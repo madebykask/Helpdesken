@@ -4,7 +4,13 @@
 
     public class LogicalDriveOverview
     {
-        public LogicalDriveOverview(int id, int? ownerId, decimal freeBytes, decimal totalBytes, string driveLetter, string fileSystemName)
+        public LogicalDriveOverview(
+            int id,
+            int? ownerId,
+            decimal freeBytes,
+            decimal totalBytes,
+            string driveLetter,
+            string fileSystemName)
         {
             this.Id = id;
             this.OwnerId = ownerId;

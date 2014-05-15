@@ -16,4 +16,17 @@
             </td>
         </tr>
     }
+    @if (Model.PurchaseDate.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.PurchaseDate.Caption)</label>
+            </td>
+            <td class="span9">
+                @(!Model.PurchaseDate.IsReadOnly 
+                    ? Html.EditorFor(m => m.PurchaseDate.Value, "DatePicker", new { id = "purchasedate_datepicker" }) 
+                    : Html.DisplayFor(m => m.PurchaseDate.Value, "Date"))
+            </td>
+        </tr>
+    }
 </table>

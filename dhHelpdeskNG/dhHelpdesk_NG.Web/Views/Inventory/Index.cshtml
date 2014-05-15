@@ -1,9 +1,35 @@
 ﻿@using DH.Helpdesk.Web.Models.Inventory
 @model IndexViewModel
+           
+<script type="text/javascript">
+
+    $(function () {
+        $('#type_dropdown').change(function () {
+            var selectedValue = $(this).val();
+
+            $.post('@Url.Action("RenderContent")', { currentMode: selectedValue }, function (tabMarkup) {
+                $('#type_data_container').html(tabMarkup);
+                var url = '@Url.Action("RedirectToNewInventory","Inventory")';
+                url += '?currentMode=' + selectedValue;
+                $('#link').attr('href', url);
+            });
+        });
+    });
+
+    $.validator.setDefaults({
+        ignore: ""
+    });
+
+    $('select option[value=Separator]').each(function () {
+        $(this).attr("disabled", "disabled");
+    });
+
+</script>
+
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
-            <li id="menu1">@Html.ActionLink(Translation.Get("Nytt"), "RedirectToNewInventory", new { currentMode = Model.CurrentMode }, new { @class = "btn" })</li>
+            <li id="menu1">@Html.ActionLink(Translation.Get("Nytt"), "RedirectToNewInventory", new { currentMode = Model.CurrentMode }, new { @class = "btn", id="link" })</li>
         </ul>
     </div>
 </div>
@@ -45,27 +71,3 @@
         </div>
     </div>
 </div>
-
-<input type="hidden" name="activeTab" id="activeTab" value="@SessionFacade.ActiveTab" />
-
-<script type="text/javascript">
-
-    $(function () {
-        $('#type_dropdown').change(function () {
-            $.post('@Url.Action("RenderContent")', { currentMode: $(this).val() }, function (tabMarkup) {
-                $('#type_data_container').html(tabMarkup);
-            });
-        });
-    });
-
-    $.validator.setDefaults({
-        ignore: ""
-    });
-
-    $('#inventory_tab a[href="' + $('#activeTab')[0].value + '"]').tab('show');
-
-    $('select option[value=Separator]').each(function () {
-        $(this).attr("disabled", "disabled");
-    });
-
-</script>

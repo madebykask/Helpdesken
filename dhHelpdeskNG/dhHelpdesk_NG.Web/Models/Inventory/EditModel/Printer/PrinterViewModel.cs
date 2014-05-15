@@ -3,7 +3,6 @@
     using System;
 
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Server;
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Shared;
 
     public class PrinterViewModel
@@ -13,7 +12,6 @@
         }
 
         public PrinterViewModel(
-            int id,
             int? customerId,
             ConfigurableFieldModel<DateTime> createdDate,
             ConfigurableFieldModel<DateTime> changedDate,
@@ -24,7 +22,6 @@
             OrganizationFieldsViewModel organizationFieldsViewModel,
             PlaceFieldsViewModel placeFieldsViewModel)
         {
-            this.Id = id;
             this.CustomerId = customerId;
             this.CreatedDate = createdDate;
             this.ChangedDate = changedDate;
@@ -37,7 +34,7 @@
         }
 
         [IsId]
-        public int Id { get; private set; }
+        public int Id { get; set; }
 
         [IsId]
         public int? CustomerId { get; private set; }

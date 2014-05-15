@@ -32,6 +32,7 @@ namespace DH.Helpdesk.Domain
         //public virtual ICollection<OperationLogCategory> OperationLogCategory { get; set; }
         public virtual Customer Customer { get; set; }
 
+        public virtual User Admin { get; set; }
         public virtual ICollection<User> Us { get; set; }
         public virtual ICollection<WorkingGroupEntity> WGs { get; set; }
         public virtual OperationLogCategory Category { get; set; }

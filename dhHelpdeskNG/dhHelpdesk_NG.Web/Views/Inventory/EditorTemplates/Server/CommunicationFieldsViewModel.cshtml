@@ -17,19 +17,14 @@
             <td class="span9">
                 @if (!Model.NetworkAdapters.IsReadOnly)
                 {
-                    Html.DropDownListFor(m => m.CommunicationFieldsModel.NetworkAdapterId, Model.NetworkAdapters.Value);
+                    @Html.DropDownListFor(m => m.CommunicationFieldsModel.NetworkAdapterId, Model.NetworkAdapters.Value, string.Empty)
                 }
                 else
                 {
-                    if (!Model.CommunicationFieldsModel.NetworkAdapterId.HasValue)
-                    {
-                        Html.TextBoxFor(m => string.Empty, new { @readonly = true });
-                    }
-                    else
-                    {
-                        Html.TextBoxFor(m => m.NetworkAdapters.Value.SingleOrDefault(x => x.Value == Model.CommunicationFieldsModel.NetworkAdapterId.ToString()).Text, new { @readonly = true });
-                    }
-                    Html.HiddenFor(m => m.CommunicationFieldsModel.NetworkAdapterId);
+                    @(!Model.CommunicationFieldsModel.NetworkAdapterId.HasValue 
+                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true }) 
+                        : Html.TextBoxFor(m => m.NetworkAdapters.Value.SingleOrDefault(x => x.Value == Model.CommunicationFieldsModel.NetworkAdapterId.ToString()).Text, new { @readonly = true }))
+                    @Html.HiddenFor(m => m.CommunicationFieldsModel.NetworkAdapterId)
                 }
             </td>
         </tr>

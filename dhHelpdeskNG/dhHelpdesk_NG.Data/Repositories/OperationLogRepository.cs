@@ -13,10 +13,14 @@ namespace DH.Helpdesk.Dal.Repositories
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Security.Cryptography;
 
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Server;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Output;
     using DH.Helpdesk.BusinessData.Models.OperationLog.Output;
     using DH.Helpdesk.Common.Extensions.Integer;
+    using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Domain;
@@ -46,6 +50,8 @@ namespace DH.Helpdesk.Dal.Repositories
         /// The result.
         /// </returns>
         IEnumerable<OperationLogOverview> GetOperationLogOverviews(int[] customers);
+
+        List<OperationServerLogOverview> GetOperationServerLogOverviews(int customerId, int serverId);
     }
 
     /// <summary>
@@ -164,6 +170,38 @@ namespace DH.Helpdesk.Dal.Repositories
                     },
                     ShowOnStartPage = o.ShowOnStartPage.ToBool()
                 });
+        }
+
+        public List<OperationServerLogOverview> GetOperationServerLogOverviews(int customerId, int serverId)
+        {
+            var query = from obj in DataContext.OperationObjects
+                        from server in DataContext.Servers
+                        from log in this.Table
+                        where
+                            server.Id == serverId && obj.Name == server.ServerName && log.OperationObject_Id == obj.Id
+                            && log.Customer_Id == customerId
+                        select
+                            new
+                                {
+                                    obj.Description,
+                                    log.CreatedDate,
+                                    log.Admin.FirstName,
+                                    log.Admin.SurName,
+                                    log.LogAction
+                                };
+
+            var anonymus = query.ToList();
+
+            var overviews =
+                anonymus.Select(
+                    x =>
+                    new OperationServerLogOverview(
+                        new UserName(x.FirstName, x.SurName),
+                        x.CreatedDate,
+                        x.Description,
+                        x.LogAction)).ToList();
+
+            return overviews;
         }
     }
 

@@ -412,6 +412,14 @@
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedIntegerAttribute.cs" />
     <Compile Include="Infrastructure\ModelFactories\Reports\Concrete\ReportsModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Reports\IReportsModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\ComputerViewModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\ConfigurableFieldModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\IComputerViewModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\IConfigurableFieldModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\IPrinterViewModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\IServerViewModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\ServerViewModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\PrinterViewModelBuilder.cs" />
     <Compile Include="Infrastructure\Print\PrintPdfEvents.cs" />
     <Compile Include="Infrastructure\Print\PrintPdfResult.cs" />
     <Compile Include="Infrastructure\Print\PrintPdfView.cs" />
@@ -557,6 +565,7 @@
     <Compile Include="Models\Changes\SettingsEdit\SettingsModel.cs" />
     <Compile Include="Models\Changes\SettingsEdit\TextFieldSettingModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\ConfigurableFieldModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Server\ServerEditViewModel.cs" />
     <Compile Include="Models\Reports\IndexModel.cs" />
     <Compile Include="Models\Reports\SearchModel.cs" />
     <Compile Include="Models\Shared\ConfigurableContainerModel.cs" />
@@ -2058,7 +2067,9 @@
     <Content Include="Areas\Admin\Views\Customer\New.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Cases\Index.cshtml" />

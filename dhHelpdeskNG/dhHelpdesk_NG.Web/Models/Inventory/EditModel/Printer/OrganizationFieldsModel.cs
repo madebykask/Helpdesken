@@ -4,7 +4,7 @@
 
     public class OrganizationFieldsModel
     {
-        public OrganizationFieldsModel(int? departmentId, int? unitId)
+        public OrganizationFieldsModel(int? departmentId, ConfigurableFieldModel<string> unitId)
         {
             this.DepartmentId = departmentId;
             this.UnitId = unitId;
@@ -14,6 +14,6 @@
         public int? DepartmentId { get; set; }
 
         [IsId]
-        public int? UnitId { get; set; }
+        public ConfigurableFieldModel<string> UnitId { get; set; }
     }
 }

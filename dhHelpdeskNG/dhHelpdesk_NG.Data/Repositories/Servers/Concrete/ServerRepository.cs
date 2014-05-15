@@ -80,7 +80,7 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
                     anonymus.Entity.Owner),
                 new BusinessData.Models.Inventory.Edit.Server.StateFields(
                     anonymus.Entity.SyncChangedDate,
-                    new UserName(anonymus.UserFirstName, anonymus.UserSurName)),
+                    !string.IsNullOrWhiteSpace(anonymus.UserFirstName) ? new UserName(anonymus.UserFirstName, anonymus.UserSurName) : null),
                 new BusinessData.Models.Inventory.Edit.Server.StorageFields(anonymus.Entity.Harddrive),
                 new BusinessData.Models.Inventory.Edit.Shared.ChassisFields(anonymus.Entity.ChassisType),
                 new BusinessData.Models.Inventory.Edit.Shared.InventoryFields(

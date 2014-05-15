@@ -11,6 +11,7 @@
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory;
     using DH.Helpdesk.Web.Models.Inventory;
     using DH.Helpdesk.Web.Models.Inventory.EditModel;
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Computer;
@@ -33,13 +34,19 @@
 
         private readonly IRoomService roomService;
 
+        private readonly IComputerViewModelBuilder computerViewModelBuilder;
+
+        private readonly IServerViewModelBuilder serverViewModelBuilder;
+
         public InventoryController(
             IMasterDataService masterDataService,
             IInventoryService inventoryService,
             IRegionService regionService,
             IDepartmentService departmentService,
             IFloorService floorService,
-            IRoomService roomService)
+            IRoomService roomService,
+            IComputerViewModelBuilder computerViewModelBuilder,
+            IServerViewModelBuilder serverViewModelBuilder)
             : base(masterDataService)
         {
             this.inventoryService = inventoryService;
@@ -47,6 +54,8 @@
             this.departmentService = departmentService;
             this.floorService = floorService;
             this.roomService = roomService;
+            this.computerViewModelBuilder = computerViewModelBuilder;
+            this.serverViewModelBuilder = serverViewModelBuilder;
         }
 
         public ViewResult Index()
@@ -246,7 +255,7 @@
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
 
-            var computerEditModel = ComputerViewModel.BuildViewModel(model, options, settings);
+            var computerEditModel = this.computerViewModelBuilder.BuildViewModel(model, options, settings);
             var inventoryGridModels = InventoryGridModel.BuildModels(
                 additionalData.InventoryOverviewResponseWithType,
                 additionalData.InventoriesFieldSettingsOverviewResponse);
@@ -276,7 +285,26 @@
         [HttpGet]
         public ViewResult EditServer(int id)
         {
-            return this.View("EditServer");
+            var model = this.inventoryService.GetServer(id);
+            var options = this.inventoryService.GetServerEditOptions(SessionFacade.CurrentCustomer.Id);
+            var settings = this.inventoryService.GetServerFieldSettingsForModelEdit(
+                SessionFacade.CurrentCustomer.Id,
+                SessionFacade.CurrentLanguageId);
+
+            var additionalData = this.inventoryService.GetServerEditAdditionalData(
+                id,
+                SessionFacade.CurrentCustomer.Id,
+                SessionFacade.CurrentLanguageId);
+
+            var serverEditModel = this.serverViewModelBuilder.BuildViewModel(model, options, settings);
+
+            var viewModel = new ServerEditViewModel(
+                serverEditModel,
+                additionalData.Softwaries,
+                additionalData.LogicalDrives,
+                additionalData.OperationLogs);
+
+            return this.View("EditServer", viewModel);
         }
 
         [HttpPost]
@@ -350,7 +378,7 @@
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
 
-            var viewModel = ComputerViewModel.BuildViewModel(
+            var viewModel = this.computerViewModelBuilder.BuildViewModel(
                 options,
                 settings,
                 SessionFacade.CurrentCustomer.Id);
@@ -368,7 +396,17 @@
         [HttpGet]
         public ViewResult NewServer()
         {
-            throw new System.NotImplementedException();
+            var options = this.inventoryService.GetServerEditOptions(SessionFacade.CurrentCustomer.Id);
+            var settings = this.inventoryService.GetServerFieldSettingsForModelEdit(
+                SessionFacade.CurrentCustomer.Id,
+                SessionFacade.CurrentLanguageId);
+
+            var viewModel = this.serverViewModelBuilder.BuildViewModel(
+                options,
+                settings,
+                SessionFacade.CurrentCustomer.Id);
+
+            return this.View("NewServer", viewModel);
         }
 
         [HttpPost]

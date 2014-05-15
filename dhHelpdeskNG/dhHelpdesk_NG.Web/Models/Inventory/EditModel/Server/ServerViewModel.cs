@@ -12,8 +12,6 @@
         }
 
         public ServerViewModel(
-            int id,
-            int? customerId,
             ConfigurableFieldModel<DateTime> createdDate,
             ConfigurableFieldModel<DateTime> changedDate,
             GeneralFieldsModel generalFields,
@@ -23,13 +21,11 @@
             ChassisFieldsModel chassisFields,
             InventoryFieldsModel inventoryFields,
             MemoryFieldsViewModel memoryFieldsViewModel,
-            CommunicationFieldsModel communicationFields,
+            CommunicationFieldsViewModel communicationFieldsViewModel,
             OperatingSystemFieldsViewModel operatingSystemFieldsViewModel,
             ProccesorFieldsViewModel proccesorFieldsViewModel,
             PlaceFieldsViewModel placeFieldsViewModel)
         {
-            this.Id = id;
-            this.CustomerId = customerId;
             this.CreatedDate = createdDate;
             this.ChangedDate = changedDate;
             this.GeneralFieldsModel = generalFields;
@@ -39,53 +35,53 @@
             this.ChassisFieldsModel = chassisFields;
             this.InventoryFieldsModel = inventoryFields;
             this.MemoryFieldsViewModel = memoryFieldsViewModel;
-            this.CommunicationFieldsModel = communicationFields;
+            this.CommunicationFieldsViewModel = communicationFieldsViewModel;
             this.OperatingSystemFieldsViewModel = operatingSystemFieldsViewModel;
             this.ProccesorFieldsViewModel = proccesorFieldsViewModel;
             this.PlaceFieldsViewModel = placeFieldsViewModel;
         }
 
         [IsId]
-        public int Id { get; private set; }
+        public int Id { get; set; }
 
         [IsId]
-        public int? CustomerId { get; private set; }
+        public int CustomerId { get; set; }
 
-        public ConfigurableFieldModel<DateTime> CreatedDate { get; private set; }
+        public ConfigurableFieldModel<DateTime> CreatedDate { get;  set; }
 
-        public ConfigurableFieldModel<DateTime> ChangedDate { get; private set; }
-
-        [NotNull]
-        public GeneralFieldsModel GeneralFieldsModel { get; private set; }
+        public ConfigurableFieldModel<DateTime> ChangedDate { get;  set; }
 
         [NotNull]
-        public OtherFieldsModel OtherFieldsModel { get; private set; }
+        public GeneralFieldsModel GeneralFieldsModel { get;  set; }
 
         [NotNull]
-        public StateFieldsModel StateFieldsModel { get; private set; }
+        public OtherFieldsModel OtherFieldsModel { get;  set; }
 
         [NotNull]
-        public StorageFieldsModel StorageFieldsModel { get; private set; }
+        public StateFieldsModel StateFieldsModel { get;  set; }
 
         [NotNull]
-        public ChassisFieldsModel ChassisFieldsModel { get; private set; }
+        public StorageFieldsModel StorageFieldsModel { get;  set; }
 
         [NotNull]
-        public InventoryFieldsModel InventoryFieldsModel { get; private set; }
+        public ChassisFieldsModel ChassisFieldsModel { get;  set; }
 
         [NotNull]
-        public MemoryFieldsViewModel MemoryFieldsViewModel { get; private set; }
+        public InventoryFieldsModel InventoryFieldsModel { get;  set; }
 
         [NotNull]
-        public CommunicationFieldsModel CommunicationFieldsModel { get; private set; }
+        public MemoryFieldsViewModel MemoryFieldsViewModel { get;  set; }
 
         [NotNull]
-        public OperatingSystemFieldsViewModel OperatingSystemFieldsViewModel { get; private set; }
+        public CommunicationFieldsViewModel CommunicationFieldsViewModel { get;  set; }
 
         [NotNull]
-        public ProccesorFieldsViewModel ProccesorFieldsViewModel { get; private set; }
+        public OperatingSystemFieldsViewModel OperatingSystemFieldsViewModel { get;  set; }
 
         [NotNull]
-        public PlaceFieldsViewModel PlaceFieldsViewModel { get; private set; }
+        public ProccesorFieldsViewModel ProccesorFieldsViewModel { get;  set; }
+
+        [NotNull]
+        public PlaceFieldsViewModel PlaceFieldsViewModel { get;  set; }
     }
 }

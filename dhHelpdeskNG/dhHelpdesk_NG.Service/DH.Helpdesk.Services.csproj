@@ -114,7 +114,10 @@
     <Compile Include="BusinessLogic\BusinessModelRestorers\IRestorer.cs" />
     <Compile Include="BusinessLogic\BusinessModelRestorers\Restorer.cs" />
     <Compile Include="Response\Inventory\InventoryOverviewResponseWithType.cs" />
+    <Compile Include="Response\Inventory\PrinterEditOptionsResponse.cs" />
     <Compile Include="Response\Inventory\PrinterFiltersResponse.cs" />
+    <Compile Include="Response\Inventory\ServerEditDataResponse.cs" />
+    <Compile Include="Response\Inventory\ServerEditOptionsResponse.cs" />
     <Compile Include="Response\Inventory\ServerFiltersResponse.cs" />
     <Compile Include="Requests\Inventory\ComputersFilter.cs" />
     <Compile Include="Requests\Inventory\InventoriesFilter.cs" />

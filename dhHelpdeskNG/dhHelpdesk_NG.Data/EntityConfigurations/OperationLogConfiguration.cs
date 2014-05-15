@@ -27,6 +27,11 @@
                .HasForeignKey(x => x.Customer_Id)
                .WillCascadeOnDelete(false);
 
+            this.HasRequired(x => x.Admin)
+                .WithMany()
+                .HasForeignKey(x => x.User_Id)
+                .WillCascadeOnDelete(false);
+
             this.Property(x => x.OperationLogCategory_Id).IsOptional();
             this.Property(x => x.Customer_Id).IsRequired();
             this.Property(x => x.PublicInformation).IsRequired();

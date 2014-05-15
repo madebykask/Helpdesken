@@ -8,12 +8,10 @@
     {
         public OrganizationFieldsViewModel(
             OrganizationFieldsModel organizationFieldsModel,
-            ConfigurableFieldModel<SelectList> departments,
-            ConfigurableFieldModel<SelectList> units)
+            ConfigurableFieldModel<SelectList> departments)
         {
             this.OrganizationFieldsModel = organizationFieldsModel;
             this.Departments = departments;
-            this.Units = units;
         }
 
         [NotNull]
@@ -21,8 +19,5 @@
 
         [NotNull]
         public ConfigurableFieldModel<SelectList> Departments { get; set; }
-
-        [NotNull]
-        public ConfigurableFieldModel<SelectList> Units { get; set; }
     }
 }

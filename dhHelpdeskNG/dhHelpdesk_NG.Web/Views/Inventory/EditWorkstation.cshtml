@@ -94,7 +94,6 @@
                             </tr>
                         }
                     </table>
-
                 }
             </div>
             <div class="tab-pane tab-pane-border" id="fragment-2">
@@ -117,10 +116,10 @@
 
                             foreach (var model in models)
                             {
-                                <tr>
-                                    <th>@Html.DisplayFor(x => model);
-                                    </th>
-                                </tr>
+                            <tr>
+                                <th>@Html.DisplayFor(x => model);
+                                </th>
+                            </tr>
                             }
                         }
                     </tbody>
@@ -139,8 +138,8 @@
                     @{
                         foreach (var model in Model.InventoryGridModels)
                         {
-                            @Translation.Get(model.CurrentModeName)
-                            @Html.Partial("InventoryGridWithDeleteButton", new InventoryGridModelForDynamicInventory(model, Model.ComputerViewModel.Id))
+                        @Translation.Get(model.CurrentModeName)
+                        @Html.Partial("InventoryGridWithDeleteButton", new InventoryGridModelForDynamicInventory(model, Model.ComputerViewModel.Id))
                         }
                     }
                 </table>

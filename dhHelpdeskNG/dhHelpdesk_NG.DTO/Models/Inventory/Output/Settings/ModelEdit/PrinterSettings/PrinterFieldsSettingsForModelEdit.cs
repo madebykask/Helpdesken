@@ -1,6 +1,5 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.PrinterSettings
 {
-    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ComputerSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.SharedSettings;
     using DH.Helpdesk.Common.ValidationAttributes;
 
@@ -10,16 +9,16 @@
     public class PrinterFieldsSettingsForModelEdit
     {
         public PrinterFieldsSettingsForModelEdit(
-            GeneralFieldsSettings generalFieldsSettingsSettings,
-            InventoryFieldsSettings inventoryFieldsSettingsSettings,
+            GeneralFieldsSettings generalFieldsSettings,
+            InventoryFieldsSettings inventoryFieldsSettings,
             CommunicationFieldsSettings communicationFieldsSettings,
             OtherFieldsSettings otherFieldsSettings,
             OrganizationFieldsSettings organizationFieldsSettings,
             PlaceFieldsSettings placeFieldsSettings,
             StateFieldsSettings stateFieldsSettings)
         {
-            this.GeneralFieldsSettingsSettings = generalFieldsSettingsSettings;
-            this.InventoryFieldsSettingsSettings = inventoryFieldsSettingsSettings;
+            this.GeneralFieldsSettings = generalFieldsSettings;
+            this.InventoryFieldsSettings = inventoryFieldsSettings;
             this.CommunicationFieldsSettings = communicationFieldsSettings;
             this.OtherFieldsSettings = otherFieldsSettings;
             this.OrganizationFieldsSettings = organizationFieldsSettings;
@@ -28,10 +27,10 @@
         }
 
         [NotNull]
-        public GeneralFieldsSettings GeneralFieldsSettingsSettings { get; private set; }
+        public GeneralFieldsSettings GeneralFieldsSettings { get; private set; }
 
         [NotNull]
-        public InventoryFieldsSettings InventoryFieldsSettingsSettings { get; private set; }
+        public InventoryFieldsSettings InventoryFieldsSettings { get; private set; }
 
         [NotNull]
         public CommunicationFieldsSettings CommunicationFieldsSettings { get; private set; }

@@ -168,6 +168,7 @@
     <Compile Include="Models\Inventory\Output\Computer\ComputerOverview.cs" />
     <Compile Include="Models\Inventory\Output\Computer\OrganizationFields.cs" />
     <Compile Include="Models\Inventory\Output\InventoryOverviewWithType.cs" />
+    <Compile Include="Models\Inventory\Output\OperaionLogOverview.cs" />
     <Compile Include="Models\Inventory\Output\Printer\CommunicationFields.cs" />
     <Compile Include="Models\Inventory\Output\Printer\OrganizationFields.cs" />
     <Compile Include="Models\Inventory\Output\Printer\PrinterOverview.cs" />

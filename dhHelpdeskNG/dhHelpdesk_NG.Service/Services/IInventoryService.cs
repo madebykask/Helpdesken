@@ -72,7 +72,11 @@
 
         void UpdateWorkstation(Server businessModel);
 
-        Server GetServerById(int id);
+        Server GetServer(int id);
+
+        ServerEditOptionsResponse GetServerEditOptions(int customerId);
+
+        ServerEditDataResponse GetServerEditAdditionalData(int id, int customerId, int langaugeId);
 
         List<ServerOverview> GetServers(ServersFilter computersFilter);
 

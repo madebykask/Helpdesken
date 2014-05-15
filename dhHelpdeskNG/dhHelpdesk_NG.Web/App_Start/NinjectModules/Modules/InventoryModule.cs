@@ -15,6 +15,8 @@
     using DH.Helpdesk.Dal.Mappers.Inventory.EntityToBusinessModel.Computer;
     using DH.Helpdesk.Dal.Mappers.Inventory.EntityToBusinessModel.Printer;
     using DH.Helpdesk.Dal.Mappers.Inventory.EntityToBusinessModel.Server;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete;
 
     using Ninject.Modules;
 
@@ -34,6 +36,11 @@
             this.Bind<IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperDataForModelEdit>, PrinterFieldsSettingsForModelEdit>>().To<PrinterFieldSettingsToPrinterEditSettingsMapper>().InSingletonScope();
             this.Bind<IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, PrinterFieldsSettingsOverview>>().To<PrinterFieldSettingsToPrinterOverviewSettingsMapper>().InSingletonScope();
             this.Bind<IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperData>, PrinterFieldsSettings>>().To<PrinterFieldSettingsToFieldSettingsMapper>().InSingletonScope();
+
+            this.Bind<IConfigurableFieldModelBuilder>().To<ConfigurableFieldModelBuilder>().InSingletonScope();
+            this.Bind<IComputerViewModelBuilder>().To<ComputerViewModelBuilder>().InSingletonScope();
+            this.Bind<IServerViewModelBuilder>().To<ServerViewModelBuilder>().InSingletonScope();
+            this.Bind<IPrinterViewModelBuilder>().To<PrinterViewModelBuilder>().InSingletonScope();
         }
     }
 }

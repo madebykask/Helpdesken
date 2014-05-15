@@ -88,6 +88,12 @@
 
         private readonly IComputerInventoryRepository computerInventoryRepository;
 
+        private readonly IOperationLogRepository operationLogRepository;
+
+        private readonly IServerLogicalDriveRepository serverLogicalDriveRepository;
+
+        private readonly IServerSoftwareRepository serverSoftwareRepository;
+
         public InventoryService(
             IInventoryTypeRepository inventoryTypeRepository,
             IComputerRepository computerRepository,
@@ -115,7 +121,10 @@
             ILogicalDriveRepository logicalDriveRepository,
             IComputerLogRepository computerLogRepository,
             IComputerModelRepository computerModelRepository,
-            IComputerInventoryRepository computerInventoryRepository)
+            IComputerInventoryRepository computerInventoryRepository,
+            IOperationLogRepository operationLogRepository,
+            IServerLogicalDriveRepository serverLogicalDriveRepository,
+            IServerSoftwareRepository serverSoftwareRepository)
         {
             this.inventoryTypeRepository = inventoryTypeRepository;
             this.computerRepository = computerRepository;
@@ -144,6 +153,9 @@
             this.computerLogRepository = computerLogRepository;
             this.computerModelRepository = computerModelRepository;
             this.computerInventoryRepository = computerInventoryRepository;
+            this.operationLogRepository = operationLogRepository;
+            this.serverLogicalDriveRepository = serverLogicalDriveRepository;
+            this.serverSoftwareRepository = serverSoftwareRepository;
         }
 
         public List<ItemOverview> GetInventoryTypes(int customerId)
@@ -340,9 +352,38 @@
             throw new NotImplementedException();
         }
 
-        public Server GetServerById(int id)
+        public Server GetServer(int id)
         {
-            throw new NotImplementedException();
+            return this.serverRepository.FindById(id);
+        }
+
+        public ServerEditOptionsResponse GetServerEditOptions(int customerId)
+        {
+            var operatingSystems = this.operatingSystemRepository.FindOverviews();
+            var processors = this.processorRepository.FindOverviews();
+            var rams = this.ramRepository.FindOverviews();
+            var netAdapters = this.nicRepository.FindOverviews();
+            var buildings = this.buildingRepository.FindOverviews(customerId);
+            var floors = this.floorRepository.FindOverviews(customerId);
+            var rooms = this.roomRepository.FindOverviews(customerId);
+
+            return new ServerEditOptionsResponse(
+                operatingSystems,
+                processors,
+                rams,
+                netAdapters,
+                buildings,
+                floors,
+                rooms);
+        }
+
+        public ServerEditDataResponse GetServerEditAdditionalData(int id, int customerId, int langaugeId)
+        {
+            var softwaries = this.serverSoftwareRepository.Find(id);
+            var logicalDrives = this.serverLogicalDriveRepository.Find(id);
+            var operationLogs = this.operationLogRepository.GetOperationServerLogOverviews(customerId, id);
+
+            return new ServerEditDataResponse(softwaries, logicalDrives, operationLogs);
         }
 
         public List<ServerOverview> GetServers(ServersFilter computersFilter)
@@ -364,7 +405,9 @@
 
         public ServerFieldsSettingsForModelEdit GetServerFieldSettingsForModelEdit(int customerId, int languageId)
         {
-            throw new NotImplementedException();
+            var models = this.serverFieldSettingsRepository.GetFieldSettingsForModelEdit(customerId, languageId);
+
+            return models;
         }
 
         public ServerFieldsSettingsOverview GetServerFieldSettingsOverview(int customerId, int languageId)
