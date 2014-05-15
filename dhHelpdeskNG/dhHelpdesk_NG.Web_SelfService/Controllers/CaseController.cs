@@ -429,16 +429,19 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             if (currentCase.WorkingGroup_Id != null)
             {
-                var emails = _userService.GetUsersForWorkingGroup(currentCase.Customer_Id, currentCase.WorkingGroup_Id.Value).Select(u => u.Email).ToList();
-                if (emails == null || emails.Count <= 0 )
-                {   
-                    var workingGroup = _workingGroupService.GetWorkingGroup(currentCase.WorkingGroup_Id.Value);                     
-                    caseLog.EmailRecepientsExternalLog = workingGroup.EMail;
+                var curWorkingGroup = _workingGroupService.GetWorkingGroup(currentCase.WorkingGroup_Id.Value);
+                if (curWorkingGroup.SendExternalEmailToWGUsers.HasValue && curWorkingGroup.SendExternalEmailToWGUsers.Value == 1)
+                {
+                    var emails = _userService.GetUsersForWorkingGroup(currentCase.Customer_Id, currentCase.WorkingGroup_Id.Value).Select(u => u.Email).ToList();
+                    if (emails != null && emails.Count > 0)
+                    {
+                        caseLog.EmailRecepientsExternalLog = string.Join(Environment.NewLine, emails);                        
+                    }                    
                 }
                 else
                 {
-                    caseLog.EmailRecepientsExternalLog = string.Join(Environment.NewLine, emails);
-                }
+                    caseLog.EmailRecepientsExternalLog = curWorkingGroup.EMail;
+                }                
             }            
                 
             

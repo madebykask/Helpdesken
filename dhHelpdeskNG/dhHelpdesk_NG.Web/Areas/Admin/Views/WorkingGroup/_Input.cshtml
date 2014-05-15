@@ -118,6 +118,17 @@
                                         </label>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td class="span3">
+                                        
+                                    </td>
+                                    <td class="span9"><label class="checkbox">
+                                        <input type="checkbox" name="workinggroup.SendExternalEmailToWGUsers" @(Model.WorkingGroup.SendExternalEmailToWGUsers == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="workinggroup.SendExternalEmailToWGUsers" value="0" />
+                                        &nbsp;@Translation.Get("Send external log Email to working group's user ", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                </tr>
                             </table>
                         </div>
                     </div>
