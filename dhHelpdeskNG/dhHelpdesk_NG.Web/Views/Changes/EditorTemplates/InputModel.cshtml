@@ -6,9 +6,12 @@
 <div class="container">
     <table class="tableform">
         <tr>
-            <td class="span8">
-                @Html.EditorFor(m => m.Orderer)
-            </td>
+            @if (Model.Orderer.Id.Show || Model.Orderer.Name.Show || Model.Orderer.Phone.Show || Model.Orderer.CellPhone.Show || Model.Orderer.Departments.Show)
+            {
+                <td class="span8">
+                    @Html.EditorFor(m => m.Orderer)
+                </td>
+            }
             <td>
                 @Html.EditorFor(m => m.General)
             </td>

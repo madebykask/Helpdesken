@@ -4,21 +4,27 @@
 
     public sealed class DateTimeDisplayValue : DisplayValue<DateTime?>
     {
+        #region Constructors and Destructors
+
         public DateTimeDisplayValue(DateTime? value)
             : base(value)
         {
         }
 
+        #endregion
+
+        #region Public Methods and Operators
+
         public static explicit operator DateTimeDisplayValue(DateTime? value)
         {
-            var displayValue = new DateTimeDisplayValue(value);
-
-            return displayValue;
+            return new DateTimeDisplayValue(value);
         }
 
         public override string GetDisplayValue()
         {
-            return this.Value.ToString();
+            return this.Value.HasValue ? this.Value.Value.ToShortDateString() : null;
         }
+
+        #endregion
     }
 }

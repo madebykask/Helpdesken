@@ -22,7 +22,7 @@
 
             foreach (var history in histories)
             {
-                var historyLog = logs.SingleOrDefault(l => l.HistoryId == history.Id);
+                var historyLog = logs.FirstOrDefault(l => l.HistoryId == history.Id);
                 var historyEmailLogs = emailLogs.Where(l => l.HistoryId == history.Id).ToList();
 
                 var difference = this.historiesComparator.Compare(

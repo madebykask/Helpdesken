@@ -41,7 +41,7 @@
 
             var dbContext = new DatabaseFactory().Get();
             var settings = dbContext.ChangeFieldSettings;
-            var settingNames = settings.Select(s => s.ChangeField).ToList();
+            var settingNames = settings.Where(s => s.Customer_Id == customerId).Select(s => s.ChangeField).ToList();
 
             CreateMissingOrdererSettings(customerId, settingNames, settings);
             CreateMissingGeneralSettings(customerId, settingNames, settings);

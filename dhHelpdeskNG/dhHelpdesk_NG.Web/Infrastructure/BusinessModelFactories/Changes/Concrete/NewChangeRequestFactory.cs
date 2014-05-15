@@ -47,8 +47,10 @@
 
         private static void CreateContactIfNeeded(ContactModel model, OperationContext context, List<Contact> contacts)
         {
-            if (string.IsNullOrEmpty(model.Name.Value) && string.IsNullOrEmpty(model.Phone.Value)
-                && string.IsNullOrEmpty(model.Email.Value) && string.IsNullOrEmpty(model.Company.Value))
+            if ((model.Name == null || string.IsNullOrEmpty(model.Name.Value))
+                && (model.Phone == null || string.IsNullOrEmpty(model.Phone.Value))
+                && (model.Email == null || string.IsNullOrEmpty(model.Email.Value))
+                && (model.Company == null || string.IsNullOrEmpty(model.Company.Value)))
             {
                 return;
             }

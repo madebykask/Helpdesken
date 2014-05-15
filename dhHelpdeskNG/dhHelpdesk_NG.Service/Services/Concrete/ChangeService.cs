@@ -548,7 +548,7 @@
             List<GroupWithEmails> emailGroupsWithEmails = null;
             List<ItemOverview> administratorsWithEmails = null;
 
-            if (settings.Orderer.Department.Show)
+            if (settings.Orderer.Department.Show || settings.Registration.AffectedDepartments.Show)
             {
                 departments = this.departmentRepository.FindActiveOverviews(customerId);
             }

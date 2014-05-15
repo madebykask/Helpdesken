@@ -38,7 +38,7 @@
                 updatedFields.Id,
                 existingFields.Id,
                 "",
-                new ElementaryValidationRule(!settings.Id.Show, settings.Name.Required));
+                new ElementaryValidationRule(!settings.Id.Show, settings.Id.Required));
 
             this.elementaryRulesValidator.ValidateStringField(
                 updatedFields.Name,

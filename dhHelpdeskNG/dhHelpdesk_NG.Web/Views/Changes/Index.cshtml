@@ -10,9 +10,7 @@
         var parameters = {
             rememberTabUrl: '@Url.Action("RememberTab", "Service")',
             changeTopicName: '@ModuleName.Changes',
-            caseSummaryTabName: '@TabName.CaseSummary',
             changesTabName: '@TabName.Changes',
-            ordersTabName: '@TabName.Orders',
             settingsTabName: '@TabName.Settings'
         };
 
@@ -23,9 +21,7 @@
 @{
     ViewBag.Title = @Translation.Get("Changes", Enums.TranslationSource.TextTranslation);
 
-    var caseSummaryTabClass = Model.ActiveTab == TabName.CaseSummary ? "active" : null;
     var changesTabClass = Model.ActiveTab == TabName.Changes ? "active" : null;
-    var ordersTabClass = Model.ActiveTab == TabName.Orders ? "active" : null;
     var settingsTabClass = Model.ActiveTab == TabName.Settings ? "active" : null;
 
     var newChangeButtonStyle = Model.ActiveTab == TabName.Changes ? "display: inline-block;" : "display: none;";
@@ -51,27 +47,19 @@
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs">
-            <li id="case_summary_tab" class="@caseSummaryTabClass">
-                <a href="#fragment-1">@Translation.Get("Case Summary", Enums.TranslationSource.TextTranslation)</a>
-            </li>
             <li id="changes_tab" class="@changesTabClass">
                 <a href="#fragment-2">@Translation.Get("Changes", Enums.TranslationSource.TextTranslation)</a>
-            </li>
-            <li id="orders_tab" class="@ordersTabClass">
-                <a href="#fragment-3">@Translation.Get("Orders", Enums.TranslationSource.TextTranslation)</a>
             </li>
             <li id="settings_tab" class="@settingsTabClass">
                 <a href="#fragment-4">@Translation.Get("Settings", Enums.TranslationSource.TextTranslation)</a>
             </li>
         </ul>
         <div class="tab-content">
-            <div id="fragment-1" class="tab-pane tab-pane-border @caseSummaryTabClass"></div>
             <div id="fragment-2" class="tab-pane tab-pane-border @changesTabClass">
                 <div id="changes_container">
                     @Html.Action("Changes", new { area = string.Empty })
                 </div>
             </div>
-            <div id="fragment-3" class="tab-pane tab-pane-border @ordersTabClass"></div>
             <div id="fragment-4" class="tab-pane tab-pane-border @settingsTabClass">
                 @Html.Action("Settings", new { area = string.Empty })
             </div>

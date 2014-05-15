@@ -1,5 +1,6 @@
 ﻿
 @using DH.Helpdesk.BusinessData.Enums.Changes
+@using DH.Helpdesk.BusinessData.Enums.Changes.Fields
 @using DH.Helpdesk.Common.Enums
 @model DH.Helpdesk.Web.Models.Changes.ChangesGrid.ChangesGridModel
 
@@ -13,6 +14,7 @@
             <th><i class="icon-thumbs-up"></i></th>
             <th><i class="icon-thumbs-up"></i></th>
             <th><i class="icon-thumbs-up"></i></th>
+            <th onclick=" sortGrid('@OtherField.Id') " class="thpointer">@Translation.Get("Change")</th>
             @foreach (var header in Model.Headers)
             {
                 <th onclick=" sortGrid('@header.FieldName') " class="thpointer">@Translation.Get(header.Caption)
@@ -98,7 +100,9 @@
                             throw new ArgumentOutOfRangeException();
                     }
                 </td>
-
+                <td class="tdpointer">
+                    @("#" + change.Id)
+                </td>
                 @for (var i = 0; i < change.FieldValues.Count; i++)
                 {
                     var changeField = Model.Headers[i];

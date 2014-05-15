@@ -178,7 +178,11 @@
                 switch (parameters.SortField.SortBy)
                 {
                     case SortBy.Ascending:
-                        if (parameters.SortField.Name == OrdererField.Id)
+                        if (parameters.SortField.Name == OtherField.Id)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.Id);
+                        }
+                        else if (parameters.SortField.Name == OrdererField.Id)
                         {
                             searchRequest = searchRequest.OrderBy(c => c.OrdererId);
                         }
@@ -208,7 +212,11 @@
                         }
                         break;
                     case SortBy.Descending:
-                        if (parameters.SortField.Name == OrdererField.Id)
+                        if (parameters.SortField.Name == OtherField.Id)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.Id);
+                        }
+                        else if (parameters.SortField.Name == OrdererField.Id)
                         {
                             searchRequest = searchRequest.OrderByDescending(c => c.OrdererId);
                         }

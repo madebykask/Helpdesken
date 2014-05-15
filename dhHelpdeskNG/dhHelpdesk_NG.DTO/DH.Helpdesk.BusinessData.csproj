@@ -56,6 +56,7 @@
     <Compile Include="Enums\Changes\Fields\GeneralField.cs" />
     <Compile Include="Enums\Changes\Fields\ImplementationField.cs" />
     <Compile Include="Enums\Changes\Fields\OrdererField.cs" />
+    <Compile Include="Enums\Changes\Fields\OtherField.cs" />
     <Compile Include="Enums\Changes\Fields\RegistrationField.cs" />
     <Compile Include="Enums\Inventory\CurrentModes.cs" />
     <Compile Include="Enums\Inventory\Fields\Computer\CommunicationFields.cs" />

@@ -137,7 +137,7 @@
                 : SessionFacade.FindPageFilters<ChangesFilter>(PageName.Changes);
             
             SessionFacade.SavePageFilters(PageName.Changes, filters);
-
+            
             var parameters = new SearchParameters(
                 this.OperationContext.CustomerId,
                 filters.StatusIds,
@@ -309,7 +309,7 @@
         [HttpGet]
         public ViewResult Index()
         {
-            var defaultTab = TabName.CaseSummary;
+            var defaultTab = TabName.Changes;
             var activeTab = SessionFacade.FindActiveTab(PageName.Changes) ?? defaultTab;
             var model = new IndexModel(activeTab);
             return this.View(model);
