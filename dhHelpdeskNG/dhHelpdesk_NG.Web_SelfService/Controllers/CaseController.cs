@@ -430,15 +430,23 @@ namespace DH.Helpdesk.SelfService.Controllers
             if (currentCase.WorkingGroup_Id != null)
             {
                 var curWorkingGroup = _workingGroupService.GetWorkingGroup(currentCase.WorkingGroup_Id.Value);
-                if (curWorkingGroup.SendExternalEmailToWGUsers.HasValue && curWorkingGroup.SendExternalEmailToWGUsers.Value == 1)
+                if (curWorkingGroup.SendExternalEmailToWGUsers.HasValue && curWorkingGroup.SendExternalEmailToWGUsers.Value == 1) // Send To Users Working Group EMail
                 {
-                    var emails = _userService.GetUsersForWorkingGroup(currentCase.Customer_Id, currentCase.WorkingGroup_Id.Value).Select(u => u.Email).ToList();
-                    if (emails != null && emails.Count > 0)
+                    if (currentCase.Performer_User_Id == 0) // Send Mail to all working Group users
                     {
-                        caseLog.EmailRecepientsExternalLog = string.Join(Environment.NewLine, emails);                        
-                    }                    
+                        var emails = _userService.GetUsersForWorkingGroup(currentCase.Customer_Id, currentCase.WorkingGroup_Id.Value).Select(u => u.Email).ToList();
+                        if (emails != null && emails.Count > 0)
+                        {
+                            caseLog.EmailRecepientsExternalLog = string.Join(Environment.NewLine, emails);
+                        }
+                    }
+                    else
+                    {
+                        var userEmail = _userService.GetUser(currentCase.Performer_User_Id).Email;
+                        caseLog.EmailRecepientsExternalLog = userEmail;
+                    }
                 }
-                else
+                else // Send Mail to Working Group Email  
                 {
                     caseLog.EmailRecepientsExternalLog = curWorkingGroup.EMail;
                 }                
