@@ -47,11 +47,13 @@
                         @Html.HiddenFor(model => model.case_.ApprovedBy_User_Id)
                         @Html.HiddenFor(model => model.case_.FollowUpDate)
                         @Html.HiddenFor(model => model.case_.ExternalTime)
+                        @Html.HiddenFor(model => model.case_.DefaultOwnerWG_Id)
                         @Html.HiddenFor(model => model.CaseKey)
                         @Html.HiddenFor(model => model.CaseMailSetting.SendMailAboutNewCaseTo)
                         @Html.HiddenFor(model => model.CaseMailSetting.HelpdeskMailFromAdress)
                         @Html.HiddenFor(model => model.CaseMailSetting.AbsoluterUrl)
                         @Html.HiddenFor(model => model.CaseMailSetting.DontConnectUserToWorkingGroup)
+
                         @Html.Hidden("WriteTextToExternalNote", Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()))
                         @Html.Hidden("Today", DateTime.Now.ToShortDateString())
 

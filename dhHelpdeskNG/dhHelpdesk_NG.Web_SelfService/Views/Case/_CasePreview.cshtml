@@ -334,7 +334,7 @@
                        @Model.FieldSettings.Where(f=> f.Name == "Caption").Select(f=> f.LabelToChange).SingleOrDefault():
                     </td>
                     <td class="span12">
-                       @Model.CasePreview.Caption
+                       @Model.CasePreview.Caption 
                     </td>
                 </tr>
              }
@@ -344,8 +344,8 @@
                     <td class="span3">
                        @Model.FieldSettings.Where(f=> f.Name == "Description").Select(f=> f.LabelToChange).SingleOrDefault():
                     </td>
-                    <td class="span12">
-                       @Model.CasePreview.Description
+                    <td class="span12">  
+                       @Html.Raw(Model.CasePreview.Description)
                     </td>
                 </tr>
              }

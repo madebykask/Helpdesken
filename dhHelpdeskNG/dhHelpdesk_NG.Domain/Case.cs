@@ -80,6 +80,7 @@
         public DateTime RegTime { get; set; }
         public DateTime ChangeTime { get; set; }
         public int? ChangeByUser_Id { get; set; }
+        public int? DefaultOwnerWG_Id { get; set; }
 
         /// <summary>
         /// Gets or sets the causing type id.

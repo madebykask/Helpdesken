@@ -884,6 +884,7 @@
             h.VerifiedDescription = c.VerifiedDescription; 
             h.WorkingGroup_Id = c.WorkingGroup_Id;
             h.CausingPartId = c.CausingPartId;
+            h.DefaultOwnerWG_Id = c.DefaultOwnerWG_Id;
 
             return h;
         }

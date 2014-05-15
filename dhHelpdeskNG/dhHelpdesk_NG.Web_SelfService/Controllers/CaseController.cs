@@ -192,7 +192,9 @@ namespace DH.Helpdesk.SelfService.Controllers
                     {
                         model.IsEmptyCase = 0;
                         var caseOverview = this.GetCaseOverviewModel(currentCase, languageId);
+                        caseOverview.CasePreview.Description = caseOverview.CasePreview.Description.Replace("\n", "<br />");
                         model.CaseOverview = caseOverview;
+                        
                         model.ExLogFileGuid = currentCase.CaseGUID.ToString();
                         if (config.IsReceipt)
                         {

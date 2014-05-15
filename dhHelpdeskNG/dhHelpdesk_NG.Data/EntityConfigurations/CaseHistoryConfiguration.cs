@@ -66,6 +66,11 @@
                             .HasForeignKey(x => x.Status_Id)
                             .WillCascadeOnDelete(false);
 
+            this.HasOptional(x => x.WorkingGroup)
+                    .WithMany()
+                    .HasForeignKey(x => x.DefaultOwnerWG_Id)
+                    .WillCascadeOnDelete(false);
+
             this.Property(x => x.AgreedDate).IsOptional();
             this.Property(x => x.ApprovedDate).IsOptional();
             this.Property(x => x.Available).IsRequired().HasMaxLength(100);
@@ -111,6 +116,8 @@
             this.Property(x => x.Unread).IsRequired().HasColumnName("Status");
             this.Property(x => x.Problem_Id).IsOptional();
             this.Property(x => x.CausingPartId).IsOptional();
+            this.Property(x => x.DefaultOwnerWG_Id).IsOptional();
+
 
             this.ToTable("tblcasehistory");
         }

@@ -528,8 +528,9 @@ namespace DH.Helpdesk.Web.Controllers
                     if (m.EditMode == Enums.AccessMode.NoAccess)
                         return this.RedirectToAction("index", "home");
 
-                }
+                }            
             }
+            
             return this.View(m);
         }
 
@@ -1115,10 +1116,13 @@ namespace DH.Helpdesk.Web.Controllers
                       mailSenders.WGEmail = curWG.EMail;
             }
 
-            var user = _userService.GetUser(case_.User_Id);
-            if (user.Default_WorkingGroup_Id.HasValue)
+            
+            //var user = _userService.GetUser(case_.User_Id);
+            //if (user.Default_WorkingGroup_Id.HasValue)            
+            if (case_.DefaultOwnerWG_Id.HasValue)
             {
-                var defaultWGEmail = _workingGroupService.GetWorkingGroup(user.Default_WorkingGroup_Id.Value).EMail;
+                var defaultWGEmail = _workingGroupService.GetWorkingGroup(case_.DefaultOwnerWG_Id.Value).EMail;
+                //var defaultWGEmail = _workingGroupService.GetWorkingGroup(user.Default_WorkingGroup_Id.Value).EMail;                
                 mailSenders.DefaultOwnerWGEMail = defaultWGEmail;
             }
             
@@ -1544,10 +1548,24 @@ namespace DH.Helpdesk.Web.Controllers
                 var acccessToGroups = this._userService.GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, customerId);
                 m.EditMode = this.EditMode(m, ModuleName.Cases, deps, acccessToGroups);
 
-                if (m.RegByUser != null && m.RegByUser.Default_WorkingGroup_Id.HasValue)
+                if (m.case_.Id == 0)  // new mode
                 {
-                    m.CaseOwnerDefaultWorkingGroup = this._workingGroupService.GetWorkingGroup(m.RegByUser.Default_WorkingGroup_Id.Value);
+                    if (m.case_.User_Id != 0)
+                    {
+                        var curUser = _userService.GetUser(m.case_.User_Id);                                                                          
+                        m.case_.DefaultOwnerWG_Id = curUser.Default_WorkingGroup_Id;                        
+                    }
                 }
+                else
+                {
+                    if (m.case_.DefaultOwnerWG_Id.HasValue)
+                        m.CaseOwnerDefaultWorkingGroup = this._workingGroupService.GetWorkingGroup(m.case_.DefaultOwnerWG_Id.Value);                
+                }
+
+                //if (m.RegByUser != null && m.RegByUser.Default_WorkingGroup_Id.HasValue)
+                //{
+                //    m.CaseOwnerDefaultWorkingGroup = this._workingGroupService.GetWorkingGroup(m.RegByUser.Default_WorkingGroup_Id.Value);
+                //}
             }
 
             return m;
