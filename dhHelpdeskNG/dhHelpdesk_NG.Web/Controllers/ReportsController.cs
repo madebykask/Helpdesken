@@ -8,16 +8,20 @@
     using DH.Helpdesk.Web.Infrastructure.Filters.Reports;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Reports;
 
-    public sealed class ReportsController : BaseController
+    public sealed class ReportsController : UserInteractionController
     {
         private readonly IReportsModelFactory reportsModelFactory;
 
+        private readonly IReportsService reportsService;
+
         public ReportsController(
             IMasterDataService masterDataService, 
-            IReportsModelFactory reportsModelFactory)
+            IReportsModelFactory reportsModelFactory, 
+            IReportsService reportsService)
             : base(masterDataService)
         {
             this.reportsModelFactory = reportsModelFactory;
+            this.reportsService = reportsService;
         }
 
         [HttpGet]
@@ -44,7 +48,10 @@
                 filters = ReportsFilter.CreateDefault();
                 SessionFacade.SavePageFilters(PageName.Reports, filters);
             }
-            return null;
+
+            var searchData = this.reportsService.GetSearchData(this.OperationContext);
+            var model = this.reportsModelFactory.CreateSearchModel(filters, searchData);
+            return this.PartialView(model);
         } 
     }
 }

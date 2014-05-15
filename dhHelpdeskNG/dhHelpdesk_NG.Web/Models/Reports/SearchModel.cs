@@ -14,10 +14,6 @@
             this.Reports = reports;
         }
 
-        private SearchModel()
-        {
-        }
-
         [NotNull]
         public ConfigurableSearchFieldModel<SelectList> Reports { get; private set; }
 

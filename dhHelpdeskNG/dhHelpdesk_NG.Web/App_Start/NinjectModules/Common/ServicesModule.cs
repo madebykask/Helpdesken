@@ -96,8 +96,8 @@
             this.Bind<IWatchDateCalendarService>().To<WatchDateCalendarService>();
             this.Bind<IWorkingGroupService>().To<WorkingGroupService>();
             this.Bind<ICausingPartService>().To<CausingPartService>();
-
             this.Bind<IEmailService>().To<EmailService>().InSingletonScope();
+            this.Bind<IReportsService>().To<ReportsService>();
         }
 
         #endregion

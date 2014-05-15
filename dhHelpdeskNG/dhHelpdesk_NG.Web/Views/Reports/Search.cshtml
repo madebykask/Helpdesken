@@ -1,0 +1,13 @@
+﻿@model DH.Helpdesk.Web.Models.Reports.SearchModel
+
+<table class="tableform">
+    
+    @if (Model.Reports.Show)
+    {
+        <tr>
+            <td class="span3">@Translation.Get(Model.Reports.Caption)</td>
+            <td>@Html.DropDownListFor(m => m.ReportId, Model.Reports.Value)</td>
+        </tr>        
+    }
+
+</table>
