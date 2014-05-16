@@ -54,6 +54,10 @@ a, a:hover, a:focus {
 .content.nonemenu {
 	margin: 70px 20px 0px 20px;
 }
+
+.content.popup {
+	margin: 20px 20px 0px 20px;
+}
 .content.twomenu {
 	margin: 150px 20px 0px 20px;
 }
