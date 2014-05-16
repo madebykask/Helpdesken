@@ -94,12 +94,12 @@
             {
                 var startDate =
                     ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.StartDateAndTime.Container.Date);
-                
+
                 if (startDate.HasValue)
                 {
                     var startTime =
                         ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.StartDateAndTime.Container.Time);
-                   
+
                     if (startTime.HasValue)
                     {
                         startDateAndTime = new DateTime(
@@ -126,12 +126,12 @@
             {
                 var finishDate =
                     ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.FinishDateAndTime.Container.Date);
-           
+
                 if (finishDate.HasValue)
                 {
                     var finishTime =
                         ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.FinishDateAndTime.Container.Time);
-                    
+
                     if (finishTime.HasValue)
                     {
                         finishDateAndTime = new DateTime(
@@ -332,30 +332,48 @@
             return newFiles;
         }
 
-        private static List<ManualLog> CreateNewLogCollection(InputModel model)
+        private static List<ManualLog> CreateNewLogCollection(InputModel inputModel)
         {
             var newLogs = new List<ManualLog>();
 
-            CreateNewLogIfNeeded(model.Analyze.Logs.Value, Subtopic.Analyze, newLogs);
-            CreateNewLogIfNeeded(model.Implementation.Logs.Value, Subtopic.Implementation, newLogs);
-            CreateNewLogIfNeeded(model.Evaluation.Logs.Value, Subtopic.Evaluation, newLogs);
-            CreateNewLogIfNeeded(model.Log.Logs.Value, Subtopic.Log, newLogs);
+            if (inputModel.Analyze != null)
+            {
+                CreateNewLogIfNeeded(inputModel.Analyze.Logs, Subtopic.Analyze, newLogs);
+            }
+
+            if (inputModel.Implementation != null)
+            {
+                CreateNewLogIfNeeded(inputModel.Implementation.Logs, Subtopic.Implementation, newLogs);
+            }
+
+            if (inputModel.Evaluation != null)
+            {
+                CreateNewLogIfNeeded(inputModel.Evaluation.Logs, Subtopic.Evaluation, newLogs);
+            }
+
+            if (inputModel.Log != null)
+            {
+                CreateNewLogIfNeeded(inputModel.Log.Logs, Subtopic.Log, newLogs);
+            }
 
             return newLogs;
         }
 
-        private static void CreateNewLogIfNeeded(LogsModel model, Subtopic area, List<ManualLog> logs)
+        private static void CreateNewLogIfNeeded(
+            ConfigurableFieldModel<LogsModel> logField,
+            Subtopic subtopic,
+            List<ManualLog> logs)
         {
-            if (string.IsNullOrEmpty(model.Text))
+            if (logField == null || string.IsNullOrEmpty(logField.Value.Text))
             {
                 return;
             }
 
-            var emails = string.IsNullOrEmpty(model.Emails)
+            var emails = string.IsNullOrEmpty(logField.Value.Emails)
                 ? new List<MailAddress>(0)
-                : model.Emails.Split(Environment.NewLine).Select(e => new MailAddress(e)).ToList();
+                : logField.Value.Emails.Split(Environment.NewLine).Select(e => new MailAddress(e)).ToList();
 
-            var newLog = ManualLog.CreateNew(model.Text, emails, area);
+            var newLog = ManualLog.CreateNew(logField.Value.Text, emails, subtopic);
             logs.Add(newLog);
         }
 
