@@ -61,6 +61,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         private readonly ICaseSearchService _caseSearchService;
         private readonly IUserService _userService;
         private readonly IWorkingGroupService _workingGroupService;
+        private readonly IStateSecondaryService _stateSecondaryService;
 
         
 
@@ -88,6 +89,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                               ICaseSearchService caseSearchService,
                               IUserService userService,
                               IWorkingGroupService workingGroupService,
+                              IStateSecondaryService stateSecondaryService,
                               ILogFileService logFileService
                              )
                               : base(masterDataService)
@@ -115,6 +117,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             this._caseSearchService = caseSearchService;
             this._workingGroupService = workingGroupService;
             this._userService = userService;
+            this._stateSecondaryService = stateSecondaryService;
         }
 
         [HttpGet]
@@ -195,6 +198,12 @@ namespace DH.Helpdesk.SelfService.Controllers
                         caseOverview.CasePreview.Description = caseOverview.CasePreview.Description.Replace("\n", "<br />");
                         model.CaseOverview = caseOverview;
                         
+                        if (currentCase.StateSecondary_Id.HasValue)
+                        {
+                            var stateSecondary = _stateSecondaryService.GetStateSecondary(currentCase.StateSecondary_Id.Value);
+                            if (stateSecondary.NoMailToNotifier == 1)
+                                model.CaseOverview.CasePreview.FinishingDate = DateTime.UtcNow;
+                        }
                         model.ExLogFileGuid = currentCase.CaseGUID.ToString();
                         if (config.IsReceipt)
                         {
