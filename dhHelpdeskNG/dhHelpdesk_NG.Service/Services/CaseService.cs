@@ -311,7 +311,6 @@
 
         public IList<Case> GetCasesByCustomers(IEnumerable<int> customerIds) 
         {
-            return new List<Case>();
             return this._caseRepository
                 .GetMany(x => customerIds.Contains(x.Customer_Id) && 
                          x.Deleted == 0)
