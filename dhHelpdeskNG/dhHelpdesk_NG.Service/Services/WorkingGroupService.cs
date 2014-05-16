@@ -174,6 +174,7 @@ namespace DH.Helpdesk.Services.Services
 
             errors = new Dictionary<string, string>();
             workingGroup.EMail = workingGroup.EMail ?? string.Empty;
+            workingGroup.SendExternalEmailToWGUsers = (workingGroup.SendExternalEmailToWGUsers.HasValue) ? workingGroup.SendExternalEmailToWGUsers.Value : 0;
 
             if (string.IsNullOrEmpty(workingGroup.WorkingGroupName))
                 errors.Add("WorkingGroup.Name", "Du måste ange en driftgrupp");
