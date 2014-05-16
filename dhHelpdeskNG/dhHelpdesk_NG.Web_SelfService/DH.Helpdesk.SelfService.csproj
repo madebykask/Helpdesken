@@ -764,6 +764,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\PublishProfiles\DH.Helpdesk.SelfService.Release.pubxml" />
+    <None Include="Properties\PublishProfiles\DH.Helpdesk.SelfService.Release_AL.pubxml" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
