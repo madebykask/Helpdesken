@@ -5,7 +5,7 @@
 
     using DH.Helpdesk.BusinessData.Models.Reports;
     using DH.Helpdesk.BusinessData.Models.Reports.Output;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
+    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Web.Infrastructure.Filters.Reports;
     using DH.Helpdesk.Web.Models.Reports;
 
