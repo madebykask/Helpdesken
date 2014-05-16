@@ -71,10 +71,17 @@
             {
                 case ReportType.RegistratedCasesCaseType:
                     var response = this.reportsService.GetRegistratedCasesCaseTypeResponse(this.OperationContext);
-                    var model = this.reportsModelFactory.CreateRegistratedCasesCaseTypeModel(response);
+                    var model = this.reportsModelFactory.CreateRegistratedCasesCaseTypeModel(response, this.OperationContext);
                     return this.PartialView("RegistratedCasesCaseType", model);
             }
 
+            return null;
+        }
+
+        [HttpPost]
+        [BadRequestOnNotValid]
+        public PartialViewResult RegistratedCasesCaseType(RegistratedCasesCaseTypeModel model)
+        {
             return null;
         }
     }

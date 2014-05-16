@@ -292,53 +292,55 @@ $(function () {
             this.Hide = function() {
                 this.Container.remove();
             };
+        },
+
+        InitHierarchyLists : function() {
+            $("[data-hierarchylist-list]").each(function () {
+                var $this = $(this);
+
+                var list = new dhHelpdesk.HierarchyList.List();
+                list.SelectedValue = $this.attr("data-hierarchylist-list-selectedvalue");
+                list.GetItemsUrl = $this.attr("data-hierarchylist-list-getitemsurl");
+                list.Model = $(document).find("[ModelId=" + $this.attr("data-hierarchylist-list-modelid") + "]");
+                var selectedItem = null;
+
+                var empty = $(document.createElement("select"))
+                            .attr("disabled", "disabled");
+                $this.before(empty);
+
+                $.getJSON(list.GetItemsUrl, function (data) {
+                    for (var i = 0; i < data.Groups.length; i++) {
+                        var listGroup = new dhHelpdesk.HierarchyList.Group();
+                        list.AddGroup(listGroup);
+
+                        var group = data.Groups[i];
+                        for (var j = 0; j < group.Items.length; j++) {
+                            var item = group.Items[j];
+                            var listItem = new dhHelpdesk.HierarchyList.Item();
+                            listItem.Id = item.Id;
+                            listItem.ParentId = item.ParentId;
+                            listItem.Name = item.Name;
+                            listItem.Description = item.Description;
+                            listItem.CreateContainer();
+                            listGroup.AddItem(listItem);
+
+                            if (selectedItem == null && listItem.Id == list.SelectedValue) {
+                                selectedItem = listItem;
+                            }
+                        }
+                        listGroup.CreateContainer();
+                    }
+                    list.CreateContainer($this);
+                })
+                .always(function () {
+                    dhHelpdesk.HierarchyList.AddList(list);
+                    list.Recalc(selectedItem);
+                    empty.remove();
+                });
+
+            });
         }
     }
 
-
-    $("[data-hierarchylist-list]").each(function () {
-        var $this = $(this);
-
-        var list = new dhHelpdesk.HierarchyList.List();
-        list.SelectedValue = $this.attr("data-hierarchylist-list-selectedvalue");
-        list.GetItemsUrl = $this.attr("data-hierarchylist-list-getitemsurl");
-        list.Model = $(document).find("[ModelId=" + $this.attr("data-hierarchylist-list-modelid") + "]");
-        var selectedItem = null;
-
-        var empty = $(document.createElement("select"))
-                    .attr("disabled", "disabled");
-        $this.before(empty);
-
-        $.getJSON(list.GetItemsUrl, function(data) {
-            for (var i = 0; i < data.Groups.length; i++) {
-                var listGroup = new dhHelpdesk.HierarchyList.Group();
-                list.AddGroup(listGroup);
-
-                var group = data.Groups[i];
-                for (var j = 0; j < group.Items.length; j++) {
-                    var item = group.Items[j];
-                    var listItem = new dhHelpdesk.HierarchyList.Item();
-                    listItem.Id = item.Id;
-                    listItem.ParentId = item.ParentId;
-                    listItem.Name = item.Name;
-                    listItem.Description = item.Description;
-                    listItem.CreateContainer();
-                    listGroup.AddItem(listItem);
-
-                    if (selectedItem == null && listItem.Id == list.SelectedValue) {
-                        selectedItem = listItem;
-                    }
-                }
-                listGroup.CreateContainer();
-            }
-            list.CreateContainer($this);
-        })
-        .always(function() {
-            dhHelpdesk.HierarchyList.AddList(list);
-            list.Recalc(selectedItem);
-            empty.remove();
-        });
-
-    });
-
+    dhHelpdesk.HierarchyList.InitHierarchyLists();
 });

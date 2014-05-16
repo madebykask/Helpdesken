@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Reports
 {
+    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports;
     using DH.Helpdesk.BusinessData.Models.Reports.Output;
     using DH.Helpdesk.Web.Infrastructure.Filters.Reports;
@@ -13,6 +14,8 @@
             ReportsFilter filter, 
             SearchData searchData);
 
-        RegistratedCasesCaseTypeModel CreateRegistratedCasesCaseTypeModel(GetRegistratedCasesCaseTypeResponse response);
+        RegistratedCasesCaseTypeModel CreateRegistratedCasesCaseTypeModel(
+                                GetRegistratedCasesCaseTypeResponse response,
+                                OperationContext context);
     }
 }

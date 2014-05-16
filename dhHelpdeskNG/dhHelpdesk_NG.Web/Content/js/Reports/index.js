@@ -10,4 +10,8 @@ $(function() {
     });
 
     onSearchReport();
+
+    $("#reports_show").click(function() {
+        $("#report_form").submit();
+    });
 });

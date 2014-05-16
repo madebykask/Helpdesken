@@ -1,10 +1,12 @@
 ﻿namespace DH.Helpdesk.Web.Models.Reports
 {
+    using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
 
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public sealed class RegistratedCasesCaseTypeModel
     {
@@ -18,8 +20,10 @@
         public RegistratedCasesCaseTypeModel(
             MultiSelectList workingGroups, 
             MultiSelectList caseTypes,
-            IEnumerable<ProductArea> productAreas)
+            IEnumerable<ProductArea> productAreas, 
+            int customerId)
         {
+            this.CustomerId = customerId;
             this.CaseTypes = caseTypes;
             this.WorkingGroups = workingGroups;
             this.ProductAreas = productAreas;
@@ -40,7 +44,17 @@
         [NotNull]
         public IEnumerable<ProductArea> ProductAreas { get; private set; }
         
+        public int? ProductAreaId { get; set; }
+
         [MinValue(0)]
-        public int ProductAreaId { get; set; }
+        public int CustomerId { get; private set; }
+
+        [LocalizedRequired]
+        public DateTime PeriodFrom { get; set; }
+
+        [LocalizedRequired]
+        public DateTime PeriodUntil { get; set; }
+
+        public bool ShowDetails { get; set; }
     }
 }

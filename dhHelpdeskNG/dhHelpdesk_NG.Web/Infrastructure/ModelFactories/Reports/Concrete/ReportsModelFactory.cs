@@ -1,8 +1,10 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Reports.Concrete
 {
+    using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
 
+    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports;
     using DH.Helpdesk.BusinessData.Models.Reports.Output;
     using DH.Helpdesk.BusinessData.Models.Shared;
@@ -29,7 +31,9 @@
             return instance;
         }
 
-        public RegistratedCasesCaseTypeModel CreateRegistratedCasesCaseTypeModel(GetRegistratedCasesCaseTypeResponse response)
+        public RegistratedCasesCaseTypeModel CreateRegistratedCasesCaseTypeModel(
+                                    GetRegistratedCasesCaseTypeResponse response,
+                                    OperationContext context)
         {
             var workingGroups = CreateMultiSelectField(response.WorkingGroups);
             var caseTypes = CreateMultiSelectField(response.CaseTypes);
@@ -37,7 +41,11 @@
             var instance = new RegistratedCasesCaseTypeModel(
                             workingGroups,
                             caseTypes,
-                            productAreas);
+                            productAreas,
+                            context.CustomerId);
+            var today = DateTime.Today;
+            instance.PeriodFrom = today.AddYears(-1);
+            instance.PeriodUntil = today;
             return instance;
         }
 

@@ -1394,6 +1394,7 @@
     <Content Include="Views\Reports\Reports.cshtml" />
     <Content Include="Views\Reports\Search.cshtml" />
     <Content Include="Views\Reports\RegistratedCasesCaseType.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\YearMonthPicker.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
