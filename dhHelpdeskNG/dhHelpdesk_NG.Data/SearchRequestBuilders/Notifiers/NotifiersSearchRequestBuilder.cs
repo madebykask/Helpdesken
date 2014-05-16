@@ -4,7 +4,7 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Enums.Notifiers;
-    using DH.Helpdesk.BusinessData.Models.Common.Input;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Domain.Computers;
 

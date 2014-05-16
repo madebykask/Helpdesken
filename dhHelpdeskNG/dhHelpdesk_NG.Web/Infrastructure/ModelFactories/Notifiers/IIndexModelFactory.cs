@@ -2,9 +2,10 @@
 {
     using System.Collections.Generic;
 
-    using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Notifiers;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.SettingsEdit;
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Web.Infrastructure.Filters.Notifiers;
     using DH.Helpdesk.Web.Models.Notifiers;
 

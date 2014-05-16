@@ -3,8 +3,9 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
 
-    using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Reports;
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Web.Infrastructure.Filters.Reports;
     using DH.Helpdesk.Web.Models.Reports;
     using DH.Helpdesk.Web.Models.Shared;

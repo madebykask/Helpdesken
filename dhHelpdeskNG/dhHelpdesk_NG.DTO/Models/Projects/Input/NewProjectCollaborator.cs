@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Projects.Input
 {
-    using DH.Helpdesk.BusinessData.Models.Common.Input;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public class NewProjectCollaborator : INewBusinessModel

@@ -13,7 +13,7 @@
         [NotNullAndEmpty]
         public string Name { get; private set; }
         
-        [NotNullAndEmptyArray]
+        [NotNull]
         public byte[] Content { get; private set; }
     }
 }

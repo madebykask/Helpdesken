@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Common.Input
+﻿namespace DH.Helpdesk.BusinessData.Models.Shared.Input
 {
     public interface INewBusinessModel
     {

@@ -2,8 +2,9 @@
 {
     using System.Collections.Generic;
 
-    using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output;
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.Shared.Output;
 
     public class ComputerEditDataResponse
     {

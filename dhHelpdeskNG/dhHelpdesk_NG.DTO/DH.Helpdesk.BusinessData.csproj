@@ -145,7 +145,7 @@
     <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\OrdererProcessingSettings.cs" />
     <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\RegistrationProcessingSettings.cs" />
     <Compile Include="Models\Changes\GetSearchDataResponse.cs" />
-    <Compile Include="Models\Common\Input\SortField.cs" />
+    <Compile Include="Models\Shared\Input\SortField.cs" />
     <Compile Include="Models\BusinessModel.cs" />
     <Compile Include="Models\Customer\CustomerSettings.cs" />
     <Compile Include="Models\DailyReport\Output\DailyReportOverview.cs" />
@@ -195,7 +195,7 @@
     <Compile Include="Models\MailTemplates\Mail.cs" />
     <Compile Include="Models\MailTemplates\MailTemplate.cs" />
     <Compile Include="Models\ModelStates.cs" />
-    <Compile Include="Models\Common\Output\IdAndNameOverview.cs" />
+    <Compile Include="Models\Shared\Output\IdAndNameOverview.cs" />
     <Compile Include="Models\Document\CategoryWithSubCategory.cs" />
     <Compile Include="Models\Inventory\Edit\Computer\Computer.cs" />
     <Compile Include="Models\Inventory\Edit\Inventory\Inventory.cs" />
@@ -446,11 +446,11 @@
     <Compile Include="Models\Faq\Output\FaqDetailedOverview.cs" />
     <Compile Include="Models\Faq\Output\FaqFileOverview.cs" />
     <Compile Include="Models\Faq\Output\FaqOverview.cs" />
-    <Compile Include="Models\Common\Output\FieldOverviewSetting.cs" />
-    <Compile Include="Models\Common\Output\GroupWithEmails.cs" />
-    <Compile Include="Models\Common\Input\INewBusinessModel.cs" />
-    <Compile Include="Models\Common\Output\ItemOverview.cs" />
-    <Compile Include="Models\Common\Output\ItemWithEmails.cs" />
+    <Compile Include="Models\Shared\Output\FieldOverviewSetting.cs" />
+    <Compile Include="Models\Shared\Output\GroupWithEmails.cs" />
+    <Compile Include="Models\Shared\Input\INewBusinessModel.cs" />
+    <Compile Include="Models\Shared\ItemOverview.cs" />
+    <Compile Include="Models\Shared\Output\ItemWithEmails.cs" />
     <Compile Include="Models\Inventory\Input\NewItem.cs" />
     <Compile Include="Models\Inventory\Input\UpdatedItem.cs" />
     <Compile Include="Models\Notifiers\Notifier.cs" />
@@ -488,7 +488,7 @@
     <Compile Include="Models\Projects\Output\ProjectCollaboratorOverview.cs" />
     <Compile Include="Models\Questionnaire\Output\QuestionnaireOverview.cs" />
     <Compile Include="Models\TextTranslationList.cs" />
-    <Compile Include="Models\Common\Output\ItemWithEmail.cs" />
+    <Compile Include="Models\Shared\Output\ItemWithEmail.cs" />
     <Compile Include="Models\UserLists.cs" />
     <Compile Include="Models\UserSearchResults.cs" />
     <Compile Include="Enums\Changes\ChangeStatus.cs" />

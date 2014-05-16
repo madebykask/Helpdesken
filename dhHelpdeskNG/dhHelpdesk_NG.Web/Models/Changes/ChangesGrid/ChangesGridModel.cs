@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    using DH.Helpdesk.BusinessData.Models.Common.Input;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Models.Shared;
 

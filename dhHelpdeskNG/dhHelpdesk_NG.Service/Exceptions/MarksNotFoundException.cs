@@ -12,7 +12,7 @@
             this.Marks = marks;
         }
 
-        [NotNull]
+        [NotNullAndEmptyCollection]
         public List<string> Marks { get; private set; }
     }
 }

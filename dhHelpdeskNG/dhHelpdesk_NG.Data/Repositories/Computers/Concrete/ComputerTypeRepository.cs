@@ -4,7 +4,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
     using System.Globalization;
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
 

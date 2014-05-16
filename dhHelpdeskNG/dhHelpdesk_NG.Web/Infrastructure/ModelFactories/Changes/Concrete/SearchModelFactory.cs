@@ -5,7 +5,8 @@
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes;
-    using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Web.Infrastructure.Filters.Changes;
     using DH.Helpdesk.Web.Models.Changes;
     using DH.Helpdesk.Web.Models.Shared;

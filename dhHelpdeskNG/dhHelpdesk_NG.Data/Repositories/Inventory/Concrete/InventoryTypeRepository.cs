@@ -6,8 +6,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 
     using DH.Helpdesk.BusinessData.Enums.Inventory;
     using DH.Helpdesk.BusinessData.Models.Changes;
-    using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory;
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
 

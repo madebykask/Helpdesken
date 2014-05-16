@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes
 {
-    using DH.Helpdesk.BusinessData.Models.Common.Input;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.Services.Response.Changes;
     using DH.Helpdesk.Web.Models.Changes.ChangesGrid;
 

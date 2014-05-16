@@ -1,5 +1,4 @@
 ﻿using DH.Helpdesk.BusinessData.Models.BulletinBoard.Output;
-using DH.Helpdesk.BusinessData.Models.Common.Output;
 
 namespace DH.Helpdesk.Services.Services
 {

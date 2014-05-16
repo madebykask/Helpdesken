@@ -8,8 +8,8 @@
     using DH.Helpdesk.BusinessData.Enums.Changes.Fields;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeDetailedOverview;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeOverview;
-    using DH.Helpdesk.BusinessData.Models.Common.Input;
-    using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
+    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Services.DisplayValues;
     using DH.Helpdesk.Services.DisplayValues.Changes;

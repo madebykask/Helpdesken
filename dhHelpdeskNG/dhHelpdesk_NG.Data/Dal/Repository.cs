@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Data.Entity;
 
-    using DH.Helpdesk.BusinessData.Models.Common.Input;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.Dal.DbContext;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;

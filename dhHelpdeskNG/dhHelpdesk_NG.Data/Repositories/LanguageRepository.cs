@@ -13,8 +13,9 @@ namespace DH.Helpdesk.Dal.Repositories
     using System.Globalization;
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Language.Output;
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;

@@ -5,7 +5,8 @@
     using System.Linq;
     using System.Web.Mvc;
 
-    using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public class IndexViewModel

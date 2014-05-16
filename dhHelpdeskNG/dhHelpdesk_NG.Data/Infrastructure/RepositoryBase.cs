@@ -15,7 +15,7 @@ namespace DH.Helpdesk.Dal.Infrastructure
     using System.Linq;
     using System.Linq.Expressions;
 
-    using DH.Helpdesk.BusinessData.Models.Common.Input;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.Dal.DbContext;
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Dal.Infrastructure.Security;

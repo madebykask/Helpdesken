@@ -1,7 +1,7 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Changes.Input.NewChange
 {
     using DH.Helpdesk.BusinessData.Enums.Changes;
-    using DH.Helpdesk.BusinessData.Models.Common.Input;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class NewChange : INewBusinessModel

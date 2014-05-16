@@ -4,8 +4,9 @@ namespace DH.Helpdesk.Dal.Repositories.WorkstationModules.Concrete
     using System.Globalization;
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Inventory.Input;
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain.WorkstationModules;

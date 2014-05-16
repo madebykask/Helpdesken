@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using DH.Helpdesk.BusinessData.Models.Common.Output;
+
 using DH.Helpdesk.BusinessData.Models.Questionnaire.Output;
 using DH.Helpdesk.Common.Extensions.Integer;
 
@@ -10,6 +10,8 @@ namespace DH.Helpdesk.Web.Controllers
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Input;
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;

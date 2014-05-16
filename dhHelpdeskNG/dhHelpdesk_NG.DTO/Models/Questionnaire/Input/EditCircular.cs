@@ -1,10 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using DH.Helpdesk.BusinessData.Models.Common.Input;
+
 using DH.Helpdesk.Common.ValidationAttributes;
 
 namespace DH.Helpdesk.BusinessData.Models.Questionnaire.Input
 {
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
+
     public sealed class EditCircular:INewBusinessModel
     {
         public EditCircular(int id, 

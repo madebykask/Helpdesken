@@ -1,9 +1,9 @@
 ﻿namespace DH.Helpdesk.Services.Services.Concrete
 {
     using DH.Helpdesk.BusinessData.Models;
-    using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Reports;
     using DH.Helpdesk.BusinessData.Models.Reports.Output;
+    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Dal.Infrastructure.Translate;
     using DH.Helpdesk.Dal.Repositories;
 

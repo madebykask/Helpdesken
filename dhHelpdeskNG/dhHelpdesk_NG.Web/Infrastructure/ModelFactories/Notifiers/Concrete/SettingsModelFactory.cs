@@ -4,9 +4,10 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Notifiers.Concrete
     using System.Globalization;
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.SettingsEdit;
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
     using DH.Helpdesk.Web.Models.Notifiers;
 

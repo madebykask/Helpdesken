@@ -1,7 +1,7 @@
 ﻿namespace DH.Helpdesk.Dal.Mappers.Changes.EntityToBusinessModel
 {
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeOverview;
-    using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Common.Collections;
     using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Dal.Enums.Changes;

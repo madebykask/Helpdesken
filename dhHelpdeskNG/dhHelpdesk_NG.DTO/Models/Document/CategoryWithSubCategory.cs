@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
-using DH.Helpdesk.BusinessData.Models.Common.Input;
 
 namespace DH.Helpdesk.BusinessData.Models.Document
 {
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
+
     public sealed class CategoryWithSubCategory :INewBusinessModel
     {
         public CategoryWithSubCategory()

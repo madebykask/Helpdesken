@@ -2,7 +2,8 @@ namespace DH.Helpdesk.Services.Response.Inventory
 {
     using System.Collections.Generic;
 
-    using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public class ComputerFiltersResponse

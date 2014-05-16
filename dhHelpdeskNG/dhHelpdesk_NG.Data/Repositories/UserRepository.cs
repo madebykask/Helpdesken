@@ -11,7 +11,8 @@ namespace DH.Helpdesk.Dal.Repositories
     using System.Linq.Expressions;
 
     using DH.Helpdesk.BusinessData.Models;
-    using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.Common.Extensions.String;
     using DH.Helpdesk.Common.Types;

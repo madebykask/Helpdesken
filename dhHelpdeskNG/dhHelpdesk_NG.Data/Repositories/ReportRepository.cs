@@ -4,8 +4,9 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models;
-    using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Reports;
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Infrastructure.Translate;
     using DH.Helpdesk.Domain;

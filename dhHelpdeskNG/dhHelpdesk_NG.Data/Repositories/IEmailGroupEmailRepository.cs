@@ -3,7 +3,7 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models;
-    using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.BusinessData.Models.Shared.Output;
 
     public interface IEmailGroupEmailRepository
     {

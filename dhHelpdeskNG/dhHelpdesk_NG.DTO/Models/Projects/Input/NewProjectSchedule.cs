@@ -2,7 +2,7 @@
 {
     using System;
 
-    using DH.Helpdesk.BusinessData.Models.Common.Input;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public class NewProjectSchedule : INewBusinessModel

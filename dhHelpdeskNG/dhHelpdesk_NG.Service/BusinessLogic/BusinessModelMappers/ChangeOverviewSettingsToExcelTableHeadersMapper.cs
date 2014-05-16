@@ -4,7 +4,7 @@
 
     using DH.Helpdesk.BusinessData.Enums.Changes.Fields;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeOverview;
-    using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport.ExcelExport;
 
     public sealed class ChangeOverviewSettingsToExcelTableHeadersMapper : IBusinessModelsMapper<ChangeOverviewSettings, List<ExcelTableHeader>>

@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Reports.Output
 {
-    using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class SearchSettings

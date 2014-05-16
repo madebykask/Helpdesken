@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Common.Output
+﻿namespace DH.Helpdesk.BusinessData.Models.Shared.Output
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
