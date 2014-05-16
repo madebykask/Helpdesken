@@ -3,24 +3,44 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Linq;
     using System.Web.Mvc;
 
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes.Rules;
 
     [AttributeUsage(AttributeTargets.Property)]
     public sealed class LocalizedRequiredFromAttribute : ConditionalValidationAttribute, IClientValidatable
     {
+        #region Fields
+
         [NotNullAndEmpty]
         private readonly string dependencyPropertyName;
+
+        #endregion
+
+        #region Constructors and Destructors
 
         public LocalizedRequiredFromAttribute(string dependencyProperty)
         {
             this.dependencyPropertyName = dependencyProperty;
         }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        public IEnumerable<ModelClientValidationRule> GetClientValidationRules(
+            ModelMetadata metadata,
+            ControllerContext context)
+        {
+            var errorMessage = Translation.Get("required");
+            return new List<ModelClientValidationRule> { new ModelClientValidationRequiredFromRule(errorMessage) };
+        }
+
+        #endregion
+
+        #region Methods
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
@@ -36,19 +56,6 @@
             return ValidationResult.Success;
         }
 
-        public IEnumerable<ModelClientValidationRule> GetClientValidationRules(
-            ModelMetadata metadata,
-            ControllerContext context)
-        {
-            var isRequired = this.GetInstancePropertyValue<bool>(context, this.dependencyPropertyName);
-            var errorMessage = Translation.Get("required", Enums.TranslationSource.TextTranslation);
-
-            return new List<ModelClientValidationRule>
-                   {
-                       new ModelClientValidationRequiredFromRule(
-                           isRequired,
-                           errorMessage)
-                   };
-        }
+        #endregion
     }
 }

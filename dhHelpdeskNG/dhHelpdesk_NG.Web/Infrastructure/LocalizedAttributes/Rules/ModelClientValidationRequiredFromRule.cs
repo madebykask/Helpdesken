@@ -4,11 +4,14 @@
 
     public sealed class ModelClientValidationRequiredFromRule : ModelClientValidationRule
     {
-        public ModelClientValidationRequiredFromRule(bool isRequired, string errorMessage)
+        #region Constructors and Destructors
+
+        public ModelClientValidationRequiredFromRule(string errorMessage)
         {
             this.ValidationType = "requiredfrom";
-            this.ValidationParameters["isrequired"] = isRequired;
             this.ErrorMessage = errorMessage;
         }
+
+        #endregion
     }
 }

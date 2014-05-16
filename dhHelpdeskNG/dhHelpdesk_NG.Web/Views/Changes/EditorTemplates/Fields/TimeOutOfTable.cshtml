@@ -6,5 +6,6 @@
     return;
 }           
 
-@Html.EditorFor(m => m.Value, "TimePicker", new { id = ViewData["Id"] })
+@Html.EditorFor(m => m.Value, "TimePicker", new { id = ViewData["Id"], inputAttributes = new Dictionary<string, object> { { "data-dh-is-required", Model.IsRequired } } })
+@Html.HiddenFor(m => m.IsRequired)
 @Html.ValidationMessageFor(m => m.Value)

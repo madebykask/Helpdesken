@@ -3,9 +3,11 @@
         return params.isRequired == 'True' && !value ? false : true;
     });
 
-    $.validator.unobtrusive.adapters.add('requiredfrom', ['isrequired'], function(options) {
+    $.validator.unobtrusive.adapters.add('requiredfrom', [], function(options) {
+        var isRequired = $(options.element).attr('data-dh-is-required');
+
         var params = {
-            isRequired: options.params.isrequired
+            isRequired: isRequired
         };
 
         options.rules['requiredfrom'] = params;
