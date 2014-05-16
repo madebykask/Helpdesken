@@ -243,6 +243,7 @@
     <Compile Include="Infrastructure\Tools\IUserTemporaryFilesStorage.cs" />
     <Compile Include="Infrastructure\Tools\IUserTemporaryFilesStorageFactory.cs" />
     <Compile Include="Infrastructure\Tools\WebTemporaryFile.cs" />
+    <Compile Include="Infrastructure\Translate\Translator.cs" />
     <Compile Include="Infrastructure\Translation.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\UserContext.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\WorkContext.cs" />

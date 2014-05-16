@@ -12,12 +12,15 @@ namespace DH.Helpdesk.SelfService.NinjectModules.Modules
     using DH.Helpdesk.BusinessData.Models.Case.Input;
     using DH.Helpdesk.BusinessData.Models.Customer;
     using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
+    using DH.Helpdesk.Dal.Infrastructure.Translate;
     using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Dal.Mappers.Cases.BusinessModelToEntity;
     using DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel;
     using DH.Helpdesk.Dal.Mappers.ProductArea.EntityToBusinessModel;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Computers;
+    using DH.Helpdesk.SelfService.Infrastructure.Translate;
+
     using Ninject.Modules;
 
     /// <summary>
@@ -41,6 +44,8 @@ namespace DH.Helpdesk.SelfService.NinjectModules.Modules
             this.Bind<IBusinessModelToEntityMapper<CaseNotifier, ComputerUser>>()
                 .To<CaseNotifierToEntityMapper>()
                 .InSingletonScope();
+
+            this.Bind<ITranslator>().To<Translator>().InSingletonScope();
         }
     }
 }
