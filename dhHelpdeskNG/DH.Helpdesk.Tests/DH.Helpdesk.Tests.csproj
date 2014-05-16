@@ -79,6 +79,7 @@
     <Compile Include="Services\Exceptions\MarksNotFoundExceptionTests.cs" />
     <Compile Include="Services\Infrastructure\MailUniqueIdentifierProviderTests.cs" />
     <Compile Include="Services\NotifierServiceTests.cs" />
+    <Compile Include="Web\Infrastructure\Filters\Changes\ChangesFilterTests.cs" />
     <Compile Include="Web\Infrastructure\Tools\WebTemporaryFileTests.cs" />
   </ItemGroup>
   <ItemGroup>
