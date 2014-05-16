@@ -444,9 +444,19 @@
             throw new NotImplementedException();
         }
 
-        public Printer GetPrinterById(int id)
+        public Printer GetPrinter(int id)
         {
-            throw new NotImplementedException();
+            return this.printerRepository.FindById(id);
+        }
+
+        public PrinterEditOptionsResponse GetPrinterEditOptions(int customerId)
+        {
+            var departments = this.departmentRepository.FindActiveOverviews(customerId);
+            var buildings = this.buildingRepository.FindOverviews(customerId);
+            var floors = this.floorRepository.FindOverviews(customerId);
+            var rooms = this.roomRepository.FindOverviews(customerId);
+
+            return new PrinterEditOptionsResponse(departments, buildings, floors, rooms);
         }
 
         public List<PrinterOverview> GetPrinters(PrintersFilter printersFilter)
@@ -471,7 +481,7 @@
 
         public PrinterFieldsSettingsForModelEdit GetPrinterFieldSettingsForModelEdit(int customerId, int languageId)
         {
-            throw new NotImplementedException();
+            return this.printerFieldSettingsRepository.GetFieldSettingsForModelEdit(customerId, languageId);
         }
 
         public PrinterFieldsSettingsOverview GetPrinterFieldSettingsOverview(int customerId, int languageId)

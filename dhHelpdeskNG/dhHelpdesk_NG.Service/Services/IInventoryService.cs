@@ -100,7 +100,9 @@
 
         void UpdatePrinter(Printer businessModel);
 
-        Printer GetPrinterById(int id);
+        Printer GetPrinter(int id);
+
+        PrinterEditOptionsResponse GetPrinterEditOptions(int customerId);
 
         List<PrinterOverview> GetPrinters(PrintersFilter printersFilter);
 

@@ -38,6 +38,8 @@
 
         private readonly IServerViewModelBuilder serverViewModelBuilder;
 
+        private readonly IPrinterViewModelBuilder printerViewModelBuilder;
+
         public InventoryController(
             IMasterDataService masterDataService,
             IInventoryService inventoryService,
@@ -46,7 +48,8 @@
             IFloorService floorService,
             IRoomService roomService,
             IComputerViewModelBuilder computerViewModelBuilder,
-            IServerViewModelBuilder serverViewModelBuilder)
+            IServerViewModelBuilder serverViewModelBuilder,
+            IPrinterViewModelBuilder printerViewModelBuilder)
             : base(masterDataService)
         {
             this.inventoryService = inventoryService;
@@ -56,6 +59,7 @@
             this.roomService = roomService;
             this.computerViewModelBuilder = computerViewModelBuilder;
             this.serverViewModelBuilder = serverViewModelBuilder;
+            this.printerViewModelBuilder = printerViewModelBuilder;
         }
 
         public ViewResult Index()
@@ -317,7 +321,15 @@
         [HttpGet]
         public ViewResult EditPrinter(int id)
         {
-            return this.View("EditPrinter");
+            var model = this.inventoryService.GetPrinter(id);
+            var options = this.inventoryService.GetPrinterEditOptions(SessionFacade.CurrentCustomer.Id);
+            var settings = this.inventoryService.GetPrinterFieldSettingsForModelEdit(
+                SessionFacade.CurrentCustomer.Id,
+                SessionFacade.CurrentLanguageId);
+
+            var printerEditModel = this.printerViewModelBuilder.BuildViewModel(model, options, settings);
+
+            return this.View("EditPrinter", printerEditModel);
         }
 
         [HttpPost]
@@ -419,7 +431,17 @@
         [HttpGet]
         public ViewResult NewPrinter()
         {
-            throw new System.NotImplementedException();
+            var options = this.inventoryService.GetPrinterEditOptions(SessionFacade.CurrentCustomer.Id);
+            var settings = this.inventoryService.GetPrinterFieldSettingsForModelEdit(
+                SessionFacade.CurrentCustomer.Id,
+                SessionFacade.CurrentLanguageId);
+
+            var printerEditModel = this.printerViewModelBuilder.BuildViewModel(
+                options,
+                settings,
+                SessionFacade.CurrentCustomer.Id);
+
+            return this.View("NewPrinter", printerEditModel);
         }
 
         [HttpPost]
