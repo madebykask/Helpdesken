@@ -365,8 +365,8 @@
     <Compile Include="Models\Inventory\Output\SoftwareOverview.cs" />
     <Compile Include="Models\Questionnaire\Output\CircularOverview.cs" />
     <Compile Include="Models\Questionnaire\Output\QuestionnaireQuestionsOverview.cs" />
+    <Compile Include="Models\Reports\Output\GetRegistratedCasesCaseTypeResponse.cs" />
     <Compile Include="Models\Reports\Output\SearchOptions.cs" />
-    <Compile Include="Models\Reports\Output\SearchSettings.cs" />
     <Compile Include="Models\Reports\ReportType.cs" />
     <Compile Include="Models\Reports\SearchData.cs" />
     <Compile Include="Models\SelfService\Case\SelfServiceCaseOverview.cs" />

@@ -99,31 +99,36 @@
                         this.translator.Translate("Avslutskategori"));
                 case ReportType.ClosedCasesDay:
                     return string.Format(
-                        "{0} - {1}", 
+                        "{0} - {1}/{2}", 
                         this.translator.Translate("Rapport"),
-                        this.translator.Translate("Avslutade ärenden"));
+                        this.translator.Translate("Avslutade ärenden"),
+                        this.translator.Translate("dag"));
                 case ReportType.RegistratedCasesDay:
                     return string.Format(
-                        "{0} - {1}", 
+                        "{0} - {1}/{2}", 
                         this.translator.Translate("Rapport"),
-                        this.translator.Translate("Registrerade ärenden"));
+                        this.translator.Translate("Registrerade ärenden"),
+                        this.translator.Translate("dag"));
                 case ReportType.RegistratedCasesHour:
                     return string.Format(
-                        "{0} - {1}", 
+                        "{0} - {1}/{2}", 
                         this.translator.Translate("Rapport"),
-                        this.translator.Translate("Registrerade ärenden"));
+                        this.translator.Translate("Registrerade ärenden"),
+                        this.translator.Translate("timme"));
                 case ReportType.CasesInProgressDay:
                     return string.Format(
-                        "{0} - {1}", 
+                        "{0} - {1}/{2}", 
                         this.translator.Translate("Rapport"),
-                        this.translator.Translate("Pågående ärenden"));
+                        this.translator.Translate("Pågående ärenden"),
+                        this.translator.Translate("dag"));
                 case ReportType.ServiceReport:
                     return this.translator.Translate("Rapport - Servicerapport");
                 case ReportType.RegistratedCasesCaseType:
                     return string.Format(
-                        "{0} - {1}", 
+                        "{0} - {1}/{2}", 
                         this.translator.Translate("Rapport"),
-                        this.translator.Translate("Registrerade ärenden"));
+                        this.translator.Translate("Registrerade ärenden"),
+                        this.translator.Translate("Case Type"));
                 case ReportType.CaseTypeArticleNo:
                     return string.Format(
                         "{0} - {1}", 

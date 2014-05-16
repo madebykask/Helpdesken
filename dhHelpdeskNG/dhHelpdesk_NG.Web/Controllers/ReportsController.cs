@@ -2,11 +2,14 @@
 {
     using System.Web.Mvc;
 
+    using DH.Helpdesk.BusinessData.Models.Reports;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Enums;
     using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.ActionFilters;
     using DH.Helpdesk.Web.Infrastructure.Filters.Reports;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Reports;
+    using DH.Helpdesk.Web.Models.Reports;
 
     public sealed class ReportsController : UserInteractionController
     {
@@ -52,6 +55,27 @@
             var searchData = this.reportsService.GetSearchData(this.OperationContext);
             var model = this.reportsModelFactory.CreateSearchModel(filters, searchData);
             return this.PartialView(model);
-        } 
+        }
+
+        [HttpPost]
+        [BadRequestOnNotValid]
+        public PartialViewResult ReportsContent(SearchModel searchModel)
+        {
+            var filters = searchModel != null
+                  ? searchModel.ExtractFilters()
+                  : SessionFacade.FindPageFilters<ReportsFilter>(PageName.Reports);
+
+            SessionFacade.SavePageFilters(PageName.Reports, filters);
+
+            switch ((ReportType)filters.ReportId)
+            {
+                case ReportType.RegistratedCasesCaseType:
+                    var response = this.reportsService.GetRegistratedCasesCaseTypeResponse(this.OperationContext);
+                    var model = this.reportsModelFactory.CreateRegistratedCasesCaseTypeModel(response);
+                    return this.PartialView("RegistratedCasesCaseType", model);
+            }
+
+            return null;
+        }
     }
 }

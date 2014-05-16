@@ -4,30 +4,47 @@
     using DH.Helpdesk.BusinessData.Models.Reports;
     using DH.Helpdesk.BusinessData.Models.Reports.Output;
     using DH.Helpdesk.BusinessData.Models.Shared.Output;
-    using DH.Helpdesk.Dal.Infrastructure.Translate;
     using DH.Helpdesk.Dal.Repositories;
 
     public sealed class ReportsService : IReportsService
     {
         private readonly IReportCustomerRepository reportCustomerRepository;
 
-        private readonly ITranslator translator;
+        private readonly IWorkingGroupService workingGroupService;
+
+        private readonly ICaseTypeService caseTypeService;
+
+        private readonly IProductAreaService productAreaService;
 
         public ReportsService(
             IReportCustomerRepository reportCustomerRepository, 
-            ITranslator translator)
+            IWorkingGroupService workingGroupService, 
+            ICaseTypeService caseTypeService, 
+            IProductAreaService productAreaService)
         {
             this.reportCustomerRepository = reportCustomerRepository;
-            this.translator = translator;
+            this.workingGroupService = workingGroupService;
+            this.caseTypeService = caseTypeService;
+            this.productAreaService = productAreaService;
         }
 
         public SearchData GetSearchData(OperationContext context)
         {
             var reports = this.reportCustomerRepository.FindOverviews(context.CustomerId);
             var options = new SearchOptions(reports);
-            var reportsSettings = new FieldOverviewSetting(true, this.translator.Translate("Rapport"));
-            var settings = new SearchSettings(reportsSettings);
-            return new SearchData(options, settings);
+            return new SearchData(options);
+        }
+
+        public GetRegistratedCasesCaseTypeResponse GetRegistratedCasesCaseTypeResponse(OperationContext context)
+        {
+            var workingGroups = this.workingGroupService.GetOverviews(context.CustomerId);
+            var caseTypes = this.caseTypeService.GetOverviews(context.CustomerId);
+            var productAreas = this.productAreaService.GetProductAreas(context.CustomerId);
+
+            return new GetRegistratedCasesCaseTypeResponse(
+                                                        workingGroups,
+                                                        caseTypes,
+                                                        productAreas);
         }
     }
 }

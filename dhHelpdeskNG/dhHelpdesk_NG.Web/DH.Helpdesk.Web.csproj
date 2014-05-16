@@ -567,6 +567,7 @@
     <Compile Include="Models\Changes\ChangeEdit\ConfigurableFieldModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Server\ServerEditViewModel.cs" />
     <Compile Include="Models\Reports\IndexModel.cs" />
+    <Compile Include="Models\Reports\RegistratedCasesCaseTypeModel.cs" />
     <Compile Include="Models\Reports\SearchModel.cs" />
     <Compile Include="Models\Shared\ConfigurableContainerModel.cs" />
     <Compile Include="Models\Shared\ConfigurableSearchFieldModel.cs" />
@@ -949,6 +950,7 @@
     <Content Include="Content\js\Moxie.swf" />
     <Content Include="Content\js\Moxie.xap" />
     <Content Include="Content\js\plupload.full.min.js" />
+    <Content Include="Content\js\Reports\index.js" />
     <Content Include="Content\js\ui\dh.ui.hierarchylist.js" />
     <Content Include="Content\js\Users\modules.js" />
     <Content Include="Content\PIE.htc" />
@@ -1391,6 +1393,7 @@
     <Content Include="Views\Reports\Index.cshtml" />
     <Content Include="Views\Reports\Reports.cshtml" />
     <Content Include="Views\Reports\Search.cshtml" />
+    <Content Include="Views\Reports\RegistratedCasesCaseType.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

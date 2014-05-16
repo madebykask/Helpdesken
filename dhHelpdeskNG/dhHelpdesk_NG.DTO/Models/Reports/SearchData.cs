@@ -5,18 +5,12 @@
 
     public sealed class SearchData
     {
-        public SearchData(
-            SearchOptions options, 
-            SearchSettings settings)
+        public SearchData(SearchOptions options)
         {
-            this.Settings = settings;
             this.Options = options;
         }
 
         [NotNull]
         public SearchOptions Options { get; private set; }
-
-        [NotNull]
-        public SearchSettings Settings { get; private set; }
     }
 }

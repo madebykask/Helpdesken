@@ -25,6 +25,8 @@ namespace DH.Helpdesk.Dal.Repositories
         string GetWorkingGroupName(int workingGroupId);
 
         void ResetDefault(int exclude);
+
+        IEnumerable<ItemOverview> GetOverviews(int customerId);
     }
 
     public sealed class WorkingGroupRepository : RepositoryBase<WorkingGroupEntity>, IWorkingGroupRepository
@@ -45,11 +47,6 @@ namespace DH.Helpdesk.Dal.Repositories
             return
                 overviews.Select(o => new ItemOverview(o.Name, o.Value.ToString(CultureInfo.InvariantCulture))).ToList();
         }
-
-        private IQueryable<WorkingGroupEntity> FindByCustomerIdCore(int customerId)
-        {
-            return this.DataContext.WorkingGroups.Where(g => g.Customer_Id == customerId);
-        } 
 
         public List<ItemOverview> FindActiveOverviews(int customerId)
         {
@@ -108,6 +105,22 @@ namespace DH.Helpdesk.Dal.Repositories
                 this.Update(obj);
             }
         }
+
+        public IEnumerable<ItemOverview> GetOverviews(int customerId)
+        {
+            var entities = this.Table
+                    .Where(g => g.Customer_Id == customerId && g.IsActive == 1)
+                    .Select(g => new { Value = g.Id, Name = g.WorkingGroupName })
+                    .OrderBy(g => g.Name)
+                    .ToList();
+
+            return entities.Select(g => new ItemOverview(g.Name, g.Value.ToString(CultureInfo.InvariantCulture)));
+        }
+
+        private IQueryable<WorkingGroupEntity> FindByCustomerIdCore(int customerId)
+        {
+            return this.DataContext.WorkingGroups.Where(g => g.Customer_Id == customerId);
+        } 
 
         //public IList<WorkingGroup> GetCaseWorkingGroupsAvailable(int globalLockCaseToWorkingGroup, int usergroup, int customer, int userid, string[] reg)
         //{

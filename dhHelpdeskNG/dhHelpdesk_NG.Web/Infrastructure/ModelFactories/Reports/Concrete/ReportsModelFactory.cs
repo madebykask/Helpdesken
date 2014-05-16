@@ -4,11 +4,10 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models.Reports;
-    using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.Reports.Output;
     using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Web.Infrastructure.Filters.Reports;
     using DH.Helpdesk.Web.Models.Reports;
-    using DH.Helpdesk.Web.Models.Shared;
 
     internal sealed class ReportsModelFactory : IReportsModelFactory
     {
@@ -23,7 +22,6 @@
             SearchData searchData)
         {
             var reports = CreateListField(
-                        searchData.Settings.Reports,
                         searchData.Options.Reports,
                         filter.ReportId);
 
@@ -31,13 +29,29 @@
             return instance;
         }
 
-        private static ConfigurableSearchFieldModel<SelectList> CreateListField(
-            FieldOverviewSetting setting,
+        public RegistratedCasesCaseTypeModel CreateRegistratedCasesCaseTypeModel(GetRegistratedCasesCaseTypeResponse response)
+        {
+            var workingGroups = CreateMultiSelectField(response.WorkingGroups);
+            var caseTypes = CreateMultiSelectField(response.CaseTypes);
+            var productAreas = response.ProductAreas;
+            var instance = new RegistratedCasesCaseTypeModel(
+                            workingGroups,
+                            caseTypes,
+                            productAreas);
+            return instance;
+        }
+
+        private static SelectList CreateListField(
             IEnumerable<ItemOverview> items,
             int selectedId)
         {
-            var list = new SelectList(items, "Value", "Name", selectedId);
-            return new ConfigurableSearchFieldModel<SelectList>(setting.Caption, list);
+            return new SelectList(items, "Value", "Name", selectedId);
+        }
+
+        private static MultiSelectList CreateMultiSelectField(
+            IEnumerable<ItemOverview> items)
+        {
+            return new MultiSelectList(items, "Value", "Name");
         }
     }
 }

@@ -1,0 +1,23 @@
+﻿@model DH.Helpdesk.Web.Models.Reports.RegistratedCasesCaseTypeModel
+
+<table class="tableform">    
+    <tr>
+        <td class="span3">@Translation.Get("Driftgrupper")</td>
+        <td>@Html.DropDownListFor(m => m.WorkingGroupIds, Model.WorkingGroups, 
+                new { id = "working_groups_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })</td>
+    </tr>        
+    <tr>
+        <td class="span3">@Translation.Get("Ärendetyp")</td>
+        <td>@Html.DropDownListFor(m => m.CaseTypeIds, Model.CaseTypes,
+                new { id = "case_types_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })</td>
+    </tr>        
+</table>        
+
+<script type="text/javascript">
+    $(function() {
+        $("#working_groups_dropdown").multiselect();
+        $("#case_types_dropdown").multiselect();
+    })
+</script>
+
+

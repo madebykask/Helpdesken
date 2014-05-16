@@ -1,13 +1,12 @@
 ﻿@model DH.Helpdesk.Web.Models.Reports.SearchModel
 
-<table class="tableform">
-    
-    @if (Model.Reports.Show)
-    {
+@using (Ajax.BeginForm("ReportsContent", "Reports", null, 
+    new AjaxOptions { UpdateTargetId = "reports_container" }, new { id = "search_report_form" }))
+{
+    <table class="tableform">    
         <tr>
-            <td class="span3">@Translation.Get(Model.Reports.Caption)</td>
-            <td>@Html.DropDownListFor(m => m.ReportId, Model.Reports.Value)</td>
+            <td class="span3">@Translation.Get("Rapporter")</td>
+            <td>@Html.DropDownListFor(m => m.ReportId, Model.Reports, new { @data_report_type = ""})</td>
         </tr>        
-    }
-
-</table>
+    </table>        
+}

@@ -26,6 +26,8 @@ namespace DH.Helpdesk.Services.Services
 
         void SaveWorkingGroup(WorkingGroupEntity workingGroup, out IDictionary<string, string> errors);
         void Commit();
+
+        IEnumerable<ItemOverview> GetOverviews(int customerId);
     }
 
     public class WorkingGroupService : IWorkingGroupService
@@ -192,6 +194,11 @@ namespace DH.Helpdesk.Services.Services
         public void Commit()
         {
             this._unitOfWork.Commit();
+        }
+
+        public IEnumerable<ItemOverview> GetOverviews(int customerId)
+        {
+            return this._workingGroupRepository.GetOverviews(customerId);
         }
     }
 }

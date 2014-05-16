@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
@@ -17,6 +18,8 @@
 
         void SaveCaseType(CaseType caseType, out IDictionary<string, string> errors);
         void Commit();
+
+        IEnumerable<ItemOverview> GetOverviews(int customerId);
     }
 
     public class CaseTypeService : ICaseTypeService
@@ -101,6 +104,11 @@
         public void Commit()
         {
             this._unitOfWork.Commit();
+        }
+
+        public IEnumerable<ItemOverview> GetOverviews(int customerId)
+        {
+            return this._caseTypeRepository.GetOverviews(customerId);
         }
     }
 }
