@@ -12,24 +12,44 @@
         {
             if (updatedChange.Orderer == null)
             {
-                updatedChange.Orderer = UpdatedOrdererFields.CreateDefault();
+                updatedChange.Orderer = UpdatedOrdererFields.CreateEmpty();
+            }
+
+            if (updatedChange.General == null)
+            {
+                updatedChange.General = UpdatedGeneralFields.CreateEmpty();
+            }
+
+            if (updatedChange.Registration == null)
+            {
+                updatedChange.Registration = UpdatedRegistrationFields.CreateEmpty();
+            }
+
+            if (updatedChange.Analyze == null)
+            {
+                updatedChange.Analyze = UpdatedAnalyzeFields.CreateEmpty();
+            }
+
+            if (updatedChange.Implementation == null)
+            {
+                updatedChange.Implementation = UpdatedImplementationFields.CreateEmpty();
             }
 
             if (updatedChange.Evaluation == null)
             {
-                updatedChange.Evaluation = UpdatedEvaluationFields.CreateDefault();
+                updatedChange.Evaluation = UpdatedEvaluationFields.CreateEmpty();
             }
 
             this.RestoreOrderer(updatedChange.Orderer, existingChange.Orderer, settings.Orderer);
             this.RestoreGeneral(updatedChange.General, existingChange.General, settings.General);
             this.RestoreRegistration(updatedChange.Registration, existingChange.Registration, settings.Registration);
             this.RestoreAnalyze(updatedChange.Analyze, existingChange.Analyze, settings.Analyze);
-           
+
             this.RestoreImplementation(
                 updatedChange.Implementation,
                 existingChange.Implementation,
                 settings.Implementation);
-            
+
             this.RestoreEvaluation(updatedChange.Evaluation, existingChange.Evaluation, settings.Evaluation);
         }
 
@@ -44,13 +64,13 @@
         {
             this.RestoreFieldIfNeeded(updated, () => updated.CategoryId, existing.CategoryId, settings.Category.Show);
             this.RestoreFieldIfNeeded(updated, () => updated.PriorityId, existing.PriorityId, settings.Priority.Show);
-       
+
             this.RestoreFieldIfNeeded(
                 updated,
                 () => updated.ResponsibleId,
                 existing.ResponsibleId,
                 settings.Responsible.Show);
-            
+
             this.RestoreFieldIfNeeded(updated, () => updated.Solution, existing.Solution, settings.Solution.Show);
             this.RestoreFieldIfNeeded(updated, () => updated.Cost, existing.Cost, settings.Cost.Show);
             this.RestoreFieldIfNeeded(updated, () => updated.YearlyCost, existing.YearlyCost, settings.YearlyCost.Show);
@@ -109,12 +129,16 @@
             GeneralFields existing,
             GeneralProcessingSettings settings)
         {
+            if (updated == null)
+            {
+            }
+
             this.RestoreFieldIfNeeded(updated, () => updated.Priority, existing.Priority, settings.Priority.Show);
             this.RestoreFieldIfNeeded(updated, () => updated.Title, existing.Title, settings.Title.Show);
             this.RestoreFieldIfNeeded(updated, () => updated.StatusId, existing.StatusId, settings.Status.Show);
             this.RestoreFieldIfNeeded(updated, () => updated.SystemId, existing.SystemId, settings.System.Show);
             this.RestoreFieldIfNeeded(updated, () => updated.ObjectId, existing.ObjectId, settings.Object.Show);
-     
+
             this.RestoreFieldIfNeeded(
                 updated,
                 () => updated.WorkingGroupId,
@@ -132,7 +156,7 @@
                 () => updated.FinishingDate,
                 existing.FinishingDate,
                 settings.FinishingDate.Show);
-        
+
             this.RestoreFieldIfNeeded(updated, () => updated.Rss, existing.Rss, settings.Rss.Show);
         }
 
@@ -142,13 +166,13 @@
             ImplementationProcessingSettings settings)
         {
             this.RestoreFieldIfNeeded(updated, () => updated.StatusId, existing.StatusId, settings.Status.Show);
-      
+
             this.RestoreFieldIfNeeded(
                 updated,
                 () => updated.RealStartDate,
                 existing.RealStartDate,
                 settings.RealStartDate.Show);
-            
+
             this.RestoreFieldIfNeeded(
                 updated,
                 () => updated.FinishingDate,
@@ -192,7 +216,7 @@
             this.RestoreFieldIfNeeded(updated, () => updated.Phone, existing.Phone, settings.Phone.Show);
             this.RestoreFieldIfNeeded(updated, () => updated.CellPhone, existing.CellPhone, settings.CellPhone.Show);
             this.RestoreFieldIfNeeded(updated, () => updated.Email, existing.Email, settings.Email.Show);
-            
+
             this.RestoreFieldIfNeeded(
                 updated,
                 () => updated.DepartmentId,
@@ -206,7 +230,7 @@
             RegistrationProcessingSettings settings)
         {
             this.RestoreFieldIfNeeded(updated, () => updated.OwnerId, existing.OwnerId, settings.Owner.Show);
-          
+
             this.RestoreFieldIfNeeded(
                 updated,
                 () => updated.Description,
@@ -224,7 +248,7 @@
                 () => updated.Consequence,
                 existing.Consequence,
                 settings.Consequence.Show);
-          
+
             this.RestoreFieldIfNeeded(updated, () => updated.Impact, existing.Impact, settings.Impact.Show);
             this.RestoreFieldIfNeeded(updated, () => updated.Approval, existing.Approval, settings.Approval.Show);
 

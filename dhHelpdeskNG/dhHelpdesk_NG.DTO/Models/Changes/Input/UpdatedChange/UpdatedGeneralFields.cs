@@ -7,13 +7,15 @@
 
     public sealed class UpdatedGeneralFields
     {
+        #region Constructors and Destructors
+
         public UpdatedGeneralFields(
             int? priority,
             string title,
             int? statusId,
             int? systemId,
             int? objectId,
-            List<string> inventories, 
+            List<string> inventories,
             int? workingGroupId,
             int? administratorId,
             DateTime? finishingDate,
@@ -35,9 +37,29 @@
             this.Rss = rss;
         }
 
+        #endregion
+
+        #region Public Properties
+
+        [IsId]
+        public int? AdministratorId { get; private set; }
+
+        [IsId]
+        public int ChangedByUserId { get; private set; }
+
+        public DateTime ChangedDate { get; private set; }
+
+        public DateTime? FinishingDate { get; private set; }
+
+        [NotNull]
+        public List<string> Inventories { get; private set; }
+
+        [IsId]
+        public int? ObjectId { get; private set; }
+
         public int? Priority { get; private set; }
 
-        public string Title { get; private set; }
+        public bool Rss { get; private set; }
 
         [IsId]
         public int? StatusId { get; private set; }
@@ -45,25 +67,32 @@
         [IsId]
         public int? SystemId { get; private set; }
 
-        [IsId]
-        public int? ObjectId { get; private set; }
-
-        [NotNull]
-        public List<string> Inventories { get; private set; }
+        public string Title { get; private set; }
 
         [IsId]
         public int? WorkingGroupId { get; private set; }
 
-        [IsId]
-        public int? AdministratorId { get; private set; }
+        #endregion
 
-        public DateTime? FinishingDate { get; private set; }
+        #region Public Methods and Operators
 
-        public DateTime ChangedDate { get; private set; }
+        public static UpdatedGeneralFields CreateEmpty()
+        {
+            return new UpdatedGeneralFields(
+                null,
+                null,
+                null,
+                null,
+                null,
+                new List<string>(0),
+                null,
+                null,
+                null,
+                DateTime.Now,
+                1,
+                false);
+        }
 
-        [IsId]
-        public int ChangedByUserId { get; private set; }
-
-        public bool Rss { get; private set; }
+        #endregion
     }
 }

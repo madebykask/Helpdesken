@@ -13,7 +13,7 @@
 
         public bool EvaluationReady { get; private set; }
 
-        public static UpdatedEvaluationFields CreateDefault()
+        public static UpdatedEvaluationFields CreateEmpty()
         {
             return new UpdatedEvaluationFields(null, false);
         }

@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Changes.Input.NewChange
 {
+    using System.Collections.Generic;
+
     using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
@@ -29,13 +31,11 @@
         [IsId]
         public int CustomerId { get; set; }
 
-        [NotNull]
         public NewGeneralFields General { get; private set; }
 
         [IsId]
         public int Id { get; set; }
 
-        [NotNull]
         public NewOrdererFields Orderer { get; private set; }
 
         [NotNull]
@@ -88,9 +88,31 @@
             this.Evaluation = new NewEvaluationFields(null, false);
         }
 
+        internal void InitializeGeneralPartWithDefaultValues(OperationContext context)
+        {
+            this.General = new NewGeneralFields(
+                0,
+                null,
+                null,
+                null,
+                null,
+                new List<string>(0),
+                null,
+                null,
+                null,
+                context.DateAndTime,
+                context.UserId,
+                false);
+        }
+
         internal void InitializeImplementationPartWithDefautValues()
         {
             this.Implementation = new NewImplementationFields(null, null, null, false, false, null, false, false);
+        }
+
+        internal void InitializeOrdererPartWithDefaultValues()
+        {
+            this.Orderer = new NewOrdererFields(null, null, null, null, null, null);
         }
 
         #endregion

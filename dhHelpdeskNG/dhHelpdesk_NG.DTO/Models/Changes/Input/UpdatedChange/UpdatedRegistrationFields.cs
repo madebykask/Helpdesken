@@ -7,6 +7,8 @@
 
     public sealed class UpdatedRegistrationFields
     {
+        #region Constructors and Destructors
+
         public UpdatedRegistrationFields(
             int? ownerId,
             string description,
@@ -33,27 +35,53 @@
             this.RejectExplanation = rejectExplanation;
         }
 
-        [IsId]
-        public int? OwnerId { get; private set; }
+        #endregion
 
-        public string Description { get; private set; }
+        #region Public Properties
+
+        public StepStatus Approval { get; private set; }
+
+        public int? ApprovedByUserId { get; private set; }
+
+        public DateTime? ApprovedDateAndTime { get; private set; }
 
         public string BusinessBenefits { get; private set; }
 
         public string Consequence { get; private set; }
 
-        public string Impact { get; private set; }
+        public string Description { get; private set; }
 
         public DateTime? DesiredDate { get; private set; }
 
-        public bool Verified { get; private set; }
+        public string Impact { get; private set; }
 
-        public StepStatus Approval { get; private set; }
-
-        public DateTime? ApprovedDateAndTime { get; private set; }
-
-        public int? ApprovedByUserId { get; private set; }
+        [IsId]
+        public int? OwnerId { get; private set; }
 
         public string RejectExplanation { get; private set; }
+
+        public bool Verified { get; private set; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        public static UpdatedRegistrationFields CreateEmpty()
+        {
+            return new UpdatedRegistrationFields(
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                false,
+                StepStatus.None,
+                null,
+                null,
+                null);
+        }
+
+        #endregion
     }
 }

@@ -213,6 +213,16 @@
 
         public void AddChange(NewChangeRequest request)
         {
+            if (request.Change.Orderer == null)
+            {
+                request.Change.InitializeOrdererPartWithDefaultValues();
+            }
+
+            if (request.Change.General == null)
+            {
+                request.Change.InitializeGeneralPartWithDefaultValues(request.Context);
+            }
+
             request.Change.InitializeAnalyzePartWithDefaultValues();
             request.Change.InitializeImplementationPartWithDefautValues();
             request.Change.InitializeEvaluationPathWithDefaultValues();
@@ -580,7 +590,7 @@
                 workingGroups = this.workingGroupRepository.FindActiveOverviews(customerId);
             }
 
-            if (settings.General.Administrator.Show)
+            if (settings.General.Administrator.Show || settings.Analyze.Responsible.Show)
             {
                 users = this.userRepository.FindActiveOverviews(customerId);
             }

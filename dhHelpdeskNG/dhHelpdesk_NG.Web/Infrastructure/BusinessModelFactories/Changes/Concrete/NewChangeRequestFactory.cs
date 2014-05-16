@@ -99,6 +99,11 @@
 
         private static NewGeneralFields CreateNewGeneralPart(GeneralModel model, OperationContext context)
         {
+            if (model == null)
+            {
+                return null;
+            }
+
             return new NewGeneralFields(
                 ConfigurableFieldModel<int>.GetValueOrDefault(model.Prioritisation),
                 ConfigurableFieldModel<string>.GetValueOrDefault(model.Title),
@@ -138,6 +143,11 @@
 
         private static NewOrdererFields CreateNewOrdererPart(OrdererModel model, OperationContext context)
         {
+            if (model == null)
+            {
+                return null;
+            }
+
             return new NewOrdererFields(
                 ConfigurableFieldModel<string>.GetValueOrDefault(model.Id),
                 ConfigurableFieldModel<string>.GetValueOrDefault(model.Name),
