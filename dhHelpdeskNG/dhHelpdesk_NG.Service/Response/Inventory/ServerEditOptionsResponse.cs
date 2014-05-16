@@ -2,7 +2,7 @@ namespace DH.Helpdesk.Services.Response.Inventory
 {
     using System.Collections.Generic;
 
-    using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.BusinessData.Models.Shared;
 
     public class ServerEditOptionsResponse
     {
