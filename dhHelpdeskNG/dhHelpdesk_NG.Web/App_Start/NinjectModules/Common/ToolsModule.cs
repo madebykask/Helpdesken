@@ -3,11 +3,13 @@
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Infrastructure.Concrete;
     using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.BusinessLogic;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport.ExcelExport;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Common;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Common.Concrete;
     using DH.Helpdesk.Services.BusinessLogic.MailTools;
+    using DH.Helpdesk.Services.BusinessLogic.OtherTools.Concrete;
     using DH.Helpdesk.Services.Infrastructure;
     using DH.Helpdesk.Services.Infrastructure.Concrete;
     using DH.Helpdesk.Services.Services;
@@ -33,7 +35,7 @@
             this.Bind<IExportFileNameFormatter>().To<ExportFileNameFormatter>().InSingletonScope();
             this.Bind<IFilesStorage>().To<FilesStorage>().InSingletonScope();
             this.Bind<IMailUniqueIdentifierProvider>().To<MailUniqueIdentifierProvider>().InSingletonScope();
-            this.Bind<INewEntityIdProvider>().To<NewEntityIdProvider>().InSingletonScope();
+            this.Bind<TemporaryIdProvider>().To<TemporaryIdProvider>().InSingletonScope();
             this.Bind<ISendToDialogModelFactory>().To<SendToDialogModelFactory>().InSingletonScope();
             this.Bind<IUnitOfWork>().To<UnitOfWork>();
             this.Bind<IEditorStateCacheFactory>().To<EditorStateCacheFactory>().InSingletonScope();

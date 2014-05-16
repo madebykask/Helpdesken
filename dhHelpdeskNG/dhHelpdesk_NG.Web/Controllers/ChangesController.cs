@@ -11,6 +11,8 @@
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.BusinessLogic;
+    using DH.Helpdesk.Services.BusinessLogic.OtherTools.Concrete;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Enums;
     using DH.Helpdesk.Web.Enums.Changes;
@@ -54,7 +56,7 @@
 
         private readonly IUpdatedSettingsFactory updatedSettingFactory;
 
-        private readonly INewEntityIdProvider newEntityIdProvider;
+        private readonly TemporaryIdProvider temporaryIdProvider;
 
         #endregion
 
@@ -74,7 +76,7 @@
             ITemporaryFilesCacheFactory temporaryFilesCacheFactory,
             IUpdateChangeRequestFactory updateChangeRequestFactory,
             IUpdatedSettingsFactory updatedSettingFactory,
-            INewEntityIdProvider newEntityIdProvider)
+            TemporaryIdProvider temporaryIdProvider)
             : base(masterDataService)
         {
             this.changeModelFactory = changeModelFactory;
@@ -87,7 +89,7 @@
             this.settingsModelFactory = settingsModelFactory;
             this.updateChangeRequestFactory = updateChangeRequestFactory;
             this.updatedSettingFactory = updatedSettingFactory;
-            this.newEntityIdProvider = newEntityIdProvider;
+            this.temporaryIdProvider = temporaryIdProvider;
 
             this.editorStateCache = editorStateCacheFactory.CreateForModule(ModuleName.Changes);
             this.temporaryFilesCache = temporaryFilesCacheFactory.CreateForModule(ModuleName.Changes);
@@ -336,7 +338,7 @@
         [HttpGet]
         public ViewResult New()
         {
-            var temporaryId = this.newEntityIdProvider.CreateKey();
+            var temporaryId = this.temporaryIdProvider.ProvideTemporaryId();
             var response = this.changeService.GetNewChangeEditData(this.OperationContext);
             var model = this.newChangeModelFactory.Create(temporaryId, response);
 
