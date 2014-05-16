@@ -65,12 +65,7 @@
                             .WithMany()
                             .HasForeignKey(x => x.Status_Id)
                             .WillCascadeOnDelete(false);
-
-            this.HasOptional(x => x.WorkingGroup)
-                    .WithMany()
-                    .HasForeignKey(x => x.DefaultOwnerWG_Id)
-                    .WillCascadeOnDelete(false);
-
+  
             this.Property(x => x.AgreedDate).IsOptional();
             this.Property(x => x.ApprovedDate).IsOptional();
             this.Property(x => x.Available).IsRequired().HasMaxLength(100);

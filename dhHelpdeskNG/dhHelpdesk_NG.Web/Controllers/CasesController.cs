@@ -1120,7 +1120,7 @@ namespace DH.Helpdesk.Web.Controllers
             
             //var user = _userService.GetUser(case_.User_Id);
             //if (user.Default_WorkingGroup_Id.HasValue)            
-            if (case_.DefaultOwnerWG_Id.HasValue)
+            if (case_.DefaultOwnerWG_Id.HasValue && case_.DefaultOwnerWG_Id.Value > 0)
             {
                 var defaultWGEmail = _workingGroupService.GetWorkingGroup(case_.DefaultOwnerWG_Id.Value).EMail;
                 //var defaultWGEmail = _workingGroupService.GetWorkingGroup(user.Default_WorkingGroup_Id.Value).EMail;                
@@ -1148,11 +1148,7 @@ namespace DH.Helpdesk.Web.Controllers
                         case_.OU_Id = oldCase.OU_Id;
                         case_.UserCode = oldCase.UserCode;
                     }
-            }
-            //else
-            //{
-            //    mailSenders.DefaultOwnerWGEMail = "";
-            //}
+            }      
             
             // save case and case history
             int caseHistoryId = this._caseService.SaveCase(case_, caseLog, caseMailSetting, SessionFacade.CurrentUser.Id, this.User.Identity.Name, out errors);
@@ -1551,15 +1547,17 @@ namespace DH.Helpdesk.Web.Controllers
 
                 if (m.case_.Id == 0)  // new mode
                 {
+                    m.case_.DefaultOwnerWG_Id = 0;
                     if (m.case_.User_Id != 0)
                     {
-                        var curUser = _userService.GetUser(m.case_.User_Id);                                                                          
-                        m.case_.DefaultOwnerWG_Id = curUser.Default_WorkingGroup_Id;                        
+                        var curUser = _userService.GetUser(m.case_.User_Id);
+                        if (curUser.Default_WorkingGroup_Id != null)
+                           m.case_.DefaultOwnerWG_Id = curUser.Default_WorkingGroup_Id;                        
                     }
                 }
                 else
                 {
-                    if (m.case_.DefaultOwnerWG_Id.HasValue)
+                    if (m.case_.DefaultOwnerWG_Id.HasValue && m.case_.DefaultOwnerWG_Id.Value > 0)
                         m.CaseOwnerDefaultWorkingGroup = this._workingGroupService.GetWorkingGroup(m.case_.DefaultOwnerWG_Id.Value);                
                 }
 

@@ -84,11 +84,6 @@
                 .HasForeignKey(c => c.CausingPartId)
                 .WillCascadeOnDelete(false);
 
-            this.HasOptional(c => c.Workinggroup)
-                .WithMany()
-                .HasForeignKey(c => c.DefaultOwnerWG_Id)
-                .WillCascadeOnDelete(false);
-
             this.Property(x => x.AgreedDate).IsOptional();
             this.Property(x => x.ApprovedDate).IsOptional();
             this.Property(x => x.ApprovedBy_User_Id).IsRequired();
