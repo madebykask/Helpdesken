@@ -547,7 +547,7 @@
                                 var user = string.Empty;                                                                                                  
                                 if (log.Text_External != string.Empty)
                                 {
-                                    if ((Model.CasePreview.FinishingDate == null || !(log.LogDate > Model.CasePreview.FinishingDate)))
+                                    if (Model.CasePreview.FinishingDate == null || !(log.LogDate > Model.CasePreview.FinishingDate))
                                     {
                                         <tr>
                                             <td style="width: 15%">                                        

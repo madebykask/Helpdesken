@@ -198,11 +198,11 @@ namespace DH.Helpdesk.SelfService.Controllers
                         caseOverview.CasePreview.Description = caseOverview.CasePreview.Description.Replace("\n", "<br />");
                         model.CaseOverview = caseOverview;
                         
-                        if (currentCase.StateSecondary_Id.HasValue)
+                        if (currentCase.StateSecondary_Id.HasValue && model.CaseOverview.CasePreview.FinishingDate == null)
                         {
                             var stateSecondary = _stateSecondaryService.GetStateSecondary(currentCase.StateSecondary_Id.Value);
                             if (stateSecondary.NoMailToNotifier == 1)
-                                model.CaseOverview.CasePreview.FinishingDate = DateTime.UtcNow;
+                                model.CaseOverview.CasePreview.FinishingDate = DateTime.UtcNow; //model.CaseOverview.CasePreview.ChangeTime;
                         }
                         model.ExLogFileGuid = currentCase.CaseGUID.ToString();
                         if (config.IsReceipt)
