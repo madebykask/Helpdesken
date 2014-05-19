@@ -1,0 +1,31 @@
+   [HttpPost]
+        public ActionResult Upload(HttpPostedFileBase FileData)
+        {
+ 
+            FileData = Request.Files[0];
+            string[] fileContents = null;
+
+
+            if (FileData.ContentLength > 0)
+            {
+                var fileName = Path.GetFileName(FileData.FileName);
+                var path = Path.Combine(Server.MapPath("~/Content"), fileName);
+                FileData.SaveAs(path);
+
+               
+                fileContents =  System.IO.File.ReadAllLines(path);
+                int i=0;
+                foreach (var _Record in fileContents)
+                {
+                    i++;
+                    if (i >= 7) //Because Records start from Line 7
+                    {                        
+                        string[] FieldList = _Record.Split('\t'); // split text by TAB character                         
+                        // Save Record to SQL Database Table 
+
+                    }
+                }
+            }
+
+            return  View("index");
+        }

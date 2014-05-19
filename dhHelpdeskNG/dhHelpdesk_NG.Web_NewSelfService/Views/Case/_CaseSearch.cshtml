@@ -1,0 +1,76 @@
+﻿@model  DH.Helpdesk.NewSelfService.Models.Case.UserCasesModel 
+
+<form id="frmCaseSearch" name="frmCaseSearch">    
+    @Html.HiddenFor(c => Model.CustomerId)
+    @Html.HiddenFor(l => Model.LanguageId)
+    @Html.HiddenFor(u => Model.UserId)
+        
+    <input type="hidden" value="@SessionFacade.CurrentCaseSearch.Search.SortBy" id="hidSortBy" name="hidSortBy" />
+    <input type="hidden" value="@SessionFacade.CurrentCaseSearch.Search.Ascending" id="hidSortByAsc" name="hidSortByAsc" />
+
+    <div class="row">
+        <div class="span12">
+            <table class="tableform">               
+                <tr>
+                    <td class="span3">
+                        @Translation.Get("Sökord", Enums.TranslationSource.TextTranslation):
+                    </td>
+                    <td class="span12">
+                        @Html.TextBoxFor(s => Model.PharasSearch)
+                    </td>                    
+                </tr>
+                <tr>
+                    <td class="span3">
+                        @Translation.Get("Visa", Enums.TranslationSource.TextTranslation):
+                    </td>
+                    <td class="span12">
+                        <select id="ProgressId" name="ProgressId">
+                            <option value="2">@Translation.Get("Pågående ärenden", Enums.TranslationSource.TextTranslation)</option>                                                                                                               
+                            <option value="1">@Translation.Get("Avslutade ärenden", Enums.TranslationSource.TextTranslation)</option>                                                        
+                            <option value="1,2">@Translation.Get("Alla ärenden", Enums.TranslationSource.TextTranslation)</option>                                                                                    
+                        </select>
+                    </td>                                     
+                </tr>
+                <tr>
+                    <td class="span3">
+                        @Translation.Get("poster i sökresultat", Enums.TranslationSource.TextTranslation):
+                    </td>                    
+                    <td class="span12">
+                        @Html.TextBoxFor(s => Model.MaxRecords, new { style = "width:50px" })                        
+                        <button id="btnSearch" name="btnSearch" class="btn">@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)</button>
+                    </td>                   
+                </tr>
+            </table>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+    $('#btnSearch').click(function (e) {
+        e.preventDefault();        
+        search();
+    });
+
+    function search() {        
+        $.post('@Url.Action("SeachUserCase", "Case")', $("#frmCaseSearch").serialize(), function (result) {
+            $('#search_result').html(result);
+        });        
+    }
+
+
+    function sortCases(sortBy) {
+        var asc = $("#hidSortByAsc").val();
+        var selected = $("#hidSortBy").val();
+
+        if (sortBy == selected) {
+            asc = asc.toLowerCase().match('true') ? 'false' : 'true';
+        }
+        else {
+            asc = 'true';
+        }
+
+        $("#hidSortBy").val(sortBy);
+        $("#hidSortByAsc").val(asc);
+        search();
+    }
+</script>
