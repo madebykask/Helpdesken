@@ -5,20 +5,20 @@
 <html>
 <head>
     <meta content="html/text; charset=utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>@Translation.Get("dhHelpdesk", Enums.TranslationSource.TextTranslation)</title>
 
-    <link rel="stylesheet" href="@Url.Content("~/Content/themes/base/minified/jquery-ui.min.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/css/bootstrap.css")" />
-    <link rel="stylesheet" href="@Url.Content("~/Content/css/dhhelpdesk.css")" />
-    <link rel="stylesheet" href="@Url.Content("~/Content/css/profile.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/selfservice.css")" />
+    @*<link rel="stylesheet" href="@Url.Content("~/Content/css/profile.css")" />*@
     <link rel="stylesheet" href="@Url.Content("~/Content/js/jquery.plupload.queue/css/jquery.plupload.queue.css")" />
     
 
-    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery-1.8.3.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery-1.11.0.min.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.unobtrusive-ajax.min.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.validate.min.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.validate.unobtrusive.min.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery-ui-1.9.2.min.js")"></script>
+    @*<script type="text/javascript" src="@Url.Content("~/Content/js/jquery-ui-1.9.2.min.js")"></script>*@
     <script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap-multiselect.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap-datepicker.js")"></script>
@@ -30,6 +30,11 @@
     <script type="text/javascript" src="@Url.Content("~/Content/js/Shared/custom.validation.requiredfrom.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Content/js/Shared/custom.validation.maxlengthfrom.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Content/js/Shared/sortby.js")"></script>
+
+    <!--[if lt IE 9]>
+	 <script src="@Url.Content("~/Content/js/html5shiv.js")"></script>
+      <script src="@Url.Content("~/Content/js/respond.min.js")"></script>
+	<![endif]-->
 
     <script type="text/javascript">
         //Tooltip on startpage
@@ -108,11 +113,100 @@
     </script>
 </head> 
     <body>
-        <div class="navbar fixed">
+        <div class="jumbotron">
+        <div class="container-fluid">
+            <a href="index.html">
+                <div class="pull-left toplogo"></div>
+            </a>
+            <div class="pull-right small">
+                Emil Lundvall | Log out
+            </div>
+        </div>
+    </div>
+    <div class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="blue">
+                        <a href="index.html">
+                            <div class="ico-home"></div>
+                            Start
+                        </a>
+                    </li>
+                    <li class="dropdown blue">
+                        <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
+                            <div class="ico-new"></div>
+                            Order New Service Request
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="NewHiring.html"><span class="glyphicon glyphicon-plus"></span>New Hiring<br />
+                                <span class="small">Explanation and information on what link means and does</span></a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-plus"></span>Administration Change<br />
+                                <span class="small">Explanation and information on what link means and does</span></a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-plus"></span>Termination Administration<br />
+                                <span class="small">Explanation and information on what link means and does</span></a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-plus"></span>Correction<br />
+                                <span class="small">Explanation and information on what link means and does</span></a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-plus"></span>Time Data<br />
+                                <span class="small">Explanation and information on what link means and does</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="blue">
+                        <a href="Ongoing.html">
+                            <div class="ico-ongoing"></div>
+                            Ongoing Service Requests
+                        </a>
+                    </li>
+                    <li class="blue">
+                        <a href="#">
+                            <div class="ico-finished"></div>
+                            Finished Service Requests
+                        </a>
+                    </li>
+                    <li class="blue">
+                        <a href="Documents.html">
+                            <div class="ico-documents"></div>
+                            HR Documents
+                        </a>
+                    </li>
+                    <li class="blue">
+                        <a href="#">
+                            <div class="ico-coworkers"></div>
+                            My Co-Workers
+                        </a>
+                    </li>
+                    <li class="dropdown blue">
+                        <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
+                            <div class="ico-help"></div>
+                            Need Help?
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="FindYourWay.html">Find Your Way</a></li>
+                            <li><a href="#">Help</a></li>
+                            <li><a href="#">About</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+
+
+        @*<div class="navbar fixed">
             <div class="navbar-container">
                 <a href="/">
                     <div class="navbar-header pull-left navbar-brand">
-                        @*<img src="@Url.Content("~/Content/img/dhhelpdesk.png")" class="navbar-brand" />*@
+                        <img src="@Url.Content("~/Content/img/dhhelpdesk.png")" class="navbar-brand" />
                     </div>
                 </a>
                 <div class="navbar-header pull-right">
@@ -120,7 +214,7 @@
                     </ul>
                 </div>
             </div>
-        </div>
+        </div>*@
 
         @*<script type="text/javascript" src="@Url.Content("~/Content/js/dhHelpdesk.js")"></script>*@
         @RenderBody()

@@ -240,9 +240,8 @@
     }
 </script>
 
-<div class="content">
-    <input id="LanguageId" type="hidden" value="@Model.LanguageId"/>                
-    <div class="container">        
+<div class="container-fluid dh-container">
+    <input id="LanguageId" type="hidden" value="@Model.LanguageId"/>                        
         <div>
             <!-- Printer Icon and others -->     
             <div>
@@ -283,7 +282,7 @@
             @if (Model.IsEmptyCase == 0)
             {
             <li id="CasePreviewTab" class="active">                             
-                <a href="#fragment-1">@Translation.Get("Ärende", Enums.TranslationSource.TextTranslation): @Model.CaseOverview.CasePreview.CaseNumber</a>                                          
+                <a href="#fragment-1">@Translation.Get("Ärende", Enums.TranslationSource.TextTranslation): @Model.CaseOverview.CasePreview.CaseNumber</a>                                         
             </li>
             }
 
@@ -322,14 +321,14 @@
 
         </ul>
         
-        <div class="tab-content">           
+        <div class="content">           
 
             @if (Model.Configuration.ViewCaseMode == 1)
             {
                 <!-- New Case Tab content-->
                 if (Model.Configuration.ShowNewCase)
                 {
-                <div id="fragment-2" class="tab-pane tab-pane-border @(Model.IsEmptyCase == 1 ? "active" : "")">
+                <div id="fragment-2" class="tab-pane @(Model.IsEmptyCase == 1 ? "active" : "")">
                     <div class="container">
                         @Html.Partial("_NewCase", Model.NewCase)  
                     </div>
@@ -339,7 +338,7 @@
                 <!-- User Cases Tab content-->
                 if (Model.Configuration.ShowUserCases)
                 {
-                    <div id="fragment-3" class="tab-pane tab-pane-border " >
+                    <div id="fragment-3" class="tab-pane" >
                         <div class="container">
                             @Html.Partial("_CaseSearch", Model.UserCases)                           
                             <div class="container" id="search_result">
@@ -353,37 +352,20 @@
             <!-- Case Preview Tab content-->
             @if (Model.IsEmptyCase == 0)
             {
-                <div id="fragment-1" class="tab-pane tab-pane-border  active" >                
+                <div id="fragment-1" class="tab-pane active" >                
                                    
-                    <div class="container">
-                        <div>
-                            @if (Model.IsEmptyCase == 0)
-                            {
-                                @Html.Raw(Model.CaseOverview.InfoText)
-                                <br />
-                            }
-                        </div>
-                        <ul class="nav nav-tabs" id="mysubTab1">
-                            <li id="CaseTab" class="active">
-                                <a href="#fragment-1-1">@Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)</a>
-                            </li>
-                            @*<li id="PolandDataChangeTab" class="">
-                            <a href="#fragment-1-2">Pland Data Change</a>
-                        </li>*@
-                        </ul>
-                    
-                        <div class="tab-content">
-                            <!-- Case Tab content -->
-                            <div class="tab-pane tab-pane-border active" id="fragment-1-1">
-                            
-                                @(Model.Configuration.IsReceipt ? Html.Partial("_NewCaseReceipt", Model.CaseOverview) : Html.Partial("_CasePreview", Model.CaseOverview))
-                           
-                            </div>
-                            <!-- Pland Tab content-->
-                            <div class="tab-pane tab-pane-border " id="fragment-1-2">                                  
-                                -                           
+                    <div class="container-fluid dh-container">
+                        <div class="row">
+                            <div class="col-md-3 dh-col">
+                                <div class="container">
+                                    @if (Model.IsEmptyCase == 0)
+                                    {
+                                        @Html.Raw(Model.CaseOverview.InfoText)
+                                    }
+                                </div>
                             </div>
                         </div>
+                        @(Model.Configuration.IsReceipt ? Html.Partial("_NewCaseReceipt", Model.CaseOverview) : Html.Partial("_CasePreview", Model.CaseOverview))    
                     </div>                
                 </div>
             }
@@ -432,7 +414,6 @@
 
              
         </div>
-    </div>
     
 </div>
 
