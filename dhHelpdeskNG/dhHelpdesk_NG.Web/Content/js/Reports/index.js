@@ -14,4 +14,8 @@ $(function() {
     $("#reports_show").click(function() {
         $("#report_form").submit();
     });
+
+    $("#reports_print").click(function () {
+        $("#report_form").submit();
+    });
 });

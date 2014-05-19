@@ -9,6 +9,8 @@
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
     using DH.Helpdesk.Web.Infrastructure.Filters.Reports;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Reports;
+    using DH.Helpdesk.Web.Infrastructure.Print;
+    using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Models.Reports;
 
     public sealed class ReportsController : UserInteractionController
@@ -17,14 +19,18 @@
 
         private readonly IReportsService reportsService;
 
+        private readonly IReportsHelper reportsHelper;
+
         public ReportsController(
             IMasterDataService masterDataService, 
             IReportsModelFactory reportsModelFactory, 
-            IReportsService reportsService)
+            IReportsService reportsService, 
+            IReportsHelper reportsHelper)
             : base(masterDataService)
         {
             this.reportsModelFactory = reportsModelFactory;
             this.reportsService = reportsService;
+            this.reportsHelper = reportsHelper;
         }
 
         [HttpGet]
@@ -80,9 +86,19 @@
 
         [HttpPost]
         [BadRequestOnNotValid]
-        public PartialViewResult RegistratedCasesCaseType(RegistratedCasesCaseTypeModel model)
+        public ActionResult RegistratedCasesCaseType(RegistratedCasesCaseTypeModel model)
         {
-            return null;
+            string cachedReportKey;
+            this.reportsHelper.CreateRegistratedCasesCaseTypeReport(model, out cachedReportKey);
+            var reportModel = this.reportsModelFactory.CreateRegistratedCasesCaseTypeReportModel(cachedReportKey);
+
+            return this.PartialView("RegistratedCasesCaseTypeReport", reportModel);
+        }
+
+        [HttpGet]
+        public FileContentResult GetReportImage(string key)
+        {
+            return this.reportsHelper.GetReportImageFromCache(key);
         }
     }
 }

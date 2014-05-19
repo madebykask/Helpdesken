@@ -17,5 +17,7 @@
         RegistratedCasesCaseTypeModel CreateRegistratedCasesCaseTypeModel(
                                 GetRegistratedCasesCaseTypeResponse response,
                                 OperationContext context);
+
+        RegistratedCasesCaseTypeReportModel CreateRegistratedCasesCaseTypeReportModel(string key);
     }
 }

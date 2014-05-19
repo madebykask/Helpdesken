@@ -423,6 +423,8 @@
     <Compile Include="Infrastructure\Print\PrintPdfEvents.cs" />
     <Compile Include="Infrastructure\Print\PrintPdfResult.cs" />
     <Compile Include="Infrastructure\Print\PrintPdfView.cs" />
+    <Compile Include="Infrastructure\Tools\Concrete\ReportsHelper.cs" />
+    <Compile Include="Infrastructure\Tools\IReportsHelper.cs" />
     <Compile Include="Infrastructure\Translate\Translator.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\CacheContext.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\CustomerContext.cs" />
@@ -568,6 +570,7 @@
     <Compile Include="Models\Inventory\EditModel\Server\ServerEditViewModel.cs" />
     <Compile Include="Models\Reports\IndexModel.cs" />
     <Compile Include="Models\Reports\RegistratedCasesCaseTypeModel.cs" />
+    <Compile Include="Models\Reports\RegistratedCasesCaseTypeReportModel.cs" />
     <Compile Include="Models\Reports\SearchModel.cs" />
     <Compile Include="Models\Shared\ConfigurableContainerModel.cs" />
     <Compile Include="Models\Shared\ConfigurableSearchFieldModel.cs" />
@@ -1395,6 +1398,7 @@
     <Content Include="Views\Reports\Search.cshtml" />
     <Content Include="Views\Reports\RegistratedCasesCaseType.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\YearMonthPicker.cshtml" />
+    <Content Include="Views\Reports\RegistratedCasesCaseTypeReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

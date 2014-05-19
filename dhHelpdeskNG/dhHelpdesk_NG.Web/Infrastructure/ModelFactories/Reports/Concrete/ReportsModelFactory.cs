@@ -49,6 +49,12 @@
             return instance;
         }
 
+        public RegistratedCasesCaseTypeReportModel CreateRegistratedCasesCaseTypeReportModel(string key)
+        {
+            var instance = new RegistratedCasesCaseTypeReportModel(key);
+            return instance;
+        }
+
         private static SelectList CreateListField(
             IEnumerable<ItemOverview> items,
             int selectedId)

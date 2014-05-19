@@ -2,6 +2,8 @@
 {
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Reports;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Reports.Concrete;
+    using DH.Helpdesk.Web.Infrastructure.Tools;
+    using DH.Helpdesk.Web.Infrastructure.Tools.Concrete;
 
     using Ninject.Modules;
 
@@ -10,6 +12,7 @@
         public override void Load()
         {
             this.Bind<IReportsModelFactory>().To<ReportsModelFactory>().InSingletonScope();
+            this.Bind<IReportsHelper>().To<ReportsHelper>().InSingletonScope();
         }
     }
 }
