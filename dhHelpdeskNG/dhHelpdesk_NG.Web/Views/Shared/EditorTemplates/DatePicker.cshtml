@@ -10,11 +10,19 @@
     }
 
     var inputAttributes = (Dictionary<string, object>)ViewData["inputAttributes"];
-    var htmlAttributes = new Dictionary<string, object>(inputAttributes.Count + 1);
-  
-    foreach (var inputAttribute in inputAttributes)
+    Dictionary<string, object> htmlAttributes;
+    if (inputAttributes != null)
     {
-        htmlAttributes.Add(inputAttribute.Key, inputAttribute.Value);
+        htmlAttributes = new Dictionary<string, object>(inputAttributes.Count + 1);
+
+        foreach (var inputAttribute in inputAttributes)
+        {
+            htmlAttributes.Add(inputAttribute.Key, inputAttribute.Value);
+        }
+    }
+    else
+    {
+        htmlAttributes = new Dictionary<string, object>(1);
     }
 
     htmlAttributes.Add("class", "span2");

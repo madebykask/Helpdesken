@@ -1,9 +1,9 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Models.Reports.RegistratedCasesCaseTypeModel
 
-@using (Ajax.BeginForm("RegistratedCasesCaseType", "Reports", null,
-    new AjaxOptions { UpdateTargetId = "report_RegistratedCasesCaseType" }, new { id = "report_form" }))
+@using (Html.BeginForm("RegistratedCasesCaseType", "Reports", null, FormMethod.Post, new { id = "report_form" }))
 {
+    @Html.HiddenFor(m => m.IsPrint, new { data_isPrint = ""})
     <table class="tableform">    
         <tr>
             <td class="span3">@Translation.Get("Driftgrupper")</td>
@@ -44,7 +44,7 @@
         </tr>        
     </table>        
 }
-<div id="report_RegistratedCasesCaseType">    
+<div id="report_container">    
 </div>
 
 <script type="text/javascript">

@@ -24,7 +24,7 @@
         {
             var chart = Chart.GetFromCache(cacheKey);
             WebCache.Remove(cacheKey);
-            return new FileContentResult(chart.GetBytes(), @"image/png");            
+            return new FileContentResult(chart.GetBytes("png"), @"image/png");            
         }
 
         private void SaveToCache(Chart chart, out string cachedReportKey)

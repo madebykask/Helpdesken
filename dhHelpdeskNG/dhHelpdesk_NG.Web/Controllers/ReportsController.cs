@@ -92,6 +92,11 @@
             this.reportsHelper.CreateRegistratedCasesCaseTypeReport(model, out cachedReportKey);
             var reportModel = this.reportsModelFactory.CreateRegistratedCasesCaseTypeReportModel(cachedReportKey);
 
+            if (model.IsPrint)
+            {
+                return new PrintPdfResult(reportModel, "RegistratedCasesCaseTypeReport");
+            }
+
             return this.PartialView("RegistratedCasesCaseTypeReport", reportModel);
         }
 

@@ -1,3 +1,8 @@
-﻿@model DH.Helpdesk.Web.Models.Reports.RegistratedCasesCaseTypeReportModel
+﻿@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@model DH.Helpdesk.Web.Models.Reports.RegistratedCasesCaseTypeReportModel
 
-<img src="@Url.Action("GetReportImage", "Reports", new { key = Model.Key })" />
+@{
+    Layout = null;
+}
+
+<img src="@Url.ActionAbsolute("GetReportImage", "Reports", new { key = Model.Key })" />

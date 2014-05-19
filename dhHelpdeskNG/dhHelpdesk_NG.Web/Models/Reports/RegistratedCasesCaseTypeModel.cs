@@ -56,5 +56,7 @@
         public DateTime PeriodUntil { get; set; }
 
         public bool ShowDetails { get; set; }
+
+        public bool IsPrint { get; set; }
     }
 }

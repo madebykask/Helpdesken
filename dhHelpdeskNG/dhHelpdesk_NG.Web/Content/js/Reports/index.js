@@ -12,10 +12,18 @@ $(function() {
     onSearchReport();
 
     $("#reports_show").click(function() {
-        $("#report_form").submit();
+        var form = $("#report_form");
+        form.find("[data-isprint]").val("false");
+        $.post(form.attr("action"), form.serialize())
+            .done(function(data) {
+                $("#report_container").html(data);
+            });
+        return false;
     });
 
     $("#reports_print").click(function () {
-        $("#report_form").submit();
+        var form = $("#report_form");
+        form.find("[data-isprint]").val("true");
+        form.submit();
     });
 });

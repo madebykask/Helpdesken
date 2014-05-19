@@ -19,6 +19,12 @@
         protected UserInteractionController(IMasterDataService masterDataService)
             : base(masterDataService)
         {
+            if (SessionFacade.CurrentCustomer == null ||
+                SessionFacade.CurrentUser == null)
+            {
+                return;
+            }
+
             this.operationContext = new OperationContext
                                     {
                                         CustomerId = SessionFacade.CurrentCustomer.Id,
