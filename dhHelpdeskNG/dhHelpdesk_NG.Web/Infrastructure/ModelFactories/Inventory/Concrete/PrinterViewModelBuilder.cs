@@ -103,7 +103,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 settings.OtherFieldsSettings.URLFieldSetting,
                 model.OtherFields.URL);
 
-            var otherFieldModel = new OtherFieldsModel(trays, driver,info, url);
+            var otherFieldModel = new OtherFieldsModel(trays, driver, info, url);
 
             var adapter =
                 this.configurableFieldModelBuilder.CreateStringField(
@@ -140,15 +140,12 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             var organizationViewModel = new OrganizationFieldsViewModel(organizationFieldsModel, departments);
 
             return new PrinterViewModel(
-                model.CustomerId,
-                createdDate,
-                changedDate,
                 generalFieldsModel,
                 inventoryFieldModel,
                 communicationFieldsModel,
                 otherFieldModel,
                 organizationViewModel,
-                placeFieldsViewModel) { Id = model.Id };
+                placeFieldsViewModel) { Id = model.Id, CreatedDate = createdDate, ChangedDate = changedDate };
         }
 
         public PrinterViewModel BuildViewModel(
@@ -267,15 +264,12 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             var organizationViewModel = new OrganizationFieldsViewModel(organizationFieldsModel, departments);
 
             return new PrinterViewModel(
-                currentCustomerId,
-                null,
-                null,
                 generalFieldsModel,
                 inventoryFieldModel,
                 communicationFieldsModel,
                 otherFieldModel,
                 organizationViewModel,
-                placeFieldsViewModel);
+                placeFieldsViewModel) { CustomerId = currentCustomerId };
         }
     }
 }

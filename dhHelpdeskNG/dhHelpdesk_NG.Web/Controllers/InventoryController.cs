@@ -40,6 +40,10 @@
 
         private readonly IPrinterViewModelBuilder printerViewModelBuilder;
 
+        private readonly IInventoryViewModelBuilder inventoryViewModelBuilder;
+
+        private readonly IDynamicsFieldsModelBuilder dynamicsFieldsModelBuilder;
+
         public InventoryController(
             IMasterDataService masterDataService,
             IInventoryService inventoryService,
@@ -49,7 +53,9 @@
             IRoomService roomService,
             IComputerViewModelBuilder computerViewModelBuilder,
             IServerViewModelBuilder serverViewModelBuilder,
-            IPrinterViewModelBuilder printerViewModelBuilder)
+            IPrinterViewModelBuilder printerViewModelBuilder,
+            IInventoryViewModelBuilder inventoryViewModelBuilder,
+            IDynamicsFieldsModelBuilder dynamicsFieldsModelBuilder)
             : base(masterDataService)
         {
             this.inventoryService = inventoryService;
@@ -60,6 +66,8 @@
             this.computerViewModelBuilder = computerViewModelBuilder;
             this.serverViewModelBuilder = serverViewModelBuilder;
             this.printerViewModelBuilder = printerViewModelBuilder;
+            this.inventoryViewModelBuilder = inventoryViewModelBuilder;
+            this.dynamicsFieldsModelBuilder = dynamicsFieldsModelBuilder;
         }
 
         public ViewResult Index()
@@ -221,7 +229,9 @@
                     return this.RedirectToAction("EditPrinter", new { id });
 
                 default:
-                    return this.RedirectToAction("EditInventory", new { id });
+                    return this.RedirectToAction(
+                        "EditInventory",
+                        new { id, inventoryTypeId = currentMode});
             }
         }
 
@@ -340,14 +350,31 @@
         }
 
         [HttpGet]
-        public ViewResult EditInventory(int id)
+        public ViewResult EditInventory(int id, int inventoryTypeId)
         {
-            return this.View("EditInventory");
+            var model = this.inventoryService.GetInventory(id);
+            var settings = this.inventoryService.GetInventoryFieldSettingsForModelEdit(inventoryTypeId);
+            var options = this.inventoryService.GetInventoryInventoryEditOptions(SessionFacade.CurrentCustomer.Id);
+            var typeGroupModels = this.inventoryService.GetTypeGroupModels(inventoryTypeId);
+
+            var inventoryViewModel = this.inventoryViewModelBuilder.BuildViewModel(
+                model.Inventory,
+                options,
+                settings.InventoryFieldSettingsForModelEdit);
+            var dynamicFieldsModel = this.dynamicsFieldsModelBuilder.BuildViewModel(
+                model.DynamicData,
+                settings.InventoryDynamicFieldSettingForModelEditData,
+                id);
+            inventoryViewModel.Name = model.Inventory.InventoryTypeName;
+ 
+            var viewModel = new InventoryEditViewModel(inventoryViewModel, dynamicFieldsModel, typeGroupModels);
+
+            return this.View("EditInventory", viewModel);
         }
 
         [HttpPost]
         [BadRequestOnNotValid]
-        public ViewResult EditInventory(InventoryViewModel inventoryViewModel)
+        public ViewResult EditInventory(InventoryEditViewModel inventoryEditViewModel)
         {
             return this.View("EditInventory");
         }
@@ -459,7 +486,7 @@
 
         [HttpPost]
         [BadRequestOnNotValid]
-        public ViewResult NewInventory(InventoryViewModel inventoryViewModel)
+        public ViewResult NewInventory(InventoryEditViewModel inventoryEditViewModel)
         {
             throw new System.NotImplementedException();
         }

@@ -13,7 +13,6 @@
         [IsId]
         public int? DepartmentId { get; set; }
 
-        [IsId]
         public ConfigurableFieldModel<string> UnitId { get; set; }
     }
 }

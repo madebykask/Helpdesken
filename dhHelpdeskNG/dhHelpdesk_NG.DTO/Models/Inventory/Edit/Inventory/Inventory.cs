@@ -11,6 +11,8 @@
             ModelStates businessModelState,
             int inventoryTypeId,
             int? departmentId,
+            int? buildingId,
+            int? floorId,
             int? roomId,
             int? changeByUserId,
             string name,
@@ -24,6 +26,8 @@
             DateTime? syncChangeDate)
             : base(businessModelState)
         {
+            this.FloorId = floorId;
+            this.BuildingId = buildingId;
             this.InventoryTypeId = inventoryTypeId;
             this.DepartmentId = departmentId;
             this.RoomId = roomId;
@@ -42,8 +46,17 @@
         [IsId]
         public int InventoryTypeId { get; private set; }
 
+        [NotNullAndEmpty]
+        public string InventoryTypeName { get; private set; }
+
         [IsId]
         public int? DepartmentId { get; private set; }
+
+        [IsId]
+        public int? BuildingId { get; private set; }
+
+        [IsId]
+        public int? FloorId { get; private set; }
 
         [IsId]
         public int? RoomId { get; private set; }
@@ -51,24 +64,27 @@
         [IsId]
         public int? ChangeByUserId { get; private set; }
 
-        [NotNullAndEmpty]
+        [NotNull]
         public string Name { get; private set; }
 
         public string Model { get; private set; }
 
-        [NotNullAndEmpty]
+        [NotNull]
         public string Manufacturer { get; private set; }
 
-        [NotNullAndEmpty]
+        [NotNull]
         public string SerialNumber { get; private set; }
 
-        [NotNullAndEmpty]
+        [NotNull]
         public string TheftMark { get; private set; }
 
-        [NotNullAndEmpty]
+        [NotNull]
         public string BarCode { get; private set; }
 
         public DateTime? PurchaseDate { get; private set; }
+
+        [AllowRead(ModelStates.ForEdit)]
+        public string[] Workstations { get; private set; }
 
         public string Info { get; private set; }
 
@@ -83,6 +99,8 @@
         public static Inventory CreateNew(
             int inventoryTypeId,
             int? departmentId,
+            int? buildingId,
+            int? floorId,
             int? roomId,
             int? changeByUserId,
             string name,
@@ -100,6 +118,8 @@
                 ModelStates.Created,
                 inventoryTypeId,
                 departmentId,
+                buildingId,
+                floorId,
                 roomId,
                 changeByUserId,
                 name,
@@ -119,6 +139,8 @@
             int inventoryTypeId,
             int id,
             int? departmentId,
+            int? buildingId,
+            int? floorId,
             int? roomId,
             int? changeByUserId,
             string name,
@@ -136,6 +158,8 @@
                 ModelStates.Updated,
                 inventoryTypeId,
                 departmentId,
+                buildingId,
+                floorId,
                 roomId,
                 changeByUserId,
                 name,
@@ -153,8 +177,11 @@
 
         public static Inventory CreateForEdit(
             int inventoryTypeId,
+            string inventoryTypeName,
             int id,
             int? departmentId,
+            int? buildingId,
+            int? floorId,
             int? roomId,
             int? changeByUserId,
             string name,
@@ -164,6 +191,7 @@
             string theftMark,
             string barCode,
             DateTime? purchaseDate,
+            string[] worstations,
             string info,
             DateTime? syncChangeDate,
             DateTime createdDate,
@@ -173,6 +201,8 @@
                 ModelStates.ForEdit,
                 inventoryTypeId,
                 departmentId,
+                buildingId,
+                floorId,
                 roomId,
                 changeByUserId,
                 name,
@@ -183,7 +213,14 @@
                 barCode,
                 purchaseDate,
                 info,
-                syncChangeDate) { Id = id, CreatedDate = createdDate, ChangeDate = changedDate };
+                syncChangeDate)
+                                    {
+                                        Id = id,
+                                        InventoryTypeName = inventoryTypeName,
+                                        CreatedDate = createdDate,
+                                        ChangeDate = changedDate,
+                                        Workstations = worstations
+                                    };
 
             return businessModel;
         }

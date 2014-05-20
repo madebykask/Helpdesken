@@ -8,16 +8,14 @@
         public const string True = "1";
 
         public DynamicFieldModel(
-            int inventoryId,
             int inventoryTypePropertyId,
             int groupId,
             string caption,
             int position,
-            int? maxSize,
+            int maxSize,
             FieldTypes fieldTypes,
             string value)
         {
-            this.InventoryId = inventoryId;
             this.InventoryTypePropertyId = inventoryTypePropertyId;
             this.GroupId = groupId;
             this.Caption = caption;
@@ -28,12 +26,8 @@
         }
 
         [IsId]
-        public int InventoryId { get; set; }
-
-        [IsId]
         public int InventoryTypePropertyId { get; set; }
 
-        [IsId]
         public int GroupId { get; set; }
 
         [NotNullAndEmpty]
@@ -41,10 +35,26 @@
 
         public int Position { get; set; }
 
-        public int? MaxSize { get; set; }
+        public int MaxSize { get; set; }
 
         public FieldTypes FieldTypes { get; set; }
 
         public string Value { get; set; }
+    }
+
+    public class DynamicFieldStringValue
+    {
+        public DynamicFieldStringValue(
+            string value,
+            int maxSize)
+        {
+            this.Value = value;
+            this.MaxSize = maxSize;
+        }
+
+        //[MaxSizeFrom("MaxSize")]
+        public string Value { get; set; }
+
+        public int MaxSize { get; set; }
     }
 }

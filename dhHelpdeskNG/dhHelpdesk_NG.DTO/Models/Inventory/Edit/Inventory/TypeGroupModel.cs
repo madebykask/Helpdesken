@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Inventory
+﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 

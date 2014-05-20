@@ -12,9 +12,6 @@
         }
 
         public PrinterViewModel(
-            int? customerId,
-            ConfigurableFieldModel<DateTime> createdDate,
-            ConfigurableFieldModel<DateTime> changedDate,
             GeneralFieldsModel generalFields,
             InventoryFieldsModel inventoryFields,
             CommunicationFieldsModel communicationFields,
@@ -22,9 +19,6 @@
             OrganizationFieldsViewModel organizationFieldsViewModel,
             PlaceFieldsViewModel placeFieldsViewModel)
         {
-            this.CustomerId = customerId;
-            this.CreatedDate = createdDate;
-            this.ChangedDate = changedDate;
             this.GeneralFieldsModel = generalFields;
             this.InventoryFieldsModel = inventoryFields;
             this.CommunicationFieldsModel = communicationFields;
@@ -37,11 +31,11 @@
         public int Id { get; set; }
 
         [IsId]
-        public int? CustomerId { get; private set; }
+        public int? CustomerId { get; set; }
 
-        public ConfigurableFieldModel<DateTime> CreatedDate { get; private set; }
+        public ConfigurableFieldModel<DateTime> CreatedDate { get; set; }
 
-        public ConfigurableFieldModel<DateTime> ChangedDate { get; private set; }
+        public ConfigurableFieldModel<DateTime> ChangedDate { get; set; }
 
         [NotNull]
         public GeneralFieldsModel GeneralFieldsModel { get; private set; }

@@ -417,8 +417,6 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 model.ContactInformationFields.UserName);
 
             return new ComputerViewModel(
-                createdDate,
-                changedDate,
                 dateFieldsModel,
                 communicationViewModel,
                 contactFieldsModel,
@@ -435,7 +433,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 operatingSystemsViewModel,
                 organizationViewModel,
                 processorViewModel,
-                workstationViewModel) { Id = model.Id };
+                workstationViewModel) { Id = model.Id, CreatedDate = createdDate, ChangedDate = changedDate };
         }
 
         public ComputerViewModel BuildViewModel(
@@ -765,8 +763,6 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 null);
 
             return new ComputerViewModel(
-                null,
-                null,
                 dateFieldsModel,
                 communicationViewModel,
                 contactFieldsModel,

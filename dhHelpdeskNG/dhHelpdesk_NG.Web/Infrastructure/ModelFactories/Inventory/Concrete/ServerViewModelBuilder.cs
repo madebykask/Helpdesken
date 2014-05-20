@@ -209,8 +209,6 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             var stateFieldsModel = new StateFieldsModel(syncDate, model.StateFields.CreatedBy);
 
             return new ServerViewModel(
-                createdDate,
-                changedDate,
                 generalFieldsModel,
                 otherFieldModel,
                 stateFieldsModel,
@@ -221,7 +219,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 communicationViewModel,
                 operatingSystemsViewModel,
                 processorViewModel,
-                placeFieldsViewModel) { Id = model.Id };
+                placeFieldsViewModel) { Id = model.Id, CreatedDate = createdDate, ChangedDate = changedDate };
         }
 
         public ServerViewModel BuildViewModel(
@@ -409,8 +407,6 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             var stateFieldsModel = new StateFieldsModel(syncDate, null);
 
             return new ServerViewModel(
-                null,
-                null,
                 generalFieldsModel,
                 otherFieldModel,
                 stateFieldsModel,

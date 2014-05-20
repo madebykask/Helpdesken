@@ -1,191 +1,171 @@
 ﻿@using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings
 @using DH.Helpdesk.Web.Models.Inventory.EditModel.Inventory
-@model InventoryViewModel
+@model InventoryEditViewModel
 <table class="tableform">
-    @if (Model.Departments.Show
-         || Model.Inventory.Name.Show
-         || Model.Inventory.Model.Show
-         || Model.Inventory.Manufacturer.Show
-         || Model.Inventory.SerialNumber.Show
-         || Model.Inventory.TheftMark.Show)
+    @if (Model.InventoryViewModel.DefaultFieldsViewModel.Departments.Show
+         || Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Name.Show
+         || Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Model.Show
+         || Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Manufacturer.Show
+         || Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.SerialNumber.Show
+         || Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.TheftMark.Show)
     {
         <tr>
-            <th colspan="2" class="header">@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</th>
+            <th colspan="2" class="header">@Translation.Get("Allmänt")</th>
         </tr>
     }
-    @if (Model.Departments.Show)
+    @if (Model.InventoryViewModel.DefaultFieldsViewModel.Departments.Show)
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Departments.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.InventoryViewModel.DefaultFieldsViewModel.Departments.Caption)</label>
             </td>
             <td class="span9">
-                @Html.DropDownListFor(m => m.Inventory.DepartmentId, Model.Departments.Value);
+                @Html.DropDownListFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.DepartmentId, Model.InventoryViewModel.DefaultFieldsViewModel.Departments.Value);
             </td>
         </tr>
     }
-    @if (Model.Inventory.Name.Show)
+    @if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Name.Show)
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Inventory.Name.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Name.Caption)</label>
             </td>
             <td class="span9">
-                @Html.TextBoxFor(m => m.Inventory.Name.Value)
+                @Html.TextBoxFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Name.Value)
             </td>
         </tr>
     }
-    @if (Model.Inventory.Model.Show)
+    @if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Model.Show)
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Inventory.Model.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Model.Caption)</label>
             </td>
             <td class="span9">
-                @Html.TextBoxFor(m => m.Inventory.Model.Value)
+                @Html.TextBoxFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Model.Value)
             </td>
         </tr>
     }
-    @if (Model.Inventory.Manufacturer.Show)
+    @if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Manufacturer.Show)
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Inventory.Manufacturer.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Manufacturer.Caption)</label>
             </td>
             <td class="span9">
-                @Html.TextBoxFor(m => m.Inventory.Manufacturer.Value)
+                @Html.TextBoxFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Manufacturer.Value)
             </td>
         </tr>
     }
-    @if (Model.Inventory.SerialNumber.Show)
+    @if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.SerialNumber.Show)
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Inventory.SerialNumber.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.SerialNumber.Caption)</label>
             </td>
             <td class="span9">
-                @Html.TextBoxFor(m => m.Inventory.SerialNumber.Value)
+                @Html.TextBoxFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.SerialNumber.Value)
             </td>
         </tr>
     }
-    @if (Model.Inventory.TheftMark.Show)
+    @if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.TheftMark.Show)
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Inventory.TheftMark.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.TheftMark.Caption)</label>
             </td>
             <td class="span9">
-                @Html.TextBoxFor(m => m.Inventory.TheftMark.Value)
+                @Html.TextBoxFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.TheftMark.Value)
             </td>
         </tr>
     }
-    @if (Model.Inventory.BarCode.Show
-         || Model.Inventory.PurchaseDate.Show)
+    @if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.BarCode.Show
+         || Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.PurchaseDate.Show)
     {
         <tr>
-            <th colspan="2" class="header">@Translation.Get("Inventering", Enums.TranslationSource.TextTranslation)</th>
+            <th colspan="2" class="header">@Translation.Get("Inventering")</th>
         </tr>
     }
-    @if (Model.Inventory.BarCode.Show)
+    @if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.BarCode.Show)
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Inventory.BarCode.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.BarCode.Caption)</label>
             </td>
             <td class="span9">
-                @Html.TextBoxFor(m => m.Inventory.BarCode.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.Inventory.PurchaseDate.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.Inventory.PurchaseDate.Caption, Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @Html.EditorFor(m => m.Inventory.PurchaseDate.Value, "DatePicker", new { id = "general_finishing_date_datepicker" })
+                @Html.TextBoxFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.BarCode.Value)
             </td>
         </tr>
     }
-    @if (Model.Inventory.Info.Show)
+    @if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.PurchaseDate.Show)
     {
         <tr>
-            <th colspan="2" class="header">@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</th>
-        </tr>
-        <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Inventory.Info.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.PurchaseDate.Caption)</label>
             </td>
             <td class="span9">
-                @Html.TextAreaFor(m => m.Inventory.Info.Value)
+                @Html.EditorFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.PurchaseDate.Value, "DatePicker", new { id = "inventory_edit_purchasedate_date_datepicker" })
             </td>
         </tr>
     }
-    @if (Model.Inventory.ComputerName.Show)
+    @if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Info.Show)
     {
         <tr>
-            <th colspan="2" class="header">@Translation.Get("Tillbehör till", Enums.TranslationSource.TextTranslation)</th>
+            <th colspan="2" class="header">@Translation.Get("Övrigt")</th>
         </tr>
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Inventory.ComputerName.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Info.Caption)</label>
             </td>
             <td class="span9">
-                @Html.DisplayFor(m => m.Inventory.ComputerName.Value)
+                @Html.TextAreaFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Info.Value)
             </td>
         </tr>
     }
-    @if (Model.Rooms.Show)
+    @if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.ComputerName.Show)
     {
         <tr>
-            <th colspan="2" class="header">@Translation.Get("Placering", Enums.TranslationSource.TextTranslation)</th>
+            <th colspan="2" class="header">@Translation.Get("Tillbehör till")</th>
         </tr>
         <tr>
             <td class="span3">
-                <label>@Translation.Get("Byggnad", Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.ComputerName.Caption)</label>
             </td>
             <td class="span9">
-                @Html.DropDownListFor(m => m.Inventory.BuildingId, Model.Buildings);
+                @Html.DisplayFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.ComputerName.Value)
             </td>
+        </tr>
+    }
+    @if (Model.InventoryViewModel.DefaultFieldsViewModel.Rooms.Show)
+    {
+        <tr>
+            <th colspan="2" class="header">@Translation.Get("Placering")</th>
         </tr>
         <tr>
             <td class="span3">
-                <label>@Translation.Get("Våning", Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get("Byggnad")</label>
             </td>
             <td class="span9">
-                @Html.DropDownListFor(m => m.Inventory.FloorId, Model.Floors);
+                @Html.DropDownListFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.BuildingId, Model.InventoryViewModel.DefaultFieldsViewModel.Buildings);
             </td>
         </tr>
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Rooms.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get("Våning")</label>
             </td>
             <td class="span9">
-                @Html.DropDownListFor(m => m.Inventory.RoomId, Model.Rooms.Value);
+                @Html.DropDownListFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.FloorId, Model.InventoryViewModel.DefaultFieldsViewModel.Floors);
+            </td>
+        </tr>
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.InventoryViewModel.DefaultFieldsViewModel.Rooms.Caption)</label>
+            </td>
+            <td class="span9">
+                @Html.DropDownListFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.RoomId, Model.InventoryViewModel.DefaultFieldsViewModel.Rooms.Value);
             </td>
         </tr>
     }
-    <tr>
-        <th colspan="2" class="header">@Translation.Get("Status", Enums.TranslationSource.TextTranslation)</th>
-    </tr>
-    <tr>
-        <td class="span3">
-            <label>@Translation.Get("Skapad datum", Enums.TranslationSource.TextTranslation)</label>
-        </td>
-        <td class="span9">
-            @Html.DisplayFor(m => m.Inventory.ChangeDate, "Date"))
-        </td>
-    </tr>
-    <tr>
-        <td class="span3">
-            <label>@Translation.Get("Senast ändrad datum", Enums.TranslationSource.TextTranslation)</label>
-        </td>
-        <td class="span9">
-            @Html.DisplayFor(m => m.Inventory.CreatedDate, "Date"))
-        </td>
-    </tr>
-
     @{
         var groups = Model.TypeGroupModels.OrderBy(x => x.SortOrder);
 
@@ -200,11 +180,12 @@
             }
 
             <tr>
-                <th colspan="2" class="header">@Html.DisplayFor(m => group.Name))</th>
+                <th colspan="2" class="header">@Html.DisplayFor(m => group.Name)</th>
             </tr>
 
             foreach (var item in itemsInGroup)
             {
+                // todo
                 <tr>
                     <td class="span3">
                         <label>@Html.DisplayFor(m => item.Caption)</label>
@@ -213,10 +194,20 @@
                         @switch (item.FieldTypes)
                         {
                             case FieldTypes.Bool:
-                                @Html.CheckBoxFor(m => item.Value == DynamicFieldModel.True)
+                                var boolValue = item.Value == DynamicFieldModel.True;
+                                @Html.CheckBoxFor(m => boolValue)
                                 break;
                             case FieldTypes.Date:
-                                @Html.EditorFor(m => item.Value, "DatePicker", new { id = "general_finishing_date_datepicker" })
+                                var dateValue = DateTime.Parse(item.Value);
+                                @Html.EditorFor(m => dateValue, "DatePicker", new { id = "general_finishing_date_datepicker" })
+                                break;
+                            case FieldTypes.Text:
+                                var textValue = new DynamicFieldStringValue(item.Value, item.MaxSize);
+                                @Html.EditorFor(m => textValue)
+                                break;
+                            case FieldTypes.Numeric:
+                                var intValue = int.Parse(item.Value);
+                                @Html.EditorFor(m => intValue)
                                 break;
                             default:
                                 @Html.EditorFor(m => item.Value)
@@ -227,4 +218,23 @@
             }
         }
     }
+    <tr>
+        <th colspan="2" class="header">@Translation.Get("Status")</th>
+    </tr>
+    <tr>
+        <td class="span3">
+            <label>@Translation.Get("Skapad datum")</label>
+        </td>
+        <td class="span9">
+            @Html.DisplayFor(m => m.InventoryViewModel.ChangeDate, "Date")
+        </td>
+    </tr>
+    <tr>
+        <td class="span3">
+            <label>@Translation.Get("Senast ändrad datum")</label>
+        </td>
+        <td class="span9">
+            @Html.DisplayFor(m => m.InventoryViewModel.CreatedDate, "Date")
+        </td>
+    </tr>
 </table>

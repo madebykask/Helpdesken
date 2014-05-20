@@ -4,18 +4,13 @@
 
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class InventoryModel
+    public class DefaultFieldsModel
     {
-        public InventoryModel(ConfigurableFieldModel<string> computerName)
+        public DefaultFieldsModel()
         {
-            this.ComputerName = computerName;
         }
 
-        public InventoryModel(
-            int id,
-            ConfigurableFieldModel<DateTime> createdDate,
-            ConfigurableFieldModel<DateTime> changeDate,
-            int inventoryTypeId,
+        public DefaultFieldsModel(
             int? departmentId,
             int? buildingId,
             int? floorId,
@@ -31,10 +26,6 @@
             ConfigurableFieldModel<string> computerName,
             ConfigurableFieldModel<string> info)
         {
-            this.Id = id;
-            this.CreatedDate = createdDate;
-            this.ChangeDate = changeDate;
-            this.InventoryTypeId = inventoryTypeId;
             this.DepartmentId = departmentId;
             this.BuildingId = buildingId;
             this.FloorId = floorId;
@@ -52,16 +43,6 @@
         }
 
         [IsId]
-        public int Id { get; set; }
-
-        public ConfigurableFieldModel<DateTime> CreatedDate { get; private set; }
-
-        public ConfigurableFieldModel<DateTime> ChangeDate { get; private set; }
-
-        [IsId]
-        public int InventoryTypeId { get; private set; }
-
-        [IsId]
         public int? DepartmentId { get; private set; }
 
         [IsId]
@@ -76,21 +57,21 @@
         [IsId]
         public int? ChangeByUserId { get; private set; }
 
-        [NotNullAndEmpty]
+        [NotNull]
         public ConfigurableFieldModel<string> Name { get; private set; }
 
         public ConfigurableFieldModel<string> Model { get; private set; }
 
-        [NotNullAndEmpty]
+        [NotNull]
         public ConfigurableFieldModel<string> Manufacturer { get; private set; }
 
-        [NotNullAndEmpty]
+        [NotNull]
         public ConfigurableFieldModel<string> SerialNumber { get; private set; }
 
-        [NotNullAndEmpty]
+        [NotNull]
         public ConfigurableFieldModel<string> TheftMark { get; private set; }
 
-        [NotNullAndEmpty]
+        [NotNull]
         public ConfigurableFieldModel<string> BarCode { get; private set; }
 
         public ConfigurableFieldModel<DateTime?> PurchaseDate { get; private set; }

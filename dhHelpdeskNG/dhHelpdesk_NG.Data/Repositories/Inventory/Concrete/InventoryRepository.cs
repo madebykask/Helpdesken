@@ -7,7 +7,6 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
@@ -64,24 +63,44 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 
         public Inventory FindById(int id)
         {
-            var entity = this.DbSet.Find(id);
-            var businessModel = Inventory.CreateForEdit(
-                entity.InventoryType_Id,
-                entity.Id,
-                entity.Department_Id,
-                entity.Room_Id,
-                entity.ChangedByUser_Id,
-                entity.InventoryName,
-                entity.InventoryModel,
-                entity.Manufacturer,
-                entity.SerialNumber,
-                entity.TheftMark,
-                entity.BarCode,
-                entity.PurchaseDate,
-                entity.Info,
-                entity.SyncChangedDate,
-                entity.CreatedDate,
-                entity.ChangedDate);
+            var anonymus = (from i in this.DbSet.Where(x => x.Id == id)
+                            join ci in DbContext.ComputerInventories on i.Id equals ci.Inventory_Id into res
+                            from k in res.DefaultIfEmpty()
+                            select
+                                new
+                                    {
+                                        Entity = i,
+                                        FloorId = (int?)i.Room.Floor.Id,
+                                        BuildingId = (int?)i.Room.Floor.Building.Id,
+                                        InventoryTypeName = i.InventoryType.Name,
+                                        Workstation = k.Computer.ComputerName
+                                    }).ToList()
+                .GroupBy(x => new { x.Entity, x.BuildingId, x.FloorId, x.InventoryTypeName });
+
+            var businessModel =
+                anonymus.Select(
+                    x =>
+                    Inventory.CreateForEdit(
+                        x.Key.Entity.InventoryType_Id,
+                        x.Key.InventoryTypeName,
+                        x.Key.Entity.Id,
+                        x.Key.Entity.Department_Id,
+                        x.Key.BuildingId,
+                        x.Key.FloorId,
+                        x.Key.Entity.Room_Id,
+                        x.Key.Entity.ChangedByUser_Id,
+                        x.Key.Entity.InventoryName,
+                        x.Key.Entity.InventoryModel,
+                        x.Key.Entity.Manufacturer,
+                        x.Key.Entity.SerialNumber,
+                        x.Key.Entity.TheftMark,
+                        x.Key.Entity.BarCode,
+                        x.Key.Entity.PurchaseDate,
+                        x.Select(w => w.Workstation).ToArray(),
+                        x.Key.Entity.Info,
+                        x.Key.Entity.SyncChangedDate,
+                        x.Key.Entity.CreatedDate,
+                        x.Key.Entity.ChangedDate)).Single();
 
             return businessModel;
         }
@@ -229,7 +248,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                         a.Key.TheftMark,
                         a.Key.BarCode,
                         a.Key.PurchaseDate,
-                        string.Join(Delimeter, a.Select(x => x.WorkstationName)),
+                        string.Join(Delimeter, a.Select(x => x.WorkstationName)), // todo change to array
                         a.Key.Info)).ToList();
 
             return overviews;

@@ -5,6 +5,7 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Computer;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Printer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Server;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings;
@@ -22,10 +23,10 @@
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.PrinterFieldSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ServerFieldSettings;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Computers;
     using DH.Helpdesk.Dal.Repositories.Inventory;
+    using DH.Helpdesk.Dal.Repositories.Inventory.Concrete;
     using DH.Helpdesk.Dal.Repositories.Printers;
     using DH.Helpdesk.Dal.Repositories.Servers;
     using DH.Helpdesk.Dal.Repositories.WorkstationModules;
@@ -94,6 +95,8 @@
 
         private readonly IServerSoftwareRepository serverSoftwareRepository;
 
+        private readonly InventoryTypeGroupRepository inventoryTypeGroupRepository;
+
         public InventoryService(
             IInventoryTypeRepository inventoryTypeRepository,
             IComputerRepository computerRepository,
@@ -124,7 +127,8 @@
             IComputerInventoryRepository computerInventoryRepository,
             IOperationLogRepository operationLogRepository,
             IServerLogicalDriveRepository serverLogicalDriveRepository,
-            IServerSoftwareRepository serverSoftwareRepository)
+            IServerSoftwareRepository serverSoftwareRepository,
+            InventoryTypeGroupRepository inventoryTypeGroupRepository)
         {
             this.inventoryTypeRepository = inventoryTypeRepository;
             this.computerRepository = computerRepository;
@@ -156,6 +160,7 @@
             this.operationLogRepository = operationLogRepository;
             this.serverLogicalDriveRepository = serverLogicalDriveRepository;
             this.serverSoftwareRepository = serverSoftwareRepository;
+            this.inventoryTypeGroupRepository = inventoryTypeGroupRepository;
         }
 
         public List<ItemOverview> GetInventoryTypes(int customerId)
@@ -502,12 +507,42 @@
 
         #region DynamicData
 
+        public InventoryOverviewResponse GetInventory(int id)
+        {
+            var model = this.inventoryRepository.FindById(id);
+            var dynamicData = this.inventoryTypePropertyValueRepository.GetData(id);
+
+            var response = new InventoryOverviewResponse(model, dynamicData);
+            return response;
+        }
+
+        public InventoryEditOptionsResponse GetInventoryInventoryEditOptions(int customerId)
+        {
+            var departments = this.departmentRepository.FindActiveOverviews(customerId);
+            var buildings = this.buildingRepository.FindOverviews(customerId);
+            var floors = this.floorRepository.FindOverviews(customerId);
+            var rooms = this.roomRepository.FindOverviews(customerId);
+
+            return new InventoryEditOptionsResponse(departments, buildings, floors, rooms);
+        }
+
         public CustomTypeFiltersResponse GetInventoryFilters(int customerId)
         {
             var departments = this.departmentRepository.FindActiveOverviews(customerId);
             var filter = new CustomTypeFiltersResponse(departments);
 
             return filter;
+        }
+
+        public InventoryFieldSettingsForModelEditResponse GetInventoryFieldSettingsForModelEdit(int inventoryTypeId)
+        {
+            var setings = this.inventoryFieldSettingsRepository.GetFieldSettingsForModelEdit(inventoryTypeId);
+            var dynamicSettings = this.inventoryDynamicFieldSettingsRepository.GetFieldSettingsForModelEdit(
+                inventoryTypeId);
+
+            var response = new InventoryFieldSettingsForModelEditResponse(setings, dynamicSettings);
+
+            return response;
         }
 
         public InventoryFieldSettingsOverviewResponse GetInventoryFieldSettingsOverview(int inventoryTypeId)
@@ -521,7 +556,7 @@
             return response;
         }
 
-        public InventoryOverviewResponse GetInventories(InventoriesFilter filter)
+        public InventoriesOverviewResponse GetInventories(InventoriesFilter filter)
         {
             var models = this.inventoryRepository.FindOverviews(
                 filter.InventoryTypeId,
@@ -533,7 +568,7 @@
 
             var dynamicData = this.inventoryTypePropertyValueRepository.GetData(ids);
 
-            var response = new InventoryOverviewResponse(models, dynamicData);
+            var response = new InventoriesOverviewResponse(models, dynamicData);
 
             return response;
         }
@@ -543,6 +578,11 @@
             var models = this.inventoryFieldSettingsRepository.GetFieldSettingsOverviewForFilter(inventoryTypeId);
 
             return models;
+        }
+
+        public List<TypeGroupModel> GetTypeGroupModels(int inventoryTypeId)
+        {
+            return this.inventoryTypeGroupRepository.Find(inventoryTypeId);
         }
 
         public void ConnectInventoryToComputer(int inventoryId, int computerId)

@@ -411,6 +411,10 @@
     <Compile Include="Infrastructure\ModelFactories\Case\ICaseNotifierModelFactory.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedMinAttribute.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedIntegerAttribute.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\DynamicsFieldsModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\IDynamicsFieldsModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\IInventoryViewModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\InventoryViewModelBuilder.cs" />
     <Compile Include="Infrastructure\ModelFactories\Reports\Concrete\ReportsModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Reports\IReportsModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\ComputerViewModelBuilder.cs" />
@@ -568,6 +572,8 @@
     <Compile Include="Models\Changes\SettingsEdit\SettingsModel.cs" />
     <Compile Include="Models\Changes\SettingsEdit\TextFieldSettingModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\ConfigurableFieldModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Inventory\DefaultFieldsViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Inventory\InventoryEditViewModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Server\ServerEditViewModel.cs" />
     <Compile Include="Models\Reports\IndexModel.cs" />
     <Compile Include="Models\Reports\RegistratedCasesCaseTypeModel.cs" />
@@ -620,9 +626,8 @@
     <Compile Include="Models\Inventory\EditModel\ConfigurableFieldModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Inventory\ConfigurableFieldModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Inventory\DynamicFieldModel.cs" />
-    <Compile Include="Models\Inventory\EditModel\Inventory\InventoryModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Inventory\DefaultFieldsModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Inventory\InventoryViewModel.cs" />
-    <Compile Include="Models\Inventory\EditModel\Inventory\TypeGroupModel.cs" />
     <Compile Include="Models\Inventory\EditModel\ModuleTypes.cs" />
     <Compile Include="Models\Inventory\EditModel\Printer\CommunicationFieldsModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Printer\CommunicationFieldsViewModel.cs" />
@@ -1354,7 +1359,7 @@
     <Content Include="Views\Inventory\EditorTemplates\Computer\ContractFieldsViewModel.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\Printer\OrganizationFieldsViewModel.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\Server\CommunicationFieldsViewModel.cshtml" />
-    <Content Include="Views\Inventory\EditorTemplates\Printer\CommunicationFieldsViewModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Printer\CommunicationFieldsModel.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateReadOnly.cshtml" />
     <Content Include="Views\Inventory\StorageGrid.cshtml" />
     <Content Include="Views\Inventory\SoftwareGrid.cshtml" />
@@ -1399,6 +1404,7 @@
     <Content Include="Views\Reports\Reports.cshtml" />
     <Content Include="Views\Reports\Search.cshtml" />
     <Content Include="Views\Reports\RegistratedCasesCaseType.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\DynamicFieldStringValue.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\YearMonthPicker.cshtml" />
     <Content Include="Views\Reports\RegistratedCasesCaseTypeReport.cshtml" />
   </ItemGroup>

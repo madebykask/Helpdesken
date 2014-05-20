@@ -145,6 +145,7 @@
     <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\OrdererProcessingSettings.cs" />
     <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\RegistrationProcessingSettings.cs" />
     <Compile Include="Models\Changes\GetSearchDataResponse.cs" />
+    <Compile Include="Models\Inventory\Edit\Inventory\TypeGroupModel.cs" />
     <Compile Include="Models\Shared\Input\SortField.cs" />
     <Compile Include="Models\BusinessModel.cs" />
     <Compile Include="Models\Customer\CustomerSettings.cs" />

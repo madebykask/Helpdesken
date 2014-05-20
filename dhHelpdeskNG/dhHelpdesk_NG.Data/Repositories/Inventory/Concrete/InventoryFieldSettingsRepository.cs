@@ -95,13 +95,24 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
         {
             var settings = this.GetSettings(inventoryTypeId);
 
-            var mapperData =
+            var anonymus =
                 settings.Select(
+                    s =>
+                    new 
+                    {
+                        Caption = s.PropertyValue,
+                        FieldName = s.PropertyType, 
+                        s.Show,
+                        s.PropertySize
+                    }).ToList();
+
+            var mapperData =
+                anonymus.Select(
                     s =>
                     new InventoryFieldSettingMapperDataForModelEdit
                     {
-                        Caption = s.PropertyValue,
-                        FieldName = s.PropertyType.ToString(CultureInfo.InvariantCulture),
+                        Caption = s.Caption,
+                        FieldName = s.FieldName.ToString(CultureInfo.InvariantCulture),
                         Show = s.Show,
                         PropertySize = s.PropertySize
                     }).ToList();

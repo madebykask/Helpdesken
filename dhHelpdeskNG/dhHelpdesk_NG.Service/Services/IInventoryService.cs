@@ -3,6 +3,7 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Computer;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Printer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Server;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings;
@@ -20,7 +21,6 @@
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.PrinterFieldSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ServerFieldSettings;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Services.Requests.Inventory;
     using DH.Helpdesk.Services.Response.Inventory;
 
@@ -120,13 +120,21 @@
 
         #region DynamicType
 
+        InventoryOverviewResponse GetInventory(int id);
+
+        InventoryEditOptionsResponse GetInventoryInventoryEditOptions(int customerId);
+
         CustomTypeFiltersResponse GetInventoryFilters(int customerId);
 
-        InventoryOverviewResponse GetInventories(InventoriesFilter filter);
+        InventoriesOverviewResponse GetInventories(InventoriesFilter filter);
+
+        InventoryFieldSettingsForModelEditResponse GetInventoryFieldSettingsForModelEdit(int inventoryTypeId);
 
         InventoryFieldSettingsOverviewResponse GetInventoryFieldSettingsOverview(int inventoryTypeId);
 
         InventoryFieldsSettingsOverviewForFilter GetInventoryFieldSettingsOverviewForFilter(int inventoryTypeId);
+
+        List<TypeGroupModel> GetTypeGroupModels(int inventoryTypeId); 
 
         void ConnectInventoryToComputer(int inventoryId, int computerId);
 

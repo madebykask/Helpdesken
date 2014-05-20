@@ -67,7 +67,7 @@
             return new InventoryGridModel(headers, overviews, (int)CurrentModes.Printers);
         }
 
-        public static InventoryGridModel BuildModel(InventoryOverviewResponse response, InventoryFieldSettingsOverviewResponse settings, int inventoryTypeId)
+        public static InventoryGridModel BuildModel(InventoriesOverviewResponse response, InventoryFieldSettingsOverviewResponse settings, int inventoryTypeId)
         {
             var overviews =
                 response.Overviews.Select(c => CreateInventoryOverview(c, response.DynamicData, settings.InventoryFieldSettingsOverview, settings.InventoryDynamicFieldSettingOverviews)).ToList();

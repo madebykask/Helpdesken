@@ -20,12 +20,14 @@
         ignore: ""
     });
 
-    $('select option[value=Separator]').each(function () {
-        $(this).attr("disabled", "disabled");
+    $(function() {
+        $('select option[value=Separator]').each(function() {
+            $(this).attr("disabled", "disabled");
+        });
     });
 
 </script>
-
+         
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">

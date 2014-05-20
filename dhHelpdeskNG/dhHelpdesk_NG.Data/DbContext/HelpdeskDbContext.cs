@@ -663,6 +663,7 @@
 
             modelBuilder.Configurations.Add(new InventoryConfiguration());
             modelBuilder.Configurations.Add(new InventoryTypeConfiguration());
+            modelBuilder.Configurations.Add(new InventoryTypeGroupConfiguration());
             modelBuilder.Configurations.Add(new InventoryTypePropertyConfiguration());
             modelBuilder.Configurations.Add(new InventoryTypePropertyValueConfiguration());
             modelBuilder.Configurations.Add(new ModuleConfiguration());

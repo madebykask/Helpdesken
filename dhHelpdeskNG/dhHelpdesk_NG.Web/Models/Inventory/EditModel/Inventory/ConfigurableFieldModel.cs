@@ -4,38 +4,28 @@
 
     public class ConfigurableFieldModel<TValue>
     {
-        public ConfigurableFieldModel(int groupId)
+        public ConfigurableFieldModel()
         {
-            this.GroupId = groupId;
         }
 
-        public ConfigurableFieldModel(bool show, int groupId)
+        public ConfigurableFieldModel(string caption, TValue value)
         {
-            this.GroupId = groupId;
-            this.Show = show;
-        }
-
-        public ConfigurableFieldModel(int groupId, string caption, int position, bool show, TValue value)
-        {
-            this.GroupId = groupId;
+            this.Show = true;
             this.Caption = caption;
-            this.Position = position;
-            this.Show = show;
             this.Value = value;
         }
-
-        [IsId]
-        public int GroupId { get; set; }
 
         [NotNullAndEmpty]
         public string Caption { get; set; }
 
-        [MinValue(0)]
-        public int Position { get; set; }
-
         public bool Show { get; set; }
 
         public TValue Value { get; set; }
+
+        public static ConfigurableFieldModel<TValue> CreateUnshowable()
+        {
+            return new ConfigurableFieldModel<TValue> { Show = false };
+        }
 
         public static TValue GetValueOrDefault(ConfigurableFieldModel<TValue> field)
         {

@@ -1,7 +1,5 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Printer
 {
-    using DH.Helpdesk.Common.ValidationAttributes;
-
     public class CommunicationFieldsModel
     {
         public CommunicationFieldsModel(
@@ -14,7 +12,6 @@
             this.MacAddress = macAddress;
         }
 
-        [IsId]
         public ConfigurableFieldModel<string> NetworkAdapterName { get; set; }
 
         public ConfigurableFieldModel<string> IPAddress { get; set; }

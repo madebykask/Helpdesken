@@ -2,8 +2,6 @@
 {
     using System;
 
-    using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Models.Inventory.EditModel;
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Shared;
@@ -15,8 +13,6 @@
         }
 
         public ComputerViewModel(
-            ConfigurableFieldModel<DateTime> createdDate,
-            ConfigurableFieldModel<DateTime> changedDate,
             DateFieldsModel dateFields,
             CommunicationFieldsViewModel communicationFieldsViewModel,
             ContactFieldsModel contactFields,
@@ -35,8 +31,6 @@
             ProccesorFieldsViewModel proccesorFieldsViewModel,
             WorkstationFieldsViewModel workstationFieldsViewModel)
         {
-            this.CreatedDate = createdDate;
-            this.ChangedDate = changedDate;
             this.DateFieldsModel = dateFields;
             this.CommunicationFieldsViewModel = communicationFieldsViewModel;
             this.ContactFieldsModel = contactFields;

@@ -12,8 +12,6 @@
         }
 
         public ServerViewModel(
-            ConfigurableFieldModel<DateTime> createdDate,
-            ConfigurableFieldModel<DateTime> changedDate,
             GeneralFieldsModel generalFields,
             OtherFieldsModel otherFields,
             StateFieldsModel stateFields,
@@ -26,8 +24,6 @@
             ProccesorFieldsViewModel proccesorFieldsViewModel,
             PlaceFieldsViewModel placeFieldsViewModel)
         {
-            this.CreatedDate = createdDate;
-            this.ChangedDate = changedDate;
             this.GeneralFieldsModel = generalFields;
             this.OtherFieldsModel = otherFields;
             this.StateFieldsModel = stateFields;

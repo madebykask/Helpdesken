@@ -41,6 +41,8 @@
             this.Bind<IComputerViewModelBuilder>().To<ComputerViewModelBuilder>().InSingletonScope();
             this.Bind<IServerViewModelBuilder>().To<ServerViewModelBuilder>().InSingletonScope();
             this.Bind<IPrinterViewModelBuilder>().To<PrinterViewModelBuilder>().InSingletonScope();
+            this.Bind<IInventoryViewModelBuilder>().To<InventoryViewModelBuilder>().InSingletonScope();
+            this.Bind<IDynamicsFieldsModelBuilder>().To<DynamicsFieldsModelBuilder>().InSingletonScope();
         }
     }
 }

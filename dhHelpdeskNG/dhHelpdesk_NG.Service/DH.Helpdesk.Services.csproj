@@ -110,6 +110,9 @@
     <Compile Include="Response\Inventory\ComputerEditDataResponse.cs" />
     <Compile Include="Response\Inventory\ComputerFiltersResponse.cs" />
     <Compile Include="Response\Inventory\InventoriesFieldSettingsOverviewResponse.cs" />
+    <Compile Include="Response\Inventory\InventoriesOverviewResponse.cs" />
+    <Compile Include="Response\Inventory\InventoryEditOptionsResponse.cs" />
+    <Compile Include="Response\Inventory\InventoryFieldSettingsForModelEditResponse.cs" />
     <Compile Include="Response\Inventory\InventoryFieldSettingsOverviewResponse.cs" />
     <Compile Include="Response\Inventory\InventoryOverviewResponse.cs" />
     <Compile Include="BusinessLogic\BusinessModelRestorers\IRestorer.cs" />
