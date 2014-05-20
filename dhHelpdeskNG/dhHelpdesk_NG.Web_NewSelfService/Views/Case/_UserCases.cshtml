@@ -1,8 +1,8 @@
 ﻿@model DH.Helpdesk.NewSelfService.Models.NewSelfService.SelfServiceModel           
 
-<div class="container">
+<div class="container" id="search_result">
     @Html.Partial("_CaseSearch", Model)
-    <div class="container" id="search_result">
+    <div class="container" >
         @Html.HiddenFor(m => Model.MailGuid)
         &nbsp;
         <div class="row">
@@ -12,7 +12,7 @@
                         <tr>
                             <th></th>
                             @if (Model.UserCases.CaseSearchResult.CaseSettings != null)
-                            {
+                            {                                
                                 foreach (var c in Model.UserCases.CaseSearchResult.CaseSettings)
                                 {
                                     if (c.Line == 1)

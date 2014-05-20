@@ -288,6 +288,10 @@
     <Content Include="Content\highlighter\codehighlighter.js" />
     <Content Include="Content\highlighter\html.js" />
     <Content Include="Content\highlighter\javascript.js" />
+    <Content Include="Content\icons\case.png" />
+    <Content Include="Content\icons\case_close.png" />
+    <Content Include="Content\icons\case_close_notapproved.png" />
+    <Content Include="Content\icons\case_log_urgent.png" />
     <Content Include="Content\img-profile\ikea-image.png" />
     <Content Include="Content\img-profile\ikea-map.png" />
     <Content Include="Content\img-profile\IKEA.png" />
@@ -573,9 +577,7 @@
     <None Include="Properties\PublishProfiles\DH.Helpdesk.SelfService.Release.pubxml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.SelfService.Release_AL.pubxml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Content\icons\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

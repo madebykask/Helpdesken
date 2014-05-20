@@ -59,17 +59,17 @@
     }
 
 
-    function sortCases(sortBy) {
-        var asc = $("#hidSortByAsc").val();
+    function sortCases(sortBy,lastAsc) {
+        var asc = '@SessionFacade.CurrentCaseSearch.Search.Ascending'; //lastAsc; //$("#hidSortByAsc").val();        
         var selected = $("#hidSortBy").val();
-
-        if (sortBy == selected) {
-            asc = asc.toLowerCase().match('true') ? 'false' : 'true';
+        
+        if (sortBy == selected) {            
+            asc = asc.toLowerCase().match('true') ? 'false' : 'true';            
         }
         else {
             asc = 'true';
         }
-
+        
         $("#hidSortBy").val(sortBy);
         $("#hidSortByAsc").val(asc);
         search();
