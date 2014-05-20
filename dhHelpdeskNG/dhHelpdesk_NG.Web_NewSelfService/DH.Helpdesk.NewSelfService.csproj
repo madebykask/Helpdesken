@@ -292,6 +292,9 @@
     <Content Include="Content\img-profile\ikea-map.png" />
     <Content Include="Content\img-profile\IKEA.png" />
     <Content Include="Content\img\close.gif" />
+    <Content Include="Content\img\dhhelpdesk-login.png" />
+    <Content Include="Content\img\dhhelpdesk-menuend.png" />
+    <Content Include="Content\img\dhhelpdesk.png" />
     <Content Include="Content\img\error.png" />
     <Content Include="Content\img\ico-cancel.png" />
     <Content Include="Content\img\ico-chat.png" />

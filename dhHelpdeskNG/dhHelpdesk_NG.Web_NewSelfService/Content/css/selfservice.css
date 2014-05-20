@@ -19,12 +19,18 @@ img
   line-height: 20px;
 }
 .toplogo {
-    background: url(../img-profile/ikea.png);
+    background: url(../img/dhhelpdesk.png);
     background-repeat: no-repeat;
-    width: 261px;
+    width: 125px;
     height: 28px;
     margin:0;
     padding:0;
+}
+.toplogout {
+    padding: 5px 0 0 0;
+}
+.toplogout a {
+    color:#333;
 }
 @media (min-width: 768px) {
   .navbar {
@@ -41,7 +47,7 @@ img
 
 
 .navbar-default {
-  background-color: #0067b2;
+  background-color: #438eb9;
   border-color: #e7e7e7;
   margin-left:-20px;
 }
@@ -126,11 +132,11 @@ img
 }
 
 .blue {
-  background-color:#0067b2 !important;
+  background-color:#438eb9 !important;
 }
 
 .blue:hover, .blue:active, .blue:focus {
-  background-color:#ffdf01 !important;
+  background-color:#d96326 !important;
 }
 
 .green {
@@ -268,14 +274,7 @@ img
   border-color: #0067b2;
 }
 
-/***TABLE**************/
 
-/*.table th
-{
-	background: #0067b2;
-	color:#fff;
-	border-color:#fff !important;
-}*/
 /***TABS**************/
 .tab-pane
 {
