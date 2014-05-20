@@ -124,10 +124,10 @@ namespace DH.Helpdesk.NewSelfService.Controllers
         public ActionResult Index(int customerId = 0, string id="", int languageId = 0)
         {
             // just for first version 
-            if (!id.Is<Guid>())
-            {
-                return null;
-            }
+            //if (!id.Is<Guid>())
+            //{
+            //    return null;
+            //}
 
             Case currentCase = null;
             var config = new SelfServiceConfigurationModel
@@ -228,8 +228,8 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                         SessionFacade.CurrentLanguageId,
                         this.Request.GetIpAddress(),
                         GlobalEnums.RegistrationSource.Case,
-                        cs,
-                        identity.Name);
+                        cs,"DATAHALLAND\\mg");
+                        //identity.Name);
 
                     newCase.NewCase.Customer = currentCustomer;
                     newCase.CaseMailSetting = new CaseMailSetting(
@@ -240,7 +240,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                     model.NewCase = newCase;
 
                     // *** User Cases *** 
-                    string adUser = identity.Name;
+                    string adUser = "DATAHALLAND\\mg"; //identity.Name;
                     string regUser = adUser.GetUserFromAdPath();
                     if (regUser != string.Empty)
                     {
@@ -249,8 +249,8 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                         {
                             model.MailGuid = id.ToString();
                         }
-                        else
-                        {
+                        //else
+                        //{
                             model.UserCases = this.GetUserCasesModel(currentCustomer.Id, languageId, regUser, "", 20);
                             if (!string.IsNullOrEmpty(id) && model.CaseOverview != null)
                                 if (model.CaseOverview.CasePreview.RegUserId != regUser)
@@ -261,7 +261,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                             config.ShowNewCase = true;
                             config.ShowUserCases = true;
                             config.ViewCaseMode = 1;
-                        }
+                        //}
                     }
                     else
                     {
