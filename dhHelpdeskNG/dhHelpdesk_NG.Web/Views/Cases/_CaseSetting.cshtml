@@ -1,12 +1,13 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseSettingModel
+@using DH.Helpdesk.BusinessData.OldComponents
 <form id="frmCaseSetting" name="frmCaseSetting">
     <div class="tab-content">
         <div class="tab-pane tab-pane-border active" id="fragment-1">
             <div class="container">
                 <h4>@Translation.Get("Filter", Enums.TranslationSource.TextTranslation)  @Translation.Get("Ärendeöversikt", Enums.TranslationSource.TextTranslation) </h4>    
 
-                @Html.HiddenFor(m=> Model.CustomerId)                
-                @Html.HiddenFor(m=> Model.UserId)
+                @Html.HiddenFor(m => Model.CustomerId)                
+                @Html.HiddenFor(m => Model.UserId)
 
                 <div class="row">
                     <div class="span100">
@@ -24,144 +25,172 @@
                                     </th>                                     
                                 </tr>
                             </thead>
-
-                            <tr>
-                                <td class="span3">
-                                    @Translation.Get("Område", Enums.TranslationSource.TextTranslation):
-                                </td>                            
-                                <td>
-                                    @Html.CheckBoxFor(m => Model.RegionCheck)                                    
-                                </td>                            
-                                <td colspan="2">
-                                    <select id="lstRegions" name="lstRegions" class="multiselect multiselect-search" multiple="multiple">
-                                        @foreach (var e in Model.Regions)
-                                        {                                                                                                      
-                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedRegion)>@e.Name</option>                                       
-                                        }
-                                    </select>
-                                </td>                                                        
-                            </tr>                                  
-                            <tr>
-                                <td class="span3">
-                                    @Translation.Get("Registrerad av", Enums.TranslationSource.TextTranslation):
-                                </td>                            
-                                <td>
-                                    @Html.CheckBoxFor(m => Model.RegisteredByCheck)
-                                </td>                            
-                                <td colspan="2">
-                                    <select id="lstRegisterBys" name="lstRegisterBy" class="multiselect multiselect-search" multiple="multiple">
-                                        @foreach (var e in Model.RegisteredBy)
-                                        {                                                                                                      
-                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedRegisteredBy)>@e.SurName @e.FirstName</option>                                       
-                                        }
-                                    </select>
-                                </td>                                                        
-                            </tr>                                  
-                            <tr>
-                                <td class="span3">
-                                    @Translation.Get("Ärendetyp", Enums.TranslationSource.TextTranslation):
-                                </td>                            
-                                <td>
-                                    @Html.CheckBoxFor(m => Model.CaseTypeCheck)
-                                </td>                        
-                                <td>
+                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Region_Id.ToString()) == 1) 
+                            { 
+                                <tr>
+                                    <td class="span3">
+                                        @Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.Region_Id.ToString()):
+                                    </td>                            
+                                    <td>
+                                        @Html.CheckBoxFor(m => Model.RegionCheck)                                    
+                                    </td>                            
+                                    <td colspan="2">
+                                        <select id="lstRegions" name="lstRegions" class="multiselect multiselect-search" multiple="multiple">
+                                            @foreach (var e in Model.Regions)
+                                            {                                                                                                      
+                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedRegion)>@e.Name</option>                                       
+                                            }
+                                        </select>
+                                    </td>                                                        
+                                </tr>
+                            }
+                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.User_Id.ToString()) == 1) 
+                            {                                    
+                                <tr>
+                                    <td class="span3">
+                                        @Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.User_Id.ToString()):
+                                    </td>                            
+                                    <td>
+                                        @Html.CheckBoxFor(m => Model.RegisteredByCheck)
+                                    </td>                            
+                                    <td colspan="2">
+                                        <select id="lstRegisterBys" name="lstRegisterBy" class="multiselect multiselect-search" multiple="multiple">
+                                            @foreach (var e in Model.RegisteredBy)
+                                            {                                                                                                      
+                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedRegisteredBy)>@e.SurName @e.FirstName</option>                                       
+                                            }
+                                        </select>
+                                    </td>                                                        
+                                </tr>
+                            }
+                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()) == 1) 
+                            {                                 
+                                <tr>
+                                    <td class="span3">
+                                        @Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()):
+                                    </td>                            
+                                    <td>
+                                        @Html.CheckBoxFor(m => Model.CaseTypeCheck)
+                                    </td>                        
+                                    <td>
                                 
-                                </td>
-                            </tr>                           
-                            <tr>
-                                <td class="span3">
-                                    @Translation.Get("Produktområde", Enums.TranslationSource.TextTranslation): 
-                                </td>
-                                <td>
-                                    @Html.CheckBoxFor(m => Model.ProductAreaCheck)
-                                </td>                                                        
-                                <td colspan="2">
-                                    <div id="divProductAreaSetting" class="btn-group">
-                                        <div class="btn" id="divBreadcrumbs_ProductAreaSetting">@Model.ProductAreaPath</div>
-                                        <button class="btn dropdown-toggle" data-toggle="dropdown">
-                                            <span class="caret"></span>
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
-                                            @Html.ProductAreaDropdownButtonString(Model.ProductAreas)
-                                        </ul>
-                                        @Html.HiddenFor(model => model.ProductAreaId)
-                                    </div>
-                                </td>                            
-                            </tr>                                             
-                            <tr>
-                                <td class="span3">
-                                    @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation):
-                                </td>                            
-                                <td>
-                                    @Html.CheckBoxFor(m => Model.WorkingGroupCheck)
-                                </td>                        
-                                <td colspan="2">
-                                    <select id="lstWorkingGroups" name="lstWorkingGroup" class="multiselect multiselect-search" multiple="multiple">
-                                        @foreach (var e in Model.WorkingGroups)
-                                        {                                                                                                      
-                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedWorkingGroup)>@e.WorkingGroupName</option>                                       
-                                        }
-                                    </select>
-                                </td>                                                        
-                            </tr>          
-                            <tr>
-                                <td class="span3">
-                                    @Translation.Get("Ansvarig", Enums.TranslationSource.TextTranslation): 
-                                </td>
-                                <td>
-                                    @Html.CheckBoxFor(m => Model.ResponsibleCheck)
-                                </td>                            
-                                <td>
+                                    </td>
+                                </tr>
+                            } 
+                           @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()) == 1)
+                           {
+                                <tr>
+                                    <td class="span3">
+                                        @Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()): 
+                                    </td>
+                                    <td>
+                                        @Html.CheckBoxFor(m => Model.ProductAreaCheck)
+                                    </td>                                                        
+                                    <td colspan="2">
+                                        <div id="divProductAreaSetting" class="btn-group">
+                                            <div class="btn" id="divBreadcrumbs_ProductAreaSetting">@Model.ProductAreaPath</div>
+                                            <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
+                                                @Html.ProductAreaDropdownButtonString(Model.ProductAreas)
+                                            </ul>
+                                            @Html.HiddenFor(model => model.ProductAreaId)
+                                        </div>
+                                    </td>                            
+                                </tr>             
+                           } 
+                           @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()) == 1)
+                           {                                         
+                                <tr>
+                                    <td class="span3">
+                                        @Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()):
+                                    </td>                            
+                                    <td>
+                                        @Html.CheckBoxFor(m => Model.WorkingGroupCheck)
+                                    </td>                        
+                                    <td colspan="2">
+                                        <select id="lstWorkingGroups" name="lstWorkingGroup" class="multiselect multiselect-search" multiple="multiple">
+                                            @foreach (var e in Model.WorkingGroups)
+                                            {                                                                                                      
+                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedWorkingGroup)>@e.WorkingGroupName</option>                                       
+                                            }
+                                        </select>
+                                    </td>                                                        
+                                </tr>
+                           } 
+                           @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString()) == 1)
+                           {         
+                                <tr>
+                                    <td class="span3">
+                                        @Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString()): 
+                                    </td>
+                                    <td>
+                                        @Html.CheckBoxFor(m => Model.ResponsibleCheck)
+                                    </td>                            
+                                    <td>
                                 
-                                </td>                            
-                            </tr>            
-                            <tr>
-                                <td class="span3">
-                                    @Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation):
-                                </td>                            
-                                <td>
-                                    @Html.CheckBoxFor(m => Model.AdministratorCheck, new { disabled = "1" })
-                                </td>
-                                <td colspan="2">
-                                    <select id="lstAdministrators" name="lstAdministrator" class="multiselect multiselect-search" multiple="multiple">
-                                        @foreach (var e in Model.Administrators)
-                                        {                                                                                                      
-                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedAdministrator)>@e.SurName @e.FirstName</option>                                       
-                                        }
-                                    </select>
-                                </td>                                                        
-                            </tr>                                                           
-                            <tr>
-                                <td class="span3">
-                                    @Translation.Get("Prioritet", Enums.TranslationSource.TextTranslation):
-                                </td>                            
-                                <td>
-                                    @Html.CheckBoxFor(m => Model.PriorityCheck)
-                                </td>                            
-                                <td colspan="2">
-                                    <select id="lstPriorities" name="lstPriority" class="multiselect multiselect-search" multiple="multiple">
-                                        @foreach (var e in Model.Priorities)
-                                        {                                                                                                      
-                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedPriority)>@e.Code. @e.Name </option>                                       
-                                        }
-                                    </select>
-                                </td>                                                                                                                
-                            </tr>
-                            <tr>
-                                <td class="span3">
-                                    @Translation.Get("Status", Enums.TranslationSource.TextTranslation):
-                                </td>                            
-                                <td>
-                                    @Html.CheckBoxFor(m => Model.StateCheck)
-                                </td>                        
-                                <td>
+                                    </td>                            
+                                </tr>
+                           } 
+                           @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()) == 1)
+                           {             
+                                <tr>
+                                    <td class="span3">
+                                        @Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()):
+                                    </td>                            
+                                    <td>
+                                        @Html.CheckBoxFor(m => Model.AdministratorCheck, new { disabled = "1" })
+                                    </td>
+                                    <td colspan="2">
+                                        <select id="lstAdministrators" name="lstAdministrator" class="multiselect multiselect-search" multiple="multiple">
+                                            @foreach (var e in Model.Administrators)
+                                            {                                                                                                      
+                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedAdministrator)>@e.SurName @e.FirstName</option>                                       
+                                            }
+                                        </select>
+                                    </td>                                                        
+                                </tr> 
+                           } 
+                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()) == 1)
+                           {                                                         
+                                <tr>
+                                    <td class="span3">
+                                        @Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()):
+                                    </td>                            
+                                    <td>
+                                        @Html.CheckBoxFor(m => Model.PriorityCheck)
+                                    </td>                            
+                                    <td colspan="2">
+                                        <select id="lstPriorities" name="lstPriority" class="multiselect multiselect-search" multiple="multiple">
+                                            @foreach (var e in Model.Priorities)
+                                            {                                                                                                      
+                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedPriority)>@e.Code. @e.Name </option>                                       
+                                            }
+                                        </select>
+                                    </td>                                                                                                                
+                                </tr>
+                            }
+                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Status_Id.ToString()) == 1)
+                            { 
+                                <tr>
+                                    <td class="span3">
+                                        @Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.Status_Id.ToString()):
+                                    </td>                            
+                                    <td>
+                                        @Html.CheckBoxFor(m => Model.StateCheck)
+                                    </td>                        
+                                    <td>
                                 
-                                </td>
-                            </tr>
+                                    </td>
+                                </tr>
+                            }
+                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()) == 1)
+                            { 
                             <tr>
                                 <td class="span3">
-                                    @Translation.Get("Understatus", Enums.TranslationSource.TextTranslation):
+                                    @Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()):
                                 </td>                            
                                 <td>
                                     @Html.CheckBoxFor(m => Model.SubStateCheck)
@@ -174,7 +203,8 @@
                                         }
                                     </select>
                                 </td>                                                                                                                
-                            </tr>          
+                            </tr>  
+                            }        
                         </table>
                     </div>
                 </div>

@@ -1823,9 +1823,11 @@ namespace DH.Helpdesk.Web.Controllers
             IList<CaseSettings> userColumns = new List<CaseSettings>();
             userColumns = _caseSettingService.GetCaseSettingsWithUser(customerId, userId, SessionFacade.CurrentUser.UserGroupId);
 
+            IList<CaseFieldSetting> userCaseFieldSettings = new List<CaseFieldSetting>();
+            userCaseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
 
             colSettingModel.UserColumns = userColumns;
-
+            colSettingModel.CaseFieldSettings = userCaseFieldSettings;
 
             List<SelectListItem> li = new List<SelectListItem>();
             li.Add(new SelectListItem()

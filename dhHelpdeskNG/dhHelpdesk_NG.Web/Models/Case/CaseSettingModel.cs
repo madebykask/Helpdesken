@@ -17,6 +17,8 @@ namespace DH.Helpdesk.Web.Models.Case
         public IList<SelectListItem> LineList { get; set; }
 
         public IList<CaseFieldSettingsWithLanguage> CaseFieldSettingLanguages { get; set; }
+
+        public IList<CaseFieldSetting> CaseFieldSettings { get; set; }
         
     }
 
@@ -67,7 +69,7 @@ namespace DH.Helpdesk.Web.Models.Case
         public string SelectedSubState { get; set; }
 
         public CaseColumnsSettingsModel ColumnSettingModel { get; set; }
-
+        
     }
 }
     

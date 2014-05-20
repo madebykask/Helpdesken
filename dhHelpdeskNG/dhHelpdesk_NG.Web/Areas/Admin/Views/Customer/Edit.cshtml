@@ -12,7 +12,8 @@
                 <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", null, new { @class = "btn" })</li>
                 @*@if (Model.Customer.Id != null)
                 {
-                    <li>@Html.ActionLink(Translation.Get("Kopiera", Enums.TranslationSource.TextTranslation), "", null, new { @class = "btn" })</li>
+                    
+                    <li><a data-toggle="modal" href="#divCopyCustomer"  title="@Translation.Get("Kopiera", Enums.TranslationSource.TextTranslation)" class="btn"><i class="btn"></i></a></li>
                 }*@
             </ul>
         </div>
@@ -20,11 +21,29 @@
     </div>
     @Html.Partial("_Input", Model)
     <input type="hidden" id="customerId" value="@Model.Customer.Id" />
-    
+    <div id="divCopyCustomer" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true" >
+        @Html.Partial("_CopyCustomer", Model)
+    </div>
 }
+
 @section Scripts {
     <script type="text/javascript">
-        
+       
+        //function save(Id) {
+        //    var cnumber = document.getElementById("customernumber").value;
+        //    var cname = document.getElementById("customername").value;
+        //    copyCustomer(Id, cnumber, cname);
+        //}
+
+        function copyCustomer(id) {
+            var cnumber = document.getElementById("customernumber").value;
+            var cname = document.getElementById("customername").value;
+            var cemail = document.getElementById("customeremail").value;
+            $.post('/customer/CopyCustomer/', { id: id, customerNumber: cnumber, customerName: cname, customerEmail: cemail }, function (data) {
+    
+                });
+          
+        }
 
         function submitForm() {
             

@@ -527,5 +527,31 @@
             else
                 errors.Add("Setting.LDAPPassword", @Translation.Get("Angivna ord stämmer ej överens", Enums.TranslationSource.TextTranslation));
         }
+
+        [HttpPost]
+        public void CopyCustomer(int id, string customerNumber, string customerName, string customerEmail)
+        {
+            var customerToCopy = this._customerService.GetCustomer(id);
+            var customerToCopySettings = this._settingService.GetCustomerSettings(customerToCopy.Id);
+
+            var newCustomerToSave = new Customer() 
+            {
+               CustomerID = customerNumber,
+               Name = customerName,
+               HelpdeskEmail = customerEmail
+            };
+
+            IDictionary<string, string> errors = new Dictionary<string, string>();
+            this._customerService.SaveNewCustomerToGetId(newCustomerToSave, out errors);
+
+
+
+
+
+
+
+
+           // return this.RedirectToAction("edit", "customer", new { newCustomerToSave.Id });
+        }
     }
 }

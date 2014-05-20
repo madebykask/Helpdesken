@@ -1040,6 +1040,7 @@
     <Content Include="Areas\Admin\Views\Domain\_ChangePassWord.cshtml">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Areas\Admin\Views\Customer\_CopyCustomer.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />
