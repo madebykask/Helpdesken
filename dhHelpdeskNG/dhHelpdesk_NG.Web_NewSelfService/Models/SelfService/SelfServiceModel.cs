@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.NewSelfService.Models.Case;
+﻿using DH.Helpdesk.NewSelfService.Models;
+using DH.Helpdesk.NewSelfService.Models.Case;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,5 +1,9 @@
-﻿@model  DH.Helpdesk.NewSelfService.Models.Case.UserCasesModel
-           
+﻿@model DH.Helpdesk.NewSelfService.Models.NewSelfService.SelfServiceModel           
+
+<div class="container">
+    @Html.Partial("_CaseSearch", Model)                           
+    <div class="container" id="search_result">                                                            
+        @Html.HiddenFor(m => Model.MailGuid);
 <div class="row">
     <div class="span100">
         <table class="table table-striped table-bordered table-hover">
@@ -7,9 +11,9 @@
                 <tr>                        
                     <th>                            
                     </th>
-                    @if (Model.CaseSearchResult.CaseSettings != null)
+                    @if (Model.UserCases.CaseSearchResult.CaseSettings != null)
                     {
-                        foreach (var c in Model.CaseSearchResult.CaseSettings)
+                        foreach (var c in Model.UserCases.CaseSearchResult.CaseSettings)
                         {
                             if (c.Line == 1)
                             {
@@ -22,9 +26,9 @@
                 </tr>
             </thead>        
             <tbody>
-                @if (Model.CaseSearchResult.Cases.Any())
+                @if (Model.UserCases.CaseSearchResult.Cases.Any())
                 {
-                    foreach (var r in Model.CaseSearchResult.Cases)
+                    foreach (var r in Model.UserCases.CaseSearchResult.Cases)
                     {
                         <tr>
                             <!--fasta kolumner -->
@@ -67,4 +71,5 @@
     </div>
 </div>
 
-
+</div>                      
+                        </div>

@@ -81,49 +81,7 @@
 
         });
 
-        $('#NewCasefile_uploader').pluploadQueue({
-            url: '@this.Url.Action("NewCaseUploadFile")',
-            multipart_params: { Id: '@this.Model.NewCase.CaseFileKey' },
-            max_file_size: '10mb',
-
-            init: {
-                FileUploaded: function() {
-                    $.get('@this.Url.Action("NewCaseFiles")', { id: '@this.Model.NewCase.CaseFileKey' }, function(files) {
-                        refreshNewCaseFilesTable(files);
-                    });
-                },
-
-                UploadComplete: function(up, file) {
-                    //plupload_add
-                    $(".plupload_buttons").css("display", "inline");
-                    $(".plupload_upload_status").css("display", "inline");
-                    up.refresh();
-                },
-
-                Error: function(uploader, e) {
-                    if (e.status != 409) {
-                        return;
-                    }
-
-                    window.alreadyExistFileIds.push(e.file.id);
-                },
-
-                StateChanged: function(uploader) {
-                    if (uploader.state != plupload.STOPPED) {
-                        return;
-                    }
-
-                    for (var i = 0; i < window.alreadyExistFileIds.length; i++) {
-                        var fileId = window.alreadyExistFileIds[i];
-                        $('#NewCasefile_uploader ul[class="plupload_filelist"] li[id="' + fileId + '"] div[class="plupload_file_action"] a').prop('title', '@Translation.Get("File already exists.", Enums.TranslationSource.TextTranslation)');
-                    }
-
-                    window.alreadyExistFileIds.length = 0;
-                    uploader.refresh();
-                }
-
-            }
-        });
+        
     });
 
     $('#upload_files_popup').on('hide', function () {
@@ -170,33 +128,7 @@
         bindDeleteFileBehaviorToDeleteButtons();
     }
 
-    function refreshNewCaseFilesTable(files) {
-        $('#NewCasefiles_table > tbody > tr').remove();
-
-        var fileMarkup =
-            $('<tr>' +
-                '<td> &nbsp; <td>' +
-                '<tr>');
-        $('#NewCasefiles_table > tbody').append(fileMarkup);
-
-        for (var i = 0; i < files.length; i++) {
-            var file = files[i];
-
-            fileMarkup =
-                $('<tr>' +
-                    '<td>' +
-                    '<a style="color:blue" href="@this.Url.Action("DownloadNewCaseFile")?@(!string.IsNullOrEmpty(this.Model.NewCase.CaseFileKey) ? "id=" + this.Model.NewCase.CaseFileKey + "&" : string.Empty)' + 'fileName=' + file + '"> <i class="icon-file"></i>' + file + '</a>' +
-                    '</td>' +
-                    '<td>' +
-                    '<a id="delete_file_button_' + i + '" class="btn bt-small" title="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)"> <i class="icon-remove"></i> </a>' +
-                    '</td>' +
-                    '</tr>');
-
-            $('#NewCasefiles_table > tbody').append(fileMarkup);
-        }
-
-        bindDeleteNewCaseFileBehaviorToDeleteButtons();
-    }
+    
 
     function bindDeleteFileBehaviorToDeleteButtons() {
         $('#files_table a[id^="delete_file_button_"]').click(function() {
@@ -209,16 +141,7 @@
         });
     }
 
-    function bindDeleteNewCaseFileBehaviorToDeleteButtons() {
-        $('#NewCasefiles_table a[id^="delete_file_button_"]').click(function() {
-            var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
-            var pressedDeleteFileButton = this;
-
-            $.post('@this.Url.Action("DeleteNewCaseFile")', { id: '@this.Model.NewCase.CaseFileKey', fileName: fileName }, function() {
-                $(pressedDeleteFileButton).parents('tr:first').remove();
-            });
-        });
-    }
+    
     
     function SendEmail() {
 
@@ -242,8 +165,8 @@
 
 <div class="container-fluid dh-container">
     <input id="LanguageId" type="hidden" value="@Model.LanguageId"/>                        
-        <div> XXX What is this div XXXXXXXX
-            <!-- Printer Icon and others -->     
+        <div>
+            <!--  XXX What is this div XXXXXXXX Printer Icon and others -->     
             <div>
                 @*/* Print current Case for functionality test */*@ 
                 <br/>
@@ -330,7 +253,7 @@
                 {
                 <div id="fragment-2" class="tab-pane @(Model.IsEmptyCase == 1 ? "active" : "")">
                     <div class="container">
-                        @Html.Partial("_NewCase", Model.NewCase)  
+                        @*@Html.Partial("_NewCase", Model.NewCase)*@  
                     </div>
                 </div>
                 }

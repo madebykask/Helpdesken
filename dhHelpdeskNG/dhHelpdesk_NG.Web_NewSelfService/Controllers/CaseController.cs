@@ -179,6 +179,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
                 var model = new SelfServiceModel(customerId, languageId);
 
+                model.MailGuid = id;
                 SessionFacade.CurrentCustomer = currentCustomer;
                 SessionFacade.CurrentLanguageId = languageId;
 
@@ -215,69 +216,96 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
                 this._userTemporaryFilesStorage.DeleteFiles(model.ExLogFileGuid);
 
-                var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
-                if (identity != null)
-                {
-                    // *** New Case *** 
-                    var newCase = this.GetNewCaseModel(currentCustomer.Id, languageId);
-                    var cs = this._settingService.GetCustomerSetting(currentCustomer.Id);
-
-                    newCase.NewCase = this._caseService.InitCase(
-                        currentCustomer.Id,
-                        0,
-                        SessionFacade.CurrentLanguageId,
-                        this.Request.GetIpAddress(),
-                        GlobalEnums.RegistrationSource.Case,
-                        cs,"DATAHALLAND\\mg");
-                        //identity.Name);
-
-                    newCase.NewCase.Customer = currentCustomer;
-                    newCase.CaseMailSetting = new CaseMailSetting(
-                        currentCustomer.NewCaseEmailList,
-                        currentCustomer.HelpdeskEmail,
-                        ConfigurationManager.AppSettings["dh_helpdeskaddress"].ToString(),
-                        cs.DontConnectUserToWorkingGroup);
-                    model.NewCase = newCase;
-
-                    // *** User Cases *** 
-                    string adUser = "DATAHALLAND\\mg"; //identity.Name;
-                    string regUser = adUser.GetUserFromAdPath();
-                    if (regUser != string.Empty)
-                    {
-                        model.AUser = regUser;
-                        if (id.Is<Guid>())
-                        {
-                            model.MailGuid = id.ToString();
-                        }
-                        //else
-                        //{
-                            model.UserCases = this.GetUserCasesModel(currentCustomer.Id, languageId, regUser, "", 20);
-                            if (!string.IsNullOrEmpty(id) && model.CaseOverview != null)
-                                if (model.CaseOverview.CasePreview.RegUserId != regUser)
-                                {
-                                    model.IsEmptyCase = 1;
-                                    model.CaseOverview.CasePreview = null;
-                                }
-                            config.ShowNewCase = true;
-                            config.ShowUserCases = true;
-                            config.ViewCaseMode = 1;
-                        //}
-                    }
-                    else
-                    {
-                        model.AUser = "";
-                        model.UserCases = null;
-                        config.ViewCaseMode = 0;
-                    }
-                }
-
+                
                 model.Configuration = config;
                 return this.View(model);
             } // if exist Customer
 
             
             
-        }            
+        }
+
+
+        [HttpGet]
+        public ActionResult NewCase(string id, int customerId)
+        {
+            // *** New Case ***
+            var currentCustomer = this._customerService.GetCustomer(customerId);
+            var languageId = currentCustomer.Language_Id;
+            SessionFacade.CurrentLanguageId = languageId;
+
+            var selfServiceModel = new SelfServiceModel(currentCustomer.Id, languageId);
+            selfServiceModel.MailGuid = id;
+            var newCaseModel = this.GetNewCaseModel(currentCustomer.Id, languageId);
+
+            var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+            if (identity != null)
+            {                 
+                
+                var cs = this._settingService.GetCustomerSetting(currentCustomer.Id);
+
+                newCaseModel.NewCase = this._caseService.InitCase(
+                    currentCustomer.Id,
+                    0,
+                    SessionFacade.CurrentLanguageId,
+                    this.Request.GetIpAddress(),
+                    GlobalEnums.RegistrationSource.Case,
+                    cs, "DATAHALLAND\\mg");
+
+                newCaseModel.NewCase.Customer = currentCustomer;
+                newCaseModel.CaseMailSetting = new CaseMailSetting(
+                    currentCustomer.NewCaseEmailList,
+                    currentCustomer.HelpdeskEmail,
+                    ConfigurationManager.AppSettings["dh_helpdeskaddress"].ToString(),
+                    cs.DontConnectUserToWorkingGroup);
+                selfServiceModel.NewCase = newCaseModel;
+            }
+
+            return this.View("_NewCase",selfServiceModel);
+        }
+
+
+        [HttpGet]
+        public ActionResult UserCases(string id, int customerId)
+        {
+            var currentCustomer = this._customerService.GetCustomer(customerId);
+            var languageId = currentCustomer.Language_Id;
+            SessionFacade.CurrentLanguageId = languageId;
+
+            var selfServiceModel = new SelfServiceModel(currentCustomer.Id, languageId);
+            selfServiceModel.MailGuid = id;
+
+            var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+            if (identity != null)
+            {
+                string adUser = "DATAHALLAND\\mg"; //identity.Name;
+                string regUser = adUser.GetUserFromAdPath();
+                if (regUser != string.Empty)
+                {
+
+                    selfServiceModel.AUser = regUser;
+                    selfServiceModel.UserCases = this.GetUserCasesModel(currentCustomer.Id, languageId, regUser, "", 20);
+                    //if (!string.IsNullOrEmpty(id) && model.CaseOverview != null)
+                    //    if (model.CaseOverview.CasePreview.RegUserId != regUser)
+                    //    {
+                    //        selfServiceModel.IsEmptyCase = 1;
+                    //        selfServiceModel.CaseOverview.CasePreview = null;
+                    //    }
+                    //config.ShowNewCase = true;
+                    //config.ShowUserCases = true;
+                    //config.ViewCaseMode = 1;                    
+                }
+                else
+                {
+                    selfServiceModel.AUser = "";
+                    selfServiceModel.UserCases = null;
+                    //config.ViewCaseMode = 0;
+                }
+            }
+
+            return this.View("_UserCases", selfServiceModel);
+
+        }
 
         [HttpGet]
         public FileContentResult DownloadFile(string id, string fileName)
@@ -516,11 +544,15 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                 var maxRecords = frm.ReturnFormValue("maxRecords").convertStringToInt();
                 var progressId = frm.ReturnFormValue("progressId");
                 var sortBy = frm.ReturnFormValue("hidSortBy");
-                var ascending = frm.ReturnFormValue("hidSortByAsc").convertStringToBool();                                      
+                var ascending = frm.ReturnFormValue("hidSortByAsc").convertStringToBool();
+                var id = frm.ReturnFormValue("MailGuid");
 
-                var model = GetUserCasesModel(customerId, languageId, userId,
+                var model = new SelfServiceModel(customerId, languageId);
+                model.MailGuid = id;
+                var userCases = GetUserCasesModel(customerId, languageId, userId,
                                               pharasSearch, maxRecords, progressId,
                                               sortBy, ascending);
+                model.UserCases = userCases;
 
                 return this.PartialView("_UserCases", model);
             }

@@ -1,9 +1,10 @@
-﻿@model  DH.Helpdesk.NewSelfService.Models.Case.UserCasesModel 
+﻿@model  DH.Helpdesk.NewSelfService.Models.NewSelfService.SelfServiceModel   
 
 <form id="frmCaseSearch" name="frmCaseSearch">    
-    @Html.HiddenFor(c => Model.CustomerId)
-    @Html.HiddenFor(l => Model.LanguageId)
-    @Html.HiddenFor(u => Model.UserId)
+    @Html.HiddenFor(c => Model.UserCases.CustomerId)
+    @Html.HiddenFor(l => Model.UserCases.LanguageId)
+    @Html.HiddenFor(u => Model.UserCases.UserId)
+    @Html.HiddenFor(u => Model.MailGuid)
         
     <input type="hidden" value="@SessionFacade.CurrentCaseSearch.Search.SortBy" id="hidSortBy" name="hidSortBy" />
     <input type="hidden" value="@SessionFacade.CurrentCaseSearch.Search.Ascending" id="hidSortByAsc" name="hidSortByAsc" />
@@ -16,7 +17,7 @@
                         @Translation.Get("Sökord", Enums.TranslationSource.TextTranslation):
                     </td>
                     <td class="span12">
-                        @Html.TextBoxFor(s => Model.PharasSearch)
+                        @Html.TextBoxFor(s => Model.UserCases.PharasSearch)
                     </td>                    
                 </tr>
                 <tr>
@@ -36,7 +37,7 @@
                         @Translation.Get("poster i sökresultat", Enums.TranslationSource.TextTranslation):
                     </td>                    
                     <td class="span12">
-                        @Html.TextBoxFor(s => Model.MaxRecords, new { style = "width:50px" })                        
+                        @Html.TextBoxFor(s => Model.UserCases.MaxRecords, new { style = "width:50px" })                        
                         <button id="btnSearch" name="btnSearch" class="btn">@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)</button>
                     </td>                   
                 </tr>

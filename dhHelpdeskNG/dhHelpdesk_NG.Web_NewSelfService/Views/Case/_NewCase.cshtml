@@ -1,67 +1,67 @@
 ﻿@using DH.Helpdesk.BusinessData.OldComponents
 @using DH.Helpdesk.Common.Extensions.Integer
 @using DH.Helpdesk.NewSelfService.Infrastructure
-@model DH.Helpdesk.NewSelfService.Models.Case.NewCaseModel
+@model DH.Helpdesk.NewSelfService.Models.NewSelfService.SelfServiceModel
 
  @using (Html.BeginForm("NewCase", "case", null, FormMethod.Post, new { id = "NewCaseForm" }))
  {
-    @Html.HiddenFor(model => model.NewCase.Id)
-    @Html.HiddenFor(model => model.NewCase.CaseGUID)
-    @Html.HiddenFor(model => model.NewCase.Customer_Id)
-    @Html.HiddenFor(model => model.NewCase.User_Id)
-    @Html.HiddenFor(model => model.NewCase.IpAddress)
-    @Html.HiddenFor(model => model.NewCase.Deleted)
-    @Html.HiddenFor(model => model.NewCase.RegistrationSource)   
-    @Html.HiddenFor(model => model.NewCase.RegUserDomain)
-    @Html.HiddenFor(model => model.NewCase.RegUserId)
-    @Html.HiddenFor(model => model.NewCase.CaseNumber)
-    @Html.HiddenFor(model => model.NewCase.ProductAreaSetDate)
-    @Html.HiddenFor(model => model.NewCase.LockCaseToWorkingGroup_Id)
-    @Html.HiddenFor(model => model.NewCase.FinishingDate)
-    @Html.HiddenFor(model => model.NewCase.ProductAreaQuestionVersion_Id)
-    @Html.HiddenFor(model => model.NewCase.LeadTime)
-    @Html.HiddenFor(model => model.NewCase.CaseCleanUp_Id)
-    @Html.HiddenFor(model => model.NewCase.RelatedCaseNumber)
-    @Html.HiddenFor(model => model.NewCase.ApprovedDate)
-    @Html.HiddenFor(model => model.NewCase.ApprovedBy_User_Id)
-    @Html.HiddenFor(model => model.NewCase.ApprovedBy_User_Id)
-    @Html.HiddenFor(model => model.NewCase.FollowUpDate)
-    @Html.HiddenFor(model => model.NewCase.ExternalTime)
-    @Html.HiddenFor(model => model.NewCase.DefaultOwnerWG_Id)
-    @Html.HiddenFor(model => model.CaseMailSetting.SendMailAboutNewCaseTo)
-    @Html.HiddenFor(model => model.CaseMailSetting.HelpdeskMailFromAdress)
-    @Html.HiddenFor(model => model.CaseMailSetting.AbsoluterUrl)
-    @Html.HiddenFor(model => model.CaseMailSetting.DontConnectUserToWorkingGroup)
-    @Html.HiddenFor(l => Model.NewCase.RegLanguage_Id)     
+    @Html.HiddenFor(model => model.NewCase.NewCase.Id)
+    @Html.HiddenFor(model => model.NewCase.NewCase.CaseGUID)
+    @Html.HiddenFor(model => model.NewCase.NewCase.Customer_Id)
+    @Html.HiddenFor(model => model.NewCase.NewCase.User_Id)
+    @Html.HiddenFor(model => model.NewCase.NewCase.IpAddress)
+    @Html.HiddenFor(model => model.NewCase.NewCase.Deleted)
+    @Html.HiddenFor(model => model.NewCase.NewCase.RegistrationSource)   
+    @Html.HiddenFor(model => model.NewCase.NewCase.RegUserDomain)
+    @Html.HiddenFor(model => model.NewCase.NewCase.RegUserId)
+    @Html.HiddenFor(model => model.NewCase.NewCase.CaseNumber)
+    @Html.HiddenFor(model => model.NewCase.NewCase.ProductAreaSetDate)
+    @Html.HiddenFor(model => model.NewCase.NewCase.LockCaseToWorkingGroup_Id)
+    @Html.HiddenFor(model => model.NewCase.NewCase.FinishingDate)
+    @Html.HiddenFor(model => model.NewCase.NewCase.ProductAreaQuestionVersion_Id)
+    @Html.HiddenFor(model => model.NewCase.NewCase.LeadTime)
+    @Html.HiddenFor(model => model.NewCase.NewCase.CaseCleanUp_Id)
+    @Html.HiddenFor(model => model.NewCase.NewCase.RelatedCaseNumber)
+    @Html.HiddenFor(model => model.NewCase.NewCase.ApprovedDate)
+    @Html.HiddenFor(model => model.NewCase.NewCase.ApprovedBy_User_Id)
+    @Html.HiddenFor(model => model.NewCase.NewCase.ApprovedBy_User_Id)
+    @Html.HiddenFor(model => model.NewCase.NewCase.FollowUpDate)
+    @Html.HiddenFor(model => model.NewCase.NewCase.ExternalTime)
+    @Html.HiddenFor(model => model.NewCase.NewCase.DefaultOwnerWG_Id)
+    @Html.HiddenFor(model => model.NewCase.CaseMailSetting.SendMailAboutNewCaseTo)
+    @Html.HiddenFor(model => model.NewCase.CaseMailSetting.HelpdeskMailFromAdress)
+    @Html.HiddenFor(model => model.NewCase.CaseMailSetting.AbsoluterUrl)
+    @Html.HiddenFor(model => model.NewCase.CaseMailSetting.DontConnectUserToWorkingGroup)
+    @Html.HiddenFor(l => Model.NewCase.NewCase.RegLanguage_Id)     
      
-    @Html.HiddenFor(k => Model.CaseFileKey)
+    @Html.HiddenFor(k => Model.NewCase.CaseFileKey)
         
  
-     if (Model.CaseFieldGroups.Contains("UserInformation"))
+     if (Model.NewCase.CaseFieldGroups.Contains("UserInformation"))
      {
           <h4>@Translation.Get("Användarinformation", Enums.TranslationSource.TextTranslation)</h4>
           <div class="row">
               <div class="span12">
                   <table class="tableform" >
-                      @if (Model.FieldSettings.Select(f => f.Name).Contains("Customer_Id"))
+                      @if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("Customer_Id"))
                       {
                           <tr>
                               <td class="span3">
-                                  @Model.FieldSettings.Where(f => f.Name == "Customer_Id").Select(f => f.LabelToChange).SingleOrDefault():                        
+                                  @Model.NewCase.FieldSettings.Where(f => f.Name == "Customer_Id").Select(f => f.LabelToChange).SingleOrDefault():                        
                               </td>
                               <td class="span12">
-                                  &nbsp; @Model.NewCase.Customer.Name
+                                  &nbsp; @Model.NewCase.NewCase.Customer.Name
                               </td>
                           </tr>
                       }                      
-                      @if (Model.FieldSettings.Select(f => f.Name).Contains("ReportedBy"))
+                      @if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("ReportedBy"))
                       {
                           <tr>
                               <td class="span3">
-                                  @Model.FieldSettings.Where(f => f.Name == "ReportedBy").Select(f => f.LabelToChange).SingleOrDefault():                          
+                                  @Model.NewCase.FieldSettings.Where(f => f.Name == "ReportedBy").Select(f => f.LabelToChange).SingleOrDefault():                          
                               </td>
                               <td class="span12">
-                                  @if (Model.FieldSettings.Where(f => f.Name == "ReportedBy").Select(f => f.Required).SingleOrDefault() == 1)
+                                  @if (Model.NewCase.FieldSettings.Where(f => f.Name == "ReportedBy").Select(f => f.Required).SingleOrDefault() == 1)
                                   {
                                       <span class="mandatorystar">*</span>
                                   }
@@ -69,18 +69,18 @@
                                   {
                                       <span class="mandatorystar">&nbsp;</span>
                                   }                                   
-                                  @Html.TextBoxFor(model => model.NewCase.ReportedBy, new { maxlength = "40", autocomplete = "Off" })                                                                    
+                                  @Html.TextBoxFor(model => model.NewCase.NewCase.ReportedBy, new { maxlength = "40", autocomplete = "Off" })                                                                    
                               </td>
                           </tr>
                       }
-                      @if (Model.FieldSettings.Select(f => f.Name).Contains("Persons_Name"))
+                      @if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("Persons_Name"))
                       {
                           <tr>
                               <td class="span3">
-                                  @Model.FieldSettings.Where(f => f.Name == "Persons_Name").Select(f => f.LabelToChange).SingleOrDefault():                          
+                                  @Model.NewCase.FieldSettings.Where(f => f.Name == "Persons_Name").Select(f => f.LabelToChange).SingleOrDefault():                          
                               </td>
                               <td class="span12">
-                                  @if (Model.FieldSettings.Where(f => f.Name == "Persons_Name").Select(f => f.Required).SingleOrDefault() == 1)
+                                  @if (Model.NewCase.FieldSettings.Where(f => f.Name == "Persons_Name").Select(f => f.Required).SingleOrDefault() == 1)
                                   {
                                       <span class="mandatorystar">*</span>
                                   }
@@ -88,18 +88,18 @@
                                   {
                                       <span class="mandatorystar">&nbsp;</span>
                                   }
-                                  @Html.TextBoxFor(p => Model.NewCase.PersonsName)
+                                  @Html.TextBoxFor(p => Model.NewCase.NewCase.PersonsName)
                               </td>
                           </tr>
                       }
-                      @if (Model.FieldSettings.Select(f => f.Name).Contains("Persons_EMail"))
+                      @if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("Persons_EMail"))
                       {
                           <tr>
                               <td class="span3">
-                                  @Model.FieldSettings.Where(f => f.Name == "Persons_EMail").Select(f => f.LabelToChange).SingleOrDefault():                          
+                                  @Model.NewCase.FieldSettings.Where(f => f.Name == "Persons_EMail").Select(f => f.LabelToChange).SingleOrDefault():                          
                               </td>
                               <td class="span12">
-                                  @if (Model.FieldSettings.Where(f => f.Name == "Persons_EMail").Select(f => f.Required).SingleOrDefault() == 1)
+                                  @if (Model.NewCase.FieldSettings.Where(f => f.Name == "Persons_EMail").Select(f => f.Required).SingleOrDefault() == 1)
                                   {
                                       <span class="mandatorystar">*</span>
                                   }
@@ -107,18 +107,18 @@
                                   {
                                       <span class="mandatorystar">&nbsp;</span>
                                   }
-                                  @Html.TextBoxFor(p => Model.NewCase.PersonsEmail)
+                                  @Html.TextBoxFor(p => Model.NewCase.NewCase.PersonsEmail)
                               </td>
                           </tr>
                       }
-                      @if (Model.FieldSettings.Select(f => f.Name).Contains("Persons_Phone"))
+                      @if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("Persons_Phone"))
                       {
                           <tr>
                               <td class="span3">
-                                  @Model.FieldSettings.Where(f => f.Name == "Persons_Phone").Select(f => f.LabelToChange).SingleOrDefault():                          
+                                  @Model.NewCase.FieldSettings.Where(f => f.Name == "Persons_Phone").Select(f => f.LabelToChange).SingleOrDefault():                          
                               </td>
                               <td class="span12">
-                                  @if (Model.FieldSettings.Where(f => f.Name == "Persons_Phone").Select(f => f.Required).SingleOrDefault() == 1)
+                                  @if (Model.NewCase.FieldSettings.Where(f => f.Name == "Persons_Phone").Select(f => f.Required).SingleOrDefault() == 1)
                                   {
                                       <span class="mandatorystar">*</span>
                                   }
@@ -126,18 +126,18 @@
                                   {
                                       <span class="mandatorystar">&nbsp;</span>
                                   }
-                                  @Html.TextBoxFor(p => Model.NewCase.PersonsPhone)
+                                  @Html.TextBoxFor(p => Model.NewCase.NewCase.PersonsPhone)
                               </td>
                           </tr>
                       }
-                      @if (Model.FieldSettings.Select(f => f.Name).Contains("Persons_CellPhone"))
+                      @if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("Persons_CellPhone"))
                       {
                           <tr>
                               <td class="span3">
-                                  @Model.FieldSettings.Where(f => f.Name == "Persons_CellPhone").Select(f => f.LabelToChange).SingleOrDefault():                          
+                                  @Model.NewCase.FieldSettings.Where(f => f.Name == "Persons_CellPhone").Select(f => f.LabelToChange).SingleOrDefault():                          
                               </td>
                               <td class="span12">
-                                  @if (Model.FieldSettings.Where(f => f.Name == "Persons_CellPhone").Select(f => f.Required).SingleOrDefault() == 1)
+                                  @if (Model.NewCase.FieldSettings.Where(f => f.Name == "Persons_CellPhone").Select(f => f.Required).SingleOrDefault() == 1)
                                   {
                                       <span class="mandatorystar">*</span>
                                   }
@@ -145,19 +145,19 @@
                                   {
                                       <span class="mandatorystar">&nbsp;</span>
                                   }
-                                  @Html.TextBoxFor(c => Model.NewCase.PersonsCellphone)
+                                  @Html.TextBoxFor(c => Model.NewCase.NewCase.PersonsCellphone)
                               </td>
                           </tr>
                       }
               
-                      @if (Model.FieldSettings.Select(f => f.Name).Contains("Region_Id"))
+                      @if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("Region_Id"))
                       {
                           <tr>
                               <td class="span3">
-                                  @Model.FieldSettings.Where(f => f.Name == "Region_Id").Select(f => f.LabelToChange).SingleOrDefault():
+                                  @Model.NewCase.FieldSettings.Where(f => f.Name == "Region_Id").Select(f => f.LabelToChange).SingleOrDefault():
                               </td>
                               <td class="span12">
-                                  @if (Model.FieldSettings.Where(f => f.Name == "Region_Id").Select(f => f.Required).SingleOrDefault() == 1)
+                                  @if (Model.NewCase.FieldSettings.Where(f => f.Name == "Region_Id").Select(f => f.Required).SingleOrDefault() == 1)
                                   {
                                       <span class="mandatorystar">*</span>
                                   }
@@ -167,9 +167,9 @@
                                   }                        
                                   <select id="NewCase_Region_Id" name="NewCase.Region_Id">                              
                                       <option value="">&nbsp;</option>                              
-                                      @if (Model.Regions != null)
+                                      @if (Model.NewCase.Regions != null)
                                       {
-                                          foreach (var e in Model.Regions.Where(e => e.IsActive == 1))
+                                          foreach (var e in Model.NewCase.Regions.Where(e => e.IsActive == 1))
                                           {
                                               <option value="@e.Id">@e.Name</option>
                                           }
@@ -178,14 +178,14 @@
                               </td>
                           </tr>
                       }
-                      @if (Model.FieldSettings.Select(f => f.Name).Contains("Department_Id"))
+                      @if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("Department_Id"))
                       {
                           <tr>
                               <td class="span3">
-                                  @Model.FieldSettings.Where(f => f.Name == "Department_Id").Select(f => f.LabelToChange).SingleOrDefault():
+                                  @Model.NewCase.FieldSettings.Where(f => f.Name == "Department_Id").Select(f => f.LabelToChange).SingleOrDefault():
                               </td>
                               <td class="span12">
-                                  @if (Model.FieldSettings.Where(f => f.Name == "Department_Id").Select(f => f.Required).SingleOrDefault() == 1)
+                                  @if (Model.NewCase.FieldSettings.Where(f => f.Name == "Department_Id").Select(f => f.Required).SingleOrDefault() == 1)
                                   {
                                       <span class="mandatorystar">*</span>
                                   }
@@ -196,9 +196,9 @@
 
                                   <select id="NewCase_Department_Id" name="NewCase.Department_Id">
                                       <option value="">&nbsp;</option>
-                                      @if (Model.Departments != null)
+                                      @if (Model.NewCase.Departments != null)
                                       {
-                                          foreach (var e in Model.Departments.Where(e => e.IsActive == 1))
+                                          foreach (var e in Model.NewCase.Departments.Where(e => e.IsActive == 1))
                                           {
                                               <option value="@e.Id"> @e.DepartmentName </option>
                                           }
@@ -207,29 +207,29 @@
                               </td>
                           </tr>
                       }
-          @*@if (Model.FieldSettings.Select(f => f.Name).Contains("OU_Id")) 
+          @*@if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("OU_Id")) 
               {
                   <tr>
                       <td class="span3">
-                          @Model.FieldSettings.Where(f=> f.Name == "OU_Id").Select(f=> f.LabelToChange).SingleOrDefault():
-                          @if (Model.FieldSettings.Where(f => f.Name == "OU_Id").Select(f => f.Required).SingleOrDefault() == 1)
+                          @Model.NewCase.FieldSettings.Where(f=> f.Name == "OU_Id").Select(f=> f.LabelToChange).SingleOrDefault():
+                          @if (Model.NewCase.FieldSettings.Where(f => f.Name == "OU_Id").Select(f => f.Required).SingleOrDefault() == 1)
                           {
                             <span class="mandatorystar">*</span>
                           }
                       </td>
                       <td class="span12">
-                          @Html.EditorFor(p=> Model.NewCase.OU_Id)
+                          @Html.EditorFor(p=> Model.NewCase.NewCase.OU_Id)
                       </td>
                   </tr>
               }*@
-                 @if (Model.FieldSettings.Select(f => f.Name).Contains("Place"))
+                 @if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("Place"))
                  {
                      <tr>
                          <td class="span3">
-                             @Model.FieldSettings.Where(f => f.Name == "Place").Select(f => f.LabelToChange).SingleOrDefault():                          
+                             @Model.NewCase.FieldSettings.Where(f => f.Name == "Place").Select(f => f.LabelToChange).SingleOrDefault():                          
                          </td>
                          <td class="span12">
-                             @if (Model.FieldSettings.Where(f => f.Name == "Place").Select(f => f.Required).SingleOrDefault() == 1)
+                             @if (Model.NewCase.FieldSettings.Where(f => f.Name == "Place").Select(f => f.Required).SingleOrDefault() == 1)
                              {
                                  <span class="mandatorystar">*</span>
                              }
@@ -237,18 +237,18 @@
                              {
                                  <span class="mandatorystar">&nbsp;</span>
                              }
-                             @Html.TextBoxFor(p => Model.NewCase.Place)
+                             @Html.TextBoxFor(p => Model.NewCase.NewCase.Place)
                          </td>
                      </tr>
                  }
-                      @if (Model.FieldSettings.Select(f => f.Name).Contains("UserCode"))
+                      @if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("UserCode"))
                       {
                           <tr>
                               <td class="span3">
-                                  @Model.FieldSettings.Where(f => f.Name == "UserCode").Select(f => f.LabelToChange).SingleOrDefault():                          
+                                  @Model.NewCase.FieldSettings.Where(f => f.Name == "UserCode").Select(f => f.LabelToChange).SingleOrDefault():                          
                               </td>
                               <td class="span12">                         
-                                  @if (Model.FieldSettings.Where(f => f.Name == "UserCode").Select(f => f.Required).SingleOrDefault() == 1)
+                                  @if (Model.NewCase.FieldSettings.Where(f => f.Name == "UserCode").Select(f => f.Required).SingleOrDefault() == 1)
                                   {
                                       <span class="mandatorystar">*</span>
                                   }
@@ -256,7 +256,7 @@
                                   {
                                       <span class="mandatorystar">&nbsp;</span>
                                   }                                            
-                                  @Html.TextBoxFor(u => Model.NewCase.UserCode) 
+                                  @Html.TextBoxFor(u => Model.NewCase.NewCase.UserCode) 
                               </td>
                           </tr>
                       }
@@ -266,20 +266,20 @@
      }
      <!-- User Information Fields -->
 
-     if (Model.CaseFieldGroups.Contains("ComputerInformation"))
+     if (Model.NewCase.CaseFieldGroups.Contains("ComputerInformation"))
      {
           <h4>@Translation.Get("Datorinformation", Enums.TranslationSource.TextTranslation)</h4>
           <div class="row">
               <div class="span12">
                   <table class="tableform" >
-                      @if (Model.FieldSettings.Select(f => f.Name).Contains("InventoryNumber"))
+                      @if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("InventoryNumber"))
                       {
                           <tr>
                               <td class="span3">
-                                  @Model.FieldSettings.Where(f => f.Name == "InventoryNumber").Select(f => f.LabelToChange).SingleOrDefault():
+                                  @Model.NewCase.FieldSettings.Where(f => f.Name == "InventoryNumber").Select(f => f.LabelToChange).SingleOrDefault():
                               </td>
                               <td class="span12">
-                                  @if (Model.FieldSettings.Where(f => f.Name == "InventoryNumber").Select(f => f.Required).SingleOrDefault() == 1)
+                                  @if (Model.NewCase.FieldSettings.Where(f => f.Name == "InventoryNumber").Select(f => f.Required).SingleOrDefault() == 1)
                                   {
                                       <span class="mandatorystar">*</span>
                                   }
@@ -287,18 +287,18 @@
                                   {
                                       <span class="mandatorystar">&nbsp;</span>
                                   }      
-                                  @Html.TextBoxFor(i => Model.NewCase.InventoryNumber)
+                                  @Html.TextBoxFor(i => Model.NewCase.NewCase.InventoryNumber)
                               </td>
                           </tr>
                       }
-                      @if (Model.FieldSettings.Select(f => f.Name).Contains("ComputerType_Id"))
+                      @if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("ComputerType_Id"))
                       {
                           <tr>
                               <td class="span3">
-                                  @Model.FieldSettings.Where(f => f.Name == "ComputerType_Id").Select(f => f.LabelToChange).SingleOrDefault():
+                                  @Model.NewCase.FieldSettings.Where(f => f.Name == "ComputerType_Id").Select(f => f.LabelToChange).SingleOrDefault():
                               </td>
                               <td class="span12">
-                                  @if (Model.FieldSettings.Where(f => f.Name == "ComputerType_Id").Select(f => f.Required).SingleOrDefault() == 1)
+                                  @if (Model.NewCase.FieldSettings.Where(f => f.Name == "ComputerType_Id").Select(f => f.Required).SingleOrDefault() == 1)
                                   {
                                       <span class="mandatorystar">*</span>
                                   }
@@ -306,18 +306,18 @@
                                   {
                                       <span class="mandatorystar">&nbsp;</span>
                                   }
-                                  @Html.TextBoxFor(i => Model.NewCase.InventoryType)
+                                  @Html.TextBoxFor(i => Model.NewCase.NewCase.InventoryType)
                               </td>
                           </tr>
                       }
-                      @if (Model.FieldSettings.Select(f => f.Name).Contains("InventoryLocation"))
+                      @if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("InventoryLocation"))
                       {
                           <tr>
                               <td class="span3">
-                                  @Model.FieldSettings.Where(f => f.Name == "InventoryLocation").Select(f => f.LabelToChange).SingleOrDefault():
+                                  @Model.NewCase.FieldSettings.Where(f => f.Name == "InventoryLocation").Select(f => f.LabelToChange).SingleOrDefault():
                               </td>
                               <td class="span12">
-                                  @if (Model.FieldSettings.Where(f => f.Name == "InventoryLocation").Select(f => f.Required).SingleOrDefault() == 1)
+                                  @if (Model.NewCase.FieldSettings.Where(f => f.Name == "InventoryLocation").Select(f => f.Required).SingleOrDefault() == 1)
                                   {
                                       <span class="mandatorystar">*</span>
                                   }
@@ -325,7 +325,7 @@
                                   {
                                       <span class="mandatorystar">&nbsp;</span>
                                   }
-                                  @Html.TextBoxFor(i => Model.NewCase.InventoryLocation)                        
+                                  @Html.TextBoxFor(i => Model.NewCase.NewCase.InventoryLocation)                        
                               </td>
                           </tr>
                       }
@@ -335,21 +335,21 @@
      }
      <!-- Computer Information Fields -->
 
-     if (Model.CaseFieldGroups.Contains("CaseInfo"))
+     if (Model.NewCase.CaseFieldGroups.Contains("CaseInfo"))
      {
           <h4>@Translation.Get("Ärendeinformation", Enums.TranslationSource.TextTranslation) </h4>
           <div class="row">
               <div class="span12">
                   <table class="tableform" >
              
-                      @if (Model.FieldSettings.Select(f => f.Name).Contains("CaseType_Id"))
+                      @if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("CaseType_Id"))
                       {
                           <tr>
                               <td class="span3">
-                                  @Model.FieldSettings.Where(f => f.Name == "CaseType_Id").Select(f => f.LabelToChange).SingleOrDefault():
+                                  @Model.NewCase.FieldSettings.Where(f => f.Name == "CaseType_Id").Select(f => f.LabelToChange).SingleOrDefault():
                               </td>
                               <td  class="span12" >
-                                  @if (Model.FieldSettings.Where(f => f.Name == "CaseType_Id").Select(f => f.Required).SingleOrDefault() == 1)
+                                  @if (Model.NewCase.FieldSettings.Where(f => f.Name == "CaseType_Id").Select(f => f.Required).SingleOrDefault() == 1)
                                   {
                                       <span class="mandatorystar">*</span>
                                   }
@@ -358,29 +358,29 @@
                                       <span class="mandatorystar">&nbsp;</span>
                                   }      
                                   <div id="divCaseType" class="btn-group">
-                                      <div class="btn" id="divBreadcrumbs_CaseType">@Model.CaseTypeParantPath</div>
+                                      <div class="btn" id="divBreadcrumbs_CaseType">@Model.NewCase.CaseTypeParantPath</div>
                                       <button class="btn dropdown-toggle" data-toggle="dropdown">
                                           <span class="caret"></span>
                                       </button>
                                       <ul class="dropdown-menu">
                                           <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
-                                          @Html.CaseTypeDropdownButtonString(Model.CaseTypes)
+                                          @Html.CaseTypeDropdownButtonString(Model.NewCase.CaseTypes)
                                       </ul>                                                
-                                      <input type="hidden" id="NewCase.CaseType_Id" name="NewCase.CaseType_Id" value="@Model.NewCase.CaseType_Id.supressZero()" />
+                                      <input type="hidden" id="NewCase.CaseType_Id" name="NewCase.CaseType_Id" value="@Model.NewCase.NewCase.CaseType_Id.supressZero()" />
 
                                   </div>
                               </td>    
                           </tr>
                       }
 
-                      @if (Model.FieldSettings.Select(f => f.Name).Contains("ProductArea_Id"))
+                      @if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("ProductArea_Id"))
                       {
                           <tr>
                               <td class="span3">
-                                  @Model.FieldSettings.Where(f => f.Name == "ProductArea_Id").Select(f => f.LabelToChange).SingleOrDefault():
+                                  @Model.NewCase.FieldSettings.Where(f => f.Name == "ProductArea_Id").Select(f => f.LabelToChange).SingleOrDefault():
                               </td>
                               <td  class="span12" >
-                                  @if (Model.FieldSettings.Where(f => f.Name == "ProductArea_Id").Select(f => f.Required).SingleOrDefault() == 1)
+                                  @if (Model.NewCase.FieldSettings.Where(f => f.Name == "ProductArea_Id").Select(f => f.Required).SingleOrDefault() == 1)
                                   {
                                       <span class="mandatorystar">*</span>
                                   }
@@ -389,28 +389,28 @@
                                       <span class="mandatorystar">&nbsp;</span>
                                   }      
                                   <div id="divProductArea" class="btn-group">
-                                      <div class="btn" id="divBreadcrumbs_ProductArea">@Model.ProductAreaParantPath</div>
+                                      <div class="btn" id="divBreadcrumbs_ProductArea">@Model.NewCase.ProductAreaParantPath</div>
                                       <button class="btn dropdown-toggle" data-toggle="dropdown">
                                           <span class="caret"></span>
                                       </button>
                                       <ul class="dropdown-menu">
                                           <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
-                                          @Html.ProductAreaDropdownButtonString(Model.ProductAreas)
+                                          @Html.ProductAreaDropdownButtonString(Model.NewCase.ProductAreas)
                                       </ul>
-                                      @Html.HiddenFor(model => model.NewCase.ProductArea_Id)
+                                      @Html.HiddenFor(model => model.NewCase.NewCase.ProductArea_Id)
                                   </div>
                               </td>    
                           </tr>
                       }
              
-                      @if (Model.FieldSettings.Select(f => f.Name).Contains("System_Id"))
+                      @if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("System_Id"))
                       {
                           <tr>
                               <td class="span3">
-                                  @Model.FieldSettings.Where(f => f.Name == "System_Id").Select(f => f.LabelToChange).SingleOrDefault():
+                                  @Model.NewCase.FieldSettings.Where(f => f.Name == "System_Id").Select(f => f.LabelToChange).SingleOrDefault():
                               </td>
                               <td class="span12">
-                                  @if (Model.FieldSettings.Where(f => f.Name == "System_Id").Select(f => f.Required).SingleOrDefault() == 1)
+                                  @if (Model.NewCase.FieldSettings.Where(f => f.Name == "System_Id").Select(f => f.Required).SingleOrDefault() == 1)
                                   {
                                       <span class="mandatorystar">*</span>
                                   }
@@ -420,9 +420,9 @@
                                   }                        
                                   <select id="NewCase_System_Id" name="NewCase.System_Id">                              
                                       <option value="">&nbsp;</option>                              
-                                      @if (Model.Systems != null)
+                                      @if (Model.NewCase.Systems != null)
                                       {
-                                          foreach (var e in Model.Systems)
+                                          foreach (var e in Model.NewCase.Systems)
                                           {
                                               <option value="@e.Id">@e.SystemName</option>
                                           }
@@ -432,37 +432,37 @@
                           </tr>
                       }
 
-          @*@if (Model.FieldSettings.Select(f => f.Name).Contains("Urgency_Id")) 
+          @*@if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("Urgency_Id")) 
              {
                 <tr>
                     <td class="span3">
-                       @Model.FieldSettings.Where(f=> f.Name == "Urgency_Id").Select(f=> f.LabelToChange).SingleOrDefault():
+                       @Model.NewCase.FieldSettings.Where(f=> f.Name == "Urgency_Id").Select(f=> f.LabelToChange).SingleOrDefault():
                     </td>
                     <td class="span12">
-                       @Model.CasePreview.Urgency.Name
+                       @Model.NewCase.CasePreview.Urgency.Name
                     </td>
                 </tr>
              }
 
-             @if (Model.FieldSettings.Select(f => f.Name).Contains("Impact_Id")) 
+             @if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("Impact_Id")) 
              {
                 <tr>
                     <td class="span3">
-                       @Model.FieldSettings.Where(f=> f.Name == "Impact_Id").Select(f=> f.LabelToChange).SingleOrDefault():
+                       @Model.NewCase.FieldSettings.Where(f=> f.Name == "Impact_Id").Select(f=> f.LabelToChange).SingleOrDefault():
                     </td>
                     <td class="span12">
-                       @Model.CasePreview.Impact_Id
+                       @Model.NewCase.CasePreview.Impact_Id
                     </td>
                 </tr>
              }*@
-          @if (Model.FieldSettings.Select(f => f.Name).Contains("Category_Id"))
+          @if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("Category_Id"))
           {
               <tr>
                   <td class="span3">
-                      @Model.FieldSettings.Where(f => f.Name == "Category_Id").Select(f => f.LabelToChange).SingleOrDefault():
+                      @Model.NewCase.FieldSettings.Where(f => f.Name == "Category_Id").Select(f => f.LabelToChange).SingleOrDefault():
                   </td>
                   <td class="span12">
-                      @if (Model.FieldSettings.Where(f => f.Name == "Category_Id").Select(f => f.Required).SingleOrDefault() == 1)
+                      @if (Model.NewCase.FieldSettings.Where(f => f.Name == "Category_Id").Select(f => f.Required).SingleOrDefault() == 1)
                       {
                           <span class="mandatorystar">*</span>
                       }
@@ -472,9 +472,9 @@
                       }                        
                       <select id="NewCase_Category_Id" name="NewCase.Category_Id">                              
                           <option value="">&nbsp;</option>                              
-                          @if (Model.Categories != null)
+                          @if (Model.NewCase.Categories != null)
                           {
-                              foreach (var e in Model.Categories.Where(c => c.IsActive == 1))
+                              foreach (var e in Model.NewCase.Categories.Where(c => c.IsActive == 1))
                               {
                                   <option value="@e.Id">@e.Name</option>
                               }
@@ -484,16 +484,16 @@
               </tr>
           }
             
-                      @if (Model.FieldSettings.Select(f => f.Name).Contains("Supplier_Id"))
+                      @if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("Supplier_Id"))
                       {
                           <tr>
                               <td class="span3">
-                                  @Model.FieldSettings.Where(f => f.Name == "Supplier_Id").Select(f => f.LabelToChange).SingleOrDefault():
+                                  @Model.NewCase.FieldSettings.Where(f => f.Name == "Supplier_Id").Select(f => f.LabelToChange).SingleOrDefault():
                               </td>
-                              @if (Model.Suppliers != null)
+                              @if (Model.NewCase.Suppliers != null)
                               {
                                   <td>
-                                      @if (Model.FieldSettings.Where(f => f.Name == "Supplier_Id").Select(f => f.Required).SingleOrDefault() == 1)
+                                      @if (Model.NewCase.FieldSettings.Where(f => f.Name == "Supplier_Id").Select(f => f.Required).SingleOrDefault() == 1)
                                       {
                                           <span class="mandatorystar">*</span>
                                       }
@@ -503,7 +503,7 @@
                                       }       
                                       <select id="NewCase_Supplier_Id" name="NewCase.Supplier_Id">
                                           <option value="">&nbsp;</option>
-                                          @foreach (var e in Model.Suppliers.Where(e => e.IsActive == 1))
+                                          @foreach (var e in Model.NewCase.Suppliers.Where(e => e.IsActive == 1))
                                           {
                                               <option value="@e.Id">@e.Name</option>
                                           }
@@ -513,14 +513,14 @@
                           </tr>
                       } 
              
-                      @if (Model.FieldSettings.Select(f => f.Name).Contains("InvoiceNumber"))
+                      @if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("InvoiceNumber"))
                       {
                           <tr>
                               <td class="span3">
-                                  @Model.FieldSettings.Where(f => f.Name == "InvoiceNumber").Select(f => f.LabelToChange).SingleOrDefault():
+                                  @Model.NewCase.FieldSettings.Where(f => f.Name == "InvoiceNumber").Select(f => f.LabelToChange).SingleOrDefault():
                               </td>
                               <td class="span12">
-                                  @if (Model.FieldSettings.Where(f => f.Name == "InvoiceNumber").Select(f => f.Required).SingleOrDefault() == 1)
+                                  @if (Model.NewCase.FieldSettings.Where(f => f.Name == "InvoiceNumber").Select(f => f.Required).SingleOrDefault() == 1)
                                   {
                                       <span class="mandatorystar">*</span>
                                   }
@@ -528,19 +528,19 @@
                                   {
                                       <span class="mandatorystar">&nbsp;</span>
                                   }     
-                                  @Html.TextBoxFor(i => Model.NewCase.InvoiceNumber) 
+                                  @Html.TextBoxFor(i => Model.NewCase.NewCase.InvoiceNumber) 
                               </td>
                           </tr>
                       }
 
-                      @if (Model.FieldSettings.Select(f => f.Name).Contains("ReferenceNumber"))
+                      @if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("ReferenceNumber"))
                       {
                           <tr>
                               <td class="span3">
-                                  @Model.FieldSettings.Where(f => f.Name == "ReferenceNumber").Select(f => f.LabelToChange).SingleOrDefault():
+                                  @Model.NewCase.FieldSettings.Where(f => f.Name == "ReferenceNumber").Select(f => f.LabelToChange).SingleOrDefault():
                               </td>
                               <td class="span12">
-                                  @if (Model.FieldSettings.Where(f => f.Name == "ReferenceNumber").Select(f => f.Required).SingleOrDefault() == 1)
+                                  @if (Model.NewCase.FieldSettings.Where(f => f.Name == "ReferenceNumber").Select(f => f.Required).SingleOrDefault() == 1)
                                   {
                                       <span class="mandatorystar">*</span>
                                   }
@@ -548,19 +548,19 @@
                                   {
                                       <span class="mandatorystar">&nbsp;</span>
                                   }
-                                  @Html.TextBoxFor(r => Model.NewCase.ReferenceNumber) 
+                                  @Html.TextBoxFor(r => Model.NewCase.NewCase.ReferenceNumber) 
                               </td>
                           </tr>
                       }
 
-                      @if (Model.FieldSettings.Select(f => f.Name).Contains("Caption"))
+                      @if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("Caption"))
                       {
                           <tr>
                               <td class="span3">
-                                  @Model.FieldSettings.Where(f => f.Name == "Caption").Select(f => f.LabelToChange).SingleOrDefault():
+                                  @Model.NewCase.FieldSettings.Where(f => f.Name == "Caption").Select(f => f.LabelToChange).SingleOrDefault():
                               </td>
                               <td class="span12">
-                                  @if (Model.FieldSettings.Where(f => f.Name == "Caption").Select(f => f.Required).SingleOrDefault() == 1)
+                                  @if (Model.NewCase.FieldSettings.Where(f => f.Name == "Caption").Select(f => f.Required).SingleOrDefault() == 1)
                                   {
                                       <span class="mandatorystar">*</span>
                                   }
@@ -568,19 +568,19 @@
                                   {
                                       <span class="mandatorystar">&nbsp;</span>
                                   }        
-                                  @Html.TextBoxFor(c => Model.NewCase.Caption) 
+                                  @Html.TextBoxFor(c => Model.NewCase.NewCase.Caption) 
                               </td>
                           </tr>
                       }
              
-                      @if (Model.FieldSettings.Select(f => f.Name).Contains("Description"))
+                      @if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("Description"))
                       {
                           <tr>
                               <td class="span3">
-                                  @Model.FieldSettings.Where(f => f.Name == "Description").Select(f => f.LabelToChange).SingleOrDefault():
+                                  @Model.NewCase.FieldSettings.Where(f => f.Name == "Description").Select(f => f.LabelToChange).SingleOrDefault():
                               </td>
                               <td class="span12">
-                                  @if (Model.FieldSettings.Where(f => f.Name == "Description").Select(f => f.Required).SingleOrDefault() == 1)
+                                  @if (Model.NewCase.FieldSettings.Where(f => f.Name == "Description").Select(f => f.Required).SingleOrDefault() == 1)
                                   {
                                       <span class="mandatorystar">*</span>
                                   }
@@ -588,19 +588,19 @@
                                   {
                                       <span class="mandatorystar">&nbsp;</span>
                                   }     
-                                  @Html.TextAreaFor(d => Model.NewCase.Description)
+                                  @Html.TextAreaFor(d => Model.NewCase.NewCase.Description)
                               </td>
                           </tr>
                       }
             
-                      @if (Model.FieldSettings.Select(f => f.Name).Contains("Miscellaneous"))
+                      @if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("Miscellaneous"))
                       {
                           <tr>
                               <td class="span3">
-                                  @Model.FieldSettings.Where(f => f.Name == "Miscellaneous").Select(f => f.LabelToChange).SingleOrDefault():
+                                  @Model.NewCase.FieldSettings.Where(f => f.Name == "Miscellaneous").Select(f => f.LabelToChange).SingleOrDefault():
                               </td>
                               <td class="span12">
-                                  @if (Model.FieldSettings.Where(f => f.Name == "Miscellaneous").Select(f => f.Required).SingleOrDefault() == 1)
+                                  @if (Model.NewCase.FieldSettings.Where(f => f.Name == "Miscellaneous").Select(f => f.Required).SingleOrDefault() == 1)
                                   {
                                       <span class="mandatorystar">*</span>
                                   }
@@ -608,59 +608,59 @@
                                   {
                                       <span class="mandatorystar">&nbsp;</span>
                                   }    
-                                  @Html.TextAreaFor(m => Model.NewCase.Miscellaneous)
+                                  @Html.TextAreaFor(m => Model.NewCase.NewCase.Miscellaneous)
                               </td>
                           </tr>
                       }
               
-                      @if (Model.FieldSettings.Select(f => f.Name).Contains("ContactBeforeAction"))
+                      @if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("ContactBeforeAction"))
                       {
                           <tr>
                               <td class="span3">
-                                  @Model.FieldSettings.Where(f => f.Name == "ContactBeforeAction").Select(f => f.LabelToChange).SingleOrDefault():
+                                  @Model.NewCase.FieldSettings.Where(f => f.Name == "ContactBeforeAction").Select(f => f.LabelToChange).SingleOrDefault():
                               </td>
                               <td class="span12">
-                                  &nbsp; <input type="checkbox" name="NewCase.ContactBeforeAction" @(Model.NewCase.ContactBeforeAction == 1 ? "checked=checked" : "") value="1"/>
+                                  &nbsp; <input type="checkbox" name="NewCase.ContactBeforeAction" @(Model.NewCase.NewCase.ContactBeforeAction == 1 ? "checked=checked" : "") value="1"/>
                                   @Translation.Get("Ska anmälaren kontaktas innan åtgärd", Enums.TranslationSource.TextTranslation)
                                   <input type="hidden" name="NewCase.ContactBeforeAction" value="0" />   
                               </td>
                           </tr>
                       }
              
-                      @if (Model.FieldSettings.Select(f => f.Name).Contains("SMS"))
+                      @if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("SMS"))
                       {
                           <tr>
                               <td class="span3">
-                                  @Model.FieldSettings.Where(f => f.Name == "SMS").Select(f => f.LabelToChange).SingleOrDefault():
+                                  @Model.NewCase.FieldSettings.Where(f => f.Name == "SMS").Select(f => f.LabelToChange).SingleOrDefault():
                               </td>
                               <td class="span12">
-                                  &nbsp; <input type="checkbox" name="NewCase.SMS" @(Model.NewCase.SMS == 1 ? "checked=checked" : "") value="1"/>
+                                  &nbsp; <input type="checkbox" name="NewCase.SMS" @(Model.NewCase.NewCase.SMS == 1 ? "checked=checked" : "") value="1"/>
                                   @Translation.Get("Skicka SMS när ärendet avslutas", Enums.TranslationSource.TextTranslation)
                                   <input type="hidden" name="NewCase.SMS" value="0" />   
                               </td>
                           </tr>
                       }
           @*
-             @if (Model.FieldSettings.Select(f => f.Name).Contains("AgreedDate")) 
+             @if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("AgreedDate")) 
              {
                 <tr>
                     <td class="span3">
-                       @Model.FieldSettings.Where(f=> f.Name == "AgreedDate").Select(f=> f.LabelToChange).SingleOrDefault():
+                       @Model.NewCase.FieldSettings.Where(f=> f.Name == "AgreedDate").Select(f=> f.LabelToChange).SingleOrDefault():
                     </td>
                     <td class="span12">
-                       @Model.CasePreview.AgreedDate
+                       @Model.NewCase.CasePreview.AgreedDate
                     </td>
                 </tr>
              }
              *@
-          @if (Model.FieldSettings.Select(f => f.Name).Contains("Available"))
+          @if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("Available"))
           {
               <tr>
                   <td class="span3">
-                      @Model.FieldSettings.Where(f => f.Name == "Available").Select(f => f.LabelToChange).SingleOrDefault():
+                      @Model.NewCase.FieldSettings.Where(f => f.Name == "Available").Select(f => f.LabelToChange).SingleOrDefault():
                   </td>
                   <td class="span12">                    
-                      @if (Model.FieldSettings.Where(f => f.Name == "Available").Select(f => f.Required).SingleOrDefault() == 1)
+                      @if (Model.NewCase.FieldSettings.Where(f => f.Name == "Available").Select(f => f.Required).SingleOrDefault() == 1)
                       {
                           <span class="mandatorystar">*</span>
                       }
@@ -670,32 +670,32 @@
                       }    
                       @Translation.Get("Anmälaren nås säkrast på följande tider", Enums.TranslationSource.TextTranslation)
                       <br/>
-                      &nbsp;@Html.TextBoxFor(m => Model.NewCase.Available)
+                      &nbsp;@Html.TextBoxFor(m => Model.NewCase.NewCase.Available)
                   </td>                
               </tr>
           }
             
-                      @if (Model.FieldSettings.Select(f => f.Name).Contains("Cost"))
+                      @if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("Cost"))
                       {
                           <tr>
                               <td class="span3">
-                                  @Model.FieldSettings.Where(f => f.Name == "Cost").Select(f => f.LabelToChange).SingleOrDefault():
+                                  @Model.NewCase.FieldSettings.Where(f => f.Name == "Cost").Select(f => f.LabelToChange).SingleOrDefault():
                               </td>
                               <td class="span12">
                                   <table>
                                       <tr>
                                           <td>@Translation.Get("Artikelkostnad", Enums.TranslationSource.TextTranslation)<br />
-                                              @Html.TextBoxFor(model => model.NewCase.Cost, new { maxlength = "7", Class = "inputw50" })
+                                              @Html.TextBoxFor(model => model.NewCase.NewCase.Cost, new { maxlength = "7", Class = "inputw50" })
                                           </td>
                                           <td>@Translation.Get("Övrig kostnad", Enums.TranslationSource.TextTranslation)<br />
-                                              @Html.TextBoxFor(model => model.NewCase.OtherCost, new { maxlength = "7", Class = "inputw50" })
+                                              @Html.TextBoxFor(model => model.NewCase.NewCase.OtherCost, new { maxlength = "7", Class = "inputw50" })
                                           </td>
                                           <td>@Translation.Get("Valuta", Enums.TranslationSource.TextTranslation)<br />
                                               <select id="NewCase_Currency" name="NewCase.Currency" class="inputw100">
                                                   <option value="">&nbsp;</option>
-                                                  @if (Model.Currencies != null)
+                                                  @if (Model.NewCase.Currencies != null)
                                                   {
-                                                      foreach (var e in Model.Currencies)
+                                                      foreach (var e in Model.NewCase.Currencies)
                                                       {
                                                           <option value="@e.Code" >@e.Code</option>
                                                       }
@@ -708,11 +708,11 @@
                           </tr>
                       }
                             
-                      @if (Model.FieldSettings.Select(f => f.Name).Contains("Filename"))
+                      @if (Model.NewCase.FieldSettings.Select(f => f.Name).Contains("Filename"))
                       {
                           <tr>
                               <td class="span3">
-                                  @Model.FieldSettings.Where(f => f.Name == "Filename").Select(f => f.LabelToChange).SingleOrDefault():
+                                  @Model.NewCase.FieldSettings.Where(f => f.Name == "Filename").Select(f => f.LabelToChange).SingleOrDefault():
                               </td>
                               <td class="span1" >
                                   <a href="#NewCase_upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)</a>
@@ -730,7 +730,7 @@
                                   </div>
                                   <table id="NewCasefiles_table" class="table table-striped" >
                                       <tbody>
-                                          @if (this.Model.NewCase.CaseFiles == null)
+                                          @if (this.Model.NewCase.NewCase.CaseFiles == null)
                                           {
                                               <div id="no_uploaded_files_label">
                                                                                     
@@ -933,6 +933,50 @@
         $("#NewCaseForm").submit();
     }
 
+    @*$('#NewCasefile_uploader').pluploadQueue({
+        url: '@this.Url.Action("NewCaseUploadFile")',
+        multipart_params: { Id: '@this.Model.NewCase.NewCase.CaseFileKey' },
+        max_file_size: '10mb',
+
+        init: {
+            FileUploaded: function () {
+                $.get('@this.Url.Action("NewCaseFiles")', { id: '@this.Model.NewCase.NewCase.CaseFileKey' }, function (files) {
+                        refreshNewCaseFilesTable(files);
+                    });
+                },
+
+                UploadComplete: function (up, file) {
+                    //plupload_add
+                    $(".plupload_buttons").css("display", "inline");
+                    $(".plupload_upload_status").css("display", "inline");
+                    up.refresh();
+                },
+
+                Error: function (uploader, e) {
+                    if (e.status != 409) {
+                        return;
+                    }
+
+                    window.alreadyExistFileIds.push(e.file.id);
+                },
+
+                StateChanged: function (uploader) {
+                    if (uploader.state != plupload.STOPPED) {
+                        return;
+                    }
+
+                    for (var i = 0; i < window.alreadyExistFileIds.length; i++) {
+                        var fileId = window.alreadyExistFileIds[i];
+                        $('#NewCasefile_uploader ul[class="plupload_filelist"] li[id="' + fileId + '"] div[class="plupload_file_action"] a').prop('title', '@Translation.Get("File already exists.", Enums.TranslationSource.TextTranslation)');
+                    }
+
+                    window.alreadyExistFileIds.length = 0;
+                    uploader.refresh();
+                }
+
+            }
+    });*@
+
     $('#NewCase_upload_files_popup').on('hide', function () {        
         if ($('#NewCasefile_uploader') != undefined) {
             if ($('#NewCasefile_uploader').pluploadQueue().files.length > 0) {
@@ -965,6 +1009,44 @@
         ee.setAttribute('value', val);
     });
 
+    @*function refreshNewCaseFilesTable(files) {
+        $('#NewCasefiles_table > tbody > tr').remove();
+
+        var fileMarkup =
+            $('<tr>' +
+                '<td> &nbsp; <td>' +
+                '<tr>');
+        $('#NewCasefiles_table > tbody').append(fileMarkup);
+
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+
+            fileMarkup =
+                $('<tr>' +
+                    '<td>' +
+                    '<a style="color:blue" href="@this.Url.Action("DownloadNewCaseFile")?@(!string.IsNullOrEmpty(this.Model.NewCase.NewCase.CaseFileKey) ? "id=" + this.Model.NewCase.NewCase.CaseFileKey + "&" : string.Empty)' + 'fileName=' + file + '"> <i class="icon-file"></i>' + file + '</a>' +
+                    '</td>' +
+                    '<td>' +
+                    '<a id="delete_file_button_' + i + '" class="btn bt-small" title="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)"> <i class="icon-remove"></i> </a>' +
+                    '</td>' +
+                    '</tr>');
+
+            $('#NewCasefiles_table > tbody').append(fileMarkup);
+        }
+
+        bindDeleteNewCaseFileBehaviorToDeleteButtons();
+    }*@
+
+    @*function bindDeleteNewCaseFileBehaviorToDeleteButtons() {
+        $('#NewCasefiles_table a[id^="delete_file_button_"]').click(function () {
+            var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
+            var pressedDeleteFileButton = this;
+
+            $.post('@this.Url.Action("DeleteNewCaseFile")', { id: '@this.Model.NewCase.NewCase.CaseFileKey', fileName: fileName }, function () {
+                $(pressedDeleteFileButton).parents('tr:first').remove();
+            });
+        });
+    }*@
     //$('#divCaseTypeSetting ul.dropdown-menu li a').click(function (e) {
     //    e.preventDefault();
     //    var val = $(this).attr('value');
@@ -987,216 +1069,216 @@
         ignore: "",
         rules: {
             "NewCase.ReportedBy": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.ReportedBy.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.ReportedBy.ToString())")
             },
             "NewCase.PersonsName": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Persons_Name.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Persons_Name.ToString())")
             },
             "NewCase.PersonsEmail": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString())")
             },
             "NewCase.PersonsCellphone": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString())") 
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString())") 
             },
             "NewCase.PersonsPhone": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString())")
             },
             "NewCase.Region_Id": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Region_Id.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Region_Id.ToString())")
             },
             "NewCase.Department_Id": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Department_Id.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Department_Id.ToString())")
             },
             "NewCase.OU_Id": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.OU_Id.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.OU_Id.ToString())")
             },
             "NewCase.Place": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Place.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Place.ToString())")
             },
             "NewCase.UserCode": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.UserCode.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.UserCode.ToString())")
             },
             "NewCase.InventoryNumber": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString())")
             },
             "NewCase.InventoryLocation": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString())")
             },
             "NewCase.InventoryType": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString())")
             },
             "NewCase.CaseType_Id": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString())")
             },
             "NewCase.ProductArea_Id": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString())")
             },
             "NewCase.System_Id": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.System_Id.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.System_Id.ToString())")
             },
             "NewCase.Urgency_Id": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString())")
             },
             "NewCase.Impact_Id": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Impact_Id.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Impact_Id.ToString())")
             },
             "NewCase.Category_Id": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Category_Id.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Category_Id.ToString())")
             },
             "NewCase.Supplier_Id": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString())")
             },
             "NewCase.InvoiceNumber": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString())")
             },
             "NewCase.ReferenceNumber": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString())")
             },
             "NewCase.Caption": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Caption.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Caption.ToString())")
             },
             "NewCase.Description": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Description.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Description.ToString())")
             },
             "NewCase.Miscellaneous": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString())")
             },
             "NewCase.AgreedDate": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.AgreedDate.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.AgreedDate.ToString())")
             },
             "NewCase.Available": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Available.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Available.ToString())")
             },
             "NewCase.WorkingGroup_Id": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString())")
             },
             "NewCase.Performer_User_Id": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString())")
             },
             "NewCase.CaseResponsible_User_Id": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString())")
             },
             "NewCase.Priority_Id": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Priority_Id.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Priority_Id.ToString())")
             },
             "NewCase.Status_Id": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Status_Id.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Status_Id.ToString())")
             },
             "NewCase.StateSecondary_Id": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString())")
             },
             "NewCase.PlanDate": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.PlanDate.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.PlanDate.ToString())")
             },
             "NewCase.WatchDate": {
-                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.WatchDate.ToString())")
+                required: FieldIsRequired("@Model.NewCase.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.WatchDate.ToString())")
             },
         },
         messages: {
             "NewCase.ReportedBy": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.PersonsName": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.PersonsEmail": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.PersonsCellPhone": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.PersonsPhone": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.Region_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.Department_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.OU_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.Place": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Place.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Place.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.UserCode": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.UserCode.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.UserCode.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.InventoryNumber": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.InventoryLocation": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.InventoryType": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.ProductArea_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.CaseType_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.System_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.System_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.System_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.Urgency_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.Impact_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Impact_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Impact_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.Category_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.Supplier_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.InvoiceNumber": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.ReferenceNumber": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.Caption": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.Description": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.Miscellaneous": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.AgreedDate": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.Available": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Available.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Available.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.WorkingGroup_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.Performer_User_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.CaseResponsible_User_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.Priority_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.Status_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.StateSecondary_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.PlanDate": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.PlanDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.PlanDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.WatchDate": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
         },
         //errorPlacement: function (error, element) {

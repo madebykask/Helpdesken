@@ -1,6 +1,6 @@
 ﻿@using DH.Helpdesk.NewSelfService.Infrastructure
 @using DH.Helpdesk.NewSelfService.Infrastructure.Extensions
-
+@model DH.Helpdesk.NewSelfService.Models.NewSelfService.SelfServiceModel
 <!DOCTYPE html>
 <html>
 <head>
@@ -123,7 +123,8 @@
                 <a href="#">Emil Lundvall</a> | <a href="#">Log out</a>
             </div>
         </div>
-    </div>
+        </div>
+        @Html.HiddenFor( m=> Model.MailGuid)
     <div class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -137,10 +138,14 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li class="blue">
-                        <a href="index.html">
+                        <a href="@Url.Action("Index", "case", new { id= Model.MailGuid})">
                             <div class="ico-home"></div>
-                            Start
+                            Case Preview
                         </a>
+
+                        @*<a href="index.html">
+                            
+                        </a>*@
                     </li>
                     <li class="dropdown blue">
                         <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
@@ -148,8 +153,18 @@
                             Order New Service Request
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="NewHiring.html"><span class="glyphicon glyphicon-plus"></span> New Hiring<br />
-                                <span class="small">Explanation and information on what link means and does</span></a></li>
+                            <li>
+                                <a href="@Url.Action("NewCase", "case", new { id= Model.MailGuid, customerId = Model.CustomerId})">
+                                    <span class="glyphicon glyphicon-plus"></span> New Case<br />
+                                    <span class="small">Explanation and information on what link means and does</span>
+                                </a>
+                                @*<a href="NewHiring.html">
+                                    <span class="glyphicon glyphicon-plus"></span> New Hiring<br />
+                                    <span class="small">Explanation and information on what link means and does</span>
+
+                                </a>*@
+
+                            </li>
                             <li><a href="#"><span class="glyphicon glyphicon-plus"></span> Administration Change<br />
                                 <span class="small">Explanation and information on what link means and does</span></a></li>
                             <li><a href="#"><span class="glyphicon glyphicon-plus"></span> Termination Administration<br />
@@ -160,11 +175,16 @@
                                 <span class="small">Explanation and information on what link means and does</span></a></li>
                         </ul>
                     </li>
-                    <li class="blue">
-                        <a href="Ongoing.html">
+                    <li class="blue">                                                
+                        <a href="@Url.Action("UserCases", "case", new { id= Model.MailGuid, customerId = Model.CustomerId})">
+                             <div class="ico-ongoing"></div>
+                            User Cases
+                        </a>
+
+                        @*<a href="Ongoing.html">
                             <div class="ico-ongoing"></div>
                             Ongoing Service Requests
-                        </a>
+                        </a>*@
                     </li>
                     <li class="blue">
                         <a href="#">
