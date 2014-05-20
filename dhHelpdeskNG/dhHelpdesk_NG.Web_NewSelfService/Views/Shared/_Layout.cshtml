@@ -113,8 +113,8 @@
 
     </script>
 </head> 
-    <body>
-        <div class="jumbotron">
+<body>
+    <div class="jumbotron">
         <div class="container-fluid">
             <a href="index.html">
                 <div class="pull-left toplogo"></div>
@@ -123,8 +123,8 @@
                 <a href="#">Emil Lundvall</a> | <a href="#">Log out</a>
             </div>
         </div>
-        </div>
-        @Html.HiddenFor( m=> Model.MailGuid)
+    </div>
+    @Html.HiddenFor(m => Model.MailGuid)
     <div class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -138,14 +138,10 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li class="blue">
-                        <a href="@Url.Action("Index", "case", new { id= Model.MailGuid})">
+                        <a href="@Url.Action("Index", "case", new { id = Model.MailGuid })">
                             <div class="ico-home"></div>
                             Case Preview
                         </a>
-
-                        @*<a href="index.html">
-                            
-                        </a>*@
                     </li>
                     <li class="dropdown blue">
                         <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
@@ -154,8 +150,8 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="@Url.Action("NewCase", "case", new { id= Model.MailGuid, customerId = Model.CustomerId})">
-                                    <span class="glyphicon glyphicon-plus"></span> New Case<br />
+                                <a href="@Url.Action("NewCase", "case", new { id = Model.MailGuid, customerId = Model.CustomerId })">
+                                    <span class="glyphicon glyphicon-plus"></span>New Case<br />
                                     <span class="small">Explanation and information on what link means and does</span>
                                 </a>
                                 @*<a href="NewHiring.html">
@@ -165,19 +161,19 @@
                                 </a>*@
 
                             </li>
-                            <li><a href="#"><span class="glyphicon glyphicon-plus"></span> Administration Change<br />
+                            <li><a href="#"><span class="glyphicon glyphicon-plus"></span>Administration Change<br />
                                 <span class="small">Explanation and information on what link means and does</span></a></li>
-                            <li><a href="#"><span class="glyphicon glyphicon-plus"></span> Termination Administration<br />
+                            <li><a href="#"><span class="glyphicon glyphicon-plus"></span>Termination Administration<br />
                                 <span class="small">Explanation and information on what link means and does</span></a></li>
-                            <li><a href="#"><span class="glyphicon glyphicon-plus"></span> Correction<br />
+                            <li><a href="#"><span class="glyphicon glyphicon-plus"></span>Correction<br />
                                 <span class="small">Explanation and information on what link means and does</span></a></li>
-                            <li><a href="#"><span class="glyphicon glyphicon-plus"></span> Time Data<br />
+                            <li><a href="#"><span class="glyphicon glyphicon-plus"></span>Time Data<br />
                                 <span class="small">Explanation and information on what link means and does</span></a></li>
                         </ul>
                     </li>
-                    <li class="blue">                                                
-                        <a href="@Url.Action("UserCases", "case", new { id= Model.MailGuid, customerId = Model.CustomerId})">
-                             <div class="ico-ongoing"></div>
+                    <li class="blue">
+                        <a href="@Url.Action("UserCases", "case", new { id = Model.MailGuid, customerId = Model.CustomerId })">
+                            <div class="ico-ongoing"></div>
                             User Cases
                         </a>
 
@@ -223,7 +219,7 @@
 
 
 
-        @*<div class="navbar fixed">
+    @*<div class="navbar fixed">
             <div class="navbar-container">
                 <a href="/">
                     <div class="navbar-header pull-left navbar-brand">
@@ -237,12 +233,12 @@
             </div>
         </div>*@
 
-        @*<script type="text/javascript" src="@Url.Content("~/Content/js/dhHelpdesk.js")"></script>*@
-        @RenderBody()
-        @RenderSection("Dialogs", false)
-        <script type="text/javascript" src="@Url.Content("~/Content/js/dhHelpdesk.js")"></script>
-        @RenderSection("Scripts", false)
-        <input type="hidden" value="@this.Request.RawUrl" id="rawUrl" />
-    </body>
+    @*<script type="text/javascript" src="@Url.Content("~/Content/js/dhHelpdesk.js")"></script>*@
+    @RenderBody()
+    @RenderSection("Dialogs", false)
+    <script type="text/javascript" src="@Url.Content("~/Content/js/dhHelpdesk.js")"></script>
+    @RenderSection("Scripts", false)
+    <input type="hidden" value="@this.Request.RawUrl" id="rawUrl" />
+</body>
     
 </html>

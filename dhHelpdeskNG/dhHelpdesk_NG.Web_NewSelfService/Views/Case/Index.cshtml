@@ -184,7 +184,8 @@
                         @Translation.Get(": ", Enums.TranslationSource.TextTranslation)
                         @Html.DisplayFor(m => Model.CaseOverview.CasePreview.FinishingDate, "DateAndTime")
                     }
-                    @Html.Partial("_CasePreview", Model.CaseOverview)                    
+
+                    @(Model.Configuration.IsReceipt ? Html.Partial("_NewCaseReceipt", Model.CaseOverview) : Html.Partial("_CasePreview", Model.CaseOverview))                        
                 </div>                
             </div>
         }                                     
