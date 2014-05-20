@@ -111,15 +111,19 @@
 
         private static SelectList CreateApprovalItems()
         {
+            var noneItem = new SelectListItem();
+            noneItem.Text = string.Empty;
+            noneItem.Value = StepStatus.None.ToString();
+
             var approveItem = new SelectListItem();
-            approveItem.Text = Translation.Get("Approve", Enums.TranslationSource.TextTranslation);
+            approveItem.Text = Translation.Get("Approve");
             approveItem.Value = StepStatus.Approved.ToString();
 
             var rejectItem = new SelectListItem();
-            rejectItem.Text = Translation.Get("Reject", Enums.TranslationSource.TextTranslation);
+            rejectItem.Text = Translation.Get("Reject");
             rejectItem.Value = StepStatus.Rejected.ToString();
 
-            return new SelectList(new List<object> { approveItem, rejectItem }, "Value", "Text");
+            return new SelectList(new List<object> { noneItem, approveItem, rejectItem }, "Value", "Text");
         }
 
         private ContactModel CreateEmptyContact(RegistrationEditSettings settings)

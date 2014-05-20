@@ -99,11 +99,5 @@
 
             return this.PartialView("RegistratedCasesCaseTypeReport", reportModel);
         }
-
-        [HttpGet]
-        public FileContentResult GetReportImage(string key)
-        {
-            return this.reportsHelper.GetReportImageFromCache(key);
-        }
     }
 }

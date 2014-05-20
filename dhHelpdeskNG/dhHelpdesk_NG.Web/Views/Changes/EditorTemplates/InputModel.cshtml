@@ -2,6 +2,7 @@
 @model DH.Helpdesk.Web.Models.Changes.ChangeEdit.InputModel
 
 @Html.HiddenFor(m => m.Id)
+@Html.HiddenFor(m => m.Context.CustomerId, new { id = "change_customerId"})
 
 <div class="container">
     <table class="tableform">

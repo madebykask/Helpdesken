@@ -4,17 +4,17 @@
 <table class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
-            <th>@Translation.Get("Field", Enums.TranslationSource.TextTranslation)</th>
-            <th>@Translation.Get("Show in Details", Enums.TranslationSource.TextTranslation)</th>
-            <th>@Translation.Get("Show in Changes", Enums.TranslationSource.TextTranslation)</th>
-            <th>@Translation.Get("Show in Self Service", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Fält", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Visa", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Lista", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Visa på självservice", Enums.TranslationSource.TextTranslation)</th>
             <th>
-                @Translation.Get("Caption", Enums.TranslationSource.TextTranslation)
+                @Translation.Get("Rubrik", Enums.TranslationSource.TextTranslation)
                 @Html.DropDownListFor(m => m.LanguageId, Model.Languages, new { id = "settings_language_dropdown" })
             </th>
-            <th>@Translation.Get("Required", Enums.TranslationSource.TextTranslation)</th>
-            <th>@Translation.Get("Default value", Enums.TranslationSource.TextTranslation)</th>
-            <th>@Translation.Get("Bookmark", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Obligatorisk", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Standardvärde", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Bokmärke", Enums.TranslationSource.TextTranslation)</th>
         </tr>
     </thead>
     <tbody>

@@ -83,24 +83,6 @@
         $('#log_send_to_dialog').dialog('open');
     });
 
-    $('#registration_approval_dropdown').change(function() {
-        var selectedValue = $(this).val();
-        if (selectedValue == parameters.registrationRejectValue) {
-            $('#registration_reject_explanation_textarea').show();
-        } else {
-            $('#registration_reject_explanation_textarea').hide();
-        }
-    });
-
-    $('#analyze_approval_dropdown').change(function() {
-        var selectedValue = $(this).val();
-        if (selectedValue == parameters.analyzeRejectValue) {
-            $('#analyze_reject_explanation_textarea').show();
-        } else {
-            $('#analyze_reject_explanation_textarea').hide();
-        }
-    });
-
     window.deleteFile = function(subtopic, fileName, filesContainerId) {
         $.post(parameters.deleteFileUrl, { changeId: parameters.id, subtopic: subtopic, fileName: fileName }, function(markup) {
             $('#' + filesContainerId).html(markup);
@@ -146,4 +128,86 @@
     window.fillEvaluationSendLogNoteToEmailsTextArea = function(emails) {
         this.fillEmailsTextArea('evaluation_send_to_emails_textarea', emails);
     };
+
+    function getChangeComputerUserSearchOptions() {
+
+        var options = {
+            items: 20,
+            minLength: 2,
+
+            source: function (query, process) {
+                return $.ajax({
+                    url: '/cases/search_user',
+                    type: 'post',
+                    data: { query: query, customerId: $('#change_customerId').val() },
+                    dataType: 'json',
+                    success: function (result) {
+                        var resultList = jQuery.map(result, function (item) {
+                            var aItem = {
+                                id: item.Id
+                                        , num: item.UserId
+                                        , name: item.SurName + ' ' + item.FirstName
+                                        , email: item.Email
+                                        , place: item.Location
+                                        , phone: item.Phone
+                                        , usercode: item.UserCode
+                                        , cellphone: item.CellPhone
+                                        , regionid: item.Region_Id
+                                        , departmentid: item.Department_Id
+                                        , ouid: item.OU_Id
+                            };
+                            return JSON.stringify(aItem);
+                        });
+
+                        return process(resultList);
+                    }
+                });
+            },
+
+            matcher: function (obj) {
+                var item = JSON.parse(obj);
+                return ~item.name.toLowerCase().indexOf(this.query.toLowerCase())
+                    || ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
+                    || ~item.phone.toLowerCase().indexOf(this.query.toLowerCase())
+                    || ~item.email.toLowerCase().indexOf(this.query.toLowerCase());
+            },
+
+            sorter: function (items) {
+                var beginswith = [], caseSensitive = [], caseInsensitive = [], item;
+                while (aItem = items.shift()) {
+                    var item = JSON.parse(aItem);
+                    if (!item.num.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
+                    else if (~item.num.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
+                    else caseInsensitive.push(JSON.stringify(item));
+                }
+
+                return beginswith.concat(caseSensitive, caseInsensitive);
+            },
+
+            highlighter: function (obj) {
+                var item = JSON.parse(obj);
+                var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
+                var result = item.name + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email;
+
+                return result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+                    return '<strong>' + match + '</strong>';
+                });
+            },
+
+            updater: function (obj) {
+                var item = JSON.parse(obj);
+                $('#change_orderer_id').val(item.num);
+                $('#change_orderer_name').val(item.name);
+                $('#change_orderer_email').val(item.email);
+                $('#change_orderer_phone').val(item.phone);
+                $('#change_orderer_cellphone').val(item.cellphone);
+                $('#change_orderer_department').val(item.departmentid);
+                return item.num;
+            }
+        };
+
+        return options;
+    }
+
+    $('#change_orderer_id').typeahead(getChangeComputerUserSearchOptions());
 }

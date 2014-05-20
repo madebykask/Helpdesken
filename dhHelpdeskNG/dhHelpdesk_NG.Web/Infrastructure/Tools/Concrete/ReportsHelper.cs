@@ -23,7 +23,7 @@
         public FileContentResult GetReportImageFromCache(string cacheKey)
         {
             var chart = Chart.GetFromCache(cacheKey);
-            WebCache.Remove(cacheKey);
+//            WebCache.Remove(cacheKey);
             return new FileContentResult(chart.GetBytes("png"), @"image/png");            
         }
 

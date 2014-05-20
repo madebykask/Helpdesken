@@ -48,5 +48,15 @@
         [NotNull]
         [LocalizedDisplay("Contact 6")]
         public ContactModel ContactSix { get; set; }
+
+        public bool IsUnshowable()
+        {
+            return this.ContactOne.IsUnshowable() &&
+                this.ContactTwo.IsUnshowable() &&
+                this.ContactThree.IsUnshowable() &&
+                this.ContactFourth.IsUnshowable() &&
+                this.ContactFive.IsUnshowable() &&
+                this.ContactSix.IsUnshowable();
+        }
     }
 }

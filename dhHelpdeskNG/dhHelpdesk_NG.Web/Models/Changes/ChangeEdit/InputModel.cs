@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Models.Changes.ChangeEdit
 {
+    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class InputModel
@@ -20,8 +21,10 @@
             ImplementationModel implementation,
             EvaluationModel evaluation,
             LogModel log,
-            HistoryModel history)
+            HistoryModel history, 
+            OperationContext context)
         {
+            this.Context = context;
             this.IsNew = isNew;
             this.Id = id;
             this.Orderer = orderer;
@@ -62,6 +65,9 @@
 
         [NotNull]
         public RegistrationModel Registration { get; set; }
+
+        [NotNull]
+        public OperationContext Context { get; private set; }
 
         #endregion
     }

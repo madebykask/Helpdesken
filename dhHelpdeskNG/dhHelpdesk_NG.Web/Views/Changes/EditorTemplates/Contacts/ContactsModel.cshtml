@@ -1,55 +1,96 @@
 ﻿
 @model DH.Helpdesk.Web.Models.Changes.ChangeEdit.Contacts.ContactsModel
+
+@if (Model.IsUnshowable())
+{
+    return;
+}
            
 <ul class="nav nav-tabs">
-    <li class="active">
-        <a href="#contact_one_tab">
-            @Translation.Get("Contact 1", Enums.TranslationSource.TextTranslation)
-        </a>
-    </li>
-    <li>
-        <a href="#contact_two_tab">
-            @Translation.Get("Contact 2", Enums.TranslationSource.TextTranslation)
-        </a>
-    </li>
-    <li>
-        <a href="#contact_three_tab">
-            @Translation.Get("Contact 3", Enums.TranslationSource.TextTranslation)
-        </a>
-    </li>
-    <li>
-        <a href="#contact_fourth_tab">
-            @Translation.Get("Contact 4", Enums.TranslationSource.TextTranslation)
-        </a>
-    </li>
-    <li>
-        <a href="#contact_five_tab">
-            @Translation.Get("Contact 5", Enums.TranslationSource.TextTranslation)
-        </a>
-    </li>
-    <li>
-        <a href="#contact_six_tab">
-            @Translation.Get("Contact 6", Enums.TranslationSource.TextTranslation)
-        </a>
-    </li>
+    @if (!Model.ContactOne.IsUnshowable())
+    {
+        <li class="active">
+            <a href="#contact_one_tab">
+                @Translation.Get("Contact 1")
+            </a>
+        </li>        
+    }
+    @if (!Model.ContactTwo.IsUnshowable())
+    {
+        <li>
+            <a href="#contact_two_tab">
+                @Translation.Get("Contact 2")
+            </a>
+        </li>        
+    }
+    @if (!Model.ContactThree.IsUnshowable())
+    {
+        <li>
+            <a href="#contact_three_tab">
+                @Translation.Get("Contact 3")
+            </a>
+        </li>        
+    }
+    @if (!Model.ContactFourth.IsUnshowable())
+    {
+        <li>
+            <a href="#contact_fourth_tab">
+                @Translation.Get("Contact 4")
+            </a>
+        </li>        
+    }
+    @if (!Model.ContactFive.IsUnshowable())
+    {
+        <li>
+            <a href="#contact_five_tab">
+                @Translation.Get("Contact 5")
+            </a>
+        </li>        
+    }
+    @if (!Model.ContactSix.IsUnshowable())
+    {
+        <li>
+            <a href="#contact_six_tab">
+                @Translation.Get("Contact 6")
+            </a>
+        </li>        
+    }
 </ul>
 <div class="tab-content">
-    <div id="contact_one_tab" class="tab-pane tab-pane-border active">
-        @Html.EditorFor(m => m.ContactOne, "Contacts/ContactModel")
-    </div>
-    <div id="contact_two_tab" class="tab-pane tab-pane-border">
-        @Html.EditorFor(m => m.ContactTwo, "Contacts/ContactModel")
-    </div>
-    <div id="contact_three_tab" class="tab-pane tab-pane-border">
-        @Html.EditorFor(m => m.ContactThree, "Contacts/ContactModel")
-    </div>
-    <div id="contact_fourth_tab" class="tab-pane tab-pane-border">
-        @Html.EditorFor(m => m.ContactFourth, "Contacts/ContactModel")
-    </div>
-    <div id="contact_five_tab" class="tab-pane tab-pane-border">
-        @Html.EditorFor(m => m.ContactFive, "Contacts/ContactModel")
-    </div>
-    <div id="contact_six_tab" class="tab-pane tab-pane-border">
-        @Html.EditorFor(m => m.ContactSix, "Contacts/ContactModel")
-    </div>    
+    @if (!Model.ContactOne.IsUnshowable())
+    {
+        <div id="contact_one_tab" class="tab-pane tab-pane-border active">
+            @Html.EditorFor(m => m.ContactOne, "Contacts/ContactModel")
+        </div>        
+    }
+    @if (!Model.ContactTwo.IsUnshowable())
+    {
+        <div id="contact_two_tab" class="tab-pane tab-pane-border">
+            @Html.EditorFor(m => m.ContactTwo, "Contacts/ContactModel")
+        </div>        
+    }
+    @if (!Model.ContactThree.IsUnshowable())
+    {
+        <div id="contact_three_tab" class="tab-pane tab-pane-border">
+            @Html.EditorFor(m => m.ContactThree, "Contacts/ContactModel")
+        </div>        
+    }
+    @if (!Model.ContactFourth.IsUnshowable())
+    {
+        <div id="contact_fourth_tab" class="tab-pane tab-pane-border">
+            @Html.EditorFor(m => m.ContactFourth, "Contacts/ContactModel")
+        </div>        
+    }
+    @if (!Model.ContactFive.IsUnshowable())
+    {
+        <div id="contact_five_tab" class="tab-pane tab-pane-border">
+            @Html.EditorFor(m => m.ContactFive, "Contacts/ContactModel")
+        </div>        
+    }
+    @if (!Model.ContactSix.IsUnshowable())
+    {
+        <div id="contact_six_tab" class="tab-pane tab-pane-border">
+            @Html.EditorFor(m => m.ContactSix, "Contacts/ContactModel")
+        </div>            
+    }
 </div>

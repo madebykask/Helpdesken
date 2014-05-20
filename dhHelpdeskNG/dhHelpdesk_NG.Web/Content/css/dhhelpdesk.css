@@ -103,6 +103,14 @@ input[type="text"] {
 {
 	width: 200px !important;
 }
+.inputw500
+{
+	width: 500px !important;
+}
+.inputmh100
+{
+	min-height: 150px !important;
+}
 /**********************NAVBAR**************************************************************/
 .navbar
 {
@@ -1012,6 +1020,10 @@ th, td, .table-bordered
 	    background-repeat: repeat-x;
 	    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff',endColorstr='#ffeeeeee',GradientType=0);
 	}
+
+.table tr td.header {
+    font-weight: bold;
+}
 
 		.table thead tr th [class*="icon-"]:first-child
 		{

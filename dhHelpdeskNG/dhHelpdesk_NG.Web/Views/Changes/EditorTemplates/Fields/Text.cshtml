@@ -6,12 +6,32 @@
     return;
 }
 
+@{
+    var inputAttributes = (Dictionary<string, object>)ViewData["inputAttributes"];
+    Dictionary<string, object> htmlAttributes;
+    if (inputAttributes != null)
+    {
+        htmlAttributes = new Dictionary<string, object>(inputAttributes.Count + 1);
+
+        foreach (var inputAttribute in inputAttributes)
+        {
+            htmlAttributes.Add(inputAttribute.Key, inputAttribute.Value);
+        }
+    }
+    else
+    {
+        htmlAttributes = new Dictionary<string, object>(1);
+    }
+
+    htmlAttributes.Add("data-dh-is-required", Model.IsRequired);    
+}
+
 <tr>
     <td class="span3">
         @Translation.Get(Model.Caption)
     </td>
     <td class="span9">
-        @Html.TextBoxFor(m => m.Value, new Dictionary<string, object> { { "data-dh-is-required", Model.IsRequired } })
+        @Html.TextBoxFor(m => m.Value, htmlAttributes)
         @Html.HiddenFor(m => m.IsRequired)
         @Html.ValidationMessageFor(m => m.Value)
     </td>

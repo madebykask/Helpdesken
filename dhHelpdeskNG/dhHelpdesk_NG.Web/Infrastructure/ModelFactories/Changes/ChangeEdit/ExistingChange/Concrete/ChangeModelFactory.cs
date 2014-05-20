@@ -2,6 +2,7 @@
 {
     using System.Globalization;
 
+    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Services.Response.Changes;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
 
@@ -53,7 +54,9 @@
 
         #region Public Methods and Operators
 
-        public InputModel Create(FindChangeResponse response)
+        public InputModel Create(
+                FindChangeResponse response,
+                OperationContext context)
         {
             var textId = response.EditData.Change.Id.ToString(CultureInfo.InvariantCulture);
 
@@ -76,7 +79,8 @@
                 implementation,
                 evaluation,
                 log,
-                history);
+                history,
+                context);
         }
 
         #endregion

@@ -31,5 +31,13 @@
         public ConfigurableFieldModel<string> Email { get; set; }
 
         public ConfigurableFieldModel<string> Company { get; set; }
+
+        public bool IsUnshowable()
+        {
+            return (this.Name == null || !this.Name.Show) &&
+                (this.Phone == null || !this.Phone.Show) &&
+                (this.Email == null || !this.Email.Show) &&
+                (this.Company == null || !this.Company.Show);
+        }
     }
 }

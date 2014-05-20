@@ -5,7 +5,8 @@
 {
     return;
 }
-
-@Translation.Get(Model.Caption)
+<span class="span3">
+    @Translation.Get(Model.Caption)    
+</span>
 @Html.TextBoxFor(m => m.Value)
 @Html.HiddenFor(m => m.IsRequired)

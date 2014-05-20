@@ -234,7 +234,7 @@
                 throw new HttpException((int)HttpStatusCode.NotFound, null);
             }
 
-            var model = this.changeModelFactory.Create(response);
+            var model = this.changeModelFactory.Create(response, this.OperationContext);
             return this.View(model);
         }
 
@@ -340,7 +340,7 @@
         {
             var temporaryId = this.temporaryIdProvider.ProvideTemporaryId();
             var response = this.changeService.GetNewChangeEditData(this.OperationContext);
-            var model = this.newChangeModelFactory.Create(temporaryId, response);
+            var model = this.newChangeModelFactory.Create(temporaryId, response, this.OperationContext);
 
             return this.View(model);
         }

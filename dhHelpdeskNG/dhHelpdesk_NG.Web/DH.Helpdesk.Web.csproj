@@ -310,6 +310,7 @@
     <Compile Include="Controllers\ChangeLanguageController.cs" />
     <Compile Include="Controllers\ChangesController.cs" />
     <Compile Include="Controllers\FaqController.cs" />
+    <Compile Include="Controllers\GlobalController.cs" />
     <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\NotifiersController.cs" />
     <Compile Include="Controllers\OperationLogController.cs" />

@@ -90,15 +90,15 @@
         private static SelectList CreateShowSelectList()
         {
             var activeItem = new SelectListItem();
-            activeItem.Text = Translation.Get("Active", Enums.TranslationSource.TextTranslation);
+            activeItem.Text = Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation);
             activeItem.Value = ChangeStatus.Active.ToString();
 
             var finishedItem = new SelectListItem();
-            finishedItem.Text = Translation.Get("Finished", Enums.TranslationSource.TextTranslation);
+            finishedItem.Text = Translation.Get("Avslutad", Enums.TranslationSource.TextTranslation);
             finishedItem.Value = ChangeStatus.Finished.ToString();
 
             var noneItem = new SelectListItem();
-            noneItem.Text = Translation.Get("None", Enums.TranslationSource.TextTranslation);
+            noneItem.Text = Translation.Get("Alla", Enums.TranslationSource.TextTranslation);
 
             var showItems = new List<SelectListItem> { activeItem, finishedItem, noneItem };
             return new SelectList(showItems, "Value", "Text");

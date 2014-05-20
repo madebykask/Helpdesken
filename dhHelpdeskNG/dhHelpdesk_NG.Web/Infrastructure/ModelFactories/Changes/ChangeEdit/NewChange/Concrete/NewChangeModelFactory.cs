@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.NewChange.Concrete
 {
+    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Services.Response.Changes;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
 
@@ -35,7 +36,10 @@
 
         #region Public Methods and Operators
 
-        public InputModel Create(string temporatyId, GetNewChangeEditDataResponse response)
+        public InputModel Create(
+                        string temporatyId, 
+                        GetNewChangeEditDataResponse response,
+                        OperationContext context)
         {
             var orderer = this.newOrdererModelFactory.Create(response.EditSettings.Orderer, response.EditOptions);
             var general = this.newGeneralModelFactory.Create(response.EditSettings.General, response.EditOptions);
@@ -46,7 +50,7 @@
 
             var log = this.newLogModelFactory.Create(temporatyId, response.EditSettings.Log, response.EditOptions);
 
-            return new InputModel(true, temporatyId, orderer, general, registration, null, null, null, log, null);
+            return new InputModel(true, temporatyId, orderer, general, registration, null, null, null, log, null, context);
         }
 
         #endregion
