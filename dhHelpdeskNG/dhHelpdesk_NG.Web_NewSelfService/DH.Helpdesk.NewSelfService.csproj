@@ -180,7 +180,9 @@
     <Compile Include="Controllers\CaseController.cs" />
     <Compile Include="Controllers\CaseSearchController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
+    <Compile Include="Controllers\DocumentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LineManagerController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\PrintController.cs" />
     <Compile Include="Global.asax.cs">
@@ -508,15 +510,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Home\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Dashboard\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\CaseSearch\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Case\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -576,6 +569,12 @@
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.SelfService.Release.pubxml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.SelfService.Release_AL.pubxml" />
+    <Content Include="Views\LineManager\Start.cshtml" />
+    <Content Include="Views\Document\Index.cshtml" />
+    <Content Include="Views\LineManager\CoWorkers.cshtml" />
+    <Content Include="Views\LineManager\Help.cshtml" />
+    <Content Include="Views\LineManager\FindYourWay.cshtml" />
+    <Content Include="Views\LineManager\About.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

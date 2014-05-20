@@ -1,5 +1,6 @@
 ﻿@model DH.Helpdesk.NewSelfService.Models.NewSelfService.SelfServiceModel         
 
+<<<<<<< HEAD
 <div class="container-fluid dh-container">
     <ul class="nav nav-tabs" id="NewCaseTab">
         <li id="NewCaseT" class="active">
@@ -22,6 +23,24 @@
                                 <tr>
                                     <th></th>
                                     @if (Model.UserCases.CaseSearchResult.CaseSettings != null)
+=======
+<div class="container" id="search_result">
+    @Html.Partial("_CaseSearch", Model)
+    <div class="container" >
+        @Html.HiddenFor(m => Model.MailGuid)
+        &nbsp;
+        <div class="row">
+            <div class="col-md-12 table-responsive">
+                <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            @if (Model.UserCases.CaseSearchResult.CaseSettings != null)
+                            {                                
+                                foreach (var c in Model.UserCases.CaseSearchResult.CaseSettings)
+                                {
+                                    if (c.Line == 1)
+>>>>>>> [UPD] session search
                                     {
                                         foreach (var c in Model.UserCases.CaseSearchResult.CaseSettings)
                                         {

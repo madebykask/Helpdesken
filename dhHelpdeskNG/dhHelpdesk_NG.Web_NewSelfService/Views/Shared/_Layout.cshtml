@@ -1,6 +1,5 @@
 ﻿@using DH.Helpdesk.NewSelfService.Infrastructure
 @using DH.Helpdesk.NewSelfService.Infrastructure.Extensions
-@model DH.Helpdesk.NewSelfService.Models.NewSelfService.SelfServiceModel
 <!DOCTYPE html>
 <html>
 <head>
@@ -124,7 +123,7 @@
             </div>
         </div>
     </div>
-    @Html.HiddenFor(m => Model.MailGuid)
+    @*@Html.HiddenFor(m => Model.MailGuid)*@
     <div class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -138,9 +137,9 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li class="blue">
-                        <a href="@Url.Action("Index", "case", new { id = Model.MailGuid })">
+                        <a href="@Url.Action("Start", "LineManager")">
                             <div class="ico-home"></div>
-                            Case Preview
+                            Start
                         </a>
                     </li>
                     <li class="dropdown blue">
@@ -150,7 +149,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="@Url.Action("NewCase", "case", new { id = Model.MailGuid, customerId = Model.CustomerId })">
+                                <a href="@Url.Action("NewCase", "case")">
                                     <span class="glyphicon glyphicon-plus"></span>New Case<br />
                                     <span class="small">Explanation and information on what link means and does</span>
                                 </a>
@@ -171,16 +170,11 @@
                                 <span class="small">Explanation and information on what link means and does</span></a></li>
                         </ul>
                     </li>
-                    <li class="blue">
-                        <a href="@Url.Action("UserCases", "case", new { id = Model.MailGuid, customerId = Model.CustomerId })">
-                            <div class="ico-ongoing"></div>
-                            User Cases
-                        </a>
-
-                        @*<a href="Ongoing.html">
+                    <li class="blue">                        
+                        <a href="Ongoing.html">
                             <div class="ico-ongoing"></div>
                             Ongoing Service Requests
-                        </a>*@
+                        </a>
                     </li>
                     <li class="blue">
                         <a href="#">
@@ -189,13 +183,13 @@
                         </a>
                     </li>
                     <li class="blue">
-                        <a href="Documents.html">
+                        <a href="@Url.Action("Index","Document")">
                             <div class="ico-documents"></div>
                             HR Documents
                         </a>
                     </li>
                     <li class="blue">
-                        <a href="#">
+                        <a href="@Url.Action("CoWorkers","LineManager")">
                             <div class="ico-coworkers"></div>
                             My Co-Workers
                         </a>
@@ -206,9 +200,9 @@
                             Need Help?
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="FindYourWay.html">Find Your Way</a></li>
-                            <li><a href="#">Help</a></li>
-                            <li><a href="#">About</a></li>
+                            <li><a href="@Url.Action("FindYourWay","LineManager")">Find Your Way</a></li>
+                            <li><a href="@Url.Action("Help","LineManager")">Help</a></li>
+                            <li><a href="@Url.Action("About","LineManager")">About</a></li>
                         </ul>
                     </li>
                 </ul>

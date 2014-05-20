@@ -120,6 +120,13 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             this._stateSecondaryService = stateSecondaryService;
         }
 
+
+        [HttpGet]
+        public ActionResult Start()
+        {
+            return View("Start");
+        }
+
         [HttpGet]
         public ActionResult Index(int customerId = 0, string id="", int languageId = 0)
         {
