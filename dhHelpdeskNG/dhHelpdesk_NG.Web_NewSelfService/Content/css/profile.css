@@ -32,12 +32,12 @@ img
   }
 }
 
-.navbar-nav > li > a {
+/*.navbar-nav > li > a {
   padding-top: 0px;
   padding-bottom: 5px;
   line-height: 15px;
   font-size:13px;
-}
+}*/
 
 
 .navbar-default {
@@ -304,7 +304,7 @@ img
 }
 /***FORM TAGS***************/
 
-input[type=text]
+/*input[type=text]
 {
 	min-width:300px;
 }
@@ -322,7 +322,7 @@ textarea
 {
 	min-width:300px;
 	min-height:100px;
-}
+}*/
 
 /*****JUMBOTRON*********/
 .jumbotron {
