@@ -27,6 +27,8 @@ namespace DH.Helpdesk.Dal.Repositories
         void ResetDefault(int exclude);
 
         IEnumerable<ItemOverview> GetOverviews(int customerId);
+
+        IEnumerable<ItemOverview> GetOverviews(int customerId, IEnumerable<int> workingGroupsIds);
     }
 
     public sealed class WorkingGroupRepository : RepositoryBase<WorkingGroupEntity>, IWorkingGroupRepository
@@ -115,6 +117,19 @@ namespace DH.Helpdesk.Dal.Repositories
                     .ToList();
 
             return entities.Select(g => new ItemOverview(g.Name, g.Value.ToString(CultureInfo.InvariantCulture)));
+        }
+
+        public IEnumerable<ItemOverview> GetOverviews(int customerId, IEnumerable<int> workingGroupsIds)
+        {
+            var entities = this.Table
+                    .Where(g => g.Customer_Id == customerId && 
+                                g.IsActive == 1 && 
+                                workingGroupsIds.Contains(g.Id))
+                    .Select(g => new { Value = g.Id, Name = g.WorkingGroupName })
+                    .OrderBy(g => g.Name)
+                    .ToList();
+
+            return entities.Select(g => new ItemOverview(g.Name, g.Value.ToString(CultureInfo.InvariantCulture)));            
         }
 
         private IQueryable<WorkingGroupEntity> FindByCustomerIdCore(int customerId)

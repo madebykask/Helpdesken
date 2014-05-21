@@ -32,7 +32,7 @@
         }
 
         public RegistratedCasesCaseTypeModel CreateRegistratedCasesCaseTypeModel(
-                                    GetRegistratedCasesCaseTypeResponse response,
+                                    RegistratedCasesCaseTypeResponse response,
                                     OperationContext context)
         {
             var workingGroups = CreateMultiSelectField(response.WorkingGroups);
@@ -49,9 +49,18 @@
             return instance;
         }
 
-        public RegistratedCasesCaseTypeReportModel CreateRegistratedCasesCaseTypeReportModel(string key)
+        public RegistratedCasesCaseTypeReportModel CreateRegistratedCasesCaseTypeReportModel(
+                                    string key,
+                                    RegistratedCasesCaseTypeModel request,
+                                    RegistratedCasesCaseTypeResponsePrint response)
         {
-            var instance = new RegistratedCasesCaseTypeReportModel(key);
+            var instance = new RegistratedCasesCaseTypeReportModel(
+                                    key, 
+                                    response.WorkingGroups,
+                                    response.CaseTypes,
+                                    response.ProductArea,
+                                    request.PeriodFrom,
+                                    request.PeriodUntil);
             return instance;
         }
 

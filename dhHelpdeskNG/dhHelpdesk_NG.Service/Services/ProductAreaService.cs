@@ -13,11 +13,15 @@
     public interface IProductAreaService
     {
         IList<ProductArea> GetProductAreas(int customerId);
+
         ProductArea GetProductArea(int id);
+
         string GetProductAreaWithChildren(int id, string separator, string valueToReturn);
+
         DeleteMessage DeleteProductArea(int id);
        
         void SaveProductArea(ProductArea productArea, out IDictionary<string, string> errors);
+
         void Commit();
 
         /// <summary>
@@ -73,25 +77,26 @@
 
     public class ProductAreaService : IProductAreaService
     {
-        private readonly IProductAreaRepository _productAreaRepository;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IProductAreaRepository productAreaRepository;
+
+        private readonly IUnitOfWork unitOfWork;
 
         public ProductAreaService(
             IProductAreaRepository productAreaRepository,
             IUnitOfWork unitOfWork)
         {
-            this._productAreaRepository = productAreaRepository;
-            this._unitOfWork = unitOfWork;
+            this.productAreaRepository = productAreaRepository;
+            this.unitOfWork = unitOfWork;
         }
 
         public IList<ProductArea> GetProductAreas(int customerId)
         {
-            return this._productAreaRepository.GetMany(x => x.Customer_Id == customerId && x.Parent_ProductArea_Id == null).OrderBy(x => x.Name).ToList();
+            return this.productAreaRepository.GetMany(x => x.Customer_Id == customerId && x.Parent_ProductArea_Id == null).OrderBy(x => x.Name).ToList();
         }
         
         public ProductArea GetProductArea(int id)
         {
-            return this._productAreaRepository.GetById(id);
+            return this.productAreaRepository.GetById(id);
         }
 
         public string GetProductAreaWithChildren(int id, string separator, string valueToReturn)
@@ -101,7 +106,7 @@
             if (id != 0)
             {
                 string children = string.Empty; 
-                ProductArea pa = this._productAreaRepository.GetById(id);
+                ProductArea pa = this.productAreaRepository.GetById(id);
                 ret = pa.getObjectValue(valueToReturn);
 
                 if (pa.SubProductAreas != null)
@@ -116,13 +121,13 @@
 
         public DeleteMessage DeleteProductArea(int id)
         {
-            var productArea = this._productAreaRepository.GetById(id);
+            var productArea = this.productAreaRepository.GetById(id);
 
             if (productArea != null)
             {
                 try
                 {
-                    this._productAreaRepository.Delete(productArea);
+                    this.productAreaRepository.Delete(productArea);
                     this.Commit();
                     return DeleteMessage.Success;
                 }
@@ -146,9 +151,9 @@
                 errors.Add("ProductArea.Name", "Du måste ange ett ämnesområde");
 
             if (productArea.Id == 0)
-                this._productAreaRepository.Add(productArea);
+                this.productAreaRepository.Add(productArea);
             else
-                this._productAreaRepository.Update(productArea);
+                this.productAreaRepository.Update(productArea);
 
             if (errors.Count == 0)
                 this.Commit();
@@ -156,7 +161,7 @@
 
         public void Commit()
         {
-            this._unitOfWork.Commit();
+            this.unitOfWork.Commit();
         }
 
         /// <summary>
@@ -170,7 +175,7 @@
         /// </returns>
         public ProductAreaOverview GetProductAreaOverview(int id)
         {
-            return this._productAreaRepository.GetProductAreaOverview(id);
+            return this.productAreaRepository.GetProductAreaOverview(id);
         }
 
         /// <summary>
@@ -187,7 +192,7 @@
         /// </returns>
         public IEnumerable<ProductAreaOverview> GetSameLevelOverviews(int customerId, int? productAreaId = null)
         {
-            return this._productAreaRepository.GetSameLevelOverviews(customerId, productAreaId);
+            return this.productAreaRepository.GetSameLevelOverviews(customerId, productAreaId);
         }
 
         /// <summary>
@@ -204,7 +209,7 @@
         /// </returns>
         public IEnumerable<ProductAreaOverview> GetChildrenOverviews(int customerId, int? parentId = null)
         {
-            return this._productAreaRepository.GetChildrenOverviews(customerId, parentId);
+            return this.productAreaRepository.GetChildrenOverviews(customerId, parentId);
         }
 
         /// <summary>
@@ -218,7 +223,7 @@
         /// </returns>
         public IEnumerable<ProductAreaOverview> GetProductAreaOverviews(int customerId)
         {
-            return this._productAreaRepository.GetProductAreaOverviews(customerId);
+            return this.productAreaRepository.GetProductAreaOverviews(customerId);
         }
 
         private string loopProdcuctAreas(IList<ProductArea> pal, string separator, string valueToReturn)

@@ -6,16 +6,16 @@
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Domain;
 
-    public sealed class GetRegistratedCasesCaseTypeResponse
+    public sealed class RegistratedCasesCaseTypeResponse
     {
-        public GetRegistratedCasesCaseTypeResponse()
+        public RegistratedCasesCaseTypeResponse()
         {
             this.WorkingGroups = new ItemOverview[] { };
             this.CaseTypes = new ItemOverview[] { };
             this.ProductAreas = new ProductArea[] { };
         }
 
-        public GetRegistratedCasesCaseTypeResponse(
+        public RegistratedCasesCaseTypeResponse(
             IEnumerable<ItemOverview> workingGroups, 
             IEnumerable<ItemOverview> caseTypes, 
             IEnumerable<ProductArea> productAreas)

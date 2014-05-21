@@ -1,9 +1,10 @@
 ﻿namespace DH.Helpdesk.Services.Services.Concrete
 {
+    using System.Collections.Generic;
+
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports;
     using DH.Helpdesk.BusinessData.Models.Reports.Output;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Dal.Repositories;
 
     public sealed class ReportsService : IReportsService
@@ -35,16 +36,32 @@
             return new SearchData(options);
         }
 
-        public GetRegistratedCasesCaseTypeResponse GetRegistratedCasesCaseTypeResponse(OperationContext context)
+        public RegistratedCasesCaseTypeResponse GetRegistratedCasesCaseTypeResponse(OperationContext context)
         {
             var workingGroups = this.workingGroupService.GetOverviews(context.CustomerId);
             var caseTypes = this.caseTypeService.GetOverviews(context.CustomerId);
             var productAreas = this.productAreaService.GetProductAreas(context.CustomerId);
 
-            return new GetRegistratedCasesCaseTypeResponse(
+            return new RegistratedCasesCaseTypeResponse(
                                                         workingGroups,
                                                         caseTypes,
                                                         productAreas);
+        }
+
+        public RegistratedCasesCaseTypeResponsePrint GetRegistratedCasesCaseTypeResponsePrint(
+                                                    OperationContext context,
+                                                    IEnumerable<int> workingGroupsIds,
+                                                    IEnumerable<int> caseTypesIds,
+                                                    int? productAreaId)
+        {
+            var workingGroups = this.workingGroupService.GetOverviews(context.CustomerId, workingGroupsIds);
+            var caseTypes = this.caseTypeService.GetOverviews(context.CustomerId, caseTypesIds);
+            var productArea = productAreaId.HasValue ? this.productAreaService.GetProductArea(productAreaId.Value) : null;
+
+            return new RegistratedCasesCaseTypeResponsePrint(
+                                                        workingGroups,
+                                                        caseTypes,
+                                                        productArea);            
         }
     }
 }

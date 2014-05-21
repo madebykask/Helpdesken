@@ -90,7 +90,15 @@
         {
             string cachedReportKey;
             this.reportsHelper.CreateRegistratedCasesCaseTypeReport(model, out cachedReportKey);
-            var reportModel = this.reportsModelFactory.CreateRegistratedCasesCaseTypeReportModel(cachedReportKey);
+            var response = this.reportsService.GetRegistratedCasesCaseTypeResponsePrint(
+                                                    this.OperationContext,
+                                                    model.WorkingGroupIds,
+                                                    model.CaseTypeIds,
+                                                    model.ProductAreaId);
+            var reportModel = this.reportsModelFactory.CreateRegistratedCasesCaseTypeReportModel(
+                                                    cachedReportKey,
+                                                    model,
+                                                    response);
 
             if (model.IsPrint)
             {

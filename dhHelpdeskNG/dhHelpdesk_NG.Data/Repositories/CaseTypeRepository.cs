@@ -13,6 +13,8 @@
         void ResetDefault(int exclude);
 
         IEnumerable<ItemOverview> GetOverviews(int customerId);
+
+        IEnumerable<ItemOverview> GetOverviews(int customerId, IEnumerable<int> caseTypesIds);
     }
 
     public class CaseTypeRepository : RepositoryBase<CaseType>, ICaseTypeRepository
@@ -40,6 +42,19 @@
                     .ToList();
 
             return entities.Select(g => new ItemOverview(g.Name, g.Value.ToString(CultureInfo.InvariantCulture)));            
+        }
+
+        public IEnumerable<ItemOverview> GetOverviews(int customerId, IEnumerable<int> caseTypesIds)
+        {
+            var entities = this.Table
+                    .Where(g => g.Customer_Id == customerId && 
+                            g.IsActive == 1 &&
+                            caseTypesIds.Contains(g.Id))
+                    .Select(g => new { Value = g.Id, g.Name })
+                    .OrderBy(g => g.Name)
+                    .ToList();
+
+            return entities.Select(g => new ItemOverview(g.Name, g.Value.ToString(CultureInfo.InvariantCulture)));                        
         }
     }
 }

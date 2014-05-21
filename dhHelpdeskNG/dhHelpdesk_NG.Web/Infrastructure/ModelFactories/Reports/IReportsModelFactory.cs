@@ -15,9 +15,12 @@
             SearchData searchData);
 
         RegistratedCasesCaseTypeModel CreateRegistratedCasesCaseTypeModel(
-                                GetRegistratedCasesCaseTypeResponse response,
+                                RegistratedCasesCaseTypeResponse response,
                                 OperationContext context);
 
-        RegistratedCasesCaseTypeReportModel CreateRegistratedCasesCaseTypeReportModel(string key);
+        RegistratedCasesCaseTypeReportModel CreateRegistratedCasesCaseTypeReportModel(
+                                string key,
+                                RegistratedCasesCaseTypeModel request,
+                                RegistratedCasesCaseTypeResponsePrint response);
     }
 }

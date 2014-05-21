@@ -146,6 +146,7 @@
     <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\RegistrationProcessingSettings.cs" />
     <Compile Include="Models\Changes\GetSearchDataResponse.cs" />
     <Compile Include="Models\Inventory\Edit\Inventory\TypeGroupModel.cs" />
+    <Compile Include="Models\Reports\Output\RegistratedCasesCaseTypeResponsePrint.cs" />
     <Compile Include="Models\Shared\Input\SortField.cs" />
     <Compile Include="Models\BusinessModel.cs" />
     <Compile Include="Models\Customer\CustomerSettings.cs" />
@@ -366,7 +367,7 @@
     <Compile Include="Models\Inventory\Output\SoftwareOverview.cs" />
     <Compile Include="Models\Questionnaire\Output\CircularOverview.cs" />
     <Compile Include="Models\Questionnaire\Output\QuestionnaireQuestionsOverview.cs" />
-    <Compile Include="Models\Reports\Output\GetRegistratedCasesCaseTypeResponse.cs" />
+    <Compile Include="Models\Reports\Output\RegistratedCasesCaseTypeResponse.cs" />
     <Compile Include="Models\Reports\Output\SearchOptions.cs" />
     <Compile Include="Models\Reports\ReportType.cs" />
     <Compile Include="Models\Reports\SearchData.cs" />
