@@ -1,194 +1,40 @@
 ﻿@using System.Activities.Statements
 @using DH.Helpdesk.NewSelfService.Infrastructure
-@model DH.Helpdesk.NewSelfService.Models.NewSelfService.SelfServiceModel
+@model DH.Helpdesk.NewSelfService.Models.Case.CaseOverviewModel
 @{
     ViewBag.Title = "Index";
 }
 
-@Html.Partial("_Plupload")
-
-<script type="text/javascript">
-
-
-    $(function() {                
-        window.alreadyExistFileIds = [];
-        bindDeleteFileBehaviorToDeleteButtons();
-
-        $('#file_uploader').pluploadQueue(
-        {
-            url:
-                '@this.Url.Action("UploadFile")',
-            multipart_params:
-            {
-                Id:
-                    '@this.Model.ExLogFileGuid'
-            },
-            max_file_size:
-                '10mb',
-
-            init:
-            {
-                FileUploaded:
-                    function() {
-                        $.
-                                get('@this.Url.Action("Files")',
-                                {
-                                    id:
-                                        '@this.Model.ExLogFileGuid'
-                        },
-                        function(files) {
-                            refreshFilesTable(files);
-                        }
-                    );
-                },
-
-                UploadComplete:
-                    function(up, file) {
-                        //plupload_add
-                        $
-                        (".plupload_buttons").css("display", "inline");
-                        $
-                        (".plupload_upload_status").css("display", "inline");
-                        up.refresh();
-                    },
-
-                Error:
-                    function(uploader, e) {
-                        if (e.status != 409) {
-                            return;
-                        }
-
-                        window.alreadyExistFileIds.push(e.file.id);
-                    },
-
-                StateChanged:
-                    function(uploader) {
-                        if (uploader.state != plupload.STOPPED) {
-                            return;
-                        }
-
-                        for (var i = 0; i < window.alreadyExistFileIds.length; i++) {
-                            var fileId = window.alreadyExistFileIds[i];
-                            $
-                            ('#file_uploader ul[class="plupload_filelist"] li[id="' + fileId + '"] div[class="plupload_file_action"] a').prop('title', '@Translation.Get("File already exists.", Enums.TranslationSource.TextTranslation)');
-                    }
-
-                    window.alreadyExistFileIds.length = 0;
-                    uploader.refresh();
-                }
-
-            }
-
-        });
-
-        
-    });
-
-    $('#upload_files_popup').on('hide', function () {
-        if ($('#file_uploader') != undefined) {            
-            if ($('#file_uploader').pluploadQueue().files.length > 0) {               
-                if ($('#file_uploader').pluploadQueue().state == plupload.UPLOADING) 
-                    $('#file_uploader').pluploadQueue().stop();                 
-                                                                            
-                while ($('#file_uploader').pluploadQueue().files.length > 0) {                        
-                    $('#file_uploader').pluploadQueue().removeFile($('#file_uploader').pluploadQueue().files[0]);
-                }
-                $('#file_uploader').pluploadQueue().refresh();
-            }            
-        }
-    });
-    
-   
-
-    function refreshFilesTable(files) {
-        $('#files_table > tbody > tr').remove();
-
-        var fileMarkup =
-            $('<tr>' +
-                '<td> &nbsp; <td>' +                
-                '<tr>');
-        $('#files_table > tbody').append(fileMarkup);
-
-        for (var i = 0; i < files.length; i++) {
-            var file = files[i];
-            
-            fileMarkup =
-                $('<tr>' +
-                    '<td>' +                    
-                    '<a style="color:blue" href="@this.Url.Action("DownloadLogFile")?@(!string.IsNullOrEmpty(this.Model.ExLogFileGuid) ? "id=" + this.Model.ExLogFileGuid + "&" : string.Empty)' + 'fileName=' + file + '"> <i class="icon-file"></i>' + file + '</a>' +
-                    '</td>' +
-                    '<td>' +
-                    '<a id="delete_file_button_' + i + '" class="btn bt-small" title="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)"> <i class="icon-remove"></i> </a>' +
-                    '</td>' +
-                    '</tr>');
-
-            $('#files_table > tbody').append(fileMarkup);
-        }
-
-        bindDeleteFileBehaviorToDeleteButtons();
-    }
-
-    
-
-    function bindDeleteFileBehaviorToDeleteButtons() {
-        $('#files_table a[id^="delete_file_button_"]').click(function() {
-            var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
-            var pressedDeleteFileButton = this;
-
-            $.post('@this.Url.Action("DeleteFile")', { id: '@this.Model.ExLogFileGuid', fileName: fileName }, function() {
-                $(pressedDeleteFileButton).parents('tr:first').remove();
-            });
-        });
-    }
-
-    
-    
-    function SendEmail() {
-
-        var note = $('#extraNote').val();
-        if (note == "") {
-            alert('External Log text is empty');
-        } else {
-            var caseId = $('#CaseId').val();
-            var languageId = $('#LanguageId').val();            
-            var curGUID = '@Model.MailGuid';            
-
-            window.location.href = '@Url.Action("SendMail", "Case")' +
-                '?caseId=' + caseId +
-                '&languageId=' + languageId +
-                '&extraNote=' + note + 
-                '&curGUID=' + curGUID ;
-        }
-
-    }
-</script>
-
-<div class="container-fluid dh-container">
-    <input id="LanguageId" type="hidden" value="@Model.LanguageId"/>                        
+<div class="container-fluid dh-container">    
             
     <ul class="nav nav-tabs" id="NewCaseTab">
         <li id="CasePreviewTab" class="active">                             
-            <a href="#fragment-1">@Translation.Get("Ärende", Enums.TranslationSource.TextTranslation): @Model.CaseOverview.CasePreview.CaseNumber</a>                                         
+            <a href="#fragment-1">@Translation.Get("Ärende", Enums.TranslationSource.TextTranslation): @Model.CasePreview.CaseNumber</a>                                         
         </li>
     </ul>
 
     <div class="content">                       
-        @if (Model.IsEmptyCase == 0)
+        @if (Model.CasePreview != null)
         {                
             <div id="fragment-1" class="tab-pane active" >                                                   
                 <div class="container-fluid dh-container">
                                        
-                    @if (Model.CaseOverview.CasePreview.FinishingDate != null)
+                    @if (Model.CasePreview.FinishingDate != null)
                     {
                         <div class="alert alert-success">
                         <span class="glyphicon glyphicon-thumbs-up"></span>
                         @Translation.Get("Ärendet avslutat", Enums.TranslationSource.TextTranslation)
                         @Translation.Get(": ", Enums.TranslationSource.TextTranslation)
-                        @Html.DisplayFor(m => Model.CaseOverview.CasePreview.FinishingDate, "DateAndTime")
+                        @Html.DisplayFor(m => Model.CasePreview.FinishingDate, "DateAndTime")
                         </div>
                     }
 
-                    @(Model.Configuration.IsReceipt ? Html.Partial("_NewCaseReceipt", Model.CaseOverview) : Html.Partial("_CasePreview", Model.CaseOverview))                        
+                    @( (Model.CanAddExternalNote) ? 
+                       Html.Partial("_CasePreview", Model) 
+                       : 
+                       Html.Partial("_NewCaseReceipt", Model)  
+                     ) 
+                                           
                 </div>                
             </div>
         }                                     

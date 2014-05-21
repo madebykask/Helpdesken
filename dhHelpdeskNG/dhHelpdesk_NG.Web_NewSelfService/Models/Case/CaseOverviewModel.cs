@@ -32,10 +32,16 @@ namespace DH.Helpdesk.NewSelfService.Models.Case
             this.Suppliers = suppliers;
         }
 
+        public bool CanAddExternalNote { get; set; }
+
+        public string ExLogFileGuid { get; set; }
+
         public string InfoText { get; set; }        
 
-        public string ReceiptFooterMessage { get; set; }        
- 
+        public string ReceiptFooterMessage { get; set; }
+
+        public string MailGuid { get; set; }
+
         [StringLength(3000)]
         public string ExtraNote { get; set; }
 

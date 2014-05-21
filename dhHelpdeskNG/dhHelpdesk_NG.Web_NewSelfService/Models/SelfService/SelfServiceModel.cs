@@ -23,8 +23,6 @@ namespace DH.Helpdesk.NewSelfService.Models.NewSelfService
 
         public string AUser { get; set; }
 
-        public string ExLogFileGuid { get; set; }
-
         public string MailGuid { get; set; }
 
         public CaseOverviewModel CaseOverview { get; set; }

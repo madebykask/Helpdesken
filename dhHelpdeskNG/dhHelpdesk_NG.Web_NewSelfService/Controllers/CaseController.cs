@@ -122,114 +122,68 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
 
         [HttpGet]
-        public ActionResult Start()
+        public ActionResult Index(string id)
         {
-            return View("Start");
-        }
-
-        [HttpGet]
-        public ActionResult Index(int customerId = 0, string id="", int languageId = 0)
-        {
-            // just for first version 
-            //if (!id.Is<Guid>())
-            //{
-            //    return null;
-            //}
-
-            Case currentCase = null;
-            var config = new SelfServiceConfigurationModel
-            {
-                ShowBulletinBoard = false,
-                ShowDashboard = false,
-                ShowFAQ = false,
-                ShowOrderAccount = false,
-                ShowNewCase = false,
-                ShowUserCases = false,
-                ViewCaseMode = 0,
-                IsReceipt = true
-            };
-
-            if (id != string.Empty)
-            {
-                if (id.Is<Guid>())
-                {
-                    var guid = new Guid(id);
-                    currentCase = _caseService.GetCaseByEMailGUID(guid);                    
-                    config.ViewCaseMode = 0;
-                    config.IsReceipt = false;
-                }
-                else
-                {
-                    currentCase = this._caseService.GetCaseById(Int32.Parse(id));                    
-                    config.ViewCaseMode = 1;                    
-                }
-
-                if (currentCase != null)
-                    customerId = currentCase.Customer_Id;
-
-                this._userTemporaryFilesStorage.DeleteFiles(id);
-            }
-
-            if (customerId == 0)
-            {
-                throw new HttpException((int)HttpStatusCode.NotFound, null);                
-            }
-            
-            var currentCustomer = this._customerService.GetCustomer(customerId);
-
-            if (currentCustomer == null)
+            if (string.IsNullOrEmpty(id))
                 return null;
+
+            int customerId = 0;
+
+            Case currentCase = null;            
+
+            
+            if (id.Is<Guid>())
+            {
+                var guid = new Guid(id);
+                currentCase = _caseService.GetCaseByEMailGUID(guid);                                    
+            }
             else
             {
-                if (languageId == 0)
-                    languageId = currentCustomer.Language_Id;
+                currentCase = this._caseService.GetCaseById(Int32.Parse(id));                                    
+            }
 
-                var model = new SelfServiceModel(customerId, languageId);
+            if (currentCase == null)
+            {
+                throw new HttpException((int)HttpStatusCode.NotFound, "Case Not Found...");
+                return null;
+            }
+            else
+            {
+                currentCase.Description = currentCase.Description.Replace("\n", "<br />");            
+                customerId = currentCase.Customer_Id;
+            }
+                                                
+            var currentCustomer = this._customerService.GetCustomer(customerId);
+            currentCase.Customer = currentCustomer;            
+            SessionFacade.CurrentCustomer = currentCustomer;
+                            
+            var languageId = currentCustomer.Language_Id;
+            SessionFacade.CurrentLanguageId = languageId;            
+            
+            var caseOverview = this.GetCaseOverviewModel(currentCase, languageId);                                    
+            caseOverview.ExLogFileGuid = currentCase.CaseGUID.ToString();
+            caseOverview.MailGuid = id;
 
-                model.MailGuid = id;
-                SessionFacade.CurrentCustomer = currentCustomer;
-                SessionFacade.CurrentLanguageId = languageId;
-
-                config.ShowBulletinBoard = currentCustomer.ShowBulletinBoardOnExtPage.convertIntToBool();
-                config.ShowDashboard = currentCustomer.ShowDashboardOnExternalPage.convertIntToBool();
-                config.ShowFAQ = currentCustomer.ShowFAQOnExternalPage.convertIntToBool();
-
-                model.IsEmptyCase = 1;
-                model.ExLogFileGuid = Guid.NewGuid().ToString();
-
-                if (id != string.Empty)
+            this._userTemporaryFilesStorage.DeleteFiles(caseOverview.ExLogFileGuid);
+            this._userTemporaryFilesStorage.DeleteFiles(id);            
+            
+            if (id.Is<Guid>())
+            {
+                if (currentCase.StateSecondary_Id.HasValue && caseOverview.CasePreview.FinishingDate == null)
                 {
-                    if (currentCase != null)
-                    {
-                        model.IsEmptyCase = 0;
-                        var caseOverview = this.GetCaseOverviewModel(currentCase, languageId);
-                        caseOverview.CasePreview.Description = caseOverview.CasePreview.Description.Replace("\n", "<br />");
-                        model.CaseOverview = caseOverview;
-                        
-                        if (currentCase.StateSecondary_Id.HasValue && model.CaseOverview.CasePreview.FinishingDate == null)
-                        {
-                            var stateSecondary = _stateSecondaryService.GetStateSecondary(currentCase.StateSecondary_Id.Value);
-                            if (stateSecondary.NoMailToNotifier == 1)
-                                model.CaseOverview.CasePreview.FinishingDate = DateTime.UtcNow; //model.CaseOverview.CasePreview.ChangeTime;
-                        }
-                        model.ExLogFileGuid = currentCase.CaseGUID.ToString();
-                        if (config.IsReceipt)
-                        {
-                            //model.CaseOverview.InfoText = Translation.Get("Tack", Enums.TranslationSource.TextTranslation);
-                            model.CaseOverview.ReceiptFooterMessage = currentCustomer.RegistrationMessage;
-                        }
-                    }
+                    var stateSecondary = _stateSecondaryService.GetStateSecondary(currentCase.StateSecondary_Id.Value);
+                    if (stateSecondary.NoMailToNotifier == 1)
+                        caseOverview.CasePreview.FinishingDate = DateTime.UtcNow; //model.CaseOverview.CasePreview.ChangeTime;
                 }
-
-                this._userTemporaryFilesStorage.DeleteFiles(model.ExLogFileGuid);
-
-                
-                model.Configuration = config;
-                return this.View(model);
-            } // if exist Customer
-
-            
-            
+                caseOverview.CanAddExternalNote = true;
+            }
+            else
+            {
+                caseOverview.ReceiptFooterMessage = currentCustomer.RegistrationMessage;
+                caseOverview.CanAddExternalNote = false;
+            }
+                                                                            
+            return this.View(caseOverview);
         }
 
 
@@ -430,7 +384,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
         }
 
         [HttpGet]
-        public RedirectToRouteResult SendMail(int caseId, int languageId, string extraNote, string curGUID)
+        public RedirectToRouteResult SendMail(int caseId, string extraNote, string curGUID)
         {
             IDictionary<string, string> errors;
 
