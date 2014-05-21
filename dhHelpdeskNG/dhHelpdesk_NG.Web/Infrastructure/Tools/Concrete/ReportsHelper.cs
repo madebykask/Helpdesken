@@ -2,7 +2,6 @@
 {
     using System;
     using System.Web.Helpers;
-    using System.Web.Mvc;
 
     using DH.Helpdesk.Web.Models.Reports;
 
@@ -20,11 +19,11 @@
             this.SaveToCache(chart, out cachedReportKey);
         }
 
-        public FileContentResult GetReportImageFromCache(string cacheKey)
+        public byte[] GetReportImageFromCache(string cacheKey)
         {
             var chart = Chart.GetFromCache(cacheKey);
 //            WebCache.Remove(cacheKey);
-            return new FileContentResult(chart.GetBytes("png"), @"image/png");            
+            return chart.GetBytes("png");            
         }
 
         private void SaveToCache(Chart chart, out string cachedReportKey)

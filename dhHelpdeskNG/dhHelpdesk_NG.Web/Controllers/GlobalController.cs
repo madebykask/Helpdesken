@@ -17,7 +17,7 @@
         public FileContentResult GetReportImage(string key)
         {
             var result = this.reportsHelper.GetReportImageFromCache(key);
-            return result;
+            return new FileContentResult(result, @"image/png");            
         }
     }
 }

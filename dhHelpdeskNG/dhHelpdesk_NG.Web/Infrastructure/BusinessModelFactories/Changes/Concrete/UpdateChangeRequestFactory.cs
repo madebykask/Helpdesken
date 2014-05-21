@@ -12,6 +12,7 @@
     using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
     using DH.Helpdesk.Common.Extensions.String;
     using DH.Helpdesk.Services.Requests.Changes;
+    using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Models.Changes;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
@@ -32,7 +33,8 @@
             List<WebTemporaryFile> newAnalyzeFiles,
             List<WebTemporaryFile> newImplementationFiles,
             List<WebTemporaryFile> newEvaluationFiles,
-            OperationContext context)
+            OperationContext context,
+            IEmailService emailService)
         {
             var updatedChange = CreateUpdatedChange(model, context);
             var contacts = CreateContactCollection(model, context);
@@ -50,7 +52,7 @@
                 newEvaluationFiles,
                 context);
 
-            var newLogs = CreateNewLogCollection(model);
+            var newLogs = CreateNewLogCollection(model, emailService);
 
             return new UpdateChangeRequest(
                 context,
@@ -332,28 +334,30 @@
             return newFiles;
         }
 
-        private static List<ManualLog> CreateNewLogCollection(InputModel inputModel)
+        private static List<ManualLog> CreateNewLogCollection(
+                                        InputModel inputModel,
+                                        IEmailService emailService)
         {
             var newLogs = new List<ManualLog>();
 
             if (inputModel.Analyze != null)
             {
-                CreateNewLogIfNeeded(inputModel.Analyze.Logs, Subtopic.Analyze, newLogs);
+                CreateNewLogIfNeeded(inputModel.Analyze.Logs, Subtopic.Analyze, newLogs, emailService);
             }
 
             if (inputModel.Implementation != null)
             {
-                CreateNewLogIfNeeded(inputModel.Implementation.Logs, Subtopic.Implementation, newLogs);
+                CreateNewLogIfNeeded(inputModel.Implementation.Logs, Subtopic.Implementation, newLogs, emailService);
             }
 
             if (inputModel.Evaluation != null)
             {
-                CreateNewLogIfNeeded(inputModel.Evaluation.Logs, Subtopic.Evaluation, newLogs);
+                CreateNewLogIfNeeded(inputModel.Evaluation.Logs, Subtopic.Evaluation, newLogs, emailService);
             }
 
             if (inputModel.Log != null)
             {
-                CreateNewLogIfNeeded(inputModel.Log.Logs, Subtopic.Log, newLogs);
+                CreateNewLogIfNeeded(inputModel.Log.Logs, Subtopic.Log, newLogs, emailService);
             }
 
             return newLogs;
@@ -362,7 +366,8 @@
         private static void CreateNewLogIfNeeded(
             ConfigurableFieldModel<LogsModel> logField,
             Subtopic subtopic,
-            List<ManualLog> logs)
+            List<ManualLog> logs,
+            IEmailService emailService)
         {
             if (logField == null || string.IsNullOrEmpty(logField.Value.Text))
             {
@@ -371,7 +376,10 @@
 
             var emails = string.IsNullOrEmpty(logField.Value.Emails)
                 ? new List<MailAddress>(0)
-                : logField.Value.Emails.Split(Environment.NewLine).Select(e => new MailAddress(e)).ToList();
+                : logField.Value.Emails.Split(Environment.NewLine)
+                                .Where(emailService.IsValidEmail)
+                                .Select(e => new MailAddress(e))
+                                .ToList();
 
             var newLog = ManualLog.CreateNew(logField.Value.Text, emails, subtopic);
             logs.Add(newLog);

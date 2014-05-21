@@ -58,6 +58,8 @@
 
         private readonly TemporaryIdProvider temporaryIdProvider;
 
+        private readonly IEmailService emailService;
+
         #endregion
 
         #region Constructors and Destructors
@@ -76,7 +78,8 @@
             ITemporaryFilesCacheFactory temporaryFilesCacheFactory,
             IUpdateChangeRequestFactory updateChangeRequestFactory,
             IUpdatedSettingsFactory updatedSettingFactory,
-            TemporaryIdProvider temporaryIdProvider)
+            TemporaryIdProvider temporaryIdProvider, 
+            IEmailService emailService)
             : base(masterDataService)
         {
             this.changeModelFactory = changeModelFactory;
@@ -90,6 +93,7 @@
             this.updateChangeRequestFactory = updateChangeRequestFactory;
             this.updatedSettingFactory = updatedSettingFactory;
             this.temporaryIdProvider = temporaryIdProvider;
+            this.emailService = emailService;
 
             this.editorStateCache = editorStateCacheFactory.CreateForModule(ModuleName.Changes);
             this.temporaryFilesCache = temporaryFilesCacheFactory.CreateForModule(ModuleName.Changes);
@@ -267,7 +271,8 @@
                 newAnalyzeFiles,
                 newImplementationFiles,
                 newEvaluationFiles,
-                this.OperationContext);
+                this.OperationContext,
+                this.emailService);
 
             this.changeService.UpdateChange(request);
             this.temporaryFilesCache.ResetCacheForObject(id);
@@ -350,7 +355,7 @@
         public RedirectToRouteResult New(InputModel model, string clickedButton)
         {
             var registrationFiles = this.temporaryFilesCache.FindFiles(model.Id, Subtopic.Registration.ToString());
-            var request = this.newChangeRequestFactory.Create(model, registrationFiles, this.OperationContext);
+            var request = this.newChangeRequestFactory.Create(model, registrationFiles, this.OperationContext, this.emailService);
             this.changeService.AddChange(request);
             this.temporaryFilesCache.ResetCacheForObject(model.Id);
 

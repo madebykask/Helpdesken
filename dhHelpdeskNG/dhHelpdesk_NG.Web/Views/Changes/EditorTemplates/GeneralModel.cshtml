@@ -8,7 +8,7 @@
     {
         <tr>
             <td class="span3">
-                @Translation.Get(Model.Statuses.Caption, Enums.TranslationSource.TextTranslation)
+                @Translation.Get(Model.Statuses.Caption)
             </td>
             <td class="span9">
                 @Html.DropDownListFor(m => m.StatusId, Model.Statuses.Value)
@@ -19,7 +19,7 @@
     {
         <tr>
             <td class="span3">
-                @Translation.Get(Model.Systems.Caption, Enums.TranslationSource.TextTranslation)
+                @Translation.Get(Model.Systems.Caption)
             </td>
             <td class="span9">
                 @Html.DropDownListFor(m => m.SystemId, Model.Systems.Value)
@@ -30,7 +30,7 @@
     {
         <tr>
             <td class="span3">
-                @Translation.Get(Model.Objects.Caption, Enums.TranslationSource.TextTranslation)
+                @Translation.Get(Model.Objects.Caption)
             </td>
             <td class="span9">
                 @Html.DropDownListFor(m => m.ObjectId, Model.Objects.Value)
@@ -53,7 +53,7 @@
     {
         <tr>
             <td class="span3">
-                @Translation.Get(Model.WorkingGroups.Caption, Enums.TranslationSource.TextTranslation)
+                @Translation.Get(Model.WorkingGroups.Caption)
             </td>
             <td class="span9">
                 @Html.DropDownListFor(m => m.WorkingGroupId, Model.WorkingGroups.Value)
@@ -64,7 +64,7 @@
     {
         <tr>
             <td class="span3">
-                @Translation.Get(Model.Administrators.Caption, Enums.TranslationSource.TextTranslation)
+                @Translation.Get(Model.Administrators.Caption)
             </td>
             <td class="span9">
                 @Html.DropDownListFor(m => m.AdministratorId, Model.Administrators.Value)

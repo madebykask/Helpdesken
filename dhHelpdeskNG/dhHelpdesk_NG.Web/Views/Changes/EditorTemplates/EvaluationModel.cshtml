@@ -55,11 +55,11 @@
         <tr>
             <td></td>
             <td>
+                @Html.Partial("_SendToDialog", Model.Logs.Value.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "evaluation_send_to_dialog" }, { "Callback", "fillEvaluationSendLogNoteToEmailsTextArea" } }))
+                @Html.TextAreaFor(m => m.Logs.Value.Emails, new { id = "evaluation_send_to_emails_textarea", @readonly = "readonly" })
                 <a id="evaluation_send_to_button" class="btn">
                     @Translation.Get("Send to...", Enums.TranslationSource.TextTranslation)
                 </a>
-                @Html.Partial("_SendToDialog", Model.Logs.Value.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "evaluation_send_to_dialog" }, { "Callback", "fillEvaluationSendLogNoteToEmailsTextArea" } }))
-                @Html.TextAreaFor(m => m.Logs.Value.Emails, new { id = "evaluation_send_to_emails_textarea", @readonly = "readonly" })
             </td>
         </tr>
     }

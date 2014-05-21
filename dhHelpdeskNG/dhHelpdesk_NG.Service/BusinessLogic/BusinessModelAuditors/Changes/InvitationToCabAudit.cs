@@ -53,8 +53,6 @@
 
         public void Audit(UpdateChangeRequest businessModel, ChangeAuditData optionalData)
         {
-            return;
-
             foreach (var log in businessModel.NewLogs)
             {
                 if (!log.Emails.Any())

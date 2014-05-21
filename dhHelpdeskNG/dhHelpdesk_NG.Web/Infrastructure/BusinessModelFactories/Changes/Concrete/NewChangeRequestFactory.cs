@@ -12,6 +12,7 @@
     using DH.Helpdesk.BusinessData.Models.Changes.Input.NewChange;
     using DH.Helpdesk.Common.Extensions.String;
     using DH.Helpdesk.Services.Requests.Changes;
+    using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Models.Changes;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
@@ -24,12 +25,13 @@
         public NewChangeRequest Create(
             InputModel model,
             List<WebTemporaryFile> registrationFiles,
-            OperationContext context)
+            OperationContext context,
+            IEmailService emailService)
         {
             var newChange = CreateNewChange(model, context);
             var newContacts = CreateNewContactCollection(model, context);
             var newFiles = CreateNewFileCollection(registrationFiles, context);
-            var newLogs = CreateNewLogCollection(model);
+            var newLogs = CreateNewLogCollection(model, emailService);
 
             return new NewChangeRequest(
                 newChange,
@@ -119,14 +121,18 @@
                 ConfigurableFieldModel<bool>.GetValueOrDefault(model.Rss));
         }
 
-        private static List<ManualLog> CreateNewLogCollection(InputModel model)
+        private static List<ManualLog> CreateNewLogCollection(InputModel model, IEmailService emailService)
         {
             var newLogs = new List<ManualLog>();
-            CreateNewLogIfNeeded(model.Log.Logs.Value, Subtopic.Log, newLogs);
+            CreateNewLogIfNeeded(model.Log.Logs.Value, Subtopic.Log, newLogs, emailService);
             return newLogs;
         }
 
-        private static void CreateNewLogIfNeeded(LogsModel model, Subtopic area, List<ManualLog> logs)
+        private static void CreateNewLogIfNeeded(
+                        LogsModel model, 
+                        Subtopic area, 
+                        List<ManualLog> logs,
+                        IEmailService emailService)
         {
             if (string.IsNullOrEmpty(model.Text))
             {
@@ -135,7 +141,10 @@
 
             var emails = string.IsNullOrEmpty(model.Emails)
                 ? new List<MailAddress>(0)
-                : model.Emails.Split(Environment.NewLine).Select(e => new MailAddress(e)).ToList();
+                : model.Emails.Split(Environment.NewLine)
+                            .Where(emailService.IsValidEmail)
+                            .Select(e => new MailAddress(e))
+                            .ToList();
 
             var newLog = ManualLog.CreateNew(model.Text, emails, area);
             logs.Add(newLog);
