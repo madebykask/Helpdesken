@@ -529,29 +529,43 @@
         }
 
         [HttpPost]
-        public void CopyCustomer(int id, string customerNumber, string customerName, string customerEmail)
+        public ActionResult CopyCustomer(int id, string customerNumber, string customerName, string customerEmail)
         {
             var customerToCopy = this._customerService.GetCustomer(id);
-            var customerToCopySettings = this._settingService.GetCustomerSettings(customerToCopy.Id);
+            var customerToCopySettings = this._settingService.GetCustomerSetting(customerToCopy.Id);
 
             var newCustomerToSave = new Customer() 
             {
                CustomerID = customerNumber,
                Name = customerName,
-               HelpdeskEmail = customerEmail
+               HelpdeskEmail = customerEmail,
+               Language_Id = customerToCopy.Language_Id
             };
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
             this._customerService.SaveNewCustomerToGetId(newCustomerToSave, out errors);
 
+            var newCustomerSetting = new Setting()
+            {
+                Customer_Id = newCustomerToSave.Id,
+                ModuleAccount = customerToCopySettings.ModuleAccount,
+                ModuleADSync = customerToCopySettings.ModuleADSync,
+                ModuleAsset = customerToCopySettings.ModuleAsset,
+                ModuleBulletinBoard = customerToCopySettings.ModuleBulletinBoard,
+                ModuleCalendar = customerToCopySettings.ModuleCalendar,
+
+            };
+            customerToCopySettings.Customer_Id = newCustomerToSave.Id;
+
+            this._customerService.SaveEditCustomer(newCustomerToSave, customerToCopySettings, null, newCustomerToSave.Language_Id, out errors);
 
 
+            if (errors.Count == 0)
+                return this.RedirectToAction("edit", "customer");
 
+            var model = this.CustomerInputViewModel(newCustomerToSave);
 
-
-
-
-           // return this.RedirectToAction("edit", "customer", new { newCustomerToSave.Id });
+            return this.View(model);
         }
     }
 }

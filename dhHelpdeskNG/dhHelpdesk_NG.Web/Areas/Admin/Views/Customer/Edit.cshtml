@@ -12,8 +12,7 @@
                 <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", null, new { @class = "btn" })</li>
                 @*@if (Model.Customer.Id != null)
                 {
-                    
-                    <li><a data-toggle="modal" href="#divCopyCustomer"  title="@Translation.Get("Kopiera", Enums.TranslationSource.TextTranslation)" class="btn"><i class="btn"></i></a></li>
+                    <li><a data-toggle="modal" href="#divCopyCustomer" title="@Translation.Get("Kopiera", Enums.TranslationSource.TextTranslation)" class="btn">@Translation.Get("Kopiera", Enums.TranslationSource.TextTranslation)</a></li>
                 }*@
             </ul>
         </div>

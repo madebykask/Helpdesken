@@ -504,7 +504,7 @@
                 }).ToList(),
                 UserRoles = this._userService.GetUserRoles().Select(x => new SelectListItem
                 {
-                    Text = x.Description,
+                    Text = Translation.Get(x.Description, Enums.TranslationSource.TextTranslation),
                     Value = x.Id.ToString(),
                 }).ToList(),
 
