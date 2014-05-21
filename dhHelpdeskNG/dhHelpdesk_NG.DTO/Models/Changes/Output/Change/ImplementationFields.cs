@@ -2,8 +2,6 @@
 {
     using System;
 
-    using DH.Helpdesk.Common.ValidationAttributes;
-
     public sealed class ImplementationFields
     {
         public ImplementationFields(
@@ -26,7 +24,6 @@
             this.ImplementationReady = implementationReady;
         }
 
-        [IsId]
         public int? StatusId { get; private set; }
 
         public DateTime? RealStartDate { get; private set; }

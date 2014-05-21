@@ -94,7 +94,7 @@
 
         public int? ImplementationStatus_Id { get; set; }
 
-        public virtual Status ImplementationStatus { get; set; }
+        public virtual ChangeImplementationStatusEntity ImplementationStatus { get; set; }
 
         public string InventoryNumber { get; set; }
 

@@ -41,7 +41,8 @@
         ConfigurableFieldModel<SelectList> CreateSelectListField(
             FieldEditSetting setting,
             List<ItemOverview> items,
-            string selectedValue);
+            string selectedValue,
+            bool needEmptyItem = false);
 
         ConfigurableFieldModel<SelectList> CreateSelectListField(FieldEditSetting setting, SelectList value);
 

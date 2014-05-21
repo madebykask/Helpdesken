@@ -122,7 +122,7 @@
 
         private ImplementationFields CreateImplementationFields(ChangeEntity entity)
         {
-            var status = entity.ImplementationStatus != null ? entity.ImplementationStatus.Name : string.Empty;
+            var status = entity.ImplementationStatus != null ? entity.ImplementationStatus.ImplementationStatus : string.Empty;
 
             return new ImplementationFields(
                 status,

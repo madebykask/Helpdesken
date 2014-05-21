@@ -37,7 +37,8 @@
             var statuses = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.Status,
                 options.ImplementationStatuses,
-                fields.StatusId.ToString());
+                fields.StatusId.HasValue ? fields.StatusId.ToString() : string.Empty,
+                true);
 
             var realStartDate = this.configurableFieldModelFactory.CreateNullableDateTimeField(
                 settings.RealStartDate,

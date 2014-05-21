@@ -166,11 +166,17 @@
         public ConfigurableFieldModel<SelectList> CreateSelectListField(
             FieldEditSetting setting,
             List<ItemOverview> items,
-            string selectedValue)
+            string selectedValue,
+            bool needEmptyItem = false) 
         {
             if (!setting.Show)
             {
                 return ConfigurableFieldModel<SelectList>.CreateUnshowable();
+            }
+
+            if (needEmptyItem)
+            {
+                items.Insert(0, new ItemOverview(string.Empty, string.Empty));
             }
 
             var list = new SelectList(items, "Value", "Name", selectedValue);
