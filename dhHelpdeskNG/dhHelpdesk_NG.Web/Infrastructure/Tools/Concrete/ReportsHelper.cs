@@ -9,7 +9,7 @@
     {
         public void CreateRegistratedCasesCaseTypeReport(RegistratedCasesCaseTypeModel model, out string cachedReportKey)
         {
-            var chart = new Chart(600, 400)
+            var chart = new Chart(500, 400)
                 .AddTitle("Chart Title")
                 .AddSeries(
                     "Employee",

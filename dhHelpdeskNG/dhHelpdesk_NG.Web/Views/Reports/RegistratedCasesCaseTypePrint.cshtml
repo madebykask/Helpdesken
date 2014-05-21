@@ -1,0 +1,16 @@
+﻿@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@model DH.Helpdesk.Web.Models.Reports.RegistratedCasesCaseTypeReportModel
+           
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <img src="@Url.ActionAbsolute("GetReportImage", "Global", new { key = Model.Key })" />            
+    </body>
+</html>

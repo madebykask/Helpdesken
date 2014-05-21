@@ -94,7 +94,7 @@
 
             if (model.IsPrint)
             {
-                return new PrintPdfResult(reportModel, "RegistratedCasesCaseTypeReport");
+                return new PrintPdfResult(reportModel, "RegistratedCasesCaseTypePrint");
             }
 
             return this.PartialView("RegistratedCasesCaseTypeReport", reportModel);

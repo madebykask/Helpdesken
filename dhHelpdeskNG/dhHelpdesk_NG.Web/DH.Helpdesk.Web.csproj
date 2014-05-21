@@ -1408,6 +1408,7 @@
     <Content Include="Views\Inventory\EditorTemplates\DynamicFieldStringValue.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\YearMonthPicker.cshtml" />
     <Content Include="Views\Reports\RegistratedCasesCaseTypeReport.cshtml" />
+    <Content Include="Views\Reports\RegistratedCasesCaseTypePrint.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
