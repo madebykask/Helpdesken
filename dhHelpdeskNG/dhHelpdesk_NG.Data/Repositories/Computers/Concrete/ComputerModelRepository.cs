@@ -6,19 +6,18 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Input;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain.Computers;
 
-    public class ComputerModelRepository : Repository, IComputerModelRepository
+    public class ComputerModelRepository : Repository<ComputerModel>, IComputerModelRepository
     {
         public ComputerModelRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
         }
 
-        public void Add(NewItem businessModel)
+        public void Add(ComputerModule businessModel)
         {
             var entity = new ComputerModel
             {
@@ -27,19 +26,13 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                 CreatedDate = businessModel.CreatedDate,
                 ChangedDate = businessModel.CreatedDate, // todo
             };
-            this.DbContext.ComputerModels.Add(entity);
+            this.DbSet.Add(entity);
             this.InitializeAfterCommit(businessModel, entity);
         }
 
-        public void Delete(int id)
+        public void Update(ComputerModule businessModel)
         {
-            var entity = this.DbContext.ComputerModels.Find(id);
-            this.DbContext.ComputerModels.Remove(entity);
-        }
-
-        public void Update(UpdatedItem businessModel)
-        {
-            var entity = this.DbContext.ComputerModels.Find(businessModel.Id);
+            var entity = this.DbSet.Find(businessModel.Id);
             entity.Name = businessModel.Name;
             entity.ChangedDate = businessModel.ChangedDate;
         }
@@ -47,7 +40,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
         public List<ItemOverview> FindOverviews()
         {
             var anonymus =
-                this.DbContext.ComputerModels
+                this.DbSet
                     .Select(c => new { c.Name, c.Id })
                     .ToList();
 

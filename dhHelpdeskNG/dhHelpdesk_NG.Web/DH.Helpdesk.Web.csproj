@@ -380,6 +380,7 @@
     <Compile Include="Infrastructure\Enums.cs" />
     <Compile Include="Infrastructure\Extensions\BooleanExtansions.cs" />
     <Compile Include="Infrastructure\Extensions\ControllerExtensions.cs" />
+    <Compile Include="Infrastructure\Extensions\EnumExtensions.cs" />
     <Compile Include="Infrastructure\Extensions\FileExtensions.cs" />
     <Compile Include="Infrastructure\Extensions\GeneralExtensions.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\CaseFieldExtension.cs" />
@@ -573,6 +574,7 @@
     <Compile Include="Models\Changes\SettingsEdit\SettingsModel.cs" />
     <Compile Include="Models\Changes\SettingsEdit\TextFieldSettingModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\ConfigurableFieldModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\ComputerModuleGridModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Inventory\DefaultFieldsViewModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Inventory\InventoryEditViewModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Server\ServerEditViewModel.cs" />
@@ -1409,6 +1411,7 @@
     <Content Include="Views\Shared\EditorTemplates\YearMonthPicker.cshtml" />
     <Content Include="Views\Reports\RegistratedCasesCaseTypeReport.cshtml" />
     <Content Include="Views\Reports\RegistratedCasesCaseTypePrint.cshtml" />
+    <Content Include="Views\Inventory\ModuleGrid.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

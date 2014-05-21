@@ -408,6 +408,72 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             return query.OrderBy(x => x.ComputerName).ThenBy(x => x.Location).ToList();
         }
 
+        public void RemoveReferenceOnNic(int id)
+        {
+            var models =
+                this.DbSet.Where(x => x.NIC_ID == id).ToList();
+
+            foreach (var item in models)
+            {
+                item.NIC_ID = null;
+            }
+        }
+
+        public void RemoveReferenceOnRam(int id)
+        {
+            var models =
+                this.DbSet.Where(x => x.RAM_ID == id).ToList();
+
+            foreach (var item in models)
+            {
+                item.RAM_ID = null;
+            }
+        }
+
+        public void RemoveReferenceOnProcessor(int id)
+        {
+            var models =
+                this.DbSet.Where(x => x.Processor_Id == id).ToList();
+
+            foreach (var item in models)
+            {
+                item.Processor_Id = null;
+            }
+        }
+
+        public void RemoveReferenceOnOs(int id)
+        {
+            var models =
+                this.DbSet.Where(x => x.OS_Id == id).ToList();
+
+            foreach (var item in models)
+            {
+                item.OS_Id = null;
+            }
+        }
+
+        public void RemoveReferenceOnComputerType(int id)
+        {
+            var models =
+                this.DbSet.Where(x => x.ComputerType_Id == id).ToList();
+
+            foreach (var item in models)
+            {
+                item.ComputerType_Id = null;
+            }
+        }
+
+        public void RemoveReferenceOnComputerModel(int id)
+        {
+            var models =
+                this.DbSet.Where(x => x.ComputerModel_Id == id).ToList();
+
+            foreach (var item in models)
+            {
+                item.ComputerModel_Id = null;
+            }
+        }
+
         private static void Map(Domain.Computers.Computer entity, Computer businessModel)
         {
             entity.ComputerName = businessModel.WorkstationFields.ComputerName;

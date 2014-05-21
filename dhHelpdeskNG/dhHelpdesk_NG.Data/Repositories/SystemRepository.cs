@@ -55,6 +55,8 @@ namespace DH.Helpdesk.Dal.Repositories
         /// The <see cref="SystemOverview"/>.
         /// </returns>
         SystemOverview GetSystemOverview(int system);
+
+        void RemoveReferenceOnOs(int id);
     }
 
     /// <summary>
@@ -128,6 +130,16 @@ namespace DH.Helpdesk.Dal.Repositories
                            Id = entity.Id, 
                            Name = entity.SystemName
                        };
+        }
+
+        public void RemoveReferenceOnOs(int id)
+        {
+            var models = this.Table.Where(x => x.OS_Id == id).ToList();
+
+            foreach (var item in models)
+            {
+                item.OS_Id = null;
+            }
         }
     }
 }

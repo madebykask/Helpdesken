@@ -6,25 +6,33 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Infrastructure.Extensions;
+    using DH.Helpdesk.Web.Models.Inventory.EditModel;
 
     public class IndexViewModel
     {
         public const string Separator = "Separator";
 
-        public IndexViewModel(int currentMode, List<SelectListItem> propertyTypes)
+        private IndexViewModel(int currentMode, List<SelectListItem> propertyTypes, int moduleType, SelectList moduleTypes)
         {
             this.CurrentMode = currentMode;
             this.PropertyTypes = propertyTypes;
+            this.ModuleType = moduleType;
+            this.ModuleTypes = moduleTypes;
         }
 
         public int CurrentMode { get; private set; }
 
+        public int ModuleType { get; private set; }
+
         [NotNull]
         public List<SelectListItem> PropertyTypes { get; private set; }
 
-        public static IndexViewModel BuildViewModel(int currentMode, List<ItemOverview> propertyTypes)
+        [NotNull]
+        public SelectList ModuleTypes { get; private set; }
+
+        public static IndexViewModel BuildViewModel(int currentMode, List<ItemOverview> propertyTypes, int moduleType)
         {
             var items = new List<SelectListItem>
                             {
@@ -55,7 +63,9 @@
                 propertyTypes.Select(
                     x => new SelectListItem { Text = x.Name, Value = x.Value }));
 
-            var viewModel = new IndexViewModel(currentMode, items);
+            var moduleTypes = EditModel.ModuleTypes.Processor.ToSelectList();
+
+            var viewModel = new IndexViewModel(currentMode, items, moduleType, moduleTypes);
 
             return viewModel;
         }

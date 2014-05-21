@@ -152,6 +152,7 @@
     <Compile Include="Services\ChangeObjectService.cs" />
     <Compile Include="Services\ChangePriorityService.cs" />
     <Compile Include="Services\ChangeStatusService.cs" />
+    <Compile Include="Services\Concrete\ComputerModulesService.cs" />
     <Compile Include="Services\Concrete\CausingPartService.cs" />
     <Compile Include="Services\Concrete\ChangeEmailService.cs" />
     <Compile Include="Services\Concrete\CircularService.cs" />
@@ -170,6 +171,7 @@
     <Compile Include="Services\Concrete\QuestionnaireService.cs" />
     <Compile Include="Response\Inventory\CustomTypeFiltersResponse.cs" />
     <Compile Include="Services\ICircularService.cs" />
+    <Compile Include="Services\IComputerModulesService.cs" />
     <Compile Include="Services\IInventoryService.cs" />
     <Compile Include="Services\IQestionnaireQuestionOptionService.cs" />
     <Compile Include="Services\IQestionnaireQuestionService.cs" />

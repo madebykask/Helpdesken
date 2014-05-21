@@ -98,6 +98,7 @@
             this.Bind<ICausingPartService>().To<CausingPartService>();
             this.Bind<IEmailService>().To<EmailService>().InSingletonScope();
             this.Bind<IReportsService>().To<ReportsService>();
+            this.Bind<IComputerModulesService>().To<ComputerModulesService>();
         }
 
         #endregion

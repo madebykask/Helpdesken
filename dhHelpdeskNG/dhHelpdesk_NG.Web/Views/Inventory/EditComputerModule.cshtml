@@ -28,15 +28,3 @@
         </div>
     </div>
 }
-
-<input type="hidden" name="activeTab" id="activeTab" value="@SessionFacade.ActiveTab" />
-
-<script type="text/javascript">
-
-    $.validator.setDefaults({
-        ignore: ""
-    });
-
-    $('#inventory_tab a[href="' + $('#activeTab')[0].value + '"]').tab('show');
-
-</script>

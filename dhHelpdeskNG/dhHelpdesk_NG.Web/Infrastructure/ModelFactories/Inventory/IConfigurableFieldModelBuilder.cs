@@ -28,7 +28,7 @@
 
         ConfigurableFieldModel<SelectList> CreateSelectListField(
             ModelEditFieldSetting setting,
-            Array items,
+            Enum items,
             string selectedValue);
 
         ConfigurableFieldModel<string> CreateStringField(ModelEditFieldSetting setting, string value);

@@ -454,8 +454,7 @@
     <Compile Include="Models\Shared\Input\INewBusinessModel.cs" />
     <Compile Include="Models\Shared\ItemOverview.cs" />
     <Compile Include="Models\Shared\Output\ItemWithEmails.cs" />
-    <Compile Include="Models\Inventory\Input\NewItem.cs" />
-    <Compile Include="Models\Inventory\Input\UpdatedItem.cs" />
+    <Compile Include="Models\Inventory\Input\ComputerModule.cs" />
     <Compile Include="Models\Notifiers\Notifier.cs" />
     <Compile Include="Models\Notifiers\Settings\SettingsEdit\FieldSetting.cs" />
     <Compile Include="Models\Notifiers\Settings\SettingsEdit\FieldSettings.cs" />

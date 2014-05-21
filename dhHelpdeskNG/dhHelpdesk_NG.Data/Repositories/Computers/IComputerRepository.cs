@@ -35,5 +35,17 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
             string searchFor,
             bool isShowScrapped,
             int recordsOnPage);
+
+        void RemoveReferenceOnNic(int id);
+
+        void RemoveReferenceOnRam(int id);
+
+        void RemoveReferenceOnProcessor(int id);
+
+        void RemoveReferenceOnOs(int id);
+
+        void RemoveReferenceOnComputerType(int id);
+
+        void RemoveReferenceOnComputerModel(int id);
     }
 }

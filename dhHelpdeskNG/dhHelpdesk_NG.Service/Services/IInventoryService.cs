@@ -48,6 +48,18 @@
 
         ComputerEditOptionsResponse GetWorkstationEditOptions(int customerId);
 
+        List<ItemOverview> GetComputerModels();
+
+        List<ItemOverview> GetComputerTypes(int customerId);
+
+        List<ItemOverview> GetOperatingSystems();
+
+        List<ItemOverview> GetProcessors();
+
+        List<ItemOverview> GetRams();
+
+        List<ItemOverview> GetNetAdapters();
+
         ComputerEditDataResponse GetWorkstationEditAdditionalData(int id, int customerId, int langaugeId);
 
         List<ComputerOverview> GetWorkstations(ComputersFilter computersFilter);
@@ -134,7 +146,7 @@
 
         InventoryFieldsSettingsOverviewForFilter GetInventoryFieldSettingsOverviewForFilter(int inventoryTypeId);
 
-        List<TypeGroupModel> GetTypeGroupModels(int inventoryTypeId); 
+        List<TypeGroupModel> GetTypeGroupModels(int inventoryTypeId);
 
         void ConnectInventoryToComputer(int inventoryId, int computerId);
 

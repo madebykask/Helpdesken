@@ -183,6 +183,50 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
             return overviewAggregates;
         }
 
+        public void RemoveReferenceOnNic(int id)
+        {
+            var models =
+                this.DbSet.Where(x => x.NIC_Id == id).ToList();
+
+            foreach (var item in models)
+            {
+                item.NIC_Id = null;
+            }
+        }
+
+        public void RemoveReferenceOnRam(int id)
+        {
+            var models =
+                this.DbSet.Where(x => x.RAM_Id == id).ToList();
+
+            foreach (var item in models)
+            {
+                item.RAM_Id = null;
+            }
+        }
+
+        public void RemoveReferenceOnProcessor(int id)
+        {
+            var models =
+                this.DbSet.Where(x => x.Processor_Id == id).ToList();
+
+            foreach (var item in models)
+            {
+                item.Processor_Id = null;
+            }
+        }
+
+        public void RemoveReferenceOnOs(int id)
+        {
+            var models =
+                this.DbSet.Where(x => x.OperatingSystem_Id == id).ToList();
+
+            foreach (var item in models)
+            {
+                item.OperatingSystem_Id = null;
+            }
+        }
+
         private static void Map(Domain.Servers.Server entity, Server businessModel)
         {
             entity.ServerName = businessModel.GeneralFields.Name;

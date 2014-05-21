@@ -7,6 +7,7 @@
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit;
     using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.Web.Infrastructure.Extensions;
     using DH.Helpdesk.Web.Models.Inventory.EditModel;
 
     public class ConfigurableFieldModelBuilder : IConfigurableFieldModelBuilder
@@ -65,7 +66,7 @@
 
         public ConfigurableFieldModel<SelectList> CreateSelectListField(
             ModelEditFieldSetting setting,
-            Array items,
+            Enum items,
             string selectedValue)
         {
             if (!setting.IsShow)
@@ -73,7 +74,7 @@
                 return ConfigurableFieldModel<SelectList>.CreateUnshowable();
             }
 
-            var list = new SelectList(items, selectedValue);
+            var list = items.ToSelectList(selectedValue);
             return new ConfigurableFieldModel<SelectList>(setting.Caption, list, setting.IsRequired, setting.IsReadOnly);
         }
 

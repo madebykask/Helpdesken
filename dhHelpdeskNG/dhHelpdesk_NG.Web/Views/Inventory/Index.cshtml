@@ -1,6 +1,5 @@
 ﻿@using DH.Helpdesk.Web.Models.Inventory
 @model IndexViewModel
-           
 <script type="text/javascript">
 
     $(function () {
@@ -9,29 +8,31 @@
 
             $.post('@Url.Action("RenderContent")', { currentMode: selectedValue }, function (tabMarkup) {
                 $('#type_data_container').html(tabMarkup);
-                var url = '@Url.Action("RedirectToNewInventory","Inventory")';
+                var url = '@Url.Action("RedirectToNewInventory", "Inventory")';
                 url += '?currentMode=' + selectedValue;
                 $('#link').attr('href', url);
             });
         });
-    });
 
-    $.validator.setDefaults({
-        ignore: ""
-    });
+        $('#category_dropdown').change(function () {
+            var selectedValue = $(this).val();
 
-    $(function() {
-        $('select option[value=Separator]').each(function() {
+            $.get('@Url.Action("RenderCategoryContent")', { moduleType: selectedValue }, function (tabMarkup) {
+                $('#category_data_container').html(tabMarkup);
+            });
+
+        });
+
+        $('select option[value=Separator]').each(function () {
             $(this).attr("disabled", "disabled");
         });
     });
-
 </script>
-         
+
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
-            <li id="menu1">@Html.ActionLink(Translation.Get("Nytt"), "RedirectToNewInventory", new { currentMode = Model.CurrentMode }, new { @class = "btn", id="link" })</li>
+            <li id="menu1">@Html.ActionLink(Translation.Get("Nytt"), "RedirectToNewInventory", new { currentMode = Model.CurrentMode }, new { @class = "btn", id = "link" })</li>
         </ul>
     </div>
 </div>
@@ -69,6 +70,15 @@
             <div class="tab-pane tab-pane-border" id="fragment-3">
             </div>
             <div class="tab-pane tab-pane-border" id="fragment-4">
+                <table class="tableform">
+                    <tr>
+                        <td class="span3">@Translation.Get("Kategorier")</td>
+                        <td>@Html.DropDownListFor(x => x.ModuleType, Model.ModuleTypes, new { id = "category_dropdown" })</td>
+                    </tr>
+                </table>
+                <div id="category_data_container">
+                    @Html.Action("RenderCategoryContent", "Inventory", new { area = string.Empty, moduleType = Model.ModuleType })
+                </div>
             </div>
         </div>
     </div>

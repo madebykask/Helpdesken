@@ -1,17 +1,17 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory
 {
-    public class CurrentModeFilter
+    public class IndexModeFilter
     {
-        public CurrentModeFilter(int currentMode)
+        public IndexModeFilter(int currentMode)
         {
             this.CurrentMode = currentMode;
         }
 
         public int CurrentMode { get; private set; }
 
-        public static CurrentModeFilter GetDefault()
+        public static IndexModeFilter GetDefault()
         {
-            return new CurrentModeFilter((int)CurrentModes.Workstations);
+            return new IndexModeFilter((int)CurrentModes.Workstations);
         }
     }
 }

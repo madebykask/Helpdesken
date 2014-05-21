@@ -17,5 +17,13 @@ namespace DH.Helpdesk.Dal.Repositories.Servers
         List<ServerOverview> FindOverviews(
             int customerId,
             string searchFor);
+
+        void RemoveReferenceOnNic(int id);
+
+        void RemoveReferenceOnRam(int id);
+
+        void RemoveReferenceOnProcessor(int id);
+
+        void RemoveReferenceOnOs(int id);
     }
 }

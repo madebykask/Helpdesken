@@ -4,16 +4,15 @@ namespace DH.Helpdesk.Dal.Repositories.WorkstationModules
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Input;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Dal.Dal;
 
     public interface IProcessorRepository : INewRepository
     {
-        void Add(NewItem businessModel);
+        void Add(ComputerModule businessModel);
 
-        void Delete(int id);
+        void DeleteById(int id);
 
-        void Update(UpdatedItem businessModel);
+        void Update(ComputerModule businessModel);
 
         List<ItemOverview> FindOverviews();
     }

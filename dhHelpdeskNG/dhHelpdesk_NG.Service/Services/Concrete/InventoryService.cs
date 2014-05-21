@@ -218,12 +218,12 @@
 
         public ComputerEditOptionsResponse GetWorkstationEditOptions(int customerId)
         {
-            var computerModels = this.computerModelRepository.FindOverviews();
-            var computerTypes = this.computerTypeRepository.FindOverviews(customerId);
-            var operatingSystems = this.operatingSystemRepository.FindOverviews();
-            var processors = this.processorRepository.FindOverviews();
-            var rams = this.ramRepository.FindOverviews();
-            var netAdapters = this.nicRepository.FindOverviews();
+            var computerModels = this.GetComputerModels();
+            var computerTypes = this.GetComputerTypes(customerId);
+            var operatingSystems = this.GetOperatingSystems();
+            var processors = this.GetProcessors();
+            var rams = this.GetRams();
+            var netAdapters = this.GetNetAdapters();
             var departments = this.departmentRepository.FindActiveOverviews(customerId);
             var domains = this.domainRepository.FindByCustomerId(customerId);
             var ous = this.organizationUnitRepository.FindActiveAndShowable();
@@ -246,6 +246,42 @@
                 rooms);
 
             return computerResponse;
+        }
+
+        public List<ItemOverview> GetNetAdapters()
+        {
+            var netAdapters = this.nicRepository.FindOverviews();
+            return netAdapters;
+        }
+
+        public List<ItemOverview> GetRams()
+        {
+            var rams = this.ramRepository.FindOverviews();
+            return rams;
+        }
+
+        public List<ItemOverview> GetProcessors()
+        {
+            var processors = this.processorRepository.FindOverviews();
+            return processors;
+        }
+
+        public List<ItemOverview> GetOperatingSystems()
+        {
+            var operatingSystems = this.operatingSystemRepository.FindOverviews();
+            return operatingSystems;
+        }
+
+        public List<ItemOverview> GetComputerTypes(int customerId)
+        {
+            var computerTypes = this.computerTypeRepository.FindOverviews(customerId);
+            return computerTypes;
+        }
+
+        public List<ItemOverview> GetComputerModels()
+        {
+            var computerModels = this.computerModelRepository.FindOverviews();
+            return computerModels;
         }
 
         // todo divide on several parts by tabs, to many queries per request

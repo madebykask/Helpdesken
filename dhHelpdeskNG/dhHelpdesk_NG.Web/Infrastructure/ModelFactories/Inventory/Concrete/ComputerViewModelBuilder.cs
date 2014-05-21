@@ -1,6 +1,5 @@
 namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 {
-    using System;
     using System.Globalization;
 
     using DH.Helpdesk.BusinessData.Models.Inventory;
@@ -213,7 +212,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             var statuses =
                 this.configurableFieldModelBuilder.CreateSelectListField(
                     settings.StateFieldsSettings.StateFieldSetting,
-                    Enum.GetValues(typeof(ComputerStatuses)),
+                    new ComputerStatuses(),
                     model.StateFields.State.ToString(CultureInfo.InvariantCulture));
 
             var stateViewModel = new StateFieldsViewModel(stateFieldsModel, statuses);
@@ -337,7 +336,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             var contractStatuses =
                 this.configurableFieldModelBuilder.CreateSelectListField(
                     settings.StateFieldsSettings.StateFieldSetting,
-                    Enum.GetValues(typeof(ContractStatuses)),
+                    new ContractStatuses(),
                     model.ContractFields.ContractStatusId.ToString());
 
             var contractViewModel = new ContractFieldsViewModel(contractFieldsModel, contractStatuses);
@@ -433,7 +432,12 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 operatingSystemsViewModel,
                 organizationViewModel,
                 processorViewModel,
-                workstationViewModel) { Id = model.Id, CreatedDate = createdDate, ChangedDate = changedDate };
+                workstationViewModel)
+                       {
+                           Id = model.Id, 
+                           CreatedDate = createdDate, 
+                           ChangedDate = changedDate
+                       };
         }
 
         public ComputerViewModel BuildViewModel(
@@ -591,7 +595,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
             var statuses = this.configurableFieldModelBuilder.CreateSelectListField(
                 settings.StateFieldsSettings.StateFieldSetting,
-                Enum.GetValues(typeof(ComputerStatuses)),
+                new ComputerStatuses(),
                 null);
 
             var stateViewModel = new StateFieldsViewModel(stateFieldsModel, statuses);
@@ -695,7 +699,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
             var contractStatuses = this.configurableFieldModelBuilder.CreateSelectListField(
                 settings.StateFieldsSettings.StateFieldSetting,
-                Enum.GetValues(typeof(ContractStatuses)),
+                new ContractStatuses(),
                 null);
 
             var contractViewModel = new ContractFieldsViewModel(contractFieldsModel, contractStatuses);
@@ -779,7 +783,10 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 operatingSystemsViewModel,
                 organizationViewModel,
                 processorViewModel,
-                workstationViewModel) { CustomerId = currentCustomerId };
+                workstationViewModel)
+                       {
+                           CustomerId = currentCustomerId
+                       };
         }
     }
 }

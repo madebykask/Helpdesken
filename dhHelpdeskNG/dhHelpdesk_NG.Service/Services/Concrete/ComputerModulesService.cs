@@ -1,0 +1,235 @@
+﻿namespace DH.Helpdesk.Services.Services.Concrete
+{
+    using System.Collections.Generic;
+
+    using DH.Helpdesk.BusinessData.Models.Inventory.Input;
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Dal.Repositories.Computers;
+    using DH.Helpdesk.Dal.Repositories.Servers;
+    using DH.Helpdesk.Dal.Repositories.WorkstationModules;
+
+    public class ComputerModulesService : IComputerModulesService
+    {
+        private readonly IOperatingSystemRepository operatingSystemRepository;
+
+        private readonly IProcessorRepository processorRepository;
+
+        private readonly IRAMRepository ramRepository;
+
+        private readonly INICRepository nicRepository;
+
+        private readonly IComputerTypeRepository computerTypeRepository;
+
+        private readonly IComputerModelRepository computerModelRepository;
+
+        private readonly IComputerRepository computerRepository;
+
+        private readonly IServerRepository serverRepository;
+
+        private readonly ISystemRepository systemRepository;
+
+        public ComputerModulesService(
+            IOperatingSystemRepository operatingSystemRepository,
+            IProcessorRepository processorRepository,
+            IRAMRepository ramRepository,
+            INICRepository nicRepository,
+            IComputerTypeRepository computerTypeRepository,
+            IComputerModelRepository computerModelRepository,
+            IComputerRepository computerRepository,
+            IServerRepository serverRepository,
+            ISystemRepository systemRepository)
+        {
+            this.operatingSystemRepository = operatingSystemRepository;
+            this.processorRepository = processorRepository;
+            this.ramRepository = ramRepository;
+            this.nicRepository = nicRepository;
+            this.computerTypeRepository = computerTypeRepository;
+            this.computerModelRepository = computerModelRepository;
+            this.computerRepository = computerRepository;
+            this.serverRepository = serverRepository;
+            this.systemRepository = systemRepository;
+        }
+
+        public List<ItemOverview> GetNetAdapters()
+        {
+            var netAdapters = this.nicRepository.FindOverviews();
+            return netAdapters;
+        }
+
+        public List<ItemOverview> GetRams()
+        {
+            var rams = this.ramRepository.FindOverviews();
+            return rams;
+        }
+
+        public List<ItemOverview> GetProcessors()
+        {
+            var processors = this.processorRepository.FindOverviews();
+            return processors;
+        }
+
+        public List<ItemOverview> GetOperatingSystems()
+        {
+            var operatingSystems = this.operatingSystemRepository.FindOverviews();
+            return operatingSystems;
+        }
+
+        public List<ItemOverview> GetComputerTypes(int customerId)
+        {
+            var computerTypes = this.computerTypeRepository.FindOverviews(customerId);
+            return computerTypes;
+        }
+
+        public List<ItemOverview> GetComputerModels()
+        {
+            var computerModels = this.computerModelRepository.FindOverviews();
+            return computerModels;
+        }
+
+        public void UpdateNetAdapter(ComputerModule module)
+        {
+            this.nicRepository.Update(module);
+            this.nicRepository.Commit();
+        }
+
+        public void UpdateRam(ComputerModule module)
+        {
+            this.ramRepository.Update(module);
+            this.ramRepository.Commit();
+        }
+
+        public void UpdateProcessor(ComputerModule module)
+        {
+            this.processorRepository.Update(module);
+            this.processorRepository.Commit();
+        }
+
+        public void UpdateOperatingSystem(ComputerModule module)
+        {
+            this.operatingSystemRepository.Update(module);
+            this.operatingSystemRepository.Commit();
+        }
+
+        public void UpdateComputerType(ComputerModule module)
+        {
+            this.computerTypeRepository.Update(module);
+            this.computerTypeRepository.Commit();
+        }
+
+        public void UpdateComputerModel(ComputerModule module)
+        {
+            this.computerModelRepository.Update(module);
+            this.computerModelRepository.Commit();
+        }
+
+        public void AddNetAdapter(ComputerModule module)
+        {
+            this.nicRepository.Update(module);
+            this.nicRepository.Commit();
+        }
+
+        public void AddRam(ComputerModule module)
+        {
+            this.ramRepository.Update(module);
+            this.ramRepository.Commit();
+        }
+
+        public void AddProcessor(ComputerModule module)
+        {
+            this.processorRepository.Update(module);
+            this.processorRepository.Commit();
+        }
+
+        public void AddOperatingSystem(ComputerModule module)
+        {
+            this.operatingSystemRepository.Update(module);
+            this.operatingSystemRepository.Commit();
+        }
+
+        public void AddComputerType(ComputerModule module)
+        {
+            this.computerTypeRepository.Update(module);
+            this.computerTypeRepository.Commit();
+        }
+
+        public void ComputerModel(ComputerModule module)
+        {
+            this.computerModelRepository.Update(module);
+            this.computerModelRepository.Commit();
+        }
+
+        public void DeleteNetAdapter(int id)
+        {
+            this.computerRepository.RemoveReferenceOnNic(id);
+            this.computerRepository.Commit();
+
+            this.serverRepository.RemoveReferenceOnNic(id);
+            this.serverRepository.Commit();
+
+            this.nicRepository.DeleteById(id);
+            this.nicRepository.Commit();
+        }
+
+        public void DeleteRam(int id)
+        {
+            this.computerRepository.RemoveReferenceOnRam(id);
+            this.computerRepository.Commit();
+
+            this.serverRepository.RemoveReferenceOnRam(id);
+            this.serverRepository.Commit();
+
+            this.ramRepository.DeleteById(id);
+            this.ramRepository.Commit();
+        }
+
+        public void DeleteProcessor(int id)
+        {
+            this.computerRepository.RemoveReferenceOnProcessor(id);
+            this.computerRepository.Commit();
+
+            this.serverRepository.RemoveReferenceOnProcessor(id);
+            this.serverRepository.Commit();
+
+            this.ramRepository.DeleteById(id);
+            this.ramRepository.Commit();
+
+
+            this.processorRepository.DeleteById(id);
+            this.processorRepository.Commit();
+        }
+
+        public void DeleteOperatingSystem(int id)
+        {
+            this.computerRepository.RemoveReferenceOnOs(id);
+            this.computerRepository.Commit();
+
+            this.serverRepository.RemoveReferenceOnOs(id);
+            this.serverRepository.Commit();
+
+            this.systemRepository.RemoveReferenceOnOs(id);
+            this.serverRepository.Commit();
+
+            this.operatingSystemRepository.DeleteById(id);
+            this.operatingSystemRepository.Commit();
+        }
+
+        public void DeleteComputerType(int id)
+        {
+            this.computerRepository.RemoveReferenceOnComputerType(id);
+            this.computerRepository.Commit();
+
+            this.computerTypeRepository.DeleteById(id);
+            this.computerTypeRepository.Commit();
+        }
+
+        public void DeleteComputerModel(int id)
+        {
+            this.computerRepository.RemoveReferenceOnComputerModel(id);
+            this.computerRepository.Commit();
+
+            this.computerModelRepository.DeleteById(id);
+            this.computerModelRepository.Commit();
+        }
+    }
+}

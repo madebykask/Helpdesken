@@ -6,19 +6,18 @@ namespace DH.Helpdesk.Dal.Repositories.WorkstationModules.Concrete
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Input;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain.WorkstationModules;
 
-    public class ProcessorRepository : Repository, IProcessorRepository
+    public class ProcessorRepository : Repository<Processor>, IProcessorRepository
     {
         public ProcessorRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
         }
 
-        public void Add(NewItem businessModel)
+        public void Add(ComputerModule businessModel)
         {
             var entity = new Processor
             {
@@ -27,19 +26,13 @@ namespace DH.Helpdesk.Dal.Repositories.WorkstationModules.Concrete
                 CreatedDate = businessModel.CreatedDate,
                 ChangedDate = businessModel.CreatedDate, // todo
             };
-            this.DbContext.Processors.Add(entity);
+            this.DbSet.Add(entity);
             this.InitializeAfterCommit(businessModel, entity);
         }
 
-        public void Delete(int id)
+        public void Update(ComputerModule businessModel)
         {
-            var entity = this.DbContext.Processors.Find(id);
-            this.DbContext.Processors.Remove(entity);
-        }
-
-        public void Update(UpdatedItem businessModel)
-        {
-            var entity = this.DbContext.Processors.Find(businessModel.Id);
+            var entity = this.DbSet.Find(businessModel.Id);
             entity.Name = businessModel.Name;
             entity.ChangedDate = businessModel.ChangedDate;
         }
@@ -47,7 +40,7 @@ namespace DH.Helpdesk.Dal.Repositories.WorkstationModules.Concrete
         public List<ItemOverview> FindOverviews()
         {
             var anonymus =
-                this.DbContext.Processors
+                this.DbSet
                     .Select(c => new { c.Name, c.Id })
                     .ToList();
 
