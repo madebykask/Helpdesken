@@ -761,40 +761,25 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             return ret;
         }
 
-        private List<CaseSolution> GetCaseTemplates(int customerId, bool checkAuthentication = true)
-        {
-            var ret = new List<CaseSolution>();
-            if (checkAuthentication)
-            {
-                var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
-                //identity = null;
-                if (identity == null)
-                {
-                    return ret;
-                }
-            }
-
-            ret = _caseSolutionService.GetCaseSolutions(customerId).ToList();
-
-            return ret;
-        }
-
         private bool CheckAndUpdateGlobalValues(int customerId)
-        {            
+        {
             if ((SessionFacade.CurrentCustomer != null && SessionFacade.CurrentCustomer.Id != customerId) ||
                 (SessionFacade.CurrentCustomer == null))
             {
                 var newCustomer = _customerService.GetCustomer(customerId);
-                if (newCustomer == null)                
-                    return false;                    
-                                            
-                SessionFacade.CurrentCustomer = newCustomer;                
+                if (newCustomer == null)
+                    return false;
+
+                SessionFacade.CurrentCustomer = newCustomer;
             }
 
             SessionFacade.CurrentLanguageId = SessionFacade.CurrentCustomer.Language_Id;
             ViewBag.PublicCustomerId = customerId;
-            ViewBag.PublicCaseTemplate = GetCaseTemplates(customerId);
-            
+
+            var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+            if (identity != null)
+                ViewBag.PublicCaseTemplate = _caseSolutionService.GetCaseSolutions(customerId).ToList();
+
             return true;
         }
 

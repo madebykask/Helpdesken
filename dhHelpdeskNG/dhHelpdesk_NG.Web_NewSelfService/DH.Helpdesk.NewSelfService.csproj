@@ -179,10 +179,12 @@
     <Compile Include="App_Start\WorkContextModule.cs" />
     <Compile Include="Controllers\CaseController.cs" />
     <Compile Include="Controllers\CaseSearchController.cs" />
+    <Compile Include="Controllers\CoWorkersController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\DocumentsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
+    <Compile Include="Controllers\InfoController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\PrintController.cs" />
     <Compile Include="Controllers\StartController.cs" />
@@ -572,11 +574,12 @@
     <None Include="Properties\PublishProfiles\DH.Helpdesk.SelfService.Release.pubxml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.SelfService.Release_AL.pubxml" />
     <Content Include="Views\Documents\Index.cshtml" />
-    <Content Include="Views\CoWorkers\Index.cshtml" />
     <Content Include="Views\Start\Index.cshtml" />
     <Content Include="Views\Help\Index.cshtml" />
     <Content Include="Views\Help\FindYourWay.cshtml" />
     <Content Include="Views\Help\About.cshtml" />
+    <Content Include="Views\CoWorkers\Index.cshtml" />
+    <Content Include="Views\Info\BulletinBoard.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

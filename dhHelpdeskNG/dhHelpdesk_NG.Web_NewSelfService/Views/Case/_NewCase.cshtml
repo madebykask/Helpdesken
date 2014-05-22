@@ -2,7 +2,9 @@
 @using DH.Helpdesk.Common.Extensions.Integer
 @using DH.Helpdesk.NewSelfService.Infrastructure
 @model DH.Helpdesk.NewSelfService.Models.Case.NewCaseModel
-
+<script type="text/javascript">
+    
+</script>
 <div class="container-fluid dh-container">
     <ul class="nav nav-tabs" id="NewCaseTab">
         <li id="NewCaseT" class="active">
@@ -954,14 +956,6 @@
         }
     });
 
-    $('#divCaseType ul.dropdown-menu li a').click(function (e) {
-        e.preventDefault();
-        var val = $(this).attr('value');
-        $("#divBreadcrumbs_CaseType").text(getBreadcrumbs(this));
-        //$("#NewCase.CaseType_Id").val(val);
-        var ee = document.getElementById("NewCase.CaseType_Id");
-        ee.setAttribute('value', val);
-    });
 
     $('#divProductArea ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();
@@ -1010,22 +1004,32 @@
             });
         });
     }*@
-    //$('#divCaseTypeSetting ul.dropdown-menu li a').click(function (e) {
-    //    e.preventDefault();
-    //    var val = $(this).attr('value');
-    //    $("#divBreadcrumbs_CaseTypeSetting").text(getBreadcrumbs(this));        
 
-    //    var ee = document.getElementById("NewCase_CaseType_Id");
-    //    ee.setAttribute('value', val);        
-    //});
+    $('#divCaseType ul.dropdown-menu li a').click(function (e) {
+        e.preventDefault();        
+        var val = $(this).attr('value');
+        $("#divBreadcrumbs_CaseType").text(getBreadcrumbs(this));
+        //$("#NewCase.CaseType_Id").val(val);
+        var ee = document.getElementById("NewCase.CaseType_Id");        
+        ee.setAttribute('value', val);
+    });
 
-    //$('#divProductAreaSetting ul.dropdown-menu li a').click(function (e) {
-    //    e.preventDefault();
-    //    var val = $(this).attr('value');
-    //    $("#divBreadcrumbs_ProductAreaSetting").text(getBreadcrumbs(this));
-    //    var ee = document.getElementById("NewCase_ProductArea_Id");
-    //    ee.setAttribute('value', val);
-    //});
+    $('#divCaseTypeSetting ul.dropdown-menu li a').click(function (e) {
+        e.preventDefault();
+        var val = $(this).attr('value');
+        $("#divBreadcrumbs_CaseTypeSetting").text(getBreadcrumbs(this));        
+
+        var ee = document.getElementById("NewCase_CaseType_Id");
+        ee.setAttribute('value', val);        
+    });
+
+    $('#divProductAreaSetting ul.dropdown-menu li a').click(function (e) {
+        e.preventDefault();
+        var val = $(this).attr('value');
+        $("#divBreadcrumbs_ProductAreaSetting").text(getBreadcrumbs(this));
+        var ee = document.getElementById("NewCase_ProductArea_Id");
+        ee.setAttribute('value', val);
+    });
 
 
     var validator = $("#NewCaseForm").validate({

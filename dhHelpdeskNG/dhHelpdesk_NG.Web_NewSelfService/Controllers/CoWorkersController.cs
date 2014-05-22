@@ -1,5 +1,4 @@
-﻿using DH.Helpdesk.Domain;
-using DH.Helpdesk.NewSelfService.Infrastructure;
+﻿using DH.Helpdesk.NewSelfService.Infrastructure;
 using DH.Helpdesk.Services.Services;
 using System;
 using System.Collections.Generic;
@@ -9,23 +8,23 @@ using System.Web.Mvc;
 
 namespace DH.Helpdesk.NewSelfService.Controllers
 {
-    public class DocumentsController : BaseController
-    {
+    public class CoWorkersController : BaseController
+    {        
         private readonly ICustomerService _customerService;
         private readonly ICaseSolutionService _caseSolutionService;
- 
-  
-        public DocumentsController(IMasterDataService masterDataService,
-                                  ICustomerService customerService,
-                                  ICaseSolutionService caseSolutionService)
+
+        public CoWorkersController(IMasterDataService masterDataService,
+                                   ICustomerService customerService,
+                                   ICaseSolutionService caseSolutionService
+                                  )
             : base(masterDataService)
         {
-             this._customerService = customerService;
+            this._customerService = customerService;
             this._caseSolutionService = caseSolutionService;
         }
 
         //
-        // GET: /Document/
+        // GET: /CoWorkers/
 
         public ActionResult Index(int customerId)
         {
@@ -34,7 +33,6 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
             return View();
         }
-
 
         private bool CheckAndUpdateGlobalValues(int customerId)
         {
