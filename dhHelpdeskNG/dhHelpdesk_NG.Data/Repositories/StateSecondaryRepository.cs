@@ -1,5 +1,9 @@
 ﻿namespace DH.Helpdesk.Dal.Repositories
 {
+    using System.Globalization;
+    using System.Linq;
+
+    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
 
@@ -9,6 +13,8 @@
         //IList<StateSecondary> GetStateSecondariesSelected(int customerId, string[] reg);
 
         void ResetDefault(int exclude);
+
+        ItemOverview GetDefaultOverview(int customerId);
     }
 
     public class StateSecondaryRepository : RepositoryBase<StateSecondary>, IStateSecondaryRepository
@@ -25,6 +31,21 @@
                 obj.IsDefault = 0;
                 this.Update(obj);
             }
+        }
+
+        public ItemOverview GetDefaultOverview(int customerId)
+        {
+            var entities = this.Table
+                    .Where(g => g.Customer_Id == customerId &&                                
+                                g.IsActive == 1 &&
+                                g.IsDefault == 1)
+                    .Select(g => new { Value = g.Id, g.Name })
+                    .OrderBy(g => g.Name)
+                    .ToList();
+
+            return entities
+                    .Select(g => new ItemOverview(g.Name, g.Value.ToString(CultureInfo.InvariantCulture)))
+                    .FirstOrDefault();
         }
 
         //public IList<StateSecondary> GetStateSecondariesSelected(int customerId, string[] reg)

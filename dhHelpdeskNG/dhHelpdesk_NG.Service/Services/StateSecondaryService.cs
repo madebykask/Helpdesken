@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
@@ -20,6 +21,8 @@
 
         void SaveStateSecondary(StateSecondary stateSecondary, out IDictionary<string, string> errors);
         void Commit();
+
+        ItemOverview GetDefaultOverview(int customerId);
     }
 
     public class StateSecondaryService : IStateSecondaryService
@@ -102,6 +105,11 @@
         public void Commit()
         {
             this._unitOfWork.Commit();
+        }
+
+        public ItemOverview GetDefaultOverview(int customerId)
+        {
+            return this._stateSecondaryRepository.GetDefaultOverview(customerId);
         }
     }
 }

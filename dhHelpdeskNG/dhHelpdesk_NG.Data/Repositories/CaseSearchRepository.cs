@@ -480,6 +480,8 @@
             // ärende progress - iShow i gammal helpdesk
             switch (f.CaseProgress)
             {
+                case "-1":
+                    break;
                 case "1":
                     sb.Append(" and (tblCase.FinishingDate is not null)");
                     break;
@@ -562,6 +564,8 @@
             // ärende progress - iShow i gammal helpdesk
             switch (f.CaseProgress)
             {
+                case "-1":
+                    break;
                 case "1":
                     sb.Append(" and (tblCase.FinishingDate is not null)");
                     break;

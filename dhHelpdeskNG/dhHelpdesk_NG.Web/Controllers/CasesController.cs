@@ -1339,7 +1339,12 @@ namespace DH.Helpdesk.Web.Controllers
                             GlobalEnums.RegistrationSource.Case, 
                             cs,
                             windowsUser);
-                    }                    
+                    }
+                    var defaultStateSecondary = this._stateSecondaryService.GetDefaultOverview(customerId);
+                    if (defaultStateSecondary != null)
+                    {
+                        m.case_.StateSecondary_Id = int.Parse(defaultStateSecondary.Value);                        
+                    }
                 }
                 else
                 {

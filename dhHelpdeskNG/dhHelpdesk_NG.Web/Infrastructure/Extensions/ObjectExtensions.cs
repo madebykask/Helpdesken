@@ -42,7 +42,6 @@
         public static IList<Field> GetFilterForCases(int followUpPermission, IList<Priority> pl, int customerId)
         {
             var ret = new List<Field>();
-
             ret.Add(new Field { Id = 2, StringValue = Translation.Get("Pågående ärenden", Enums.TranslationSource.TextTranslation) });
             ret.Add(new Field { Id = 1, StringValue = Translation.Get("Avslutade ärenden", Enums.TranslationSource.TextTranslation) });
             ret.Add(new Field { Id = 4, StringValue = Translation.Get("Olästa ärenden", Enums.TranslationSource.TextTranslation) });
@@ -68,6 +67,7 @@
                     }
                 }
 
+            ret.Add(new Field { Id = -1, StringValue = Translation.Get("Alla") });
             return ret;
         }
 
