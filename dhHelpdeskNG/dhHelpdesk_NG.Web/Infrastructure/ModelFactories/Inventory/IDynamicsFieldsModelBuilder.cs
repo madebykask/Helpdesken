@@ -12,5 +12,7 @@
             List<InventoryValue> dynamicData,
             List<InventoryDynamicFieldSettingForModelEdit> settings,
             int inventoryId);
+
+        List<DynamicFieldModel> BuildViewModel(List<InventoryDynamicFieldSettingForModelEdit> settings);
     }
 }

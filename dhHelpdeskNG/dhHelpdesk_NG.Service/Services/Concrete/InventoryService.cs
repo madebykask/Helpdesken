@@ -8,20 +8,10 @@
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Printer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Server;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.PrinterSettings;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ServerSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Input;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Printer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Server;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ComputerSettings;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.PrinterSettings;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ServerSettings;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ComputerFieldSettings;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.InventoryFieldSettings;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.PrinterFieldSettings;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ServerFieldSettings;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Computers;
@@ -39,19 +29,9 @@
 
         private readonly IComputerRepository computerRepository;
 
-        private readonly IComputerFieldSettingsRepository computerFieldSettingsRepository;
-
         private readonly IServerRepository serverRepository;
 
-        private readonly IServerFieldSettingsRepository serverFieldSettingsRepository;
-
         private readonly IPrinterRepository printerRepository;
-
-        private readonly IPrinterFieldSettingsRepository printerFieldSettingsRepository;
-
-        private readonly IDepartmentRepository departmentRepository;
-
-        private readonly IComputerTypeRepository computerTypeRepository;
 
         private readonly IInventoryFieldSettingsRepository inventoryFieldSettingsRepository;
 
@@ -61,31 +41,11 @@
 
         private readonly IInventoryTypePropertyValueRepository inventoryTypePropertyValueRepository;
 
-        private readonly IOperatingSystemRepository operatingSystemRepository;
-
-        private readonly IProcessorRepository processorRepository;
-
-        private readonly IRAMRepository ramRepository;
-
-        private readonly INICRepository nicRepository;
-
-        private readonly IDomainRepository domainRepository;
-
-        private readonly IOrganizationUnitRepository organizationUnitRepository;
-
-        private readonly IBuildingRepository buildingRepository;
-
-        private readonly IFloorRepository floorRepository;
-
-        private readonly IRoomRepository roomRepository;
-
         private readonly ISoftwareRepository softwareRepository;
 
         private readonly ILogicalDriveRepository logicalDriveRepository;
 
         private readonly IComputerLogRepository computerLogRepository;
-
-        private readonly IComputerModelRepository computerModelRepository;
 
         private readonly IComputerInventoryRepository computerInventoryRepository;
 
@@ -100,30 +60,15 @@
         public InventoryService(
             IInventoryTypeRepository inventoryTypeRepository,
             IComputerRepository computerRepository,
-            IComputerFieldSettingsRepository computerFieldSettingsRepository,
             IServerRepository serverRepository,
-            IServerFieldSettingsRepository serverFieldSettingsRepository,
             IPrinterRepository printerRepository,
-            IPrinterFieldSettingsRepository printerFieldSettingsRepository,
-            IDepartmentRepository departmentRepository,
-            IComputerTypeRepository computerTypeRepository,
             IInventoryFieldSettingsRepository inventoryFieldSettingsRepository,
             IInventoryDynamicFieldSettingsRepository inventoryDynamicFieldSettingsRepository,
             IInventoryRepository inventoryRepository,
             IInventoryTypePropertyValueRepository inventoryTypePropertyValueRepository,
-            IOperatingSystemRepository operatingSystemRepository,
-            IProcessorRepository processorRepository,
-            IRAMRepository ramRepository,
-            INICRepository nicRepository,
-            IDomainRepository domainRepository,
-            IOrganizationUnitRepository organizationUnitRepository,
-            IBuildingRepository buildingRepository,
-            IFloorRepository floorRepository,
-            IRoomRepository roomRepository,
             ISoftwareRepository softwareRepository,
             ILogicalDriveRepository logicalDriveRepository,
             IComputerLogRepository computerLogRepository,
-            IComputerModelRepository computerModelRepository,
             IComputerInventoryRepository computerInventoryRepository,
             IOperationLogRepository operationLogRepository,
             IServerLogicalDriveRepository serverLogicalDriveRepository,
@@ -132,30 +77,15 @@
         {
             this.inventoryTypeRepository = inventoryTypeRepository;
             this.computerRepository = computerRepository;
-            this.computerFieldSettingsRepository = computerFieldSettingsRepository;
             this.serverRepository = serverRepository;
-            this.serverFieldSettingsRepository = serverFieldSettingsRepository;
             this.printerRepository = printerRepository;
-            this.printerFieldSettingsRepository = printerFieldSettingsRepository;
-            this.departmentRepository = departmentRepository;
-            this.computerTypeRepository = computerTypeRepository;
             this.inventoryFieldSettingsRepository = inventoryFieldSettingsRepository;
             this.inventoryDynamicFieldSettingsRepository = inventoryDynamicFieldSettingsRepository;
             this.inventoryRepository = inventoryRepository;
             this.inventoryTypePropertyValueRepository = inventoryTypePropertyValueRepository;
-            this.operatingSystemRepository = operatingSystemRepository;
-            this.processorRepository = processorRepository;
-            this.ramRepository = ramRepository;
-            this.nicRepository = nicRepository;
-            this.domainRepository = domainRepository;
-            this.organizationUnitRepository = organizationUnitRepository;
-            this.buildingRepository = buildingRepository;
-            this.floorRepository = floorRepository;
-            this.roomRepository = roomRepository;
             this.softwareRepository = softwareRepository;
             this.logicalDriveRepository = logicalDriveRepository;
             this.computerLogRepository = computerLogRepository;
-            this.computerModelRepository = computerModelRepository;
             this.computerInventoryRepository = computerInventoryRepository;
             this.operationLogRepository = operationLogRepository;
             this.serverLogicalDriveRepository = serverLogicalDriveRepository;
@@ -187,15 +117,6 @@
             this.computerLogRepository.Commit();
         }
 
-        public ComputerFiltersResponse GetWorkstationFilters(int customerId)
-        {
-            var computerTypes = this.computerTypeRepository.FindOverviews(customerId);
-
-            var filter = new ComputerFiltersResponse(computerTypes);
-
-            return filter;
-        }
-
         public void AddWorkstation(Computer businessModel)
         {
             throw new NotImplementedException();
@@ -214,74 +135,6 @@
         public Computer GetWorkstation(int id)
         {
             return this.computerRepository.FindById(id);
-        }
-
-        public ComputerEditOptionsResponse GetWorkstationEditOptions(int customerId)
-        {
-            var computerModels = this.GetComputerModels();
-            var computerTypes = this.GetComputerTypes(customerId);
-            var operatingSystems = this.GetOperatingSystems();
-            var processors = this.GetProcessors();
-            var rams = this.GetRams();
-            var netAdapters = this.GetNetAdapters();
-            var departments = this.departmentRepository.FindActiveOverviews(customerId);
-            var domains = this.domainRepository.FindByCustomerId(customerId);
-            var ous = this.organizationUnitRepository.FindActiveAndShowable();
-            var buildings = this.buildingRepository.FindOverviews(customerId);
-            var floors = this.floorRepository.FindOverviews(customerId);
-            var rooms = this.roomRepository.FindOverviews(customerId);
-
-            var computerResponse = new ComputerEditOptionsResponse(
-                computerModels,
-                computerTypes,
-                operatingSystems,
-                processors,
-                rams,
-                netAdapters,
-                departments,
-                domains,
-                ous,
-                buildings,
-                floors,
-                rooms);
-
-            return computerResponse;
-        }
-
-        public List<ItemOverview> GetNetAdapters()
-        {
-            var netAdapters = this.nicRepository.FindOverviews();
-            return netAdapters;
-        }
-
-        public List<ItemOverview> GetRams()
-        {
-            var rams = this.ramRepository.FindOverviews();
-            return rams;
-        }
-
-        public List<ItemOverview> GetProcessors()
-        {
-            var processors = this.processorRepository.FindOverviews();
-            return processors;
-        }
-
-        public List<ItemOverview> GetOperatingSystems()
-        {
-            var operatingSystems = this.operatingSystemRepository.FindOverviews();
-            return operatingSystems;
-        }
-
-        public List<ItemOverview> GetComputerTypes(int customerId)
-        {
-            var computerTypes = this.computerTypeRepository.FindOverviews(customerId);
-            return computerTypes;
-        }
-
-        public List<ItemOverview> GetComputerModels()
-        {
-            var computerModels = this.computerModelRepository.FindOverviews();
-            return computerModels;
         }
 
         // todo divide on several parts by tabs, to many queries per request
@@ -343,37 +196,6 @@
             return computerOverviews;
         }
 
-        public void UpdateWorkstationFieldsSettings(ComputerFieldsSettings businessModel)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ComputerFieldsSettings GetWorkstationFieldSettingsForEdit(int customerId, int languageId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ComputerFieldsSettingsForModelEdit GetWorkstationFieldSettingsForModelEdit(int customerId, int languageId)
-        {
-            var models = this.computerFieldSettingsRepository.GetFieldSettingsForModelEdit(customerId, languageId);
-
-            return models;
-        }
-
-        public ComputerFieldsSettingsOverview GetWorkstationFieldSettingsOverview(int customerId, int languageId)
-        {
-            var models = this.computerFieldSettingsRepository.GetFieldSettingsOverview(customerId, languageId);
-
-            return models;
-        }
-
-        public ComputerFieldsSettingsOverviewForFilter GetWorkstationFieldSettingsOverviewForFilter(int customerId, int languageId)
-        {
-            var models = this.computerFieldSettingsRepository.GetFieldSettingsOverviewForFilter(customerId, languageId);
-
-            return models;
-        }
-
         #endregion
 
         #region Server
@@ -398,26 +220,6 @@
             return this.serverRepository.FindById(id);
         }
 
-        public ServerEditOptionsResponse GetServerEditOptions(int customerId)
-        {
-            var operatingSystems = this.operatingSystemRepository.FindOverviews();
-            var processors = this.processorRepository.FindOverviews();
-            var rams = this.ramRepository.FindOverviews();
-            var netAdapters = this.nicRepository.FindOverviews();
-            var buildings = this.buildingRepository.FindOverviews(customerId);
-            var floors = this.floorRepository.FindOverviews(customerId);
-            var rooms = this.roomRepository.FindOverviews(customerId);
-
-            return new ServerEditOptionsResponse(
-                operatingSystems,
-                processors,
-                rams,
-                netAdapters,
-                buildings,
-                floors,
-                rooms);
-        }
-
         public ServerEditDataResponse GetServerEditAdditionalData(int id, int customerId, int langaugeId)
         {
             var softwaries = this.serverSoftwareRepository.Find(id);
@@ -434,41 +236,9 @@
             return models;
         }
 
-        public void UpdateServerFieldsSettings(ServerFieldsSettings businessModel)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ServerFieldsSettings GetServerFieldSettingsForEdit(int customerId, int languageId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ServerFieldsSettingsForModelEdit GetServerFieldSettingsForModelEdit(int customerId, int languageId)
-        {
-            var models = this.serverFieldSettingsRepository.GetFieldSettingsForModelEdit(customerId, languageId);
-
-            return models;
-        }
-
-        public ServerFieldsSettingsOverview GetServerFieldSettingsOverview(int customerId, int languageId)
-        {
-            var models = this.serverFieldSettingsRepository.GetFieldSettingsOverview(customerId, languageId);
-
-            return models;
-        }
-
         #endregion
 
         #region Printer
-
-        public PrinterFiltersResponse GetPrinterFilters(int customerId)
-        {
-            var departments = this.departmentRepository.FindActiveOverviews(customerId);
-            var filter = new PrinterFiltersResponse(departments);
-
-            return filter;
-        }
 
         public void AddPrinter(Printer businessModel)
         {
@@ -490,16 +260,6 @@
             return this.printerRepository.FindById(id);
         }
 
-        public PrinterEditOptionsResponse GetPrinterEditOptions(int customerId)
-        {
-            var departments = this.departmentRepository.FindActiveOverviews(customerId);
-            var buildings = this.buildingRepository.FindOverviews(customerId);
-            var floors = this.floorRepository.FindOverviews(customerId);
-            var rooms = this.roomRepository.FindOverviews(customerId);
-
-            return new PrinterEditOptionsResponse(departments, buildings, floors, rooms);
-        }
-
         public List<PrinterOverview> GetPrinters(PrintersFilter printersFilter)
         {
             var models = this.printerRepository.FindOverviews(
@@ -509,36 +269,7 @@
 
             return models;
         }
-
-        public void UpdatePrinterFieldsSettings(PrinterFieldsSettings businessModel)
-        {
-            throw new NotImplementedException();
-        }
-
-        public PrinterFieldsSettings GetPrinterFieldSettingsForEdit(int customerId, int languageId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public PrinterFieldsSettingsForModelEdit GetPrinterFieldSettingsForModelEdit(int customerId, int languageId)
-        {
-            return this.printerFieldSettingsRepository.GetFieldSettingsForModelEdit(customerId, languageId);
-        }
-
-        public PrinterFieldsSettingsOverview GetPrinterFieldSettingsOverview(int customerId, int languageId)
-        {
-            var models = this.printerFieldSettingsRepository.GetFieldSettingsOverview(customerId, languageId);
-
-            return models;
-        }
-
-        public PrinterFieldsSettingsOverviewForFilter GetPrinterFieldSettingsOverviewForFilter(int customerId, int languageId)
-        {
-            var models = this.printerFieldSettingsRepository.GetFieldSettingsOverviewForFilter(customerId, languageId);
-
-            return models;
-        }
-
+        
         #endregion
 
         #region DynamicData
@@ -549,46 +280,6 @@
             var dynamicData = this.inventoryTypePropertyValueRepository.GetData(id);
 
             var response = new InventoryOverviewResponse(model, dynamicData);
-            return response;
-        }
-
-        public InventoryEditOptionsResponse GetInventoryInventoryEditOptions(int customerId)
-        {
-            var departments = this.departmentRepository.FindActiveOverviews(customerId);
-            var buildings = this.buildingRepository.FindOverviews(customerId);
-            var floors = this.floorRepository.FindOverviews(customerId);
-            var rooms = this.roomRepository.FindOverviews(customerId);
-
-            return new InventoryEditOptionsResponse(departments, buildings, floors, rooms);
-        }
-
-        public CustomTypeFiltersResponse GetInventoryFilters(int customerId)
-        {
-            var departments = this.departmentRepository.FindActiveOverviews(customerId);
-            var filter = new CustomTypeFiltersResponse(departments);
-
-            return filter;
-        }
-
-        public InventoryFieldSettingsForModelEditResponse GetInventoryFieldSettingsForModelEdit(int inventoryTypeId)
-        {
-            var setings = this.inventoryFieldSettingsRepository.GetFieldSettingsForModelEdit(inventoryTypeId);
-            var dynamicSettings = this.inventoryDynamicFieldSettingsRepository.GetFieldSettingsForModelEdit(
-                inventoryTypeId);
-
-            var response = new InventoryFieldSettingsForModelEditResponse(setings, dynamicSettings);
-
-            return response;
-        }
-
-        public InventoryFieldSettingsOverviewResponse GetInventoryFieldSettingsOverview(int inventoryTypeId)
-        {
-            var setings = this.inventoryFieldSettingsRepository.GetFieldSettingsOverview(inventoryTypeId);
-            var dynamicSettings = this.inventoryDynamicFieldSettingsRepository.GetFieldSettingsOverview(
-                inventoryTypeId);
-
-            var response = new InventoryFieldSettingsOverviewResponse(setings, dynamicSettings);
-
             return response;
         }
 
@@ -609,13 +300,6 @@
             return response;
         }
 
-        public InventoryFieldsSettingsOverviewForFilter GetInventoryFieldSettingsOverviewForFilter(int inventoryTypeId)
-        {
-            var models = this.inventoryFieldSettingsRepository.GetFieldSettingsOverviewForFilter(inventoryTypeId);
-
-            return models;
-        }
-
         public List<TypeGroupModel> GetTypeGroupModels(int inventoryTypeId)
         {
             return this.inventoryTypeGroupRepository.Find(inventoryTypeId);
@@ -624,13 +308,13 @@
         public void ConnectInventoryToComputer(int inventoryId, int computerId)
         {
             this.computerInventoryRepository.Add(new ComputerInventory(computerId, inventoryId));
-            this.computerFieldSettingsRepository.Commit();
+            this.computerInventoryRepository.Commit();
         }
 
         public void RemoveInventoryFromComputer(int inventoryId, int computerId)
         {
             this.computerInventoryRepository.DeleteById(computerId, inventoryId);
-            this.computerFieldSettingsRepository.Commit();
+            this.computerInventoryRepository.Commit();
         }
 
         #endregion

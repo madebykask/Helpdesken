@@ -36,5 +36,26 @@
 
             return data;
         }
+
+        public List<DynamicFieldModel> BuildViewModel(List<InventoryDynamicFieldSettingForModelEdit> settings)
+        {
+            var data = new List<DynamicFieldModel>();
+
+            foreach (var setting in settings)
+            {
+                var dynamicFieldModel = new DynamicFieldModel(
+                    setting.Id,
+                    setting.InventoryTypeGroupId ?? 0,
+                    setting.Caption,
+                    setting.Position,
+                    setting.PropertySize,
+                    setting.FieldType,
+                    null);
+
+                data.Add(dynamicFieldModel);
+            }
+
+            return data;
+        }
     }
 }

@@ -125,37 +125,37 @@
 
         public void AddNetAdapter(ComputerModule module)
         {
-            this.nicRepository.Update(module);
+            this.nicRepository.Add(module);
             this.nicRepository.Commit();
         }
 
         public void AddRam(ComputerModule module)
         {
-            this.ramRepository.Update(module);
+            this.ramRepository.Add(module);
             this.ramRepository.Commit();
         }
 
         public void AddProcessor(ComputerModule module)
         {
-            this.processorRepository.Update(module);
+            this.processorRepository.Add(module);
             this.processorRepository.Commit();
         }
 
         public void AddOperatingSystem(ComputerModule module)
         {
-            this.operatingSystemRepository.Update(module);
+            this.operatingSystemRepository.Add(module);
             this.operatingSystemRepository.Commit();
         }
 
         public void AddComputerType(ComputerModule module)
         {
-            this.computerTypeRepository.Update(module);
+            this.computerTypeRepository.Add(module);
             this.computerTypeRepository.Commit();
         }
 
-        public void ComputerModel(ComputerModule module)
+        public void AddComputerModel(ComputerModule module)
         {
-            this.computerModelRepository.Update(module);
+            this.computerModelRepository.Add(module);
             this.computerModelRepository.Commit();
         }
 

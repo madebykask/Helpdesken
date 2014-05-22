@@ -2,9 +2,9 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 {
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Printer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.PrinterSettings;
-    using DH.Helpdesk.Services.Response.Inventory;
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Printer;
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Shared;
+    using DH.Helpdesk.Web.Models.Inventory.OptionsAggregates;
 
     public class PrinterViewModelBuilder : IPrinterViewModelBuilder
     {
@@ -17,7 +17,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
         public PrinterViewModel BuildViewModel(
             Printer model,
-            PrinterEditOptionsResponse options,
+            PrinterEditOptions options,
             PrinterFieldsSettingsForModelEdit settings)
         {
             var createdDate =
@@ -149,7 +149,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
         }
 
         public PrinterViewModel BuildViewModel(
-            PrinterEditOptionsResponse options,
+            PrinterEditOptions options,
             PrinterFieldsSettingsForModelEdit settings,
             int currentCustomerId)
         {

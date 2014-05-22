@@ -99,6 +99,9 @@
             this.Bind<IEmailService>().To<EmailService>().InSingletonScope();
             this.Bind<IReportsService>().To<ReportsService>();
             this.Bind<IComputerModulesService>().To<ComputerModulesService>();
+            this.Bind<IInventorySettingsService>().To<InventorySettingsService>();
+            this.Bind<IPlaceService>().To<PlaceService>();
+            this.Bind<IOrganizationService>().To<OrganizationService>();
         }
 
         #endregion

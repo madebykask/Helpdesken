@@ -8,8 +8,8 @@
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.InventorySettings;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.Services.Response.Inventory;
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Inventory;
+    using DH.Helpdesk.Web.Models.Inventory.OptionsAggregates;
 
     public class InventoryViewModelBuilder : IInventoryViewModelBuilder
     {
@@ -66,7 +66,7 @@
 
         public InventoryViewModel BuildViewModel(
             Inventory model,
-            InventoryEditOptionsResponse options,
+            InventoryEditOptions options,
             InventoryFieldSettingsForModelEdit settings)
         {
             const string Delimeter = "; ";
@@ -133,7 +133,7 @@
         }
 
         public InventoryViewModel BuildViewModel(
-            InventoryEditOptionsResponse options,
+            InventoryEditOptions options,
             InventoryFieldSettingsForModelEdit settings,
             int inventoryTypeId,
             int currentCustomerId)

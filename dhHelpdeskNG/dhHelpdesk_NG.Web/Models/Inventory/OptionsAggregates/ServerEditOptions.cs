@@ -1,12 +1,12 @@
-namespace DH.Helpdesk.Services.Response.Inventory
+namespace DH.Helpdesk.Web.Models.Inventory.OptionsAggregates
 {
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Shared;
 
-    public class ServerEditOptionsResponse
+    public class ServerEditOptions
     {
-        public ServerEditOptionsResponse(
+        public ServerEditOptions(
             List<ItemOverview> operatingSystems,
             List<ItemOverview> processors,
             List<ItemOverview> rams,

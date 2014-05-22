@@ -7,7 +7,7 @@
 
     public class ComputerModule : BusinessModel
     {
-        public ComputerModule(ModelStates modelState, string name)
+        private ComputerModule(ModelStates modelState, string name)
         {
             this.State = modelState;
             this.Name = name;
@@ -29,7 +29,7 @@
 
         public static ComputerModule CreateUpdated(int id, string name, DateTime changedDate)
         {
-            return new ComputerModule(ModelStates.Created, name) { ChangedDate = changedDate };
+            return new ComputerModule(ModelStates.Updated, name) { Id = id, ChangedDate = changedDate };
         }
     }
 }

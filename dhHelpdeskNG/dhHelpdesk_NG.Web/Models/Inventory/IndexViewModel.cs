@@ -8,18 +8,23 @@
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel;
 
     public class IndexViewModel
     {
         public const string Separator = "Separator";
 
-        private IndexViewModel(int currentMode, List<SelectListItem> propertyTypes, int moduleType, SelectList moduleTypes)
+        private IndexViewModel(
+            int currentMode,
+            List<SelectListItem> propertyTypes,
+            int moduleType,
+            SelectList moduleTypes,
+            string activeTab)
         {
             this.CurrentMode = currentMode;
             this.PropertyTypes = propertyTypes;
             this.ModuleType = moduleType;
             this.ModuleTypes = moduleTypes;
+            this.ActiveTab = activeTab;
         }
 
         public int CurrentMode { get; private set; }
@@ -32,7 +37,9 @@
         [NotNull]
         public SelectList ModuleTypes { get; private set; }
 
-        public static IndexViewModel BuildViewModel(int currentMode, List<ItemOverview> propertyTypes, int moduleType)
+        public string ActiveTab { get; private set; }
+
+        public static IndexViewModel BuildViewModel(int currentMode, List<ItemOverview> propertyTypes, int moduleType, string activeTab)
         {
             var items = new List<SelectListItem>
                             {
@@ -65,7 +72,7 @@
 
             var moduleTypes = EditModel.ModuleTypes.Processor.ToSelectList();
 
-            var viewModel = new IndexViewModel(currentMode, items, moduleType, moduleTypes);
+            var viewModel = new IndexViewModel(currentMode, items, moduleType, moduleTypes, activeTab);
 
             return viewModel;
         }

@@ -1,12 +1,12 @@
-namespace DH.Helpdesk.Services.Response.Inventory
+namespace DH.Helpdesk.Web.Models.Inventory.OptionsAggregates
 {
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Shared;
 
-    public class InventoryEditOptionsResponse
+    public class InventoryEditOptions
     {
-        public InventoryEditOptionsResponse(
+        public InventoryEditOptions(
             List<ItemOverview> departments,
             List<ItemOverview> buildings,
             List<ItemOverview> floors,

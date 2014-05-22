@@ -1,4 +1,4 @@
-﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.ComputerModuleModel
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.ComputerModuleEditModel
 @using (Html.BeginForm("NewComputerModule", "Inventory", FormMethod.Post, new { id = "computerModule_edit_form" }))
 {
     <div class="secnavs fixed">
@@ -22,6 +22,7 @@
             <div class="tab-content">
                 <div class="tab-pane tab-pane-border active" id="fragment-1">
                     @Html.EditorFor(m => m.Name)
+                    @Html.HiddenFor(m => m.ModuleType)
                 </div>
             </div>
         </div>

@@ -2,9 +2,9 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 {
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Server;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ServerSettings;
-    using DH.Helpdesk.Services.Response.Inventory;
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Server;
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Shared;
+    using DH.Helpdesk.Web.Models.Inventory.OptionsAggregates;
 
     public class ServerViewModelBuilder : IServerViewModelBuilder
     {
@@ -17,7 +17,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
         public ServerViewModel BuildViewModel(
             Server model,
-            ServerEditOptionsResponse options,
+            ServerEditOptions options,
             ServerFieldsSettingsForModelEdit settings)
         {
             var createdDate =
@@ -223,7 +223,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
         }
 
         public ServerViewModel BuildViewModel(
-            ServerEditOptionsResponse options,
+            ServerEditOptions options,
             ServerFieldsSettingsForModelEdit settings,
             int currentCustomerId)
         {

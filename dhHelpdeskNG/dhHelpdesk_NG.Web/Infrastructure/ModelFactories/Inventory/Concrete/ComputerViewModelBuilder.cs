@@ -4,9 +4,9 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
     using DH.Helpdesk.BusinessData.Models.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ComputerSettings;
-    using DH.Helpdesk.Services.Response.Inventory;
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Computer;
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Shared;
+    using DH.Helpdesk.Web.Models.Inventory.OptionsAggregates;
 
     using PlaceFieldsModel = DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.PlaceFieldsModel;
     using PlaceFieldsViewModel = DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.PlaceFieldsViewModel;
@@ -22,7 +22,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
         public ComputerViewModel BuildViewModel(
             BusinessData.Models.Inventory.Edit.Computer.Computer model,
-            ComputerEditOptionsResponse options,
+            ComputerEditOptions options,
             ComputerFieldsSettingsForModelEdit settings)
         {
             var createdDate =
@@ -441,7 +441,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
         }
 
         public ComputerViewModel BuildViewModel(
-            ComputerEditOptionsResponse options,
+            ComputerEditOptions options,
             ComputerFieldsSettingsForModelEdit settings,
             int currentCustomerId)
         {

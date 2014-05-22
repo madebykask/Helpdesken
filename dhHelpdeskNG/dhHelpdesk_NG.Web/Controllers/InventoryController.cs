@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
@@ -7,8 +8,10 @@
     using System.Web;
     using System.Web.Mvc;
 
+    using DH.Helpdesk.BusinessData.Models.Inventory.Input;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Services.Services.Concrete;
     using DH.Helpdesk.Web.Enums.Inventory;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
@@ -20,6 +23,7 @@
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Inventory;
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Printer;
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Server;
+    using DH.Helpdesk.Web.Models.Inventory.OptionsAggregates;
     using DH.Helpdesk.Web.Models.Inventory.SearchModels;
 
     using PageName = DH.Helpdesk.Web.Enums.PageName;
@@ -28,15 +32,13 @@
     {
         private readonly IInventoryService inventoryService;
 
+        private readonly IInventorySettingsService inventorySettingsService;
+
         private readonly IComputerModulesService computerModulesService;
 
-        private readonly IRegionService regionService;
+        private readonly IOrganizationService organizationService;
 
-        private readonly IDepartmentService departmentService;
-
-        private readonly IFloorService floorService;
-
-        private readonly IRoomService roomService;
+        private readonly IPlaceService placeService;
 
         private readonly IComputerViewModelBuilder computerViewModelBuilder;
 
@@ -51,11 +53,10 @@
         public InventoryController(
             IMasterDataService masterDataService,
             IInventoryService inventoryService,
+            IInventorySettingsService inventorySettingsService,
             IComputerModulesService computerModulesService,
-            IRegionService regionService,
-            IDepartmentService departmentService,
-            IFloorService floorService,
-            IRoomService roomService,
+            IOrganizationService organizationService,
+            IPlaceService placeService,
             IComputerViewModelBuilder computerViewModelBuilder,
             IServerViewModelBuilder serverViewModelBuilder,
             IPrinterViewModelBuilder printerViewModelBuilder,
@@ -64,11 +65,10 @@
             : base(masterDataService)
         {
             this.inventoryService = inventoryService;
+            this.inventorySettingsService = inventorySettingsService;
             this.computerModulesService = computerModulesService;
-            this.regionService = regionService;
-            this.departmentService = departmentService;
-            this.floorService = floorService;
-            this.roomService = roomService;
+            this.organizationService = organizationService;
+            this.placeService = placeService;
             this.computerViewModelBuilder = computerViewModelBuilder;
             this.serverViewModelBuilder = serverViewModelBuilder;
             this.printerViewModelBuilder = printerViewModelBuilder;
@@ -78,13 +78,16 @@
 
         public ViewResult Index()
         {
+            var activeTab = SessionFacade.FindActiveTab(Web.Enums.Inventory.PageName.InventoryIndex) ?? TabName.Inventories;
+
             var currentModeFilter = SessionFacade.FindPageFilters<IndexModeFilter>(PageName.Inventory) ?? IndexModeFilter.GetDefault();
             var inventoryTypes = this.inventoryService.GetInventoryTypes(SessionFacade.CurrentCustomer.Id);
 
             var viewModel = IndexViewModel.BuildViewModel(
                 currentModeFilter.CurrentMode,
                 inventoryTypes,
-                (int)ModuleTypes.Processor);
+                (int)ModuleTypes.Processor,
+                activeTab);
 
             return this.View(viewModel);
         }
@@ -113,12 +116,12 @@
         {
             SessionFacade.SavePageFilters(PageName.Inventory, new IndexModeFilter((int)CurrentModes.Workstations));
             var currentFilter = SessionFacade.FindPageFilters<WorkstationsSearchFilter>(CurrentModes.Workstations.ToString()) ?? WorkstationsSearchFilter.CreateDefault();
-            var filters = this.inventoryService.GetWorkstationFilters(SessionFacade.CurrentCustomer.Id);
-            var regions = this.regionService.GetOverviews(SessionFacade.CurrentCustomer.Id);
-            var departments = this.departmentService.GetOverviews(
+            var computerTypes = this.computerModulesService.GetComputerTypes(SessionFacade.CurrentCustomer.Id);
+            var regions = this.organizationService.GetRegions(SessionFacade.CurrentCustomer.Id);
+            var departments = this.organizationService.GetDepartments(
                 SessionFacade.CurrentCustomer.Id,
                 currentFilter.RegionId);
-            var settings = this.inventoryService.GetWorkstationFieldSettingsOverviewForFilter(
+            var settings = this.inventorySettingsService.GetWorkstationFieldSettingsOverviewForFilter(
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
 
@@ -126,7 +129,7 @@
                 currentFilter,
                 regions,
                 departments,
-                filters.ComputerTypes,
+                computerTypes,
                 settings);
 
             return this.PartialView("Workstations", viewModel);
@@ -146,12 +149,12 @@
         {
             SessionFacade.SavePageFilters(PageName.Inventory, new IndexModeFilter((int)CurrentModes.Printers));
             var currentFilter = SessionFacade.FindPageFilters<PrinterSearchFilter>(CurrentModes.Printers.ToString()) ?? PrinterSearchFilter.CreateDefault();
-            var filters = this.inventoryService.GetPrinterFilters(SessionFacade.CurrentCustomer.Id);
-            var settings = this.inventoryService.GetPrinterFieldSettingsOverviewForFilter(
+            var departments = this.organizationService.GetDepartments(SessionFacade.CurrentCustomer.Id);
+            var settings = this.inventorySettingsService.GetPrinterFieldSettingsOverviewForFilter(
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
 
-            var viewModel = PrinterSearchViewModel.BuildViewModel(currentFilter, filters, settings);
+            var viewModel = PrinterSearchViewModel.BuildViewModel(currentFilter, departments, settings);
 
             return this.PartialView("Printers", viewModel);
         }
@@ -161,10 +164,10 @@
         {
             SessionFacade.SavePageFilters(PageName.Inventory, new IndexModeFilter(inventoryTypeId));
             var currentFilter = SessionFacade.FindPageFilters<InventorySearchFilter>(inventoryTypeId.ToString(CultureInfo.InvariantCulture)) ?? InventorySearchFilter.CreateDefault(inventoryTypeId);
-            var filters = this.inventoryService.GetInventoryFilters(SessionFacade.CurrentCustomer.Id);
-            var settings = this.inventoryService.GetInventoryFieldSettingsOverviewForFilter(inventoryTypeId);
+            var departments = this.organizationService.GetDepartments(SessionFacade.CurrentCustomer.Id);
+            var settings = this.inventorySettingsService.GetInventoryFieldSettingsOverviewForFilter(inventoryTypeId);
 
-            var viewModel = InventorySearchViewModel.BuildViewModel(currentFilter, filters, settings);
+            var viewModel = InventorySearchViewModel.BuildViewModel(currentFilter, departments, settings);
 
             return this.PartialView("Inventories", viewModel);
         }
@@ -173,7 +176,7 @@
         public PartialViewResult WorkstationsGrid(WorkstationsSearchFilter filter)
         {
             SessionFacade.SavePageFilters(CurrentModes.Workstations.ToString(), filter);
-            var settings = this.inventoryService.GetWorkstationFieldSettingsOverview(
+            var settings = this.inventorySettingsService.GetWorkstationFieldSettingsOverview(
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
             var models = this.inventoryService.GetWorkstations(filter.CreateRequest(SessionFacade.CurrentCustomer.Id));
@@ -187,7 +190,7 @@
         public PartialViewResult ServersGrid(ServerSearchFilter filter)
         {
             SessionFacade.SavePageFilters(CurrentModes.Servers.ToString(), filter);
-            var settings = this.inventoryService.GetServerFieldSettingsOverview(
+            var settings = this.inventorySettingsService.GetServerFieldSettingsOverview(
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
             var models = this.inventoryService.GetServers(filter.CreateRequest(SessionFacade.CurrentCustomer.Id));
@@ -201,7 +204,7 @@
         public PartialViewResult PrintersGrid(PrinterSearchFilter filter)
         {
             SessionFacade.SavePageFilters(CurrentModes.Printers.ToString(), filter);
-            var settings = this.inventoryService.GetPrinterFieldSettingsOverview(
+            var settings = this.inventorySettingsService.GetPrinterFieldSettingsOverview(
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
             var models = this.inventoryService.GetPrinters(filter.CreateRequest(SessionFacade.CurrentCustomer.Id));
@@ -215,7 +218,7 @@
         public PartialViewResult InventoriesGrid(InventorySearchFilter filter)
         {
             SessionFacade.SavePageFilters(filter.InventoryTypeId.ToString(CultureInfo.InvariantCulture), filter);
-            var settings = this.inventoryService.GetInventoryFieldSettingsOverview(filter.InventoryTypeId);
+            var settings = this.inventorySettingsService.GetInventoryFieldSettingsOverview(filter.InventoryTypeId);
             var models = this.inventoryService.GetInventories(filter.CreateRequest());
 
             var viewModel = InventoryGridModel.BuildModel(models, settings, filter.InventoryTypeId);
@@ -259,7 +262,7 @@
                     return this.RedirectToAction("NewPrinter");
 
                 default:
-                    return this.RedirectToAction("NewInventory");
+                    return this.RedirectToAction("NewInventory", new { inventoryTypeId = currentMode });
             }
         }
 
@@ -269,8 +272,8 @@
             var activeTab = SessionFacade.FindActiveTab(Web.Enums.Inventory.PageName.ComputerEdit) ?? TabName.Computer;
 
             var model = this.inventoryService.GetWorkstation(id);
-            var options = this.inventoryService.GetWorkstationEditOptions(SessionFacade.CurrentCustomer.Id);
-            var settings = this.inventoryService.GetWorkstationFieldSettingsForModelEdit(
+            var options = this.GetWorkstationEditOptions(SessionFacade.CurrentCustomer.Id);
+            var settings = this.inventorySettingsService.GetWorkstationFieldSettingsForModelEdit(
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
             var additionalData = this.inventoryService.GetWorkstationEditAdditionalData(
@@ -309,8 +312,8 @@
         public ViewResult EditServer(int id)
         {
             var model = this.inventoryService.GetServer(id);
-            var options = this.inventoryService.GetServerEditOptions(SessionFacade.CurrentCustomer.Id);
-            var settings = this.inventoryService.GetServerFieldSettingsForModelEdit(
+            var options = this.GetServerEditOptions(SessionFacade.CurrentCustomer.Id);
+            var settings = this.inventorySettingsService.GetServerFieldSettingsForModelEdit(
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
 
@@ -341,8 +344,8 @@
         public ViewResult EditPrinter(int id)
         {
             var model = this.inventoryService.GetPrinter(id);
-            var options = this.inventoryService.GetPrinterEditOptions(SessionFacade.CurrentCustomer.Id);
-            var settings = this.inventoryService.GetPrinterFieldSettingsForModelEdit(
+            var options = this.GetPrinterEditOptions(SessionFacade.CurrentCustomer.Id);
+            var settings = this.inventorySettingsService.GetPrinterFieldSettingsForModelEdit(
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
 
@@ -362,8 +365,8 @@
         public ViewResult EditInventory(int id, int inventoryTypeId)
         {
             var model = this.inventoryService.GetInventory(id);
-            var settings = this.inventoryService.GetInventoryFieldSettingsForModelEdit(inventoryTypeId);
-            var options = this.inventoryService.GetInventoryInventoryEditOptions(SessionFacade.CurrentCustomer.Id);
+            var settings = this.inventorySettingsService.GetInventoryFieldSettingsForModelEdit(inventoryTypeId);
+            var options = this.GetInventoryInventoryEditOptions(SessionFacade.CurrentCustomer.Id);
             var typeGroupModels = this.inventoryService.GetTypeGroupModels(inventoryTypeId);
 
             var inventoryViewModel = this.inventoryViewModelBuilder.BuildViewModel(
@@ -421,8 +424,8 @@
         [HttpGet]
         public ViewResult NewWorkstation()
         {
-            var options = this.inventoryService.GetWorkstationEditOptions(SessionFacade.CurrentCustomer.Id);
-            var settings = this.inventoryService.GetWorkstationFieldSettingsForModelEdit(
+            var options = this.GetWorkstationEditOptions(SessionFacade.CurrentCustomer.Id);
+            var settings = this.inventorySettingsService.GetWorkstationFieldSettingsForModelEdit(
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
 
@@ -444,8 +447,8 @@
         [HttpGet]
         public ViewResult NewServer()
         {
-            var options = this.inventoryService.GetServerEditOptions(SessionFacade.CurrentCustomer.Id);
-            var settings = this.inventoryService.GetServerFieldSettingsForModelEdit(
+            var options = this.GetServerEditOptions(SessionFacade.CurrentCustomer.Id);
+            var settings = this.inventorySettingsService.GetServerFieldSettingsForModelEdit(
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
 
@@ -467,8 +470,8 @@
         [HttpGet]
         public ViewResult NewPrinter()
         {
-            var options = this.inventoryService.GetPrinterEditOptions(SessionFacade.CurrentCustomer.Id);
-            var settings = this.inventoryService.GetPrinterFieldSettingsForModelEdit(
+            var options = this.GetPrinterEditOptions(SessionFacade.CurrentCustomer.Id);
+            var settings = this.inventorySettingsService.GetPrinterFieldSettingsForModelEdit(
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
 
@@ -488,9 +491,24 @@
         }
 
         [HttpGet]
-        public ViewResult NewInventory()
+        public ViewResult NewInventory(int inventoryTypeId, string inventoryTypeName)
         {
-            throw new System.NotImplementedException();
+            var settings = this.inventorySettingsService.GetInventoryFieldSettingsForModelEdit(inventoryTypeId);
+            var options = this.GetInventoryInventoryEditOptions(SessionFacade.CurrentCustomer.Id);
+            var typeGroupModels = this.inventoryService.GetTypeGroupModels(inventoryTypeId);
+
+            var inventoryViewModel = this.inventoryViewModelBuilder.BuildViewModel(
+                options,
+                settings.InventoryFieldSettingsForModelEdit,
+                inventoryTypeId,
+                SessionFacade.CurrentCustomer.Id);
+            var dynamicFieldsModel =
+                this.dynamicsFieldsModelBuilder.BuildViewModel(settings.InventoryDynamicFieldSettingForModelEditData);
+            inventoryViewModel.Name = inventoryTypeName;
+
+            var viewModel = new InventoryEditViewModel(inventoryViewModel, dynamicFieldsModel, typeGroupModels);
+
+            return this.View("EditInventory", viewModel);
         }
 
         [HttpPost]
@@ -563,7 +581,7 @@
         [HttpGet]
         public ActionResult SearchDepartmentsByRegionId(int? selected)
         {
-            var models = this.departmentService.GetOverviews(SessionFacade.CurrentCustomer.Id, selected);
+            var models = this.organizationService.GetDepartments(SessionFacade.CurrentCustomer.Id, selected);
 
             var viewModel = DropDownViewModel.BuildViewModel(models);
             viewModel.AllowEmpty = true;
@@ -574,7 +592,7 @@
         [HttpGet]
         public ActionResult SearchFloorsByBuildingId(int? selected)
         {
-            var models = this.floorService.GetOverviews(SessionFacade.CurrentCustomer.Id, selected);
+            var models = this.placeService.GetFloors(SessionFacade.CurrentCustomer.Id, selected);
 
             var viewModel = DropDownViewModel.BuildViewModel(models);
             viewModel.AllowEmpty = true;
@@ -585,7 +603,7 @@
         [HttpGet]
         public ActionResult SearchRoomsByFloorId(int? selected)
         {
-            var models = this.roomService.GetOverviews(SessionFacade.CurrentCustomer.Id, selected);
+            var models = this.placeService.GetRooms(SessionFacade.CurrentCustomer.Id, selected);
 
             var viewModel = DropDownViewModel.BuildViewModel(models);
             viewModel.AllowEmpty = true;
@@ -623,11 +641,174 @@
         }
 
         [HttpGet]
-        public ViewResult EditComputerModule(int id, string name, ModuleTypes currentmode)
+        public ViewResult EditComputerModule(int id, string name, ModuleTypes moduleType)
         {
-            var viewModel = new ComputerModuleModel(id, name, currentmode);
+            var viewModel = new ComputerModuleEditModel(id, name, moduleType);
 
             return this.View("EditComputerModule", viewModel);
         }
+
+        [HttpPost]
+        public RedirectToRouteResult EditComputerModule(ComputerModuleEditModel model)
+        {
+            var businessModel = ComputerModule.CreateUpdated(model.Id, model.Name, DateTime.Now);
+
+            switch (model.ModuleType)
+            {
+                case ModuleTypes.ComputerModel:
+                    this.computerModulesService.UpdateComputerModel(businessModel);
+                    break;
+                case ModuleTypes.ComputerType:
+                    this.computerModulesService.UpdateComputerType(businessModel);
+                    break;
+                case ModuleTypes.Processor:
+                    this.computerModulesService.UpdateProcessor(businessModel);
+                    break;
+                case ModuleTypes.OperatingSystem:
+                    this.computerModulesService.UpdateOperatingSystem(businessModel);
+                    break;
+                case ModuleTypes.Ram:
+                    this.computerModulesService.UpdateRam(businessModel);
+                    break;
+            }
+
+            return this.RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public ViewResult NewComputerModule(ModuleTypes moduleType)
+        {
+            var viewModel = new ComputerModuleEditModel(moduleType);
+
+            return this.View("NewComputerModule", viewModel);
+        }
+
+        [HttpPost]
+        public RedirectToRouteResult NewComputerModule(ComputerModuleEditModel model)
+        {
+            var businessModel = ComputerModule.CreateNew(model.Name, DateTime.Now);
+
+            switch (model.ModuleType)
+            {
+                case ModuleTypes.ComputerModel:
+                    this.computerModulesService.AddComputerModel(businessModel);
+                    break;
+                case ModuleTypes.ComputerType:
+                    this.computerModulesService.AddComputerType(businessModel);
+                    break;
+                case ModuleTypes.Processor:
+                    this.computerModulesService.AddProcessor(businessModel);
+                    break;
+                case ModuleTypes.OperatingSystem:
+                    this.computerModulesService.AddOperatingSystem(businessModel);
+                    break;
+                case ModuleTypes.Ram:
+                    this.computerModulesService.AddRam(businessModel);
+                    break;
+            }
+
+            return this.RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public RedirectToRouteResult DeleteComputerModule(int id, ModuleTypes moduleType)
+        {
+            switch (moduleType)
+            {
+                case ModuleTypes.ComputerModel:
+                    this.computerModulesService.DeleteComputerModel(id);
+                    break;
+                case ModuleTypes.ComputerType:
+                    this.computerModulesService.DeleteComputerType(id);
+                    break;
+                case ModuleTypes.Processor:
+                    this.computerModulesService.DeleteProcessor(id);
+                    break;
+                case ModuleTypes.OperatingSystem:
+                    this.computerModulesService.DeleteOperatingSystem(id);
+                    break;
+                case ModuleTypes.Ram:
+                    this.computerModulesService.DeleteRam(id);
+                    break;
+            }
+
+            return this.RedirectToAction("Index");
+        }
+
+        #region Private
+
+        private ComputerEditOptions GetWorkstationEditOptions(int customerId)
+        {
+            var computerModels = this.computerModulesService.GetComputerModels();
+            var computerTypes = this.computerModulesService.GetComputerTypes(customerId);
+            var operatingSystems = this.computerModulesService.GetOperatingSystems();
+            var processors = this.computerModulesService.GetProcessors();
+            var rams = this.computerModulesService.GetRams();
+            var netAdapters = this.computerModulesService.GetNetAdapters();
+            var departments = this.organizationService.GetDepartments(customerId);
+            var domains = this.organizationService.GetDepartments(customerId);
+            var ous = this.organizationService.GetOrganizationUnits();
+            var buildings = this.placeService.GetBuildings(customerId);
+            var floors = this.placeService.GetFloors(customerId);
+            var rooms = this.placeService.GetRooms(customerId);
+
+            var computerResponse = new ComputerEditOptions(
+                computerModels,
+                computerTypes,
+                operatingSystems,
+                processors,
+                rams,
+                netAdapters,
+                departments,
+                domains,
+                ous,
+                buildings,
+                floors,
+                rooms);
+
+            return computerResponse;
+        }
+
+        private ServerEditOptions GetServerEditOptions(int customerId)
+        {
+            var operatingSystems = this.computerModulesService.GetOperatingSystems();
+            var processors = this.computerModulesService.GetProcessors();
+            var rams = this.computerModulesService.GetRams();
+            var netAdapters = this.computerModulesService.GetNetAdapters();
+            var buildings = this.placeService.GetBuildings(customerId);
+            var floors = this.placeService.GetFloors(customerId);
+            var rooms = this.placeService.GetRooms(customerId);
+
+            return new ServerEditOptions(
+                operatingSystems,
+                processors,
+                rams,
+                netAdapters,
+                buildings,
+                floors,
+                rooms);
+        }
+
+        private PrinterEditOptions GetPrinterEditOptions(int customerId)
+        {
+            var departments = this.organizationService.GetDepartments(customerId);
+            var buildings = this.placeService.GetBuildings(customerId);
+            var floors = this.placeService.GetFloors(customerId);
+            var rooms = this.placeService.GetRooms(customerId);
+
+            return new PrinterEditOptions(departments, buildings, floors, rooms);
+        }
+
+        private InventoryEditOptions GetInventoryInventoryEditOptions(int customerId)
+        {
+            var departments = this.organizationService.GetDepartments(customerId);
+            var buildings = this.placeService.GetBuildings(customerId);
+            var floors = this.placeService.GetFloors(customerId);
+            var rooms = this.placeService.GetRooms(customerId);
+
+            return new InventoryEditOptions(departments, buildings, floors, rooms);
+        }
+
+        #endregion
     }
 }

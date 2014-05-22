@@ -41,7 +41,7 @@
 
         void AddComputerType(ComputerModule module);
 
-        void ComputerModel(ComputerModule module);
+        void AddComputerModel(ComputerModule module);
 
         void DeleteNetAdapter(int id);
 

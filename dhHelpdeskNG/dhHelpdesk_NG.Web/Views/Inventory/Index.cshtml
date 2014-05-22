@@ -1,5 +1,14 @@
-﻿@using DH.Helpdesk.Web.Models.Inventory
+﻿@using DH.Helpdesk.Web.Enums.Inventory
+@using DH.Helpdesk.Web.Models.Inventory
+@using DH.Helpdesk.Web.Models.Inventory.EditModel
 @model IndexViewModel
+@{
+    var inventoryTabClass = Model.ActiveTab == TabName.Inventories ? "active" : null;
+    var masterDataTabClass = Model.ActiveTab == TabName.MasterData ? "active" : null;
+
+    var inventoryButtonStyle = Model.ActiveTab == TabName.Inventories ? "display: inline-block;" : "display: none;";
+    var masterDataButtonStyle = Model.ActiveTab == TabName.MasterData ? "display: inline-block;" : "display: none;";
+}
 <script type="text/javascript">
 
     $(function () {
@@ -10,15 +19,21 @@
                 $('#type_data_container').html(tabMarkup);
                 var url = '@Url.Action("RedirectToNewInventory", "Inventory")';
                 url += '?currentMode=' + selectedValue;
-                $('#link').attr('href', url);
+                $('#new_inventory_button').attr('href', url);
             });
         });
 
         $('#category_dropdown').change(function () {
             var selectedValue = $(this).val();
+            var selectedName = $(this).find(":selected").text();
 
             $.get('@Url.Action("RenderCategoryContent")', { moduleType: selectedValue }, function (tabMarkup) {
                 $('#category_data_container').html(tabMarkup);
+
+                var url = '@Url.Action("NewComputerModule", "Inventory")';
+                url += '?moduleType=' + selectedValue;
+                $('#new_master_data_button').attr('href', url);
+                $('#new_master_data_button').html('Nytt' + selectedName);
             });
 
         });
@@ -26,21 +41,34 @@
         $('select option[value=Separator]').each(function () {
             $(this).attr("disabled", "disabled");
         });
+
+        $('#inventory_tab').click(function () {
+            $.post('@Url.Action("RememberTab", "Service")', { topic: '@PageName.InventoryIndex', tab: '@TabName.Inventories'});
+            $('#new_master_data_button').hide();
+            $('#new_inventory_button').show();
+        });
+
+        $('#master_data_tab').click(function () {
+            $.post('@Url.Action("RememberTab", "Service")', { topic: '@PageName.InventoryIndex', tab: '@TabName.MasterData' });
+            $('#new_inventory_button').hide();
+            $('#new_master_data_button').show();
+        });
     });
 </script>
 
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
-            <li id="menu1">@Html.ActionLink(Translation.Get("Nytt"), "RedirectToNewInventory", new { currentMode = Model.CurrentMode }, new { @class = "btn", id = "link" })</li>
+            <li>@Html.ActionLink(Translation.Get("Nytt"), "RedirectToNewInventory", new { currentMode = Model.CurrentMode }, new { @class = "btn", id = "new_inventory_button", style = inventoryButtonStyle })</li>
+            <li>@Html.ActionLink(Translation.Get( string.Format("Nytt {0} ", ((ModuleTypes)Model.ModuleType).ToString())), "NewComputerModule", new { moduleType = Model.ModuleType }, new { @class = "btn", id = "new_master_data_button", style = masterDataButtonStyle })</li>
         </ul>
     </div>
 </div>
 
 <div class="content">
     <div class="container">
-        <ul class="nav nav-tabs" id="inventory_tab">
-            <li class="active">
+        <ul class="nav nav-tabs"> 
+            <li id ="inventory_tab" class="@inventoryTabClass">
                 <a href="#fragment-1">@Translation.Get("Inventarier")</a>
             </li>
             <li>
@@ -49,12 +77,12 @@
             <li>
                 <a href="#fragment-3">@Translation.Get("Rapporter")</a>
             </li>
-            <li>
+            <li id="master_data_tab" class="@masterDataTabClass">
                 <a href="#fragment-4">@Translation.Get("Grunddata")</a>
             </li>
         </ul>
         <div class="tab-content">
-            <div class="tab-pane tab-pane-border active" id="fragment-1">
+            <div class="tab-pane tab-pane-border @inventoryTabClass" id="fragment-1">
                 <table class="tableform">
                     <tr>
                         <td class="span3">@Translation.Get("Typ")</td>
@@ -69,7 +97,7 @@
             </div>
             <div class="tab-pane tab-pane-border" id="fragment-3">
             </div>
-            <div class="tab-pane tab-pane-border" id="fragment-4">
+            <div class="tab-pane tab-pane-border @masterDataTabClass" id="fragment-4">
                 <table class="tableform">
                     <tr>
                         <td class="span3">@Translation.Get("Kategorier")</td>

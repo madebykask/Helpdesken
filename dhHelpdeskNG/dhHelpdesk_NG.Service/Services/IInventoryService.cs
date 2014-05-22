@@ -6,20 +6,10 @@
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Printer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Server;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.PrinterSettings;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ServerSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Input;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Printer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Server;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ComputerSettings;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.PrinterSettings;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ServerSettings;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ComputerFieldSettings;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.InventoryFieldSettings;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.PrinterFieldSettings;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ServerFieldSettings;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Services.Requests.Inventory;
     using DH.Helpdesk.Services.Response.Inventory;
@@ -36,8 +26,6 @@
 
         void DeleteComputerLog(int id);
 
-        ComputerFiltersResponse GetWorkstationFilters(int customerId);
-
         void AddWorkstation(Computer businessModel);
 
         void DeleteWorkstation(int id);
@@ -46,33 +34,9 @@
 
         Computer GetWorkstation(int id);
 
-        ComputerEditOptionsResponse GetWorkstationEditOptions(int customerId);
-
-        List<ItemOverview> GetComputerModels();
-
-        List<ItemOverview> GetComputerTypes(int customerId);
-
-        List<ItemOverview> GetOperatingSystems();
-
-        List<ItemOverview> GetProcessors();
-
-        List<ItemOverview> GetRams();
-
-        List<ItemOverview> GetNetAdapters();
-
         ComputerEditDataResponse GetWorkstationEditAdditionalData(int id, int customerId, int langaugeId);
 
         List<ComputerOverview> GetWorkstations(ComputersFilter computersFilter);
-
-        void UpdateWorkstationFieldsSettings(ComputerFieldsSettings businessModel);
-
-        ComputerFieldsSettings GetWorkstationFieldSettingsForEdit(int customerId, int languageId);
-
-        ComputerFieldsSettingsForModelEdit GetWorkstationFieldSettingsForModelEdit(int customerId, int languageId);
-
-        ComputerFieldsSettingsOverview GetWorkstationFieldSettingsOverview(int customerId, int languageId);
-
-        ComputerFieldsSettingsOverviewForFilter GetWorkstationFieldSettingsOverviewForFilter(int customerId, int languageId);
 
         #endregion
 
@@ -86,25 +50,13 @@
 
         Server GetServer(int id);
 
-        ServerEditOptionsResponse GetServerEditOptions(int customerId);
-
         ServerEditDataResponse GetServerEditAdditionalData(int id, int customerId, int langaugeId);
 
         List<ServerOverview> GetServers(ServersFilter computersFilter);
 
-        void UpdateServerFieldsSettings(ServerFieldsSettings businessModel);
-
-        ServerFieldsSettings GetServerFieldSettingsForEdit(int customerId, int languageId);
-
-        ServerFieldsSettingsForModelEdit GetServerFieldSettingsForModelEdit(int customerId, int languageId);
-
-        ServerFieldsSettingsOverview GetServerFieldSettingsOverview(int customerId, int languageId);
-
         #endregion
 
         #region Printer
-
-        PrinterFiltersResponse GetPrinterFilters(int customerId);
 
         void AddPrinter(Printer businessModel);
 
@@ -114,19 +66,7 @@
 
         Printer GetPrinter(int id);
 
-        PrinterEditOptionsResponse GetPrinterEditOptions(int customerId);
-
         List<PrinterOverview> GetPrinters(PrintersFilter printersFilter);
-
-        void UpdatePrinterFieldsSettings(PrinterFieldsSettings businessModel);
-
-        PrinterFieldsSettings GetPrinterFieldSettingsForEdit(int customerId, int languageId);
-
-        PrinterFieldsSettingsForModelEdit GetPrinterFieldSettingsForModelEdit(int customerId, int languageId);
-
-        PrinterFieldsSettingsOverview GetPrinterFieldSettingsOverview(int customerId, int languageId);
-
-        PrinterFieldsSettingsOverviewForFilter GetPrinterFieldSettingsOverviewForFilter(int customerId, int languageId);
 
         #endregion
 
@@ -134,17 +74,7 @@
 
         InventoryOverviewResponse GetInventory(int id);
 
-        InventoryEditOptionsResponse GetInventoryInventoryEditOptions(int customerId);
-
-        CustomTypeFiltersResponse GetInventoryFilters(int customerId);
-
         InventoriesOverviewResponse GetInventories(InventoriesFilter filter);
-
-        InventoryFieldSettingsForModelEditResponse GetInventoryFieldSettingsForModelEdit(int inventoryTypeId);
-
-        InventoryFieldSettingsOverviewResponse GetInventoryFieldSettingsOverview(int inventoryTypeId);
-
-        InventoryFieldsSettingsOverviewForFilter GetInventoryFieldSettingsOverviewForFilter(int inventoryTypeId);
 
         List<TypeGroupModel> GetTypeGroupModels(int inventoryTypeId);
 

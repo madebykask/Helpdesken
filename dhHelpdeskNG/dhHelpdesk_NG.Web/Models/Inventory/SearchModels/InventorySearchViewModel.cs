@@ -1,10 +1,11 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory.SearchModels
 {
+    using System.Collections.Generic;
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.InventoryFieldSettings;
+    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Services.Response.Inventory;
 
     public class InventorySearchViewModel
     {
@@ -29,12 +30,12 @@
 
         public static InventorySearchViewModel BuildViewModel(
             InventorySearchFilter currentFilter,
-            CustomTypeFiltersResponse additionalData,
+            List<ItemOverview> departments,
             InventoryFieldsSettingsOverviewForFilter settings)
         {
-            var departments = new SelectList(additionalData.Departments, "Value", "Name");
+            var list = new SelectList(departments, "Value", "Name");
 
-            return new InventorySearchViewModel(departments, currentFilter, settings);
+            return new InventorySearchViewModel(list, currentFilter, settings);
         }
     }
 }

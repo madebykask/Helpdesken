@@ -1,12 +1,12 @@
-namespace DH.Helpdesk.Services.Response.Inventory
+namespace DH.Helpdesk.Web.Models.Inventory.OptionsAggregates
 {
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Shared;
 
-    public class PrinterEditOptionsResponse
+    public class PrinterEditOptions
     {
-        public PrinterEditOptionsResponse(
+        public PrinterEditOptions(
             List<ItemOverview> departments,
             List<ItemOverview> buildings,
             List<ItemOverview> floors,

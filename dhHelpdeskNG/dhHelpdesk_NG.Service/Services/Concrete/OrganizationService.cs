@@ -1,0 +1,57 @@
+﻿namespace DH.Helpdesk.Services.Services.Concrete
+{
+    using System.Collections.Generic;
+
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.Dal.Repositories;
+
+    public class OrganizationService : IOrganizationService
+    {
+        private readonly IRegionRepository regionRepository;
+
+        private readonly IDepartmentRepository departmentRepository;
+
+        private readonly IDomainRepository domainRepository;
+
+        private readonly IOrganizationUnitRepository organizationUnitRepository;
+
+        public OrganizationService(
+            IRegionRepository regionRepository,
+            IDepartmentRepository departmentRepository,
+            IDomainRepository domainRepository,
+            IOrganizationUnitRepository organizationUnitRepository)
+        {
+            this.regionRepository = regionRepository;
+            this.departmentRepository = departmentRepository;
+            this.domainRepository = domainRepository;
+            this.organizationUnitRepository = organizationUnitRepository;
+        }
+
+        public List<ItemOverview> GetRegions(int customerId)
+        {
+            return this.regionRepository.FindByCustomerId(customerId);
+        }
+
+        public List<ItemOverview> GetDepartments(int customerId)
+        {
+            return this.departmentRepository.FindActiveOverviews(customerId);
+        }
+
+        public List<ItemOverview> GetDepartments(int customerId, int? regionId)
+        {
+            return !regionId.HasValue
+                       ? this.GetDepartments(customerId)
+                       : this.departmentRepository.FindActiveByCustomerIdAndRegionId(customerId, regionId.Value);
+        }
+
+        public List<ItemOverview> GetDomains(int customerId)
+        {
+            return this.domainRepository.FindByCustomerId(customerId);
+        }
+
+        public List<ItemOverview> GetOrganizationUnits()
+        {
+            return this.organizationUnitRepository.FindActiveAndShowable();
+        }
+    }
+}

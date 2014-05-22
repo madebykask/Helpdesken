@@ -1,18 +1,18 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory
 {
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.InventorySettings;
-    using DH.Helpdesk.Services.Response.Inventory;
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Inventory;
+    using DH.Helpdesk.Web.Models.Inventory.OptionsAggregates;
 
     public interface IInventoryViewModelBuilder
     {
         InventoryViewModel BuildViewModel(
             BusinessData.Models.Inventory.Edit.Inventory.Inventory model,
-            InventoryEditOptionsResponse options,
+            InventoryEditOptions options,
             InventoryFieldSettingsForModelEdit settings);
 
         InventoryViewModel BuildViewModel(
-            InventoryEditOptionsResponse options,
+            InventoryEditOptions options,
             InventoryFieldSettingsForModelEdit settings,
             int inventoryTypeId,
             int currentCustomerId);

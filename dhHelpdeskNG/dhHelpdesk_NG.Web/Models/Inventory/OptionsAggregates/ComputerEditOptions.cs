@@ -1,13 +1,12 @@
-namespace DH.Helpdesk.Services.Response.Inventory
+namespace DH.Helpdesk.Web.Models.Inventory.OptionsAggregates
 {
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
 
-    public class ComputerEditOptionsResponse
+    public class ComputerEditOptions
     {
-        public ComputerEditOptionsResponse(
+        public ComputerEditOptions(
             List<ItemOverview> computerModels,
             List<ItemOverview> computerTypes,
             List<ItemOverview> operatingSystems,

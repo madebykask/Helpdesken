@@ -3,13 +3,18 @@
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
-    public class ComputerModuleModel
+    public class ComputerModuleEditModel
     {
-        public ComputerModuleModel()
+        public ComputerModuleEditModel()
         {
         }
 
-        public ComputerModuleModel(int id, string name, ModuleTypes moduleType)
+        public ComputerModuleEditModel(ModuleTypes moduleType)
+        {
+            this.ModuleType = moduleType;
+        }
+
+        public ComputerModuleEditModel(int id, string name, ModuleTypes moduleType)
         {
             this.Id = id;
             this.Name = name;
