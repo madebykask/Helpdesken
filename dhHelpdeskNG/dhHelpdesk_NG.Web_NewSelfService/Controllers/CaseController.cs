@@ -62,6 +62,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
         private readonly IUserService _userService;
         private readonly IWorkingGroupService _workingGroupService;
         private readonly IStateSecondaryService _stateSecondaryService;
+        private readonly ICaseSolutionService _caseSolutionService;
 
         
 
@@ -90,7 +91,8 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                               IUserService userService,
                               IWorkingGroupService workingGroupService,
                               IStateSecondaryService stateSecondaryService,
-                              ILogFileService logFileService
+                              ILogFileService logFileService,
+                              ICaseSolutionService caseSolutionService
                              )
                               : base(masterDataService)
         {
@@ -118,6 +120,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             this._workingGroupService = workingGroupService;
             this._userService = userService;
             this._stateSecondaryService = stateSecondaryService;
+            this._caseSolutionService = caseSolutionService;
         }
 
 
@@ -140,6 +143,13 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             else
             {
                 currentCase = this._caseService.GetCaseById(Int32.Parse(id));                                    
+                var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+                
+                if (currentCase == null || identity == null)
+                    return null;
+
+                if (currentCase != null && currentCase.RegUserId != identity.Name.GetUserFromAdPath())
+                    return null;                             
             }
 
             if (currentCase == null)
@@ -153,17 +163,19 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                 customerId = currentCase.Customer_Id;
             }
                                                 
-            var currentCustomer = this._customerService.GetCustomer(customerId);
-            currentCase.Customer = currentCustomer;            
-            SessionFacade.CurrentCustomer = currentCustomer;
-                            
-            var languageId = currentCustomer.Language_Id;
-            SessionFacade.CurrentLanguageId = languageId;            
+            var currentCustomer = this._customerService.GetCustomer(customerId);                        
+            currentCase.Customer = currentCustomer;
+
+            if (!CheckAndUpdateGlobalValues(customerId))
+                return null;
+
+            var languageId = currentCustomer.Language_Id;            
             
             var caseOverview = this.GetCaseOverviewModel(currentCase, languageId);                                    
             caseOverview.ExLogFileGuid = currentCase.CaseGUID.ToString();
             caseOverview.MailGuid = id;
 
+            
             this._userTemporaryFilesStorage.DeleteFiles(caseOverview.ExLogFileGuid);
             this._userTemporaryFilesStorage.DeleteFiles(id);            
             
@@ -186,6 +198,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             return this.View(caseOverview);
         }
 
+        
 
         [HttpGet]
         public ActionResult NewCase(string id, int customerId)
@@ -193,7 +206,9 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             // *** New Case ***
             var currentCustomer = this._customerService.GetCustomer(customerId);
             var languageId = currentCustomer.Language_Id;
-            SessionFacade.CurrentLanguageId = languageId;
+
+            if (!CheckAndUpdateGlobalValues(customerId))
+                return null;
 
             var selfServiceModel = new SelfServiceModel(currentCustomer.Id, languageId);
             selfServiceModel.MailGuid = id;
@@ -225,16 +240,16 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             return this.View("_NewCase",selfServiceModel);
         }
 
-
         [HttpGet]
-        public ActionResult UserCases(string id, int customerId)
+        public ActionResult UserCases(int customerId, string progressId )
         {
             var currentCustomer = this._customerService.GetCustomer(customerId);
             var languageId = currentCustomer.Language_Id;
-            SessionFacade.CurrentLanguageId = languageId;
 
-            var selfServiceModel = new SelfServiceModel(currentCustomer.Id, languageId);
-            selfServiceModel.MailGuid = id;
+            if (!CheckAndUpdateGlobalValues(customerId))
+                return null;
+
+            UserCasesModel model = null;
 
             var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
             if (identity != null)
@@ -242,20 +257,12 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                 string adUser = "DATAHALLAND\\mg"; //identity.Name;
                 string regUser = adUser.GetUserFromAdPath();
                 if (regUser != string.Empty)
-                {
-
-                    selfServiceModel.AUser = regUser;
-                    selfServiceModel.UserCases = this.GetUserCasesModel(currentCustomer.Id, languageId, regUser, "", 20);                                
-                }
-                else
-                {
-                    selfServiceModel.AUser = "";
-                    selfServiceModel.UserCases = null;
-                    //config.ViewCaseMode = 0;
-                }
+                {                    
+                    model = this.GetUserCasesModel(currentCustomer.Id, languageId, regUser, "", 20, progressId);                                
+                }                
             }
 
-            return this.View("_UserCases", selfServiceModel);
+            return this.View("_UserCases", model);
 
         }
 
@@ -584,9 +591,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
         private UserCasesModel GetUserCasesModel(int customerId, int languageId, string curUser,
                                                  string pharasSearch, int maxRecords, string progressId = "",
                                                  string sortBy = "", bool ascending = false)
-        {             
-            if (string.IsNullOrEmpty(progressId)) progressId = "1,2";
-                        
+        {                                                 
             var cusId = customerId;
        
                 
@@ -596,7 +601,8 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                         LanguageId = languageId,
                         UserId = curUser,
                         MaxRecords = maxRecords,
-                        PharasSearch = pharasSearch
+                        PharasSearch = pharasSearch,
+                        ProgressId = progressId
                     };
             
             var srm = new CaseSearchResultModel();
@@ -726,6 +732,42 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             }
             
             return ret;
+        }
+
+        private List<CaseSolution> GetCaseTemplates(int customerId, bool checkAuthentication = true)
+        {
+            var ret = new List<CaseSolution>();
+            if (checkAuthentication)
+            {
+                var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+                if (identity == null)
+                {
+                    return ret;
+                }
+            }
+
+            ret = _caseSolutionService.GetCaseSolutions(customerId).ToList();
+
+            return ret;
+        }
+
+        private bool CheckAndUpdateGlobalValues(int customerId)
+        {            
+            if ((SessionFacade.CurrentCustomer != null && SessionFacade.CurrentCustomer.Id != customerId) ||
+                (SessionFacade.CurrentCustomer == null))
+            {
+                var newCustomer = _customerService.GetCustomer(customerId);
+                if (newCustomer == null)                
+                    return false;                    
+                                            
+                SessionFacade.CurrentCustomer = newCustomer;                
+            }
+
+            SessionFacade.CurrentLanguageId = SessionFacade.CurrentCustomer.Language_Id;
+            ViewBag.PublicCustomerId = customerId;
+            ViewBag.PublicCaseTemplate = GetCaseTemplates(customerId);
+            
+            return true;
         }
 
     }

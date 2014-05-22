@@ -1,5 +1,9 @@
-﻿@using DH.Helpdesk.NewSelfService.Infrastructure
+﻿@using System.Collections.Generic;
+@using DH.Helpdesk.NewSelfService.Infrastructure
 @using DH.Helpdesk.NewSelfService.Infrastructure.Extensions
+@using DH.Helpdesk.NewSelfService.Infrastructure.Common
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -113,6 +117,11 @@
     </script>
 </head> 
 <body>
+     @{                                                        
+         var pCustomerId = ViewBag.PublicCustomerId;
+         var pCaseTemplates = (List<DH.Helpdesk.Domain.CaseSolution>)ViewBag.PublicCaseTemplate;
+      } 
+
     <div class="jumbotron">
         <div class="container-fluid">
             <a href="index.html">
@@ -137,7 +146,7 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li class="blue">
-                        <a href="@Url.Action("Start", "LineManager")">
+                        <a href="@Url.Action("Start", "LineManager",new {customerId = pCustomerId})">
                             <div class="ico-home"></div>
                             Start
                         </a>
@@ -145,51 +154,58 @@
                     <li class="dropdown blue">
                         <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
                             <div class="ico-new"></div>
-                            Order New Service Request
+                            Order New Service Request  
                         </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="@Url.Action("NewCase", "case")">
-                                    <span class="glyphicon glyphicon-plus"></span>New Case<br />
-                                    <span class="small">Explanation and information on what link means and does</span>
-                                </a>
-                                @*<a href="NewHiring.html">
-                                    <span class="glyphicon glyphicon-plus"></span> New Hiring<br />
-                                    <span class="small">Explanation and information on what link means and does</span>
+                                                
+                        @if (pCaseTemplates != null && pCaseTemplates.Count > 0)
+                        {
+                            <ul class="dropdown-menu">
+                                @foreach (var c in pCaseTemplates)
+                                {
+                                <li>
+                                    <a href="@Url.Action("NewCase", "case")">
+                                        <span class="glyphicon glyphicon-plus"></span> @c.Name <br />
+                                        <span class="small">Explanation and information on what link means and does</span>
+                                    </a>
+                                    @*<a href="NewHiring.html">
+                                        <span class="glyphicon glyphicon-plus"></span> New Hiring<br />
+                                        <span class="small">Explanation and information on what link means and does</span>
 
-                                </a>*@
+                                    </a>*@
 
-                            </li>
-                            <li><a href="#"><span class="glyphicon glyphicon-plus"></span>Administration Change<br />
-                                <span class="small">Explanation and information on what link means and does</span></a></li>
-                            <li><a href="#"><span class="glyphicon glyphicon-plus"></span>Termination Administration<br />
-                                <span class="small">Explanation and information on what link means and does</span></a></li>
-                            <li><a href="#"><span class="glyphicon glyphicon-plus"></span>Correction<br />
-                                <span class="small">Explanation and information on what link means and does</span></a></li>
-                            <li><a href="#"><span class="glyphicon glyphicon-plus"></span>Time Data<br />
-                                <span class="small">Explanation and information on what link means and does</span></a></li>
-                        </ul>
+                                </li>
+                                }
+                                @*<li><a href="#"><span class="glyphicon glyphicon-plus"></span>Administration Change<br />
+                                    <span class="small">Explanation and information on what link means and does</span></a></li>
+                                <li><a href="#"><span class="glyphicon glyphicon-plus"></span>Termination Administration<br />
+                                    <span class="small">Explanation and information on what link means and does</span></a></li>
+                                <li><a href="#"><span class="glyphicon glyphicon-plus"></span>Correction<br />
+                                    <span class="small">Explanation and information on what link means and does</span></a></li>
+                                <li><a href="#"><span class="glyphicon glyphicon-plus"></span>Time Data<br />
+                                    <span class="small">Explanation and information on what link means and does</span></a></li>*@
+                            </ul>
+                        }
                     </li>
                     <li class="blue">                        
-                        <a href="Ongoing.html">
+                        <a href="@Url.Action("UserCases", "case", new {customerId = pCustomerId , progressId = "2"})">
                             <div class="ico-ongoing"></div>
                             Ongoing Service Requests
                         </a>
                     </li>
                     <li class="blue">
-                        <a href="#">
+                        <a href="@Url.Action("UserCases", "case", new {customerId = pCustomerId , progressId = "1"})">
                             <div class="ico-finished"></div>
                             Finished Service Requests
                         </a>
                     </li>
                     <li class="blue">
-                        <a href="@Url.Action("Index","Document")">
+                        <a href="@Url.Action("Index", "Document", new { customerId = pCustomerId })">
                             <div class="ico-documents"></div>
                             HR Documents
                         </a>
                     </li>
                     <li class="blue">
-                        <a href="@Url.Action("CoWorkers","LineManager")">
+                        <a href="@Url.Action("CoWorkers", "LineManager", new { customerId = pCustomerId })">
                             <div class="ico-coworkers"></div>
                             My Co-Workers
                         </a>
@@ -200,9 +216,9 @@
                             Need Help?
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="@Url.Action("FindYourWay","LineManager")">Find Your Way</a></li>
-                            <li><a href="@Url.Action("Help","LineManager")">Help</a></li>
-                            <li><a href="@Url.Action("About","LineManager")">About</a></li>
+                            <li><a href="@Url.Action("FindYourWay","LineManager",new {customerId = pCustomerId} )">Find Your Way</a></li>
+                            <li><a href="@Url.Action("Help","LineManager",new {customerId = pCustomerId})">Help</a></li>
+                            <li><a href="@Url.Action("About", "LineManager", new { customerId = pCustomerId })">About</a></li>
                         </ul>
                     </li>
                 </ul>

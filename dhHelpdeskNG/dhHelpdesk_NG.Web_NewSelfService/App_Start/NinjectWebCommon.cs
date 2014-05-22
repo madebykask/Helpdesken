@@ -156,9 +156,11 @@ namespace DH.Helpdesk.NewSelfService
             kernel.Bind<IProjectRepository>().To<ProjectRepository>();
             kernel.Bind<IFinishingCauseRepository>().To<FinishingCauseRepository>();
             kernel.Bind<IFinishingCauseCategoryRepository>().To<FinishingCauseCategoryRepository>();
-            kernel.Bind<IStateSecondaryRepository>().To<StateSecondaryRepository>();            
-             
-                                           
+            kernel.Bind<IStateSecondaryRepository>().To<StateSecondaryRepository>();
+            kernel.Bind<ICaseSolutionRepository>().To<CaseSolutionRepository>();
+            kernel.Bind<ICaseSolutionCategoryRepository>().To<CaseSolutionCategoryRepository>();
+            kernel.Bind<ICaseSolutionScheduleRepository>().To<CaseSolutionScheduleRepository>();            
+                                
                                       
             // Service             
             kernel.Bind<IMasterDataService>().To<MasterDataService>();            
@@ -195,8 +197,9 @@ namespace DH.Helpdesk.NewSelfService
             kernel.Bind<IImpactService>().To<ImpactService>();
             kernel.Bind<IProjectService>().To<ProjectService>();
             kernel.Bind<IFinishingCauseService>().To<FinishingCauseService>();
-            kernel.Bind<IStateSecondaryService>().To<StateSecondaryService>();            
-                             
+            kernel.Bind<IStateSecondaryService>().To<StateSecondaryService>();
+            kernel.Bind<ICaseSolutionService>().To<CaseSolutionService>();            
+                        
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();
         }        

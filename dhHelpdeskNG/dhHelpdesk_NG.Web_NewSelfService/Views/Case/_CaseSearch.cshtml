@@ -1,10 +1,10 @@
-﻿@model  DH.Helpdesk.NewSelfService.Models.NewSelfService.SelfServiceModel  
+﻿@model  DH.Helpdesk.NewSelfService.Models.Case.UserCasesModel  
 
 <form id="frmCaseSearch" name="frmCaseSearch">
-    @Html.HiddenFor(c => Model.UserCases.CustomerId)
-    @Html.HiddenFor(l => Model.UserCases.LanguageId)
-    @Html.HiddenFor(u => Model.UserCases.UserId)
-    @Html.HiddenFor(u => Model.MailGuid)
+    @Html.HiddenFor(c => Model.CustomerId)
+    @Html.HiddenFor(l => Model.LanguageId)
+    @Html.HiddenFor(u => Model.UserId)
+    @*@Html.HiddenFor(u => Model.MailGuid)*@
 
     <input type="hidden" value="@SessionFacade.CurrentCaseSearch.Search.SortBy" id="hidSortBy" name="hidSortBy" />
     <input type="hidden" value="@SessionFacade.CurrentCaseSearch.Search.Ascending" id="hidSortByAsc" name="hidSortByAsc" />
@@ -17,10 +17,10 @@
                         @Translation.Get("Sökord", Enums.TranslationSource.TextTranslation):
                     </label>
                     <div class="col-md-10">
-                        @Html.TextBoxFor(s => Model.UserCases.PharasSearch)
+                        @Html.TextBoxFor(s => Model.PharasSearch)
                     </div>
                 </div>
-                <div class="form-group row">
+                @*<div class="form-group row">
                     <label class="col-md-2">
                         @Translation.Get("Visa", Enums.TranslationSource.TextTranslation):
                     </label>
@@ -31,13 +31,13 @@
                             <option value="1,2">@Translation.Get("Alla ärenden", Enums.TranslationSource.TextTranslation)</option>
                         </select>
                     </div>
-                </div>
+                </div>*@
                 <div class="form-group row">
                     <label class="col-md-2">
                         @Translation.Get("poster i sökresultat", Enums.TranslationSource.TextTranslation):
                     </label>
                     <div class="col-md-10">
-                        @Html.TextBoxFor(s => Model.UserCases.MaxRecords, new { style = "width:50px;" }) <button id="btnSearch" name="btnSearch" class="btn btn-primary">@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)</button>
+                        @Html.TextBoxFor(s => Model.MaxRecords, new { style = "width:50px;" }) <button id="btnSearch" name="btnSearch" class="btn btn-primary">@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)</button>
                     </div>
                 </div>
             </div>

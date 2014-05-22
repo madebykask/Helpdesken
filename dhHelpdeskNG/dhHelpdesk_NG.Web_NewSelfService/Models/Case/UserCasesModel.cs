@@ -21,6 +21,8 @@ namespace DH.Helpdesk.NewSelfService.Models.Case
 
         public int MaxRecords { get; set; }
 
+        public string ProgressId { get; set; }
+        
         public CaseSearchResultModel CaseSearchResult { get; set; }
     }
 
