@@ -64,7 +64,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
         private readonly IStateSecondaryService _stateSecondaryService;
         private readonly ICaseSolutionService _caseSolutionService;
 
-        
+        private const string ParentPathDefaultValue = "--";
 
 
         public CaseController(ICaseService caseService,
@@ -223,7 +223,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                     SessionFacade.CurrentLanguageId,
                     this.Request.GetIpAddress(),
                     GlobalEnums.RegistrationSource.Case,
-                    cs, "DATAHALLAND\\mg");
+                    cs, identity.Name);
 
                 model.NewCase.Customer = currentCustomer;
                 model.CaseMailSetting = new CaseMailSetting(
@@ -233,9 +233,12 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                     cs.DontConnectUserToWorkingGroup);                
             }
 
+            model.CaseTypeParantPath = ParentPathDefaultValue;            
+            model.ProductAreaParantPath = ParentPathDefaultValue;
+
             // Load template info
             if (caseTemplateId != null && caseTemplateId.Value > 0)
-            {
+            {                
                 var caseTemplate = this._caseSolutionService.GetCaseSolution(caseTemplateId.Value);
                 if (caseTemplate != null)
                 {
@@ -261,7 +264,26 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                     //m.CaseLog.TextInternal = caseTemplate.Text_Internal;
                     //m.CaseLog.FinishingType = caseTemplate.FinishingCause_Id;
                 }
+                
+                if (model.NewCase.ProductArea_Id.HasValue)
+                {
+                    var p = this._productAreaService.GetProductArea(model.NewCase.ProductArea_Id.GetValueOrDefault());
+                    if (p != null)
+                    {
+                        model.ProductAreaParantPath = p.getProductAreaParentPath();
+                    }
+                }
+                
+                if (model.NewCase.CaseType_Id > 0)
+                {
+                    var c = this._caseTypeService.GetCaseType(model.NewCase.CaseType_Id);
+                    if (c != null)
+                    {
+                        model.CaseTypeParantPath = c.getCaseTypeParentPath();
+                    }
+                }
             } // Load Case Template
+
             return this.View("_NewCase",model);
         }
 
@@ -279,7 +301,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
             if (identity != null)
             {
-                string adUser = "DATAHALLAND\\mg"; //identity.Name;
+                string adUser = identity.Name; // "DATAHALLAND\\mg"
                 string regUser = adUser.GetUserFromAdPath();
                 if (regUser != string.Empty)
                 {                    
