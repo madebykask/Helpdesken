@@ -5,6 +5,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
+    using System;
 
     public class EmailLogRepository : RepositoryBase<EmailLog>, IEmailLogRepository
     {
@@ -27,6 +28,14 @@ namespace DH.Helpdesk.Dal.Repositories
             return (from l in this.DataContext.EmailLogs                    
                     where l.CaseHistory_Id == caseHistoryId
                     select l).ToList(); 
+
+        }
+
+        public EmailLog  GetEmailLogsByGuid(Guid Id)
+        {
+            return (from l in this.DataContext.EmailLogs
+                    where l.EmailLogGUID == Id
+                    select l).FirstOrDefault();
 
         }
     }

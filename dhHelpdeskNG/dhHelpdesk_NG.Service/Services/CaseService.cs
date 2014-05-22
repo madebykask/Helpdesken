@@ -29,7 +29,8 @@
         Case GetCaseById(int id, bool markCaseAsRead = false);
         Case GetDetachedCaseById(int id);
         Case GetCaseByGUID(Guid GUID);
-        Case GetCaseByEMailGUID(Guid GUID);             
+        Case GetCaseByEMailGUID(Guid GUID);
+        EmailLog GetEMailLogByGUID(Guid GUID);             
         IList<CaseHistory> GetCaseHistoryByCaseId(int caseId);
         int SaveCase(Case cases, CaseLog caseLog, CaseMailSetting caseMailSetting, int userId, string adUser, out IDictionary<string, string> errors);
         int SaveCaseHistory(Case c, int userId, string adUser, out IDictionary<string, string> errors, string defaultUser = "");
@@ -147,6 +148,11 @@
         public Case GetCaseByEMailGUID(Guid GUID)
         {
             return this._caseRepository.GetCaseByEmailGUID(GUID);
+        }
+
+        public EmailLog GetEMailLogByGUID(Guid GUID)
+        {
+            return _emailLogRepository.GetEmailLogsByGuid(GUID);
         }
 
         public Guid Delete(int id)

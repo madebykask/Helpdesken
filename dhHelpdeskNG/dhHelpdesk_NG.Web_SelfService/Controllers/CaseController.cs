@@ -62,6 +62,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         private readonly IUserService _userService;
         private readonly IWorkingGroupService _workingGroupService;
         private readonly IStateSecondaryService _stateSecondaryService;
+        
 
         
 
@@ -416,6 +417,9 @@ namespace DH.Helpdesk.SelfService.Controllers
             // may be need change PersonsEmail
             int caseHistoryId = this._caseService.SaveCaseHistory(currentCase, 0, currentCase.PersonsEmail, out errors, currentCase.RegUserId); 
 
+            var guid = new Guid(curGUID);
+            var emailLog = _caseService.GetEMailLogByGUID(guid);
+
             // save log
             var caseLog = new CaseLog
                               {
@@ -430,7 +434,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                                   EquipmentPrice = 0,
                                   Price = 0,
                                   Charge = false,
-                                  RegUser = currentCase.PersonsEmail,
+                                  RegUser = emailLog.EmailAddress,
                                   SendMailAboutCaseToNotifier = true,
                                   SendMailAboutLog = true
                               };
