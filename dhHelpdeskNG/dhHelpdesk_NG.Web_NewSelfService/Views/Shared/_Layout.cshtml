@@ -146,7 +146,7 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li class="blue">
-                        <a href="@Url.Action("Start", "LineManager",new {customerId = pCustomerId})">
+                        <a href="@Url.Action("Index", "Start",new {customerId = pCustomerId})">
                             <div class="ico-home"></div>
                             Start
                         </a>
@@ -210,7 +210,7 @@
                         </a>
                     </li>
                     <li class="blue">
-                        <a href="@Url.Action("CoWorkers", "LineManager", new { customerId = pCustomerId })">
+                        <a href="@Url.Action("Index", "CoWorkers", new { customerId = pCustomerId })">
                             <div class="ico-coworkers"></div>
                             My Co-Workers
                         </a>
@@ -221,9 +221,9 @@
                             Need Help?
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="@Url.Action("FindYourWay","LineManager",new {customerId = pCustomerId} )">Find Your Way</a></li>
-                            <li><a href="@Url.Action("Help","LineManager",new {customerId = pCustomerId})">Help</a></li>
-                            <li><a href="@Url.Action("About", "LineManager", new { customerId = pCustomerId })">About</a></li>
+                            <li><a href="@Url.Action("FindYourWay","Help",new {customerId = pCustomerId} )">Find Your Way</a></li>
+                            <li><a href="@Url.Action("Index","Help",new {customerId = pCustomerId})">Help</a></li>
+                            <li><a href="@Url.Action("About", "Help", new { customerId = pCustomerId })">About</a></li>
                         </ul>
                     </li>
                 </ul>

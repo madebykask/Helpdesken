@@ -180,11 +180,12 @@
     <Compile Include="Controllers\CaseController.cs" />
     <Compile Include="Controllers\CaseSearchController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
-    <Compile Include="Controllers\DocumentController.cs" />
+    <Compile Include="Controllers\DocumentsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\LineManagerController.cs" />
+    <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\PrintController.cs" />
+    <Compile Include="Controllers\StartController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -570,12 +571,12 @@
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.SelfService.Release.pubxml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.SelfService.Release_AL.pubxml" />
-    <Content Include="Views\LineManager\Start.cshtml" />
-    <Content Include="Views\Document\Index.cshtml" />
-    <Content Include="Views\LineManager\CoWorkers.cshtml" />
-    <Content Include="Views\LineManager\Help.cshtml" />
-    <Content Include="Views\LineManager\FindYourWay.cshtml" />
-    <Content Include="Views\LineManager\About.cshtml" />
+    <Content Include="Views\Documents\Index.cshtml" />
+    <Content Include="Views\CoWorkers\Index.cshtml" />
+    <Content Include="Views\Start\Index.cshtml" />
+    <Content Include="Views\Help\Index.cshtml" />
+    <Content Include="Views\Help\FindYourWay.cshtml" />
+    <Content Include="Views\Help\About.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

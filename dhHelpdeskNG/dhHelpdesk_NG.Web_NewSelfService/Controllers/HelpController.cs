@@ -9,12 +9,12 @@ using System.Web.Mvc;
 
 namespace DH.Helpdesk.NewSelfService.Controllers
 {
-    public class LineManagerController : BaseController
+    public class HelpController : BaseController
     {
         private readonly ICustomerService _customerService;
         private readonly ICaseSolutionService _caseSolutionService;
  
-        public LineManagerController(IMasterDataService masterDataService,
+        public HelpController(IMasterDataService masterDataService,
                                      ICustomerService customerService,
                                      ICaseSolutionService caseSolutionService
                                     )
@@ -24,41 +24,14 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             this._caseSolutionService = caseSolutionService;
         }
 
-        //
-        // GET: /LineManager/
-
         public ActionResult Index(int customerId)
         {
             if (!CheckAndUpdateGlobalValues(customerId))
                 return null;
 
-            return RedirectToAction("Start", new { customerId });
-        }
-
-        public ActionResult Start(int customerId)
-        {
-            if (!CheckAndUpdateGlobalValues(customerId))
-                return null;
-            
             return View();
         }
-
-        public ActionResult CoWorkers(int customerId)
-        {
-            if (!CheckAndUpdateGlobalValues(customerId))
-                return null;
-
-            return View();
-        }
-
-        public ActionResult Help(int customerId)
-        {
-            if (!CheckAndUpdateGlobalValues(customerId))
-                return null;
-
-            return View();
-        }
-
+       
         public ActionResult FindYourWay(int customerId)
         {
             if (!CheckAndUpdateGlobalValues(customerId))
@@ -73,24 +46,6 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                 return null;
 
             return View();
-        }       
-
-        private List<CaseSolution> GetCaseTemplates(int customerId, bool checkAuthentication = true)
-        {
-            var ret = new List<CaseSolution>();
-            if (checkAuthentication)
-            {
-                var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
-                //identity = null;
-                if (identity == null)
-                {
-                    return ret;
-                }
-            }
-
-            ret = _caseSolutionService.GetCaseSolutions(customerId).ToList();
-
-            return ret;
         }
 
         private bool CheckAndUpdateGlobalValues(int customerId)
@@ -107,9 +62,13 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
             SessionFacade.CurrentLanguageId = SessionFacade.CurrentCustomer.Language_Id;
             ViewBag.PublicCustomerId = customerId;
-            ViewBag.PublicCaseTemplate = GetCaseTemplates(customerId);
+
+            var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+            if (identity != null)
+                ViewBag.PublicCaseTemplate = _caseSolutionService.GetCaseSolutions(customerId).ToList();
 
             return true;
         }
+       
     }
 }

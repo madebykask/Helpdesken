@@ -9,23 +9,22 @@ using System.Web.Mvc;
 
 namespace DH.Helpdesk.NewSelfService.Controllers
 {
-    public class DocumentController : BaseController
+    public class StartController : BaseController
     {
         private readonly ICustomerService _customerService;
         private readonly ICaseSolutionService _caseSolutionService;
- 
-  
-        public DocumentController(IMasterDataService masterDataService,
-                                  ICustomerService customerService,
-                                  ICaseSolutionService caseSolutionService)
-            : base(masterDataService)
+
+        public StartController(IMasterDataService masterDataService,
+                                     ICustomerService customerService,
+                                     ICaseSolutionService caseSolutionService
+                             ):base(masterDataService)
         {
-             this._customerService = customerService;
+            this._customerService = customerService;
             this._caseSolutionService = caseSolutionService;
         }
 
         //
-        // GET: /Document/
+        // GET: /Start/
 
         public ActionResult Index(int customerId)
         {
@@ -33,25 +32,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                 return null;
 
             return View();
-        }
-
-        private List<CaseSolution> GetCaseTemplates(int customerId, bool checkAuthentication = true)
-        {
-            var ret = new List<CaseSolution>();
-            if (checkAuthentication)
-            {
-                var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
-                //identity = null;
-                if (identity == null)
-                {
-                    return ret;
-                }
-            }
-
-            ret = _caseSolutionService.GetCaseSolutions(customerId).ToList();
-
-            return ret;
-        }
+        }        
 
         private bool CheckAndUpdateGlobalValues(int customerId)
         {
@@ -67,9 +48,13 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
             SessionFacade.CurrentLanguageId = SessionFacade.CurrentCustomer.Language_Id;
             ViewBag.PublicCustomerId = customerId;
-            ViewBag.PublicCaseTemplate = GetCaseTemplates(customerId);
+
+            var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+            if (identity != null)
+                ViewBag.PublicCaseTemplate = _caseSolutionService.GetCaseSolutions(customerId).ToList();
 
             return true;
-        }        
+        }
+
     }
 }
