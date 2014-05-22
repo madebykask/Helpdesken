@@ -521,23 +521,23 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             
             try
             {
-                var customerId = frm.ReturnFormValue("UserCases.customerId").convertStringToInt();
-                var languageId = frm.ReturnFormValue("UserCases.languageId").convertStringToInt();
-                var userId = frm.ReturnFormValue("UserCases.userId");
-                var pharasSearch = frm.ReturnFormValue("UserCases.pharasSearch");
-                var maxRecords = frm.ReturnFormValue("UserCases.maxRecords").convertStringToInt();
+                var customerId = frm.ReturnFormValue("customerId").convertStringToInt();
+                var languageId = frm.ReturnFormValue("languageId").convertStringToInt();
+                var userId = frm.ReturnFormValue("userId");
+                var pharasSearch = frm.ReturnFormValue("pharasSearch");
+                var maxRecords = frm.ReturnFormValue("maxRecords").convertStringToInt();
                 var progressId = frm.ReturnFormValue("progressId");
                 var sortBy = frm.ReturnFormValue("hidSortBy");
                 var ascending = frm.ReturnFormValue("hidSortByAsc").convertStringToBool();
                 var id = frm.ReturnFormValue("MailGuid");
 
-                var model = new SelfServiceModel(customerId, languageId);
-                model.MailGuid = id;
-                var userCases = GetUserCasesModel(customerId, languageId, userId,
+                if (!CheckAndUpdateGlobalValues(customerId))
+                    return null;
+         
+                var model = GetUserCasesModel(customerId, languageId, userId,
                                               pharasSearch, maxRecords, progressId,
-                                              sortBy, ascending);
-                model.UserCases = userCases;
-
+                                              sortBy, ascending);                
+                
                 return this.PartialView("_UserCases", model);
             }
             catch (Exception e)

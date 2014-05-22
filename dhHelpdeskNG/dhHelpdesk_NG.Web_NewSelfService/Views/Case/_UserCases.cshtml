@@ -1,10 +1,14 @@
 ﻿@model DH.Helpdesk.NewSelfService.Models.Case.UserCasesModel         
 
-<div class="container-fluid dh-container">
+<div id="search_result2" class="container-fluid dh-container">
+<form id="frmUserCases" name="frmUserCases">
+    @Html.HiddenFor(c => Model.CustomerId)
+    @Html.HiddenFor(l => Model.LanguageId)
+    @Html.HiddenFor(u => Model.UserId)
+    @Html.HiddenFor(p => Model.ProgressId)
     <ul class="nav nav-tabs" id="NewCaseTab">
         <li id="NewCaseT" class="active">
             <a href="#fragment-1"> 
-
                 @{
                     string tabTitle = "";
                     if (Model != null)
@@ -36,71 +40,72 @@
                 <div class="row" id="search_result">
                     @*@Html.HiddenFor(m => Model.MailGuid)*@
                     <div class="col-md-12 table-responsive">
-            <div class="span100">
-                        <table class="table table-striped table-bordered table-hover">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    @if (Model.CaseSearchResult.CaseSettings != null)
-                                    {
-                                        foreach (var c in Model.CaseSearchResult.CaseSettings)
+                        <div class="span100">
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        @if (Model.CaseSearchResult.CaseSettings != null)
                                         {
-                                            if (c.Line == 1)
+                                            foreach (var c in Model.CaseSearchResult.CaseSettings)
                                             {
-                                        <th onclick=" sortCases('@c.Name') " class="thpointer" >
-                                            @Translation.Get(c.Name, Enums.TranslationSource.CaseTranslation, c.Customer_Id)  <i class="@c.Name.SetCaseSortIcon()"></i>
-                                        </th>
+                                                if (c.Line == 1)
+                                                {
+                                            <th onclick=" sortCases('@c.Name') " class="thpointer" >
+                                                @Translation.Get(c.Name, Enums.TranslationSource.CaseTranslation, c.Customer_Id)  <i class="@c.Name.SetCaseSortIcon()"></i>
+                                            </th>
                                             }
                                         }
                                     }
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (Model.CaseSearchResult.Cases.Any())
-                                {
-                                    foreach (var r in Model.CaseSearchResult.Cases)
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.CaseSearchResult.Cases.Any())
                                     {
-                                    <tr>
-                                        <!--fasta kolumner -->
-                                        <td>
-                                            <span class="glyphicon glyphicon-file"  title="@r.CaseIcon.CaseIconTitle()"></span>
-                                        </td>
-                                        <!-- valbara kolumner -->
-                                        @foreach (var c in r.Columns)
+                                        foreach (var r in Model.CaseSearchResult.Cases)
                                         {
+                                        <tr>
+                                            <!--fasta kolumner -->
                                             <td>
-                                                @if (c.FieldType == 1)
-                                                {
-                                                    <!-- date -->
-                                                    <a href="@Url.Action("Index", "case", new { id = r.Id })">@Html.DisplayFor(m => c.DateTimeValue, "Date")</a>
-                                                }
-                                                else if (c.FieldType == 2)
-                                                {
-                                                    <!-- dateTime -->
-                                                    <a href="@Url.Action("Index", "case", new { id = r.Id })">@Html.DisplayFor(m => c.DateTimeValue, "DateAndTime")</a>
-                                                }
-                                                else
-                                                {
-                                                    if (c.TranslateThis)
+                                                <span class="glyphicon glyphicon-file"  title="@r.CaseIcon.CaseIconTitle()"></span>
+                                            </td>
+                                            <!-- valbara kolumner -->
+                                            @foreach (var c in r.Columns)
+                                            {
+                                                <td>
+                                                    @if (c.FieldType == 1)
                                                     {
-                                                    <!-- string -->
-                                                    <a href="@Url.Action("Index", "case", new { id = r.Id })">@Translation.Get(c.StringValue, Enums.TranslationSource.TextTranslation)</a>
+                                                        <!-- date -->
+                                                        <a href="@Url.Action("Index", "case", new { id = r.Id })">@Html.DisplayFor(m => c.DateTimeValue, "Date")</a>
+                                                }
+                                                    else if (c.FieldType == 2)
+                                                    {
+                                                        <!-- dateTime -->
+                                                        <a href="@Url.Action("Index", "case", new { id = r.Id })">@Html.DisplayFor(m => c.DateTimeValue, "DateAndTime")</a>
+                                                }
+                                                    else
+                                                    {
+                                                        if (c.TranslateThis)
+                                                        {
+                                                        <!-- string -->
+                                                        <a href="@Url.Action("Index", "case", new { id = r.Id })">@Translation.Get(c.StringValue, Enums.TranslationSource.TextTranslation)</a>
                                                     }
                                                     else
                                                     {
-                                                    <a href="@Url.Action("Index", "case", new { id = r.Id })">@c.StringValue</a>
+                                                        <a href="@Url.Action("Index", "case", new { id = r.Id })">@c.StringValue</a>
                                                     }
                                                 }
-                                            </td>
+                                                </td>
                                         }
-                                    </tr>
+                                        </tr>
                                     }
                                 }
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div>    
+</form>
     </div>
-</div>

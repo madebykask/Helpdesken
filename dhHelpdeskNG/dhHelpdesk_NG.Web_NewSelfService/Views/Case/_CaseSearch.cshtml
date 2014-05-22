@@ -1,11 +1,6 @@
 ﻿@model  DH.Helpdesk.NewSelfService.Models.Case.UserCasesModel  
 
-<form id="frmCaseSearch" name="frmCaseSearch">
-    @Html.HiddenFor(c => Model.CustomerId)
-    @Html.HiddenFor(l => Model.LanguageId)
-    @Html.HiddenFor(u => Model.UserId)
-    @*@Html.HiddenFor(u => Model.MailGuid)*@
-
+<form id="frmCaseSearch" name="frmCaseSearch">   
     <input type="hidden" value="@SessionFacade.CurrentCaseSearch.Search.SortBy" id="hidSortBy" name="hidSortBy" />
     <input type="hidden" value="@SessionFacade.CurrentCaseSearch.Search.Ascending" id="hidSortByAsc" name="hidSortByAsc" />
 
@@ -51,9 +46,9 @@
         search();
     });
 
-    function search() {
-        $.post('@Url.Action("SeachUserCase", "Case")', $("#frmCaseSearch").serialize(), function (result) {
-            $('#search_result').html(result);
+    function search() {        
+        $.post('@Url.Action("SeachUserCase", "Case")', $("#frmUserCases").serialize(), function (result) {
+            $('#search_result2').html(result);
         });
     }
 
