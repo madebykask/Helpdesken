@@ -199,9 +199,8 @@ namespace DH.Helpdesk.NewSelfService.Controllers
         }
 
         
-
         [HttpGet]
-        public ActionResult NewCase(string id, int customerId)
+        public ActionResult NewCase(int customerId, int? caseTemplateId)
         {
             // *** New Case ***
             var currentCustomer = this._customerService.GetCustomer(customerId);
@@ -209,10 +208,8 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
             if (!CheckAndUpdateGlobalValues(customerId))
                 return null;
-
-            var selfServiceModel = new SelfServiceModel(currentCustomer.Id, languageId);
-            selfServiceModel.MailGuid = id;
-            var newCaseModel = this.GetNewCaseModel(currentCustomer.Id, languageId);
+            
+            var model = this.GetNewCaseModel(currentCustomer.Id, languageId);
 
             var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
             if (identity != null)
@@ -220,7 +217,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                 
                 var cs = this._settingService.GetCustomerSetting(currentCustomer.Id);
 
-                newCaseModel.NewCase = this._caseService.InitCase(
+                model.NewCase = this._caseService.InitCase(
                     currentCustomer.Id,
                     0,
                     SessionFacade.CurrentLanguageId,
@@ -228,16 +225,44 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                     GlobalEnums.RegistrationSource.Case,
                     cs, "DATAHALLAND\\mg");
 
-                newCaseModel.NewCase.Customer = currentCustomer;
-                newCaseModel.CaseMailSetting = new CaseMailSetting(
+                model.NewCase.Customer = currentCustomer;
+                model.CaseMailSetting = new CaseMailSetting(
                     currentCustomer.NewCaseEmailList,
                     currentCustomer.HelpdeskEmail,
                     ConfigurationManager.AppSettings["dh_helpdeskaddress"].ToString(),
-                    cs.DontConnectUserToWorkingGroup);
-                selfServiceModel.NewCase = newCaseModel;
+                    cs.DontConnectUserToWorkingGroup);                
             }
 
-            return this.View("_NewCase",selfServiceModel);
+            // Load template info
+            if (caseTemplateId != null && caseTemplateId.Value > 0)
+            {
+                var caseTemplate = this._caseSolutionService.GetCaseSolution(caseTemplateId.Value);
+                if (caseTemplate != null)
+                {
+                    if (caseTemplate.CaseType_Id != null)
+                    {
+                        model.NewCase.CaseType_Id = caseTemplate.CaseType_Id.Value;
+                    }
+
+                    if (caseTemplate.PerformerUser_Id != null)
+                    {
+                        model.NewCase.Performer_User_Id = caseTemplate.PerformerUser_Id.Value;
+                    }
+
+                    model.NewCase.ReportedBy = caseTemplate.ReportedBy;
+                    model.NewCase.Department_Id = caseTemplate.Department_Id;
+                    model.NewCase.ProductArea_Id = caseTemplate.ProductArea_Id;
+                    model.NewCase.Caption = caseTemplate.Caption;
+                    model.NewCase.Description = caseTemplate.Description;
+                    model.NewCase.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
+                    model.NewCase.Priority_Id = caseTemplate.Priority_Id;
+                    model.NewCase.Project_Id = caseTemplate.Project_Id;
+                    //m.CaseLog.TextExternal = caseTemplate.Text_External;
+                    //m.CaseLog.TextInternal = caseTemplate.Text_Internal;
+                    //m.CaseLog.FinishingType = caseTemplate.FinishingCause_Id;
+                }
+            } // Load Case Template
+            return this.View("_NewCase",model);
         }
 
         [HttpGet]

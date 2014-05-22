@@ -162,21 +162,26 @@
                             <ul class="dropdown-menu">
                                 @foreach (var c in pCaseTemplates)
                                 {
-                                <li>
-                                    <a href="@Url.Action("NewCase", "case")">
-                                        <span class="glyphicon glyphicon-plus"></span> @c.Name <br />
-                                        <span class="small">Explanation and information on what link means and does</span>
-                                    </a>
-                                    @*<a href="NewHiring.html">
-                                        <span class="glyphicon glyphicon-plus"></span> New Hiring<br />
-                                        <span class="small">Explanation and information on what link means and does</span>
-
-                                    </a>*@
-
-                                </li>
+                                    <li>
+                                        <a href="@Url.Action("NewCase", "case", new { customerId = pCustomerId, caseTemplateId = c.Id})">
+                                            <span class="glyphicon glyphicon-plus"></span> @c.Name <br />
+                                            <span class="small"> @c.Description </span>
+                                        </a>                                   
+                                    </li>
                                 }
-                                @*<li><a href="#"><span class="glyphicon glyphicon-plus"></span>Administration Change<br />
-                                    <span class="small">Explanation and information on what link means and does</span></a></li>
+
+                                 @*
+                                <li>
+                                    <a href="#"><span class="glyphicon glyphicon-plus"></span>Administration Change<br />
+                                       <span class="small">Explanation and information on what link means and does</span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                            <li><a href="#"><span class="glyphicon glyphicon-plus"></span>Termination Administration<br />
+                                            <span class="small">Explanation and information on what link means and does</span></a></li>
+                                    </ul>                                    
+                                </li>
+
+                                
                                 <li><a href="#"><span class="glyphicon glyphicon-plus"></span>Termination Administration<br />
                                     <span class="small">Explanation and information on what link means and does</span></a></li>
                                 <li><a href="#"><span class="glyphicon glyphicon-plus"></span>Correction<br />
