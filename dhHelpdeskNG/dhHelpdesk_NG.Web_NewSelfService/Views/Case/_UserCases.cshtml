@@ -4,17 +4,21 @@
     <ul class="nav nav-tabs" id="NewCaseTab">
         <li id="NewCaseT" class="active">
             <a href="#fragment-1"> 
+
                 @{
                     string tabTitle = "";
-                    switch (Model.ProgressId)  
+                    if (Model != null)
                     {
-                        case "1":
-                            tabTitle = Translation.Get("Avslutade ärenden", Enums.TranslationSource.TextTranslation);
-                            break;
+                        switch (Model.ProgressId)  
+                        {
+                            case "1":
+                                tabTitle = Translation.Get("Avslutade ärenden", Enums.TranslationSource.TextTranslation);
+                                break;
                             
-                        case "2":
-                            tabTitle = Translation.Get("Pågående ärenden", Enums.TranslationSource.TextTranslation);
-                            break;                            
+                            case "2":
+                                tabTitle = Translation.Get("Pågående ärenden", Enums.TranslationSource.TextTranslation);
+                                break;                            
+                        }
                     }                       
                  }  
                  @tabTitle

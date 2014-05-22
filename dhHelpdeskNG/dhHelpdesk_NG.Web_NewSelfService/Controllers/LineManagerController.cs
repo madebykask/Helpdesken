@@ -29,76 +29,51 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
         public ActionResult Index(int customerId)
         {
-            if (!CheckCustomerValidation(customerId))
+            if (!CheckAndUpdateGlobalValues(customerId))
                 return null;
-
-            ViewBag.PublicCustomerId = customerId;
-            ViewBag.PublicCaseTemplate = GetCaseTemplates(customerId);
 
             return RedirectToAction("Start", new { customerId });
         }
 
         public ActionResult Start(int customerId)
         {
-            if (!CheckCustomerValidation(customerId))
+            if (!CheckAndUpdateGlobalValues(customerId))
                 return null;
-
-            ViewBag.PublicCustomerId = customerId;
-            ViewBag.PublicCaseTemplate = GetCaseTemplates(customerId);
             
             return View();
         }
 
-
         public ActionResult CoWorkers(int customerId)
         {
-            if (!CheckCustomerValidation(customerId))
+            if (!CheckAndUpdateGlobalValues(customerId))
                 return null;
-
-            ViewBag.PublicCustomerId = customerId;
-            ViewBag.PublicCaseTemplate = GetCaseTemplates(customerId);
 
             return View();
         }
 
         public ActionResult Help(int customerId)
         {
-            if (!CheckCustomerValidation(customerId))
+            if (!CheckAndUpdateGlobalValues(customerId))
                 return null;
-
-            ViewBag.PublicCustomerId = customerId;
-            ViewBag.PublicCaseTemplate = GetCaseTemplates(customerId);
 
             return View();
         }
 
         public ActionResult FindYourWay(int customerId)
         {
-            if (!CheckCustomerValidation(customerId))
+            if (!CheckAndUpdateGlobalValues(customerId))
                 return null;
-
-            ViewBag.PublicCustomerId = customerId;
-            ViewBag.PublicCaseTemplate = GetCaseTemplates(customerId);
 
             return View();
         }
 
         public ActionResult About(int customerId)
         {
-            if (!CheckCustomerValidation(customerId))
+            if (!CheckAndUpdateGlobalValues(customerId))
                 return null;
 
-            ViewBag.PublicCustomerId = customerId;
-            ViewBag.PublicCaseTemplate = GetCaseTemplates(customerId);
-
             return View();
-        }
-
-        private bool CheckCustomerValidation(int customerId)
-        {          
-            var cu = _customerService.GetCustomer(customerId);
-            return (cu == null) ? false : true;
-        }
+        }       
 
         private List<CaseSolution> GetCaseTemplates(int customerId, bool checkAuthentication = true)
         {
@@ -106,15 +81,35 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             if (checkAuthentication)
             {
                 var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+                //identity = null;
                 if (identity == null)
                 {
                     return ret;
                 }
             }
-            
+
             ret = _caseSolutionService.GetCaseSolutions(customerId).ToList();
 
             return ret;
+        }
+
+        private bool CheckAndUpdateGlobalValues(int customerId)
+        {
+            if ((SessionFacade.CurrentCustomer != null && SessionFacade.CurrentCustomer.Id != customerId) ||
+                (SessionFacade.CurrentCustomer == null))
+            {
+                var newCustomer = _customerService.GetCustomer(customerId);
+                if (newCustomer == null)
+                    return false;
+
+                SessionFacade.CurrentCustomer = newCustomer;
+            }
+
+            SessionFacade.CurrentLanguageId = SessionFacade.CurrentCustomer.Language_Id;
+            ViewBag.PublicCustomerId = customerId;
+            ViewBag.PublicCaseTemplate = GetCaseTemplates(customerId);
+
+            return true;
         }
     }
 }

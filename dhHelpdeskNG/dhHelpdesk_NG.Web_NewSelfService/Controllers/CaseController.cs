@@ -593,8 +593,10 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                                                  string sortBy = "", bool ascending = false)
         {                                                 
             var cusId = customerId;
-       
-                
+
+            if (progressId != "1" && progressId != "2")
+                return null;
+
             var model = new UserCasesModel
                     {
                         CustomerId = cusId,
@@ -740,6 +742,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             if (checkAuthentication)
             {
                 var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+                //identity = null;
                 if (identity == null)
                 {
                     return ret;
