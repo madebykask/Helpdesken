@@ -14,12 +14,14 @@ namespace DH.Helpdesk.Services.Services
     {
         IList<CustomerUser> GetCustomerUsersForHomeIndexPage(int userId);
         IList<CustomerUserList> GetFinalListForCustomerUsersHomeIndexPage(int id);
+        IList<CustomerUser> GetCustomerUsersForCustomer(int customerId);
 
         CustomerUser GetCustomerSettings(int customer, int user);
 
         UserCaseSetting GetUserCaseSettings(int customerId, int userId);
 
         void UpdateUserCaseSetting(UserCaseSetting newSetting);
+        void SaveCustomerUser(CustomerUser customerUser, out IDictionary<string, string> errors);
     }
 
     public class CustomerUserService : ICustomerUserService
@@ -35,6 +37,11 @@ namespace DH.Helpdesk.Services.Services
         public IList<CustomerUser> GetCustomerUsersForHomeIndexPage(int userId)
         {
             return this._customerUserRepository.GetCustomerUsersForStart(userId);
+        }
+
+        public IList<CustomerUser> GetCustomerUsersForCustomer(int customerId)
+        {
+            return this._customerUserRepository.GetCustomerUsersForCustomer(customerId);
         }
 
         public IList<CustomerUserList> GetFinalListForCustomerUsersHomeIndexPage(int userId)
@@ -72,6 +79,15 @@ namespace DH.Helpdesk.Services.Services
         {
             _customerUserRepository.UpdateUserSetting(newSetting);
             _customerUserRepository.Commit();
+        }
+
+        public void SaveCustomerUser(CustomerUser customerUser, out IDictionary<string, string> errors)
+        {
+
+            errors = new Dictionary<string, string>();
+
+            this._customerUserRepository.Add(customerUser);
+           
         }
     }
 }

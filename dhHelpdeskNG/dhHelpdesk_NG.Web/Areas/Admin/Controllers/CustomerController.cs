@@ -21,6 +21,15 @@
         private readonly IRegionService _regionService;
         private readonly ISettingService _settingService;
         private readonly IUserService _userService;
+        private readonly ICaseTypeService _caseTypeService;
+        private readonly ICategoryService _categoryService;
+        private readonly IProductAreaService _productAreaService;
+        private readonly IStateSecondaryService _stateSecondaryService;
+        private readonly IWorkingGroupService _workingGroupService;
+        private readonly IStatusService _statusService;
+        private readonly IFinishingCauseService _finishingCauseService;
+        private readonly ICaseSolutionService _caseSolutionService;
+        private readonly ICustomerUserService _customerUserService;
 
         public CustomerController(
             ICaseFieldSettingService caseFieldSettingService,
@@ -30,6 +39,15 @@
             IRegionService regionService,
             ISettingService settingService,
             IUserService userService,
+            ICaseTypeService caseTypeService,
+            ICategoryService categoryService,
+            IProductAreaService productAreaService,
+            IStateSecondaryService stateSecondaryService,
+            IWorkingGroupService workingGroupService,
+            IStatusService statusService,
+            IFinishingCauseService finishingCauseService,
+            ICaseSolutionService caseSolutionsService,
+            ICustomerUserService customerUserSerivce,
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
@@ -40,6 +58,15 @@
             this._regionService = regionService;
             this._settingService = settingService;
             this._userService = userService;
+            this._caseTypeService = caseTypeService;
+            this._categoryService = categoryService;
+            this._productAreaService = productAreaService;
+            this._stateSecondaryService = stateSecondaryService;
+            this._workingGroupService = workingGroupService;
+            this._statusService = statusService;
+            this._finishingCauseService = finishingCauseService;
+            this._caseSolutionService = caseSolutionsService;
+            this._customerUserService = customerUserSerivce;
         }
 
         [CustomAuthorize(Roles = "3,4")]
@@ -553,19 +580,286 @@
                 ModuleAsset = customerToCopySettings.ModuleAsset,
                 ModuleBulletinBoard = customerToCopySettings.ModuleBulletinBoard,
                 ModuleCalendar = customerToCopySettings.ModuleCalendar,
+                ModuleCase = customerToCopySettings.ModuleCase,
+                ModuleChangeManagement = customerToCopySettings.ModuleChangeManagement,
+                ModuleChecklist = customerToCopySettings.ModuleChecklist,
+                ModuleComputerUser = customerToCopySettings.ModuleComputerUser,
+                ModuleContract = customerToCopySettings.ModuleContract,
+                ModuleDailyReport = customerToCopySettings.ModuleDailyReport,
+                ModuleDocument = customerToCopySettings.ModuleDocument,
+                ModuleFAQ = customerToCopySettings.ModuleFAQ,
+                ModuleInventory = customerToCopySettings.ModuleInventory,
+                ModuleInventoryImport = customerToCopySettings.ModuleInventoryImport,
+                ModuleInvoice = customerToCopySettings.ModuleInvoice,
+                ModuleLicense = customerToCopySettings.ModuleLicense,
+                ModuleOperationLog = customerToCopySettings.ModuleOperationLog,
+                ModuleOrder = customerToCopySettings.ModuleOrder,
+                ModulePlanning = customerToCopySettings.ModulePlanning,
+                ModuleProblem = customerToCopySettings.ModuleProblem,
+                ModuleProject = customerToCopySettings.ModuleProject,
+                ModuleQuestion = customerToCopySettings.ModuleQuestion,
+                ModuleQuestionnaire = customerToCopySettings.ModuleQuestionnaire,
+                ModuleTimeRegistration = customerToCopySettings.ModuleTimeRegistration,
+                ModuleWatch = customerToCopySettings.ModuleWatch,
+                DepartmentFilterFormat = customerToCopySettings.DepartmentFilterFormat,
+                DepartmentFormat = customerToCopySettings.DepartmentFormat,
+                ProductAreaFilterFormat = customerToCopySettings.ProductAreaFilterFormat,
+                CaseDateFormat = customerToCopySettings.CaseDateFormat,
+                PriorityFormat = customerToCopySettings.PriorityFormat,
+                PlanDateFormat = customerToCopySettings.PlanDateFormat,
+                CategoryFilterFormat = customerToCopySettings.CategoryFilterFormat,
+                DisableCaseEndDate = customerToCopySettings.DisableCaseEndDate,
+                SetFirstUserToOwner = customerToCopySettings.SetFirstUserToOwner,
+                CaseWorkingGroupSource = customerToCopySettings.CaseWorkingGroupSource,
+                SearchCaseOnExternalPage = customerToCopySettings.SearchCaseOnExternalPage,
+                NoMailToNotifierChecked = customerToCopySettings.NoMailToNotifierChecked,
+                DontConnectUserToWorkingGroup = customerToCopySettings.DontConnectUserToWorkingGroup,
+                LogLevel = customerToCopySettings.LogLevel,
+                StateSecondaryReminder = customerToCopySettings.StateSecondaryReminder,
+                StateSecondaryFormat =customerToCopySettings.StateSecondaryFormat,
+                MinPasswordLength = customerToCopySettings.MinPasswordLength,
+                MinRegWorkingTime = customerToCopySettings.MinRegWorkingTime,
+                InvoiceType = customerToCopySettings.InvoiceType,
+                ComplexPassword = customerToCopySettings.ComplexPassword,
+                DBType = customerToCopySettings.DBType,
+                ComputerUserInfoListLocation = customerToCopySettings.ComputerUserInfoListLocation,
+                ComputerUserLog = customerToCopySettings.ComputerUserLog,
+                StateSecondaryFilterFormat = customerToCopySettings.StateSecondaryFilterFormat,
+                CreateCaseFromOrder = customerToCopySettings.CreateCaseFromOrder,
+                LeadTimeFromProductAreaSetDate = customerToCopySettings.LeadTimeFromProductAreaSetDate,
+                CaseSMS = customerToCopySettings.CaseSMS,
+                MaxPasswordAge = customerToCopySettings.MaxPasswordAge,
+                PasswordHistory = customerToCopySettings.PasswordHistory,
+                CaseFiles = customerToCopySettings.CaseFiles,
+                LogNoteFormat = customerToCopySettings.LogNoteFormat,
+                CaseArchiveDays = customerToCopySettings.CaseArchiveDays,
+                CaseComplaintDays = customerToCopySettings.CaseComplaintDays,
+
 
             };
-            customerToCopySettings.Customer_Id = newCustomerToSave.Id;
 
-            this._customerService.SaveEditCustomer(newCustomerToSave, customerToCopySettings, null, newCustomerToSave.Language_Id, out errors);
+            //Get CaseSettings to copy
+            var caseSettingsToCopy = this._caseSettingsService.GetCaseSettings(customerToCopy.Id);
+
+            foreach (var cs in caseSettingsToCopy)
+            {
+                var newCustomerCaseSetting = new CaseSettings() { };
+
+                newCustomerSetting.Customer_Id = newCustomerToSave.Id;
+                newCustomerCaseSetting.Name = cs.Name;
+                newCustomerCaseSetting.Line = cs.Line;
+                newCustomerCaseSetting.MinWidth = cs.MinWidth;
+                newCustomerCaseSetting.UserGroup = cs.UserGroup;
+                newCustomerCaseSetting.ColOrder = cs.ColOrder;
+
+                this._caseSettingsService.SaveCaseSetting(newCustomerCaseSetting, out errors);
+            }
+
+            //Get CaseFieldSettings to copy
+            var caseFieldSettingsToCopy = this._caseFieldSettingService.GetCaseFieldSettings(customerToCopy.Id);
+
+            foreach (var cfs in caseFieldSettingsToCopy)
+            {
+                var newCustomerCaseFieldSettings = new CaseFieldSetting() { };
+
+                newCustomerCaseFieldSettings.Customer_Id = newCustomerToSave.Id;
+                newCustomerCaseFieldSettings.Name = cfs.Name;
+                newCustomerCaseFieldSettings.ShowOnStartPage = cfs.ShowOnStartPage;
+                newCustomerCaseFieldSettings.Required = cfs.Required;
+                newCustomerCaseFieldSettings.ShowExternal = cfs.ShowExternal;
+                newCustomerCaseFieldSettings.FieldSize = cfs.FieldSize;
+                newCustomerCaseFieldSettings.ListEdit = cfs.ListEdit;
+                newCustomerCaseFieldSettings.CaseFieldSettingLanguages = cfs.CaseFieldSettingLanguages;
 
 
-            if (errors.Count == 0)
-                return this.RedirectToAction("edit", "customer");
+                //this._customerService.SaveCaseFieldSettingsForCustomer(newCustomerToSave.Id, newCustomerToSave.Language_Id, casefieldsettingswithlanguages, newCustomerCaseFieldSettings, out errors);
+            }
 
-            var model = this.CustomerInputViewModel(newCustomerToSave);
+            //Get CustomerUser to copy
+            var customerUserToCopy = this._customerUserService.GetCustomerUsersForCustomer(customerToCopy.Id);
 
-            return this.View(model);
+            foreach (var cu in customerUserToCopy)
+            {
+                var newCustomerCustomerUser = new CustomerUser() { };
+
+                newCustomerCustomerUser.Customer_Id = newCustomerToSave.Id;
+                newCustomerCustomerUser.User_Id = cu.User_Id;
+                newCustomerCustomerUser.CasePerformerFilter = string.Empty;
+
+                this._customerUserService.SaveCustomerUser(newCustomerCustomerUser, out errors);
+            }
+
+
+
+            //Get Casetype to copy
+            var caseTypesToCopy = this._caseTypeService.GetCaseTypes(customerToCopy.Id);
+
+            foreach (var ct in caseTypesToCopy)
+            {
+                var newCustomerCaseType = new CaseType() { };
+
+                newCustomerCaseType.Customer_Id = newCustomerToSave.Id;
+                newCustomerCaseType.Name = ct.Name;
+                newCustomerCaseType.IsDefault = ct.IsDefault;
+                newCustomerCaseType.RequireApproving = ct.RequireApproving;
+                newCustomerCaseType.ShowOnExternalPage = ct.ShowOnExternalPage;
+                newCustomerCaseType.IsEMailDefault = ct.IsEMailDefault;
+                newCustomerCaseType.AutomaticApproveTime = ct.AutomaticApproveTime;
+                newCustomerCaseType.User_Id = ct.User_Id;
+                newCustomerCaseType.IsActive = ct.IsActive;
+                newCustomerCaseType.Selectable = ct.Selectable;
+                newCustomerCaseType.ITILProcess = 0;
+                newCustomerCaseType.RelatedField = String.Empty;
+
+                this._caseTypeService.SaveCaseType(newCustomerCaseType, out errors);
+            };
+
+            //Get Category to copy
+            var categoriesToCopy = this._categoryService.GetCategories(customerToCopy.Id);
+
+            foreach (var c in categoriesToCopy)
+            {
+                var newCustomerCategory = new Category() { };
+
+                newCustomerCategory.Customer_Id = newCustomerToSave.Id;
+                newCustomerCategory.Name = c.Name;
+                newCustomerCategory.Description = c.Description;
+                newCustomerCategory.IsActive = c.IsActive;
+                newCustomerCategory.CreatedDate = DateTime.UtcNow;
+                newCustomerCategory.ChangedDate = DateTime.UtcNow;
+
+                this._categoryService.SaveCategory(newCustomerCategory, out errors);
+            }
+
+            //Get Category to copy
+            var productAreasToCopy = this._productAreaService.GetProductAreas(customerToCopy.Id);
+
+            foreach (var p in productAreasToCopy)
+            {
+                var newCustomerProductArea = new ProductArea() { };
+
+                newCustomerProductArea.Customer_Id = newCustomerToSave.Id;
+                newCustomerProductArea.Name = p.Name;
+                newCustomerProductArea.Parent_ProductArea_Id = p.Parent_ProductArea_Id;
+                newCustomerProductArea.IsActive = p.IsActive;
+
+                this._productAreaService.SaveProductArea(newCustomerProductArea, out errors);
+            }
+            
+            //Get StateSecondary to copy
+            var stateSecondariesToCopy = this._stateSecondaryService.GetStateSecondaries(customerToCopy.Id).ToList();
+
+            foreach (var ss in stateSecondariesToCopy)
+            {
+                var newCustomerStateSecondaries = new StateSecondary() { };
+
+                newCustomerStateSecondaries.Customer_Id = newCustomerToSave.Id;
+                newCustomerStateSecondaries.Name = ss.Name;
+                newCustomerStateSecondaries.IncludeInCaseStatistics = ss.IncludeInCaseStatistics;
+                newCustomerStateSecondaries.NoMailToNotifier = ss.NoMailToNotifier;
+                newCustomerStateSecondaries.ResetOnExternalUpdate = ss.ResetOnExternalUpdate;
+
+                this._stateSecondaryService.SaveStateSecondary(newCustomerStateSecondaries, out errors);
+            }
+
+            //Get WorkingGroups to copy
+            var workingGroupsToCopy = this._workingGroupService.GetWorkingGroupsForIndexPage(customerToCopy.Id);
+
+            foreach (var wg in workingGroupsToCopy)
+            {
+                var newCustomerWorkingGroup = new WorkingGroupEntity() { };
+
+                newCustomerWorkingGroup.Customer_Id = newCustomerToSave.Id;
+                newCustomerWorkingGroup.WorkingGroupName = wg.WorkingGroupName;
+                newCustomerWorkingGroup.Code = wg.Code;
+                newCustomerWorkingGroup.EMail = wg.EMail;
+                newCustomerWorkingGroup.AllocateCaseMail = wg.AllocateCaseMail;
+                newCustomerWorkingGroup.IsDefault = wg.IsDefault;
+                newCustomerWorkingGroup.IsDefaultCalendar = wg.IsDefaultCalendar;
+                newCustomerWorkingGroup.IsDefaultBulletinBoard = wg.IsDefaultBulletinBoard;
+                newCustomerWorkingGroup.IsDefaultOperationLog = wg.IsDefaultOperationLog;
+                newCustomerWorkingGroup.IsActive = wg.IsActive;
+
+                this._workingGroupService.SaveWorkingGroup(newCustomerWorkingGroup, out errors);
+            }
+
+            //Get Status to copy
+            var statusesToCopy = this._statusService.GetStatuses(customerToCopy.Id).ToList();
+
+            foreach (var s in statusesToCopy)
+            {
+                var newCustomerStatuses = new Status() { };
+
+                newCustomerStatuses.Customer_Id = newCustomerToSave.Id;
+                newCustomerStatuses.Name = s.Name;
+                newCustomerStatuses.IsDefault = s.IsDefault;
+
+                this._statusService.SaveStatus(newCustomerStatuses, out errors);
+            }
+
+            //Get FinishingCause to copy
+            var finishingCausesToCopy = this._finishingCauseService.GetFinishingCauses(customerToCopy.Id);
+
+            foreach (var fc in finishingCausesToCopy)
+            {
+                var newCustomerFinishingCause = new FinishingCause() { };
+
+                newCustomerFinishingCause.Customer_Id = newCustomerToSave.Id;
+                newCustomerFinishingCause.Name = fc.Name;
+                newCustomerFinishingCause.Parent_FinishingCause_Id = fc.Parent_FinishingCause_Id;
+                newCustomerFinishingCause.FinishingCauseCategory_Id = fc.FinishingCauseCategory_Id;
+                newCustomerFinishingCause.PromptUser = fc.PromptUser;
+
+                this._finishingCauseService.SaveFinishingCause(newCustomerFinishingCause, out errors);
+            }
+
+            //Get CaseSolutionCategory to copy
+            var caseSolutionCategoriesToCopy = this._caseSolutionService.GetCaseSolutionCategories(customerToCopy.Id);
+
+            foreach (var csc in caseSolutionCategoriesToCopy)
+            {
+                var newCustomerCaseSolutionCategories = new CaseSolutionCategory() { };
+
+                newCustomerCaseSolutionCategories.Customer_Id = newCustomerToSave.Id;
+                newCustomerCaseSolutionCategories.Name = csc.Name;
+                newCustomerCaseSolutionCategories.IsDefault = csc.IsDefault;
+
+                this._caseSolutionService.SaveCaseSolutionCategory(newCustomerCaseSolutionCategories, out errors);
+            }
+
+            // Get CaseSolution to copy
+            var caseSolutionToCopy = this._caseSolutionService.GetCaseSolutions(customerToCopy.Id);
+
+            foreach (var cs in caseSolutionToCopy)
+            {
+                var newCustomerCaseSolution = new CaseSolution() { };
+
+                newCustomerCaseSolution.Customer_Id = newCustomerToSave.Id;
+                newCustomerCaseSolution.WorkingGroup_Id = cs.WorkingGroup_Id;
+                newCustomerCaseSolution.CaseSolutionCategory_Id = cs.CaseSolutionCategory_Id;
+                newCustomerCaseSolution.Name = cs.Name;
+                newCustomerCaseSolution.CaseType_Id = cs.CaseType_Id;
+                newCustomerCaseSolution.ProductArea_Id = cs.ProductArea_Id;
+                newCustomerCaseSolution.Caption = cs.Caption;
+                newCustomerCaseSolution.Description = cs.Description;
+                newCustomerCaseSolution.Miscellaneous = cs.Miscellaneous;
+                newCustomerCaseSolution.Priority_Id = cs.Priority_Id;
+                newCustomerCaseSolution.Text_External = cs.Text_External;
+                newCustomerCaseSolution.Text_Internal = cs.Text_Internal;
+                newCustomerCaseSolution.FinishingCause_Id = cs.FinishingCause_Id;
+                newCustomerCaseSolution.CaseWorkingGroup_Id = cs.CaseWorkingGroup_Id;
+                newCustomerCaseSolution.Category_Id = cs.Category_Id;
+
+                this._caseSolutionService.SaveCaseSolution(newCustomerCaseSolution, null, null, out errors);
+            }
+
+
+            this._customerService.SaveEditCustomer(newCustomerToSave, newCustomerSetting, null, newCustomerToSave.Language_Id, out errors);
+
+            
+          
+           return this.RedirectToAction("edit", "customer", new { newCustomerToSave.Id });
+
         }
     }
 }

@@ -75,6 +75,7 @@
         CustomerUser GetCustomerSettings(int customer, int user);
         IList<CustomerUser> GetCustomerUsersForStart(int userId);
         IList<CustomerUserList> GetCustomerUsersForStartFinal(int userId);
+        IList<CustomerUser> GetCustomerUsersForCustomer(int customeId);
         void UpdateUserSetting(UserCaseSetting newSetting);
     }
 
@@ -99,6 +100,15 @@
                          join c in this.DataContext.Customers on cu.Customer_Id equals c.Id
                          join u in this.DataContext.Users on cu.User_Id equals u.Id
                          where u.Id == userId
+                         select cu);
+
+            return query.ToList();
+        }
+
+        public IList<CustomerUser> GetCustomerUsersForCustomer(int customerId)
+        {
+            var query = (from cu in this.DataContext.CustomerUsers
+                         where cu.Customer_Id == customerId
                          select cu);
 
             return query.ToList();

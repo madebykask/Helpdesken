@@ -29,6 +29,9 @@
                                 @Translation.Get("Inkludera i ärendestatistik", Enums.TranslationSource.TextTranslation)
                             </th>
                             <th>
+                                @Translation.Get("Standard", Enums.TranslationSource.TextTranslation)
+                            </th>
+                            <th>
                                 @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
                             </th>
                         </tr>
@@ -43,6 +46,10 @@
                                 <td>
                                     <a href="@Url.Action("edit", "statesecondary", new { area = "admin", id = item.Id })">
                                         @Translation.Get(item.IncludeInCaseStatistics.TranslateBit(), Enums.TranslationSource.TextTranslation)</a>
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("edit", "statesecondary", new { area = "admin", id = item.Id })">
+                                        @Translation.Get(item.IsDefault.TranslateBit(), Enums.TranslationSource.TextTranslation)</a>
                                 </td>
                                 <td>
                                     <a href="@Url.Action("edit", "statesecondary", new { area = "admin", id = item.Id })">

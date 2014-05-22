@@ -13,6 +13,7 @@
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
         public int? WorkingGroup_Id { get; set; }
+        public int IsDefault { get; set; }
 
         public virtual Customer Customer { get; set; }
         public virtual WorkingGroupEntity WorkingGroup { get; set; }

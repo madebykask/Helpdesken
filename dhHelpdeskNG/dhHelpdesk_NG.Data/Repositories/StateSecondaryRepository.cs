@@ -7,6 +7,8 @@
     {
         //IList<StateSecondary> GetStateSecondariesAvailable(int customerId, string[] reg);
         //IList<StateSecondary> GetStateSecondariesSelected(int customerId, string[] reg);
+
+        void ResetDefault(int exclude);
     }
 
     public class StateSecondaryRepository : RepositoryBase<StateSecondary>, IStateSecondaryRepository
@@ -14,6 +16,15 @@
         public StateSecondaryRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
+        }
+
+        public void ResetDefault(int exclude)
+        {
+            foreach (StateSecondary obj in this.GetMany(s => s.IsDefault == 1 && s.Id != exclude))
+            {
+                obj.IsDefault = 0;
+                this.Update(obj);
+            }
         }
 
         //public IList<StateSecondary> GetStateSecondariesSelected(int customerId, string[] reg)
