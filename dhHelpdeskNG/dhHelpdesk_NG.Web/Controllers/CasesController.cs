@@ -29,6 +29,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Case;
+    using DH.Helpdesk.Web.Infrastructure.Mvc;
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Models;
     using DH.Helpdesk.Web.Models.Case;
@@ -741,22 +742,22 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpGet]
-        public FileContentResult DownloadFile(string id, string fileName)
+        public UnicodeFileContentResult DownloadFile(string id, string fileName)
         {
             var fileContent = GuidHelper.IsGuid(id)
                                   ? this.userTemporaryFilesStorage.GetFileContent(fileName, id, ModuleName.Cases)
                                   : this._caseFileService.GetFileContentByIdAndFileName(int.Parse(id), fileName);
-            return this.File(fileContent, "application/octet-stream", fileName);
+            return new UnicodeFileContentResult(fileContent, fileName);
         }
 
         [HttpGet]
-        public FileContentResult DownloadLogFile(string id, string fileName)
+        public UnicodeFileContentResult DownloadLogFile(string id, string fileName)
         {
             var fileContent = GuidHelper.IsGuid(id)
                                   ? this.userTemporaryFilesStorage.GetFileContent(fileName, id, ModuleName.Log)
                                   : this._logFileService.GetFileContentByIdAndFileName(int.Parse(id), fileName);
 
-            return this.File(fileContent, "application/octet-stream", fileName);
+            return new UnicodeFileContentResult(fileContent, fileName);
         }
 
         [HttpGet]

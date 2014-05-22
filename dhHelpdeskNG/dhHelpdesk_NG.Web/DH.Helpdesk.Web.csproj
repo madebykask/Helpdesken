@@ -427,6 +427,7 @@
     <Compile Include="Infrastructure\ModelFactories\Inventory\IServerViewModelBuilder.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\ServerViewModelBuilder.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\PrinterViewModelBuilder.cs" />
+    <Compile Include="Infrastructure\Mvc\UnicodeFileContentResult.cs" />
     <Compile Include="Infrastructure\Print\PrintPdfEvents.cs" />
     <Compile Include="Infrastructure\Print\PrintPdfResult.cs" />
     <Compile Include="Infrastructure\Print\PrintPdfView.cs" />
