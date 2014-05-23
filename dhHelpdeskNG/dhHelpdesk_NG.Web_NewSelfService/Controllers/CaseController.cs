@@ -210,6 +210,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                 return null;
             
             var model = this.GetNewCaseModel(currentCustomer.Id, languageId);
+            model.ExLogFileGuid = Guid.NewGuid().ToString();
 
             var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
             if (identity != null)

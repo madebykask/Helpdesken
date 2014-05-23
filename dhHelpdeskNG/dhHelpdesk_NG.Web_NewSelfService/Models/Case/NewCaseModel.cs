@@ -42,6 +42,8 @@ namespace DH.Helpdesk.NewSelfService.Models.Case
 
         public string CaseFileKey { get; set; }
 
+        public string ExLogFileGuid { get; set; }
+
         public IList<CaseType> CaseTypes { get; set; }
 
         public IList<ProductArea> ProductAreas { get; set; }
