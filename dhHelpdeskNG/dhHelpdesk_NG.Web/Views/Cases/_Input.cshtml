@@ -971,6 +971,12 @@
             "case_.WatchDate": {
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.WatchDate.ToString())")
             },
+            "CaseLog.TextExternal": {
+                maxlength: 3000
+            },
+            "CaseLog.TextInternal": {
+                maxlength: 3000
+            }
         },
         messages: {
             "case_.ReportedBy": {
@@ -1077,7 +1083,7 @@
             },
             "case_.WatchDate": {
                 required: "@Translation.Get(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-            },
+            }
         },
         //errorPlacement: function (error, element) {
         //    alert(error.text());

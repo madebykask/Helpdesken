@@ -19,8 +19,13 @@
         public int LogType { get; set; }
         public int Price { get; set; }
         public string RegUser { get; set; }
+        
+        [StringLength(3000)]
         public string TextExternal { get; set; }
+
+        [StringLength(3000)]
         public string TextInternal { get; set; }
+        
         public string EmailRecepientsInternalLog { get; set; }
         public string EmailRecepientsExternalLog { get; set; }
         public int? UserId { get; set; }
