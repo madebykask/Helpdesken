@@ -520,8 +520,8 @@
             this.changeLogRepository.AddLogs(request.NewLogs);
             this.changeLogRepository.Commit();
 
-//            var auditOptionalData = new ChangeAuditData(history.Id, existingChange);
-//            this.changeAuditors.ForEach(a => a.Audit(request, auditOptionalData));
+            var auditOptionalData = new ChangeAuditData(history.Id, existingChange);
+            this.changeAuditors.ForEach(a => a.Audit(request, auditOptionalData));
         }
 
         public void UpdateSettings(ChangeFieldSettings settings)
