@@ -1,0 +1,88 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<div class="container-fluid dh-container">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#home" data-toggle="tab">Co-Workers</a></li>
+    </ul>
+    <div class="content">
+        <div class="tab-pane active" id="home">
+            <div class="container-fluid dh-container">
+                <div class="row">
+                    <div class="col-md-3 dh-col">
+                        <div class="container">
+                            <div class="form-group">
+                                <label>
+                                    Search
+                                </label>
+                                <div>
+                                    <input type="text" />
+                                    <input type="submit" value="Search" class="btn btn-default btn-sm" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 table-responsive">
+                        <table class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Employee No
+                                    </th>
+                                    <th>Co-worker Name
+                                    </th>
+                                    <th>Status
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>5305391
+                                    </td>
+                                    <td>Ruben van Burgsteden
+                                    </td>
+                                    <td>10. Initiated
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>5305391
+                                    </td>
+                                    <td>Ruben van Burgsteden
+                                    </td>
+                                    <td>10. Initiated
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>5305391
+                                    </td>
+                                    <td>Ruben van Burgsteden
+                                    </td>
+                                    <td>10. Initiated
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>5305391
+                                    </td>
+                                    <td>Ruben van Burgsteden
+                                    </td>
+                                    <td>10. Initiated
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>5305391
+                                    </td>
+                                    <td>Ruben van Burgsteden
+                                    </td>
+                                    <td>10. Initiated
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
