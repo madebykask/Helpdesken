@@ -26,19 +26,29 @@
             var subjectMarks = Regex.Matches(template.Subject, MarkPattern);
             var bodyMarks = Regex.Matches(template.Body, MarkPattern);
 
-            CheckMarks(markValues, subjectMarks, bodyMarks);
+//            CheckMarks(markValues, subjectMarks, bodyMarks);
 
             var subject = template.Subject;
             var body = template.Body;
 
             foreach (Match mark in subjectMarks)
             {
+                if (!markValues.ContainsKey(mark.Value))
+                {
+                    continue;
+                }
+
                 var value = markValues[mark.Value];
                 subject = subject.Replace(mark.Value, value);
             }
 
             foreach (Match mark in bodyMarks)
             {
+                if (!markValues.ContainsKey(mark.Value))
+                {
+                    continue;
+                }
+
                 var value = markValues[mark.Value];
                 body = body.Replace(mark.Value, value);
             }
