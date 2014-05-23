@@ -80,13 +80,15 @@
         {
             var activeTab = SessionFacade.FindActiveTab(Web.Enums.Inventory.PageName.InventoryIndex) ?? TabName.Inventories;
 
-            var currentModeFilter = SessionFacade.FindPageFilters<IndexModeFilter>(PageName.Inventory) ?? IndexModeFilter.GetDefault();
+            var currentModeFilter = SessionFacade.FindPageFilters<InventoriesModeFilter>(TabName.Inventories) ?? InventoriesModeFilter.GetDefault();
+            var moduleTypeFilter = SessionFacade.FindPageFilters<ComputerModuleModeFilter>(TabName.MasterData) ?? ComputerModuleModeFilter.GetDefault();
+
             var inventoryTypes = this.inventoryService.GetInventoryTypes(SessionFacade.CurrentCustomer.Id);
 
             var viewModel = IndexViewModel.BuildViewModel(
                 currentModeFilter.CurrentMode,
                 inventoryTypes,
-                (int)ModuleTypes.Processor,
+                moduleTypeFilter.ModuleType,
                 activeTab);
 
             return this.View(viewModel);
@@ -114,7 +116,7 @@
         [HttpGet]
         public PartialViewResult Workstations()
         {
-            SessionFacade.SavePageFilters(PageName.Inventory, new IndexModeFilter((int)CurrentModes.Workstations));
+            SessionFacade.SavePageFilters(TabName.Inventories, new InventoriesModeFilter((int)CurrentModes.Workstations));
             var currentFilter = SessionFacade.FindPageFilters<WorkstationsSearchFilter>(CurrentModes.Workstations.ToString()) ?? WorkstationsSearchFilter.CreateDefault();
             var computerTypes = this.computerModulesService.GetComputerTypes(SessionFacade.CurrentCustomer.Id);
             var regions = this.organizationService.GetRegions(SessionFacade.CurrentCustomer.Id);
@@ -138,7 +140,7 @@
         [HttpGet]
         public PartialViewResult Servers()
         {
-            SessionFacade.SavePageFilters(PageName.Inventory, new IndexModeFilter((int)CurrentModes.Servers));
+            SessionFacade.SavePageFilters(TabName.Inventories, new InventoriesModeFilter((int)CurrentModes.Servers));
             var currentFilter = SessionFacade.FindPageFilters<ServerSearchFilter>(CurrentModes.Servers.ToString()) ?? ServerSearchFilter.CreateDefault();
 
             return this.PartialView("Servers", currentFilter);
@@ -147,7 +149,7 @@
         [HttpGet]
         public PartialViewResult Printers()
         {
-            SessionFacade.SavePageFilters(PageName.Inventory, new IndexModeFilter((int)CurrentModes.Printers));
+            SessionFacade.SavePageFilters(TabName.Inventories, new InventoriesModeFilter((int)CurrentModes.Printers));
             var currentFilter = SessionFacade.FindPageFilters<PrinterSearchFilter>(CurrentModes.Printers.ToString()) ?? PrinterSearchFilter.CreateDefault();
             var departments = this.organizationService.GetDepartments(SessionFacade.CurrentCustomer.Id);
             var settings = this.inventorySettingsService.GetPrinterFieldSettingsOverviewForFilter(
@@ -162,7 +164,7 @@
         [HttpGet]
         public PartialViewResult Inventories(int inventoryTypeId)
         {
-            SessionFacade.SavePageFilters(PageName.Inventory, new IndexModeFilter(inventoryTypeId));
+            SessionFacade.SavePageFilters(TabName.Inventories, new InventoriesModeFilter(inventoryTypeId));
             var currentFilter = SessionFacade.FindPageFilters<InventorySearchFilter>(inventoryTypeId.ToString(CultureInfo.InvariantCulture)) ?? InventorySearchFilter.CreateDefault(inventoryTypeId);
             var departments = this.organizationService.GetDepartments(SessionFacade.CurrentCustomer.Id);
             var settings = this.inventorySettingsService.GetInventoryFieldSettingsOverviewForFilter(inventoryTypeId);
@@ -614,6 +616,7 @@
         [HttpGet]
         public PartialViewResult RenderCategoryContent(int moduleType)
         {
+            SessionFacade.SavePageFilters(TabName.MasterData, new ComputerModuleModeFilter(moduleType));
             var items = new List<ItemOverview>();
 
             switch ((ModuleTypes)moduleType)
@@ -632,6 +635,9 @@
                     break;
                 case ModuleTypes.Ram:
                     items = this.computerModulesService.GetRams();
+                    break;
+                case ModuleTypes.NetworkAdapter:
+                    items = this.computerModulesService.GetNetAdapters();
                     break;
             }
 
@@ -670,6 +676,9 @@
                 case ModuleTypes.Ram:
                     this.computerModulesService.UpdateRam(businessModel);
                     break;
+                case ModuleTypes.NetworkAdapter:
+                    this.computerModulesService.UpdateNetAdapter(businessModel);
+                    break;
             }
 
             return this.RedirectToAction("Index");
@@ -705,6 +714,9 @@
                 case ModuleTypes.Ram:
                     this.computerModulesService.AddRam(businessModel);
                     break;
+                case ModuleTypes.NetworkAdapter:
+                    this.computerModulesService.AddNetAdapter(businessModel);
+                    break;
             }
 
             return this.RedirectToAction("Index");
@@ -729,6 +741,9 @@
                     break;
                 case ModuleTypes.Ram:
                     this.computerModulesService.DeleteRam(id);
+                    break;
+                case ModuleTypes.NetworkAdapter:
+                    this.computerModulesService.DeleteNetAdapter(id);
                     break;
             }
 

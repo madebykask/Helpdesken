@@ -576,6 +576,7 @@
     <Compile Include="Models\Changes\SettingsEdit\SettingsModel.cs" />
     <Compile Include="Models\Changes\SettingsEdit\TextFieldSettingModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\ConfigurableFieldModel.cs" />
+    <Compile Include="Models\Inventory\ComputerModuleModeFilter.cs" />
     <Compile Include="Models\Inventory\OptionsAggregates\ComputerEditOptions.cs" />
     <Compile Include="Models\Inventory\EditModel\ComputerModuleGridModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Inventory\DefaultFieldsViewModel.cs" />
@@ -702,7 +703,7 @@
     <Compile Include="Models\Inventory\InventoryGridModelForDynamicInventory.cs" />
     <Compile Include="Models\Inventory\InventoryOverviewModel.cs" />
     <Compile Include="Models\Inventory\InventoryGridModel.cs" />
-    <Compile Include="Models\Inventory\CurrentModeFilter.cs" />
+    <Compile Include="Models\Inventory\InventoriesModeFilter.cs" />
     <Compile Include="Models\Inventory\CurrentModes.cs" />
     <Compile Include="Models\Inventory\IndexViewModel.cs" />
     <Compile Include="Models\Inventory\InventoryReportModel.cs" />
