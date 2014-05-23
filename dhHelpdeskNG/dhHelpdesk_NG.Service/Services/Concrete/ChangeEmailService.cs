@@ -42,7 +42,12 @@
             int languageId)
         {
             var templateId = this.mailTemplateRepository.GetTemplateId(ChangeTemplate.SendLogNoteTo, customerId);
-            var template = this.mailTemplateLanguageRepository.GetTemplate(templateId, languageId);
+            if (!templateId.HasValue)
+            {
+                return;
+            }
+
+            var template = this.mailTemplateLanguageRepository.GetTemplate(templateId.Value, languageId);
 
             var mail = this.mailTemplateFormatter.Format(template, change, customerId, languageId);
             var from = this.customerRepository.GetCustomerEmail(customerId);
@@ -53,7 +58,12 @@
         public void SendAssignedToUser(UpdatedChange change, List<string> emails, int customerId, int languageId)
         {
             var templateId = this.mailTemplateRepository.GetTemplateId(ChangeTemplate.AssignedToUser, customerId);
-            var template = this.mailTemplateLanguageRepository.GetTemplate(templateId, languageId);
+            if (!templateId.HasValue)
+            {
+                return;
+            }
+
+            var template = this.mailTemplateLanguageRepository.GetTemplate(templateId.Value, languageId);
 
             var mail = this.mailTemplateFormatter.Format(template, change, customerId, languageId);
             var from = this.customerRepository.GetCustomerEmail(customerId);
@@ -64,7 +74,12 @@
         public void SendStatusChanged(UpdatedChange change, List<string> ownerEmails, int customerId, int languageId)
         {
             var templateId = this.mailTemplateRepository.GetTemplateId(ChangeTemplate.StatusChanged, customerId);
-            var template = this.mailTemplateLanguageRepository.GetTemplate(templateId, languageId);
+            if (!templateId.HasValue)
+            {
+                return;
+            }
+
+            var template = this.mailTemplateLanguageRepository.GetTemplate(templateId.Value, languageId);
 
             var mail = this.mailTemplateFormatter.Format(template, change, customerId, languageId);
             var from = this.customerRepository.GetCustomerEmail(customerId);

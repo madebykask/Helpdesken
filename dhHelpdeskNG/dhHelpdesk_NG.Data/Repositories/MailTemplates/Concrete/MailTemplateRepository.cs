@@ -60,27 +60,41 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete
                 select m).FirstOrDefault();
         }
 
-        public int GetTemplateId(ChangeTemplate template, int customerId)
+        public int? GetTemplateId(ChangeTemplate template, int customerId)
         {
             var customerTemplates = this.DataContext.MailTemplates.Where(t => t.Customer_Id == customerId);
 
+            MailTemplateEntity entity;
             switch (template)
             {
                 case ChangeTemplate.AssignedToUser:
-                    return customerTemplates.Single(t => t.MailID == (int)ChangeTemplate.AssignedToUser).Id;
+                    entity = customerTemplates.SingleOrDefault(t => t.MailID == (int)ChangeTemplate.AssignedToUser);
+                    break;
                 case ChangeTemplate.SendLogNoteTo:
-                    return customerTemplates.Single(t => t.MailID == (int)ChangeTemplate.SendLogNoteTo).Id;
+                    entity = customerTemplates.SingleOrDefault(t => t.MailID == (int)ChangeTemplate.SendLogNoteTo);
+                    break;
                 case ChangeTemplate.Cab:
-                    return customerTemplates.Single(t => t.MailID == (int)ChangeTemplate.Cab).Id;
+                    entity = customerTemplates.SingleOrDefault(t => t.MailID == (int)ChangeTemplate.Cab);
+                    break;
                 case ChangeTemplate.Pir:
-                    return customerTemplates.Single(t => t.MailID == (int)ChangeTemplate.Pir).Id;
+                    entity = customerTemplates.SingleOrDefault(t => t.MailID == (int)ChangeTemplate.Pir);
+                    break;
                 case ChangeTemplate.StatusChanged:
-                    return customerTemplates.Single(t => t.MailID == (int)ChangeTemplate.StatusChanged).Id;
+                    entity = customerTemplates.SingleOrDefault(t => t.MailID == (int)ChangeTemplate.StatusChanged);
+                    break;
                 case ChangeTemplate.Change:
-                    return customerTemplates.Single(t => t.MailID == (int)ChangeTemplate.Change).Id;
+                    entity = customerTemplates.SingleOrDefault(t => t.MailID == (int)ChangeTemplate.Change);
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException("template");
             }
+
+            if (entity == null)
+            {
+                return null;
+            }
+
+            return entity.Id;
         }
     }
 

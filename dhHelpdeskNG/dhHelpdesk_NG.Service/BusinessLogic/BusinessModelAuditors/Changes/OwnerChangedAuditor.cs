@@ -68,7 +68,12 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
                 ChangeTemplate.AssignedToUser,
                 businessModel.Context.CustomerId);
 
-            var template = this.mailTemplateLanguageRepository.GetTemplate(templateId, businessModel.Context.LanguageId);
+            if (!templateId.HasValue)
+            {
+                return;
+            }
+
+            var template = this.mailTemplateLanguageRepository.GetTemplate(templateId.Value, businessModel.Context.LanguageId);
 
             var mail = this.mailTemplateFormatter.Format(
                 template,
