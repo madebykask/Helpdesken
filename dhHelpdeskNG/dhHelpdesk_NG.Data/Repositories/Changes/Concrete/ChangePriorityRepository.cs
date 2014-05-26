@@ -5,7 +5,6 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain.Changes;
 
@@ -30,7 +29,7 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
 
         public string GetPriorityName(int priorityId)
         {
-            return this.DataContext.Priorities.Where(p => p.Id == priorityId).Select(p => p.Name).Single();
+            return this.DataContext.Priorities.Where(p => p.Id == priorityId).Select(p => p.Name).FirstOrDefault();
         }
     }
 }

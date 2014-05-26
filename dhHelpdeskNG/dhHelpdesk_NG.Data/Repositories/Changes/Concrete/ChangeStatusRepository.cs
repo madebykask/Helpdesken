@@ -5,7 +5,6 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain.Changes;
 
@@ -30,7 +29,7 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
 
         public string GetStatusName(int statusId)
         {
-            return this.DataContext.ChangeStatuses.Where(s => s.Id == statusId).Select(s => s.ChangeStatus).Single();
+            return this.DataContext.ChangeStatuses.Where(s => s.Id == statusId).Select(s => s.ChangeStatus).FirstOrDefault();
         }
 
         public void ResetDefault(int exclude)

@@ -5,7 +5,6 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain.Changes;
 
@@ -34,7 +33,7 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
             return
                 this.DataContext.ChangeImplementationStatuses.Where(s => s.Id == statusId)
                     .Select(s => s.ImplementationStatus)
-                    .Single();
+                    .FirstOrDefault();
         }
     }
 }

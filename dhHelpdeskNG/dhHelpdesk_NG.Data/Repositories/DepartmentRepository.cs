@@ -5,7 +5,6 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
 
@@ -87,7 +86,7 @@
 
         public string GetDepartmentName(int departmentId)
         {
-            return this.DataContext.Departments.Where(d => d.Id == departmentId).Select(d => d.DepartmentName).Single();
+            return this.DataContext.Departments.Where(d => d.Id == departmentId).Select(d => d.DepartmentName).FirstOrDefault();
         }
     }
 

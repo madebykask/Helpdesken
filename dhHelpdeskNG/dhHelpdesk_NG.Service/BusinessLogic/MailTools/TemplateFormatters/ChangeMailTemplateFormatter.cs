@@ -98,7 +98,7 @@
             if (fields.ResponsibleId.HasValue)
             {
                 var userName = this.userRepository.GetUserName(fields.ResponsibleId.Value);
-                responsible = userName.FirstName + userName.LastName;
+                responsible = userName != null ? userName.FirstName + userName.LastName : string.Empty;
             }
 
             var solution = fields.Solution;
@@ -155,7 +155,7 @@
             if (fields.AdministratorId.HasValue)
             {
                 var userName = this.userRepository.GetUserName(fields.AdministratorId.Value);
-                administrator = userName.FirstName + userName.LastName;
+                administrator = userName != null ? userName.FirstName + userName.LastName : string.Empty;
             }
 
             var finishingDate = fields.FinishingDate.ToString();

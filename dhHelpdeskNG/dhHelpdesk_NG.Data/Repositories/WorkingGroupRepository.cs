@@ -96,7 +96,7 @@ namespace DH.Helpdesk.Dal.Repositories
             return
                 this.DataContext.WorkingGroups.Where(g => g.Id == workingGroupId)
                     .Select(g => g.WorkingGroupName)
-                    .Single();
+                    .FirstOrDefault();
         }
 
         public void ResetDefault(int exclude)

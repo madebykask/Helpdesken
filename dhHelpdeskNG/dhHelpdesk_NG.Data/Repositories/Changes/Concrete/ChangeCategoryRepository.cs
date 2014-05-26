@@ -5,7 +5,6 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain.Changes;
 
@@ -29,7 +28,7 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
 
         public string GetCategoryName(int categoryId)
         {
-            return this.DataContext.ChangeCategories.Where(c => c.Id == categoryId).Select(c => c.Name).Single();
+            return this.DataContext.ChangeCategories.Where(c => c.Id == categoryId).Select(c => c.Name).FirstOrDefault();
         }
     }
 }

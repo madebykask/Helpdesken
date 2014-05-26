@@ -241,7 +241,7 @@ namespace DH.Helpdesk.Dal.Repositories
                     .Select(u => new { u.FirstName, u.SurName })
                     .ToList()
                     .Select(u => new UserName(u.FirstName, u.SurName))
-                    .Single();
+                    .FirstOrDefault();
         }
 
         private UserOverview GetUser(Expression<Func<User, bool>> expression)

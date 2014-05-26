@@ -14,7 +14,6 @@ namespace DH.Helpdesk.Dal.Repositories
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.BusinessData.Models.Systems.Output;
     using DH.Helpdesk.Dal.Infrastructure;
 
@@ -105,7 +104,7 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         public string GetSystemName(int systemId)
         {
-            return this.DataContext.Systems.Where(s => s.Id == systemId).Select(s => s.SystemName).Single();
+            return this.DataContext.Systems.Where(s => s.Id == systemId).Select(s => s.SystemName).FirstOrDefault();
         }
 
         /// <summary>
