@@ -62,7 +62,7 @@
                     .Select(c => c.HelpdeskEmail)
                     .ToList()
                     .Select(e => new MailAddress(e))
-                    .Single();
+                    .FirstOrDefault();
         }
     }
 

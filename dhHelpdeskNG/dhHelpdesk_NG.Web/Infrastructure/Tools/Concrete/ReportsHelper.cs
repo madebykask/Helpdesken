@@ -23,43 +23,30 @@
                             out string objectId,
                             out string fileName)
         {
-            var chart = new Chart(500, 400)
-                           .AddTitle("Chart Title")
-                           .AddSeries(
-                               "Employee",
-                               xValue: new[] { "Peter", "Andrew", "Julie", "Mary", "Dave" },
-                               yValues: new[] { "2", "6", "4", "5", "3" });
+            objectId = null;
+            fileName = null;
+            var from = model.PeriodFrom.RoundToMonth();
+            var until = model.PeriodUntil.RoundToMonth();
+            if (from > until)
+            {
+                return false;
+            }
+
+            var x = new List<string>();
+            var y = new List<string>();
+            while (from <= until)
+            {
+                x.Add(from.ToMonthYear());
+                y.Add("5");
+                from = from.AddMonths(1);
+            }
+
+            var chart = this.CreateChart()
+                .AddSeries(
+                    xValue: x,
+                    yValues: y);
 
             this.SaveToCache(chart, out objectId, out fileName);
-
-
-//            objectId = null;
-//            fileName = null;
-//            var from = model.PeriodFrom.RoundToMonth();
-//            var until = model.PeriodUntil.RoundToMonth();
-//            if (from > until)
-//            {
-//                return false;
-//            }
-//
-//            var x = new List<string>();
-//            while (from <= until)
-//            {
-//                x.Add(from.ToMonthYear());
-//                from = from.AddMonths(1);
-//            }
-//
-//            var y = new List<string>();
-//
-//            var chart = this.CreateChart()
-//                .AddSeries(
-//                    xValue: x,
-//                    yValues: y)
-//                .AddSeries(
-//                    xValue: x,
-//                    yValues: y);
-//
-//            this.SaveToCache(chart, out objectId, out fileName);
             return true;
         }
 

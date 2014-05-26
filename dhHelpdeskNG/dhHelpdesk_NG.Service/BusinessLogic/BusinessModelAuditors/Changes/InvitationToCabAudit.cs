@@ -63,23 +63,34 @@
                 var templateId = this.mailTemplateRepository.GetTemplateId(
                     ChangeTemplate.Cab,
                     businessModel.Context.CustomerId);
-
                 if (!templateId.HasValue)
                 {
-                    return;
+                    continue;
                 }
 
                 var template = this.mailTemplateLanguageRepository.GetTemplate(
                     templateId.Value,
                     businessModel.Context.LanguageId);
+                if (template == null)
+                {
+                    continue;
+                }
 
                 var mail = this.mailTemplateFormatter.Format(
                     template,
                     businessModel.Change,
                     businessModel.Context.CustomerId,
                     businessModel.Context.LanguageId);
+                if (mail == null)
+                {
+                    continue;
+                }
 
                 var from = this.customerRepository.GetCustomerEmail(businessModel.Context.CustomerId);
+                if (from == null)
+                {
+                    continue;
+                }
 
                 var mailUniqueIdentifier = this.mailUniqueIdentifierProvider.Provide(
                     businessModel.Context.DateAndTime,

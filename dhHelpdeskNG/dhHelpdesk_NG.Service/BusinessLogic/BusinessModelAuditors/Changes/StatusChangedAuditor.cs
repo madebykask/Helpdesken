@@ -1,5 +1,7 @@
 namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
 {
+    using System.Linq;
+
     using DH.Helpdesk.BusinessData.Enums.MailTemplates;
     using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
@@ -63,25 +65,41 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
 
             var ownerEmails = this.userEmailRepository.FindUserEmails(
                 businessModel.Change.General.AdministratorId.Value);
+            if (ownerEmails == null || !ownerEmails.Any())
+            {
+                return;
+            }
 
             var templateId = this.mailTemplateRepository.GetTemplateId(
                 ChangeTemplate.StatusChanged,
                 businessModel.Context.CustomerId);
-
             if (!templateId.HasValue)
             {
                 return;
             }
 
             var template = this.mailTemplateLanguageRepository.GetTemplate(templateId.Value, businessModel.Context.LanguageId);
+            if (template == null)
+            {
+                return;
+            }
 
             var mail = this.mailTemplateFormatter.Format(
                 template,
                 businessModel.Change,
                 businessModel.Context.CustomerId,
                 businessModel.Context.LanguageId);
+            if (mail == null)
+            {
+                return;
+            }
 
             var from = this.customerRepository.GetCustomerEmail(businessModel.Context.CustomerId);
+            if (from == null)
+            {
+                return;
+            }
+
             this.emailService.SendEmail(from, ownerEmails, mail);
         }
 

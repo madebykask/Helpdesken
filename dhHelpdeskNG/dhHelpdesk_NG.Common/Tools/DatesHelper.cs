@@ -18,7 +18,7 @@ namespace DH.Helpdesk.Common.Tools
     {
         public static DateTime RoundToMonth(this DateTime date)
         {
-            return new DateTime(date.Year, date.Month, 0);
+            return new DateTime(date.Year, date.Month, 1);
         }
 
         /// <summary>

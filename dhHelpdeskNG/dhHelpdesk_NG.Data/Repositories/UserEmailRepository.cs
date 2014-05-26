@@ -17,7 +17,13 @@
 
         public List<MailAddress> FindUserEmails(int userId)
         {
-            var emails = this.DbContext.Users.Where(u => u.Id == userId).Select(u => u.Email).Single();
+            var emails = this.DbContext.Users.Where(u => u.Id == userId).Select(u => u.Email).FirstOrDefault();
+            
+            if (string.IsNullOrEmpty(emails))
+            {
+                return new List<MailAddress>();
+            }
+
             return emails.Split(";").Select(e => new MailAddress(e)).ToList();
         }
     }
