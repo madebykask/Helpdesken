@@ -485,7 +485,6 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Case\_CasePreview.cshtml" />
-    <Content Include="Views\Case\_Plupload.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">

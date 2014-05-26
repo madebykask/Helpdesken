@@ -3,79 +3,11 @@
 @using DH.Helpdesk.NewSelfService.Infrastructure
 @model DH.Helpdesk.NewSelfService.Models.Case.NewCaseModel
 
-@Html.Partial("_Plupload")
 <script type="text/javascript">
 
     $(function() {
         window.alreadyExistFileIds = [];
-        bindDeleteNewCaseFileBehaviorToDeleteButtons();
-
-        $('#file_uploader').pluploadQueue(
-        {
-            url:
-                '@this.Url.Action("NewCaseUploadFile")',
-            multipart_params:
-            {
-                Id:
-                    '@this.Model.CaseFileKey'
-            },
-            max_file_size:
-                '10mb',
-
-            init:
-            {
-                FileUploaded:
-                    function() {
-                        $.
-                            get('@this.Url.Action("NewCaseFiles")',
-                            {
-                                id:
-                                    '@this.Model.CaseFileKey'
-                        },
-                        function(files) {
-                            refreshNewCaseFilesTable(files);
-                        }
-                    );
-                },
-
-                UploadComplete:
-                    function(up, file) {
-                        //plupload_add
-                        $
-                        (".plupload_buttons").css("display", "inline");
-                        $
-                        (".plupload_upload_status").css("display", "inline");
-                        up.refresh();
-                    },
-
-                Error:
-                    function(uploader, e) {
-                        if (e.status != 409) {
-                            return;
-                        }
-
-                        window.alreadyExistFileIds.push(e.file.id);
-                    },
-
-                StateChanged:
-                    function(uploader) {
-                        if (uploader.state != plupload.STOPPED) {
-                            return;
-                        }
-
-                        for (var i = 0; i < window.alreadyExistFileIds.length; i++) {
-                            var fileId = window.alreadyExistFileIds[i];
-                            $
-                            ('#file_uploader ul[class="plupload_filelist"] li[id="' + fileId + '"] div[class="plupload_file_action"] a').prop('title', '@Translation.Get("File already exists.", Enums.TranslationSource.TextTranslation)');
-                    }
-
-                    window.alreadyExistFileIds.length = 0;
-                    uploader.refresh();
-                }
-
-            }
-
-        });
+        bindDeleteNewCaseFileBehaviorToDeleteButtons();       
 
         $('#NewCasefile_uploader').pluploadQueue({
             url: '@this.Url.Action("NewCaseUploadFile")',
@@ -140,10 +72,7 @@
     function refreshNewCaseFilesTable(files) {
         $('#NewCasefiles_table > tbody > tr').remove();
 
-        var fileMarkup =
-            $('<tr>' +
-                '<td> &nbsp; <td>' +
-                '<tr>');
+        var fileMarkup =            
         $('#NewCasefiles_table > tbody').append(fileMarkup);
 
         for (var i = 0; i < files.length; i++) {
@@ -155,7 +84,7 @@
                         '<i class="glyphicon glyphicon-file">&nbsp;</i><a style="color:blue" href="@this.Url.Action("DownloadNewCaseFile")?@(!string.IsNullOrEmpty(this.Model.CaseFileKey) ? "id=" + this.Model.CaseFileKey + "&" : string.Empty)' + 'fileName=' + file + '">' + file + '</a>' +
                     '</td>' +
                     '<td>' +
-                        '<a id="delete_file_button_' + i + '" class="btn bt-small" >@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation) <i class="icon-remove"></i> </a>' +
+                        '<a id="delete_file_button_' + i + '" class="btn btn-default btn-sm" ><span class="glyphicon glyphicon-remove"></span> </a>' +
                     '</td>' +
                     '</tr>');
             
@@ -851,7 +780,7 @@
                                             <label class="col-md-2">
                                                 @Model.FieldSettings.Where(f => f.Name == "Filename").Select(f => f.LabelToChange).SingleOrDefault():
                                             </label>
-                                            <div class="col-md-10">                                                
+                                            <div class="col-md-5">                                                
                                                 <a href="#NewCase_upload_files_popup" role="button" class="btn btn-default" data-toggle="modal">@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)</a>
                                                 <div id="NewCase_upload_files_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabel" aria-hidden="true">                                                    
                                                     <div class="modal-dialog">
@@ -869,7 +798,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <table id="NewCasefiles_table" class="table table-striped">
+                                                <table id="NewCasefiles_table" class="table table-striped table-bordered table-hover">
                                                     <tbody>
                                                         @if (this.Model.NewCase.CaseFiles == null)
                                                         {

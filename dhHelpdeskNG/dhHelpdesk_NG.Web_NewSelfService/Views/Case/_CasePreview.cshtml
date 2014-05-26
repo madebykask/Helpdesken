@@ -1,76 +1,10 @@
 ﻿@model DH.Helpdesk.NewSelfService.Models.Case.CaseOverviewModel
 
-
 <script type="text/javascript">
 
-    $(function() {                
+    $(function() {
         window.alreadyExistFileIds = [];
-        bindDeleteFileBehaviorToDeleteButtons();
-
-        $('#file_uploader').pluploadQueue(
-        {
-            url:
-                '@this.Url.Action("UploadFile")',
-            multipart_params:
-            {
-                Id:
-                    '@this.Model.ExLogFileGuid'
-            },
-            max_file_size:
-                '10mb',
-
-            init:
-            {
-                FileUploaded:
-                    function() {
-                        $.
-                            get('@this.Url.Action("Files")',
-                            {
-                                id:
-                                    '@this.Model.ExLogFileGuid'
-                        },
-                        function(files) {
-                            refreshFilesTable(files);
-                        }
-                    );
-                },
-
-                UploadComplete:
-                    function(up, file) {
-                        //plupload_add
-                        $
-                        (".plupload_buttons").css("display", "inline");
-                        $
-                        (".plupload_upload_status").css("display", "inline");
-                        up.refresh();
-                    },
-
-                Error:
-                    function(uploader, e) {
-                        if (e.status != 409) {
-                            return;
-                        }
-
-                        window.alreadyExistFileIds.push(e.file.id);
-                    },
-
-                StateChanged:
-                    function(uploader) {
-                        if (uploader.state != plupload.STOPPED) {
-                            return;
-                        }
-
-                        for (var i = 0; i < window.alreadyExistFileIds.length; i++) {
-                            var fileId = window.alreadyExistFileIds[i];
-                            $
-                            ('#file_uploader ul[class="plupload_filelist"] li[id="' + fileId + '"] div[class="plupload_file_action"] a').prop('title', '@Translation.Get("File already exists.", Enums.TranslationSource.TextTranslation)');
-                    }
-
-                    window.alreadyExistFileIds.length = 0;
-                    uploader.refresh();
-                }
-            }
-        });
+        bindDeleteFileBehaviorToDeleteButtons();       
 
         $('#file_uploader').pluploadQueue({
             url: '@this.Url.Action("UploadFile")',
@@ -78,21 +12,21 @@
             max_file_size: '10mb',
 
             init: {
-                FileUploaded: function () {
+                FileUploaded: function() {
 
-                    $.get('@this.Url.Action("Files")', { id: '@this.Model.ExLogFileGuid' }, function (files) {
+                    $.get('@this.Url.Action("Files")', { id: '@this.Model.ExLogFileGuid' }, function(files) {
                         refreshFilesTable(files);
                     });
                 },
 
-                UploadComplete: function (up, file) {
+                UploadComplete: function(up, file) {
                     //plupload_add
                     $(".plupload_buttons").css("display", "inline");
                     $(".plupload_upload_status").css("display", "inline");
                     up.refresh();
                 },
 
-                Error: function (uploader, e) {
+                Error: function(uploader, e) {
                     if (e.status != 409) {
                         return;
                     }
@@ -100,7 +34,7 @@
                     window.alreadyExistFileIds.push(e.file.id);
                 },
 
-                StateChanged: function (uploader) {
+                StateChanged: function(uploader) {
                     if (uploader.state != plupload.STOPPED) {
                         return;
                     }
@@ -129,20 +63,14 @@
                     $('#file_uploader').pluploadQueue().refresh();
                 }
             }
-        });
-
+        });        
     });
-    
-    
 
     function refreshFilesTable(files) {
         $('#files_table > tbody > tr').remove();
 
-        var fileMarkup =
-            $('<tr>' +
-                '<td> &nbsp; <td>' +
-                '<tr>');
-        $('#files_table > tbody').append(fileMarkup);
+        var fileMarkup =            
+          $('#files_table > tbody').append(fileMarkup);
 
         for (var i = 0; i < files.length; i++) {
             var file = files[i];
@@ -150,29 +78,29 @@
             fileMarkup =
                 $('<tr>' +
                     '<td>' +
-                    '<i class="glyphicon glyphicon-file">&nbsp;</i> <a style="color:blue" href="@this.Url.Action("DownloadLogFile")?@(!string.IsNullOrEmpty(this.Model.ExLogFileGuid) ? "id=" + this.Model.ExLogFileGuid + "&" : string.Empty)' + 'fileName=' + file + '">' + file + '</a>' +
+                        '<i class="glyphicon glyphicon-file">&nbsp;</i><a style="color:blue" href="@this.Url.Action("DownloadFile")?@(!string.IsNullOrEmpty(this.Model.ExLogFileGuid) ? "id=" + this.Model.ExLogFileGuid + "&" : string.Empty)' + 'fileName=' + file + '">' + file + '</a>' +
                     '</td>' +
                     '<td>' +
-                    '<a id="delete_file_button_' + i + '" class="btn bt-small">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation) <i class="icon-remove"></i> </a>' +
+                        '<a id="delete_file_button_' + i + '" class="btn btn-default btn-sm" ><span class="glyphicon glyphicon-remove"></span> </a>' +
                     '</td>' +
                     '</tr>');
+            
+                $('#files_table > tbody').append(fileMarkup);
+            }
 
-            $('#files_table > tbody').append(fileMarkup);
+            bindDeleteFileBehaviorToDeleteButtons();
         }
 
-        bindDeleteFileBehaviorToDeleteButtons();
-    }
+        function bindDeleteFileBehaviorToDeleteButtons() {
+            $('#files_table a[id^="delete_file_button_"]').click(function () {
+                var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
+                var pressedDeleteFileButton = this;
 
-    function bindDeleteFileBehaviorToDeleteButtons() {
-        $('#files_table a[id^="delete_file_button_"]').click(function () {
-            var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
-            var pressedDeleteFileButton = this;
-
-            $.post('@this.Url.Action("DeleteFile")', { id: '@this.Model.ExLogFileGuid', fileName: fileName }, function () {
-                $(pressedDeleteFileButton).parents('tr:first').remove();
+                $.post('@this.Url.Action("DeleteFile")', { id: '@this.Model.ExLogFileGuid', fileName: fileName }, function () {
+                    $(pressedDeleteFileButton).parents('tr:first').remove();
+                });
             });
-        });
-    }
+        }
 
     function SendEmail() {
 
@@ -180,19 +108,19 @@
         if (note == "") {
             alert('External Log text is empty');
         } else {
-            var caseId = $('#CaseId').val();            
+            var caseId = $('#CaseId').val();
             var curGuid = '@Model.MailGuid';
 
             window.location.href = '@Url.Action("SendMail", "Case")' +
-                '?caseId=' + caseId +                
+                '?caseId=' + caseId +
                 '&extraNote=' + note +
                 '&curGUID=' + curGuid;
         }
 
     }
+    
+
 </script>
-
-
 
 @if (Model.CaseFieldGroups.Contains("UserInformation"))
 {
@@ -822,8 +750,7 @@
                         <label class="col-md-2">
                             @Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation): 
                         </label>
-                        <div class="col-md-10">
-                            
+                        <div class="col-md-5">                            
                             <a href="#upload_files_popup" role="button" class="btn btn-default" data-toggle="modal">@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)</a>
                             <div id="upload_files_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
@@ -842,7 +769,7 @@
                                 </div>
                             </div>
 
-                            <table id="files_table" class="table table-striped">
+                            <table id="files_table" class="table table-striped table-bordered table-hover">
                                 <tbody>
                                     @if (this.Model.LogFilesModel.Files == null)
                                     {
