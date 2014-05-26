@@ -183,6 +183,13 @@
             var changeId = int.Parse(model.Id);
             var contacts = new List<Contact>();
 
+            if (model == null ||
+                model.Registration == null ||
+                model.Registration.Contacts == null)
+            {
+                return contacts;
+            }
+
             CreateContactIfNeeded(model.Registration.Contacts.ContactOne, context, changeId, contacts);
 
             CreateContactIfNeeded(model.Registration.Contacts.ContactTwo, context, changeId, contacts);
@@ -204,6 +211,11 @@
             int changeId,
             List<Contact> contacts)
         {
+            if (model == null)
+            {
+                return;
+            }
+
             if ((model.Name == null || string.IsNullOrEmpty(model.Name.Value))
                 && (model.Phone == null || string.IsNullOrEmpty(model.Phone.Value))
                 && (model.Email == null || string.IsNullOrEmpty(model.Email.Value))
@@ -213,14 +225,18 @@
             }
 
             Contact contact;
+            var name = model.Name != null ? model.Name.Value : string.Empty;
+            var phone = model.Phone != null ? model.Phone.Value : string.Empty;
+            var email = model.Email != null ? model.Email.Value : string.Empty;
+            var company = model.Company != null ? model.Company.Value : string.Empty;
 
             if (model.Id == 0)
             {
                 contact = Contact.CreateNew(
-                    model.Name.Value,
-                    model.Phone.Value,
-                    model.Email.Value,
-                    model.Company.Value,
+                    name,
+                    phone,
+                    email,
+                    company,
                     context.DateAndTime);
             }
             else
@@ -228,10 +244,10 @@
                 contact = Contact.CreateUpdated(
                     model.Id,
                     changeId,
-                    model.Name.Value,
-                    model.Phone.Value,
-                    model.Email.Value,
-                    model.Company.Value,
+                    name,
+                    phone,
+                    email,
+                    company,
                     context.DateAndTime);
             }
 
