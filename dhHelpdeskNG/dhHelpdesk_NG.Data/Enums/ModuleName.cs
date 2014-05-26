@@ -17,5 +17,7 @@
         public static readonly string Project = "Project";
 
         public static readonly string Priority = "Priority";
+
+        public static readonly string Reports = "Reports";
     }
 }

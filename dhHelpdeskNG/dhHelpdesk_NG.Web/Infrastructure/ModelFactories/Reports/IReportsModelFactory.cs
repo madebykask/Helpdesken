@@ -19,7 +19,8 @@
                                 OperationContext context);
 
         RegistratedCasesCaseTypeReportModel CreateRegistratedCasesCaseTypeReportModel(
-                                string key,
+                                string objectId,
+                                string fileName,
                                 RegistratedCasesCaseTypeModel request,
                                 RegistratedCasesCaseTypeResponsePrint response);
     }

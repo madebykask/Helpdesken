@@ -9,30 +9,36 @@
 
     public sealed class RegistratedCasesCaseTypeReportModel
     {
-        public RegistratedCasesCaseTypeReportModel()
+        public RegistratedCasesCaseTypeReportModel(string objectId, string fileName)
         {
+            this.FileName = fileName;
+            this.ObjectId = objectId;
             this.WorkingGroups = new ItemOverview[] { };
             this.CaseTypes = new ItemOverview[] { };
         }
 
         public RegistratedCasesCaseTypeReportModel(
-                        string key, 
                         IEnumerable<ItemOverview> workingGroups, 
                         IEnumerable<ItemOverview> caseTypes, 
                         ProductArea productArea, 
                         DateTime periodFrom, 
-                        DateTime periodUntil)
+                        DateTime periodUntil, 
+                        string objectId, 
+                        string fileName)
         {
+            this.FileName = fileName;
+            this.ObjectId = objectId;
             this.PeriodUntil = periodUntil;
             this.PeriodFrom = periodFrom;
             this.ProductArea = productArea;
             this.CaseTypes = caseTypes;
             this.WorkingGroups = workingGroups;
-            this.Key = key;
         }
 
+        public string ObjectId { get; private set; }
+
         [NotNullAndEmpty]
-        public string Key { get; private set; }
+        public string FileName { get; private set; }
 
         [NotNull]
         public IEnumerable<ItemOverview> WorkingGroups { get; private set; }

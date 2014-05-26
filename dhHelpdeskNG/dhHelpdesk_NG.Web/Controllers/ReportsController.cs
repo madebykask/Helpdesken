@@ -88,15 +88,22 @@
         [BadRequestOnNotValid]
         public ActionResult RegistratedCasesCaseType(RegistratedCasesCaseTypeModel model)
         {
-            string cachedReportKey;
-            this.reportsHelper.CreateRegistratedCasesCaseTypeReport(model, out cachedReportKey);
+            string objectId;
+            string fileName;
+            this.reportsHelper.CreateRegistratedCasesCaseTypeReport(model, out objectId, out fileName);
+            if (model.IsPrint)
+            {
+                fileName = this.reportsHelper.GetReportPathFromCache(objectId, fileName);
+            }
+
             var response = this.reportsService.GetRegistratedCasesCaseTypeResponsePrint(
                                                     this.OperationContext,
                                                     model.WorkingGroupIds,
                                                     model.CaseTypeIds,
                                                     model.ProductAreaId);
             var reportModel = this.reportsModelFactory.CreateRegistratedCasesCaseTypeReportModel(
-                                                    cachedReportKey,
+                                                    objectId,
+                                                    fileName,
                                                     model,
                                                     response);
 
@@ -106,6 +113,14 @@
             }
 
             return this.PartialView("RegistratedCasesCaseTypeReport", reportModel);
+        }
+
+        [HttpGet]
+        public FileContentResult GetReportImage(string objectId, string fileName)
+        {
+            return new FileContentResult(
+                                this.reportsHelper.GetReportImageFromCache(objectId, fileName),
+                                MimeHelper.GetMimeType(fileName));
         }
     }
 }

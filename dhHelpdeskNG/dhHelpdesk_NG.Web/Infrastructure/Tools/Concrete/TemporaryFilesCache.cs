@@ -113,6 +113,15 @@
                        : new List<string>(0);
         }
 
+        public string FindFilePath(string fileName, string objectId, params string[] subtopics)
+        {
+            var directory = this.ComposeDirectoryPath(objectId, subtopics);
+
+            return Directory.Exists(directory)
+                       ? Directory.GetFiles(directory).FirstOrDefault(f => Path.GetFileName(f) == fileName)
+                       : string.Empty;
+        }
+
         public List<WebTemporaryFile> FindFiles(string objectId, params string[] subtopics)
         {
             var directory = this.ComposeDirectoryPath(objectId, subtopics);

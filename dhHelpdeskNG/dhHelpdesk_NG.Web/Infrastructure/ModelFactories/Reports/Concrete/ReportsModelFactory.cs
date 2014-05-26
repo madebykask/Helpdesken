@@ -50,17 +50,19 @@
         }
 
         public RegistratedCasesCaseTypeReportModel CreateRegistratedCasesCaseTypeReportModel(
-                                    string key,
+                                    string objectId,
+                                    string fileName,
                                     RegistratedCasesCaseTypeModel request,
                                     RegistratedCasesCaseTypeResponsePrint response)
         {
-            var instance = new RegistratedCasesCaseTypeReportModel(
-                                    key, 
+            var instance = new RegistratedCasesCaseTypeReportModel(                                    
                                     response.WorkingGroups,
                                     response.CaseTypes,
                                     response.ProductArea,
                                     request.PeriodFrom,
-                                    request.PeriodUntil);
+                                    request.PeriodUntil,
+                                    objectId,
+                                    fileName);
             return instance;
         }
 

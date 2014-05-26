@@ -31,5 +31,7 @@
         byte[] GetFileContent(string fileName, string objectId, params string[] subtopics);
 
         byte[] GetFileContent(string fileName, int objectId, params string[] subtopics);
+
+        string FindFilePath(string fileName, string objectId, params string[] subtopics);
     }
 }
