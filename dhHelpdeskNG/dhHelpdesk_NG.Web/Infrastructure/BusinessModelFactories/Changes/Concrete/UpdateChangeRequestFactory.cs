@@ -180,7 +180,6 @@
 
         private static List<Contact> CreateContactCollection(InputModel model, OperationContext context)
         {
-            var changeId = int.Parse(model.Id);
             var contacts = new List<Contact>();
 
             if (model == null ||
@@ -189,6 +188,8 @@
             {
                 return contacts;
             }
+
+            var changeId = int.Parse(model.Id);
 
             CreateContactIfNeeded(model.Registration.Contacts.ContactOne, context, changeId, contacts);
 
