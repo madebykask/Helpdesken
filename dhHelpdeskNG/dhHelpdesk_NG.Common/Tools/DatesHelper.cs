@@ -16,6 +16,11 @@ namespace DH.Helpdesk.Common.Tools
     /// </summary>
     public static class DatesHelper
     {
+        public static DateTime RoundToMonth(this DateTime date)
+        {
+            return new DateTime(date.Year, date.Month, 0);
+        }
+
         /// <summary>
         /// The round to day.
         /// </summary>

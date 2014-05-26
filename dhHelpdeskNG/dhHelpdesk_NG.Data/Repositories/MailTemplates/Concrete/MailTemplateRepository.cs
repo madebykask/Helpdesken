@@ -68,22 +68,22 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete
             switch (template)
             {
                 case ChangeTemplate.AssignedToUser:
-                    entity = customerTemplates.SingleOrDefault(t => t.MailID == (int)ChangeTemplate.AssignedToUser);
+                    entity = customerTemplates.FirstOrDefault(t => t.MailID == (int)ChangeTemplate.AssignedToUser);
                     break;
                 case ChangeTemplate.SendLogNoteTo:
-                    entity = customerTemplates.SingleOrDefault(t => t.MailID == (int)ChangeTemplate.SendLogNoteTo);
+                    entity = customerTemplates.FirstOrDefault(t => t.MailID == (int)ChangeTemplate.SendLogNoteTo);
                     break;
                 case ChangeTemplate.Cab:
-                    entity = customerTemplates.SingleOrDefault(t => t.MailID == (int)ChangeTemplate.Cab);
+                    entity = customerTemplates.FirstOrDefault(t => t.MailID == (int)ChangeTemplate.Cab);
                     break;
                 case ChangeTemplate.Pir:
-                    entity = customerTemplates.SingleOrDefault(t => t.MailID == (int)ChangeTemplate.Pir);
+                    entity = customerTemplates.FirstOrDefault(t => t.MailID == (int)ChangeTemplate.Pir);
                     break;
                 case ChangeTemplate.StatusChanged:
-                    entity = customerTemplates.SingleOrDefault(t => t.MailID == (int)ChangeTemplate.StatusChanged);
+                    entity = customerTemplates.FirstOrDefault(t => t.MailID == (int)ChangeTemplate.StatusChanged);
                     break;
                 case ChangeTemplate.Change:
-                    entity = customerTemplates.SingleOrDefault(t => t.MailID == (int)ChangeTemplate.Change);
+                    entity = customerTemplates.FirstOrDefault(t => t.MailID == (int)ChangeTemplate.Change);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("template");

@@ -90,7 +90,11 @@
         {
             string objectId;
             string fileName;
-            this.reportsHelper.CreateRegistratedCasesCaseTypeReport(model, out objectId, out fileName);
+            if (!this.reportsHelper.CreateRegistratedCasesCaseTypeReport(model, out objectId, out fileName))
+            {
+                return new EmptyResult();
+            }
+
             if (model.IsPrint)
             {
                 fileName = this.reportsHelper.GetReportPathFromCache(objectId, fileName);

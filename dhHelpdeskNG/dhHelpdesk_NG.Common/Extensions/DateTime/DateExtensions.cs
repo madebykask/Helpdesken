@@ -45,5 +45,10 @@ namespace DH.Helpdesk.Common.Extensions.DateTime
         {
             return date.ToString("g", Thread.CurrentThread.CurrentUICulture);
         }
+
+        public static string ToMonthYear(this DateTime date)
+        {
+            return date.ToString("MM/yy");
+        }
     }
 }
