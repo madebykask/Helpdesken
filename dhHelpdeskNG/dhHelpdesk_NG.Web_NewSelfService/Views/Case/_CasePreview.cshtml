@@ -69,9 +69,8 @@
     function refreshFilesTable(files) {
         $('#files_table > tbody > tr').remove();
 
-        var fileMarkup =            
-          $('#files_table > tbody').append(fileMarkup);
-
+        var fileMarkup;
+        
         for (var i = 0; i < files.length; i++) {
             var file = files[i];
 
@@ -676,49 +675,46 @@
                                 {
                                     if (Model.CasePreview.FinishingDate == null || !(log.LogDate > Model.CasePreview.FinishingDate))
                                     {
-                            <tr>
-                                <td style="width: 15%">
-                                    @if (isFirst)
-                                    {
-                                        isFirst = false;
-                                        @Html.DisplayFor(l => log.LogDate, "DateAndTime")
-                                        <span style="color: red">&nbsp; @Translation.Get("Ny", Enums.TranslationSource.TextTranslation)!</span>
-                                                    
-                                    }
-                                    else
-                                    {
-                                        @Html.DisplayFor(l => log.LogDate, "DateAndTime")
-                                    }
-                                    <br />
-                                    @if (log.User == null)
-                                    {
-                                        user = log.RegUser;
-                                    }
-                                    else
-                                    {
-                                        user = log.User.SurName + " " + log.User.FirstName;
-                                    }
-                                    @user
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => log.Text_External)
-                                    <br />
-                                    @if (log.LogFiles.Count > 0)
-                                    {
-                                        foreach (var file in log.LogFiles)
-                                        {
-                                        <a style="color: blue" href="@this.Url.Action("DownloadLogFile", new RouteValueDictionary { { "id", log.Id }, { "fileName", file.FileName } })">
-                                            <i class="icon-file"></i>@file.FileName
-                                        </a>
-                                        <br />
-                                        }
-                                    }
-                                </td>
-                            </tr>
-                                        
+                                        <tr>
+                                            <td style="width: 15%">
+                                                @if (isFirst)
+                                                {
+                                                    isFirst = false;
+                                                    @Html.DisplayFor(l => log.LogDate, "DateAndTime")
+                                                    <span style="color: red">&nbsp; @Translation.Get("Ny", Enums.TranslationSource.TextTranslation)!</span>
+                                                }
+                                                else
+                                                {
+                                                    @Html.DisplayFor(l => log.LogDate, "DateAndTime")
+                                                }
+                                                <br />
+                                                @if (log.User == null)
+                                                {
+                                                    user = log.RegUser;
+                                                }
+                                                else
+                                                {
+                                                    user = log.User.SurName + " " + log.User.FirstName;
+                                                }
+                                                @user
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => log.Text_External)
+                                                <br />
+                                                @if (log.LogFiles.Count > 0)
+                                                {
+                                                    foreach (var file in log.LogFiles)
+                                                    {
+                                                        <a style="color: blue" href="@this.Url.Action("DownloadLogFile", new RouteValueDictionary { { "id", log.Id }, { "fileName", file.FileName } })">
+                                                            <i class="icon-file"></i>@file.FileName
+                                                        </a>
+                                                        <br />
+                                                    }
+                                                }
+                                            </td>
+                                        </tr>
                                     }
                                 }
-
                             }
                         }
                     </tbody>

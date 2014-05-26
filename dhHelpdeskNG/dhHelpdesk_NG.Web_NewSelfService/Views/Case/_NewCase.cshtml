@@ -72,8 +72,7 @@
     function refreshNewCaseFilesTable(files) {
         $('#NewCasefiles_table > tbody > tr').remove();
 
-        var fileMarkup =            
-        $('#NewCasefiles_table > tbody').append(fileMarkup);
+        var fileMarkup;        
 
         for (var i = 0; i < files.length; i++) {
             var file = files[i];
@@ -1024,7 +1023,7 @@
     
 
     $('#divCaseType ul.dropdown-menu li a').click(function (e) {
-        e.preventDefault();        
+        e.preventDefault();       
         var val = $(this).attr('value');
         $("#divBreadcrumbs_CaseType").text(getBreadcrumbs(this));
         //$("#NewCase.CaseType_Id").val(val);
@@ -1036,7 +1035,6 @@
         e.preventDefault();
         var val = $(this).attr('value');
         $("#divBreadcrumbs_CaseTypeSetting").text(getBreadcrumbs(this));        
-
         var ee = document.getElementById("NewCase_CaseType_Id");
         ee.setAttribute('value', val);        
     });
