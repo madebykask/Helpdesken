@@ -40,7 +40,7 @@ namespace DH.Helpdesk.NewSelfService.Models.Case
 
         public string ReceiptFooterMessage { get; set; }
 
-        public string MailGuid { get; set; }
+        public string MailGuid { get; set; }        
 
         [StringLength(3000)]
         public string ExtraNote { get; set; }

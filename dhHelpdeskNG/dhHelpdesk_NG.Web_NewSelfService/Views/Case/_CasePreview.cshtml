@@ -1,6 +1,5 @@
 ﻿@model DH.Helpdesk.NewSelfService.Models.Case.CaseOverviewModel
 
-@Html.Partial("_Plupload")
 
 <script type="text/javascript">
 
@@ -25,10 +24,10 @@
                 FileUploaded:
                     function() {
                         $.
-                                get('@this.Url.Action("Files")',
-                                {
-                                    id:
-                                        '@this.Model.ExLogFileGuid'
+                            get('@this.Url.Action("Files")',
+                            {
+                                id:
+                                    '@this.Model.ExLogFileGuid'
                         },
                         function(files) {
                             refreshFilesTable(files);
@@ -71,22 +70,70 @@
                     uploader.refresh();
                 }
             }
-        });        
+        });
+
+        $('#file_uploader').pluploadQueue({
+            url: '@this.Url.Action("UploadFile")',
+            multipart_params: { Id: '@this.Model.ExLogFileGuid' },
+            max_file_size: '10mb',
+
+            init: {
+                FileUploaded: function () {
+
+                    $.get('@this.Url.Action("Files")', { id: '@this.Model.ExLogFileGuid' }, function (files) {
+                        refreshFilesTable(files);
+                    });
+                },
+
+                UploadComplete: function (up, file) {
+                    //plupload_add
+                    $(".plupload_buttons").css("display", "inline");
+                    $(".plupload_upload_status").css("display", "inline");
+                    up.refresh();
+                },
+
+                Error: function (uploader, e) {
+                    if (e.status != 409) {
+                        return;
+                    }
+
+                    window.alreadyExistFileIds.push(e.file.id);
+                },
+
+                StateChanged: function (uploader) {
+                    if (uploader.state != plupload.STOPPED) {
+                        return;
+                    }
+
+                    for (var i = 0; i < window.alreadyExistFileIds.length; i++) {
+                        var fileId = window.alreadyExistFileIds[i];
+                        $('#file_uploader ul[class="plupload_filelist"] li[id="' + fileId + '"] div[class="plupload_file_action"] a').prop('title', '@Translation.Get("File already exists.", Enums.TranslationSource.TextTranslation)');
+                    }
+
+                    window.alreadyExistFileIds.length = 0;
+                    uploader.refresh();
+                }
+
+            }
+        });
+
+        $('#upload_files_popup').on('hidden.bs.modal', function () {
+            if ($('#file_uploader') != undefined) {
+                if ($('#file_uploader').pluploadQueue().files.length > 0) {
+                    if ($('#file_uploader').pluploadQueue().state == plupload.UPLOADING)
+                        $('#file_uploader').pluploadQueue().stop();
+
+                    while ($('#file_uploader').pluploadQueue().files.length > 0) {
+                        $('#file_uploader').pluploadQueue().removeFile($('#file_uploader').pluploadQueue().files[0]);
+                    }
+                    $('#file_uploader').pluploadQueue().refresh();
+                }
+            }
+        });
+
     });
     
-    $('#upload_files_popup').on('hide', function () {
-        if ($('#file_uploader') != undefined) {
-            if ($('#file_uploader').pluploadQueue().files.length > 0) {
-                if ($('#file_uploader').pluploadQueue().state == plupload.UPLOADING)
-                    $('#file_uploader').pluploadQueue().stop();
-
-                while ($('#file_uploader').pluploadQueue().files.length > 0) {
-                    $('#file_uploader').pluploadQueue().removeFile($('#file_uploader').pluploadQueue().files[0]);
-                }
-                $('#file_uploader').pluploadQueue().refresh();
-            }
-        }
-    });
+    
 
     function refreshFilesTable(files) {
         $('#files_table > tbody > tr').remove();
@@ -103,10 +150,10 @@
             fileMarkup =
                 $('<tr>' +
                     '<td>' +
-                    '<a style="color:blue" href="@this.Url.Action("DownloadLogFile")?@(!string.IsNullOrEmpty(this.Model.ExLogFileGuid) ? "id=" + this.Model.ExLogFileGuid + "&" : string.Empty)' + 'fileName=' + file + '"> <i class="icon-file"></i>' + file + '</a>' +
+                    '<i class="glyphicon glyphicon-file">&nbsp;</i> <a style="color:blue" href="@this.Url.Action("DownloadLogFile")?@(!string.IsNullOrEmpty(this.Model.ExLogFileGuid) ? "id=" + this.Model.ExLogFileGuid + "&" : string.Empty)' + 'fileName=' + file + '">' + file + '</a>' +
                     '</td>' +
                     '<td>' +
-                    '<a id="delete_file_button_' + i + '" class="btn bt-small" title="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)"> <i class="icon-remove"></i> </a>' +
+                    '<a id="delete_file_button_' + i + '" class="btn bt-small">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation) <i class="icon-remove"></i> </a>' +
                     '</td>' +
                     '</tr>');
 
@@ -134,12 +181,12 @@
             alert('External Log text is empty');
         } else {
             var caseId = $('#CaseId').val();            
-            var curGUID = '@Model.MailGuid';
+            var curGuid = '@Model.MailGuid';
 
             window.location.href = '@Url.Action("SendMail", "Case")' +
                 '?caseId=' + caseId +                
                 '&extraNote=' + note +
-                '&curGUID=' + curGUID;
+                '&curGUID=' + curGuid;
         }
 
     }
@@ -776,19 +823,25 @@
                             @Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation): 
                         </label>
                         <div class="col-md-10">
+                            
                             <a href="#upload_files_popup" role="button" class="btn btn-default" data-toggle="modal">@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)</a>
-                            <div id="upload_files_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                    <h3>&nbsp;</h3>
-                                </div>
-                                <div class="modal-body">
-                                    <div id="file_uploader"></div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Stäng", Enums.TranslationSource.TextTranslation)</button>
+                            <div id="upload_files_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                            <h3>&nbsp;</h3>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div id="file_uploader"></div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Stäng", Enums.TranslationSource.TextTranslation)</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+
                             <table id="files_table" class="table table-striped">
                                 <tbody>
                                     @if (this.Model.LogFilesModel.Files == null)

@@ -6,58 +6,18 @@
 @Html.Partial("_Plupload")
 <script type="text/javascript">
 
-    function refreshFilesTable(files) {
-        $('#files_table > tbody > tr').remove();
-
-        var fileMarkup =
-            $('<tr>' +
-                '<td> &nbsp; <td>' +
-                '<tr>');
-        $('#files_table > tbody').append(fileMarkup);
-
-        for (var i = 0; i < files.length; i++) {
-            var file = files[i];
-
-            fileMarkup =
-                $('<tr>' +
-                    '<td>' +
-                    '<a style="color:blue" href="@this.Url.Action("DownloadLogFile")?@(!string.IsNullOrEmpty(this.Model.ExLogFileGuid) ? "id=" + this.Model.ExLogFileGuid + "&" : string.Empty)' + 'fileName=' + file + '"> <i class="icon-file"></i>' + file + '</a>' +
-                    '</td>' +
-                    '<td>' +
-                    '<a id="delete_file_button_' + i + '" class="btn bt-small" title="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)"> <i class="icon-remove"></i> </a>' +
-                    '</td>' +
-                    '</tr>');
-
-            $('#files_table > tbody').append(fileMarkup);
-        }
-
-        bindDeleteFileBehaviorToDeleteButtons();
-    }
-
-
-    function bindDeleteFileBehaviorToDeleteButtons() {
-        $('#files_table a[id^="delete_file_button_"]').click(function () {
-            var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
-            var pressedDeleteFileButton = this;
-
-            $.post('@this.Url.Action("DeleteFile")', { id: '@this.Model.ExLogFileGuid', fileName: fileName }, function() {
-                $(pressedDeleteFileButton).parents('tr:first').remove();
-            });
-        });
-    }
-
-    $(function () {        
+    $(function() {
         window.alreadyExistFileIds = [];
-        bindDeleteFileBehaviorToDeleteButtons();
+        bindDeleteNewCaseFileBehaviorToDeleteButtons();
 
         $('#file_uploader').pluploadQueue(
         {
             url:
-                '@this.Url.Action("UploadFile")',
+                '@this.Url.Action("NewCaseUploadFile")',
             multipart_params:
             {
                 Id:
-                    '@this.Model.ExLogFileGuid'
+                    '@this.Model.CaseFileKey'
             },
             max_file_size:
                 '10mb',
@@ -67,16 +27,16 @@
                 FileUploaded:
                     function() {
                         $.
-                            get('@this.Url.Action("Files")',
-                                {
-                                    id:
-                                        '@this.Model.ExLogFileGuid'
-                                },
-                                function(files) {
-                                    refreshFilesTable(files);
-                                }
-                            );
-                    },
+                            get('@this.Url.Action("NewCaseFiles")',
+                            {
+                                id:
+                                    '@this.Model.CaseFileKey'
+                        },
+                        function(files) {
+                            refreshNewCaseFilesTable(files);
+                        }
+                    );
+                },
 
                 UploadComplete:
                     function(up, file) {
@@ -107,11 +67,11 @@
                             var fileId = window.alreadyExistFileIds[i];
                             $
                             ('#file_uploader ul[class="plupload_filelist"] li[id="' + fileId + '"] div[class="plupload_file_action"] a').prop('title', '@Translation.Get("File already exists.", Enums.TranslationSource.TextTranslation)');
-                        }
-
-                        window.alreadyExistFileIds.length = 0;
-                        uploader.refresh();
                     }
+
+                    window.alreadyExistFileIds.length = 0;
+                    uploader.refresh();
+                }
 
             }
 
@@ -161,23 +121,62 @@
 
             }
         });
-    });
 
+        $('#NewCase_upload_files_popup').on('hidden.bs.modal', function () {
+            if ($('#NewCasefile_uploader') != undefined) {
+                if ($('#NewCasefile_uploader').pluploadQueue().files.length > 0) {
+                    if ($('#NewCasefile_uploader').pluploadQueue().state == plupload.UPLOADING)
+                        $('#NewCasefile_uploader').pluploadQueue().stop();
 
-    $('#NewCase_upload_files_popup').on('hide', function () {
-        if ($('#NewCasefile_uploader') != undefined) {
-            if ($('#NewCasefile_uploader').pluploadQueue().files.length > 0) {
-                if ($('#NewCasefile_uploader').pluploadQueue().state == plupload.UPLOADING)
-                    $('#NewCasefile_uploader').pluploadQueue().stop();
-
-                while ($('#NewCasefile_uploader').pluploadQueue().files.length > 0) {
-                    $('#NewCasefile_uploader').pluploadQueue().removeFile($('#NewCasefile_uploader').pluploadQueue().files[0]);
+                    while ($('#NewCasefile_uploader').pluploadQueue().files.length > 0) {
+                        $('#NewCasefile_uploader').pluploadQueue().removeFile($('#NewCasefile_uploader').pluploadQueue().files[0]);
+                    }
+                    $('#NewCasefile_uploader').pluploadQueue().refresh();
                 }
-                $('#NewCasefile_uploader').pluploadQueue().refresh();
             }
-        }
+        });        
     });
 
+    function refreshNewCaseFilesTable(files) {
+        $('#NewCasefiles_table > tbody > tr').remove();
+
+        var fileMarkup =
+            $('<tr>' +
+                '<td> &nbsp; <td>' +
+                '<tr>');
+        $('#NewCasefiles_table > tbody').append(fileMarkup);
+
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+
+            fileMarkup =
+                $('<tr>' +
+                    '<td>' +
+                        '<i class="glyphicon glyphicon-file">&nbsp;</i><a style="color:blue" href="@this.Url.Action("DownloadNewCaseFile")?@(!string.IsNullOrEmpty(this.Model.CaseFileKey) ? "id=" + this.Model.CaseFileKey + "&" : string.Empty)' + 'fileName=' + file + '">' + file + '</a>' +
+                    '</td>' +
+                    '<td>' +
+                        '<a id="delete_file_button_' + i + '" class="btn bt-small" >@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation) <i class="icon-remove"></i> </a>' +
+                    '</td>' +
+                    '</tr>');
+            
+                $('#NewCasefiles_table > tbody').append(fileMarkup);
+            }
+
+            bindDeleteNewCaseFileBehaviorToDeleteButtons();
+        }
+
+        function bindDeleteNewCaseFileBehaviorToDeleteButtons() {
+            $('#NewCasefiles_table a[id^="delete_file_button_"]').click(function () {
+                var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
+                var pressedDeleteFileButton = this;
+
+                $.post('@this.Url.Action("DeleteNewCaseFile")', { id: '@this.Model.CaseFileKey', fileName: fileName }, function () {
+                    $(pressedDeleteFileButton).parents('tr:first').remove();
+                });
+            });
+        }
+
+    
 
 </script>
 
@@ -247,7 +246,7 @@
                                     {
                                         <div class="form-group row">
                                             <label class="col-md-2">
-                                                @Model.FieldSettings.Where(f => f.Name == "ReportedBy").Select(f => f.LabelToChange).SingleOrDefault():                          
+                                                @Model.FieldSettings.Where(f => f.Name == "ReportedBy").Select(f => f.LabelToChange).SingleOrDefault():                                                                          
                                             </label>
                                             <div class="col-md-10">
                                                 @if (Model.FieldSettings.Where(f => f.Name == "ReportedBy").Select(f => f.Required).SingleOrDefault() == 1)
@@ -1093,44 +1092,7 @@
         ee.setAttribute('value', val);
     });
 
-    function refreshNewCaseFilesTable(files) {
-        $('#NewCasefiles_table > tbody > tr').remove();
-
-        var fileMarkup =
-            $('<tr>' +
-                '<td> &nbsp; <td>' +
-                '<tr>');
-        $('#NewCasefiles_table > tbody').append(fileMarkup);
-
-        for (var i = 0; i < files.length; i++) {
-            var file = files[i];
-
-            fileMarkup =
-                $('<tr>' +
-                    '<td>' +
-                    '<a style="color:blue" href="@this.Url.Action("DownloadNewCaseFile")?@(!string.IsNullOrEmpty(this.Model.CaseFileKey) ? "id=" + this.Model.CaseFileKey + "&" : string.Empty)' + 'fileName=' + file + '"> <i class="icon-file"></i>' + file + '</a>' +
-                    '</td>' +
-                    '<td>' +
-                    '<a id="delete_file_button_' + i + '" class="btn bt-small" title="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)"> <i class="icon-remove"></i> </a>' +
-                    '</td>' +
-                    '</tr>');
-
-            $('#NewCasefiles_table > tbody').append(fileMarkup);
-        }
-
-        bindDeleteNewCaseFileBehaviorToDeleteButtons();
-    }
-
-    function bindDeleteNewCaseFileBehaviorToDeleteButtons() {
-        $('#NewCasefiles_table a[id^="delete_file_button_"]').click(function () {
-            var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
-            var pressedDeleteFileButton = this;
-
-            $.post('@this.Url.Action("DeleteNewCaseFile")', { id: '@this.Model.CaseFileKey', fileName: fileName }, function () {
-                $(pressedDeleteFileButton).parents('tr:first').remove();
-            });
-        });
-    }
+    
 
     $('#divCaseType ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();        
