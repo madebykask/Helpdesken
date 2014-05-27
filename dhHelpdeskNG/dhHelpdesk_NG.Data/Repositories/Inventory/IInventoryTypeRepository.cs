@@ -3,9 +3,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Changes;
+    using DH.Helpdesk.BusinessData.Models.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Dal.Dal;
 
     public interface IInventoryTypeRepository : INewRepository
@@ -21,5 +21,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
         List<ItemOverview> FindOverviews(int customerId);
 
         List<InventoryTypeWithInventories> FindInventoryTypesWithInventories(int customerId, int langaugeId);
+
+        List<InventoryReportModel> FindInventoriesWithCount(int customerId, int? departmentId);
     }
 }

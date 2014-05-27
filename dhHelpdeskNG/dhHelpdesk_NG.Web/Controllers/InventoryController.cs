@@ -2,12 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
     using System.Net;
     using System.Web;
     using System.Web.Mvc;
 
+    using DH.Helpdesk.BusinessData.Models.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Input;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Services.Services;
@@ -25,8 +25,6 @@
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Server;
     using DH.Helpdesk.Web.Models.Inventory.OptionsAggregates;
     using DH.Helpdesk.Web.Models.Inventory.SearchModels;
-
-    using PageName = DH.Helpdesk.Web.Enums.PageName;
 
     public class InventoryController : BaseController
     {
@@ -78,17 +76,19 @@
 
         public ViewResult Index()
         {
-            var activeTab = SessionFacade.FindActiveTab(Web.Enums.Inventory.PageName.InventoryIndex) ?? TabName.Inventories;
+            var activeTab = SessionFacade.FindActiveTab(PageName.InventoryIndex) ?? TabName.Inventories;
 
             var currentModeFilter = SessionFacade.FindPageFilters<InventoriesModeFilter>(TabName.Inventories) ?? InventoriesModeFilter.GetDefault();
+            var reportTypeFilter = SessionFacade.FindPageFilters<ReportFilter>(TabName.Reports) ?? ReportFilter.GetDefault();
             var moduleTypeFilter = SessionFacade.FindPageFilters<ComputerModuleModeFilter>(TabName.MasterData) ?? ComputerModuleModeFilter.GetDefault();
 
             var inventoryTypes = this.inventoryService.GetInventoryTypes(SessionFacade.CurrentCustomer.Id);
 
             var viewModel = IndexViewModel.BuildViewModel(
                 currentModeFilter.CurrentMode,
-                inventoryTypes,
+                reportTypeFilter.ReportType,
                 moduleTypeFilter.ModuleType,
+                inventoryTypes,
                 activeTab);
 
             return this.View(viewModel);
@@ -100,13 +100,13 @@
             switch ((CurrentModes)currentMode)
             {
                 case CurrentModes.Workstations:
-                    return this.Workstations();
+                    return this.Workstations(currentMode);
 
                 case CurrentModes.Servers:
-                    return this.Servers();
+                    return this.Servers(currentMode);
 
                 case CurrentModes.Printers:
-                    return this.Printers();
+                    return this.Printers(currentMode);
 
                 default:
                     return this.Inventories(currentMode);
@@ -114,10 +114,14 @@
         }
 
         [HttpGet]
-        public PartialViewResult Workstations()
+        public PartialViewResult Workstations(int currentModeId)
         {
-            SessionFacade.SavePageFilters(TabName.Inventories, new InventoriesModeFilter((int)CurrentModes.Workstations));
-            var currentFilter = SessionFacade.FindPageFilters<WorkstationsSearchFilter>(CurrentModes.Workstations.ToString()) ?? WorkstationsSearchFilter.CreateDefault();
+            SessionFacade.SavePageFilters(TabName.Inventories, new InventoriesModeFilter(currentModeId));
+            var currentFilter =
+                SessionFacade.FindPageFilters<WorkstationsSearchFilter>(
+                    this.CreateFilterId(TabName.Inventories, InventoryFilterMode.Workstation.ToString()))
+                ?? WorkstationsSearchFilter.CreateDefault();
+
             var computerTypes = this.computerModulesService.GetComputerTypes(SessionFacade.CurrentCustomer.Id);
             var regions = this.organizationService.GetRegions(SessionFacade.CurrentCustomer.Id);
             var departments = this.organizationService.GetDepartments(
@@ -138,19 +142,26 @@
         }
 
         [HttpGet]
-        public PartialViewResult Servers()
+        public PartialViewResult Servers(int currentModeId)
         {
-            SessionFacade.SavePageFilters(TabName.Inventories, new InventoriesModeFilter((int)CurrentModes.Servers));
-            var currentFilter = SessionFacade.FindPageFilters<ServerSearchFilter>(CurrentModes.Servers.ToString()) ?? ServerSearchFilter.CreateDefault();
+            SessionFacade.SavePageFilters(TabName.Inventories, new InventoriesModeFilter(currentModeId));
+            var currentFilter =
+                SessionFacade.FindPageFilters<ServerSearchFilter>(
+                    this.CreateFilterId(TabName.Inventories, InventoryFilterMode.Server.ToString()))
+                ?? ServerSearchFilter.CreateDefault();
 
             return this.PartialView("Servers", currentFilter);
         }
 
         [HttpGet]
-        public PartialViewResult Printers()
+        public PartialViewResult Printers(int currentModeId)
         {
-            SessionFacade.SavePageFilters(TabName.Inventories, new InventoriesModeFilter((int)CurrentModes.Printers));
-            var currentFilter = SessionFacade.FindPageFilters<PrinterSearchFilter>(CurrentModes.Printers.ToString()) ?? PrinterSearchFilter.CreateDefault();
+            SessionFacade.SavePageFilters(TabName.Inventories, new InventoriesModeFilter(currentModeId));
+            var currentFilter =
+                SessionFacade.FindPageFilters<PrinterSearchFilter>(
+                    this.CreateFilterId(TabName.Inventories, InventoryFilterMode.Printer.ToString()))
+                ?? PrinterSearchFilter.CreateDefault();
+
             var departments = this.organizationService.GetDepartments(SessionFacade.CurrentCustomer.Id);
             var settings = this.inventorySettingsService.GetPrinterFieldSettingsOverviewForFilter(
                 SessionFacade.CurrentCustomer.Id,
@@ -165,7 +176,11 @@
         public PartialViewResult Inventories(int inventoryTypeId)
         {
             SessionFacade.SavePageFilters(TabName.Inventories, new InventoriesModeFilter(inventoryTypeId));
-            var currentFilter = SessionFacade.FindPageFilters<InventorySearchFilter>(inventoryTypeId.ToString(CultureInfo.InvariantCulture)) ?? InventorySearchFilter.CreateDefault(inventoryTypeId);
+            var currentFilter =
+                SessionFacade.FindPageFilters<InventorySearchFilter>(
+                    this.CreateFilterId(TabName.Inventories, InventoryFilterMode.CustomType.ToString()))
+                ?? InventorySearchFilter.CreateDefault(inventoryTypeId);
+
             var departments = this.organizationService.GetDepartments(SessionFacade.CurrentCustomer.Id);
             var settings = this.inventorySettingsService.GetInventoryFieldSettingsOverviewForFilter(inventoryTypeId);
 
@@ -177,7 +192,10 @@
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
         public PartialViewResult WorkstationsGrid(WorkstationsSearchFilter filter)
         {
-            SessionFacade.SavePageFilters(CurrentModes.Workstations.ToString(), filter);
+            SessionFacade.SavePageFilters(
+                this.CreateFilterId(TabName.Inventories, InventoryFilterMode.Workstation.ToString()),
+                filter);
+
             var settings = this.inventorySettingsService.GetWorkstationFieldSettingsOverview(
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
@@ -191,7 +209,10 @@
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
         public PartialViewResult ServersGrid(ServerSearchFilter filter)
         {
-            SessionFacade.SavePageFilters(CurrentModes.Servers.ToString(), filter);
+            SessionFacade.SavePageFilters(
+                this.CreateFilterId(TabName.Inventories, InventoryFilterMode.Server.ToString()),
+                filter);
+
             var settings = this.inventorySettingsService.GetServerFieldSettingsOverview(
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
@@ -205,7 +226,10 @@
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
         public PartialViewResult PrintersGrid(PrinterSearchFilter filter)
         {
-            SessionFacade.SavePageFilters(CurrentModes.Printers.ToString(), filter);
+            SessionFacade.SavePageFilters(
+                this.CreateFilterId(TabName.Inventories, InventoryFilterMode.Printer.ToString()),
+                filter);
+
             var settings = this.inventorySettingsService.GetPrinterFieldSettingsOverview(
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
@@ -219,7 +243,10 @@
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
         public PartialViewResult InventoriesGrid(InventorySearchFilter filter)
         {
-            SessionFacade.SavePageFilters(filter.InventoryTypeId.ToString(CultureInfo.InvariantCulture), filter);
+            SessionFacade.SavePageFilters(
+                this.CreateFilterId(TabName.Inventories, InventoryFilterMode.CustomType.ToString()),
+                filter);
+
             var settings = this.inventorySettingsService.GetInventoryFieldSettingsOverview(filter.InventoryTypeId);
             var models = this.inventoryService.GetInventories(filter.CreateRequest());
 
@@ -271,7 +298,7 @@
         [HttpGet]
         public ViewResult EditWorkstation(int id)
         {
-            var activeTab = SessionFacade.FindActiveTab(Web.Enums.Inventory.PageName.ComputerEdit) ?? TabName.Computer;
+            var activeTab = SessionFacade.FindActiveTab(PageName.ComputerEdit) ?? TabName.Computer;
 
             var model = this.inventoryService.GetWorkstation(id);
             var options = this.GetWorkstationEditOptions(SessionFacade.CurrentCustomer.Id);
@@ -396,31 +423,31 @@
         [HttpGet]
         public ViewResult DeleteWorkstation(int id)
         {
-            throw new System.NotImplementedException();
+            throw new global::System.NotImplementedException();
         }
 
         [HttpGet]
         public ViewResult DeleteServer(int id)
         {
-            throw new System.NotImplementedException();
+            throw new global::System.NotImplementedException();
         }
 
         [HttpGet]
         public ViewResult DeletePrinter(int id)
         {
-            throw new System.NotImplementedException();
+            throw new global::System.NotImplementedException();
         }
 
         [HttpGet]
         public ViewResult DeleteInventory(int id)
         {
-            throw new System.NotImplementedException();
+            throw new global::System.NotImplementedException();
         }
 
         [HttpGet]
         public ViewResult DeleteDynamicSetting(int id)
         {
-            throw new System.NotImplementedException();
+            throw new global::System.NotImplementedException();
         }
 
         [HttpGet]
@@ -443,7 +470,7 @@
         [BadRequestOnNotValid]
         public ViewResult NewWorkstation(ComputerViewModel computerViewModel)
         {
-            throw new System.NotImplementedException();
+            throw new global::System.NotImplementedException();
         }
 
         [HttpGet]
@@ -466,7 +493,7 @@
         [BadRequestOnNotValid]
         public ViewResult NewServer(ServerViewModel serverViewModel)
         {
-            throw new System.NotImplementedException();
+            throw new global::System.NotImplementedException();
         }
 
         [HttpGet]
@@ -489,7 +516,7 @@
         [BadRequestOnNotValid]
         public ViewResult NewPrinter(PrinterViewModel printerViewModel)
         {
-            throw new System.NotImplementedException();
+            throw new global::System.NotImplementedException();
         }
 
         [HttpGet]
@@ -517,17 +544,17 @@
         [BadRequestOnNotValid]
         public ViewResult NewInventory(InventoryEditViewModel inventoryEditViewModel)
         {
-            throw new System.NotImplementedException();
+            throw new global::System.NotImplementedException();
         }
 
         public ActionResult EditComputerModule()
         {
-            throw new System.NotImplementedException();
+            throw new global::System.NotImplementedException();
         }
 
         public ActionResult NewComputerModule()
         {
-            throw new System.NotImplementedException();
+            throw new global::System.NotImplementedException();
         }
 
         [HttpPost]
@@ -750,6 +777,182 @@
             return this.RedirectToAction("Index");
         }
 
+        [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+        public PartialViewResult RenderReports(int reportType)
+        {
+            switch ((ReportTypes)reportType)
+            {
+                case ReportTypes.OperatingSystem:
+                case ReportTypes.ServicePack:
+                case ReportTypes.Processor:
+                case ReportTypes.Ram:
+                case ReportTypes.NetworkAdapter:
+                case ReportTypes.Location:
+                    return this.Reports(reportType);
+                case ReportTypes.InstaledPrograms:
+                    return this.InstaledProgramsReport(reportType);
+                case ReportTypes.Inventory:
+                    return this.InventoryReport(reportType);
+                default:
+                    return this.CustomTypeReport(reportType);
+            }
+        }
+
+        [HttpGet]
+        public PartialViewResult InstaledProgramsReport(int inventoryTypeId)
+        {
+            SessionFacade.SavePageFilters(TabName.Reports, new ReportFilter(inventoryTypeId));
+            var currentFilter =
+                SessionFacade.FindPageFilters<InstaledProgramsReportSearchFilter>(
+                    this.CreateFilterId(TabName.Reports, ReportFilterMode.InstaledPrograms.ToString()))
+                ?? InstaledProgramsReportSearchFilter.CreateDefault();
+
+            var departments = this.organizationService.GetDepartments(SessionFacade.CurrentCustomer.Id);
+
+            var viewModel = InstaledProgramsReportSearchViewModel.BuildViewModel(
+                currentFilter,
+                departments);
+
+            return this.PartialView("InstaledProgramsReport", viewModel);
+        }
+
+        [HttpGet]
+        public PartialViewResult Reports(int inventoryTypeId)
+        {
+            SessionFacade.SavePageFilters(TabName.Reports, new ReportFilter(inventoryTypeId));
+            var currentFilter =
+                SessionFacade.FindPageFilters<ReportsSearchFilter>(
+                    this.CreateFilterId(TabName.Reports, ReportFilterMode.DefaultReport.ToString()))
+                ?? ReportsSearchFilter.CreateDefault();
+
+            var departments = this.organizationService.GetDepartments(SessionFacade.CurrentCustomer.Id);
+
+            var viewModel = ReportsSearchViewModel.BuildViewModel(
+                currentFilter,
+                departments);
+
+            return this.PartialView("Reports", viewModel);
+        }
+
+        [HttpGet]
+        public PartialViewResult CustomTypeReport(int inventoryTypeId)
+        {
+            SessionFacade.SavePageFilters(TabName.Reports, new ReportFilter(inventoryTypeId));
+            var currentFilter =
+                SessionFacade.FindPageFilters<CustomTypeReportsSearchFilter>(
+                    this.CreateFilterId(TabName.Reports, ReportFilterMode.CustomType.ToString()))
+                ?? CustomTypeReportsSearchFilter.CreateDefault(inventoryTypeId);
+
+            var departments = this.organizationService.GetDepartments(SessionFacade.CurrentCustomer.Id);
+
+            var viewModel = CustomTypeReportSearchViewModel.BuildViewModel(
+                currentFilter,
+                departments);
+
+            return this.PartialView("CustomTypeReport", viewModel);
+        }
+
+        [HttpGet]
+        public PartialViewResult InventoryReport(int inventoryTypeId)
+        {
+            SessionFacade.SavePageFilters(TabName.Reports, new ReportFilter(inventoryTypeId));
+            var currentFilter =
+                SessionFacade.FindPageFilters<InventoryReportSearchFilter>(
+                    this.CreateFilterId(TabName.Reports, ReportFilterMode.Inventory.ToString()))
+                ?? InventoryReportSearchFilter.CreateDefault();
+
+            var departments = this.organizationService.GetDepartments(SessionFacade.CurrentCustomer.Id);
+
+            var viewModel = InventoryReportSearchViewModel.BuildViewModel(
+                currentFilter,
+                departments);
+
+            return this.PartialView("InventoryReport", viewModel);
+        }
+
+        [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+        public PartialViewResult InstaledProgramsReportGrid(InstaledProgramsReportSearchFilter filter)
+        {
+            SessionFacade.SavePageFilters(
+                this.CreateFilterId(TabName.Reports, ReportFilterMode.InstaledPrograms.ToString()),
+                filter);
+
+            var models = new List<ReportModel>();
+
+            switch (filter.ReportDataType)
+            {
+                case ReportDataTypes.Workstation:
+                    models = this.inventoryService.GetComputerInstaledSoftware(
+                        SessionFacade.CurrentCustomer.Id,
+                        filter.DepartmentId,
+                        filter.SearchFor);
+                    break;
+                case ReportDataTypes.Server:
+                    models = this.inventoryService.GetServerInstaledSoftware(
+                        SessionFacade.CurrentCustomer.Id,
+                        filter.SearchFor);
+                    break;
+                default:
+                    var computerSoftware = this.inventoryService.GetComputerInstaledSoftware(
+                        SessionFacade.CurrentCustomer.Id,
+                        filter.DepartmentId,
+                        filter.SearchFor);
+                    var serverSoftware =
+                        this.inventoryService.GetServerInstaledSoftware(
+                            SessionFacade.CurrentCustomer.Id,
+                            filter.SearchFor);
+                    models = computerSoftware.Union(serverSoftware).ToList();
+                    break;
+            }
+
+            if (filter.IsShowMissingParentInventory)
+            {
+                return null;
+            }
+
+            var viewModel = new ReportViewModel(models, ReportTypes.InstaledPrograms.ToString(), filter.IsShowParentInventory);
+            return this.PartialView("ReportGrid", viewModel);
+        }
+
+        [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+        public PartialViewResult ReportsGrid(ReportsSearchFilter filter)
+        {
+            SessionFacade.SavePageFilters(
+                this.CreateFilterId(TabName.Reports, ReportFilterMode.DefaultReport.ToString()),
+                filter);
+
+            return null;
+        }
+
+        [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+        public PartialViewResult CustomTypeReportGrid(CustomTypeReportsSearchFilter filter)
+        {
+            SessionFacade.SavePageFilters(
+                this.CreateFilterId(TabName.Reports, ReportFilterMode.CustomType.ToString()),
+                filter);
+
+            var models = this.inventoryService.GetAllConnectedInventory(
+                SessionFacade.CurrentCustomer.Id,
+                filter.InventoryTypeId,
+                filter.DepartmentId,
+                filter.SearchFor);
+
+            var viewModel = new ReportViewModel(models.ReportModel, models.InventoryName, filter.IsShowParentInventory);
+            return this.PartialView("CustomTypeReportGrid", viewModel);
+        }
+
+        [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+        public PartialViewResult InventoryReportGrid(InventoryReportSearchFilter filter)
+        {
+            SessionFacade.SavePageFilters(
+                this.CreateFilterId(TabName.Reports, ReportFilterMode.Inventory.ToString()),
+                filter);
+
+            var models = this.inventoryService.GetInventoryCounts(SessionFacade.CurrentCustomer.Id, filter.DepartmentId);
+
+            return this.PartialView("InventoryReportGrid", models);
+        }
+
         #region Private
 
         private ComputerEditOptions GetWorkstationEditOptions(int customerId)
@@ -825,5 +1028,10 @@
         }
 
         #endregion
+
+        private string CreateFilterId(string tabName, string id)
+        {
+            return string.Format("{0}{1}", tabName, id);
+        }
     }
 }

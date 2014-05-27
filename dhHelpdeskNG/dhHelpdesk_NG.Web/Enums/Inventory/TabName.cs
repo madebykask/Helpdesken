@@ -10,6 +10,8 @@
 
         public static readonly string Inventories = "InventoryIndex.Inventories";
 
+        public static readonly string Reports = "InventoryIndex.Reports";
+
         public static readonly string MasterData = "InventoryIndex.MasterData";
     }
 }

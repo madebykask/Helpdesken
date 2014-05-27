@@ -25,5 +25,7 @@ namespace DH.Helpdesk.Dal.Repositories.Servers
         void RemoveReferenceOnProcessor(int id);
 
         void RemoveReferenceOnOs(int id);
+
+        int GetServerCount(int customerId);
     }
 }

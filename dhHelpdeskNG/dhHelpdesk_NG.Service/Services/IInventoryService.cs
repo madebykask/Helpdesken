@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
 
+    using DH.Helpdesk.BusinessData.Models.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Computer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Printer;
@@ -19,6 +20,18 @@
         List<ItemOverview> GetInventoryTypes(int customerId);
 
         List<ItemOverview> GetNotConnectedInventory(int inventoryType, int customerId);
+
+        List<InventoryReportModel> GetInventoryCounts(int customerId, int? departmentId);
+
+        List<ReportModel> GetComputerInstaledSoftware(int customerId, int? departmentId, string searchFor);
+
+        List<ReportModel> GetServerInstaledSoftware(int customerId, string searchFor);
+
+        ReportModelWithInventoryType GetAllConnectedInventory(
+            int customerId,
+            int inventoryTypeId,
+            int? departmentId,
+            string searchFor);
 
         #region Workstation
 

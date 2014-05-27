@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Inventory
+﻿namespace DH.Helpdesk.Web.Enums.Inventory
 {
     public enum CurrentModes
     {

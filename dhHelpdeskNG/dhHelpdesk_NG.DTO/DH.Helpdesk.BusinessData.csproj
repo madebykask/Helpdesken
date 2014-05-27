@@ -146,6 +146,9 @@
     <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\RegistrationProcessingSettings.cs" />
     <Compile Include="Models\Changes\GetSearchDataResponse.cs" />
     <Compile Include="Models\Inventory\Edit\Inventory\TypeGroupModel.cs" />
+    <Compile Include="Models\Inventory\InventoryReportModel.cs" />
+    <Compile Include="Models\Inventory\ReportModel.cs" />
+    <Compile Include="Models\Inventory\ReportModelWithInventoryType.cs" />
     <Compile Include="Models\Reports\Output\RegistratedCasesCaseTypeResponsePrint.cs" />
     <Compile Include="Models\Shared\Input\SortField.cs" />
     <Compile Include="Models\BusinessModel.cs" />

@@ -4,6 +4,8 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Enums.Inventory;
+    using DH.Helpdesk.BusinessData.Models.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Computer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Printer;
@@ -101,6 +103,44 @@
         public List<ItemOverview> GetNotConnectedInventory(int inventoryType, int customerId)
         {
             return this.inventoryRepository.FindNotConnectedOverviews(inventoryType, customerId);
+        }
+
+        public List<InventoryReportModel> GetInventoryCounts(int customerId, int? departmentId)
+        {
+            var workstationCount = new InventoryReportModel(
+                CurrentModes.Workstations.ToString(),
+                this.computerRepository.GetComputerCount(customerId, departmentId));
+            var serverCount = new InventoryReportModel(
+                CurrentModes.Servers.ToString(),
+                this.serverRepository.GetServerCount(customerId));
+            var printerCount = new InventoryReportModel(
+                CurrentModes.Printers.ToString(),
+                this.printerRepository.GetPrinterCount(customerId, departmentId));
+
+            var inventoryCounts = this.inventoryTypeRepository.FindInventoriesWithCount(customerId, departmentId);
+            var models = new List<InventoryReportModel> { workstationCount, serverCount, printerCount };
+            models.AddRange(inventoryCounts);
+
+            return models;
+        }
+
+        public List<ReportModel> GetComputerInstaledSoftware(int customerId, int? departmentId, string searchFor)
+        {
+            return this.softwareRepository.FindAllComputerSoftware(customerId, departmentId, searchFor);
+        }
+
+        public List<ReportModel> GetServerInstaledSoftware(int customerId, string searchFor)
+        {
+            return this.serverSoftwareRepository.FindAllServerSoftware(customerId, searchFor);
+        }
+
+        public ReportModelWithInventoryType GetAllConnectedInventory(int customerId, int inventoryTypeId, int? departmentId, string searchFor)
+        {
+            return this.inventoryRepository.FindAllConnectedInventory(
+                customerId,
+                inventoryTypeId,
+                departmentId,
+                searchFor);
         }
 
         #region Workstation

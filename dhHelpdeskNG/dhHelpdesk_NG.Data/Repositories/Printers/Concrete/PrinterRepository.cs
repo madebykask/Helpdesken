@@ -166,6 +166,20 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
             return overviewAggregates;
         }
 
+        public int GetPrinterCount(int customerId, int? departmentId)
+        {
+            var query = this.DbSet.Where(x => x.Customer_Id == customerId);
+
+            if (departmentId.HasValue)
+            {
+                query = query.Where(x => x.Department_Id == departmentId);
+            }
+
+            var result = query.Count();
+
+            return result;
+        }
+
         private static void Map(Domain.Printers.Printer entity, Printer businessModel)
         {
             entity.PrinterName = businessModel.GeneralFields.Name;

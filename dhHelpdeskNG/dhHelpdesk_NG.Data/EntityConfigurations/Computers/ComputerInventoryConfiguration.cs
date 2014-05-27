@@ -10,10 +10,9 @@
         {
             this.HasKey(u => new { u.Inventory_Id, u.Computer_Id });
 
-            this.HasRequired(x => x.Computer)
-                .WithMany()
-                .HasForeignKey(x => x.Computer_Id)
-                .WillCascadeOnDelete(false);
+            this.HasRequired(x => x.Computer).WithMany().HasForeignKey(x => x.Computer_Id).WillCascadeOnDelete(false);
+
+            this.HasRequired(x => x.Inventory).WithMany().HasForeignKey(x => x.Inventory_Id).WillCascadeOnDelete(false);
 
             this.Property(x => x.Inventory_Id).IsRequired();
 

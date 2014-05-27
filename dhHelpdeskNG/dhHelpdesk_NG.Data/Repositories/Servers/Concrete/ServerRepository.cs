@@ -227,6 +227,13 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
             }
         }
 
+        public int GetServerCount(int customerId)
+        {
+            var result = this.DbSet.Count(x => x.Customer_Id == customerId);
+
+            return result;
+        }
+
         private static void Map(Domain.Servers.Server entity, Server businessModel)
         {
             entity.ServerName = businessModel.GeneralFields.Name;

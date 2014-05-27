@@ -6,9 +6,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 
     using DH.Helpdesk.BusinessData.Enums.Inventory;
     using DH.Helpdesk.BusinessData.Models.Changes;
+    using DH.Helpdesk.BusinessData.Models.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
 
@@ -59,10 +59,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 
         public List<ItemOverview> FindOverviews(int customerId)
         {
-            var anonymus =
-              this.DbSet
-                  .Select(c => new { c.Name, c.Id })
-                  .ToList();
+            var anonymus = this.DbSet.Where(x => x.Customer_Id == customerId).Select(c => new { c.Name, c.Id }).ToList();
 
             var overviews =
                 anonymus.Select(c => new ItemOverview(c.Name, c.Id.ToString(CultureInfo.InvariantCulture))).ToList();
@@ -148,6 +145,30 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             }
 
             return inventoryTypesWithInventories;
+        }
+
+        public List<InventoryReportModel> FindInventoriesWithCount(int customerId, int? departmentId)
+        {
+            var inventories = DbContext.Inventories.AsQueryable();
+
+            if (departmentId.HasValue)
+            {
+                inventories = inventories.Where(x => x.Department_Id == departmentId);
+            }
+
+            var inventoryTypeWithCount =
+                inventories.GroupBy(x => x.InventoryType_Id).Select(x => new { Id = x.Key, Count = (int?)x.Count() });
+
+            var query = from it in DbContext.InventoryTypes.Where(x => x.Customer_Id == customerId)
+                        join i in inventoryTypeWithCount on it.Id equals i.Id into result
+                        from k in result.DefaultIfEmpty()
+                        select new { it.Name, k.Count };
+
+            var anonymus = query.ToList();
+
+            var models = anonymus.Select(x => new InventoryReportModel(x.Name, x.Count.GetValueOrDefault())).ToList();
+
+            return models;
         }
     }
 }

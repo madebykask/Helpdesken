@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory
 {
+    using DH.Helpdesk.Web.Enums.Inventory;
+
     public class InventoriesModeFilter
     {
         public InventoriesModeFilter(int currentMode)

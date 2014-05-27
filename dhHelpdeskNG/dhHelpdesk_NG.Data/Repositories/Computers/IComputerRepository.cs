@@ -4,6 +4,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Computer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer;
     using DH.Helpdesk.Dal.Dal;
@@ -47,5 +48,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
         void RemoveReferenceOnComputerType(int id);
 
         void RemoveReferenceOnComputerModel(int id);
+
+        int GetComputerCount(int customerId, int? departmentId);
     }
 }

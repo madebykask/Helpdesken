@@ -2,10 +2,10 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
 {
     using System.Collections.Generic;
 
+    using DH.Helpdesk.BusinessData.Models.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Dal.Dal;
 
     public interface IInventoryRepository : INewRepository
@@ -23,5 +23,11 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
         List<InventoryOverview> FindOverviews(int inventoryTypeId, int? departmentId, string searchString, int pageSize);
 
         List<ItemOverview> FindNotConnectedOverviews(int inventoryTypeId, int computerId);
+
+        ReportModelWithInventoryType FindAllConnectedInventory(
+            int customerId,
+            int inventoryTypeId,
+            int? departmentId,
+            string searchFor);
     }
 }

@@ -7,8 +7,6 @@
         <tr>
             <th>@Translation.Get(Model.Header)
             </th>
-            <th>@Translation.Get("Antal")
-            </th>
         </tr>
     </thead>
     <tbody>
@@ -19,19 +17,13 @@
                 <tr>
                     <td class="@howerClass">@Html.DisplayFor(x => item.Key)
                     </td>
-                    <td class="@howerClass">
-                        @{
-                            var count = item.Count();
-                            @Html.DisplayFor(x => count)
-                        }
-                    </td>
                 </tr>
                 if (Model.IsGrouped)
                 {
                     foreach (var owner in item)
                     {
                         <tr>
-                            <td colspan="2">@Html.DisplayFor(x => owner.Owner)
+                            <td>@Html.DisplayFor(x => owner.Owner)
                             </td>
                         </tr>
                     }
@@ -40,4 +32,5 @@
         }
     </tbody>
 </table>
+
 

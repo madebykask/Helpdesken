@@ -4,6 +4,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
     using System.Globalization;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output;
     using DH.Helpdesk.BusinessData.Models.Shared;
@@ -268,6 +269,46 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                 anonymus.Select(c => new ItemOverview(c.Name, c.Id.ToString(CultureInfo.InvariantCulture))).ToList();
 
             return overviews;
+        }
+
+        public ReportModelWithInventoryType FindAllConnectedInventory(int customerId, int inventoryTypeId, int? departmentId, string searchFor)
+        {
+            var query =
+                this.DbSet.Where(
+                    x => x.InventoryType.Customer_Id == customerId && x.InventoryType.Id == inventoryTypeId);
+
+            if (departmentId.HasValue)
+            {
+                query = query.Where(x => x.Department_Id == departmentId);
+            }
+
+            if (!string.IsNullOrEmpty(searchFor))
+            {
+                var pharseInLowerCase = searchFor.ToLower();
+                query = query.Where(x => x.InventoryName.ToLower().Contains(pharseInLowerCase));
+            }
+
+            var anonymus = (from q in query
+                            join ci in DbContext.ComputerInventories on q.Id equals ci.Inventory_Id into result
+                            from k in result.DefaultIfEmpty()
+                            select
+                                new
+                                    {
+                                        q.InventoryName,
+                                        k.Computer.ComputerName,
+                                        q.InventoryType_Id,
+                                        InventoryTypeName = q.InventoryType.Name
+                                    }).ToList();
+
+            var grouped = anonymus.GroupBy(x => new { x.InventoryType_Id, x.InventoryTypeName }).Single();
+
+            var models = grouped.Select(x => new ReportModel(x.InventoryName, x.ComputerName)).ToList();
+            var model = new ReportModelWithInventoryType(
+                grouped.Key.InventoryType_Id,
+                grouped.Key.InventoryTypeName,
+                models);
+
+            return model;
         }
     }
 }
