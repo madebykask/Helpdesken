@@ -36,19 +36,19 @@
             return new SearchData(options);
         }
 
-        public RegistratedCasesCaseTypeResponse GetRegistratedCasesCaseTypeResponse(OperationContext context)
+        public RegistratedCasesCaseTypeOptionsResponse GetRegistratedCasesCaseTypeOptionsResponse(OperationContext context)
         {
             var workingGroups = this.workingGroupService.GetOverviews(context.CustomerId);
             var caseTypes = this.caseTypeService.GetOverviews(context.CustomerId);
             var productAreas = this.productAreaService.GetProductAreas(context.CustomerId);
 
-            return new RegistratedCasesCaseTypeResponse(
+            return new RegistratedCasesCaseTypeOptionsResponse(
                                                         workingGroups,
                                                         caseTypes,
                                                         productAreas);
         }
 
-        public RegistratedCasesCaseTypeResponsePrint GetRegistratedCasesCaseTypeResponsePrint(
+        public RegistratedCasesCaseTypeReportResponse GetRegistratedCasesCaseTypeReportResponse(
                                                     OperationContext context,
                                                     IEnumerable<int> workingGroupsIds,
                                                     IEnumerable<int> caseTypesIds,
@@ -58,7 +58,7 @@
             var caseTypes = this.caseTypeService.GetOverviews(context.CustomerId, caseTypesIds);
             var productArea = productAreaId.HasValue ? this.productAreaService.GetProductArea(productAreaId.Value) : null;
 
-            return new RegistratedCasesCaseTypeResponsePrint(
+            return new RegistratedCasesCaseTypeReportResponse(
                                                         workingGroups,
                                                         caseTypes,
                                                         productArea);            

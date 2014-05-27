@@ -6,13 +6,26 @@
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports;
-    using DH.Helpdesk.BusinessData.Models.Reports.Output;
     using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure.Filters.Reports;
+    using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Models.Reports;
 
     internal sealed class ReportsModelFactory : IReportsModelFactory
     {
+        private readonly IReportsHelper reportsHelper;
+
+        private readonly IReportsService reportsService;
+
+        public ReportsModelFactory(
+                    IReportsHelper reportsHelper, 
+                    IReportsService reportsService)
+        {
+            this.reportsHelper = reportsHelper;
+            this.reportsService = reportsService;
+        }
+
         public IndexModel CreateIndexModel()
         {
             var instance = new IndexModel();
@@ -31,14 +44,13 @@
             return instance;
         }
 
-        public RegistratedCasesCaseTypeModel CreateRegistratedCasesCaseTypeModel(
-                                    RegistratedCasesCaseTypeResponse response,
-                                    OperationContext context)
+        public RegistratedCasesCaseTypeOptions CreateRegistratedCasesCaseTypeOptions(OperationContext context)
         {
+            var response = this.reportsService.GetRegistratedCasesCaseTypeOptionsResponse(context);
             var workingGroups = CreateMultiSelectField(response.WorkingGroups);
             var caseTypes = CreateMultiSelectField(response.CaseTypes);
             var productAreas = response.ProductAreas;
-            var instance = new RegistratedCasesCaseTypeModel(
+            var instance = new RegistratedCasesCaseTypeOptions(
                             workingGroups,
                             caseTypes,
                             productAreas,
@@ -49,13 +61,29 @@
             return instance;
         }
 
-        public RegistratedCasesCaseTypeReportModel CreateRegistratedCasesCaseTypeReportModel(
-                                    string objectId,
-                                    string fileName,
-                                    RegistratedCasesCaseTypeModel request,
-                                    RegistratedCasesCaseTypeResponsePrint response)
+        public RegistratedCasesCaseTypeReport CreateRegistratedCasesCaseTypeReport(
+                                    RegistratedCasesCaseTypeOptions request,
+                                    OperationContext context)
         {
-            var instance = new RegistratedCasesCaseTypeReportModel(                                    
+            var response = this.reportsService.GetRegistratedCasesCaseTypeReportResponse(
+                                        context,
+                                        request.WorkingGroupIds,
+                                        request.CaseTypeIds,
+                                        request.ProductAreaId);
+
+            string objectId;
+            string fileName;
+            if (!this.reportsHelper.CreateRegistratedCasesCaseTypeReport(request, out objectId, out fileName))
+            {
+                return null;
+            }
+
+            if (request.IsPrint)
+            {
+                fileName = this.reportsHelper.GetReportPathFromCache(objectId, fileName);
+            }
+
+            var instance = new RegistratedCasesCaseTypeReport(                                    
                                     response.WorkingGroups,
                                     response.CaseTypes,
                                     response.ProductArea,

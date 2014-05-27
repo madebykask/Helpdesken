@@ -7,9 +7,9 @@
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Domain;
 
-    public sealed class RegistratedCasesCaseTypeReportModel
+    public sealed class RegistratedCasesCaseTypeReport
     {
-        public RegistratedCasesCaseTypeReportModel(string objectId, string fileName)
+        public RegistratedCasesCaseTypeReport(string objectId, string fileName)
         {
             this.FileName = fileName;
             this.ObjectId = objectId;
@@ -17,7 +17,7 @@
             this.CaseTypes = new ItemOverview[] { };
         }
 
-        public RegistratedCasesCaseTypeReportModel(
+        public RegistratedCasesCaseTypeReport(
                         IEnumerable<ItemOverview> workingGroups, 
                         IEnumerable<ItemOverview> caseTypes, 
                         ProductArea productArea, 

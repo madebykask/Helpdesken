@@ -5,7 +5,7 @@
     public interface IReportsHelper
     {
         bool CreateRegistratedCasesCaseTypeReport(
-                            RegistratedCasesCaseTypeModel model, 
+                            RegistratedCasesCaseTypeOptions options, 
                             out string objectId,
                             out string fileName);
 
