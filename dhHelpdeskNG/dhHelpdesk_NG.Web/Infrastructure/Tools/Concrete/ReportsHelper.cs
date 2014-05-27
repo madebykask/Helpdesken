@@ -19,14 +19,14 @@
         }
 
         public bool CreateRegistratedCasesCaseTypeReport(
-                            RegistratedCasesCaseTypeModel model,
+                            RegistratedCasesCaseTypeOptions options,
                             out string objectId,
                             out string fileName)
         {
             objectId = null;
             fileName = null;
-            var from = model.PeriodFrom.RoundToMonth();
-            var until = model.PeriodUntil.RoundToMonth();
+            var from = options.PeriodFrom.RoundToMonth();
+            var until = options.PeriodUntil.RoundToMonth();
             if (from > until)
             {
                 return false;

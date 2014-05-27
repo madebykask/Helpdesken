@@ -597,8 +597,8 @@
     <Compile Include="Models\Inventory\SearchModels\ReportsSearchFilter.cs" />
     <Compile Include="Models\Inventory\SearchModels\ReportsSearchViewModel.cs" />
     <Compile Include="Models\Reports\IndexModel.cs" />
-    <Compile Include="Models\Reports\RegistratedCasesCaseTypeModel.cs" />
-    <Compile Include="Models\Reports\RegistratedCasesCaseTypeReportModel.cs" />
+    <Compile Include="Models\Reports\RegistratedCasesCaseTypeOptions.cs" />
+    <Compile Include="Models\Reports\RegistratedCasesCaseTypeReport.cs" />
     <Compile Include="Models\Reports\SearchModel.cs" />
     <Compile Include="Models\Shared\ConfigurableContainerModel.cs" />
     <Compile Include="Models\Shared\ConfigurableSearchFieldModel.cs" />
@@ -1422,10 +1422,10 @@
     <Content Include="Views\Reports\Index.cshtml" />
     <Content Include="Views\Reports\Reports.cshtml" />
     <Content Include="Views\Reports\Search.cshtml" />
-    <Content Include="Views\Reports\RegistratedCasesCaseType.cshtml" />
+    <Content Include="Views\Reports\RegistratedCasesCaseTypeOptions.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\DynamicFieldStringValue.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\YearMonthPicker.cshtml" />
-    <Content Include="Views\Reports\RegistratedCasesCaseTypeReport.cshtml" />
+    <Content Include="Views\Reports\RegistratedCasesCaseTypeView.cshtml" />
     <Content Include="Views\Reports\RegistratedCasesCaseTypePrint.cshtml" />
     <Content Include="Views\Inventory\ModuleGrid.cshtml" />
     <Content Include="Views\Inventory\Reports.cshtml" />

@@ -10,9 +10,9 @@
     {
         SearchData GetSearchData(OperationContext context);
 
-        RegistratedCasesCaseTypeResponse GetRegistratedCasesCaseTypeResponse(OperationContext context);
+        RegistratedCasesCaseTypeOptionsResponse GetRegistratedCasesCaseTypeOptionsResponse(OperationContext context);
 
-        RegistratedCasesCaseTypeResponsePrint GetRegistratedCasesCaseTypeResponsePrint(
+        RegistratedCasesCaseTypeReportResponse GetRegistratedCasesCaseTypeReportResponse(
                                                             OperationContext context,
                                                             IEnumerable<int> workingGroupsIds,
                                                             IEnumerable<int> caseTypesIds,

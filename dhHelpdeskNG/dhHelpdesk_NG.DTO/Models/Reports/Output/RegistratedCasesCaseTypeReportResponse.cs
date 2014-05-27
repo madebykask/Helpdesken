@@ -6,15 +6,15 @@
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Domain;
 
-    public sealed class RegistratedCasesCaseTypeResponsePrint
+    public sealed class RegistratedCasesCaseTypeReportResponse
     {
-        public RegistratedCasesCaseTypeResponsePrint()
+        public RegistratedCasesCaseTypeReportResponse()
         {
             this.WorkingGroups = new ItemOverview[] { };
             this.CaseTypes = new ItemOverview[] { };
         }
 
-        public RegistratedCasesCaseTypeResponsePrint(
+        public RegistratedCasesCaseTypeReportResponse(
                 IEnumerable<ItemOverview> workingGroups, 
                 IEnumerable<ItemOverview> caseTypes, 
                 ProductArea productArea)

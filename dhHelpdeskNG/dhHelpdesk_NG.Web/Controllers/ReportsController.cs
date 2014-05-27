@@ -75,10 +75,10 @@
 
             switch ((ReportType)filters.ReportId)
             {
-                case ReportType.RegistratedCasesCaseType:
-                    var response = this.reportsService.GetRegistratedCasesCaseTypeResponse(this.OperationContext);
-                    var model = this.reportsModelFactory.CreateRegistratedCasesCaseTypeModel(response, this.OperationContext);
-                    return this.PartialView("RegistratedCasesCaseType", model);
+                case ReportType.RegistratedCasesCaseType:                    
+                    return this.PartialView(
+                                "RegistratedCasesCaseTypeOptions", 
+                                this.reportsModelFactory.CreateRegistratedCasesCaseTypeOptions(this.OperationContext));
             }
 
             return null;
@@ -86,37 +86,16 @@
 
         [HttpPost]
         [BadRequestOnNotValid]
-        public ActionResult RegistratedCasesCaseType(RegistratedCasesCaseTypeModel model)
+        public ActionResult RegistratedCasesCaseType(RegistratedCasesCaseTypeOptions request)
         {
-            string objectId;
-            string fileName;
-            if (!this.reportsHelper.CreateRegistratedCasesCaseTypeReport(model, out objectId, out fileName))
+            var model = this.reportsModelFactory.CreateRegistratedCasesCaseTypeReport(request, this.OperationContext);
+
+            if (request.IsPrint)
             {
-                return new EmptyResult();
+                return new PrintPdfResult(model, "RegistratedCasesCaseTypePrint");
             }
 
-            if (model.IsPrint)
-            {
-                fileName = this.reportsHelper.GetReportPathFromCache(objectId, fileName);
-            }
-
-            var response = this.reportsService.GetRegistratedCasesCaseTypeResponsePrint(
-                                                    this.OperationContext,
-                                                    model.WorkingGroupIds,
-                                                    model.CaseTypeIds,
-                                                    model.ProductAreaId);
-            var reportModel = this.reportsModelFactory.CreateRegistratedCasesCaseTypeReportModel(
-                                                    objectId,
-                                                    fileName,
-                                                    model,
-                                                    response);
-
-            if (model.IsPrint)
-            {
-                return new PrintPdfResult(reportModel, "RegistratedCasesCaseTypePrint");
-            }
-
-            return this.PartialView("RegistratedCasesCaseTypeReport", reportModel);
+            return this.PartialView("RegistratedCasesCaseTypeView", model);
         }
 
         [HttpGet]

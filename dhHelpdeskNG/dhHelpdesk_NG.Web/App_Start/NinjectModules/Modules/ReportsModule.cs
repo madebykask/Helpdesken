@@ -6,13 +6,14 @@
     using DH.Helpdesk.Web.Infrastructure.Tools.Concrete;
 
     using Ninject.Modules;
+    using Ninject.Web.Common;
 
     internal class ReportsModule : NinjectModule
     {
         public override void Load()
         {
-            this.Bind<IReportsModelFactory>().To<ReportsModelFactory>().InSingletonScope();
-            this.Bind<IReportsHelper>().To<ReportsHelper>().InSingletonScope();
+            this.Bind<IReportsModelFactory>().To<ReportsModelFactory>().InRequestScope();
+            this.Bind<IReportsHelper>().To<ReportsHelper>().InRequestScope();
         }
     }
 }

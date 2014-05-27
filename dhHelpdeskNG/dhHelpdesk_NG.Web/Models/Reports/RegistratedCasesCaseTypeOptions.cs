@@ -8,16 +8,16 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
-    public sealed class RegistratedCasesCaseTypeModel
+    public sealed class RegistratedCasesCaseTypeOptions
     {
-        public RegistratedCasesCaseTypeModel()
+        public RegistratedCasesCaseTypeOptions()
         {
             this.WorkingGroupIds = new List<int>();
             this.CaseTypeIds = new List<int>();
             this.ProductAreas = new List<ProductArea>();
         }
 
-        public RegistratedCasesCaseTypeModel(
+        public RegistratedCasesCaseTypeOptions(
             MultiSelectList workingGroups, 
             MultiSelectList caseTypes,
             IEnumerable<ProductArea> productAreas, 

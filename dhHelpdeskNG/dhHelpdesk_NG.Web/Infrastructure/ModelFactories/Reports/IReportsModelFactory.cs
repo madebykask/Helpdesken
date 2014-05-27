@@ -2,7 +2,6 @@
 {
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports;
-    using DH.Helpdesk.BusinessData.Models.Reports.Output;
     using DH.Helpdesk.Web.Infrastructure.Filters.Reports;
     using DH.Helpdesk.Web.Models.Reports;
 
@@ -14,14 +13,10 @@
             ReportsFilter filter, 
             SearchData searchData);
 
-        RegistratedCasesCaseTypeModel CreateRegistratedCasesCaseTypeModel(
-                                RegistratedCasesCaseTypeResponse response,
-                                OperationContext context);
+        RegistratedCasesCaseTypeOptions CreateRegistratedCasesCaseTypeOptions(OperationContext context);
 
-        RegistratedCasesCaseTypeReportModel CreateRegistratedCasesCaseTypeReportModel(
-                                string objectId,
-                                string fileName,
-                                RegistratedCasesCaseTypeModel request,
-                                RegistratedCasesCaseTypeResponsePrint response);
+        RegistratedCasesCaseTypeReport CreateRegistratedCasesCaseTypeReport(
+                                RegistratedCasesCaseTypeOptions request,
+                                OperationContext context);
     }
 }
