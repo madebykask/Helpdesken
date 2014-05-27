@@ -1,40 +1,29 @@
 ﻿using System;
-using Ninject;
 using System.Linq;
 using System.Web.Mvc;
 using System.Collections.Generic;
 
 using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.NewSelfService.Models.Case;
-using DH.Helpdesk.BusinessData.Models.SelfService.Case;
-using DH.Helpdesk.NewSelfService.Infrastructure;
-using DH.Helpdesk.Common;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Services.Services;
-using DH.Helpdesk.Services.Services.Concrete;
-
 using DH.Helpdesk.Dal.Enums;
 
 namespace DH.Helpdesk.NewSelfService.Controllers
-{
-    using System.Diagnostics.Eventing.Reader;
-    using System.EnterpriseServices;
+{    
     using System.Net;
+    using System.Web;
     using System.Web.WebPages;
+    using System.Configuration;
 
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.NewSelfService.Infrastructure;
     using DH.Helpdesk.NewSelfService.Infrastructure.Extensions;
     using DH.Helpdesk.NewSelfService.Infrastructure.Tools;
-    using DH.Helpdesk.Common.Tools;
-    using System.Web;
+    using DH.Helpdesk.Common.Tools;    
     using DH.Helpdesk.BusinessData.OldComponents;
-    using DH.Helpdesk.NewSelfService.Models;
-
-    using Microsoft.SqlServer.Server;
-    using DH.Helpdesk.NewSelfService.Models.NewSelfService;
-    using System.Configuration;
+    using DH.Helpdesk.NewSelfService.Models;            
 
     public class CaseController : BaseController
     {
@@ -130,10 +119,9 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             if (string.IsNullOrEmpty(id))
                 return null;
 
-            int customerId = 0;
+            int customerId;
 
             Case currentCase = null;            
-
             
             if (id.Is<Guid>())
             {
@@ -174,7 +162,6 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             var caseOverview = this.GetCaseOverviewModel(currentCase, languageId);                                    
             caseOverview.ExLogFileGuid = currentCase.CaseGUID.ToString();
             caseOverview.MailGuid = id;
-
             
             this._userTemporaryFilesStorage.DeleteFiles(caseOverview.ExLogFileGuid);
             this._userTemporaryFilesStorage.DeleteFiles(id);            
@@ -214,8 +201,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
             var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
             if (identity != null)
-            {                 
-                
+            {                                 
                 var cs = this._settingService.GetCustomerSetting(currentCustomer.Id);
 
                 model.NewCase = this._caseService.InitCase(
@@ -311,7 +297,6 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             }
 
             return this.View("_UserCases", model);
-
         }
 
         [HttpGet]
@@ -350,8 +335,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                     else
                     {
                         this._userTemporaryFilesStorage.AddFile(uploadedData, name, id);    
-                    }
-                
+                    }                
                 }
             }
         }
@@ -375,7 +359,6 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                     {
                         this._userTemporaryFilesStorage.AddFile(uploadedData, name, id);
                     }
-
                 }
             }
         }
@@ -389,8 +372,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             }
             else
             {
-                this._logFileService.DeleteByLogIdAndFileName(int.Parse(id), fileName.Trim());
-                
+                this._logFileService.DeleteByLogIdAndFileName(int.Parse(id), fileName.Trim());                
             }
         }
 
@@ -497,12 +479,10 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                 {
                     caseLog.EmailRecepientsExternalLog = curWorkingGroup.EMail;
                 }                
-            }            
-                
+            }                            
             
             var temporaryLogFiles = this._userTemporaryFilesStorage.GetFiles(currentCase.CaseGUID.ToString(), "");                        
             caseLog.Id = this._logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
-
 
             // save log files
             var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, caseLog.Id)).ToList();
@@ -543,8 +523,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
         }
 
         public ActionResult SeachUserCase(FormCollection frm) 
-        {
-            
+        {            
             try
             {
                 var customerId = frm.ReturnFormValue("customerId").convertStringToInt();
@@ -570,9 +549,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             {
                 throw new HttpException((int)HttpStatusCode.PartialContent, e.Message);                
                 return View("Error");
-            }
-
-            
+            }            
         }
 
         private int Save(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey)
@@ -598,7 +575,6 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
         private CaseOverviewModel GetCaseOverviewModel(Case currentCase, int languageId)
         {            
-
             var caseFieldSetting = _caseFieldSettingService.ListToShowOnCasePage(currentCase.Customer_Id, languageId)
                                                            .Where(c => c.ShowExternal == 1 || 
                                                                        c.Name == "tblLog.Text_External" ||                                                                        
@@ -634,8 +610,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                     Suppliers = suppliers,
                     Systems = systems
                 };
-            }
-            
+            }            
             return model;                     
         } 
 
@@ -694,8 +669,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             model.CaseSearchResult = srm;
             SessionFacade.CurrentCaseSearch = sm;
            
-            return model;
-           
+            return model;           
         }
 
         private NewCaseModel GetNewCaseModel(int customerId, int languageId)
@@ -750,7 +724,6 @@ namespace DH.Helpdesk.NewSelfService.Controllers
         {
             List<string> ret = new List<string>();
          
-
             string[] userInformationGroup = new string [] {"ReportedBy", "Persons_Name", "Persons_EMail",
                                                            "Persons_Phone", "Persons_CellPhone", "Customer_Id", "Region_Id",
                                                            "Department_Id" , "OU_Id", "Place", "UserCode"};
@@ -768,8 +741,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             foreach (var field in fieldList)
             {
                 if (userInformationGroup.Contains(field.Name))                                    
-                    ret.Add("UserInformation");
-                
+                    ret.Add("UserInformation");                
 
                 if (computerInformationGroup.Contains(field.Name))                                    
                     ret.Add("ComputerInformation");                
@@ -795,7 +767,6 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                 var newCustomer = _customerService.GetCustomer(customerId);
                 if (newCustomer == null)
                     return false;
-
                 SessionFacade.CurrentCustomer = newCustomer;
             }
 

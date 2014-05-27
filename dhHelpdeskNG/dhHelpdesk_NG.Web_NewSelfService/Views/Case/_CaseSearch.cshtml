@@ -48,7 +48,7 @@
 
     function search() {        
         $.post('@Url.Action("SeachUserCase", "Case")', $("#frmUserCases").serialize(), function (result) {
-            $('#search_result2').html(result);
+            $('#search_result').html(result);           
         });
     }
 
