@@ -15,6 +15,21 @@
             List<GroupWithEmails> workingGroups,
             List<ItemOverview> administrators)
         {
+            if (emailGroups == null)
+            {
+                emailGroups = new List<GroupWithEmails>();
+            }
+
+            if (workingGroups == null)
+            {
+                workingGroups = new List<GroupWithEmails>();
+            }
+
+            if (administrators == null)
+            {
+                administrators = new List<ItemOverview>();
+            }
+
             var emailGroupList = new MultiSelectList(emailGroups, "Id", "Name");
             var emailGroupEmails = emailGroups.Select(g => new GroupEmailsModel(g.Id, g.Emails)).ToList();
             var workingGroupList = new MultiSelectList(workingGroups, "Id", "Name");
