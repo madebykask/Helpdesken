@@ -3,11 +3,11 @@
     @if (Model.BarCode.Show)
     {
         <tr>
-            <th colspan="2" class="header">@Translation.Get("Inventering", Enums.TranslationSource.TextTranslation)</th>
+            <th colspan="2" class="header">@Translation.Get("Inventering")</th>
         </tr>
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.BarCode.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.BarCode.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.BarCode.IsReadOnly

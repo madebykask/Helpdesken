@@ -9,5 +9,5 @@
 <td>@Html.TextBoxFor(m => m.PropertySize)</td>
 <td>@Html.CheckBoxFor(m => m.ShowInDetails)</td>
 <td>@Html.CheckBoxFor(m => m.ShowInList)</td>
-<td>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteDynamicSetting", new { id = Model.Id }, new { @class = "btn" })
+<td>@Html.ActionLink(Translation.Get("Ta bort"), "DeleteDynamicSetting", new { id = Model.Id }, new { @class = "btn" })
 </td>

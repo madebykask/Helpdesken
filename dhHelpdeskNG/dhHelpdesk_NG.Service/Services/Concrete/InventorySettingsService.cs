@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Services.Services.Concrete
 {
     using System;
+    using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.PrinterSettings;
@@ -169,6 +170,17 @@
             var models = this.inventoryFieldSettingsRepository.GetFieldSettingsOverviewForFilter(inventoryTypeId);
 
             return models;
+        }
+
+        public InventoriesFieldSettingsOverviewResponse GetInventoryFieldSettingsOverview(List<int> invetoryTypeIds)
+        {
+            var inventorySettings = this.inventoryFieldSettingsRepository.GetFieldSettingsOverviews(invetoryTypeIds);
+            var inventoryDynamicSettings = this.inventoryDynamicFieldSettingsRepository.GetFieldSettingsOverviewWithType(invetoryTypeIds);
+            var inventorySettingsResponse = new InventoriesFieldSettingsOverviewResponse(
+                inventorySettings,
+                inventoryDynamicSettings);
+
+            return inventorySettingsResponse;
         }
 
         #endregion

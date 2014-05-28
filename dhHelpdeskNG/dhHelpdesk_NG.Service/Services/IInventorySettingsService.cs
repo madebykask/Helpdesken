@@ -1,5 +1,7 @@
 namespace DH.Helpdesk.Services.Services
 {
+    using System.Collections.Generic;
+
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.PrinterSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ServerSettings;
@@ -47,5 +49,7 @@ namespace DH.Helpdesk.Services.Services
         InventoryFieldSettingsOverviewResponse GetInventoryFieldSettingsOverview(int inventoryTypeId);
 
         InventoryFieldsSettingsOverviewForFilter GetInventoryFieldSettingsOverviewForFilter(int inventoryTypeId);
+
+        InventoriesFieldSettingsOverviewResponse GetInventoryFieldSettingsOverview(List<int> invetoryTypeIds);
     }
 }

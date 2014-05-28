@@ -6,14 +6,14 @@
         || Model.URL.Show)
     {
         <tr>
-            <th colspan="2" class="header">@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</th>
+            <th colspan="2" class="header">@Translation.Get("Övrigt")</th>
         </tr>
     }
     @if (Model.NumberOfTrays.Show)
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.NumberOfTrays.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.NumberOfTrays.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.NumberOfTrays.IsReadOnly
@@ -26,7 +26,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Driver.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.Driver.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.Driver.IsReadOnly
@@ -39,7 +39,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Info.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.Info.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.Info.IsReadOnly
@@ -52,7 +52,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.URL.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.URL.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.URL.IsReadOnly

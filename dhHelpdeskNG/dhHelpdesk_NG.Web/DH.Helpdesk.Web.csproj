@@ -579,6 +579,7 @@
     <Compile Include="Models\Changes\SettingsEdit\TextFieldSettingModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\ConfigurableFieldModel.cs" />
     <Compile Include="Models\Inventory\ComputerModuleModeFilter.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\AccesoriesViewModel.cs" />
     <Compile Include="Models\Inventory\OptionsAggregates\ComputerEditOptions.cs" />
     <Compile Include="Models\Inventory\EditModel\ComputerModuleGridModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Inventory\DefaultFieldsViewModel.cs" />
@@ -1433,6 +1434,7 @@
     <Content Include="Views\Inventory\InventoryReport.cshtml" />
     <Content Include="Views\Inventory\CustomTypeReport.cshtml" />
     <Content Include="Views\Inventory\CustomTypeReportGrid.cshtml" />
+    <Content Include="Views\Inventory\Accesories.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

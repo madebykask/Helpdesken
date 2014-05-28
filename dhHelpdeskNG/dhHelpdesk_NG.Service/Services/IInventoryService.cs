@@ -89,6 +89,8 @@
 
         InventoriesOverviewResponse GetInventories(InventoriesFilter filter);
 
+        InventoryOverviewResponseWithType GetConnectedToComputerInventories(int computerId);
+
         List<TypeGroupModel> GetTypeGroupModels(int inventoryTypeId);
 
         void ConnectInventoryToComputer(int inventoryId, int computerId);

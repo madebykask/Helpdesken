@@ -311,24 +311,43 @@
                 SessionFacade.CurrentLanguageId);
 
             var computerEditModel = this.computerViewModelBuilder.BuildViewModel(model, options, settings);
-            var inventoryGridModels = InventoryGridModel.BuildModels(
-                additionalData.InventoryOverviewResponseWithType,
-                additionalData.InventoriesFieldSettingsOverviewResponse);
-            var inventoryTypesViewModel = DropDownViewModel.BuildViewModel(additionalData.InventoryTypes);
-            
-            var selected = additionalData.InventoryTypes.Min(x => x.Value.ToNullableInt32());
-            inventoryTypesViewModel.Selected = selected;
 
             var viewModel = new ComputerEditViewModel(
                 computerEditModel,
                 additionalData.Softwaries,
                 additionalData.LogicalDrives,
                 additionalData.ComputerLogs,
-                inventoryGridModels,
-                inventoryTypesViewModel,
                 activeTab);
 
             return this.View("EditWorkstation", viewModel);
+        }
+
+        [HttpGet]
+        public PartialViewResult RenderAccesories(int computerId)
+        {
+            var inventory = this.inventoryService.GetConnectedToComputerInventories(computerId);
+            var invetoryTypeIds = inventory.Overviews.Select(x => x.InventoryTypeId).ToList();
+            var settings = this.inventorySettingsService.GetInventoryFieldSettingsOverview(invetoryTypeIds);
+            var inventoryGridModels = InventoryGridModel.BuildModels(inventory, settings);
+
+            var inventoryTypes = this.inventoryService.GetInventoryTypes(SessionFacade.CurrentCustomer.Id);
+
+            // todo
+            var selected = inventoryTypes.Min(x => x.Value.ToNullableInt32());
+            var inventories = selected.HasValue
+                                  ? this.inventoryService.GetNotConnectedInventory(
+                                      selected.Value,
+                                      SessionFacade.CurrentCustomer.Id)
+                                  : new List<ItemOverview>();
+
+            var viewModel = AccesoriesViewModel.BuildViewModel(
+                computerId,
+                selected,
+                inventoryTypes,
+                inventories,
+                inventoryGridModels);
+
+            return this.PartialView("Accesories", viewModel);
         }
 
         [HttpPost]
@@ -575,28 +594,26 @@
         }
 
         [HttpGet]
-        public PartialViewResult SearchNotConnectedInventory(int? selected, int computerId)
+        public JsonResult SearchNotConnectedInventory(int? selected, int computerId)
         {
             if (!selected.HasValue)
             {
-                return this.PartialView("DropDown", DropDownViewModel.BuildDefault());
+                return this.Json(new { });
             }
 
             var models = this.inventoryService.GetNotConnectedInventory(selected.Value, computerId);
-            var viewModel = DropDownViewModel.BuildViewModel(models);
-            viewModel.PropertyName = "Selected"; // todo
-            return this.PartialView("DropDown", viewModel);
+            return this.Json(models, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public RedirectToRouteResult ConnectInventoryToComputer(int? selected, int computerId)
+        public RedirectToRouteResult ConnectInventoryToComputer(int? inventoryId, int computerId)
         {
-            if (!selected.HasValue)
+            if (!inventoryId.HasValue)
             {
                 throw new HttpException((int)HttpStatusCode.BadRequest, null);
             }
 
-            this.inventoryService.ConnectInventoryToComputer(selected.Value, computerId);
+            this.inventoryService.ConnectInventoryToComputer(inventoryId.Value, computerId);
 
             return this.RedirectToAction("EditWorkstation", new { id = computerId });
         }
@@ -610,36 +627,24 @@
         }
 
         [HttpGet]
-        public ActionResult SearchDepartmentsByRegionId(int? selected)
+        public JsonResult SearchDepartmentsByRegionId(int? selected)
         {
             var models = this.organizationService.GetDepartments(SessionFacade.CurrentCustomer.Id, selected);
-
-            var viewModel = DropDownViewModel.BuildViewModel(models);
-            viewModel.AllowEmpty = true;
-            viewModel.PropertyName = DropDownName.DepartmentName;
-            return this.PartialView("DropDown", viewModel);
+            return this.Json(models, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
-        public ActionResult SearchFloorsByBuildingId(int? selected)
+        public JsonResult SearchFloorsByBuildingId(int? selected)
         {
             var models = this.placeService.GetFloors(SessionFacade.CurrentCustomer.Id, selected);
-
-            var viewModel = DropDownViewModel.BuildViewModel(models);
-            viewModel.AllowEmpty = true;
-            viewModel.PropertyName = DropDownName.FloorName;
-            return this.PartialView("DropDown", viewModel);
+            return this.Json(models, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
-        public ActionResult SearchRoomsByFloorId(int? selected)
+        public JsonResult SearchRoomsByFloorId(int? selected)
         {
             var models = this.placeService.GetRooms(SessionFacade.CurrentCustomer.Id, selected);
-
-            var viewModel = DropDownViewModel.BuildViewModel(models);
-            viewModel.AllowEmpty = true;
-            viewModel.PropertyName = DropDownName.RoomName;
-            return this.PartialView("DropDown", viewModel);
+            return this.Json(models, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]

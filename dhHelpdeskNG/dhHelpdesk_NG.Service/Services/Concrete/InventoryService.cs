@@ -35,10 +35,6 @@
 
         private readonly IPrinterRepository printerRepository;
 
-        private readonly IInventoryFieldSettingsRepository inventoryFieldSettingsRepository;
-
-        private readonly IInventoryDynamicFieldSettingsRepository inventoryDynamicFieldSettingsRepository;
-
         private readonly IInventoryRepository inventoryRepository;
 
         private readonly IInventoryTypePropertyValueRepository inventoryTypePropertyValueRepository;
@@ -64,8 +60,6 @@
             IComputerRepository computerRepository,
             IServerRepository serverRepository,
             IPrinterRepository printerRepository,
-            IInventoryFieldSettingsRepository inventoryFieldSettingsRepository,
-            IInventoryDynamicFieldSettingsRepository inventoryDynamicFieldSettingsRepository,
             IInventoryRepository inventoryRepository,
             IInventoryTypePropertyValueRepository inventoryTypePropertyValueRepository,
             ISoftwareRepository softwareRepository,
@@ -81,8 +75,6 @@
             this.computerRepository = computerRepository;
             this.serverRepository = serverRepository;
             this.printerRepository = printerRepository;
-            this.inventoryFieldSettingsRepository = inventoryFieldSettingsRepository;
-            this.inventoryDynamicFieldSettingsRepository = inventoryDynamicFieldSettingsRepository;
             this.inventoryRepository = inventoryRepository;
             this.inventoryTypePropertyValueRepository = inventoryTypePropertyValueRepository;
             this.softwareRepository = softwareRepository;
@@ -177,7 +169,6 @@
             return this.computerRepository.FindById(id);
         }
 
-        // todo divide on several parts by tabs, to many queries per request
         public ComputerEditDataResponse GetWorkstationEditAdditionalData(int id, int customerId, int langaugeId)
         {
             var softwaries = this.softwareRepository.Find(id);
@@ -186,31 +177,10 @@
 
             var computerLogs = this.computerLogRepository.Find(id);
 
-            var inventories = this.inventoryRepository.FindConnectedToComputerInventories(id);
-            var inventoryIds = new List<int>();
-            foreach (var item in inventories)
-            {
-                inventoryIds.AddRange(item.InventoryOverviews.Select(x => x.Id));
-            }
-
-            var dynamicData = this.inventoryTypePropertyValueRepository.GetData(inventoryIds);
-            var inventoryResponse = new InventoryOverviewResponseWithType(inventories, dynamicData);
-
-            var invetoryTypeIds = inventories.Select(x => x.InventoryTypeId).ToList();
-            var inventorySettings = this.inventoryFieldSettingsRepository.GetFieldSettingsOverviews(invetoryTypeIds);
-            var inventoryDynamicSettings = this.inventoryDynamicFieldSettingsRepository.GetFieldSettingsOverviewWithType(invetoryTypeIds);
-            var inventorySettingsResponse = new InventoriesFieldSettingsOverviewResponse(
-                inventorySettings,
-                inventoryDynamicSettings);
-            var inventoryTypes = this.inventoryTypeRepository.FindOverviews(customerId);
-
             return new ComputerEditDataResponse(
                 softwaries,
                 logicalDrives,
-                computerLogs,
-                inventoryResponse,
-                inventorySettingsResponse, 
-                inventoryTypes);
+                computerLogs);
         }
 
         public List<ComputerOverview> GetWorkstations(ComputersFilter computersFilter)
@@ -309,7 +279,7 @@
 
             return models;
         }
-        
+
         #endregion
 
         #region DynamicData
@@ -338,6 +308,21 @@
             var response = new InventoriesOverviewResponse(models, dynamicData);
 
             return response;
+        }
+
+        public InventoryOverviewResponseWithType GetConnectedToComputerInventories(int computerId)
+        {
+            var inventories = this.inventoryRepository.FindConnectedToComputerInventories(computerId);
+            var inventoryIds = new List<int>();
+            foreach (var item in inventories)
+            {
+                inventoryIds.AddRange(item.InventoryOverviews.Select(x => x.Id));
+            }
+
+            var dynamicData = this.inventoryTypePropertyValueRepository.GetData(inventoryIds);
+            var inventoryResponse = new InventoryOverviewResponseWithType(inventories, dynamicData);
+
+            return inventoryResponse;
         }
 
         public List<TypeGroupModel> GetTypeGroupModels(int inventoryTypeId)

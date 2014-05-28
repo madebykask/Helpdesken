@@ -1,4 +1,21 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.SearchModels.WorkstationSearchViewModel
+<script>
+    $(function () {
+        $('#region_dropdown').change(function () {
+
+            var selectedValue = $(this).val();
+            $.get('@Url.Action("SearchDepartmentsByRegionId")', { selected: selectedValue }, function (json) {
+                var sel = $('#department_dropdown');
+                sel.empty();
+                sel.prepend("<option></option>");
+                for (var i = 0; i < json.length; i++) {
+                    var e = json[i];
+                    $('<option>').text(e.Name).val(e.Value).appendTo(sel);
+                }
+            });
+        });
+    });
+</script>
 @using (Ajax.BeginForm("WorkstationsGrid", null, new AjaxOptions { UpdateTargetId = "grid_container" }, new { id = "search_form" }))
 {
     <table class="tableform">
@@ -6,14 +23,12 @@
         {
             <tr>
                 <td class="span3">@Translation.Get("Område")</td>
-                <td>@Html.DropDownListFor(m => m.Filter.RegionId, Model.Regions, string.Empty, new { id = "region_drop_down" })</td>
+                <td>@Html.DropDownListFor(m => m.Filter.RegionId, Model.Regions, string.Empty, new { id = "region_dropdown" })</td>
             </tr>
             <tr>
                 <td class="span3">@Translation.Get(Model.Settings.DepartmnetFieldSetting.Caption)</td>
                 <td>
-                    <div id="department_drop_down">
-                        @Html.DropDownListFor(m => m.Filter.DepartmentId, Model.Departments, string.Empty)
-                    </div>
+                    @Html.DropDownListFor(m => m.Filter.DepartmentId, Model.Departments, string.Empty, new { id = "department_dropdown" })
                 </td>
             </tr>
         }
@@ -103,12 +118,3 @@
 <div id="grid_container">
     @Html.Action("WorkstationsGrid", "Inventory", new { area = string.Empty, filter = Model.Filter })
 </div>
-
-<script>
-    $('#region_drop_down').change(function() {
-        var selectedValue = $(this).val();
-        $.get('@Url.Action("SearchDepartmentsByRegionId")', { selected: selectedValue }, function(dropDownMarkup) {
-            $('#department_drop_down').html(dropDownMarkup);
-        });
-    });
-</script>

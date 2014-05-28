@@ -7,14 +7,14 @@
         || Model.Owner.Show)
     {
         <tr>
-            <th colspan="2" class="header">@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</th>
+            <th colspan="2" class="header">@Translation.Get("Övrigt")</th>
         </tr>
     }
     @if (Model.Info.Show)
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Info.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.Info.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.Info.IsReadOnly
@@ -27,7 +27,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Other.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.Other.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.Other.IsReadOnly
@@ -40,7 +40,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.URL.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.URL.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.URL.IsReadOnly
@@ -53,7 +53,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.URL2.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.URL2.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.URL2.IsReadOnly
@@ -66,7 +66,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Owner.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.Owner.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.Owner.IsReadOnly

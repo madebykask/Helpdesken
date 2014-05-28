@@ -7,14 +7,14 @@
         || Model.SerialNumber.Show)
     {
         <tr>
-            <th colspan="2" class="header">@Translation.Get("Server", Enums.TranslationSource.TextTranslation)</th>
+            <th colspan="2" class="header">@Translation.Get("Server")</th>
         </tr>
     }
     @if (Model.Name.Show)
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Name.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.Name.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.Name.IsReadOnly
@@ -27,7 +27,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Manufacturer.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.Manufacturer.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.Manufacturer.IsReadOnly
@@ -40,7 +40,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Description.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.Description.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.Description.IsReadOnly
@@ -53,7 +53,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Model.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.Model.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.Model.IsReadOnly
@@ -66,7 +66,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.SerialNumber.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.SerialNumber.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.SerialNumber.IsReadOnly

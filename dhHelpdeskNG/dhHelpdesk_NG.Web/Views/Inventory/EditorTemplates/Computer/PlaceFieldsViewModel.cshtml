@@ -1,5 +1,36 @@
-﻿@using DH.Helpdesk.Web.Enums.Inventory
-@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.PlaceFieldsViewModel
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.PlaceFieldsViewModel
+<script>
+    $(function () {
+        $('#buildings_dropdown').change(function () {
+            var selectedBuilding = $(this).val();
+            $.get('@Url.Action("SearchFloorsByBuildingId")', { selected: selectedBuilding }, function (json) {
+
+                var sel = $('#floors_dropdown');
+                $('#rooms_dropdown').empty();
+                fillSelect(sel, json);
+            });
+        });
+
+        $('#floors_dropdown').change(function () {
+            var selectedFloor = $(this).val();
+            $.get('@Url.Action("SearchRoomsByFloorId")', { selected: selectedFloor }, function (json) {
+
+                var sel = $('#rooms_dropdown');
+                fillSelect(sel, json);
+            });
+        });
+    });
+
+    function fillSelect(select, json) {
+        select.empty();
+        select.prepend("<option></option>");
+
+        for (var i = 0; i < json.length; i++) {
+            var e = json[i];
+            $('<option>').text(e.Name).val(e.Value).appendTo(select);
+        }
+    }
+</script>
 <table class="tableform">
     @if (Model.Rooms.Show
         || Model.PlaceFieldsModel.Address.Show
@@ -21,7 +52,7 @@
             <td class="span9">
                 @if (!Model.Rooms.IsReadOnly)
                 {
-                    @Html.DropDownListFor(m => m.PlaceFieldsModel.BuildingId, Model.Buildings, string.Empty, new { id = "building_drop_down" })
+                    @Html.DropDownListFor(m => m.PlaceFieldsModel.BuildingId, Model.Buildings, string.Empty, new { id = "buildings_dropdown" })
                 }
                 else
                 {
@@ -39,9 +70,7 @@
             <td class="span9">
                 @if (!Model.Rooms.IsReadOnly)
                 {
-                    <div id="floor_drop_down_div">
-                        @Html.DropDownListFor(m => m.PlaceFieldsModel.FloorId, Model.Floors, string.Empty, new { id = DropDownId.FloorId })
-                    </div>
+                    @Html.DropDownListFor(m => m.PlaceFieldsModel.FloorId, Model.Floors, string.Empty, new { id = "floors_dropdown" })
                 }
                 else
                 {
@@ -59,9 +88,7 @@
             <td class="span9">
                 @if (!Model.Rooms.IsReadOnly)
                 {
-                    <div id="room_drop_down_div">
-                        @Html.DropDownListFor(m => m.PlaceFieldsModel.RoomId, Model.Rooms.Value, string.Empty, new { id = DropDownId.RoomId })
-                    </div>
+                    @Html.DropDownListFor(m => m.PlaceFieldsModel.RoomId, Model.Rooms.Value, string.Empty, new { id = "rooms_dropdown" })
                 }
                 else
                 {
@@ -139,36 +166,3 @@
         </tr>
     }
 </table>
-
-<script>
-    $('#building_drop_down').change(function () {
-        var selectedBuilding = $(this).val();
-        $.get('@Url.Action("SearchFloorsByBuildingId")', { selected: selectedBuilding }, function (floorDropDownMarkup) {
-            $('#floor_drop_down_div').html(floorDropDownMarkup);
-            $('#floor_drop_down_div select').attr('id', "@DropDownId.FloorId");
-            applyFloorDropDownBehavior();
-            clearRoomSelect();
-        });
-    });
-
-    $(function () {
-        applyFloorDropDownBehavior();
-    });
-
-    function applyFloorDropDownBehavior() {
-        $('#floor_drop_down').change(function () {
-            var selectedFloor = $(this).val();
-            $.get('@Url.Action("SearchRoomsByFloorId")', { selected: selectedFloor }, function (roomDropDownMarkup) {
-                $('#room_drop_down_div').html(roomDropDownMarkup);
-                $('#room_drop_down_div select').attr('id', "@DropDownId.RoomId");
-            });
-        });
-    }
-
-    function clearRoomSelect() {
-        $('#room_drop_down')
-            .find('option')
-            .remove()
-            .end();
-    }
-</script>

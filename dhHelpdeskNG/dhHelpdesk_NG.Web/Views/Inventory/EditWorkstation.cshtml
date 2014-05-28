@@ -1,5 +1,4 @@
 ﻿@using DH.Helpdesk.Web.Enums.Inventory
-@using DH.Helpdesk.Web.Models.Inventory
 @using DH.Helpdesk.Web.Models.Inventory.EditModel
 @using DH.Helpdesk.Web.Models.Inventory.EditModel.Computer
 @model ComputerEditViewModel
@@ -134,45 +133,13 @@
                 @Html.Partial("LogGrid", Model.ComputerLogs)
             </div>
             <div class="tab-pane tab-pane-border @inventoryTabClass" id="fragment-6">
-                <table>
-                    @{
-                        foreach (var model in Model.InventoryGridModels)
-                        {
-                            @Translation.Get(model.CurrentModeName)
-                            @Html.Partial("InventoryGridWithDeleteButton", new InventoryGridModelForDynamicInventory(model, Model.ComputerViewModel.Id))
-                        }
-                    }
-                </table>
-                @Translation.Get("Lägg till")
-                <div>
-                    @Html.DropDownListFor(x => x.DropDownViewModel.Selected, Model.DropDownViewModel.Values, new { id = "inventoryType_drop_down" })
-                </div>
-                @using (Html.BeginForm("ConnectInventoryToComputer", "Inventory", new { computerId = Model.ComputerViewModel.Id }, FormMethod.Post, new { id = "log_edit_form" }))
-                {
-                    <div id="inventory_drop_down">
-                        @Html.Action("SearchNotConnectedInventory", "Inventory", new { area = string.Empty, selected = Model.DropDownViewModel.Selected, computerId = Model.ComputerViewModel.Id })
-                    </div>
-                    <input type="submit" value="@Translation.Get("Lägg till")" class="btn" id="inventory_button" />
-                }
+                @Html.Action("RenderAccesories", "Inventory", new { area = string.Empty, computerId = Model.ComputerViewModel.Id })
             </div>
         </div>
     </div>
 </div>
 
 <script type="text/javascript">
-
-    $('#inventoryType_drop_down').change(function () {
-        var selectedValue = $(this).val();
-        $.get('@Url.Action("SearchNotConnectedInventory")', { selected: selectedValue, computerId: @Model.ComputerViewModel.Id }, function(dropDownMarkup) {
-            $('#inventory_drop_down').html(dropDownMarkup);
-
-            if ($('#inventory_drop_down select').val() == null) {
-                $('#inventory_button').hide();
-            } else {
-                $('#inventory_button').show();
-            }
-        });
-    });
 
     $('#computer_tab').click(function() {
         $.post('@Url.Action("RememberTab", "Service")', { topic: '@PageName.ComputerEdit', tab: '@TabName.Computer' });

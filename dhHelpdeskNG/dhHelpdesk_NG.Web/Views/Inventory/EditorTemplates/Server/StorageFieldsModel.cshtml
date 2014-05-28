@@ -3,11 +3,11 @@
     @if (Model.Capasity.Show)
     {
         <tr>
-            <th colspan="2" class="header">@Translation.Get("Lagring", Enums.TranslationSource.TextTranslation)</th>
+            <th colspan="2" class="header">@Translation.Get("Lagring")</th>
         </tr>
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Capasity.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.Capasity.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.Capasity.IsReadOnly
