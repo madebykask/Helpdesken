@@ -13,28 +13,9 @@
                     </label>
                     <div class="col-md-10">
                         @Html.TextBoxFor(s => Model.PharasSearch)
+                        <button id="btnSearch" name="btnSearch" class="btn btn-default">@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)</button>
                     </div>
-                </div>
-                @*<div class="form-group row">
-                    <label class="col-md-2">
-                        @Translation.Get("Visa", Enums.TranslationSource.TextTranslation):
-                    </label>
-                    <div class="col-md-10">
-                        <select id="ProgressId" name="ProgressId">
-                            <option value="2">@Translation.Get("Pågående ärenden", Enums.TranslationSource.TextTranslation)</option>
-                            <option value="1">@Translation.Get("Avslutade ärenden", Enums.TranslationSource.TextTranslation)</option>
-                            <option value="1,2">@Translation.Get("Alla ärenden", Enums.TranslationSource.TextTranslation)</option>
-                        </select>
-                    </div>
-                </div>*@
-                <div class="form-group row">
-                    <label class="col-md-2">
-                        @Translation.Get("poster i sökresultat", Enums.TranslationSource.TextTranslation):
-                    </label>
-                    <div class="col-md-10">
-                        @Html.TextBoxFor(s => Model.MaxRecords, new { style = "width:50px;" }) <button id="btnSearch" name="btnSearch" class="btn btn-primary">@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)</button>
-                    </div>
-                </div>
+                </div>                              
             </div>
         </div>
     </div>

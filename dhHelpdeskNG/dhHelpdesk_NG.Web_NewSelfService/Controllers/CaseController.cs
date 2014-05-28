@@ -664,7 +664,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                 search,
                 1,
                 1,
-                null).Take(maxRecords).ToList();
+                null).ToList(); // Take(maxRecords)
             
             model.CaseSearchResult = srm;
             SessionFacade.CurrentCaseSearch = sm;
