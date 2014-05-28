@@ -1553,7 +1553,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 if (m.case_.Id == 0)  // new mode
                 {
-                    m.case_.DefaultOwnerWG_Id = 0;
+                    m.case_.DefaultOwnerWG_Id = null;
                     if (m.case_.User_Id != 0)
                     {
                         var curUser = _userService.GetUser(m.case_.User_Id);
