@@ -91,7 +91,9 @@
             return (from customerUser in this.DataContext.Set<CustomerUser>()
                     join settings in this.DataContext.Set<Setting>() on customerUser.Customer_Id equals settings.Customer_Id
                     where customerUser.Customer_Id == customer && customerUser.User_Id == user
-                    select customerUser).FirstOrDefault();
+                    select customerUser)
+                    .ToList()
+                    .FirstOrDefault();
         }
 
         public IList<CustomerUser> GetCustomerUsersForStart(int userId)
