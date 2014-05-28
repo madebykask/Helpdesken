@@ -130,7 +130,6 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         public IEnumerable<OperationLogOverview> GetOperationLogOverviews(int[] customers)
         {
-            return new List<OperationLogOverview>();
             var entities = this.GetSecuredEntities(this.Table
                 .Where(o => customers.Contains(o.Customer_Id))
                 .Select(o => new

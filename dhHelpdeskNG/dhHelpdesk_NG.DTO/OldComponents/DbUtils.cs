@@ -281,8 +281,19 @@
             public static string GetUserFromAdPath(this string path)
             {
                 string s = path;
-                int stop = s.IndexOf("\\");
-                return (stop > -1) ? s.Substring(stop + 1, s.Length - stop - 1) : string.Empty;
+                int stop = s.IndexOf("\\", StringComparison.Ordinal);
+                if (stop <= -1)
+                {
+                    return string.Empty;
+                }
+
+                s = s.Substring(stop + 1, s.Length - stop - 1);
+                if (s.Length > 20)
+                {
+                    s = s.Substring(0, 20);
+                }
+
+                return s;
             }
 
             public static string GetDomainFromAdPath(this string path)

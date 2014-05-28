@@ -129,7 +129,6 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         public IEnumerable<DocumentOverview> GetDocumentOverviews(int[] customers)
         {
-            return new List<DocumentOverview>();
             var entities = this.GetSecuredEntities(this.Table
                 .Where(d => customers.Contains(d.Customer_Id))
                 .Select(d => new 

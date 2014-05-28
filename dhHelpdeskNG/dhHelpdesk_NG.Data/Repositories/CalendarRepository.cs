@@ -107,7 +107,6 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         public IEnumerable<CalendarOverview> GetCalendarOverviews(int[] customers)
         {
-            return new List<CalendarOverview>();
             var entities = this.GetSecuredEntities(this.Table
                 .Where(c => customers.Contains(c.Customer_Id))
                 .Select(c => new
