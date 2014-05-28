@@ -39,7 +39,9 @@
                 }
                 else
                 {
-                    @(!Model.PlaceFieldsModel.FloorId.HasValue ? Html.TextBoxFor(m => string.Empty, new { @readonly = true }) : Html.TextBoxFor(m => m.Floors.SingleOrDefault(x => x.Value == Model.PlaceFieldsModel.FloorId.ToString()).Text, new { @readonly = true }))
+                    @(!Model.PlaceFieldsModel.FloorId.HasValue 
+                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true }) 
+                        : Html.TextBoxFor(m => m.Floors.SingleOrDefault(x => x.Value == Model.PlaceFieldsModel.FloorId.ToString()).Text, new { @readonly = true }))
                     @Html.HiddenFor(m => m.PlaceFieldsModel.FloorId)
                 }
             </td>
@@ -57,7 +59,9 @@
                 }
                 else
                 {
-                    @(!Model.PlaceFieldsModel.RoomId.HasValue ? Html.TextBoxFor(m => string.Empty, new { @readonly = true }) : Html.TextBoxFor(m => m.Rooms.Value.SingleOrDefault(x => x.Value == Model.PlaceFieldsModel.RoomId.ToString()).Text, new { @readonly = true }))
+                    @(!Model.PlaceFieldsModel.RoomId.HasValue 
+                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true }) 
+                        : Html.TextBoxFor(m => m.Rooms.Value.SingleOrDefault(x => x.Value == Model.PlaceFieldsModel.RoomId.ToString()).Text, new { @readonly = true }))
                     @Html.HiddenFor(m => m.PlaceFieldsModel.RoomId)
                 }
             </td>

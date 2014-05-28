@@ -12,11 +12,13 @@
         public InventorySearchViewModel(
             SelectList departments,
             InventorySearchFilter filter,
-            InventoryFieldsSettingsOverviewForFilter settings)
+            InventoryFieldsSettingsOverviewForFilter settings, 
+            int inventoryTypeId)
         {
             this.Filter = filter;
             this.Departments = departments;
             this.Settings = settings;
+            this.InventoryTypeId = inventoryTypeId;
         }
 
         [NotNull]
@@ -25,17 +27,21 @@
         [NotNull]
         public SelectList Departments { get; private set; }
 
+        [IsId]
+        public int InventoryTypeId { get; private set; }
+
         [NotNull]
         public InventoryFieldsSettingsOverviewForFilter Settings { get; private set; }
 
         public static InventorySearchViewModel BuildViewModel(
             InventorySearchFilter currentFilter,
             List<ItemOverview> departments,
-            InventoryFieldsSettingsOverviewForFilter settings)
+            InventoryFieldsSettingsOverviewForFilter settings,
+            int inventoryTypeId)
         {
             var list = new SelectList(departments, "Value", "Name");
 
-            return new InventorySearchViewModel(list, currentFilter, settings);
+            return new InventorySearchViewModel(list, currentFilter, settings, inventoryTypeId);
         }
     }
 }

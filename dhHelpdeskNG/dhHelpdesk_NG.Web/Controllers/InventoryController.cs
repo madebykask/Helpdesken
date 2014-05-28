@@ -184,7 +184,7 @@
             var departments = this.organizationService.GetDepartments(SessionFacade.CurrentCustomer.Id);
             var settings = this.inventorySettingsService.GetInventoryFieldSettingsOverviewForFilter(inventoryTypeId);
 
-            var viewModel = InventorySearchViewModel.BuildViewModel(currentFilter, departments, settings);
+            var viewModel = InventorySearchViewModel.BuildViewModel(currentFilter, departments, settings, inventoryTypeId);
 
             return this.PartialView("Inventories", viewModel);
         }
@@ -241,16 +241,16 @@
         }
 
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
-        public PartialViewResult InventoriesGrid(InventorySearchFilter filter)
+        public PartialViewResult InventoriesGrid(InventorySearchFilter filter, int inventoryTypeId)
         {
             SessionFacade.SavePageFilters(
                 this.CreateFilterId(TabName.Inventories, InventoryFilterMode.CustomType.ToString()),
                 filter);
 
-            var settings = this.inventorySettingsService.GetInventoryFieldSettingsOverview(filter.InventoryTypeId);
-            var models = this.inventoryService.GetInventories(filter.CreateRequest());
+            var settings = this.inventorySettingsService.GetInventoryFieldSettingsOverview(inventoryTypeId);
+            var models = this.inventoryService.GetInventories(filter.CreateRequest(inventoryTypeId));
 
-            var viewModel = InventoryGridModel.BuildModel(models, settings, filter.InventoryTypeId);
+            var viewModel = InventoryGridModel.BuildModel(models, settings, inventoryTypeId);
 
             return this.PartialView("InventoryGrid", viewModel);
         }
@@ -315,6 +315,7 @@
                 additionalData.InventoryOverviewResponseWithType,
                 additionalData.InventoriesFieldSettingsOverviewResponse);
             var inventoryTypesViewModel = DropDownViewModel.BuildViewModel(additionalData.InventoryTypes);
+            
             var selected = additionalData.InventoryTypes.Min(x => x.Value.ToNullableInt32());
             inventoryTypesViewModel.Selected = selected;
 
@@ -583,6 +584,7 @@
 
             var models = this.inventoryService.GetNotConnectedInventory(selected.Value, computerId);
             var viewModel = DropDownViewModel.BuildViewModel(models);
+            viewModel.PropertyName = "Selected"; // todo
             return this.PartialView("DropDown", viewModel);
         }
 
@@ -841,13 +843,14 @@
             var currentFilter =
                 SessionFacade.FindPageFilters<CustomTypeReportsSearchFilter>(
                     this.CreateFilterId(TabName.Reports, ReportFilterMode.CustomType.ToString()))
-                ?? CustomTypeReportsSearchFilter.CreateDefault(inventoryTypeId);
+                ?? CustomTypeReportsSearchFilter.CreateDefault();
 
             var departments = this.organizationService.GetDepartments(SessionFacade.CurrentCustomer.Id);
 
             var viewModel = CustomTypeReportSearchViewModel.BuildViewModel(
                 currentFilter,
-                departments);
+                departments,
+                inventoryTypeId);
 
             return this.PartialView("CustomTypeReport", viewModel);
         }
@@ -925,7 +928,7 @@
         }
 
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
-        public PartialViewResult CustomTypeReportGrid(CustomTypeReportsSearchFilter filter)
+        public PartialViewResult CustomTypeReportGrid(CustomTypeReportsSearchFilter filter, int inventoryTypeId)
         {
             SessionFacade.SavePageFilters(
                 this.CreateFilterId(TabName.Reports, ReportFilterMode.CustomType.ToString()),
@@ -933,7 +936,7 @@
 
             var models = this.inventoryService.GetAllConnectedInventory(
                 SessionFacade.CurrentCustomer.Id,
-                filter.InventoryTypeId,
+                inventoryTypeId,
                 filter.DepartmentId,
                 filter.SearchFor);
 

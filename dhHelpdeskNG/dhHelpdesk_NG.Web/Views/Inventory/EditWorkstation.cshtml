@@ -138,8 +138,8 @@
                     @{
                         foreach (var model in Model.InventoryGridModels)
                         {
-                        @Translation.Get(model.CurrentModeName)
-                        @Html.Partial("InventoryGridWithDeleteButton", new InventoryGridModelForDynamicInventory(model, Model.ComputerViewModel.Id))
+                            @Translation.Get(model.CurrentModeName)
+                            @Html.Partial("InventoryGridWithDeleteButton", new InventoryGridModelForDynamicInventory(model, Model.ComputerViewModel.Id))
                         }
                     }
                 </table>

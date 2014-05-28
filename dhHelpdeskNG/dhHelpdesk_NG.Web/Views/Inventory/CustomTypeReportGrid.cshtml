@@ -20,7 +20,11 @@
                 </tr>
                 if (Model.IsGrouped)
                 {
-                    foreach (var owner in item)
+                    if (!item.Any())
+                    {
+                        continue;
+                    }
+                    foreach (var owner in item.Where(x => x.Owner != null))
                     {
                         <tr>
                             <td>@Html.DisplayFor(x => owner.Owner)

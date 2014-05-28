@@ -5,12 +5,13 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Inventory;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
+
+    using Inventory = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory.Inventory;
 
     public class InventoryRepository : Repository<Domain.Inventory.Inventory>, IInventoryRepository
     {
@@ -288,21 +289,27 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                 query = query.Where(x => x.InventoryName.ToLower().Contains(pharseInLowerCase));
             }
 
-            var anonymus = (from q in query
-                            join ci in DbContext.ComputerInventories on q.Id equals ci.Inventory_Id into result
+            var anonymus = (from ti in DbContext.InventoryTypes.Where(x => x.Id == inventoryTypeId)
+                            join q in query on ti.Id equals q.InventoryType_Id into fake
+                            from c in fake.DefaultIfEmpty()
+                            join ci in DbContext.ComputerInventories on c.Id equals ci.Inventory_Id into result
                             from k in result.DefaultIfEmpty()
                             select
                                 new
                                     {
-                                        q.InventoryName,
+                                        c.InventoryName,
                                         k.Computer.ComputerName,
-                                        q.InventoryType_Id,
-                                        InventoryTypeName = q.InventoryType.Name
+                                        InventoryType_Id = ti.Id,
+                                        InventoryTypeName = ti.Name
                                     }).ToList();
 
             var grouped = anonymus.GroupBy(x => new { x.InventoryType_Id, x.InventoryTypeName }).Single();
 
-            var models = grouped.Select(x => new ReportModel(x.InventoryName, x.ComputerName)).ToList();
+            var models =
+                grouped.Where(x => x.InventoryName != null)
+                    .Select(x => new ReportModel(x.InventoryName, x.ComputerName))
+                    .ToList();
+
             var model = new ReportModelWithInventoryType(
                 grouped.Key.InventoryType_Id,
                 grouped.Key.InventoryTypeName,

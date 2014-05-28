@@ -12,22 +12,17 @@
         {
         }
 
-        public InventorySearchFilter(int inventoryTypeId, int? departmentId, string searchFor, int recordsOnPage)
+        public InventorySearchFilter(int? departmentId, string searchFor, int recordsOnPage)
         {
-            this.InventoryTypeId = inventoryTypeId;
             this.DepartmentId = departmentId;
             this.SearchFor = searchFor;
             this.RecordsOnPage = recordsOnPage;
         }
 
-        private InventorySearchFilter(int inventoryTypeId, int recordsOnPage)
+        private InventorySearchFilter(int recordsOnPage)
         {
-            this.InventoryTypeId = inventoryTypeId;
             this.RecordsOnPage = recordsOnPage;
         }
-
-        [IsId]
-        public int InventoryTypeId { get; set; }
 
         [IsId]
         public int? DepartmentId { get; set; }
@@ -41,12 +36,12 @@
 
         public static InventorySearchFilter CreateDefault(int inventoryTypeId)
         {
-            return new InventorySearchFilter(inventoryTypeId, 500);
+            return new InventorySearchFilter(500);
         }
 
-        public InventoriesFilter CreateRequest()
+        public InventoriesFilter CreateRequest(int inventoryTypeId)
         {
-            return new InventoriesFilter(this.InventoryTypeId, this.DepartmentId, this.SearchFor, this.RecordsOnPage);
+            return new InventoriesFilter(inventoryTypeId, this.DepartmentId, this.SearchFor, this.RecordsOnPage);
         }
     }
 }

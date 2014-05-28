@@ -30,8 +30,8 @@
             </td>
         </tr>
     </table>
-    @Html.HiddenFor(x => x.Filter.InventoryTypeId)
+    @Html.HiddenFor(x => x.InventoryTypeId)
 }
 <div id="report_grid_container">
-    @Html.Action("CustomTypeReportGrid", "Inventory", new { area = string.Empty, filter = Model.Filter })
+    @Html.Action("CustomTypeReportGrid", "Inventory", new { area = string.Empty, filter = Model.Filter, inventoryTypeId = Model.InventoryTypeId })
 </div>

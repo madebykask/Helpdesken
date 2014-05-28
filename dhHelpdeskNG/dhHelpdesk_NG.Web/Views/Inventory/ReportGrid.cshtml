@@ -28,7 +28,7 @@
                 </tr>
                 if (Model.IsGrouped)
                 {
-                    foreach (var owner in item)
+                    foreach (var owner in item.Where(x => x.Owner != null))
                     {
                         <tr>
                             <td colspan="2">@Html.DisplayFor(x => owner.Owner)

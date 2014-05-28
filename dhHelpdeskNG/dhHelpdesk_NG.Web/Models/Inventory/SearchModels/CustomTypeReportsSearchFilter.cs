@@ -18,13 +18,6 @@
             this.SearchFor = searchFor;
         }
 
-        private CustomTypeReportsSearchFilter(int inventoryTypeId)
-        {
-            this.InventoryTypeId = inventoryTypeId;
-        }
-
-        public int InventoryTypeId { get; set; }
-
         public int? DepartmentId { get; set; }
 
         public bool IsShowParentInventory { get; set; }
@@ -32,9 +25,9 @@
         [LocalizedDisplay("Sök")]
         public string SearchFor { get; set; }
 
-        public static CustomTypeReportsSearchFilter CreateDefault(int inventoryTypeId)
+        public static CustomTypeReportsSearchFilter CreateDefault()
         {
-            return new CustomTypeReportsSearchFilter(inventoryTypeId);
+            return new CustomTypeReportsSearchFilter();
         }
     }
 }
