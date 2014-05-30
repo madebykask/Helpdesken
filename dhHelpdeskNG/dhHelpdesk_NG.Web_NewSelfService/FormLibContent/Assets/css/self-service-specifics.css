@@ -1,0 +1,15 @@
+﻿body {
+    padding-top: 0;
+}
+
+#lmEmbedded .navbar, #lmEmbedded .navbar-inverse {
+    position: relative;
+    right: 0;
+    left: 0;
+    z-index: 1030;
+    margin-bottom: 0;
+}
+
+#lmEmbedded .navbar-fixed-top {
+    
+}

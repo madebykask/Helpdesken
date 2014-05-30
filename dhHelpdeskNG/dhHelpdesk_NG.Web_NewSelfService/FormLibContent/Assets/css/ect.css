@@ -72,7 +72,7 @@ legend {
 
 .nobullits {
     list-style-type: none;
-    padding-left: 0 ;
+    padding-left: 0;
     margin-left: 0;
 }
 
@@ -206,33 +206,26 @@ body > .navbar {
 }
 
 /*****************MULTI CHECKBOXES UL********************************/
-.multicheck ul
-{
-	list-style: none;
-	margin-left:0;
-	margin-right:30px;
-
+.multicheck ul {
+    list-style: none;
+    margin-left: 0;
+    margin-right: 30px;
 }
 
-.multicheck ul li
-{
-	display:inline;
-	float:left;
+    .multicheck ul li {
+        display: inline;
+        float: left;
+    }
 
-}
+        .multicheck ul li ul {
+            list-style: none;
+            margin-left: 10px;
+        }
 
-.multicheck ul li ul
-{
-	list-style: none;
-	margin-left:10px;
-}
-
-.multicheck ul li ul li
-{
-	display:list-item;
-	float:none;
-
-}
+            .multicheck ul li ul li {
+                display: list-item;
+                float: none;
+            }
 
 
 /* Sections
@@ -1176,5 +1169,5 @@ label.error, .notice {
 
 /* ie-8 fix append input problem */
 .row-fluid [class*="span"] {
-   min-height: 20px\9;
+    min-height: 20px\9;
 }
