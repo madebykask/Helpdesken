@@ -2,7 +2,7 @@
     padding-top: 0;
 }
 
-#lmEmbedded .navbar, #lmEmbedded .navbar-inverse {
+#lmEmbedded .navbar {
     position: relative;
     right: 0;
     left: 0;
@@ -10,6 +10,18 @@
     margin-bottom: 0;
 }
 
+#lmEmbedded .navbar-inverse {
+    background-color: transparent;
+    border-color: transparent;
+}
+
 #lmEmbedded .navbar-fixed-top {
-    
+}
+
+#lmEmbedded .collapse {
+    display: block;
+}
+
+#lmEmbedded .container.containeralignright {
+    margin-left: 0;
 }
