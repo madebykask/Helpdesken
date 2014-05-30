@@ -1,0 +1,80 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane" id="Basic">
+    <div class="span12">
+        <table class="table">       
+            <tr>
+                <td class="tdstrong">@Model.Label("BasicTerminationType")</td>
+                <td>
+                    @Model.Element("BasicTerminationType")
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("LastDayOfEmployment")</td>
+                <td>
+                    @Model.Element("LastDayOfEmployment")
+                    <div id="notice_HiringDate" style="display:none;" class="notice">
+                            @Model.Translate("The date you've entered is in the past. Are you sure you want to backdate Last Day of Employment date?")
+                        </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstrong" colspan="2">
+                    <h4>@Model.Translate("CDS")</h4>
+                </td>                
+            </tr>  
+            <tr>
+                <td class="tdstrong">@Model.Label("LockCDSAccountFrom")</td>
+                <td>
+                    @Model.Element("LockCDSAccountFrom")</td>
+            </tr>         
+            <tr>
+                <td class="tdstrong" colspan="2">
+                    <h4>@Model.Translate("Country Specifics")</h4>
+                </td>                
+            </tr>  
+            <tr>
+                <td class="tdstrong">@Model.Label("Co-WorkerBeenEmployedFor2Months")</td>
+                <td>
+                    @Model.Element("Co-WorkerBeenEmployedFor2Months")</td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("UsingCompanyFitness")</td>
+                <td>
+                    @Model.Element("UsingCompanyFitness")</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<script>
+    
+
+    function selectIndexChangeTerminationType() {
+        document.getElementById('CompleteTerminationType').value = document.getElementById('BasicTerminationType').value;
+        
+    }
+
+    document.getElementById('BasicTerminationType').onchange = selectIndexChangeTerminationType;
+
+    function changedLastDayOfEmployment()
+    {
+        debugger;
+        var noticeHiringDate = $('#notice_HiringDate');
+        var hiringdate = new Date(document.getElementById('LastDayOfEmployment').value);
+        var startDate = new Date();
+        startDate.setHours(0, 0, 0, 0);
+        if (hiringdate.valueOf() < startDate.valueOf()) {
+            noticeHiringDate.show();
+        }
+        else {
+            noticeHiringDate.hide();
+        }
+     }
+    
+
+    document.getElementById('LastDayOfEmployment').onchange = changedLastDayOfEmployment;
+
+</script>

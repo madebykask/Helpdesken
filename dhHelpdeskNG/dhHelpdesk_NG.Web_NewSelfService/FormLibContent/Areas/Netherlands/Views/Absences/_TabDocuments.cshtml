@@ -1,0 +1,71 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+@functions{
+    public string GetContract()
+    {
+
+        switch (Model.GetAnswer("AbsenceType").Trim())
+        {
+            case "Parental leave":
+                return "ParentalLeave";
+
+            case "Short term care leave (paid leave)":
+                return "ShortTermCareLeave";
+
+            case "Unpaid leave":
+                return "UnpaidLeave";
+
+            case "Long term care leave (unpaid)":
+                return "UnpaidLeave";
+            case "Emergency leave":
+                return "EmergencyLeave";
+
+            default:
+                return "";
+        }
+
+
+    }
+}
+
+
+<div class="tab-pane" id="documents">
+    <div class="span12">
+        <table class="table-striped">
+            <thead>
+                <tr>
+                    <th>@Model.Translate("Document")
+                    </th>
+                    <th>@Model.Translate("Type")
+                    </th>
+                    <th>
+                        @Model.Translate("Printed by")
+                    </th>
+                    @*<th>
+                        @Model.Translate("Contract concluded on")
+                    </th>*@
+                    <th>&nbsp;
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@Model.GetAnswer("AbsenceType")</td>
+                    <td>pdf</td>
+                    <td>@Model.GetAnswer(GetContract())</td>
+                    <td>
+                        <a href="@Url.Action("print", "Absences", new
+                                {
+                                    id = GetContract(),
+                                    caseId = Model.Contract.Id,
+                                    path = Path.Combine(Path.GetDirectoryName(Model.FormXmlPath), Path.GetFileNameWithoutExtension(Model.FormXmlPath)),
+                                    userId = FormLibSessions.User.UserId
+                                })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@Model.Translate("Print")</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

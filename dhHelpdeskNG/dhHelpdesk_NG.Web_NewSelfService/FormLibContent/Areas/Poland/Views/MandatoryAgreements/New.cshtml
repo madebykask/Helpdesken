@@ -1,0 +1,36 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+@{
+    ViewBag.Title = Model.Translate("Poland") + " - " + Model.Translate("Mandatory agreements");
+}
+
+@section Script {
+ <script type="text/javascript">
+
+        $(function () {
+            validate.run(10);
+        });
+
+    </script>
+
+     @Html.Partial("_Validate", Model)
+}
+
+@using (Html.BeginForm("new", "MandatoryAgreements", FormMethod.Post, new { area = "poland", enctype = "multipart/form-data" }))
+{
+    @Html.Partial("_Navigation", Model)
+    <div class="container containeralignright">
+        @Html.Partial("_CurrentUser")
+        @Html.Partial("_ErrorMessage", Model)
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#MandatoryAgreements">@Model.Translate("Mandatory agreements")</a></li>
+        </ul>
+        <div class="content">
+            <div class="tab-content">
+                @Html.Partial("_TabMandatoryAgreements", Model)
+            </div>
+        </div>
+    </div>
+}

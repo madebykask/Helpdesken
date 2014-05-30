@@ -1,0 +1,57 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<body>
+    <div>
+         <br />
+        <table style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
+            <tr>
+                <td style="text-align: right;">@Model.GetAnswer("FirstName") @Model.GetAnswer("LastName")</td>
+            </tr>
+            <tr>
+                <td style="text-align: right;">@Model.GetAnswer("PermanentAddressLine1") @Model.GetAnswer("PermanentAddressLine2") @Model.GetAnswer("PermanentAddressLine3")</td>
+            </tr>
+            <tr>
+                <td style="text-align: right;">@Model.GetAnswer("PermanentPostalCode") @Model.GetAnswer("PermanentCity")</td>
+            </tr>
+        </table>
+
+        @Model.Department.HeadOfDepartmentCity, @string.Format(new System.Globalization.CultureInfo("nl-NL"), "{0:dd MMM yyyy}", DateTime.Now)<br />
+        <br />
+
+        Betreft: kortdurend zorgverlof<br />
+        <br />
+
+        Beste @Model.GetAnswer("FirstName")<br />
+        <br />
+
+        Hierbij bevestigen wij je het volgende.
+        <br />
+        <br />
+
+        In de maand @Model.GetAnswer("MonthTfTheLeave") heb jij @Model.GetAnswer("AbsenceHoursAlreadyUsed") uur kortdurend zorgverlof opgenomen met behoud van je salaris tot 100%. 
+
+        <br />
+        <br />
+
+        Voor meer informatie over deze regeling verwijzen wij je naar ico-worker.com/nl of raadpleeg artikel 41C van de IKEA CAO.<br />
+        <br />
+
+        We hopen je hiermee voldoende te hebben geïnformeerd.
+        <br />
+        <br />
+
+        Met vriendelijke groet,<br />
+        @Model.GetAnswer("Department")
+        <endpage />
+    </div>
+
+
+</body>
+</html>

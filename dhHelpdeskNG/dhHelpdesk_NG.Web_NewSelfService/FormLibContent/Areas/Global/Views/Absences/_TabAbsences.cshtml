@@ -1,0 +1,243 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane" id="Absences">
+    <div class="span5">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Absences")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AbsenceType")</td>
+                    <td>
+                        @Model.Element("AbsenceType")
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="tdstrong">@Model.Label("AbsenceStartFrom")</td>
+                    <td>
+                        @Model.Element("AbsenceStartFrom")
+                        <div id="notice_FutureDate" style="display: none;" class="notice">
+                            @Model.Translate("The date you've entered is in the past. Are you sure you want to backdate Absence start from?")
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AbsenceEndsOn")</td>
+                    <td>
+                        @Model.Element("AbsenceEndsOn")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AbsenceHours")</td>
+                    <td>
+                        @Model.Element("AbsenceHours")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AbsenceDays")</td>
+                    <td>
+                        @Model.Element("AbsenceDays")
+                    </td>
+                </tr>
+
+
+                 @for(int i = 2; i <= 4; i++)
+                {
+                    <tr class="absence@(i.ToString())" id="absence@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Absences") @(i.ToString())</h4>
+                        </td>
+                    </tr>
+                    <tr class="absence@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AbsenceType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AbsenceType" + i.ToString())</td>
+                    </tr>
+                     
+                     <tr class="absence@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AbsenceStartFrom" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AbsenceStartFrom" + i.ToString())</td>
+                    </tr>
+                     <tr class="absence@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AbsenceEndsOn" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AbsenceEndsOn" + i.ToString())</td>
+                    </tr>
+                    
+                    <tr class="absence@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AbsenceHours" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AbsenceHours" + i.ToString())</td>
+                    </tr>  
+                     <tr class="absence@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AbsenceDays" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AbsenceDays" + i.ToString())</td>
+                    </tr>  
+                 }
+
+                <tr id="addAbsenceTr">
+                    <td colspan="2">
+                        @Model.Element("Absences")
+                        <a id="addAbsence" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Absence")</a></td>
+                </tr>
+
+
+                
+
+                @* CDS *@
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("CDS")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("LockCDSAccount")</td>
+                    <td>
+                        @Model.Element("LockCDSAccount")
+                    </td>
+                </tr>
+                </tbody>
+        </table>
+    </div>
+
+@*    @if (Model.GetAnswer("TECoWorker") == "Yes")
+    {
+                 *@<div class="span6">
+           <table class="table">
+             <tbody>
+
+                @* DETAILS ON GLOBAL COMMUTING *@
+
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Details on Global Commuting")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("CommutingType")</td>
+                    <td>
+                        @Model.Element("CommutingType")
+                    </td>
+                </tr>    
+
+                <tr>
+                    <td class="tdstrong">@Model.Label("StartFrom")</td>
+                    <td>
+                        @Model.Element("StartFrom")
+                    </td>
+                </tr>    
+
+                <tr>
+                    <td class="tdstrong">@Model.Label("EndsOn")</td>
+                    <td>
+                        @Model.Element("EndsOn")
+                    </td>
+                </tr>    
+
+                <tr>
+                    <td class="tdstrong">@Model.Label("DestinationCountry")</td>
+                    <td>
+                        @Model.Element("DestinationCountry")
+                    </td>
+                </tr>    
+
+                <tr>
+                    <td class="tdstrong">@Model.Label("TaxRelevant")</td>
+                    <td>
+                        @Model.Element("TaxRelevant")
+                    </td>
+                </tr>
+                
+                
+                 @for(int i = 2; i <= 4; i++)
+                {
+                    <tr class="detailsonglobalcommuting@(i.ToString())" id="detailsonglobalcommuting@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Details on Global Commuting") @(i.ToString())</h4>
+                        </td>
+                    </tr>
+                    <tr class="detailsonglobalcommuting@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("CommutingType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("CommutingType" + i.ToString())</td>
+                    </tr>
+                     <tr class="detailsonglobalcommuting@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("StartFrom" + i.ToString())</td>
+                        <td>
+                            @Model.Element("StartFrom" + i.ToString())</td>
+                    </tr>
+                     <tr class="detailsonglobalcommuting@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("EndsOn" + i.ToString())</td>
+                        <td>
+                            @Model.Element("EndsOn" + i.ToString())</td>
+                    </tr>
+                     <tr class="detailsonglobalcommuting@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DestinationCountry" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DestinationCountry" + i.ToString())</td>
+                    </tr>
+                     <tr class="detailsonglobalcommuting@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("TaxRelevant" + i.ToString())</td>
+                        <td>
+                            @Model.Element("TaxRelevant" + i.ToString())</td>
+                    </tr>
+                 }
+                <tr id="addDetailsOnGlobalCommutingTr">
+                    <td colspan="2">
+                        @Model.Element("DetailsOnGlobalCommutings")
+                        <a id="addDetailsOnGlobalCommuting" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Details On Global Commuting")</a></td>
+                </tr>    
+
+            </tbody>
+        </table>
+    </div>
+  @* } *@  
+    
+</div>
+
+<script>
+    
+    var futureNotice = $('#notice_FutureDate');
+    var nowTemp = new Date();
+    var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+
+    var start = $('#date_AbsenceStartFrom').datepicker({
+        onRender: function (date) {
+            return '';
+        }
+    }).on('changeDate', function (ev) {
+
+        futureNotice.hide();
+
+        if (ev.date.valueOf() < now.valueOf())
+            futureNotice.show();
+
+        if (ev.date.valueOf() > end.date.valueOf()) {
+            var newDate = new Date(ev.date);
+            newDate.setDate(newDate.getDate() + 1);
+            end.setValue(newDate);
+            $('#AbsenceEndsOn').val('');
+        }
+        end.update();
+        start.hide();
+    }).data('datepicker');
+
+    var end = $('#date_AbsenceEndsOn').datepicker({
+        onRender: function (date) {
+            return date.valueOf() <= start.date.valueOf() ? 'disabled' : '';
+        }
+    }).on('changeDate', function (ev) {
+
+        end.hide();
+    }).data('datepicker');
+    $('#date_AbsenceEndsOn').on("keydown keypress keyup", false);
+    
+</script>

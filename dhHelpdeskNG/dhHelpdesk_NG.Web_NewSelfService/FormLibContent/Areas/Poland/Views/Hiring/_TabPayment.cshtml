@@ -1,0 +1,167 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane" id="payment">
+    <div class="span5">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Payment information")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ECMCompensationProgram")</td>
+                    <td>
+                        @Model.Element("ECMCompensationProgram")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PSArea")</td>
+                    <td>
+                        @Model.Element("PSArea")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PSGroup")</td>
+                    <td>
+                        @Model.Element("PSGroup")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("CollectiveScaleSalary")</td>
+                    <td>
+                        @Model.Element("CollectiveScaleSalary")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Payments and allowances")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("OneIKEABonusType")</td>
+                    <td>@Model.Element("OneIKEABonusType")</td>
+                </tr>
+                <tr class="allowance">
+                    <td class="tdstrong">@Model.Label("FunctionAllowance")</td>
+                    <td>
+                        @Model.Element("FunctionAllowance")
+                    </td>
+                </tr>
+                <tr class="allowance">
+                    <td class="tdstrong">@Model.Label("FunctionAllowanceAmount")</td>
+                    <td>
+                        @Model.Element("FunctionAllowanceAmount")
+                    </td>
+                </tr>
+                <tr class="allowance">
+                    <td class="tdstrong">@Model.Label("FunctionAllowanceGrossNett")</td>
+                    <td>
+                        @Model.Element("FunctionAllowanceGrossNett")
+                    </td>
+                </tr>
+
+                @for(int i = 2; i <= 3; i++)
+                {
+                    <tr class="allowance@(i.ToString())" id="allowance@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Allowance")</h4>
+                        </td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("FunctionAllowance" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FunctionAllowance" + i.ToString())</td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("FunctionAllowanceAmount" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FunctionAllowanceAmount" + i.ToString())</td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("FunctionAllowanceGrossNett" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FunctionAllowanceGrossNett" + i.ToString())</td>
+                    </tr>
+                }
+
+                <tr id="addAllowanceTr">
+                    <td colspan="2">
+                        @Model.Element("Allowances")
+                        <a id="addAllowance" class="btn btn-link btn-mini pull-right">@Model.Translate("I want to add another Allowance")</a></td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Cost center")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HomeCostCenter")</td>
+                    <td>
+                        @Model.Element("HomeCostCenter")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HomeCostCenterAllocation")</td>
+                    <td>
+                        @Model.Element("HomeCostCenterAllocation")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AdditionalCostCenter")</td>
+                    <td>
+                        @Model.Element("AdditionalCostCenter")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AdditionalCostCenterAllocation")</td>
+                    <td>
+                        @Model.Element("AdditionalCostCenterAllocation")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AdditionalCostCenter2")</td>
+                    <td>
+                        @Model.Element("AdditionalCostCenter2")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AdditionalCostCenterAllocation2")</td>
+                    <td>
+                        @Model.Element("AdditionalCostCenterAllocation2")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Additional information")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HealthInsuranceLocation")</td>
+                    <td>
+                        @Model.Element("HealthInsuranceLocation")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PensionerStatus")</td>
+                    <td>
+                        @Model.Element("PensionerStatus")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PESEL")</td>
+                    <td>
+                        @Model.Element("PESEL")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MobilityStatus")</td>
+                    <td>
+                        @Model.Element("MobilityStatus")
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

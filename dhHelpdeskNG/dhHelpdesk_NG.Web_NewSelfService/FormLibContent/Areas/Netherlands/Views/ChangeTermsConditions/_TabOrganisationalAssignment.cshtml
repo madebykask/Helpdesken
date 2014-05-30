@@ -1,0 +1,218 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane" id="OrganisationalAssignment">
+    <div class="span5">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Organisation")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("OrganisationCountry")</td>
+                    <td>@Model.Element("OrganisationCountry")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Company")</td>
+                    <td>@Model.Element("Company")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NewBusinessUnit")</td>
+                    <td>@Model.Element("NewBusinessUnit")</td>
+                </tr>
+
+                <tr>
+                    <td class="tdstrong">@Model.Label("NewDepartment")</td>
+                    <td>@Model.Element("NewDepartment")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Team")</td>
+                    <td>@Model.Element("Team")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HomeCostCentre")</td>
+                    <td>@Model.Element("HomeCostCentre")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("CostAllocation")</td>
+                    <td>@Model.Element("CostAllocation")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("CrossChargeCostCentre")</td>
+                    <td>@Model.Element("CrossChargeCostCentre")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Job")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("JobTitle")</td>
+                    <td>@Model.Element("JobTitle")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("LocalJobTitle")</td>
+                    <td>@Model.Element("LocalJobTitle")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NewPosition")</td>
+                    <td>@Model.Element("NewPosition")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ReportsToLineManager")</td>
+                    <td>@Model.Element("ReportsToLineManager")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EligibleForManagementAllowance")</td>
+                    <td>@Model.Element("EligibleForManagementAllowance")</td>
+                </tr>
+
+
+            </tbody>
+        </table>
+    </div>
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Employment Conditions")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmploymentCategory")</td>
+                    <td>@Model.Element("EmploymentCategory")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ContractEndDate")</td>
+                    <td>@Model.Element("ContractEndDate")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ResidencePermitRestriction")</td>
+                    <td>@Model.Element("ResidencePermitRestriction")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ContractedHours")</td>
+                    <td>@Model.Element("ContractedHours")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PreviousContractHours")</td>
+                    <td>@Model.Element("PreviousContractHours")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ContractType")</td>
+                    <td>@Model.Element("ContractType")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ProbationPeriod")</td>
+                    <td>@Model.Element("ProbationPeriod")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ProbationEndDate")</td>
+                    <td>@Model.Element("ProbationEndDate")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("CDS")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PrimarySite")</td>
+                    <td>@Model.Element("PrimarySite")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TECApprover")</td>
+                    <td>@Model.Element("TECApprover")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HelpDesk")</td>
+                    <td>@Model.Element("HelpDesk")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Country Specifics")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NameOfSchool")</td>
+                    <td>@Model.Element("NameOfSchool")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NameOfEducation")</td>
+                    <td>@Model.Element("NameOfEducation")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("CityEducationSchool")</td>
+                    <td>@Model.Element("CityEducationSchool")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("LevelOfEducation")</td>
+                    <td>@Model.Element("LevelOfEducation")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MentorAtIKEA")</td>
+                    <td>@Model.Element("MentorAtIKEA")</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script>
+
+    function selectIndexChangeProbationPeriod() {
+        
+        var probitionEndDate = document.getElementById('ProbationEndDate');
+        if (this.options[this.selectedIndex].value == 'No') {
+            probitionEndDate.disabled = true;
+            probitionEndDate.className = probitionEndDate.className + " disabled";
+        } else {
+            probitionEndDate.disabled = false;
+            $(probitionEndDate).removeClass("disabled");
+
+            var validFrom = document.getElementById('ChangeValidFrom');
+            var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+            var date = APIGlobal.DateTime.parseDate(validFrom.value, format);
+            date.setMonth(date.getMonth() + 2);
+
+            probitionEndDate.value = APIGlobal.DateTime.formatDate(date, format);
+        }
+    }
+    document.getElementById('ProbationPeriod').onchange = selectIndexChangeProbationPeriod;
+
+    function selectIndexChangeEmploymentCategory() {
+        if (this.options[this.selectedIndex].value == 'Permanent') {
+            document.getElementById("ContractEndDate").disabled = true;
+            document.getElementById("date_ContractEndDate").className = document.getElementById("date_ContractEndDate").className + " disabled";
+
+        }
+        else {
+            document.getElementById('ContractEndDate').disabled = false;
+            $("#ContractEndDate").removeClass("disabled");
+        }
+    }
+    document.getElementById('EmploymentCategory').onchange = selectIndexChangeEmploymentCategory;
+
+
+
+
+        if (document.getElementById('EmploymentCategory').value == 'Permanent') {
+            document.getElementById('ContractEndDate').disabled = true;
+        }
+
+        function selectIndexChangeLineManagertoTECApprover() {
+            document.getElementById('TECApprover').value = document.getElementById('ReportsToLineManager').value;
+        }
+        document.getElementById('ReportsToLineManager').onchange = selectIndexChangeLineManagertoTECApprover;
+
+
+        function selectIndexChangeBusinessUnit() {
+            document.getElementById('PrimarySite').value = document.getElementById('NewBusinessUnit').value;
+        }
+        document.getElementById('NewBusinessUnit').onchange = selectIndexChangeBusinessUnit;
+
+</script>

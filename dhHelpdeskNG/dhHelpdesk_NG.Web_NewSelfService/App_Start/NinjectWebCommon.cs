@@ -202,6 +202,21 @@ namespace DH.Helpdesk.NewSelfService
                         
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();
+
+
+            // FormLib
+            var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DSN"].ConnectionString;
+
+            kernel.Bind<ECT.Model.Abstract.IGlobalViewRepository>()
+            .To<ECT.Model.Contrete.GlobalViewRepository>().InRequestScope().WithConstructorArgument("connectionString", connectionString);
+
+            kernel.Bind<ECT.Model.Abstract.IContractRepository>()
+            .To<ECT.Model.Contrete.ContractRepository>().InRequestScope().WithConstructorArgument("connectionString", connectionString);
+
+            kernel.Bind<ECT.Model.Abstract.IUserRepository>()
+            .To<ECT.Model.Contrete.UserRepository>().InRequestScope().WithConstructorArgument("connectionString", connectionString);
+
+            kernel.Bind<ECT.Core.Service.IFileService>().To<ECT.Service.FileService>().InRequestScope();
         }        
     }
    

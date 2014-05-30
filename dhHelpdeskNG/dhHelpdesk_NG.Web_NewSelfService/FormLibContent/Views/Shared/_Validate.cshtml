@@ -1,0 +1,8 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+@foreach(var pair in Model.GetStatusActions())
+{
+    <input type="hidden" id="validate_@pair.Key" value="@Model.ClientValidate(int.Parse(pair.Key))" />
+}

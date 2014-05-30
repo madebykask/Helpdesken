@@ -1,0 +1,34 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane" id="documents">
+    @if(Model.GetAnswer("BusinessUnit") != "Service Office Netherlands"
+         || Model.GetAnswer("EmploymentCategory") != "Apprentice" || Model.GetAnswer("Company") != "IKEA Competence B.V.")
+    {
+
+    <div class="span12">
+        <table class="table-striped">
+            <thead>
+                <tr>
+                    <th>@Model.Translate("Document")
+                    </th>
+                    <th>@Model.Translate("Type")
+                    </th>
+                    <th>
+                        @Model.Translate("Printed by")
+                    </th>
+                    @*<th>
+                        @Model.Translate("Contract concluded on")
+                    </th>*@
+                    <th>&nbsp;
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @Html.Partial("_Documents", Model)
+            </tbody>
+        </table>
+    </div>
+    }
+</div>

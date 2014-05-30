@@ -1,0 +1,233 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE form [
+  <!ENTITY languages SYSTEM "Templates/Languages.xml">
+  <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
+  <!ENTITY state SYSTEM "Templates/AbsencesState.xml">
+]>
+
+<!-- Prod/Test -->
+
+<!--<form id="45" customerId="28">-->
+
+<!-- Dev -->
+
+<form id="52" customerId="29">
+  &languages;
+  &regexs;
+  &state;
+  <fields>
+    <!--Tab ServiceRequestDetails-->
+    <tab name="#ServiceRequestDetails" label="Service Request Details">
+      <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" mandatory="1">
+        <regex inherit="employeeno" message="" pattern=""></regex>
+      </element>
+      <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1"></element>
+      <element name="LastName" type="text" label="Co-Worker Last name" mandatory="1"></element>
+      <element name="IKEAEmailAddress" type="text" label="IKEA Email Address" mandatory="1">
+        <regex inherit="email" message="" pattern=""></regex>
+      </element>
+      <element name="IKEANetworkID" type="text"  label="IKEA Network ID" mandatory="1">
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+      </element>
+      <element name="BusinessUnit" type="text" label="Business Unit"></element>
+      <element name="Department" type="text" label="Department"></element>
+      <element name="TECoWorker" type="select" label="Is Co-Worker a TE?" mandatory="1">
+        <options>
+          <option value ="No">No</option>
+          <option value ="Yes">Yes</option>
+        </options>
+      </element>
+      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1">
+        <options>
+          <option value=""></option>
+          <option value ="Urgent">Urgent</option>
+          <option value ="Not Urgent">Not Urgent</option>
+        </options>
+      </element>
+      <element name="ProcessBeforeDate" type="date" format="dd.MM.yyyy" mandatory="1" label="Process before date:">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+    </tab>
+
+    <!--Absences-->
+    <tab name="#Absences" label="Absences">
+      <element name="AbsencesMulti" type="hidden" default="1"></element>
+      <element name="AbsenceType" type="select" label="Absence Type" mandatory="1">
+        <options>
+          <option value=""></option>
+          <option value ="Parental leave">Parental leave</option>
+          <option value ="Unpaid leave">Unpaid leave</option>
+          <option value ="Long term care leave (unpaid)">Long term care leave (unpaid)</option>
+          <option value ="Short term care leave (paid leave)">Short term care leave (paid leave)</option>
+          <option value ="Emergency leave">Emergency leave</option>
+        </options>
+      </element>
+      <element name="AbsenceStartFrom" type="date" format="dd.MM.yyyy" mandatory="1" label="Absence starts from:">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceEndsOn" type="date" format="dd.MM.yyyy" mandatory="1" label="Absence ends on:">
+        <laterThanOrEqual name="AbsenceStartFrom"></laterThanOrEqual>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceHours" type="text" mandatory="1" label="Absence hours"></element>
+      <element name="AbsenceDays" type="text" mandatory="1" label="Absence days"></element>
+
+      <element name="AbsenceType2" type="select" label="Absence Type">
+        <options>
+          <option value=""></option>
+          <option value ="Parental leave">Parental leave</option>
+          <option value ="Unpaid leave">Unpaid leave</option>
+          <option value ="Long term care leave (unpaid)">Long term care leave (unpaid)</option>
+          <option value ="Short term care leave (paid leave)">Short term care leave (paid leave)</option>
+          <option value ="Emergency leave">Emergency leave</option>
+        </options>
+      </element>
+      <element name="AbsenceStartFrom2" type="date" format="dd.MM.yyyy"  label="Absence starts from:">
+        <mandatoryIf name ="AbsenceType2" >Parental leave,Unpaid leave,Long term care leave (unpaid),Short term care leave (paid leave),Emergency leave</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceEndsOn2" type="date" format="dd.MM.yyyy"  label="Absence ends on:">
+        <laterThanOrEqual name="AbsenceStartFrom2"></laterThanOrEqual>
+        <mandatoryIf name ="AbsenceType2" >Parental leave,Unpaid leave,Long term care leave (unpaid),Short term care leave (paid leave),Emergency leave</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceHours2" type="text" label="Absence hours">
+        <mandatoryIf name ="AbsenceType2" >Parental leave,Unpaid leave,Long term care leave (unpaid),Short term care leave (paid leave),Emergency leave</mandatoryIf>
+      </element>
+      <element name="AbsenceDays2" type="text" label="Absence days">
+        <mandatoryIf name ="AbsenceType2" >Parental leave,Unpaid leave,Long term care leave (unpaid),Short term care leave (paid leave),Emergency leave</mandatoryIf>
+      </element>
+
+      <element name="AbsenceType3" type="select" label="Absence Type" >
+        <options>
+          <option value=""></option>
+          <option value ="Parental leave">Parental leave</option>
+          <option value ="Unpaid leave">Unpaid leave</option>
+          <option value ="Long term care leave (unpaid)">Long term care leave (unpaid)</option>
+          <option value ="Short term care leave (paid leave)">Short term care leave (paid leave)</option>
+          <option value ="Emergency leave">Emergency leave</option>
+        </options>
+      </element>
+      <element name="AbsenceStartFrom3" type="date" format="dd.MM.yyyy" label="Absence starts from:">
+        <mandatoryIf name ="AbsenceType3">Parental leave,Unpaid leave,Long term care leave (unpaid),Short term care leave (paid leave),Emergency leave</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceEndsOn3" type="date" format="dd.MM.yyyy" label="Absence ends on:">
+        <laterThanOrEqual name="AbsenceStartFrom3"></laterThanOrEqual>
+        <mandatoryIf name ="AbsenceType3">Parental leave,Unpaid leave,Long term care leave (unpaid),Short term care leave (paid leave),Emergency leave</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceHours3" type="text" label="Absence hours">
+        <mandatoryIf name ="AbsenceType3">Parental leave,Unpaid leave,Long term care leave (unpaid),Short term care leave (paid leave),Emergency leave</mandatoryIf>
+      </element>
+      <element name="AbsenceDays3" type="text" label="Absence days">
+        <mandatoryIf name ="AbsenceType3">Parental leave,Unpaid leave,Long term care leave (unpaid),Short term care leave (paid leave),Emergency leave</mandatoryIf>
+      </element>
+
+      <element name="AbsenceType4" type="select" label="Absence Type" >
+        <options>
+          <option value=""></option>
+          <option value ="Parental leave">Parental leave</option>
+          <option value ="Unpaid leave">Unpaid leave</option>
+          <option value ="Long term care leave (unpaid)">Long term care leave (unpaid)</option>
+          <option value ="Short term care leave (paid leave)">Short term care leave (paid leave)</option>
+          <option value ="Emergency leave">Emergency leave</option>
+        </options>
+      </element>
+      <element name="AbsenceStartFrom4" type="date" format="dd.MM.yyyy" label="Absence starts from:">
+        <mandatoryIf name ="AbsenceType4">Parental leave,Unpaid leave,Long term care leave (unpaid),Short term care leave (paid leave),Emergency leave</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceEndsOn4" type="date" format="dd.MM.yyyy" label="Absence ends on:">
+        <laterThanOrEqual name="AbsenceStartFrom4"></laterThanOrEqual>
+        <mandatoryIf name ="AbsenceType4">Parental leave,Unpaid leave,Long term care leave (unpaid),Short term care leave (paid leave),Emergency leave</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceHours4" type="text" label="Absence hours">
+        <mandatoryIf name ="AbsenceType4">Parental leave,Unpaid leave,Long term care leave (unpaid),Short term care leave (paid leave),Emergency leave</mandatoryIf>
+      </element>
+      <element name="AbsenceDays4" type="text"  label="Absence days">
+        <mandatoryIf name ="AbsenceType4">Parental leave,Unpaid leave,Long term care leave (unpaid),Short term care leave (paid leave),Emergency leave</mandatoryIf>
+      </element>
+      
+      <!--Country Specifics-->
+      
+      <element name="ChildName" type="text" label="Child's Name">
+        <mandatoryIf name ="AbsenceType">Parental leave</mandatoryIf>      
+      </element>
+      <element name="ChildDateOfBirth" type="date" format="dd.MM.yyyy" label="Child's Date Of Birth">
+        <regex inherit="date" pattern="" message=""></regex>
+        <mandatoryIf name ="AbsenceType">Parental leave</mandatoryIf>
+      </element>
+      <element name="AbsenceHoursWeekly" type="text" label="Absence hours weekly">
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+        <mandatoryIf name ="AbsenceType">Parental leave</mandatoryIf>
+      </element>
+      <element name="Totalparentalleaveentitlement" type="text" label="Total parental leave entitlement">
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+        <mandatoryIf name ="AbsenceType">Parental leave</mandatoryIf>
+      </element>
+      <element name="ContractedHoursOldData" type="text" label="Contracted Hours old data">
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+        <mandatoryIf name ="AbsenceType">Parental leave</mandatoryIf>
+      </element>
+      <element name="MonthTfTheLeave" type="select" label="Month of the leave">
+        <mandatoryIf name ="AbsenceType">Short term care leave (paid leave)</mandatoryIf>
+        <options>
+          <option value=""></option>
+          <option value="January">January</option>
+          <option value="February">February</option>
+          <option value="March">March</option>
+          <option value="April">April</option>
+          <option value="May">May</option>
+          <option value="June">June</option>
+          <option value="July">July</option>
+          <option value="Agust">Agust</option>
+          <option value="September">September</option>          
+          <option value="October">October</option>
+          <option value="November">November</option>
+          <option value="December">December</option>
+        </options>
+      </element>
+      <element name="AbsenceHoursAlreadyUsed" type="text" label="Absence Hours already used">
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+        <mandatoryIf name ="AbsenceType">Short term care leave (paid leave)</mandatoryIf>
+      </element>
+      <element name="PreviousContractHours" type="text" label="Previous contract hours">
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+        <mandatoryIf name ="AbsenceType">Unpaid leave,Long term care leave (unpaid)</mandatoryIf>
+      </element>
+      <element name="AbsenceLongerThan2Months" type="select" label="Absence longer than 2 months (for OV users)">
+        <mandatoryIf name ="AbsenceType">Unpaid leave,Long term care leave (unpaid)</mandatoryIf>
+        <options>
+          <option value=""></option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </options>
+      </element>
+
+
+      <!--CDS-->
+      <element name="LockCDSAccount" type="select" label="Lock CDS Account?">
+        <options>
+          <option value=""></option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </options>
+      </element>     
+    </tab>
+
+    <!--GlobalView-->
+    <tab name="#globalview">
+      <element type="text" name="Co-WorkerGlobalviewID" label="Co-Worker Globalview ID" mandatory="1">
+        <regex inherit="employeeno" pattern="" message=""></regex>
+      </element>
+      <element type="checkbox" name="SubmittedToExternalBody" mandatory="1" label="External body contacted">
+        <on value="1">External body contacted</on>
+        <off value="0"></off>
+        <regex inherit="booltrue" pattern="" message="This field is required."></regex>
+      </element>
+    </tab>
+  </fields>
+</form>
+

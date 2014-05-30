@@ -1,0 +1,174 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@using ECT.FormLib.Pdfs;
+
+@{
+    Layout = null;
+}
+
+@functions{
+
+public static string GetLetter(int value)
+    {
+        //skickar in Count från sublist, därför plus 1
+        value++;
+
+        string[] alpha2 = new string[5];
+
+        alpha2[0] = "a";
+        alpha2[1] = "b";
+        alpha2[2] = "c";
+        alpha2[3] = "d";
+        alpha2[4] = "e";
+
+        return "." + alpha2[value].ToString() + ". ";
+   }
+}
+
+<!DOCTYPE html>
+<html>
+
+<body>
+    <div>
+        <br />
+  @*      <text>*********</text>
+            @Model.Contract.EmployeeNumber*@
+
+
+        <text>*********</text>
+
+          <table style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
+            <tr>
+                <td style="text-align: right;">@Model.Contract.FirstName @Model.Contract.Surname</td>
+            </tr>
+            <tr>
+                <td style="text-align: right;">@Model.GetAnswer("PermanentAddressLine1") @Model.GetAnswer("PermanentAddressLine2") @Model.GetAnswer("PermanentAddressLine3")</td>
+            </tr>
+            <tr>
+                <td style="text-align: right;">@Model.GetAnswer("PermanentPostalCode") @Model.GetAnswer("PermanentCity")</td>
+            </tr>
+        </table>
+
+          Amsterdam, @string.Format(new System.Globalization.CultureInfo("nl-NL"), "{0:dd MMM yyyy}", DateTime.Now)<br />
+        <br />
+
+        Betreft: wijziging arbeidsovereenkomst
+        <br /> <br />
+
+        Beste @Model.Contract.FirstName,
+        <br /> <br />
+
+        Hierbij bevestigen wij je het volgende.
+        <br /> <br />
+
+        Per @Model.GetAnswer("ChangeValidFrom") zullen de volgende wijzigingen in jouw arbeidsovereenkomst plaatsvinden:
+         <br /> 
+
+    
+        @{
+            var list = new List<PdfListItem>();
+            var pdfList = new List<PdfListItem>();
+
+
+            var brText = "<br /><br />";
+
+           
+            
+            //1
+            // **** Applicable if OA9 Job Title (Local Language translation) changes
+            string text1 = "Je zal werkzaam zijn in de functie van {0} bij IKEA {1}. Deze functie is ingedeeld in functieschaal {2}";
+
+            list.Add(new PdfListItem { Text = string.Format(text1, Model.Translate(Model.GetAnswer("JobTitle")), Model.GetAnswer("BusinessUnit"), Model.GetAnswer("PayScaleLevel")) });
+
+            // **** Applicable if additionally OA10 is "New Position for VAP store?" for units OA3: Store Amsterdam 088 or Store Heerlen 089 or Store Barendrecht 274
+            pdfList = new List<PdfListItem>();
+
+            string text1a = "De bovenstaande functie is specifiek voor de vestiging {0} en valt buiten de kaders van het functiegebouw van IKEA B.V. Op het moment dat VAPS constructie van IKEA {0} vervalt en IKEA {0} weer een reguliere vestiging wordt, zal dit consequenties hebben voor deze functie. Met jou zal dan moeten worden gesproken over herplaatsing in een andere functie behorende bij het functiegebouw van IKEA B.V.";
+
+            pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + GetLetter(pdfList.Count - 1) + text1a, @Model.GetAnswer("BusinessUnit")) });
+
+            // **** lägg till i sublist - kolla värdet!
+            list[list.Count - 1].SubList = pdfList;
+
+
+            //2
+            // **** Applicable if changing from co-worker to manager position, applicable If Pay Scale Level is 10 or more, or if it is 9, but the value in a field OA.CS.11.1 "Eligible for Management allowance?" is yes
+            string text2 = "Als tegemoetkoming in kosten voor representatie en telefoongebruik ontvang je een algemene onkostenvergoeding van € 50,- bruto per maand. Dit is conform CAO artikel 28A. Hiernaast ontvang je ook een reiskostenvergoeding conform CAO artikel 29C.";
+            list.Add(new PdfListItem { Text = text2 });
+
+            //3
+            // **** Applicable if changing from manager to co-worker position, The last section applicable If Pay Scale Level is 8 or less, or if it is 9, but the value in a field OA.CS.11.1 "Is the co-worker allowed a Management allowance?" is no
+            string text3 = "Je tegemoetkoming in kosten voor representatie en telefoongebruik vervalt met ingang van bovengenoemde datum. Je reiskostenvergoeding wordt berekend conform CAO artikel 29B.";
+            list.Add(new PdfListItem { Text = text3 });
+            
+            //4
+            // **** Applicable if PM.CS.2.2 changes
+            string text4 = "Je zal worden ingeschaald in functieschaal {0}.";
+            list.Add(new PdfListItem { Text = string.Format(text4, Model.GetAnswer("PayScaleLevel")) });
+            
+            //5
+            // **** Applicable if OA14 is "Full time"
+            string text5 = "Je salaris zal gewijzigd worden naar € {0} bruto per maand.";
+            list.Add(new PdfListItem { Text = string.Format(text5, Model.GetAnswer("BasicPay")) });
+            
+            //6
+            // **** Applicable if OA14 is "Part time"
+            string text6 = "Je salaris zal gewijzigd worden naar € {0} bruto per uur.";
+            list.Add(new PdfListItem { Text = string.Format(text6, Model.GetAnswer("BasicPayAmount")) });
+                
+            //7 **** Applicable if PM.CS.18 is filled in
+            string text7 = "De volgende salarisrevisie zal zijn in {0}.";
+            list.Add(new PdfListItem { Text = string.Format(text7, Model.GetAnswer("NextRevisionDate")) });
+
+            // 8 Applicable if PM.CS.15 is filled in
+            string text8 = "Werknemer heeft recht op gebruik van een lease-auto categorie {0}:";
+            list.Add(new PdfListItem { Text = string.Format(text8, Model.GetAnswer("Category")) });
+
+            // 8a Values from drop down field PM.CS.15:
+            //sätts ovan? eller i ul?
+            
+          //  Type of car
+            
+          
+            
+            
+            }
+
+        BasicPayAmount: @Model.GetAnswer("BasicPayAmount")<br />
+        BasicPay: @Model.GetAnswer("BasicPay")<br />
+
+
+          @if (list.Count > 1)
+        {
+            for (int i = 0; i < list.Count; i++)
+            { 
+            <br />                                        
+            <p style="text-align: justify; font-family: Verdana; font-size: 11px; padding-left: 10px; padding-right: 50px;">@(i + 1). @Html.Raw(list[i].Text)</p>
+                if (list[i].SubList != null && list[i].SubList.Count > 0)
+                {
+                    foreach (var item in list[i].SubList)
+                    {
+            <br />
+            <p style="text-align: justify; font-family: Verdana; font-size: 11px; padding-left: 10px; padding-right: 50px;">@item.Text </p>
+                    }
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i == list.Count - 1; i++)
+            {
+            <p style="font-family: Verdana; font-size: 11px;">@Html.Raw(list[i])</p>
+            }
+        }
+
+        <br />
+ 
+        <endpage/>
+    </div>
+    
+
+</body>
+</html>
+

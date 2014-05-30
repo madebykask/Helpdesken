@@ -1,0 +1,514 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@using ECT.FormLib.Pdfs;
+
+@{
+    Layout = null;
+    Model.Language = "nl";
+}
+
+@functions{
+    public string GetPayRollCategoryText(string PayrollCategory)
+    {
+
+        if (PayrollCategory == "Juvenile Montly" | PayrollCategory == "MT/Dep/SM")
+        {
+            return "Monthly";
+        }
+        else if (PayrollCategory == "Juvenile Hourly")
+        {
+            return "Hourly";
+        }
+        else
+        {
+            return PayrollCategory;
+        }
+    }
+
+
+    public static string GetLetter(int value)
+    {
+        //skickar in Count från sublist, därför plus 1
+        value++;
+
+        string[] alpha2 = new string[5];
+
+        alpha2[0] = "a";
+        alpha2[1] = "b";
+        alpha2[2] = "c";
+        alpha2[3] = "d";
+        alpha2[4] = "e";
+
+        return "." + alpha2[value].ToString() + ". ";
+    }
+    
+}
+
+
+<!DOCTYPE html>
+<html>
+<body>
+    <div>
+        <p style="text-align: left; font-family: Verdana; font-size: 11px;">
+            <strong>ARBEIDSOVEREENKOMST</strong><br />
+            <br />
+        </p>
+        <p style="text-align: justify; font-family: Verdana; font-size: 11px;">
+            Tussen IKEA B.V., hierna te noemen de werkgever, en
+            <br />
+            <br />
+        </p>
+        <table style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
+            @if (!string.IsNullOrEmpty(Model.GetAnswer("Initials")))
+            {
+                <tr>
+                    <td width="30%" style="text-align: left;">Voorletters</td>
+                    <td width="70%" style="text-align: left;">: @Model.GetAnswer("Initials")</td>
+                </tr>
+            }
+            <tr>
+                <td style="text-align: left;">Roepnaam</td>
+                <td style="text-align: left;">: @Model.GetAnswer("FirstName")</td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">Achternaam</td>
+                <td style="text-align: left;">: @Model.GetAnswer("Prefixes") @Model.GetAnswer("LastName")</td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">Adres</td>
+                <td style="text-align: left;">: @Model.GetAnswer("PermanentAddressLine1") @Model.GetAnswer("PermanentAddressLine2") @Model.GetAnswer("PermanentAddressLine3")</td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">Postcode /  woonplaats</td>
+                <td style="text-align: left;">: @Model.GetAnswer("PermanentPostalCode") @Model.GetAnswer("PermanentCity")</td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">Geboortedatum</td>
+                <td style="text-align: left;">: @Model.GetAnswer("DateOfBirth")</td>
+            </tr>
+        </table>
+        <p style="text-align: justify; font-family: Verdana; font-size: 11px;">
+            <br />
+            Hierna te noemen werknemer, wordt een arbeidsovereenkomst afgesloten waarvan de voorwaarden als volgt luiden:     
+           <br />
+        </p>
+
+
+        @{
+            var list = new List<PdfListItem>();
+            var pdfList = new List<PdfListItem>();
+
+
+            var brText = "<br /><br />";
+
+            //1
+            string text1 = "Met ingang van {0} treedt de werknemer bij de werkgever in dienst.";
+            list.Add(new PdfListItem { Text = string.Format(text1, Model.GetAnswer("ContractStartDate")) });
+
+            //2
+            string text2 = "De werknemer wordt aangesteld in de functie van {0} bij de vestiging {1}. Deze functie is ingedeeld in functiegroep {2}. Tevens kan de werknemer op verzoek van de leidinggevende ingezet worden op andere afdelingen binnen IKEA.";
+            list.Add(new PdfListItem { Text = string.Format(text2, Model.GetAnswer("LocalJobTitle"), Model.GetAnswer("BusinessUnit"), Model.GetAnswer("PayScaleLevel")) });
+
+
+            if ((Model.GetAnswer("BusinessUnit") == "Store Amsterdam 088" || Model.GetAnswer("BusinessUnit") == "Store Heerlen 089" || Model.GetAnswer("BusinessUnit") == "Store Barendrecht 274")
+                   && Model.GetAnswer("NewPosition") == "New Position for VAP store?")
+            {
+
+                //2+
+
+                string text2add = "De bovenstaande functie is specifiek voor de vestiging {0} en valt buiten de kaders van het functiegebouw van IKEA B.V. Op het moment dat VAPS constructie van IKEA {0} vervalt en IKEA {0} weer een reguliere vestiging wordt, zal dit consequenties hebben voor deze functie. Met jou zal dan moeten worden gesproken over herplaatsing in een andere functie behorende bij het functiegebouw van IKEA B.V.";
+                pdfList.Add(new PdfListItem { Text = string.Format(text2add, Model.GetAnswer("BusinessUnit")) });
+                list[list.Count - 1].SubList = pdfList;
+            }
+
+
+            if (Model.GetAnswer("EmploymentCategory") == "Permanent")
+            {
+                //3
+                string text3a = "Deze arbeidsovereenkomst wordt afgesloten voor onbepaalde tijd.";
+                list.Add(new PdfListItem { Text = text3a });
+            }
+
+
+            if (Model.GetAnswer("EmploymentCategory") == "Temporary")
+            {
+                //3
+                string text3b = "Deze arbeidsovereenkomst wordt afgesloten voor bepaalde tijd. Looptijd van het contract is van {0} tot en met {1} en eindigt derhalve van rechtswege aan het einde van de overeengekomen periode, zonder dat hiervoor enige opzegging is vereist.";
+                list.Add(new PdfListItem { Text = string.Format(text3b, Model.GetAnswer("ContractStartDate"), Model.GetAnswer("ContractEndDate")) });
+            }
+
+
+            //4
+            string text4 = "Partijen zijn gerechtigd om de arbeidsovereenkomst tussentijds tegen het einde van de kalendermaand op te zeggen met inachtneming van de wettelijke opzegtermijn.";
+            list.Add(new PdfListItem { Text = text4 });
+
+
+            //5
+            string text5 = "Het dienstverband tussen werkgever en werknemer eindigt in ieder geval van rechtswege bij het bereiken van de pensioengerechtigde leeftijd door werknemer.";
+            list.Add(new PdfListItem { Text = text5 });
+
+
+            if (Model.GetAnswer("ProbationPeriod") == "Yes")
+            {
+                //6
+                string text6 = "De eerste twee maanden van het dienstverband gelden als proeftijd. Tijdens de proeftijd hebben beide partijen het recht om het dienstverband met onmiddellijke ingang op te zeggen en te beëindigen.";
+                list.Add(new PdfListItem { Text = text6 });
+            }
+
+            //7
+            string text7 = "Het betreft een {0} dienstverband. Het gemiddeld te werken uren per week bedraagt {1}, volgens rooster. De werknemer behoort tot de categorie {2}. De werknemer is conform de IKEA CAO flexibel in tijd en uren in te roosteren tijdens weekdagen, zaterdagen en op zon- en feestdagen en verklaart zich hiermee uitdrukkelijk akkoord.";
+            list.Add(new PdfListItem { Text = string.Format(text7, Model.GetAnswer("ContractType"), Model.GetAnswer("ContractedHours"), @GetPayRollCategoryText(Model.GetAnswer("PayrollCategory"))) });
+
+            //8
+            if (Model.GetAnswer("ContractType") == "Full Time")
+            {
+                string text8 = "Het salaris bedraagt € {0} bruto per maand.";
+                list.Add(new PdfListItem { Text = string.Format(text8, @Model.GetAnswer("BasicPay")) });
+            }
+
+            //8 START
+            if (Model.GetAnswer("ContractType") == "Part Time")
+            {
+                string text8 = "Het salaris bedraagt € {0} bruto per uur. {1} De salarisbetalingen vinden telkens aan het einde van de kalendermaand plaats.";
+                list.Add(new PdfListItem { Text = string.Format(text8, @Model.GetAnswer("BasicPayAmount"), brText) });
+            }
+
+            //SUBLIST
+
+            //8b
+
+            pdfList = new List<PdfListItem>();
+
+
+            if (Model.GetAnswer("TypeOfBenefit") == "Company Car")
+            {
+                string text8b = list.Count.ToString()  + GetLetter(pdfList.Count)  + "Werknemer heeft recht op gebruik van een lease-auto categorie {0}. {1}";
+                pdfList.Add(new PdfListItem { Text = string.Format(text8b, @Model.GetAnswer("Category"), @Model.GetAnswer("TypeOfCar")) });
+
+            }
+            else
+            {
+                string text8b = list.Count.ToString()  + GetLetter(pdfList.Count) + "De tegemoetkoming in de reiskosten wordt berekend conform de geldende IKEA CAO, artikel 29.";
+                pdfList.Add(new PdfListItem { Text = text8b });
+            }
+
+            //8c
+            if (Model.GetAnswer("PayrollCategory") == "MT/Dep/SM" && (Model.GetAnswer("PayScaleLevel") == "9" || Model.GetAnswer("PayScaleLevel") == "10" || Model.GetAnswer("PayScaleLevel") == "11" || Model.GetAnswer("PayScaleLevel") == "12"))
+            {
+                string text8c = list.Count.ToString() + GetLetter(pdfList.Count) + "Als tegemoetkoming in kosten voor representatie en telefoongebruik  ontvang je een algemene onkostenvergoeding van EUR 50,- bruto per maand. Dit is conform CAO artikel 28A.";
+                pdfList.Add(new PdfListItem { Text = text8c });
+            }
+
+            //8d
+
+            if (Model.GetAnswer("TypeOfBenefit") == "Salary Revision")
+            {
+                if (!string.IsNullOrEmpty(Model.GetAnswer("NextRevisionDate")))
+                {
+                    string text8d = list.Count.ToString() + GetLetter(pdfList.Count) + "Eerste salarisrevisie: {0}.";
+                    pdfList.Add(new PdfListItem { Text = string.Format(text8d, @Model.GetAnswer("NextRevisionDate")) });
+                }
+            }
+
+            //lägg till i sublist (vet att b alltid kommer läggas till så behöver inte kolla null
+            list[list.Count - 1].SubList = pdfList;
+
+            //SUBLIST END
+
+            //8 END
+
+            //9
+            string text9 = "Op deze arbeidsovereenkomst  is het pensioenreglement van toepassing als bedoeld in artikel 10 van de IKEA CAO.";
+            list.Add(new PdfListItem { Text = text9 });
+
+
+            //10
+            if (Model.GetAnswer("BusinessUnit") == "CCCN")
+            {
+                string text10 = "IKEA beschikt over faciliteiten om telefoongesprekken die worden gevoerd tussen klanten en medewerkers van het CCCN op te nemen. Deze gesprekken zijn bestemd voor trainingsdoeleinden om de medewerkers van IKEA te kunnen trainen. Werknemer verklaart zich door ondertekening van dit contract ermee bekend en akkoord dat IKEA van deze opname faciliteiten gebruik maakt.";
+                list.Add(new PdfListItem { Text = text10 });
+            }
+
+            //11
+            if (Model.GetAnswer("DocumentType") == "Work Permit")
+            {
+                string text11 = "Medewerkers die op basis van een verblijfsvergunning in Nederland verblijvenen bij wie arbeid (tijdelijk) is toegestaan, verplichten zich om bij iedere wijziging in hun verblijfsstatus (verblijfsvergunning) en/of werkstatus (werkvergunning) IKEA hierover te informeren.";
+                list.Add(new PdfListItem { Text = text11 });
+            }
+
+            //12 START
+            string text12 = "Op deze arbeidsovereenkomst zijn de van tijd tot tijd geldende IKEA CAO, de  IKEA Group Code of Conduct en de regels die zijn opgenomen in Mijn IKEA van toepassing. De IKEA CAO en de IKEA Group Code of Conduct zijn te raadplegen op en downloaden via de internetsite <a href=\"http://www.ico-worker.com/nl\" target=\"_blank\" title=\"http://www.ico-worker.com/nl\" style=\"text-decoration: underline; color: blue;\">www.ico-worker.com/nl</a>. De inloggegevens voor deze site vind je in de bijgesloten brief. Op verzoek van de werknemer stuurt IKEA een digitale versie per e-mail of een geprinte versie per gewone post toe van de toepasselijke regels. Het boekje Mijn IKEA ontvang je tegelijk met deze arbeidsovereenkomst.";
+            
+
+            if ((Model.GetAnswer("PayScaleType") == "IKEA NL CAO" | Model.GetAnswer("PayScaleType") == "IKEA NL geen CAO - out of scope") && ((Model.GetAnswer("PayScaleLevel") == "14" || Model.GetAnswer("PayScaleLevel") == "15")))
+            {
+
+                text12 += brText + "Hoewel de IKEA CAO niet op deze arbeidsovereenkomst van toepassing is, worden de artikelen met de volgende onderwerpen uit de laatst overeengekomen IKEA CAO door ondertekening van deze arbeidsovereenkomst op de arbeidsovereenkomst van toepassing en worden die geacht daarvan onderdeel uit te maken, ook als de looptijd van deze CAO is verstreken en nog geen nieuwe CAO tot stand is gekomen:";
+                text12 += brText + "- Ontwikkel- en beoordelingscyclus (II, artikel 4)";
+                text12 += "<br />- Beloningssysteem (II, artikel 5)";
+                text12 += "<br />- Personeelskorting (II, artikel 9)";
+                text12 += "<br />- Pensioen (II artikel 10)";
+                text12 += "<br />- Vergoedingen incidentele dienstreizen binnen- en buitenland (II, artikel 30)";
+                text12 += "<br />- Algemeen (wettelijk) verlof (VI, artikel 41)";
+                text12 += "<br />- Bijzonder verlof met behoud van salaris (VI, artikel 42)";
+                text12 += "<br />- Gezondheidsbeleid (VII, artikel 45 t/m 52)";
+                text12 += "<br />- Verzekeringen (VIII artikel 55 t/m 59).";
+            }
+
+            text12 += brText + "De tussen haakjes vermelde artikelen verwijzen naar de desbetreffende bepalingen van de IKEA CAO zoals deze luidde ten tijde van het aangaan van de arbeidsovereenkomst. Indien een of meer van de bovengenoemde bepalingen of de nummering ervan in een latere IKEA CAO wijzigen, treden deze gewijzigde bepalingen in de plaats van die bepalingen.";
+
+
+            list.Add(new PdfListItem { Text = text12 });
+
+            //12 END
+
+            //13
+            if (Model.GetAnswer("PayScaleLevel") != "15")
+            {
+                list.Add(new PdfListItem { Text = "Werknemer gaat akkoord met een mogelijk volgende loopbaanstap welke uitzending naar het buitenland zou kunnen betekenen. Plaatsing geschiedt in overleg met werknemer." });
+            }
+            
+        }
+
+
+
+
+        @{
+                //var list = new List<PdfListItem>();
+                //var pdfList = new List<PdfListItem>();
+
+
+
+                //list.Add(new PdfListItem { Text = "Met ingang van " + Model.GetAnswer("ContractStartDate") + " treedt de werknemer bij de werkgever in dienst." + "<br />" });
+
+                //list.Add(new PdfListItem
+                //{
+                //    Text = "De werknemer wordt aangesteld in de functie van " + Model.GetAnswer("LocalJobTitle") + " bij de vestiging "
+                //        + Model.GetAnswer("BusinessUnit") + ". Deze functie is ingedeeld in functiegroep "
+                //        + Model.GetAnswer("PayScaleLevel") + ". Tevens kan de werknemer op verzoek van de leidinggevende ingezet worden op andere afdelingen binnen IKEA." + "<br />"
+                //});
+
+                //if ((Model.GetAnswer("BusinessUnit") == "Store Amsterdam 088" || Model.GetAnswer("BusinessUnit") == "Store Heerlen 089" || Model.GetAnswer("BusinessUnit") == "Store Barendrecht 274")
+                //      && Model.GetAnswer("NewPosition") == "New Position for VAP store?")
+                //{
+                //    list.Insert(list.Count - 1, new PdfListItem
+                //                {
+                //                    Text =
+                //                        "De bovenstaande functie is specifiek voor de vestiging" + @Model.GetAnswer("BusinessUnit") +
+                //                        "en valt buiten de kaders van het functiegebouw van IKEA B.V. Op het moment dat VAPS constructie van IKEA" + @Model.GetAnswer("BusinessUnit") +
+                //                        "vervalt en IKEA " + @Model.GetAnswer("BusinessUnit") + "weer een reguliere vestiging wordt, zal dit consequenties hebben voor deze functie." +
+                //                        "Met jou zal dan moeten worden gesproken over herplaatsing in een andere functie behorende bij het functiegebouw van IKEA B.V."
+                //                });
+
+                //}
+
+                //if (Model.GetAnswer("EmploymentCategory") == "Permanent")
+                //{
+                //    list.Add(new PdfListItem { Text = "Deze arbeidsovereenkomst wordt afgesloten voor onbepaalde tijd." + "<br />" });
+                //}
+
+                //if (Model.GetAnswer("EmploymentCategory") == "Temporary")
+                //{
+                //    list.Add(new PdfListItem
+                //    {
+                //        Text = "Deze arbeidsovereenkomst wordt afgesloten voor onbepaalde tijd." + "</br>" + " Looptijd van het contract is van "
+                //            + Model.GetAnswer("ContractStartDate") + " tot en met " + Model.GetAnswer("ContractEndDate")
+                //            + " en eindigt derhalve van rechtswege aan het einde van de overeengekomen periode, zonder dat hiervoor enige opzegging is vereist." + "<br />"
+                //    });
+                //}
+
+                //list.Add(new PdfListItem { Text = "Partijen zijn gerechtigd om de arbeidsovereenkomst tussentijds tegen het einde van de kalendermaand op te zeggen met inachtneming van de wettelijke opzegtermijn." + "<br />" });
+
+                //list.Add(new PdfListItem { Text = "Het dienstverband tussen werkgever en werknemer eindigt in ieder geval van rechtswege bij het bereiken van de pensioengerechtigde leeftijd door werknemer." + "<br />" });
+
+                //if (Model.GetAnswer("ProbationPeriod") == "Yes")
+                //{
+                //    list.Add(new PdfListItem { Text = "De eerste twee maanden van het dienstverband gelden als proeftijd. Tijdens de proeftijd hebben beide partijen het recht om het dienstverband met onmiddellijke ingang op te zeggen en te beëindigen." + "<br />" });
+                //}
+
+                //if (Model.GetAnswer("PayrollCategory") == "Juvenile Hourly")
+                //{
+                //    list.Add(new PdfListItem
+                //    {
+                //        Text = "Het betreft een " + Model.GetAnswer("ContractType") + " dienstverband. Het gemiddeld te werken uren per week bedraagt " + Model.GetAnswer("ContractedHours") + " volgens rooster."
+                //            + "De werknemer behoort tot de categorie " + "Hourly"
+                //            + ". De werknemer is conform de IKEA CAO flexibel in tijd en uren in te roosteren tijdens weekdagen, zaterdagen en op zon- en feestdagen en verklaart zich hiermee uitdrukkelijk akkoord." + "<br />"
+                //    });
+                //}
+                //else
+                //{
+                //    if (Model.GetAnswer("PayrollCategory") == "Juvenile Montly")
+                //    {
+                //        list.Add(new PdfListItem
+                //        {
+                //            Text = "Het betreft een " + Model.GetAnswer("ContractType") + " dienstverband. Het gemiddeld te werken uren per week bedraagt " + Model.GetAnswer("ContractedHours") + " volgens rooster."
+                //                + "De werknemer behoort tot de categorie " + "Montly"
+                //                + ". De werknemer is conform de IKEA CAO flexibel in tijd en uren in te roosteren tijdens weekdagen, zaterdagen en op zon- en feestdagen en verklaart zich hiermee uitdrukkelijk akkoord." + "<br />"
+                //        });
+                //    }
+                //    else
+                //    {
+                //        list.Add(new PdfListItem
+                //        {
+                //            Text = "Het betreft een " + Model.GetAnswer("ContractType") + " dienstverband. Het gemiddeld te werken uren per week bedraagt " + Model.GetAnswer("ContractedHours") + " volgens rooster."
+                //                + "De werknemer behoort tot de categorie " + Model.GetAnswer("PayrollCategory")
+                //                + ". De werknemer is conform de IKEA CAO flexibel in tijd en uren in te roosteren tijdens weekdagen, zaterdagen en op zon- en feestdagen en verklaart zich hiermee uitdrukkelijk akkoord." + "<br />"
+                //        });
+                //    }
+                //}
+
+
+
+                //if (Model.GetAnswer("ContractType") == "Full Time")
+                //{
+                //    list.Add(new PdfListItem
+                //    {
+                //        Text = "Het salaris bedraagt € " + Model.GetAnswer("BasicPayAmount") + " bruto per maand."
+                //            + "<br/>" + "De salarisbetalingen vinden telkens aan het einde van de kalendermaand plaats." + "<br />"
+                //    });
+                //}
+
+                //if (Model.GetAnswer("ContractType") == "Part Time")
+                //{
+                //    list.Add(new PdfListItem
+                //    {
+                //        Text = "Het salaris bedraagt € " + Model.GetAnswer("BasicPayAmount") + " bruto per uur."
+                //            + "<br/>" + "De salarisbetalingen vinden telkens aan het einde van de kalendermaand plaats." + "<br />"
+                //    });
+                //}
+
+
+                //if (Model.GetAnswer("Category") != "Company Car")
+                //{
+                //    pdfList.Add(new PdfListItem { Text = (list.Count).ToString() + " .b. De tegemoetkoming in de reiskosten wordt berekend conform de geldende IKEA CAO, artikel 29." });
+                //}
+
+                //if (Model.GetAnswer("Category") == "Company Car")
+                //{
+                //    pdfList.Add(new PdfListItem { Text = (list.Count).ToString() + " .b. Werknemer heeft recht op gebruik van een lease-auto categorie " + @Model.GetAnswer("Category") + "." + @Model.GetAnswer("TypeOfCar") });
+                //}
+
+                //if (Model.GetAnswer("PayrollCategory") == "MT/Dep/SM" && (Model.GetAnswer("PayScaleLevel") == "9" || Model.GetAnswer("PayScaleLevel") == "10" || Model.GetAnswer("PayScaleLevel") == "11" || Model.GetAnswer("PayScaleLevel") == "12"))
+                //{
+                //    pdfList.Add(new PdfListItem { Text = (list.Count).ToString() + " .c. Als tegemoetkoming in kosten voor representatie en telefoongebruik  ontvang je een algemene onkostenvergoeding van EUR 50,- bruto per maand. Dit is conform CAO artikel 28A." });
+                //}
+
+                //if (Model.GetAnswer("TypeOfBenefit") == "Salary Revision")
+                //{
+                //    pdfList.Add(new PdfListItem { Text = (list.Count).ToString() + " .d. Eerste salarisrevisie: " + @Model.GetAnswer("NextRevisionDate") + "." });
+                //}
+
+                //list[list.Count - 1].SubList = pdfList;
+
+
+                //list.Add(new PdfListItem { Text = "Op deze arbeidsovereenkomst  is het pensioenreglement van toepassing als bedoeld in artikel 10 van de IKEA CAO." + "<br/>" });
+
+                //if (Model.GetAnswer("BusinessUnit") == "CCCN")
+                //{
+                //    list.Add(new PdfListItem { Text = "IKEA beschikt over faciliteiten om telefoongesprekken die worden gevoerd tussen klanten en medewerkers van het CCCN op te nemen. Deze gesprekken zijn bestemd voor trainingsdoeleinden om de medewerkers van IKEA te kunnen trainen. Werknemer verklaart zich door ondertekening van dit contract ermee bekend en akkoord dat IKEA van deze opname faciliteiten gebruik maakt." + "<br/>" });
+                //}
+
+                //if (Model.GetAnswer("DocumentType") == "Work Permit")
+                //{
+                //    list.Add(new PdfListItem { Text = "Medewerkers die op basis van een verblijfsvergunning in Nederland verblijvenen bij wie arbeid (tijdelijk) is toegestaan, verplichten zich om bij iedere wijziging in hun verblijfsstatus (verblijfsvergunning) en/of werkstatus (werkvergunning) IKEA hierover te informeren." + "<br/>" });
+                //}
+
+                //list.Add(new PdfListItem
+                //{
+                //    Text = "Medewerkers die op basis van een verblijfsvergunning in Nederland verblijven en bij wie arbeid (tijdelijk) is toegestaan, " +
+                //        "verplichten zich om bij iedere wijziging in hun verblijfsstatus (verblijfsvergunning) en/of werkstatus (werkvergunning) IKEA hierover te informeren." + "<br/>"
+                //});
+
+                //list.Add(new PdfListItem
+                //{
+                //    Text = "Op deze arbeidsovereenkomst zijn de van tijd tot tijd geldende IKEA CAO, de  IKEA Group Code of Conduct en de regels die zijn opgenomen in Mijn IKEA van toepassing." +
+                //           "De IKEA CAO en de IKEA Group Code of Conduct zijn te raadplegen op en downloaden via de internetsite " + "<a style='color:blue;' href='url'>www.ico-worker.com/nl</a>. " +
+                //           "De inloggegevens voor deze site vind je in de bijgesloten brief. Op verzoek van de werknemer stuurt IKEA een digitale versie per " +
+                //           "e-mail of een geprinte versie per gewone post toe van de toepasselijke regels. Het boekje Mijn IKEA ontvang je tegelijk met deze arbeidsovereenkomst. " + "<br/>"
+                //});
+
+
+
+
+                //if (Model.GetAnswer("PayScaleType") != "IKEA Competence" && ((Model.GetAnswer("PayScaleLevel") == "14" || Model.GetAnswer("PayScaleLevel") == "15")))
+                //{
+
+                //    list.Insert(list.Count - 1, new PdfListItem
+                //    {
+                //        Text = "Hoewel de IKEA CAO niet op deze arbeidsovereenkomst van toepassing is," +
+                //                "worden de artikelen met de volgende onderwerpen uit de laatst overeengekomen " +
+                //                "IKEA CAO door ondertekening van deze arbeidsovereenkomst " +
+                //                "op de arbeidsovereenkomst van toepassing en worden die geacht daarvan onderdeel uit te maken, ook als de looptijd van deze CAO is " +
+                //                "verstreken en nog geen nieuwe CAO tot stand is gekomen: " + " <br/> " + " <br/> " +
+                //                "- Ontwikkel- en beoordelingscyclus (II, artikel 4)" + "<br/>" +
+                //                "- Beloningssysteem (II, artikel 5)" + "<br/>" +
+                //                "- Personeelskorting (II, artikel 9)" + "<br/>" +
+                //                "- Pensioen (II artikel 10)" + "<br/>" +
+                //                "- Vergoedingen incidentele dienstreizen binnen- en buitenland (II, artikel 30)" + "<br/>" +
+                //                "- Algemeen (wettelijk) verlof (VI, artikel 41)" + "<br/>" +
+                //                "- Bijzonder verlof met behoud van salaris (VI, artikel 42)" + "<br/>" +
+                //                "- Gezondheidsbeleid (VII, artikel 45 t/m 52)" + "<br/>" +
+                //                "- Verzekeringen (VIII artikel 55 t/m 59)." + "<br/>"
+                //    });
+                //}
+
+                //else
+                //{
+                //    list.Insert(list.Count - 1, new PdfListItem
+                //    {
+                //        Text = "De tussen haakjes vermelde artikelen verwijzen naar de desbetreffende bepalingen van de IKEA CAO zoals deze luidde ten tijde van " +
+                //               "het aangaan van de arbeidsovereenkomst. Indien een of meer van de bovengenoemde bepalingen of de nummering ervan in een latere IKEA CAO wijzigen," +
+                //               "treden deze gewijzigde bepalingen in de plaats van die bepalingen." + "<br/>"
+                //    });
+                //}
+
+
+                //if (Model.GetAnswer("PayScaleLevel") != "15")
+                //{
+                //    list.Add(new PdfListItem { Text = "Werknemer gaat akkoord met een mogelijk volgende loopbaanstap welke uitzending naar het buitenland zou kunnen betekenen. Plaatsing geschiedt in overleg met werknemer." + "<br/>" });
+                //}                 
+                         
+        }
+
+            @if (list.Count > 1)
+            {
+                for (int i = 0; i < list.Count; i++)
+                { 
+            <br />                                        
+        <p style="text-align: justify; font-family: Verdana; font-size: 11px; padding-left: 20px; padding-right: 50px;">@(i + 1). @Html.Raw(list[i].Text)</p>
+                    if (list[i].SubList != null && list[i].SubList.Count > 0)
+                    {
+                        foreach (var item in list[i].SubList)
+                        {
+        <br />
+        <p style="text-align: justify; font-family: Verdana; font-size: 11px; padding-left: 20px; padding-right: 50px;">@item.Text </p>
+                        }
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i == list.Count - 1; i++)
+                {
+        <p style="font-family: Verdana; font-size: 11px;">@Html.Raw(list[i])</p>
+                }
+            }
+
+        
+@*        <newpage />*@
+
+
+        
+
+     @*   <p class="lastparagraph" style="text-align: justify; font-family: Verdana; font-size: 11px;">
+            <br />
+            <br />
+            A. De werknemer verklaart hiermee voorafgaande aan ondertekening van de arbeidsovereenkomst kennis te hebben genomen van de IKEA CAO, de IKEA Group Code of Conduct en de regels in Mijn IKEA en verder met het bovenstaande akkoord te gaan.
+            <br />
+            <br />
+        </p>*@
+        <endpage />
+    </div>
+</body>
+</html>

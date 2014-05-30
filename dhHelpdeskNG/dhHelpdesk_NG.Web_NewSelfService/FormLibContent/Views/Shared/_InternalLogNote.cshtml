@@ -1,0 +1,18 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+@if(Model.Contract.StateSecondaryId <= 10 
+    && (Model.Contract.CaseHistory == null || !Model.Contract.CaseHistory.Any()))
+{
+    <tr>
+        <td class="tdstrong" colspan="2">
+            <h4>@Model.Label("InternalLogNote")</h4>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            @Model.Element("InternalLogNote", "span12")
+        </td>
+    </tr>
+}

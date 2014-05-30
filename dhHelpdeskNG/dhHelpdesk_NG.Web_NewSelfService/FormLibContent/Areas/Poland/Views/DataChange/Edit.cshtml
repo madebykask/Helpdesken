@@ -1,0 +1,54 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+@{
+    ViewBag.Title = Model.Translate("Poland") + " - " + Model.Translate("Data change");
+}
+
+@section Validation {
+
+     @Html.Partial("_Validate", Model)
+
+}
+
+@section Script {
+
+    <script>
+
+        $(document).on('change', '#Extent', function (e) {
+            e.preventDefault();
+            if ($(this).val() === 'Full time')
+                $('#Workload').val('100');
+        });
+        
+        validate.run($('#actionState').val());
+
+        $(document).on('change', '#actionState', function (e) {
+            var val = $(this).val();
+            validate.run(val);
+        });
+
+        if ($('#WorkingTimeSchedule').val() === '') {
+            if ($('#Company').val() === 'OR')
+                $('#WorkingTimeSchedule').val('equivalent');
+            else
+                $('#WorkingTimeSchedule').val('basic');
+        }
+
+        //$(document).on('change', '#Company', function (e) {
+        //    e.preventDefault();
+        //    if ($(this).val() === 'OR')
+        //        $('#WorkingTimeSchedule').val('equivalent');
+        //    else
+        //        $('#WorkingTimeSchedule').val('basic');
+        //});
+
+        //if ($('#WorkingTimeSchedule').val() == '')
+        //    $('#Company').change();
+
+    </script>
+
+}
+
+@Html.Partial("_Edit", Model)
