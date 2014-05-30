@@ -10,6 +10,7 @@
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure.Filters.Reports;
     using DH.Helpdesk.Web.Infrastructure.Tools;
+    using DH.Helpdesk.Web.Infrastructure.Tools.Concrete;
     using DH.Helpdesk.Web.Models.Reports;
 
     internal sealed class ReportsModelFactory : IReportsModelFactory
@@ -62,35 +63,40 @@
         }
 
         public RegistratedCasesCaseTypeReport CreateRegistratedCasesCaseTypeReport(
-                                    RegistratedCasesCaseTypeOptions request,
+                                    RegistratedCasesCaseTypeOptions options,
                                     OperationContext context)
         {
             var response = this.reportsService.GetRegistratedCasesCaseTypeReportResponse(
                                         context,
-                                        request.WorkingGroupIds,
-                                        request.CaseTypeIds,
-                                        request.ProductAreaId);
+                                        options.WorkingGroupIds,
+                                        options.CaseTypeIds,
+                                        options.ProductAreaId);
 
-            string objectId;
-            string fileName;
-            if (!this.reportsHelper.CreateRegistratedCasesCaseTypeReport(request, out objectId, out fileName))
+            List<ReportFile> files;
+            if (!this.reportsHelper.CreateRegistratedCasesCaseTypeReport(
+                                        response.Customer,
+                                        response.ReportType,
+                                        response.WorkingGroups,
+                                        response.CaseTypes,
+                                        response.ProductArea,
+                                        options.PeriodFrom,
+                                        options.PeriodUntil,
+                                        options.ShowDetails,
+                                        options.IsPrint,
+                                        out files))
             {
                 return null;
             }
 
-            if (request.IsPrint)
-            {
-                fileName = this.reportsHelper.GetReportPathFromCache(objectId, fileName);
-            }
-
-            var instance = new RegistratedCasesCaseTypeReport(                                    
+            var instance = new RegistratedCasesCaseTypeReport(
+                                    response.Customer,
+                                    response.ReportType,                                  
                                     response.WorkingGroups,
                                     response.CaseTypes,
                                     response.ProductArea,
-                                    request.PeriodFrom,
-                                    request.PeriodUntil,
-                                    objectId,
-                                    fileName);
+                                    options.PeriodFrom,
+                                    options.PeriodUntil,
+                                    files);
             return instance;
         }
 

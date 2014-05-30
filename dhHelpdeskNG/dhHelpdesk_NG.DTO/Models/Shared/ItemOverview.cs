@@ -11,5 +11,10 @@
         public string Name { get; private set; }
 
         public string Value { get; private set; }
+
+        public static ItemOverview CreateEmpty()
+        {
+            return new ItemOverview(string.Empty, string.Empty);
+        }
     }
 }

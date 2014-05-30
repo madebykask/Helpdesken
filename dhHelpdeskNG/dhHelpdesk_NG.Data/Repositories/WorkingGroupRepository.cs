@@ -121,10 +121,11 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public IEnumerable<ItemOverview> GetOverviews(int customerId, IEnumerable<int> workingGroupsIds)
         {
+            var all = workingGroupsIds == null || !workingGroupsIds.Any();
             var entities = this.Table
                     .Where(g => g.Customer_Id == customerId && 
                                 g.IsActive == 1 && 
-                                workingGroupsIds.Contains(g.Id))
+                                (all || workingGroupsIds.Contains(g.Id)))
                     .Select(g => new { Value = g.Id, Name = g.WorkingGroupName })
                     .OrderBy(g => g.Name)
                     .ToList();

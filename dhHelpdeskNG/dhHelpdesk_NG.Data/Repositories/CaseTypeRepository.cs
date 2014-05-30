@@ -46,10 +46,11 @@
 
         public IEnumerable<ItemOverview> GetOverviews(int customerId, IEnumerable<int> caseTypesIds)
         {
+            var all = caseTypesIds == null || !caseTypesIds.Any();
             var entities = this.Table
                     .Where(g => g.Customer_Id == customerId && 
                             g.IsActive == 1 &&
-                            caseTypesIds.Contains(g.Id))
+                            (all || caseTypesIds.Contains(g.Id)))
                     .Select(g => new { Value = g.Id, g.Name })
                     .OrderBy(g => g.Name)
                     .ToList();

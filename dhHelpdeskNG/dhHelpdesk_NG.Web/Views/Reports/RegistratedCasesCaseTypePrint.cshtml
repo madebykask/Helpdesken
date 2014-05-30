@@ -2,18 +2,12 @@
            
 @{
     Layout = null;
-    
-    var title = string.Format(
-                        "{0} - {1}/{2}", 
-                        Translation.Get("Rapport"),
-                        Translation.Get("Registrerade ärenden"),
-                        Translation.Get("Case Type"));
 }
 
 <!DOCTYPE html>
 <html>
     <head>
-        <title>@title</title>
+        <title>@Model.ReportType.Name</title>
     </head>
     <body>
         @Html.Partial("~/Views/Print/Header.cshtml")        
@@ -22,8 +16,16 @@
                 <tr>
                     <td colspan="2">
                         <h2>
-                            @title                         
+                            @Model.ReportType.Name                         
                         </h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Translation.Get("Kund")
+                    </td>
+                    <td>
+                        @Model.Customer.Name
                     </td>
                 </tr>
                 <tr>
@@ -60,6 +62,9 @@
                 </tr>
             </tbody>
         </table>
-        <img src="@Model.FileName" />                        
+        @foreach (var file in Model.Files)
+        {
+            <img src="@file.FileName" />                                    
+        }
     </body>
 </html>

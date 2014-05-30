@@ -5,6 +5,7 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Common.Extensions.String;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
@@ -31,6 +32,8 @@
         void Commit();
 
         void SaveCustomerSettings(Customer customerToSave, Setting setting, List<ReportCustomer> ReportCustomers, int LanguageId, out IDictionary<string, string> errors);
+
+        ItemOverview GetOverview(int customerId);
     }
 
     public class CustomerService : ICustomerService
@@ -483,6 +486,11 @@
 
             if(errors.Count == 0)
                 this.Commit();
+        }
+
+        public ItemOverview GetOverview(int customerId)
+        {
+            return this._customerRepository.GetOverview(customerId);
         }
 
         public void SaveNewCustomerToGetId(Customer customer, out IDictionary<string, string> errors)

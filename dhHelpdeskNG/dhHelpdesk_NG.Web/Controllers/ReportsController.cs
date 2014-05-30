@@ -86,11 +86,11 @@
 
         [HttpPost]
         [BadRequestOnNotValid]
-        public ActionResult RegistratedCasesCaseType(RegistratedCasesCaseTypeOptions request)
+        public ActionResult RegistratedCasesCaseType(RegistratedCasesCaseTypeOptions options)
         {
-            var model = this.reportsModelFactory.CreateRegistratedCasesCaseTypeReport(request, this.OperationContext);
+            var model = this.reportsModelFactory.CreateRegistratedCasesCaseTypeReport(options, this.OperationContext);
 
-            if (request.IsPrint)
+            if (options.IsPrint)
             {
                 return new PrintPdfResult(model, "RegistratedCasesCaseTypePrint");
             }

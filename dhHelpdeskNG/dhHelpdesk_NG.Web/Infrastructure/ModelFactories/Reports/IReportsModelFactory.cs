@@ -16,7 +16,7 @@
         RegistratedCasesCaseTypeOptions CreateRegistratedCasesCaseTypeOptions(OperationContext context);
 
         RegistratedCasesCaseTypeReport CreateRegistratedCasesCaseTypeReport(
-                                RegistratedCasesCaseTypeOptions request,
+                                RegistratedCasesCaseTypeOptions options,
                                 OperationContext context);
     }
 }

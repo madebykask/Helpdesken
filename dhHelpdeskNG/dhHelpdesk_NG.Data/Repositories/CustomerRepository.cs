@@ -1,12 +1,14 @@
 ﻿namespace DH.Helpdesk.Dal.Repositories
 {
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Net.Mail;
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Customer.Input;
     using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
 
@@ -21,6 +23,8 @@
         CustomerOverview FindById(int id);
 
         MailAddress GetCustomerEmail(int customerId);
+
+        ItemOverview GetOverview(int customerId);
     }
 
     public sealed class CustomerRepository : RepositoryBase<Customer>, ICustomerRepository
@@ -63,6 +67,18 @@
                     .ToList()
                     .Select(e => new MailAddress(e))
                     .FirstOrDefault();
+        }
+
+        public ItemOverview GetOverview(int customerId)
+        {
+            var entities = this.Table
+                    .Where(c => c.Id == customerId)
+                    .Select(c => new { Value = c.Id, c.Name })
+                    .ToList();
+
+            return entities
+                    .Select(c => new ItemOverview(c.Name, c.Value.ToString(CultureInfo.InvariantCulture)))
+                    .FirstOrDefault();                        
         }
     }
 

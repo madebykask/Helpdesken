@@ -17,16 +17,20 @@
 
         private readonly IProductAreaService productAreaService;
 
+        private readonly ICustomerRepository customerRepository;
+
         public ReportsService(
             IReportCustomerRepository reportCustomerRepository, 
             IWorkingGroupService workingGroupService, 
             ICaseTypeService caseTypeService, 
-            IProductAreaService productAreaService)
+            IProductAreaService productAreaService, 
+            ICustomerRepository customerRepository)
         {
             this.reportCustomerRepository = reportCustomerRepository;
             this.workingGroupService = workingGroupService;
             this.caseTypeService = caseTypeService;
             this.productAreaService = productAreaService;
+            this.customerRepository = customerRepository;
         }
 
         public SearchData GetSearchData(OperationContext context)
@@ -54,11 +58,15 @@
                                                     IEnumerable<int> caseTypesIds,
                                                     int? productAreaId)
         {
+            var customer = this.customerRepository.GetOverview(context.CustomerId);
+            var report = this.reportCustomerRepository.GetOverview(context.CustomerId, ReportType.RegistratedCasesCaseType);
             var workingGroups = this.workingGroupService.GetOverviews(context.CustomerId, workingGroupsIds);
             var caseTypes = this.caseTypeService.GetOverviews(context.CustomerId, caseTypesIds);
             var productArea = productAreaId.HasValue ? this.productAreaService.GetProductArea(productAreaId.Value) : null;
 
             return new RegistratedCasesCaseTypeReportResponse(
+                                                        customer,
+                                                        report,
                                                         workingGroups,
                                                         caseTypes,
                                                         productArea);            

@@ -6,7 +6,6 @@
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Infrastructure.Translate;
     using DH.Helpdesk.Domain;
@@ -34,6 +33,8 @@
         IEnumerable<CustomerReportList> GetCustomerReportListForCustomer(int id);
 
         IEnumerable<ItemOverview> FindOverviews(int customerId);
+
+        ItemOverview GetOverview(int customerId, ReportType reportType);
     }
 
     public class ReportCustomerRepository : RepositoryBase<ReportCustomer>, IReportCustomerRepository
@@ -77,6 +78,23 @@
                 .Select(r => new ItemOverview(this.GetReportName((ReportType)r.ReportId), r.ReportId.ToString(global::System.Globalization.CultureInfo.InvariantCulture)))
                 .Where(i => !string.IsNullOrEmpty(i.Name))
                 .OrderBy(i => i.Name);
+        }
+
+        public ItemOverview GetOverview(int customerId, ReportType reportType)
+        {
+            var entities = this.Table
+                    .Where(r => r.Customer_Id == customerId &&
+                                r.Report_Id == (int)reportType &&
+                                r.ShowOnPage == 1)
+                    .Select(r => new
+                    {
+                        ReportId = r.Report_Id,
+                    })
+                    .ToList();
+
+            return entities
+                .Select(r => new ItemOverview(this.GetReportName((ReportType)r.ReportId), r.ReportId.ToString(global::System.Globalization.CultureInfo.InvariantCulture)))
+                .FirstOrDefault();            
         }
 
         private string GetReportName(ReportType reportType)

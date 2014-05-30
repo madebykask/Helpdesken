@@ -4,10 +4,11 @@
     using System.Collections.Generic;
     using System.Web.Helpers;
 
+    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Common.Extensions.DateTime;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Enums;
-    using DH.Helpdesk.Web.Models.Reports;
+    using DH.Helpdesk.Domain;
 
     public sealed class ReportsHelper : IReportsHelper
     {
@@ -19,34 +20,52 @@
         }
 
         public bool CreateRegistratedCasesCaseTypeReport(
-                            RegistratedCasesCaseTypeOptions options,
-                            out string objectId,
-                            out string fileName)
+                            ItemOverview customer,
+                            ItemOverview report,
+                            IEnumerable<ItemOverview> workingGroups,
+                            IEnumerable<ItemOverview> caseTypes,
+                            ProductArea productArea,
+                            DateTime periodFrom,
+                            DateTime periodUntil,
+                            bool showDetails,
+                            bool isPrint,
+                            out List<ReportFile> files)
         {
-            objectId = null;
-            fileName = null;
-            var from = options.PeriodFrom.RoundToMonth();
-            var until = options.PeriodUntil.RoundToMonth();
-            if (from > until)
+            files = new List<ReportFile>();
+            foreach (var caseType in caseTypes)
             {
-                return false;
+                var from = periodFrom.RoundToMonth();
+                var until = periodUntil.RoundToMonth();
+                if (from > until)
+                {
+                    return false;
+                }
+
+                var x = new List<string>();
+                var y = new List<string>();
+                while (from <= until)
+                {
+                    x.Add(from.ToMonthYear());
+                    y.Add("5");
+                    from = from.AddMonths(1);
+                }
+
+                var chart = this.CreateChart()
+                    .AddTitle(caseType.Name, caseType.Name)
+                    .AddSeries(
+                        caseType.Name,
+                        xValue: x,
+                        yValues: y);
+
+                string objectId;
+                string fileName;
+                this.SaveToCache(chart, out objectId, out fileName);
+                var file = new ReportFile(
+                                objectId,
+                                isPrint ? this.GetReportPathFromCache(objectId, fileName) : fileName);
+                files.Add(file);
             }
 
-            var x = new List<string>();
-            var y = new List<string>();
-            while (from <= until)
-            {
-                x.Add(from.ToMonthYear());
-                y.Add("5");
-                from = from.AddMonths(1);
-            }
-
-            var chart = this.CreateChart()
-                .AddSeries(
-                    xValue: x,
-                    yValues: y);
-
-            this.SaveToCache(chart, out objectId, out fileName);
             return true;
         }
 

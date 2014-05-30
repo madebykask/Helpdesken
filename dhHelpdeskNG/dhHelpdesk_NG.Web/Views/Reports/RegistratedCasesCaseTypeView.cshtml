@@ -4,4 +4,10 @@
     Layout = null;
 }
 
-<img src="@Url.Action("GetReportImage", "Reports", new { objectId = Model.ObjectId, fileName = Model.FileName })" />
+@foreach (var file in Model.Files)
+{
+    <div>
+        <img src="@Url.Action("GetReportImage", "Reports", new { objectId = file.ObjectId, fileName = file.FileName })" />            
+    </div>
+}
+
