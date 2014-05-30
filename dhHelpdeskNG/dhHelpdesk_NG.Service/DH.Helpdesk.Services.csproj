@@ -106,7 +106,6 @@
     <Compile Include="Response\Changes\GetNewChangeEditDataResponse.cs" />
     <Compile Include="Response\Changes\GetSettingsResponse.cs" />
     <Compile Include="Response\Changes\SearchResponse.cs" />
-    <Compile Include="Response\Inventory\ComputerEditDataResponse.cs" />
     <Compile Include="Response\Inventory\ComputerFiltersResponse.cs" />
     <Compile Include="Response\Inventory\InventoriesFieldSettingsOverviewResponse.cs" />
     <Compile Include="Response\Inventory\InventoriesOverviewResponse.cs" />
@@ -116,8 +115,6 @@
     <Compile Include="BusinessLogic\BusinessModelRestorers\IRestorer.cs" />
     <Compile Include="BusinessLogic\BusinessModelRestorers\Restorer.cs" />
     <Compile Include="Response\Inventory\InventoryOverviewResponseWithType.cs" />
-    <Compile Include="Response\Inventory\ServerEditDataResponse.cs" />
-    <Compile Include="Response\Inventory\ServerFiltersResponse.cs" />
     <Compile Include="Requests\Inventory\ComputersFilter.cs" />
     <Compile Include="Requests\Inventory\InventoriesFilter.cs" />
     <Compile Include="Requests\Inventory\PrintersFilter.cs" />

@@ -2,6 +2,7 @@ namespace DH.Helpdesk.Dal.Repositories.Servers
 {
     using System.Collections.Generic;
 
+    using DH.Helpdesk.BusinessData.Models.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Server;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Server;
     using DH.Helpdesk.Dal.Dal;
@@ -27,5 +28,7 @@ namespace DH.Helpdesk.Dal.Repositories.Servers
         void RemoveReferenceOnOs(int id);
 
         int GetServerCount(int customerId);
+
+        List<ReportModel> FindConnectedToServerLocationOverviews(int customerId, string searchFor);
     }
 }

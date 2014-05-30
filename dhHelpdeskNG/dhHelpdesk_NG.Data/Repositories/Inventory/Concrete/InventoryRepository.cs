@@ -262,7 +262,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                 this.DbSet.Where(
                     x =>
                     x.InventoryType_Id == inventoryTypeId
-                    && !DbContext.ComputerInventories.Where(ci => ci.Computer_Id == computerId)
+                    && !DbContext.ComputerInventories
+                            .Where(ci => ci.Computer_Id == computerId)
                             .Select(ci => ci.Inventory_Id)
                             .Contains(x.Id)).Select(x => new { x.Id, Name = x.InventoryName }).ToList();
 
@@ -272,11 +273,10 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             return overviews;
         }
 
-        public ReportModelWithInventoryType FindAllConnectedInventory(int customerId, int inventoryTypeId, int? departmentId, string searchFor)
+        public ReportModelWithInventoryType FindAllConnectedInventory(int inventoryTypeId, int? departmentId, string searchFor)
         {
             var query =
-                this.DbSet.Where(
-                    x => x.InventoryType.Customer_Id == customerId && x.InventoryType.Id == inventoryTypeId);
+                this.DbSet.Where(x => x.InventoryType.Id == inventoryTypeId);
 
             if (departmentId.HasValue)
             {

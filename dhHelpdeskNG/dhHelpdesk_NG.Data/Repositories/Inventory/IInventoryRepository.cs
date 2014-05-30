@@ -24,10 +24,6 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
 
         List<ItemOverview> FindNotConnectedOverviews(int inventoryTypeId, int computerId);
 
-        ReportModelWithInventoryType FindAllConnectedInventory(
-            int customerId,
-            int inventoryTypeId,
-            int? departmentId,
-            string searchFor);
+        ReportModelWithInventoryType FindAllConnectedInventory(int inventoryTypeId, int? departmentId, string searchFor);
     }
 }

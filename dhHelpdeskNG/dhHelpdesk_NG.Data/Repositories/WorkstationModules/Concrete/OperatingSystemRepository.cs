@@ -4,14 +4,19 @@ namespace DH.Helpdesk.Dal.Repositories.WorkstationModules.Concrete
     using System.Globalization;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Input;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain.Computers;
+    using DH.Helpdesk.Domain.Servers;
     using DH.Helpdesk.Domain.WorkstationModules;
 
     public class OperatingSystemRepository : Repository<OperatingSystem>, IOperatingSystemRepository
     {
+        public const string ServicePackMask = "service pack";
+
         public OperatingSystemRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
@@ -48,6 +53,94 @@ namespace DH.Helpdesk.Dal.Repositories.WorkstationModules.Concrete
                 anonymus.Select(c => new ItemOverview(c.Name, c.Id.ToString(CultureInfo.InvariantCulture))).ToList();
 
             return overviews;
+        }
+
+        public List<ReportModel> FindConnectedToComputerOperatingSystemOverviews(
+            int customerId,
+            int? departmentId,
+            string searchFor)
+        {
+            var query = this.DbContext.Computers.Where(x => !x.OS.Name.ToLower().Contains(ServicePackMask));
+            var models = FindConnectedToComputerOverviews(query, customerId, departmentId, searchFor);
+
+            return models;
+        }
+
+        public List<ReportModel> FindConnectedToComputerServicePackOverviews(
+            int customerId,
+            int? departmentId,
+            string searchFor)
+        {
+            var query = this.DbContext.Computers.Where(x => x.OS.Name.ToLower().Contains(ServicePackMask));
+            var models = FindConnectedToComputerOverviews(query, customerId, departmentId, searchFor);
+
+            return models;
+        }
+
+        public List<ReportModel> FindConnectedToServerOperatingSystemOverviews(int customerId, string searchFor)
+        {
+            var query = this.DbContext.Servers.Where(x => !x.OperatingSystem.Name.ToLower().Contains(ServicePackMask));
+            var models = FindConnectedToServerOverviews(query, customerId, searchFor);
+
+            return models;
+        }
+
+        public List<ReportModel> FindConnectedToServerServicePackOverviews(int customerId, string searchFor)
+        {
+            var query = this.DbContext.Servers.Where(x => x.OperatingSystem.Name.ToLower().Contains(ServicePackMask));
+            var models = FindConnectedToServerOverviews(query, customerId, searchFor);
+
+            return models;
+        }
+
+        private static List<ReportModel> FindConnectedToComputerOverviews(
+            IQueryable<Computer> queryable,
+            int customerId,
+            int? departmentId,
+            string searchFor)
+        {
+            var query = queryable.Where(x => x.Customer_Id == customerId);
+
+            if (departmentId.HasValue)
+            {
+                query = query.Where(x => x.Department_Id == departmentId);
+            }
+
+            if (!string.IsNullOrEmpty(searchFor))
+            {
+                var pharseInLowerCase = searchFor.ToLower();
+                query = query.Where(x => x.OS.Name.ToLower().Contains(pharseInLowerCase));
+            }
+
+            var anonymus =
+                query.Where(x => x.OS_Id != null).Select(x => new { Item = x.OS.Name, Owner = x.ComputerName }).ToList();
+
+            var models = anonymus.Select(x => new ReportModel(x.Item, x.Owner)).ToList();
+
+            return models;
+        }
+
+        private static List<ReportModel> FindConnectedToServerOverviews(
+            IQueryable<Server> queryable,
+            int customerId,
+            string searchFor)
+        {
+            var query = queryable.Where(x => x.Customer_Id == customerId);
+
+            if (!string.IsNullOrEmpty(searchFor))
+            {
+                var pharseInLowerCase = searchFor.ToLower();
+                query = query.Where(x => x.OperatingSystem.Name.ToLower().Contains(pharseInLowerCase));
+            }
+
+            var anonymus =
+                query.Where(x => x.OperatingSystem_Id != null)
+                    .Select(x => new { Item = x.OperatingSystem.Name, Owner = x.ServerName })
+                    .ToList();
+
+            var models = anonymus.Select(x => new ReportModel(x.Item, x.Owner)).ToList();
+
+            return models;
         }
     }
 }

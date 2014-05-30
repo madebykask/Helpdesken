@@ -16,7 +16,7 @@
     <tbody>
         @foreach (var inventory in Model.InventoryGridModel.Inventories)
         {
-            <tr onclick=" window.location.href = '@Url.Action("EditInventory", new { id = inventory.Id })' ">
+            <tr onclick=" window.location.href = '@Url.Action("RedirectToEditInventory", new { id = inventory.Id, currentMode = Model.InventoryGridModel.CurrentMode })' ">
                 @for (var i = 0; i < inventory.FieldValues.Count; i++)
                 {
                     var inventoryField = Model.InventoryGridModel.Headers[i];

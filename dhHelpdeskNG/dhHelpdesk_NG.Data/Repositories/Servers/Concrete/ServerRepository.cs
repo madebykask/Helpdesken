@@ -3,6 +3,7 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Server;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Server;
     using DH.Helpdesk.Common.Types;
@@ -232,6 +233,26 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
             var result = this.DbSet.Count(x => x.Customer_Id == customerId);
 
             return result;
+        }
+
+        public List<ReportModel> FindConnectedToServerLocationOverviews(int customerId, string searchFor)
+        {
+            var query = this.DbSet.Where(x => x.Customer_Id == customerId);
+
+            if (!string.IsNullOrEmpty(searchFor))
+            {
+                var pharseInLowerCase = searchFor.ToLower();
+                query = query.Where(x => x.Location.ToLower().Contains(pharseInLowerCase));
+            }
+
+            var anonymus =
+                query.Where(x => string.IsNullOrWhiteSpace(x.Location))
+                    .Select(x => new { Item = x.Location, Owner = x.ServerName })
+                    .ToList();
+
+            var models = anonymus.Select(x => new ReportModel(x.Item, x.Owner)).ToList();
+
+            return models;
         }
 
         private static void Map(Domain.Servers.Server entity, Server businessModel)

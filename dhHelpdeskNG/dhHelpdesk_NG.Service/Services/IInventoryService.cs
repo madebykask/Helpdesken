@@ -8,6 +8,7 @@
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Printer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Server;
     using DH.Helpdesk.BusinessData.Models.Inventory.Input;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Output;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Printer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Server;
@@ -19,19 +20,11 @@
     {
         List<ItemOverview> GetInventoryTypes(int customerId);
 
-        List<ItemOverview> GetNotConnectedInventory(int inventoryType, int customerId);
+        List<ItemOverview> GetNotConnectedInventory(int inventoryType, int computerId);
 
         List<InventoryReportModel> GetInventoryCounts(int customerId, int? departmentId);
 
-        List<ReportModel> GetComputerInstaledSoftware(int customerId, int? departmentId, string searchFor);
-
-        List<ReportModel> GetServerInstaledSoftware(int customerId, string searchFor);
-
-        ReportModelWithInventoryType GetAllConnectedInventory(
-            int customerId,
-            int inventoryTypeId,
-            int? departmentId,
-            string searchFor);
+        ReportModelWithInventoryType GetAllConnectedInventory(int inventoryTypeId, int? departmentId, string searchFor);
 
         #region Workstation
 
@@ -47,7 +40,7 @@
 
         Computer GetWorkstation(int id);
 
-        ComputerEditDataResponse GetWorkstationEditAdditionalData(int id, int customerId, int langaugeId);
+        List<ComputerLogOverview> GetWorkstationLogOverviews(int id);
 
         List<ComputerOverview> GetWorkstations(ComputersFilter computersFilter);
 
@@ -63,7 +56,7 @@
 
         Server GetServer(int id);
 
-        ServerEditDataResponse GetServerEditAdditionalData(int id, int customerId, int langaugeId);
+        List<OperationServerLogOverview> GetOperationServerLogOverviews(int id, int customerId);
 
         List<ServerOverview> GetServers(ServersFilter computersFilter);
 

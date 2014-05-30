@@ -11,6 +11,7 @@
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Printer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Server;
     using DH.Helpdesk.BusinessData.Models.Inventory.Input;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Output;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Printer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Server;
@@ -21,7 +22,6 @@
     using DH.Helpdesk.Dal.Repositories.Inventory.Concrete;
     using DH.Helpdesk.Dal.Repositories.Printers;
     using DH.Helpdesk.Dal.Repositories.Servers;
-    using DH.Helpdesk.Dal.Repositories.WorkstationModules;
     using DH.Helpdesk.Services.Requests.Inventory;
     using DH.Helpdesk.Services.Response.Inventory;
 
@@ -39,19 +39,11 @@
 
         private readonly IInventoryTypePropertyValueRepository inventoryTypePropertyValueRepository;
 
-        private readonly ISoftwareRepository softwareRepository;
-
-        private readonly ILogicalDriveRepository logicalDriveRepository;
-
         private readonly IComputerLogRepository computerLogRepository;
 
         private readonly IComputerInventoryRepository computerInventoryRepository;
 
         private readonly IOperationLogRepository operationLogRepository;
-
-        private readonly IServerLogicalDriveRepository serverLogicalDriveRepository;
-
-        private readonly IServerSoftwareRepository serverSoftwareRepository;
 
         private readonly InventoryTypeGroupRepository inventoryTypeGroupRepository;
 
@@ -62,13 +54,9 @@
             IPrinterRepository printerRepository,
             IInventoryRepository inventoryRepository,
             IInventoryTypePropertyValueRepository inventoryTypePropertyValueRepository,
-            ISoftwareRepository softwareRepository,
-            ILogicalDriveRepository logicalDriveRepository,
             IComputerLogRepository computerLogRepository,
             IComputerInventoryRepository computerInventoryRepository,
             IOperationLogRepository operationLogRepository,
-            IServerLogicalDriveRepository serverLogicalDriveRepository,
-            IServerSoftwareRepository serverSoftwareRepository,
             InventoryTypeGroupRepository inventoryTypeGroupRepository)
         {
             this.inventoryTypeRepository = inventoryTypeRepository;
@@ -77,13 +65,9 @@
             this.printerRepository = printerRepository;
             this.inventoryRepository = inventoryRepository;
             this.inventoryTypePropertyValueRepository = inventoryTypePropertyValueRepository;
-            this.softwareRepository = softwareRepository;
-            this.logicalDriveRepository = logicalDriveRepository;
             this.computerLogRepository = computerLogRepository;
             this.computerInventoryRepository = computerInventoryRepository;
             this.operationLogRepository = operationLogRepository;
-            this.serverLogicalDriveRepository = serverLogicalDriveRepository;
-            this.serverSoftwareRepository = serverSoftwareRepository;
             this.inventoryTypeGroupRepository = inventoryTypeGroupRepository;
         }
 
@@ -92,9 +76,9 @@
             return this.inventoryTypeRepository.FindOverviews(customerId);
         }
 
-        public List<ItemOverview> GetNotConnectedInventory(int inventoryType, int customerId)
+        public List<ItemOverview> GetNotConnectedInventory(int inventoryType, int computerId)
         {
-            return this.inventoryRepository.FindNotConnectedOverviews(inventoryType, customerId);
+            return this.inventoryRepository.FindNotConnectedOverviews(inventoryType, computerId);
         }
 
         public List<InventoryReportModel> GetInventoryCounts(int customerId, int? departmentId)
@@ -116,20 +100,9 @@
             return models;
         }
 
-        public List<ReportModel> GetComputerInstaledSoftware(int customerId, int? departmentId, string searchFor)
-        {
-            return this.softwareRepository.FindAllComputerSoftware(customerId, departmentId, searchFor);
-        }
-
-        public List<ReportModel> GetServerInstaledSoftware(int customerId, string searchFor)
-        {
-            return this.serverSoftwareRepository.FindAllServerSoftware(customerId, searchFor);
-        }
-
-        public ReportModelWithInventoryType GetAllConnectedInventory(int customerId, int inventoryTypeId, int? departmentId, string searchFor)
+        public ReportModelWithInventoryType GetAllConnectedInventory(int inventoryTypeId, int? departmentId, string searchFor)
         {
             return this.inventoryRepository.FindAllConnectedInventory(
-                customerId,
                 inventoryTypeId,
                 departmentId,
                 searchFor);
@@ -169,18 +142,9 @@
             return this.computerRepository.FindById(id);
         }
 
-        public ComputerEditDataResponse GetWorkstationEditAdditionalData(int id, int customerId, int langaugeId)
+        public List<ComputerLogOverview> GetWorkstationLogOverviews(int id)
         {
-            var softwaries = this.softwareRepository.Find(id);
-
-            var logicalDrives = this.logicalDriveRepository.Find(id);
-
-            var computerLogs = this.computerLogRepository.Find(id);
-
-            return new ComputerEditDataResponse(
-                softwaries,
-                logicalDrives,
-                computerLogs);
+            return this.computerLogRepository.Find(id);
         }
 
         public List<ComputerOverview> GetWorkstations(ComputersFilter computersFilter)
@@ -230,13 +194,9 @@
             return this.serverRepository.FindById(id);
         }
 
-        public ServerEditDataResponse GetServerEditAdditionalData(int id, int customerId, int langaugeId)
+        public List<OperationServerLogOverview> GetOperationServerLogOverviews(int id, int customerId)
         {
-            var softwaries = this.serverSoftwareRepository.Find(id);
-            var logicalDrives = this.serverLogicalDriveRepository.Find(id);
-            var operationLogs = this.operationLogRepository.GetOperationServerLogOverviews(customerId, id);
-
-            return new ServerEditDataResponse(softwaries, logicalDrives, operationLogs);
+            return this.operationLogRepository.GetOperationServerLogOverviews(customerId, id);
         }
 
         public List<ServerOverview> GetServers(ServersFilter computersFilter)

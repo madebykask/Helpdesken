@@ -332,8 +332,6 @@
     <Compile Include="Enums\Changes\ChangeDeletedItem.cs" />
     <Compile Include="Enums\Changes\ClickedButton.cs" />
     <Compile Include="Enums\Changes\TabName.cs" />
-    <Compile Include="Enums\Inventory\DropDownId.cs" />
-    <Compile Include="Enums\Inventory\DropDownName.cs" />
     <Compile Include="Enums\Inventory\InventoryFilterMode.cs" />
     <Compile Include="Enums\Inventory\PageName.cs" />
     <Compile Include="Enums\Inventory\ReportDataTypes.cs" />
@@ -626,7 +624,6 @@
     <Compile Include="Models\Shared\GroupEmailsModel.cs" />
     <Compile Include="Models\Inventory\EditModel\ComputerLogModel.cs" />
     <Compile Include="Models\Inventory\EditModel\ComputerModuleModel.cs" />
-    <Compile Include="Models\Inventory\EditModel\Computer\CascadingConnectedInventoryViewModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Computer\CommunicationFieldsModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Computer\CommunicationFieldsViewModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Computer\ComputerEditViewModel.cs" />
@@ -1416,7 +1413,6 @@
     <Content Include="Views\Changes\EditorTemplates\Fields\Time.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\Settings\UnrequiredSetting.cshtml" />
     <Content Include="Views\Shared\Empty.cshtml" />
-    <Content Include="Views\Inventory\DropDown.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\DateAndTimeModel.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\Fields\DateOutOfTable.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\Fields\TimeOutOfTable.cshtml" />

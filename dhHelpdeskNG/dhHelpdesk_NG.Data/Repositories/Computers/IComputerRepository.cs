@@ -50,5 +50,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
         void RemoveReferenceOnComputerModel(int id);
 
         int GetComputerCount(int customerId, int? departmentId);
+
+        List<ReportModel> FindConnectedToComputerLocationOverviews(int customerId, int? departmentId, string searchFor);
     }
 }

@@ -4,6 +4,7 @@ namespace DH.Helpdesk.Dal.Repositories.WorkstationModules.Concrete
     using System.Globalization;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Input;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Dal.Dal;
@@ -48,6 +49,49 @@ namespace DH.Helpdesk.Dal.Repositories.WorkstationModules.Concrete
                 anonymus.Select(c => new ItemOverview(c.Name, c.Id.ToString(CultureInfo.InvariantCulture))).ToList();
 
             return overviews;
+        }
+
+        public List<ReportModel> FindConnectedToComputerOverviews(int customerId, int? departmentId, string searchFor)
+        {
+            var query = this.DbContext.Computers.Where(x => x.Customer_Id == customerId);
+
+            if (departmentId.HasValue)
+            {
+                query = query.Where(x => x.Department_Id == departmentId);
+            }
+
+            if (!string.IsNullOrEmpty(searchFor))
+            {
+                var pharseInLowerCase = searchFor.ToLower();
+                query = query.Where(x => x.NIC.Name.ToLower().Contains(pharseInLowerCase));
+            }
+
+            var anonymus =
+                query.Where(x => x.NIC_ID != null)
+                    .Select(x => new { Item = x.NIC.Name, Owner = x.ComputerName })
+                    .ToList();
+
+            var models = anonymus.Select(x => new ReportModel(x.Item, x.Owner)).ToList();
+
+            return models;
+        }
+
+        public List<ReportModel> FindConnectedToServerOverviews(int customerId, string searchFor)
+        {
+            var query = this.DbContext.Servers.Where(x => x.Customer_Id == customerId);
+
+            if (!string.IsNullOrEmpty(searchFor))
+            {
+                var pharseInLowerCase = searchFor.ToLower();
+                query = query.Where(x => x.NIC.Name.ToLower().Contains(pharseInLowerCase));
+            }
+
+            var anonymus =
+                query.Where(x => x.NIC_Id != null).Select(x => new { Item = x.NIC.Name, Owner = x.ServerName }).ToList();
+
+            var models = anonymus.Select(x => new ReportModel(x.Item, x.Owner)).ToList();
+
+            return models;
         }
     }
 }

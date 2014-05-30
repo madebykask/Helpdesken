@@ -42,13 +42,13 @@
             </td>
             <td>
                 @Translation.Get("Arbetsstationer")
-                @Html.RadioButton("Show", 1, Model.Filter.ReportDataType == ReportDataTypes.Workstation, new { id = "show_workstation_radio_button" })
+                @Html.RadioButton("Filter.ReportDataType", 1, Model.Filter.ReportDataType == ReportDataTypes.Workstation, new { id = "show_workstation_radio_button" })
 
                 @Translation.Get("Server")
-                @Html.RadioButton("Show", 2, Model.Filter.ReportDataType == ReportDataTypes.Server, new { id = "show_server_radio_button" })
+                @Html.RadioButton("Filter.ReportDataType", 2, Model.Filter.ReportDataType == ReportDataTypes.Server, new { id = "show_server_radio_button" })
 
                 @Translation.Get("Alla")
-                @Html.RadioButton("Show", 3, Model.Filter.ReportDataType == ReportDataTypes.All, new { id = "show_all_radio_button" })
+                @Html.RadioButton("Filter.ReportDataType", 3, Model.Filter.ReportDataType == ReportDataTypes.All, new { id = "show_all_radio_button" })
             </td>
         </tr>
         <tr id="inventory_tr">
@@ -67,7 +67,8 @@
             </td>
         </tr>
     </table>
+    @Html.HiddenFor(x => x.InventoryTypeId)
 }
 <div id="report_grid_container">
-    @Html.Action("ReportsGrid", "Inventory", new { area = string.Empty, filter = Model.Filter })
+    @Html.Action("ReportsGrid", "Inventory", new { area = string.Empty, filter = Model.Filter, inventoryTypeId = Model.InventoryTypeId })
 </div>

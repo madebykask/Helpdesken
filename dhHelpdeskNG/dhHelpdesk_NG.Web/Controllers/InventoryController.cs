@@ -305,18 +305,16 @@
             var settings = this.inventorySettingsService.GetWorkstationFieldSettingsForModelEdit(
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
-            var additionalData = this.inventoryService.GetWorkstationEditAdditionalData(
-                id,
-                SessionFacade.CurrentCustomer.Id,
-                SessionFacade.CurrentLanguageId);
-
+            var softwares = this.computerModulesService.GetComputerSoftware(id);
+            var drives = this.computerModulesService.GetComputerLogicalDrive(id);
+            var logs = this.inventoryService.GetWorkstationLogOverviews(id);
             var computerEditModel = this.computerViewModelBuilder.BuildViewModel(model, options, settings);
 
             var viewModel = new ComputerEditViewModel(
                 computerEditModel,
-                additionalData.Softwaries,
-                additionalData.LogicalDrives,
-                additionalData.ComputerLogs,
+                softwares,
+                drives,
+                logs,
                 activeTab);
 
             return this.View("EditWorkstation", viewModel);
@@ -337,7 +335,7 @@
             var inventories = selected.HasValue
                                   ? this.inventoryService.GetNotConnectedInventory(
                                       selected.Value,
-                                      SessionFacade.CurrentCustomer.Id)
+                                      computerId)
                                   : new List<ItemOverview>();
 
             var viewModel = AccesoriesViewModel.BuildViewModel(
@@ -366,18 +364,17 @@
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
 
-            var additionalData = this.inventoryService.GetServerEditAdditionalData(
-                id,
-                SessionFacade.CurrentCustomer.Id,
-                SessionFacade.CurrentLanguageId);
+            var softwares = this.computerModulesService.GetServerSoftware(id);
+            var drives = this.computerModulesService.GetServerLogicalDrive(id);
+            var logs = this.inventoryService.GetOperationServerLogOverviews(id, SessionFacade.CurrentCustomer.Id);
 
             var serverEditModel = this.serverViewModelBuilder.BuildViewModel(model, options, settings);
 
             var viewModel = new ServerEditViewModel(
                 serverEditModel,
-                additionalData.Softwaries,
-                additionalData.LogicalDrives,
-                additionalData.OperationLogs);
+                softwares,
+                drives,
+                logs);
 
             return this.View("EditServer", viewModel);
         }
@@ -834,9 +831,7 @@
 
             var departments = this.organizationService.GetDepartments(SessionFacade.CurrentCustomer.Id);
 
-            var viewModel = ReportsSearchViewModel.BuildViewModel(
-                currentFilter,
-                departments);
+            var viewModel = ReportsSearchViewModel.BuildViewModel(currentFilter, departments, inventoryTypeId);
 
             return this.PartialView("Reports", viewModel);
         }
@@ -885,51 +880,36 @@
                 this.CreateFilterId(TabName.Reports, ReportFilterMode.InstaledPrograms.ToString()),
                 filter);
 
-            var models = new List<ReportModel>();
-
-            switch (filter.ReportDataType)
-            {
-                case ReportDataTypes.Workstation:
-                    models = this.inventoryService.GetComputerInstaledSoftware(
-                        SessionFacade.CurrentCustomer.Id,
-                        filter.DepartmentId,
-                        filter.SearchFor);
-                    break;
-                case ReportDataTypes.Server:
-                    models = this.inventoryService.GetServerInstaledSoftware(
-                        SessionFacade.CurrentCustomer.Id,
-                        filter.SearchFor);
-                    break;
-                default:
-                    var computerSoftware = this.inventoryService.GetComputerInstaledSoftware(
-                        SessionFacade.CurrentCustomer.Id,
-                        filter.DepartmentId,
-                        filter.SearchFor);
-                    var serverSoftware =
-                        this.inventoryService.GetServerInstaledSoftware(
-                            SessionFacade.CurrentCustomer.Id,
-                            filter.SearchFor);
-                    models = computerSoftware.Union(serverSoftware).ToList();
-                    break;
-            }
-
             if (filter.IsShowMissingParentInventory)
             {
                 return null;
             }
 
-            var viewModel = new ReportViewModel(models, ReportTypes.InstaledPrograms.ToString(), filter.IsShowParentInventory);
+            var viewModel = this.BuildViewModel(
+                filter.ReportDataType,
+                (int)ReportTypes.InstaledPrograms,
+                filter.DepartmentId,
+                filter.SearchFor,
+                filter.IsShowParentInventory);
+
             return this.PartialView("ReportGrid", viewModel);
         }
 
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
-        public PartialViewResult ReportsGrid(ReportsSearchFilter filter)
+        public PartialViewResult ReportsGrid(ReportsSearchFilter filter, int inventoryTypeId)
         {
             SessionFacade.SavePageFilters(
                 this.CreateFilterId(TabName.Reports, ReportFilterMode.DefaultReport.ToString()),
                 filter);
 
-            return null;
+            var viewModel = this.BuildViewModel(
+                filter.ReportDataType,
+                inventoryTypeId,
+                filter.DepartmentId,
+                filter.SearchFor,
+                filter.IsShowParentInventory);
+
+            return this.PartialView("ReportGrid", viewModel);
         }
 
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
@@ -940,7 +920,6 @@
                 filter);
 
             var models = this.inventoryService.GetAllConnectedInventory(
-                SessionFacade.CurrentCustomer.Id,
                 inventoryTypeId,
                 filter.DepartmentId,
                 filter.SearchFor);
@@ -962,6 +941,148 @@
         }
 
         #region Private
+
+        private ReportViewModel BuildViewModel(
+            ReportDataTypes reportDataType,
+            int reportType,
+            int? departmentId,
+            string searchFor,
+            bool isShowParentInventory)
+        {
+            var models = new List<ReportModel>();
+
+            switch (reportDataType)
+            {
+                case ReportDataTypes.Workstation:
+                    models = this.GetComputerReportModels(reportType, departmentId, searchFor);
+                    break;
+                case ReportDataTypes.Server:
+                    models = this.GetServerReportModels(reportType, searchFor);
+                    break;
+                case ReportDataTypes.All:
+                    var computerSoftware = this.GetComputerReportModels(reportType, departmentId, searchFor);
+                    var serverSoftware = this.GetServerReportModels(reportType, searchFor);
+                    models = computerSoftware.Union(serverSoftware).ToList();
+                    break;
+            }
+
+            var viewModel = new ReportViewModel(models, ((ReportTypes)reportType).ToString(), isShowParentInventory);
+
+            return viewModel;
+        }
+
+        private List<ReportModel> GetComputerReportModels(int reportType, int? departmentId, string searchFor)
+        {
+            var models = new List<ReportModel>();
+
+            switch ((ReportTypes)reportType)
+            {
+                case ReportTypes.OperatingSystem:
+                    models =
+                        this.computerModulesService.GetConnectedToComputerOperatingSystemOverviews(
+                            SessionFacade.CurrentCustomer.Id,
+                            departmentId,
+                            searchFor);
+                    break;
+                case ReportTypes.ServicePack:
+                    models =
+                        this.computerModulesService.GetConnectedToComputerServicePackOverviews(
+                            SessionFacade.CurrentCustomer.Id,
+                            departmentId,
+                            searchFor);
+                    break;
+                case ReportTypes.Processor:
+                    models =
+                        this.computerModulesService.GetConnectedToComputersProcessorsOverviews(
+                            SessionFacade.CurrentCustomer.Id,
+                            departmentId,
+                            searchFor);
+                    break;
+                case ReportTypes.NetworkAdapter:
+                    models =
+                        this.computerModulesService.GetConnectedToComputersNicOverviews(
+                            SessionFacade.CurrentCustomer.Id,
+                            departmentId,
+                            searchFor);
+                    break;
+                case ReportTypes.Ram:
+                    models =
+                        this.computerModulesService.GetConnectedToComputersRamOverviews(
+                            SessionFacade.CurrentCustomer.Id,
+                            departmentId,
+                            searchFor);
+                    break;
+                case ReportTypes.Location:
+                    models =
+                        this.computerModulesService.GetConnectedToComputersLocationOverviews(
+                            SessionFacade.CurrentCustomer.Id,
+                            departmentId,
+                            searchFor);
+                    break;
+                case ReportTypes.InstaledPrograms:
+                    models =
+                        this.computerModulesService.GetComputersInstaledSoftware(
+                            SessionFacade.CurrentCustomer.Id,
+                            departmentId,
+                            searchFor);
+                    break;
+            }
+
+            return models;
+        }
+
+        private List<ReportModel> GetServerReportModels(int reportType, string searchFor)
+        {
+            var models = new List<ReportModel>();
+
+            switch ((ReportTypes)reportType)
+            {
+                case ReportTypes.OperatingSystem:
+                    models =
+                        this.computerModulesService.GetConnectedToServerOperatingSystemOverviews(
+                            SessionFacade.CurrentCustomer.Id,
+                            searchFor);
+                    break;
+                case ReportTypes.ServicePack:
+                    models =
+                        this.computerModulesService.GetConnectedToServerServicePackOverviews(
+                            SessionFacade.CurrentCustomer.Id,
+                            searchFor);
+                    break;
+                case ReportTypes.Processor:
+                    models =
+                        this.computerModulesService.GetConnectedToServersProcessorsOverviews(
+                            SessionFacade.CurrentCustomer.Id,
+                            searchFor);
+                    break;
+                case ReportTypes.NetworkAdapter:
+                    models =
+                        this.computerModulesService.GetConnectedToServersNicOverviews(
+                            SessionFacade.CurrentCustomer.Id,
+                            searchFor);
+                    break;
+                case ReportTypes.Ram:
+                    models =
+                        this.computerModulesService.GetConnectedToServersRamOverviews(
+                            SessionFacade.CurrentCustomer.Id,
+                            searchFor);
+                    break;
+                case ReportTypes.Location:
+                    models =
+                        this.computerModulesService.GetConnectedToServersLocationOverviews(
+                            SessionFacade.CurrentCustomer.Id,
+                            searchFor);
+                    break;
+                case ReportTypes.InstaledPrograms:
+                    models =
+                        this.computerModulesService.GetServersInstaledSoftware(
+                            SessionFacade.CurrentCustomer.Id,
+                            searchFor);
+                    break;
+            }
+
+            return models;
+        }
 
         private ComputerEditOptions GetWorkstationEditOptions(int customerId)
         {
@@ -1035,11 +1156,11 @@
             return new InventoryEditOptions(departments, buildings, floors, rooms);
         }
 
-        #endregion
-
         private string CreateFilterId(string tabName, string id)
         {
             return string.Format("{0}{1}", tabName, id);
         }
+
+        #endregion
     }
 }

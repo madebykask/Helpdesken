@@ -488,6 +488,31 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             return result;
         }
 
+        public List<ReportModel> FindConnectedToComputerLocationOverviews(int customerId, int? departmentId, string searchFor)
+        {
+            var query = this.DbSet.Where(x => x.Customer_Id == customerId);
+
+            if (departmentId.HasValue)
+            {
+                query = query.Where(x => x.Department_Id == departmentId);
+            }
+
+            if (!string.IsNullOrEmpty(searchFor))
+            {
+                var pharseInLowerCase = searchFor.ToLower();
+                query = query.Where(x => x.Location.ToLower().Contains(pharseInLowerCase));
+            }
+
+            var anonymus =
+                query.Where(x => string.IsNullOrWhiteSpace(x.Location))
+                    .Select(x => new { Item = x.Location, Owner = x.ComputerName })
+                    .ToList();
+
+            var models = anonymus.Select(x => new ReportModel(x.Item, x.Owner)).ToList();
+
+            return models;
+        }
+
         private static void Map(Domain.Computers.Computer entity, Computer businessModel)
         {
             entity.ComputerName = businessModel.WorkstationFields.ComputerName;
