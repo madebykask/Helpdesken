@@ -1,5 +1,6 @@
 ﻿body {
     padding-top: 0;
+    background:#f2f7fe;
 }
 
 #lmEmbedded .navbar {
@@ -67,13 +68,15 @@
 #lmEmbedded input.append-ie8 {
   width: 173px !important;
   min-width:173px !important;
+  border-radius: 4px 0 0 4px;
 }
 #lmEmbedded .input-append .add-on,
 #lmEmbedded .input-prepend .add-on {
   display: inline-block;
   width: auto;
-  height: 20px;
+  height: 26px;
   min-height:30px;
+  *min-height:26px;
   min-width: 16px;
   padding: 4px 5px;
   font-size: 14px;
