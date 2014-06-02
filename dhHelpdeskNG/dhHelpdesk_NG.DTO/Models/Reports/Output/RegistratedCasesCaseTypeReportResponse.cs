@@ -10,6 +10,7 @@
     {
         public RegistratedCasesCaseTypeReportResponse()
         {
+            this.Items = new RegistratedCasesCaseTypeItem[0];
             this.ReportType = ItemOverview.CreateEmpty();
             this.Customer = ItemOverview.CreateEmpty();
             this.WorkingGroups = new ItemOverview[] { };
@@ -22,8 +23,10 @@
                 ItemOverview reportType,
                 IEnumerable<ItemOverview> workingGroups, 
                 IEnumerable<ItemOverview> caseTypes, 
-                ProductArea productArea)
+                ProductArea productArea, 
+                IEnumerable<RegistratedCasesCaseTypeItem> items)
         {
+            this.Items = items;
             this.ReportType = reportType;
             this.Customer = customer;
             this.ProductArea = productArea;
@@ -44,5 +47,8 @@
         public IEnumerable<ItemOverview> CaseTypes { get; private set; }
 
         public ProductArea ProductArea { get; private set; }
+
+        [NotNull]
+        public IEnumerable<RegistratedCasesCaseTypeItem> Items { get; private set; } 
     }
 }

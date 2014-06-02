@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.Services.Services
 {
-    using System.Collections.Generic;
+    using System;
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports;
@@ -13,9 +13,11 @@
         RegistratedCasesCaseTypeOptionsResponse GetRegistratedCasesCaseTypeOptionsResponse(OperationContext context);
 
         RegistratedCasesCaseTypeReportResponse GetRegistratedCasesCaseTypeReportResponse(
-                                                            OperationContext context,
-                                                            IEnumerable<int> workingGroupsIds,
-                                                            IEnumerable<int> caseTypesIds,
-                                                            int? productAreaId);
+                                                    OperationContext context,
+                                                    int[] workingGroupsIds,
+                                                    int[] caseTypesIds,
+                                                    int? productAreaId,
+                                                    DateTime periodFrom,
+                                                    DateTime periodUntil);
     }
 }

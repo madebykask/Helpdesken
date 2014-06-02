@@ -147,6 +147,7 @@
     <Compile Include="Models\Changes\GetSearchDataResponse.cs" />
     <Compile Include="Models\Inventory\Edit\Inventory\TypeGroupModel.cs" />
     <Compile Include="Models\Inventory\InventoryReportModel.cs" />
+    <Compile Include="Models\Reports\Output\RegistratedCasesCaseTypeItem.cs" />
     <Compile Include="Models\Reports\Output\RegistratedCasesCaseTypeReportResponse.cs" />
     <Compile Include="Models\Inventory\ReportModel.cs" />
     <Compile Include="Models\Inventory\ReportModelWithInventoryType.cs" />

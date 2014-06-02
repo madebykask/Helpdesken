@@ -8,6 +8,8 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Faq.Output;
+    using DH.Helpdesk.BusinessData.Models.Reports.Output;
+    using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
@@ -41,6 +43,14 @@ namespace DH.Helpdesk.Dal.Repositories
         /// The <see cref="CaseOverview"/>.
         /// </returns>
         CaseOverview GetCaseOverview(int caseId);
+
+        IEnumerable<RegistratedCasesCaseTypeItem> GetRegistratedCasesCaseTypeItems(
+                                                    int customerId,
+                                                    int[] workingGroups,
+                                                    int[] caseTypes,
+                                                    int? productArea,
+                                                    DateTime perionFrom,
+                                                    DateTime perionUntil);
     }
 
     public class CaseRepository : RepositoryBase<Case>, ICaseRepository
@@ -154,19 +164,6 @@ namespace DH.Helpdesk.Dal.Repositories
         public void MarkCaseAsUnread(int id)
         {
             SetCaseUnreadFlag(id, 1);
-        }
-
-        private void MarkCaseAsRead(int id)
-        {
-            SetCaseUnreadFlag(id);
-        }
-
-        private void SetCaseUnreadFlag(int id, int unread = 0)
-        {
-            var cases = this.DataContext.Cases.Single(c => c.Id == id);
-            cases.Unread = unread;
-            this.Update(cases);
-            this.Commit();
         }
 
         public IEnumerable<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user)
@@ -286,6 +283,60 @@ namespace DH.Helpdesk.Dal.Repositories
                 CausingTypeId = c.CausingPartId
             })
             .FirstOrDefault();
+        }
+
+        public IEnumerable<RegistratedCasesCaseTypeItem> GetRegistratedCasesCaseTypeItems(
+                                        int customerId,
+                                        int[] workingGroups,
+                                        int[] caseTypes,
+                                        int? productArea,
+                                        DateTime perionFrom,
+                                        DateTime perionUntil)
+        {
+            perionFrom = perionFrom.RoundToMonth();
+            perionUntil = perionUntil.RoundToMonth();
+            var allWorkingGroups = workingGroups == null || !workingGroups.Any();
+            var allCaseTypes = caseTypes == null || !caseTypes.Any();
+
+            var query = from c in this.DataContext.Cases
+                        join cu in this.DataContext.Customers on c.Customer_Id equals cu.Id
+                        join ct in this.DataContext.CaseTypes on c.CaseType_Id equals ct.Id
+                        join wg in this.DataContext.WorkingGroups on c.WorkingGroup_Id equals wg.Id
+                        join pa in this.DataContext.ProductAreas on c.ProductArea_Id equals pa.Id
+                        where c.Customer_Id == customerId &&
+                              c.WorkingGroup_Id.HasValue &&  
+                              (allWorkingGroups || workingGroups.Contains(c.WorkingGroup_Id.Value)) &&
+                              (allCaseTypes || caseTypes.Contains(c.CaseType_Id)) &&
+                              (!productArea.HasValue || c.ProductArea_Id == productArea) &&
+                              c.RegTime >= perionFrom && c.RegTime <= perionUntil &&
+                              c.Deleted == 0
+                        select new RegistratedCasesCaseTypeItem
+                                   {
+                                       CustomerId = cu.Id,
+                                       CustomerName = cu.Name,
+                                       WorkingGroupId = wg.Id,
+                                       WorkingGroupName = wg.WorkingGroupName,
+                                       CaseTypeId = ct.Id,
+                                       CaseTypeName = ct.Name,
+                                       ProductAreadId = pa.Id,
+                                       ProductAreaName = pa.Name,
+                                       CaseId = c.Id,
+                                       RegistrationDate = c.RegTime
+                                   };
+            return query.ToList();
+        }
+
+        private void MarkCaseAsRead(int id)
+        {
+            SetCaseUnreadFlag(id);
+        }
+
+        private void SetCaseUnreadFlag(int id, int unread = 0)
+        {
+            var cases = this.DataContext.Cases.Single(c => c.Id == id);
+            cases.Unread = unread;
+            this.Update(cases);
+            this.Commit();
         }
     }
 

@@ -2,8 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
     using System.Web.Helpers;
 
+    using DH.Helpdesk.BusinessData.Models.Reports.Output;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Common.Extensions.DateTime;
     using DH.Helpdesk.Common.Tools;
@@ -29,6 +32,7 @@
                             DateTime periodUntil,
                             bool showDetails,
                             bool isPrint,
+                            RegistratedCasesCaseTypeItem[] items,
                             out List<ReportFile> files)
         {
             files = new List<ReportFile>();
@@ -41,13 +45,27 @@
                     return false;
                 }
 
+                var caseTypeItems = items.Where(i => i.CaseTypeId == int.Parse(caseType.Value));
+
                 var x = new List<string>();
                 var y = new List<string>();
+                var needChart = false;
                 while (from <= until)
                 {
                     x.Add(from.ToMonthYear());
-                    y.Add("5");
+                    var casesCount = caseTypeItems.Count(i => i.RegistrationDate.RoundToMonth() == from);
+                    if (casesCount > 0)
+                    {
+                        needChart = true;
+                    }
+
+                    y.Add(casesCount.ToString(CultureInfo.InvariantCulture));
                     from = from.AddMonths(1);
+                }
+
+                if (!needChart)
+                {
+                    continue;
                 }
 
                 var chart = this.CreateChart()

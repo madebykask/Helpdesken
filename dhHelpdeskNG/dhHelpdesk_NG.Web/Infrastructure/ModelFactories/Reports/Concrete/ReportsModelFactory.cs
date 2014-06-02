@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models;
@@ -68,9 +69,11 @@
         {
             var response = this.reportsService.GetRegistratedCasesCaseTypeReportResponse(
                                         context,
-                                        options.WorkingGroupIds,
-                                        options.CaseTypeIds,
-                                        options.ProductAreaId);
+                                        options.WorkingGroupIds.ToArray(),
+                                        options.CaseTypeIds.ToArray(),
+                                        options.ProductAreaId,
+                                        options.PeriodFrom,
+                                        options.PeriodUntil);
 
             List<ReportFile> files;
             if (!this.reportsHelper.CreateRegistratedCasesCaseTypeReport(
@@ -83,6 +86,7 @@
                                         options.PeriodUntil,
                                         options.ShowDetails,
                                         options.IsPrint,
+                                        response.Items.ToArray(),
                                         out files))
             {
                 return null;
