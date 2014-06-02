@@ -4,11 +4,18 @@
 
     public class OrganizationFieldsSettingsModel
     {
-        public OrganizationFieldsSettingsModel(FieldSettingModel domainFieldSettingModel, FieldSettingModel unitFieldSettingModel)
+        public OrganizationFieldsSettingsModel(
+            FieldSettingModel departmentFieldSettingModel,
+            FieldSettingModel domainFieldSettingModel,
+            FieldSettingModel unitFieldSettingModel)
         {
+            this.DepartmentFieldSettingModel = departmentFieldSettingModel;
             this.DomainFieldSettingModel = domainFieldSettingModel;
             this.UnitFieldSettingModel = unitFieldSettingModel;
         }
+
+        [NotNull]
+        public FieldSettingModel DepartmentFieldSettingModel { get; set; }
 
         [NotNull]
         public FieldSettingModel DomainFieldSettingModel { get; set; }

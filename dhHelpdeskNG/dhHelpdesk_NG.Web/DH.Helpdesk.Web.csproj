@@ -311,6 +311,7 @@
     <Compile Include="Controllers\ChangesController.cs" />
     <Compile Include="Controllers\FaqController.cs" />
     <Compile Include="Controllers\InventoryController.cs" />
+    <Compile Include="Controllers\InventorySettingsController.cs" />
     <Compile Include="Controllers\NotifiersController.cs" />
     <Compile Include="Controllers\OperationLogController.cs" />
     <Compile Include="Areas\Admin\Controllers\CustomerController.cs" />
@@ -347,6 +348,14 @@
     <Compile Include="Infrastructure\Binders\BinderHelper.cs" />
     <Compile Include="Infrastructure\Binders\DateTimeBinder.cs" />
     <Compile Include="Infrastructure\Binders\NullableDateTimeBinder.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\ComputerFieldsSettingsBuilder.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\FieldSettingBuilder.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Inventory\IComputerFieldsSettingsBuilder.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Inventory\IFieldSettingBuilder.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Inventory\IPrinterFieldsSettingsBuilder.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Inventory\IServerFieldsSettingsBuilder.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\PrinterFieldsSettingsBuilder.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\ServerFieldsSettingsBuilder.cs" />
     <Compile Include="Infrastructure\Configuration\Concrete\ApplicationConfiguration.cs" />
     <Compile Include="Infrastructure\ActionFilters\BadRequestOnNotValidAttribute.cs" />
     <Compile Include="Infrastructure\Configuration\Concrete\Configuration.cs" />
@@ -413,10 +422,18 @@
     <Compile Include="Infrastructure\ModelFactories\Case\ICaseNotifierModelFactory.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedMinAttribute.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedIntegerAttribute.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\ComputerFieldsSettingsViewModelBuilder.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\DynamicsFieldsModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\FieldSettingModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\IComputerFieldsSettingsViewModelBuilder.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\IDynamicsFieldsModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\IFieldSettingModelBuilder.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\IInventoryViewModelBuilder.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\InventoryViewModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\IPrinterFieldsSettingsViewModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\IServerFieldsSettingsViewModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\PrinterFieldsSettingsViewModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\ServerFieldsSettingsViewModelBuilder.cs" />
     <Compile Include="Infrastructure\ModelFactories\Reports\Concrete\ReportsModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Reports\IReportsModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\ComputerViewModelBuilder.cs" />
@@ -1432,6 +1449,7 @@
     <Content Include="Views\Inventory\CustomTypeReport.cshtml" />
     <Content Include="Views\Inventory\CustomTypeReportGrid.cshtml" />
     <Content Include="Views\Inventory\Accesories.cshtml" />
+    <Content Include="Views\Inventory\InventoryTypesGrid.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

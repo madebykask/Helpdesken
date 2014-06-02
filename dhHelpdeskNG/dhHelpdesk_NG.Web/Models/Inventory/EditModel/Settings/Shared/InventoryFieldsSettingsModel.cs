@@ -4,7 +4,9 @@
 
     public class InventoryFieldsSettingsModel
     {
-        public InventoryFieldsSettingsModel(FieldSettingModel barCodeFieldSettingModel, FieldSettingModel purchaseDateFieldSettingModel)
+        public InventoryFieldsSettingsModel(
+            FieldSettingModel barCodeFieldSettingModel,
+            FieldSettingModel purchaseDateFieldSettingModel)
         {
             this.BarCodeFieldSettingModel = barCodeFieldSettingModel;
             this.PurchaseDateFieldSettingModel = purchaseDateFieldSettingModel;

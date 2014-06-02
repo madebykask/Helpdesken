@@ -10,8 +10,6 @@
         }
 
         public ServerFieldsSettingsViewModel(
-            int? customerId,
-            int? languageId,
             GeneralFieldsSettingsModel generalFieldsSettingsModel,
             OtherFieldsSettingsModel otherFieldsSettingsModel,
             StateFieldsSettingsModel stateFieldsSettingsModel,
@@ -24,8 +22,6 @@
             PlaceFieldsSettingsModel placeFieldsSettingsModel,
             CommunicationFieldsSettingsModel communicationFieldsSettingsModel)
         {
-            this.CustomerId = customerId;
-            this.LanguageId = languageId;
             this.GeneralFieldsSettingsModel = generalFieldsSettingsModel;
             this.OtherFieldsSettingsModel = otherFieldsSettingsModel;
             this.StateFieldsSettingsModel = stateFieldsSettingsModel;
@@ -38,12 +34,6 @@
             this.PlaceFieldsSettingsModel = placeFieldsSettingsModel;
             this.CommunicationFieldsSettingsModel = communicationFieldsSettingsModel;
         }
-
-        [IsId]
-        public int? CustomerId { get; private set; }
-
-        [IsId]
-        public int? LanguageId { get; private set; }
 
         [NotNull]
         public GeneralFieldsSettingsModel GeneralFieldsSettingsModel { get; private set; }

@@ -15,6 +15,8 @@
     using DH.Helpdesk.Dal.Mappers.Inventory.EntityToBusinessModel.Computer;
     using DH.Helpdesk.Dal.Mappers.Inventory.EntityToBusinessModel.Printer;
     using DH.Helpdesk.Dal.Mappers.Inventory.EntityToBusinessModel.Server;
+    using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory;
+    using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concrete;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete;
 
@@ -43,6 +45,17 @@
             this.Bind<IPrinterViewModelBuilder>().To<PrinterViewModelBuilder>().InSingletonScope();
             this.Bind<IInventoryViewModelBuilder>().To<InventoryViewModelBuilder>().InSingletonScope();
             this.Bind<IDynamicsFieldsModelBuilder>().To<DynamicsFieldsModelBuilder>().InSingletonScope();
+            
+            this.Bind<IFieldSettingBuilder>().To<FieldSettingBuilder>().InSingletonScope();
+            this.Bind<IFieldSettingModelBuilder>().To<FieldSettingModelBuilder>().InSingletonScope();
+
+            this.Bind<IComputerFieldsSettingsBuilder>().To<ComputerFieldsSettingsBuilder>().InSingletonScope();
+            this.Bind<IServerFieldsSettingsBuilder>().To<ServerFieldsSettingsBuilder>().InSingletonScope();
+            this.Bind<IPrinterFieldsSettingsBuilder>().To<PrinterFieldsSettingsBuilder>().InSingletonScope();
+
+            this.Bind<IComputerFieldsSettingsViewModelBuilder>().To<ComputerFieldsSettingsViewModelBuilder>().InSingletonScope();
+            this.Bind<IServerFieldsSettingsViewModelBuilder>().To<ServerFieldsSettingsViewModelBuilder>().InSingletonScope();
+            this.Bind<IPrinterFieldsSettingsViewModelBuilder>().To<PrinterFieldsSettingsViewModelBuilder>().InSingletonScope();
         }
     }
 }

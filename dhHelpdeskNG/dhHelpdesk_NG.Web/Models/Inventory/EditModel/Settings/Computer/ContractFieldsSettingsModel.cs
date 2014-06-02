@@ -10,7 +10,6 @@
             FieldSettingModel contractStartDateFieldSettingModel,
             FieldSettingModel contractEndDateFieldSettingModel,
             FieldSettingModel purchasePriceFieldSettingModel,
-            FieldSettingModel purchaseDateFieldSettingModel,
             FieldSettingModel accountingDimension1FieldSettingModel,
             FieldSettingModel accountingDimension2FieldSettingModel,
             FieldSettingModel accountingDimension3FieldSettingModel,
@@ -23,7 +22,6 @@
             this.ContractStartDateFieldSettingModel = contractStartDateFieldSettingModel;
             this.ContractEndDateFieldSettingModel = contractEndDateFieldSettingModel;
             this.PurchasePriceFieldSettingModel = purchasePriceFieldSettingModel;
-            this.PurchaseDateFieldSettingModel = purchaseDateFieldSettingModel;
             this.AccountingDimension1FieldSettingModel = accountingDimension1FieldSettingModel;
             this.AccountingDimension2FieldSettingModel = accountingDimension2FieldSettingModel;
             this.AccountingDimension3FieldSettingModel = accountingDimension3FieldSettingModel;
@@ -46,9 +44,6 @@
 
         [NotNull]
         public FieldSettingModel PurchasePriceFieldSettingModel { get; set; }
-
-        [NotNull]
-        public FieldSettingModel PurchaseDateFieldSettingModel { get; set; }
 
         [NotNull]
         public FieldSettingModel AccountingDimension1FieldSettingModel { get; set; }

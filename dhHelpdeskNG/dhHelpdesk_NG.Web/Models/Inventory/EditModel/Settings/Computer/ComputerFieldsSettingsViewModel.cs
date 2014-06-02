@@ -10,8 +10,6 @@
         }
 
         public ComputerFieldsSettingsViewModel(
-            int? customerId,
-            int? languageId,
             DateFieldsSettingsModel dateFieldsSettingsModel,
             CommunicationFieldsSettingsModel communicationFieldsSettingsModel,
             ContactFieldsSettingsModel contactFieldsSettingsModel,
@@ -30,8 +28,6 @@
             ProccesorFieldsSettingsModel proccesorFieldsSettingsModel,
             WorkstationFieldsSettingsModel workstationFieldsSettingsModel)
         {
-            this.LanguageId = languageId;
-            this.CustomerId = customerId;
             this.DateFieldsSettingsModel = dateFieldsSettingsModel;
             this.CommunicationFieldsSettingsModel = communicationFieldsSettingsModel;
             this.ContactFieldsSettingsModel = contactFieldsSettingsModel;
@@ -50,12 +46,6 @@
             this.ProccesorFieldsSettingsModel = proccesorFieldsSettingsModel;
             this.WorkstationFieldsSettingsModel = workstationFieldsSettingsModel;
         }
-
-        [IsId]
-        public int? CustomerId { get; private set; }
-
-        [IsId]
-        public int? LanguageId { get; private set; }
 
         [NotNull]
         public DateFieldsSettingsModel DateFieldsSettingsModel { get; private set; }

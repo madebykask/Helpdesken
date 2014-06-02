@@ -130,7 +130,6 @@
             var settings = new ProcessorFieldsSettings(processor);
 
             return settings;
-
         }
 
         private static MemoryFieldsSettings CreateMemorySettings(NamedObjectCollection<FieldSettingMapperData> entity)
@@ -145,14 +144,14 @@
         private static CommunicationFieldsSettings CreateCommunicationSettings(NamedObjectCollection<FieldSettingMapperData> entity)
         {
             var networkAdapter = CreateFieldSetting(entity.FindByName(CommunicationFields.NetworkAdapter));
-            var ipAddress = CreateFieldSetting(entity.FindByName(CommunicationFields.IPAddress));
+            var ipaddress = CreateFieldSetting(entity.FindByName(CommunicationFields.IPAddress));
             var macAddress = CreateFieldSetting(entity.FindByName(CommunicationFields.MacAddress));
             var ras = CreateFieldSetting(entity.FindByName(CommunicationFields.RAS));
             var novellClient = CreateFieldSetting(entity.FindByName(CommunicationFields.NovellClient));
 
             var settings = new CommunicationFieldsSettings(
                 networkAdapter,
-                ipAddress,
+                ipaddress,
                 macAddress,
                 ras,
                 novellClient);
@@ -185,7 +184,6 @@
             var contractStartDate = CreateFieldSetting(entity.FindByName(ContractFields.ContractStartDate));
             var contractEndDate = CreateFieldSetting(entity.FindByName(ContractFields.ContractEndDate));
             var purchasePrice = CreateFieldSetting(entity.FindByName(ContractFields.PurchasePrice));
-            var purchaseDate = CreateFieldSetting(entity.FindByName(InventoryFields.PurchaseDate)); // todo should be removed from computer contract models
             var accountingDimension1 = CreateFieldSetting(entity.FindByName(ContractFields.AccountingDimension1));
             var accountingDimension2 = CreateFieldSetting(entity.FindByName(ContractFields.AccountingDimension2));
             var accountingDimension3 = CreateFieldSetting(entity.FindByName(ContractFields.AccountingDimension3));
@@ -198,7 +196,6 @@
                 contractStartDate,
                 contractEndDate,
                 purchasePrice,
-                purchaseDate,
                 accountingDimension1,
                 accountingDimension2,
                 accountingDimension3,

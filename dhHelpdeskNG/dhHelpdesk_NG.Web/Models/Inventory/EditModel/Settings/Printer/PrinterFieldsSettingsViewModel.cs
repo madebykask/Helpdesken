@@ -10,8 +10,6 @@
         }
 
         public PrinterFieldsSettingsViewModel(
-            int? customerId,
-            int? languageId,
             GeneralFieldsSettingsModel generalFieldsSettingsSettingsModel,
             InventoryFieldsSettingsModel inventoryFieldsSettingsSettingsModel,
             CommunicationFieldsSettingsModel communicationFieldsSettingsModel,
@@ -20,8 +18,6 @@
             PlaceFieldsSettingsModel placeFieldsSettingsModel,
             StateFieldsSettingsModel stateFieldsSettingsModel)
         {
-            this.CustomerId = customerId;
-            this.LanguageId = languageId;
             this.GeneralFieldsSettingsModel = generalFieldsSettingsSettingsModel;
             this.InventoryFieldsSettingsModel = inventoryFieldsSettingsSettingsModel;
             this.CommunicationFieldsSettingsModel = communicationFieldsSettingsModel;
@@ -30,12 +26,6 @@
             this.PlaceFieldsSettingsModel = placeFieldsSettingsModel;
             this.StateFieldsSettingsModel = stateFieldsSettingsModel;
         }
-
-        [IsId]
-        public int? CustomerId { get; private set; }
-
-        [IsId]
-        public int? LanguageId { get; private set; }
 
         [NotNull]
         public GeneralFieldsSettingsModel GeneralFieldsSettingsModel { get; private set; }

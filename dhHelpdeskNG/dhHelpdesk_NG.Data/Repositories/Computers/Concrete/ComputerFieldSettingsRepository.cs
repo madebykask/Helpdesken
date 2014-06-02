@@ -354,7 +354,6 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             MapFieldSetting(updatedSettings.ContractStartDateFieldSetting, entity.FindByName(ContractFields.ContractStartDate), languageTextId, changeDate);
             MapFieldSetting(updatedSettings.ContractEndDateFieldSetting, entity.FindByName(ContractFields.ContractEndDate), languageTextId, changeDate);
             MapFieldSetting(updatedSettings.PurchasePriceFieldSetting, entity.FindByName(ContractFields.PurchasePrice), languageTextId, changeDate);
-            MapFieldSetting(updatedSettings.PurchaseDateFieldSetting, entity.FindByName(InventoryFields.PurchaseDate), languageTextId, changeDate); // todo should be removed from computer contract models
             MapFieldSetting(updatedSettings.AccountingDimension1FieldSetting, entity.FindByName(ContractFields.AccountingDimension1), languageTextId, changeDate);
             MapFieldSetting(updatedSettings.AccountingDimension2FieldSetting, entity.FindByName(ContractFields.AccountingDimension2), languageTextId, changeDate);
             MapFieldSetting(updatedSettings.AccountingDimension3FieldSetting, entity.FindByName(ContractFields.AccountingDimension3), languageTextId, changeDate);

@@ -22,6 +22,7 @@
             SelectList propertyTypes,
             SelectList reportTypes,
             SelectList moduleTypes,
+            List<ItemOverview> propertyTypeList,
             string activeTab)
         {
             this.CurrentMode = currentMode;
@@ -30,6 +31,7 @@
             this.PropertyTypes = propertyTypes;
             this.ReportTypes = reportTypes;
             this.ModuleTypes = moduleTypes;
+            this.PropertyTypeList = propertyTypeList;
             this.ActiveTab = activeTab;
         }
 
@@ -48,6 +50,8 @@
         [NotNull]
         public SelectList ModuleTypes { get; private set; }
 
+        public List<ItemOverview> PropertyTypeList { get; private set; } 
+
         public string ActiveTab { get; private set; }
 
         public static IndexViewModel BuildViewModel(
@@ -64,9 +68,15 @@
                                               Value = Convert.ToInt32(d).ToString(CultureInfo.InvariantCulture),
                                               Name = d.ToString()
                                           }).ToList();
+            
+            var inventoryTypeList =
+                inventoryTypes.Select(x => new ItemOverview(x.Name, x.Value)).ToList();
+            inventoryTypeList.AddRange(propertyTypes);
+
             inventoryTypes.Add(new { Value = Separator, Name = "-------------" });
-            var inventoryTypeList = inventoryTypes.Union(propertyTypes.Select(x => new { x.Value, x.Name }));
-            var inventoryTypeSelectList = new SelectList(inventoryTypeList, "Value", "Name");
+            var inventoryTypeListWithSeparator = inventoryTypes.Union(
+                propertyTypes.Select(x => new { x.Value, x.Name }));
+            var inventoryTypeSelectList = new SelectList(inventoryTypeListWithSeparator, "Value", "Name");
 
             var reportTypes = from Enum d in Enum.GetValues(typeof(ReportTypes))
                               select
@@ -87,6 +97,7 @@
                 inventoryTypeSelectList,
                 reportTypeSelectList,
                 moduleTypes,
+                inventoryTypeList,
                 activeTab);
 
             return viewModel;
