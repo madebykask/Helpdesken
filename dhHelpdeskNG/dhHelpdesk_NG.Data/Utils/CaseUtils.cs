@@ -73,14 +73,33 @@ namespace DH.Helpdesk.Dal.Utils
                 startDate = endDate;
             }
 
+            var workingHours = CalculateTotalWorkingHours(
+                                    startDate,
+                                    endDate,
+                                    workingDayStart,
+                                    workingDayEnd,
+                                    holidays);
+
+            return workingHours - (caseExternalTime / 60);
+        }
+
+        public static int CalculateTotalWorkingHours(
+                                DateTime startDate,
+                                DateTime endDate,
+                                int workingDayStart,
+                                int workingDayEnd,
+                                IEnumerable<HolidayOverview> holidays)
+        {
             int holidaysHours = holidays
-                .Where(holiday => startDate.RoundToDay() <= holiday.HolidayDate.RoundToDay() && 
-                        holiday.HolidayDate.RoundToDay() <= endDate.RoundToDay())
+                .Where(holiday => startDate.RoundToDay() <= holiday.HolidayDate.RoundToDay() &&
+                        holiday.HolidayDate.RoundToDay() <= endDate.RoundToDay() &&
+                        holiday.HolidayDate.DayOfWeek != DayOfWeek.Saturday &&
+                        holiday.HolidayDate.DayOfWeek != DayOfWeek.Sunday)
                  .Sum(holiday => holiday.TimeUntil - holiday.TimeFrom);
 
-            var allHours = DatesHelper.GetBusinessDays(startDate, endDate) * (workingDayEnd - workingDayStart);
+            var workingHours = DatesHelper.GetBusinessDays(startDate, endDate) * (workingDayEnd - workingDayStart);
 
-            return allHours - holidaysHours - (caseExternalTime / 60);
+            return workingHours - holidaysHours;
         }
     }
 }

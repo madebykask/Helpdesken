@@ -12,6 +12,8 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Dal.Infrastructure.Context;
+    using DH.Helpdesk.Dal.Utils;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.BusinessData.Models.SelfService.Case;
     using DH.Helpdesk.BusinessData.Models.User.Input;
@@ -55,9 +57,14 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public class CaseRepository : RepositoryBase<Case>, ICaseRepository
     {
-        public CaseRepository(IDatabaseFactory databaseFactory)
+        private readonly IWorkContext workContext;
+
+        public CaseRepository(
+            IDatabaseFactory databaseFactory, 
+            IWorkContext workContext)
             : base(databaseFactory)
         {
+            this.workContext = workContext;
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -119,11 +126,26 @@ namespace DH.Helpdesk.Dal.Repositories
             if (cases != null)
             {
                 // todo calculate external time
-                TimeSpan span = DateTime.UtcNow - cases.ChangeTime; 
+                int workingHours = CaseUtils.CalculateTotalWorkingHours(
+                                                    cases.ChangeTime, 
+                                                    DateTime.UtcNow,
+                                                    this.workContext.Customer.WorkingDayStart,
+                                                    this.workContext.Customer.WorkingDayEnd,
+                                                    this.workContext.Cache.Holidays);
+                int externalTimeMinutes;
+                if (workingHours > 0)
+                {
+                    externalTimeMinutes = workingHours * 60;
+                }
+                else
+                {
+                    externalTimeMinutes = (int)(DateTime.UtcNow - cases.ChangeTime).TotalMinutes;
+                }
+
                 cases.FinishingDate = null;
                 cases.ApprovedBy_User_Id = 0;
                 cases.ApprovedDate = null;
-                cases.ExternalTime = cases.ExternalTime + (int)span.TotalMinutes;
+                cases.ExternalTime = cases.ExternalTime + externalTimeMinutes;
                 cases.LeadTime = 0;
                 cases.ChangeTime = DateTime.UtcNow;
                 this.Update(cases);

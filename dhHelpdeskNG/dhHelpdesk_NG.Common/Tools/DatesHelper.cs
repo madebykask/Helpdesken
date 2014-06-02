@@ -63,8 +63,9 @@ namespace DH.Helpdesk.Common.Tools
         /// </returns>
         public static int GetBusinessDays(DateTime startD, DateTime endD)
         {
-            double calcBusinessDays =
-            1 + ((endD - startD).TotalDays * 5 - (startD.DayOfWeek - endD.DayOfWeek) * 2) / 7;
+            int days = (int)(((endD - startD).TotalDays * 5 - (startD.DayOfWeek - endD.DayOfWeek) * 2) / 7);
+
+            double calcBusinessDays = days > 0 ? 1 + days : 0;
 
             if ((int)endD.DayOfWeek == 6)
             {
