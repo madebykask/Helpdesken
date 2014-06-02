@@ -123,8 +123,9 @@ namespace DH.Helpdesk.Dal.Repositories
                 cases.FinishingDate = null;
                 cases.ApprovedBy_User_Id = 0;
                 cases.ApprovedDate = null;
-                cases.ExternalTime = cases.ExternalTime + span.Minutes;
+                cases.ExternalTime = cases.ExternalTime + (int)span.TotalMinutes;
                 cases.LeadTime = 0;
+                cases.ChangeTime = DateTime.UtcNow;
                 this.Update(cases);
                 this.Commit();
             }
@@ -146,6 +147,7 @@ namespace DH.Helpdesk.Dal.Repositories
             if (cases != null)
             {
                 cases.FollowUpDate = time;
+                cases.ChangeTime = DateTime.UtcNow;
                 this.Update(cases);
                 this.Commit();
             }
@@ -335,6 +337,7 @@ namespace DH.Helpdesk.Dal.Repositories
         {
             var cases = this.DataContext.Cases.Single(c => c.Id == id);
             cases.Unread = unread;
+            cases.ChangeTime = DateTime.UtcNow;
             this.Update(cases);
             this.Commit();
         }

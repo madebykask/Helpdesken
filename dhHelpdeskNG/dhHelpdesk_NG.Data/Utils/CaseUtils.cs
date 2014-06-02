@@ -80,7 +80,7 @@ namespace DH.Helpdesk.Dal.Utils
 
             var allHours = DatesHelper.GetBusinessDays(startDate, endDate) * (workingDayEnd - workingDayStart);
 
-            return allHours - holidaysHours - caseExternalTime;
+            return allHours - holidaysHours - (caseExternalTime / 60);
         }
     }
 }
