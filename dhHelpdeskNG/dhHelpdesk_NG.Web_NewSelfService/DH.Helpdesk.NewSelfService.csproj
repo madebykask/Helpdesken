@@ -60,19 +60,19 @@
     </Reference>
     <Reference Include="ECT.Core, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\ECT.Core.dll</HintPath>
+      <HintPath>FormLibContent\Assemblies\ECT.Core.dll</HintPath>
     </Reference>
     <Reference Include="ECT.FormLib, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\ECT.FormLib.dll</HintPath>
+      <HintPath>FormLibContent\Assemblies\ECT.FormLib.dll</HintPath>
     </Reference>
     <Reference Include="ECT.Model, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\ECT.Model.dll</HintPath>
+      <HintPath>FormLibContent\Assemblies\ECT.Model.dll</HintPath>
     </Reference>
     <Reference Include="ECT.Service, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\ECT.Service.dll</HintPath>
+      <HintPath>FormLibContent\Assemblies\ECT.Service.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.6.1.0\lib\net40\EntityFramework.dll</HintPath>
