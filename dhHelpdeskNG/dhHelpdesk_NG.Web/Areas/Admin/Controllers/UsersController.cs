@@ -23,6 +23,7 @@
         private readonly IOrderTypeService _orderTypeService;
         private readonly IUserService _userService;
         private readonly IWorkingGroupService _workingGroupService;
+        private readonly ICaseSettingsService _caseSettingsService;
 
         public UsersController(
             IAccountActivityService accountActivityService,
@@ -34,6 +35,7 @@
             IOrderTypeService orderTypeService,
             IUserService userService,
             IWorkingGroupService workingGroupService,
+            ICaseSettingsService caseSettingsService,
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
@@ -46,6 +48,7 @@
             this._orderTypeService = orderTypeService;
             this._userService = userService;
             this._workingGroupService = workingGroupService;
+            this._caseSettingsService = caseSettingsService;
         }
 
         [CustomAuthorize(Roles = "3,4")]
@@ -202,6 +205,7 @@
             if (user == null)
                 return new HttpNotFoundResult("No user found...");
 
+            IDictionary<string, string> errors = new Dictionary<string, string>();
 
             var model = this.CreateInputViewModel(user);
 
@@ -218,6 +222,8 @@
                 model.User.CellPhone = string.Empty;
                 model.User.Email = string.Empty;
                 model.User.Password = string.Empty;
+
+                model.CopyUserid = id;
 
             }
 
@@ -256,13 +262,16 @@
                 foreach (var cu in userToSave.CustomerUsers)
                 {
                     cu.User_Id = 0;
+                    cu.CasePerformerFilter = string.Empty;
                 }
                
+                
             }
 
             var vmodel = this.CreateInputViewModel(userToSave);
             vmodel.MenuSetting = userModel.MenuSetting;
 
+            
             if (userToSave.UserRoles != null)
                 foreach (var delete in userToSave.UserRoles.ToList())
                     userToSave.UserRoles.Remove(delete);
@@ -276,14 +285,44 @@
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
-
+            
             this._userService.SaveEditUser(userToSave, AAsSelected, CsSelected, OTsSelected, Departments, UserWorkingGroups, out errors);
+
+            if (userModel.CopyUserid != 0)
+            {
+                foreach (var c in userModel.User.CustomerUsers)
+                {
+                    //Get CaseSettings
+                    var caseSettingsToCopy = _caseSettingsService.GetCaseSettingsWithUser(c.Customer_Id, userModel.CopyUserid, userToSave.UserGroup_Id);
+
+
+                    foreach (var cs in caseSettingsToCopy)
+                    {
+                        var newUserCaseSetting = new CaseSettings() { };
+
+                        newUserCaseSetting.User_Id = userToSave.Id;
+                        newUserCaseSetting.Customer_Id = cs.Customer_Id;
+                        newUserCaseSetting.Name = cs.Name;
+                        newUserCaseSetting.Line = cs.Line;
+                        newUserCaseSetting.MinWidth = cs.MinWidth;
+                        newUserCaseSetting.UserGroup = cs.UserGroup;
+                        newUserCaseSetting.ColOrder = cs.ColOrder;
+
+                        this._caseSettingsService.SaveCaseSetting(newUserCaseSetting, out errors);
+                    }
+                }
+            }
+
 
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "users");
 
             var model = this.CreateInputViewModel(userToSave);
 
+
+            
+
+           // model.UserColumns = _caseSettingsService.GetCaseSettingsWithUser(userToSave.Customer_Id, userToSave.Id, SessionFacade.CurrentUser.UserGroupId);
             return this.View(model);
         }
 
@@ -482,6 +521,7 @@
                 CustomerUsers = this._userService.GetCustomerUserForUser(user.Id),
                 Departments = this._userService.GetDepartmentsForUser(user.Id),
                 ListWorkingGroupsForUser = this._userService.GetListToUserWorkingGroup(user.Id),
+                //UserColumns = _caseSettingsService.GetCaseSettingsWithUser(user.Customer_Id, user.Id, SessionFacade.CurrentUser.UserGroupId),
                 Customers = this._customerService.GetAllCustomers().Select(x => new SelectListItem
                 {
                     Text = x.Name,

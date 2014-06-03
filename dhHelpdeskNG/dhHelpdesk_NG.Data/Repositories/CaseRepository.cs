@@ -512,6 +512,7 @@ namespace DH.Helpdesk.Dal.Repositories
     {
         string SetListCaseName(int labelId);
         void UpdateCaseSetting(CaseSettings updatedCaseSetting);
+        //IList<CaseSettings> GetCaseSettingsByCopyUserId(int userId);
     }
 
     public class CaseSettingRepository : RepositoryBase<CaseSettings>, ICaseSettingRepository
@@ -546,6 +547,15 @@ namespace DH.Helpdesk.Dal.Repositories
             caseSettingEntity.ColOrder = updatedCaseSetting.ColOrder;
 
         }
+
+        //public IList<CaseSettings> GetCaseSettingsByUserId(int userId)
+        //{
+        //    var query = (from uc in this.DataContext.CaseSettings
+        //                 where uc.User_Id == userId
+        //                 select uc);
+
+        //    return query.ToList();
+        //}
     }
 
     #endregion

@@ -11,6 +11,8 @@
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
     using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Domain.MailTemplates;
+    using DH.Helpdesk.Domain.Computers;
 
     public class CustomerController : BaseController
     {
@@ -30,6 +32,9 @@
         private readonly IFinishingCauseService _finishingCauseService;
         private readonly ICaseSolutionService _caseSolutionService;
         private readonly ICustomerUserService _customerUserService;
+        private readonly IPriorityService _priorityService;
+        private readonly IComputerService _computerService;
+        private readonly IMailTemplateService _mailTemplateService;
 
         public CustomerController(
             ICaseFieldSettingService caseFieldSettingService,
@@ -48,6 +53,9 @@
             IFinishingCauseService finishingCauseService,
             ICaseSolutionService caseSolutionsService,
             ICustomerUserService customerUserSerivce,
+            IPriorityService priorityService,
+            IComputerService computerService,
+            IMailTemplateService mailTemplateService,
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
@@ -67,6 +75,9 @@
             this._finishingCauseService = finishingCauseService;
             this._caseSolutionService = caseSolutionsService;
             this._customerUserService = customerUserSerivce;
+            this._priorityService = priorityService;
+            this._computerService = computerService;
+            this._mailTemplateService = mailTemplateService;
         }
 
         [CustomAuthorize(Roles = "3,4")]
@@ -556,7 +567,7 @@
         }
 
         [HttpPost]
-        public ActionResult CopyCustomer(int id, string customerNumber, string customerName, string customerEmail)
+        public int CopyCustomer(int id, string customerNumber, string customerName, string customerEmail)
         {
             var customerToCopy = this._customerService.GetCustomer(id);
             var customerToCopySettings = this._settingService.GetCustomerSetting(customerToCopy.Id);
@@ -645,7 +656,7 @@
             {
                 var newCustomerCaseSetting = new CaseSettings() { };
 
-                newCustomerSetting.Customer_Id = newCustomerToSave.Id;
+                newCustomerCaseSetting.Customer_Id = newCustomerToSave.Id;
                 newCustomerCaseSetting.Name = cs.Name;
                 newCustomerCaseSetting.Line = cs.Line;
                 newCustomerCaseSetting.MinWidth = cs.MinWidth;
@@ -657,6 +668,7 @@
 
             //Get CaseFieldSettings to copy
             var caseFieldSettingsToCopy = this._caseFieldSettingService.GetCaseFieldSettings(customerToCopy.Id);
+            
 
             foreach (var cfs in caseFieldSettingsToCopy)
             {
@@ -669,11 +681,101 @@
                 newCustomerCaseFieldSettings.ShowExternal = cfs.ShowExternal;
                 newCustomerCaseFieldSettings.FieldSize = cfs.FieldSize;
                 newCustomerCaseFieldSettings.ListEdit = cfs.ListEdit;
-                newCustomerCaseFieldSettings.CaseFieldSettingLanguages = cfs.CaseFieldSettingLanguages;
 
-
-                //this._customerService.SaveCaseFieldSettingsForCustomer(newCustomerToSave.Id, newCustomerToSave.Language_Id, casefieldsettingswithlanguages, newCustomerCaseFieldSettings, out errors);
+                
+                this._customerService.SaveCaseFieldSettingsForCustomerCopy(newCustomerToSave.Id, newCustomerToSave.Language_Id, newCustomerCaseFieldSettings, out errors);
             }
+
+            //Get CaseFieldSettingLang
+            var language = this._languageService.GetLanguages();
+
+            foreach (var l in language)
+            {
+                var caseFieldSettingsLangToCopy = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerToCopy.Id, l.Id);
+                var caseFieldSettingsForNewCustomer = this._caseFieldSettingService.GetCaseFieldSettings(newCustomerToSave.Id);
+
+                foreach (var cfsl in caseFieldSettingsLangToCopy)
+                {
+
+                    foreach (var cfs in caseFieldSettingsForNewCustomer)
+                    {
+                        if (cfsl.Name == cfs.Name)
+                        {
+                            var newCustomerCaseFieldSettingsLang = new CaseFieldSettingLanguage() { };
+
+                            newCustomerCaseFieldSettingsLang.CaseFieldSettings_Id = cfs.Id;
+                            newCustomerCaseFieldSettingsLang.Label = cfsl.Label;
+                            newCustomerCaseFieldSettingsLang.Language_Id = cfsl.Language_Id;
+                            newCustomerCaseFieldSettingsLang.FieldHelp = cfsl.FieldHelp;
+
+
+                            this._customerService.SaveCaseFieldSettingsLangForCustomerCopy(newCustomerCaseFieldSettingsLang, out errors);
+
+                            break;
+                        }
+
+                    }
+
+                }
+
+                
+            }
+
+
+            // Get ComputerUser
+            var computerUserFieldSettingsToCopy = this._computerService.GetComputerUserFieldSettings(customerToCopy.Id);
+
+            foreach (var cufs in computerUserFieldSettingsToCopy)
+            {
+                var newCustomerComputerUserFS = new ComputerUserFieldSettings() { };
+
+                newCustomerComputerUserFS.Customer_Id = newCustomerToSave.Id;
+                newCustomerComputerUserFS.ComputerUserField = cufs.ComputerUserField;
+                newCustomerComputerUserFS.Show = cufs.Show;
+                newCustomerComputerUserFS.Required = cufs.Required;
+                newCustomerComputerUserFS.MinLength = cufs.MinLength;
+                newCustomerComputerUserFS.ShowInList = cufs.ShowInList;
+                newCustomerComputerUserFS.LDAPAttribute = cufs.LDAPAttribute;
+
+                this._computerService.SaveComputerUserFieldSettingForCustomerCopy(newCustomerComputerUserFS, out errors);
+            }
+
+            //ComputerUserLang
+            //var lang = this._languageService.GetLanguages();
+
+            //foreach (var l in lang)
+            //{
+            //    var computerUserFieldSettingsLangToCopy = this._computerService.GetComputerUserFieldSettingsWithLanguages(customerToCopy.Id, l.Id);
+            //    var computerUserFieldSettingsForNewCustomer = this._computerService.GetComputerUserFieldSettings(newCustomerToSave.Id);
+
+            //    //foreach (var cufsl in computerUserFieldSettingsLangToCopy)
+            //    //{
+
+            //    //    foreach (var cufs in computerUserFieldSettingsForNewCustomer)
+            //    //    {
+            //    //        if (cufsl.Label == cufs.Name)
+            //    //        {
+            //    //            var newComputerUserFieldSettingsLang = new ComputerUserFieldSettingsLanguage() { };
+
+            //    //            newComputerUserFieldSettingsLang.ComputerUserFieldSettings_Id = cufs.Id;
+            //    //            newComputerUserFieldSettingsLang.Label = cufsl.Label;
+            //    //            newComputerUserFieldSettingsLang.Language_Id = cufsl.Language_Id;
+            //    //            newComputerUserFieldSettingsLang.FieldHelp = cufsl.FieldHelp;
+
+
+            //    //            this._computerService.SaveComputerUserFieldSettingLangForCustomerCopy(newComputerUserFieldSettingsLang, out errors);
+
+            //    //            break;
+            //    //        }
+
+            //    //    }
+
+            //    //}
+
+
+            //}
+
+
 
             //Get CustomerUser to copy
             var customerUserToCopy = this._customerUserService.GetCustomerUsersForCustomer(customerToCopy.Id);
@@ -730,6 +832,27 @@
 
                 this._categoryService.SaveCategory(newCustomerCategory, out errors);
             }
+
+            //Get Priority to copy
+            var prioritiesToCopy = this._priorityService.GetPriorities(customerToCopy.Id);
+
+            foreach (var pr in prioritiesToCopy)
+            {
+                var newCustomerPriority = new Priority() { };
+
+                newCustomerPriority.Customer_Id = newCustomerToSave.Id;
+                newCustomerPriority.Name = pr.Name;
+                newCustomerPriority.Description = pr.Description;
+                newCustomerPriority.SolutionTime = pr.SolutionTime;
+                newCustomerPriority.IsDefault = pr.IsDefault;
+                newCustomerPriority.IsEmailDefault = pr.IsEmailDefault;
+                newCustomerPriority.IsActive = pr.IsActive;
+                newCustomerPriority.Code = pr.Code;
+
+                this._priorityService.SavePriority(newCustomerPriority, out errors);
+
+            }
+
 
             //Get Category to copy
             var productAreasToCopy = this._productAreaService.GetProductAreas(customerToCopy.Id);
@@ -853,13 +976,17 @@
                 this._caseSolutionService.SaveCaseSolution(newCustomerCaseSolution, null, null, out errors);
             }
 
+            //Get Mailtemplate
+            //var mailTemplateToCopy = this._mailTemplateService.GetMailTemplates(customerToCopy.Id, customerToCopy.Language_Id);
 
             this._customerService.SaveEditCustomer(newCustomerToSave, newCustomerSetting, null, newCustomerToSave.Language_Id, out errors);
 
-            
-          
-           return this.RedirectToAction("edit", "customer", new { newCustomerToSave.Id });
 
+            //var model = this.CustomerInputViewModel(newCustomerToSave);
+
+            //return this.View(model);
+            //return this.RedirectToAction("edit", "customer", new { area = "admin", newCustomerToSave.Id });
+            return newCustomerToSave.Id;
         }
     }
 }

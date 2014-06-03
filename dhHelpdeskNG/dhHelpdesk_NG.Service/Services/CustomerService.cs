@@ -27,6 +27,8 @@
         //void SaveCaseFieldSettingsForCustomer(Customer customer, Setting setting, int[] us, List<CaseFieldSetting> CaseFieldSettings, int LanguageId, out IDictionary<string, string> errors);
         void SaveCaseFieldSettingsForCustomer(int customerId, int languageId, IEnumerable<CaseFieldSettingsWithLanguage> caseFieldSettingWithLanguages, List<CaseFieldSetting> caseFieldSettings, out IDictionary<string, string> errors);
         void SaveCaseFieldSettingsForCustomer(Customer customer, IEnumerable<CaseFieldSettingsWithLanguage> caseFieldSettingWithLanguages, int[] us, List<CaseFieldSetting> CaseFieldSettings, int LanguageId, out IDictionary<string, string> errors);
+        void SaveCaseFieldSettingsForCustomerCopy(int customerId, int languageId, CaseFieldSetting caseFieldSetting, out IDictionary<string, string> errors);
+        void SaveCaseFieldSettingsLangForCustomerCopy(CaseFieldSettingLanguage caseFieldSettingLanguage, out IDictionary<string, string> errors);
         void SaveEditCustomer(Customer customer, Setting setting, int[] us, int LanguageId, out IDictionary<string, string> errors);
         void SaveNewCustomerToGetId(Customer customer, out IDictionary<string, string> errors);
         void Commit();
@@ -322,6 +324,40 @@
                 _caseFieldSettingLanguageRepository.Commit();
             }
         }
+
+        public void SaveCaseFieldSettingsForCustomerCopy(int customerId, int languageId, CaseFieldSetting caseFieldSetting, out IDictionary<string, string> errors)
+        {
+            errors = new Dictionary<string, string>();
+
+            if (caseFieldSetting.Id == 0)
+                _caseFieldSettingRepository.Add(caseFieldSetting);
+            else
+                _caseFieldSettingRepository.Update(caseFieldSetting);
+              
+
+            _caseFieldSettingRepository.Commit();
+
+        }
+
+
+        public void SaveCaseFieldSettingsLangForCustomerCopy(CaseFieldSettingLanguage caseFieldSettingLanguage, out IDictionary<string, string> errors)
+        {
+            errors = new Dictionary<string, string>();
+
+            var upd = new CaseFieldSettingLanguage
+                    {
+                        CaseFieldSettings_Id = caseFieldSettingLanguage.CaseFieldSettings_Id,
+                        Language_Id = caseFieldSettingLanguage.Language_Id,
+                        Label = caseFieldSettingLanguage.Label,
+                        FieldHelp = caseFieldSettingLanguage.FieldHelp
+                    };
+
+                    _caseFieldSettingLanguageRepository.Add(upd);
+              
+
+                _caseFieldSettingLanguageRepository.Commit();
+        }
+
 
         public void SaveCaseFieldSettingsForCustomer(Customer customer, IEnumerable<CaseFieldSettingsWithLanguage> caseFieldSettingWithLanguages, int[] us, List<CaseFieldSetting> CaseFieldSettings, int LanguageId, out IDictionary<string, string> errors)
         {

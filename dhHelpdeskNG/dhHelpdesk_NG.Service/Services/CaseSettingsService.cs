@@ -14,6 +14,7 @@
         IList<CaseSettings> GenerateCSFromUGChoice(int customerId, int? UserGroupId);
         IList<CaseSettings> GetCaseSettingsWithUser(int customerId, int userId, int userGroupId);
         IList<CaseSettings> GetCaseSettingsByUserGroup(int customerId, int UserGroupId);
+        //IList<CaseSettings> GetCaseSettingsByCopyUserId(int userId);
 
         CaseSettings GetCaseSetting(int id);
 
@@ -118,10 +119,48 @@
             return csl;
         }
 
+
+        //public IList<CaseSettings> GetCaseSettingsByCopyUserId(int userId)
+        //{
+        //    return this._caseSettingRepository.GetCaseSettingsByCopyUserId(userId).ToList();
+
+        //    //IList<CaseSettings> csl;
+        //    //IDictionary<string, string> errors = new Dictionary<string, string>();
+
+        //    //csl = this._caseSettingRepository.GetMany(x => x.User_Id == userId).OrderBy(x => x.ColOrder).ToList();
+        //    //if (userId == null)
+        //    //{
+        //    //    //csl = this.GetCaseSettingsByUserGroup(customerId, userGroupId);
+
+        //    //    foreach (var cfs in csl)
+        //    //    {
+        //    //        var newCaseSetting = new CaseSettings();
+
+        //    //        newCaseSetting.Id = 0;
+        //    //        newCaseSetting.Customer_Id = cfs.Customer_Id;
+        //    //        newCaseSetting.User_Id = 0;
+        //    //        newCaseSetting.Name = cfs.Name;
+        //    //        newCaseSetting.Line = cfs.Line;
+        //    //        newCaseSetting.MinWidth = cfs.MinWidth;
+        //    //        newCaseSetting.ColOrder = cfs.ColOrder;
+        //    //        newCaseSetting.UserGroup = cfs.UserGroup;
+        //    //        newCaseSetting.RegTime = DateTime.UtcNow;
+        //    //        newCaseSetting.ChangeTime = DateTime.UtcNow;
+
+        //    //        SaveCaseSetting(newCaseSetting, out errors);
+
+        //    //    }
+        //    //}
+
+        //    //csl = this._caseSettingRepository.GetMany(x => x.Customer_Id == customerId && x.User_Id == userId).OrderBy(x => x.ColOrder).ToList();
+        //    //return csl;
+        //}
+
         public CaseSettings GetCaseSetting(int id)
         {
             return this._caseSettingRepository.GetById(id);
         }
+
 
         public DeleteMessage DeleteCaseSetting(int id)
         {

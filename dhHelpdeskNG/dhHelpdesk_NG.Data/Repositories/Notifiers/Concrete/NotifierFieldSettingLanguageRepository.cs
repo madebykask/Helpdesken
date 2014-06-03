@@ -27,5 +27,22 @@
 
             return captions.Select(c => new Caption(c.FieldName, c.Text)).ToList();
         }
+
+        public IEnumerable<ComputerUserFieldSettingsLanguage> GetComputerUserFieldSettingsLanguage(int? customerId, int? languageId)
+        {
+            var query = from cfsl in this.DataContext.ComputerUserFieldSettingsLanguages
+                        join cfs in this.DataContext.ComputerUserFieldSettings on cfsl.ComputerUserFieldSettings_Id equals cfs.Id
+                        where cfs.Customer_Id == customerId && cfsl.Language_Id == languageId
+                        group cfsl by new { cfsl.ComputerUserFieldSettings_Id, cfsl.Label, cfsl.Language_Id, cfsl.FieldHelp } into grouped
+                        select new ComputerUserFieldSettingsLanguage
+                        {
+                            ComputerUserFieldSettings_Id = grouped.Key.ComputerUserFieldSettings_Id,
+                            Label = grouped.Key.Label,
+                            Language_Id = grouped.Key.Language_Id,
+                            FieldHelp = grouped.Key.FieldHelp
+                        };
+
+            return query.OrderBy(x => x.ComputerUserFieldSettings_Id);
+        }
     }
 }

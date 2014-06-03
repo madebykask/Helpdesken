@@ -89,6 +89,8 @@
         public IList<SelectListItem> UserRoles { get; set; }
         public IList<SelectListItem> WorkingGroups { get; set; }
 
+        //public IList<CaseSettings> UserColumns { get; set; }
+        public int CopyUserid { get; set; }
         public List<SelectListItem> CaseInfoMailList { get; set; }
 
         public UserInputViewModel() { }
@@ -107,5 +109,7 @@
         public int? UserRights { get; set; }
         //public string CaseStateSecondaryColor { get; set; }
         public string[] MenuSetting { get; set; }
+
+        public int CopyUserid { get; set; }
     }
 }

@@ -22,6 +22,7 @@
         IList<ComputerUserFieldSettings> GetComputerUserFieldSettings(int customerId);
         IList<ComputerUserGroup> GetComputerUserGroups(int customerId);
         IList<ComputerUsersBlackList> GetComputerUsersBlackLists();
+        IList<ComputerUserFieldSettingsLanguage> GetComputerUserFieldSettingsWithLanguages(int customerId, int languageId);
 
         IList<ComputerResults> SearchComputer(int customerId, string searchFor);
         ComputerUser GetComputerUser(int id);
@@ -35,6 +36,8 @@
         void NewComputerUsersBlackList(ComputerUsersBlackList computerUsersBlackList);
         void SaveComputerUser(ComputerUser computerUser, int[] cugs, out IDictionary<string, string> errors);
         void SaveComputerUserFieldSetting(IList<ComputerUserFieldSettings> computerUserFieldSetting, out IDictionary<string, string> errors);
+        void SaveComputerUserFieldSettingForCustomerCopy(ComputerUserFieldSettings computerUserFieldSetting, out IDictionary<string, string> errors);
+        //void SaveComputerUserFieldSettingLangForCustomerCopy(ComputerUserFieldSettingsLanguage computerUserFieldSettingLanguage, out IDictionary<string, string> errors);
         void SaveComputerUserGroup(ComputerUserGroup computerUserGroup, int[] ous, out IDictionary<string, string> errors);
         void UpdateComputerUsersBlackList(ComputerUsersBlackList computerUsersBlackList);
         void Commit();
@@ -48,7 +51,9 @@
         private readonly IComputerUsersBlackListRepository _computerUsersBlackListRepository;
         private readonly IComputerRepository _computerRepository;
         private readonly IOrganizationUnitRepository _ouRespository;
+        private readonly INotifierFieldSettingLanguageRepository _computerUserFieldSettingLanguageRepository;
         private readonly IUnitOfWork _unitOfWork;
+       
 
         public ComputerService(
             INotifierFieldSettingRepository computerUserFieldSettingsRepository,
@@ -57,6 +62,7 @@
             IComputerUsersBlackListRepository computerUsersBlackListRepository,
             IComputerRepository computerRepository,
             IOrganizationUnitRepository ouRespository,
+            INotifierFieldSettingLanguageRepository computerUserFieldSettingLanguageRepository,
             IUnitOfWork unitOfWork)
         {
             this._computerUserFieldSettingsRepository = computerUserFieldSettingsRepository;
@@ -66,6 +72,7 @@
             this._computerRepository = computerRepository;
             this._ouRespository = ouRespository;
             this._unitOfWork = unitOfWork;
+            this._computerUserFieldSettingLanguageRepository = computerUserFieldSettingLanguageRepository;
         }
 
         public IDictionary<string, string> Validate(ComputerUsersBlackList computerUsersBlackListToValidate)
@@ -81,6 +88,11 @@
         public IList<ComputerUser> GetComputerUsers(int customerId)
         {
             return this._computerUserRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.SyncChangedDate).ToList();
+        }
+
+        public IList<ComputerUserFieldSettingsLanguage> GetComputerUserFieldSettingsWithLanguages(int customerId, int languageId)
+        {
+            return this._computerUserFieldSettingLanguageRepository.GetComputerUserFieldSettingsLanguage(customerId, languageId).ToList();
         }
 
         public IList<ComputerUser> SearchSortAndGenerateComputerUsers(int customerId, IComputerUserSearch searchComputerUsers)
@@ -306,6 +318,34 @@
             if (errors.Count == 0)
                 this.Commit();
         }
+
+        public void SaveComputerUserFieldSettingForCustomerCopy(ComputerUserFieldSettings computerUserFieldSettings, out IDictionary<string, string> errors)
+        {
+            errors = new Dictionary<string, string>();
+
+            if (computerUserFieldSettings.Id == 0)
+                _computerUserFieldSettingsRepository.Add(computerUserFieldSettings);
+            else
+                _computerUserFieldSettingsRepository.Update(computerUserFieldSettings);
+
+
+            _computerUserFieldSettingsRepository.Commit();
+
+        }
+
+        //public void SaveComputerUserFieldSettingLangForCustomerCopy(ComputerUserFieldSettingsLanguage computerUserFieldSettingsLanguage, out IDictionary<string, string> errors)
+        //{
+        //    errors = new Dictionary<string, string>();
+
+        //    if (computerUserFieldSettingsLanguage.ComputerUserFieldSettings_Id == 0)
+        //        _computerUserFieldSettingLanguageRepository.Add(computerUserFieldSettingsLanguage);
+        //    else
+        //        _computerUserFieldSettingLanguageRepository.Update(computerUserFieldSettingsLanguage);
+
+
+        //    _computerUserFieldSettingsRepository.Commit();
+
+        //}
 
         public void SaveComputerUserGroup(ComputerUserGroup computerUserGroup, int[] ous, out IDictionary<string, string> errors)
         {
