@@ -1,39 +1,53 @@
 namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings
 {
+    using System.Web.Mvc;
+
     using DataAnnotationsExtensions;
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
-    public class InventoryFieldSettingModel
+    public class InventoryDynamicFieldSettingModel
     {
-        public InventoryFieldSettingModel()
+        public InventoryDynamicFieldSettingModel()
         {
         }
 
-        public InventoryFieldSettingModel(
+        public InventoryDynamicFieldSettingModel(
+            int id,
+            int? inventoryTypeGroupId,
             string caption,
+            int position,
             FieldTypes? fieldType,
             int? propertySize,
             bool showInDetails,
-            bool showInList)
+            bool showInList,
+            SelectList groups)
         {
+            this.Id = id;
+            this.InventoryTypeGroupId = inventoryTypeGroupId;
             this.Caption = caption;
+            this.Position = position;
             this.FieldType = fieldType;
             this.PropertySize = propertySize;
             this.ShowInDetails = showInDetails;
             this.ShowInList = showInList;
+            this.Groups = groups;
         }
 
-        private InventoryFieldSettingModel(int? propertySize)
-        {
-            this.PropertySize = propertySize;
-        }
+        [IsId]
+        public int Id { get; private set; }
+
+        [IsId]
+        public int? InventoryTypeGroupId { get; private set; }
 
         [NotNull]
         [LocalizedRequired]
         public string Caption { get; private set; }
+
+        [Max(0)]
+        public int Position { get; private set; }
 
         public FieldTypes? FieldType { get; private set; }
 
@@ -44,9 +58,6 @@ namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings
 
         public bool ShowInList { get; private set; }
 
-        public static InventoryFieldSettingModel GetDefault(int? propertySize)
-        {
-            return new InventoryFieldSettingModel(propertySize);
-        }
+        public SelectList Groups { get; private set; }
     }
 }

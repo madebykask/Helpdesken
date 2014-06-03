@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Printer
 {
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public class OtherFieldsSettingsModel
     {
@@ -17,15 +18,19 @@
         }
 
         [NotNull]
+        [LocalizedDisplay("Number Of Trays")]
         public FieldSettingModel NumberOfTraysFieldSettingModel { get; set; }
 
         [NotNull]
+        [LocalizedDisplay("Driver")]
         public FieldSettingModel DriverFieldSettingModel { get; set; }
 
         [NotNull]
+        [LocalizedDisplay("Info")]
         public FieldSettingModel InfoFieldSettingModel { get; set; }
 
         [NotNull]
+        [LocalizedDisplay("Url")]
         public FieldSettingModel URLFieldSettingModel { get; set; }
     }
 }

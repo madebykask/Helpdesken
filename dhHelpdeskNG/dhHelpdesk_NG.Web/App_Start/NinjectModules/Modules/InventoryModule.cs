@@ -56,6 +56,7 @@
             this.Bind<IComputerFieldsSettingsViewModelBuilder>().To<ComputerFieldsSettingsViewModelBuilder>().InSingletonScope();
             this.Bind<IServerFieldsSettingsViewModelBuilder>().To<ServerFieldsSettingsViewModelBuilder>().InSingletonScope();
             this.Bind<IPrinterFieldsSettingsViewModelBuilder>().To<PrinterFieldsSettingsViewModelBuilder>().InSingletonScope();
+            this.Bind<IInventoryFieldSettingsViewModelBuilder>().To<InventoryFieldSettingsViewModelBuilder>().InSingletonScope();
         }
     }
 }

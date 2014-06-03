@@ -1,6 +1,5 @@
 ﻿namespace DH.Helpdesk.Services.Services.Concrete
 {
-    using System;
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings;
@@ -49,12 +48,13 @@
 
         public void UpdateWorkstationFieldsSettings(ComputerFieldsSettings businessModel)
         {
-            throw new NotImplementedException();
+            this.computerFieldSettingsRepository.Update(businessModel);
+            this.computerFieldSettingsRepository.Commit();
         }
 
         public ComputerFieldsSettings GetWorkstationFieldSettingsForEdit(int customerId, int languageId)
         {
-            throw new NotImplementedException();
+            return this.computerFieldSettingsRepository.GetFieldSettingsForEdit(customerId, languageId);
         }
 
         public ComputerFieldsSettingsForModelEdit GetWorkstationFieldSettingsForModelEdit(int customerId, int languageId)
@@ -84,12 +84,13 @@
 
         public void UpdateServerFieldsSettings(ServerFieldsSettings businessModel)
         {
-            throw new NotImplementedException();
+            this.serverFieldSettingsRepository.Update(businessModel);
+            this.serverFieldSettingsRepository.Commit();
         }
 
         public ServerFieldsSettings GetServerFieldSettingsForEdit(int customerId, int languageId)
         {
-            throw new NotImplementedException();
+            return this.serverFieldSettingsRepository.GetFieldSettingsForEdit(customerId, languageId);
         }
 
         public ServerFieldsSettingsForModelEdit GetServerFieldSettingsForModelEdit(int customerId, int languageId)
@@ -112,12 +113,13 @@
 
         public void UpdatePrinterFieldsSettings(PrinterFieldsSettings businessModel)
         {
-            throw new NotImplementedException();
+            this.printerFieldSettingsRepository.Update(businessModel);
+            this.printerFieldSettingsRepository.Commit();
         }
 
         public PrinterFieldsSettings GetPrinterFieldSettingsForEdit(int customerId, int languageId)
         {
-            throw new NotImplementedException();
+            return this.printerFieldSettingsRepository.GetFieldSettingsForEdit(customerId, languageId);
         }
 
         public PrinterFieldsSettingsForModelEdit GetPrinterFieldSettingsForModelEdit(int customerId, int languageId)
@@ -142,6 +144,17 @@
         #endregion
 
         #region DynamicInventorySettings
+
+        public InventoryFieldSettingsForEditResponse GetInventoryFieldSettingsForEdit(int inventoryTypeId)
+        {
+            var setings = this.inventoryFieldSettingsRepository.GetFieldSettingsForEdit(inventoryTypeId);
+            var dynamicSettings = this.inventoryDynamicFieldSettingsRepository.GetFieldSettingsForEdit(
+                inventoryTypeId);
+
+            var response = new InventoryFieldSettingsForEditResponse(setings, dynamicSettings);
+
+            return response;
+        }
 
         public InventoryFieldSettingsForModelEditResponse GetInventoryFieldSettingsForModelEdit(int inventoryTypeId)
         {

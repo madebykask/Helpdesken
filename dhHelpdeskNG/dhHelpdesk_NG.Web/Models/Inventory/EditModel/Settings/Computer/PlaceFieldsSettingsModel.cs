@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Computer
 {
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public class PlaceFieldsSettingsModel
     {
@@ -21,21 +22,28 @@
         }
 
         [NotNull]
+        [LocalizedDisplay("Room")]
         public FieldSettingModel RoomFieldSettingModel { get; set; }
 
         [NotNull]
+        [LocalizedDisplay("Address")]
         public FieldSettingModel AddressFieldSettingModel { get; set; }
 
         [NotNull]
+        [LocalizedDisplay("Postal Code")]
         public FieldSettingModel PostalCodeFieldSettingModel { get; set; }
 
         [NotNull]
+        [LocalizedDisplay("Postal Address")]
         public FieldSettingModel PostalAddressFieldSettingModel { get; set; }
 
         [NotNull]
+        [LocalizedDisplay("Location")]
+
         public FieldSettingModel PlaceFieldSettingModel { get; set; }
 
         [NotNull]
+        [LocalizedDisplay("Location2")]
         public FieldSettingModel Place2FieldSettingModel { get; set; }
     }
 }

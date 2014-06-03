@@ -44,6 +44,8 @@ namespace DH.Helpdesk.Services.Services
 
         PrinterFieldsSettingsOverviewForFilter GetPrinterFieldSettingsOverviewForFilter(int customerId, int languageId);
 
+        InventoryFieldSettingsForEditResponse GetInventoryFieldSettingsForEdit(int inventoryTypeId);
+
         InventoryFieldSettingsForModelEditResponse GetInventoryFieldSettingsForModelEdit(int inventoryTypeId);
 
         InventoryFieldSettingsOverviewResponse GetInventoryFieldSettingsOverview(int inventoryTypeId);

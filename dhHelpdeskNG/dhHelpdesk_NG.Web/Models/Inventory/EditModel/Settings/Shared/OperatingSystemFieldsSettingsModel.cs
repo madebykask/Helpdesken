@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Shared
 {
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public class OperatingSystemFieldsSettingsModel
     {
@@ -19,18 +20,23 @@
         }
 
         [NotNull]
+        [LocalizedDisplay("Operating System")]
         public FieldSettingModel OperatingSystemFieldSettingModel { get; set; }
 
         [NotNull]
+        [LocalizedDisplay("Version")]
         public FieldSettingModel VersionFieldSettingModel { get; set; }
 
         [NotNull]
+        [LocalizedDisplay("Service Pack")]
         public FieldSettingModel ServicePackSystemFieldSettingModel { get; set; }
 
         [NotNull]
+        [LocalizedDisplay("Registration Code")]
         public FieldSettingModel RegistrationCodeSystemFieldSettingModel { get; set; }
 
         [NotNull]
+        [LocalizedDisplay("Product Key")]
         public FieldSettingModel ProductKeyFieldSettingModel { get; set; }
     }
 }

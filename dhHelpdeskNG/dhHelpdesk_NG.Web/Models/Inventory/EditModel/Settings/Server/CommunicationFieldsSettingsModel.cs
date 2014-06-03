@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Server
 {
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public class CommunicationFieldsSettingsModel
     {
@@ -15,12 +16,15 @@
         }
 
         [NotNull]
+        [LocalizedDisplay("Network Adapter")]
         public FieldSettingModel NetworkAdapterFieldSettingModel { get; set; }
 
         [NotNull]
+        [LocalizedDisplay("IP Address")]
         public FieldSettingModel IPAddressFieldSettingModel { get; set; }
 
         [NotNull]
+        [LocalizedDisplay("Mac Address")]
         public FieldSettingModel MacAddressFieldSettingModel { get; set; }
     }
 }

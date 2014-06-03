@@ -1,0 +1,19 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Server.ServerFieldsSettingsViewModel
+<div class="secnavs fixed">
+    <div class="pull-left">
+        <ul class="secnav">
+            <li id="menu1">
+                <input type="submit" value="@Translation.Get("Spara")" class="btn" onclick=" $('#settings_edit_form').submit(); "/>
+            </li>
+            <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt"), "Index", "Inventory", null, new { @class = "btn" })</li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="container">
+        @using (Ajax.BeginForm("EditServerSettings", null, new AjaxOptions(), new { id = "settings_edit_form" }))
+        {
+            @Html.EditorFor(x => x, "Settings/ServerFieldsSettingsViewModel")
+        }
+    </div>
+</div>

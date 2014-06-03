@@ -26,5 +26,21 @@
 
             return businessModel;
         }
+
+        public static InventoryFieldSettings CreateForUpdate(
+            int inventoryTypeId,
+            DefaultFieldSettings defaultSettings,
+            DateTime changedDate)
+        {
+            var businessModel = new InventoryFieldSettings(ModelStates.Updated, defaultSettings)
+                                    {
+                                        InventoryTypeId =
+                                            inventoryTypeId,
+                                        ChangedDate =
+                                            changedDate
+                                    };
+
+            return businessModel;
+        }
     }
 }

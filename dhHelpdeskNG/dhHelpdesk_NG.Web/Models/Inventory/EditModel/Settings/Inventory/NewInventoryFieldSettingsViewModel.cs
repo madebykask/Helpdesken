@@ -1,19 +1,17 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Inventory
 {
-    using System.Collections.Generic;
-
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class InventoryFieldSettingsViewModel
+    public class NewInventoryFieldSettingsViewModel
     {
-        public InventoryFieldSettingsViewModel(
+        public NewInventoryFieldSettingsViewModel(
             int inventoryTypeId,
             DefaultFieldSettingsModel defaultSettings,
-            List<InventoryDynamicFieldSettingModel> inventoryDynamicFieldSettings)
+            InventoryDynamicFieldSettingModel newFieldSettingModel)
         {
             this.InventoryTypeId = inventoryTypeId;
             this.DefaultSettings = defaultSettings;
-            this.InventoryDynamicFieldSettings = inventoryDynamicFieldSettings;
+            this.NewFieldSettingModel = newFieldSettingModel;
         }
 
         [NotNull]
@@ -23,6 +21,6 @@
         public DefaultFieldSettingsModel DefaultSettings { get; private set; }
 
         [NotNull]
-        public List<InventoryDynamicFieldSettingModel> InventoryDynamicFieldSettings { get; private set; }
+        public InventoryDynamicFieldSettingModel NewFieldSettingModel { get; private set; }
     }
 }

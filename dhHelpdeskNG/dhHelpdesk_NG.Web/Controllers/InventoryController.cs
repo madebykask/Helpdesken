@@ -462,12 +462,6 @@
         }
 
         [HttpGet]
-        public ViewResult DeleteDynamicSetting(int id)
-        {
-            throw new global::System.NotImplementedException();
-        }
-
-        [HttpGet]
         public ViewResult NewWorkstation()
         {
             var options = this.GetWorkstationEditOptions(SessionFacade.CurrentCustomer.Id);

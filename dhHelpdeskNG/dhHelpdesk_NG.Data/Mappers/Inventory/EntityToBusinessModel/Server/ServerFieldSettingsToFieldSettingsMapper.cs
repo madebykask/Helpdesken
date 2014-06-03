@@ -76,7 +76,7 @@
 
         private static OperatingSystemFieldsSettings CretateOperatingSystemSettings(NamedObjectCollection<FieldSettingMapperData> entity)
         {
-            var operatingSystem = CreateFieldSetting(entity.FindByName(OperatingSystemFields.OS));
+            var operatingSystem = CreateFieldSetting(entity.FindByName(OperatingSystemFields.OperatingSystem));
             var version = CreateFieldSetting(entity.FindByName(OperatingSystemFields.Version));
             var servicePack = CreateFieldSetting(entity.FindByName(OperatingSystemFields.ServicePack));
             var registrationCode = CreateFieldSetting(entity.FindByName(OperatingSystemFields.RegistrationCode));

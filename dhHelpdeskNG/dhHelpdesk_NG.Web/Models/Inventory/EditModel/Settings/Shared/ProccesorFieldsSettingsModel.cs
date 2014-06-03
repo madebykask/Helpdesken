@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Shared
 {
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public class ProccesorFieldsSettingsModel
     {
@@ -10,6 +11,7 @@
         }
 
         [NotNull]
+        [LocalizedDisplay("Proccesor")]
         public FieldSettingModel ProccesorFieldSettingModel { get; set; }
     }
 }

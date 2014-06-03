@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Server
 {
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public class OtherFieldsSettingsModel
     {
@@ -19,18 +20,23 @@
         }
 
         [NotNull]
+        [LocalizedDisplay("Info")]
         public FieldSettingModel InfoFieldSettingModel { get; set; }
 
         [NotNull]
+        [LocalizedDisplay("Other")]
         public FieldSettingModel OtherFieldSettingModel { get; set; }
 
         [NotNull]
+        [LocalizedDisplay("Url")]
         public FieldSettingModel URLFieldSettingModel { get; set; }
 
         [NotNull]
+        [LocalizedDisplay("Url2")]
         public FieldSettingModel URL2FieldSettingModel { get; set; }
 
         [NotNull]
+        [LocalizedDisplay("Owner")]
         public FieldSettingModel OwnerFieldSettingModel { get; set; }
     }
 }

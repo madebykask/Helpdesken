@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Computer
 {
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public class DateFieldsSettingsModel
     {
@@ -19,18 +20,19 @@
         }
 
         [NotNull]
+        [LocalizedDisplay("Created Date")]
         public FieldSettingModel CreatedDateFieldSettingModel { get; set; }
 
-        [NotNull]
+        [LocalizedDisplay("Changed Date")]
         public FieldSettingModel ChangedDateFieldSettingModel { get; set; }
 
-        [NotNull]
+        [LocalizedDisplay("Synchronize Changed Date")]
         public FieldSettingModel SyncChangedDateSettingModel { get; set; }
 
-        [NotNull]
+        [LocalizedDisplay("Scan Date")]
         public FieldSettingModel ScanDateFieldSettingModel { get; set; }
 
-        [NotNull]
+        [LocalizedDisplay("Path Directory")]
         public FieldSettingModel PathDirectoryFieldSettingModel { get; set; }
     }
 }

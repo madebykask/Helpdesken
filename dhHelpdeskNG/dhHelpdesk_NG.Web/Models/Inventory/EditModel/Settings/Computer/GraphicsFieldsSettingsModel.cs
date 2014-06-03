@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Computer
 {
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public class GraphicsFieldsSettingsModel
     {
@@ -10,6 +11,7 @@
         }
 
         [NotNull]
+        [LocalizedDisplay("Video Card")]
         public FieldSettingModel VideoCardFieldSettingModel { get; set; }
     }
 }

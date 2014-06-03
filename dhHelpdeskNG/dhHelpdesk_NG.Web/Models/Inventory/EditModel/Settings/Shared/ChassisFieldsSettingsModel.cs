@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Shared
 {
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public class ChassisFieldsSettingsModel
     {
@@ -9,7 +10,8 @@
             this.ChassisFieldSettingModel = chassisFieldSettingModel;
         }
 
-        [IsId]
+        [NotNull]
+        [LocalizedDisplay("Chassis")]
         public FieldSettingModel ChassisFieldSettingModel { get; set; }
     }
 }

@@ -428,8 +428,10 @@
     <Compile Include="Infrastructure\ModelFactories\Inventory\IComputerFieldsSettingsViewModelBuilder.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\IDynamicsFieldsModelBuilder.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\IFieldSettingModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\IInventoryFieldSettingsViewModelBuilder.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\IInventoryViewModelBuilder.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\InventoryViewModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\InventoryFieldSettingsViewModelBuilder.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\IPrinterFieldsSettingsViewModelBuilder.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\IServerFieldsSettingsViewModelBuilder.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\PrinterFieldsSettingsViewModelBuilder.cs" />
@@ -596,6 +598,8 @@
     <Compile Include="Models\Changes\ChangeEdit\ConfigurableFieldModel.cs" />
     <Compile Include="Models\Inventory\ComputerModuleModeFilter.cs" />
     <Compile Include="Models\Inventory\EditModel\Computer\AccesoriesViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\InventoryDynamicFieldSettingModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Inventory\NewInventoryFieldSettingsViewModel.cs" />
     <Compile Include="Models\Inventory\OptionsAggregates\ComputerEditOptions.cs" />
     <Compile Include="Models\Inventory\EditModel\ComputerModuleGridModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Inventory\DefaultFieldsViewModel.cs" />
@@ -1400,16 +1404,16 @@
     <Content Include="Views\Inventory\SoftwareGrid.cshtml" />
     <Content Include="Views\Inventory\LogGrid.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\ComputerLogModel.cshtml" />
-    <Content Include="Views\Inventory\EditorTemplates\Settings\InventoryFieldSettingModelDefault.cshtml" />
-    <Content Include="Views\Inventory\EditorTemplates\Settings\InventoryFieldSettingModel.cshtml" />
+    <Content Include="Views\InventorySettings\EditorTemplates\Settings\InventoryFieldSettingModelDefault.cshtml" />
+    <Content Include="Views\InventorySettings\EditorTemplates\Settings\InventoryFieldSettingModel.cshtml" />
     <Content Include="Views\Print\Case.cshtml" />
     <Content Include="Views\Print\Footer.cshtml" />
     <Content Include="Views\Print\Header.cshtml" />
-    <Content Include="Views\Inventory\EditorTemplates\Settings\FieldSettingModel.cshtml" />
-    <Content Include="Views\Inventory\EditorTemplates\Settings\ComputerSettings.cshtml" />
-    <Content Include="Views\Inventory\EditorTemplates\Settings\ServerSettings.cshtml" />
-    <Content Include="Views\Inventory\EditorTemplates\Settings\PrinterSettings.cshtml" />
-    <Content Include="Views\Inventory\EditorTemplates\Settings\InventorySettings.cshtml" />
+    <Content Include="Views\InventorySettings\EditorTemplates\Settings\FieldSettingModel.cshtml" />
+    <Content Include="Views\InventorySettings\EditorTemplates\Settings\ComputerFieldsSettingsViewModel.cshtml" />
+    <Content Include="Views\InventorySettings\EditorTemplates\Settings\ServerFieldsSettingsViewModel.cshtml" />
+    <Content Include="Views\InventorySettings\EditorTemplates\Settings\PrinterFieldsSettingsViewModel.cshtml" />
+    <Content Include="Views\InventorySettings\EditorTemplates\Settings\InventorySettings.cshtml" />
     <Content Include="Views\Inventory\NewInventory.cshtml" />
     <Content Include="Views\Inventory\NewPrinter.cshtml" />
     <Content Include="Views\Inventory\NewServer.cshtml" />
@@ -1450,6 +1454,9 @@
     <Content Include="Views\Inventory\CustomTypeReportGrid.cshtml" />
     <Content Include="Views\Inventory\Accesories.cshtml" />
     <Content Include="Views\Inventory\InventoryTypesGrid.cshtml" />
+    <Content Include="Views\InventorySettings\EditWorkstationSettings.cshtml" />
+    <Content Include="Views\InventorySettings\EditServerSettings.cshtml" />
+    <Content Include="Views\InventorySettings\EditPrinterSettings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
@@ -2255,7 +2262,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>54130</DevelopmentServerPort>
+          <DevelopmentServerPort>61868</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

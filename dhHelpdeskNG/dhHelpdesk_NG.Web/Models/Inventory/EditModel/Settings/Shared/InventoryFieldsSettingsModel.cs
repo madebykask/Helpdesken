@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Shared
 {
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public class InventoryFieldsSettingsModel
     {
@@ -13,9 +14,11 @@
         }
 
         [NotNull]
+        [LocalizedDisplay("Bar Code")]
         public FieldSettingModel BarCodeFieldSettingModel { get; set; }
 
         [NotNull]
+        [LocalizedDisplay("Purchase Date")]
         public FieldSettingModel PurchaseDateFieldSettingModel { get; set; }
     }
 }
