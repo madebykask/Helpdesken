@@ -4,9 +4,11 @@
 @model IndexViewModel
 @{
     var inventoryTabClass = Model.ActiveTab == TabName.Inventories ? "active" : null;
+    var settingsTabClass = Model.ActiveTab == TabName.Settings ? "active" : null;
     var masterDataTabClass = Model.ActiveTab == TabName.MasterData ? "active" : null;
 
     var inventoryButtonStyle = Model.ActiveTab == TabName.Inventories ? "display: inline-block;" : "display: none;";
+    var settingsButtonStyle = Model.ActiveTab == TabName.Settings ? "display: inline-block;" : "display: none;";
     var masterDataButtonStyle = Model.ActiveTab == TabName.MasterData ? "display: inline-block;" : "display: none;";
 }
 <script type="text/javascript">
@@ -23,10 +25,10 @@
             });
         });
 
-        $('#reports_dropdown').change(function() {
+        $('#reports_dropdown').change(function () {
             var selectedValue = $(this).val();
 
-            $.get('@Url.Action("RenderReports")', { reportType: selectedValue }, function(tabMarkup) {
+            $.get('@Url.Action("RenderReports")', { reportType: selectedValue }, function (tabMarkup) {
                 $('#report_data_container').html(tabMarkup);
             });
         });
@@ -50,14 +52,29 @@
         });
 
         $('#inventory_tab').click(function () {
-            $.post('@Url.Action("RememberTab", "Service")', { topic: '@PageName.InventoryIndex', tab: '@TabName.Inventories'});
+            $.post('@Url.Action("RememberTab", "Service")', { topic: '@PageName.InventoryIndex', tab: '@TabName.Inventories' });
             $('#new_master_data_button').hide();
+            $('#new_custom_inventory_type_button').hide();
             $('#new_inventory_button').show();
+        });
+
+        $('#settings_tab').click(function () {
+            $.post('@Url.Action("RememberTab", "Service")', { topic: '@PageName.InventoryIndex', tab: '@TabName.Settings' });
+            $('#new_master_data_button').hide();
+            $('#new_inventory_button').hide();
+            $('#new_custom_inventory_type_button').show();
+        });
+
+        $('#reports_tab').click(function () {
+            $('#new_master_data_button').hide();
+            $('#new_custom_inventory_type_button').hide();
+            $('#new_inventory_button').hide();
         });
 
         $('#master_data_tab').click(function () {
             $.post('@Url.Action("RememberTab", "Service")', { topic: '@PageName.InventoryIndex', tab: '@TabName.MasterData' });
             $('#new_inventory_button').hide();
+            $('#new_custom_inventory_type_button').hide();
             $('#new_master_data_button').show();
         });
     });
@@ -67,21 +84,22 @@
     <div class="pull-left">
         <ul class="secnav">
             <li>@Html.ActionLink(Translation.Get("Nytt"), "RedirectToNewInventory", new { currentMode = Model.CurrentMode }, new { @class = "btn", id = "new_inventory_button", style = inventoryButtonStyle })</li>
-            <li>@Html.ActionLink(Translation.Get( string.Format("Nytt {0} ", ((ModuleTypes)Model.ModuleType))), "NewComputerModule", new { moduleType = Model.ModuleType }, new { @class = "btn", id = "new_master_data_button", style = masterDataButtonStyle })</li>
+            <li>@Html.ActionLink(Translation.Get("Nytt"), "NewCustomInventoryType", "InventorySettings", new { }, new { @class = "btn", id = "new_custom_inventory_type_button", style = settingsButtonStyle })</li>
+            <li>@Html.ActionLink(Translation.Get(string.Format("Nytt {0} ", ((ModuleTypes)Model.ModuleType))), "NewComputerModule", new { moduleType = Model.ModuleType }, new { @class = "btn", id = "new_master_data_button", style = masterDataButtonStyle })</li>
         </ul>
     </div>
 </div>
 
 <div class="content">
     <div class="container">
-        <ul class="nav nav-tabs"> 
+        <ul class="nav nav-tabs">
             <li id ="inventory_tab" class="@inventoryTabClass">
                 <a href="#fragment-1">@Translation.Get("Inventarier")</a>
             </li>
-            <li>
+            <li id="settings_tab" class="@settingsTabClass">
                 <a href="#fragment-2">@Translation.Get("Inventarietyp")</a>
             </li>
-            <li>
+            <li id="reports_tab">
                 <a href="#fragment-3">@Translation.Get("Rapporter")</a>
             </li>
             <li id="master_data_tab" class="@masterDataTabClass">
@@ -100,7 +118,7 @@
                     @Html.Action("RenderContent", "Inventory", new { area = string.Empty, currentMode = Model.CurrentMode })
                 </div>
             </div>
-            <div class="tab-pane tab-pane-border" id="fragment-2">
+            <div class="tab-pane tab-pane-border @settingsTabClass" id="fragment-2">
                 @Html.Partial("InventoryTypesGrid", Model.PropertyTypeList)
             </div>
             <div class="tab-pane tab-pane-border" id="fragment-3">

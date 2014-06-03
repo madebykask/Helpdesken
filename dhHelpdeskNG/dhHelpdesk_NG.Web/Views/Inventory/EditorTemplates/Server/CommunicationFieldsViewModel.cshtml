@@ -15,17 +15,7 @@
                 <label>@Translation.Get(Model.NetworkAdapters.Caption)</label>
             </td>
             <td class="span9">
-                @if (!Model.NetworkAdapters.IsReadOnly)
-                {
-                    @Html.DropDownListFor(m => m.CommunicationFieldsModel.NetworkAdapterId, Model.NetworkAdapters.Value, string.Empty)
-                }
-                else
-                {
-                    @(!Model.CommunicationFieldsModel.NetworkAdapterId.HasValue 
-                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true }) 
-                        : Html.TextBoxFor(m => m.NetworkAdapters.Value.SingleOrDefault(x => x.Value == Model.CommunicationFieldsModel.NetworkAdapterId.ToString()).Text, new { @readonly = true }))
-                    @Html.HiddenFor(m => m.CommunicationFieldsModel.NetworkAdapterId)
-                }
+                @Html.DropDownListFor(m => m.CommunicationFieldsModel.NetworkAdapterId, Model.NetworkAdapters.Value, string.Empty)
             </td>
         </tr>
     }
@@ -36,9 +26,7 @@
                 <label>@Translation.Get(Model.CommunicationFieldsModel.IPAddress.Caption)</label>
             </td>
             <td class="span9">
-                @(!Model.CommunicationFieldsModel.IPAddress.IsReadOnly
-                      ? Html.TextBoxFor(m => m.CommunicationFieldsModel.IPAddress.Value)
-                      : Html.TextBoxFor(m => m.CommunicationFieldsModel.IPAddress.Value, new { @readonly = true }))
+                @Html.TextBoxFor(m => m.CommunicationFieldsModel.IPAddress.Value)
             </td>
         </tr>
     }
@@ -49,9 +37,7 @@
                 <label>@Translation.Get(Model.CommunicationFieldsModel.MacAddress.Caption)</label>
             </td>
             <td class="span9">
-                @(!Model.CommunicationFieldsModel.MacAddress.IsReadOnly
-                      ? Html.TextBoxFor(m => m.CommunicationFieldsModel.MacAddress.Value)
-                      : Html.TextBoxFor(m => m.CommunicationFieldsModel.MacAddress.Value, new { @readonly = true }))
+                @Html.TextBoxFor(m => m.CommunicationFieldsModel.MacAddress.Value)
             </td>
         </tr>
     }

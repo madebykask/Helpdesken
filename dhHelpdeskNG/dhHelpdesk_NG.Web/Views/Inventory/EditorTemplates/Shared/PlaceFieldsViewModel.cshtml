@@ -46,17 +46,7 @@
                 <label>@Translation.Get("Byggnad")</label>
             </td>
             <td class="span9">
-                @if (!Model.Rooms.IsReadOnly)
-                {
-                    @Html.DropDownListFor(m => m.PlaceFieldsModel.BuildingId, Model.Buildings, string.Empty, new { id = "buildings_dropdown" })
-                }
-                else
-                {
-                    @(!Model.PlaceFieldsModel.BuildingId.HasValue 
-                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true }) 
-                        : Html.TextBoxFor(m => m.Buildings.SingleOrDefault(x => x.Value == Model.PlaceFieldsModel.BuildingId.ToString()).Text, new { @readonly = true }))
-                    @Html.HiddenFor(m => m.PlaceFieldsModel.BuildingId)
-                }
+                @Html.DropDownListFor(m => m.PlaceFieldsModel.BuildingId, Model.Buildings, string.Empty, new { id = "buildings_dropdown" })
             </td>
         </tr>
         <tr>
@@ -64,19 +54,7 @@
                 <label>@Translation.Get("Våning")</label>
             </td>
             <td class="span9">
-                @if (!Model.Rooms.IsReadOnly)
-                {
-                    <div id="floor_drop_down_div">
-                        @Html.DropDownListFor(m => m.PlaceFieldsModel.FloorId, Model.Floors, string.Empty, new { id = "floors_dropdown" })
-                    </div>
-                }
-                else
-                {
-                    @(!Model.PlaceFieldsModel.FloorId.HasValue
-                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true })
-                        : Html.TextBoxFor(m => m.Floors.SingleOrDefault(x => x.Value == Model.PlaceFieldsModel.FloorId.ToString()).Text, new { @readonly = true }))
-                    @Html.HiddenFor(m => m.PlaceFieldsModel.FloorId)
-                }
+                @Html.DropDownListFor(m => m.PlaceFieldsModel.FloorId, Model.Floors, string.Empty, new { id = "floors_dropdown" })
             </td>
         </tr>
         <tr>
@@ -84,19 +62,7 @@
                 <label>@Translation.Get(Model.Rooms.Caption)</label>
             </td>
             <td class="span9">
-                @if (!Model.Rooms.IsReadOnly)
-                {
-                    <div id="room_drop_down_div">
-                        @Html.DropDownListFor(m => m.PlaceFieldsModel.RoomId, Model.Rooms.Value, string.Empty, new { id = "rooms_dropdown" })
-                    </div>
-                }
-                else
-                {
-                    @(!Model.PlaceFieldsModel.RoomId.HasValue
-                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true })
-                        : Html.TextBoxFor(m => m.Rooms.Value.SingleOrDefault(x => x.Value == Model.PlaceFieldsModel.RoomId.ToString()).Text, new { @readonly = true }))
-                    @Html.HiddenFor(m => m.PlaceFieldsModel.RoomId)
-                }
+                @Html.DropDownListFor(m => m.PlaceFieldsModel.RoomId, Model.Rooms.Value, string.Empty, new { id = "rooms_dropdown" })
             </td>
         </tr>
     }
@@ -107,9 +73,7 @@
                 <label>@Translation.Get(Model.PlaceFieldsModel.Location.Caption)</label>
             </td>
             <td class="span9">
-                @(!Model.PlaceFieldsModel.Location.IsReadOnly
-                      ? Html.TextBoxFor(m => m.PlaceFieldsModel.Location.Value)
-                      : Html.TextBoxFor(m => m.PlaceFieldsModel.Location.Value, new { @readonly = true }))
+                @Html.TextBoxFor(m => m.PlaceFieldsModel.Location.Value)
             </td>
         </tr>
     }

@@ -16,9 +16,7 @@
                 <label>@Translation.Get(Model.NumberOfTrays.Caption)</label>
             </td>
             <td class="span9">
-                @(!Model.NumberOfTrays.IsReadOnly
-                      ? Html.TextBoxFor(m => m.NumberOfTrays.Value)
-                      : Html.TextBoxFor(m => m.NumberOfTrays.Value, new { @readonly = true }))
+                @Html.TextBoxFor(m => m.NumberOfTrays.Value)
             </td>
         </tr>
     }
@@ -29,9 +27,7 @@
                 <label>@Translation.Get(Model.Driver.Caption)</label>
             </td>
             <td class="span9">
-                @(!Model.Driver.IsReadOnly
-                      ? Html.TextBoxFor(m => m.Driver.Value)
-                      : Html.TextBoxFor(m => m.Driver.Value, new { @readonly = true }))
+                @Html.TextBoxFor(m => m.Driver.Value)
             </td>
         </tr>
     }
@@ -42,9 +38,7 @@
                 <label>@Translation.Get(Model.Info.Caption)</label>
             </td>
             <td class="span9">
-                @(!Model.Info.IsReadOnly
-                      ? Html.TextAreaFor(m => m.Info.Value)
-                      : Html.TextAreaFor(m => m.Info.Value, new { @readonly = true }))
+                @Html.TextAreaFor(m => m.Info.Value)
             </td>
         </tr>
     }
@@ -55,9 +49,7 @@
                 <label>@Translation.Get(Model.URL.Caption)</label>
             </td>
             <td class="span9">
-                @(!Model.URL.IsReadOnly
-                      ? Html.TextBoxFor(m => m.URL.Value)
-                      : Html.TextBoxFor(m => m.URL.Value, new { @readonly = true }))
+                @Html.TextBoxFor(m => m.URL.Value)
             </td>
         </tr>
     }

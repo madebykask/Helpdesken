@@ -17,9 +17,7 @@
                 <label>@Translation.Get(Model.Info.Caption)</label>
             </td>
             <td class="span9">
-                @(!Model.Info.IsReadOnly
-                      ? Html.TextAreaFor(m => m.Info.Value)
-                      : Html.TextAreaFor(m => m.Info.Value, new { @readonly = true }))
+                @Html.TextAreaFor(m => m.Info.Value)
             </td>
         </tr>
     }
@@ -30,9 +28,7 @@
                 <label>@Translation.Get(Model.Other.Caption)</label>
             </td>
             <td class="span9">
-                @(!Model.Other.IsReadOnly
-                      ? Html.TextAreaFor(m => m.Other.Value)
-                      : Html.TextAreaFor(m => m.Other.Value, new { @readonly = true }))
+                @Html.TextAreaFor(m => m.Other.Value)
             </td>
         </tr>
     }
@@ -43,9 +39,7 @@
                 <label>@Translation.Get(Model.URL.Caption)</label>
             </td>
             <td class="span9">
-                @(!Model.URL.IsReadOnly
-                      ? Html.TextBoxFor(m => m.URL.Value)
-                      : Html.TextBoxFor(m => m.URL.Value, new { @readonly = true }))
+                @Html.TextBoxFor(m => m.URL.Value)
             </td>
         </tr>
     }
@@ -56,9 +50,7 @@
                 <label>@Translation.Get(Model.URL2.Caption)</label>
             </td>
             <td class="span9">
-                @(!Model.URL2.IsReadOnly
-                      ? Html.TextBoxFor(m => m.URL2.Value)
-                      : Html.TextBoxFor(m => m.URL2.Value, new { @readonly = true }))
+                @Html.TextBoxFor(m => m.URL2.Value)
             </td>
         </tr>
     }
@@ -69,9 +61,7 @@
                 <label>@Translation.Get(Model.Owner.Caption)</label>
             </td>
             <td class="span9">
-                @(!Model.Owner.IsReadOnly
-                      ? Html.TextBoxFor(m => m.Owner.Value)
-                      : Html.TextBoxFor(m => m.Owner.Value, new { @readonly = true }))
+                @Html.TextBoxFor(m => m.Owner.Value)
             </td>
         </tr>
     }

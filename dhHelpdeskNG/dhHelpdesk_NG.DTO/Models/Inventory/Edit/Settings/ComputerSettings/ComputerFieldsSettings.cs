@@ -3,12 +3,12 @@
     using System;
 
     using DH.Helpdesk.BusinessData.Attributes;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.SharedSettings;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class ComputerFieldsSettings
+    public class ComputerFieldsSettings : BusinessModel
     {
         private ComputerFieldsSettings(
+            ModelStates modelState,
             DateFieldsSettings dateFieldsSettings,
             CommunicationFieldsSettings communicationFieldsSettings,
             ContactFieldsSettings contactFieldsSettings,
@@ -27,6 +27,7 @@
             ProcessorFieldsSettings proccesorFieldsSettings,
             WorkstationFieldsSettings workstationFieldsSettings)
         {
+            this.State = modelState;
             this.DateFieldsSettings = dateFieldsSettings;
             this.CommunicationFieldsSettings = communicationFieldsSettings;
             this.ContactFieldsSettings = contactFieldsSettings;
@@ -131,6 +132,7 @@
             WorkstationFieldsSettings workstationFieldsSettings)
         {
             var businessModel = new ComputerFieldsSettings(
+                ModelStates.Updated,
                 dateFieldsSettings,
                 communicationFieldsSettings,
                 contactFieldsSettings,
@@ -177,6 +179,7 @@
             WorkstationFieldsSettings workstationFieldsSettings)
         {
             var businessModel = new ComputerFieldsSettings(
+                ModelStates.ForEdit,
                 dateFieldsSettings,
                 communicationFieldsSettings,
                 contactFieldsSettings,

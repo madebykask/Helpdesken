@@ -174,7 +174,6 @@
                 fieldSetting.ShowInDetails.ToBool(),
                 fieldSetting.ShowInList.ToBool(),
                 fieldSetting.Caption,
-                fieldSetting.Required.ToBool(),
                 fieldSetting.Required.ToBool());
         }
     }

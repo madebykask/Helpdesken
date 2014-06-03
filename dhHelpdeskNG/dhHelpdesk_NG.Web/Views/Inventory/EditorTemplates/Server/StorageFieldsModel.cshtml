@@ -10,9 +10,7 @@
                 <label>@Translation.Get(Model.Capasity.Caption)</label>
             </td>
             <td class="span9">
-                @(!Model.Capasity.IsReadOnly
-                ? Html.TextAreaFor(m => m.Capasity.Value)
-                : Html.TextAreaFor(m => m.Capasity.Value, new { @readonly = true }))
+                @Html.TextAreaFor(m => m.Capasity.Value)
             </td>
         </tr>
     }

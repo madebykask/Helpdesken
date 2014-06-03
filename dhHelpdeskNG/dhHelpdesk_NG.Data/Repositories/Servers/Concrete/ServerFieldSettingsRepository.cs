@@ -27,8 +27,6 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
 
     public class ServerFieldSettingsRepository : Repository<ServerFieldSettings>, IServerFieldSettingsRepository
     {
-        private const int IsReadOnlyInt = 0; // tblPrinter doesn't contain readonly field.
-
         private readonly IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, ServerFieldsSettingsOverview> entityToBusinessModelMapperForOverview;
 
         private readonly IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperDataForModelEdit>, ServerFieldsSettingsForModelEdit> entityToBusinessModelMapperForModelEdit;
@@ -83,7 +81,6 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
                                 FieldName = s.ServerField,
                                 ShowInList = s.ShowInList,
                                 ShowInDetails = s.Show,
-                                ReadOnly = IsReadOnlyInt,
                                 Required = s.Required
                             }).ToList();
                     break;
@@ -97,7 +94,6 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
                                 FieldName = s.ServerField,
                                 ShowInList = s.ShowInList,
                                 ShowInDetails = s.Show,
-                                ReadOnly = IsReadOnlyInt,
                                 Required = s.Required,
                             }).ToList();
                     break;
@@ -126,7 +122,6 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
                                 Caption = s.Label,
                                 FieldName = s.ServerField,
                                 Show = s.Show,
-                                ReadOnly = IsReadOnlyInt,
                                 Required = s.Required
                             }).ToList();
                     break;
@@ -139,7 +134,6 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
                                 Caption = s.Label_ENG,
                                 FieldName = s.ServerField,
                                 Show = s.Show,
-                                ReadOnly = IsReadOnlyInt,
                                 Required = s.Required,
                             }).ToList();
                     break;

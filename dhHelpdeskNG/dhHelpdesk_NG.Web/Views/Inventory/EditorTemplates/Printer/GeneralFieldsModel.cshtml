@@ -16,9 +16,7 @@
                 <label>@Translation.Get(Model.Name.Caption)</label>
             </td>
             <td class="span9">
-                @(!Model.Name.IsReadOnly
-                      ? Html.TextBoxFor(m => m.Name.Value)
-                      : Html.TextBoxFor(m => m.Name.Value, new { @readonly = true }))
+                @Html.TextBoxFor(m => m.Name.Value)
             </td>
         </tr>
     }
@@ -29,9 +27,7 @@
                 <label>@Translation.Get(Model.Manufacturer.Caption)</label>
             </td>
             <td class="span9">
-                @(!Model.Manufacturer.IsReadOnly
-                      ? Html.TextBoxFor(m => m.Manufacturer.Value)
-                      : Html.TextBoxFor(m => m.Manufacturer.Value, new { @readonly = true }))
+                @Html.TextBoxFor(m => m.Manufacturer.Value)
             </td>
         </tr>
     }
@@ -42,9 +38,7 @@
                 <label>@Translation.Get(Model.Model.Caption)</label>
             </td>
             <td class="span9">
-                @(!Model.Model.IsReadOnly
-                      ? Html.TextBoxFor(m => m.Model.Value)
-                      : Html.TextBoxFor(m => m.Model.Value, new { @readonly = true }))
+                @Html.TextBoxFor(m => m.Model.Value)
             </td>
         </tr>
     }
@@ -55,9 +49,7 @@
                 <label>@Translation.Get(Model.SerialNumber.Caption)</label>
             </td>
             <td class="span9">
-                @(!Model.SerialNumber.IsReadOnly
-                      ? Html.TextBoxFor(m => m.SerialNumber.Value)
-                      : Html.TextBoxFor(m => m.SerialNumber.Value, new { @readonly = true }))
+                @Html.TextBoxFor(m => m.SerialNumber.Value)
             </td>
         </tr>
     }

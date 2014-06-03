@@ -10,9 +10,7 @@
                 <label>@Translation.Get(Model.BarCode.Caption)</label>
             </td>
             <td class="span9">
-                @(!Model.BarCode.IsReadOnly
-                ? Html.TextBoxFor(m => m.BarCode.Value)
-                : Html.TextBoxFor(m => m.BarCode.Value, new { @readonly = true }))
+                @Html.TextBoxFor(m => m.BarCode.Value)
             </td>
         </tr>
     }
@@ -23,9 +21,7 @@
                 <label>@Translation.Get(Model.PurchaseDate.Caption)</label>
             </td>
             <td class="span9">
-                @(!Model.PurchaseDate.IsReadOnly 
-                    ? Html.EditorFor(m => m.PurchaseDate.Value, "DatePicker", new { id = "purchasedate_datepicker" }) 
-                    : Html.DisplayFor(m => m.PurchaseDate.Value, "Date"))
+                @Html.EditorFor(m => m.PurchaseDate.Value, "DatePicker", new { id = "purchasedate_datepicker" })
             </td>
         </tr>
     }

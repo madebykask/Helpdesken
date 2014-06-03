@@ -1,6 +1,5 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ComputerSettings
 {
-    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.SharedSettings;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public class ComputerFieldsSettingsForModelEdit

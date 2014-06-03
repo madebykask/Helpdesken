@@ -1,8 +1,6 @@
 ﻿namespace DH.Helpdesk.Dal.Mappers.Inventory.EntityToBusinessModel.Computer
 {
-    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.SharedSettings;
     using DH.Helpdesk.Common.Collections;
     using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Dal.Enums.Inventory.Computer;
@@ -10,6 +8,7 @@
     using DH.Helpdesk.Dal.MapperData.Inventory;
 
     using CommunicationFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings.CommunicationFieldsSettings;
+    using FieldSetting = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings.FieldSetting;
     using PlaceFields = DH.Helpdesk.Dal.Enums.Inventory.Computer.PlaceFields;
     using PlaceFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings.PlaceFieldsSettings;
 
@@ -292,7 +291,7 @@
                 fieldSetting.ShowInDetails.ToBool(),
                 fieldSetting.ShowInList.ToBool(),
                 fieldSetting.Caption,
-                fieldSetting.Required.ToBool(),
+                fieldSetting.ReadOnly.ToBool(),
                 fieldSetting.Required.ToBool());
         }
     }

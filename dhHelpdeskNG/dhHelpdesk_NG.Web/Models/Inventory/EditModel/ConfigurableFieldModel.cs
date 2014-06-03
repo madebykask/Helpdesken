@@ -9,13 +9,12 @@
         {
         }
 
-        public ConfigurableFieldModel(string caption, TValue value, bool isRequired, bool isReadOnly)
+        public ConfigurableFieldModel(string caption, TValue value, bool isRequired)
         {
             this.Show = true;
             this.Caption = caption;
             this.Value = value;
             this.IsRequired = isRequired;
-            this.IsReadOnly = isReadOnly;
         }
 
         public bool Show { get; set; }
@@ -27,8 +26,6 @@
         public TValue Value { get; set; }
 
         public bool IsRequired { get; set; }
-
-        public bool IsReadOnly { get; set; }
 
         public static ConfigurableFieldModel<TValue> CreateUnshowable()
         {

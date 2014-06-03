@@ -10,9 +10,7 @@
                 <label>@Translation.Get(Model.Chassis.Caption)</label>
             </td>
             <td class="span9">
-                @(!Model.Chassis.IsReadOnly
-                ? Html.TextBoxFor(m => m.Chassis.Value)
-                : Html.TextBoxFor(m => m.Chassis.Value, new { @readonly = true }))
+                @Html.TextBoxFor(m => m.Chassis.Value)
             </td>
         </tr>
     }

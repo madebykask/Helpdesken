@@ -15,9 +15,7 @@
                 <label>@Translation.Get(Model.NetworkAdapterName.Caption)</label>
             </td>
             <td class="span9">
-                @(!Model.NetworkAdapterName.IsReadOnly
-                      ? Html.TextBoxFor(m => m.NetworkAdapterName.Value)
-                      : Html.TextBoxFor(m => m.NetworkAdapterName.Value, new { @readonly = true }))
+                @Html.TextBoxFor(m => m.NetworkAdapterName.Value)
             </td>
         </tr>
     }
@@ -28,9 +26,7 @@
                 <label>@Translation.Get(Model.IPAddress.Caption)</label>
             </td>
             <td class="span9">
-                @(!Model.IPAddress.IsReadOnly
-                      ? Html.TextBoxFor(m => m.IPAddress.Value)
-                      : Html.TextBoxFor(m => m.IPAddress.Value, new { @readonly = true }))
+                @Html.TextBoxFor(m => m.IPAddress.Value)
             </td>
         </tr>
     }
@@ -41,9 +37,7 @@
                 <label>@Translation.Get(Model.MacAddress.Caption)</label>
             </td>
             <td class="span9">
-                @(!Model.MacAddress.IsReadOnly
-                      ? Html.TextBoxFor(m => m.MacAddress.Value)
-                      : Html.TextBoxFor(m => m.MacAddress.Value, new { @readonly = true }))
+                @Html.TextBoxFor(m => m.MacAddress.Value)
             </td>
         </tr>
     }

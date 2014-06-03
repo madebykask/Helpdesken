@@ -1,0 +1,20 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.ChassisFieldsModel
+<table class="tableform">
+    @if (Model.Chassis.Show)
+    {
+        <tr>
+            <th colspan="2" class="header">@Translation.Get("Chassis")</th>
+        </tr>
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Chassis.Caption)</label>
+            </td>
+            <td class="span9">
+                @(!Model.Chassis.IsReadOnly
+                ? Html.TextBoxFor(m => m.Chassis.Value)
+                : Html.TextBoxFor(m => m.Chassis.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+</table>
+

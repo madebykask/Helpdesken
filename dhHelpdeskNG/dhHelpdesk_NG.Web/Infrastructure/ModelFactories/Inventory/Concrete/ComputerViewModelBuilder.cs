@@ -1,69 +1,75 @@
 namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 {
+    using System;
+    using System.Collections.Generic;
     using System.Globalization;
+    using System.Linq;
+    using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ComputerSettings;
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.Web.Infrastructure.Extensions;
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Computer;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Shared;
     using DH.Helpdesk.Web.Models.Inventory.OptionsAggregates;
 
+    using ChassisFieldsModel = DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.ChassisFieldsModel;
+    using InventoryFieldsModel = DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.InventoryFieldsModel;
+    using MemoryFieldsModel = DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.MemoryFieldsModel;
+    using MemoryFieldsViewModel = DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.MemoryFieldsViewModel;
+    using OperatingSystemFieldsModel = DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.OperatingSystemFieldsModel;
+    using OperatingSystemFieldsViewModel = DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.OperatingSystemFieldsViewModel;
     using PlaceFieldsModel = DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.PlaceFieldsModel;
     using PlaceFieldsViewModel = DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.PlaceFieldsViewModel;
+    using ProccesorFieldsModel = DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.ProccesorFieldsModel;
+    using ProccesorFieldsViewModel = DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.ProccesorFieldsViewModel;
 
     public class ComputerViewModelBuilder : IComputerViewModelBuilder
     {
-        private readonly IConfigurableFieldModelBuilder configurableFieldModelBuilder;
-
-        public ComputerViewModelBuilder(IConfigurableFieldModelBuilder configurableFieldModelBuilder)
-        {
-            this.configurableFieldModelBuilder = configurableFieldModelBuilder;
-        }
-
         public ComputerViewModel BuildViewModel(
             BusinessData.Models.Inventory.Edit.Computer.Computer model,
             ComputerEditOptions options,
             ComputerFieldsSettingsForModelEdit settings)
         {
             var createdDate =
-                this.configurableFieldModelBuilder.CreateDateTimeField(
+                CreateDateTimeField(
                     settings.DateFieldsSettings.CreatedDateFieldSetting,
                     model.CreatedDate);
             var changedDate =
-                this.configurableFieldModelBuilder.CreateDateTimeField(
+                CreateDateTimeField(
                     settings.DateFieldsSettings.ChangedDateFieldSetting,
                     model.ChangedDate);
 
             var name =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.WorkstationFieldsSettings.ComputerNameFieldSetting,
                     model.WorkstationFields.ComputerName);
             var manufacturer =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.WorkstationFieldsSettings.ManufacturerFieldSetting,
                     model.WorkstationFields.Manufacturer);
             var serial =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.WorkstationFieldsSettings.SerialNumberFieldSetting,
                     model.WorkstationFields.SerialNumber);
             var biosVersion =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.WorkstationFieldsSettings.BIOSVersionFieldSetting,
                     model.WorkstationFields.BIOSVersion);
             var biosDate =
-                this.configurableFieldModelBuilder.CreateNullableDateTimeField(
+                CreateNullableDateTimeField(
                     settings.WorkstationFieldsSettings.BIOSDateFieldSetting,
                     model.WorkstationFields.BIOSDate);
             var theftMark =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.WorkstationFieldsSettings.TheftmarkFieldSetting,
                     model.WorkstationFields.Theftmark);
             var carePackNumber =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.WorkstationFieldsSettings.CarePackNumberFieldSetting,
                     model.WorkstationFields.CarePackNumber);
             var location =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.WorkstationFieldsSettings.LocationFieldSetting,
                     model.WorkstationFields.Location);
 
@@ -79,12 +85,12 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 model.WorkstationFields.ComputerTypeId,
                 location);
             var computerModels =
-                this.configurableFieldModelBuilder.CreateSelectListField(
+                CreateSelectListField(
                     settings.WorkstationFieldsSettings.ComputerModelFieldSetting,
                     options.ComputerModels,
                     model.WorkstationFields.ComputerModelId.ToString());
             var computerTypes =
-                this.configurableFieldModelBuilder.CreateSelectListField(
+                CreateSelectListField(
                     settings.WorkstationFieldsSettings.ComputerTypeFieldSetting,
                     options.ComputerTypes,
                     model.WorkstationFields.ComputerTypeId.ToString());
@@ -96,7 +102,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
             var proccesorFieldsModel = new ProccesorFieldsModel(model.ProccesorFields.ProccesorId);
             var processors =
-                this.configurableFieldModelBuilder.CreateSelectListField(
+                CreateSelectListField(
                     settings.ProccesorFieldsSettings.ProccesorFieldSetting,
                     options.Processors,
                     model.ProccesorFields.ProccesorId.ToString());
@@ -108,17 +114,17 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 model.OrganizationFields.DomainId,
                 model.OrganizationFields.UnitId);
             var departments =
-                this.configurableFieldModelBuilder.CreateSelectListField(
+                CreateSelectListField(
                     settings.OrganizationFieldsSettings.DepartmentFieldSetting,
                     options.Departments,
                     model.OrganizationFields.DepartmentId.ToString());
             var domains =
-                this.configurableFieldModelBuilder.CreateSelectListField(
+                CreateSelectListField(
                     settings.OrganizationFieldsSettings.DomainFieldSetting,
                     options.Domains,
                     model.OrganizationFields.DomainId.ToString());
             var ous =
-                this.configurableFieldModelBuilder.CreateSelectListField(
+                CreateSelectListField(
                     settings.OrganizationFieldsSettings.UnitFieldSetting,
                     options.Units,
                     model.OrganizationFields.UnitId.ToString());
@@ -130,19 +136,19 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 ous);
 
             var version =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.OperatingSystemFieldsSettings.VersionFieldSetting,
                     model.OperatingSystemFields.Version);
             var servicePack =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.OperatingSystemFieldsSettings.ServicePackSystemFieldSetting,
                     model.OperatingSystemFields.ServicePack);
             var registratinCode =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.OperatingSystemFieldsSettings.RegistrationCodeSystemFieldSetting,
                     model.OperatingSystemFields.RegistrationCode);
             var productKey =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.OperatingSystemFieldsSettings.ProductKeyFieldSetting,
                     model.OperatingSystemFields.ProductKey);
 
@@ -154,7 +160,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                     registratinCode,
                     productKey);
             var operatingSystems =
-                this.configurableFieldModelBuilder.CreateSelectListField(
+                CreateSelectListField(
                     settings.OperatingSystemFieldsSettings.OperatingSystemFieldSetting,
                     options.OperatingSystems,
                     model.OperatingSystemFields.OperatingSystemId.ToString());
@@ -165,7 +171,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
             var memoryFieldsModel = new MemoryFieldsModel(model.MemoryFields.RAMId);
             var memories =
-                this.configurableFieldModelBuilder.CreateSelectListField(
+                CreateSelectListField(
                     settings.MemoryFieldsSettings.RAMFieldSetting,
                     options.Rams,
                     model.MemoryFields.RAMId.ToString());
@@ -173,44 +179,44 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             var memoryViewModel = new MemoryFieldsViewModel(memoryFieldsModel, memories);
 
             var barCode =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.InventoryFieldsSettings.BarCodeFieldSetting,
                     model.InventoryFields.BarCode);
             var purchaseDate =
-                this.configurableFieldModelBuilder.CreateNullableDateTimeField(
+                CreateNullableDateTimeField(
                     settings.InventoryFieldsSettings.PurchaseDateFieldSetting,
                     model.InventoryFields.PurchaseDate);
 
             var inventoryFieldModel = new InventoryFieldsModel(barCode, purchaseDate);
 
             var chassis =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.ChassisFieldsSettings.ChassisFieldSetting,
                     model.ChassisFields.Chassis);
 
             var chassisFieldModel = new ChassisFieldsModel(chassis);
 
             var stolen =
-                this.configurableFieldModelBuilder.CreateBooleanField(
+                CreateBooleanField(
                     settings.StateFieldsSettings.StolenFieldSetting,
                     model.StateFields.IsStolen);
             var replaced =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.StateFieldsSettings.ReplacedWithFieldSetting,
                     model.StateFields.Replaced);
             var sendBack =
-                this.configurableFieldModelBuilder.CreateBooleanField(
+                CreateBooleanField(
                     settings.StateFieldsSettings.SendBackFieldSetting,
                     model.StateFields.IsSendBack);
             var scrapDate =
-                this.configurableFieldModelBuilder.CreateNullableDateTimeField(
+                CreateNullableDateTimeField(
                     settings.StateFieldsSettings.ScrapDateFieldSetting,
                     model.StateFields.ScrapDate);
 
             var stateFieldsModel = new StateFieldsModel(model.StateFields.State, stolen, replaced, sendBack, scrapDate);
 
             var statuses =
-                this.configurableFieldModelBuilder.CreateSelectListField(
+                CreateSelectListField(
                     settings.StateFieldsSettings.StateFieldSetting,
                     new ComputerStatuses(),
                     model.StateFields.State.ToString(CultureInfo.InvariantCulture));
@@ -218,30 +224,30 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             var stateViewModel = new StateFieldsViewModel(stateFieldsModel, statuses);
 
             var sound =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.SoundFieldsSettings.SoundCardFieldSetting,
                     model.SoundFields.SoundCard);
 
             var soundFieldModel = new SoundFieldsModel(sound);
 
             var address =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.PlaceFieldsSettings.AddressFieldSetting,
                     model.PlaceFields.Address);
             var postalCode =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.PlaceFieldsSettings.PostalCodeFieldSetting,
                     model.PlaceFields.PostalCode);
             var postalAddress =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.PlaceFieldsSettings.PostalAddressFieldSetting,
                     model.PlaceFields.PostalAddress);
             var location1 =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.PlaceFieldsSettings.PlaceFieldSetting,
                     model.PlaceFields.Location);
             var location2 =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.PlaceFieldsSettings.Place2FieldSetting,
                     model.PlaceFields.Location2);
 
@@ -255,69 +261,69 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 location1,
                 location2);
 
-            var buildings = this.configurableFieldModelBuilder.CreateSelectList(
+            var buildings = CreateSelectList(
                 settings.PlaceFieldsSettings.RoomFieldSetting,
                 options.Buildings,
                 model.PlaceFields.BuildingId.ToString());
-            var floors = this.configurableFieldModelBuilder.CreateSelectList(
+            var floors = CreateSelectList(
                 settings.PlaceFieldsSettings.RoomFieldSetting,
                 options.Floors,
                 model.PlaceFields.FloorId.ToString());
             var rooms =
-                this.configurableFieldModelBuilder.CreateSelectListField(
+                CreateSelectListField(
                     settings.PlaceFieldsSettings.RoomFieldSetting,
                     options.Rooms,
                     model.PlaceFields.RoomId.ToString());
 
             var placeFieldsViewModel = new PlaceFieldsViewModel(placeFieldsModel, buildings, floors, rooms);
 
-            var other = this.configurableFieldModelBuilder.CreateStringField(
+            var other = CreateStringField(
                 settings.OtherFieldsSettings.InfoFieldSetting,
                 model.OtherFields.Info);
 
             var otherFieldModel = new OtherFieldsModel(other);
 
             var graphics =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.GraphicsFieldsSettings.VideoCardFieldSetting,
                     model.GraphicsFields.VideoCard);
 
             var graphicsFieldModel = new GraphicsFieldsModel(graphics);
 
             var contractNumber =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.ContractFieldsSettings.ContractNumberFieldSetting,
                     model.ContractFields.ContractNumber);
             var contractStartDate =
-                this.configurableFieldModelBuilder.CreateNullableDateTimeField(
+                CreateNullableDateTimeField(
                     settings.ContractFieldsSettings.ContractStartDateFieldSetting,
                     model.ContractFields.ContractStartDate);
             var contractEndDate =
-                this.configurableFieldModelBuilder.CreateNullableDateTimeField(
+                CreateNullableDateTimeField(
                     settings.ContractFieldsSettings.ContractEndDateFieldSetting,
                     model.ContractFields.ContractEndDate);
             var price =
-                this.configurableFieldModelBuilder.CreateIntegerField(
+                CreateIntegerField(
                     settings.ContractFieldsSettings.PurchasePriceFieldSetting,
                     model.ContractFields.PurchasePrice);
             var accounting1 =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.ContractFieldsSettings.AccountingDimension1FieldSetting,
                     model.ContractFields.AccountingDimension1);
             var accounting2 =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.ContractFieldsSettings.AccountingDimension2FieldSetting,
                     model.ContractFields.AccountingDimension2);
             var accounting3 =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.ContractFieldsSettings.AccountingDimension3FieldSetting,
                     model.ContractFields.AccountingDimension3);
             var accounting4 =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.ContractFieldsSettings.AccountingDimension4FieldSetting,
                     model.ContractFields.AccountingDimension4);
             var accounting5 =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.ContractFieldsSettings.AccountingDimension5FieldSetting,
                     model.ContractFields.AccountingDimension5);
 
@@ -334,7 +340,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 accounting5);
 
             var contractStatuses =
-                this.configurableFieldModelBuilder.CreateSelectListField(
+                CreateSelectListField(
                     settings.StateFieldsSettings.StateFieldSetting,
                     new ContractStatuses(),
                     model.ContractFields.ContractStatusId.ToString());
@@ -342,34 +348,34 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             var contractViewModel = new ContractFieldsViewModel(contractFieldsModel, contractStatuses);
 
             var contactName =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.ContactFieldsSettings.NameFieldSetting,
                     model.ContactFields.Name);
             var contactPhone =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.ContactFieldsSettings.PhoneFieldSetting,
                     model.ContactFields.Phone);
             var contactEmail =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.ContactFieldsSettings.EmailFieldSetting,
                     model.ContactFields.Email);
 
             var contactFieldsModel = new ContactFieldsModel(contactName, contactPhone, contactEmail);
 
             var ip =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.CommunicationFieldsSettings.IPAddressFieldSetting,
                     model.CommunicationFields.IPAddress);
             var mac =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.CommunicationFieldsSettings.MacAddressFieldSetting,
                     model.CommunicationFields.MacAddress);
             var ras =
-                this.configurableFieldModelBuilder.CreateBooleanField(
+                CreateBooleanField(
                     settings.CommunicationFieldsSettings.RASFieldSetting,
                     model.CommunicationFields.IsRAS);
             var client =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.CommunicationFieldsSettings.NovellClientFieldSetting,
                     model.CommunicationFields.NovellClient);
 
@@ -381,7 +387,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 client);
 
             var adapters =
-                this.configurableFieldModelBuilder.CreateSelectListField(
+                CreateSelectListField(
                     settings.CommunicationFieldsSettings.NetworkAdapterFieldSetting,
                     options.NetworkAdapters,
                     model.CommunicationFields.NetworkAdapterId.ToString());
@@ -389,22 +395,22 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             var communicationViewModel = new CommunicationFieldsViewModel(communicationFieldsModel, adapters);
 
             var syncDate =
-                this.configurableFieldModelBuilder.CreateNullableDateTimeField(
+                CreateNullableDateTimeField(
                     settings.DateFieldsSettings.SyncChangedDateSetting,
                     model.DateFields.SynchronizeDate);
             var scanDate =
-                this.configurableFieldModelBuilder.CreateNullableDateTimeField(
+                CreateNullableDateTimeField(
                     settings.DateFieldsSettings.ScanDateFieldSetting,
                     model.DateFields.ScanDate);
             var path =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.DateFieldsSettings.PathDirectoryFieldSetting,
                     model.DateFields.PathDirectory);
 
             var dateFieldsModel = new DateFieldsModel(syncDate, scanDate, path);
 
             var userStringId =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.ContactInformationFieldsSettings.UserIdFieldSetting,
                     model.ContactInformationFields.UserStringId);
 
@@ -445,28 +451,28 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             ComputerFieldsSettingsForModelEdit settings,
             int currentCustomerId)
         {
-            var name = this.configurableFieldModelBuilder.CreateStringField(
+            var name = CreateStringField(
                 settings.WorkstationFieldsSettings.ComputerNameFieldSetting,
                 null);
-            var manufacturer = this.configurableFieldModelBuilder.CreateStringField(
+            var manufacturer = CreateStringField(
                 settings.WorkstationFieldsSettings.ManufacturerFieldSetting,
                 null);
-            var serial = this.configurableFieldModelBuilder.CreateStringField(
+            var serial = CreateStringField(
                 settings.WorkstationFieldsSettings.SerialNumberFieldSetting,
                 null);
-            var biosVersion = this.configurableFieldModelBuilder.CreateStringField(
+            var biosVersion = CreateStringField(
                 settings.WorkstationFieldsSettings.BIOSVersionFieldSetting,
                 null);
-            var biosDate = this.configurableFieldModelBuilder.CreateNullableDateTimeField(
+            var biosDate = CreateNullableDateTimeField(
                 settings.WorkstationFieldsSettings.BIOSDateFieldSetting,
                 null);
-            var theftMark = this.configurableFieldModelBuilder.CreateStringField(
+            var theftMark = CreateStringField(
                 settings.WorkstationFieldsSettings.TheftmarkFieldSetting,
                 null);
-            var carePackNumber = this.configurableFieldModelBuilder.CreateStringField(
+            var carePackNumber = CreateStringField(
                 settings.WorkstationFieldsSettings.CarePackNumberFieldSetting,
                 null);
-            var location = this.configurableFieldModelBuilder.CreateStringField(
+            var location = CreateStringField(
                 settings.WorkstationFieldsSettings.LocationFieldSetting,
                 null);
 
@@ -481,11 +487,11 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 carePackNumber,
                 null,
                 location);
-            var computerTypes = this.configurableFieldModelBuilder.CreateSelectListField(
+            var computerTypes = CreateSelectListField(
                 settings.WorkstationFieldsSettings.ComputerTypeFieldSetting,
                 options.ComputerTypes,
                 null);
-            var computerModels = this.configurableFieldModelBuilder.CreateSelectListField(
+            var computerModels = CreateSelectListField(
                 settings.WorkstationFieldsSettings.ComputerModelFieldSetting,
                 options.ComputerModels,
                 null);
@@ -496,7 +502,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 computerModels);
 
             var proccesorFieldsModel = new ProccesorFieldsModel(null);
-            var processors = this.configurableFieldModelBuilder.CreateSelectListField(
+            var processors = CreateSelectListField(
                 settings.ProccesorFieldsSettings.ProccesorFieldSetting,
                 options.Processors,
                 null);
@@ -507,15 +513,15 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 null,
                 null,
                 null);
-            var departments = this.configurableFieldModelBuilder.CreateSelectListField(
+            var departments = CreateSelectListField(
                 settings.OrganizationFieldsSettings.DepartmentFieldSetting,
                 options.Departments,
                 null);
-            var domains = this.configurableFieldModelBuilder.CreateSelectListField(
+            var domains = CreateSelectListField(
                 settings.OrganizationFieldsSettings.DomainFieldSetting,
                 options.Domains,
                 null);
-            var ous = this.configurableFieldModelBuilder.CreateSelectListField(
+            var ous = CreateSelectListField(
                 settings.OrganizationFieldsSettings.UnitFieldSetting,
                 options.Units,
                 null);
@@ -526,17 +532,17 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 domains,
                 ous);
 
-            var version = this.configurableFieldModelBuilder.CreateStringField(
+            var version = CreateStringField(
                 settings.OperatingSystemFieldsSettings.VersionFieldSetting,
                 null);
-            var servicePack = this.configurableFieldModelBuilder.CreateStringField(
+            var servicePack = CreateStringField(
                 settings.OperatingSystemFieldsSettings.ServicePackSystemFieldSetting,
                 null);
             var registratinCode =
-                this.configurableFieldModelBuilder.CreateStringField(
+                CreateStringField(
                     settings.OperatingSystemFieldsSettings.RegistrationCodeSystemFieldSetting,
                     null);
-            var productKey = this.configurableFieldModelBuilder.CreateStringField(
+            var productKey = CreateStringField(
                 settings.OperatingSystemFieldsSettings.ProductKeyFieldSetting,
                 null);
 
@@ -548,7 +554,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                     registratinCode,
                     productKey);
             var operatingSystems =
-                this.configurableFieldModelBuilder.CreateSelectListField(
+                CreateSelectListField(
                     settings.OperatingSystemFieldsSettings.OperatingSystemFieldSetting,
                     options.OperatingSystems,
                     null);
@@ -558,65 +564,65 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 operatingSystems);
 
             var memoryFieldsModel = new MemoryFieldsModel(null);
-            var memories = this.configurableFieldModelBuilder.CreateSelectListField(
+            var memories = CreateSelectListField(
                 settings.MemoryFieldsSettings.RAMFieldSetting,
                 options.Rams,
                 null);
 
             var memoryViewModel = new MemoryFieldsViewModel(memoryFieldsModel, memories);
 
-            var barCode = this.configurableFieldModelBuilder.CreateStringField(
+            var barCode = CreateStringField(
                 settings.InventoryFieldsSettings.BarCodeFieldSetting,
                 null);
-            var purchaseDate = this.configurableFieldModelBuilder.CreateNullableDateTimeField(
+            var purchaseDate = CreateNullableDateTimeField(
                 settings.InventoryFieldsSettings.PurchaseDateFieldSetting,
                 null);
 
             var inventoryFieldModel = new InventoryFieldsModel(barCode, purchaseDate);
 
-            var chassis = this.configurableFieldModelBuilder.CreateStringField(
+            var chassis = CreateStringField(
                 settings.ChassisFieldsSettings.ChassisFieldSetting,
                 null);
 
             var chassisFieldModel = new ChassisFieldsModel(chassis);
 
-            var stolen = this.configurableFieldModelBuilder.CreateBooleanField(settings.StateFieldsSettings.StolenFieldSetting, false);
-            var replaced = this.configurableFieldModelBuilder.CreateStringField(
+            var stolen = CreateBooleanField(settings.StateFieldsSettings.StolenFieldSetting, false);
+            var replaced = CreateStringField(
                 settings.StateFieldsSettings.ReplacedWithFieldSetting,
                 null);
-            var sendBack = this.configurableFieldModelBuilder.CreateBooleanField(
+            var sendBack = CreateBooleanField(
                 settings.StateFieldsSettings.SendBackFieldSetting,
                 false);
-            var scrapDate = this.configurableFieldModelBuilder.CreateNullableDateTimeField(
+            var scrapDate = CreateNullableDateTimeField(
                 settings.StateFieldsSettings.ScrapDateFieldSetting,
                 null);
 
             var stateFieldsModel = new StateFieldsModel(0, stolen, replaced, sendBack, scrapDate);
 
-            var statuses = this.configurableFieldModelBuilder.CreateSelectListField(
+            var statuses = CreateSelectListField(
                 settings.StateFieldsSettings.StateFieldSetting,
                 new ComputerStatuses(),
                 null);
 
             var stateViewModel = new StateFieldsViewModel(stateFieldsModel, statuses);
 
-            var sound = this.configurableFieldModelBuilder.CreateStringField(
+            var sound = CreateStringField(
                 settings.SoundFieldsSettings.SoundCardFieldSetting,
                 null);
 
             var soundFieldModel = new SoundFieldsModel(sound);
 
-            var address = this.configurableFieldModelBuilder.CreateStringField(settings.PlaceFieldsSettings.AddressFieldSetting, null);
-            var postalCode = this.configurableFieldModelBuilder.CreateStringField(
+            var address = CreateStringField(settings.PlaceFieldsSettings.AddressFieldSetting, null);
+            var postalCode = CreateStringField(
                 settings.PlaceFieldsSettings.PostalCodeFieldSetting,
                 null);
-            var postalAddress = this.configurableFieldModelBuilder.CreateStringField(
+            var postalAddress = CreateStringField(
                 settings.PlaceFieldsSettings.PostalAddressFieldSetting,
                 null);
-            var location1 = this.configurableFieldModelBuilder.CreateStringField(
+            var location1 = CreateStringField(
                 settings.PlaceFieldsSettings.PlaceFieldSetting,
                 null);
-            var location2 = this.configurableFieldModelBuilder.CreateStringField(
+            var location2 = CreateStringField(
                 settings.PlaceFieldsSettings.Place2FieldSetting,
                 null);
 
@@ -630,58 +636,58 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 location1,
                 location2);
 
-            var buildings = this.configurableFieldModelBuilder.CreateSelectList(
+            var buildings = CreateSelectList(
                 settings.PlaceFieldsSettings.RoomFieldSetting,
                 options.Buildings,
                 null);
-            var floors = this.configurableFieldModelBuilder.CreateSelectList(
+            var floors = CreateSelectList(
                 settings.PlaceFieldsSettings.RoomFieldSetting,
                 options.Floors,
                 null);
-            var rooms = this.configurableFieldModelBuilder.CreateSelectListField(
+            var rooms = CreateSelectListField(
                 settings.PlaceFieldsSettings.RoomFieldSetting,
                 options.Rooms,
                 null);
 
             var placeFieldsViewModel = new PlaceFieldsViewModel(placeFieldsModel, buildings, floors, rooms);
 
-            var other = this.configurableFieldModelBuilder.CreateStringField(settings.OtherFieldsSettings.InfoFieldSetting, null);
+            var other = CreateStringField(settings.OtherFieldsSettings.InfoFieldSetting, null);
 
             var otherFieldModel = new OtherFieldsModel(other);
 
-            var graphics = this.configurableFieldModelBuilder.CreateStringField(
+            var graphics = CreateStringField(
                 settings.GraphicsFieldsSettings.VideoCardFieldSetting,
                 null);
 
             var graphicsFieldModel = new GraphicsFieldsModel(graphics);
 
-            var contractNumber = this.configurableFieldModelBuilder.CreateStringField(
+            var contractNumber = CreateStringField(
                 settings.ContractFieldsSettings.ContractNumberFieldSetting,
                 null);
             var contractStartDate =
-                this.configurableFieldModelBuilder.CreateNullableDateTimeField(
+                CreateNullableDateTimeField(
                     settings.ContractFieldsSettings.ContractStartDateFieldSetting,
                     null);
             var contractEndDate =
-                this.configurableFieldModelBuilder.CreateNullableDateTimeField(
+                CreateNullableDateTimeField(
                     settings.ContractFieldsSettings.ContractEndDateFieldSetting,
                     null);
-            var price = this.configurableFieldModelBuilder.CreateIntegerField(
+            var price = CreateIntegerField(
                 settings.ContractFieldsSettings.PurchasePriceFieldSetting,
                 0);
-            var accounting1 = this.configurableFieldModelBuilder.CreateStringField(
+            var accounting1 = CreateStringField(
                 settings.ContractFieldsSettings.AccountingDimension1FieldSetting,
                 null);
-            var accounting2 = this.configurableFieldModelBuilder.CreateStringField(
+            var accounting2 = CreateStringField(
                 settings.ContractFieldsSettings.AccountingDimension2FieldSetting,
                 null);
-            var accounting3 = this.configurableFieldModelBuilder.CreateStringField(
+            var accounting3 = CreateStringField(
                 settings.ContractFieldsSettings.AccountingDimension3FieldSetting,
                 null);
-            var accounting4 = this.configurableFieldModelBuilder.CreateStringField(
+            var accounting4 = CreateStringField(
                 settings.ContractFieldsSettings.AccountingDimension4FieldSetting,
                 null);
-            var accounting5 = this.configurableFieldModelBuilder.CreateStringField(
+            var accounting5 = CreateStringField(
                 settings.ContractFieldsSettings.AccountingDimension5FieldSetting,
                 null);
 
@@ -697,35 +703,35 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 accounting4,
                 accounting5);
 
-            var contractStatuses = this.configurableFieldModelBuilder.CreateSelectListField(
+            var contractStatuses = CreateSelectListField(
                 settings.StateFieldsSettings.StateFieldSetting,
                 new ContractStatuses(),
                 null);
 
             var contractViewModel = new ContractFieldsViewModel(contractFieldsModel, contractStatuses);
 
-            var contactName = this.configurableFieldModelBuilder.CreateStringField(
+            var contactName = CreateStringField(
                 settings.ContactFieldsSettings.NameFieldSetting,
                 null);
-            var contactPhone = this.configurableFieldModelBuilder.CreateStringField(
+            var contactPhone = CreateStringField(
                 settings.ContactFieldsSettings.PhoneFieldSetting,
                 null);
-            var contactEmail = this.configurableFieldModelBuilder.CreateStringField(
+            var contactEmail = CreateStringField(
                 settings.ContactFieldsSettings.EmailFieldSetting,
                 null);
 
             var contactFieldsModel = new ContactFieldsModel(contactName, contactPhone, contactEmail);
 
-            var ip = this.configurableFieldModelBuilder.CreateStringField(
+            var ip = CreateStringField(
                 settings.CommunicationFieldsSettings.IPAddressFieldSetting,
                 null);
-            var mac = this.configurableFieldModelBuilder.CreateStringField(
+            var mac = CreateStringField(
                 settings.CommunicationFieldsSettings.MacAddressFieldSetting,
                 null);
-            var ras = this.configurableFieldModelBuilder.CreateBooleanField(
+            var ras = CreateBooleanField(
                 settings.CommunicationFieldsSettings.RASFieldSetting,
                 false);
-            var client = this.configurableFieldModelBuilder.CreateStringField(
+            var client = CreateStringField(
                 settings.CommunicationFieldsSettings.NovellClientFieldSetting,
                 null);
 
@@ -736,26 +742,26 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 ras,
                 client);
 
-            var adapters = this.configurableFieldModelBuilder.CreateSelectListField(
+            var adapters = CreateSelectListField(
                 settings.CommunicationFieldsSettings.NetworkAdapterFieldSetting,
                 options.NetworkAdapters,
                 null);
 
             var communicationViewModel = new CommunicationFieldsViewModel(communicationFieldsModel, adapters);
 
-            var syncDate = this.configurableFieldModelBuilder.CreateNullableDateTimeField(
+            var syncDate = CreateNullableDateTimeField(
                 settings.DateFieldsSettings.SyncChangedDateSetting,
                 null);
-            var scanDate = this.configurableFieldModelBuilder.CreateNullableDateTimeField(
+            var scanDate = CreateNullableDateTimeField(
                 settings.DateFieldsSettings.ScanDateFieldSetting,
                 null);
-            var path = this.configurableFieldModelBuilder.CreateStringField(
+            var path = CreateStringField(
                 settings.DateFieldsSettings.PathDirectoryFieldSetting,
                 null);
 
             var dateFieldsModel = new DateFieldsModel(syncDate, scanDate, path);
 
-            var userStringId = this.configurableFieldModelBuilder.CreateStringField(
+            var userStringId = CreateStringField(
                 settings.ContactInformationFieldsSettings.UserIdFieldSetting,
                 null);
 
@@ -787,6 +793,97 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                        {
                            CustomerId = currentCustomerId
                        };
+        }
+
+        private static SelectList CreateSelectList(
+            ModelEditFieldSetting setting,
+            List<ItemOverview> items,
+            string selectedValue)
+        {
+            if (!setting.IsShow)
+            {
+                return new SelectList(Enumerable.Empty<SelectListItem>());
+            }
+
+            var list = new SelectList(items, "Value", "Name", selectedValue);
+            return list;
+        }
+
+        private static ConfigurableFieldModel<DateTime?> CreateNullableDateTimeField(
+            ModelEditFieldSetting setting,
+            DateTime? value)
+        {
+            return !setting.IsShow
+                       ? ConfigurableFieldModel<DateTime?>.CreateUnshowable()
+                       : new ConfigurableFieldModel<DateTime?>(
+                             setting.Caption,
+                             value,
+                             setting.IsRequired,
+                             setting.IsReadOnly);
+        }
+
+        private static ConfigurableFieldModel<DateTime> CreateDateTimeField(ModelEditFieldSetting setting, DateTime value)
+        {
+            return !setting.IsShow
+                       ? ConfigurableFieldModel<DateTime>.CreateUnshowable()
+                       : new ConfigurableFieldModel<DateTime>(
+                             setting.Caption,
+                             value,
+                             setting.IsRequired,
+                             setting.IsReadOnly);
+        }
+
+        private static ConfigurableFieldModel<SelectList> CreateSelectListField(
+            ModelEditFieldSetting setting,
+            List<ItemOverview> items,
+            string selectedValue)
+        {
+            if (!setting.IsShow)
+            {
+                return ConfigurableFieldModel<SelectList>.CreateUnshowable();
+            }
+
+            var list = new SelectList(items, "Value", "Name", selectedValue);
+            return new ConfigurableFieldModel<SelectList>(setting.Caption, list, setting.IsRequired, setting.IsReadOnly);
+        }
+
+        private static ConfigurableFieldModel<SelectList> CreateSelectListField(
+            ModelEditFieldSetting setting,
+            Enum items,
+            string selectedValue)
+        {
+            if (!setting.IsShow)
+            {
+                return ConfigurableFieldModel<SelectList>.CreateUnshowable();
+            }
+
+            var list = items.ToSelectList(selectedValue);
+            return new ConfigurableFieldModel<SelectList>(setting.Caption, list, setting.IsRequired, setting.IsReadOnly);
+        }
+
+        private static ConfigurableFieldModel<string> CreateStringField(ModelEditFieldSetting setting, string value)
+        {
+            return !setting.IsShow
+                       ? ConfigurableFieldModel<string>.CreateUnshowable()
+                       : new ConfigurableFieldModel<string>(
+                             setting.Caption,
+                             value,
+                             setting.IsRequired,
+                             setting.IsReadOnly);
+        }
+
+        private static ConfigurableFieldModel<bool> CreateBooleanField(ModelEditFieldSetting setting, bool value)
+        {
+            return !setting.IsShow
+                       ? ConfigurableFieldModel<bool>.CreateUnshowable()
+                       : new ConfigurableFieldModel<bool>(setting.Caption, value, setting.IsRequired, setting.IsReadOnly);
+        }
+
+        private static ConfigurableFieldModel<int> CreateIntegerField(ModelEditFieldSetting setting, int value)
+        {
+            return !setting.IsShow
+                       ? ConfigurableFieldModel<int>.CreateUnshowable()
+                       : new ConfigurableFieldModel<int>(setting.Caption, value, setting.IsRequired, setting.IsReadOnly);
         }
     }
 }

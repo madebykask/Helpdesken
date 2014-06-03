@@ -1,8 +1,6 @@
 ﻿namespace DH.Helpdesk.Dal.Mappers.Inventory.EntityToBusinessModel.Computer
 {
-    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ComputerSettings;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.SharedSettings;
     using DH.Helpdesk.Common.Collections;
     using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Dal.Enums.Inventory.Computer;

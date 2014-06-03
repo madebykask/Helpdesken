@@ -1,5 +1,4 @@
-﻿
-namespace DH.Helpdesk.Web.Controllers
+﻿namespace DH.Helpdesk.Web.Controllers
 {
     using System.Web.Mvc;
 
@@ -117,7 +116,13 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public ViewResult DeleteDynamicSetting(int id)
         {
-            throw new global::System.NotImplementedException();
+            throw new System.NotImplementedException();
+        }
+
+        [HttpGet]
+        public ViewResult NewCustomInventoryType()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

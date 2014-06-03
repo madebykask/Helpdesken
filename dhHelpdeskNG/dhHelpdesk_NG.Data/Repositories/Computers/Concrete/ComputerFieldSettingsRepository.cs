@@ -5,9 +5,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Enums;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.SharedSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ComputerSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ComputerFieldSettings;
     using DH.Helpdesk.Common.Collections;
@@ -20,16 +18,22 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
     using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Domain.Computers;
 
+    using ChassisFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings.ChassisFieldsSettings;
     using CommunicationFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings.CommunicationFieldsSettings;
     using ContactFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings.ContactFieldsSettings;
     using ContactInformationFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings.ContactInformationFieldsSettings;
     using ContractFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings.ContractFieldsSettings;
     using DateFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings.DateFieldsSettings;
+    using FieldSetting = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings.FieldSetting;
     using GraphicsFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings.GraphicsFieldsSettings;
+    using InventoryFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings.InventoryFieldsSettings;
+    using MemoryFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings.MemoryFieldsSettings;
+    using OperatingSystemFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings.OperatingSystemFieldsSettings;
     using OrganizationFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings.OrganizationFieldsSettings;
     using OtherFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings.OtherFieldsSettings;
     using PlaceFields = DH.Helpdesk.Dal.Enums.Inventory.Computer.PlaceFields;
     using PlaceFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings.PlaceFieldsSettings;
+    using ProcessorFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings.ProcessorFieldsSettings;
     using SoundFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings.SoundFieldsSettings;
     using StateFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings.StateFieldsSettings;
     using WorkstationFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings.WorkstationFieldsSettings;

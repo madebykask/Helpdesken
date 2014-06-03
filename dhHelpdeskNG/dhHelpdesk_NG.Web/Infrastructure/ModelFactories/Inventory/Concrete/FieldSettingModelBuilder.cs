@@ -12,8 +12,7 @@
                 setting.ShowInDetails,
                 setting.ShowInList,
                 setting.Caption,
-                setting.IsRequired,
-                setting.IsReadOnly);
+                setting.IsRequired);
 
             return settingModel;
         }

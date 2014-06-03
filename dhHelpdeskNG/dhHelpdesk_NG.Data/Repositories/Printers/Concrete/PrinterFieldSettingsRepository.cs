@@ -28,8 +28,6 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
 
     public class PrinterFieldSettingsRepository : Repository<PrinterFieldSettings>, IPrinterFieldSettingsRepository
     {
-        private const int IsReadOnlyInt = 0; // tblPrinter doesn't contain readonly field.
-
         private readonly IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, PrinterFieldsSettingsOverview> entityToBusinessModelMapperForOverview;
 
         private readonly IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperDataForModelEdit>, PrinterFieldsSettingsForModelEdit> entityToBusinessModelMapperForModelEdit;
@@ -80,7 +78,6 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
                                 FieldName = s.PrinterField,
                                 ShowInList = s.ShowInList,
                                 ShowInDetails = s.Show,
-                                ReadOnly = IsReadOnlyInt,
                                 Required = s.Required
                             }).ToList();
                     break;
@@ -94,7 +91,6 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
                                 FieldName = s.PrinterField,
                                 ShowInList = s.ShowInList,
                                 ShowInDetails = s.Show,
-                                ReadOnly = IsReadOnlyInt,
                                 Required = s.Required,
                             }).ToList();
                     break;
@@ -123,7 +119,6 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
                                 Caption = s.Label,
                                 FieldName = s.PrinterField,
                                 Show = s.Show,
-                                ReadOnly = IsReadOnlyInt,
                                 Required = s.Required
                             }).ToList();
                     break;
@@ -136,7 +131,6 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
                                 Caption = s.Label_ENG,
                                 FieldName = s.PrinterField,
                                 Show = s.Show,
-                                ReadOnly = IsReadOnlyInt,
                                 Required = s.Required,
                             }).ToList();
                     break;

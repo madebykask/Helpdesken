@@ -598,6 +598,21 @@
     <Compile Include="Models\Changes\ChangeEdit\ConfigurableFieldModel.cs" />
     <Compile Include="Models\Inventory\ComputerModuleModeFilter.cs" />
     <Compile Include="Models\Inventory\EditModel\Computer\AccesoriesViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\ChassisFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\ConfigurableFieldModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\InventoryFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\MemoryFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\MemoryFieldsViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\OperatingSystemFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\OperatingSystemFieldsViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\ProccesorFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\ProccesorFieldsViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Computer\ChassisFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Computer\FieldSettingModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Computer\InventoryFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Computer\MemoryFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Computer\OperatingSystemFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Computer\ProccesorFieldsSettingsModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Settings\InventoryDynamicFieldSettingModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Settings\Inventory\NewInventoryFieldSettingsViewModel.cs" />
     <Compile Include="Models\Inventory\OptionsAggregates\ComputerEditOptions.cs" />
@@ -1457,6 +1472,12 @@
     <Content Include="Views\InventorySettings\EditWorkstationSettings.cshtml" />
     <Content Include="Views\InventorySettings\EditServerSettings.cshtml" />
     <Content Include="Views\InventorySettings\EditPrinterSettings.cshtml" />
+    <Content Include="Views\InventorySettings\EditorTemplates\Settings\FieldSettingForComputerModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Computer\ChassisModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Computer\InventoryModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Computer\MemoryFieldsViewModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Computer\OperatingSystemFieldsViewModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Computer\ProccesorFieldsViewModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
