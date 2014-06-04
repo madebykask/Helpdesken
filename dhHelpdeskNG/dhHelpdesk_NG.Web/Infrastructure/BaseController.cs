@@ -198,6 +198,12 @@
                 throw new ArgumentNullException("httpContext");
             }
 
+            if (httpContext.Session == null)
+            {
+                httpContext.Response.Redirect("~/login/login");
+                return false;
+            }
+
             if (!httpContext.User.Identity.IsAuthenticated)
             {
                 return false;

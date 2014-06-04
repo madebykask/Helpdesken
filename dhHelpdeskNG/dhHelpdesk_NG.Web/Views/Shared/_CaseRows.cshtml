@@ -46,7 +46,7 @@
                         else if (c.FieldType == 2)                                                        
                         {
                             <!-- dateTime -->
-                            <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@Html.DisplayFor(m => c.DateTimeValue, "DateAndTime")</a>
+                            <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@(c.DateTimeValue.HasValue ? c.DateTimeValue.Value.ToLocalTime().ToString() : string.Empty)</a>
                         }
                         else    
                         {

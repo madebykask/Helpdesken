@@ -2,15 +2,19 @@
 {
     using System.Web.Mvc;
 
-    public class StartController : Controller
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Infrastructure;
+
+    public class StartController : BaseController
     {
-        //
-        // GET: /Admin/Start/
+        public StartController(IMasterDataService masterDataService)
+            : base(masterDataService)
+        {
+        }
 
         public ActionResult Index()
         {
             return this.View();
         }
-
     }
 }
