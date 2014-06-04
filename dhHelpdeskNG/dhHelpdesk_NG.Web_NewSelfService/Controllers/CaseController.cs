@@ -271,7 +271,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                 }
             } // Load Case Template
 
-            return this.View("_NewCase",model);
+            return this.View("NewCase",model);
         }
 
         [HttpGet]

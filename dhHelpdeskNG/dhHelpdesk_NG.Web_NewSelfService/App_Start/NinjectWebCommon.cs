@@ -159,8 +159,8 @@ namespace DH.Helpdesk.NewSelfService
             kernel.Bind<IStateSecondaryRepository>().To<StateSecondaryRepository>();
             kernel.Bind<ICaseSolutionRepository>().To<CaseSolutionRepository>();
             kernel.Bind<ICaseSolutionCategoryRepository>().To<CaseSolutionCategoryRepository>();
-            kernel.Bind<ICaseSolutionScheduleRepository>().To<CaseSolutionScheduleRepository>();            
-                                
+            kernel.Bind<ICaseSolutionScheduleRepository>().To<CaseSolutionScheduleRepository>();
+            kernel.Bind<INotifierFieldSettingLanguageRepository>().To<NotifierFieldSettingLanguageRepository>();
                                       
             // Service             
             kernel.Bind<IMasterDataService>().To<MasterDataService>();            

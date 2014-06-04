@@ -722,7 +722,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Case\_CasePreview.cshtml" />
+    <Content Include="Views\Case\CasePreview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">
@@ -764,7 +764,7 @@
     <Content Include="Views\Case\_CaseLogFiles.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Case\_NewCase.cshtml" />
+    <Content Include="Views\Case\NewCase.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\DisplayTemplates\Date.cshtml" />
