@@ -1,10 +1,12 @@
 ﻿namespace DH.Helpdesk.Services.Services.Concrete
 {
     using System;
+    using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports;
     using DH.Helpdesk.BusinessData.Models.Reports.Output;
+    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Dal.Repositories;
 
     public sealed class ReportsService : IReportsService
@@ -112,17 +114,36 @@
                                             int? departmentId,
                                             int[] caseTypesIds,
                                             int? workingGroupId,
-                                            int? administrator,
+                                            int? administratorId,
                                             DateTime period)
         {
-//            var customer = this.customerRepository.GetOverview(context.CustomerId);
-//            var report = this.reportCustomerRepository.GetOverview(context.CustomerId, ReportType.RegistratedCasesDay);
-//
-//            return new RegistratedCasesDayReportResponse(
-//                                            customer,
-//                                            report,
-//                                            );
-            return null;
+            var customer = this.customerRepository.GetOverview(context.CustomerId);
+            var report = this.reportCustomerRepository.GetOverview(context.CustomerId, ReportType.RegistratedCasesDay);
+            var department = departmentId.HasValue ? 
+                            this.departmentService.FindActiveOverview(departmentId.Value) : 
+                            ItemOverview.CreateEmpty();
+            var caseTypes = this.caseTypeService.GetOverviews(context.CustomerId, caseTypesIds);
+            var workingGroup = workingGroupId.HasValue ? 
+                            this.workingGroupService.GetOverviews(context.CustomerId, new[] { workingGroupId.Value }).FirstOrDefault() :
+                            ItemOverview.CreateEmpty();
+            var administrator = administratorId.HasValue ? 
+                            this.userService.FindActiveOverview(administratorId.Value) : 
+                            ItemOverview.CreateEmpty();
+            var items = this.caseService.GetRegistratedCasesDayItems(
+                                                        context.CustomerId,
+                                                        departmentId,
+                                                        caseTypesIds,
+                                                        workingGroupId,
+                                                        administratorId,
+                                                        period);
+            return new RegistratedCasesDayReportResponse(
+                                            customer,
+                                            report,
+                                            department,
+                                            caseTypes,
+                                            workingGroup,
+                                            administrator,
+                                            items);
         }
     }
 }

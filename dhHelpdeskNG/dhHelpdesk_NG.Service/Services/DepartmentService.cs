@@ -20,6 +20,8 @@
         void Commit();
 
         List<ItemOverview> FindActiveOverviews(int customerId);
+
+        ItemOverview FindActiveOverview(int departmentId);
     }
 
     public class DepartmentService : IDepartmentService
@@ -111,6 +113,11 @@
         public List<ItemOverview> FindActiveOverviews(int customerId)
         {
             return this._departmentRepository.FindActiveOverviews(customerId);
+        }
+
+        public ItemOverview FindActiveOverview(int departmentId)
+        {
+            return this._departmentRepository.FindActiveOverview(departmentId);
         }
     }
 }

@@ -1,2 +1,15 @@
 ﻿@model DH.Helpdesk.Web.Models.Reports.RegistratedCasesDayReport
 
+@{
+    Layout = null;
+
+    if (Model.File == null)
+    {
+        @Html.Partial("Empty")
+        return;
+    }
+}
+
+<img src="@Url.Action("GetReportImage", "Reports", new { objectId = Model.File.ObjectId, fileName = Model.File.FileName })" />            
+
+

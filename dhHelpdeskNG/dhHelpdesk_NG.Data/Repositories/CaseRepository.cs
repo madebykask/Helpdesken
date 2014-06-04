@@ -53,6 +53,14 @@ namespace DH.Helpdesk.Dal.Repositories
                                                     int? productArea,
                                                     DateTime perionFrom,
                                                     DateTime perionUntil);
+
+        IEnumerable<RegistratedCasesDayItem> GetRegistratedCasesDayItems(
+                                                    int customerId,
+                                                    int? departmentId,
+                                                    int[] caseTypesIds,
+                                                    int? workingGroupId,
+                                                    int? administratorId,
+                                                    DateTime period);
     }
 
     public class CaseRepository : RepositoryBase<Case>, ICaseRepository
@@ -348,6 +356,49 @@ namespace DH.Helpdesk.Dal.Repositories
                                        RegistrationDate = c.RegTime
                                    };
             return query.ToList();
+        }
+
+        public IEnumerable<RegistratedCasesDayItem> GetRegistratedCasesDayItems(
+            int customerId,
+            int? departmentId,
+            int[] caseTypesIds,
+            int? workingGroupId,
+            int? administratorId,
+            DateTime period)
+        {
+            var allCaseTypes = caseTypesIds == null || !caseTypesIds.Any();
+            var perionFrom = period.RoundToMonth();
+            var perionUntil = period.AddMonths(1).RoundToMonth();
+
+            var query = from c in this.DataContext.Cases
+                        join cu in this.DataContext.Customers on c.Customer_Id equals cu.Id
+                        join d in this.DataContext.Departments on c.Department_Id equals d.Id
+                        join ct in this.DataContext.CaseTypes on c.CaseType_Id equals ct.Id
+                        join wg in this.DataContext.WorkingGroups on c.WorkingGroup_Id equals wg.Id
+                        join u in this.DataContext.Users on c.Performer_User_Id equals u.Id
+                        where c.Customer_Id == customerId &&
+                              c.Department_Id.HasValue &&                                
+                              (!departmentId.HasValue || c.Department_Id.Value == departmentId.Value) &&
+                              (allCaseTypes || (caseTypesIds != null && caseTypesIds.Contains(c.CaseType_Id))) &&
+                              c.WorkingGroup_Id.HasValue &&
+                              (!workingGroupId.HasValue || c.WorkingGroup_Id.Value == workingGroupId.Value) &&                              
+                              c.RegTime >= perionFrom && c.RegTime <= perionUntil &&
+                              c.Deleted == 0
+                        select new RegistratedCasesDayItem
+                        {
+                            CustomerId = cu.Id,
+                            CustomerName = cu.Name,
+                            WorkingGroupId = wg.Id,
+                            WorkingGroupName = wg.WorkingGroupName,
+                            CaseTypeId = ct.Id,
+                            CaseTypeName = ct.Name,
+                            AdministratorId = u.Id,
+                            AdministratorName = u.FirstName + " " + u.SurName, 
+                            CaseId = c.Id,
+                            RegistrationDate = c.RegTime
+                        };
+            return query.ToList();
+
         }
 
         private void MarkCaseAsRead(int id)

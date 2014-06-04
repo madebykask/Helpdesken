@@ -20,6 +20,8 @@
         List<ItemOverview> FindActiveByCustomerIdAndRegionId(int customerId, int regionId);
 
         string GetDepartmentName(int departmentId);
+
+        ItemOverview FindActiveOverview(int departmentId);
     }
 
     public sealed class DepartmentRepository : RepositoryBase<Department>, IDepartmentRepository
@@ -87,6 +89,22 @@
         public string GetDepartmentName(int departmentId)
         {
             return this.DataContext.Departments.Where(d => d.Id == departmentId).Select(d => d.DepartmentName).FirstOrDefault();
+        }
+
+        public ItemOverview FindActiveOverview(int departmentId)
+        {
+            var departments =
+                this.DataContext.Departments
+                    .Where(d =>
+                            d.Id == departmentId &&
+                            d.IsActive != 0)
+                    .Select(d => new { d.Id, d.DepartmentName })
+                    .ToList();
+
+            return
+                departments.Select(
+                    d => new ItemOverview(d.DepartmentName, d.Id.ToString(CultureInfo.InvariantCulture)))
+                    .FirstOrDefault();            
         }
     }
 

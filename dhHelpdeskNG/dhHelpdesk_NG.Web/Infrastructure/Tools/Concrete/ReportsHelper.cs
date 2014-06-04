@@ -99,7 +99,8 @@
             RegistratedCasesDayItem[] items,
             out ReportFile file)
         {
-            throw new NotImplementedException();
+            file = new ReportFile(null, null);
+            return false;
         }
 
         public byte[] GetReportImageFromCache(string objectId, string fileName)

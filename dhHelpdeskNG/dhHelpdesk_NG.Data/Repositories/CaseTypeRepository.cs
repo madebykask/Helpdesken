@@ -15,6 +15,8 @@
         IEnumerable<ItemOverview> GetOverviews(int customerId);
 
         IEnumerable<ItemOverview> GetOverviews(int customerId, IEnumerable<int> caseTypesIds);
+
+        IEnumerable<int> GetChildren(int caseTypeId);
     }
 
     public class CaseTypeRepository : RepositoryBase<CaseType>, ICaseTypeRepository
@@ -56,6 +58,26 @@
                     .ToList();
 
             return entities.Select(g => new ItemOverview(g.Name, g.Value.ToString(CultureInfo.InvariantCulture)));                        
+        }
+
+        public IEnumerable<int> GetChildren(int caseTypeId)
+        {
+            var children = new List<int>();
+            this.GetChildrenProcess(caseTypeId, children);
+            return children.ToArray();
+        }
+
+        private void GetChildrenProcess(int caseTypeId, List<int> children)
+        {
+            var caseType = this.GetById(caseTypeId);
+            if (caseType != null && caseType.SubCaseTypes != null)
+            {
+                foreach (var child in caseType.SubCaseTypes)
+                {
+                    children.Add(child.Id);
+                    this.GetChildrenProcess(child.Id, children);
+                }
+            }            
         }
     }
 }

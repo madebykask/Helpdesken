@@ -105,17 +105,17 @@
                 </td>
             </tr>
             <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString())">                                        
-            <tr>
-                <td>
-                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Filename) 
-                </td>
-                @if (Model.CaseLog.Id == 0 && Model.EditMode == Enums.AccessMode.FullAccess) 
-                {                                        
+            @if (Model.CaseLog.Id == 0) 
+            {                                        
+                <tr>
                     <td>
-                        <a href="#upload_logfiles_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till")</a>
+                        @CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Filename) 
                     </td>
-                }
-            </tr>                
+                        <td>
+                            <a href="#upload_logfiles_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till")</a>
+                        </td>
+                </tr>                
+            }
             <tr>
                 <td class="span3"></td>
                 <td>

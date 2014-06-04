@@ -43,6 +43,8 @@ namespace DH.Helpdesk.Dal.Repositories
         UserOverview GetUserByLogin(string IdName);
 
         UserName GetUserName(int userId);
+
+        ItemOverview FindActiveOverview(int userId);
     }
 
     public sealed class UserRepository : RepositoryBase<User>, IUserRepository
@@ -84,7 +86,9 @@ namespace DH.Helpdesk.Dal.Repositories
             var overviews = users.Select(u => new { Name = u.FirstName + u.SurName, Value = u.Id }).ToList();
 
             return
-                overviews.Select(o => new ItemOverview(o.Name, o.Value.ToString(CultureInfo.InvariantCulture))).ToList();
+                overviews.Select(o => new ItemOverview(o.Name, o.Value.ToString(CultureInfo.InvariantCulture)))
+                    .OrderBy(o => o.Name)
+                    .ToList();
         }
 
         public List<ItemWithEmail> FindUsersEmails(List<int> userIds)
@@ -242,6 +246,18 @@ namespace DH.Helpdesk.Dal.Repositories
                     .ToList()
                     .Select(u => new UserName(u.FirstName, u.SurName))
                     .FirstOrDefault();
+        }
+
+        public ItemOverview FindActiveOverview(int userId)
+        {
+            var users = this.DataContext.Users
+                        .Where(u => u.Id == userId &&
+                            u.IsActive != 0)
+                        .Select(u => new { Name = u.FirstName + u.SurName, Value = u.Id })
+                        .ToList();
+
+            return users.Select(o => new ItemOverview(o.Name, o.Value.ToString(CultureInfo.InvariantCulture)))
+                        .FirstOrDefault();            
         }
 
         private UserOverview GetUser(Expression<Func<User, bool>> expression)

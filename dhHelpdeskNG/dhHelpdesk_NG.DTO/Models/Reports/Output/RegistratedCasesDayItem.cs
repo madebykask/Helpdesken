@@ -20,7 +20,7 @@
 
         public DateTime RegistrationDate { get; set; }
 
-        public string Administrator { get; set; }
+        public string AdministratorName { get; set; }
 
         public int AdministratorId { get; set; }
     }

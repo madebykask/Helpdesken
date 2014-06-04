@@ -13,6 +13,7 @@
     using DH.Helpdesk.BusinessData.Models.Holiday.Output;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+    using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Utils;
     using DH.Helpdesk.Domain;
 
@@ -40,12 +41,19 @@
     public class CaseSearchRepository : ICaseSearchRepository
     {
         private readonly ICustomerUserRepository _customerUserRepository;
+
         private readonly IProductAreaRepository _productAreaRepository;
 
-        public CaseSearchRepository(ICustomerUserRepository customerUserRepository, IProductAreaRepository productAreaRepository)
+        private readonly ICaseTypeRepository caseTypeRepository;
+
+        public CaseSearchRepository(
+                ICustomerUserRepository customerUserRepository, 
+                IProductAreaRepository productAreaRepository, 
+                ICaseTypeRepository caseTypeRepository)
         {
             this._customerUserRepository = customerUserRepository;
-            this._productAreaRepository = productAreaRepository; 
+            this._productAreaRepository = productAreaRepository;
+            this.caseTypeRepository = caseTypeRepository;
         }
 
         public IList<CaseSearchResult> Search(
@@ -214,11 +222,21 @@
             return value.Replace("tblProblem.", "tblProblem_");
         }
 
-        private static bool CaseIsUrgent(DateTime WatchDate)
+        private static bool CaseIsUrgent(DateTime watchDate)
         {
-            if (WatchDate != DateTime.MinValue)  
-                if (WatchDate < DateTime.Now.AddDays(1))                 
-                    return true;
+            if (watchDate == DateTime.MinValue)
+            {
+                return false;
+            }
+
+            watchDate = watchDate.RoundToDay();
+            var today = DateTime.Today.RoundToDay();
+
+            if (today >= watchDate.AddDays(-1) && today <= watchDate)
+            {
+                return true;
+            }
+
             return false;
         }
 
@@ -617,7 +635,17 @@
                 sb.Append(" and (tblDepartment.Country_Id in (" + f.Country.SafeForSqlInject() + "))"); 
             // case type
             if (f.CaseType != 0)
-                sb.Append(" and (tblcase.CaseType_Id = " + f.CaseType + ")");
+            {
+                var caseTypes = new List<int>();
+                caseTypes.Add(f.CaseType);
+                var caseTypeChildren = this.caseTypeRepository.GetChildren(f.CaseType);
+                if (caseTypeChildren != null)
+                {
+                    caseTypes.AddRange(caseTypeChildren);
+                }
+
+                sb.Append(" and (tblcase.CaseType_Id IN (" + string.Join(",", caseTypes) + "))");
+            }
             // Product area 
             if (!string.IsNullOrWhiteSpace(f.ProductArea))
                 if (string.Compare(f.ProductArea, "0", true, CultureInfo.InvariantCulture) != 0)  

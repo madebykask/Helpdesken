@@ -103,6 +103,8 @@ namespace DH.Helpdesk.Services.Services
         UserOverview GetUserOverview(int user);
 
         List<ItemOverview> FindActiveOverviews(int customerId);
+
+        ItemOverview FindActiveOverview(int userId);
     }
 
     public class UserService : IUserService
@@ -686,6 +688,11 @@ namespace DH.Helpdesk.Services.Services
         public List<ItemOverview> FindActiveOverviews(int customerId)
         {
             return this._userRepository.FindActiveOverviews(customerId);
+        }
+
+        public ItemOverview FindActiveOverview(int userId)
+        {
+            return this._userRepository.FindActiveOverview(userId);
         }
 
         /// <summary>

@@ -1,2 +1,82 @@
 ﻿@model DH.Helpdesk.Web.Models.Reports.RegistratedCasesDayReport
 
+@{
+    Layout = null;    
+}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>@Model.ReportType.Name</title>
+    </head>
+    <body>
+        @Html.Partial("~/Views/Print/Header.cshtml")        
+        <table>
+            <tbody>
+                <tr>
+                    <td colspan="2">
+                        <h2>
+                            @Model.ReportType.Name                         
+                        </h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Translation.Get("Kund")
+                    </td>
+                    <td>
+                        @Model.Customer.Name
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Translation.Get("Avdelning påverkad")
+                    </td>
+                    <td>
+                        @(Model.Department != null ? Model.Department.Name : Translation.Get("Alla"))
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Translation.Get("Ärendetyp")
+                    </td>
+                    <td>
+                        @(Model.CaseTypes.Any() ? string.Join(",", Model.CaseTypes.Select(i => i.Name)) : Translation.Get("Alla"))
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Translation.Get("Driftgrupp")
+                    </td>
+                    <td>
+                        @(Model.WorkingGroup != null ? Model.WorkingGroup.Name : Translation.Get("Alla"))
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Translation.Get("Handläggare")
+                    </td>
+                    <td>
+                        @(Model.Administrator != null ? Model.Administrator.Name : Translation.Get("Alla"))
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Translation.Get("Period")
+                    </td>
+                    <td>
+                        @Model.Period.ToShortDateString()
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        @if (Model.File == null)
+        {
+            @Html.Partial("Empty")
+        }
+        else
+        {
+           <img src="@Model.File.FileName" />                                    
+        }
+    </body>
+</html>

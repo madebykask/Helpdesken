@@ -62,6 +62,14 @@
                                                 int? productArea,
                                                 DateTime perionFrom,
                                                 DateTime perionUntil);
+
+        IEnumerable<RegistratedCasesDayItem> GetRegistratedCasesDayItems(
+                                            int customerId,
+                                            int? departmentId,
+                                            int[] caseTypesIds,
+                                            int? workingGroupId,
+                                            int? administratorId,
+                                            DateTime period);
     }
 
     public class CaseService : ICaseService
@@ -273,6 +281,23 @@
                                     productArea,
                                     perionFrom,
                                     perionUntil);
+        }
+
+        public IEnumerable<RegistratedCasesDayItem> GetRegistratedCasesDayItems(
+            int customerId,
+            int? departmentId,
+            int[] caseTypesIds,
+            int? workingGroupId,
+            int? administratorId,
+            DateTime period)
+        {
+            return this._caseRepository.GetRegistratedCasesDayItems(
+                                    customerId,
+                                    departmentId,
+                                    caseTypesIds,
+                                    workingGroupId,
+                                    administratorId,
+                                    period);
         }
 
         public Case Copy(int copyFromCaseid, int userId, int languageId, string ipAddress, GlobalEnums.RegistrationSource source, string adUser)

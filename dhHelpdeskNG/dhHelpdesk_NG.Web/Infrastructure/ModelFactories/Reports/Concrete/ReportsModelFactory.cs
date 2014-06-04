@@ -76,7 +76,7 @@
                                         options.PeriodUntil);
 
             List<ReportFile> files;
-            if (!this.reportsHelper.CreateRegistratedCasesCaseTypeReport(
+            this.reportsHelper.CreateRegistratedCasesCaseTypeReport(
                                         response.Customer,
                                         response.ReportType,
                                         response.WorkingGroups,
@@ -87,10 +87,7 @@
                                         options.ShowDetails,
                                         options.IsPrint,
                                         response.Items.ToArray(),
-                                        out files))
-            {
-                return null;
-            }
+                                        out files);
 
             var instance = new RegistratedCasesCaseTypeReport(
                                     response.Customer,
@@ -107,10 +104,10 @@
         public RegistratedCasesDayOptions CreateRegistratedCasesDayOptions(OperationContext context)
         {
             var response = this.reportsService.GetRegistratedCasesDayOptionsResponse(context);
-            var departments = CreateListField(response.Departments);
+            var departments = CreateListField(response.Departments, true);
             var caseTypes = CreateMultiSelectField(response.CaseTypes);
-            var workingGroups = CreateListField(response.WorkingGroups);
-            var administrators = CreateListField(response.Administrators);
+            var workingGroups = CreateListField(response.WorkingGroups, true);
+            var administrators = CreateListField(response.Administrators, true);
             var instance = new RegistratedCasesDayOptions(
                             departments,
                             caseTypes,
@@ -132,7 +129,7 @@
                             options.Period);
 
             ReportFile file;
-            if (!this.reportsHelper.CreateRegistratedCasesDayReport(
+            this.reportsHelper.CreateRegistratedCasesDayReport(
                                         response.Customer,
                                         response.ReportType,
                                         response.Department,
@@ -142,10 +139,7 @@
                                         options.Period,
                                         options.IsPrint,
                                         response.Items.ToArray(),
-                                        out file))
-            {
-                return null;
-            }
+                                        out file);
 
             var instance = new RegistratedCasesDayReport(
                                     response.Customer,
@@ -167,9 +161,18 @@
         }
 
         private static SelectList CreateListField(
-            IEnumerable<ItemOverview> items)
+            IEnumerable<ItemOverview> items,
+            bool needEmpty = false)
         {
-            return new SelectList(items, "Value", "Name");
+            var list = new List<ItemOverview>();
+            if (needEmpty)
+            {
+               list.Add(ItemOverview.CreateEmpty());     
+            }
+
+            list.AddRange(items);
+
+            return new SelectList(list, "Value", "Name");
         }
 
         private static MultiSelectList CreateMultiSelectField(
