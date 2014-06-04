@@ -12,6 +12,7 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ServerFieldSettings;
     using DH.Helpdesk.Common.Collections;
     using DH.Helpdesk.Common.Extensions.Boolean;
+    using DH.Helpdesk.Dal.Attributes.Inventory;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Enums.Inventory.Server;
     using DH.Helpdesk.Dal.Enums.Inventory.Shared;
@@ -63,6 +64,7 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
             MapStateFieldsSettings(businessModel.StateFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
         }
 
+        [CreateMissingServerSettings("customerId")]
         public ServerFieldsSettings GetFieldSettingsForEdit(int customerId, int languageId)
         {
             var languageTextId = this.GetLanguageTextId(languageId);
@@ -105,6 +107,7 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
             return this.entityToBusinessModelMapperForEdit.Map(settingCollection);
         }
 
+        [CreateMissingServerSettings("customerId")]
         public ServerFieldsSettingsForModelEdit GetFieldSettingsForModelEdit(int customerId, int languageId)
         {
             var languageTextId = this.GetLanguageTextId(languageId);
@@ -145,6 +148,7 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
             return this.entityToBusinessModelMapperForModelEdit.Map(settingCollection);
         }
 
+        [CreateMissingServerSettings("customerId")]
         public ServerFieldsSettingsOverview GetFieldSettingsOverview(int customerId, int languageId)
         {
             var languageTextId = this.GetLanguageTextId(languageId);
@@ -221,7 +225,7 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
              string languageTextId,
             DateTime changedDate)
         {
-            MapFieldSetting(updatedSettings.OperatingSystemFieldSetting, entity.FindByName(OperatingSystemFields.OS), languageTextId, changedDate);
+            MapFieldSetting(updatedSettings.OperatingSystemFieldSetting, entity.FindByName(OperatingSystemFields.OperatingSystem), languageTextId, changedDate);
             MapFieldSetting(updatedSettings.VersionFieldSetting, entity.FindByName(OperatingSystemFields.Version), languageTextId, changedDate);
             MapFieldSetting(updatedSettings.ServicePackSystemFieldSetting, entity.FindByName(OperatingSystemFields.ServicePack), languageTextId, changedDate);
             MapFieldSetting(updatedSettings.RegistrationCodeSystemFieldSetting, entity.FindByName(OperatingSystemFields.RegistrationCode), languageTextId, changedDate);

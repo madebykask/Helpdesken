@@ -21,5 +21,7 @@
         public static readonly string AccountingDimension4 = "AccountingDimension4";
 
         public static readonly string AccountingDimension5 = "AccountingDimension5";
+
+        public static readonly string Document = "Document";
     }
 }

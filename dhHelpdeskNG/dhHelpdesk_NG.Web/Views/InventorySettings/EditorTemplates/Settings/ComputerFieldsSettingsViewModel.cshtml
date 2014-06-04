@@ -1,4 +1,17 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Computer.ComputerFieldsSettingsViewModel
+<script>
+    $(function () {
+        $(".is_required").change(function () {
+            var value = $(this).is(":checked");
+            $(this).closest("tr").find(".is_readonly").prop('checked', !value);
+        });
+
+        $(".is_readonly").change(function () {
+            var value = $(this).is(":checked");
+            $(this).closest("tr").find(".is_required").prop('checked', !value);
+        });
+    });
+</script>
 <table class="table table-striped table-bordered table-hover">
     <thead>
         <tr>

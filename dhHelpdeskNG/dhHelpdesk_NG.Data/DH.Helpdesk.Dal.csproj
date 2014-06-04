@@ -69,6 +69,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\Changes\CreateMissingSettingsAttribute.cs" />
+    <Compile Include="Attributes\Inventory\CreateMissingPrinterSettingsAttribute.cs" />
+    <Compile Include="Attributes\Inventory\CreateMissingServerSettingsAttribute.cs" />
+    <Compile Include="Attributes\Inventory\CreateMissingComputerSettingsAttribute.cs" />
     <Compile Include="Dal\INewRepository.cs" />
     <Compile Include="EntityConfigurations\Cases\CausingPartConfiguration.cs" />
     <Compile Include="EntityConfigurations\Changes\ChangeCouncilConfiguration.cs" />

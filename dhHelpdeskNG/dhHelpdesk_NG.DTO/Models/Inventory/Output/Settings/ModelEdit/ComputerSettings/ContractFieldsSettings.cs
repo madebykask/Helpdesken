@@ -4,7 +4,19 @@
 
     public class ContractFieldsSettings
     {
-        public ContractFieldsSettings(ModelEditFieldSetting contractStatusFieldSetting, ModelEditFieldSetting contractNumberFieldSetting, ModelEditFieldSetting contractStartDateFieldSetting, ModelEditFieldSetting contractEndDateFieldSetting, ModelEditFieldSetting purchasePriceFieldSetting, ModelEditFieldSetting purchaseDateFieldSetting, ModelEditFieldSetting accountingDimension1FieldSetting, ModelEditFieldSetting accountingDimension2FieldSetting, ModelEditFieldSetting accountingDimension3FieldSetting, ModelEditFieldSetting accountingDimension4FieldSetting, ModelEditFieldSetting accountingDimension5FieldSetting)
+        public ContractFieldsSettings(
+            ModelEditFieldSetting contractStatusFieldSetting,
+            ModelEditFieldSetting contractNumberFieldSetting,
+            ModelEditFieldSetting contractStartDateFieldSetting,
+            ModelEditFieldSetting contractEndDateFieldSetting,
+            ModelEditFieldSetting purchasePriceFieldSetting,
+            ModelEditFieldSetting purchaseDateFieldSetting,
+            ModelEditFieldSetting accountingDimension1FieldSetting,
+            ModelEditFieldSetting accountingDimension2FieldSetting,
+            ModelEditFieldSetting accountingDimension3FieldSetting,
+            ModelEditFieldSetting accountingDimension4FieldSetting,
+            ModelEditFieldSetting accountingDimension5FieldSetting,
+            ModelEditFieldSetting doumentFieldSetting)
         {
             this.ContractStatusFieldSetting = contractStatusFieldSetting;
             this.ContractNumberFieldSetting = contractNumberFieldSetting;
@@ -17,6 +29,7 @@
             this.AccountingDimension3FieldSetting = accountingDimension3FieldSetting;
             this.AccountingDimension4FieldSetting = accountingDimension4FieldSetting;
             this.AccountingDimension5FieldSetting = accountingDimension5FieldSetting;
+            this.DocumentFieldSetting = doumentFieldSetting;
         }
 
         [NotNull]
@@ -51,5 +64,8 @@
 
         [NotNull]
         public ModelEditFieldSetting AccountingDimension5FieldSetting { get; set; }
+
+        [NotNull]
+        public ModelEditFieldSetting DocumentFieldSetting { get; set; }
     }
 }

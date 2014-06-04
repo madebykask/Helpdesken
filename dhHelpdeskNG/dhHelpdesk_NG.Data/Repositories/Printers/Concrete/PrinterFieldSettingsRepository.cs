@@ -13,6 +13,7 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.PrinterFieldSettings;
     using DH.Helpdesk.Common.Collections;
     using DH.Helpdesk.Common.Extensions.Boolean;
+    using DH.Helpdesk.Dal.Attributes.Inventory;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Enums.Inventory.Printer;
     using DH.Helpdesk.Dal.Enums.Inventory.Shared;
@@ -60,6 +61,7 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
             MapStateFieldsSettings(businessModel.StateFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
         }
 
+        [CreateMissingPrinterSettings("customerId")]
         public PrinterFieldsSettings GetFieldSettingsForEdit(int customerId, int languageId)
         {
             var languageTextId = this.GetLanguageTextId(languageId);
@@ -102,6 +104,7 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
             return this.entityToBusinessModelMapperForEdit.Map(settingCollection);
         }
 
+        [CreateMissingPrinterSettings("customerId")]
         public PrinterFieldsSettingsForModelEdit GetFieldSettingsForModelEdit(int customerId, int languageId)
         {
             var languageTextId = this.GetLanguageTextId(languageId);
@@ -142,6 +145,7 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
             return this.entityToBusinessModelMapperForModelEdit.Map(settingCollection);
         }
 
+        [CreateMissingPrinterSettings("customerId")]
         public PrinterFieldsSettingsOverview GetFieldSettingsOverview(int customerId, int languageId)
         {
             var languageTextId = this.GetLanguageTextId(languageId);
@@ -180,6 +184,7 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
             return this.entityToBusinessModelMapperForOverview.Map(settingCollection);
         }
 
+        [CreateMissingPrinterSettings("customerId")]
         public PrinterFieldsSettingsOverviewForFilter GetFieldSettingsOverviewForFilter(int customerId, int languageId)
         {
             var languageTextId = this.GetLanguageTextId(languageId);

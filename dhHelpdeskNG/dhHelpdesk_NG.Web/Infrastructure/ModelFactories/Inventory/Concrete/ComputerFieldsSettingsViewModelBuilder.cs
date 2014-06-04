@@ -52,6 +52,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             var accounting3 = MapFieldSetting(settings.ContractFieldsSettings.AccountingDimension3FieldSetting);
             var accounting4 = MapFieldSetting(settings.ContractFieldsSettings.AccountingDimension4FieldSetting);
             var accounting5 = MapFieldSetting(settings.ContractFieldsSettings.AccountingDimension5FieldSetting);
+            var document = MapFieldSetting(settings.ContractFieldsSettings.DocumentFieldSetting);
             var contractFieldsSettingsModel = new ContractFieldsSettingsModel(
                 status,
                 number,
@@ -63,7 +64,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 accounting3,
                 accounting4,
                 accounting5,
-                new FieldSettingModel()); // todo
+                document);
 
             var video = MapFieldSetting(settings.GraphicsFieldsSettings.VideoCardFieldSetting);
             var graphicsFieldsSettingsModel = new GraphicsFieldsSettingsModel(video);

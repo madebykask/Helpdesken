@@ -188,6 +188,7 @@
             var accountingDimension3 = CreateFieldSetting(entity.FindByName(ContractFields.AccountingDimension3));
             var accountingDimension4 = CreateFieldSetting(entity.FindByName(ContractFields.AccountingDimension4));
             var accountingDimension5 = CreateFieldSetting(entity.FindByName(ContractFields.AccountingDimension5));
+            var document = CreateFieldSetting(entity.FindByName(ContractFields.Document));
 
             var settings = new ContractFieldsSettings(
                 contractStatusName,
@@ -199,7 +200,8 @@
                 accountingDimension2,
                 accountingDimension3,
                 accountingDimension4,
-                accountingDimension5);
+                accountingDimension5,
+                document);
 
             return settings;
         }

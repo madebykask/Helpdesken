@@ -10,6 +10,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ComputerFieldSettings;
     using DH.Helpdesk.Common.Collections;
     using DH.Helpdesk.Common.Extensions.Boolean;
+    using DH.Helpdesk.Dal.Attributes.Inventory;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Enums.Inventory.Computer;
     using DH.Helpdesk.Dal.Enums.Inventory.Shared;
@@ -86,6 +87,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             MapDateFieldsSettings(businessModel.DateFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
         }
 
+        [CreateMissingComputerSettings("customerId")]
         public ComputerFieldsSettings GetFieldSettingsForEdit(int customerId, int languageId)
         {
             var languageTextId = this.GetLanguageTextId(languageId);
@@ -130,6 +132,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             return this.entityToBusinessModelMapperForEdit.Map(settingCollection);
         }
 
+        [CreateMissingComputerSettings("customerId")]
         public ComputerFieldsSettingsForModelEdit GetFieldSettingsForModelEdit(int customerId, int languageId)
         {
             var languageTextId = this.GetLanguageTextId(languageId);
@@ -172,6 +175,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             return this.entityToBusinessModelMapperForModelEdit.Map(settingCollection);
         }
 
+        [CreateMissingComputerSettings("customerId")]
         public ComputerFieldsSettingsOverview GetFieldSettingsOverview(int customerId, int languageId)
         {
             var languageTextId = this.GetLanguageTextId(languageId);
@@ -210,6 +214,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             return this.entityToBusinessModelMapperForOverview.Map(settingCollection);
         }
 
+        [CreateMissingComputerSettings("customerId")]
         public ComputerFieldsSettingsOverviewForFilter GetFieldSettingsOverviewForFilter(int customerId, int languageId)
         {
             var languageTextId = this.GetLanguageTextId(languageId);
