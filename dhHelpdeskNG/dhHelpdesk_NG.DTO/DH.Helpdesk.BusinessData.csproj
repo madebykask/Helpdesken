@@ -163,6 +163,9 @@
     <Compile Include="Models\Reports\Output\RegistratedCasesCaseTypeReportResponse.cs" />
     <Compile Include="Models\Inventory\ReportModel.cs" />
     <Compile Include="Models\Inventory\ReportModelWithInventoryType.cs" />
+    <Compile Include="Models\Reports\Output\RegistratedCasesDayItem.cs" />
+    <Compile Include="Models\Reports\Output\RegistratedCasesDayOptionsResponse.cs" />
+    <Compile Include="Models\Reports\Output\RegistratedCasesDayReportResponse.cs" />
     <Compile Include="Models\Shared\Input\SortField.cs" />
     <Compile Include="Models\BusinessModel.cs" />
     <Compile Include="Models\Customer\CustomerSettings.cs" />

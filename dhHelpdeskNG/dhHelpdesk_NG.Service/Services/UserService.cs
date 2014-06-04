@@ -10,6 +10,7 @@ namespace DH.Helpdesk.Services.Services
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.Common.Extensions.String;
     using DH.Helpdesk.Dal.Infrastructure;
@@ -100,6 +101,8 @@ namespace DH.Helpdesk.Services.Services
         /// The <see cref="UserOverview"/>.
         /// </returns>
         UserOverview GetUserOverview(int user);
+
+        List<ItemOverview> FindActiveOverviews(int customerId);
     }
 
     public class UserService : IUserService
@@ -678,6 +681,11 @@ namespace DH.Helpdesk.Services.Services
         public UserOverview GetUserOverview(int user)
         {
             return this._userRepository.GetUser(user);
+        }
+
+        public List<ItemOverview> FindActiveOverviews(int customerId)
+        {
+            return this._userRepository.FindActiveOverviews(customerId);
         }
 
         /// <summary>

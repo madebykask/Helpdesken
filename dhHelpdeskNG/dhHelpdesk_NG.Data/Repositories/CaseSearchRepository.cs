@@ -308,7 +308,7 @@
             StringBuilder sb = new StringBuilder();
 
             // fields
-            sb.Append("select distinct ");
+            sb.Append("select ");
             //vid avslutade ärenden visas bara första 500, TODO fungerar inte i Oracle 
             if (f.CaseProgress == "1")
                 sb.Append(" top 500 ");

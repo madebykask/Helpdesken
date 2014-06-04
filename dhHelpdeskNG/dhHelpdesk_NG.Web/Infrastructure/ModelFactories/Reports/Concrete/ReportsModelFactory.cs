@@ -104,11 +104,72 @@
             return instance;
         }
 
+        public RegistratedCasesDayOptions CreateRegistratedCasesDayOptions(OperationContext context)
+        {
+            var response = this.reportsService.GetRegistratedCasesDayOptionsResponse(context);
+            var departments = CreateListField(response.Departments);
+            var caseTypes = CreateMultiSelectField(response.CaseTypes);
+            var workingGroups = CreateListField(response.WorkingGroups);
+            var administrators = CreateListField(response.Administrators);
+            var instance = new RegistratedCasesDayOptions(
+                            departments,
+                            caseTypes,
+                            workingGroups,
+                            administrators);
+            var today = DateTime.Today;
+            instance.Period = today;
+            return instance;
+        }
+
+        public RegistratedCasesDayReport CreateRegistratedCasesDayReport(RegistratedCasesDayOptions options, OperationContext context)
+        {
+            var response = this.reportsService.GetRegistratedCasesDayReportResponse(
+                            context,
+                            options.DepartmentId,
+                            options.CaseTypeIds.ToArray(),
+                            options.WorkingGroupId,
+                            options.AdministratorId,
+                            options.Period);
+
+            ReportFile file;
+            if (!this.reportsHelper.CreateRegistratedCasesDayReport(
+                                        response.Customer,
+                                        response.ReportType,
+                                        response.Department,
+                                        response.CaseTypes,
+                                        response.WorkingGroup,
+                                        response.Administrator,
+                                        options.Period,
+                                        options.IsPrint,
+                                        response.Items.ToArray(),
+                                        out file))
+            {
+                return null;
+            }
+
+            var instance = new RegistratedCasesDayReport(
+                                    response.Customer,
+                                    response.ReportType,
+                                    response.Department,
+                                    response.CaseTypes,
+                                    response.WorkingGroup,
+                                    response.Administrator,
+                                    options.Period,
+                                    file);
+            return instance;
+        }
+
         private static SelectList CreateListField(
             IEnumerable<ItemOverview> items,
             int selectedId)
         {
             return new SelectList(items, "Value", "Name", selectedId);
+        }
+
+        private static SelectList CreateListField(
+            IEnumerable<ItemOverview> items)
+        {
+            return new SelectList(items, "Value", "Name");
         }
 
         private static MultiSelectList CreateMultiSelectField(

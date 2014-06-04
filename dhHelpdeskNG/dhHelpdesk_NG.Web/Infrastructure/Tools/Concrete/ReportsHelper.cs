@@ -87,6 +87,21 @@
             return true;
         }
 
+        public bool CreateRegistratedCasesDayReport(
+            ItemOverview customer,
+            ItemOverview report,
+            ItemOverview department,
+            IEnumerable<ItemOverview> caseTypes,
+            ItemOverview workingGroup,
+            ItemOverview administrator,
+            DateTime period,
+            bool isPrint,
+            RegistratedCasesDayItem[] items,
+            out ReportFile file)
+        {
+            throw new NotImplementedException();
+        }
+
         public byte[] GetReportImageFromCache(string objectId, string fileName)
         {
             return this.temporaryFilesCache.GetFileContent(fileName, objectId);

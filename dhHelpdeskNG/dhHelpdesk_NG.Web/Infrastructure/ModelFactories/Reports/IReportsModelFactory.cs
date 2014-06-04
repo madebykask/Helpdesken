@@ -18,5 +18,11 @@
         RegistratedCasesCaseTypeReport CreateRegistratedCasesCaseTypeReport(
                                 RegistratedCasesCaseTypeOptions options,
                                 OperationContext context);
+
+        RegistratedCasesDayOptions CreateRegistratedCasesDayOptions(OperationContext context);
+
+        RegistratedCasesDayReport CreateRegistratedCasesDayReport(
+                                RegistratedCasesDayOptions options,
+                                OperationContext context);
     }
 }

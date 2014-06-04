@@ -2,6 +2,12 @@
 
 @{
     Layout = null;
+
+    if (Model.Files == null || !Model.Files.Any())
+    {
+        @Html.Partial("Empty")
+        return;
+    }
 }
 
 @foreach (var file in Model.Files)

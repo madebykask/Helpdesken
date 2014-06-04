@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
@@ -17,6 +18,8 @@
 
         void SaveDepartment(Department department, out IDictionary<string, string> errors);
         void Commit();
+
+        List<ItemOverview> FindActiveOverviews(int customerId);
     }
 
     public class DepartmentService : IDepartmentService
@@ -103,6 +106,11 @@
         public void Commit()
         {
             this._unitOfWork.Commit();
+        }
+
+        public List<ItemOverview> FindActiveOverviews(int customerId)
+        {
+            return this._departmentRepository.FindActiveOverviews(customerId);
         }
     }
 }

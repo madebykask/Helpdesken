@@ -19,5 +19,15 @@
                                                     int? productAreaId,
                                                     DateTime periodFrom,
                                                     DateTime periodUntil);
+
+        RegistratedCasesDayOptionsResponse GetRegistratedCasesDayOptionsResponse(OperationContext context);
+
+        RegistratedCasesDayReportResponse GetRegistratedCasesDayReportResponse(
+                                                    OperationContext context,
+                                                    int? departmentId,
+                                                    int[] caseTypesIds,
+                                                    int? workingGroupId,
+                                                    int? administrator,
+                                                    DateTime period);
     }
 }

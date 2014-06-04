@@ -635,6 +635,8 @@
     <Compile Include="Models\Reports\IndexModel.cs" />
     <Compile Include="Models\Reports\RegistratedCasesCaseTypeOptions.cs" />
     <Compile Include="Models\Reports\RegistratedCasesCaseTypeReport.cs" />
+    <Compile Include="Models\Reports\RegistratedCasesDayOptions.cs" />
+    <Compile Include="Models\Reports\RegistratedCasesDayReport.cs" />
     <Compile Include="Models\Reports\SearchModel.cs" />
     <Compile Include="Models\Shared\ConfigurableContainerModel.cs" />
     <Compile Include="Models\Shared\ConfigurableSearchFieldModel.cs" />

@@ -79,6 +79,10 @@
                     return this.PartialView(
                                 "RegistratedCasesCaseTypeOptions", 
                                 this.reportsModelFactory.CreateRegistratedCasesCaseTypeOptions(this.OperationContext));
+                case ReportType.RegistratedCasesDay:                    
+                    return this.PartialView(
+                                "RegistratedCasesDayOptions", 
+                                this.reportsModelFactory.CreateRegistratedCasesDayOptions(this.OperationContext));
             }
 
             return null;
@@ -96,6 +100,20 @@
             }
 
             return this.PartialView("RegistratedCasesCaseTypeView", model);
+        }
+
+        [HttpPost]
+        [BadRequestOnNotValid]
+        public ActionResult RegistratedCasesDay(RegistratedCasesDayOptions options)
+        {
+            var model = this.reportsModelFactory.CreateRegistratedCasesDayReport(options, this.OperationContext);
+
+            if (options.IsPrint)
+            {
+                return new PrintPdfResult(model, "RegistratedCasesDayPrint");
+            }
+
+            return this.PartialView("RegistratedCasesDayView", model);
         }
 
         [HttpGet]

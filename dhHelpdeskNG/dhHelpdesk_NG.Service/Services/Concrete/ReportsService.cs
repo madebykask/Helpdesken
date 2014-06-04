@@ -21,13 +21,19 @@
 
         private readonly ICaseService caseService;
 
+        private readonly IDepartmentService departmentService;
+
+        private readonly IUserService userService;
+
         public ReportsService(
             IReportCustomerRepository reportCustomerRepository, 
             IWorkingGroupService workingGroupService, 
             ICaseTypeService caseTypeService, 
             IProductAreaService productAreaService, 
             ICustomerRepository customerRepository, 
-            ICaseService caseService)
+            ICaseService caseService, 
+            IDepartmentService departmentService, 
+            IUserService userService)
         {
             this.reportCustomerRepository = reportCustomerRepository;
             this.workingGroupService = workingGroupService;
@@ -35,6 +41,8 @@
             this.productAreaService = productAreaService;
             this.customerRepository = customerRepository;
             this.caseService = caseService;
+            this.departmentService = departmentService;
+            this.userService = userService;
         }
 
         public SearchData GetSearchData(OperationContext context)
@@ -83,6 +91,38 @@
                                                         caseTypes,
                                                         productArea,
                                                         items);            
+        }
+
+        public RegistratedCasesDayOptionsResponse GetRegistratedCasesDayOptionsResponse(OperationContext context)
+        {
+            var departments = this.departmentService.FindActiveOverviews(context.CustomerId);
+            var caseTypes = this.caseTypeService.GetOverviews(context.CustomerId);
+            var workingGroups = this.workingGroupService.GetOverviews(context.CustomerId);
+            var administrators = this.userService.FindActiveOverviews(context.CustomerId);
+
+            return new RegistratedCasesDayOptionsResponse(
+                                                        departments,
+                                                        caseTypes,
+                                                        workingGroups,
+                                                        administrators);
+        }
+
+        public RegistratedCasesDayReportResponse GetRegistratedCasesDayReportResponse(
+                                            OperationContext context,
+                                            int? departmentId,
+                                            int[] caseTypesIds,
+                                            int? workingGroupId,
+                                            int? administrator,
+                                            DateTime period)
+        {
+//            var customer = this.customerRepository.GetOverview(context.CustomerId);
+//            var report = this.reportCustomerRepository.GetOverview(context.CustomerId, ReportType.RegistratedCasesDay);
+//
+//            return new RegistratedCasesDayReportResponse(
+//                                            customer,
+//                                            report,
+//                                            );
+            return null;
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿@model DH.Helpdesk.Web.Models.Reports.RegistratedCasesCaseTypeReport
            
 @{
-    Layout = null;
+    Layout = null;    
 }
 
 <!DOCTYPE html>
@@ -62,9 +62,16 @@
                 </tr>
             </tbody>
         </table>
-        @foreach (var file in Model.Files)
+        @if (Model.Files == null || !Model.Files.Any())
         {
-            <img src="@file.FileName" />                                    
+            @Html.Partial("Empty")
+        }
+        else
+        {
+            foreach (var file in Model.Files)
+            {
+                <img src="@file.FileName" />                                    
+            }            
         }
     </body>
 </html>

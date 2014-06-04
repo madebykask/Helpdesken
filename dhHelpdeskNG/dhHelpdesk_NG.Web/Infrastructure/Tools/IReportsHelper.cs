@@ -23,6 +23,18 @@
                             RegistratedCasesCaseTypeItem[] items,
                             out List<ReportFile> files);
 
+       bool CreateRegistratedCasesDayReport(
+                            ItemOverview customer,
+                            ItemOverview report,
+                            ItemOverview department,
+                            IEnumerable<ItemOverview> caseTypes,
+                            ItemOverview workingGroup,
+                            ItemOverview administrator,
+                            DateTime period,
+                            bool isPrint,
+                            RegistratedCasesDayItem[] items,
+                            out ReportFile file);
+
         byte[] GetReportImageFromCache(string objectId, string fileName);
 
         string GetReportPathFromCache(string objectId, string fileName);
