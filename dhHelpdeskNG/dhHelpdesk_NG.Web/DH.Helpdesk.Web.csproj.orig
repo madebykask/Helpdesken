@@ -1,0 +1,2315 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{FFCFD298-57C0-46A4-8554-CB2163A49B25}</ProjectGuid>
+    <ProjectTypeGuids>{E53F8FEA-EAE0-44A6-8774-FFD645390401};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DH.Helpdesk.Web</RootNamespace>
+    <AssemblyName>DH.Helpdesk.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <DontImportPostSharp>True</DontImportPostSharp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DataAnnotationsExtensions">
+      <HintPath>..\packages\DataAnnotationsExtensions.1.1.0.0\lib\NETFramework40\DataAnnotationsExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="DataAnnotationsExtensions.ClientValidation">
+      <HintPath>..\packages\DataAnnotationsExtensions.MVC3.1.1.0.0\lib\NETFramework40\DataAnnotationsExtensions.ClientValidation.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net40\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp">
+      <HintPath>..\packages\iTextSharp.4.1.2\lib\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.6\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net40\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Web.Common, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Ninject.Web.Common.3.2.0.0\lib\net40-full\Ninject.Web.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Web.Mvc">
+      <HintPath>..\packages\Ninject.MVC3.3.2.0.0\lib\net40-full\Ninject.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="RazorPDF">
+      <HintPath>..\packages\RazorPDF.1.0.0\lib\net40\RazorPDF.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.4.0.20710.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.WebRequest.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.4.0.20710.0\lib\net40\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.4.0.20710.0\lib\net40\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PostSharp">
+      <HintPath>..\packages\PostSharp.3.1.33\lib\net20\PostSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Core">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Extensions">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Abstractions">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Routing">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Configuration">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.XML">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WebActivator">
+      <HintPath>..\packages\WebActivator.1.4.1\lib\net40\WebActivator.dll</HintPath>
+    </Reference>
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\WebActivatorEx.2.0.5\lib\net40\WebActivatorEx.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\NinjectModules\Common\CommonModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Common\ConfigurationModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Common\UserModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Common\WorkContextModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Modules\CasesModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Modules\ChangesModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Modules\EmailModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Modules\FaqModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Modules\InventoryModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Modules\LinkModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Modules\NotifiersModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Modules\ProblemModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Modules\ProjectModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Common\RepositoriesModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Common\ServicesModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Common\ToolsModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Modules\ReportsModule.cs" />
+    <Compile Include="App_Start\NinjectWebCommon.cs" />
+    <Compile Include="App_Start\RegisterClientValidationExtensions.cs" />
+    <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\AccountActivityController.cs" />
+    <Compile Include="Areas\Admin\Controllers\BuildingController.cs" />
+    <Compile Include="Areas\Admin\Controllers\CaseTypeController.cs" />
+    <Compile Include="Areas\Admin\Controllers\CategoryController.cs" />
+    <Compile Include="Areas\Admin\Controllers\CausingPartController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ChangeCategoryController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ChangeGroupController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ChangeImplementationStatusController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ChangeObjectController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ChangePriorityController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ChangeStatusController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ChecklistActionController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ChecklistServiceController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ComputerUserGroupController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ComputerUsersBlackListController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ContractCategoryController.cs" />
+    <Compile Include="Areas\Admin\Controllers\CustomerCaseOverviewController.cs" />
+    <Compile Include="Areas\Admin\Controllers\CustomerCaseFieldSettingsController.cs" />
+    <Compile Include="Areas\Admin\Controllers\CustomerSettingsController.cs" />
+    <Compile Include="Areas\Admin\Controllers\CurrencyController.cs" />
+    <Compile Include="Areas\Admin\Controllers\DailyReportSubjectController.cs" />
+    <Compile Include="Areas\Admin\Controllers\DepartmentController.cs" />
+    <Compile Include="Areas\Admin\Controllers\DomainController.cs" />
+    <Compile Include="Areas\Admin\Controllers\EMailGroupController.cs" />
+    <Compile Include="Areas\Admin\Controllers\FinishingCauseCategoryController.cs" />
+    <Compile Include="Areas\Admin\Controllers\FinishingCauseController.cs" />
+    <Compile Include="Areas\Admin\Controllers\FloorController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ImpactController.cs" />
+    <Compile Include="Areas\Admin\Controllers\InfoTextController.cs" />
+    <Compile Include="Areas\Admin\Controllers\MailTemplateController.cs" />
+    <Compile Include="Areas\Admin\Controllers\OperationLogCategoryController.cs" />
+    <Compile Include="Areas\Admin\Controllers\OperationObjectController.cs" />
+    <Compile Include="Areas\Admin\Controllers\OrderStateController.cs" />
+    <Compile Include="Areas\Admin\Controllers\OrderTypeController.cs" />
+    <Compile Include="Areas\Admin\Controllers\OUController.cs" />
+    <Compile Include="Areas\Admin\Controllers\PriorityController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ProductAreaController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ProgramController.cs" />
+    <Compile Include="Areas\Admin\Controllers\QuickLinkController.cs" />
+    <Compile Include="Areas\Admin\Controllers\RegionController.cs" />
+    <Compile Include="Areas\Admin\Controllers\RoomController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SettingsController.cs" />
+    <Compile Include="Areas\Admin\Controllers\StandardTextController.cs" />
+    <Compile Include="Areas\Admin\Controllers\StartController.cs" />
+    <Compile Include="Areas\Admin\Controllers\StateSecondaryController.cs" />
+    <Compile Include="Areas\Admin\Controllers\StatusController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SupplierController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SystemController.cs" />
+    <Compile Include="Areas\Admin\Controllers\UrgencyController.cs" />
+    <Compile Include="Areas\Admin\Controllers\WorkingGroupController.cs" />
+    <Compile Include="Areas\Admin\Models\AccountActivityInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\CaseTypeInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\CategoryViewModels.cs" />
+    <Compile Include="Areas\Admin\Models\CausingPart\CausingPartsViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\CausingPart\CausingPartViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\ChecklistActionInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\ComputerUserGroupInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\ContractCategoryInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\CaseTypeIndexViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\ChangeStatusViewModels.cs" />
+    <Compile Include="Areas\Admin\Models\ChangePriorityViewModels.cs" />
+    <Compile Include="Areas\Admin\Models\ChangeObjectViewModels.cs" />
+    <Compile Include="Areas\Admin\Models\ChangeGroupViewModels.cs" />
+    <Compile Include="Areas\Admin\Models\ChangeCategoryViewModels.cs" />
+    <Compile Include="Areas\Admin\Models\ChangeImplementationStatusViewModels.cs" />
+    <Compile Include="Areas\Admin\Models\ContractCategoryIndexViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\AccountActivityIndexViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\BuildingViewModels.cs" />
+    <Compile Include="Areas\Admin\Models\InfoTextViewModels.cs" />
+    <Compile Include="Areas\Admin\Models\StandardTextViewModels.cs" />
+    <Compile Include="Areas\Admin\Models\ProgramIndexViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\QuickLinkIndexViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\EmailGroupViewModels.cs" />
+    <Compile Include="Areas\Admin\Models\DomainViewModels.cs" />
+    <Compile Include="Areas\Admin\Models\FloorIndexViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\OperationLogCategoryViewModels.cs" />
+    <Compile Include="Areas\Admin\Models\OperationObjectIndexViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\DailyReportSubjectIndexViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\OrderTypeIndexViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\OrderStateViewModels.cs" />
+    <Compile Include="Areas\Admin\Models\FinishingCauseIndexViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\FinishingCauseCategoryIndexViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\FinishingCauseCategoryInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\StateSecondaryIndexViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\StatusIndexViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\StatusInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\ImpactIndexViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\ImpactInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\OUIndexViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\DepartmentIndexViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\RegionIndexViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\UrgencyIndexViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\ProductAreaIndexViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\PriorityIndexViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\WorkingGroupIndexViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\SystemIndexViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\SupplierIndexViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\DailyReportSubjectInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\DepartmentInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\FinishingCauseInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\FloorInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\MailTemplateInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\OperationObjectInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\OrderTypeInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\OUInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\PriorityInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\ProductAreaInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\ProgramInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\QuickLinkInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\RegionInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\RoomInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\StateSecondaryInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\SupplierInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\SystemInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\UrgencyInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\WorkingGroupInputViewModel.cs" />
+    <Content Include="Content\js\Changes\inventoryDialog.js" />
+    <Compile Include="Controllers\AboutController.cs" />
+    <Compile Include="Controllers\AjaxController.cs" />
+    <Compile Include="Controllers\BulletinBoardController.cs" />
+    <Compile Include="Controllers\CalendarController.cs" />
+    <Compile Include="Controllers\CasesController.cs" />
+    <Compile Include="Controllers\CaseSolutionController.cs" />
+    <Compile Include="Controllers\ChangeLanguageController.cs" />
+    <Compile Include="Controllers\ChangesController.cs" />
+    <Compile Include="Controllers\FaqController.cs" />
+    <Compile Include="Controllers\InventoryController.cs" />
+    <Compile Include="Controllers\InventorySettingsController.cs" />
+    <Compile Include="Controllers\NotifiersController.cs" />
+    <Compile Include="Controllers\OperationLogController.cs" />
+    <Compile Include="Areas\Admin\Controllers\CustomerController.cs" />
+    <Compile Include="Controllers\DivisionController.cs" />
+    <Compile Include="Controllers\DocumentController.cs" />
+    <Compile Include="Areas\Admin\Controllers\GlobalSettingController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\PrintController.cs" />
+    <Compile Include="Controllers\ProblemController.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
+    <Compile Include="Controllers\ProjectsController.cs" />
+    <Compile Include="Controllers\QuestionnaireController.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
+    <Compile Include="Areas\Admin\Controllers\UsersController.cs" />
+    <Compile Include="Controllers\ServiceController.cs" />
+    <Compile Include="Controllers\UserInteractionController.cs" />
+    <Compile Include="Enums\Changes\ChangeDeletedItem.cs" />
+    <Compile Include="Enums\Changes\ClickedButton.cs" />
+    <Compile Include="Enums\Changes\TabName.cs" />
+    <Compile Include="Enums\Inventory\InventoryFilterMode.cs" />
+    <Compile Include="Enums\Inventory\PageName.cs" />
+    <Compile Include="Enums\Inventory\ReportDataTypes.cs" />
+    <Compile Include="Enums\Inventory\ReportFilterMode.cs" />
+    <Compile Include="Enums\Inventory\TabName.cs" />
+    <Compile Include="Enums\MimeType.cs" />
+    <Compile Include="Enums\PageName.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Infrastructure\ApplicationFacade.cs" />
+    <Compile Include="Infrastructure\Attributes\CurrentTabAttribute.cs" />
+    <Compile Include="Infrastructure\Binders\BinderHelper.cs" />
+    <Compile Include="Infrastructure\Binders\DateTimeBinder.cs" />
+    <Compile Include="Infrastructure\Binders\NullableDateTimeBinder.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\ComputerFieldsSettingsBuilder.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\FieldSettingBuilder.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Inventory\IComputerFieldsSettingsBuilder.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Inventory\IFieldSettingBuilder.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Inventory\IPrinterFieldsSettingsBuilder.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Inventory\IServerFieldsSettingsBuilder.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\PrinterFieldsSettingsBuilder.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\ServerFieldsSettingsBuilder.cs" />
+    <Compile Include="Infrastructure\Configuration\Concrete\ApplicationConfiguration.cs" />
+    <Compile Include="Infrastructure\ActionFilters\BadRequestOnNotValidAttribute.cs" />
+    <Compile Include="Infrastructure\Configuration\Concrete\Configuration.cs" />
+    <Compile Include="Infrastructure\Configuration\IApplicationConfiguration.cs" />
+    <Compile Include="Infrastructure\Configuration\IConfiguration.cs" />
+    <Compile Include="Infrastructure\BaseController.cs" />
+    <Compile Include="Infrastructure\BaseInputViewModel.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Notifiers\Concrete\NewNotifierFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Notifiers\Concrete\UpdatedNotifierFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Notifiers\INewNotifierFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Notifiers\IUpdatedNotifierFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Projects\INewProjectFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Projects\INewProjectLogFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Projects\INewProjectScheduleFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Projects\IUpdatedProjectFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Projects\IUpdatedProjectScheduleFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Projects\Concrete\NewProjectFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Projects\Concrete\NewProjectLogFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Projects\Concrete\NewProjectScheduleFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Projects\Concrete\UpdatedProjectFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Projects\Concrete\UpdatedProjectScheduleFactory.cs" />
+    <Compile Include="Infrastructure\Constants.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Changes\Concrete\NewChangeRequestFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Changes\Concrete\UpdateChangeRequestFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Changes\INewChangeRequestFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Changes\IUpdateChangeRequestFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Changes\IUpdatedSettingsFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Changes\Concrete\UpdatedSettingsFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Notifiers\Concrete\UpdatedSettingsFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Notifiers\IUpdatedSettingsFactory.cs" />
+    <Compile Include="Infrastructure\Enums.cs" />
+    <Compile Include="Infrastructure\Extensions\BooleanExtansions.cs" />
+    <Compile Include="Infrastructure\Extensions\ControllerExtensions.cs" />
+    <Compile Include="Infrastructure\Extensions\EnumExtensions.cs" />
+    <Compile Include="Infrastructure\Extensions\FileExtensions.cs" />
+    <Compile Include="Infrastructure\Extensions\GeneralExtensions.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\CaseFieldExtension.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\ConfigurableFieldModelExtension.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\DropDownContent.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\DropDownWithSubmenusContent.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\ListGroup.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\ListItem.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\TreeContent.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\DropDownExtension.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\DropDownWithSubmenusExtension.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\TreeItem.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\HierarchyList.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\HierarchyListExtension.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\TreeExtension.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\UrlExtension.cs" />
+    <Compile Include="Infrastructure\Extensions\ObjectExtensions.cs" />
+    <Compile Include="Infrastructure\Extensions\PagingExtensions.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\DropDownItem.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\DropDownWithSubmenusItem.cs" />
+    <Compile Include="Infrastructure\Extensions\RequestExtension.cs" />
+    <Compile Include="Infrastructure\Filters\Changes\ChangesFilter.cs" />
+    <Compile Include="Infrastructure\Filters\Notifiers\NotifierFilters.cs" />
+    <Compile Include="Infrastructure\Filters\Problems\ProblemFilter.cs" />
+    <Compile Include="Infrastructure\Filters\Projects\ProjectFilter.cs" />
+    <Compile Include="Infrastructure\Filters\Reports\ReportsFilter.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Case\Concrete\CaseModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Case\Concrete\CaseNotifierModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Case\ICaseModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Case\ICaseNotifierModelFactory.cs" />
+    <Compile Include="Infrastructure\LocalizedAttributes\LocalizedMinAttribute.cs" />
+    <Compile Include="Infrastructure\LocalizedAttributes\LocalizedIntegerAttribute.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\ComputerFieldsSettingsViewModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\DynamicsFieldsModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\FieldSettingModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\IComputerFieldsSettingsViewModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\IDynamicsFieldsModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\IFieldSettingModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\IInventoryFieldSettingsViewModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\IInventoryViewModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\InventoryViewModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\InventoryFieldSettingsViewModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\IPrinterFieldsSettingsViewModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\IServerFieldsSettingsViewModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\PrinterFieldsSettingsViewModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\ServerFieldsSettingsViewModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Reports\Concrete\ReportsModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Reports\IReportsModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\ComputerViewModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\ConfigurableFieldModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\IComputerViewModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\IConfigurableFieldModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\IPrinterViewModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\IServerViewModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\ServerViewModelBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\PrinterViewModelBuilder.cs" />
+    <Compile Include="Infrastructure\Mvc\UnicodeFileContentResult.cs" />
+    <Compile Include="Infrastructure\Print\PrintPdfEvents.cs" />
+    <Compile Include="Infrastructure\Print\PrintPdfResult.cs" />
+    <Compile Include="Infrastructure\Print\PrintPdfView.cs" />
+    <Compile Include="Infrastructure\Tools\Concrete\ReportFile.cs" />
+    <Compile Include="Infrastructure\Tools\Concrete\ReportsHelper.cs" />
+    <Compile Include="Infrastructure\Tools\IReportsHelper.cs" />
+    <Compile Include="Infrastructure\Tools\MimeHelper.cs" />
+    <Compile Include="Infrastructure\Translate\Translator.cs" />
+    <Compile Include="Infrastructure\WorkContext\Concrete\CacheContext.cs" />
+    <Compile Include="Infrastructure\WorkContext\Concrete\CustomerContext.cs" />
+    <Compile Include="Infrastructure\WorkContext\Concrete\UserContext.cs" />
+    <Compile Include="Infrastructure\WorkContext\Concrete\WorkContext.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Link\Concrete\LinkModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Link\ILinkModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\ExistingChange\Concrete\LogModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\NewChange\Concrete\NewLogModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\ExistingChange\ILogModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\NewChange\INewLogModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Notifiers\ISettingsModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Notifiers\Concrete\SettingsModelFactory.cs" />
+    <Compile Include="Infrastructure\LocalizedAttributes\ConditionalValidationAttribute.cs" />
+    <Compile Include="Infrastructure\LocalizedAttributes\LocalizedDisplayAttribute.cs" />
+    <Compile Include="Infrastructure\LocalizedAttributes\LocalizedMaxLengthFromAttribute.cs" />
+    <Compile Include="Infrastructure\LocalizedAttributes\LocalizedRequiredAttribute.cs" />
+    <Compile Include="Infrastructure\LocalizedAttributes\LocalizedStringLengthAttribute.cs" />
+    <Compile Include="Infrastructure\LocalizedAttributes\LocalizedRequiredFromAttribute.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\ExistingChange\Concrete\AnalyzeModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\ExistingChange\Concrete\ChangeModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\ExistingChange\Concrete\EvaluationModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\ExistingChange\Concrete\GeneralModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\ExistingChange\Concrete\HistoryModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\NewChange\INewGeneralModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\NewChange\Concrete\NewGeneralModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\NewChange\INewRegistrationModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\NewChange\Concrete\NewRegistrationModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\NewChange\INewOrdererModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\NewChange\Concrete\NewOrdererModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\ExistingChange\IHistoryModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\ExistingChange\IGeneralModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\ExistingChange\Concrete\ImplementationModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\ExistingChange\IOrdererModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\ExistingChange\Concrete\OrdererModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\ExistingChange\Concrete\RegistrationModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\ExistingChange\IEvaluationModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\ExistingChange\IImplementationModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\ExistingChange\IRegistrationModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\ExistingChange\IAnalyzeModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\ChangesGridModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\ConfigurableFieldModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\LogsModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\NewChange\Concrete\NewChangeModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\SearchModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\SettingsModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\ExistingChange\IChangeModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\IChangesGridModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\IConfigurableFieldModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ILogsModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\NewChange\INewChangeModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ISearchModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ISettingsModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Common\Concrete\SendToDialogModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Common\ISendToDialogModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Faq\Concrete\EditFaqModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Faq\IEditFaqModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Faq\IIndexModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Faq\Concrete\IndexModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Faq\INewFaqModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Faq\Concrete\NewFaqModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Notifiers\Concrete\IndexModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Notifiers\INotifierModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Notifiers\INotifierInputFieldModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Notifiers\Concrete\NewNotifierModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Notifiers\Concrete\NotifierInputFieldModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Notifiers\Concrete\NotifierModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Notifiers\Concrete\NotifiersGridModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Notifiers\Concrete\NotifiersModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Notifiers\IIndexModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Notifiers\INewNotifierModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Notifiers\INotifiersGridModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Notifiers\INotifiersModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Projects\Concrete\NewProjectViewModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Projects\Concrete\UpdatedProjectViewModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Projects\IIndexProjectViewModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Projects\Concrete\IndexProjectViewModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Projects\INewProjectViewModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Projects\IUpdatedProjectViewModelFactory.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtension.cs" />
+    <Compile Include="Infrastructure\Extensions\IntegerExtensions.cs" />
+    <Compile Include="Infrastructure\Permission.cs" />
+    <Compile Include="Infrastructure\SessionFacade.cs" />
+    <Compile Include="Infrastructure\Extensions\StringExtensions.cs" />
+    <Compile Include="Infrastructure\Session\ActiveTab.cs" />
+    <Compile Include="Infrastructure\Session\PageFilters.cs" />
+    <Compile Include="Infrastructure\Tools\Concrete\DeletedFile.cs" />
+    <Compile Include="Infrastructure\Tools\Concrete\DeletedItem.cs" />
+    <Compile Include="Infrastructure\Tools\Concrete\EditorStateCache.cs" />
+    <Compile Include="Infrastructure\Tools\Concrete\EditorStateCacheFactory.cs" />
+    <Compile Include="Infrastructure\Tools\Concrete\TemporaryFilesCache.cs" />
+    <Compile Include="Infrastructure\Tools\Concrete\TemporaryFilesCacheFactory.cs" />
+    <Compile Include="Infrastructure\Tools\IEditorStateCache.cs" />
+    <Compile Include="Infrastructure\Tools\IEditorStateCacheFactory.cs" />
+    <Compile Include="Infrastructure\Tools\ITemporaryFilesCache.cs" />
+    <Compile Include="Infrastructure\Tools\ITemporaryFilesCacheFactory.cs" />
+    <Compile Include="Infrastructure\Tools\WebTemporaryFile.cs" />
+    <Compile Include="Infrastructure\Translation.cs" />
+    <Compile Include="Infrastructure\LocalizedAttributes\Rules\ModelClientValidationMaxLengthFromRule.cs" />
+    <Compile Include="Infrastructure\LocalizedAttributes\Rules\ModelClientValidationRequiredFromRule.cs" />
+    <Compile Include="Models\BulletinBoardInputViewModel.cs" />
+    <Compile Include="Models\CalendarInputViewModel.cs" />
+    <Compile Include="Models\Case\CaseFilterSeachBoxes.cs" />
+    <Compile Include="Models\CaseSolutionInputViewModel.cs" />
+    <Compile Include="Models\Case\CaseOverview.cs" />
+    <Compile Include="Models\Case\CaseTemplateTreeModel.cs" />
+    <Compile Include="Models\Case\CaseViewModel.cs" />
+    <Compile Include="Models\Case\CaseSettingModel.cs" />
+    <Compile Include="Models\Changes\ChangeEdit\GeneralModel.cs" />
+    <Compile Include="Models\Changes\ChangeEdit\InviteToModel.cs" />
+    <Compile Include="Models\Changes\ChangeEdit\LogModel.cs" />
+    <Compile Include="Models\Changes\ChangeEdit\OrdererModel.cs" />
+    <Compile Include="Models\Changes\ChangeEdit\Contacts\ContactModel.cs" />
+    <Compile Include="Models\Changes\ChangeEdit\Contacts\ContactsModel.cs" />
+    <Compile Include="Models\Changes\IndexModel.cs" />
+    <Compile Include="Models\Changes\InventoryDialog\InventoryDialogModel.cs" />
+    <Compile Include="Models\Changes\InventoryDialog\InventoryTypeModel.cs" />
+    <Compile Include="Models\Changes\SettingsEdit\AnalyzeSettingsModel.cs" />
+    <Compile Include="Models\Changes\ChangeEdit\FieldDifferencesModel.cs" />
+    <Compile Include="Models\Changes\ChangeEdit\AttachedFilesModel.cs" />
+    <Compile Include="Models\Changes\ChangeEdit\HistoryRecordModel.cs" />
+    <Compile Include="Models\Changes\ChangeEdit\HistoryModel.cs" />
+    <Compile Include="Models\Changes\ChangeEdit\AnalyzeModel.cs" />
+    <Compile Include="Models\Changes\ChangesGrid\ChangeOverviewModel.cs" />
+    <Compile Include="Models\Changes\ChangesGrid\ChangesGridModel.cs" />
+    <Compile Include="Models\Changes\SettingsEdit\EvaluationSettingsModel.cs" />
+    <Compile Include="Models\Changes\ChangeEdit\EvaluationModel.cs" />
+    <Compile Include="Models\Changes\SettingsEdit\FieldSettingModel.cs" />
+    <Compile Include="Models\Changes\SettingsEdit\GeneralSettingsModel.cs" />
+    <Compile Include="Models\Changes\SettingsEdit\ImplementationSettingsModel.cs" />
+    <Compile Include="Models\Changes\ChangeEdit\ImplementationModel.cs" />
+    <Compile Include="Models\Changes\ChangeEdit\InputModel.cs" />
+    <Compile Include="Models\Changes\SettingsEdit\LogSettingsModel.cs" />
+    <Compile Include="Models\Changes\LogModel.cs" />
+    <Compile Include="Models\Changes\LogsModel.cs" />
+    <Compile Include="Models\Changes\SettingsEdit\OrdererSettingsModel.cs" />
+    <Compile Include="Models\Changes\SettingsEdit\RegistrationSettingsModel.cs" />
+    <Compile Include="Models\Changes\ChangeEdit\RegistrationModel.cs" />
+    <Compile Include="Models\Changes\SearchModel.cs" />
+    <Compile Include="Models\Changes\SettingsEdit\SettingsModel.cs" />
+    <Compile Include="Models\Changes\SettingsEdit\TextFieldSettingModel.cs" />
+    <Compile Include="Models\Changes\ChangeEdit\ConfigurableFieldModel.cs" />
+    <Compile Include="Models\Inventory\ComputerModuleModeFilter.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\AccesoriesViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\ChassisFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\ConfigurableFieldModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\InventoryFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\MemoryFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\MemoryFieldsViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\OperatingSystemFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\OperatingSystemFieldsViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\ProccesorFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\ProccesorFieldsViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Computer\ChassisFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Computer\FieldSettingModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Computer\InventoryFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Computer\MemoryFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Computer\OperatingSystemFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Computer\ProccesorFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\InventoryDynamicFieldSettingModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Inventory\NewInventoryFieldSettingsViewModel.cs" />
+    <Compile Include="Models\Inventory\OptionsAggregates\ComputerEditOptions.cs" />
+    <Compile Include="Models\Inventory\EditModel\ComputerModuleGridModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Inventory\DefaultFieldsViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Inventory\InventoryEditViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Server\ServerEditViewModel.cs" />
+    <Compile Include="Models\Inventory\OptionsAggregates\InventoryEditOptions.cs" />
+    <Compile Include="Models\Inventory\OptionsAggregates\PrinterEditOptions.cs" />
+    <Compile Include="Models\Inventory\OptionsAggregates\ServerEditOptions.cs" />
+    <Compile Include="Models\Inventory\ReportFilter.cs" />
+    <Compile Include="Models\Inventory\SearchModels\CustomTypeReportSearchViewModel.cs" />
+    <Compile Include="Models\Inventory\SearchModels\CustomTypeReportsSearchFilter.cs" />
+    <Compile Include="Models\Inventory\SearchModels\InstaledProgramsReportSearchFilter.cs" />
+    <Compile Include="Models\Inventory\SearchModels\InstaledProgramsReportSearchViewModel.cs" />
+    <Compile Include="Models\Inventory\SearchModels\InventoryReportSearchFilter.cs" />
+    <Compile Include="Models\Inventory\SearchModels\InventoryReportSearchViewModel.cs" />
+    <Compile Include="Models\Inventory\SearchModels\ReportsSearchFilter.cs" />
+    <Compile Include="Models\Inventory\SearchModels\ReportsSearchViewModel.cs" />
+    <Compile Include="Models\Reports\IndexModel.cs" />
+    <Compile Include="Models\Reports\RegistratedCasesCaseTypeOptions.cs" />
+    <Compile Include="Models\Reports\RegistratedCasesCaseTypeReport.cs" />
+    <Compile Include="Models\Reports\RegistratedCasesDayOptions.cs" />
+    <Compile Include="Models\Reports\RegistratedCasesDayReport.cs" />
+    <Compile Include="Models\Reports\SearchModel.cs" />
+    <Compile Include="Models\Shared\ConfigurableContainerModel.cs" />
+    <Compile Include="Models\Shared\ConfigurableSearchFieldModel.cs" />
+    <Compile Include="Models\Shared\CustomersInfoModel.cs" />
+    <Compile Include="Models\Shared\DateAndTimeModel.cs" />
+    <Compile Include="Models\Shared\DateRange.cs" />
+    <Compile Include="Models\Shared\NewGridRowCellValueModel.cs" />
+    <Compile Include="Models\Shared\SortFieldModel.cs" />
+    <Compile Include="Models\ComputerUserInputViewModel.cs" />
+    <Compile Include="Models\Customers\CustomersInfoViewModel.cs" />
+    <Compile Include="Models\Faq\Output\EditCategoryModel.cs" />
+    <Compile Include="Models\Faq\Output\EditFaqModel.cs" />
+    <Compile Include="Models\Faq\Output\EditingCategoryModel.cs" />
+    <Compile Include="Models\Faq\Output\EditingFaqModel.cs" />
+    <Compile Include="Models\Faq\Output\FaqDetailedOverviewModel.cs" />
+    <Compile Include="Models\Faq\Output\FaqOverviewModel.cs" />
+    <Compile Include="Models\Faq\Output\IndexModel.cs" />
+    <Compile Include="Models\Faq\Input\EditCategoryInputModel.cs" />
+    <Compile Include="Models\Faq\Input\EditFaqInputModel.cs" />
+    <Compile Include="Models\Faq\Input\NewCategoryInputModel.cs" />
+    <Compile Include="Models\Faq\Input\NewFaqInputModel.cs" />
+    <Compile Include="Models\Faq\Output\NewCategoryModel.cs" />
+    <Compile Include="Models\Faq\Output\NewFaqModel.cs" />
+    <Compile Include="Models\Shared\GroupEmailsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\ComputerLogModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\ComputerModuleModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\CommunicationFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\CommunicationFieldsViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\ComputerEditViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\ComputerViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\ContactFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\ContactInformationFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\ContractFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\ContractFieldsViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\DateFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\GraphicsFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\OtherFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\PlaceFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\PlaceFieldsViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\SoundFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\StateFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\StateFieldsViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\WorkstationFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\WorkstationFieldsViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\ConfigurableFieldModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Inventory\ConfigurableFieldModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Inventory\DynamicFieldModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Inventory\DefaultFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Inventory\InventoryViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\ModuleTypes.cs" />
+    <Compile Include="Models\Inventory\EditModel\Printer\CommunicationFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Printer\CommunicationFieldsViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Printer\GeneralFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Printer\OrganizationFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Printer\OrganizationFieldsViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Printer\OtherFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Printer\PrinterViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Server\GeneralFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Server\OtherFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Server\ServerViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Server\StateFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Server\StorageFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Computer\OrganizationFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\FieldSettingModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Inventory\DefaultFieldSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\InventoryFieldSettingModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Inventory\InventoryFieldSettingsViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Printer\GeneralFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Printer\OrganizationFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Printer\OtherFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Printer\PrinterFieldsSettingsViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Printer\StateFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Server\CommunicationFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Server\GeneralFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Server\OtherFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Server\ServerFieldsSettingsViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Server\StateFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Server\StorageFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Shared\ChassisFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Printer\CommunicationFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Shared\InventoryFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Shared\MemoryFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Shared\OperatingSystemFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Shared\PlaceFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Shared\ProccesorFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Computer\CommunicationFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Computer\ComputerFieldsSettingsViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Computer\ContactFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Computer\ContactInformationFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Computer\ContractFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Computer\DateFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Computer\GraphicsFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Computer\OtherFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Computer\PlaceFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Computer\SoundFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Computer\StateFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Computer\WorkstationFieldsSettingsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Shared\ChassisFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Server\CommunicationFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Server\CommunicationFieldsViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Shared\InventoryFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Shared\MemoryFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Shared\MemoryFieldsViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Shared\OperatingSystemFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Shared\OperatingSystemFieldsViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\OrganizationFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\OrganizationFieldsViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Shared\PlaceFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Shared\PlaceFieldsViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Shared\ProccesorFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Shared\ProccesorFieldsViewModel.cs" />
+    <Compile Include="Models\Inventory\InventoryGridModelForDynamicInventory.cs" />
+    <Compile Include="Models\Inventory\InventoryOverviewModel.cs" />
+    <Compile Include="Models\Inventory\InventoryGridModel.cs" />
+    <Compile Include="Models\Inventory\InventoriesModeFilter.cs" />
+    <Compile Include="Enums\Inventory\CurrentModes.cs" />
+    <Compile Include="Models\Inventory\IndexViewModel.cs" />
+    <Compile Include="Enums\Inventory\ReportTypes.cs" />
+    <Compile Include="Models\Inventory\ReportViewModel.cs" />
+    <Compile Include="Models\Inventory\SearchModels\InventorySearchViewModel.cs" />
+    <Compile Include="Models\Inventory\SearchModels\PrinterSearchViewModel.cs" />
+    <Compile Include="Models\Inventory\SearchModels\WorkstationSearchViewModel.cs" />
+    <Compile Include="Models\Inventory\SearchModels\InventorySearchFilter.cs" />
+    <Compile Include="Models\Inventory\SearchModels\PrinterSearchFilter.cs" />
+    <Compile Include="Models\Inventory\SearchModels\ServerSearchFilter.cs" />
+    <Compile Include="Models\Inventory\SearchModels\WorkstationsSearchFilter.cs" />
+    <Compile Include="Models\ISearchModel.cs" />
+    <Compile Include="Models\Link\LinkCategoryGroupViewModel.cs" />
+    <Compile Include="Models\Link\LinkCustomerGroupViewModel.cs" />
+    <Compile Include="Models\Link\LinksInfoViewModel.cs" />
+    <Compile Include="Models\Notifiers\ConfigurableFields\BooleanFieldModel.cs" />
+    <Compile Include="Models\Notifiers\ConfigurableFields\ConfigurableFieldModel.cs" />
+    <Compile Include="Models\Notifiers\ConfigurableFields\DropDownFieldModel.cs" />
+    <Compile Include="Models\Notifiers\ConfigurableFields\IntegerFieldModel.cs" />
+    <Compile Include="Models\Notifiers\ConfigurableFields\StringFieldModel.cs" />
+    <Compile Include="Models\Notifiers\SearchInputModel.cs" />
+    <Compile Include="Models\Notifiers\IndexModel.cs" />
+    <Compile Include="Models\Notifiers\NotifierDetailedOverviewModel.cs" />
+    <Compile Include="Models\Shared\GridColumnHeaderModel.cs" />
+    <Compile Include="Models\Shared\GridRowCellValueModel.cs" />
+    <Compile Include="Models\Notifiers\InputModel.cs" />
+    <Compile Include="Models\Notifiers\NotifiersGridModel.cs" />
+    <Compile Include="Models\Notifiers\NotifiersModel.cs" />
+    <Compile Include="Models\Notifiers\SearchDropDownModel.cs" />
+    <Compile Include="Models\Notifiers\SearchModel.cs" />
+    <Compile Include="Models\Notifiers\SettingModel.cs" />
+    <Compile Include="Models\Notifiers\SettingsModel.cs" />
+    <Compile Include="Models\OperationLogInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\CustomerInputViewModel.cs" />
+    <Compile Include="Models\DocumentInputViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\GlobalSettingInputViewModel.cs" />
+    <Compile Include="Models\HomeIndexViewModel.cs" />
+    <Compile Include="Models\MasterPageViewModel.cs" />
+    <Compile Include="Models\Print\Case\CasePrintModel.cs" />
+    <Compile Include="Models\Problem\LogEditViewModel.cs" />
+    <Compile Include="Models\Problem\ProblemEditViewModel.cs" />
+    <Compile Include="Models\Problem\CaseOutputModel.cs" />
+    <Compile Include="Models\Problem\LogEditModel.cs" />
+    <Compile Include="Models\Problem\LogOutputModel.cs" />
+    <Compile Include="Models\Problem\ProblemEditModel.cs" />
+    <Compile Include="Models\Problem\ProblemOutputModel.cs" />
+    <Compile Include="Models\Problem\ProblemOutputViewModel.cs" />
+    <Compile Include="Models\Profile\ProfileInputViewModel.cs" />
+    <Compile Include="Models\Profile\UserModulesViewModel.cs" />
+    <Compile Include="Models\Projects\FilesModel.cs" />
+    <Compile Include="Models\Projects\IndexProjectViewModel.cs" />
+    <Compile Include="Models\Projects\NewProjectScheduleEditModel.cs" />
+    <Compile Include="Models\Projects\NewProjectViewModel.cs" />
+    <Compile Include="Models\Projects\ProjectEditModel.cs" />
+    <Compile Include="Models\Projects\ProjectLogEditModel.cs" />
+    <Compile Include="Models\Projects\ProjectScheduleEditModel.cs" />
+    <Compile Include="Models\Projects\ProjectEditViewModel.cs" />
+    <Compile Include="Models\Projects\ScheduleStates.cs" />
+    <Compile Include="Models\Projects\UpdatedProjectScheduleEditModel.cs" />
+    <Compile Include="Models\Projects\UpdatedProjectViewModel.cs" />
+    <Compile Include="Models\Questionnaire\Input\EditCircularModel.cs" />
+    <Compile Include="Models\Questionnaire\Input\NewCircularModel.cs" />
+    <Compile Include="Models\Questionnaire\Input\QuestionnaireQuesOptionModel.cs" />
+    <Compile Include="Models\Questionnaire\Input\EditQuestionnaireQuestionModel.cs" />
+    <Compile Include="Models\Questionnaire\Input\NewQuestionnaireQuestionModel.cs" />
+    <Compile Include="Models\Questionnaire\Input\EditQuestionnaireModel.cs" />
+    <Compile Include="Models\Questionnaire\Input\NewQuestionnaireModel.cs" />
+    <Compile Include="Models\Questionnaire\Output\CircularOverviewModel.cs" />
+    <Compile Include="Models\Questionnaire\Output\PreviewQuestionnaireModel.cs" />
+    <Compile Include="Models\Questionnaire\Output\QuestionnaireQuestionsOverviewModel.cs" />
+    <Compile Include="Models\Questionnaire\Output\QuestionnaireOverviewModel.cs" />
+    <Compile Include="Models\SearchModel.cs" />
+    <Compile Include="Areas\Admin\Models\UserViewModel.cs" />
+    <Compile Include="Models\Shared\SendToDialogModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\CommonJavascript\dhHelpdesk.js">
+      <Link>Content\js\dhHelpdesk.js</Link>
+    </Content>
+    <Content Include="Content\base.css" />
+    <Content Include="Content\bootstrap-datepicker.css" />
+    <Content Include="Content\bootstrap-datepicker3.css" />
+    <Content Include="Content\bootstrap-responsive.css" />
+    <Content Include="Content\bootstrap-responsive.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\css\bootstrap-responsive.css" />
+    <Content Include="Content\css\bootstrap-timepicker.min.css" />
+    <Content Include="Content\css\bootstrap.css" />
+    <Content Include="Content\css\dhhelpdesk.css" />
+    <Content Include="Content\css\jquery.toastmessage.css" />
+    <Content Include="Content\css\profile.css" />
+    <Content Include="Content\dialog.css" />
+    <Content Include="Content\highlighter\codehighlighter.js" />
+    <Content Include="Content\highlighter\html.js" />
+    <Content Include="Content\highlighter\javascript.js" />
+    <Content Include="Content\icons\bulletinboard.png" />
+    <Content Include="Content\icons\calendar.png" />
+    <Content Include="Content\icons\case.png" />
+    <Content Include="Content\icons\caseperuser.png" />
+    <Content Include="Content\icons\casesearch.png" />
+    <Content Include="Content\icons\casetemplate.png" />
+    <Content Include="Content\icons\case_close.png" />
+    <Content Include="Content\icons\case_close_notapproved.png" />
+    <Content Include="Content\icons\case_log_urgent.png" />
+    <Content Include="Content\icons\changes.png" />
+    <Content Include="Content\icons\chart.png" />
+    <Content Include="Content\icons\checklist.png" />
+    <Content Include="Content\icons\customer.png" />
+    <Content Include="Content\icons\dailyreport.png" />
+    <Content Include="Content\icons\documenthandling.png" />
+    <Content Include="Content\icons\dotGreen.png" />
+    <Content Include="Content\icons\dotGrey.png" />
+    <Content Include="Content\icons\dotOrange.png" />
+    <Content Include="Content\icons\dotRed.png" />
+    <Content Include="Content\icons\dotRedOK.png" />
+    <Content Include="Content\icons\faq.png" />
+    <Content Include="Content\icons\home.png" />
+    <Content Include="Content\icons\icoCaseTemplate.gif" />
+    <Content Include="Content\icons\icoGreen.gif" />
+    <Content Include="Content\icons\icoHelp.gif" />
+    <Content Include="Content\icons\icoInventory.gif" />
+    <Content Include="Content\icons\icoMnuPrint.gif" />
+    <Content Include="Content\icons\icoOrder.gif" />
+    <Content Include="Content\icons\icoOrderAccount.gif" />
+    <Content Include="Content\icons\icoOrderMenu.gif" />
+    <Content Include="Content\icons\icoPlanDate.gif" />
+    <Content Include="Content\icons\icoPlanDateExpanded.gif" />
+    <Content Include="Content\icons\icoProblemList.gif" />
+    <Content Include="Content\icons\icoProblemListMenu.gif" />
+    <Content Include="Content\icons\icoRed.gif" />
+    <Content Include="Content\icons\icoRegSourceMenu.gif" />
+    <Content Include="Content\icons\icoWatchDate.gif" />
+    <Content Include="Content\icons\icoWatchDateExpanded.gif" />
+    <Content Include="Content\icons\icoWatchDateMenu.gif" />
+    <Content Include="Content\icons\info.png" />
+    <Content Include="Content\icons\inventory.png" />
+    <Content Include="Content\icons\language.png" />
+    <Content Include="Content\icons\Licens.png" />
+    <Content Include="Content\icons\logout.png" />
+    <Content Include="Content\icons\magnifier.png" />
+    <Content Include="Content\icons\minus.gif" />
+    <Content Include="Content\icons\new.png" />
+    <Content Include="Content\icons\news.png" />
+    <Content Include="Content\icons\notifier.png" />
+    <Content Include="Content\icons\operationlog.png" />
+    <Content Include="Content\icons\order.png" />
+    <Content Include="Content\icons\orderaccount.png" />
+    <Content Include="Content\icons\planning.png" />
+    <Content Include="Content\icons\plus.gif" />
+    <Content Include="Content\icons\plus_document.png" />
+    <Content Include="Content\icons\plus_pcnumber.png" />
+    <Content Include="Content\icons\plus_userinfo.png" />
+    <Content Include="Content\icons\problem.png" />
+    <Content Include="Content\icons\programlog.png" />
+    <Content Include="Content\icons\project.png" />
+    <Content Include="Content\icons\questionnaire.png" />
+    <Content Include="Content\icons\quicklinks.png" />
+    <Content Include="Content\icons\registerquestion.png" />
+    <Content Include="Content\icons\reports.png" />
+    <Content Include="Content\icons\setup.png" />
+    <Content Include="Content\icons\user.png" />
+    <Content Include="Content\images_old\arrow-square.gif" />
+    <Content Include="Content\images_old\ASC.gif" />
+    <Content Include="Content\images_old\bg_menuTop.png" />
+    <Content Include="Content\images_old\bg_menuTopHover.png" />
+    <Content Include="Content\images_old\BigApproved.png" />
+    <Content Include="Content\images_old\CaseFile.gif" />
+    <Content Include="Content\images_old\case_close.gif" />
+    <Content Include="Content\images_old\case_close_notapproved.gif" />
+    <Content Include="Content\images_old\case_log.gif" />
+    <Content Include="Content\images_old\dd_arrow.gif" />
+    <Content Include="Content\images_old\DESC.gif" />
+    <Content Include="Content\images_old\dot.gif" />
+    <Content Include="Content\images_old\drop.png" />
+    <Content Include="Content\images_old\Excel.gif" />
+    <Content Include="Content\images_old\gif.gif" />
+    <Content Include="Content\images_old\htm.gif" />
+    <Content Include="Content\images_old\ico-black.png" />
+    <Content Include="Content\images_old\ico-green.png" />
+    <Content Include="Content\images_old\icoRedFlag.gif" />
+    <Content Include="Content\images_old\jpg.gif" />
+    <Content Include="Content\images_old\Logg.gif" />
+    <Content Include="Content\images_old\logotype_dh.png" />
+    <Content Include="Content\images_old\mht.gif" />
+    <Content Include="Content\images_old\nn_ff.gif" />
+    <Content Include="Content\images_old\pdf.gif" />
+    <Content Include="Content\images_old\pil.gif" />
+    <Content Include="Content\images_old\pixel_blank.gif" />
+    <Content Include="Content\images_old\PowerPoint.gif" />
+    <Content Include="Content\images_old\regsource_mail.gif" />
+    <Content Include="Content\images_old\regsource_ss.gif" />
+    <Content Include="Content\images_old\streck_pix.gif" />
+    <Content Include="Content\images_old\SubMenu.gif" />
+    <Content Include="Content\images_old\switch.gif" />
+    <Content Include="Content\images_old\switch.png" />
+    <Content Include="Content\images_old\tabHelpdesk.gif" />
+    <Content Include="Content\images_old\tabHelpdesk129.gif" />
+    <Content Include="Content\images_old\tabHelpdesk149.gif" />
+    <Content Include="Content\images_old\tabHelpdeskDisabled.gif" />
+    <Content Include="Content\images_old\toggle-lt.gif" />
+    <Content Include="Content\images_old\toggle-rt.gif" />
+    <Content Include="Content\images_old\white-grad-active.png" />
+    <Content Include="Content\images_old\white-grad.png" />
+    <Content Include="Content\images_old\winzip.gif" />
+    <Content Include="Content\images_old\word.gif" />
+    <Content Include="Content\img-profile\CHS-logo-H31px_140227.png" />
+    <Content Include="Content\img-profile\CHS-logo-W300_140227.png" />
+    <Content Include="Content\img-profile\ikea-logo-login.png" />
+    <Content Include="Content\img-profile\ikea-logo.png" />
+    <Content Include="Content\img-profile\ikea-quality-text.png" />
+    <Content Include="Content\img\Circular.png" />
+    <Content Include="Content\img\close.gif" />
+    <Content Include="Content\img\dhhelpdesk-login.png" />
+    <Content Include="Content\img\dhhelpdesk-menuend.png" />
+    <Content Include="Content\img\dhhelpdesk.png" />
+    <Content Include="Content\img\dhhelpdeskadministration.png" />
+    <Content Include="Content\img\English.png" />
+    <Content Include="Content\img\error.png" />
+    <Content Include="Content\img\Germany.png" />
+    <Content Include="Content\img\glyphicons-halflings-blue.png" />
+    <Content Include="Content\img\glyphicons-halflings-dh.png" />
+    <Content Include="Content\img\glyphicons-halflings-green.png" />
+    <Content Include="Content\img\glyphicons-halflings-red.png" />
+    <Content Include="Content\img\glyphicons-halflings-white.png" />
+    <Content Include="Content\img\glyphicons-halflings-yellow.png" />
+    <Content Include="Content\img\glyphicons-halflings.png" />
+    <Content Include="Content\img\icons-tree.png" />
+    <Content Include="Content\img\img-customers.png" />
+    <Content Include="Content\img\img-settings.png" />
+    <Content Include="Content\img\img-users.png" />
+    <Content Include="Content\img\notice.png" />
+    <Content Include="Content\img\success.png" />
+    <Content Include="Content\img\Swedish.png" />
+    <Content Include="Content\img\switch.png" />
+    <Content Include="Content\img\warning.png" />
+    <Content Include="Content\js\bootstrap-multiselect.js" />
+    <Content Include="Content\js\bootstrap-timepicker.min.js" />
+    <Content Include="Content\js\bootstrap.js" />
+    <Content Include="Content\js\Changes\search.js" />
+    <Content Include="Content\js\Changes\settings.js" />
+    <Content Include="Content\js\dhHelpdesk-head.js" />
+    <Content Include="Content\js\jquery.plupload.queue\css\jquery.plupload.queue.css" />
+    <Content Include="Content\js\jquery.plupload.queue\img\backgrounds.gif" />
+    <Content Include="Content\js\jquery.plupload.queue\img\buttons-disabled.png" />
+    <Content Include="Content\js\jquery.plupload.queue\img\buttons.png" />
+    <Content Include="Content\js\jquery.plupload.queue\img\delete.gif" />
+    <Content Include="Content\js\jquery.plupload.queue\img\done.gif" />
+    <Content Include="Content\js\jquery.plupload.queue\img\error.gif" />
+    <Content Include="Content\js\jquery.plupload.queue\img\throbber.gif" />
+    <Content Include="Content\js\jquery.plupload.queue\img\transp50.png" />
+    <Content Include="Content\js\jquery.plupload.queue\jquery.plupload.queue.js" />
+    <Content Include="Content\js\jquery.plupload.queue\jquery.plupload.queue.min.js" />
+    <Content Include="Content\js\jquery.ui.plupload\css\jquery.ui.plupload.css" />
+    <Content Include="Content\js\jquery.ui.plupload\img\loading.gif" />
+    <Content Include="Content\js\jquery.ui.plupload\img\plupload.png" />
+    <Content Include="Content\js\jquery.ui.plupload\jquery.ui.plupload.js" />
+    <Content Include="Content\js\jquery.ui.plupload\jquery.ui.plupload.min.js" />
+    <Content Include="Content\js\jquery.validate.min.js" />
+    <Content Include="Content\js\Moxie.swf" />
+    <Content Include="Content\js\Moxie.xap" />
+    <Content Include="Content\js\plupload.full.min.js" />
+    <Content Include="Content\js\Reports\index.js" />
+    <Content Include="Content\js\ui\dh.ui.hierarchylist.js" />
+    <Content Include="Content\js\Users\modules.js" />
+    <Content Include="Content\PIE.htc" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\jquery-ui.css" />
+    <Content Include="Content\themes\base\jquery.ui.accordion.css" />
+    <Content Include="Content\themes\base\jquery.ui.all.css" />
+    <Content Include="Content\themes\base\jquery.ui.autocomplete.css" />
+    <Content Include="Content\themes\base\jquery.ui.base.css" />
+    <Content Include="Content\themes\base\jquery.ui.button.css" />
+    <Content Include="Content\themes\base\jquery.ui.core.css" />
+    <Content Include="Content\themes\base\jquery.ui.datepicker.css" />
+    <Content Include="Content\themes\base\jquery.ui.dialog.css" />
+    <Content Include="Content\themes\base\jquery.ui.menu.css" />
+    <Content Include="Content\themes\base\jquery.ui.progressbar.css" />
+    <Content Include="Content\themes\base\jquery.ui.resizable.css" />
+    <Content Include="Content\themes\base\jquery.ui.selectable.css" />
+    <Content Include="Content\themes\base\jquery.ui.slider.css" />
+    <Content Include="Content\themes\base\jquery.ui.spinner.css" />
+    <Content Include="Content\themes\base\jquery.ui.tabs.css" />
+    <Content Include="Content\themes\base\jquery.ui.theme.css" />
+    <Content Include="Content\themes\base\jquery.ui.tooltip.css" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\minified\jquery-ui.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.accordion.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.autocomplete.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.button.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.core.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.datepicker.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.dialog.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.menu.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.progressbar.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.resizable.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.selectable.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.spinner.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
+    <Content Include="Content\themes\flick\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\flick\images\ui-bg_flat_0_eeeeee_40x100.png" />
+    <Content Include="Content\themes\flick\images\ui-bg_flat_55_ffffff_40x100.png" />
+    <Content Include="Content\themes\flick\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\flick\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\flick\images\ui-bg_highlight-soft_100_f6f6f6_1x100.png" />
+    <Content Include="Content\themes\flick\images\ui-bg_highlight-soft_25_0073ea_1x100.png" />
+    <Content Include="Content\themes\flick\images\ui-bg_highlight-soft_50_dddddd_1x100.png" />
+    <Content Include="Content\themes\flick\images\ui-icons_0073ea_256x240.png" />
+    <Content Include="Content\themes\flick\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\flick\images\ui-icons_666666_256x240.png" />
+    <Content Include="Content\themes\flick\images\ui-icons_ff0084_256x240.png" />
+    <Content Include="Content\themes\flick\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\themes\flick\jquery-ui-1.8.4.custom.css" />
+    <Content Include="Global.asax" />
+    <Content Include="Areas\Admin\Views\CausingPart\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\CausingPart\_Input.cshtml" />
+    <Content Include="Areas\Admin\Views\CausingPart\New.cshtml" />
+    <Content Include="Areas\Admin\Views\CausingPart\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Domain\_ChangePassWord.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Areas\Admin\Views\Customer\_CopyCustomer.cshtml" />
+    <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
+    <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
+    <Content Include="Content\js\bootstrap-datepicker.js" />
+    <Content Include="Content\js\Changes\change.js" />
+    <Content Include="Content\js\Changes\index.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.ar.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.az.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.bg.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.ca.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.cs.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.cy.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.da.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.de.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.el.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.es.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.et.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.fa.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.fi.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.fr.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.gl.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.he.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.hr.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.hu.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.id.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.is.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.it.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.ja.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.ka.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.kk.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.kr.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.lt.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.lv.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.mk.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.ms.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.nb.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.nl-BE.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.nl.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.no.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.pl.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.pt-BR.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.pt.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.ro.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.rs-latin.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.rs.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.ru.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.sk.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.sl.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.sq.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.sv.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.sw.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.th.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.tr.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.ua.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.vi.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.zh-CN.js" />
+    <Content Include="Content\js\locales\bootstrap-datepicker.zh-TW.js" />
+    <Content Include="Content\js\Notifiers\settings.js" />
+    <Content Include="Content\js\Shared\custom.validation.maxlengthfrom.js" />
+    <Content Include="Content\js\Shared\custom.validation.requiredfrom.js" />
+    <Content Include="Content\js\Shared\sortby.js" />
+    <Content Include="Content\js\jquery-1.8.3.min.js" />
+    <Content Include="Content\js\jquery-ui-1.9.2.min.js" />
+    <Content Include="Content\js\jquery.toastmessage.js" />
+    <Content Include="Areas\Admin\Views\CustomerCaseFieldSettings\_Input.cshtml" />
+    <Content Include="Areas\Admin\Views\CustomerCaseFieldSettings\Edit.cshtml" />
+    <Content Include="Content\js\Notifiers\index.js" />
+    <Content Include="Content\js\Notifiers\notifier.js" />
+    <Content Include="Content\js\Notifiers\notifiers.js" />
+    <Content Include="Views\Faq\CategoryEditing.cshtml" />
+    <Content Include="Views\Faq\EditCategory.cshtml" />
+    <Content Include="Views\Faq\EditFaq.cshtml" />
+    <Content Include="Views\Faq\FaqEditing.cshtml" />
+    <Content Include="Views\Faq\Index.cshtml" />
+    <Content Include="Views\Faq\NewCategory.cshtml" />
+    <Content Include="Views\Faq\NewFaq.cshtml" />
+    <Content Include="Areas\Admin\Views\CustomerCaseOverview\_Input.cshtml" />
+    <Content Include="Areas\Admin\Views\CustomerCaseOverview\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\CustomerCaseOverview\_CaseSummaryPartialView.cshtml" />
+    <Content Include="Areas\Admin\Views\InfoText\_InfoTextPartialView.cshtml" />
+    <Content Include="Content\js\jquery.typing-0.2.0.min.js" />
+    <Content Include="Content\js\jquery.validate.js" />
+    <Content Include="Content\js\plupload\i18n\cs.js" />
+    <Content Include="Content\js\plupload\i18n\da.js" />
+    <Content Include="Content\js\plupload\i18n\de.js" />
+    <Content Include="Content\js\plupload\i18n\el.js" />
+    <Content Include="Content\js\plupload\i18n\es.js" />
+    <Content Include="Content\js\plupload\i18n\et.js" />
+    <Content Include="Content\js\plupload\i18n\fa.js" />
+    <Content Include="Content\js\plupload\i18n\fi.js" />
+    <Content Include="Content\js\plupload\i18n\fr-ca.js" />
+    <Content Include="Content\js\plupload\i18n\fr.js" />
+    <Content Include="Content\js\plupload\i18n\hr.js" />
+    <Content Include="Content\js\plupload\i18n\hu.js" />
+    <Content Include="Content\js\plupload\i18n\it.js" />
+    <Content Include="Content\js\plupload\i18n\ja.js" />
+    <Content Include="Content\js\plupload\i18n\ko.js" />
+    <Content Include="Content\js\plupload\i18n\lv.js" />
+    <Content Include="Content\js\plupload\i18n\nl.js" />
+    <Content Include="Content\js\plupload\i18n\pl.js" />
+    <Content Include="Content\js\plupload\i18n\pt-br.js" />
+    <Content Include="Content\js\plupload\i18n\ro.js" />
+    <Content Include="Content\js\plupload\i18n\ru.js" />
+    <Content Include="Content\js\plupload\i18n\sk.js" />
+    <Content Include="Content\js\plupload\i18n\sr.js" />
+    <Content Include="Content\js\plupload\i18n\sv.js" />
+    <Content Include="Content\js\plupload\jquery.plupload.queue\css\jquery.plupload.queue.css" />
+    <Content Include="Content\js\plupload\jquery.plupload.queue\img\backgrounds.gif" />
+    <Content Include="Content\js\plupload\jquery.plupload.queue\img\buttons-disabled.png" />
+    <Content Include="Content\js\plupload\jquery.plupload.queue\img\buttons.png" />
+    <Content Include="Content\js\plupload\jquery.plupload.queue\img\delete.gif" />
+    <Content Include="Content\js\plupload\jquery.plupload.queue\img\done.gif" />
+    <Content Include="Content\js\plupload\jquery.plupload.queue\img\error.gif" />
+    <Content Include="Content\js\plupload\jquery.plupload.queue\img\throbber.gif" />
+    <Content Include="Content\js\plupload\jquery.plupload.queue\img\transp50.png" />
+    <Content Include="Content\js\plupload\jquery.plupload.queue\jquery.plupload.queue.js" />
+    <Content Include="Content\js\plupload\jquery.ui.plupload\css\jquery.ui.plupload.css" />
+    <Content Include="Content\js\plupload\jquery.ui.plupload\img\plupload-bw.png" />
+    <Content Include="Content\js\plupload\jquery.ui.plupload\img\plupload.png" />
+    <Content Include="Content\js\plupload\jquery.ui.plupload\jquery.ui.plupload.js" />
+    <Content Include="Content\js\plupload\plupload.browserplus.js" />
+    <Content Include="Content\js\plupload\plupload.flash.js" />
+    <Content Include="Content\js\plupload\plupload.flash.swf" />
+    <Content Include="Content\js\plupload\plupload.full.js" />
+    <Content Include="Content\js\plupload\plupload.gears.js" />
+    <Content Include="Content\js\plupload\plupload.html4.js" />
+    <Content Include="Content\js\plupload\plupload.html5.js" />
+    <Content Include="Content\js\plupload\plupload.js" />
+    <Content Include="Content\js\plupload\plupload.silverlight.js" />
+    <Content Include="Content\js\plupload\plupload.silverlight.xap" />
+    <Content Include="Areas\Admin\Views\Users\_ChangePassword.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Content\js\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Content\js\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Content\js\MicrosoftAjax.js" />
+    <Content Include="Content\js\MicrosoftAjax.debug.js" />
+    <Content Include="Content\js\MicrosoftMvcAjax.js" />
+    <Content Include="Content\js\MicrosoftMvcAjax.debug.js" />
+    <Content Include="Content\js\MicrosoftMvcValidation.js" />
+    <Content Include="Content\js\MicrosoftMvcValidation.debug.js" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Notifiers\_Input.cshtml" />
+    <Content Include="Views\Notifiers\Index.cshtml" />
+    <Content Include="Views\Notifiers\NewNotifier.cshtml" />
+    <Content Include="Views\Notifiers\Notifier.cshtml" />
+    <Content Include="Views\Notifiers\Notifiers.cshtml" />
+    <Content Include="Views\Notifiers\NotifiersGrid.cshtml" />
+    <Content Include="Views\Notifiers\DepartmentDropDown.cshtml" />
+    <Content Include="Views\Cases\_CaseLog.cshtml" />
+    <Content Include="Views\Cases\_CaseHistory.cshtml" />
+    <Content Include="Views\Cases\_CaseLogInput.cshtml" />
+    <Content Include="Views\Changes\ChangesGrid.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Settings\SettingsModel.cshtml" />
+    <Content Include="Views\Changes\Search.cshtml" />
+    <Content Include="Views\Problems\ProblemGrid.cshtml" />
+    <Content Include="Views\Problems\_InputProblem.cshtml" />
+    <Content Include="Views\Problems\_InputLog.cshtml" />
+    <Content Include="Views\Problems\LogGrid.cshtml" />
+    <Content Include="Views\Projects\CaseGrid.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Settings\StandardSetting.cshtml" />
+    <Content Include="Views\Problems\NewProblem.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Settings\DefaultSupportSetting.cshtml" />
+    <Content Include="Views\Calendar\_CalendarRows.cshtml" />
+    <Content Include="Views\Problems\EditLog.cshtml" />
+    <Content Include="Views\Problems\NewLog.cshtml" />
+    <Content Include="Views\About\Index.cshtml" />
+    <Content Include="Views\Projects\Index.cshtml" />
+    <Content Include="Views\Changes\Edit.cshtml" />
+    <Content Include="Views\Projects\NewProject.cshtml" />
+    <Content Include="Views\Projects\EditProject.cshtml" />
+    <Content Include="Views\Projects\_InputProject.cshtml" />
+    <Content Include="Views\Projects\EditorTemplates\ProjectLogEditModel.cshtml" />
+    <Content Include="Views\Projects\LogGrid.cshtml" />
+    <Content Include="Views\Changes\New.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\RegistrationModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\AnalyzeModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\EvaluationModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\ImplementationModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\InputModel.cshtml" />
+    <Content Include="Views\Cases\EditLog.cshtml" />
+    <Content Include="Views\Cases\_CaseFiles.cshtml" />
+    <Content Include="Views\Cases\_CaseLogFiles.cshtml" />
+    <Content Include="Views\Changes\DisplayTemplates\HistoryRecordModel.cshtml" />
+    <Content Include="Views\Changes\DisplayTemplates\HistoryModel.cshtml" />
+    <Content Include="Views\Projects\ProjectGrid.cshtml" />
+    <Content Include="Views\Problems\CaseGrid.cshtml" />
+    <Content Include="Views\Projects\ProjectScheduleGrid.cshtml" />
+    <Content Include="Views\Changes\AttachedFiles.cshtml" />
+    <Content Include="Views\Projects\EditorTemplates\NewProjectScheduleEditModel.cshtml" />
+    <Content Include="Views\Projects\_ProjectFiles.cshtml" />
+    <Content Include="Views\Projects\AttachedFiles.cshtml" />
+    <Content Include="Views\Changes\Logs.cshtml" />
+    <Content Include="Views\Shared\_SendToDialog.cshtml" />
+    <Content Include="Views\Questionnaire\Index.cshtml" />
+    <Content Include="Views\Questionnaire\EditQuestionnaire.cshtml" />
+    <Content Include="Views\Questionnaire\NewQuestionnaire.cshtml" />
+    <Content Include="Views\Changes\Changes.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\OrdererModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\GeneralModel.cshtml" />
+    <Content Include="Views\Changes\Settings.cshtml" />
+    <Content Include="Views\Questionnaire\_QuestionnaireQuestionsOverview.cshtml" />
+    <Content Include="Views\Questionnaire\NewQuestionnaireQuestion.cshtml" />
+    <Content Include="Views\Questionnaire\EditQuestionnaireQuestion.cshtml" />
+    <Content Include="Views\Questionnaire\QuestionnaireQuesOptionsOverview.cshtml" />
+    <Content Include="Views\Questionnaire\_QuestionnaireQuestionOptions.cshtml" />
+    <Content Include="Views\Questionnaire\PreviewQuestionnaire.cshtml" />
+    <Content Include="Views\Questionnaire\CircularOverview.cshtml" />
+    <Content Include="Views\Questionnaire\NewCircular.cshtml" />
+    <Content Include="Views\Cases\_Plupload.cshtml" />
+    <Content Include="Views\Questionnaire\EditCircular.cshtml" />
+    <Content Include="Views\Cases\_CaseTemplateTree.cshtml" />
+    <Content Include="Views\Questionnaire\_CircularPartOverview.cshtml" />
+    <Content Include="Views\Cases\_CaseSetting.cshtml" />
+    <Content Include="Views\Cases\_ColumnCaseSetting.cshtml" />
+    <Content Include="Views\Notifiers\EditorTemplates\SettingModel.cshtml" />
+    <Content Include="Views\Notifiers\DisplayTemplates\SettingModel.cshtml" />
+    <Content Include="Views\Document\_DocumentListOverview.cshtml" />
+    <Content Include="Views\Notifiers\EditorTemplates\TextBox.cshtml" />
+    <Content Include="Views\Notifiers\EditorTemplates\TextArea.cshtml" />
+    <Content Include="Views\Notifiers\EditorTemplates\CheckBox.cshtml" />
+    <Content Include="Views\Notifiers\DisplayTemplates\Label.cshtml" />
+    <Content Include="Views\Notifiers\EditorTemplates\SettingsModel.cshtml" />
+    <Content Include="Views\Notifiers\Settings.cshtml" />
+    <Content Include="Views\Notifiers\NotifierEdit\AddressFields.cshtml" />
+    <Content Include="Views\Notifiers\NotifierEdit\GeneralFields.cshtml" />
+    <Content Include="Views\Notifiers\NotifierEdit\OrganizationFields.cshtml" />
+    <Content Include="Views\Notifiers\NotifierEdit\StateFields.cshtml" />
+    <Content Include="Views\Notifiers\NotifierEdit\OrdererFields.cshtml" />
+    <Content Include="Views\Notifiers\Search.cshtml" />
+    <Content Include="Views\Inventory\Index.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DatePicker.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Date.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\DateAndTime.cshtml" />
+    <Content Include="Views\Notifiers\NewNotifierPopup.cshtml" />
+    <Content Include="Views\Shared\_PopupLayout.cshtml" />
+    <Content Include="Views\Shared\_Translations.cshtml" />
+    <Content Include="Views\Profile\Edit.cshtml" />
+    <Content Include="Views\Profile\_Input.cshtml" />
+    <Content Include="Views\Profile\_General.cshtml" />
+    <Content Include="Views\Profile\_ChangePassword.cshtml" />
+    <Content Include="Views\Shared\CalendarsInfo.cshtml" />
+    <Content Include="Views\Inventory\Workstations.cshtml" />
+    <Content Include="Views\Inventory\Servers.cshtml" />
+    <Content Include="Views\Inventory\Printers.cshtml" />
+    <Content Include="Views\Inventory\Inventories.cshtml" />
+    <Content Include="Views\Inventory\InventoryGrid.cshtml" />
+    <Content Include="Views\Shared\DailyReportsInfo.cshtml" />
+    <Content Include="Views\Shared\LinksInfo.cshtml" />
+    <Content Include="Views\Shared\OperationLogsInfo.cshtml" />
+    <Content Include="Views\Shared\ProblemsInfo.cshtml" />
+    <Content Include="Views\Shared\StatisticsInfo.cshtml" />
+    <Content Include="Views\Shared\BulletinBoardInfo.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Inventory\EditWorkstation.cshtml" />
+    <Content Include="Views\Inventory\EditServer.cshtml" />
+    <Content Include="Views\Inventory\EditPrinter.cshtml" />
+    <Content Include="Views\Inventory\EditInventory.cshtml" />
+    <Content Include="Views\Shared\CustomersInfo.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Shared\FaqInfo.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Shared\DocumentsInfo.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\ExistingLog.cshtml" />
+    <Content Include="Views\Profile\Modules.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\UserModuleOverview.cshtml" />
+    <Content Include="Views\Cases\_RelatedCases.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\NewLog.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Contacts\ContactsModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Contacts\ContactModel.cshtml" />
+    <Content Include="Views\Cases\_MoveCase.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Computer\CommunicationFieldsViewModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Computer\ContactFieldsModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Computer\ContactInformationFieldsModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Computer\DateFieldsModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Computer\GraphicsFieldsModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Computer\OtherFieldsModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Computer\PlaceFieldsViewModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Computer\SoundFieldsModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Computer\StateFieldsViewModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Computer\WorkstationFieldsViewModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Inventory\Inventory.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Printer\StateModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Printer\OtherFieldsModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Printer\GeneralFieldsModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Server\GeneralFieldsModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Server\OtherFieldsModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Server\StateModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Server\StorageFieldsModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Shared\ChassisModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Shared\InventoryModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Shared\MemoryFieldsViewModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Shared\OperatingSystemFieldsViewModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Computer\OrganizationFieldsViewModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Shared\PlaceFieldsViewModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Shared\ProccesorFieldsViewModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Computer\ContractFieldsViewModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Printer\OrganizationFieldsViewModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Server\CommunicationFieldsViewModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Printer\CommunicationFieldsModel.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DateReadOnly.cshtml" />
+    <Content Include="Views\Inventory\StorageGrid.cshtml" />
+    <Content Include="Views\Inventory\SoftwareGrid.cshtml" />
+    <Content Include="Views\Inventory\LogGrid.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\ComputerLogModel.cshtml" />
+    <Content Include="Views\InventorySettings\EditorTemplates\Settings\InventoryFieldSettingModelDefault.cshtml" />
+    <Content Include="Views\InventorySettings\EditorTemplates\Settings\InventoryFieldSettingModel.cshtml" />
+    <Content Include="Views\Print\Case.cshtml" />
+    <Content Include="Views\Print\Footer.cshtml" />
+    <Content Include="Views\Print\Header.cshtml" />
+    <Content Include="Views\InventorySettings\EditorTemplates\Settings\FieldSettingModel.cshtml" />
+    <Content Include="Views\InventorySettings\EditorTemplates\Settings\ComputerFieldsSettingsViewModel.cshtml" />
+    <Content Include="Views\InventorySettings\EditorTemplates\Settings\ServerFieldsSettingsViewModel.cshtml" />
+    <Content Include="Views\InventorySettings\EditorTemplates\Settings\PrinterFieldsSettingsViewModel.cshtml" />
+    <Content Include="Views\InventorySettings\EditorTemplates\Settings\InventorySettings.cshtml" />
+    <Content Include="Views\Inventory\NewInventory.cshtml" />
+    <Content Include="Views\Inventory\NewPrinter.cshtml" />
+    <Content Include="Views\Inventory\NewServer.cshtml" />
+    <Content Include="Views\Inventory\NewWorkstation.cshtml" />
+    <Content Include="Views\Inventory\ReportGrid.cshtml" />
+    <Content Include="Views\Inventory\InventoryReportGrid.cshtml" />
+    <Content Include="Views\Inventory\MissingSoftwareView.cshtml" />
+    <Content Include="Views\Inventory\NewComputerModule.cshtml" />
+    <Content Include="Views\Inventory\EditComputerModule.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\TimePicker.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\InventoryDialogModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Fields\Text.cshtml" />
+    <Content Include="Views\Inventory\InventoryGridWithDeleteButton.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Fields\Flag.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Fields\WideText.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Fields\Number.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Fields\Date.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Contacts\Text.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Fields\Time.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Settings\UnrequiredSetting.cshtml" />
+    <Content Include="Views\Shared\Empty.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\DateAndTimeModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Fields\DateOutOfTable.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Fields\TimeOutOfTable.cshtml" />
+    <Content Include="Views\Reports\Index.cshtml" />
+    <Content Include="Views\Reports\Reports.cshtml" />
+    <Content Include="Views\Reports\Search.cshtml" />
+    <Content Include="Views\Reports\RegistratedCasesCaseTypeOptions.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\DynamicFieldStringValue.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\YearMonthPicker.cshtml" />
+    <Content Include="Views\Reports\RegistratedCasesCaseTypeView.cshtml" />
+    <Content Include="Views\Reports\RegistratedCasesCaseTypePrint.cshtml" />
+    <Content Include="Views\Inventory\ModuleGrid.cshtml" />
+    <Content Include="Views\Inventory\Reports.cshtml" />
+    <Content Include="Views\Inventory\InstaledProgramsReport.cshtml" />
+    <Content Include="Views\Inventory\InventoryReport.cshtml" />
+    <Content Include="Views\Inventory\CustomTypeReport.cshtml" />
+    <Content Include="Views\Inventory\CustomTypeReportGrid.cshtml" />
+    <Content Include="Views\Inventory\Accesories.cshtml" />
+    <Content Include="Views\Inventory\InventoryTypesGrid.cshtml" />
+<<<<<<< HEAD
+    <Content Include="Views\InventorySettings\EditWorkstationSettings.cshtml" />
+    <Content Include="Views\InventorySettings\EditServerSettings.cshtml" />
+    <Content Include="Views\InventorySettings\EditPrinterSettings.cshtml" />
+    <Content Include="Views\InventorySettings\EditorTemplates\Settings\FieldSettingForComputerModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Computer\ChassisModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Computer\InventoryModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Computer\MemoryFieldsViewModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Computer\OperatingSystemFieldsViewModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Computer\ProccesorFieldsViewModel.cshtml" />
+=======
+    <Content Include="Views\Reports\RegistratedCasesDayOptions.cshtml" />
+    <Content Include="Views\Reports\RegistratedCasesDayPrint.cshtml" />
+    <Content Include="Views\Reports\RegistratedCasesDayView.cshtml" />
+>>>>>>> [UPD] Reports module.
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">
+      <Project>{90DEFCB6-E297-4F99-A532-DA1E0522AA49}</Project>
+      <Name>DH.Helpdesk.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.Data\DH.Helpdesk.Dal.csproj">
+      <Project>{A8F6B7B8-8055-4BB7-82C4-85004F52E6EF}</Project>
+      <Name>DH.Helpdesk.Dal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.Domain\DH.Helpdesk.Domain.csproj">
+      <Project>{5BD5F918-3BE4-474D-AC30-9DBD02FC385D}</Project>
+      <Name>DH.Helpdesk.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.DTO\DH.Helpdesk.BusinessData.csproj">
+      <Project>{C4520E52-CB9E-4FD6-BEE9-92AA532685A2}</Project>
+      <Name>DH.Helpdesk.BusinessData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.Service\DH.Helpdesk.Services.csproj">
+      <Project>{3A5BFA9B-C033-4C1C-81AF-7B4E1BEDCFA3}</Project>
+      <Name>DH.Helpdesk.Services</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Users\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Users\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Users\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Cases\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Problems\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Problems\Problem.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Changes\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Search\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Status\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Status\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Status\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Status\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Category\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Category\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Category\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Category\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Region\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Region\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Region\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Region\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Department\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Department\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Department\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Department\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Currency\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Currency\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Currency\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Currency\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Building\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Building\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Building\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Building\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Shared\_MasterDataPanel.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Floor\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Floor\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Floor\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Floor\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Impact\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Impact\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Impact\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Impact\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\FinishingCauseCategory\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\FinishingCauseCategory\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\FinishingCauseCategory\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\FinishingCauseCategory\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChangeGroup\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChangeGroup\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChangeGroup\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChangeGroup\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChangeObject\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChangeObject\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChangeObject\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChangeObject\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChangeCategory\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChangeCategory\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChangeCategory\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChangeCategory\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChangePriority\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChangePriority\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChangePriority\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChangePriority\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChangeImplementationStatus\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChangeImplementationStatus\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChangeImplementationStatus\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChangeImplementationStatus\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChecklistService\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChecklistService\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChecklistService\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChecklistService\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChecklistAction\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChecklistAction\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChecklistAction\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChecklistAction\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\OperationLogCategory\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\OperationLogCategory\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\OperationLogCategory\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\OperationLogCategory\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\CaseType\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\CaseType\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\CaseType\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\CaseType\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Urgency\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\StateSecondary\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Room\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Room\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Room\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Room\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\OU\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\OU\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\OU\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\OU\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\StandardText\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\StandardText\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\StandardText\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\StandardText\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Urgency\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Urgency\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Urgency\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\StateSecondary\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\StateSecondary\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\StateSecondary\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Supplier\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Supplier\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Supplier\New.cshtml" />
+    <Content Include="Areas\Admin\Views\Supplier\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Priority\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Priority\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Priority\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Priority\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\FinishingCause\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\FinishingCause\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\FinishingCause\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\FinishingCause\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\OrderState\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\OrderType\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\OrderType\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\OrderType\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\OrderState\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\OrderState\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\OrderState\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\OrderType\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\WorkingGroup\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\WorkingGroup\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\WorkingGroup\New.cshtml" />
+    <Content Include="Areas\Admin\Views\WorkingGroup\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\EMailGroup\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\EMailGroup\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\EMailGroup\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\EMailGroup\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\DailyReportSubject\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\DailyReportSubject\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\DailyReportSubject\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\DailyReportSubject\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\AccountActivity\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\AccountActivity\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\AccountActivity\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\AccountActivity\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\System\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\System\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\System\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\System\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\OperationObject\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\OperationObject\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\OperationObject\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\OperationObject\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ComputerUserGroup\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ComputerUserGroup\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ComputerUserGroup\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ComputerUserGroup\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\QuickLink\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\QuickLink\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\QuickLink\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\QuickLink\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ComputerUsersBlackList\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ComputerUsersBlackList\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ComputerUsersBlackList\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ComputerUsersBlackList\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Program\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Program\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Program\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Program\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Domain\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Domain\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Domain\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Domain\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\MailTemplate\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\MailTemplate\_OrderTypeMailTemplates.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\MailTemplate\_SpecialMailTemplates.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\MailTemplate\_AccountActivityMailTemplates.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\MailTemplate\_RegularCaseMailTemplates.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\MailTemplate\_CaseSMSMailTemplates.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\MailTemplate\_ChangesMailTemplates.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\MailTemplate\_OperationLogsMailTemplates.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\MailTemplate\_SurveyMailTemplates.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\MailTemplate\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\MailTemplate\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\MailTemplate\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\MailTemplate\_IdentifierMailTemplates.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\InfoText\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChangeStatus\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChangeStatus\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChangeStatus\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ChangeStatus\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ContractCategory\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ContractCategory\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ContractCategory\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ContractCategory\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\ProductArea\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ProductArea\New.cshtml" />
+    <Content Include="Areas\Admin\Views\ProductArea\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\ProductArea\_Input.cshtml" />
+    <Content Include="Areas\Admin\Views\InfoText\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\BulletinBoard\Edit.cshtml" />
+    <Content Include="Views\BulletinBoard\Index.cshtml" />
+    <Content Include="Views\BulletinBoard\New.cshtml" />
+    <Content Include="Views\BulletinBoard\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Calendar\Edit.cshtml" />
+    <Content Include="Views\Calendar\Index.cshtml" />
+    <Content Include="Views\Calendar\New.cshtml" />
+    <Content Include="Views\Calendar\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\CaseSolution\Edit.cshtml" />
+    <Content Include="Views\CaseSolution\Index.cshtml" />
+    <Content Include="Views\CaseSolution\New.cshtml" />
+    <Content Include="Views\CaseSolution\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Division\Edit.cshtml" />
+    <Content Include="Views\Division\Index.cshtml" />
+    <Content Include="Views\Division\New.cshtml" />
+    <Content Include="Views\Division\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Document\Edit.cshtml" />
+    <Content Include="Views\Document\Index.cshtml" />
+    <Content Include="Views\Document\New.cshtml" />
+    <Content Include="Views\Document\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\GlobalSetting\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\CaseSolution\NewCategory.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\CaseSolution\EditCategory.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\CaseSolution\_InputCategory.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Document\NewCategory.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Document\EditCategory.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Document\_InputCategory.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Users\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Customer\_Case.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Customer\_CaseSummary.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Customer\_CaseSummaryPartialView.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Customer\_Customer.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Customer\_Email.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Customer\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Customer\_Order.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Customer\_Syncronization.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Customer\_User.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Customer\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Customer\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Customer\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Cases\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\_Search.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\_NoHits.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Users\_General.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Users\_Security.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Users\_Message.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Users\_Other.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Users\_Customer.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Users\_Department.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Users\_WorkingGroups.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Cases\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Users\_Appearance.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Login\Login.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\OperationLog\Edit.cshtml" />
+    <Content Include="Views\OperationLog\Index.cshtml" />
+    <Content Include="Views\OperationLog\New.cshtml" />
+    <Content Include="Views\OperationLog\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\GlobalSetting\EditHoliday.cshtml" />
+    <Content Include="Areas\Admin\Views\GlobalSetting\EditTranslation.cshtml" />
+    <Content Include="Areas\Admin\Views\GlobalSetting\EditWatchDate.cshtml" />
+    <Content Include="Areas\Admin\Views\GlobalSetting\NewHoliday.cshtml" />
+    <Content Include="Areas\Admin\Views\GlobalSetting\NewTranslation.cshtml" />
+    <Content Include="Areas\Admin\Views\GlobalSetting\NewWatchDate.cshtml" />
+    <Content Include="Areas\Admin\Views\GlobalSetting\_Holiday.cshtml" />
+    <Content Include="Areas\Admin\Views\GlobalSetting\_HolidayList.cshtml" />
+    <Content Include="Areas\Admin\Views\GlobalSetting\_Translation.cshtml" />
+    <Content Include="Areas\Admin\Views\GlobalSetting\_WatchDate.cshtml" />
+    <Content Include="Areas\Admin\Views\GlobalSetting\_WatchDateList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\GlobalSetting\Change.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Customer\_ChangePassword.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\_CaseRows.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Settings\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Shared\_MasterDataPanelContent.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Shared\_LayoutAdmin.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Cases\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Start\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\CustomerSettings\_Input.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\CustomerSettings\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\CustomerSettings\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\CustomerSettings\New.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\CustomerSettings\_ChangePassword.cshtml" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>61868</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="..\packages\PostSharp.3.1.33\tools\PostSharp.targets" Condition="Exists('..\packages\PostSharp.3.1.33\tools\PostSharp.targets')" />
+  <Target Name="EnsurePostSharpImported" BeforeTargets="BeforeBuild" Condition="'$(PostSharp30Imported)' == ''">
+    <Error Condition="!Exists('..\packages\PostSharp.3.1.33\tools\PostSharp.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://www.postsharp.net/links/nuget-restore." />
+    <Error Condition="Exists('..\packages\PostSharp.3.1.33\tools\PostSharp.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://www.postsharp.net/links/nuget-restore." />
+  </Target>
+  <Target Name="CopyLinkedContentFiles" BeforeTargets="Build">
+    <Copy SourceFiles="%(Content.Identity)" DestinationFiles="%(Content.Link)" SkipUnchangedFiles="true" OverwriteReadOnlyFiles="true" Condition="'%(Content.Link)' != ''" />
+  </Target>
+</Project>
