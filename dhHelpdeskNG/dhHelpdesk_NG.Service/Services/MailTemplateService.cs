@@ -16,9 +16,10 @@
         IDictionary<string, string> Validate(MailTemplateEntity mailTemplateToValidate);
 
         IList<MailTemplateList> GetMailTemplates(int customerId, int langaugeId);
-        IList<MailTemplateIdentifierEntity> GetMailTemplateIdentifiers();
         MailTemplateEntity GetMailTemplate(int id, int customerId);
         MailTemplateEntity GetMailTemplateForCustomer(int id, int customerId, int languageId);
+        MailTemplateEntity GetMailTemplateForCopyCustomer(int id, int customerId);
+        IList<MailTemplateIdentifierEntity> GetMailTemplateIdentifiers();
         MailTemplateLanguageEntity GetMailTemplateLanguage(int id, int languageId);
         MailTemplateLanguageEntity GetMailTemplateForCustomerAndLanguage(int customerId, int languageId, int mailTemplateId);
         MailTemplateLanguageEntity GetMailTemplateLanguageForCustomer(int id, int customerId, int languageId);
@@ -26,6 +27,7 @@
 
         int GetNewMailTemplateMailId();
 
+        void SaveMailTemplate(MailTemplateEntity mailTemplate, out IDictionary<string, string> errors);
         void SaveMailTemplateLanguage(MailTemplateLanguageEntity mailtemplatelanguage,  bool update, out IDictionary<string, string> errors);
         void DeleteMailTemplateLanguage(MailTemplateLanguageEntity mailtemplatelanguage, out IDictionary<string, string> errors);
         void Commit();
@@ -73,6 +75,11 @@
         }
 
         public MailTemplateEntity GetMailTemplate(int id, int customerId)
+        {
+            return this._mailTemplateRepository.GetMany(x => x.MailID == id && x.Customer_Id == customerId).FirstOrDefault();
+        }
+
+        public MailTemplateEntity GetMailTemplateForCopyCustomer(int id, int customerId)
         {
             return this._mailTemplateRepository.GetMany(x => x.MailID == id && x.Customer_Id == customerId).FirstOrDefault();
         }
@@ -135,6 +142,28 @@
                 this._mailTemplateLanguageRepository.Add(mailtemplatelanguage);
             else
                 this._mailTemplateLanguageRepository.Update(mailtemplatelanguage);
+
+            if (errors.Count == 0)
+                this.Commit();
+        }
+
+        public void SaveMailTemplate(MailTemplateEntity mailtemplate, out IDictionary<string, string> errors)
+        {
+            if (mailtemplate == null)
+                throw new ArgumentNullException("mailtemplate");
+
+            errors = new Dictionary<string, string>();
+
+            if (mailtemplate.MailTemplateGUID == Guid.Empty)
+            {
+                mailtemplate.MailTemplateGUID = Guid.NewGuid();
+     
+            }
+
+            if (mailtemplate.Id == 0)
+                this._mailTemplateRepository.Add(mailtemplate);
+            else
+                this._mailTemplateRepository.Update(mailtemplate);
 
             if (errors.Count == 0)
                 this.Commit();

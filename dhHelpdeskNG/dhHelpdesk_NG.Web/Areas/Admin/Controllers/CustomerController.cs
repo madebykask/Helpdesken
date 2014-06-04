@@ -977,15 +977,53 @@
             }
 
             //Get Mailtemplate
-            //var mailTemplateToCopy = this._mailTemplateService.GetMailTemplates(customerToCopy.Id, customerToCopy.Language_Id);
+            for (int i = 1; i < 100; i++)
+            {
+                var mailTemplateToCopy = this._mailTemplateService.GetMailTemplateForCopyCustomer(i, customerToCopy.Id);
+
+                if (mailTemplateToCopy != null)
+                {
+                    var mailTemplateToSave = new MailTemplateEntity
+                    {
+                        //Id = id,
+                        MailID = mailTemplateToCopy.MailID,
+                        Customer_Id = newCustomerToSave.Id
+
+                    };
+
+                    this._mailTemplateService.SaveMailTemplate(mailTemplateToSave, out errors);
+
+                    //Get MailTemplateLanguage
+                    foreach (var l in language)
+                    {
+                        var mailTemplateLanguageToCopy = this._mailTemplateService.GetMailTemplateLanguageForCustomer(mailTemplateToCopy.Id, customerToCopy.Id, l.Id);
+
+
+
+                        if (mailTemplateLanguageToCopy != null)
+                        {
+                            var newMailTemplateLanguage = new MailTemplateLanguageEntity
+                            {
+                                MailTemplate_Id = mailTemplateToSave.Id,
+                                Language_Id = mailTemplateLanguageToCopy.Language_Id,
+                                MailTemplate = mailTemplateToSave,
+                                Subject = mailTemplateLanguageToCopy.Subject,
+                                Body = mailTemplateLanguageToCopy.Body,
+                                MailTemplateName = mailTemplateLanguageToCopy.MailTemplateName,
+                            };
+
+                            this._mailTemplateService.SaveMailTemplateLanguage(newMailTemplateLanguage, false, out errors);
+                        }
+
+                    }
+                }
+
+               
+            }
 
             this._customerService.SaveEditCustomer(newCustomerToSave, newCustomerSetting, null, newCustomerToSave.Language_Id, out errors);
 
 
-            //var model = this.CustomerInputViewModel(newCustomerToSave);
-
-            //return this.View(model);
-            //return this.RedirectToAction("edit", "customer", new { area = "admin", newCustomerToSave.Id });
             return newCustomerToSave.Id;
         }
     }
