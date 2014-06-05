@@ -11,5 +11,7 @@
         public Customer Customer { get; set; }
 
         public IList<SelectListItem> WorkingGroups { get; set; }
+        public IList<SelectListItem> MailTemplates { get; set; }
+        public IList<SelectListItem> ReminderDays { get; set; }
     }
 }

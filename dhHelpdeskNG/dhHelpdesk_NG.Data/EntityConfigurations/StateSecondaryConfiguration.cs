@@ -21,6 +21,11 @@
                .HasForeignKey(x => x.WorkingGroup_Id)
                .WillCascadeOnDelete(false);
 
+            this.HasOptional(x => x.MailTemplate)
+                .WithMany()
+                .HasForeignKey(x => x.MailTemplate_Id)
+                .WillCascadeOnDelete(false);
+
             this.Property(x => x.Customer_Id).IsRequired();
             this.Property(x => x.IncludeInCaseStatistics).IsRequired();
             this.Property(x => x.IsActive).IsRequired().HasColumnName("Status");
@@ -32,6 +37,8 @@
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(x => x.WorkingGroup_Id).IsOptional();
+            this.Property(x => x.MailTemplate_Id).IsOptional();
+            this.Property(x => x.ReminderDays).IsOptional();
 
             this.ToTable("tblstatesecondary");
         }

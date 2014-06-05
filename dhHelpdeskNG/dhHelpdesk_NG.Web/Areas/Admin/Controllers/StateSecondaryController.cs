@@ -16,17 +16,20 @@
         private readonly IStateSecondaryService _stateSecondaryService;
         private readonly IWorkingGroupService _workingGroupService;
         private readonly ICustomerService _customerService;
+        private readonly IMailTemplateService _mailTemplateService;
 
         public StateSecondaryController(
             IStateSecondaryService stateSecondaryService,
             IWorkingGroupService workingGroupService,
             ICustomerService customerService,
+            IMailTemplateService mailTemplateService,
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
             this._stateSecondaryService = stateSecondaryService;
             this._workingGroupService = workingGroupService;
             this._customerService = customerService;
+            this._mailTemplateService = mailTemplateService;
         }
 
         public ActionResult Index(int customerId)
@@ -108,15 +111,31 @@
 
         private StateSecondaryInputViewModel CreateInputViewModel(StateSecondary statesecondary, Customer customer)
         {
+            List<SelectListItem> sl = new List<SelectListItem>();
+            for (int i = 0; i < 31; i++)
+            {
+                sl.Add(new SelectListItem
+                {
+                    Text = i.ToString(),
+                    Value = i.ToString()
+                });
+            }
+
             var model = new StateSecondaryInputViewModel
             {
                 StateSecondary = statesecondary,
                 Customer = customer,
+                ReminderDays = sl,
                 WorkingGroups = this._workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.WorkingGroupName,
                     Value = x.Id.ToString()
-                }).ToList()
+                }).ToList(),
+                MailTemplates = this._mailTemplateService.GetMailTemplates(customer.Id, customer.Language_Id).Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList(),
             };
 
             return model;

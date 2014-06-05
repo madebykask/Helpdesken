@@ -54,6 +54,7 @@
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(x => x.HolidayHeader_Id).IsOptional();
             this.Property(x => x.WatchDateCalendar_Id).IsOptional();
+            this.Property(x => x.OverTimeAmount).IsRequired();
 
             this.ToTable("tbldepartment");
         }

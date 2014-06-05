@@ -95,6 +95,7 @@
             department.IsActive = department.IsActive;
             department.IsEMailDefault = department.IsEMailDefault;
             department.ChangedDate = DateTime.UtcNow;
+            department.OverTimeAmount = department.OverTimeAmount;
             
             if (department.Id == 0)
                 this._departmentRepository.Add(department);

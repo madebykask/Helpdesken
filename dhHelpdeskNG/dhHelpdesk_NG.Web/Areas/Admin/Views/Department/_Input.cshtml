@@ -192,6 +192,14 @@
                                             @Html.TextBoxFor(model => model.Department.AccountancyAmount, new { maxlength = "8" })&nbsp;SEK
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td>
+                                            @Translation.Get("Övertidsbelopp", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(model => model.Department.OverTimeAmount, new { maxlength = "8" })&nbsp;SEK
+                                        </td>
+                                    </tr>
                                 </table>
                                 @Html.HiddenFor(model => model.Department.Customer_Id)
                                 @Html.HiddenFor(model => model.Department.Id)
