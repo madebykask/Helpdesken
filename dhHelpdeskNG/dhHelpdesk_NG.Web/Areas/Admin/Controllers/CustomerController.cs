@@ -722,7 +722,7 @@
             }
 
 
-            // Get ComputerUser
+            // Get ComputerUserFieldSettings
             var computerUserFieldSettingsToCopy = this._computerService.GetComputerUserFieldSettings(customerToCopy.Id);
 
             foreach (var cufs in computerUserFieldSettingsToCopy)
@@ -740,42 +740,36 @@
                 this._computerService.SaveComputerUserFieldSettingForCustomerCopy(newCustomerComputerUserFS, out errors);
             }
 
-            //ComputerUserLang
-            //var lang = this._languageService.GetLanguages();
+            //ComputerUserFieldSettingsLanguage
 
-            //foreach (var l in lang)
+            //foreach (var l in language)
             //{
             //    var computerUserFieldSettingsLangToCopy = this._computerService.GetComputerUserFieldSettingsWithLanguages(customerToCopy.Id, l.Id);
             //    var computerUserFieldSettingsForNewCustomer = this._computerService.GetComputerUserFieldSettings(newCustomerToSave.Id);
 
-            //    //foreach (var cufsl in computerUserFieldSettingsLangToCopy)
-            //    //{
+            //    if (computerUserFieldSettingsLangToCopy != null)
+            //    {
+            //        foreach (var cfsltc in computerUserFieldSettingsLangToCopy)
+            //        {
 
-            //    //    foreach (var cufs in computerUserFieldSettingsForNewCustomer)
-            //    //    {
-            //    //        if (cufsl.Label == cufs.Name)
-            //    //        {
-            //    //            var newComputerUserFieldSettingsLang = new ComputerUserFieldSettingsLanguage() { };
+            //            foreach (var cfsln in computerUserFieldSettingsForNewCustomer)
+            //            {
+                           
+            //                var newComputerUserFSL = new ComputerUserFieldSettingsLanguage
+            //                {
+            //                    ComputerUserFieldSettings_Id = cfsln.Id,
+            //                    Language_Id = cfsltc.Language_Id,
+            //                    Label = cfsltc.Label,
+            //                    FieldHelp = cfsltc.FieldHelp,
+            //                };
 
-            //    //            newComputerUserFieldSettingsLang.ComputerUserFieldSettings_Id = cufs.Id;
-            //    //            newComputerUserFieldSettingsLang.Label = cufsl.Label;
-            //    //            newComputerUserFieldSettingsLang.Language_Id = cufsl.Language_Id;
-            //    //            newComputerUserFieldSettingsLang.FieldHelp = cufsl.FieldHelp;
-
-
-            //    //            this._computerService.SaveComputerUserFieldSettingLangForCustomerCopy(newComputerUserFieldSettingsLang, out errors);
-
-            //    //            break;
-            //    //        }
-
-            //    //    }
-
-            //    //}
-
+            //                this._computerService.SaveComputerUserFieldSettingLangForCustomerCopy(newComputerUserFSL, out errors);
+            //            }
+                          
+            //        }
+            //    }
 
             //}
-
-
 
             //Get CustomerUser to copy
             var customerUserToCopy = this._customerUserService.GetCustomerUsersForCustomer(customerToCopy.Id);
@@ -787,6 +781,7 @@
                 newCustomerCustomerUser.Customer_Id = newCustomerToSave.Id;
                 newCustomerCustomerUser.User_Id = cu.User_Id;
                 newCustomerCustomerUser.CasePerformerFilter = string.Empty;
+                newCustomerCustomerUser.ShowOnStartPage = cu.ShowOnStartPage;
 
                 this._customerUserService.SaveCustomerUser(newCustomerCustomerUser, out errors);
             }

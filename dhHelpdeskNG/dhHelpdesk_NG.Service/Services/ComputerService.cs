@@ -37,7 +37,7 @@
         void SaveComputerUser(ComputerUser computerUser, int[] cugs, out IDictionary<string, string> errors);
         void SaveComputerUserFieldSetting(IList<ComputerUserFieldSettings> computerUserFieldSetting, out IDictionary<string, string> errors);
         void SaveComputerUserFieldSettingForCustomerCopy(ComputerUserFieldSettings computerUserFieldSetting, out IDictionary<string, string> errors);
-        //void SaveComputerUserFieldSettingLangForCustomerCopy(ComputerUserFieldSettingsLanguage computerUserFieldSettingLanguage, out IDictionary<string, string> errors);
+        void SaveComputerUserFieldSettingLangForCustomerCopy(ComputerUserFieldSettingsLanguage computerUserFieldSettingLanguage, out IDictionary<string, string> errors);
         void SaveComputerUserGroup(ComputerUserGroup computerUserGroup, int[] ous, out IDictionary<string, string> errors);
         void UpdateComputerUsersBlackList(ComputerUsersBlackList computerUsersBlackList);
         void Commit();
@@ -333,19 +333,19 @@
 
         }
 
-        //public void SaveComputerUserFieldSettingLangForCustomerCopy(ComputerUserFieldSettingsLanguage computerUserFieldSettingsLanguage, out IDictionary<string, string> errors)
-        //{
-        //    errors = new Dictionary<string, string>();
+        public void SaveComputerUserFieldSettingLangForCustomerCopy(ComputerUserFieldSettingsLanguage computerUserFieldSettingsLanguage, out IDictionary<string, string> errors)
+        {
+            errors = new Dictionary<string, string>();
 
-        //    if (computerUserFieldSettingsLanguage.ComputerUserFieldSettings_Id == 0)
-        //        _computerUserFieldSettingLanguageRepository.Add(computerUserFieldSettingsLanguage);
-        //    else
-        //        _computerUserFieldSettingLanguageRepository.Update(computerUserFieldSettingsLanguage);
+            if (computerUserFieldSettingsLanguage.ComputerUserFieldSettings_Id == 0)
+                _computerUserFieldSettingLanguageRepository.Add(computerUserFieldSettingsLanguage);
+            else
+                _computerUserFieldSettingLanguageRepository.Update(computerUserFieldSettingsLanguage);
 
 
-        //    _computerUserFieldSettingsRepository.Commit();
+            _computerUserFieldSettingsRepository.Commit();
 
-        //}
+        }
 
         public void SaveComputerUserGroup(ComputerUserGroup computerUserGroup, int[] ous, out IDictionary<string, string> errors)
         {
