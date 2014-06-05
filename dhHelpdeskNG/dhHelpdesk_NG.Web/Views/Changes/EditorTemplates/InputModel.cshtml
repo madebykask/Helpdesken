@@ -36,9 +36,6 @@
             <li class="inactive">
                 @Translation.Get("Utvärdering")
             </li>
-            <li class="inactive">
-                @Translation.Get("Historik")
-            </li>
         }
         else
         {
@@ -51,13 +48,22 @@
             <li>
                 <a href="#fragment-4">@Translation.Get("Utvärdering")</a>
             </li>
-            <li>
-                <a href="#fragment-5">@Translation.Get("Historik")</a>
-            </li>
         }
         <li>
             <a href="#fragment-6">@Translation.Get("Logg")</a>
         </li>
+        @if (Model.IsNew)
+        {
+            <li class="inactive">
+                @Translation.Get("Historik")
+            </li>
+        }
+        else
+        {
+            <li>
+                <a href="#fragment-5">@Translation.Get("Historik")</a>
+            </li>            
+        }
     </ul>
     <div class="tab-content">
         <div id="fragment-1" class="tab-pane tab-pane-border active">
@@ -74,7 +80,6 @@
             <div id="fragment-2" class="tab-pane tab-pane-border"></div>
             <div id="fragment-3" class="tab-pane tab-pane-border"></div>
             <div id="fragment-4" class="tab-pane tab-pane-border"></div>
-            <div id="fragment-5" class="tab-pane tab-pane-border"></div>
         }
         else
         {
@@ -106,15 +111,6 @@
                     </div>
                 </div>
             </div>
-            <div id="fragment-5" class="tab-pane tab-pane-border">
-                <div class="container">
-                    <div class="row">
-                        <div class="span12">
-                            @Html.DisplayFor(m => m.History)
-                        </div>
-                    </div>
-                </div>
-            </div>
         }
         <div id="fragment-6" class="tab-pane tab-pane-border">
             <div class="container">
@@ -125,5 +121,21 @@
                 </div>
             </div>
         </div>
+        @if (Model.IsNew)
+        {
+            <div id="fragment-5" class="tab-pane tab-pane-border"></div>
+        }
+        else
+        {
+            <div id="fragment-5" class="tab-pane tab-pane-border">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                            @Html.DisplayFor(m => m.History)
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        }
     </div>
 </div>

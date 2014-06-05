@@ -2,6 +2,7 @@
 @using DH.Helpdesk.BusinessData.Enums.Changes
 @using DH.Helpdesk.BusinessData.Enums.Changes.Fields
 @using DH.Helpdesk.Common.Enums
+@using DH.Helpdesk.Services.DisplayValues.Changes
 @model DH.Helpdesk.Web.Models.Changes.ChangesGrid.ChangesGridModel
 
 @Translation.Get("Changes found: ")
@@ -10,13 +11,22 @@
 <table class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
-            <th><i class="icon-thumbs-up"></i></th>
-            <th><i class="icon-thumbs-up"></i></th>
-            <th><i class="icon-thumbs-up"></i></th>
-            <th><i class="icon-thumbs-up"></i></th>
+            @foreach (var header in Model.Headers)
+            {
+                if (!IsStatusField(header.FieldName))
+                {
+                    continue;
+                }                
+                <th><a title="@header.Caption"><i class="icon-thumbs-up"></i></a></th>                
+            }
             <th onclick=" sortGrid('@OtherField.Id') " class="thpointer">@Translation.Get("Change")</th>
             @foreach (var header in Model.Headers)
             {
+                if (IsStatusField(header.FieldName))
+                {
+                    continue;
+                }
+                
                 <th onclick=" sortGrid('@header.FieldName') " class="thpointer">@Translation.Get(header.Caption)
                     @if (Model.SortField != null && header.FieldName == Model.SortField.Name)
                     {
@@ -40,77 +50,74 @@
         @foreach (var change in Model.Changes)
         {
             <tr onclick=" window.location.href = '@Url.Action("Edit", new RouteValueDictionary { { "id", change.Id } })' ">
-                <td class="tdpointer">
-                    @switch (change.RegistrationStepStatus)
+                @for (var i = 0; i < change.FieldValues.Count; i++)
+                {
+                    var changeField = Model.Headers[i];
+                    var changeFieldValue = change.FieldValues.FirstOrDefault(v => v.FieldName == changeField.FieldName);
+                    if (changeFieldValue == null)
                     {
-                        case StepStatus.Approved:
-                            <i class="icon-thumbs-up icon-green"></i>
-                            break;
-                        case StepStatus.Rejected:
-                            <i class="icon-thumbs-down icon-red"></i>
-                            break;
-                        case StepStatus.None:
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
+                        continue;
                     }
-                </td>
-                <td class="tdpointer">
-                    @switch (change.AnalyzeStepStatus)
+
+                    var status = changeFieldValue.Value as StepStatusDisplayValue;
+                    
+                    if (status == null)
                     {
-                        case StepStatus.Approved:
-                            <i class="icon-thumbs-up icon-green"></i>
-                            break;
-                        case StepStatus.Rejected:
-                            <i class="icon-thumbs-down icon-red"></i>
-                            break;
-                        case StepStatus.None:
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
+                        continue;
                     }
-                </td>
-                <td class="tdpointer">
-                    @switch (change.ImplementationStepStatus)
-                    {
-                        case StepStatus.Approved:
-                            <i class="icon-thumbs-up icon-green"></i>
-                            break;
-                        case StepStatus.Rejected:
-                            <i class="icon-thumbs-down icon-red"></i>
-                            break;
-                        case StepStatus.None:
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
-                </td>
-                <td class="tdpointer">
-                    @switch (change.EvaluationStepStatus)
-                    {
-                        case StepStatus.Approved:
-                            <i class="icon-thumbs-up icon-green"></i>
-                            break;
-                        case StepStatus.Rejected:
-                            <i class="icon-thumbs-down icon-red"></i>
-                            break;
-                        case StepStatus.None:
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
-                </td>
+
+                    <td class="tdpointer">
+                        @switch (status.Value)
+                        {
+                            case StepStatus.Approved:
+                                <i class="icon-thumbs-up icon-green"></i>
+                                break;
+                            case StepStatus.Rejected:
+                                <i class="icon-thumbs-down icon-red"></i>
+                                break;
+                            case StepStatus.None:
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+                    </td>                                        
+                }
                 <td class="tdpointer">
                     @("#" + change.Id)
                 </td>
                 @for (var i = 0; i < change.FieldValues.Count; i++)
                 {
                     var changeField = Model.Headers[i];
-                    var changeFieldValue = change.FieldValues.Single(v => v.FieldName == changeField.FieldName);
+                    var changeFieldValue = change.FieldValues.FirstOrDefault(v => v.FieldName == changeField.FieldName);
+                    if (changeFieldValue == null)
+                    {
+                        continue;
+                    }
 
+                    if (changeFieldValue.Value is StepStatusDisplayValue)
+                    {
+                        continue;
+                    }
+                    
                     <td class="tdpointer">@changeFieldValue.Value.GetDisplayValue()</td>
                 }
             </tr>
         }
     </tbody>
 </table>
+@functions    {
+
+    private bool IsStatusField(string fieldName)
+    {
+        if (string.IsNullOrEmpty(fieldName))
+        {
+            return false;
+        }
+
+        return fieldName == RegistrationField.Approval || 
+            fieldName == AnalyzeField.Approval ||
+            fieldName == ImplementationField.ImplementationReady ||
+            fieldName == EvaluationField.EvaluationReady;
+    }    
+
+}
