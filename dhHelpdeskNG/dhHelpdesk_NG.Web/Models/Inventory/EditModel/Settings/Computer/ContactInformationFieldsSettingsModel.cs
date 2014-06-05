@@ -5,6 +5,10 @@
 
     public class ContactInformationFieldsSettingsModel
     {
+        public ContactInformationFieldsSettingsModel()
+        {
+        }
+
         public ContactInformationFieldsSettingsModel(FieldSettingModel userIdFieldSettingModel)
         {
             this.UserIdFieldSettingModel = userIdFieldSettingModel;

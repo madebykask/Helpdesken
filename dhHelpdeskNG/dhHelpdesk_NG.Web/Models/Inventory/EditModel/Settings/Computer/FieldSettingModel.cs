@@ -10,14 +10,12 @@
         }
 
         public FieldSettingModel(
-            string name,
             bool showInDetails,
             bool showInList,
             string caption,
             bool isRequired,
             bool isReadOnly)
         {
-            this.Name = name;
             this.ShowInDetails = showInDetails;
             this.ShowInList = showInList;
             this.Caption = caption;
@@ -25,19 +23,16 @@
             this.IsReadOnly = isReadOnly;
         }
 
-        [NotNullAndEmpty]
-        public string Name { get; private set; }
+        public bool ShowInDetails { get; set; }
 
-        public bool ShowInDetails { get; private set; }
-
-        public bool ShowInList { get; private set; }
+        public bool ShowInList { get; set; }
 
         [NotNull]
         [LocalizedRequired]
-        public string Caption { get; private set; }
+        public string Caption { get; set; }
 
-        public bool IsRequired { get; private set; }
+        public bool IsRequired { get; set; }
 
-        public bool IsReadOnly { get; private set; }
+        public bool IsReadOnly { get; set; }
     }
 }

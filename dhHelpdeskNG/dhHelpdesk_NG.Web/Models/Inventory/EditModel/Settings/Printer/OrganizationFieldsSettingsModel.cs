@@ -5,6 +5,10 @@
 
     public class OrganizationFieldsSettingsModel
     {
+        public OrganizationFieldsSettingsModel()
+        {
+        }
+
         public OrganizationFieldsSettingsModel(FieldSettingModel departmentFieldSettingModel, FieldSettingModel unitFieldSettingModel)
         {
             this.DepartmentFieldSettingModel = departmentFieldSettingModel;

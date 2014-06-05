@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Printer
 {
+    using System.Web.Mvc;
+
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Shared;
 
@@ -10,6 +12,8 @@
         }
 
         public PrinterFieldsSettingsViewModel(
+            int langaugeId,
+            SelectList langauges,
             GeneralFieldsSettingsModel generalFieldsSettingsSettingsModel,
             InventoryFieldsSettingsModel inventoryFieldsSettingsSettingsModel,
             CommunicationFieldsSettingsModel communicationFieldsSettingsModel,
@@ -18,6 +22,8 @@
             PlaceFieldsSettingsModel placeFieldsSettingsModel,
             StateFieldsSettingsModel stateFieldsSettingsModel)
         {
+            this.LanguageId = langaugeId;
+            this.Languages = langauges;
             this.GeneralFieldsSettingsModel = generalFieldsSettingsSettingsModel;
             this.InventoryFieldsSettingsModel = inventoryFieldsSettingsSettingsModel;
             this.CommunicationFieldsSettingsModel = communicationFieldsSettingsModel;
@@ -27,25 +33,31 @@
             this.StateFieldsSettingsModel = stateFieldsSettingsModel;
         }
 
-        [NotNull]
-        public GeneralFieldsSettingsModel GeneralFieldsSettingsModel { get; private set; }
+        [IsId]
+        public int LanguageId { get; set; }
 
         [NotNull]
-        public InventoryFieldsSettingsModel InventoryFieldsSettingsModel { get; private set; }
+        public SelectList Languages { get; set; }
 
         [NotNull]
-        public CommunicationFieldsSettingsModel CommunicationFieldsSettingsModel { get; private set; }
+        public GeneralFieldsSettingsModel GeneralFieldsSettingsModel { get; set; }
 
         [NotNull]
-        public OtherFieldsSettingsModel OtherFieldsSettingsModel { get; private set; }
+        public InventoryFieldsSettingsModel InventoryFieldsSettingsModel { get; set; }
 
         [NotNull]
-        public OrganizationFieldsSettingsModel OrganizationFieldsSettingsModel { get; private set; }
+        public CommunicationFieldsSettingsModel CommunicationFieldsSettingsModel { get; set; }
 
         [NotNull]
-        public PlaceFieldsSettingsModel PlaceFieldsSettingsModel { get; private set; }
+        public OtherFieldsSettingsModel OtherFieldsSettingsModel { get; set; }
 
         [NotNull]
-        public StateFieldsSettingsModel StateFieldsSettingsModel { get; private set; }
+        public OrganizationFieldsSettingsModel OrganizationFieldsSettingsModel { get; set; }
+
+        [NotNull]
+        public PlaceFieldsSettingsModel PlaceFieldsSettingsModel { get; set; }
+
+        [NotNull]
+        public StateFieldsSettingsModel StateFieldsSettingsModel { get; set; }
     }
 }

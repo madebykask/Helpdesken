@@ -1,0 +1,19 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Printer.PrinterFieldsSettingsViewModel
+<script type="text/javascript" src="@Url.Content("~/Content/js/Changes/settings.js")"></script>
+
+<script type="text/javascript">
+    $(function () {
+        var parameters = {
+            saveSettingsUrl: '@Url.Action("PrinterSettings")',
+            settingsSavedSuccessfullyMessage: '@Translation.Get("Settings saved successfully.")'
+        };
+
+        applySettingsBehavior(parameters);
+    });
+</script>
+<div id="settings_container">
+    @using (Ajax.BeginForm("PrinterSettings", "InventorySettings", new AjaxOptions { OnSuccess = "onSettingsSavedSuccessfully", HttpMethod = "POST"}, new { id = "settings_form" }))
+    {
+        @Html.EditorFor(m => m, "Settings/PrinterFieldsSettingsViewModel")
+    }
+</div>

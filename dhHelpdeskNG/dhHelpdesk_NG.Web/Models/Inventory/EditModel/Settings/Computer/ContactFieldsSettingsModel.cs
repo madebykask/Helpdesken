@@ -5,6 +5,10 @@
 
     public class ContactFieldsSettingsModel
     {
+        public ContactFieldsSettingsModel()
+        {
+        }
+
         public ContactFieldsSettingsModel(
             FieldSettingModel nameFieldSettingModel,
             FieldSettingModel phoneFieldSettingModel,

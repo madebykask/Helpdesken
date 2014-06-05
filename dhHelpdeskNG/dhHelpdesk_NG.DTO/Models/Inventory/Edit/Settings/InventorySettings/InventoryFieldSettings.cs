@@ -12,8 +12,11 @@
             this.DefaultSettings = defaultSettings;
         }
 
-        [AllowRead(ModelStates.Updated)]
+        [AllowRead(ModelStates.Updated | ModelStates.Created)]
         public int InventoryTypeId { get; private set; }
+
+        [AllowRead(ModelStates.Created)]
+        public DateTime CreatedDate { get; private set; }
 
         [AllowRead(ModelStates.Updated)]
         public DateTime ChangedDate { get; private set; }
@@ -38,6 +41,22 @@
                                             inventoryTypeId,
                                         ChangedDate =
                                             changedDate
+                                    };
+
+            return businessModel;
+        }
+
+        public static InventoryFieldSettings CreateNew(
+            int inventoryTypeId,
+            DefaultFieldSettings defaultSettings,
+            DateTime createdDate)
+        {
+            var businessModel = new InventoryFieldSettings(ModelStates.Created, defaultSettings)
+                                    {
+                                        InventoryTypeId =
+                                            inventoryTypeId,
+                                        CreatedDate =
+                                            createdDate
                                     };
 
             return businessModel;

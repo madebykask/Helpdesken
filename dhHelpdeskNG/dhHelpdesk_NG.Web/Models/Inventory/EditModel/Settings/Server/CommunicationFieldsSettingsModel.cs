@@ -5,6 +5,10 @@
 
     public class CommunicationFieldsSettingsModel
     {
+        public CommunicationFieldsSettingsModel()
+        {
+        }
+
         public CommunicationFieldsSettingsModel(
             FieldSettingModel networkAdapterFieldSettingModel,
             FieldSettingModel ipAddressFieldSettingModel,

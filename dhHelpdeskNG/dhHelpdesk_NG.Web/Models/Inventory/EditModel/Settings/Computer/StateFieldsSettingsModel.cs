@@ -5,6 +5,10 @@
 
     public class StateFieldsSettingsModel
     {
+        public StateFieldsSettingsModel()
+        {
+        }
+
         public StateFieldsSettingsModel(
             FieldSettingModel stateFieldSettingModel,
             FieldSettingModel stolenFieldSettingModel,

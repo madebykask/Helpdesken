@@ -1,6 +1,11 @@
 namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings;
+    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Computer;
 
     using FieldSettingModel = DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Computer.FieldSettingModel;
@@ -8,7 +13,10 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
     public class ComputerFieldsSettingsViewModelBuilder : IComputerFieldsSettingsViewModelBuilder
     {
-        public ComputerFieldsSettingsViewModel BuildViewModel(ComputerFieldsSettings settings)
+        public ComputerFieldsSettingsViewModel BuildViewModel(
+            ComputerFieldsSettings settings,
+            List<ItemOverview> langauges,
+            int langaugeId)
         {
             var createdDate = MapFieldSetting(settings.DateFieldsSettings.CreatedDateFieldSetting);
             var changedDate = MapFieldSetting(settings.DateFieldsSettings.ChangedDateFieldSetting);
@@ -148,7 +156,14 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 computerType,
                 location);
 
+            var localizedLanguages =
+                langauges.Select(l => new ItemOverview(Translation.Get(l.Name), l.Value)).ToList();
+
+            var langaugesSelectList = new SelectList(localizedLanguages, "Value", "Name");
+
             var viewModel = new ComputerFieldsSettingsViewModel(
+                langaugeId,
+                langaugesSelectList,
                 dateFieldsSettingsModel,
                 communicationFieldsSettingsModel,
                 contactFieldsSettingsModel,
@@ -173,7 +188,6 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
         private static FieldSettingModel MapFieldSetting(FieldSetting setting)
         {
             var settingModel = new FieldSettingModel(
-                setting.Name,
                 setting.ShowInDetails,
                 setting.ShowInList,
                 setting.Caption,

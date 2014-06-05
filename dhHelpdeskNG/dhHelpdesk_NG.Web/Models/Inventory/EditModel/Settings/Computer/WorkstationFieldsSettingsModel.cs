@@ -5,6 +5,10 @@
 
     public class WorkstationFieldsSettingsModel
     {
+        public WorkstationFieldsSettingsModel()
+        {
+        }
+
         public WorkstationFieldsSettingsModel(
             FieldSettingModel nameFieldSettingModel,
             FieldSettingModel manufacturerFieldSettingModel,

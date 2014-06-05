@@ -98,7 +98,6 @@
         {
             var settingModel = new InventoryFieldSettingModel(
                 setting.Caption,
-                setting.FieldType,
                 setting.PropertySize,
                 setting.ShowInDetails,
                 setting.ShowInList);

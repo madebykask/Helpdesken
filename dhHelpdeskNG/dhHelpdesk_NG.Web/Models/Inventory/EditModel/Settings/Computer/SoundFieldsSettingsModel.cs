@@ -5,6 +5,10 @@
 
     public class SoundFieldsSettingsModel
     {
+        public SoundFieldsSettingsModel()
+        {
+        }
+
         public SoundFieldsSettingsModel(FieldSettingModel soundCardFieldSettingModel)
         {
             this.SoundCardFieldSettingModel = soundCardFieldSettingModel;

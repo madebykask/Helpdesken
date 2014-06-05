@@ -170,7 +170,6 @@
         private static FieldSetting CreateFieldSetting(FieldSettingMapperData fieldSetting)
         {
             return new FieldSetting(
-                fieldSetting.FieldName,
                 fieldSetting.ShowInDetails.ToBool(),
                 fieldSetting.ShowInList.ToBool(),
                 fieldSetting.Caption,

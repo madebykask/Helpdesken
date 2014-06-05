@@ -8,9 +8,10 @@
 
     using PlaceFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.SharedSettings.PlaceFieldsSettings;
 
-    public class ServerFieldsSettings
+    public class ServerFieldsSettings : BusinessModel
     {
         private ServerFieldsSettings(
+            ModelStates modelState,
             GeneralFieldsSettings generalFieldsSettings,
             OtherFieldsSettings otherFieldsSettings,
             StateFieldsSettings stateFieldsSettings,
@@ -23,6 +24,7 @@
             PlaceFieldsSettings placeFieldsSettings,
             CommunicationFieldsSettings communicationFieldsSettings)
         {
+            this.State = modelState;
             this.GeneralFieldsSettings = generalFieldsSettings;
             this.OtherFieldsSettings = otherFieldsSettings;
             this.StateFieldsSettings = stateFieldsSettings;
@@ -41,7 +43,6 @@
         public int CustomerId { get; private set; }
 
         [IsId]
-        [AllowRead(ModelStates.Updated)]
         public int LanguageId { get; private set; }
 
         [AllowRead(ModelStates.Updated)]
@@ -97,6 +98,7 @@
             CommunicationFieldsSettings communicationFieldsSettings)
         {
             var businessModel = new ServerFieldsSettings(
+                ModelStates.Updated,
                 generalFieldsSettings,
                 otherFieldsSettings,
                 stateFieldsSettings,
@@ -131,6 +133,7 @@
             CommunicationFieldsSettings communicationFieldsSettings)
         {
             var businessModel = new ServerFieldsSettings(
+                ModelStates.ForEdit,
                 generalFieldsSettings,
                 otherFieldsSettings,
                 stateFieldsSettings,

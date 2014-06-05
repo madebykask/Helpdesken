@@ -2,7 +2,6 @@ namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings
 {
     using DataAnnotationsExtensions;
 
-    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
@@ -14,13 +13,11 @@ namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings
 
         public InventoryFieldSettingModel(
             string caption,
-            FieldTypes? fieldType,
             int? propertySize,
             bool showInDetails,
             bool showInList)
         {
             this.Caption = caption;
-            this.FieldType = fieldType;
             this.PropertySize = propertySize;
             this.ShowInDetails = showInDetails;
             this.ShowInList = showInList;
@@ -34,8 +31,6 @@ namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings
         [NotNull]
         [LocalizedRequired]
         public string Caption { get; private set; }
-
-        public FieldTypes? FieldType { get; private set; }
 
         [Max(0)]
         public int? PropertySize { get; private set; }

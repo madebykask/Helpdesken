@@ -5,6 +5,10 @@
 
     public class OtherFieldsSettingsModel
     {
+        public OtherFieldsSettingsModel()
+        {
+        }
+
         public OtherFieldsSettingsModel(
             FieldSettingModel numberOfTraysFieldSettingModel,
             FieldSettingModel driverFieldSettingModel,

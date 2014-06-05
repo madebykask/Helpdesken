@@ -5,6 +5,10 @@
 
     public class GraphicsFieldsSettingsModel
     {
+        public GraphicsFieldsSettingsModel()
+        {
+        }
+
         public GraphicsFieldsSettingsModel(FieldSettingModel videoCardFieldSettingModel)
         {
             this.VideoCardFieldSettingModel = videoCardFieldSettingModel;

@@ -1,6 +1,11 @@
 namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.PrinterSettings;
+    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Printer;
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Shared;
 
@@ -13,7 +18,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             this.settingModelBuilder = settingModelBuilder;
         }
 
-        public PrinterFieldsSettingsViewModel BuildViewModel(PrinterFieldsSettings settings)
+        public PrinterFieldsSettingsViewModel BuildViewModel(PrinterFieldsSettings settings, List<ItemOverview> langauges, int langaugeId)
         {
             var name = this.settingModelBuilder.MapFieldSetting(settings.GeneralFieldsSettings.NameFieldSetting);
             var manufacturer = this.settingModelBuilder.MapFieldSetting(settings.GeneralFieldsSettings.ManufacturerFieldSetting);
@@ -57,7 +62,14 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 createdDate,
                 changedDate);
 
+            var localizedLanguages =
+                langauges.Select(l => new ItemOverview(Translation.Get(l.Name), l.Value)).ToList();
+
+            var langaugesSelectList = new SelectList(localizedLanguages, "Value", "Name");
+
             var viewModel = new PrinterFieldsSettingsViewModel(
+                langaugeId,
+                langaugesSelectList,
                 generalFieldsSettingsModel,
                 inventoryFieldsSettingsModel,
                 communicationFieldsSettingsModel,

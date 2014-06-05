@@ -52,8 +52,7 @@
         public int CustomerId { get; private set; }
 
         [IsId]
-        [AllowRead(ModelStates.Updated)]
-        public int LanguageId { get; private set; }
+        public int LanguageId { get; set; }
 
         [AllowRead(ModelStates.Updated)]
         public DateTime ChangedDate { get; private set; }

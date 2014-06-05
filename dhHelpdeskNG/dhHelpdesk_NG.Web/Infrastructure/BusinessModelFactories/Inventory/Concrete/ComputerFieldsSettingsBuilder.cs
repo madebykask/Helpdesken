@@ -12,8 +12,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
     {
         public ComputerFieldsSettings BuildViewModel(
                ComputerFieldsSettingsViewModel settings,
-               int customerId,
-               int languageId)
+               int customerId)
         {
             var createdDate = MapFieldSetting(settings.DateFieldsSettingsModel.CreatedDateFieldSettingModel);
             var changedDate = MapFieldSetting(settings.DateFieldsSettingsModel.ChangedDateFieldSettingModel);
@@ -147,7 +146,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
 
             var businessModel = ComputerFieldsSettings.CreateUpdated(
                 customerId,
-                languageId,
+                settings.LanguageId,
                 DateTime.Now,
                 dateFieldsSettings,
                 communicationFieldsSettings,
@@ -173,7 +172,6 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
         private static FieldSetting MapFieldSetting(FieldSettingModel setting)
         {
             var settingModel = new FieldSetting(
-                setting.Name,
                 setting.ShowInDetails,
                 setting.ShowInList,
                 setting.Caption,

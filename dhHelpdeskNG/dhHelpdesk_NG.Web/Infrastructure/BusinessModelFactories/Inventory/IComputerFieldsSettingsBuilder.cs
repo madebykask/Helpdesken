@@ -7,7 +7,6 @@
     {
         ComputerFieldsSettings BuildViewModel(
             ComputerFieldsSettingsViewModel settings,
-            int languageId,
-            int customerId);
+            int languageId);
     }
 }

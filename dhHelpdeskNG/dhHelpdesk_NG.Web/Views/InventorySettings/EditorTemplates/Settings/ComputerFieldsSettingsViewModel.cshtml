@@ -17,7 +17,10 @@
         <tr>
             <th>@Translation.Get("Fält")</th>
             <th>@Translation.Get("Visa")</th>
-            <th>@Translation.Get("Rubrik")</th>
+            <th>
+                @Translation.Get("Rubrik")
+                @Html.DropDownListFor(m => m.LanguageId, Model.Languages, new { id = "settings_language_dropdown" })
+            </th>
             <th>@Translation.Get("Obligatorisk")</th>
             <th>@Translation.Get("Lista")</th>
             <th>@Translation.Get("Skrivskyddad")</th>
@@ -68,6 +71,9 @@
         </tr>
         <tr>
             @Html.EditorFor(m => m.InventoryFieldsSettingsModel.BarCodeFieldSettingModel, "Settings/FieldSettingForComputerModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.InventoryFieldsSettingsModel.PurchaseDateFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
             <td colspan="6" class="header">@Translation.Get("Operativsystem")</td>
@@ -179,6 +185,9 @@
         </tr>
         <tr>
             <td colspan="6" class="header">@Translation.Get("Organisation")</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.OrganizationFieldsSettingsModel.DepartmentFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
             @Html.EditorFor(m => m.OrganizationFieldsSettingsModel.DomainFieldSettingModel, "Settings/FieldSettingForComputerModel")

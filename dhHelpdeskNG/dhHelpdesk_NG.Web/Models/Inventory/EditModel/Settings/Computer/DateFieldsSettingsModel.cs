@@ -5,6 +5,10 @@
 
     public class DateFieldsSettingsModel
     {
+        public DateFieldsSettingsModel()
+        {
+        }
+
         public DateFieldsSettingsModel(
             FieldSettingModel createdDateFieldSettingModel,
             FieldSettingModel changedDateFieldSettingModel,

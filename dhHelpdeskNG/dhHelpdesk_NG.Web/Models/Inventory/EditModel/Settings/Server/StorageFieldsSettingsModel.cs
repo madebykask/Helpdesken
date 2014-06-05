@@ -5,6 +5,10 @@
 
     public class StorageFieldsSettingsModel
     {
+        public StorageFieldsSettingsModel()
+        {
+        }
+
         public StorageFieldsSettingsModel(FieldSettingModel capasityFieldSettingModel)
         {
             this.CapasityFieldSettingModel = capasityFieldSettingModel;

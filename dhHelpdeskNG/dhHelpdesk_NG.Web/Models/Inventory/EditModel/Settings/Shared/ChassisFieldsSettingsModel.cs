@@ -5,6 +5,10 @@
 
     public class ChassisFieldsSettingsModel
     {
+        public ChassisFieldsSettingsModel()
+        {
+        }
+
         public ChassisFieldsSettingsModel(FieldSettingModel chassisFieldSettingModel)
         {
             this.ChassisFieldSettingModel = chassisFieldSettingModel;

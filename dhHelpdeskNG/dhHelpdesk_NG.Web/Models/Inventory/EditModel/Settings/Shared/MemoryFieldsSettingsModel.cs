@@ -5,6 +5,10 @@
 
     public class MemoryFieldsSettingsModel
     {
+        public MemoryFieldsSettingsModel()
+        {
+        }
+
         public MemoryFieldsSettingsModel(FieldSettingModel ramFieldSettingModel)
         {
             this.RAMFieldSettingModel = ramFieldSettingModel;

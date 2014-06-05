@@ -7,14 +7,12 @@
         public InventoryFieldSetting(
             string caption,
             int position,
-            FieldTypes fieldType,
             int propertySize,
             bool showInDetails,
             bool showInList)
         {
             this.Caption = caption;
             this.Position = position;
-            this.FieldType = fieldType;
             this.PropertySize = propertySize;
             this.ShowInDetails = showInDetails;
             this.ShowInList = showInList;
@@ -24,8 +22,6 @@
         public string Caption { get; private set; }
 
         public int Position { get; private set; }
-
-        public FieldTypes FieldType { get; private set; }
 
         public int PropertySize { get; private set; }
 

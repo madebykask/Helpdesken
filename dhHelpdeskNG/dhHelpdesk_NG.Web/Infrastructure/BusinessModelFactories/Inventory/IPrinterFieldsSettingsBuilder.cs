@@ -7,7 +7,6 @@
     {
         PrinterFieldsSettings BuildViewModel(
             PrinterFieldsSettingsViewModel settings,
-            int languageId,
             int customerId);
     }
 }

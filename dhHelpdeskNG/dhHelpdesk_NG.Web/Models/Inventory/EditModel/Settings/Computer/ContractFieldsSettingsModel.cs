@@ -5,6 +5,10 @@
 
     public class ContractFieldsSettingsModel
     {
+        public ContractFieldsSettingsModel()
+        {
+        }
+
         public ContractFieldsSettingsModel(
             FieldSettingModel contractStatusFieldSettingModel,
             FieldSettingModel contractNumberFieldSettingModel,

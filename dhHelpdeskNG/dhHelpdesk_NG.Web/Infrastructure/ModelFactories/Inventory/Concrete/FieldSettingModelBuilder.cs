@@ -8,7 +8,6 @@
         public FieldSettingModel MapFieldSetting(FieldSetting setting)
         {
             var settingModel = new FieldSettingModel(
-                setting.Name,
                 setting.ShowInDetails,
                 setting.ShowInList,
                 setting.Caption,

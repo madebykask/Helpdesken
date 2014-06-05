@@ -17,7 +17,6 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
 
         public PrinterFieldsSettings BuildViewModel(
             PrinterFieldsSettingsViewModel settings,
-            int languageId,
             int customerId)
         {
             var name = this.settingBuilder.MapFieldSetting(settings.GeneralFieldsSettingsModel.NameFieldSettingModel);
@@ -64,7 +63,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
 
             var businessModel = PrinterFieldsSettings.CreateUpdated(
                 customerId,
-                languageId,
+                settings.LanguageId,
                 DateTime.Now,
                 generalFieldsSettings,
                 inventoryFieldsSettings,

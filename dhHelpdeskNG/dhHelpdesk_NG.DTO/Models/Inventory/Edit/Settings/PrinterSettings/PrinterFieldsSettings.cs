@@ -9,9 +9,10 @@
     using CommunicationFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.SharedSettings.CommunicationFieldsSettings;
     using PlaceFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.SharedSettings.PlaceFieldsSettings;
 
-    public class PrinterFieldsSettings
+    public class PrinterFieldsSettings : BusinessModel
     {
         private PrinterFieldsSettings(
+            ModelStates modelState,
             GeneralFieldsSettings generalFieldsSettings,
             InventoryFieldsSettings inventoryFieldsSettings,
             CommunicationFieldsSettings communicationFieldsSettings,
@@ -20,6 +21,7 @@
             PlaceFieldsSettings placeFieldsSettings,
             StateFieldsSettings stateFieldsSettings)
         {
+            this.State = modelState;
             this.GeneralFieldsSettings = generalFieldsSettings;
             this.InventoryFieldsSettings = inventoryFieldsSettings;
             this.CommunicationFieldsSettings = communicationFieldsSettings;
@@ -34,7 +36,6 @@
         public int CustomerId { get; private set; }
 
         [IsId]
-        [AllowRead(ModelStates.Updated)]
         public int LanguageId { get; private set; }
 
         [AllowRead(ModelStates.Updated)]
@@ -74,6 +75,7 @@
             StateFieldsSettings stateFieldsSettings)
         {
             var businessModel = new PrinterFieldsSettings(
+                ModelStates.Updated,
                 generalFieldsSettings,
                 inventoryFieldsSettings,
                 communicationFieldsSettings,
@@ -95,6 +97,7 @@
             StateFieldsSettings stateFieldsSettings)
         {
             var businessModel = new PrinterFieldsSettings(
+                ModelStates.ForEdit,
                 generalFieldsSettings,
                 inventoryFieldsSettings,
                 communicationFieldsSettings,

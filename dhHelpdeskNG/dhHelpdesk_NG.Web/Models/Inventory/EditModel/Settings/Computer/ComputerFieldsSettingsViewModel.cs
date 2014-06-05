@@ -1,7 +1,8 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Computer
 {
+    using System.Web.Mvc;
+
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Shared;
 
     public class ComputerFieldsSettingsViewModel
     {
@@ -10,6 +11,8 @@
         }
 
         public ComputerFieldsSettingsViewModel(
+            int langaugeId,
+            SelectList langauges,
             DateFieldsSettingsModel dateFieldsSettingsModel,
             CommunicationFieldsSettingsModel communicationFieldsSettingsModel,
             ContactFieldsSettingsModel contactFieldsSettingsModel,
@@ -28,6 +31,8 @@
             ProccesorFieldsSettingsModel proccesorFieldsSettingsModel,
             WorkstationFieldsSettingsModel workstationFieldsSettingsModel)
         {
+            this.LanguageId = langaugeId;
+            this.Languages = langauges;
             this.DateFieldsSettingsModel = dateFieldsSettingsModel;
             this.CommunicationFieldsSettingsModel = communicationFieldsSettingsModel;
             this.ContactFieldsSettingsModel = contactFieldsSettingsModel;
@@ -47,55 +52,61 @@
             this.WorkstationFieldsSettingsModel = workstationFieldsSettingsModel;
         }
 
-        [NotNull]
-        public DateFieldsSettingsModel DateFieldsSettingsModel { get; private set; }
+        [IsId]
+        public int LanguageId { get; set; }
 
         [NotNull]
-        public CommunicationFieldsSettingsModel CommunicationFieldsSettingsModel { get; private set; }
+        public SelectList Languages { get; set; }
 
         [NotNull]
-        public ContactFieldsSettingsModel ContactFieldsSettingsModel { get; private set; }
+        public DateFieldsSettingsModel DateFieldsSettingsModel { get; set; }
 
         [NotNull]
-        public ContactInformationFieldsSettingsModel ContactInformationFieldsSettingsModel { get; private set; }
+        public CommunicationFieldsSettingsModel CommunicationFieldsSettingsModel { get; set; }
 
         [NotNull]
-        public ContractFieldsSettingsModel ContractFieldsSettingsModel { get; private set; }
+        public ContactFieldsSettingsModel ContactFieldsSettingsModel { get; set; }
 
         [NotNull]
-        public GraphicsFieldsSettingsModel GraphicsFieldsSettingsModel { get; private set; }
+        public ContactInformationFieldsSettingsModel ContactInformationFieldsSettingsModel { get; set; }
 
         [NotNull]
-        public OtherFieldsSettingsModel OtherFieldsSettingsModel { get; private set; }
+        public ContractFieldsSettingsModel ContractFieldsSettingsModel { get; set; }
 
         [NotNull]
-        public PlaceFieldsSettingsModel PlaceFieldsSettingsModel { get; private set; }
+        public GraphicsFieldsSettingsModel GraphicsFieldsSettingsModel { get; set; }
 
         [NotNull]
-        public SoundFieldsSettingsModel SoundFieldsSettingsModel { get; private set; }
+        public OtherFieldsSettingsModel OtherFieldsSettingsModel { get; set; }
 
         [NotNull]
-        public StateFieldsSettingsModel StateFieldsSettingsModel { get; private set; }
+        public PlaceFieldsSettingsModel PlaceFieldsSettingsModel { get; set; }
 
         [NotNull]
-        public ChassisFieldsSettingsModel ChassisFieldsSettingsModel { get; private set; }
+        public SoundFieldsSettingsModel SoundFieldsSettingsModel { get; set; }
 
         [NotNull]
-        public InventoryFieldsSettingsModel InventoryFieldsSettingsModel { get; private set; }
+        public StateFieldsSettingsModel StateFieldsSettingsModel { get; set; }
 
         [NotNull]
-        public MemoryFieldsSettingsModel MemoryFieldsSettingsModel { get; private set; }
+        public ChassisFieldsSettingsModel ChassisFieldsSettingsModel { get; set; }
 
         [NotNull]
-        public OperatingSystemFieldsSettingsModel OperatingSystemFieldsSettingsModel { get; private set; }
+        public InventoryFieldsSettingsModel InventoryFieldsSettingsModel { get; set; }
 
         [NotNull]
-        public OrganizationFieldsSettingsModel OrganizationFieldsSettingsModel { get; private set; }
+        public MemoryFieldsSettingsModel MemoryFieldsSettingsModel { get; set; }
 
         [NotNull]
-        public ProccesorFieldsSettingsModel ProccesorFieldsSettingsModel { get; private set; }
+        public OperatingSystemFieldsSettingsModel OperatingSystemFieldsSettingsModel { get; set; }
 
         [NotNull]
-        public WorkstationFieldsSettingsModel WorkstationFieldsSettingsModel { get; private set; }
+        public OrganizationFieldsSettingsModel OrganizationFieldsSettingsModel { get; set; }
+
+        [NotNull]
+        public ProccesorFieldsSettingsModel ProccesorFieldsSettingsModel { get; set; }
+
+        [NotNull]
+        public WorkstationFieldsSettingsModel WorkstationFieldsSettingsModel { get; set; }
     }
 }

@@ -5,6 +5,10 @@
 
     public class OperatingSystemFieldsSettingsModel
     {
+        public OperatingSystemFieldsSettingsModel()
+        {
+        }
+
         public OperatingSystemFieldsSettingsModel(
             FieldSettingModel operatingSystemFieldSettingModel,
             FieldSettingModel versionFieldSettingModel,

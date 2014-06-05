@@ -17,7 +17,6 @@
 
         public ServerFieldsSettings BuildViewModel(
             ServerFieldsSettingsViewModel settings,
-            int languageId,
             int customerId)
         {
             var name = this.settingBuilder.MapFieldSetting(settings.GeneralFieldsSettingsModel.NameFieldSettingModel);
@@ -91,7 +90,7 @@
 
             var businessModel = ServerFieldsSettings.CreateUpdated(
                 customerId,
-                languageId,
+                settings.LanguageId,
                 DateTime.Now,
                 generalFieldsSettings,
                 otherFieldsSettings,

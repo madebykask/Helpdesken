@@ -7,7 +7,6 @@
     {
         ServerFieldsSettings BuildViewModel(
             ServerFieldsSettingsViewModel settings,
-            int languageId,
             int customerId);
     }
 }

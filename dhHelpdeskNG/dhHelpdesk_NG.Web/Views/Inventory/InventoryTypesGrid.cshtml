@@ -9,7 +9,7 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr style="cursor: pointer" onclick="window.location.href = '@Url.Action("RedirectToEditInventorySetttings", "InventorySettings", new { inventoryTypeId = item.Value })'">
+            <tr style="cursor: pointer" onclick="window.location.href = '@Url.Action("EditSettings", "InventorySettings", new { inventoryTypeId = item.Value })'">
                 <td>@Html.DisplayFor(x => item.Name)
                 </td>
             </tr>

@@ -5,6 +5,10 @@
 
     public class ProccesorFieldsSettingsModel
     {
+        public ProccesorFieldsSettingsModel()
+        {
+        }
+
         public ProccesorFieldsSettingsModel(FieldSettingModel proccesorFieldSettingsModel)
         {
             this.ProccesorFieldSettingModel = proccesorFieldSettingsModel;

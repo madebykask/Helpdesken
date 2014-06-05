@@ -5,6 +5,8 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Language.Output;
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
@@ -20,6 +22,8 @@
 
         void SaveLanguage(Language language, out IDictionary<string, string> errors);
         void Commit();
+
+        List<ItemOverview> GetActiveOverviews();
 
         /// <summary>
         /// The get active languages.
@@ -105,6 +109,14 @@
         public void Commit()
         {
             this._unitOfWork.Commit();
+        }
+
+        public List<ItemOverview> GetActiveOverviews()
+        {
+            var languageIds = new List<int> { LanguageId.Swedish, LanguageId.English };
+            var languages = this._languageRepository.FindActiveOverviewsByIds(languageIds);
+
+            return languages;
         }
 
         /// <summary>

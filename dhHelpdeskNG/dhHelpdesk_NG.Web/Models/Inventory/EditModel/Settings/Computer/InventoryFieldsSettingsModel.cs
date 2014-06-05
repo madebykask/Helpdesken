@@ -5,6 +5,10 @@
 
     public class InventoryFieldsSettingsModel
     {
+        public InventoryFieldsSettingsModel()
+        {
+        }
+
         public InventoryFieldsSettingsModel(
             FieldSettingModel barCodeFieldSettingModel,
             FieldSettingModel purchaseDateFieldSettingModel)

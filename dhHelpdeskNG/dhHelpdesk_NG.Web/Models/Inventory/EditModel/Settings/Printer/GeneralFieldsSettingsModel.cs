@@ -5,6 +5,10 @@
 
     public class GeneralFieldsSettingsModel
     {
+        public GeneralFieldsSettingsModel()
+        {
+        }
+
         public GeneralFieldsSettingsModel(
             FieldSettingModel nameFieldSettingModel,
             FieldSettingModel manufacturerFieldSettingModel,

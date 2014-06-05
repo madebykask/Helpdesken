@@ -196,6 +196,7 @@
             CreateSettingIfNeeded(ContractFields.AccountingDimension3, customerId, settingNames, settings);
             CreateSettingIfNeeded(ContractFields.AccountingDimension4, customerId, settingNames, settings);
             CreateSettingIfNeeded(ContractFields.AccountingDimension5, customerId, settingNames, settings);
+            CreateSettingIfNeeded(ContractFields.Document, customerId, settingNames, settings);
         }
 
         private static void CreateMissingOtherFieldsSettings(

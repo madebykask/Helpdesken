@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Server
 {
+    using System.Web.Mvc;
+
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Shared;
 
@@ -10,6 +12,8 @@
         }
 
         public ServerFieldsSettingsViewModel(
+            int langaugeId,
+            SelectList langauges,
             GeneralFieldsSettingsModel generalFieldsSettingsModel,
             OtherFieldsSettingsModel otherFieldsSettingsModel,
             StateFieldsSettingsModel stateFieldsSettingsModel,
@@ -22,6 +26,8 @@
             PlaceFieldsSettingsModel placeFieldsSettingsModel,
             CommunicationFieldsSettingsModel communicationFieldsSettingsModel)
         {
+            this.LanguageId = langaugeId;
+            this.Languages = langauges;
             this.GeneralFieldsSettingsModel = generalFieldsSettingsModel;
             this.OtherFieldsSettingsModel = otherFieldsSettingsModel;
             this.StateFieldsSettingsModel = stateFieldsSettingsModel;
@@ -35,37 +41,43 @@
             this.CommunicationFieldsSettingsModel = communicationFieldsSettingsModel;
         }
 
-        [NotNull]
-        public GeneralFieldsSettingsModel GeneralFieldsSettingsModel { get; private set; }
+        [IsId]
+        public int LanguageId { get; set; }
 
         [NotNull]
-        public OtherFieldsSettingsModel OtherFieldsSettingsModel { get; private set; }
+        public SelectList Languages { get; set; }
 
         [NotNull]
-        public StateFieldsSettingsModel StateFieldsSettingsModel { get; private set; }
+        public GeneralFieldsSettingsModel GeneralFieldsSettingsModel { get;  set; }
 
         [NotNull]
-        public StorageFieldsSettingsModel StorageFieldsSettingsModel { get; private set; }
+        public OtherFieldsSettingsModel OtherFieldsSettingsModel { get;  set; }
 
         [NotNull]
-        public ChassisFieldsSettingsModel ChassisFieldsSettingsModel { get; private set; }
+        public StateFieldsSettingsModel StateFieldsSettingsModel { get;  set; }
 
         [NotNull]
-        public InventoryFieldsSettingsModel InventoryFieldsSettingsModel { get; private set; }
+        public StorageFieldsSettingsModel StorageFieldsSettingsModel { get;  set; }
 
         [NotNull]
-        public MemoryFieldsSettingsModel MemoryFieldsSettingsModel { get; private set; }
+        public ChassisFieldsSettingsModel ChassisFieldsSettingsModel { get;  set; }
 
         [NotNull]
-        public OperatingSystemFieldsSettingsModel OperatingSystemFieldsSettingsModel { get; private set; }
+        public InventoryFieldsSettingsModel InventoryFieldsSettingsModel { get;  set; }
 
         [NotNull]
-        public ProccesorFieldsSettingsModel ProccesorFieldsSettingsModel { get; private set; }
+        public MemoryFieldsSettingsModel MemoryFieldsSettingsModel { get;  set; }
 
         [NotNull]
-        public PlaceFieldsSettingsModel PlaceFieldsSettingsModel { get; private set; }
+        public OperatingSystemFieldsSettingsModel OperatingSystemFieldsSettingsModel { get;  set; }
 
         [NotNull]
-        public CommunicationFieldsSettingsModel CommunicationFieldsSettingsModel { get; private set; }
+        public ProccesorFieldsSettingsModel ProccesorFieldsSettingsModel { get;  set; }
+
+        [NotNull]
+        public PlaceFieldsSettingsModel PlaceFieldsSettingsModel { get;  set; }
+
+        [NotNull]
+        public CommunicationFieldsSettingsModel CommunicationFieldsSettingsModel { get;  set; }
     }
 }

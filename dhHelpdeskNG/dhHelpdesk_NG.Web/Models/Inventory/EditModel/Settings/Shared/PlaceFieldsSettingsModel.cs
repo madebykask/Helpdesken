@@ -5,6 +5,10 @@
 
     public class PlaceFieldsSettingsModel
     {
+        public PlaceFieldsSettingsModel()
+        {
+        }
+
         public PlaceFieldsSettingsModel(FieldSettingModel roomFieldSettingModel, FieldSettingModel locationFieldSettingModel)
         {
             this.RoomFieldSettingModel = roomFieldSettingModel;

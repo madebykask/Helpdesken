@@ -4,7 +4,10 @@
         <tr>
             <th>@Translation.Get("Fält")</th>
             <th>@Translation.Get("Visa")</th>
-            <th>@Translation.Get("Rubrik")</th>
+            <th>
+                @Translation.Get("Rubrik")
+                @Html.DropDownListFor(m => m.LanguageId, Model.Languages, new { id = "settings_language_dropdown" })
+            </th>
             <th>@Translation.Get("Obligatorisk")</th>
             <th>@Translation.Get("Lista")</th>
         </tr>
@@ -30,6 +33,9 @@
         </tr>
         <tr>
             @Html.EditorFor(m => m.InventoryFieldsSettingsModel.BarCodeFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.InventoryFieldsSettingsModel.PurchaseDateFieldSettingModel, "Settings/FieldSettingModel")
         </tr>
         <tr>
             <td colspan="6" class="header">@Translation.Get("Kommunikation")</td>

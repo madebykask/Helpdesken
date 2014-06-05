@@ -1471,9 +1471,7 @@
     <Content Include="Views\Inventory\CustomTypeReportGrid.cshtml" />
     <Content Include="Views\Inventory\Accesories.cshtml" />
     <Content Include="Views\Inventory\InventoryTypesGrid.cshtml" />
-    <Content Include="Views\InventorySettings\EditWorkstationSettings.cshtml" />
-    <Content Include="Views\InventorySettings\EditServerSettings.cshtml" />
-    <Content Include="Views\InventorySettings\EditPrinterSettings.cshtml" />
+    <Content Include="Views\InventorySettings\EditSettings.cshtml" />
     <Content Include="Views\InventorySettings\EditorTemplates\Settings\FieldSettingForComputerModel.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\Computer\ChassisModel.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\Computer\InventoryModel.cshtml" />
@@ -1485,6 +1483,9 @@
     </Content>
     <Content Include="Views\Reports\RegistratedCasesDayPrint.cshtml" />
     <Content Include="Views\Reports\RegistratedCasesDayView.cshtml" />
+    <Content Include="Views\InventorySettings\WorkstationSettings.cshtml" />
+    <Content Include="Views\InventorySettings\ServerSettings.cshtml" />
+    <Content Include="Views\InventorySettings\PrinterSettings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
