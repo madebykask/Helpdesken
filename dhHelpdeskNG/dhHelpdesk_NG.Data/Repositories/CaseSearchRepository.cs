@@ -326,7 +326,7 @@
             StringBuilder sb = new StringBuilder();
 
             // fields
-            sb.Append("select ");
+            sb.Append("select distinct ");
             //vid avslutade ärenden visas bara första 500, TODO fungerar inte i Oracle 
             if (f.CaseProgress == "1")
                 sb.Append(" top 500 ");
@@ -478,7 +478,13 @@
 
             // order by
             sb.Append("order by ");
-            sb.Append(s.SortBy.Replace("_temporary_.", string.Empty));
+            string sort = s.SortBy.Replace("_temporary_.", string.Empty);
+            if (string.IsNullOrEmpty(sort))
+            {
+                sort = " CaseNumber ";
+            }
+
+            sb.Append(sort);
             if (!s.Ascending)
                 sb.Append(" desc");
 
