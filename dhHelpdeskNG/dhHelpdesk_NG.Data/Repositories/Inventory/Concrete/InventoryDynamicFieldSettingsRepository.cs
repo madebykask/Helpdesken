@@ -177,6 +177,12 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             return overviews;
         }
 
+        public void DeleteByInventoryTypeId(int inventoryTypeId)
+        {
+            var models = this.GetSettings(inventoryTypeId).Where(x => x.InventoryType_Id == inventoryTypeId).ToList();
+            models.ForEach(x => this.DbSet.Remove(x));
+        }
+
         private IQueryable<Domain.Inventory.InventoryTypeProperty> GetSettings(int inventoryTypeId)
         {
             return this.DbSet.Where(x => x.InventoryType_Id == inventoryTypeId && x.PropertyType >= MinDynamicSettingTypeId);

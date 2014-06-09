@@ -252,6 +252,10 @@
                 model.InventoryFieldSettingsViewModel.DefaultSettings);
             this.inventorySettingsService.AddInventoryFieldsSettings(defaultSettingsBusinessModel);
 
+            this.AddDynamicFieldSetting(
+                inventoryTypeBusinessModel.Id,
+                model.InventoryFieldSettingsViewModel.NewDynamicFieldViewModel.InventoryDynamicFieldSettingModel);
+
             return this.RedirectToAction("EditSettings", new { inventoryTypeId = inventoryTypeBusinessModel.Id });
         }
 
@@ -262,14 +266,13 @@
             return this.RedirectToAction("InventorySettings", new { inventoryTypeId });
         }
 
-        [HttpGet]
-        public ViewResult DeleteInventoryType(int inventoryTypeId)
-        {
-            throw new System.NotImplementedException();
-        }
-
         private void UpdateDynamicFieldsSettings(List<InventoryDynamicFieldSettingViewModel> model)
         {
+            if (model == null)
+            {
+                return;
+            }
+
             var dynamicFieldsSettings =
                 model.Select(
                     x =>

@@ -59,5 +59,11 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             var models = this.DbSet.Where(x => x.InventoryTypeProperty_Id == inventoryTypePropertyId).ToList();
             models.ForEach(x => this.DbSet.Remove(x));
         }
+
+        public void DeleteByInventoryTypeId(int inventoryTypeId)
+        {
+            var models = this.DbSet.Where(x => x.Inventory.InventoryType_Id == inventoryTypeId).ToList();
+            models.ForEach(x => this.DbSet.Remove(x));
+        }
     }
 }

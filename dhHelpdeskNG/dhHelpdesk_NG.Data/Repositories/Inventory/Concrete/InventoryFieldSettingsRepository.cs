@@ -27,6 +27,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 
         public const string PropertyDefaultValue = "";
 
+        public const int MinDynamicSettingTypeId = 0;
+
         public InventoryFieldSettingsRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
@@ -268,6 +270,12 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             return overview;
         }
 
+        public void DeleteByInventoryTypeId(int inventoryTypeId)
+        {
+            var models = this.GetSettings(inventoryTypeId).Where(x => x.InventoryType_Id == inventoryTypeId).ToList();
+            models.ForEach(x => this.DbSet.Remove(x));
+        }
+
         private static InventoryFieldSettingsOverview GetInventoryFieldSettingsOverview(List<FieldOverviewSettingMapperData> mapperData)
         {
             var settingCollection = new NamedObjectCollection<FieldOverviewSettingMapperData>(mapperData);
@@ -390,7 +398,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 
         private IQueryable<Domain.Inventory.InventoryTypeProperty> GetSettings(int inventoryTypeId)
         {
-            return this.DbSet.Where(x => x.InventoryType_Id == inventoryTypeId);
+            return this.DbSet.Where(x => x.InventoryType_Id == inventoryTypeId && x.PropertyType < MinDynamicSettingTypeId);
         }
     }
 }

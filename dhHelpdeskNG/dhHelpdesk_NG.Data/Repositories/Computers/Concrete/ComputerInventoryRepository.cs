@@ -42,5 +42,11 @@
             var entities = this.DbContext.ComputerInventories.Where(x => x.Inventory_Id == inventoryId).ToList();
             entities.ForEach(x => this.DbContext.ComputerInventories.Remove(x));
         }
+
+        public void DeleteByInventoryTypeId(int inventoryTypeId)
+        {
+            var models = this.DbSet.Where(x => x.Inventory.InventoryType_Id == inventoryTypeId).ToList();
+            models.ForEach(x => this.DbSet.Remove(x));
+        }
     }
 }

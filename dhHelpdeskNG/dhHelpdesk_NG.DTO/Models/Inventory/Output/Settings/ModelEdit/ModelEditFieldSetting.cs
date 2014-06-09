@@ -13,7 +13,7 @@
 
         public bool IsShow { get; private set; }
 
-        [NotNullAndEmpty]
+        [NotNull]
         public string Caption { get; private set; }
 
         public bool IsRequired { get; private set; }

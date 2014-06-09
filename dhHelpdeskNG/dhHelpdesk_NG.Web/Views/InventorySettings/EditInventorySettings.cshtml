@@ -9,7 +9,7 @@
                 <input type="submit" value="@Translation.Get("Spara")" class="btn" onclick=" $('#settings_form').submit(); "/>
             </li>
             <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt"), "Index", "Inventory", null, new { @class = "btn" })</li>
-            <li id="menu3">@Html.ActionLink(Translation.Get("Ta bort"), "DeleteInventoryType", new { inventoryTypeId = Model }, new { @class = "btn" })</li>
+            <li id="menu3">@Html.ActionLink(Translation.Get("Ta bort"), "DeleteInventoryType", "Inventory", new { inventoryTypeId = Model }, new { @class = "btn" })</li>
         </ul>
     </div>
 </div>

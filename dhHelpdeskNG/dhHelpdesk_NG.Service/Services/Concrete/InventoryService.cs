@@ -47,6 +47,10 @@
 
         private readonly InventoryTypeGroupRepository inventoryTypeGroupRepository;
 
+        private readonly IInventoryFieldSettingsRepository inventoryFieldSettingsRepository;
+
+        private readonly IInventoryDynamicFieldSettingsRepository inventoryDynamicFieldSettingsRepository;
+
         public InventoryService(
             IInventoryTypeRepository inventoryTypeRepository,
             IComputerRepository computerRepository,
@@ -57,7 +61,9 @@
             IComputerLogRepository computerLogRepository,
             IComputerInventoryRepository computerInventoryRepository,
             IOperationLogRepository operationLogRepository,
-            InventoryTypeGroupRepository inventoryTypeGroupRepository)
+            InventoryTypeGroupRepository inventoryTypeGroupRepository,
+            IInventoryFieldSettingsRepository inventoryFieldSettingsRepository,
+            IInventoryDynamicFieldSettingsRepository inventoryDynamicFieldSettingsRepository)
         {
             this.inventoryTypeRepository = inventoryTypeRepository;
             this.computerRepository = computerRepository;
@@ -69,6 +75,8 @@
             this.computerInventoryRepository = computerInventoryRepository;
             this.operationLogRepository = operationLogRepository;
             this.inventoryTypeGroupRepository = inventoryTypeGroupRepository;
+            this.inventoryFieldSettingsRepository = inventoryFieldSettingsRepository;
+            this.inventoryDynamicFieldSettingsRepository = inventoryDynamicFieldSettingsRepository;
         }
 
         public void AddInventoryType(InventoryType businessModel)
@@ -80,6 +88,30 @@
         public void UpdateInventoryType(InventoryType businessModel)
         {
             this.inventoryTypeRepository.Update(businessModel);
+            this.inventoryTypeRepository.Commit();
+        }
+
+        public void DeleteInventoryType(int id)
+        {
+            this.computerInventoryRepository.DeleteByInventoryTypeId(id);
+            this.computerInventoryRepository.Commit();
+            
+            this.inventoryTypePropertyValueRepository.DeleteByInventoryTypeId(id);
+            this.inventoryTypePropertyValueRepository.Commit();
+
+            this.inventoryFieldSettingsRepository.DeleteByInventoryTypeId(id);
+            this.inventoryFieldSettingsRepository.Commit();
+
+            this.inventoryDynamicFieldSettingsRepository.DeleteByInventoryTypeId(id);
+            this.inventoryDynamicFieldSettingsRepository.Commit();
+
+            this.inventoryRepository.DeleteByInventoryTypeId(id);
+            this.inventoryRepository.Commit();
+
+            this.inventoryTypeGroupRepository.DeleteByInventoryTypeId(id);
+            this.inventoryTypeGroupRepository.Commit();
+
+            this.inventoryTypeRepository.Delete(id);
             this.inventoryTypeRepository.Commit();
         }
 

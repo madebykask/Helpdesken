@@ -317,5 +317,11 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 
             return model;
         }
+
+        public void DeleteByInventoryTypeId(int inventoryTypeId)
+        {
+            var models = this.DbSet.Where(x => x.InventoryType_Id == inventoryTypeId).ToList();
+            models.ForEach(x => this.DbSet.Remove(x));
+        }
     }
 }

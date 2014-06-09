@@ -8,5 +8,7 @@
     public interface IInventoryTypeGroupRepository : INewRepository
     {
         List<TypeGroupModel> Find(int inventoryTypeId);
+
+        void DeleteByInventoryTypeId(int inventoryTypeId);
     }
 }

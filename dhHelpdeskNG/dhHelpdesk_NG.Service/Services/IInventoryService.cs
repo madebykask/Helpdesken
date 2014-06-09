@@ -22,6 +22,8 @@
 
         void UpdateInventoryType(InventoryType businessModel);
 
+        void DeleteInventoryType(int id);
+
         InventoryType GetInventoryType(int id);
 
         List<ItemOverview> GetInventoryTypes(int customerId);

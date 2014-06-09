@@ -74,6 +74,7 @@
             this.dynamicsFieldsModelBuilder = dynamicsFieldsModelBuilder;
         }
 
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")] // todo
         public ViewResult Index()
         {
             var activeTab = SessionFacade.FindActiveTab(PageName.InventoryIndex) ?? TabName.Inventories;
@@ -933,6 +934,13 @@
             var models = this.inventoryService.GetInventoryCounts(SessionFacade.CurrentCustomer.Id, filter.DepartmentId);
 
             return this.PartialView("InventoryReportGrid", models);
+        }
+
+        [HttpGet]
+        public RedirectToRouteResult DeleteInventoryType(int inventoryTypeId)
+        {
+            this.inventoryService.DeleteInventoryType(inventoryTypeId);
+            return this.RedirectToAction("Index");
         }
 
         #region Private

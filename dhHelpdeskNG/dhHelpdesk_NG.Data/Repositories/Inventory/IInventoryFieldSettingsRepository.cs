@@ -13,6 +13,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
 
         void Update(InventoryFieldSettings businessModel);
 
+        void DeleteByInventoryTypeId(int inventoryTypeId);
+
         InventoryFieldSettings GetFieldSettingsForEdit(int inventoryTypeId);
 
         InventoryFieldSettingsForModelEdit GetFieldSettingsForModelEdit(int inventoryTypeId);

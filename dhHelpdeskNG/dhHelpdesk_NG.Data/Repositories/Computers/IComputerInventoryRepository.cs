@@ -14,5 +14,7 @@
         void DeleteByComputerId(int computerId);
 
         void DeleteByInventoryId(int inventoryId);
+
+        void DeleteByInventoryTypeId(int inventoryTypeId);
     }
 }

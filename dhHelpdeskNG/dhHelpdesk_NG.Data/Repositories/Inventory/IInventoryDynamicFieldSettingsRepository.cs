@@ -24,5 +24,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
         List<InventoryDynamicFieldSettingOverviewWithType> GetFieldSettingsOverviewWithType(List<int> inventoryTypeIds);
 
         List<InventoryDynamicFieldSettingOverview> GetFieldSettingsOverview(int inventoryTypeId);
+
+        void DeleteByInventoryTypeId(int inventoryTypeId);
     }
 }
