@@ -10,6 +10,7 @@
     using System.Text;
 
     using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.BusinessData.Models.Holiday.Output;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
@@ -75,6 +76,7 @@
             var customerUserSetting = this._customerUserRepository.GetCustomerSettings(f.CustomerId, userId);
             IList<ProductArea> pal = this._productAreaRepository.GetMany(x => x.Customer_Id == f.CustomerId).OrderBy(x => x.Name).ToList(); 
             IList<CaseSearchResult> ret = new List<CaseSearchResult>();
+            var caseTypes = this.caseTypeRepository.GetCaseTypeOverviews(f.CustomerId).ToArray();
 
             var sql = this.ReturnCaseSearchSql(f, customerSetting, customerUserSetting, userId, userUserId, showNotAssignedWorkingGroups, userGroupId, restrictedCasePermission, gs, s);
 
@@ -147,13 +149,13 @@
                                                 bool translateField = false;
                                                 if (c.Line == 1)
                                                 {
-                                                    string value = GetDatareaderValue(dr, i, c.Name, customerSetting, pal, leadTime, out translateField, out dateValue, out fieldType);
+                                                    string value = GetDatareaderValue(dr, i, c.Name, customerSetting, pal, leadTime, caseTypes, out translateField, out dateValue, out fieldType);
                                                     cols.Add(new Field { StringValue = value, TranslateThis = translateField, DateTimeValue = dateValue, FieldType = fieldType });
                                                     if (string.Compare(s.SortBy, c.Name, true, CultureInfo.InvariantCulture) == 0)
                                                         sortOrder = value;
                                                 }
                                                 else
-                                                    toolTip += GetDatareaderValue(dr, i, c.Name, customerSetting, pal, leadTime, out translateField, out dateValue, out fieldType) + Environment.NewLine;
+                                                    toolTip += GetDatareaderValue(dr, i, c.Name, customerSetting, pal, leadTime, caseTypes, out translateField, out dateValue, out fieldType) + Environment.NewLine;
 
                                                 fieldExists = true;
                                             }
@@ -240,6 +242,28 @@
             return false;
         }
 
+        private static string GetCaseTypeFullPath(
+                            CaseTypeOverview[] caseTypes,
+                            int caseTypeId)
+        {
+            var caseType = caseTypes.FirstOrDefault(c => c.Id == caseTypeId);
+            if (caseType == null)
+            {
+                return string.Empty;
+            }
+
+            var list = new List<CaseTypeOverview>();
+            var parent = caseType;
+            do
+            {
+                list.Add(parent);
+                parent = caseTypes.FirstOrDefault(c => c.Id == parent.ParentId);
+            }
+            while (parent != null);
+
+            return string.Join(" - ", list.Select(c => c.Name).Reverse());
+        }
+
         private static string GetDatareaderValue(
                                 IDataReader dr, 
                                 int col, 
@@ -247,6 +271,7 @@
                                 Setting customerSetting, 
                                 IList<ProductArea> pal, 
                                 int leadTime,
+                                IEnumerable<CaseTypeOverview> caseTypes,
                                 out bool translateField, 
                                 out DateTime? dateValue, 
                                 out int fieldType) 
@@ -276,7 +301,9 @@
                     translateField = true;
                     break;
                 case "casetype_id": case "status_id":
-                    ret = dr[col].ToString();
+                    ret = GetCaseTypeFullPath(
+                                caseTypes.ToArray(),
+                                int.Parse(dr[col].ToString()));
                     translateField = true;
                     break;
                 case "plandate":
@@ -403,7 +430,7 @@
                 sb.Append(", tblWorkingGroup.WorkingGroup as WorkingGroup_Id");
             }
             sb.Append(", tblCase.ChangeTime");
-            sb.Append(", tblCaseType.CaseType as CaseType_Id");
+            sb.Append(", tblCaseType.Id as CaseType_Id");
             sb.Append(", tblCase.RegistrationSource");
             sb.Append(", tblCase.InventoryNumber");
             sb.Append(", tblCase.InventoryType as ComputerType_Id");

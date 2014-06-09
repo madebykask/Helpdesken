@@ -4,6 +4,7 @@
     using System.Globalization;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
@@ -17,6 +18,8 @@
         IEnumerable<ItemOverview> GetOverviews(int customerId, IEnumerable<int> caseTypesIds);
 
         IEnumerable<int> GetChildren(int caseTypeId);
+
+        IEnumerable<CaseTypeOverview> GetCaseTypeOverviews(int customerId);
     }
 
     public class CaseTypeRepository : RepositoryBase<CaseType>, ICaseTypeRepository
@@ -65,6 +68,22 @@
             var children = new List<int>();
             this.GetChildrenProcess(caseTypeId, children);
             return children.ToArray();
+        }
+
+        public IEnumerable<CaseTypeOverview> GetCaseTypeOverviews(int customerId)
+        {
+            var entities =
+                this.DataContext.CaseTypes.Where(c => c.Customer_Id == customerId && c.IsActive != 0)
+                    .Select(c => new { c.Id, ParentId = c.Parent_CaseType_Id, c.Name })
+                    .OrderBy(c => c.Name)
+                    .ToList();
+            return entities
+                    .Select(c => new CaseTypeOverview
+                                     {
+                                         Id = c.Id,
+                                         ParentId = c.ParentId,
+                                         Name = c.Name
+                                     });
         }
 
         private void GetChildrenProcess(int caseTypeId, List<int> children)

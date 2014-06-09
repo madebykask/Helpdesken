@@ -80,6 +80,8 @@
         public bool InformNotifierBehavior { get; set; }
 
         public bool UpdateNotifierInformation { get; set; }
+
+        public string FinishingCause { get; set; }
     }
 
     public class CaseIndexViewModel

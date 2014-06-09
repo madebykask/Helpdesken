@@ -45,13 +45,10 @@
         [NotNull]
         public ItemOverview ReportType { get; private set; }
 
-        [NotNull]
         public List<ReportFile> Files { get; private set; }
 
-        [NotNull]
         public IEnumerable<ItemOverview> WorkingGroups { get; private set; }
 
-        [NotNull]
         public IEnumerable<ItemOverview> CaseTypes { get; private set; }
 
         public ProductArea ProductArea { get; private set; }

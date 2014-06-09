@@ -813,6 +813,15 @@
                                     <table class="tableform">
                                         <tr>
                                             <td class="span3">
+                                                @Translation.Get("Avslutsorsak") 
+                                            </td>
+                                            <td class="span4">
+                                                @Model.FinishingCause
+                                            </td>
+                                            <td class="span5"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="span3">
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDate)
                                             </td>
                                             <td class="span4">

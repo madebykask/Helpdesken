@@ -41,7 +41,7 @@
                         @Translation.Get("Ärendetyp")
                     </td>
                     <td>
-                        @(Model.CaseTypes.Any() ? string.Join(",", Model.CaseTypes.Select(i => i.Name)) : Translation.Get("Alla"))
+                        @(Model.CaseTypes != null && Model.CaseTypes.Any() ? string.Join(",", Model.CaseTypes.Select(i => i.Name)) : Translation.Get("Alla"))
                     </td>
                 </tr>
                 <tr>

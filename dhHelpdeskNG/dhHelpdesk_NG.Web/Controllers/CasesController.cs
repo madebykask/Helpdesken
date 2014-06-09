@@ -14,6 +14,7 @@ namespace DH.Helpdesk.Web.Controllers
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.FinishingCause;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.BusinessData.OldComponents;
@@ -1351,6 +1352,15 @@ namespace DH.Helpdesk.Web.Controllers
                     m.Logs = this._logService.GetCaseLogOverviews(caseId);
                     m.CaseFilesModel = new FilesModel(caseId.ToString(global::System.Globalization.CultureInfo.InvariantCulture), this._caseFileService.FindFileNamesByCaseId(caseId));
                     m.RegByUser = this._userService.GetUser(m.case_.User_Id);
+                    if (m.Logs != null)
+                    {
+                        var finishingCauses = this._finishingCauseService.GetFinishingCauseInfos(customerId);
+                        var lastLog = m.Logs.FirstOrDefault();
+                        if (lastLog != null)
+                        {
+                            m.FinishingCause = this.GetFinishingCauseFullPath(finishingCauses.ToArray(), lastLog.FinishingType);                                                    
+                        }
+                    }
                 }
 
                 m.CaseMailSetting = new CaseMailSetting(
@@ -1435,7 +1445,7 @@ namespace DH.Helpdesk.Web.Controllers
                     m.changes = this._changeService.GetChanges(customerId);
                 }
 
-                m.finishingCauses = this._finishingCauseService.GetFinishingCauses(customerId);
+                m.finishingCauses = this._finishingCauseService.GetFinishingCauses(customerId);                
                 m.problems = this._problemService.GetCustomerProblems(customerId);
                 m.currencies = this._currencyService.GetCurrencies();
                 m.users = this._userService.GetUsers(customerId);
@@ -1574,6 +1584,33 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             return m;
+        }
+
+        private string GetFinishingCauseFullPath(
+                        FinishingCauseInfo[] finishingCauses,
+                        int? finishingCauseId)
+        {
+            if (!finishingCauseId.HasValue)
+            {
+                return string.Empty;
+            }
+
+            var finishingCause = finishingCauses.FirstOrDefault(f => f.Id == finishingCauseId);
+            if (finishingCause == null)
+            {
+                return string.Empty;
+            }
+
+            var list = new List<FinishingCauseInfo>();
+            var parent = finishingCause;
+            do
+            {
+                list.Add(parent);
+                parent = finishingCauses.FirstOrDefault(c => c.Id == parent.ParentId);
+            }
+            while (parent != null);
+
+            return string.Join(" - ", list.Select(c => c.Name).Reverse());
         }
 
         private CaseTemplateTreeModel GetCaseTemplateTreeModel(int customerId, int userId)

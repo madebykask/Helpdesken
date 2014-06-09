@@ -110,6 +110,7 @@
     <Compile Include="Models\Case\CaseSearchFilter.cs" />
     <Compile Include="Models\Case\Input\CaseNotifier.cs" />
     <Compile Include="Models\Case\Output\CaseOverview.cs" />
+    <Compile Include="Models\Case\Output\CaseTypeOverview.cs" />
     <Compile Include="Models\Case\Output\CausingPartOverview.cs" />
     <Compile Include="Models\Case\UserCaseSetting.cs" />
     <Compile Include="Models\Case\FilesModel.cs" />
@@ -145,6 +146,7 @@
     <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\OrdererProcessingSettings.cs" />
     <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\RegistrationProcessingSettings.cs" />
     <Compile Include="Models\Changes\GetSearchDataResponse.cs" />
+    <Compile Include="Models\FinishingCause\FinishingCauseInfo.cs" />
     <Compile Include="Models\Inventory\Edit\Inventory\TypeGroupModel.cs" />
     <Compile Include="Models\Inventory\Edit\Settings\ComputerSettings\ChassisFieldsSettings.cs" />
     <Compile Include="Models\Inventory\Edit\Settings\ComputerSettings\FieldSetting.cs" />

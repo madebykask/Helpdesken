@@ -48,7 +48,6 @@
 
         public ItemOverview Department { get; private set; }
 
-        [NotNull]
         public IEnumerable<ItemOverview> CaseTypes { get; private set; }
         
         public ItemOverview WorkingGroup { get; private set; }

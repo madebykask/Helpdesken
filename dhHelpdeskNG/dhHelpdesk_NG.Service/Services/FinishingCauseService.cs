@@ -25,6 +25,8 @@
         void SaveFinishingCauseCategory(FinishingCauseCategory finishingCauseCategory, out IDictionary<string, string> errors);
         void SaveFinishingCause(FinishingCause finishingCause, out IDictionary<string, string> errors);
         void Commit();
+
+        IEnumerable<FinishingCauseInfo> GetFinishingCauseInfos(int customerId);
     }
 
     public class FinishingCauseService : IFinishingCauseService
@@ -158,6 +160,11 @@
         public void Commit()
         {
             this._unitOfWork.Commit();
+        }
+
+        public IEnumerable<FinishingCauseInfo> GetFinishingCauseInfos(int customerId)
+        {
+            return this._finishingCauseRepository.GetFinishingCauseInfos(customerId);
         }
     }
 }

@@ -14,6 +14,8 @@ namespace DH.Helpdesk.Dal.Repositories
         IEnumerable<FinishingCause> GetActiveByCustomer(int customerId);
 
         List<FinishingCauseOverview> GetFinishingCauseOverviews(int customerId);
+
+        IEnumerable<FinishingCauseInfo> GetFinishingCauseInfos(int customerId);
     }
 
     public class FinishingCauseRepository : RepositoryBase<FinishingCause>, IFinishingCauseRepository
@@ -45,6 +47,22 @@ namespace DH.Helpdesk.Dal.Repositories
             }
 
             return categories;
+        }
+
+        public IEnumerable<FinishingCauseInfo> GetFinishingCauseInfos(int customerId)
+        {
+            var entities =
+                this.DataContext.FinishingCauses.Where(c => c.Customer_Id == customerId && c.IsActive != 0)
+                    .Select(c => new { c.Id, ParentId = c.Parent_FinishingCause_Id, c.Name })
+                    .OrderBy(c => c.Name)
+                    .ToList();
+            return entities
+                    .Select(c => new FinishingCauseInfo
+                    {
+                        Id = c.Id,
+                        ParentId = c.ParentId,
+                        Name = c.Name
+                    });
         }
 
         private FinishingCauseOverview CreateBrunchForParent(FinishingCause parentCategory, IList<FinishingCause> allCategories)
