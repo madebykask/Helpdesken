@@ -156,8 +156,9 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IProjectRepository>().To<ProjectRepository>();
             kernel.Bind<IFinishingCauseRepository>().To<FinishingCauseRepository>();
             kernel.Bind<IFinishingCauseCategoryRepository>().To<FinishingCauseCategoryRepository>();
-            kernel.Bind<IStateSecondaryRepository>().To<StateSecondaryRepository>();            
-             
+            kernel.Bind<IStateSecondaryRepository>().To<StateSecondaryRepository>();
+            kernel.Bind<INotifierFieldSettingLanguageRepository>().To<NotifierFieldSettingLanguageRepository>();            
+              
                                            
                                       
             // Service             
