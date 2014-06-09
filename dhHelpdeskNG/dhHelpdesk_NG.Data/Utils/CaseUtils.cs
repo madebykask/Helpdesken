@@ -73,33 +73,38 @@ namespace DH.Helpdesk.Dal.Utils
                 startDate = endDate;
             }
 
-            var workingHours = CalculateTotalWorkingHours(
+            var workingMinutes = CalculateTotalWorkingMinutes(
                                     startDate,
                                     endDate,
                                     workingDayStart,
                                     workingDayEnd,
                                     holidays);
 
-            return workingHours - (caseExternalTime / 60);
+            return (workingMinutes - caseExternalTime) / 60;
         }
 
-        public static int CalculateTotalWorkingHours(
+        public static int CalculateTotalWorkingMinutes(
                                 DateTime startDate,
                                 DateTime endDate,
                                 int workingDayStart,
                                 int workingDayEnd,
                                 IEnumerable<HolidayOverview> holidays)
         {
-            int holidaysHours = holidays
+            int holidaysMinutes = holidays
                 .Where(holiday => startDate.RoundToDay() <= holiday.HolidayDate.RoundToDay() &&
                         holiday.HolidayDate.RoundToDay() <= endDate.RoundToDay() &&
                         holiday.HolidayDate.DayOfWeek != DayOfWeek.Saturday &&
                         holiday.HolidayDate.DayOfWeek != DayOfWeek.Sunday)
-                 .Sum(holiday => holiday.TimeUntil - holiday.TimeFrom);
+                 .Sum(holiday => (holiday.TimeUntil - holiday.TimeFrom) * 60);
 
-            var workingHours = DatesHelper.GetBusinessDays(startDate, endDate) * (workingDayEnd - workingDayStart);
+            var businessDays = DatesHelper.GetBusinessDays(startDate, endDate);
 
-            return workingHours - holidaysHours;
+            var workingMinutes = businessDays > 1 ?
+                businessDays * (workingDayEnd - workingDayStart) * 60 : 
+                (int)(endDate - startDate).TotalMinutes;                
+
+            return workingMinutes > holidaysMinutes ? 
+                workingMinutes - holidaysMinutes : 0;
         }
     }
 }

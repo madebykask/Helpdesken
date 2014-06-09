@@ -133,27 +133,16 @@ namespace DH.Helpdesk.Dal.Repositories
             var cases = this.DataContext.Cases.Where(x => x.Id == caseId).FirstOrDefault();
             if (cases != null)
             {
-                // todo calculate external time
-                int workingHours = CaseUtils.CalculateTotalWorkingHours(
+                var workingMinutes = CaseUtils.CalculateTotalWorkingMinutes(
                                                     cases.ChangeTime, 
                                                     DateTime.UtcNow,
                                                     this.workContext.Customer.WorkingDayStart,
                                                     this.workContext.Customer.WorkingDayEnd,
                                                     this.workContext.Cache.Holidays);
-                int externalTimeMinutes;
-                if (workingHours > 0)
-                {
-                    externalTimeMinutes = workingHours * 60;
-                }
-                else
-                {
-                    externalTimeMinutes = (int)(DateTime.UtcNow - cases.ChangeTime).TotalMinutes;
-                }
-
                 cases.FinishingDate = null;
                 cases.ApprovedBy_User_Id = 0;
                 cases.ApprovedDate = null;
-                cases.ExternalTime = cases.ExternalTime + externalTimeMinutes;
+                cases.ExternalTime = cases.ExternalTime + workingMinutes;
                 cases.LeadTime = 0;
                 cases.ChangeTime = DateTime.UtcNow;
                 this.Update(cases);

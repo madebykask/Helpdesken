@@ -49,35 +49,23 @@ namespace DH.Helpdesk.Common.Tools
             return new DateTime(date.Year, date.Month, date.Day, date.Hour, 0, 0);
         }
 
-        /// <summary>
-        /// The get business days.
-        /// </summary>
-        /// <param name="startD">
-        /// The start d.
-        /// </param>
-        /// <param name="endD">
-        /// The end d.
-        /// </param>
-        /// <returns>
-        /// The <see cref="int"/>.
-        /// </returns>
-        public static int GetBusinessDays(DateTime startD, DateTime endD)
+        public static int GetBusinessDays(DateTime startDate, DateTime endDate)
         {
-            int days = (int)(((endD - startD).TotalDays * 5 - (startD.DayOfWeek - endD.DayOfWeek) * 2) / 7);
-
-            double calcBusinessDays = days > 0 ? 1 + days : 0;
-
-            if ((int)endD.DayOfWeek == 6)
+            int businessDays = 0;
+            var nextDay = startDate.RoundToDay();
+            var end = endDate.RoundToDay();
+            while (nextDay <= end)
             {
-                calcBusinessDays--;
+                if (nextDay.DayOfWeek != DayOfWeek.Saturday && 
+                    nextDay.DayOfWeek != DayOfWeek.Sunday)
+                {
+                    businessDays++;                    
+                }
+
+                nextDay = nextDay.AddDays(1);
             }
 
-            if ((int)startD.DayOfWeek == 0)
-            {
-                calcBusinessDays--;
-            }
-
-            return (int)calcBusinessDays;
+            return businessDays;
         }
     }
 }
