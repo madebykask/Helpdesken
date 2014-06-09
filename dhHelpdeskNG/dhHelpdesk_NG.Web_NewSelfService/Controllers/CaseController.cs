@@ -296,7 +296,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                 }                
             }
 
-            return this.View("_UserCases", model);
+            return this.View("UserCases", model);
         }
 
         [HttpGet]
@@ -543,7 +543,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                                               pharasSearch, maxRecords, progressId,
                                               sortBy, ascending);                
                 
-                return this.PartialView("_UserCases", model);
+                return this.PartialView("UserCases", model);
             }
             catch (Exception e)
             {

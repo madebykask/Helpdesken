@@ -779,10 +779,10 @@
     <Content Include="Views\Shared\EditorTemplates\UserModuleOverview.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Case\_NewCaseReceipt.cshtml" />
+    <Content Include="Views\Case\NewCaseReceipt.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Case\_UserCases.cshtml" />
+    <Content Include="Views\Case\UserCases.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Case\_CaseSearch.cshtml" />
