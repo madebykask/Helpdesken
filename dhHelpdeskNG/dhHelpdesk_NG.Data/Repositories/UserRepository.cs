@@ -160,13 +160,17 @@ namespace DH.Helpdesk.Dal.Repositories
         public IList<User> GetUsersForUserSettingList(UserSearch searchUser)
         {
             var query = from u in this.DataContext.Users
-                        where u.Customer_Id == searchUser.CustomerId
+                        join cu in this.DataContext.CustomerUsers on u.Id equals cu.User_Id into cuGroup
+                        from cuOJ in cuGroup.DefaultIfEmpty()
+                        where ((cuOJ != null && cuOJ.Customer_Id == searchUser.CustomerId) || u.Customer_Id == searchUser.CustomerId)
                         select u;
+
+
 
             if (searchUser.StatusId == 2)
                 query = query.Where(x => x.IsActive == 0);
             else if (searchUser.StatusId == 1)
-                query = query.Where(x => x.IsActive == 1);
+                query = query.Where(x => x.IsActive == 1 /*&& x.Customer_Id == searchUser.CustomerId*/);
             else if (searchUser.StatusId == 3)
                 query = query.Where(x => x.IsActive == 1 || x.IsActive == 0);
 
@@ -184,7 +188,7 @@ namespace DH.Helpdesk.Dal.Repositories
                     || x.UserGroup.Name.ToLower().Contains(s));
             }
 
-            return query.OrderBy(x => x.UserID).ToList();
+            return query.OrderBy(x => x.UserID).Distinct().ToList();
         }
 
 
