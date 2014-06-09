@@ -4,6 +4,7 @@
     using System.Linq;
     using System.Web.Mvc;
 
+    using DH.Helpdesk.BusinessData.Enums.Inventory.Fields.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.InventorySettings;
@@ -11,10 +12,10 @@
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Settings;
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Inventory;
 
-    public class InventoryFieldSettingsViewModelBuilder : IInventoryFieldSettingsViewModelBuilder
+    public class InventoryFieldSettingsEditViewModelBuilder : IInventoryFieldSettingsEditViewModelBuilder
     {
-        public InventoryFieldSettingsViewModel BuildViewModel(
-            int inventoryTypeId,
+        public InventoryFieldSettingsEditViewModel BuildViewModel(
+            InventoryType inventoryType,
             InventoryFieldSettingsForEditResponse response,
             List<TypeGroupModel> groupModels)
         {
@@ -45,31 +46,32 @@
 
             var inventoryDynamicFieldSettings =
                 response.InventoryDynamicFieldSettings.Select(
-                    dynamicSetting => MapInventoryDynamicFieldSetting(dynamicSetting, groupModels)).ToList();
+                    dynamicSetting => MapInventoryDynamicFieldSetting(dynamicSetting, groupModels, inventoryType.Id)).ToList();
 
-            var viewModel = new InventoryFieldSettingsViewModel(
-                inventoryTypeId,
-                defaultFieldSettingsModel,
-                inventoryDynamicFieldSettings);
+            var inventoryTypeModel = new InventoryTypeModel(inventoryType.Id, inventoryType.Name);
+            var newDynamicFieldSettingViewModel = CreateNewInventoryDynamicFieldSettingViewModel(groupModels);
+
+            var viewModel = new InventoryFieldSettingsEditViewModel(
+                inventoryTypeModel,
+                new InventoryFieldSettingsViewModel(newDynamicFieldSettingViewModel, defaultFieldSettingsModel, inventoryDynamicFieldSettings));
 
             return viewModel;
         }
 
-        public NewInventoryFieldSettingsViewModel BuildDefaultViewModel(
-            int inventoryTypeId,
+        public InventoryFieldSettingsEditViewModel BuildDefaultViewModel(
             List<TypeGroupModel> groupModels)
         {
-            var department = InventoryFieldSettingModel.GetDefault(null);
-            var name = InventoryFieldSettingModel.GetDefault(50);
-            var model = InventoryFieldSettingModel.GetDefault(50);
-            var manufacturer = InventoryFieldSettingModel.GetDefault(50);
-            var serial = InventoryFieldSettingModel.GetDefault(50);
-            var theftMark = InventoryFieldSettingModel.GetDefault(20);
-            var barCode = InventoryFieldSettingModel.GetDefault(20);
-            var purchaseDate = InventoryFieldSettingModel.GetDefault(12);
-            var place = InventoryFieldSettingModel.GetDefault(null);
-            var workstation = InventoryFieldSettingModel.GetDefault(null);
-            var info = InventoryFieldSettingModel.GetDefault(1000);
+            var department = InventoryFieldSettingModel.GetDefault(null, InventoryFieldNames.Department);
+            var name = InventoryFieldSettingModel.GetDefault(50, InventoryFieldNames.Name);
+            var model = InventoryFieldSettingModel.GetDefault(50, InventoryFieldNames.Model);
+            var manufacturer = InventoryFieldSettingModel.GetDefault(50, InventoryFieldNames.Manufacturer);
+            var serial = InventoryFieldSettingModel.GetDefault(50, InventoryFieldNames.SerialNumber);
+            var theftMark = InventoryFieldSettingModel.GetDefault(20, InventoryFieldNames.TheftMark);
+            var barCode = InventoryFieldSettingModel.GetDefault(20, InventoryFieldNames.BarCode);
+            var purchaseDate = InventoryFieldSettingModel.GetDefault(12, InventoryFieldNames.PurchaseDate);
+            var place = InventoryFieldSettingModel.GetDefault(null, InventoryFieldNames.Place);
+            var workstation = InventoryFieldSettingModel.GetDefault(null, InventoryFieldNames.Workstation);
+            var info = InventoryFieldSettingModel.GetDefault(1000, InventoryFieldNames.Info);
 
             var defaultFieldSettingsModel = new DefaultFieldSettingsModel(
                 department,
@@ -84,14 +86,26 @@
                 workstation,
                 info);
 
-            var newDynamicSetting = new InventoryDynamicFieldSettingModel();
+            var inventoryTypeModel = InventoryTypeModel.CreateDefault();
+            var newDynamicFieldSettingViewModel = CreateNewInventoryDynamicFieldSettingViewModel(groupModels);
 
-            var viewModel = new NewInventoryFieldSettingsViewModel(
-                inventoryTypeId,
-                defaultFieldSettingsModel,
-                newDynamicSetting);
+            var viewModel = new InventoryFieldSettingsEditViewModel(
+                inventoryTypeModel,
+                new InventoryFieldSettingsViewModel(
+                    newDynamicFieldSettingViewModel,
+                    defaultFieldSettingsModel,
+                    new List<InventoryDynamicFieldSettingViewModel>()));
 
             return viewModel;
+        }
+
+        private static NewInventoryDynamicFieldSettingViewModel CreateNewInventoryDynamicFieldSettingViewModel(List<TypeGroupModel> groupModels)
+        {
+            var newDynamicFieldSettingModel = new NewInventoryDynamicFieldSettingModel { PropertySize = 50 };
+            var newDynamicFieldSettingViewModel = new NewInventoryDynamicFieldSettingViewModel(
+                newDynamicFieldSettingModel,
+                new SelectList(groupModels, "Id", "Name"));
+            return newDynamicFieldSettingViewModel;
         }
 
         private static InventoryFieldSettingModel MapInventoryFieldSetting(InventoryFieldSetting setting)
@@ -105,24 +119,27 @@
             return settingModel;
         }
 
-        private static InventoryDynamicFieldSettingModel MapInventoryDynamicFieldSetting(
+        private static InventoryDynamicFieldSettingViewModel MapInventoryDynamicFieldSetting(
             InventoryDynamicFieldSetting setting,
-            List<TypeGroupModel> groupModels)
+            List<TypeGroupModel> groupModels,
+            int inventoryTypeId)
         {
-            var groupSelectList = new SelectList(groupModels, "Id", "Name");
+            var groupSelectList = new SelectList(groupModels, "Id", "Name", setting.InventoryTypeGroupId.ToString());
 
             var settingModel = new InventoryDynamicFieldSettingModel(
                 setting.Id,
+                inventoryTypeId,
                 setting.InventoryTypeGroupId,
                 setting.Caption,
                 setting.Position,
                 setting.FieldType,
                 setting.PropertySize,
                 setting.ShowInDetails,
-                setting.ShowInList,
-                groupSelectList);
+                setting.ShowInList);
 
-            return settingModel;
+            var settingsViewModel = new InventoryDynamicFieldSettingViewModel(settingModel, groupSelectList);
+
+            return settingsViewModel;
         }
     }
 }

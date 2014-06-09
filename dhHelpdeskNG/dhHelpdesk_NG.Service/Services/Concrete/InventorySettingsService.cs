@@ -3,6 +3,7 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.InventorySettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.PrinterSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ServerSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ComputerSettings;
@@ -30,18 +31,22 @@
 
         private readonly IInventoryDynamicFieldSettingsRepository inventoryDynamicFieldSettingsRepository;
 
+        private readonly IInventoryTypePropertyValueRepository inventoryTypePropertyValueRepository;
+
         public InventorySettingsService(
             IComputerFieldSettingsRepository computerFieldSettingsRepository,
             IServerFieldSettingsRepository serverFieldSettingsRepository,
             IPrinterFieldSettingsRepository printerFieldSettingsRepository,
             IInventoryFieldSettingsRepository inventoryFieldSettingsRepository,
-            IInventoryDynamicFieldSettingsRepository inventoryDynamicFieldSettingsRepository)
+            IInventoryDynamicFieldSettingsRepository inventoryDynamicFieldSettingsRepository,
+            IInventoryTypePropertyValueRepository inventoryTypePropertyValueRepository)
         {
             this.computerFieldSettingsRepository = computerFieldSettingsRepository;
             this.serverFieldSettingsRepository = serverFieldSettingsRepository;
             this.printerFieldSettingsRepository = printerFieldSettingsRepository;
             this.inventoryFieldSettingsRepository = inventoryFieldSettingsRepository;
             this.inventoryDynamicFieldSettingsRepository = inventoryDynamicFieldSettingsRepository;
+            this.inventoryTypePropertyValueRepository = inventoryTypePropertyValueRepository;
         }
 
         #region WorkstationSettings
@@ -144,6 +149,39 @@
         #endregion
 
         #region DynamicInventorySettings
+
+        public void AddDynamicFieldSetting(InventoryDynamicFieldSetting businessModel)
+        {
+            this.inventoryDynamicFieldSettingsRepository.Add(businessModel);
+            this.inventoryDynamicFieldSettingsRepository.Commit();
+        }
+
+        public void UpdateDynamicFieldsSettings(List<InventoryDynamicFieldSetting> businessModels)
+        {
+            this.inventoryDynamicFieldSettingsRepository.Update(businessModels);
+            this.inventoryDynamicFieldSettingsRepository.Commit();
+        }
+
+        public void DeleteDynamicFieldSetting(int id)
+        {
+            this.inventoryTypePropertyValueRepository.DeleteByInventoryTypePropertyId(id);
+            this.inventoryTypePropertyValueRepository.Commit();
+
+            this.inventoryDynamicFieldSettingsRepository.DeleteById(id);
+            this.inventoryDynamicFieldSettingsRepository.Commit();
+        }
+
+        public void AddInventoryFieldsSettings(InventoryFieldSettings businessModel)
+        {
+            this.inventoryFieldSettingsRepository.Add(businessModel);
+            this.inventoryFieldSettingsRepository.Commit();
+        }
+
+        public void UpdateInventoryFieldsSettings(InventoryFieldSettings businessModel)
+        {
+            this.inventoryFieldSettingsRepository.Update(businessModel);
+            this.inventoryFieldSettingsRepository.Commit();
+        }
 
         public InventoryFieldSettingsForEditResponse GetInventoryFieldSettingsForEdit(int inventoryTypeId)
         {

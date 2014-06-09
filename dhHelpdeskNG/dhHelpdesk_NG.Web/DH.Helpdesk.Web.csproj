@@ -350,6 +350,8 @@
     <Compile Include="Infrastructure\Binders\NullableDateTimeBinder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\ComputerFieldsSettingsBuilder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\FieldSettingBuilder.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Inventory\IInventoryFieldsSettingsBuilder.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\InventoryFieldsSettingsBuilder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\IComputerFieldsSettingsBuilder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\IFieldSettingBuilder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\IPrinterFieldsSettingsBuilder.cs" />
@@ -614,7 +616,12 @@
     <Compile Include="Models\Inventory\EditModel\Settings\Computer\OperatingSystemFieldsSettingsModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Settings\Computer\ProccesorFieldsSettingsModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Settings\InventoryDynamicFieldSettingModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\InventoryDynamicFieldSettingViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Inventory\InventoryFieldSettingsEditViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\Inventory\InventoryTypeModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Settings\Inventory\NewInventoryFieldSettingsViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\NewInventoryDynamicFieldSettingModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Settings\NewInventoryDynamicFieldSettingViewModel.cs" />
     <Compile Include="Models\Inventory\OptionsAggregates\ComputerEditOptions.cs" />
     <Compile Include="Models\Inventory\EditModel\ComputerModuleGridModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Inventory\DefaultFieldsViewModel.cs" />
@@ -995,6 +1002,7 @@
     <Content Include="Content\js\Changes\search.js" />
     <Content Include="Content\js\Changes\settings.js" />
     <Content Include="Content\js\dhHelpdesk-head.js" />
+    <Content Include="Content\js\Inventory\settings.js" />
     <Content Include="Content\js\jquery.plupload.queue\css\jquery.plupload.queue.css" />
     <Content Include="Content\js\jquery.plupload.queue\img\backgrounds.gif" />
     <Content Include="Content\js\jquery.plupload.queue\img\buttons-disabled.png" />
@@ -1486,6 +1494,12 @@
     <Content Include="Views\InventorySettings\WorkstationSettings.cshtml" />
     <Content Include="Views\InventorySettings\ServerSettings.cshtml" />
     <Content Include="Views\InventorySettings\PrinterSettings.cshtml" />
+    <Content Include="Views\InventorySettings\EditInventorySettings.cshtml" />
+    <Content Include="Views\InventorySettings\InventorySettings.cshtml" />
+    <Content Include="Views\InventorySettings\EditorTemplates\InventoryTypeModel.cshtml" />
+    <Content Include="Views\InventorySettings\EditorTemplates\Settings\NewInventoryFieldSettingModel.cshtml" />
+    <Content Include="Views\InventorySettings\NewInventorySettings.cshtml" />
+    <Content Include="Views\InventorySettings\EmptyInventorySettings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
@@ -2291,7 +2305,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>61868</DevelopmentServerPort>
+          <DevelopmentServerPort>56662</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

@@ -13,7 +13,7 @@ namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.InventorySetti
             string caption,
             int position,
             FieldTypes fieldType,
-            int propertySize,
+            int? propertySize,
             bool showInDetails,
             bool showInList)
             : base(businessModelStates)
@@ -41,7 +41,7 @@ namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.InventorySetti
 
         public FieldTypes FieldType { get; private set; }
 
-        public int PropertySize { get; private set; }
+        public int? PropertySize { get; private set; }
 
         public bool ShowInDetails { get; private set; }
 
@@ -51,7 +51,7 @@ namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.InventorySetti
         public DateTime ChangedDate { get; private set; }
 
         [AllowRead(ModelStates.Created)]
-        public DateTime CretedDate { get; private set; }
+        public DateTime CreatedDate { get; private set; }
 
         public static InventoryDynamicFieldSetting CreateNew(
             int inventoryTypeId,
@@ -59,7 +59,7 @@ namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.InventorySetti
             string caption,
             int position,
             FieldTypes fieldType,
-            int propertySize,
+            int? propertySize,
             bool showInDetails,
             bool showInList,
             DateTime createdDate)
@@ -72,7 +72,7 @@ namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.InventorySetti
                 fieldType,
                 propertySize,
                 showInDetails,
-                showInList) { InventoryTypeId = inventoryTypeId, CretedDate = createdDate };
+                showInList) { InventoryTypeId = inventoryTypeId, CreatedDate = createdDate };
 
             return businessModel;
         }
@@ -83,7 +83,7 @@ namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.InventorySetti
             string caption,
             int position,
             FieldTypes fieldType,
-            int propertySize,
+            int? propertySize,
             bool showInDetails,
             bool showInList,
             DateTime changedDate)
@@ -107,7 +107,7 @@ namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.InventorySetti
             string caption,
             int position,
             FieldTypes fieldType,
-            int propertySize,
+            int? propertySize,
             bool showInDetails,
             bool showInList)
         {

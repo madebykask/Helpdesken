@@ -10,5 +10,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
         List<InventoryValue> GetData(int id);
 
         List<InventoryValue> GetData(List<int> ids);
+
+        void DeleteByInventoryTypePropertyId(int inventoryTypePropertyId);
     }
 }

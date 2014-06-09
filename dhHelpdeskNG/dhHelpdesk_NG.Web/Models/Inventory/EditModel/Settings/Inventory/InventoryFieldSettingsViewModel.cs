@@ -6,23 +6,27 @@
 
     public class InventoryFieldSettingsViewModel
     {
-        public InventoryFieldSettingsViewModel(
-            int inventoryTypeId,
-            DefaultFieldSettingsModel defaultSettings,
-            List<InventoryDynamicFieldSettingModel> inventoryDynamicFieldSettings)
+        public InventoryFieldSettingsViewModel()
         {
-            this.InventoryTypeId = inventoryTypeId;
+        }
+
+        public InventoryFieldSettingsViewModel(
+            NewInventoryDynamicFieldSettingViewModel newDynamicFieldViewModel,
+            DefaultFieldSettingsModel defaultSettings,
+            List<InventoryDynamicFieldSettingViewModel> inventoryDynamicFieldViewModelSettings)
+        {
+            this.NewDynamicFieldViewModel = newDynamicFieldViewModel;
             this.DefaultSettings = defaultSettings;
-            this.InventoryDynamicFieldSettings = inventoryDynamicFieldSettings;
+            this.InventoryDynamicFieldViewModelSettings = inventoryDynamicFieldViewModelSettings;
         }
 
         [NotNull]
-        public int InventoryTypeId { get; private set; }
+        public NewInventoryDynamicFieldSettingViewModel NewDynamicFieldViewModel { get; set; }
 
         [NotNull]
-        public DefaultFieldSettingsModel DefaultSettings { get; private set; }
+        public DefaultFieldSettingsModel DefaultSettings { get; set; }
 
         [NotNull]
-        public List<InventoryDynamicFieldSettingModel> InventoryDynamicFieldSettings { get; private set; }
+        public List<InventoryDynamicFieldSettingViewModel> InventoryDynamicFieldViewModelSettings { get; set; }
     }
 }

@@ -52,11 +52,12 @@
             this.Bind<IComputerFieldsSettingsBuilder>().To<ComputerFieldsSettingsBuilder>().InSingletonScope();
             this.Bind<IServerFieldsSettingsBuilder>().To<ServerFieldsSettingsBuilder>().InSingletonScope();
             this.Bind<IPrinterFieldsSettingsBuilder>().To<PrinterFieldsSettingsBuilder>().InSingletonScope();
+            this.Bind<IInventoryFieldsSettingsBuilder>().To<InventoryFieldsSettingsBuilder>().InSingletonScope();
 
             this.Bind<IComputerFieldsSettingsViewModelBuilder>().To<ComputerFieldsSettingsViewModelBuilder>().InSingletonScope();
             this.Bind<IServerFieldsSettingsViewModelBuilder>().To<ServerFieldsSettingsViewModelBuilder>().InSingletonScope();
             this.Bind<IPrinterFieldsSettingsViewModelBuilder>().To<PrinterFieldsSettingsViewModelBuilder>().InSingletonScope();
-            this.Bind<IInventoryFieldSettingsViewModelBuilder>().To<InventoryFieldSettingsViewModelBuilder>().InSingletonScope();
+            this.Bind<IInventoryFieldSettingsEditViewModelBuilder>().To<InventoryFieldSettingsEditViewModelBuilder>().InSingletonScope();
         }
     }
 }

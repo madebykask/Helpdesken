@@ -16,7 +16,7 @@
                 .WillCascadeOnDelete(false);
 
             this.Property(x => x.Name).HasColumnName("InventoryType").IsRequired().HasMaxLength(50);
-            this.Property(x => x.XMLElement).IsRequired().HasMaxLength(100);
+            this.Property(x => x.XMLElement).HasMaxLength(100);
             this.Property(x => x.CreatedDate).IsRequired();
             this.Property(x => x.ChangedDate).IsRequired();
 

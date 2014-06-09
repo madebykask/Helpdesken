@@ -6,15 +6,14 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory
     using DH.Helpdesk.Services.Response.Inventory;
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Inventory;
 
-    public interface IInventoryFieldSettingsViewModelBuilder
+    public interface IInventoryFieldSettingsEditViewModelBuilder
     {
-        InventoryFieldSettingsViewModel BuildViewModel(
-            int inventoryTypeId,
+        InventoryFieldSettingsEditViewModel BuildViewModel(
+            InventoryType inventoryType,
             InventoryFieldSettingsForEditResponse response,
             List<TypeGroupModel> groupModels);
 
-        NewInventoryFieldSettingsViewModel BuildDefaultViewModel(
-            int inventoryTypeId,
+        InventoryFieldSettingsEditViewModel BuildDefaultViewModel(
             List<TypeGroupModel> groupModels);
     }
 }

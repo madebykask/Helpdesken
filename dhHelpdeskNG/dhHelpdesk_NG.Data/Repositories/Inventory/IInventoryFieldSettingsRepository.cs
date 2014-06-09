@@ -9,6 +9,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
 
     public interface IInventoryFieldSettingsRepository : INewRepository
     {
+        void Add(InventoryFieldSettings businessModel);
+
         void Update(InventoryFieldSettings businessModel);
 
         InventoryFieldSettings GetFieldSettingsForEdit(int inventoryTypeId);

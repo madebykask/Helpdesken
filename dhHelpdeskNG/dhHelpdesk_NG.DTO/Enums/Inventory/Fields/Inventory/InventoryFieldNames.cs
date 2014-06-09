@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Dal.Enums.Inventory.Inventory
+﻿namespace DH.Helpdesk.BusinessData.Enums.Inventory.Fields.Inventory
 {
     public class InventoryFieldNames
     {

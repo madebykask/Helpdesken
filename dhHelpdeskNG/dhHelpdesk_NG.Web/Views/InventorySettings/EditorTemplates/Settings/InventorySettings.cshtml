@@ -9,11 +9,18 @@
             <th>@Translation.Get("Storlek")</th>
             <th>@Translation.Get("Visa")</th>
             <th>@Translation.Get("Lista")</th>
+            <th>@Translation.Get("Ta bort")</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td colspan="7" class="header">@Translation.Get("Allmänt")</td>
+            <td colspan="8" class="header">@Translation.Get("Nytt")</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.NewDynamicFieldViewModel, "Settings/NewInventoryFieldSettingModel")
+        </tr>
+        <tr>
+            <td colspan="8" class="header">@Translation.Get("Allmänt")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.DefaultSettings.DepartmentFieldSettingModel, "Settings/InventoryFieldSettingModelDefault")
@@ -34,7 +41,7 @@
             @Html.EditorFor(m => m.DefaultSettings.TheftMarkFieldSettingModel, "Settings/InventoryFieldSettingModelDefault")
         </tr>
         <tr>
-            <td colspan="7" class="header">@Translation.Get("Inventering")</td>
+            <td colspan="8" class="header">@Translation.Get("Inventering")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.DefaultSettings.BarCodeFieldSettingModel, "Settings/InventoryFieldSettingModelDefault")
@@ -43,34 +50,34 @@
             @Html.EditorFor(m => m.DefaultSettings.PurchaseDateFieldSettingModel, "Settings/InventoryFieldSettingModelDefault")
         </tr>
         <tr>
-            <td colspan="7" class="header">@Translation.Get("Placering")</td>
+            <td colspan="8" class="header">@Translation.Get("Placering")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.DefaultSettings.PlaceFieldSettingModel, "Settings/InventoryFieldSettingModelDefault")
         </tr>
         <tr>
-            <td colspan="7" class="header">@Translation.Get("Övrigt")</td>
+            <td colspan="8" class="header">@Translation.Get("Övrigt")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.DefaultSettings.InfoFieldSettingModel, "Settings/InventoryFieldSettingModelDefault")
         </tr>
         <tr>
-            <td colspan="7" class="header">@Translation.Get("Tillbehör till")</td>
+            <td colspan="8" class="header">@Translation.Get("Tillbehör till")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.DefaultSettings.WorkstationFieldSettingModel, "Settings/InventoryFieldSettingModelDefault")
         </tr>
         <tr>
-            <td colspan="7" class="header">@Translation.Get("Additional")</td>
+            <td colspan="8" class="header">@Translation.Get("Additional")</td>
         </tr>
         @{
-            var fields = Model.InventoryDynamicFieldSettings.OrderBy(x => x.Position).ThenBy(x => x.Caption);
+            var inventoryDynamicFieldViewModelSettings = Model.InventoryDynamicFieldViewModelSettings.OrderBy(x => x.InventoryDynamicFieldSettingModel.Position).ThenBy(x => x.InventoryDynamicFieldSettingModel.Caption).ToList();
 
-            foreach (var item in fields)
+            for (int i = 0; i < inventoryDynamicFieldViewModelSettings.Count(); i++)
             {
-                <tr>
-                    @Html.EditorFor(m => item, "Settings/InventoryFieldSettingModel")
-                </tr>
+            <tr>
+                @Html.EditorFor(m => inventoryDynamicFieldViewModelSettings[i], "Settings/InventoryFieldSettingModel")
+            </tr>
             }
         }
     </tbody>

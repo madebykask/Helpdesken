@@ -1,0 +1,12 @@
+﻿@using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings
+@model DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.NewInventoryDynamicFieldSettingViewModel
+<td>@Html.DropDownListFor(m => m.InventoryDynamicFieldSettingModel.InventoryTypeGroupId, Model.InventoryTypeGroups)
+</td>
+<td>@Html.TextBoxFor(m => m.InventoryDynamicFieldSettingModel.Caption)</td>
+<td>@Html.TextBoxFor(m => m.InventoryDynamicFieldSettingModel.Position)</td>
+<td>@Html.DropDownListFor(x => x.InventoryDynamicFieldSettingModel.FieldType, new SelectList(Enum.GetValues(typeof(FieldTypes)), Model.InventoryDynamicFieldSettingModel.FieldType), string.Empty, new { @class = "new_inventory_field_type_class" })
+</td>
+<td>@Html.TextBoxFor(m => m.InventoryDynamicFieldSettingModel.PropertySize, new { @class = "new_inventory_property_size_class" })</td>
+<td>@Html.CheckBoxFor(m => m.InventoryDynamicFieldSettingModel.ShowInDetails)</td>
+<td>@Html.CheckBoxFor(m => m.InventoryDynamicFieldSettingModel.ShowInList)</td>
+<td></td>

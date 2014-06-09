@@ -15,6 +15,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
 
         void Update(InventoryDynamicFieldSetting businessModel);
 
+        void Update(List<InventoryDynamicFieldSetting> businessModels);
+
         List<InventoryDynamicFieldSetting> GetFieldSettingsForEdit(int inventoryTypeId);
 
         List<InventoryDynamicFieldSettingForModelEdit> GetFieldSettingsForModelEdit(int inventoryTypeId);

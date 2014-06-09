@@ -1,13 +1,14 @@
 ﻿@using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings
-@model DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.InventoryDynamicFieldSettingModel
-<td>@Html.DropDownListFor(m => m.InventoryTypeGroupId, Model.Groups);
+@model DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.InventoryDynamicFieldSettingViewModel
+<td>@Html.DropDownListFor(m => m.InventoryDynamicFieldSettingModel.InventoryTypeGroupId, Model.InventoryTypeGroups)
+    @Html.HiddenFor(m => m.InventoryDynamicFieldSettingModel.Id)
 </td>
-<td>@Html.TextBoxFor(m => m.Caption)</td>
-<td>@Html.TextBoxFor(m => m.Position)</td>
-<td>@Html.DropDownListFor(x => x.FieldType, new SelectList(Enum.GetValues(typeof(FieldTypes)), Model.FieldType), string.Empty)
+<td>@Html.TextBoxFor(m => m.InventoryDynamicFieldSettingModel.Caption)</td>
+<td>@Html.TextBoxFor(m => m.InventoryDynamicFieldSettingModel.Position)</td>
+<td>@Html.DropDownListFor(x => x.InventoryDynamicFieldSettingModel.FieldType, new SelectList(Enum.GetValues(typeof(FieldTypes)), Model.InventoryDynamicFieldSettingModel.FieldType), new { @class = "inventory_field_type_class" })
 </td>
-<td>@Html.TextBoxFor(m => m.PropertySize)</td>
-<td>@Html.CheckBoxFor(m => m.ShowInDetails)</td>
-<td>@Html.CheckBoxFor(m => m.ShowInList)</td>
-<td>@Html.ActionLink(Translation.Get("Ta bort"), "DeleteDynamicSetting", new { id = Model.Id }, new { @class = "btn" })
+<td>@Html.TextBoxFor(m => m.InventoryDynamicFieldSettingModel.PropertySize, new { @class = "inventory_property_size_class" })</td>
+<td>@Html.CheckBoxFor(m => m.InventoryDynamicFieldSettingModel.ShowInDetails)</td>
+<td>@Html.CheckBoxFor(m => m.InventoryDynamicFieldSettingModel.ShowInList)</td>
+<td>@Ajax.ActionLink(Translation.Get("Ta bort"), "DeleteDynamicSetting", new { id = Model.InventoryDynamicFieldSettingModel.Id, inventoryTypeId = Model.InventoryDynamicFieldSettingModel.InventoryTypeId }, new AjaxOptions { UpdateTargetId = "settings_container", OnSuccess = "updateForm(); onSettingsSavedSuccessfully();" }, new { @class = "btn" })
 </td>

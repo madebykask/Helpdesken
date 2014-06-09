@@ -7,6 +7,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.InventorySettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.InventorySettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.InventoryFieldSettings;
+    using DH.Helpdesk.Common.Extensions.Boolean;
     using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
@@ -17,6 +18,10 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 
         public const int MinDynamicSettingTypeId = 0;
 
+        public const int DefaultPropertySize = 50;
+
+        public const string PropertyDefaultValue = "";
+
         public InventoryDynamicFieldSettingsRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
@@ -26,11 +31,16 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
         {
             var entity = new Domain.Inventory.InventoryTypeProperty
                              {
-                                 CreatedDate = businessModel.ChangedDate,
+                                 InventoryType_Id = businessModel.InventoryTypeId,
+                                 CreatedDate = businessModel.CreatedDate,
+                                 ChangedDate = businessModel.CreatedDate, // todo
                                  PropertyPos = businessModel.Position,
-                                 PropertySize = businessModel.PropertySize,
+                                 PropertySize = businessModel.PropertySize ?? DefaultPropertySize,
                                  PropertyValue = businessModel.Caption,
                                  PropertyType = (int)businessModel.FieldType,
+                                 PropertyDefault = PropertyDefaultValue,
+                                 Show = businessModel.ShowInDetails.ToInt(),
+                                 ShowInList = businessModel.ShowInList.ToInt(),
                                  InventoryTypeGroup_Id =
                                      businessModel.InventoryTypeGroupId,
                              };
@@ -44,10 +54,26 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             var entity = this.DbSet.Find(businessModel.Id);
             entity.ChangedDate = businessModel.ChangedDate;
             entity.PropertyPos = businessModel.Position;
-            entity.PropertySize = businessModel.PropertySize;
+
+            if (businessModel.PropertySize.HasValue)
+            {
+                entity.PropertySize = businessModel.PropertySize.Value;
+            }
+
             entity.PropertyValue = businessModel.Caption;
             entity.PropertyType = (int)businessModel.FieldType;
             entity.InventoryTypeGroup_Id = businessModel.InventoryTypeGroupId;
+            entity.Show = businessModel.ShowInDetails.ToInt();
+            entity.ShowInList = businessModel.ShowInList.ToInt();
+            entity.InventoryTypeGroup_Id = businessModel.InventoryTypeGroupId;
+        }
+
+        public void Update(List<InventoryDynamicFieldSetting> businessModels)
+        {
+            foreach (var businessModel in businessModels)
+            {
+                this.Update(businessModel);
+            }
         }
 
         public List<InventoryDynamicFieldSetting> GetFieldSettingsForEdit(int inventoryTypeId)

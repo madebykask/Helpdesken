@@ -28,7 +28,11 @@
 
         public static InventoryType CreateNew(int customerId, string name, DateTime createdDate)
         {
-            var businessModel = new InventoryType(name, ModelStates.Created) { CustomerId = customerId, CreatedDate = createdDate };
+            var businessModel = new InventoryType(name, ModelStates.Created)
+                                    {
+                                        CustomerId = customerId,
+                                        CreatedDate = createdDate
+                                    };
 
             return businessModel;
         }
@@ -42,7 +46,12 @@
 
         public static InventoryType CreateForEdit(string name, int id, DateTime createdDate, DateTime changedDate)
         {
-            var businessModel = new InventoryType(name, ModelStates.ForEdit) { Id = id, CreatedDate = createdDate, ChangedDate = changedDate };
+            var businessModel = new InventoryType(name, ModelStates.ForEdit)
+                                    {
+                                        Id = id,
+                                        CreatedDate = createdDate,
+                                        ChangedDate = changedDate
+                                    };
 
             return businessModel;
         }

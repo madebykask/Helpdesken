@@ -14,6 +14,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 
     public class InventoryTypeRepository : Repository<Domain.Inventory.InventoryType>, IInventoryTypeRepository
     {
+        public const string DefaultXmlElement = "";
+
         public InventoryTypeRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
@@ -25,7 +27,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             {
                 Name = businessModel.Name,
                 Customer_Id = businessModel.CustomerId,
-                CreatedDate = businessModel.CreatedDate
+                XMLElement = DefaultXmlElement,
+                CreatedDate = businessModel.CreatedDate,
+                ChangedDate = businessModel.CreatedDate // todo
             };
 
             this.DbSet.Add(entity);

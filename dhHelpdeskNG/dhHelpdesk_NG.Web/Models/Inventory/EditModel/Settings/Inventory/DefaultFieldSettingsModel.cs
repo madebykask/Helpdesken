@@ -5,6 +5,10 @@
 
     public class DefaultFieldSettingsModel
     {
+        public DefaultFieldSettingsModel()
+        {
+        }
+
         public DefaultFieldSettingsModel(
             InventoryFieldSettingModel departmentFieldSettingModel,
             InventoryFieldSettingModel nameFieldSettingModel,
@@ -32,36 +36,36 @@
         }
 
         [NotNull]
-        public InventoryFieldSettingModel DepartmentFieldSettingModel { get; private set; }
+        public InventoryFieldSettingModel DepartmentFieldSettingModel { get; set; }
 
         [NotNull]
-        public InventoryFieldSettingModel NameFieldSettingModel { get; private set; }
+        public InventoryFieldSettingModel NameFieldSettingModel { get; set; }
 
         [NotNull]
-        public InventoryFieldSettingModel ModelFieldSettingModel { get; private set; }
+        public InventoryFieldSettingModel ModelFieldSettingModel { get; set; }
 
         [NotNull]
-        public InventoryFieldSettingModel ManufacturerFieldSettingModel { get; private set; }
+        public InventoryFieldSettingModel ManufacturerFieldSettingModel { get; set; }
 
         [NotNull]
-        public InventoryFieldSettingModel SerialNumberFieldSettingModel { get; private set; }
+        public InventoryFieldSettingModel SerialNumberFieldSettingModel { get; set; }
 
         [NotNull]
-        public InventoryFieldSettingModel TheftMarkFieldSettingModel { get; private set; }
+        public InventoryFieldSettingModel TheftMarkFieldSettingModel { get; set; }
 
         [NotNull]
-        public InventoryFieldSettingModel BarCodeFieldSettingModel { get; private set; }
+        public InventoryFieldSettingModel BarCodeFieldSettingModel { get; set; }
 
         [NotNull]
-        public InventoryFieldSettingModel PurchaseDateFieldSettingModel { get; private set; }
+        public InventoryFieldSettingModel PurchaseDateFieldSettingModel { get; set; }
 
         [NotNull]
-        public InventoryFieldSettingModel PlaceFieldSettingModel { get; private set; }
+        public InventoryFieldSettingModel PlaceFieldSettingModel { get; set; }
 
         [NotNull]
-        public InventoryFieldSettingModel WorkstationFieldSettingModel { get; private set; }
+        public InventoryFieldSettingModel WorkstationFieldSettingModel { get; set; }
 
         [NotNull]
-        public InventoryFieldSettingModel InfoFieldSettingModel { get; private set; }
+        public InventoryFieldSettingModel InfoFieldSettingModel { get; set; }
     }
 }

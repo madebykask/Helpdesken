@@ -1,15 +1,21 @@
 ﻿namespace DH.Helpdesk.Web.Controllers
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Mvc;
 
+    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.InventorySettings;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Enums.Inventory;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
     using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory;
+    using DH.Helpdesk.Web.Models.Inventory.EditModel.Settings;
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Computer;
+    using DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Inventory;
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Printer;
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Server;
 
@@ -25,13 +31,15 @@
 
         private readonly IPrinterFieldsSettingsViewModelBuilder printerFieldsSettingsViewModelBuilder;
 
-        private readonly IInventoryFieldSettingsViewModelBuilder inventoryFieldSettingsViewModelBuilder;
+        private readonly IInventoryFieldSettingsEditViewModelBuilder inventoryFieldSettingsEditViewModelBuilder;
 
         private readonly IComputerFieldsSettingsBuilder computerFieldsSettingsBuilder;
 
         private readonly IServerFieldsSettingsBuilder serverFieldsSettingsBuilder;
 
         private readonly IPrinterFieldsSettingsBuilder printerFieldsSettingsBuilder;
+
+        private readonly IInventoryFieldsSettingsBuilder inventoryFieldsSettingsBuilder;
 
         private readonly ILanguageService languageService;
 
@@ -42,10 +50,11 @@
             IComputerFieldsSettingsViewModelBuilder computerFieldsSettingsViewModelBuilder,
             IServerFieldsSettingsViewModelBuilder serverFieldsSettingsViewModelBuilder,
             IPrinterFieldsSettingsViewModelBuilder printerFieldsSettingsViewModelBuilder,
-            IInventoryFieldSettingsViewModelBuilder inventoryFieldSettingsViewModelBuilder,
+            IInventoryFieldSettingsEditViewModelBuilder inventoryFieldSettingsEditViewModelBuilder,
             IComputerFieldsSettingsBuilder computerFieldsSettingsBuilder,
             IServerFieldsSettingsBuilder serverFieldsSettingsBuilder,
             IPrinterFieldsSettingsBuilder printerFieldsSettingsBuilder,
+            IInventoryFieldsSettingsBuilder inventoryFieldsSettingsBuilder,
             ILanguageService languageService)
             : base(masterDataService)
         {
@@ -54,10 +63,11 @@
             this.computerFieldsSettingsViewModelBuilder = computerFieldsSettingsViewModelBuilder;
             this.serverFieldsSettingsViewModelBuilder = serverFieldsSettingsViewModelBuilder;
             this.printerFieldsSettingsViewModelBuilder = printerFieldsSettingsViewModelBuilder;
-            this.inventoryFieldSettingsViewModelBuilder = inventoryFieldSettingsViewModelBuilder;
+            this.inventoryFieldSettingsEditViewModelBuilder = inventoryFieldSettingsEditViewModelBuilder;
             this.computerFieldsSettingsBuilder = computerFieldsSettingsBuilder;
             this.serverFieldsSettingsBuilder = serverFieldsSettingsBuilder;
             this.printerFieldsSettingsBuilder = printerFieldsSettingsBuilder;
+            this.inventoryFieldsSettingsBuilder = inventoryFieldsSettingsBuilder;
             this.languageService = languageService;
         }
 
@@ -72,7 +82,7 @@
                     return this.View("EditSettings", inventoryTypeId);
 
                 default:
-                    throw new NotImplementedException();
+                    return this.View("EditInventorySettings", inventoryTypeId);
             }
         }
 
@@ -91,7 +101,7 @@
                     return this.PrinterSettings(SessionFacade.CurrentLanguageId);
 
                 default:
-                    throw new NotImplementedException();
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -177,21 +187,139 @@
         }
 
         [HttpGet]
-        public ViewResult EditInventorySettings(int inventoryTypeid)
+        public PartialViewResult InventorySettings(int inventoryTypeId)
         {
-            throw new System.NotImplementedException();
+            var model = this.inventorySettingsService.GetInventoryFieldSettingsForEdit(inventoryTypeId);
+            var typeGroups = this.inventoryService.GetTypeGroupModels(inventoryTypeId);
+            var inventoryTypeModel = this.inventoryService.GetInventoryType(inventoryTypeId);
+
+            var viewModel = this.inventoryFieldSettingsEditViewModelBuilder.BuildViewModel(inventoryTypeModel, model, typeGroups);
+            return this.PartialView("InventorySettings", viewModel);
         }
 
-        [HttpGet]
-        public ViewResult DeleteDynamicSetting(int id)
+        [HttpPost]
+        [BadRequestOnNotValid]
+        public RedirectToRouteResult InventorySettings(InventoryFieldSettingsEditViewModel model)
         {
-            throw new System.NotImplementedException();
+            this.UpdateInventoryType(model.InventoryTypeModel);
+
+            this.UpdateInventoryFieldsSettings(
+                model.InventoryTypeModel.Id,
+                model.InventoryFieldSettingsViewModel.DefaultSettings);
+
+            var newSetting =
+                model.InventoryFieldSettingsViewModel.NewDynamicFieldViewModel.InventoryDynamicFieldSettingModel;
+            if (!string.IsNullOrWhiteSpace(newSetting.Caption) && newSetting.FieldType.HasValue)
+            {
+                this.AddDynamicFieldSetting(model.InventoryTypeModel.Id, newSetting);
+            }
+
+            this.UpdateDynamicFieldsSettings(
+                model.InventoryFieldSettingsViewModel.InventoryDynamicFieldViewModelSettings);
+
+            return this.RedirectToAction("InventorySettings", new { inventoryTypeId = model.InventoryTypeModel.Id });
         }
 
         [HttpGet]
         public ViewResult NewCustomInventoryType()
         {
+            return this.View("NewInventorySettings");
+        }
+
+        [HttpGet]
+        public PartialViewResult NewInventorySettings()
+        {
+            // todo
+            var typeGroups = new List<TypeGroupModel>();
+
+            var viewModel = this.inventoryFieldSettingsEditViewModelBuilder.BuildDefaultViewModel(typeGroups);
+            return this.PartialView("EmptyInventorySettings", viewModel);
+        }
+
+        [HttpPost]
+        [BadRequestOnNotValid]
+        public RedirectToRouteResult NewInventorySettings(InventoryFieldSettingsEditViewModel model)
+        {
+            // todo
+            var inventoryTypeBusinessModel = InventoryType.CreateNew(
+                SessionFacade.CurrentCustomer.Id,
+                model.InventoryTypeModel.Name,
+                DateTime.Now);
+            this.inventoryService.AddInventoryType(inventoryTypeBusinessModel);
+
+            var defaultSettingsBusinessModel = this.inventoryFieldsSettingsBuilder.BuildBusinessModelForAdd(
+                inventoryTypeBusinessModel.Id,
+                model.InventoryFieldSettingsViewModel.DefaultSettings);
+            this.inventorySettingsService.AddInventoryFieldsSettings(defaultSettingsBusinessModel);
+
+            return this.RedirectToAction("EditSettings", new { inventoryTypeId = inventoryTypeBusinessModel.Id });
+        }
+
+        [HttpGet]
+        public RedirectToRouteResult DeleteDynamicSetting(int id, int inventoryTypeId)
+        {
+            this.inventorySettingsService.DeleteDynamicFieldSetting(id);
+            return this.RedirectToAction("InventorySettings", new { inventoryTypeId });
+        }
+
+        [HttpGet]
+        public ViewResult DeleteInventoryType(int inventoryTypeId)
+        {
             throw new System.NotImplementedException();
+        }
+
+        private void UpdateDynamicFieldsSettings(List<InventoryDynamicFieldSettingViewModel> model)
+        {
+            var dynamicFieldsSettings =
+                model.Select(
+                    x =>
+                    InventoryDynamicFieldSetting.CreateUpdated(
+                        x.InventoryDynamicFieldSettingModel.Id,
+                        x.InventoryDynamicFieldSettingModel.InventoryTypeGroupId,
+                        x.InventoryDynamicFieldSettingModel.Caption,
+                        x.InventoryDynamicFieldSettingModel.Position,
+                        x.InventoryDynamicFieldSettingModel.FieldType.Value,
+                        x.InventoryDynamicFieldSettingModel.PropertySize,
+                        x.InventoryDynamicFieldSettingModel.ShowInDetails,
+                        x.InventoryDynamicFieldSettingModel.ShowInList,
+                        DateTime.Now)).ToList();
+
+            this.inventorySettingsService.UpdateDynamicFieldsSettings(dynamicFieldsSettings);
+        }
+
+        private void AddDynamicFieldSetting(
+            int inventoryTypeId,
+            NewInventoryDynamicFieldSettingModel newSetting)
+        {
+            var dynamicFieldSetting = InventoryDynamicFieldSetting.CreateNew(
+                inventoryTypeId,
+                newSetting.InventoryTypeGroupId,
+                newSetting.Caption,
+                newSetting.Position,
+                newSetting.FieldType.Value,
+                newSetting.PropertySize,
+                newSetting.ShowInDetails,
+                newSetting.ShowInList,
+                DateTime.Now);
+
+            this.inventorySettingsService.AddDynamicFieldSetting(dynamicFieldSetting);
+        }
+
+        private void UpdateInventoryFieldsSettings(int inventoryTypeId, DefaultFieldSettingsModel defaultFieldSettingsModel)
+        {
+            var defaultSettingsBusinessModel = this.inventoryFieldsSettingsBuilder.BuildBusinessModelForUpdate(
+                inventoryTypeId,
+                defaultFieldSettingsModel);
+            this.inventorySettingsService.UpdateInventoryFieldsSettings(defaultSettingsBusinessModel);
+        }
+
+        private void UpdateInventoryType(InventoryTypeModel model)
+        {
+            var inventoryTypeBusinessModel = InventoryType.CreateUpdated(
+                model.Name,
+                model.Id,
+                DateTime.Now);
+            this.inventoryService.UpdateInventoryType(inventoryTypeBusinessModel);
         }
     }
 }

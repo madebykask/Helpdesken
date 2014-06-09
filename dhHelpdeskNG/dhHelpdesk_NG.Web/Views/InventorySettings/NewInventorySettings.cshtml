@@ -1,5 +1,4 @@
-﻿@model int
-<script type="text/javascript" src="@Url.Content("~/Content/js/Changes/settings.js")"></script>
+﻿<script type="text/javascript" src="@Url.Content("~/Content/js/Inventory/settings.js")"></script>
 
 <div class="secnavs fixed">
     <div class="pull-left">
@@ -14,7 +13,7 @@
 <div class="content">
     <div class="container">
         <div id="settings_container">
-            @Html.Action("RenderContent", "InventorySettings", new { area = string.Empty, inventoryTypeId = Model })
+            @Html.Action("NewInventorySettings", "InventorySettings", new { area = string.Empty })
         </div>
     </div>
 </div>

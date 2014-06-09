@@ -53,5 +53,11 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 
             return overviews;
         }
+
+        public void DeleteByInventoryTypePropertyId(int inventoryTypePropertyId)
+        {
+            var models = this.DbSet.Where(x => x.InventoryTypeProperty_Id == inventoryTypePropertyId).ToList();
+            models.ForEach(x => this.DbSet.Remove(x));
+        }
     }
 }

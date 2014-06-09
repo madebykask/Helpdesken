@@ -440,25 +440,25 @@
         [HttpGet]
         public ViewResult DeleteWorkstation(int id)
         {
-            throw new global::System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         [HttpGet]
         public ViewResult DeleteServer(int id)
         {
-            throw new global::System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         [HttpGet]
         public ViewResult DeletePrinter(int id)
         {
-            throw new global::System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         [HttpGet]
         public ViewResult DeleteInventory(int id)
         {
-            throw new global::System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         [HttpGet]
@@ -481,7 +481,7 @@
         [BadRequestOnNotValid]
         public ViewResult NewWorkstation(ComputerViewModel computerViewModel)
         {
-            throw new global::System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         [HttpGet]
@@ -504,7 +504,7 @@
         [BadRequestOnNotValid]
         public ViewResult NewServer(ServerViewModel serverViewModel)
         {
-            throw new global::System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         [HttpGet]
@@ -527,12 +527,13 @@
         [BadRequestOnNotValid]
         public ViewResult NewPrinter(PrinterViewModel printerViewModel)
         {
-            throw new global::System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         [HttpGet]
-        public ViewResult NewInventory(int inventoryTypeId, string inventoryTypeName)
+        public ViewResult NewInventory(int inventoryTypeId)
         {
+            var inventoryType = this.inventoryService.GetInventoryType(inventoryTypeId);
             var settings = this.inventorySettingsService.GetInventoryFieldSettingsForModelEdit(inventoryTypeId);
             var options = this.GetInventoryInventoryEditOptions(SessionFacade.CurrentCustomer.Id);
             var typeGroupModels = this.inventoryService.GetTypeGroupModels(inventoryTypeId);
@@ -544,7 +545,7 @@
                 SessionFacade.CurrentCustomer.Id);
             var dynamicFieldsModel =
                 this.dynamicsFieldsModelBuilder.BuildViewModel(settings.InventoryDynamicFieldSettingForModelEditData);
-            inventoryViewModel.Name = inventoryTypeName;
+            inventoryViewModel.Name = inventoryType.Name;
 
             var viewModel = new InventoryEditViewModel(inventoryViewModel, dynamicFieldsModel, typeGroupModels);
 
@@ -555,17 +556,17 @@
         [BadRequestOnNotValid]
         public ViewResult NewInventory(InventoryEditViewModel inventoryEditViewModel)
         {
-            throw new global::System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public ActionResult EditComputerModule()
         {
-            throw new global::System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public ActionResult NewComputerModule()
         {
-            throw new global::System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         [HttpPost]

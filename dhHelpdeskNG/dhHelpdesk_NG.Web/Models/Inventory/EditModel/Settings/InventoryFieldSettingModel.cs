@@ -23,25 +23,26 @@ namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings
             this.ShowInList = showInList;
         }
 
-        private InventoryFieldSettingModel(int? propertySize)
+        private InventoryFieldSettingModel(int? propertySize, string caption)
         {
             this.PropertySize = propertySize;
+            this.Caption = caption;
         }
 
         [NotNull]
         [LocalizedRequired]
-        public string Caption { get; private set; }
+        public string Caption { get; set; }
 
         [Max(0)]
-        public int? PropertySize { get; private set; }
+        public int? PropertySize { get; set; }
 
-        public bool ShowInDetails { get; private set; }
+        public bool ShowInDetails { get; set; }
 
-        public bool ShowInList { get; private set; }
+        public bool ShowInList { get; set; }
 
-        public static InventoryFieldSettingModel GetDefault(int? propertySize)
+        public static InventoryFieldSettingModel GetDefault(int? propertySize, string caption)
         {
-            return new InventoryFieldSettingModel(propertySize);
+            return new InventoryFieldSettingModel(propertySize, caption);
         }
     }
 }

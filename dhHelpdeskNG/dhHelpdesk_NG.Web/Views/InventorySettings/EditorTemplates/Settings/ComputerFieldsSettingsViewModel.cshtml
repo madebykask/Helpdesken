@@ -3,12 +3,16 @@
     $(function () {
         $(".is_required").change(function () {
             var value = $(this).is(":checked");
-            $(this).closest("tr").find(".is_readonly").prop('checked', !value);
+            if (value == true) {
+                $(this).closest("tr").find(".is_readonly").prop('checked', !value);
+            }
         });
 
         $(".is_readonly").change(function () {
             var value = $(this).is(":checked");
-            $(this).closest("tr").find(".is_required").prop('checked', !value);
+            if (value == true) {
+                $(this).closest("tr").find(".is_required").prop('checked', !value);
+            }
         });
     });
 </script>

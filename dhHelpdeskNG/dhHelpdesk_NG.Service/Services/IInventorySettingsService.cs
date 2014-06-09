@@ -3,6 +3,7 @@ namespace DH.Helpdesk.Services.Services
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.InventorySettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.PrinterSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ServerSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ComputerSettings;
@@ -43,6 +44,16 @@ namespace DH.Helpdesk.Services.Services
         PrinterFieldsSettingsOverview GetPrinterFieldSettingsOverview(int customerId, int languageId);
 
         PrinterFieldsSettingsOverviewForFilter GetPrinterFieldSettingsOverviewForFilter(int customerId, int languageId);
+
+        void AddDynamicFieldSetting(InventoryDynamicFieldSetting businessModel);
+
+        void UpdateDynamicFieldsSettings(List<InventoryDynamicFieldSetting> businessModels);
+
+        void DeleteDynamicFieldSetting(int id);
+
+        void AddInventoryFieldsSettings(InventoryFieldSettings businessModel);
+
+        void UpdateInventoryFieldsSettings(InventoryFieldSettings businessModel);
 
         InventoryFieldSettingsForEditResponse GetInventoryFieldSettingsForEdit(int inventoryTypeId);
 

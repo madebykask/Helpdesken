@@ -71,6 +71,23 @@
             this.inventoryTypeGroupRepository = inventoryTypeGroupRepository;
         }
 
+        public void AddInventoryType(InventoryType businessModel)
+        {
+            this.inventoryTypeRepository.Add(businessModel);
+            this.inventoryTypeRepository.Commit();
+        }
+
+        public void UpdateInventoryType(InventoryType businessModel)
+        {
+            this.inventoryTypeRepository.Update(businessModel);
+            this.inventoryTypeRepository.Commit();
+        }
+
+        public InventoryType GetInventoryType(int id)
+        {
+            return this.inventoryTypeRepository.FindById(id);
+        }
+
         public List<ItemOverview> GetInventoryTypes(int customerId)
         {
             return this.inventoryTypeRepository.FindOverviews(customerId);

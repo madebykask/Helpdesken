@@ -21,6 +21,12 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 
     public class InventoryFieldSettingsRepository : Repository<Domain.Inventory.InventoryTypeProperty>, IInventoryFieldSettingsRepository
     {
+        public const int DefaultPosition = 0;
+
+        public const int DefaultPropertySize = 50;
+
+        public const string PropertyDefaultValue = "";
+
         public InventoryFieldSettingsRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
@@ -29,16 +35,16 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
         public void Add(InventoryFieldSettings businessModel)
         {
             AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.Department, businessModel.DefaultSettings.DepartmentFieldSetting, businessModel.CreatedDate, this.DbSet);
-            AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.Name, businessModel.DefaultSettings.DepartmentFieldSetting, businessModel.CreatedDate, this.DbSet);
-            AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.Model, businessModel.DefaultSettings.DepartmentFieldSetting, businessModel.CreatedDate, this.DbSet);
-            AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.Manufacturer, businessModel.DefaultSettings.DepartmentFieldSetting, businessModel.CreatedDate, this.DbSet);
-            AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.SerialNumber, businessModel.DefaultSettings.DepartmentFieldSetting, businessModel.CreatedDate, this.DbSet);
-            AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.TheftMark, businessModel.DefaultSettings.DepartmentFieldSetting, businessModel.CreatedDate, this.DbSet);
-            AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.BarCode, businessModel.DefaultSettings.DepartmentFieldSetting, businessModel.CreatedDate, this.DbSet);
-            AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.PurchaseDate, businessModel.DefaultSettings.DepartmentFieldSetting, businessModel.CreatedDate, this.DbSet);
-            AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.Place, businessModel.DefaultSettings.DepartmentFieldSetting, businessModel.CreatedDate, this.DbSet);
-            AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.Workstation, businessModel.DefaultSettings.DepartmentFieldSetting, businessModel.CreatedDate, this.DbSet);
-            AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.Info, businessModel.DefaultSettings.DepartmentFieldSetting, businessModel.CreatedDate, this.DbSet);
+            AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.Name, businessModel.DefaultSettings.NameFieldSetting, businessModel.CreatedDate, this.DbSet);
+            AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.Model, businessModel.DefaultSettings.ModelFieldSetting, businessModel.CreatedDate, this.DbSet);
+            AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.Manufacturer, businessModel.DefaultSettings.ManufacturerFieldSetting, businessModel.CreatedDate, this.DbSet);
+            AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.SerialNumber, businessModel.DefaultSettings.SerialNumberFieldSetting, businessModel.CreatedDate, this.DbSet);
+            AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.TheftMark, businessModel.DefaultSettings.TheftMarkFieldSetting, businessModel.CreatedDate, this.DbSet);
+            AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.BarCode, businessModel.DefaultSettings.BarCodeFieldSetting, businessModel.CreatedDate, this.DbSet);
+            AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.PurchaseDate, businessModel.DefaultSettings.PurchaseDateFieldSetting, businessModel.CreatedDate, this.DbSet);
+            AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.Place, businessModel.DefaultSettings.PlaceFieldSetting, businessModel.CreatedDate, this.DbSet);
+            AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.Workstation, businessModel.DefaultSettings.WorkstationFieldSetting, businessModel.CreatedDate, this.DbSet);
+            AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.Info, businessModel.DefaultSettings.InfoFieldSetting, businessModel.CreatedDate, this.DbSet);
         }
 
         public void Update(InventoryFieldSettings businessModel)
@@ -63,18 +69,24 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
         {
             var settings = this.GetSettings(inventoryTypeId);
 
-            var mapperData =
+            var anonymus =
                 settings.Select(
+                    s => new { s.PropertyValue, s.PropertyType, s.Show, s.ShowInList, s.PropertySize, s.PropertyPos })
+                    .ToList();
+
+            var mapperData =
+                anonymus.Select(
                     s =>
                     new InventoryFieldSettingMapperData
-                    {
-                        Caption = s.PropertyValue,
-                        FieldName = s.PropertyType.ToString(CultureInfo.InvariantCulture),
-                        ShowInDetails = s.Show,
-                        ShowInList = s.ShowInList,
-                        PropertySize = s.PropertySize,
-                        Position = s.PropertyPos
-                    }).ToList();
+                        {
+                            Caption = s.PropertyValue,
+                            FieldName =
+                                s.PropertyType.ToString(CultureInfo.InvariantCulture),
+                            ShowInDetails = s.Show,
+                            ShowInList = s.ShowInList,
+                            PropertySize = s.PropertySize,
+                            Position = s.PropertyPos
+                        }).ToList();
 
             var settingCollection = new NamedObjectCollection<InventoryFieldSettingMapperData>(mapperData);
             var department = CreateFieldSetting(settingCollection.FindByName(InventoryFields.Department.ToString(CultureInfo.InvariantCulture)));
@@ -85,8 +97,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             var theftMark = CreateFieldSetting(settingCollection.FindByName(InventoryFields.TheftMark.ToString(CultureInfo.InvariantCulture)));
             var barCode = CreateFieldSetting(settingCollection.FindByName(InventoryFields.BarCode.ToString(CultureInfo.InvariantCulture)));
             var purchaseDate = CreateFieldSetting(settingCollection.FindByName(InventoryFields.PurchaseDate.ToString(CultureInfo.InvariantCulture)));
-            var place = CreateFieldSetting(settingCollection.FindByName(InventoryFields.Place.ToString(CultureInfo.InvariantCulture)));
-            var workstation = CreateFieldSetting(settingCollection.FindByName(InventoryFields.Workstation.ToString(CultureInfo.InvariantCulture)));
+            var place = CreateFieldSettingWithDefaultPropertySize(settingCollection.FindByName(InventoryFields.Place.ToString(CultureInfo.InvariantCulture)));
+            var workstation = CreateFieldSettingWithDefaultPropertySize(settingCollection.FindByName(InventoryFields.Workstation.ToString(CultureInfo.InvariantCulture)));
             var info = CreateFieldSetting(settingCollection.FindByName(InventoryFields.Info.ToString(CultureInfo.InvariantCulture)));
 
             var settingAgregate =
@@ -327,8 +339,16 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
         {
             return new InventoryFieldSetting(
                 fieldSetting.Caption,
-                fieldSetting.Position,
                 fieldSetting.PropertySize,
+                fieldSetting.ShowInDetails.ToBool(),
+                fieldSetting.ShowInList.ToBool());
+        }
+
+        private static InventoryFieldSetting CreateFieldSettingWithDefaultPropertySize(InventoryFieldSettingMapperData fieldSetting)
+        {
+            return new InventoryFieldSetting(
+                fieldSetting.Caption,
+                null,
                 fieldSetting.ShowInDetails.ToBool(),
                 fieldSetting.ShowInList.ToBool());
         }
@@ -359,9 +379,10 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                            InventoryType_Id = inventoryTypeId,
                            Show = newSetting.ShowInDetails.ToInt(),
                            ShowInList = newSetting.ShowInList.ToInt(),
-                           PropertySize = newSetting.PropertySize,
-                           PropertyPos = newSetting.Position,
+                           PropertySize = newSetting.PropertySize ?? DefaultPropertySize,
+                           PropertyPos = DefaultPosition,
                            PropertyType = propertyType,
+                           PropertyDefault = PropertyDefaultValue
                        };
 
             settings.Add(setting);

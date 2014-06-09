@@ -1,5 +1,4 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Server.ServerFieldsSettingsViewModel
-<script type="text/javascript" src="@Url.Content("~/Content/js/Changes/settings.js")"></script>
 
 <script type="text/javascript">
     $(function () {
@@ -11,9 +10,7 @@
         applySettingsBehavior(parameters);
     });
 </script>
-<div id="settings_container">
-    @using (Ajax.BeginForm("ServerSettings", "InventorySettings", new AjaxOptions { OnSuccess = "onSettingsSavedSuccessfully", HttpMethod = "POST"}, new { id = "settings_form" }))
-    {
-        @Html.EditorFor(m => m, "Settings/ServerFieldsSettingsViewModel")
-    }
-</div>
+@using (Ajax.BeginForm("ServerSettings", "InventorySettings", new AjaxOptions { OnSuccess = "onSettingsSavedSuccessfully", HttpMethod = "POST" }, new { id = "settings_form" }))
+{
+    @Html.EditorFor(m => m, "Settings/ServerFieldsSettingsViewModel")
+}

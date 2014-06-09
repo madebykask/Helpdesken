@@ -71,6 +71,7 @@
     <Compile Include="Enums\Inventory\Fields\Computer\SoundFields.cs" />
     <Compile Include="Enums\Inventory\Fields\Computer\StateFields.cs" />
     <Compile Include="Enums\Inventory\Fields\Computer\WorkstationFields.cs" />
+    <Compile Include="Enums\Inventory\Fields\Inventory\InventoryFieldNames.cs" />
     <Compile Include="Enums\Inventory\Fields\Inventory\InventoryFields.cs" />
     <Compile Include="Enums\Inventory\Fields\Printer\CommunicationFields.cs" />
     <Compile Include="Enums\Inventory\Fields\Printer\GeneralFields.cs" />

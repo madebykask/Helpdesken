@@ -18,6 +18,12 @@
 
     public interface IInventoryService
     {
+        void AddInventoryType(InventoryType businessModel);
+
+        void UpdateInventoryType(InventoryType businessModel);
+
+        InventoryType GetInventoryType(int id);
+
         List<ItemOverview> GetInventoryTypes(int customerId);
 
         List<ItemOverview> GetNotConnectedInventory(int inventoryType, int computerId);

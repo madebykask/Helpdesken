@@ -4,17 +4,15 @@ namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings;
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
-    public class InventoryDynamicFieldSettingModel
+    public class NewInventoryDynamicFieldSettingModel
     {
-        public InventoryDynamicFieldSettingModel()
+        public NewInventoryDynamicFieldSettingModel()
         {
         }
 
-        public InventoryDynamicFieldSettingModel(
+        public NewInventoryDynamicFieldSettingModel(
             int id,
-            int inventoryTypeId,
             int? inventoryTypeGroupId,
             string caption,
             int position,
@@ -24,7 +22,6 @@ namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings
             bool showInList)
         {
             this.Id = id;
-            this.InventoryTypeId = inventoryTypeId;
             this.InventoryTypeGroupId = inventoryTypeGroupId;
             this.Caption = caption;
             this.Position = position;
@@ -38,13 +35,8 @@ namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings
         public int Id { get; set; }
 
         [IsId]
-        public int InventoryTypeId { get; set; }
-
-        [IsId]
         public int? InventoryTypeGroupId { get; set; }
 
-        [NotNull]
-        [LocalizedRequired]
         public string Caption { get; set; }
 
         [Min(0)]
