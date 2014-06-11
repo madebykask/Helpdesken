@@ -7,7 +7,12 @@ using DH.Helpdesk.Domain;
 
 namespace DH.Helpdesk.NewSelfService.Infrastructure.Common
 {
-    public class CommonFunctions
+    public interface ICommonFunctions
+    {
+        List<CaseSolution> GetCaseTemplates(int customerId);
+    }
+
+    public class CommonFunctions:ICommonFunctions
     {                
         private readonly ICaseSolutionService _caseSolutionService;
  
@@ -16,21 +21,9 @@ namespace DH.Helpdesk.NewSelfService.Infrastructure.Common
             _caseSolutionService = caseSolutionService;
         }
 
-        public List<CaseSolution> GetCaseTemplates(int customerId, bool checkAuthentication = true)
-        {
-            var ret = new List<CaseSolution>();             
-            if (checkAuthentication)
-            {
-                var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
-                if (identity == null)
-                {
-                    return ret;
-                }
-            }
-
-            ret = _caseSolutionService.GetCaseSolutions(customerId).ToList();
-
-            return ret;
+        public List<CaseSolution> GetCaseTemplates(int customerId)
+        {            
+            return _caseSolutionService.GetCaseSolutions(customerId).Where(t=> t.ShowInSelfService).ToList();           
         }
     }
 }

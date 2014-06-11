@@ -109,16 +109,14 @@
 </script>
 <div class="jumbotron greybar">
         <div class="container-fluid">
-            <ul class="secnav">
-                <li>
-                    <a href="#" class="btn btn-default">Save</a>
-                </li>
-                <li>
-                    <a href="#" class="btn btn-default">Back</a>
-                </li>
+            <ul class="secnav">                
                 <li>
                     <a href="#" class="btn btn-default">Cancel request</a>
                 </li>
+                <li>                    
+                    @Html.ActionLink(Translation.Get("Spara och skicka", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "$('#NewCaseForm').submit();return false;" , @class="btn btn-default" })
+                </li>
+                
             </ul>
         </div>
     </div>
@@ -825,10 +823,10 @@
                                     }
                                     <div class="form-group row">
                                         <label class="col-md-2"></label>
-                                        <div class="col-md-10">
+                                        @*<div class="col-md-10">
                                             @Html.ActionLink(Translation.Get("Spara och skicka", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "$('#NewCaseForm').submit();return false;", @class = "btn btn-primary" })
                     
-                                        </div>
+                                        </div>*@
                                     </div>
                                     
 

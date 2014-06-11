@@ -558,6 +558,11 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             }            
         }
 
+        public List<CaseSolution> GetCaseSolutions(int customerId)
+        {
+            return _caseSolutionService.GetCaseSolutions(customerId).Where(t=> t.ShowInSelfService).ToList();             
+        }
+
         private int Save(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey)
         {           
             IDictionary<string, string> errors;

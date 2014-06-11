@@ -72,11 +72,12 @@ namespace DH.Helpdesk.NewSelfService
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            var kernel = new StandardKernel(new WorkContextModule(),  new UserModule() , new ProblemModule() , new CommonModule(), new EmailModule() , new NotifiersModule());
+            var kernel = new StandardKernel(new WorkContextModule(),  new UserModule() , new ProblemModule() , new CommonModule(), new EmailModule() , new NotifiersModule() , new ToolsModule());
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
             
             RegisterServices(kernel);
+            ManualDependencyResolver.SetKernel(kernel);
             return kernel;
         }
 

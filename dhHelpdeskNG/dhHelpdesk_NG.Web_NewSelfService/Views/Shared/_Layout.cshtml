@@ -1,7 +1,8 @@
 ﻿@using System.Collections.Generic;
 @using DH.Helpdesk.NewSelfService.Infrastructure
 @using DH.Helpdesk.NewSelfService.Infrastructure.Extensions
-@using DH.Helpdesk.NewSelfService.Infrastructure.Common
+@using DH.Helpdesk.NewSelfService.Infrastructure.Common;
+@using DH.Helpdesk.Services.Infrastructure
 
 
 <!DOCTYPE html>
@@ -122,15 +123,19 @@
          
          if (SessionFacade.CurrentCustomer != null)
          {
-             pCustomerId = SessionFacade.CurrentCustomer.Id;                          
+             pCustomerId = SessionFacade.CurrentCustomer.Id;
+             SessionFacade.CurrentCustomerID = pCustomerId;
          }
 
          if (pCustomerId == -1 && SessionFacade.CurrentCustomerID > 0)
          {
              pCustomerId = SessionFacade.CurrentCustomerID;
+             SessionFacade.CurrentCustomer.Id = pCustomerId;
          }
-         
-         var pCaseTemplates = (List<DH.Helpdesk.Domain.CaseSolution>)ViewBag.PublicCaseTemplate;
+
+         var helper = ManualDependencyResolver.Get<ICommonFunctions>();
+
+         var pCaseTemplates = helper.GetCaseTemplates(pCustomerId);
       } 
     <div style="position: fixed; top: 30%; right: -2px; background: #fff; padding: 20px 20px 5px 20px; border: 1px solid #ccc;">
         <ul class="nav nav-pills nav-stacked">
@@ -166,7 +171,7 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li class="blue">
-                        <a href="@Url.Action("Index", "Start",new {customerId = pCustomerId})">
+                        <a href="@Url.Action("Index", "Start",new {customerId = pCustomerId, area = ""})">
                             <div class="ico-home"></div>
                             Start
                         </a>
@@ -178,77 +183,50 @@
                         </a>
                                
                         <ul class="dropdown-menu">
-                            <li class="dropdown-submenu">                                
-                                <a href="#"> 
-                                    <span class="glyphicon glyphicon-plus"></span> Regular Case Template 
-                                </a>
-                                @if (pCaseTemplates.Where(t => t.TemplatePath == null).ToList().Count > 0)
+                            @if (pCaseTemplates != null)
+                            {                                
+                                foreach (var c in pCaseTemplates)
                                 {
-                                    <ul class="dropdown-menu">
-                                        @foreach (var c in pCaseTemplates.Where(t => t.TemplatePath == null))
+                                    <li>
+                                        @if (string.IsNullOrEmpty(c.TemplatePath))
                                         {
-                                            <li>
-                                                <a href="@Url.Action("NewCase", "case", new { customerId = pCustomerId, caseTemplateId = c.Id })">
-                                                    <span class="glyphicon glyphicon-list-alt"></span> @c.Name <br />
-                                                    <span class="small"> @c.Description </span>
-                                                </a>                                   
-                                            </li>
-                                        }                                                                                        
-                                    </ul>
-                                }
-                            </li>                            
-                            <li class="divider"></li>
-                            <li class="dropdown-submenu">                                
-                                <a href="#"> 
-                                    <span class="glyphicon glyphicon-plus"></span> DH+ Case Template
-                                </a>
-                                @if (pCaseTemplates.Where(t => t.TemplatePath != null).ToList().Count > 0)
-                                {
-                                    <ul class="dropdown-menu">
-                                        @foreach (var c in pCaseTemplates.Where(t => t.TemplatePath != null))
+                                            <a href="@Url.Action("NewCase", "case", new { customerId = pCustomerId, caseTemplateId = c.Id, area = "" })">
+                                                <span class="glyphicon glyphicon-plus"></span> @c.Name <br />
+                                                <span class="small"> @c.Description </span>
+                                            </a>                                     
+                                        }
+                                        else
                                         {
-                                            <li>
-                                                <a href="@Url.Content(c.TemplatePath.SetUrlParameters())">
-                                                    <span class="glyphicon glyphicon-list-alt"></span> @c.Name <br />
-                                                    <span class="small"> @c.Description </span>
-                                                </a>                                   
-                                            </li>
-                                        }             
-                                    </ul>
-                                }
-                            </li>                            
-                        </ul>                
-                        
-                         
-                        @*@if (pCaseTemplates != null && pCaseTemplates.Count > 0)
-                        {
-                            <ul class="dropdown-menu">
-                                
-                            </ul>
-                        }*@
-                        
-
+                                            <a href="@Url.Content(c.TemplatePath.SetUrlParameters())">
+                                                <span class="glyphicon glyphicon-plus"></span> @c.Name <br />
+                                                <span class="small"> @c.Description </span>
+                                            </a>                                            
+                                        }   
+                                    </li>
+                                }                                                                                                                                                                                        
+                            }
+                        </ul>                                                                                         
                     </li>
                     <li class="blue">                        
-                        <a href="@Url.Action("UserCases", "case", new {customerId = pCustomerId , progressId = "2"})">
+                        <a href="@Url.Action("UserCases", "case", new {customerId = pCustomerId , progressId = "2", area = ""})">
                             <div class="ico-ongoing"></div>
                             Ongoing Service Requests
                         </a>
                     </li>
                     <li class="blue">
-                        <a href="@Url.Action("UserCases", "case", new {customerId = pCustomerId , progressId = "1"})">
+                        <a href="@Url.Action("UserCases", "case", new {customerId = pCustomerId , progressId = "1", area = ""})">
                             <div class="ico-finished"></div>
                             Finished Service Requests
                         </a>
                     </li>
                     <li class="blue">
-                        <a href="@Url.Action("Index", "Documents", new {customerId = pCustomerId})">
+                        <a href="@Url.Action("Index", "Documents", new {customerId = pCustomerId, area = ""})">
                             <div class="ico-documents"></div>
                             HR Documents
                         </a>
                     </li>
                     <li class="blue">
-                        <a href="@Url.Action("Index", "CoWorkers", new {customerId = pCustomerId})">
+                        <a href="@Url.Action("Index", "CoWorkers", new {customerId = pCustomerId, area = ""})">
                             <div class="ico-coworkers"></div>
                             My Co-Workers
                         </a>
@@ -259,9 +237,9 @@
                             Need Help?
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="@Url.Action("FindYourWay","Help",new {customerId = pCustomerId} )">Find Your Way</a></li>
-                            <li><a href="@Url.Action("Index","Help",new {customerId = pCustomerId})">Help</a></li>
-                            <li><a href="@Url.Action("About", "Help", new { customerId = pCustomerId })">About</a></li>
+                            <li><a href="@Url.Action("FindYourWay","Help",new {customerId = pCustomerId, area = ""} )">Find Your Way</a></li>
+                            <li><a href="@Url.Action("Index","Help",new {customerId = pCustomerId, area = ""})">Help</a></li>
+                            <li><a href="@Url.Action("About", "Help", new { customerId = pCustomerId, area = "" })">About</a></li>
                         </ul>
                     </li>
                 </ul>
