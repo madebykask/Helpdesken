@@ -73,10 +73,13 @@
         @if (Model.File == null)
         {
             @Html.Partial("Empty")
-        }
+        } 
         else
         {
-           <img src="@Model.File.FileName" />                                    
+            <img src="@Model.File.FileName" />                                    
+            <div>
+                @string.Format("{0}: {1}", Translation.Get("Antal ärenden"), Model.Items.Count())
+            </div>            
         }
     </body>
 </html>

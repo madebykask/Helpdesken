@@ -10,7 +10,7 @@
 
     public interface IReportsHelper
     {
-       bool CreateRegistratedCasesCaseTypeReport(
+       void CreateRegistratedCasesCaseTypeReport(
                             ItemOverview customer,
                             ItemOverview report,
                             IEnumerable<ItemOverview> workingGroups,
@@ -23,7 +23,7 @@
                             RegistratedCasesCaseTypeItem[] items,
                             out List<ReportFile> files);
 
-       bool CreateRegistratedCasesDayReport(
+       void CreateRegistratedCasesDayReport(
                             ItemOverview customer,
                             ItemOverview report,
                             ItemOverview department,

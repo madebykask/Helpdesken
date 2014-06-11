@@ -3,14 +3,16 @@
     using System;
     using System.Collections.Generic;
 
+    using DH.Helpdesk.BusinessData.Models.Reports.Output;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.Tools.Concrete;
 
     public sealed class RegistratedCasesDayReport
     {
-        public RegistratedCasesDayReport()
+        public RegistratedCasesDayReport(IEnumerable<RegistratedCasesDayItem> items)
         {
+            this.Items = items;
             this.ReportType = ItemOverview.CreateEmpty();
             this.Customer = ItemOverview.CreateEmpty();
             this.Department = ItemOverview.CreateEmpty();
@@ -18,6 +20,7 @@
             this.WorkingGroup = ItemOverview.CreateEmpty();
             this.Administrator = ItemOverview.CreateEmpty();
             this.Period = DateTime.Today;
+            this.Items = new RegistratedCasesDayItem[0];
         }
 
         public RegistratedCasesDayReport(
@@ -28,8 +31,10 @@
             ItemOverview workingGroup, 
             ItemOverview administrator,
             DateTime period,
-            ReportFile file)
+            ReportFile file, 
+            IEnumerable<RegistratedCasesDayItem> items)
         {
+            this.Items = items;
             this.File = file;
             this.Administrator = administrator;
             this.WorkingGroup = workingGroup;
@@ -57,5 +62,8 @@
         public DateTime Period { get; private set; }
 
         public ReportFile File { get; private set; }
+
+        [NotNull]
+        public IEnumerable<RegistratedCasesDayItem> Items { get; private set; } 
     }
 }

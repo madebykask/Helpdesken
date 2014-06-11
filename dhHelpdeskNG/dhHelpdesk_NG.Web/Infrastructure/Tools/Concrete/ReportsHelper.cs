@@ -22,7 +22,7 @@
             this.temporaryFilesCache = temporaryFilesCacheFactory.CreateForModule(ModuleName.Reports);
         }
 
-        public bool CreateRegistratedCasesCaseTypeReport(
+        public void CreateRegistratedCasesCaseTypeReport(
                             ItemOverview customer,
                             ItemOverview report,
                             IEnumerable<ItemOverview> workingGroups,
@@ -42,7 +42,7 @@
                 var until = periodUntil.RoundToMonth();
                 if (from > until)
                 {
-                    return false;
+                    return;
                 }
 
                 var caseTypeItems = items.Where(i => i.CaseTypeId == int.Parse(caseType.Value));
@@ -83,11 +83,9 @@
                                 isPrint ? this.GetReportPathFromCache(objectId, fileName) : fileName);
                 files.Add(file);
             }
-
-            return true;
         }
 
-        public bool CreateRegistratedCasesDayReport(
+        public void CreateRegistratedCasesDayReport(
             ItemOverview customer,
             ItemOverview report,
             ItemOverview department,
@@ -99,8 +97,25 @@
             RegistratedCasesDayItem[] items,
             out ReportFile file)
         {
-            file = new ReportFile(null, null);
-            return false;
+            var days = DateTime.DaysInMonth(period.Year, period.Month);
+            var x = new List<int>();
+            var y = new List<int>();
+            for (var day = 1; day < days + 1; day++)
+            {
+                x.Add(day);    
+                y.Add(items.Count(i => i.RegistrationDate.Day == day));
+            }
+
+            var chart = this.CreateChart()
+                .AddSeries(
+                        xValue: x,
+                        yValues: y);
+            string objectId;
+            string fileName;
+            this.SaveToCache(chart, out objectId, out fileName);
+            file = new ReportFile(
+                            objectId,
+                            isPrint ? this.GetReportPathFromCache(objectId, fileName) : fileName);
         }
 
         public byte[] GetReportImageFromCache(string objectId, string fileName)
@@ -123,9 +138,9 @@
             this.temporaryFilesCache.AddFile(chart.GetBytes("png"), fileName, objectId);
         }
 
-        private Chart CreateChart()
+        private Chart CreateChart(int width = 500, int height = 400)
         {
-            return new Chart(500, 400);
+            return new Chart(width, height);
         }
     }
 }

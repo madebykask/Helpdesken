@@ -12,4 +12,6 @@
 
 <img src="@Url.Action("GetReportImage", "Reports", new { objectId = Model.File.ObjectId, fileName = Model.File.FileName })" />            
 
-
+<div>
+    @string.Format("{0}: {1}", Translation.Get("Antal ärenden"), Model.Items.Count())
+</div>

@@ -367,10 +367,10 @@ namespace DH.Helpdesk.Dal.Repositories
                         join u in this.DataContext.Users on c.Performer_User_Id equals u.Id
                         where c.Customer_Id == customerId &&
                               c.Department_Id.HasValue &&                                
-                              (!departmentId.HasValue || c.Department_Id.Value == departmentId.Value) &&
-                              (allCaseTypes || (caseTypesIds != null && caseTypesIds.Contains(c.CaseType_Id))) &&
+                              (!departmentId.HasValue || c.Department_Id == departmentId) &&
+                              (allCaseTypes || caseTypesIds.Contains(c.CaseType_Id)) &&
                               c.WorkingGroup_Id.HasValue &&
-                              (!workingGroupId.HasValue || c.WorkingGroup_Id.Value == workingGroupId.Value) &&                              
+                              (!workingGroupId.HasValue || c.WorkingGroup_Id == workingGroupId) &&                              
                               c.RegTime >= perionFrom && c.RegTime <= perionUntil &&
                               c.Deleted == 0
                         select new RegistratedCasesDayItem
@@ -387,7 +387,6 @@ namespace DH.Helpdesk.Dal.Repositories
                             RegistrationDate = c.RegTime
                         };
             return query.ToList();
-
         }
 
         private void MarkCaseAsRead(int id)

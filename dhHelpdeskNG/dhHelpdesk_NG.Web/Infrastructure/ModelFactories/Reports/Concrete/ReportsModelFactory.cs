@@ -149,7 +149,8 @@
                                     response.WorkingGroup,
                                     response.Administrator,
                                     options.Period,
-                                    file);
+                                    file,
+                                    response.Items);
             return instance;
         }
 
