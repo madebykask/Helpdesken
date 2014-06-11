@@ -9,55 +9,66 @@
 <html>
 <body>
     <div>
-         <br />
-        <table style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
+        <br />
+   
+        <table width="100%" style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
             <tr>
-                <td style="text-align: right;">@Model.GetAnswer("FirstName") @Model.GetAnswer("LastName")</td>
+                <td></td>
+                <td></td>
+                <td style="text-align:right;">     
+                    <table style="font-family: Verdana; font-size: 11px;" border="0">
+            <tr>
+               
+                <td style="text-align: left;">@Model.GetAnswer("FirstName") @Model.GetAnswer("LastName")</td>
             </tr>
             <tr>
-                <td style="text-align: right;">@Model.GetAnswer("PermanentAddressLine1") @Model.GetAnswer("PermanentAddressLine2") @Model.GetAnswer("PermanentAddressLine3")</td>
+                
+                <td style="text-align: left;">@Model.GetAnswer("PermanentAddressLine1") @Model.GetAnswer("PermanentAddressLine2") @Model.GetAnswer("PermanentAddressLine3")</td>
             </tr>
             <tr>
-                <td style="text-align: right;">@Model.GetAnswer("PermanentPostalCode") @Model.GetAnswer("PermanentCity")</td>
+               <td style="text-align: left;">@Model.GetAnswer("PermanentPostalCode") @Model.GetAnswer("PermanentCity")</td>
             </tr>
-        </table>
+        </table></td>
 
-        @Model.Department.HeadOfDepartmentCity, @string.Format(new System.Globalization.CultureInfo("nl-NL"), "{0:dd MMM yyyy}", DateTime.Now)<br />
-        <br />
+            </tr>
+            </table>
+        <p style="text-align: left; font-family: Verdana; font-size: 11px;">
+            <br />
+            @Model.Department.HeadOfDepartmentCity, @string.Format(new System.Globalization.CultureInfo("nl-NL"), "{0:d MMM yyyy}", DateTime.Now)<br />
+            <br />
 
-        Betreft: onbetaald verlof<br />
-        <br />
+            Betreft: onbetaald verlof<br />
+            <br />
 
-        Beste @Model.GetAnswer("FirstName")<br />
-        <br />
+            Beste @Model.GetAnswer("FirstName"),<br />
+            <br />
 
-        Hierbij bevestigen wij je het volgende. <br />
-        <br />
+            Hierbij bevestigen wij je het volgende.
+            <br />
+            <br />
 
-        Jij hebt aan je leidinggevende het verzoek gedaan om in de periode van @Model.GetAnswer("AbsenceStartFrom") tot @Model.GetAnswer("AbsenceEndsOn") per week onbetaald verlof op te nemen. 
+            Jij hebt aan je leidinggevende het verzoek gedaan om in de periode van @Model.GetAnswer("AbsenceStartFrom" +Model.AbsenceNr) tot @Model.GetAnswer("AbsenceEndsOn"+Model.AbsenceNr).Trim():@Model.GetAnswer("AbsenceHours"+Model.AbsenceNr).Trim() per week onbetaald verlof op te nemen. 
         <br />
+            <br />
+            Je leidinggevende gaat hiermee akkoord.<br />
+            <br />
+
+            @if (Model.GetAnswer("AbsenceLongerThan2Months") == "Yes")
+            {
+                <text>
+                Aangezien je verlof langer dan twee aaneengesloten maanden duurt, verzoeken wij je, om je OV-abonnement op je laatste werkdag voorafgaand aan je verlof te retourneren met bijgevoegde enveloppe.
         <br />
-Je leidinggevende gaat hiermee akkoord.<br />
-        <br />
-           
-        @if (Model.GetAnswer("AbsenceLongerThan2Months") == "Yes")
-        {
-            <text>
-Aangezien je verlof langer dan twee aaneengesloten maanden duurt, verzoeken wij je, om je OV-abonnement op je laatste werkdag voorafgaand aan je verlof te retourneren met bijgevoegde enveloppe.
-        <br /><br />
-        </text>
-        }
+                <br />
+                </text>
+            }
+
+            Na afloop van je onbetaald verlof zal je weer werkzaam zijn voor @Model.GetAnswer("ContractedHoursOldData") uur per week.<br />
+            <br />
+
+            We willen je er graag op wijzen dat je gedurende bovenstaande periode geen opbouw hebt van verlofuren, 13<span style="font-size: 8px"><sup>e</sup></span> maand, vakantiegeld en pensioenpremie.
             
-Na afloop van je onbetaald verlof zal je weer werkzaam zijn voor @Model.GetAnswer("PreviousContractHours") uur per week.<br /><br />
-
-We willen je er graag op wijzen dat je gedurende bovenstaande periode geen opbouw hebt van verlofuren, 13e maand, vakantiegeld en pensioenpremie.<br /><br />
-
-We hopen je hiermee voldoende geïnformeerd te hebben. Voor meer informatie over deze regeling verwijzen wij je naar ico-worker.com/nl of raadpleeg de IKEA CAO.<br /><br />
-
-   Met vriendelijke groet,<br />
-        @Model.GetAnswer("Department")
-        <br />
-
+            
+        </p>
         <endpage />
     </div>
 

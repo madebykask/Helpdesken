@@ -8,7 +8,7 @@
 
 @section Validation {
 
-     @Html.Partial("_Validate", Model)
+    @Html.Partial("_Validate", Model)
 
 }
 
@@ -29,23 +29,17 @@
             validate.run(val);
         });
 
+        var unitWorkTimeSystemArr = ["O188", "O203", "O204", "O205", "O294", "O306", "O307", "O329"];
+
         if ($('#WorkingTimeSchedule').val() === '') {
-            if ($('#Company').val() === 'OR')
-                $('#WorkingTimeSchedule').val('equivalent');
-            else
-                $('#WorkingTimeSchedule').val('basic');
+            $('#WorkingTimeSchedule').val('basic');
+            for (var i = 0; i < unitWorkTimeSystemArr.length; i++) {
+                if (unitWorkTimeSystemArr[i] === $('#Unit').val()) {
+                    $('#WorkingTimeSchedule').val('equivalent');
+                    break;
+                }
+            }
         }
-
-        //$(document).on('change', '#Company', function (e) {
-        //    e.preventDefault();
-        //    if ($(this).val() === 'OR')
-        //        $('#WorkingTimeSchedule').val('equivalent');
-        //    else
-        //        $('#WorkingTimeSchedule').val('basic');
-        //});
-
-        //if ($('#WorkingTimeSchedule').val() == '')
-        //    $('#Company').change();
 
     </script>
 

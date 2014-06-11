@@ -26,7 +26,7 @@
         @Html.Partial("_ErrorMessage", Model)    
         <ul class="nav nav-tabs">
             <li class="active"><a href="#ServiceRequestDetails">@Model.Translate("Service Request Details")</a></li>
-            
+            <li><a href="#Absences">@Model.Translate("Absences")</a></li>
         </ul>
         <div class="content">
             <div class="row-fluid">
@@ -34,7 +34,7 @@
                      
                         @Html.Partial("_TabServiceRequestDetails", Model)
                     
-            
+                        @Html.Partial("_TabAbsences", Model)
                                                                                       
                 </div>
             </div>
@@ -44,30 +44,6 @@
 }
 
 <script>
-    function selectIndexChangeServiceRequestPriority() {
-        var d = new Date();
-        var day = d.getDate() + 2;
-        if (this.options[this.selectedIndex].value == 'Urgent') {
-
-
-            $('#date_ProcessBeforeDate').datepicker(
-            {
-
-                onRender: function (ev) {
-                    if (ev.getDate() > day)
-                        return '';
-                    return 'disabled';
-                }
-
-
-            });
-        }
-        else {
-            //document.getElementById('ProcessBeforeDate').value = document.getElementById('ContractStartDate').value;
-        }
-    }
-
-    document.getElementById('ServiceRequestPriority').onchange = selectIndexChangeServiceRequestPriority;
 
 
 </script>

@@ -9,86 +9,129 @@
 <html>
 
 <body>
-    <div>
-        
-        <p style="font-family:Verdana; font-size:10px;"><strong>Termination</strong></p><br/>
-        <p style="font-family:Verdana; font-size:10px;">
-            Between IKEA B.V., hereinafter referred to as the Employer, and
-        </p>
-        <p style="font-family:Verdana; font-size:10px;">
-            
-            <strong>Initials        :</strong>@Model.GetAnswer("Initials") <br/>
-            <strong>First Name      :</strong>@Model.GetAnswer("FirstName") <br/>
-            <strong>Last Name       :</strong>@Model.GetAnswer("LastName")<br />
-            <strong>Adress          :</strong>@Model.GetAnswer("PermanentAddressLine1")  @Model.GetAnswer("PermanentAddressLine2") @Model.GetAnswer("PermanentAddressLine3")<br />
-            <strong>Postal Code     :</strong>@Model.GetAnswer("PermanentPostalCode") @Model.GetAnswer("PermanentCity")<br />
-            <strong>Date of Birth   :</strong>@Model.GetAnswer("DateOfBirth")
-            <br />
-        </p>
-        
-       
-        <p style="text-align: justify;font-family:Verdana; font-size:10px;">  
 
-                1. <br/>
-                As from @Model.GetAnswer("ContractStartDate"), the Employee enters employment with the Employer
+        <div>
+            <br />
+            <table style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
+                <tr>
+                    <td style="text-align: right;">@Model.GetAnswer("FirstName") @Model.GetAnswer("LastName")</td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;">@Model.GetAnswer("PermanentAddressLine1") @Model.GetAnswer("PermanentAddressLine2") @Model.GetAnswer("PermanentAddressLine3")</td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;">@Model.GetAnswer("PermanentPostalCode") @Model.GetAnswer("PermanentCity")</td>
+                </tr>
+            </table>
+
+            <p style="text-align: left; font-family: Verdana; font-size: 11px;">
+           
+                @if (!string.IsNullOrEmpty(Model.Department.HeadOfDepartmentCity))
+                {
+
+           <text> @Model.Department.HeadOfDepartmentCity, </text>
+                
+                } @string.Format(new System.Globalization.CultureInfo("nl-NL"), "{0:d MMM yyyy}", DateTime.Now)<br />
+            <br />
+            Betreft: uitdiensttreding
+            <br />
+            <br />
+            Beste @Model.GetAnswer("FirstName"),<br /><br />
+
+
+            @if (@Model.GetAnswer("BasicTerminationType") == "Resignation")
+            {
+                <text> Hierbij bevestigen we de ontvangst van jouw mededeling waarmee je het dienstverband tussen jou en IKEA B.V. opzegt. 
                 <br />
-               
-        </p>
+                <br />
+                We gaan hiermee akkoord en zullen @Model.GetAnswer("LastDayOfEmployment") als laatste dag van de arbeidsovereenkomst beschouwen.
+             <br />
+                <br />
+                </text>
+            }
 
-        <p style="font-family:Verdana; font-size:9px;">
+
+            @if (@Model.GetAnswer("BasicTerminationType") == "Expiry of Contract")
+            {
+                <text>
+                Je arbeidsovereenkomst voor bepaalde tijd loopt af op @Model.GetAnswer("LastDayOfEmployment") en wordt niet verlengd. Dit betekent dat met ingang van bovengenoemde datum het dienstverband tussen jou en IKEA B.V. van rechtswege eindigt.
+                <br />
+                <br />
+                </text>
+            }
+
+
+            @if (@Model.GetAnswer("BasicTerminationType") == "Termination in probation period by employer")
+            {
+                <text>
+                Met ingang van @Model.GetAnswer("LastDayOfEmployment") is het dienstverband tussen jou en IKEA tijdens de proeftijd beëindigd. De reden van het ontslag is met jou besproken.
+                <br />
+                <br />
+                </text> 
+            }
+
+
+            @if (@Model.GetAnswer("BasicTerminationType") == "Termination in probation period by employee")
+            {
+                <text>
+                Met ingang van @Model.GetAnswer("LastDayOfEmployment") wordt op jouw verzoek het dienstverband tussen jou en IKEA B.V. tijdens de proeftijd beëindigd.
+             <br />
+                <br />
+                We gaan hiermee akkoord en zullen @Model.GetAnswer("LastDayOfEmployment") als laatste dag van de arbeidsovereenkomst beschouwen.
+             <br />
+                <br />
+                </text>
+            }
+
+
+            @if (@Model.GetAnswer("BasicTerminationType") == "Retirement")
+            {
+                <text>
+                Hierbij bevestigen we de wettelijke beëindiging van de arbeidsovereenkomst tussen jou en IKEA B.V., dit vanwege het bereiken van de pensioengerechtigde leeftijd. 
             <br />
-        </p>
-        <p style="text-align:justify;font-family:Verdana; font-size:10px;">
-           2.<br/>
-            The Employee is appointed in the job role of @Model.GetAnswer("JobTitle") at @Model.GetAnswer("BusinessUnit"). The scale of this position is "JOBSCALE".
-            The above job is specific to the store @Model.GetAnswer("BusinessUnit") and is out of scope of the job structure of IKEA B.V. At the moment the VAPS construction of IKEA @Model.GetAnswer("BusinessUnit") expires and IKEA @Model.GetAnswer("BusinessUnit") is a regular store again, this will have consequences for this job. Together with you we will arrange another job associated with the job structure of IKEA B.V.
-        </p>
+                <br />
+                We beschouwen @Model.GetAnswer("LastDayOfEmployment") als laatste dag van je arbeidsovereenkomst.
 
-        <p style="text-align:justify; font-family:Verdana; font-size:10px;">
-            @if(Model.GetAnswer("ContractType") == "Full time")
+             <br />
+                <br />
+                </text>
+            }
+
+            We willen je vragen om op je laatste werkdag de eigendommen van IKEA in te leveren bij de vestiging @Model.GetAnswer("BusinessUnit"). Denk hierbij aan je bedrijfskleding (schoon en gestreken), je naambadge, je laptop en/of telefoon van IKEA, de sleutel van je kluisje en van het fietsenhok. Daarnaast vragen wij je om na je laatste werkdag je personeelspas en OV-abonnementspas (indien van toepassing) in de bijgevoegde retourenvelop terug te sturen. Na ontvangst van deze pas(sen), zullen wij in de maand  na je uitdiensttreding overgaan tot de eindafrekening van je salaris. In de daarop volgende maand zullen de eventuele vakantie-uren worden uitbetaald. In de bijlage vind je een toelichting op je laatste salarisbetalingen.
+              <br />
+                <br />
+
+             @if (@Model.GetAnswer("BasicTerminationType") == "Retirement")
             {
                 <text>
-                3.<br/>
-                This Contract of Employment is entered into for a definite period of time: @Model.GetAnswer("ContractStartDate") - @Model.GetAnswer("ContractEndDate"). This contract legally ends at the end of the agreed period, without requiring any notice is required.
 
+            In jouw geval hoef je de personeelspas niet in te leveren, want (vroeg)gepensioneerden behouden gedurende hun hele leven de IKEA personeelspas en daarmee het recht op personeelskorting. Dit is conform CAO artikel 9F.
+
+              <br />
+                <br />
                 </text>
-            }        
-        </p>
-        
-        <p style="text-align:justify; font-family:Verdana; font-size:10px;">
-            @if(Model.GetAnswer("ContractType") == "Permanent")
+            }
+  
+                 @if (@Model.GetAnswer("UsingCompanyFitness") == "Yes")
             {
                 <text>
-                    3.<br/>
-                    This Contract of Employment is entered into for an indefinite period of time. 
+            Aangezien je gebruik maakt van Bedrijfsfitness zal met de eindafrekening van je salaris het resterende bedrag voor je abonnement worden verrekend. We verzoeken je om zelf je uitdiensttreding bij Bedrijfsfitness Nederland te melden. Voor meer informatie zie www.bedrijfsfitnessnederland.nl.
+            <br />
+                <br />
                 </text>
-            }        
-        </p>
-        <p style="text-align:justify;font-family:Verdana; font-size:10px;">
-            
-            4.<br/>
-            Either party may terminate this Contract of Employment in the meantime by observing the statutory legal notice period. 
-               
-        </p>
-        <p style="text-align:justify;font-family:Verdana; font-size:10px;">
-           5.<br/>
-            The Employee's employment with the Employer will lawfully cease in any case when the Employee reaches pensionable age. 
-        </p>
-        
-        <p style="text-align:justify;font-family:Verdana; font-size:10px;">
-            6.<br/>
-            The first two month's of employment will serve as a probation period. During this trial period, either party may give notice and terminate the employment with immediate effect. 
-        </p>
-        
-        <p style="text-align:justify;font-family:Verdana; font-size:10px;">
-           7.<br/>
-            This is a @Model.GetAnswer("FullTime/PartTime") Contract of Employment. The average number of working hours per week will be @Model.GetAnswer("WorkingHours") hours.
-            The employee belongs to the category @Model.GetAnswer("EmployeeSubGroup").
-            The employee is flexible to be scheduled during weekdays, Saturdays, Sundays and public holidays according to the IKEA CLA in time and hours and declares expressly agree.
-        </p>                                                   
-        <endpage/>
-    </div>
-    
-
+            }
+                @if (@Model.GetAnswer("Co-WorkerBeenEmployedFor2Months") == "Yes")
+            {
+                <text>
+            Tot slot willen we je wijzen op de mogelijkheid van waardeoverdracht van je pensioen naar een nieuwe werkgever. Informeer bij je nieuwe pensioenuitvoerder naar de procedure. Mocht je niet besluiten tot waardeoverdracht en je pensioenuitkering is kleiner dan € 100,- per jaar op je pensioendatum, dan zal STIP (Stichting IKEA Pensioenfonds) over twee jaar je pensioenaanspraken in één keer uitbetalen (dit noemen we afkoop). Zodra dit van toepassing is, zal je hiervoor een formulier ontvangen van onze pensioenuitvoerder om de gegevens te controleren. STIP zal je later informeren over het pensioen dat je tijdens je dienstverband bij IKEA hebt opgebouwd.
+              <br />
+                <br />
+                </text>
+            }
+ </p> 
+            <p style="text-align: left; font-family: Verdana; font-size: 11px;">Graag ontvangen wij één exemplaar, met daarop je handtekening, voor akkoord retour. Deze kan je in de bijgevoegde envelop terugsturen.</p>
+       
+            <endpage />
+        </div>
 </body>
 </html>

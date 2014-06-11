@@ -9,7 +9,7 @@
 ]>
 
 <!-- Dev/Prod/Test -->
-<form id="42" customerId="28">
+<form id="42" guid="8C5DB806-670C-4F6B-AD2F-BEBA3F0EBCAA" customerId="28">
     &languages;
     &regexs;
     &state;
@@ -62,7 +62,7 @@
 
         </tab>
 
-        <tab name="#employment" label="Organisational Assignment">
+        <tab name="#OrganisationalAssignment" label="Organisational Assignment">
             <element type="select" name="OrganisationCountry" label="Country" mandatory="1">
                 <options>
                     <option value=""></option>
@@ -475,12 +475,12 @@
             <element type="text" name="DependantsDocumentIssuePlace" label="Issue Place" ></element>
 
             <!--Bank Account Details-->
-            <element type="select" name="BankType" label="Bank Type" mandatory="1" default="Main Bank">
+            <!--<element type="select" name="BankType" label="Bank Type" mandatory="1" default="Main Bank">
                 <options>
                     <option value="Main Bank">Main Bank</option>
                     <option value="Other Bank">Other Bank</option>
                 </options>
-            </element>
+            </element>-->
             <element type="text" name="Payee" label="Payee" mandatory="1"></element>
             <element type="select" name="BankCountry" label="Bank Country" mandatory="1">
                 <options>
@@ -494,12 +494,12 @@
             <element type="text" name="IBAN" label="IBAN" mandatory="1"></element>
             <element type="text" name="PaymentCurrency" label="Payment Currency" mandatory="1"></element>
 
-            <element type="select" name="BankType2" label="Bank Type" default="Other Bank">
+            <!--<element type="select" name="BankType2" label="Bank Type" default="Other Bank">
                 <options>
                     <option value=""></option>
                     <option value="Other Bank">Other Bank</option>
                 </options>
-            </element>
+            </element>-->
             <element type="text" name="Payee2" label="Payee"></element>
             <element type="select" name="BankCountry2" label="Bank Country">
                 <options>

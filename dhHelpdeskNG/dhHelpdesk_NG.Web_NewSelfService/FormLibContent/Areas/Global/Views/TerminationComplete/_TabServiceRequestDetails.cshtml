@@ -73,15 +73,14 @@
     $('#ServiceRequestPriority').change(function () {
         $('#date_ProcessBeforeDate').datepicker("destroy");
 
-
         if ($(this).val() == 'Urgent') {
-            
+
             var nowTemp = new Date();
             var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-            var endDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate() + 3, 0, 0, 0, 0)
+            var endDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate() + 3, 0, 0, 0, 0);
 
             $('#date_ProcessBeforeDate').not(".disabled").datepicker(
-            {                
+            {
                 onRender: function (ev) {
                     return ev.valueOf() >= endDate.valueOf() || ev.valueOf() < now.valueOf() ? 'disabled' : '';
                 }
@@ -89,8 +88,7 @@
 
             $("#date_ProcessBeforeDate").on("keydown keypress keyup", false);
         }
-        else        
-        {
+        else {
             $('#date_ProcessBeforeDate').not(".disabled").datepicker(
             {
                 onRender: function (ev) {
@@ -99,7 +97,7 @@
             });
 
             document.getElementById('ProcessBeforeDate').onkeypress = function () { return true; }
-        } 
+        }
     });
    
 </script>

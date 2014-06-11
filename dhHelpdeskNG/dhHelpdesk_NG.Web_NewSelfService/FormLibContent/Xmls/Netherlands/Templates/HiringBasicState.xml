@@ -1,21 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-
 <state status="0">
     <status value="0">
-        <visibleTabs>#servicerequestdetails</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#personal</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
-        <readOnlyFields>BusinessUnit,Department</readOnlyFields>
+        <readOnlyFields></readOnlyFields>
         <actions>
-            <action status="20" internal-val="20" text="">
-                <validateTabs>#servicerequestdetails</validateTabs>
+            <action status="30" internal-val="30" text="Submit Complete Service Request to SSC">
+                <validateTabs>#servicerequestdetails,#personal</validateTabs>
             </action>
         </actions>
     </status>
     <!-- HRU -->
     <status value="20">
         <visibleTabs>#servicerequestdetails,#personal</visibleTabs>
-        <readOnlyTabs></readOnlyTabs>
-        <readOnlyFields>BusinessUnit,Department</readOnlyFields>
+        <readOnlyTabs>#servicerequestdetails</readOnlyTabs>
+        <readOnlyFields></readOnlyFields>
         <actions>
             <action status="30" internal-val="30" text="Submit Complete Service Request to SSC">
                 <validateTabs>#servicerequestdetails,#personal</validateTabs>

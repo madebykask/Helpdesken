@@ -61,4 +61,32 @@
     <selected>Rent Wage in Kind ER</selected>
     <show>Gross</show>
   </dependent>
+  <dependent>
+    <selected>Telephone Allowance (net)</selected>
+    <show>Gross</show>
+  </dependent>
+  <dependent>
+    <selected>Telephone Allowance (gross)</selected>
+    <show>Net</show>
+  </dependent>
+  <dependent>
+    <selected>Comp.Serv.Allowance (BHV)</selected>
+    <show>Gross</show>
+  </dependent>
+  <dependent>
+    <selected>Miscellaneous Payment (gross)</selected>
+    <show>Gross</show>
+  </dependent>
+  <dependent>
+    <selected>Miscellaneous Payment (net)</selected>
+    <show>Net</show>
+  </dependent>
+  <dependent>
+    <selected>Study Costs</selected>
+    <show>Net</show>
+  </dependent>
+  <dependent>
+    <selected>Project Allowance</selected>
+    <show>Gross</show>
+  </dependent>
 </predefined>

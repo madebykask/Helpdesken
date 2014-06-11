@@ -190,9 +190,7 @@
 
             noticeProbationDate.hide();
             probationDate.hide();
-
             probationEndDate.val("");
-
         }
 
     });
@@ -204,7 +202,7 @@
         var contractenddate = new Date(document.getElementById('ContractEndDate').value);
 
         var datedifference = contractenddate.getMonth() - contractstartdate.getMonth();
-        console.log(datedifference.toString());
+        
     }
 
     document.getElementById('ContractEndDate').onchange = valueChangedContractEndDate;
@@ -214,8 +212,17 @@
     }
     document.getElementById('ReportsToLineManager').onchange = selectIndexChangeLineManagertoTECApprover;
 
+    function selectIndexChangeBusinessUnittoPrimarySite() {
+        
+        document.getElementById('PrimarySite').value = document.getElementById('BusinessUnit').value;
+
+    }
+    document.getElementById('BusinessUnit').onchange = selectIndexChangeBusinessUnittoPrimarySite;
+
     function selectIndexChangeEmploymentCategory() {
         if (this.options[this.selectedIndex].value == 'Permanent') {
+            $('#date_ContractEndDate').datepicker("destroy");
+            $('#date_ContractEndDate').addClass("disabled");
             document.getElementById("ContractEndDate").disabled = true;
             document.getElementById("date_ContractEndDate").className = document.getElementById("date_ContractEndDate").className + " disabled";
 
@@ -240,9 +247,9 @@
         var allowancesValidTo2 = document.getElementById('AllowancesValidTo2');
         var allowancesValidTo3 = document.getElementById('AllowancesValidTo3');
 
-        var deductionsValidTo = document.getElementById('deductionsValidTo');
-        var deductionsValidTo2 = document.getElementById('deductionsValidTo2');
-        var deductionsValidTo3 = document.getElementById('deductionsValidTo3');
+        var deductionsValidTo = document.getElementById('DeductionsValidTo');
+        var deductionsValidTo2 = document.getElementById('DeductionsValidTo2');
+        var deductionsValidTo3 = document.getElementById('DeductionsValidTo3');
         var allowancesPaymentType = $("#AllowancesPaymentType").val;
 
         var sEnd = document.getElementById('ContractEndDate').value;
@@ -254,7 +261,7 @@
             allowancesValidTo2.value = defDate;            
             allowancesValidTo3.value = defDate;
            
-            deductionsValidTo.value = defDate;            
+            deductionsValidTo.value = defDate;
             deductionsValidTo2.value = defDate;            
             deductionsValidTo3.value = defDate;          
         }

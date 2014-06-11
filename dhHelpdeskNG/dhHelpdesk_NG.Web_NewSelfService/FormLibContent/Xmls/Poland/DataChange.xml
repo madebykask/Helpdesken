@@ -10,7 +10,7 @@
     <!ENTITY pre_psarea_psgroup SYSTEM "Templates/Predefined_PSArea_PSGroup.xml">
 ]>
 
-<form id="22" customerId="26">
+<form id="22" guid="5DBD6AD0-A5BE-4B12-9808-3476BC3F24BA" customerId="26">
     &languages;
     &regexs;
     &state;

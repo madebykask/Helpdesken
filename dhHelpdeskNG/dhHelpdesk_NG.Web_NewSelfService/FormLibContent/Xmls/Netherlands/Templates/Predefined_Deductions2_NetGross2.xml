@@ -9,4 +9,12 @@
     <selected>Company Fitness Net</selected>
     <show>Net</show>
   </dependent>
+  <dependent>
+    <selected>Rent Net</selected>
+    <show>Net</show>
+  </dependent>
+  <dependent>
+    <selected>Net Witholding</selected>
+    <show>Net</show>
+  </dependent>
 </predefined>

@@ -9,46 +9,51 @@
 <html>
 <body>
     <div>
-         <br />
-        <table style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
+        <br />
+        <table width="100%" style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
             <tr>
-                <td style="text-align: right;">@Model.GetAnswer("FirstName") @Model.GetAnswer("LastName")</td>
+                <td></td>
+                <td></td>
+                <td style="text-align:right;">     
+                    <table style="font-family: Verdana; font-size: 11px;" border="0">
+            <tr>
+               
+                <td style="text-align: left;">@Model.GetAnswer("FirstName") @Model.GetAnswer("LastName")</td>
             </tr>
             <tr>
-                <td style="text-align: right;">@Model.GetAnswer("PermanentAddressLine1") @Model.GetAnswer("PermanentAddressLine2") @Model.GetAnswer("PermanentAddressLine3")</td>
+                
+                <td style="text-align: left;">@Model.GetAnswer("PermanentAddressLine1") @Model.GetAnswer("PermanentAddressLine2") @Model.GetAnswer("PermanentAddressLine3")</td>
             </tr>
             <tr>
-                <td style="text-align: right;">@Model.GetAnswer("PermanentPostalCode") @Model.GetAnswer("PermanentCity")</td>
+                
+                <td style="text-align: left;">@Model.GetAnswer("PermanentPostalCode") @Model.GetAnswer("PermanentCity")</td>
             </tr>
-        </table>
+        </table></td>
 
-        @Model.Department.HeadOfDepartmentCity, @string.Format(new System.Globalization.CultureInfo("nl-NL"), "{0:dd MMM yyyy}", DateTime.Now)<br />
-        <br />
+            </tr>
+            </table>
+        <p style="text-align: left; font-family: Verdana; font-size: 11px;">
+            <br />
+            @Model.Department.HeadOfDepartmentCity, @string.Format(new System.Globalization.CultureInfo("nl-NL"), "{0:d MMM yyyy}", DateTime.Now)<br />
+            <br />
 
-        Betreft: calamiteitenverlof<br />
-        <br />
+            Betreft: calamiteitenverlof<br />
+            <br />
 
-        Beste @Model.GetAnswer("FirstName")<br />
-        <br />
+            Beste @Model.GetAnswer("FirstName"),<br />
+            <br />
 
-        Hierbij bevestigen wij je het volgende.
+            Hierbij bevestigen wij je het volgende.
         <br />
-        <br />
+            <br />
 
-        Op @Model.GetAnswer("AbsenceStartFrom") heb jij voor @Model.GetAnswer("AbsenceHours") uur gebruik gemaakt van de calamiteitenregeling uit de IKEA CAO.
+            Op @Model.GetAnswer("AbsenceStartFrom"+Model.AbsenceNr) heb jij voor @Model.GetAnswer("AbsenceHours"+Model.AbsenceNr) uur gebruik gemaakt van de calamiteitenregeling uit de IKEA CAO.
         <br />
-        <br />
+            <br />
 
-        Voor meer informatie over deze regeling verwijzen wij je naar ico-worker.com/nl of raadpleeg artikel 41E van de IKEA CAO.<br />
-        <br />
-
-        We hopen je hiermee voldoende te hebben geïnformeerd.
-        <br />
-        <br />
-
-        Met vriendelijke groet,<br />
-        @Model.GetAnswer("Department")
-        <br />
+            Voor meer informatie over deze regeling verwijzen wij je naar ico-worker.com/nl of raadpleeg artikel 41E van de IKEA CAO.
+    
+        </p>
 
         <endpage />
     </div>

@@ -72,6 +72,124 @@
         </table>
     </div>
     
+    <div class="span6">        
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Permanent Address")</h4>
+                    </td>
+                </tr>                
+              @*  <tr>
+                    <td class="tdstrong">@Model.Label("AddressType")</td>
+                    <td>@Model.Element("AddressType")</td>
+                </tr>*@
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentAddressLine1")</td>
+                    <td>@Model.Element("PermanentAddressLine1")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentAddressLine2")</td>
+                    <td>@Model.Element("PermanentAddressLine2")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentAddressLine3")</td>
+                    <td>@Model.Element("PermanentAddressLine3")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentPostalCode")</td>
+                    <td>@Model.Element("PermanentPostalCode")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentCity")</td>
+                    <td>@Model.Element("PermanentCity")</td>
+                </tr>                                
+                 @*<tr>
+                    <td class="tdstrong">@Model.Label("PermanentCountry")</td>
+                    <td>@Model.Element("PermanentCountry")</td>
+                </tr>*@
+                
+                <!-- MAILING ADDRESS -->
+                @*<tr class="mailingaddress" id="mailingaddress">
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Mailing Address")
+                        <button class="btn btn-mini pull-right" id="btnMailingAddress" data-prefix="Mailing">
+                            <i class="icon-share"></i>&nbsp;@Model.Translate("Copy from Permanent Address")
+                        </button>
+                            </h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MailingAddressLine1")</td>
+                    <td>@Model.Element("MailingAddressLine1")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MailingAddressLine2")</td>
+                    <td>@Model.Element("MailingAddressLine2")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MailingAddressLine3")</td>
+                    <td>@Model.Element("MailingAddressLine3")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MailingPostalCode")</td>
+                    <td>@Model.Element("MailingPostalCode")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MailingCity")</td>
+                    <td>@Model.Element("MailingCity")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MailingCountry")</td>
+                    <td>@Model.Element("MailingCountry")</td>
+                </tr>
+                
+                <!-- EMERGENCY ADDRESS -->
+                <tr class="emergencyaddress" id="emergencyaddress">
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Emergency Address")
+                        <button class="btn btn-mini pull-right" id="btnEmergencyAddress" data-prefix="Emergency">
+                            <i class="icon-share"></i>&nbsp;@Model.Translate("Copy from Permanent Address")
+                        </button>
+                            </h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyAddressLine1")</td>
+                    <td>@Model.Element("EmergencyAddressLine1")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyAddressLine2")</td>
+                    <td>@Model.Element("EmergencyAddressLine2")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyAddressLine3")</td>
+                    <td>@Model.Element("EmergencyAddressLine3")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyPostalCode")</td>
+                    <td>@Model.Element("EmergencyPostalCode")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyCity")</td>
+                    <td>@Model.Element("EmergencyCity")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyCountry")</td>
+                    <td>@Model.Element("EmergencyCountry")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyContactNumber")</td>
+                    <td>@Model.Element("EmergencyContactNumber")</td>
+                </tr>                
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyContactRelationship")</td>
+                    <td>@Model.Element("EmergencyContactRelationship")</td>
+                </tr>                *@
+            </tbody>
+        </table>
+    </div>
+    
     <input type="hidden" id="CustomerId" value="@Model.CustomerId" />
     
 </div>
@@ -85,7 +203,7 @@
             
             var nowTemp = new Date();
             var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-            var endDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate() + 3, 0, 0, 0, 0);
+            var endDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate() + 2, 0, 0, 0, 0);
 
             $('#date_ProcessBeforeDate').not(".disabled").datepicker(
             {
@@ -94,7 +212,7 @@
                 }
             });
 
-            $("#date_ProcessBeforeDate").on("keydown keypress keyup", false);
+            //$("#date_ProcessBeforeDate").on("keydown keypress keyup", false);
         }
         else        
         {
@@ -105,7 +223,7 @@
                 }
 
             });
-            document.getElementById('ProcessBeforeDate').onkeypress = function () { return true; }        
+            //document.getElementById('ProcessBeforeDate').onkeypress = function () { return true; }        
         } 
     });   
 

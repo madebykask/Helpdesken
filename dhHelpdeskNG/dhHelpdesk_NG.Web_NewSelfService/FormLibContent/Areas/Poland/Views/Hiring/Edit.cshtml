@@ -56,17 +56,16 @@
             validate.run(val);
         });
 
-        $(document).on('change', '#Company', function (e) {
+        var unitWorkTimeSystemArr = ["O188", "O203", "O204", "O205", "O294", "O306", "O307", "O329"];
 
-            e.preventDefault();
-            if ($(this).val() === 'OR')
-                $('#WorkingTimeSchedule').val('equivalent');
-            else
-                $('#WorkingTimeSchedule').val('basic');
-        });
-
-        if ($('#WorkingTimeSchedule').val() == '') {
-            $('#Company').change();
+        if ($('#WorkingTimeSchedule').val() === '') {
+            $('#WorkingTimeSchedule').val('basic');
+            for (var i = 0; unitWorkTimeSystemArr.length; i++) {
+                if (unitWorkTimeSystemArr[i] === $('#Unit').val()) {
+                    $('#WorkingTimeSchedule').val('equivalent');
+                    break;
+                }
+            }
         }
 
     </script>

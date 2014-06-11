@@ -26,7 +26,6 @@
             document.getElementById(prefix + "PostalCode").value = document.getElementById('PermanentPostalCode').value;
             document.getElementById(prefix + "City").value = document.getElementById('PermanentCity').value;
             document.getElementById(prefix + "Country").value = document.getElementById('PermanentCountry').value;
-
         });
 
         $(document).on('change', '#Extent', function (e) {
@@ -40,14 +39,6 @@
         $(document).on('change', '#actionState', function (e) {
             var val = $(this).val();
             validate.run(val);
-        });
-
-        $(document).on('change', '#Company', function (e) {
-            e.preventDefault
-            if ($(this).val() === 'OR')
-                $('#WorkingTimeSchedule').val('equivalent');
-            else
-                $('#WorkingTimeSchedule').val('basic');
         });
 
     </script>

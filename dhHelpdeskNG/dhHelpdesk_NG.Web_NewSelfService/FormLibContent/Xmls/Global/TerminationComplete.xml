@@ -6,7 +6,7 @@
   <!ENTITY pre_termination_reason SYSTEM "Templates/Predefined_TerminationReason.xml">
 ]>
 
-<form id="43" customerId="28">
+<form id="43" guid="83068D9B-01FB-43F5-A2AE-53EB84514CE1" customerId="28">
   &languages;
   &regexs;
   &state;

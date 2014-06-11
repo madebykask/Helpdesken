@@ -98,7 +98,11 @@
                     <tr class="allowance@(i.ToString())">
                         <td class="tdstrong">@Model.Label("AllowancesType" + i.ToString())</td>
                         <td>
-                            @Model.Element("AllowancesType" + i.ToString())</td>
+                            @Model.Element("AllowancesType" + i.ToString())
+                            <div id="notice_AllowancesType@(i.ToString())" style="display: none;" class="notice">
+                            @Model.Translate("The BHV allowance is calculated according to CLA article 28")
+                        </div>
+                        </td>
                     </tr>
                     <tr class="allowance@(i.ToString())">
                         <td class="tdstrong">@Model.Label("AllowancesPaymentType" + i.ToString())</td>
@@ -373,6 +377,30 @@
     }
     document.getElementById('AllowancesType').onchange = selectIndexChangeAllowancesType;
 
+    // Show notice if allowancestype comp.serv.allowance
+    function selectIndexChangeAllowancesType2() {
+        if (this.options[this.selectedIndex].value == 'Comp.Serv.Allowance') {
+
+            document.getElementById('notice_AllowancesType2').style.display = "block";
+        }
+        else {
+            document.getElementById('notice_AllowancesType2').style.display = "none";
+        }
+    }
+    document.getElementById('AllowancesType2').onchange = selectIndexChangeAllowancesType2;
+
+    // Show notice if allowancestype comp.serv.allowance
+    function selectIndexChangeAllowancesType3() {
+        if (this.options[this.selectedIndex].value == 'Comp.Serv.Allowance') {
+
+            document.getElementById('notice_AllowancesType3').style.display = "block";
+        }
+        else {
+            document.getElementById('notice_AllowancesType3').style.display = "none";
+        }
+    }
+    document.getElementById('AllowancesType3').onchange = selectIndexChangeAllowancesType3;
+
     // allowance and deduction datepickers
     var employmentCategory = document.getElementById('EmploymentCategory').value;
     var sEnd = document.getElementById('ContractEndDate');
@@ -528,7 +556,7 @@
                 }
             });
 
-            $("#date_NextRevisionDate").on("keydown keypress keyup", false);
+            //$("#date_NextRevisionDate").on("keydown keypress keyup", false);
         }
         else {
             $('#date_NextRevisionDate').not(".disabled").datepicker(
@@ -557,7 +585,7 @@
                 }
             });
 
-            $("#date_NextRevisionDate2").on("keydown keypress keyup", false);
+            //$("#date_NextRevisionDate2").on("keydown keypress keyup", false);
         }
         else {
             $('#date_NextRevisionDate2').not(".disabled").datepicker(
@@ -586,7 +614,7 @@
                 }
             });
 
-            $("#date_NextRevisionDate3").on("keydown keypress keyup", false);
+            //$("#date_NextRevisionDate3").on("keydown keypress keyup", false);
         }
         else {
             $('#date_NextRevisionDate3').not(".disabled").datepicker(

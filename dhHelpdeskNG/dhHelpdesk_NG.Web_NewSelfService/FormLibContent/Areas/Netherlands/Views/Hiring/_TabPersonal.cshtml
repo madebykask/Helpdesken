@@ -361,8 +361,7 @@
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Nationality / Language")</h4>
                     </td>
-                </tr>  
-                
+                </tr>                  
                 <tr>
                     <td class="tdstrong">@Model.Label("Language")</td>
                     <td>@Model.Element("Language")</td>
@@ -557,11 +556,10 @@
     if ('@Model.GetAnswer("NewToIKEA")' == 'New Hire') {
         
         $(".globalmobility").hide();
-        
-        
+               
     }
 
-    if (!('@Model.GetAnswer("IBAN2")' === "")) {
+    if (!('@Model.GetAnswer("IBAN2")' == "")) {
         $(".SecondBank").show();
         $("#addBankButton").hide();
     }
@@ -576,7 +574,7 @@
     };
 
 
-    document.getElementById('Payee').value = '@Model.GetAnswer("FirstName") @Model.GetAnswer("LastName")';
-    document.getElementById('Payee2').value = '@Model.GetAnswer("FirstName") @Model.GetAnswer("LastName")';
+    document.getElementById('Payee').value = $('#FirstName').val() + ' ' + $('#LastName').val();
+    document.getElementById('Payee2').value = $('#FirstName').val() + ' ' + $('#LastName').val();
 
 </script>

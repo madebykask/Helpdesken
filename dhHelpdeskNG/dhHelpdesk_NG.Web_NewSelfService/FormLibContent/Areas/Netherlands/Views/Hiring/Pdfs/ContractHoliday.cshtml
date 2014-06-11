@@ -50,7 +50,7 @@
             </tr>
         </table>
         <br />
-        <p style="text-align: justify; font-family: Verdana; font-size: 11px;">
+        <p style="text-align: left;font-family: Verdana; font-size: 11px;">
             Hierna te noemen vakantiekracht, wordt een arbeidsovereenkomst afgesloten waarvan de voorwaarden als volgt luiden:
                 <br />
             <br />
@@ -111,13 +111,13 @@
             for (int i = 0; i < list.Count; i++)
             { 
             <br />                                        
-            <p style="text-align: justify; font-family: Verdana; font-size: 11px; padding-left: 20px; padding-right: 50px;">@(i + 1). @Html.Raw(list[i].Text)</p>
+            <p style="text-align: left;font-family: Verdana; font-size: 11px; padding-left: 20px; padding-right: 50px;">@(i + 1). @Html.Raw(list[i].Text)</p>
                 if (list[i].SubList != null && list[i].SubList.Count > 0)
                 {
                     foreach (var item in list[i].SubList)
                     {
             <br />
-            <p style="text-align: justify; font-family: Verdana; font-size: 11px; padding-left: 20px; padding-right: 50px;">@item.Text </p>
+            <p style="text-align: left;font-family: Verdana; font-size: 11px; padding-left: 20px; padding-right: 50px;">@item.Text </p>
                     }
                 }
             }

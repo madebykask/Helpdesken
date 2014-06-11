@@ -72,13 +72,13 @@
     <status value="60">
         <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#documents,#globalview</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#documents,#globalview</readOnlyTabs>
-        <readOnlyFields>BusinessUnit,Department</readOnlyFields>
+        <readOnlyFields></readOnlyFields>
         <actions>
         </actions>
     </status>
     <status value="70">
         <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</readOnlyTabs>
-        <readOnlyFields>BusinessUnit,Department</readOnlyFields>
+        <readOnlyFields></readOnlyFields>
     </status>
 </state>

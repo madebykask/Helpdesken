@@ -252,10 +252,10 @@
                         <h4>@Model.Translate("Bank Account Details")</h4>
                     </td>
                 </tr>
-                <tr>
+@*                <tr>
                     <td class="tdstrong">@Model.Label("BankType")</td>
                     <td>@Model.Element("BankType")</td>
-                </tr>
+                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("Payee")</td>
                     <td>@Model.Element("Payee")</td>
@@ -281,9 +281,14 @@
                     <td>@Model.Element("PaymentCurrency")</td>
                 </tr>
 
-                <tr class="SecondBank">
+@*                <tr class="SecondBank">
                     <td class="tdstrong">@Model.Label("BankType2")</td>
                     <td>@Model.Element("BankType2")</td>
+                </tr>*@
+                <tr class="SecondBank">
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Second Bank Account Details")</h4>
+                    </td>
                 </tr>
                 <tr class="SecondBank">
                     <td class="tdstrong">@Model.Label("Payee2")</td>
@@ -514,9 +519,14 @@
 
     }
 
-
-    $(".SecondBank").hide();
-
+    
+    if (!('@Model.GetAnswer("IBAN2")' === "")) {
+        $(".SecondBank").show();
+        $("#addBankButton").hide();
+    }
+    else {
+        $(".SecondBank").hide();
+    }
 
     document.getElementById('addBank').onclick = function () {
         $(".SecondBank").show();

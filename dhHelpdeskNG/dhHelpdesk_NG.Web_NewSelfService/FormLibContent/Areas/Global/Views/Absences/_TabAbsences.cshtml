@@ -239,5 +239,71 @@
         end.hide();
     }).data('datepicker');
     $('#date_AbsenceEndsOn').on("keydown keypress keyup", false);
+
+    // Absence 2 
+    var start2 = $('#date_AbsenceStartFrom2').datepicker({
+        onRender: function (date) {
+            return '';
+        }
+    }).on('changeDate', function (ev) {
+
+        futureNotice.hide();
+
+        if (ev.date.valueOf() < now.valueOf())
+            futureNotice.show();
+
+        if (ev.date.valueOf() > end2.date.valueOf()) {
+            var newDate = new Date(ev.date);
+            newDate.setDate(newDate.getDate() + 1);
+            end2.setValue(newDate);
+            $('#AbsenceEndsOn2').val('');
+        }
+        end2.update();
+        start.hide();
+    }).data('datepicker');
+
+    var end2 = $('#date_AbsenceEndsOn2').datepicker({
+        onRender: function (date) {
+            return date.valueOf() <= start2.date.valueOf() ? 'disabled' : '';
+        }
+    }).on('changeDate', function (ev) {
+
+        end2.hide();
+    }).data('datepicker');
+    $('#date_AbsenceEndsOn2').on("keydown keypress keyup", false);
+
+    // Absence 3 
+    var start3 = $('#date_AbsenceStartFrom3').datepicker({
+        onRender: function (date) {
+            return '';
+        }
+    }).on('changeDate', function (ev) {
+
+        futureNotice.hide();
+
+        if (ev.date.valueOf() < now.valueOf())
+            futureNotice.show();
+
+        if (ev.date.valueOf() > end3.date.valueOf()) {
+            var newDate = new Date(ev.date);
+            newDate.setDate(newDate.getDate() + 1);
+            end3.setValue(newDate);
+            $('#AbsenceEndsOn3').val('');
+        }
+        end2.update();
+        start.hide();
+    }).data('datepicker');
+
+    var end3 = $('#date_AbsenceEndsOn3').datepicker({
+        onRender: function (date) {
+            return date.valueOf() <= start3.date.valueOf() ? 'disabled' : '';
+        }
+    }).on('changeDate', function (ev) {
+
+        end3.hide();
+    }).data('datepicker');
+    $('#date_AbsenceEndsOn3').on("keydown keypress keyup", false);
+
+
     
 </script>

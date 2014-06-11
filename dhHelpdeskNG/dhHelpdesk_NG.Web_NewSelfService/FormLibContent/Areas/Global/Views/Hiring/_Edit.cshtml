@@ -2,12 +2,12 @@
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
 
-@using (Html.BeginForm("edit", "hiring", FormMethod.Post, new { area = "Global", novalidate = "novalidate" }))
+@using(Html.BeginForm("edit", "hiring", new { id = Model.Contract.Id }, FormMethod.Post, new { area = "Global", novalidate = "novalidate" }))
 {   
     <span style="display: none;" id="narrowDownInit"></span>
-    @Html.Partial("_GlobalNavigation", Model)
+     @Html.Partial("_GlobalNavRev", Model)
     <div class="container containeralignright">
-        @Html.Partial("_CurrentUser")
+        @Html.Partial("_FormInfo", Model)
         @Html.Partial("_ErrorMessage", Model)
         <ul class="nav nav-tabs">
             @if(Model.VisibleTab("#servicerequestdetails"))
@@ -15,10 +15,10 @@
                 <li class="active @(Model.TabHasError("#servicerequestdetails") ? "error" : "")">
                     <a href="#servicerequestdetails">@Model.Translate("Service Request Details")</a></li>
             }
-            @if(Model.VisibleTab("#employment"))
+            @if (Model.VisibleTab("#OrganisationalAssignment"))
             {
-                <li class="@(Model.TabHasError("#employment") ? "error" : "")">
-                    <a href="#employment">@Model.Translate("Organisational Assignment")</a></li>
+                <li class="@(Model.TabHasError("#OrganisationalAssignment") ? "error" : "")">
+                    <a href="#OrganisationalAssignment">@Model.Translate("Organisational Assignment")</a></li>
             }
             @if(Model.VisibleTab("#payment"))
             {
@@ -41,11 +41,11 @@
                 <div class="tab-content">
                     @if(Model.VisibleTab("#servicerequestdetails"))
                     {
-                        @Html.Partial("_TabContract", Model)
+                        @Html.Partial("_TabServiceRequestDetails", Model)
                     }
-                    @if(Model.VisibleTab("#employment"))
+                    @if (Model.VisibleTab("#OrganisationalAssignment"))
                     {
-                        @Html.Partial("_TabEmployment", Model)
+                        @Html.Partial("_TabOrganisationalAssignment", Model)
                     }
                     @if(Model.VisibleTab("#payment"))
                     {

@@ -3,7 +3,7 @@
 @using ECT.FormLib.Models;
 
 @{
-    ViewBag.Title = Model.Translate("Global") + " - " + Model.Translate("Service Request Details");
+    ViewBag.Title = Model.Translate("Netherlands") + " - " + Model.Translate("Service Request Details");
 }
 @section Script {
     <script type="text/javascript">
@@ -16,7 +16,7 @@
 
      @Html.Partial("_Validate", Model)
 }
-@using (Html.BeginForm("new", "VoluntaryDeductions", FormMethod.Post, new { area = "Global", novalidate = "novalidate" }))
+@using (Html.BeginForm("new", "VoluntaryDeductions", FormMethod.Post, new { area = "ntherlands", novalidate = "novalidate" }))
 {
     @Html.Partial("_GlobalNavigation", Model)
     <div class="container containeralignright">

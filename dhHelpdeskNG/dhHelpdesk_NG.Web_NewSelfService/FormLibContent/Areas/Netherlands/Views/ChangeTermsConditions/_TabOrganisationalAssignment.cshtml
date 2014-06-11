@@ -133,9 +133,9 @@
                 </tr>
                 <tr>
                     <td class="tdstrong" colspan="2">
-                        <h4>@Model.Translate("Country Specifics")</h4>
+                        <h4>@Model.Translate("Apprentice education")</h4>
                     </td>
-                </tr>
+                </tr>                
                 <tr>
                     <td class="tdstrong">@Model.Label("NameOfSchool")</td>
                     <td>@Model.Element("NameOfSchool")</td>
@@ -186,6 +186,8 @@
 
     function selectIndexChangeEmploymentCategory() {
         if (this.options[this.selectedIndex].value == 'Permanent') {
+            $('#date_ContractEndDate').datepicker("destroy");
+            $('#date_ContractEndDate').addClass("disabled");
             document.getElementById("ContractEndDate").disabled = true;
             document.getElementById("date_ContractEndDate").className = document.getElementById("date_ContractEndDate").className + " disabled";
 
@@ -210,9 +212,11 @@
         document.getElementById('ReportsToLineManager').onchange = selectIndexChangeLineManagertoTECApprover;
 
 
-        function selectIndexChangeBusinessUnit() {
+        function selectIndexChangeBusinessUnittoPrimarySite() {
+
             document.getElementById('PrimarySite').value = document.getElementById('NewBusinessUnit').value;
+
         }
-        document.getElementById('NewBusinessUnit').onchange = selectIndexChangeBusinessUnit;
+        document.getElementById('NewBusinessUnit').onchange = selectIndexChangeBusinessUnittoPrimarySite;
 
 </script>

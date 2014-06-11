@@ -1,10 +1,9 @@
 ﻿@model ECT.FormLib.Models.FormModel
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
-
 <div class="tab-pane" id="documents">
-   
-
+@if(Model.GetAnswer("BusinessUnit") != "IKEA Competence B.V.")
+    {
     <div class="span12">
         <table class="table-striped">
             <thead>
@@ -13,12 +12,8 @@
                     </th>
                     <th>@Model.Translate("Type")
                     </th>
-                    <th>
-                        @Model.Translate("Printed by")
+                  <th>&nbsp;
                     </th>
-                    @*<th>
-                        @Model.Translate("Contract concluded on")
-                    </th>*@
                     <th>&nbsp;
                     </th>
                 </tr>
@@ -27,7 +22,7 @@
                 <tr>
                     <td>@Model.Translate("Termination")</td>
                     <td>pdf</td>
-                    <td>@Model.GetAnswer("Appendix1")</td>
+                    <td>&nbsp;</td>
                     <td>
                         <a href="@Url.Action("print", "TerminationComplete", new
                                 {
@@ -39,6 +34,8 @@
                     </td>
                 </tr>
             </tbody>
+                
         </table>
     </div>    
+    }
 </div>

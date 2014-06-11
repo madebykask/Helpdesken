@@ -26,6 +26,7 @@
         @Html.Partial("_ErrorMessage", Model)    
         <ul class="nav nav-tabs">
             <li class="active"><a href="#ServiceRequestDetails">@Model.Translate("Service Request Details")</a></li>
+            <li><a href="#Personal">@Model.Translate("Personal Information")</a></li>
             
         </ul>
         <div class="content">
@@ -34,10 +35,10 @@
                                                
                         @Html.Partial("_TabServiceRequestDetails", Model)                                     
                      
-                                              
+                        @Html.Partial("_TabPersonal", Model)                      
                 </div>
             </div>
         </div>
     </div>
-    @*<input type="hidden" id="activeTab" name="activeTab" value="@Model.ActiveTab" />*@    
+    <input type="hidden" id="activeTab" name="activeTab" value="@Model.ActiveTab" />    
 }

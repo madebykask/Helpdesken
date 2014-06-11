@@ -5,7 +5,7 @@
   <!ENTITY state SYSTEM "Templates/ChangeTermsConditionsState.xml">
 ]>
 
-<form id="45" customerId="28">
+<form id="45" guid="2F8F6175-337B-4552-B854-8CED49BE9796" customerId="28">
   &languages;
   &regexs;
   &state;

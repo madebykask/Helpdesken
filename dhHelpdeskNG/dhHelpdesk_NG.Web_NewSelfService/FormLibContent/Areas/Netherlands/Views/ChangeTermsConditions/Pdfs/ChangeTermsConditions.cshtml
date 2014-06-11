@@ -7,65 +7,65 @@
     Layout = null;
 }
 
-@functions{
-
-public static string GetLetter(int value)
-    {
-        //skickar in Count från sublist, därför plus 1
-        value++;
-
-        string[] alpha2 = new string[5];
-
-        alpha2[0] = "a";
-        alpha2[1] = "b";
-        alpha2[2] = "c";
-        alpha2[3] = "d";
-        alpha2[4] = "e";
-
-        return "." + alpha2[value].ToString() + ". ";
-   }
-}
-
 <!DOCTYPE html>
 <html>
 
 <body>
     <div>
+    @*     <br />
+       
+
+        Version 0.7 (Remove before Test)
+
+
+        DEBUG  
+          <text> <br />****************</text>
         <br />
-  @*      <text>*********</text>
-            @Model.Contract.EmployeeNumber*@
 
+          NewPosition: @Model.GetAnswer("NewPosition") <br />
+        BusinessUnit: @Model.GetAnswer("BusinessUnit") <br />
+        NewBusinessUnit: @Model.GetAnswer("NewBusinessUnit") <br />
+        EmploymentCategory: @Model.GetAnswer("EmploymentCategory") <br />
 
-        <text>*********</text>
+        
 
+        <text><br />****************</text>*@
+      
+  
           <table style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
-            <tr>
-                <td style="text-align: right;">@Model.Contract.FirstName @Model.Contract.Surname</td>
-            </tr>
-            <tr>
-                <td style="text-align: right;">@Model.GetAnswer("PermanentAddressLine1") @Model.GetAnswer("PermanentAddressLine2") @Model.GetAnswer("PermanentAddressLine3")</td>
-            </tr>
-            <tr>
-                <td style="text-align: right;">@Model.GetAnswer("PermanentPostalCode") @Model.GetAnswer("PermanentCity")</td>
-            </tr>
-        </table>
+              <tr>
+                  <td style="text-align: right;">@Model.Contract.FirstName @Model.Contract.Surname</td>
+              </tr>
+              <tr>
+                  <td style="text-align: right;">@Model.GetAnswer("PermanentAddressLine1") @Model.GetAnswer("PermanentAddressLine2") @Model.GetAnswer("PermanentAddressLine3")</td>
+              </tr>
+              <tr>
+                  <td style="text-align: right;">@Model.GetAnswer("PermanentPostalCode") @Model.GetAnswer("PermanentCity")</td>
+              </tr>
+          </table>
+          <br />
+         <p style="text-align: left; font-family: Verdana; font-size: 11px;">
 
-          Amsterdam, @string.Format(new System.Globalization.CultureInfo("nl-NL"), "{0:dd MMM yyyy}", DateTime.Now)<br />
+         @Model.Department.HeadOfDepartmentCity, @string.Format(new System.Globalization.CultureInfo("nl-NL"), "{0:d MMM yyyy}", DateTime.Now)<br />
         <br />
 
         Betreft: wijziging arbeidsovereenkomst
-        <br /> <br />
+        <br />
+        <br />
 
         Beste @Model.Contract.FirstName,
-        <br /> <br />
+        <br />
+        <br />
 
         Hierbij bevestigen wij je het volgende.
-        <br /> <br />
+        <br />
+        <br />
 
         Per @Model.GetAnswer("ChangeValidFrom") zullen de volgende wijzigingen in jouw arbeidsovereenkomst plaatsvinden:
-         <br /> 
+         <br />
 
-    
+             </p>
+     
         @{
             var list = new List<PdfListItem>();
             var pdfList = new List<PdfListItem>();
@@ -79,17 +79,21 @@ public static string GetLetter(int value)
             // **** Applicable if OA9 Job Title (Local Language translation) changes
             string text1 = "Je zal werkzaam zijn in de functie van {0} bij IKEA {1}. Deze functie is ingedeeld in functieschaal {2}";
 
-            list.Add(new PdfListItem { Text = string.Format(text1, Model.Translate(Model.GetAnswer("JobTitle")), Model.GetAnswer("BusinessUnit"), Model.GetAnswer("PayScaleLevel")) });
+            list.Add(new PdfListItem { Text = string.Format(text1, Model.Translate(Model.GetAnswer("LocalJobTitle")), Model.GetAnswer("BusinessUnit"), Model.GetAnswer("PayScaleLevel")) });
 
             // **** Applicable if additionally OA10 is "New Position for VAP store?" for units OA3: Store Amsterdam 088 or Store Heerlen 089 or Store Barendrecht 274
-            pdfList = new List<PdfListItem>();
 
-            string text1a = "De bovenstaande functie is specifiek voor de vestiging {0} en valt buiten de kaders van het functiegebouw van IKEA B.V. Op het moment dat VAPS constructie van IKEA {0} vervalt en IKEA {0} weer een reguliere vestiging wordt, zal dit consequenties hebben voor deze functie. Met jou zal dan moeten worden gesproken over herplaatsing in een andere functie behorende bij het functiegebouw van IKEA B.V.";
+            if (Model.GetAnswer("NewPosition") == "New Position for VAP store?" || (Model.GetAnswer("NewBusinessUnit") == "Store Amsterdam 088" | Model.GetAnswer("NewBusinessUnit") == "Store Heerlen 089" | Model.GetAnswer("NewBusinessUnit") == "Store Barendrecht 274"))
+            {
+             //   pdfList = new List<PdfListItem>();
 
-            pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + GetLetter(pdfList.Count - 1) + text1a, @Model.GetAnswer("BusinessUnit")) });
+                string text1a = "De bovenstaande functie is specifiek voor de vestiging {0} en valt buiten de kaders van het functiegebouw van IKEA B.V. Op het moment dat VAPS constructie van IKEA {0} vervalt en IKEA {0} weer een reguliere vestiging wordt, zal dit consequenties hebben voor deze functie. Met jou zal dan moeten worden gesproken over herplaatsing in een andere functie behorende bij het functiegebouw van IKEA B.V.";
 
-            // **** lägg till i sublist - kolla värdet!
-            list[list.Count - 1].SubList = pdfList;
+                list.Add(new PdfListItem { Text = string.Format(text1a, Model.GetAnswer("NewBusinessUnit")) });
+
+                //// **** lägg till i sublist - kolla värdet!
+                //list[list.Count - 1].SubList = pdfList;
+            }
 
 
             //2
@@ -127,30 +131,89 @@ public static string GetLetter(int value)
 
             // 8a Values from drop down field PM.CS.15:
             //sätts ovan? eller i ul?
+
+           // pdfList = new List<PdfListItem>();
+
+            string text8a = Model.GetAnswer("Category");
+
+            list.Add(new PdfListItem { Text = text8a });
+
+
+            ////lägg till i sublist (vet att b alltid kommer läggas till så behöver inte kolla null
+            //list[list.Count - 1].SubList = pdfList;
+
+            
             
           //  Type of car
-            
-          
-            
-            
+       //   PayScaleLevel
+
+       //FORTFARANDE OTYDLIGT!
+
+            // 8b Depending on choices from drop down in PM.CS.16 ( Type of car)
+            string text8b = "????";
+            list.Add(new PdfListItem { Text = text8b});
+
+            //Applicable if OA12 is "Permanent"
+            if (Model.GetAnswer("EmploymentCategory") == "Permanent")
+            {
+                string text9 = "Gemiddeld ben je {0} uur per week werkzaam volgens rooster, conform CAO. Je zal werkzaam zijn als {1}. In de bijlage vind je een toelichting op je nieuwe salarisbetaling.";
+
+                list.Add(new PdfListItem { Text = string.Format(text9, Model.GetAnswer("ContractedHours"), Model.GetAnswer("EmploymentCategory")) });
+
+            }
+            //Applicable if OA12 is any other than "Permanent"
+            else
+            {
+                string text10 = "Gemiddeld ben je {0} uur per week werkzaam volgens rooster, conform CAO. Deze urenaanpassing is tijdelijk en duurt tot en met {1}. In deze periode zal je werkzaam zijn als {2}. Na deze datum is je contract voor {3} uur per week weer van kracht.";
+                list.Add(new PdfListItem { Text = string.Format(text10, Model.GetAnswer("ContractedHours"), Model.GetAnswer("ChangeValidTo"), Model.GetAnswer("EmploymentCategory"), Model.GetAnswer("PreviousContractHours")) });
             }
 
-        BasicPayAmount: @Model.GetAnswer("BasicPayAmount")<br />
-        BasicPay: @Model.GetAnswer("BasicPay")<br />
+            //Applicable if PM1 changes
+            string text11 = "Je behoort tot de categorie {0} in plaats van {1}. Deze wijziging heeft plaatsgevonden in overleg met de afdeling HR van je vestiging. In de bijlage vind je een toelichting op je salarisstrook.";
+
+            list.Add(new PdfListItem { Text = string.Format(text11, Model.GetAnswer("PayrollCategory"), Model.GetAnswer("PayrollCategoryOldData")) });
+            
+            //Applicable if OA12 changes from 'Temporary' to 'Temporary';
+            string text12 = "Je contract voor bepaalde tijd wordt verlengd. Deze overeenkomst gaat in op {0} en loopt tot en met {1}.<br />Partijen zijn gerechtigd om de arbeidsovereenkomst tussentijds op te zeggen met inachtneming van de wettelijke opzegtermijn.";
+            list.Add(new PdfListItem { Text = string.Format(text12, Model.GetAnswer("ChangeValidFrom"), Model.GetAnswer("ChangeValidTo")) });
+
+            //13. Applicable if OA12 changes from "Temporary" to "Permanent"
+            string text13 = "Je contract voor bepaalde tijd wordt omgezet in een arbeidsovereenkomst voor onbepaalde tijd. Deze overeenkomst gaat in op {0}.<br />We hebben een korte vragenlijst toegevoegd, we willen je vragen deze in te vullen. Het beantwoorden van deze vragen is niet van invloed op jouw dienstverband en de gegeven informatie zal vertrouwelijk behandeld worden. Deze vragenlijst is alleen bedoeld voor het eventueel verkrijgen van subsidiemogelijkheden bij het UWV voor IKEA als werkgever en heeft dan ook geen gevolgen voor jou.";
+            list.Add(new PdfListItem { Text = string.Format(text13, Model.GetAnswer("ChangeValidFrom")) });
 
 
-          @if (list.Count > 1)
+            //13a. Additionally applicable if a co-worker has a residence permit entitling to engage in employment in the Netherlands. If OA.CS.12.2 is yes.
+            string text13a = "Graag willen we je er op wijzen dat medewerkers die op basis van een verblijfsvergunning in Nederland verblijven en bij wie arbeid (tijdelijk) is toegestaan, verplicht zijn om bij iedere wijziging in hun verblijfsstatus (verblijfsvergunning) en/of werkstatus (werkvergunning) IKEA hierover te informeren.";
+            text13a += brText;
+            
+            pdfList = new List<PdfListItem>();
+
+            
+            pdfList.Add(new PdfListItem { Text = text13a });
+
+
+            //lägg till i sublist (vet att b alltid kommer läggas till så behöver inte kolla null
+            list[list.Count - 1].SubList = pdfList;
+
+            
+            
+       }
+
+
+
+
+        @if (list.Count > 1)
         {
             for (int i = 0; i < list.Count; i++)
             { 
             <br />                                        
-            <p style="text-align: justify; font-family: Verdana; font-size: 11px; padding-left: 10px; padding-right: 50px;">@(i + 1). @Html.Raw(list[i].Text)</p>
+            <p style="text-align: left; font-family: Verdana; font-size: 11px; padding-left: 10px; padding-right: 50px;">@*@(i + 1).*@ &bull; @Html.Raw(list[i].Text)</p>
                 if (list[i].SubList != null && list[i].SubList.Count > 0)
                 {
                     foreach (var item in list[i].SubList)
                     {
             <br />
-            <p style="text-align: justify; font-family: Verdana; font-size: 11px; padding-left: 10px; padding-right: 50px;">@item.Text </p>
+            <p style="text-align: left; font-family: Verdana; font-size: 11px; padding-left: 20px; padding-right: 50px;">&bull; @Html.Raw(item.Text) </p>
                     }
                 }
             }
@@ -163,11 +226,15 @@ public static string GetLetter(int value)
             }
         }
 
-        <br />
- 
-        <endpage/>
+
+          <p style="text-align: left; font-family: Verdana; font-size: 11px;">
+            De overige arbeidsvoorwaarden die voor jou op grond van jouw reeds bestaande arbeidsovereenkomst gelden, blijven onveranderd van toepassing. Mocht je het met één of meerdere bepalingen uit de wijziging in je arbeidsovereenkomst niet eens zijn, dan ontvangen wij je reactie graag schriftelijk binnen 7 (zeven) kalenderdagen.
+
+<br /><br />Graag ontvangen wij één exemplaar, met daarop je handtekening, voor akkoord retour. Deze kan je in de bijgevoegde envelop terugsturen.
+    </p>
+    <endpage />
     </div>
-    
+
 
 </body>
 </html>

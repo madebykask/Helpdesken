@@ -18,8 +18,8 @@
            <br />
             <br />
         </p>
-        <p style="text-align: justify; font-family: Verdana; font-size: 11px; padding-top: 30px;">
-            Tussen IKEA B.V., hierna te noemen de werkgever, en
+        <p style="text-align: left;font-family: Verdana; font-size: 11px; padding-top: 30px;">
+            Tussen IKEA Nederland B.V., hierna te noemen IKEA, 
             <br />
             <br />
         </p>
@@ -57,7 +57,7 @@
             </tr>
         </table>
         <br />
-        <p style="text-align: justify; font-family: Verdana; font-size: 11px;">
+        <p style="text-align: left;font-family: Verdana; font-size: 11px;">
             Hierna te noemen de stagiair,<br />
             <br />
             Verklaren als volgt te zijn overeengekomen:<br />
@@ -72,7 +72,7 @@
             var brText = "<br /><br />";
 
             //1
-            string text1 = "Dat IKEA de stagiair in de gelegenheid zal stellen in samenhang met zijn/haar opleiding praktische ervaringen op te doen met betrekking tot het werk in de volgende bedrijfsafdeling(en): {0} in de vestiging {1}, tijdens de periode {2} tot en met {3},gedurende {4} uur per week, met uitzon¬dering van de dagen of gedeelten van dagen dat er in de onder¬neming niet wordt gewerkt.";
+            string text1 = "Dat IKEA de stagiair in de gelegenheid zal stellen in samenhang met zijn/haar opleiding praktische ervaringen op te doen met betrekking tot het werk in de volgende bedrijfsafdeling(en): {0} in de vestiging {1}, tijdens de periode {2} tot en met {3}, gedurende {4} uur per week, met uitzondering van de dagen of gedeelten van dagen dat er in de onderneming niet wordt gewerkt.";
 
             list.Add(new PdfListItem { Text = string.Format(text1, Model.GetAnswer("Department"), Model.GetAnswer("BusinessUnit"), Model.GetAnswer("ContractStartDate"), Model.GetAnswer("ContractEndDate"), Model.GetAnswer("ContractedHours")) });
     
@@ -94,7 +94,7 @@
             list.Add(new PdfListItem { Text = "De stagiair verbindt zich om zowel tijdens de duur der stage als ook na afloop daarvan aan derden geen mededelingen te doen betreffende bijzonderheden van de IKEA organisatie." });
 
             //7
-            list.Add(new PdfListItem { Text = "Een stage overeenkomst kan op initiatief en met overeenstem¬ming van IKEA of de stagiair en de vertegenwoordiger van de school, worden verbroken, verlengd of bekort." });
+            list.Add(new PdfListItem { Text = "Een stage overeenkomst kan op initiatief en met overeenstemming van IKEA of de stagiair en de vertegenwoordiger van de school, worden verbroken, verlengd of bekort." });
 
 
             //8
@@ -114,13 +114,13 @@
             for (int i = 0; i < list.Count; i++)
             { 
             <br />                                        
-            <p style="text-align: justify; font-family: Verdana; font-size: 11px; padding-left: 20px; padding-right: 50px;">@(i + 1). @Html.Raw(list[i].Text)</p>
+            <p style="text-align: left;font-family: Verdana; font-size: 11px; padding-left: 20px; padding-right: 50px;">@(i + 1). @Html.Raw(list[i].Text)</p>
                 if (list[i].SubList != null && list[i].SubList.Count > 0)
                 {
                     foreach (var item in list[i].SubList)
                     {
             <br />
-            <p style="text-align: justify; font-family: Verdana; font-size: 11px; padding-left: 20px; padding-right: 50px;">@item.Text </p>
+            <p style="text-align: left;font-family: Verdana; font-size: 11px; padding-left: 20px; padding-right: 50px;">@item.Text </p>
                     }
                 }
             }

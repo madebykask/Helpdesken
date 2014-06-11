@@ -1,12 +1,10 @@
 ﻿@model ECT.FormLib.Models.FormModel
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
-
 @functions{
-    public string GetContract()
+    public string GetContract(string absenceNr)
     {
-
-        switch (Model.GetAnswer("AbsenceType").Trim())
+        switch (Model.GetAnswer("AbsenceType" + absenceNr).Trim())
         {
             case "Parental leave":
                 return "ParentalLeave";
@@ -21,51 +19,55 @@
                 return "UnpaidLeave";
             case "Emergency leave":
                 return "EmergencyLeave";
-
             default:
                 return "";
         }
-
-
     }
 }
-
-
 <div class="tab-pane" id="documents">
-    <div class="span12">
-        <table class="table-striped">
-            <thead>
-                <tr>
-                    <th>@Model.Translate("Document")
-                    </th>
-                    <th>@Model.Translate("Type")
-                    </th>
-                    <th>
-                        @Model.Translate("Printed by")
-                    </th>
-                    @*<th>
-                        @Model.Translate("Contract concluded on")
-                    </th>*@
-                    <th>&nbsp;
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>@Model.GetAnswer("AbsenceType")</td>
-                    <td>pdf</td>
-                    <td>@Model.GetAnswer(GetContract())</td>
-                    <td>
-                        <a href="@Url.Action("print", "Absences", new
+    @if (Model.GetAnswer("BusinessUnit") != "IKEA Competence B.V.")
+    {
+        <div class="span12">
+            <table class="table-striped">
+                <thead>
+                    <tr>
+                        <th>@Model.Translate("Document")
+                        </th>
+                        <th>@Model.Translate("Type")
+                        </th>
+                        <th>&nbsp;
+                        </th>
+                        <th>&nbsp;
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 1; i <= int.Parse(Model.GetAnswer("AbsencesMulti")); i++)
+                    {
+                        string absenceNr = "";
+
+                        if (i > 1)
+                        {
+                            absenceNr = i.ToString();
+                        }
+                        <tr>
+                            <td>@Model.GetAnswer("AbsenceType" + absenceNr)</td>
+                            <td>pdf</td>
+                            <td>&nbsp;</td>
+                            <td>
+                                <a href="@Url.Action("print", "Absences", new
                                 {
-                                    id = GetContract(),
+                                    id = GetContract(absenceNr),
                                     caseId = Model.Contract.Id,
                                     path = Path.Combine(Path.GetDirectoryName(Model.FormXmlPath), Path.GetFileNameWithoutExtension(Model.FormXmlPath)),
-                                    userId = FormLibSessions.User.UserId
+                                    userId = FormLibSessions.User.UserId,
+                                    absenceNr = i
                                 })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@Model.Translate("Print")</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
 </div>

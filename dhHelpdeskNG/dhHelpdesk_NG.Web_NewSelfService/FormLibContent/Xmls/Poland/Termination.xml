@@ -9,7 +9,7 @@
     <!ENTITY pre_district_community SYSTEM "Templates/Predefined_District_Community.xml">
 ]>
 
-<form id="23" customerId="26">
+<form id="23" guid="FFD55F8B-BE93-48D7-AC30-C9178BE5D531" customerId="26">
     &languages;
     &regexs;
     &state;

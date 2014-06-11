@@ -323,6 +323,11 @@
                     <td>@Model.Element("AccountNumber2")</td>
                 </tr>*@
                 <tr class="SecondBank">
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Second Bank Account Details")</h4>
+                    </td>
+                </tr>
+                <tr class="SecondBank">
                     <td class="tdstrong">@Model.Label("IBAN2")</td>
                     <td>@Model.Element("IBAN2")</td>
                 </tr>
@@ -571,6 +576,6 @@
     };
 
 
-    document.getElementById('Payee').value = '@Model.GetAnswer("FirstName") @Model.GetAnswer("LastName")';
-    document.getElementById('Payee2').value = '@Model.GetAnswer("FirstName") @Model.GetAnswer("LastName")';
+    document.getElementById('Payee').value = $('#FirstName').val() + ' ' + $('#LastName').val();
+    document.getElementById('Payee2').value = $('#FirstName').val() + ' ' + $('#LastName').val();
 </script>

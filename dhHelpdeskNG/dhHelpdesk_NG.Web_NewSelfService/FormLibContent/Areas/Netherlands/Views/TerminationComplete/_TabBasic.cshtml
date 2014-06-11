@@ -4,7 +4,8 @@
 
 <div class="tab-pane" id="Basic">
     <div class="span12">
-        <table class="table">       
+        <table class="table">
+            <tbody>       
             <tr>
                 <td class="tdstrong">@Model.Label("BasicTerminationType")</td>
                 <td>
@@ -45,6 +46,7 @@
                 <td>
                     @Model.Element("UsingCompanyFitness")</td>
             </tr>
+                </tbody>
         </table>
     </div>
 </div>
@@ -59,22 +61,66 @@
 
     document.getElementById('BasicTerminationType').onchange = selectIndexChangeTerminationType;
 
-    function changedLastDayOfEmployment()
-    {
-        debugger;
-        var noticeHiringDate = $('#notice_HiringDate');
-        var hiringdate = new Date(document.getElementById('LastDayOfEmployment').value);
-        var startDate = new Date();
-        startDate.setHours(0, 0, 0, 0);
-        if (hiringdate.valueOf() < startDate.valueOf()) {
-            noticeHiringDate.show();
-        }
-        else {
-            noticeHiringDate.hide();
-        }
-     }
-    
+    var noticeHiringDate = $('#notice_HiringDate');
+    var nowTemp = new Date();
+    var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
 
-    document.getElementById('LastDayOfEmployment').onchange = changedLastDayOfEmployment;
+    var lastDay = $('#date_LastDayOfEmployment').not(".disabled").datepicker({
+        onRender: function (date) {
+            return '';
+        }
+    }).on('changeDate', function (ev) {
+
+        noticeHiringDate.hide();
+
+        if (ev.date.valueOf() < now.valueOf())
+            noticeHiringDate.show();       
+    }).data('datepicker');
+
+
+    $('#LastDayOfEmployment').change(function () {
+        var lastDayOfEmployment = $('#LastDayOfEmployment').val();
+        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+        var dlastDayOfEmployment = APIGlobal.DateTime.parseDate(lastDayOfEmployment, format);
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+        noticeHiringDate.hide();
+        if (dlastDayOfEmployment.valueOf() < now.valueOf())
+            noticeHiringDate.show();
+    });
+
+
+    //function changedLastDayOfEmployment() {
+    //    var noticeHiringDate = $('#notice_HiringDate');
+
+    //    var hiringdate = new Date(document.getElementById('LastDayOfEmployment').value);
+    //    var startDate = new Date();
+    //    startDate.setHours(0, 0, 0, 0);
+    //    if (hiringdate.valueOf() > startDate.valueOf()) {
+    //        noticeHiringDate.show();
+    //    } else {
+    //        noticeHiringDate.hide();
+    //    }
+    //}
+
+    //document.getElementById('LastDayOfEmployment').onchange = changedLastDayOfEmployment;
+
+
+    function selectIndexChangeProbationPeriod() {
+        var probitionEndDate = document.getElementById('ProbationEndDate');
+        if ((this.options[this.selectedIndex].value == 'Not Applicable') || (this.options[this.selectedIndex].value == 'No')) {
+            probitionEndDate.disabled = true;
+        } else {
+            probitionEndDate.disabled = false;
+            var validFrom = document.getElementById('ChangeValidFrom');
+            var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+            var date = APIGlobal.DateTime.parseDate(validFrom.value, format);
+            date.setMonth(date.getMonth() + 2);
+
+            probitionEndDate.value = APIGlobal.DateTime.formatDate(date, format);
+        }
+    }
+
+
 
 </script>

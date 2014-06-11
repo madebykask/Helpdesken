@@ -6,7 +6,7 @@
     <!ENTITY pre_termination_reason SYSTEM "Templates/Predefined_TerminationReason.xml">
 ]>
 
-<form id="51" customerId="29">
+<form id="51" guid="9726B3D4-8D1C-4A65-A0BB-BC9817581D5C" customerId="29">
     &languages;
     &regexs;
     &state;
@@ -46,7 +46,7 @@
             <element type="text" name="PermanentAddressLine2" label="Address line 2"></element>
             <element type="text" name="PermanentAddressLine3" label="Address line 3"></element>
             <element type="text" name="PermanentPostalCode" label="Postal code" mandatory="1">
-                <regex inherit="postcode" message="" pattern=""></regex>
+                
             </element>
             <element type="text" name="PermanentCity" label="City" mandatory="1"></element>
         </tab>

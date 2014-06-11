@@ -6,7 +6,7 @@
     <!ENTITY pre_company_unit SYSTEM "Templates/Predefined_Company_Unit.xml">
 ]>
 
-<form id="24" customerId="26">
+<form id="24" guid="684B54B9-43D0-4514-8E96-C76A46E8AA01" customerId="26">
     &languages;
     &regexs;
     &state;

@@ -148,7 +148,7 @@
 
             var nowTemp = new Date();
             var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-            var endDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate() + 3, 0, 0, 0, 0);
+            var endDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate() + 2, 0, 0, 0, 0);
 
             $('#date_ProcessBeforeDate').not(".disabled").datepicker(
             {
@@ -156,7 +156,7 @@
                     return ev.valueOf() >= endDate.valueOf() || ev.valueOf() < now.valueOf() ? 'disabled' : '';
                 }
             });
-            $("#date_ProcessBeforeDate").on("keydown keypress keyup", false);
+            //$("#date_ProcessBeforeDate").on("keydown keypress keyup", false);
             
         }
         else {
@@ -167,7 +167,7 @@
                 }
             });
 
-            document.getElementById('ProcessBeforeDate').onkeypress = function () { return true; }
+            //document.getElementById('ProcessBeforeDate').onkeypress = function () { return true; }
         }
     });
 
@@ -187,26 +187,27 @@
         document.getElementById('GlobalHRID').disabled = true;
     }
 
-    function changedHiringDate()
-    {
-        var noticeHiringDate = $('#notice_HiringDate');
-        var noticeHiringDateWrong = $('#notice_HiringDateWrong');
-        var hiringdate = new Date(document.getElementById('ContractStartDate').value);
-        var startDate = new Date();
-        startDate.setHours(0, 0, 0, 0);
-        if (!(hiringdate.getDate() === 1 || hiringdate.getDate() === 15)) {
+    var noticeHiringDate = $('#notice_HiringDate');
+    var noticeHiringDateWrong = $('#notice_HiringDateWrong');
+
+    $('#ContractStartDate').change(function () {
+        var startDate = $('#ContractStartDate').val();
+        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+        var dstartDate = APIGlobal.DateTime.parseDate(startDate, format);
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+        noticeHiringDate.hide();
+        noticeHiringDateWrong.hide();
+        if (!(dstartDate.getDate() === 1 || dstartDate.getDate() === 15)) 
             noticeHiringDateWrong.show();
-        } else {
-            noticeHiringDateWrong.hide();
-        }
-        if (hiringdate.valueOf() < startDate.valueOf()) {
+
+        if (dstartDate.valueOf() < now.valueOf())       
             noticeHiringDate.show();
-        } else {
-            noticeHiringDate.hide();
-        }
-    }
 
-    document.getElementById('ContractStartDate').onchange = changedHiringDate;
-
-
+        if (!(dstartDate.getDate() === 1 || dstartDate.getDate() === 15) && (dstartDate.valueOf() < now.valueOf())) {
+            noticeHiringDateWrong.show();
+            noticeHiringDate.show();
+        } 
+    });
+  
 </script>

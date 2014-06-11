@@ -80,3 +80,36 @@
     <input type="hidden" id="CustomerId" value="@Model.CustomerId" />
     
 </div>
+
+
+<script>
+    $('#ServiceRequestPriority').change(function () {
+        $('#date_ProcessBeforeDate').datepicker("destroy");
+
+        if ($(this).val() == 'Urgent') {
+
+            var nowTemp = new Date();
+            var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+            var endDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate() + 1, 0, 0, 0, 0);
+
+            $('#date_ProcessBeforeDate').not(".disabled").datepicker(
+            {
+                onRender: function (ev) {
+                    return ev.valueOf() >= endDate.valueOf() || ev.valueOf() < now.valueOf() ? 'disabled' : '';
+                }
+            });
+
+            //$("#date_ProcessBeforeDate").on("keydown keypress keyup", false);
+        }
+        else {
+            $('#date_ProcessBeforeDate').not(".disabled").datepicker(
+            {
+                onRender: function (ev) {
+                    return '';
+                }
+            });
+
+            //document.getElementById('ProcessBeforeDate').onkeypress = function () { return true; }
+        }
+    });
+</script>

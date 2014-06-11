@@ -12,17 +12,18 @@
     public string GetPayRollCategoryText(string PayrollCategory)
     {
 
-        if (PayrollCategory == "Juvenile Montly" | PayrollCategory == "MT/Dep/SM")
+        if (PayrollCategory == "Juvenile Monthly" | PayrollCategory == "MT/Dep/SM")
         {
-            return "Monthly";
+            return Model.Translate("Monthly", Model.Language).ToLower();
         }
         else if (PayrollCategory == "Juvenile Hourly")
         {
-            return "Hourly";
+
+            return Model.Translate("Hourly", Model.Language).ToLower();
         }
         else
         {
-            return PayrollCategory;
+            return Model.Translate(PayrollCategory, Model.Language).ToLower();
         }
     }
 
@@ -42,6 +43,11 @@
 
         return "." + alpha2[value].ToString() + ". ";
     }
+
+    public static string FirstLetterToUpperCase(string text)
+    {
+        return char.ToUpper(text[0]) + text.Substring(1);
+    }
     
 }
 
@@ -54,7 +60,7 @@
             <strong>ARBEIDSOVEREENKOMST</strong><br />
             <br />
         </p>
-        <p style="text-align: justify; font-family: Verdana; font-size: 11px;">
+        <p style="text-align: left;font-family: Verdana; font-size: 11px;">
             Tussen IKEA B.V., hierna te noemen de werkgever, en
             <br />
             <br />
@@ -88,7 +94,7 @@
                 <td style="text-align: left;">: @Model.GetAnswer("DateOfBirth")</td>
             </tr>
         </table>
-        <p style="text-align: justify; font-family: Verdana; font-size: 11px;">
+        <p style="text-align: left;font-family: Verdana; font-size: 11px;">
             <br />
             Hierna te noemen werknemer, wordt een arbeidsovereenkomst afgesloten waarvan de voorwaarden als volgt luiden:     
            <br />
@@ -163,8 +169,8 @@
             //8
             if (Model.GetAnswer("ContractType") == "Full Time")
             {
-                string text8 = "Het salaris bedraagt € {0} bruto per maand.";
-                list.Add(new PdfListItem { Text = string.Format(text8, @Model.GetAnswer("BasicPay")) });
+                string text8 = "Het salaris bedraagt € {0} bruto per maand. {1} De salarisbetalingen vinden telkens aan het einde van de kalendermaand plaats.";
+                list.Add(new PdfListItem { Text = string.Format(text8, @Model.GetAnswer("BasicPay"), brText) });
             }
 
             //8 START
@@ -180,11 +186,30 @@
 
             pdfList = new List<PdfListItem>();
 
-
-            if (Model.GetAnswer("TypeOfBenefit") == "Company Car")
+            if (Model.GetAnswer("TypeOfBenefit") == "Company Car" | Model.GetAnswer("TypeOfBenefit2") == "Company Car" | Model.GetAnswer("TypeOfBenefit3") == "Company Car")
             {
-                string text8b = list.Count.ToString()  + GetLetter(pdfList.Count)  + "Werknemer heeft recht op gebruik van een lease-auto categorie {0}. {1}";
-                pdfList.Add(new PdfListItem { Text = string.Format(text8b, @Model.GetAnswer("Category"), @Model.GetAnswer("TypeOfCar")) });
+                string text8b = "Werknemer heeft recht op gebruik van een lease-auto categorie {0}. {1}";
+
+                //Need to do this check because you can add 3 benefits
+
+                if (Model.GetAnswer("TypeOfBenefit") == "Company Car")
+                {
+                    string TypeOfCar = Model.Translate(Model.GetAnswer("TypeOfCar").ToLower(), Model.Language);
+                    pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + GetLetter(pdfList.Count) + text8b, Model.GetAnswer("Category"), FirstLetterToUpperCase(TypeOfCar)) });
+                }
+
+                if (Model.GetAnswer("TypeOfBenefit2") == "Company Car")
+                {
+                    string TypeOfCar2 = Model.Translate(Model.GetAnswer("TypeOfCar2").ToLower(), Model.Language);
+                    pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + GetLetter(pdfList.Count) + text8b, Model.GetAnswer("Category2"), FirstLetterToUpperCase(TypeOfCar2)) });
+                }
+
+
+                if (Model.GetAnswer("TypeOfBenefit3") == "Company Car")
+                {
+                    string TypeOfCar3 = Model.Translate(Model.GetAnswer("TypeOfCar3").ToLower(), Model.Language);
+                    pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + GetLetter(pdfList.Count) + text8b, Model.GetAnswer("Category3"), FirstLetterToUpperCase(TypeOfCar3)) });
+                }
 
             }
             else
@@ -202,13 +227,40 @@
 
             //8d
 
-            if (Model.GetAnswer("TypeOfBenefit") == "Salary Revision")
+            if (Model.GetAnswer("TypeOfBenefit") == "Salary Revision" | Model.GetAnswer("TypeOfBenefit2") == "Salary Revision" | Model.GetAnswer("TypeOfBenefit3") == "Salary Revision")
             {
-                if (!string.IsNullOrEmpty(Model.GetAnswer("NextRevisionDate")))
+                //Need to do this check because you can add 3 benefits
+
+                string text8d = "Eerste salarisrevisie: {0}.";
+
+                if (Model.GetAnswer("TypeOfBenefit") == "Salary Revision")
                 {
-                    string text8d = list.Count.ToString() + GetLetter(pdfList.Count) + "Eerste salarisrevisie: {0}.";
-                    pdfList.Add(new PdfListItem { Text = string.Format(text8d, @Model.GetAnswer("NextRevisionDate")) });
+                    if (!string.IsNullOrEmpty(Model.GetAnswer("NextRevisionDate")))
+                    {
+
+                        pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + GetLetter(pdfList.Count) + text8d, Model.GetAnswer("NextRevisionDate")) });
+
+                    }
                 }
+
+                if (Model.GetAnswer("TypeOfBenefit2") == "Salary Revision")
+                {
+                    if (!string.IsNullOrEmpty(Model.GetAnswer("NextRevisionDate2")))
+                    {
+
+                        pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + GetLetter(pdfList.Count) + text8d, Model.GetAnswer("NextRevisionDate2")) });
+                    }
+                }
+
+                if (Model.GetAnswer("TypeOfBenefit3") == "Salary Revision")
+                {
+                    if (!string.IsNullOrEmpty(Model.GetAnswer("NextRevisionDate3")))
+                    {
+
+                        pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + GetLetter(pdfList.Count) + text8d, Model.GetAnswer("NextRevisionDate3")) });
+                    }
+                }
+
             }
 
             //lägg till i sublist (vet att b alltid kommer läggas till så behöver inte kolla null
@@ -219,7 +271,7 @@
             //8 END
 
             //9
-            string text9 = "Op deze arbeidsovereenkomst  is het pensioenreglement van toepassing als bedoeld in artikel 10 van de IKEA CAO.";
+            string text9 = "Op deze arbeidsovereenkomst is het pensioenreglement van toepassing als bedoeld in artikel 10 van de IKEA CAO.";
             list.Add(new PdfListItem { Text = text9 });
 
 
@@ -264,10 +316,20 @@
             //12 END
 
             //13
-            if (Model.GetAnswer("PayScaleLevel") != "15")
+            int PayScaleLevel = 0;
+
+            if (Model.GetAnswer("PayScaleLevel").Length > 0 && Model.GetAnswer("PayScaleLevel") != "N/A")
             {
-                list.Add(new PdfListItem { Text = "Werknemer gaat akkoord met een mogelijk volgende loopbaanstap welke uitzending naar het buitenland zou kunnen betekenen. Plaatsing geschiedt in overleg met werknemer." });
+                PayScaleLevel = int.Parse(Model.GetAnswer("PayScaleLevel"));
+
+                if (PayScaleLevel >= 14)
+                {
+                    list.Add(new PdfListItem { Text = "Werknemer gaat akkoord met een mogelijk volgende loopbaanstap welke uitzending naar het buitenland zou kunnen betekenen. Plaatsing geschiedt in overleg met werknemer." });
+                }
+                
             }
+
+          
             
         }
 
@@ -476,13 +538,13 @@
                 for (int i = 0; i < list.Count; i++)
                 { 
             <br />                                        
-        <p style="text-align: justify; font-family: Verdana; font-size: 11px; padding-left: 20px; padding-right: 50px;">@(i + 1). @Html.Raw(list[i].Text)</p>
+        <p style="text-align: left;font-family: Verdana; font-size: 11px; padding-left: 20px; padding-right: 50px;">@(i + 1). @Html.Raw(list[i].Text)</p>
                     if (list[i].SubList != null && list[i].SubList.Count > 0)
                     {
                         foreach (var item in list[i].SubList)
                         {
         <br />
-        <p style="text-align: justify; font-family: Verdana; font-size: 11px; padding-left: 20px; padding-right: 50px;">@item.Text </p>
+        <p style="text-align: left;font-family: Verdana; font-size: 11px; padding-left: 20px; padding-right: 50px;">@item.Text </p>
                         }
                     }
                 }
@@ -494,14 +556,14 @@
         <p style="font-family: Verdana; font-size: 11px;">@Html.Raw(list[i])</p>
                 }
             }
-
+    
         
 @*        <newpage />*@
 
 
         
 
-     @*   <p class="lastparagraph" style="text-align: justify; font-family: Verdana; font-size: 11px;">
+     @*   <p class="lastparagraph" style="text-align: left;font-family: Verdana; font-size: 11px;">
             <br />
             <br />
             A. De werknemer verklaart hiermee voorafgaande aan ondertekening van de arbeidsovereenkomst kennis te hebben genomen van de IKEA CAO, de IKEA Group Code of Conduct en de regels in Mijn IKEA en verder met het bovenstaande akkoord te gaan.
@@ -509,6 +571,166 @@
             <br />
         </p>*@
         <endpage />
+
+
+
+        
+       @* @if (Model.GetAnswer("BusinessUnit") == "Store Amsterdam 088")
+        {
+            <newpage />
+            <text>
+        
+        <div>
+        <p style="font-family: Verdana; font-size: 11px;">
+            <strong>Toelichting op salarisbetaling bij IKEA</strong><br />
+            <br />
+        </p>
+        <p style="font-family: Verdana; font-size: 11px;">
+            Bij IKEA maken we onderscheid tussen de salarisbetaling van een uurloon parttimer en een maandloon parttimer/fulltimer. 
+         <br />
+            <br />
+        </p>
+        <p style="font-family: Verdana; font-size: 11px;">
+            <strong>Uurloon parttimers</strong> krijgen maandelijks de gewerkte uren van de vorige maand uitbetaald. Alleen in je eerste maand van je dienstverband ontvang je salaris gebaseerd op je contracturen; je ontvangt dan salaris over uren die je nog niet gewerkt hebt. Pas in de daaropvolgende maand kan IKEA het aantal daadwerkelijke gewerkte uren plus toeslagen en reiskosten uit je eerste gewerkte maand berekenen en uitbetalen.
+         <br />
+            <br />
+        </p>
+        <p style="font-family: Verdana; font-size: 11px;">
+            <strong>Maandloonparttimers/fulltimers</strong> ontvangen de contracturen van de <u><i>lopende maand</i></u> + reiskosten en eventuele toeslagen van de <u><i>voorgaande maand</i></u>. 
+             <br />
+            <br />
+        </p>
+        <p style="font-family: Verdana; font-size: 11px;">
+            <strong>Wijziging contracturen</strong><br />
+            Als je contracturen wijzigen (je gaat meer of minder uren per week werken), zal je salaris bij je eerstvolgende salarisbetaling ook wijzigen. Ga je meer werken dan worden de extra contracturen op de eerstvolgende salarisbetaling uitbetaald, maar ga je minder werken dan worden de verlaagde contracturen juist in mindering gebracht. 
+             <br />
+            <br />
+            Hieronder kan je in 2 voorbeeldberekeningen zien hoe de uitbetaling van je contracturen wordt berekend:
+                <br />
+            <br />
+        </p>
+        <p style="font-family: Verdana; font-size: 11px;">
+            <strong>Uurloon parttimer met contractwijziging per 1 mei</strong>
+            <br />
+       
+        <table border="1" cellpadding="5">
+            <tr border="0">
+                <th border="0"></th>
+                <th border="0" align="center">april</th>
+                <th border="0" align="center">mei</th>
+                <th border="0" align="center">juni</th>
+            </tr>
+            <tr>
+                <td border="0">Contracturen</td>
+                <td align="right" valign="bottom">34,67</td>
+                <td align="right" valign="bottom">43,33</td>
+                <td align="right" valign="bottom">43,33</td>
+            </tr>
+            <tr>
+                <td border="0">Uurloon</td>
+                <td align="right" valign="bottom">€ 10,00</td>
+                <td align="right" valign="bottom">€ 10,00</td>
+                <td align="right" valign="bottom">€ 10,00</td>
+            </tr>
+            <tr>
+                <td border="0">"Basis" salaris</td>
+                <td align="right" valign="bottom"><strong>€ 346,70</strong></td>
+                <td align="right" valign="bottom"><strong>€ 433,30</strong></td>
+                <td align="right" valign="bottom"><strong>€ 433,30</strong></td>
+            </tr>
+            <tr height="30" border="0">
+                <td border="0" height="30" color="white">_</td>
+                <td border="0" height="30" color="white" align="right" valign="bottom"></td>
+                <td border="0" height="30" color="white" align="right" valign="bottom"></td>
+                <td border="0" height="30" color="white" align="right" valign="bottom"></td>
+            </tr>
+            <tr>
+                <td border="0" valign="top">Gewerkte uren huidige maand</td>
+                <td align="right" valign="bottom">36,00</td>
+                <td align="right" valign="bottom">41,00</td>
+                <td align="right" valign="bottom">45,00</td>
+            </tr>
+            <tr>
+                <td border="0">Minder/Meer Uren vorige maand (<i>gewerkte uren vorige maand -/- contracturen vorige maand</i>)</td>
+                <td align="right" valign="bottom">(39,67-34,67=)<br />
+                    5,00</td>
+                <td align="right" valign="bottom">(36-34,67=)<br />
+                    1,33</td>
+                <td align="right" valign="bottom" color="red">(41-43,33=)<br />
+                    2,33-</td>
+            </tr>
+            <tr>
+                <td border="0">Uurloon</td>
+                <td align="right" valign="bottom">€ 10,00</td>
+                <td align="right" valign="bottom">€ 10,00</td>
+                <td align="right" valign="bottom">€ 10,00</td>
+            </tr>
+
+            <tr>
+                <td border="0">Minder/meer salaris</td>
+                <td align="right" valign="bottom"><strong>€ 50,00</strong></td>
+                <td align="right" valign="bottom"><strong>€ 13,30</strong></td>
+                <td align="right" valign="bottom" color="red"><strong>€ 23,30-</strong></td>
+            </tr>
+            <tr>
+                <td border="0">Uitbetalingsbedrag huidige maand</td>
+                <td align="right" valign="bottom"><strong>€ 396,70</strong></td>
+                <td align="right" valign="bottom"><strong>€ 446,60</strong></td>
+                <td align="right" valign="bottom"><strong>€ 410,00</strong></td>
+            </tr>
+        </table>
+             </p>
+        <br />
+        <br />
+        <br />
+        <p style="font-family: Verdana; font-size: 11px;">
+            <strong>Maandloon parttimer/fulltimer met contractwijziging per 1 mei</strong>
+            <br />
+       
+        <table border="1" cellpadding="5">
+            <tr border="0">
+                <th border="0"></th>
+                <th border="0" align="center">april</th>
+                <th border="0" align="center">mei</th>
+                <th border="0" align="center">juni</th>
+            </tr>
+            <tr>
+                <td border="0">Contracturen</td>
+                <td align="right" valign="bottom">104,00</td>
+                <td align="right" valign="bottom">121,33</td>
+                <td align="right" valign="bottom">121,33</td>
+            </tr>
+            <tr>
+                <td border="0">Uurloon</td>
+                <td align="right" valign="bottom">€ 10,00</td>
+                <td align="right" valign="bottom">€ 10,00</td>
+                <td align="right" valign="bottom">€ 10,00</td>
+            </tr>
+            <tr>
+                <td border="0">"Basis" salaris</td>
+                <td align="right" valign="bottom"><strong>€ 1.040,00</strong></td>
+                <td align="right" valign="bottom"><strong>€ 1.213,30</strong></td>
+                <td align="right" valign="bottom"><strong>€ 1.213,30</strong></td>
+            </tr>
+            <tr>
+                <td border="0">Uitbetalingsbedrag<br />
+                    huidige maand</td>
+                <td align="right" valign="bottom"><strong>€ 1.040,00</strong></td>
+                <td align="right" valign="bottom"><strong>€ 1.213,30</strong></td>
+                <td align="right" valign="bottom"><strong>€ 1.213,30</strong></td>
+            </tr>
+        </table>
+             </p>
+      
+       
+    </div>
+        
+        
+        </text>
+            
+             <endpage />
+        }*@
+
     </div>
 </body>
 </html>

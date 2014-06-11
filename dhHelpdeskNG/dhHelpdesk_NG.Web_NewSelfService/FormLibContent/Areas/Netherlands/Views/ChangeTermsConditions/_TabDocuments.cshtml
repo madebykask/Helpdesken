@@ -4,7 +4,8 @@
 
 <div class="tab-pane" id="documents">
    
-
+    @if(Model.GetAnswer("BusinessUnit") != "IKEA Competence B.V.")
+    {
     <div class="span12">
         <table class="table-striped">
             <thead>
@@ -13,12 +14,8 @@
                     </th>
                     <th>@Model.Translate("Type")
                     </th>
-                    <th>
-                        @Model.Translate("Printed by")
+                    <th>&nbsp;
                     </th>
-                    @*<th>
-                        @Model.Translate("Contract concluded on")
-                    </th>*@
                     <th>&nbsp;
                     </th>
                 </tr>
@@ -27,7 +24,7 @@
                 <tr>
                     <td>@Model.Translate("ChangeTermsConditions")</td>
                     <td>pdf</td>
-                    <td>@Model.GetAnswer("ChangeTermsConditions")</td>
+                    <td>&nbsp;</td>
                     <td>
                         <a href="@Url.Action("print", "ChangeTermsConditions", new
                                 {
@@ -38,7 +35,41 @@
                                 })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@Model.Translate("Print")</a>
                     </td>
                 </tr>
+
+                 <tr>
+                    <td>@Model.Translate("Appendix1")</td>
+                    <td>pdf</td>
+                     <td>&nbsp;</td>
+                    <td>
+                        <a href="@Url.Action("print", "ChangeTermsConditions", new
+                                {
+                                    id = "Appendix1",
+                                    caseId = Model.Contract.Id,
+                                    path = Path.Combine(Path.GetDirectoryName(Model.FormXmlPath), Path.GetFileNameWithoutExtension(Model.FormXmlPath)),
+                                    userId = FormLibSessions.User.UserId
+                                })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@Model.Translate("Print")</a>
+                    </td>
+                </tr>
+
+                 <tr>
+                    <td>@Model.Translate("Appendix2")</td>
+                    <td>pdf</td>
+                     <td>&nbsp;</td>
+                    <td>
+                        <a href="@Url.Action("print", "ChangeTermsConditions", new
+                                {
+                                    id = "Appendix2",
+                                    caseId = Model.Contract.Id,
+                                    path = Path.Combine(Path.GetDirectoryName(Model.FormXmlPath), Path.GetFileNameWithoutExtension(Model.FormXmlPath)),
+                                    userId = FormLibSessions.User.UserId
+                                })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@Model.Translate("Print")</a>
+                    </td>
+                </tr>
             </tbody>
         </table>
-    </div>    
+    </div>  
+        
+    }  
 </div>
+
+

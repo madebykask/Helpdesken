@@ -2,12 +2,12 @@
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
 
-@using (Html.BeginForm("edit", "TerminationComplete", FormMethod.Post, new { area = "Netherlands", novalidate = "novalidate" }))
+@using (Html.BeginForm("edit", "TerminationComplete", new { id = Model.Contract.Id }, FormMethod.Post, new { area = "Netherlands", novalidate = "novalidate" }))
 {   
     <span style="display: none;" id="narrowDownInit"></span>
-    @Html.Partial("_GlobalNavigation", Model)
+    @Html.Partial("_GlobalNavRev", Model)
     <div class="container containeralignright">
-        @Html.Partial("_CurrentUser")
+        @Html.Partial("_FormInfo", Model)
         @Html.Partial("_ErrorMessage", Model)
         <ul class="nav nav-tabs">
             @if(Model.VisibleTab("#ServiceRequestDetails"))
@@ -33,7 +33,7 @@
             @if(Model.VisibleTab("#globalview"))
             {
                 <li class="@(Model.TabHasError("#globalview") ? "error" : "")">
-                    <a href="#globalview" data-url="@Url.Action("GetGlobalViewFields", new { caseId = Model.Contract.Id, formId = Model.FormId })">@Model.Translate("Global View")</a></li>
+                    <a href="#globalview" data-url="@Url.Action("GetGlobalViewFields", new { caseId = Model.Contract.Id, formGuid = Model.FormGuid })">@Model.Translate("Global View")</a></li>
             }         
         </ul>
         <div class="content">

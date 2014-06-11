@@ -4,23 +4,24 @@
 @using ECT.FormLib.Pdfs;
 @{
     Layout = null;
+    Model.Language = "nl";
 }
 
 @functions{
     public string GetPayRollCategoryText(string PayrollCategory)
     {
 
-        if (PayrollCategory == "Juvenile Montly" | PayrollCategory == "MT/Dep/SM")
+        if (PayrollCategory == "Juvenile Monthly" | PayrollCategory == "MT/Dep/SM")
         {
-            return "Monthly";
+            return Model.Translate("Monthly", Model.Language).ToLower();
         }
         else if (PayrollCategory == "Juvenile Hourly")
         {
-            return "Hourly";
+            return Model.Translate("Hourly", Model.Language).ToLower();
         }
         else
         {
-            return PayrollCategory;
+            return Model.Translate(PayrollCategory, Model.Language).ToLower();
         }
     }
 
@@ -38,7 +39,14 @@
         alpha2[4] = "e";
 
         return "." + alpha2[value].ToString() + ". ";
-   }
+    }
+
+    public static string FirstLetterToUpperCase(string text)
+    {
+
+        return char.ToUpper(text[0]) + text.Substring(1);
+    }
+   
 }
 
 <!DOCTYPE html>
@@ -84,13 +92,13 @@
 
         </table>
 
-        <p style="text-align: justify; font-family: Verdana; font-size: 11px;">
+        <p style="text-align: left; font-family: Verdana; font-size: 11px;">
             <br />
             Hierna te noemen werknemer, wordt een arbeidsovereenkomst afgesloten waarvan de voorwaarden als volgt luiden:<br />
             <br />
         </p>
 
-      
+
 
         @{
             var list = new List<PdfListItem>();
@@ -145,8 +153,8 @@
             //8
             if (Model.GetAnswer("ContractType") == "Full Time")
             {
-                string text8 = "Het salaris bedraagt € {0} bruto per maand.";
-                list.Add(new PdfListItem { Text = string.Format(text8, Model.GetAnswer("BasicPay")) });
+                string text8 = "Het salaris bedraagt € {0} bruto per maand. {1} De salarisbetalingen vinden telkens aan het einde van de kalendermaand plaats.";
+                list.Add(new PdfListItem { Text = string.Format(text8, Model.GetAnswer("BasicPay"), brText) });
             }
 
             //8 START
@@ -163,15 +171,35 @@
             pdfList = new List<PdfListItem>();
 
 
-            if (Model.GetAnswer("TypeOfBenefit") == "Company Car")
+            if (Model.GetAnswer("TypeOfBenefit") == "Company Car" | Model.GetAnswer("TypeOfBenefit2") == "Company Car" | Model.GetAnswer("TypeOfBenefit3") == "Company Car")
             {
-                string text8b = list.Count.ToString() + GetLetter(pdfList.Count) + "Werknemer heeft recht op gebruik van een lease-auto categorie {0}. {1}";
-                pdfList.Add(new PdfListItem { Text = string.Format(text8b, Model.GetAnswer("Category"), Model.GetAnswer("TypeOfCar")) });
+                string text8b =  "Werknemer heeft recht op gebruik van een lease-auto categorie {0}. {1}";
+
+                //Need to do this check because you can add 3 benefits
+
+                if (Model.GetAnswer("TypeOfBenefit") == "Company Car")
+                {
+                    string TypeOfCar = Model.Translate(Model.GetAnswer("TypeOfCar").ToLower(), Model.Language);
+                    pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + GetLetter(pdfList.Count) + text8b, Model.GetAnswer("Category"), FirstLetterToUpperCase(TypeOfCar)) });
+                }
+
+                if (Model.GetAnswer("TypeOfBenefit2") == "Company Car")
+                {
+                    string TypeOfCar2 = Model.Translate(Model.GetAnswer("TypeOfCar2").ToLower(), Model.Language);
+                    pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + GetLetter(pdfList.Count) + text8b, Model.GetAnswer("Category2"), FirstLetterToUpperCase(TypeOfCar2)) });
+                }
+
+
+                if (Model.GetAnswer("TypeOfBenefit3") == "Company Car")
+                {
+                    string TypeOfCar3 = Model.Translate(Model.GetAnswer("TypeOfCar3").ToLower(), Model.Language);
+                    pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + GetLetter(pdfList.Count) + text8b, Model.GetAnswer("Category3"), FirstLetterToUpperCase(TypeOfCar3)) });
+                }
 
             }
             else
             {
-                string text8b = list.Count.ToString() + GetLetter(pdfList.Count) +"De tegemoetkoming in de reiskosten wordt berekend conform de geldende IKEA CAO, artikel 29.";
+                string text8b = list.Count.ToString() + GetLetter(pdfList.Count) + "De tegemoetkoming in de reiskosten wordt berekend conform de geldende IKEA CAO, artikel 29.";
                 pdfList.Add(new PdfListItem { Text = text8b });
             }
 
@@ -180,16 +208,43 @@
             {
                 string text8c = list.Count.ToString() + GetLetter(pdfList.Count) + "Als tegemoetkoming in kosten voor representatie en telefoongebruik  ontvang je een algemene onkostenvergoeding van EUR 50,- bruto per maand. Dit is conform CAO artikel 28A.";
                 pdfList.Add(new PdfListItem { Text = text8c });
-           }
+            }
 
             //8d
-            if (Model.GetAnswer("TypeOfBenefit") == "Salary Revision")
+            if (Model.GetAnswer("TypeOfBenefit") == "Salary Revision" | Model.GetAnswer("TypeOfBenefit2") == "Salary Revision" | Model.GetAnswer("TypeOfBenefit3") == "Salary Revision")
             {
-                if (!string.IsNullOrEmpty(Model.GetAnswer("NextRevisionDate")))
+                //Need to do this check because you can add 3 benefits
+
+                string text8d =  "Eerste salarisrevisie: {0}.";
+
+                if (Model.GetAnswer("TypeOfBenefit") == "Salary Revision")
                 {
-                    string text8d = list.Count.ToString() + GetLetter(pdfList.Count) + "Eerste salarisrevisie: {0}.";
-                    pdfList.Add(new PdfListItem { Text = string.Format(text8d, Model.GetAnswer("NextRevisionDate")) });
+                    if (!string.IsNullOrEmpty(Model.GetAnswer("NextRevisionDate")))
+                    {
+
+                        pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + GetLetter(pdfList.Count) + text8d, Model.GetAnswer("NextRevisionDate")) });
+
+                    }
                 }
+
+                if (Model.GetAnswer("TypeOfBenefit2") == "Salary Revision")
+                {
+                    if (!string.IsNullOrEmpty(Model.GetAnswer("NextRevisionDate2")))
+                    {
+
+                        pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + GetLetter(pdfList.Count) + text8d, Model.GetAnswer("NextRevisionDate2")) });
+                    }
+                }
+
+                if (Model.GetAnswer("TypeOfBenefit3") == "Salary Revision")
+                {
+                    if (!string.IsNullOrEmpty(Model.GetAnswer("NextRevisionDate3")))
+                    {
+
+                        pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + GetLetter(pdfList.Count) + text8d, Model.GetAnswer("NextRevisionDate3")) });
+                    }
+                }
+
             }
 
 
@@ -215,7 +270,7 @@
             //11 START
             string text11 = "Op deze arbeidsovereenkomst zijn de van tijd tot tijd geldende IKEA CAO, de IKEA Group Code of Contact en de regels die zijn opgenomen in Mijn IKEA van toepassing. De IKEA CAO en de IKEA Group Code of Contact zijn te raadplegen op en downloaden via de internetsite <a href=\"http://www.ico-worker.com/nl\" target=\"_blank\" title=\"http://www.ico-worker.com/nl\" style=\"text-decoration: underline; color: blue;\">www.ico-worker.com/nl</a>. De inloggegevens voor deze site vind je in de bijgesloten brief. Op verzoek van de werknemer stuurt IKEA een digitale versie per e-mail of een geprinte versie per gewone post toe van de toepasselijke regels. Het boekje Mijn IKEA ontvang je tegelijk met deze arbeidsovereenkomst.";
 
-            
+
             if ((Model.GetAnswer("PayScaleType") == "IKEA NL CAO" | Model.GetAnswer("PayScaleType") == "IKEA NL geen CAO - out of scope") && ((Model.GetAnswer("PayScaleLevel") == "14" || Model.GetAnswer("PayScaleLevel") == "15")))
             {
                 text11 += brText + "Hoewel de IKEA CAO niet op deze arbeidsovereenkomst van toepassing is, worden de artikelen met de volgende onderwerpen uit de laatst overeengekomen IKEA CAO door ondertekening van deze arbeidsovereenkomst op de arbeidsovereenkomst van toepassing en worden die geacht daarvan onderdeel uit te maken, ook als de looptijd van deze CAO is verstreken en nog geen nieuwe CAO tot stand is gekomen:";
@@ -232,16 +287,27 @@
 
 
             text11 += brText + "De tussen haakjes vermelde artikelen verwijzen naar de desbetreffende bepalingen van de IKEA CAO zoals deze luidde ten tijde van het aangaan van de arbeidsovereenkomst. Indien een of meer van de bovengenoemde bepalingen of de nummering ervan in een latere IKEA CAO wijzigen, treden deze gewijzigde bepalingen in de plaats van die bepalingen.";
-            
+
             list.Add(new PdfListItem { Text = text11 });
+
+            //11
+            int PayScaleLevel = 0;
             
-            //11 END
             
-            if (Model.GetAnswer("PayScaleLevel") != "15")
+            
+            if (Model.GetAnswer("PayScaleLevel").Length > 0 && Model.GetAnswer("PayScaleLevel") != "N/A")
             {
-                string text12 = "Werknemer gaat akkoord met een mogelijk volgende loopbaanstap welke uitzending naar het buitenland zou kunnen betekenen. Plaatsing geschiedt in overleg met werknemer.";
-                list.Add(new PdfListItem { Text = text12 });
+                PayScaleLevel = int.Parse(Model.GetAnswer("PayScaleLevel"));
+
+                if (PayScaleLevel >= 14)
+                {
+                    string text12 = "Werknemer gaat akkoord met een mogelijk volgende loopbaanstap welke uitzending naar het buitenland zou kunnen betekenen. Plaatsing geschiedt in overleg met werknemer.";
+                    list.Add(new PdfListItem { Text = text12 });
+                }
+                
             }
+         
+
            
         }
 
@@ -250,13 +316,13 @@
             for (int i = 0; i < list.Count; i++)
             { 
             <br />                                        
-            <p style="text-align: justify; font-family: Verdana; font-size: 11px; padding-left: 20px; padding-right: 50px;">@(i + 1). @Html.Raw(list[i].Text)</p>
+            <p style="text-align: left; font-family: Verdana; font-size: 11px; padding-left: 20px; padding-right: 50px;">@(i + 1). @Html.Raw(list[i].Text)</p>
                 if (list[i].SubList != null && list[i].SubList.Count > 0)
                 {
                     foreach (var item in list[i].SubList)
                     {
             <br />
-            <p style="text-align: justify; font-family: Verdana; font-size: 11px; padding-left: 20px; padding-right: 50px;">@item.Text </p>
+            <p style="text-align: left; font-family: Verdana; font-size: 11px; padding-left: 20px; padding-right: 50px;">@item.Text </p>
                     }
                 }
             }
@@ -269,7 +335,7 @@
             }
         }
 
-      @*  <p style="text-align: justify; font-family: Verdana; font-size: 11px;">
+        @*  <p style="text-align: left; font-family: Verdana; font-size: 11px;">
             <br />
             <br />
            De werknemer verklaart hiermee voorafgaande aan ondertekening van de arbeidsovereenkomst kennis te hebben genomen van de IKEA CAO, de IKEA Group Code of Conduct en de regels in Mijn IKEA en verder met het bovenstaande akkoord te gaan.<br />
