@@ -18,10 +18,12 @@
                     <th>&nbsp;</th>
                 </tr>
             </thead>
+            @if (!string.IsNullOrEmpty(Model.GetAnswer("EmploymentCategory")))
+            {
             <tbody>
                 @Html.Partial("_Documents", Model)
             </tbody>
-             
+             }
         </table>
     </div>
     }

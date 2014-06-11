@@ -10,33 +10,35 @@
 
 <body>
 
-        <div>
-            <br />
-            <table style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
-                <tr>
-                    <td style="text-align: right;">@Model.GetAnswer("FirstName") @Model.GetAnswer("LastName")</td>
-                </tr>
-                <tr>
-                    <td style="text-align: right;">@Model.GetAnswer("PermanentAddressLine1") @Model.GetAnswer("PermanentAddressLine2") @Model.GetAnswer("PermanentAddressLine3")</td>
-                </tr>
-                <tr>
-                    <td style="text-align: right;">@Model.GetAnswer("PermanentPostalCode") @Model.GetAnswer("PermanentCity")</td>
-                </tr>
-            </table>
+    <div>
+        <br />
+        <table style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
+            <tr>
+                <td style="text-align: right;">@Model.GetAnswer("FirstName") @Model.GetAnswer("LastName")</td>
+            </tr>
+            <tr>
+                <td style="text-align: right;">@Model.GetAnswer("PermanentAddressLine1") @Model.GetAnswer("PermanentAddressLine2") @Model.GetAnswer("PermanentAddressLine3")</td>
+            </tr>
+            <tr>
+                <td style="text-align: right;">@Model.GetAnswer("PermanentPostalCode") @Model.GetAnswer("PermanentCity")</td>
+            </tr>
+        </table>
 
-            <p style="text-align: left; font-family: Verdana; font-size: 11px;">
-           
-                @if (!string.IsNullOrEmpty(Model.Department.HeadOfDepartmentCity))
+        <p style="text-align: left; font-family: Verdana; font-size: 11px;">
+            @if (Model.Department != null)
+            {
+                if (!string.IsNullOrEmpty(Model.Department.HeadOfDepartmentCity))
                 {
-
-           <text> @Model.Department.HeadOfDepartmentCity, </text>
+                <text> @Model.Department.HeadOfDepartmentCity, </text>
                 
-                } @string.Format(new System.Globalization.CultureInfo("nl-NL"), "{0:d MMM yyyy}", DateTime.Now)<br />
+                }
+            } @string.Format(new System.Globalization.CultureInfo("nl-NL"), "{0:d MMM yyyy}", DateTime.Now)<br />
             <br />
             Betreft: uitdiensttreding
             <br />
             <br />
-            Beste @Model.GetAnswer("FirstName"),<br /><br />
+            Beste @Model.GetAnswer("FirstName"),<br />
+            <br />
 
 
             @if (@Model.GetAnswer("BasicTerminationType") == "Resignation")
@@ -99,39 +101,39 @@
 
             We willen je vragen om op je laatste werkdag de eigendommen van IKEA in te leveren bij de vestiging @Model.GetAnswer("BusinessUnit"). Denk hierbij aan je bedrijfskleding (schoon en gestreken), je naambadge, je laptop en/of telefoon van IKEA, de sleutel van je kluisje en van het fietsenhok. Daarnaast vragen wij je om na je laatste werkdag je personeelspas en OV-abonnementspas (indien van toepassing) in de bijgevoegde retourenvelop terug te sturen. Na ontvangst van deze pas(sen), zullen wij in de maand  na je uitdiensttreding overgaan tot de eindafrekening van je salaris. In de daarop volgende maand zullen de eventuele vakantie-uren worden uitbetaald. In de bijlage vind je een toelichting op je laatste salarisbetalingen.
               <br />
-                <br />
+            <br />
 
-             @if (@Model.GetAnswer("BasicTerminationType") == "Retirement")
+            @if (@Model.GetAnswer("BasicTerminationType") == "Retirement")
             {
                 <text>
 
-            In jouw geval hoef je de personeelspas niet in te leveren, want (vroeg)gepensioneerden behouden gedurende hun hele leven de IKEA personeelspas en daarmee het recht op personeelskorting. Dit is conform CAO artikel 9F.
+                In jouw geval hoef je de personeelspas niet in te leveren, want (vroeg)gepensioneerden behouden gedurende hun hele leven de IKEA personeelspas en daarmee het recht op personeelskorting. Dit is conform CAO artikel 9F.
 
               <br />
                 <br />
                 </text>
             }
-  
-                 @if (@Model.GetAnswer("UsingCompanyFitness") == "Yes")
+
+            @if (@Model.GetAnswer("UsingCompanyFitness") == "Yes")
             {
                 <text>
-            Aangezien je gebruik maakt van Bedrijfsfitness zal met de eindafrekening van je salaris het resterende bedrag voor je abonnement worden verrekend. We verzoeken je om zelf je uitdiensttreding bij Bedrijfsfitness Nederland te melden. Voor meer informatie zie www.bedrijfsfitnessnederland.nl.
+                Aangezien je gebruik maakt van Bedrijfsfitness zal met de eindafrekening van je salaris het resterende bedrag voor je abonnement worden verrekend. We verzoeken je om zelf je uitdiensttreding bij Bedrijfsfitness Nederland te melden. Voor meer informatie zie www.bedrijfsfitnessnederland.nl.
             <br />
                 <br />
                 </text>
             }
-                @if (@Model.GetAnswer("Co-WorkerBeenEmployedFor2Months") == "Yes")
+            @if (@Model.GetAnswer("Co-WorkerBeenEmployedFor2Months") == "Yes")
             {
                 <text>
-            Tot slot willen we je wijzen op de mogelijkheid van waardeoverdracht van je pensioen naar een nieuwe werkgever. Informeer bij je nieuwe pensioenuitvoerder naar de procedure. Mocht je niet besluiten tot waardeoverdracht en je pensioenuitkering is kleiner dan € 100,- per jaar op je pensioendatum, dan zal STIP (Stichting IKEA Pensioenfonds) over twee jaar je pensioenaanspraken in één keer uitbetalen (dit noemen we afkoop). Zodra dit van toepassing is, zal je hiervoor een formulier ontvangen van onze pensioenuitvoerder om de gegevens te controleren. STIP zal je later informeren over het pensioen dat je tijdens je dienstverband bij IKEA hebt opgebouwd.
+                Tot slot willen we je wijzen op de mogelijkheid van waardeoverdracht van je pensioen naar een nieuwe werkgever. Informeer bij je nieuwe pensioenuitvoerder naar de procedure. Mocht je niet besluiten tot waardeoverdracht en je pensioenuitkering is kleiner dan € 100,- per jaar op je pensioendatum, dan zal STIP (Stichting IKEA Pensioenfonds) over twee jaar je pensioenaanspraken in één keer uitbetalen (dit noemen we afkoop). Zodra dit van toepassing is, zal je hiervoor een formulier ontvangen van onze pensioenuitvoerder om de gegevens te controleren. STIP zal je later informeren over het pensioen dat je tijdens je dienstverband bij IKEA hebt opgebouwd.
               <br />
                 <br />
                 </text>
             }
- </p> 
-            <p style="text-align: left; font-family: Verdana; font-size: 11px;">Graag ontvangen wij één exemplaar, met daarop je handtekening, voor akkoord retour. Deze kan je in de bijgevoegde envelop terugsturen.</p>
-       
-            <endpage />
-        </div>
+        </p>
+        <p style="text-align: left; font-family: Verdana; font-size: 11px;">Graag ontvangen wij één exemplaar, met daarop je handtekening, voor akkoord retour. Deze kan je in de bijgevoegde envelop terugsturen.</p>
+
+        <endpage />
+    </div>
 </body>
 </html>

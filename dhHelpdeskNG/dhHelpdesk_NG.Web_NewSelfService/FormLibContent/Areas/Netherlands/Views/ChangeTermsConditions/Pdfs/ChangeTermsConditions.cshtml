@@ -46,7 +46,14 @@
           <br />
          <p style="text-align: left; font-family: Verdana; font-size: 11px;">
 
-         @Model.Department.HeadOfDepartmentCity, @string.Format(new System.Globalization.CultureInfo("nl-NL"), "{0:d MMM yyyy}", DateTime.Now)<br />
+         @if (Model.Department != null)
+            {
+                if (!string.IsNullOrEmpty(Model.Department.HeadOfDepartmentCity))
+                {
+                <text> @Model.Department.HeadOfDepartmentCity, </text>
+                
+                }
+            } @string.Format(new System.Globalization.CultureInfo("nl-NL"), "{0:d MMM yyyy}", DateTime.Now)<br />
         <br />
 
         Betreft: wijziging arbeidsovereenkomst

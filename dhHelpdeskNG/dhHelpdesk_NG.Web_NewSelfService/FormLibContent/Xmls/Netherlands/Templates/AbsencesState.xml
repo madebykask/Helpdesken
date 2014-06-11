@@ -15,7 +15,7 @@
   </status>
   <!-- LM -->
   <status value="10">
-    <visibleTabs>#ServiceRequestDetails,#Absences</visibleTabs>
+    <visibleTabs>#ServiceRequestDetails,#Absences,#documents</visibleTabs>
     <readOnlyTabs></readOnlyTabs>
     <readOnlyFields>BusinessUnit,Department</readOnlyFields>
     <actions>
@@ -27,7 +27,7 @@
   </status>
   <!-- HRU -->
   <status value="20">
-    <visibleTabs>#ServiceRequestDetails,#Absences</visibleTabs>
+    <visibleTabs>#ServiceRequestDetails,#Absences,#documents</visibleTabs>
     <readOnlyTabs></readOnlyTabs>
     <readOnlyFields>BusinessUnit,Department</readOnlyFields>
     <actions>

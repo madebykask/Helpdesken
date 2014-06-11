@@ -3,7 +3,7 @@
 @using ECT.FormLib.Models;
 
 @{
-    ViewBag.Title = Model.Translate("Global") + " - " + Model.Translate("Service Request Details");
+    ViewBag.Title = Model.Translate("Global") + " - " + Model.Translate("Termination basic");
 }
 
 @section Validation {
@@ -27,6 +27,14 @@
         $(document).on('change', '#actionState', function (e) {
             var val = $(this).val();
             validate.run(val);
+        });
+
+        $(document).on('change', '#Company', function (e) {
+            e.preventDefault
+            if ($(this).val() === 'OR')
+                $('#WorkingTimeSchedule').val('equivalent');
+            else
+                $('#WorkingTimeSchedule').val('basic');
         });
 
     </script>

@@ -15,7 +15,7 @@
     </status>
     <!-- LM -->
     <status value="10">
-        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#documents</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
       <readOnlyFields>BusinessUnit,Department</readOnlyFields>
         <actions>
@@ -27,7 +27,7 @@
     </status>
     <!-- HRU -->
     <status value="20">
-        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#documents</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields>BusinessUnit,Department</readOnlyFields>
         <actions>
@@ -40,7 +40,7 @@
     </status>
     <!-- SSC -->
     <status value="30">
-        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#documents</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</readOnlyTabs>
         <readOnlyFields>BusinessUnit,Department</readOnlyFields>
         <actions>

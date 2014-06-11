@@ -42,6 +42,8 @@
                     </tr>
                 </thead>
                 <tbody>
+
+                   
                     @for (int i = 1; i <= int.Parse(Model.GetAnswer("AbsencesMulti")); i++)
                     {
                         string absenceNr = "";
@@ -50,6 +52,10 @@
                         {
                             absenceNr = i.ToString();
                         }
+
+                        if (!string.IsNullOrEmpty(Model.GetAnswer("AbsenceType" + absenceNr)))
+                    {
+
                         <tr>
                             <td>@Model.GetAnswer("AbsenceType" + absenceNr)</td>
                             <td>pdf</td>
@@ -65,6 +71,7 @@
                                 })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@Model.Translate("Print")</a>
                             </td>
                         </tr>
+                    }
                     }
                 </tbody>
             </table>

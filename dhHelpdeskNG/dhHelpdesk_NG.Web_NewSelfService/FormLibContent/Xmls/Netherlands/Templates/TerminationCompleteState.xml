@@ -16,7 +16,7 @@
     </status>
     <!-- LM -->
     <status value="10">
-        <visibleTabs>#ServiceRequestDetails</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#documents</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
       <readOnlyFields>BusinessUnit,Department</readOnlyFields>
         <actions>
@@ -28,7 +28,7 @@
     </status>
     <!-- HRU -->
     <status value="20">
-        <visibleTabs>#ServiceRequestDetails,#Basic,#Complete</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Basic,#Complete,#documents</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
       <readOnlyFields>BusinessUnit,Department</readOnlyFields>
         <actions>
@@ -44,7 +44,7 @@
     </status>
     <!-- SSC -->
     <status value="30">
-      <visibleTabs>#ServiceRequestDetails,#Basic,#Complete</visibleTabs>
+      <visibleTabs>#ServiceRequestDetails,#Basic,#Complete,#documents</visibleTabs>
       <readOnlyTabs>#ServiceRequestDetails,#Basic,#Complete</readOnlyTabs>
       <readOnlyFields>BusinessUnit,Department</readOnlyFields>
         <actions>

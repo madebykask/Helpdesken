@@ -35,7 +35,7 @@
           <element type="text" name="InductionStartTime" mandatory="1" label="Induction Start Time">
             <regex inherit="timestamp" pattern="" message=""></regex>
           </element>
-          <element type="select" name="LengthOfInductionInDays" mandatory="1" label="Length of induction in days" default="2 days">
+          <element type="select" name="LengthOfInductionInDays" mandatory="1" label="Length of Induction in days" default="2 days">
             <options>
               <option value=""></option>
               <option value="1 day">1 day</option>
@@ -4398,7 +4398,7 @@
               </options>
             </element>
           <element type="text" name="EmergencyContactNumber" label="Emergency contact number"></element>
-          <element type="text" name="EmergencyContactRelationship" label="Emergency Contact Relationship">
+          <element type="text" name="EmergencyContactRelationship" label="Emergency contact/relationship">
             <mandatoryIfNotEmpty name="EmergencyAddressLine1"></mandatoryIfNotEmpty>
           </element>
 
@@ -4767,7 +4767,7 @@
                 <option value="Zimbabwe">Zimbabwe</option>
               </options>
             </element>
-            <element type="text" name="EmployeeDocumentNo" label="Document No"></element>
+            <element type="text" name="EmployeeDocumentNo" label="Document No."></element>
             <element type="date" name="EmployeeDocumentIssueDate" label="Issue Date" format="dd.MM.yyyy">
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
@@ -5324,7 +5324,7 @@
                 <option value="Zimbabwe">Zimbabwe</option>
               </options>
             </element>
-            <element type="text" name="DependantsDocumentNo" label="Document No"></element>
+            <element type="text" name="DependantsDocumentNo" label="Document No."></element>
             <element type="date" name="DependantsDocumentIssueDate" label="Issue Date" format="dd.MM.yyyy">
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
@@ -6024,7 +6024,7 @@
               <option value="Work Permit">Work Permit</option>
             </options>
           </element>
-          <element type="typeahead-simple" source="1" name="DocumentCountryOfIssue" label="Country of Issue" >
+          <element type="typeahead-simple" source="1" name="DocumentCountryOfIssue" label="Country of issue" >
             <mandatoryIf name="DocumentType">VISA</mandatoryIf>
             
               <options>
@@ -6539,10 +6539,10 @@
               <option value="Zimbabwe">Zimbabwe</option>
             </options>
           </element>
-          <element type="text" name="DocumentNO" label="Document no.">
+          <element type="text" name="DocumentNO" label="Document No.">
             <mandatoryIf name="DocumentType">Passport</mandatoryIf>
           </element>
-          <element type="date" name="DocumentValidUntil" label="Document Valid Until" format="dd.MM.yyyy">
+          <element type="date" name="DocumentValidUntil" label="Document Valid Until:" format="dd.MM.yyyy">
             <regex inherit="date" pattern="" message=""></regex>
           </element>
 

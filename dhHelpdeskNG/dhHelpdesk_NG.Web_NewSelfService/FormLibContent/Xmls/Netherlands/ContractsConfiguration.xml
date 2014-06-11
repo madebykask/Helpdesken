@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Contracts>
-  <contract process="Hiring" id="ContractDutch" footerUse="true" barcodeUse="true" signatureUse="true" employeeSignatureTextUse="true"  cityDateUse="true">
+  <contract process="Hiring" id="ContractDutch" footerUse="true" barcodeUse="true" barcodeShowOnMinStateSecondaryId="50" signatureUse="true" employeeSignatureTextUse="true"  cityDateUse="true">
     <lastParagraphText>
       <![CDATA[De werknemer verklaart hiermee voorafgaande aan ondertekening van de arbeidsovereenkomst kennis te hebben genomen van de IKEA CAO, de IKEA Group Code of Conduct en de regels in Mijn IKEA en verder met het bovenstaande akkoord te gaan.
       ]]>
@@ -11,7 +11,7 @@
     <documentTypeCode><![CDATA[w101]]></documentTypeCode>
   </contract>
 
-  <contract process="Hiring" id="NetherlandsServiceOfficeContract" footerUse="true" barcodeUse="true" signatureUse="true" employeeSignatureTextUse="true"  cityDateUse="true">
+  <contract process="Hiring" id="NetherlandsServiceOfficeContract" footerUse="true" barcodeUse="true" barcodeShowOnMinStateSecondaryId="50" signatureUse="true" employeeSignatureTextUse="true"  cityDateUse="true">
     <lastParagraphText>
       <![CDATA[De werknemer verklaart hiermee voorafgaande aan ondertekening van de arbeidsovereenkomst kennis te hebben genomen van de IKEA CAO, de IKEA Group Code of Conduct en de regels in Mijn IKEA en verder met het bovenstaande akkoord te gaan.
       ]]>
@@ -28,7 +28,7 @@
     <documentTypeCode><![CDATA[w101]]></documentTypeCode>
   </contract>
 
-  <contract process="Hiring" id="ContractHoliday" footerUse="true" barcodeUse="true" signatureUse="false" employeeSignatureTextUse="true" cityDateUse="true">
+  <contract process="Hiring" id="ContractHoliday" footerUse="true" barcodeUse="true" barcodeShowOnMinStateSecondaryId="50" signatureUse="false" employeeSignatureTextUse="true" cityDateUse="true">
     <lastParagraphText>
       <![CDATA[De vakantiekracht verklaart hiermee voorafgaande aan ondertekening van de arbeidsovereenkomst kennis te hebben genomen van de IKEA CAO, de IKEA Group Code of Conduct en de regels in Mijn IKEA en verder met het bovenstaande akkoord te gaan.
       ]]>
@@ -45,7 +45,7 @@
     <documentTypeCode><![CDATA[w101]]></documentTypeCode>
   </contract>
 
-  <contract process="Hiring" id="NetherlandsApprenticeContract" footerUse="true" barcodeUse="true" signatureUse="false" employeeSignatureTextUse="true"  cityDateUse="true">
+  <contract process="Hiring" id="NetherlandsApprenticeContract" footerUse="true" barcodeShowOnMinStateSecondaryId="50" barcodeUse="true" signatureUse="false" employeeSignatureTextUse="true"  cityDateUse="true">
     <lastParagraphText></lastParagraphText>
     <employerSignatureText1>
       <![CDATA[Handtekening]]>
@@ -59,7 +59,7 @@
     <documentTypeCode><![CDATA[w101]]></documentTypeCode>
   </contract>
 
-  <contract process="Absences" id="EmergencyLeave" footerUse="true" barcodeUse="true" signatureUse="false" employeeSignatureTextUse="false" cityDateUse="false">
+  <contract process="Absences" id="EmergencyLeave" footerUse="true" barcodeUse="true" barcodeShowOnMinStateSecondaryId="40" signatureUse="false" employeeSignatureTextUse="false" cityDateUse="false">
     <lastParagraphText><![CDATA[We hopen je hiermee voldoende te hebben geïnformeerd.]]></lastParagraphText>
     <employerSignatureText1><![CDATA[Met vriendelijke groet,]]></employerSignatureText1>
     <employerSignatureText2><![CDATA[IKEA B.V. Nederland]]></employerSignatureText2>
@@ -67,7 +67,7 @@
     <documentTypeCode><![CDATA[w111]]></documentTypeCode>
   </contract>
 
-  <contract process="Absences" id="ParentalLeave" footerUse="true" barcodeUse="true" signatureUse="false" employeeSignatureTextUse="false" cityDateUse="false">
+  <contract process="Absences" id="ParentalLeave" footerUse="true" barcodeUse="true" barcodeShowOnMinStateSecondaryId="40" signatureUse="false" employeeSignatureTextUse="false" cityDateUse="false">
     <lastParagraphText><![CDATA[We hopen je hiermee voldoende geïnformeerd te hebben. Voor meer informatie over deze regeling verwijzen wij je naar ico-worker.com/nl of raadpleeg artikel 41B van de IKEA CAO.]]></lastParagraphText>
     <employerSignatureText1><![CDATA[Met vriendelijke groet,]]></employerSignatureText1>
     <employerSignatureText2><![CDATA[IKEA B.V. Nederland]]></employerSignatureText2>
@@ -75,7 +75,7 @@
     <documentTypeCode><![CDATA[w111]]></documentTypeCode>
   </contract>
 
-  <contract process="Absences" id="ShortTermCareLeave" footerUse="true" barcodeUse="true" signatureUse="false" employeeSignatureTextUse="false"  cityDateUse="false">
+  <contract process="Absences" id="ShortTermCareLeave" footerUse="true" barcodeUse="true" barcodeShowOnMinStateSecondaryId="40" signatureUse="false" employeeSignatureTextUse="false"  cityDateUse="false">
     <lastParagraphText><![CDATA[We hopen je hiermee voldoende te hebben geïnformeerd.]]></lastParagraphText>
     <employerSignatureText1><![CDATA[Met vriendelijke groet,]]></employerSignatureText1>
     <employerSignatureText2><![CDATA[IKEA B.V. Nederland]]></employerSignatureText2>
@@ -83,7 +83,7 @@
     <documentTypeCode><![CDATA[w111]]></documentTypeCode>
   </contract>
 
-  <contract process="Absences" id="UnpaidLeave" footerUse="true" barcodeUse="true" signatureUse="false" employeeSignatureTextUse="false" cityDateUse="false">
+  <contract process="Absences" id="UnpaidLeave" footerUse="true" barcodeUse="true" barcodeShowOnMinStateSecondaryId="40" signatureUse="false" employeeSignatureTextUse="false" cityDateUse="false">
     <lastParagraphText><![CDATA[We hopen je hiermee voldoende geïnformeerd te hebben. Voor meer informatie over deze regeling verwijzen wij je naar ico-worker.com/nl of raadpleeg de IKEA CAO.]]></lastParagraphText>
     <employerSignatureText1><![CDATA[Met vriendelijke groet,]]></employerSignatureText1>
     <employerSignatureText2><![CDATA[IKEA B.V. Nederland]]></employerSignatureText2>
@@ -91,7 +91,7 @@
     <documentTypeCode><![CDATA[w111]]></documentTypeCode>
   </contract>
 
-  <contract process="ChangeTermsConditions" id="ChangeTermsConditions" footerUse="true" barcodeUse="true" signatureUse="true" employeeSignatureTextUse="true"  cityDateUse="false">
+  <contract process="ChangeTermsConditions" id="ChangeTermsConditions" footerUse="true" barcodeUse="true" barcodeShowOnMinStateSecondaryId="40" signatureUse="true" employeeSignatureTextUse="true"  cityDateUse="false">
     <lastParagraphText>
       <![CDATA[We hopen je hiermee voldoende te hebben geïnformeerd. Als je nog vragen hebt kan je contact opnemen met het HR Service Centre, telefoonnummer: 050 - 316 8137 of e-mail: HRSCNL@IKEA.COM]]>
     </lastParagraphText>
@@ -101,7 +101,7 @@
     <documentTypeCode><![CDATA[w102]]></documentTypeCode>
   </contract>
 
-  <contract process="ChangeTermsConditions" id="Appendix1" footerUse="false" barcodeUse="false" signatureUse="false" employeeSignatureTextUse="false"  cityDateUse="false">
+  <contract process="ChangeTermsConditions" id="Appendix1" footerUse="false" barcodeUse="false" barcodeShowOnMinStateSecondaryId="40" signatureUse="false" employeeSignatureTextUse="false"  cityDateUse="false">
     <lastParagraphText></lastParagraphText>
     <employerSignatureText1></employerSignatureText1>
     <employerSignatureText2></employerSignatureText2>
@@ -109,7 +109,7 @@
     <documentTypeCode></documentTypeCode>
   </contract>
 
-  <contract process="ChangeTermsConditions" id="Appendix2" footerUse="true" barcodeUse="false" signatureUse="true" employeeSignatureTextUse="true"  cityDateUse="true">
+  <contract process="ChangeTermsConditions" id="Appendix2" footerUse="true" barcodeUse="false" barcodeShowOnMinStateSecondaryId="40" signatureUse="true" employeeSignatureTextUse="true"  cityDateUse="true">
     <lastParagraphText><![CDATA[* Vestigingen die meer dan 12 koopzondagen/feestdagen per jaar geopend zijn, kunnen in overleg met de medewerker tot een maximum van 50% van het aantal openstellingen, contractuele afspraken maken over het extra inroosteren op deze zondagen/feestdagen.
     ]]></lastParagraphText>
     <employerSignatureText1><![CDATA[Met vriendelijke groet,]]></employerSignatureText1>
@@ -118,7 +118,7 @@
     <documentTypeCode></documentTypeCode>
   </contract>
 
-  <contract process="TerminationComplete" id="Termination" footerUse="true" barcodeUse="true" signatureUse="true" employeeSignatureTextUse="true"  cityDateUse="false">
+  <contract process="TerminationComplete" id="Termination" footerUse="true" barcodeUse="true" barcodeShowOnMinStateSecondaryId="40" signatureUse="true" employeeSignatureTextUse="true"  cityDateUse="false">
     <lastParagraphText>
       <![CDATA[We hopen je hiermee voldoende te hebben geïnformeerd. Als je nog vragen hebt kan je contact opnemen met jouw leidinggevende of met de afdeling HR van jouw vestiging.]]>
     </lastParagraphText>

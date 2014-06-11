@@ -105,7 +105,10 @@ var reload = function (cancelCase) {
             window.opener = self; window.close();
         }
     }
-    location.reload();
+    var action = $('form').attr('action');
+    location.href = action;
+
+    //location.href = location.href;
 };
 
 var multi = function () {
@@ -625,25 +628,104 @@ var narrowDownInit = function () {
             }
         });
 
-
-        //var test = $('#HomeCostCentre');
         var url = init.attr('url');
-        
-        $('#HomeCostCentre').typeahead({
+        $('#CrossChargeCostCentre').typeahead({
             minLength: 1,
             source: function (query, process) {
-                
+
                 var node = this.$element.attr('data-node');
                 var dependent = $('#Department').val();
-                //if (test.length > 0)
-                //    dependent = test.val();
+
                 return $.ajax({
                     url: url,
                     type: 'post',
                     data: { query: query, node: node, dependentAttribute: 'Department', dependentAttributeValue: dependent },
                     dataType: 'json',
                     success: function (result) {
-                       
+
+                        var resultList = jQuery.map(result, function (item) {
+                            return item;
+                        });
+
+                        return process(resultList);
+                    }
+                });
+            }
+        });
+
+        var url = init.attr('url');
+        $('#TECApprover').typeahead({
+            minLength: 1,
+            source: function (query, process) {
+
+                var node = this.$element.attr('data-node');
+                var dependent = $('#ReportsToLineManager').val();
+
+                return $.ajax({
+                    url: url,
+                    type: 'post',
+                    data: { query: query, node: node, dependentAttribute: 'ReportsToLineManager', dependentAttributeValue: dependent },
+                    dataType: 'json',
+                    success: function (result) {
+
+                        var resultList = jQuery.map(result, function (item) {
+                            return item;
+                        });
+
+                        return process(resultList);
+                    }
+                });
+            }
+        });
+
+        var url = init.attr('url');
+        $('#HomeCostCentre').typeahead({
+            minLength: 1,
+            source: function (query, process) {
+
+                var node = this.$element.attr('data-node');
+                var dependent; 
+                var hiredependent = $('#Department').val();
+                var changedependent = $('#NewDepartment').val();
+
+                var ci = $('#HomeCostCentre').attr("customid");
+                if (ci != 'changeModule') 
+                    dependent = hiredependent;
+                    else                    
+                    dependent = changedependent;
+
+                return $.ajax({
+                    url: url,
+                    type: 'post',
+                    data: { query: query, node: node, dependentAttribute: 'Department', dependentAttributeValue: dependent },
+                    dataType: 'json',
+                    success: function (result) {
+
+                        var resultList = jQuery.map(result, function (item) {
+                            return item;
+                        });
+
+                        return process(resultList);
+                    }
+                });
+            }
+        });
+
+        var url = init.attr('url');
+        $('#ReportsToLineManager').typeahead({
+            minLength: 1,
+            source: function (query, process) {
+
+                var node = this.$element.attr('data-node');
+                var dependent = $('#BusinessUnit').val();
+
+                return $.ajax({
+                    url: url,
+                    type: 'post',
+                    data: { query: query, node: node, dependentAttribute: 'BusinessUnit', dependentAttributeValue: dependent },
+                    dataType: 'json',
+                    success: function (result) {
+
                         var resultList = jQuery.map(result, function (item) {
                             return item;
                         });
@@ -694,6 +776,8 @@ var narrowDownInit = function () {
                 homeCostCenterQuery(depart.val(), homeCostCenter);
         }
     }
+
+
 };
 
 var familyMembers = function () {
@@ -1496,7 +1580,7 @@ var actionStateChanged = function () {
             if ($('#pickfiles').length > 0) {
                 initUpload();
             }
-        } else {
+        } else {  
             reload(data.CancelCase);
         }
     });
@@ -1568,7 +1652,7 @@ $(document).on('click', '.print', function (e) {
     })
         .done(function (data) {
             if (data.Exception)
-                location.reload();
+                location.href = location.href;
             else {
                 $this.closest('tr').find('td').eq(2).text(data.Result);
                 url = url.replace('print', 'contract');

@@ -627,8 +627,11 @@
     <Content Include="FormLibContent\Xmls\Global\Templates\PersonalInfoChangeState.xml" />
     <Content Include="FormLibContent\Xmls\Global\Templates\Predefined_TerminationReason.xml" />
     <Content Include="FormLibContent\Xmls\Global\Templates\Regexs.xml" />
+    <Content Include="FormLibContent\Xmls\Global\Templates\TerminationBasicOneState.xml" />
+    <Content Include="FormLibContent\Xmls\Global\Templates\TerminationBasicState.xml" />
     <Content Include="FormLibContent\Xmls\Global\Templates\TerminationCompleteState.xml" />
     <Content Include="FormLibContent\Xmls\Global\Templates\VoluntaryDeductionsState.xml" />
+    <Content Include="FormLibContent\Xmls\Global\TerminationBasic.xml" />
     <Content Include="FormLibContent\Xmls\Global\TerminationComplete.xml" />
     <Content Include="FormLibContent\Xmls\Global\VoluntaryDeductions.xml" />
     <Content Include="FormLibContent\Xmls\I18n.xml" />

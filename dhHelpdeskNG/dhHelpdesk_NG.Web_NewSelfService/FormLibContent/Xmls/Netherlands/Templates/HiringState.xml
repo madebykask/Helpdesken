@@ -19,7 +19,7 @@
     </status>
     <!-- LM -->
     <status value="10">
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#documents</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
