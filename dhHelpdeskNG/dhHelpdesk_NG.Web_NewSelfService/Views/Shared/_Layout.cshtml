@@ -117,8 +117,19 @@
     </script>
 </head> 
 <body>
-     @{                                                        
-         var pCustomerId = ViewBag.PublicCustomerId;
+     @{
+         int pCustomerId = -1; 
+         
+         if (SessionFacade.CurrentCustomer != null)
+         {
+             pCustomerId = SessionFacade.CurrentCustomer.Id;                          
+         }
+
+         if (pCustomerId == -1 && SessionFacade.CurrentCustomerID > 0)
+         {
+             pCustomerId = SessionFacade.CurrentCustomerID;
+         }
+         
          var pCaseTemplates = (List<DH.Helpdesk.Domain.CaseSolution>)ViewBag.PublicCaseTemplate;
       } 
     <div style="position: fixed; top: 30%; right: -2px; background: #fff; padding: 20px 20px 5px 20px; border: 1px solid #ccc;">
@@ -141,7 +152,7 @@
             </div>
         </div>
     </div>
-    @*@Html.HiddenFor(m => Model.MailGuid)*@
+
     <div class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -165,40 +176,58 @@
                             <div class="ico-new"></div>
                             Order New Service Request  
                         </a>
-                                                
-                        @if (pCaseTemplates != null && pCaseTemplates.Count > 0)
+                               
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-submenu">                                
+                                <a href="#"> 
+                                    <span class="glyphicon glyphicon-plus"></span> Regular Case Template 
+                                </a>
+                                @if (pCaseTemplates.Where(t => t.TemplatePath == null).ToList().Count > 0)
+                                {
+                                    <ul class="dropdown-menu">
+                                        @foreach (var c in pCaseTemplates.Where(t => t.TemplatePath == null))
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("NewCase", "case", new { customerId = pCustomerId, caseTemplateId = c.Id })">
+                                                    <span class="glyphicon glyphicon-list-alt"></span> @c.Name <br />
+                                                    <span class="small"> @c.Description </span>
+                                                </a>                                   
+                                            </li>
+                                        }                                                                                        
+                                    </ul>
+                                }
+                            </li>                            
+                            <li class="divider"></li>
+                            <li class="dropdown-submenu">                                
+                                <a href="#"> 
+                                    <span class="glyphicon glyphicon-plus"></span> DH+ Case Template
+                                </a>
+                                @if (pCaseTemplates.Where(t => t.TemplatePath != null).ToList().Count > 0)
+                                {
+                                    <ul class="dropdown-menu">
+                                        @foreach (var c in pCaseTemplates.Where(t => t.TemplatePath != null))
+                                        {
+                                            <li>
+                                                <a href="@Url.Content(c.TemplatePath.SetUrlParameters())">
+                                                    <span class="glyphicon glyphicon-list-alt"></span> @c.Name <br />
+                                                    <span class="small"> @c.Description </span>
+                                                </a>                                   
+                                            </li>
+                                        }             
+                                    </ul>
+                                }
+                            </li>                            
+                        </ul>                
+                        
+                         
+                        @*@if (pCaseTemplates != null && pCaseTemplates.Count > 0)
                         {
                             <ul class="dropdown-menu">
-                                @foreach (var c in pCaseTemplates)
-                                {
-                                    <li>
-                                        <a href="@Url.Action("NewCase", "case", new { customerId = pCustomerId, caseTemplateId = c.Id})">
-                                            <span class="glyphicon glyphicon-plus"></span> @c.Name <br />
-                                            <span class="small"> @c.Description </span>
-                                        </a>                                   
-                                    </li>
-                                }
-
-                                 @*
-                                <li>
-                                    <a href="#"><span class="glyphicon glyphicon-plus"></span>Administration Change<br />
-                                       <span class="small">Explanation and information on what link means and does</span>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                            <li><a href="#"><span class="glyphicon glyphicon-plus"></span>Termination Administration<br />
-                                            <span class="small">Explanation and information on what link means and does</span></a></li>
-                                    </ul>                                    
-                                </li>
-
                                 
-                                <li><a href="#"><span class="glyphicon glyphicon-plus"></span>Termination Administration<br />
-                                    <span class="small">Explanation and information on what link means and does</span></a></li>
-                                <li><a href="#"><span class="glyphicon glyphicon-plus"></span>Correction<br />
-                                    <span class="small">Explanation and information on what link means and does</span></a></li>
-                                <li><a href="#"><span class="glyphicon glyphicon-plus"></span>Time Data<br />
-                                    <span class="small">Explanation and information on what link means and does</span></a></li>*@
                             </ul>
-                        }
+                        }*@
+                        
+
                     </li>
                     <li class="blue">                        
                         <a href="@Url.Action("UserCases", "case", new {customerId = pCustomerId , progressId = "2"})">

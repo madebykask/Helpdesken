@@ -209,6 +209,22 @@
             return ret;
         }
 
+        public static string SetUrlParameters(this string value)
+        {
+            string strUrl = value.ToLower();
+
+            if (strUrl.IndexOf("[userid]") > 0)            
+                if (SessionFacade.CurrentSystemUser != null) strUrl = strUrl.Replace("[userid]", SessionFacade.CurrentSystemUser);
+
+            if (strUrl.IndexOf("[language]") > 0)
+                if (SessionFacade.CurrentLanguageId > 0) strUrl = strUrl.Replace("[language]", SessionFacade.CurrentLanguageId.ToString());
+
+            if (strUrl.IndexOf("[customerid]") > 0)
+                if (SessionFacade.CurrentCustomer != null) strUrl = strUrl.Replace("[customerid]", SessionFacade.CurrentCustomer.Id.ToString());                                    
+
+            return strUrl;
+        }
+
         public static string GetMailTemplateName(this int value)
         {
             var ret = string.Empty; 

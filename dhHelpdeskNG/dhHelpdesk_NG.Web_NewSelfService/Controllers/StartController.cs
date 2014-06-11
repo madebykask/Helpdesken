@@ -9,6 +9,8 @@ using System.Web.Mvc;
 
 namespace DH.Helpdesk.NewSelfService.Controllers
 {
+    using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+
     public class StartController : BaseController
     {
         private readonly ICustomerService _customerService;
@@ -51,8 +53,10 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
             var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
             if (identity != null)
+            {
+                SessionFacade.CurrentSystemUser = identity.Name.GetUserFromAdPath();
                 ViewBag.PublicCaseTemplate = _caseSolutionService.GetCaseSolutions(customerId).ToList();
-
+            }
             return true;
         }
 

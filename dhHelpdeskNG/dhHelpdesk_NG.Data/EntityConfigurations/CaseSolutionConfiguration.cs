@@ -94,6 +94,8 @@
             this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            this.Property(x => x.TemplatePath).IsOptional();
+            this.Property(x => x.ShowInSelfService).IsRequired();
 
             this.ToTable("tblcasesolution");
         }

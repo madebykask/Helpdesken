@@ -121,8 +121,10 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
             int customerId;
 
-            Case currentCase = null;            
-            
+            Case currentCase = null;
+            var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+            SessionFacade.CurrentSystemUser = identity.Name.GetUserFromAdPath();
+
             if (id.Is<Guid>())
             {
                 var guid = new Guid(id);
@@ -131,18 +133,18 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             else
             {
                 currentCase = this._caseService.GetCaseById(Int32.Parse(id));                                    
-                var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
-                
+                    
                 if (currentCase == null || identity == null)
                     return null;
 
                 if (currentCase != null && currentCase.RegUserId != identity.Name.GetUserFromAdPath())
-                    return null;                             
+                    return null;
+                
             }
 
             if (currentCase == null)
             {
-                throw new HttpException((int)HttpStatusCode.NotFound, "Case Not Found...");
+                throw new HttpException((int)HttpStatusCode.NotFound, "Case not found...");
                 return null;
             }
             else
@@ -200,8 +202,11 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             model.ExLogFileGuid = Guid.NewGuid().ToString();
 
             var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+      
             if (identity != null)
-            {                                 
+            {
+                SessionFacade.CurrentSystemUser = identity.Name.GetUserFromAdPath();
+
                 var cs = this._settingService.GetCustomerSetting(currentCustomer.Id);
 
                 model.NewCase = this._caseService.InitCase(
@@ -290,6 +295,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             {
                 string adUser = identity.Name; // "DATAHALLAND\\mg"
                 string regUser = adUser.GetUserFromAdPath();
+                SessionFacade.CurrentSystemUser = regUser;
                 if (regUser != string.Empty)
                 {                    
                     model = this.GetUserCasesModel(currentCustomer.Id, languageId, regUser, "", 20, progressId);                                
@@ -771,7 +777,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             }
 
             SessionFacade.CurrentLanguageId = SessionFacade.CurrentCustomer.Language_Id;
-            ViewBag.PublicCustomerId = customerId;
+            //ViewBag.PublicCustomerId = customerId;
 
             var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
             if (identity != null)

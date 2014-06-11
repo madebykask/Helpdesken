@@ -31,6 +31,8 @@ namespace DH.Helpdesk.Domain
         public string Text_Internal { get; set; }
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
+        public string TemplatePath { get; set; }
+        public bool ShowInSelfService { get; set; }
 
         public virtual CaseSolutionCategory CaseSolutionCategory { get; set; }
         public virtual CaseSolutionSchedule CaseSolutionSchedule { get; set; }

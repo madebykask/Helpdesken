@@ -17,10 +17,12 @@
         private const string _CASE_TRANSLATION = "CASE_TRANSLATION";
         private const string _COMPUTER_USER_SEARCH = "COMPUTER_USER_SEARCH";
         private const string _CURRENT_CUSTOMER = "CURRENT_CUSTOMER";
+        private const string _CURRENT_CUSTOMER_ID = "CURRENT_CUSTOMER_ID";
         private const string _CURRENT_LANGUAGE = "CURRENT_LANGUAGE";
         private const string _SIGNED_IN_USER = "SIGNED_IN_USER";
         private const string _TEXT_TRANSLATION = "TEXT_TRANSLATION";
         private const string _ACTIVE_TAB = "ACTIVE_TAB";
+        private const string _CURRENT_SYSTEM_USER = "CURRENT_SYSTEM_USER";
 
         private const string _PAGE_FILTERS = "PAGE_FILTERS";
         private const string _CUSTOM_VALUES = "CUSTOM_VALUES";
@@ -30,6 +32,40 @@
         private const string _CURRENT_CASESOLUTION_SEARCH = "CURRENT_CASESOLUTION_SEARCH";
         private const string _CURRENT_OPERATIONLOG_SEARCH = "CURRENT_OPERATIONLOG_SEARCH";
         private const string _CURRENT_DOCUMENT_SEARCH = "CURRENT_DOCUMENT_SEARCH";
+
+        public static int CurrentCustomerID
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_CURRENT_CUSTOMER_ID] == null)
+                    return -1;
+                return (int) HttpContext.Current.Session[_CURRENT_CUSTOMER_ID];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_CURRENT_CUSTOMER_ID] == null)
+                    HttpContext.Current.Session.Add(_CURRENT_CUSTOMER_ID, value);
+                else
+                    HttpContext.Current.Session[_CURRENT_CUSTOMER_ID] = value;
+            }
+        }
+
+        public static string CurrentSystemUser
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_CURRENT_SYSTEM_USER] == null)
+                    return null;
+                return (string) HttpContext.Current.Session[_CURRENT_SYSTEM_USER];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_CURRENT_SYSTEM_USER] == null)
+                    HttpContext.Current.Session.Add(_CURRENT_SYSTEM_USER, value);
+                else
+                    HttpContext.Current.Session[_CURRENT_SYSTEM_USER] = value;
+            }
+        }
 
         public static UserOverview CurrentUser
         {
