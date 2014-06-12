@@ -12,5 +12,6 @@ namespace DH.Helpdesk.Dal.Repositories
         List<EmailLog> GetEmailLogsByCaseHistoryId(int caseHistoryId);
 
         EmailLog GetEmailLogsByGuid(Guid Id);
+        
     }
 }

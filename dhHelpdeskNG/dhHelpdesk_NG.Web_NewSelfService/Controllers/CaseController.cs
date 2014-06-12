@@ -679,7 +679,10 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             
             model.CaseSearchResult = srm;
             SessionFacade.CurrentCaseSearch = sm;
-           
+
+            var dynamicCases = _caseService.GetAllDynamicCases();
+            model.DynamicCases = dynamicCases;
+
             return model;           
         }
 

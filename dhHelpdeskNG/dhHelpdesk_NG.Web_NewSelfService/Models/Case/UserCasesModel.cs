@@ -23,10 +23,12 @@ namespace DH.Helpdesk.NewSelfService.Models.Case
 
         public string ProgressId { get; set; }
         
+        public List<DynamicCase> DynamicCases { get; set; }
+
         public CaseSearchResultModel CaseSearchResult { get; set; }
     }
 
-    public class CaseSearchResultModel
+ public class CaseSearchResultModel
     {
         public IList<CaseSettings> CaseSettings { get; set; }
 

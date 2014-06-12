@@ -20,6 +20,7 @@
             this.Property(x => x.FormLogo).IsOptional();
             this.Property(x => x.FormHeader).IsOptional();
             this.Property(x => x.Customer_Id).IsRequired();
+            this.Property(x => x.ExternalPage).IsRequired();
             
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity); ;
 

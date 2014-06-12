@@ -33,6 +33,8 @@
         Case GetCaseByEMailGUID(Guid GUID);
         EmailLog GetEMailLogByGUID(Guid GUID);             
         IList<CaseHistory> GetCaseHistoryByCaseId(int caseId);
+        List<DynamicCase> GetAllDynamicCases();
+
         int SaveCase(Case cases, CaseLog caseLog, CaseMailSetting caseMailSetting, int userId, string adUser, out IDictionary<string, string> errors);
         int SaveCaseHistory(Case c, int userId, string adUser, out IDictionary<string, string> errors, string defaultUser = "");
         void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null);
@@ -170,6 +172,11 @@
         public EmailLog GetEMailLogByGUID(Guid GUID)
         {
             return _emailLogRepository.GetEmailLogsByGuid(GUID);
+        }
+
+        public List<DynamicCase> GetAllDynamicCases()
+        {
+            return _caseRepository.GetAllDynamicCases();
         }
 
         public Guid Delete(int id)

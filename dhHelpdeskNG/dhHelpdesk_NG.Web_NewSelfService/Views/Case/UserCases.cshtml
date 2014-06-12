@@ -1,4 +1,5 @@
-﻿@model DH.Helpdesk.NewSelfService.Models.Case.UserCasesModel         
+﻿@using Microsoft.Ajax.Utilities
+@model DH.Helpdesk.NewSelfService.Models.Case.UserCasesModel         
 
 <div id="search_result">
     <div class="container-fluid dh-container">
@@ -62,45 +63,77 @@
                                     </thead>
                                     <tbody>
                                         @if (Model.CaseSearchResult.Cases.Any())
-                                        {
+                                        {                                            
                                             foreach (var r in Model.CaseSearchResult.Cases)
                                             {
-                                            <tr>
-                                                <!--fasta kolumner -->
-                                                <td>
-                                                    <span class="glyphicon glyphicon-file"  title="@r.CaseIcon.CaseIconTitle()"></span>
-                                                </td>
-                                                <!-- valbara kolumner -->
-                                                @foreach (var c in r.Columns)
-                                                {
+
+                                                var dynamicUrl = Model.DynamicCases.Where(w => w.CaseId == r.Id).Select(d => d.FormPath).SingleOrDefault();
+
+                                                <tr>
+                                                    <!--fasta kolumner -->
                                                     <td>
-                                                        @if (c.FieldType == 1)
-                                                        {
-                                                            <!-- date -->
-                                                            <a href="@Url.Action("Index", "case", new { id = r.Id })">@Html.DisplayFor(m => c.DateTimeValue, "Date")</a>
-                                                        }
-                                                        else if (c.FieldType == 2)
-                                                        {
-                                                            <!-- dateTime -->
-                                                            <a href="@Url.Action("Index", "case", new { id = r.Id })">@Html.DisplayFor(m => c.DateTimeValue, "DateAndTime")</a>
-                                                        }
-                                                        else
-                                                        {
-                                                            if (c.TranslateThis)
+                                                        <span class="glyphicon glyphicon-file"  title="@r.CaseIcon.CaseIconTitle()"></span>
+                                                    </td>
+                                                    <!-- valbara kolumner -->
+                                                
+                                                    @foreach (var c in r.Columns)
+                                                    {
+                                                        <td>
+                                                            @if (c.FieldType == 1)
                                                             {
-                                                            <!-- string -->
-                                                            <a href="@Url.Action("Index", "case", new { id = r.Id })">@Translation.Get(c.StringValue, Enums.TranslationSource.TextTranslation)</a>
+                                                                <!-- date -->
+                                                                if (string.IsNullOrEmpty(dynamicUrl))
+                                                                {
+                                                                    <a href ="@Url.Action("Index", "case", new { id = r.Id })" > @Html.DisplayFor(m => c.DateTimeValue, "Date") </a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a href="@Url.Content(dynamicUrl.SetUrlParameters(r.Id))">@Html.DisplayFor(m => c.DateTimeValue, "Date")</a>
+                                                                }
+                                                            }
+                                                            else if (c.FieldType == 2)
+                                                            {
+                                                                <!-- dateTime -->
+                                                                if (string.IsNullOrEmpty(dynamicUrl))
+                                                                {
+                                                                    <a href="@Url.Action("Index", "case", new { id = r.Id })">@Html.DisplayFor(m => c.DateTimeValue, "DateAndTime")</a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a href="@Url.Content(dynamicUrl.SetUrlParameters(r.Id))">@Html.DisplayFor(m => c.DateTimeValue, "DateAndTime")</a>
+                                                                }
                                                             }
                                                             else
                                                             {
-                                                            <a href="@Url.Action("Index", "case", new { id = r.Id })">@c.StringValue</a>
+                                                                if (c.TranslateThis) 
+                                                                {
+                                                                    <!-- string -->
+                                                                    if (string.IsNullOrEmpty(dynamicUrl))
+                                                                    {
+                                                                        <a href="@Url.Action("Index", "case", new { id = r.Id })">@Translation.Get(c.StringValue, Enums.TranslationSource.TextTranslation)</a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <a href="@Url.Content(dynamicUrl.SetUrlParameters(r.Id))">@Translation.Get(c.StringValue, Enums.TranslationSource.TextTranslation)</a>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    if (string.IsNullOrEmpty(dynamicUrl))
+                                                                    {
+                                                                        <a href="@Url.Action("Index", "case", new { id = r.Id })">@c.StringValue</a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <a href="@Url.Content(dynamicUrl.SetUrlParameters(r.Id))">@c.StringValue</a>
+                                                                    }
+                                                                }
                                                             }
-                                                        }
-                                                    </td>
-                                                }
-                                            </tr>
+                                                        </td>
+                                                    }
+                                                </tr>
+                                            }
                                         }
-                                    }
                                     </tbody>
                                 </table>
                             </div>

@@ -10,5 +10,6 @@
         public string FormName { get; set; }
         public string FormPath { get; set; }
         public Guid FormGUID { get; set; }
+        public int ExternalPage { get; set; } 
     }
 }

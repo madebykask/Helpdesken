@@ -27,6 +27,7 @@ namespace DH.Helpdesk.Dal.Repositories
         Case GetCaseByGUID(Guid GUID);
         Case GetCaseByEmailGUID(Guid GUID);             
         Case GetDetachedCaseById(int id);
+        List<DynamicCase> GetAllDynamicCases();
         void SetNullProblemByProblemId(int problemId);
         void UpdateFinishedDate(int problemId, DateTime? time);
         void UpdateFollowUpDate(int caseId, DateTime? time);
@@ -83,6 +84,20 @@ namespace DH.Helpdesk.Dal.Repositories
             return (from w in this.DataContext.Set<Case>()
                     where w.Id == id
                     select w).FirstOrDefault();
+        }
+
+        public List<DynamicCase> GetAllDynamicCases()
+        {
+            var query = from f in this.DataContext.Forms
+                            join ff in this.DataContext.FormField on f.Id equals ff.Form_Id
+                            join ffv in this.DataContext.FormFieldValue on ff.Id equals ffv.FormField_Id                        
+                        where f.ExternalPage == 1  
+                        select new DynamicCase {
+                            CaseId = ffv.Case_Id,
+                            FormPath = f.FormPath                            
+                        };
+
+            return query.Distinct().ToList();
         }
 
         public Case GetCaseByGUID(Guid GUID)

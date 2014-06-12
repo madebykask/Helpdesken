@@ -209,9 +209,12 @@
             return ret;
         }
 
-        public static string SetUrlParameters(this string value)
+        public static string SetUrlParameters(this string value, int id = 0)
         {
             string strUrl = value.ToLower();
+
+            if (strUrl.IndexOf("[caseid]") > 0)
+                if (id > 0) strUrl = strUrl.Replace("[caseid]", id.ToString());
 
             if (strUrl.IndexOf("[userid]") > 0)            
                 if (SessionFacade.CurrentSystemUser != null) strUrl = strUrl.Replace("[userid]", SessionFacade.CurrentSystemUser);
