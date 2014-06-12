@@ -11,5 +11,10 @@
         public bool Required { get; private set; }
 
         public bool Show { get; private set; }
+
+        public static FieldProcessingSetting CreateEmpty()
+        {
+            return new FieldProcessingSetting(false, false);
+        }
     }
 }

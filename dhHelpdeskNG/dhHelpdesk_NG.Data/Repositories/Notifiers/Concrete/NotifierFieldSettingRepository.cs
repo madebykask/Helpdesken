@@ -251,6 +251,11 @@
         private static FieldProcessingSetting CreateDisplayRule(List<ComputerUserFieldSettings> settings, string fieldName)
         {
             var setting = FilterSettingByFieldName(settings, fieldName);
+            if (setting == null)
+            {
+                return FieldProcessingSetting.CreateEmpty();
+            }
+
             return new FieldProcessingSetting(setting.Show != 0, setting.Required != 0);
         }
 
@@ -263,6 +268,10 @@
             }
 
             var translation = this.GetTranslationBySettingIdAndLanguageId(setting.Id, languageId);
+            if (translation == null)
+            {
+                return this.notifierFieldSettingsFactory.CreateEmpty();
+            }
 
             return this.notifierFieldSettingsFactory.Create(
                                                     setting.Show != 0,
@@ -280,14 +289,24 @@
         private ComputerUserFieldSettingsLanguage GetTranslationBySettingIdAndLanguageId(int settingId, int languageId)
         {
             return
-                this.DataContext.ComputerUserFieldSettingsLanguages.Single(
+                this.DataContext.ComputerUserFieldSettingsLanguages.SingleOrDefault(
                     t => t.ComputerUserFieldSettings_Id == settingId && t.Language_Id == languageId);
         }
 
         private FieldOverviewSetting CreateDisplayFieldSetting(List<ComputerUserFieldSettings> settings, string createSettingName, int languageId)
         {
             var setting = FilterSettingByFieldName(settings, createSettingName);
+            if (setting == null)
+            {
+                return FieldOverviewSetting.CreateEmpty();
+            }
+
             var translation = this.GetTranslationBySettingIdAndLanguageId(setting.Id, languageId);
+            if (translation == null)
+            {
+                return FieldOverviewSetting.CreateEmpty();
+            }
+
             return new FieldOverviewSetting(setting.Show != 0, translation.Label, setting.Required != 0);
         }
         
@@ -304,15 +323,22 @@
             DateTime changedDateAndTime)
         {
             var setting = FilterSettingByFieldName(settings, updateSettingName);
+            if (setting == null)
+            {
+                return;
+            }
 
             setting.ChangedDate = changedDateAndTime;
             setting.LDAPAttribute = updatedSetting.LdapAttribute ?? string.Empty;
 
             var translation =
-                this.DataContext.ComputerUserFieldSettingsLanguages.Single(
+                this.DataContext.ComputerUserFieldSettingsLanguages.SingleOrDefault(
                     t => t.ComputerUserFieldSettings_Id == setting.Id && t.Language_Id == languageId);
+            if (translation != null)
+            {
+                translation.Label = updatedSetting.Caption;                
+            }
 
-            translation.Label = updatedSetting.Caption;
             setting.Required = updatedSetting.Required ? 1 : 0;
             setting.Show = updatedSetting.ShowInDetails ? 1 : 0;
             setting.ShowInList = updatedSetting.ShowInNotifiers ? 1 : 0;

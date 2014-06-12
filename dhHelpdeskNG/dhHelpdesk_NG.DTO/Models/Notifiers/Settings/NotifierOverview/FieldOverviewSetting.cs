@@ -17,5 +17,10 @@
         public bool Show { get; private set; }
 
         public bool Required { get; private set; }
+
+        public static FieldOverviewSetting CreateEmpty()
+        {
+            return new FieldOverviewSetting(false, string.Empty, false);
+        }
     }
 }
