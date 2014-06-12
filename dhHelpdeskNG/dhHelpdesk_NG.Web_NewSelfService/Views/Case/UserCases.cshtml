@@ -67,7 +67,7 @@
                                             foreach (var r in Model.CaseSearchResult.Cases)
                                             {
 
-                                                var dynamicUrl = Model.DynamicCases.Where(w => w.CaseId == r.Id).Select(d => d.FormPath).SingleOrDefault();
+                                                var dynamicUrl = Model.DynamicCases.Where(w => w.CaseId == r.Id).Select(d => "~/" + d.FormPath).SingleOrDefault();
 
                                                 <tr>
                                                     <!--fasta kolumner -->
@@ -84,7 +84,7 @@
                                                                 <!-- date -->
                                                                 if (string.IsNullOrEmpty(dynamicUrl))
                                                                 {
-                                                                    <a href ="@Url.Action("Index", "case", new { id = r.Id })" > @Html.DisplayFor(m => c.DateTimeValue, "Date") </a>
+                                                                    <a href ="@Url.Action("Index", "case", new { id = r.Id , area ="" })" > @Html.DisplayFor(m => c.DateTimeValue, "Date") </a>
                                                                 }
                                                                 else
                                                                 {
@@ -96,7 +96,7 @@
                                                                 <!-- dateTime -->
                                                                 if (string.IsNullOrEmpty(dynamicUrl))
                                                                 {
-                                                                    <a href="@Url.Action("Index", "case", new { id = r.Id })">@Html.DisplayFor(m => c.DateTimeValue, "DateAndTime")</a>
+                                                                    <a href="@Url.Action("Index", "case", new { id = r.Id, area ="" })">@Html.DisplayFor(m => c.DateTimeValue, "DateAndTime")</a>
                                                                 }
                                                                 else
                                                                 {
@@ -110,7 +110,7 @@
                                                                     <!-- string -->
                                                                     if (string.IsNullOrEmpty(dynamicUrl))
                                                                     {
-                                                                        <a href="@Url.Action("Index", "case", new { id = r.Id })">@Translation.Get(c.StringValue, Enums.TranslationSource.TextTranslation)</a>
+                                                                        <a href="@Url.Action("Index", "case", new { id = r.Id, area ="" })">@Translation.Get(c.StringValue, Enums.TranslationSource.TextTranslation)</a>
                                                                     }
                                                                     else
                                                                     {
@@ -121,7 +121,7 @@
                                                                 {
                                                                     if (string.IsNullOrEmpty(dynamicUrl))
                                                                     {
-                                                                        <a href="@Url.Action("Index", "case", new { id = r.Id })">@c.StringValue</a>
+                                                                        <a href="@Url.Action("Index", "case", new { id = r.Id, area ="" })">@c.StringValue</a>
                                                                     }
                                                                     else
                                                                     {
