@@ -49,5 +49,13 @@
         public ConfigurableFieldModel<LogsModel> Logs { get; set; }
 
         #endregion
+
+        public bool HasShowableFields()
+        {
+            return this.AttachedFiles.Show ||
+                this.ChangeEvaluation.Show ||
+                this.EvaluationReady.Show ||
+                this.Logs.Show;
+        }
     }
 }

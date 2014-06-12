@@ -2580,3 +2580,6 @@ body.login {
 .cursor-pointer {
     cursor: pointer;
 }
+.overflow-visible {
+    overflow: visible!important;
+}

@@ -20,6 +20,7 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
             var objects =
                 this.DataContext.ChangeObjects.Where(o => o.Customer_Id == customerId)
                     .Select(o => new { o.Id, o.ChangeObject })
+                    .OrderBy(o => o.ChangeObject)
                     .ToList();
 
             return

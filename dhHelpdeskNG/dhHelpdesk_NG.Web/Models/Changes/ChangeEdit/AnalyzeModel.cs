@@ -151,5 +151,26 @@
         public ConfigurableFieldModel<int> YearlyCost { get; set; }
 
         #endregion
+
+        public bool HasShowableFields()
+        {
+            return this.ApprovalResults.Show ||
+                this.AttachedFiles.Show ||
+                this.Categories.Show ||
+                this.Cost.Show ||
+                this.Currencies.Show ||
+                this.EstimatedTimeInHours.Show ||
+                this.FinishDateAndTime.Show ||
+                this.HasImplementationPlan.Show ||
+                this.HasRecoveryPlan.Show ||
+                this.Logs.Show ||
+                this.Priorities.Show ||
+                this.RejectExplanation.Show ||
+                this.Responsibles.Show ||
+                this.Risk.Show ||
+                this.Solution.Show ||
+                this.StartDateAndTime.Show ||
+                this.YearlyCost.Show;
+        }
     }
 }

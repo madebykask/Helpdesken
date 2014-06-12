@@ -80,5 +80,19 @@
         public int? ImplementationStatusId { get; set; }
 
         #endregion
+
+        public bool HasShowableFields()
+        {
+            return this.AttachedFiles.Show ||
+                this.BuildImplemented.Show ||
+                this.ChangeDeviation.Show ||
+                this.FinishingDate.Show ||
+                this.ImplementationPlanUsed.Show ||
+                this.ImplementationReady.Show ||
+                this.ImplementationStatuses.Show ||
+                this.Logs.Show ||
+                this.RealStartDate.Show ||
+                this.RecoveryPlanUsed.Show;
+        }
     }
 }

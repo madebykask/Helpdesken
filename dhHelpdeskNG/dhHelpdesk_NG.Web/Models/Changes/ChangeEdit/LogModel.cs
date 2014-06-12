@@ -23,5 +23,10 @@
         public ConfigurableFieldModel<LogsModel> Logs { get; set; }
 
         #endregion
+
+        public bool HasShowableFields()
+        {
+            return this.Logs.Show;
+        }
     }
 }

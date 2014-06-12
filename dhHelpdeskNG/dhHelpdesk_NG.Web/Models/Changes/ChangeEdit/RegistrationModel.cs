@@ -117,5 +117,22 @@
         public ConfigurableFieldModel<bool> Verified { get; set; }
 
         #endregion
+
+        public bool HasShowableFields()
+        {
+            return this.AffectedDepartments.Show ||
+                this.AffectedProcesses.Show ||
+                this.ApprovalResults.Show ||
+                this.AttachedFiles.Show ||
+                this.BusinessBenefits.Show ||
+                this.Consequence.Show ||
+                !this.Contacts.IsUnshowable() ||
+                this.Description.Show ||
+                this.DesiredDate.Show ||
+                this.Impact.Show ||
+                this.Owners.Show ||
+                this.RejectExplanation.Show ||
+                this.Verified.Show;
+        }
     }
 }

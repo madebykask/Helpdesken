@@ -457,6 +457,14 @@ namespace DH.Helpdesk.Services.Services
 
             #endregion
 
+            foreach (var customerUser in user.CustomerUsers)
+            {
+                if (customerUser.CasePerformerFilter == null)
+                {
+                    customerUser.CasePerformerFilter = string.Empty;
+                }
+            }
+
             if (user.Id == 0)
                 this._userRepository.Add(user);
             else

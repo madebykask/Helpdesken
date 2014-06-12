@@ -21,37 +21,61 @@
 </div>
 
 <div class="container">
-    <ul class="nav nav-tabs">
-        <li class="active">
-            <a href="#fragment-1">@Translation.Get("Registrering")</a>
-        </li>
+    <ul id="change-tabs" class="nav nav-tabs">
+        @if (Model.Registration.HasShowableFields())
+        {
+            <li class="active">
+                <a href="#fragment-1">@Translation.Get("Registrering")</a>
+            </li>                        
+        }
         @if (Model.IsNew)
         {
-            <li class="inactive">
-                @Translation.Get("Analys")
-            </li>
-            <li class="inactive">
-                @Translation.Get("Implementation")
-            </li>
-            <li class="inactive">
-                @Translation.Get("Utvärdering")
-            </li>
+            if (Model.Analyze.HasShowableFields())
+            {
+                <li class="inactive">
+                    @Translation.Get("Analys")
+                </li>                
+            }
+            if (Model.Implementation.HasShowableFields())
+            {
+                <li class="inactive">
+                    @Translation.Get("Implementation")
+                </li>                
+            }
+            if (Model.Evaluation.HasShowableFields())
+            {
+                <li class="inactive">
+                    @Translation.Get("Utvärdering")
+                </li>                
+            }
         }
         else
         {
-            <li>
-                <a href="#fragment-2">@Translation.Get("Analys")</a>
-            </li>
-            <li>
-                <a href="#fragment-3">@Translation.Get("Implementation")</a>
-            </li>
-            <li>
-                <a href="#fragment-4">@Translation.Get("Utvärdering")</a>
-            </li>
+            if (Model.Analyze.HasShowableFields())
+            {
+                <li>
+                    <a href="#fragment-2">@Translation.Get("Analys")</a>
+                </li>                 
+            }
+            if (Model.Implementation.HasShowableFields())
+            {
+                <li>
+                    <a href="#fragment-3">@Translation.Get("Implementation")</a>
+                </li>                
+            }
+            if (Model.Evaluation.HasShowableFields())
+            {
+                <li>
+                    <a href="#fragment-4">@Translation.Get("Utvärdering")</a>
+                </li>                
+            }                     
         }
-        <li>
-            <a href="#fragment-6">@Translation.Get("Logg")</a>
-        </li>
+        @if (Model.Log.HasShowableFields())
+        {
+            <li>
+                <a href="#fragment-6">@Translation.Get("Logg")</a>
+            </li>            
+        }
         @if (Model.IsNew)
         {
             <li class="inactive">
@@ -139,3 +163,15 @@
         }
     </div>
 </div>
+<script type="text/javascript">
+    $(function() {
+
+        $("#change-tabs")
+            .find("li")
+            .not(".inactive")
+            .first()
+            .find("a")
+            .click();
+
+    });
+</script>

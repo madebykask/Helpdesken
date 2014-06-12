@@ -87,6 +87,7 @@ namespace DH.Helpdesk.Dal.Repositories
            var systems = this.GetSecuredEntities(this.Table
                     .Where(s => s.Customer_Id == customerId)
                     .Select(s => new { s.SystemName, s.Id })
+                    .OrderBy(s => s.SystemName)
                     .ToList());
 
             return systems

@@ -20,6 +20,7 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
             var groups =
                 this.DataContext.ChangeGroups.Where(g => g.Customer_Id == customerId)
                     .Select(g => new { g.Id, g.ChangeGroup })
+                    .OrderBy(g => g.ChangeGroup)
                     .ToList();
 
             return

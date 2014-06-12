@@ -96,6 +96,7 @@
             var changes =
                 this.DbContext.Changes.Where(c => c.Customer_Id == customerId && c.Id != changeId)
                     .Select(c => new { c.Id, c.ChangeTitle })
+                    .OrderBy(c => c.ChangeTitle)
                     .ToList();
 
             return

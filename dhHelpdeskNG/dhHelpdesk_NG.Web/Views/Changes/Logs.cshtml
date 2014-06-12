@@ -28,7 +28,7 @@
                     @log.RegisteredBy.LastName
                 </td>
                 <td>
-                    @log.Text
+                    @log.Text.ForHtmlView()
                 </td>
                 <td>
                     <a onclick="deleteLog('@Model.Area', @log.Id, '@Model.Area.ToString().ToLower()_logs_container')" class="btn">
