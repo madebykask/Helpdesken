@@ -262,7 +262,64 @@
                 foreach (var cu in userToSave.CustomerUsers)
                 {
                     cu.User_Id = 0;
-                    cu.CasePerformerFilter = string.Empty;
+
+                    if (Convert.ToInt32(cu.CaseCaseTypeFilter) > 0)
+                    {
+                        cu.CaseCaseTypeFilter = "0";
+                    }
+
+                    if (Convert.ToInt32(cu.CaseWorkingGroupFilter) > 0)
+                    {
+                        cu.CaseWorkingGroupFilter = "0";
+                    }
+
+                    if (Convert.ToInt32(cu.CaseResponsibleFilter) > 0)
+                    {
+                        cu.CaseResponsibleFilter = "0";
+                    }
+
+                    if (Convert.ToInt32(cu.CaseStateSecondaryFilter) > 0)
+                    {
+                        cu.CaseStateSecondaryFilter = "0";
+                    }
+
+                    if (Convert.ToInt32(cu.CaseProductAreaFilter) > 0 )
+                    {
+                        cu.CaseProductAreaFilter = "0";
+                    }
+
+                    if (Convert.ToInt32(cu.CaseCategoryFilter) > 0)
+                    {
+                        cu.CaseCategoryFilter = "0";
+                    }
+
+                    if (Convert.ToInt32(cu.CaseRegionFilter) > 0)
+                    {
+                        cu.CaseRegionFilter = "0";
+                    }
+
+                    if (Convert.ToInt32(cu.CaseUserFilter) > 0)
+                    {
+                        cu.CaseUserFilter = "0";
+                    }
+
+                    if (Convert.ToInt32(cu.CaseStatusFilter) > 0)
+                    {
+                        cu.CaseStatusFilter = "0";
+                    }
+
+                    if (Convert.ToInt32(cu.CaseResponsibleFilter) > 0 )
+                    {
+                        cu.CaseResponsibleFilter = "0";
+                    }
+
+                    if (Convert.ToInt32(cu.CasePriorityFilter) > 0 )
+                    {
+                        cu.CasePriorityFilter = "0";
+                    }
+
+                    cu.CasePerformerFilter = "0";
+                    
                 }
                
                 
@@ -311,6 +368,8 @@
                         this._caseSettingsService.SaveCaseSetting(newUserCaseSetting, out errors);
                     }
                 }
+
+             
             }
 
 
@@ -635,6 +694,9 @@
             #endregion
 
             #region SetStrings
+
+
+
 
             //if (user.CaseStateSecondaryColor != null)
             //{

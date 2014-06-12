@@ -375,25 +375,28 @@ namespace DH.Helpdesk.Services.Services
                 user.Cs = new List<Customer>();
 
 
-            if (user.Id == 0)
+            //if (user.Id == 0)
+            //{
+            //    if (user.CustomerUsers != null)
+            //        foreach (var delete in user.CustomerUsers.ToList())
+            //            user.CustomerUsers.Remove(delete);
+            //    else
+            //        user.CustomerUsers = new List<CustomerUser>();
+            //}
+
+
+
+            if (user.Id != 0)
             {
-                if (user.CustomerUsers != null)
-                    foreach (var delete in user.CustomerUsers.ToList())
-                        user.CustomerUsers.Remove(delete);
-                else
-                    user.CustomerUsers = new List<CustomerUser>();
-            }
-
-
-
-            if (cs != null)
-            {
-                foreach (int id in cs)
+                if (cs != null)
                 {
-                    var c = this._customerRepository.GetById(id);
+                    foreach (int id in cs)
+                    {
+                        var c = this._customerRepository.GetById(id);
 
-                    if (c != null)
-                        user.Cs.Add(c);
+                        if (c != null)
+                            user.Cs.Add(c);
+                    }
                 }
             }
 
