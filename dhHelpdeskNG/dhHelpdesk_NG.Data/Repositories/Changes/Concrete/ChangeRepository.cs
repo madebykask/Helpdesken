@@ -208,10 +208,7 @@
                         {
                             searchRequest = searchRequest.OrderBy(c => c.OrdererDepartment.DepartmentName);
                         }
-                        else
-                        {
-                            throw new NotImplementedException();
-                        }
+
                         break;
                     case SortBy.Descending:
                         if (parameters.SortField.Name == OtherField.Id)
@@ -242,10 +239,7 @@
                         {
                             searchRequest = searchRequest.OrderByDescending(c => c.OrdererDepartment.DepartmentName);
                         }
-                        else
-                        {
-                            throw new NotImplementedException();
-                        }
+
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
