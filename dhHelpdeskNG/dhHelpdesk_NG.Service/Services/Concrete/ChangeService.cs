@@ -199,7 +199,7 @@
         public ExcelFile ExportChangesToExcelFile(SearchParameters parameters, OperationContext context)
         {
             var changes = this.changeRepository.Search(parameters);
-            var overviewSettings = this.GetChangeOverviewSettings(parameters.CustomerId, context.LanguageId);
+            var overviewSettings = this.GetChangeOverviewSettings(parameters.CustomerId, context.LanguageId, false);
 
             var headers = changeOverviewSettingsToExcelHeadersMapper.Map(overviewSettings);
             var businessItems = changes.Changes.Select(c => this.changeToBusinessItemMapper.Map(c)).ToList();
@@ -395,16 +395,16 @@
             }
         }
 
-        public ChangeOverviewSettings GetChangeOverviewSettings(int customerId, int languageId)
+        public ChangeOverviewSettings GetChangeOverviewSettings(int customerId, int languageId, bool onlyListSettings)
         {
             var languageTextId = this.languageRepository.GetLanguageTextIdById(languageId);
 
             switch (languageTextId)
             {
                 case LanguageTextId.Swedish:
-                    return this.changeFieldSettingRepository.GetSwedishOverviewSettings(customerId);
+                    return this.changeFieldSettingRepository.GetSwedishOverviewSettings(customerId, onlyListSettings);
                 case LanguageTextId.English:
-                    return this.changeFieldSettingRepository.GetEnglishOverviewSettings(customerId);
+                    return this.changeFieldSettingRepository.GetEnglishOverviewSettings(customerId, onlyListSettings);
                 default:
                     throw new ArgumentOutOfRangeException("languageId");
             }
@@ -464,7 +464,7 @@
         public SearchResponse Search(SearchParameters parameters, OperationContext context)
         {
             var result = this.changeRepository.Search(parameters);
-            var settings = this.GetChangeOverviewSettings(context.CustomerId, context.LanguageId);
+            var settings = this.GetChangeOverviewSettings(context.CustomerId, context.LanguageId, true);
             return new SearchResponse(result, settings);
         }
 

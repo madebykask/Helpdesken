@@ -14,9 +14,9 @@
 
         void UpdateSettings(ChangeFieldSettings updatedSettings);
 
-        ChangeOverviewSettings GetEnglishOverviewSettings(int customerId);
+        ChangeOverviewSettings GetEnglishOverviewSettings(int customerId, bool onlyListSettings);
 
-        ChangeOverviewSettings GetSwedishOverviewSettings(int customerId);
+        ChangeOverviewSettings GetSwedishOverviewSettings(int customerId, bool onlyListSettings);
 
         ChangeFieldSettings GetEnglishFieldSettings(int customerId);
         

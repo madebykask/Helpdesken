@@ -47,7 +47,7 @@
 
         GetNewChangeEditDataResponse GetNewChangeEditData(OperationContext context);
 
-        ChangeOverviewSettings GetChangeOverviewSettings(int customerId, int languageId);
+        ChangeOverviewSettings GetChangeOverviewSettings(int customerId, int languageId, bool onlyListSettings);
 
         IList<ChangeEntity> GetChanges(int customerId);
 

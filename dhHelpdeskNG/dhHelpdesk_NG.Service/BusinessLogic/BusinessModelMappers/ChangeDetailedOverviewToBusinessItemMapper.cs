@@ -16,6 +16,8 @@
         public BusinessItem Map(ChangeDetailedOverview businessModel)
         {
             var fields = new List<BusinessItemField>();
+            
+            fields.Add(new BusinessItemField("Id", new StringDisplayValue(string.Format("#{0}", businessModel.Id))));
 
             CreateOrdererFields(businessModel.Orderer, fields);
             CreateGeneralFields(businessModel.General, fields);

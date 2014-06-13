@@ -6,12 +6,15 @@
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeOverview;
     using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport.ExcelExport;
+    using DH.Helpdesk.Services.Localization;
 
     public sealed class ChangeOverviewSettingsToExcelTableHeadersMapper : IBusinessModelsMapper<ChangeOverviewSettings, List<ExcelTableHeader>>
     {
         public List<ExcelTableHeader> Map(ChangeOverviewSettings businessModel)
         {
             var headers = new List<ExcelTableHeader>();
+
+            headers.Add(new ExcelTableHeader(Translator.Translate("Ändring"), "Id"));
 
             AddHeaderIfNeeded(businessModel.Orderer.Id, OrdererField.Id, headers);
             AddHeaderIfNeeded(businessModel.Orderer.Name, OrdererField.Name, headers);

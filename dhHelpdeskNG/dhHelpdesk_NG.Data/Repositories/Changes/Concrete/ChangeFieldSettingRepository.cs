@@ -125,7 +125,7 @@
         }
 
         [CreateMissingSettings("customerId")]
-        public ChangeOverviewSettings GetEnglishOverviewSettings(int customerId)
+        public ChangeOverviewSettings GetEnglishOverviewSettings(int customerId, bool onlyListSettings)
         {
             var fieldSettings = this.FindByCustomerIdCore(customerId);
 
@@ -136,7 +136,7 @@
                         {
                             Caption = s.Label_ENG,
                             ChangeField = s.ChangeField,
-                            Show = s.ShowInList
+                            Show = onlyListSettings ? s.ShowInList : s.Show
                         }).ToList();
 
             var fieldSettingCollection = new NamedObjectCollection<FieldOverviewSettingMapperData>(mapperData);
@@ -249,7 +249,7 @@
         }
 
         [CreateMissingSettings("customerId")]
-        public ChangeOverviewSettings GetSwedishOverviewSettings(int customerId)
+        public ChangeOverviewSettings GetSwedishOverviewSettings(int customerId, bool onlyListSettings)
         {
             var fieldSettings = this.FindByCustomerIdCore(customerId);
 
@@ -260,7 +260,7 @@
                         {
                             Caption = s.Label,
                             ChangeField = s.ChangeField,
-                            Show = s.ShowInList
+                            Show = onlyListSettings ? s.ShowInList : s.Show
                         }).ToList();
 
             var fieldSettingCollection = new NamedObjectCollection<FieldOverviewSettingMapperData>(mapperData);
