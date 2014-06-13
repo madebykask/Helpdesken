@@ -3,6 +3,7 @@
 @using DH.Helpdesk.NewSelfService.Infrastructure.Extensions
 @using DH.Helpdesk.NewSelfService.Infrastructure.Common;
 @using DH.Helpdesk.Services.Infrastructure
+@using DH.Helpdesk.Common.Enums;
 
 
 <!DOCTYPE html>
@@ -119,8 +120,8 @@
 </head> 
 <body>
      @{
-         int pCustomerId = -1; 
-         
+         int pCustomerId = -1;
+
          if (SessionFacade.CurrentCustomer != null)
          {
              pCustomerId = SessionFacade.CurrentCustomer.Id;
@@ -136,6 +137,8 @@
          var helper = ManualDependencyResolver.Get<ICommonFunctions>();
 
          var pCaseTemplates = helper.GetCaseTemplates(pCustomerId);
+         var pActionSettings = helper.GetActionSettings(pCustomerId);
+         
       } 
     <div style="position: fixed; top: 30%; right: -2px; background: #fff; padding: 20px 20px 5px 20px; border: 1px solid #ccc;">
         <ul class="nav nav-pills nav-stacked">
@@ -170,78 +173,226 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li class="blue">
-                        <a href="@Url.Action("Index", "Start",new {customerId = pCustomerId, area = ""})">
-                            <div class="ico-home"></div>
-                            Start
-                        </a>
-                    </li>
-                    <li class="dropdown blue">
-                        <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
-                            <div class="ico-new"></div>
-                            Order New Service Request  
-                        </a>
-                               
-                        <ul class="dropdown-menu">
-                            @if (pCaseTemplates != null)
-                            {                                
-                                foreach (var c in pCaseTemplates)
-                                {
-                                    <li>
-                                        @if (string.IsNullOrEmpty(c.TemplatePath))
+                    @{ var start = pActionSettings.SingleOrDefault(a => a.ObjectId == ActionObject.Start);}
+                    @if (start != null)
+                    {
+                        if (start.Visibled)
+                        {
+                            <li class="blue">
+                                <a href="@Url.Action("Index", "Start", new { customerId = pCustomerId, area = "" })">
+                                    <div class="@(string.IsNullOrEmpty(start.ObjectClass) ? "ico-home" : start.ObjectClass)"></div>
+                                    @start.ObjectValue
+                                </a>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <li class="blue">
+                            <a href="@Url.Action("Index", "Start", new { customerId = pCustomerId, area = "" })">
+                                <div class="ico-home"></div>
+                                Start
+                            </a>
+                        </li>
+                    }
+                    
+                    @{ var serviceRequest = pActionSettings.SingleOrDefault(a => a.ObjectId == ActionObject.ServiceRequest);}
+                    @if (serviceRequest != null)
+                    {
+                        if (serviceRequest.Visibled)
+                        {
+                            <li class="dropdown blue">
+                                <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
+                                    <div class="@(string.IsNullOrEmpty(serviceRequest.ObjectClass) ? "ico-new" : serviceRequest.ObjectClass)"></div>
+                                    @serviceRequest.ObjectValue 
+                                </a>
+                      
+                                <ul class="dropdown-menu">
+                                    @if (pCaseTemplates != null)
+                                    {
+                                        foreach (var c in pCaseTemplates)
                                         {
-                                            <a href="@Url.Action("NewCase", "case", new { customerId = pCustomerId, caseTemplateId = c.Id, area = "" })">
-                                                <span class="glyphicon glyphicon-plus"></span> @c.Name <br />
-                                                <span class="small"> @c.Description </span>
-                                            </a>                                     
+                                            <li>
+                                                @if (string.IsNullOrEmpty(c.TemplatePath))
+                                                {
+                                                    <a href="@Url.Action("NewCase", "case", new { customerId = pCustomerId, caseTemplateId = c.Id, area = "" })">
+                                                        <span class="glyphicon glyphicon-plus"></span> @c.Name <br />
+                                                        <span class="small"> @c.Description </span>
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@Url.Content(c.TemplatePath.SetUrlParameters())">
+                                                        <span class="glyphicon glyphicon-plus"></span> @c.Name <br />
+                                                        <span class="small"> @c.Description </span>
+                                                    </a>
+                                                }   
+                                            </li>
                                         }
-                                        else
-                                        {
-                                            <a href="@Url.Content(c.TemplatePath.SetUrlParameters())">
-                                                <span class="glyphicon glyphicon-plus"></span> @c.Name <br />
-                                                <span class="small"> @c.Description </span>
-                                            </a>                                            
-                                        }   
-                                    </li>
-                                }                                                                                                                                                                                        
-                            }
-                        </ul>                                                                                         
-                    </li>
-                    <li class="blue">                        
-                        <a href="@Url.Action("UserCases", "case", new {customerId = pCustomerId , progressId = "2", area = ""})">
-                            <div class="ico-ongoing"></div>
-                            Ongoing Service Requests
-                        </a>
-                    </li>
-                    <li class="blue">
-                        <a href="@Url.Action("UserCases", "case", new {customerId = pCustomerId , progressId = "1", area = ""})">
-                            <div class="ico-finished"></div>
-                            Finished Service Requests
-                        </a>
-                    </li>
-                    <li class="blue">
-                        <a href="@Url.Action("Index", "Documents", new {customerId = pCustomerId, area = ""})">
-                            <div class="ico-documents"></div>
-                            HR Documents
-                        </a>
-                    </li>
-                    <li class="blue">
-                        <a href="@Url.Action("Index", "CoWorkers", new {customerId = pCustomerId, area = ""})">
-                            <div class="ico-coworkers"></div>
-                            My Co-Workers
-                        </a>
-                    </li>
-                    <li class="dropdown blue">
-                        <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
-                            <div class="ico-help"></div>
-                            Need Help?
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="@Url.Action("FindYourWay","Help",new {customerId = pCustomerId, area = ""} )">Find Your Way</a></li>
-                            <li><a href="@Url.Action("Index","Help",new {customerId = pCustomerId, area = ""})">Help</a></li>
-                            <li><a href="@Url.Action("About", "Help", new { customerId = pCustomerId, area = "" })">About</a></li>
-                        </ul>
-                    </li>
+                                    }
+                                </ul>                                                                                         
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <li class="dropdown blue">
+                            <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
+                                <div class="ico-new"></div>
+                                Order New Service Request  
+                            </a>
+                      
+                            <ul class="dropdown-menu">
+                                @if (pCaseTemplates != null)
+                                {
+                                    foreach (var c in pCaseTemplates)
+                                    {
+                                        <li>
+                                            @if (string.IsNullOrEmpty(c.TemplatePath))
+                                            {
+                                                <a href="@Url.Action("NewCase", "case", new { customerId = pCustomerId, caseTemplateId = c.Id, area = "" })">
+                                                    <span class="glyphicon glyphicon-plus"></span> @c.Name <br />
+                                                    <span class="small"> @c.Description </span>
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a href="@Url.Content(c.TemplatePath.SetUrlParameters())">
+                                                    <span class="glyphicon glyphicon-plus"></span> @c.Name <br />
+                                                    <span class="small"> @c.Description </span>
+                                                </a>
+                                            }   
+                                        </li>
+                                    }
+                                }
+                            </ul>                                                                                         
+                        </li>
+                    }
+                    
+                    @{ var ongoingService = pActionSettings.SingleOrDefault(a => a.ObjectId == ActionObject.OngoingService);}
+                    @if (ongoingService != null)
+                    {
+                        if (ongoingService.Visibled)
+                        {
+                            <li class="blue">                        
+                                <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = "2", area = "" })">
+                                    <div class="@(string.IsNullOrEmpty(ongoingService.ObjectClass) ? "ico-ongoing" : ongoingService.ObjectClass)"></div>
+                                    @ongoingService.ObjectValue                                    
+                                </a>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <li class="blue">                        
+                            <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = "2", area = "" })">
+                                <div class="ico-ongoing"></div>
+                                Ongoing Service Requests
+                            </a>
+                        </li>
+                    }
+                    
+                    @{var finishedService = pActionSettings.SingleOrDefault(a => a.ObjectId == ActionObject.FinishedService);}
+                    @if (finishedService != null)
+                    {
+                        if (finishedService.Visibled)
+                        {
+                            <li class="blue">
+                                <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = "1", area = "" })">
+                                    <div class="@(string.IsNullOrEmpty(finishedService.ObjectClass) ? "ico-finished" : finishedService.ObjectClass)"></div>
+                                    @finishedService.ObjectValue                                    
+                                </a>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <li class="blue">
+                            <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = "1", area = "" })">
+                                <div class="ico-finished"></div>
+                                Finished Service Requests
+                            </a>
+                        </li>
+                    }
+
+                    @{var document = pActionSettings.SingleOrDefault(a => a.ObjectId == ActionObject.Document);}
+                    @if (document != null)
+                    {
+                        if (document.Visibled)
+                        {
+                            <li class="blue">
+                                <a href="@Url.Action("Index", "Documents", new { customerId = pCustomerId, area = "" })">
+                                    <div class="@(string.IsNullOrEmpty(document.ObjectClass) ? "ico-documents" : document.ObjectClass)"></div>
+                                    @document.ObjectValue
+                                </a>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <li class="blue">
+                            <a href="@Url.Action("Index", "Documents", new { customerId = pCustomerId, area = "" })">
+                                <div class="ico-documents"></div>
+                                HR Documents
+                            </a>
+                        </li>
+                    }
+                    
+                    @{var coWorker = pActionSettings.SingleOrDefault(a => a.ObjectId == ActionObject.CoWorker);}
+                    @if (coWorker != null)
+                    {
+                        if (coWorker.Visibled)
+                        {
+                            <li class="blue">
+                                <a href="@Url.Action("Index", "CoWorkers", new { customerId = pCustomerId, area = "" })">
+                                    <div class="@(string.IsNullOrEmpty(coWorker.ObjectClass) ? "ico-coworkers" : coWorker.ObjectClass)"></div>
+                                    @coWorker.ObjectValue
+                                </a>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <li class="blue">
+                            <a href="@Url.Action("Index", "CoWorkers", new { customerId = pCustomerId, area = "" })">
+                                <div class="ico-coworkers"></div>
+                                My Co-Workers
+                            </a>
+                        </li>
+                    }
+                    
+                     
+                    @{var help = pActionSettings.SingleOrDefault(a => a.ObjectId == ActionObject.Help);}
+                    @if (help != null)
+                    {
+                        if (help.Visibled)
+                        {
+                            <li class="dropdown blue">
+                                <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
+                                    <div class="@(string.IsNullOrEmpty(help.ObjectClass) ? "ico-help" : help.ObjectClass)"></div>
+                                    @help.ObjectValue
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="@Url.Action("FindYourWay", "Help", new { customerId = pCustomerId, area = "" })">Find Your Way</a></li>
+                                    <li><a href="@Url.Action("Index", "Help", new { customerId = pCustomerId, area = "" })">Help</a></li>
+                                    <li><a href="@Url.Action("About", "Help", new { customerId = pCustomerId, area = "" })">About</a></li>
+                                </ul>
+                            </li>
+                        }
+                    }
+                    else
+                    {<li class="dropdown blue">
+                         <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
+                             <div class="ico-help"></div>
+                             Need Help?
+                         </a>
+                         <ul class="dropdown-menu">
+                             <li><a href="@Url.Action("FindYourWay", "Help", new { customerId = pCustomerId, area = "" })">Find Your Way</a></li>
+                             <li><a href="@Url.Action("Index", "Help", new { customerId = pCustomerId, area = "" })">Help</a></li>
+                             <li><a href="@Url.Action("About", "Help", new { customerId = pCustomerId, area = "" })">About</a></li>
+                         </ul>
+                     </li>
+                    }
                 </ul>
             </div>
         </div>

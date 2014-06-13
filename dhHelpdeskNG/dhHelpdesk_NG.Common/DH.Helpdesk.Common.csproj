@@ -53,6 +53,7 @@
     <Compile Include="Constraints\NotifierConstraint.cs" />
     <Compile Include="Enums\AppSettingsKey.cs" />
     <Compile Include="Enums\CircularStateId.cs" />
+    <Compile Include="Enums\ActionObject.cs" />
     <Compile Include="Enums\LanquageNameId.cs" />
     <Compile Include="Enums\SortBy.cs" />
     <Compile Include="Exceptions\PropertyNotFoundException.cs" />

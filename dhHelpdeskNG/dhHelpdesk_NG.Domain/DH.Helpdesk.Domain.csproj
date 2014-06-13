@@ -61,6 +61,7 @@
     <Compile Include="AccountEMailLog.cs" />
     <Compile Include="AccountFieldSettings.cs" />
     <Compile Include="AccountType.cs" />
+    <Compile Include="ActionSetting\ActionSetting.cs" />
     <Compile Include="Application.cs" />
     <Compile Include="Building.cs" />
     <Compile Include="BulletinBoard.cs" />
@@ -286,6 +287,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\PostSharp.3.1.33\tools\PostSharp.targets" Condition="Exists('..\packages\PostSharp.3.1.33\tools\PostSharp.targets')" />
   <Target Name="EnsurePostSharpImported" BeforeTargets="BeforeBuild" Condition="'$(PostSharp30Imported)' == ''">

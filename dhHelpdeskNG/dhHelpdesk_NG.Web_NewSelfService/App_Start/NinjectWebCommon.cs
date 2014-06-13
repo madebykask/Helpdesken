@@ -11,6 +11,8 @@ namespace DH.Helpdesk.NewSelfService
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Dal.Repositories.ActionSetting;
+    using DH.Helpdesk.Dal.Repositories.ActionSetting.Concrete;
     using DH.Helpdesk.Dal.Repositories.Computers;
     using DH.Helpdesk.Dal.Repositories.Computers.Concrete;
     using DH.Helpdesk.Dal.Repositories.MailTemplates;
@@ -162,6 +164,7 @@ namespace DH.Helpdesk.NewSelfService
             kernel.Bind<ICaseSolutionCategoryRepository>().To<CaseSolutionCategoryRepository>();
             kernel.Bind<ICaseSolutionScheduleRepository>().To<CaseSolutionScheduleRepository>();
             kernel.Bind<INotifierFieldSettingLanguageRepository>().To<NotifierFieldSettingLanguageRepository>();
+            kernel.Bind<IActionSettingRepository>().To<ActionSettingRepository>();
                                       
             // Service             
             kernel.Bind<IMasterDataService>().To<MasterDataService>();            
@@ -199,8 +202,9 @@ namespace DH.Helpdesk.NewSelfService
             kernel.Bind<IProjectService>().To<ProjectService>();
             kernel.Bind<IFinishingCauseService>().To<FinishingCauseService>();
             kernel.Bind<IStateSecondaryService>().To<StateSecondaryService>();
-            kernel.Bind<ICaseSolutionService>().To<CaseSolutionService>();            
-                        
+            kernel.Bind<ICaseSolutionService>().To<CaseSolutionService>();
+            kernel.Bind<IActionSettingService>().To<ActionSettingService>();            
+                         
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();
 

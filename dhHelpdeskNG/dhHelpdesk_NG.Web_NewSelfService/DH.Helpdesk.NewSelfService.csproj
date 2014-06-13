@@ -237,7 +237,8 @@
     <Compile Include="Infrastructure\BusinessModelFactories\Notifiers\INewNotifierFactory.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Notifiers\IUpdatedNotifierFactory.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Notifiers\IUpdatedSettingsFactory.cs" />
-    <Compile Include="Infrastructure\Common\CommonFunctions.cs" />
+    <Compile Include="Infrastructure\Common\Concrete\CommonFunctions.cs" />
+    <Compile Include="Infrastructure\Common\ICommonFunctions.cs" />
     <Compile Include="Infrastructure\Constants.cs" />
     <Compile Include="Infrastructure\Enums.cs" />
     <Compile Include="Infrastructure\Extensions\BooleanExtansions.cs" />

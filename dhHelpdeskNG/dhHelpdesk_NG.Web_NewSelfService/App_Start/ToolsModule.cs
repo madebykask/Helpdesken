@@ -3,6 +3,7 @@
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Infrastructure.Concrete;
     using DH.Helpdesk.NewSelfService.Infrastructure.Common;
+    using DH.Helpdesk.NewSelfService.Infrastructure.Common.Concrete;
     using DH.Helpdesk.NewSelfService.Infrastructure.Tools;
     using DH.Helpdesk.NewSelfService.Infrastructure.Tools.Concrete;
 

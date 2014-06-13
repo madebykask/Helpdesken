@@ -52,6 +52,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
         private readonly IWorkingGroupService _workingGroupService;
         private readonly IStateSecondaryService _stateSecondaryService;
         private readonly ICaseSolutionService _caseSolutionService;
+        
 
         private const string ParentPathDefaultValue = "--";
 
@@ -109,7 +110,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             this._workingGroupService = workingGroupService;
             this._userService = userService;
             this._stateSecondaryService = stateSecondaryService;
-            this._caseSolutionService = caseSolutionService;
+            this._caseSolutionService = caseSolutionService;            
         }
 
 

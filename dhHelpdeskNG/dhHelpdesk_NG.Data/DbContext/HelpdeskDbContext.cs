@@ -64,6 +64,8 @@
 
         public DbSet<Account> Accounts { get; set; }
 
+        public DbSet<ActionSettingEntity> ActionSetting { get; set; }
+
         public DbSet<Application> Applications { get; set; }
 
         public DbSet<Building> Buildings { get; set; }
@@ -505,6 +507,7 @@
             modelBuilder.Configurations.Add(new AccountActivityConfiguration());
             modelBuilder.Configurations.Add(new AccountActivityGroupConfiguration());
             modelBuilder.Configurations.Add(new AccountFieldSettingsConfiguration());
+            modelBuilder.Configurations.Add(new ActionSettingConfiguration());
             modelBuilder.Configurations.Add(new ApplicationConfiguration());
             modelBuilder.Configurations.Add(new BuildingConfiguration());
             modelBuilder.Configurations.Add(new BulletinBoardConfiguration());

@@ -74,6 +74,7 @@
     <Compile Include="Attributes\Inventory\CreateMissingServerSettingsAttribute.cs" />
     <Compile Include="Attributes\Inventory\CreateMissingComputerSettingsAttribute.cs" />
     <Compile Include="Dal\INewRepository.cs" />
+    <Compile Include="EntityConfigurations\ActionSetting\ActionSettingConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CausingPartConfiguration.cs" />
     <Compile Include="EntityConfigurations\Changes\ChangeCouncilConfiguration.cs" />
     <Compile Include="EntityConfigurations\DailyReport\DailyReportConfiguration.cs" />
@@ -255,6 +256,8 @@
     <Compile Include="MapperData\Changes\FieldProcessingSettingMapperData.cs" />
     <Compile Include="MapperData\Changes\FieldSettingMapperData.cs" />
     <Compile Include="Mappers\Users\BusinessModelToEntity\UpdatedUserModuleToUserModuleEntityMapper.cs" />
+    <Compile Include="Repositories\ActionSetting\Concrete\ActionSettingRepository.cs" />
+    <Compile Include="Repositories\ActionSetting\IActionSettingRepository.cs" />
     <Compile Include="Repositories\CaseHistoryRepository.cs" />
     <Compile Include="Repositories\Cases\Concrete\CausingPartRepository.cs" />
     <Compile Include="Repositories\Cases\ICausingPartRepository.cs" />

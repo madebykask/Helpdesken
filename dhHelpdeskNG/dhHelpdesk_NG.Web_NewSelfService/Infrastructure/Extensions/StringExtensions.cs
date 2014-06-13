@@ -213,8 +213,11 @@
         {
             string strUrl = value.ToLower();
 
+            if (strUrl.IndexOf("&clearsession=1") > 0)
+                strUrl = strUrl.Replace("&clearsession=1", string.Empty);
+
             if (strUrl.IndexOf("[caseid]") > 0)
-                if (id > 0) strUrl = strUrl.Replace("[caseid]", id.ToString());
+                if (id > 0) strUrl = strUrl.Replace("[caseid]", id.ToString());            
 
             if (strUrl.IndexOf("[userid]") > 0)            
                 if (SessionFacade.CurrentSystemUser != null) strUrl = strUrl.Replace("[userid]", SessionFacade.CurrentSystemUser);
