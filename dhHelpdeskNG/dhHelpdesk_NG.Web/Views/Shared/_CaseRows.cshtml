@@ -1,4 +1,5 @@
 ﻿
+@using DH.Helpdesk.Common.Extensions.DateTime
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @model DH.Helpdesk.Web.Models.Case.CaseSearchResultModel
 
@@ -46,7 +47,7 @@
                         else if (c.FieldType == 2)                                                        
                         {
                             <!-- dateTime -->
-                            <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@(c.DateTimeValue.HasValue ? c.DateTimeValue.Value.ToLocalTime().ToString() : string.Empty)</a>
+                            <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@(c.DateTimeValue.HasValue ? c.DateTimeValue.Value.ToLocalTime().ToFormattedDateTime() : string.Empty)</a>
                         }
                         else    
                         {

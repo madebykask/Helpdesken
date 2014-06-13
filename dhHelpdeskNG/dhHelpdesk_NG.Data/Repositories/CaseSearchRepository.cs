@@ -234,7 +234,7 @@
             watchDate = watchDate.RoundToDay();
             var today = DateTime.Today.RoundToDay();
 
-            if (today >= watchDate.AddDays(-1) && today <= watchDate)
+            if (today > watchDate)
             {
                 return true;
             }
