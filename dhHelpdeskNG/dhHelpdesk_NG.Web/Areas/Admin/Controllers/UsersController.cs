@@ -2,15 +2,15 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Web.Mvc;
-
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
     using DH.Helpdesk.Web.Infrastructure;
-   
+
 
     public class UsersController : BaseController
     {
@@ -99,7 +99,7 @@
         public ActionResult Index(UserSearch filter)
         {
             var model = this.IndexInputViewModel();
-            model.Filter = filter;            
+            model.Filter = filter;
             this.Session["UserSearch"] = filter;
             model.Users = this._userService.SearchSortAndGenerateUsers(filter);
 
@@ -181,7 +181,7 @@
             userInputViewModel.User.UserGroup_Id = 4;
 
 
-            this._userService.SaveNewUser(user, AAsSelected, CsSelected, OTsSelected, out errors);
+            this._userService.SaveNewUser(user, AAsSelected, CsSelected, OTsSelected, null, out errors);
 
             if (errors.Count == 0)
             {
@@ -199,7 +199,6 @@
         [CustomAuthorize(Roles = "3,4")]
         public ActionResult Edit(int id, int? copy)
         {
-
             var user = this._userService.GetUser(id);
 
             if (user == null)
@@ -228,161 +227,151 @@
             }
 
             return this.View(model);
-
-
         }
 
         [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
         public ActionResult Edit(int id, int[] AAsSelected, int[] CsSelected, int[] OTsSelected, int[] Departments, List<UserWorkingGroup> UserWorkingGroups, UserSaveViewModel userModel, string NewPassword, string ConfirmPassword, FormCollection coll)
         {
+            IDictionary<string, string> errors = new Dictionary<string, string>();
+
             var userToSave = new User();
 
             if (id != -1)
             {
                 userToSave = this._userService.GetUser(id);
-            }
 
-            userToSave.OrderPermission = this.returnOrderPermissionForSave(userModel);
-            userToSave.CaseInfoMail = this.returnCaseInfoMailForEditSave(userModel);
+                userToSave.OrderPermission = this.returnOrderPermissionForSave(userModel);
+                userToSave.CaseInfoMail = this.returnCaseInfoMailForEditSave(userModel);
 
-            
-            var b = this.TryUpdateModel(userToSave, "user");
+                var b = this.TryUpdateModel(userToSave, "user");
 
-            if (id == -1)
-            {
-                userToSave.Id = 0;
-                userToSave.Password = NewPassword;
-                userToSave.UserRoles = this._userService.GetUserRoles();
+                if (userToSave.UserRoles != null)
+                    foreach (var delete in userToSave.UserRoles.ToList())
+                        userToSave.UserRoles.Remove(delete);
 
-                if (userToSave.Language_Id == 0)
-                    userToSave.Language_Id = 2;
-
-
-                foreach (var cu in userToSave.CustomerUsers)
+                if (userModel.UserRights.HasValue)
                 {
-                    cu.User_Id = 0;
-
-                    if (Convert.ToInt32(cu.CaseCaseTypeFilter) > 0)
-                    {
-                        cu.CaseCaseTypeFilter = "0";
-                    }
-
-                    if (Convert.ToInt32(cu.CaseWorkingGroupFilter) > 0)
-                    {
-                        cu.CaseWorkingGroupFilter = "0";
-                    }
-
-                    if (Convert.ToInt32(cu.CaseResponsibleFilter) > 0)
-                    {
-                        cu.CaseResponsibleFilter = "0";
-                    }
-
-                    if (Convert.ToInt32(cu.CaseStateSecondaryFilter) > 0)
-                    {
-                        cu.CaseStateSecondaryFilter = "0";
-                    }
-
-                    if (Convert.ToInt32(cu.CaseProductAreaFilter) > 0 )
-                    {
-                        cu.CaseProductAreaFilter = "0";
-                    }
-
-                    if (Convert.ToInt32(cu.CaseCategoryFilter) > 0)
-                    {
-                        cu.CaseCategoryFilter = "0";
-                    }
-
-                    if (Convert.ToInt32(cu.CaseRegionFilter) > 0)
-                    {
-                        cu.CaseRegionFilter = "0";
-                    }
-
-                    if (Convert.ToInt32(cu.CaseUserFilter) > 0)
-                    {
-                        cu.CaseUserFilter = "0";
-                    }
-
-                    if (Convert.ToInt32(cu.CaseStatusFilter) > 0)
-                    {
-                        cu.CaseStatusFilter = "0";
-                    }
-
-                    if (Convert.ToInt32(cu.CaseResponsibleFilter) > 0 )
-                    {
-                        cu.CaseResponsibleFilter = "0";
-                    }
-
-                    if (Convert.ToInt32(cu.CasePriorityFilter) > 0 )
-                    {
-                        cu.CasePriorityFilter = "0";
-                    }
-
-                    cu.CasePerformerFilter = "0";
-                    
+                    var userRight = this._userService.GetUserRoleById(userModel.UserRights.Value);
+                    userToSave.UserRoles.Add(userRight);
                 }
-               
-                
+
+                this._userService.SaveEditUser(userToSave, AAsSelected, CsSelected, OTsSelected, Departments, UserWorkingGroups, out errors);
+
+                if (errors.Count == 0)
+                    return this.RedirectToAction("index", "users");
+
+                var model = this.CreateInputViewModel(userToSave);
+
+                return this.View(model);
             }
 
-            var vmodel = this.CreateInputViewModel(userToSave);
-            vmodel.MenuSetting = userModel.MenuSetting;
+            var copy = userModel.User;
+            copy.Id = 0;
+            copy.Password = NewPassword;
 
-            
-            if (userToSave.UserRoles != null)
-                foreach (var delete in userToSave.UserRoles.ToList())
-                    userToSave.UserRoles.Remove(delete);
+            if (copy.Language_Id == 0)
+                copy.Language_Id = 2;
+
+            var tempCustomerUser = copy.CustomerUsers.ToList();
+            copy.CustomerUsers.Clear();
 
             if (userModel.UserRights.HasValue)
             {
                 var userRight = this._userService.GetUserRoleById(userModel.UserRights.Value);
-                userToSave.UserRoles.Add(userRight);
+                copy.UserRoles.Add(userRight);
             }
 
+            this._userService.SaveNewUser(copy, AAsSelected, CsSelected, OTsSelected, UserWorkingGroups, out errors);
 
-            IDictionary<string, string> errors = new Dictionary<string, string>();
+            var customerUsers = this._userService.GetCustomerUserForUser(copy.Id).ToList();
 
-            
-            this._userService.SaveEditUser(userToSave, AAsSelected, CsSelected, OTsSelected, Departments, UserWorkingGroups, out errors);
-
-            if (userModel.CopyUserid != 0)
+            foreach (var cu in customerUsers)
             {
-                foreach (var c in userModel.User.CustomerUsers)
+                var ccu = tempCustomerUser.FirstOrDefault(x => x.Customer_Id == cu.Customer_Id);
+
+                if (ccu == null) continue;
+
+                if (ccu.CasePriorityFilter != null)
                 {
-                    //Get CaseSettings
-                    var caseSettingsToCopy = _caseSettingsService.GetCaseSettingsWithUser(c.Customer_Id, userModel.CopyUserid, userToSave.UserGroup_Id);
-
-
-                    foreach (var cs in caseSettingsToCopy)
-                    {
-                        var newUserCaseSetting = new CaseSettings() { };
-
-                        newUserCaseSetting.User_Id = userToSave.Id;
-                        newUserCaseSetting.Customer_Id = cs.Customer_Id;
-                        newUserCaseSetting.Name = cs.Name;
-                        newUserCaseSetting.Line = cs.Line;
-                        newUserCaseSetting.MinWidth = cs.MinWidth;
-                        newUserCaseSetting.UserGroup = cs.UserGroup;
-                        newUserCaseSetting.ColOrder = cs.ColOrder;
-
-                        this._caseSettingsService.SaveCaseSetting(newUserCaseSetting, out errors);
-                    }
+                    cu.CasePriorityFilter = "0";
                 }
 
-             
-            }
+                if (ccu.CaseCaseTypeFilter != null)
+                {
+                    cu.CaseCaseTypeFilter = "0";
+                }
 
+                if (ccu.CaseCategoryFilter != null)
+                {
+                    cu.CaseCategoryFilter = "0";
+                }
+
+                if (ccu.CaseProductAreaFilter != null)
+                {
+                    cu.CaseProductAreaFilter = "0";
+                }
+
+                if (ccu.CaseRegionFilter != null)
+                {
+                    cu.CaseRegionFilter = "0";
+                }
+
+                if (ccu.CaseResponsibleFilter != null)
+                {
+                    cu.CaseResponsibleFilter = "0";
+                }
+
+                if (ccu.CaseStateSecondaryFilter != null)
+                {
+                    cu.CaseStateSecondaryFilter = "0";
+                }
+
+                if (ccu.CaseStatusFilter != null)
+                {
+                    cu.CaseStatusFilter = "0";
+                }
+
+                if (ccu.CaseUserFilter != null)
+                {
+                    cu.CaseUserFilter = "0";
+                }
+
+                if (ccu.CaseWorkingGroupFilter != null)
+                {
+                    cu.CaseWorkingGroupFilter = "0";
+                }
+
+                cu.CasePerformerFilter = "0";
+
+                _customerUserService.SaveCustomerUser(cu, out errors);
+
+                //Get CaseSettings
+                var caseSettingsToCopy = _caseSettingsService.GetCaseSettingsWithUser(cu.Customer_Id, userModel.CopyUserid, userToSave.UserGroup_Id).ToList();
+
+
+                foreach (var cs in caseSettingsToCopy)
+                {
+                    var newUserCaseSetting = new CaseSettings() { };
+
+                    newUserCaseSetting.User_Id = copy.Id;
+                    newUserCaseSetting.Customer_Id = cs.Customer_Id;
+                    newUserCaseSetting.Name = cs.Name;
+                    newUserCaseSetting.Line = cs.Line;
+                    newUserCaseSetting.MinWidth = cs.MinWidth;
+                    newUserCaseSetting.UserGroup = cs.UserGroup;
+                    newUserCaseSetting.ColOrder = cs.ColOrder;
+
+                    this._caseSettingsService.SaveCaseSetting(newUserCaseSetting, out errors);
+                }
+            }
 
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "users");
 
-            var model = this.CreateInputViewModel(userToSave);
+            var copyModel = this.CreateInputViewModel(copy);
 
-
-            
-
-           // model.UserColumns = _caseSettingsService.GetCaseSettingsWithUser(userToSave.Customer_Id, userToSave.Id, SessionFacade.CurrentUser.UserGroupId);
-            return this.View(model);
+            return this.View(copyModel);
         }
 
         [CustomAuthorize(Roles = "3,4")]
@@ -752,7 +741,7 @@
         //    return userRoles;
         //}
 
-        
+
 
         private int returnCaseInfoMailForEditSave(UserSaveViewModel userModel)
         {

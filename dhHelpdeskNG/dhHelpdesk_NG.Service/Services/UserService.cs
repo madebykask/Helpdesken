@@ -44,7 +44,7 @@ namespace DH.Helpdesk.Services.Services
 
         void SavePassword(int id, string password);
         void SaveEditUser(User user, int[] aas, int[] cs, int[] ots, int[] dus, List<UserWorkingGroup> UserWorkingGroups, out IDictionary<string, string> errors);
-        void SaveNewUser(User user, int[] aas, int[] cs, int[] ots, out IDictionary<string, string> errors);
+        void SaveNewUser(User user, int[] aas, int[] cs, int[] ots, List<UserWorkingGroup> UserWorkingGroups, out IDictionary<string, string> errors);
         void SaveProfileUser(User user, out IDictionary<string, string> errors);
         void Commit();
 
@@ -375,17 +375,6 @@ namespace DH.Helpdesk.Services.Services
                 user.Cs = new List<Customer>();
 
 
-            //if (user.Id == 0)
-            //{
-            //    if (user.CustomerUsers != null)
-            //        foreach (var delete in user.CustomerUsers.ToList())
-            //            user.CustomerUsers.Remove(delete);
-            //    else
-            //        user.CustomerUsers = new List<CustomerUser>();
-            //}
-
-
-
             if (user.Id != 0)
             {
                 if (cs != null)
@@ -398,6 +387,15 @@ namespace DH.Helpdesk.Services.Services
                             user.Cs.Add(c);
                     }
                 }
+            }
+
+            if (user.Id == 0)
+            {
+                if (user.CustomerUsers != null)
+                    foreach (var delete in user.CustomerUsers.ToList())
+                        user.CustomerUsers.Remove(delete);
+                else
+                    user.CustomerUsers = new List<CustomerUser>();
             }
 
             if (user.OTs != null)
@@ -474,7 +472,7 @@ namespace DH.Helpdesk.Services.Services
                 this.Commit();
         }
 
-        public void SaveNewUser(User user, int[] aas, int[] cs, int[] ots, out IDictionary<string, string> errors)
+        public void SaveNewUser(User user, int[] aas, int[] cs, int[] ots, List<UserWorkingGroup> UserWorkingGroups, out IDictionary<string, string> errors)
         {
             if (user == null)
             {

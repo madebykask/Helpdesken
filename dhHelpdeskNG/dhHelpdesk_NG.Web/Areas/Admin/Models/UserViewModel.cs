@@ -111,5 +111,6 @@
         public string[] MenuSetting { get; set; }
 
         public int CopyUserid { get; set; }
+       
     }
 }

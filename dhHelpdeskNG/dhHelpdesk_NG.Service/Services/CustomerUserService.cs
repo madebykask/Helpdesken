@@ -3,18 +3,23 @@ using DH.Helpdesk.Common.Extensions.Integer;
 
 namespace DH.Helpdesk.Services.Services
 {
+    using System;
     using System.Collections.Generic;
-
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
+
+  
+  
 
     public interface ICustomerUserService
     {
         IList<CustomerUser> GetCustomerUsersForHomeIndexPage(int userId);
         IList<CustomerUserList> GetFinalListForCustomerUsersHomeIndexPage(int id);
         IList<CustomerUser> GetCustomerUsersForCustomer(int customerId);
+        IList<CustomerUser> GetCustomerUsersForUser(int userId);
 
         CustomerUser GetCustomerSettings(int customer, int user);
 
@@ -22,14 +27,18 @@ namespace DH.Helpdesk.Services.Services
 
         void UpdateUserCaseSetting(UserCaseSetting newSetting);
         void SaveCustomerUser(CustomerUser customerUser, out IDictionary<string, string> errors);
+
+        void Commit();
     }
 
     public class CustomerUserService : ICustomerUserService
     {
         private readonly ICustomerUserRepository _customerUserRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public CustomerUserService(
-            ICustomerUserRepository customerUserRepository)
+            ICustomerUserRepository customerUserRepository,
+             IUnitOfWork unitOfWork)
         {
             this._customerUserRepository = customerUserRepository;
         }
@@ -42,6 +51,11 @@ namespace DH.Helpdesk.Services.Services
         public IList<CustomerUser> GetCustomerUsersForCustomer(int customerId)
         {
             return this._customerUserRepository.GetCustomerUsersForCustomer(customerId);
+        }
+
+        public IList<CustomerUser> GetCustomerUsersForUser(int userId)
+        {
+            return this._customerUserRepository.GetCustomerUsersForUser(userId);
         }
 
         public IList<CustomerUserList> GetFinalListForCustomerUsersHomeIndexPage(int userId)
@@ -86,8 +100,20 @@ namespace DH.Helpdesk.Services.Services
 
             errors = new Dictionary<string, string>();
 
-            this._customerUserRepository.Add(customerUser);
-           
+
+            //if (customerUser. == 0)
+            //    this._customerUserRepository.Add(customerUser);
+            //else
+                this._customerUserRepository.Update(customerUser);
+                _customerUserRepository.Commit();
+            //if (errors.Count == 0)
+            //    this.Commit();
         }
+
+        public void Commit()
+        {
+            this._unitOfWork.Commit();
+        }
+
     }
 }

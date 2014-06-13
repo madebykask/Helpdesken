@@ -30,6 +30,7 @@
             this.Property(x => x.ShowOnStartPage).IsOptional();
             this.Property(x => x.WatchDatePermission).IsRequired();
             this.Property(x => x.UserInfoPermission).IsRequired();
+            this.Property(x => x.CasePriorityFilter).IsOptional().HasMaxLength(50);
 
             this.ToTable("tblcustomeruser");
         }

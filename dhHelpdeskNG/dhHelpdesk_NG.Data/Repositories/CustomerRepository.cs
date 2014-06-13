@@ -92,6 +92,7 @@
         IList<CustomerUser> GetCustomerUsersForStart(int userId);
         IList<CustomerUserList> GetCustomerUsersForStartFinal(int userId);
         IList<CustomerUser> GetCustomerUsersForCustomer(int customeId);
+        IList<CustomerUser> GetCustomerUsersForUser(int userId);
         void UpdateUserSetting(UserCaseSetting newSetting);
     }
 
@@ -127,6 +128,15 @@
         {
             var query = (from cu in this.DataContext.CustomerUsers
                          where cu.Customer_Id == customerId
+                         select cu);
+
+            return query.ToList();
+        }
+
+        public IList<CustomerUser> GetCustomerUsersForUser(int userId)
+        {
+            var query = (from cu in this.DataContext.CustomerUsers
+                         where cu.User_Id == userId
                          select cu);
 
             return query.ToList();
