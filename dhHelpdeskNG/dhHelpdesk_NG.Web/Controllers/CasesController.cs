@@ -954,45 +954,45 @@ namespace DH.Helpdesk.Web.Controllers
             int customerId = int.Parse(frm["CustomerId"]);
             int userId = int.Parse(frm["UserId"]);
 
-            bool regionCheck = frm["RegionCheck"].Contains("true");
+            bool regionCheck = frm.IsFormValueTrue("RegionCheck");
             var regions = (regionCheck)
                 ? ((frm.ReturnFormValue("lstRegions") == string.Empty) ? "0" : frm.ReturnFormValue("lstRegions"))
                 : string.Empty;
 
-            bool registerByCheck = frm["RegisteredByCheck"].Contains("true");
+            bool registerByCheck = frm.IsFormValueTrue("RegisteredByCheck");
             var registerBy = (registerByCheck)
                 ? ((frm.ReturnFormValue("lstRegisterBy") == string.Empty) ? "0" : frm.ReturnFormValue("lstRegisterBy"))
                 : string.Empty;
 
-            bool caseTypeCheck = frm["CaseTypeCheck"].Contains("true");
+            bool caseTypeCheck = frm.IsFormValueTrue("CaseTypeCheck");
 
-            bool productAreaCheck = frm["ProductAreaCheck"].Contains("true");
+            bool productAreaCheck = frm.IsFormValueTrue("ProductAreaCheck");
             var productArea = (productAreaCheck)
                 ? ((frm.ReturnFormValue("ProductAreaId") == string.Empty) ? "0" : frm.ReturnFormValue("ProductAreaId"))
                 : string.Empty;
 
-            bool workingGroupCheck = frm["WorkingGroupCheck"].Contains("true");
+            bool workingGroupCheck = frm.IsFormValueTrue("WorkingGroupCheck");
             var workingGroup = (workingGroupCheck)
                 ? ((frm.ReturnFormValue("lstWorkingGroup") == string.Empty)
                     ? "0"
                     : frm.ReturnFormValue("lstWorkingGroup"))
                 : string.Empty;
 
-            bool responsibleCheck = frm["ResponsibleCheck"].Contains("true");
+            bool responsibleCheck = frm.IsFormValueTrue("ResponsibleCheck");
 
             //bool administratorCheck = frm["AdministratorCheck"].Contains("true"); it is always true  
             var administrator = (frm.ReturnFormValue("lstAdministrator") == string.Empty)
                 ? "0"
                 : frm.ReturnFormValue("lstAdministrator");
 
-            bool priorityCheck = frm["PriorityCheck"].Contains("true");
+            bool priorityCheck = frm.IsFormValueTrue("PriorityCheck");
             var priority = (priorityCheck)
                 ? ((frm.ReturnFormValue("lstPriority") == string.Empty) ? "0" : frm.ReturnFormValue("lstPriority"))
                 : string.Empty;
 
-            var stateCheck = frm["StateCheck"].Contains("true");
+            var stateCheck = frm.IsFormValueTrue("StateCheck");
 
-            bool subStateCheck = frm["SubStateCheck"].Contains("true");
+            bool subStateCheck = frm.IsFormValueTrue("SubStateCheck");
             var subState = (subStateCheck)
                 ? ((frm.ReturnFormValue("lstSubState") == string.Empty) ? "0" : frm.ReturnFormValue("lstSubState"))
                 : string.Empty;

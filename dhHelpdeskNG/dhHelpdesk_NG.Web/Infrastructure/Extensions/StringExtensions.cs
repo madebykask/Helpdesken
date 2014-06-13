@@ -48,6 +48,23 @@
             return ret;
         }
 
+        public static bool IsFormValueTrue(this FormCollection form, string key)
+        {
+            if (string.IsNullOrEmpty(key))
+            {
+                return false;
+            }
+
+            var value = form[key];
+
+            if (string.IsNullOrEmpty(value))
+            {
+                return false;
+            }
+
+            return value.ToLower().Contains("true");
+        }
+
         public static string ReturnFormValue(this FormCollection collection, string valueToReturn)
         {
             var value = valueToReturn.ToLower(); 
