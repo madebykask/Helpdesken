@@ -375,8 +375,9 @@
         {
             var editData = this.GetChangeEditDataCore(context.CustomerId, context.LanguageId, settings);
             var relatedChanges = this.changeRepository.FindOverviewsExcludeSpecified(context.CustomerId, changeId);
-            editData.RelatedChanges = relatedChanges;
-
+            editData.RelatedChanges = relatedChanges
+                                        .Select(c => new ItemOverview(string.Format("#{0} - {1}", c.Value, c.Name), c.Value))
+                                        .ToList();
             return editData;
         }
 
