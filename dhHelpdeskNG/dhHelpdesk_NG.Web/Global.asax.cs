@@ -55,7 +55,7 @@
 
         protected void Application_BeginRequest(Object sender, EventArgs e)
         {
-            Thread.CurrentThread.CurrentUICulture = this.configuration.Application.DefaultCulture;
+            Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture = this.configuration.Application.DefaultCulture;
         }
 
         private static void RegisterLocalizedAttributes()

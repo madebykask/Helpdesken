@@ -3,5 +3,5 @@
 
 @if (Model.HasValue)
 {
-    <span data-datetimeutc="@Model.Value.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds">@Model.Value</span>
+    <span>@Model.Value.ToLocalTime()</span>
 }
