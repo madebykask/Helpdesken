@@ -26,6 +26,10 @@
 
         public static readonly string HasRecoveryPlan = "Analyze.HasRecoveryPlan";
 
+        public static readonly string AttachedFiles = "Analyze.AttachedFiles";
+
+        public static readonly string Logs = "Analyze.Logs";
+
         public static readonly string Approval = "Analyze.Approval";
 
         public static readonly string RejectExplanation = "Analyze.RejectExplanation";

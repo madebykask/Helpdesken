@@ -17,5 +17,9 @@
         public static readonly string FinishingDate = "Implementation.FinishingDate";
 
         public static readonly string ImplementationReady = "Implementation.ImplementationReady";
+
+        public static readonly string AttachedFiles = "Implementation.AttachedFiles";
+
+        public static readonly string Logs = "Implementation.Logs";
     }
 }

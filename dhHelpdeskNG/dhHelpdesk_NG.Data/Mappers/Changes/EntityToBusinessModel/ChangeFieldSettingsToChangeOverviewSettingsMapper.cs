@@ -65,24 +65,38 @@
         private static RegistrationOverviewSettings CreateRegistrationSettings(
             NamedObjectCollection<FieldOverviewSettingMapperData> fieldSettings)
         {
+            var name = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.Name));
+            var phone = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.Phone));
+            var email = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.Email));
+            var company = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.Company));
             var owner = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.Owner));
+            var affectedProcesses = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.AffectedProcesses));
+            var affectedDepartments = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.AffectedDepartments));
             var description = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.Description));
             var businessBenefits = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.BusinessBenefits));
             var consequence = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.Consequence));
             var impact = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.Impact));
             var desiredDate = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.DesiredDate));
             var verified = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.Verified));
+            var attachedFiles = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.AttachedFiles));
             var approval = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.Approval));
             var rejectExplanation = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.RejectExplanation));
 
             return new RegistrationOverviewSettings(
+                name,
+                phone,
+                email,
+                company,
                 owner,
+                affectedProcesses,
+                affectedDepartments,
                 description,
                 businessBenefits,
                 consequence,
                 impact,
                 desiredDate,
                 verified,
+                attachedFiles,
                 approval,
                 rejectExplanation);
         }
@@ -102,6 +116,8 @@
             var finishDate = CreateFieldSetting(fieldSettings.FindByName(AnalyzeField.FinishDate));
             var hasImplementationPlan = CreateFieldSetting(fieldSettings.FindByName(AnalyzeField.HasImplementationPlan));
             var hasRecoveryPlan = CreateFieldSetting(fieldSettings.FindByName(AnalyzeField.HasRecoveryPlan));
+            var attachedFiles = CreateFieldSetting(fieldSettings.FindByName(AnalyzeField.AttachedFiles));
+            var logs = CreateFieldSetting(fieldSettings.FindByName(AnalyzeField.Logs));
             var approval = CreateFieldSetting(fieldSettings.FindByName(AnalyzeField.Approval));
             var rejectExplanation = CreateFieldSetting(fieldSettings.FindByName(AnalyzeField.RejectExplanation));
 
@@ -118,6 +134,8 @@
                 finishDate,
                 hasImplementationPlan,
                 hasRecoveryPlan,
+                attachedFiles,
+                logs,
                 approval,
                 rejectExplanation);
         }
@@ -139,6 +157,9 @@
             var implementationReady =
                 CreateFieldSetting(fieldSettings.FindByName(ImplementationField.ImplementationReady));
 
+            var attachedFiles = CreateFieldSetting(fieldSettings.FindByName(ImplementationField.AttachedFiles));
+            var logs = CreateFieldSetting(fieldSettings.FindByName(ImplementationField.Logs));
+
             return new ImplementationOverviewSettings(
                 status,
                 realStartDate,
@@ -147,7 +168,9 @@
                 deviation,
                 recoveryPlanUsed,
                 finishingDate,
-                implementationReady);
+                implementationReady,
+                attachedFiles,
+                logs);
         }
 
         private static EvaluationOverviewSettings CreateEvaluationSettings(
@@ -155,8 +178,14 @@
         {
             var changeEvaluation = CreateFieldSetting(fieldSettings.FindByName(EvaluationField.ChangeEvaluation));
             var evaluationReady = CreateFieldSetting(fieldSettings.FindByName(EvaluationField.EvaluationReady));
+            var attachedFiles = CreateFieldSetting(fieldSettings.FindByName(ImplementationField.AttachedFiles));
+            var logs = CreateFieldSetting(fieldSettings.FindByName(ImplementationField.Logs));
 
-            return new EvaluationOverviewSettings(changeEvaluation, evaluationReady);
+            return new EvaluationOverviewSettings(
+                changeEvaluation, 
+                evaluationReady,
+                attachedFiles,
+                logs);
         }
 
         private static FieldOverviewSetting CreateFieldSetting(FieldOverviewSettingMapperData fieldSetting)

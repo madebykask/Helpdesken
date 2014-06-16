@@ -215,6 +215,21 @@
 
         private static void CreateRegistrationFields(RegistrationFields fields, List<BusinessItemField> headers)
         {
+            var owner = new BusinessItemField(
+                    RegistrationField.Owner,
+                    new StringDisplayValue(fields.Owner));
+            headers.Add(owner);
+
+            var affectedProcesses = new BusinessItemField(
+                RegistrationField.AffectedProcesses,
+                new ItemOverviewListDisplayValue(fields.AffectedProcesses));
+            headers.Add(affectedProcesses);
+
+            var affectedDepartments = new BusinessItemField(
+                RegistrationField.AffectedDepartments,
+                new ItemOverviewListDisplayValue(fields.AffectedDepartments));
+            headers.Add(affectedDepartments);
+
             var description = new BusinessItemField(
                 RegistrationField.Description,
                 new StringDisplayValue(fields.Description));

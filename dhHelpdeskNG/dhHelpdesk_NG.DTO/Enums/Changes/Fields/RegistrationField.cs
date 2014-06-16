@@ -2,7 +2,19 @@
 {
     public static class RegistrationField
     {
+        public static readonly string Name = "Registration.Name";
+
+        public static readonly string Phone = "Registration.Phone";
+
+        public static readonly string Email = "Registration.Mail";
+
+        public static readonly string Company = "Registration.Company";
+
         public static readonly string Owner = "Registration.Owner";
+
+        public static readonly string AffectedProcesses = "Registration.AffectedProcesses";
+
+        public static readonly string AffectedDepartments = "Registration.AffectedDepartments";
 
         public static readonly string Description = "Registration.Description";
 
@@ -15,6 +27,8 @@
         public static readonly string DesiredDate = "Registration.DesiredDate";
 
         public static readonly string Verified = "Registration.Verified";
+
+        public static readonly string AttachedFiles = "Registration.AttachedFiles";
 
         public static readonly string Approval = "Registration.Approval";
 

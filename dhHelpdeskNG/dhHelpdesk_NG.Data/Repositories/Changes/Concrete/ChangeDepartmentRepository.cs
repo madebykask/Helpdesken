@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain.Changes;
@@ -25,6 +26,21 @@
             return
                 this.DbContext.ChangeDepartments.Where(cd => cd.Change_Id == changeId)
                     .Select(cd => cd.Department_Id)
+                    .ToList();
+        }
+
+        public List<ItemOverview> FindDepartmensByChangeId(int changeId)
+        {
+            var entities = this.DbContext.ChangeDepartments
+                    .Where(cd => cd.Change_Id == changeId)
+                    .Select(cd => new
+                            {
+                                Value = cd.Department_Id.ToString(),
+                                Name = cd.Department.DepartmentName
+                            })
+                    .ToList();
+            return entities
+                    .Select(cd => new ItemOverview(cd.Name, cd.Value))
                     .ToList();
         }
 

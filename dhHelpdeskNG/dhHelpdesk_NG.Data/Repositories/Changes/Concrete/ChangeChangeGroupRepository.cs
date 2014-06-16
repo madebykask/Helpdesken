@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain.Changes;
@@ -25,6 +26,22 @@
             return
                 this.DbContext.ChangeChangeGroups.Where(cg => cg.Change_Id == changeId)
                     .Select(cg => cg.ChangeGroup_Id)
+                    .ToList();
+        }
+
+        public List<ItemOverview> FindProcessesByChangeId(int changeId)
+        {
+            var entities = this.DbContext.ChangeChangeGroups
+                    .Where(cg => cg.Change_Id == changeId)
+                    .Select(cg => new
+                                {
+                                    Value = cg.ChangeGroup_Id.ToString(),
+                                    Name = cg.ChangeGroup.ChangeGroup  
+                                })
+                    .OrderBy(cg => cg.Name)
+                    .ToList();
+            return entities
+                    .Select(cg => new ItemOverview(cg.Name, cg.Value))
                     .ToList();
         }
 

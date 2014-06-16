@@ -6,6 +6,7 @@
     using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Dal.Repositories.Changes;
     using DH.Helpdesk.Domain.Changes;
 
     public sealed class ChangeEntityToChangeDetailedOverviewMapper :
@@ -13,9 +14,22 @@
     {
         private readonly IUserRepository userRepository;
 
-        public ChangeEntityToChangeDetailedOverviewMapper(IUserRepository userRepository)
+        private readonly IChangeChangeGroupRepository changeChangeGroupRepository;
+
+        private readonly IChangeDepartmentRepository changeDepartmentRepository;
+
+        private readonly IChangeContactRepository changeContactRepository;
+
+        public ChangeEntityToChangeDetailedOverviewMapper(
+                        IUserRepository userRepository, 
+                        IChangeChangeGroupRepository changeChangeGroupRepository, 
+                        IChangeDepartmentRepository changeDepartmentRepository, 
+                        IChangeContactRepository changeContactRepository)
         {
             this.userRepository = userRepository;
+            this.changeChangeGroupRepository = changeChangeGroupRepository;
+            this.changeDepartmentRepository = changeDepartmentRepository;
+            this.changeContactRepository = changeContactRepository;
         }
 
         public ChangeDetailedOverview Map(ChangeEntity entity)
@@ -79,8 +93,15 @@
 
         private RegistrationFields CreateRegistrationFields(ChangeEntity entity)
         {
+            var contacts = this.changeContactRepository.FindChangeContacts(entity.Id);
+            var affectedProcesses = this.changeChangeGroupRepository.FindProcessesByChangeId(entity.Id);
+            var affectedDepartments = this.changeDepartmentRepository.FindDepartmensByChangeId(entity.Id);
+
             return new RegistrationFields(
+                contacts,
                 entity.ChangeGroup_Id.HasValue ? entity.ChangeGroup.ChangeGroup : null,
+                affectedProcesses,
+                affectedDepartments,
                 entity.ChangeDescription,
                 entity.ChangeBenefits,
                 entity.ChangeConsequence,

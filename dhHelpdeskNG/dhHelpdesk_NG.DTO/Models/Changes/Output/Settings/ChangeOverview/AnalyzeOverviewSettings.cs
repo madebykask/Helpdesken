@@ -18,6 +18,8 @@
             FieldOverviewSetting finishDate,
             FieldOverviewSetting hasImplementationPlan,
             FieldOverviewSetting hasRecoveryPlan,
+            FieldOverviewSetting attachedFiles,
+            FieldOverviewSetting logs,
             FieldOverviewSetting approval,
             FieldOverviewSetting rejectRecommendation)
         {
@@ -33,6 +35,8 @@
             this.FinishDate = finishDate;
             this.HasImplementationPlan = hasImplementationPlan;
             this.HasRecoveryPlan = hasRecoveryPlan;
+            this.AttachedFiles = attachedFiles;
+            this.Logs = logs;
             this.Approval = approval;
             this.RejectRecommendation = rejectRecommendation;
         }
@@ -72,6 +76,12 @@
 
         [NotNull]
         public FieldOverviewSetting HasRecoveryPlan { get; private set; }
+
+        [NotNull]
+        public FieldOverviewSetting AttachedFiles { get; private set; }
+
+        [NotNull]
+        public FieldOverviewSetting Logs { get; private set; }
 
         [NotNull]
         public FieldOverviewSetting Approval { get; private set; }

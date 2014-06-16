@@ -33,13 +33,21 @@
             AddHeaderIfNeeded(businessModel.General.Administrator, GeneralField.Administrator, headers);
             AddHeaderIfNeeded(businessModel.General.FinishingDate, GeneralField.FinishingDate, headers);
             AddHeaderIfNeeded(businessModel.General.Rss, GeneralField.Rss, headers);
-            
+
+//            AddHeaderIfNeeded(businessModel.Registration.Name, RegistrationField.Name, headers);
+//            AddHeaderIfNeeded(businessModel.Registration.Phone, RegistrationField.Phone, headers);
+//            AddHeaderIfNeeded(businessModel.Registration.Email, RegistrationField.Email, headers);
+//            AddHeaderIfNeeded(businessModel.Registration.Company, RegistrationField.Company, headers);
+            AddHeaderIfNeeded(businessModel.Registration.Owner, RegistrationField.Owner, headers);
+            AddHeaderIfNeeded(businessModel.Registration.AffectedProcesses, RegistrationField.AffectedProcesses, headers);
+            AddHeaderIfNeeded(businessModel.Registration.AffectedDepartments, RegistrationField.AffectedDepartments, headers);
             AddHeaderIfNeeded(businessModel.Registration.Description, RegistrationField.Description, headers);
             AddHeaderIfNeeded(businessModel.Registration.BusinessBenefits, RegistrationField.BusinessBenefits, headers);
             AddHeaderIfNeeded(businessModel.Registration.Consequence, RegistrationField.Consequence, headers);
             AddHeaderIfNeeded(businessModel.Registration.Impact, RegistrationField.Impact, headers);
             AddHeaderIfNeeded(businessModel.Registration.DesiredDate, RegistrationField.DesiredDate, headers);
             AddHeaderIfNeeded(businessModel.Registration.Verified, RegistrationField.Verified, headers);
+//            AddHeaderIfNeeded(businessModel.Registration.AttachedFiles, RegistrationField.AttachedFiles, headers);
             AddHeaderIfNeeded(businessModel.Registration.Approval, RegistrationField.Approval, headers);
             AddHeaderIfNeeded(businessModel.Registration.RejectExplanation, RegistrationField.RejectExplanation, headers);
             
@@ -48,12 +56,15 @@
             AddHeaderIfNeeded(businessModel.Analyze.Responsible, AnalyzeField.Responsible, headers);
             AddHeaderIfNeeded(businessModel.Analyze.Solution, AnalyzeField.Solution, headers);
             AddHeaderIfNeeded(businessModel.Analyze.Cost, AnalyzeField.Cost, headers);
-            AddHeaderIfNeeded(businessModel.Analyze.EstimatedTimeInHours, AnalyzeField.YearlyCost, headers);
+            AddHeaderIfNeeded(businessModel.Analyze.YearlyCost, AnalyzeField.YearlyCost, headers);
+            AddHeaderIfNeeded(businessModel.Analyze.EstimatedTimeInHours, AnalyzeField.EstimatedTimeInHours, headers);
             AddHeaderIfNeeded(businessModel.Analyze.Risk, AnalyzeField.Risk, headers);
             AddHeaderIfNeeded(businessModel.Analyze.StartDate, AnalyzeField.StartDate, headers);
             AddHeaderIfNeeded(businessModel.Analyze.FinishDate, AnalyzeField.FinishDate, headers);
             AddHeaderIfNeeded(businessModel.Analyze.HasImplementationPlan, AnalyzeField.HasImplementationPlan, headers);
             AddHeaderIfNeeded(businessModel.Analyze.HasRecoveryPlan, AnalyzeField.HasRecoveryPlan, headers);
+//            AddHeaderIfNeeded(businessModel.Analyze.AttachedFiles, AnalyzeField.AttachedFiles, headers);
+//            AddHeaderIfNeeded(businessModel.Analyze.Logs, AnalyzeField.Logs, headers);
             AddHeaderIfNeeded(businessModel.Analyze.Approval, AnalyzeField.Approval, headers);
             AddHeaderIfNeeded(businessModel.Analyze.RejectRecommendation, AnalyzeField.RejectExplanation, headers);
 
@@ -64,9 +75,13 @@
             AddHeaderIfNeeded(businessModel.Implementation.Deviation, ImplementationField.Deviation, headers);
             AddHeaderIfNeeded(businessModel.Implementation.RecoveryPlanUsed, ImplementationField.RecoveryPlanUsed, headers);
             AddHeaderIfNeeded(businessModel.Implementation.FinishingDate, ImplementationField.FinishingDate, headers);
+//            AddHeaderIfNeeded(businessModel.Implementation.AttachedFiles, ImplementationField.AttachedFiles, headers);
+//            AddHeaderIfNeeded(businessModel.Implementation.Logs, ImplementationField.Logs, headers);
             AddHeaderIfNeeded(businessModel.Implementation.ImplementationReady, ImplementationField.ImplementationReady, headers);
 
-            AddHeaderIfNeeded(businessModel.Evaluation.ChangeEvaluation, EvaluationField. ChangeEvaluation, headers);
+            AddHeaderIfNeeded(businessModel.Evaluation.ChangeEvaluation, EvaluationField.ChangeEvaluation, headers);
+//            AddHeaderIfNeeded(businessModel.Evaluation.AttachedFiles, EvaluationField.AttachedFiles, headers);
+//            AddHeaderIfNeeded(businessModel.Evaluation.Logs, EvaluationField.Logs, headers);
             AddHeaderIfNeeded(businessModel.Evaluation.EvaluationReady, EvaluationField.EvaluationReady, headers);
 
             return headers;

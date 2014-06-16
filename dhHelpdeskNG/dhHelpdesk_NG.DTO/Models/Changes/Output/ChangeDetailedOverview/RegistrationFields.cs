@@ -1,13 +1,18 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeDetailedOverview
 {
     using System;
+    using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Models.Shared;
 
     public sealed class RegistrationFields
     {
         public RegistrationFields(
+            List<Contact> contacts,
             string owner,
+            List<ItemOverview> affectedProcesses,
+            List<ItemOverview> affectedDepartments,
             string description,
             string businessBenefits,
             string consequence,
@@ -17,7 +22,10 @@
             StepStatus approval,
             string rejectExplanation)
         {
+            this.Contacts = contacts;
             this.Owner = owner;
+            this.AffectedProcesses = affectedProcesses;
+            this.AffectedDepartments = affectedDepartments;
             this.Description = description;
             this.BusinessBenefits = businessBenefits;
             this.Consequence = consequence;
@@ -28,7 +36,13 @@
             this.RejectExplanation = rejectExplanation;
         }
 
+        public List<Contact> Contacts { get; private set; }
+
         public string Owner { get; private set; }
+
+        public List<ItemOverview> AffectedProcesses { get; private set; }
+
+        public List<ItemOverview> AffectedDepartments { get; private set; }
 
         public string Description { get; private set; }
 

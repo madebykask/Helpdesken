@@ -68,6 +68,8 @@
     <Compile Include="BusinessLogic\BusinessModelExport\ExportFileNameFormatter.cs" />
     <Compile Include="BusinessLogic\BusinessModelExport\IExportFileNameFormatter.cs" />
     <Compile Include="BusinessLogic\OtherTools\ITemporaryIdProvider.cs" />
+    <Compile Include="DisplayValues\Changes\ContactsListDisplayValue.cs" />
+    <Compile Include="DisplayValues\Changes\ItemOverviewListDisplayValue.cs" />
     <Compile Include="DisplayValues\Changes\StepStatusDisplayValue.cs" />
     <Compile Include="DisplayValues\BooleanDisplayValue.cs" />
     <Compile Include="DisplayValues\DateTimeDisplayValue.cs" />

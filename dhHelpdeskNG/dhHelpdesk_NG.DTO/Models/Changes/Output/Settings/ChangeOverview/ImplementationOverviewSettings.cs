@@ -13,7 +13,9 @@
             FieldOverviewSetting deviation,
             FieldOverviewSetting recoveryPlanUsed,
             FieldOverviewSetting finishingDate,
-            FieldOverviewSetting implementationReady)
+            FieldOverviewSetting implementationReady,
+            FieldOverviewSetting attachedFiles,
+            FieldOverviewSetting logs)
         {
             this.Status = status;
             this.RealStartDate = realStartDate;
@@ -23,6 +25,8 @@
             this.RecoveryPlanUsed = recoveryPlanUsed;
             this.FinishingDate = finishingDate;
             this.ImplementationReady = implementationReady;
+            this.AttachedFiles = attachedFiles;
+            this.Logs = logs;
         }
 
         [NotNull]
@@ -48,5 +52,11 @@
 
         [NotNull]
         public FieldOverviewSetting ImplementationReady { get; private set; }
+
+        [NotNull]
+        public FieldOverviewSetting AttachedFiles { get; private set; }
+
+        [NotNull]
+        public FieldOverviewSetting Logs { get; private set; }
     }
 }
