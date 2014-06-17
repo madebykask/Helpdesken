@@ -22,7 +22,7 @@
 
 <div class="container">
     <ul id="change-tabs" class="nav nav-tabs">
-        @if (Model.Registration.HasShowableFields())
+        @if (Model.Registration != null && Model.Registration.HasShowableFields())
         {
             <li class="active">
                 <a href="#fragment-1">@Translation.Get("Registrering")</a>
@@ -30,19 +30,19 @@
         }
         @if (Model.IsNew)
         {
-            if (Model.Analyze.HasShowableFields())
+            if (Model.Analyze != null && Model.Analyze.HasShowableFields())
             {
                 <li class="inactive">
                     @Translation.Get("Analys")
                 </li>                
             }
-            if (Model.Implementation.HasShowableFields())
+            if (Model.Implementation != null && Model.Implementation.HasShowableFields())
             {
                 <li class="inactive">
                     @Translation.Get("Implementation")
                 </li>                
             }
-            if (Model.Evaluation.HasShowableFields())
+            if (Model.Evaluation != null && Model.Evaluation.HasShowableFields())
             {
                 <li class="inactive">
                     @Translation.Get("Utvärdering")
@@ -51,26 +51,26 @@
         }
         else
         {
-            if (Model.Analyze.HasShowableFields())
+            if (Model.Analyze != null && Model.Analyze.HasShowableFields())
             {
                 <li>
                     <a href="#fragment-2">@Translation.Get("Analys")</a>
                 </li>                 
             }
-            if (Model.Implementation.HasShowableFields())
+            if (Model.Implementation != null && Model.Implementation.HasShowableFields())
             {
                 <li>
                     <a href="#fragment-3">@Translation.Get("Implementation")</a>
                 </li>                
             }
-            if (Model.Evaluation.HasShowableFields())
+            if (Model.Evaluation != null && Model.Evaluation.HasShowableFields())
             {
                 <li>
                     <a href="#fragment-4">@Translation.Get("Utvärdering")</a>
                 </li>                
             }                     
         }
-        @if (Model.Log.HasShowableFields())
+        @if (Model.Log != null && Model.Log.HasShowableFields())
         {
             <li>
                 <a href="#fragment-6">@Translation.Get("Logg")</a>
