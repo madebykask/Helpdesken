@@ -2,10 +2,12 @@
 {
     using System.Collections.Generic;
     using System.Globalization;
+    using System.Linq;
     using System.Text;
 
     using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
     using DH.Helpdesk.BusinessData.Models.MailTemplates;
+    using DH.Helpdesk.Common.Extensions.Boolean;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Changes;
 
@@ -246,13 +248,36 @@
             var desiredDate = fields.DesiredDate.ToString();
             var rejectExplanation = fields.RejectExplanation;
 
+            var name = string.Empty;
+            var phone = string.Empty;
+            var email = string.Empty;
+            var company = string.Empty;
+            if (fields.Contacts != null)
+            {
+                var contact = fields.Contacts.FirstOrDefault();
+                if (contact != null)
+                {
+                    name = contact.Name;
+                    phone = contact.Phone;
+                    email = contact.Email;
+                    company = contact.Company;
+                }
+            }
+
+            var verified = fields.Verified.ToBoolString();            
+
+            markValues.Add("[#60]", name);
+            markValues.Add("[#61]", phone);
+            markValues.Add("[#62]", email);
+            markValues.Add("[#63]", company);
             markValues.Add("[#7]", owner);
             markValues.Add("[#9]", description);
             markValues.Add("[#10]", businessBenefits);
             markValues.Add("[#33]", consequence);
             markValues.Add("[#47]", impact);
             markValues.Add("[#31]", desiredDate);
-            //            markValues.Add("[#50]", rejectExplanation);
+            markValues.Add("[#14]", verified);
+            markValues.Add("[#50]", rejectExplanation);
         }
 
         #endregion

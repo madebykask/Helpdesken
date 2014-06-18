@@ -436,7 +436,10 @@
                 approvedByUserId = context.UserId;
             }
 
+            var contacts = model.Contacts != null ? model.Contacts.CloneContacts() : new List<Contact>();
+
             return new UpdatedRegistrationFields(
+                contacts,
                 model.OwnerId,
                 ConfigurableFieldModel<string>.GetValueOrDefault(model.Description),
                 ConfigurableFieldModel<string>.GetValueOrDefault(model.BusinessBenefits),

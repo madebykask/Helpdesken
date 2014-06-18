@@ -1,5 +1,8 @@
 ﻿namespace DH.Helpdesk.Web.Models.Changes.ChangeEdit.Contacts
 {
+    using System.Collections.Generic;
+
+    using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
@@ -57,6 +60,44 @@
                 this.ContactFourth.IsUnshowable() &&
                 this.ContactFive.IsUnshowable() &&
                 this.ContactSix.IsUnshowable();
+        }
+
+
+        public List<Contact> CloneContacts()
+        {
+            var contacts = new List<Contact>();
+
+            if (this.ContactOne != null)
+            {
+                contacts.Add(this.ContactOne.CloneContact());
+            }
+
+            if (this.ContactTwo != null)
+            {
+                contacts.Add(this.ContactTwo.CloneContact());
+            }
+
+            if (this.ContactThree != null)
+            {
+                contacts.Add(this.ContactThree.CloneContact());
+            }
+
+            if (this.ContactFourth != null)
+            {
+                contacts.Add(this.ContactFourth.CloneContact());
+            }
+
+            if (this.ContactFive != null)
+            {
+                contacts.Add(this.ContactFive.CloneContact());
+            }
+
+            if (this.ContactSix != null)
+            {
+                contacts.Add(this.ContactSix.CloneContact());
+            }
+
+            return contacts;
         }
     }
 }

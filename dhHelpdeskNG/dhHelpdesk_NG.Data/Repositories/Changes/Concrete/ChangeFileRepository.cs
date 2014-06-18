@@ -38,18 +38,27 @@
 
         public byte[] GetFileContent(int changeId, Subtopic subtopic, string fileName)
         {
-            return
-                this.DbContext.ChangeFiles.Single(
-                    f => f.Change_Id == changeId && f.ChangeArea == (int)subtopic && f.FileName == fileName).ChangeFile;
+            var file = this.DbContext.ChangeFiles.SingleOrDefault(
+                    f => f.Change_Id == changeId && f.ChangeArea == (int)subtopic && f.FileName == fileName);
+
+            if (file == null)
+            {
+                return new byte[0];
+            }
+
+            return file.ChangeFile;
         }
 
         public void Delete(int changeId, Subtopic subtopic, string fileName)
         {
             var file =
-                this.DbContext.ChangeFiles.Single(
+                this.DbContext.ChangeFiles.SingleOrDefault(
                     f => f.Change_Id == changeId && f.ChangeArea == (int)subtopic && f.FileName == fileName);
-
-            this.DbContext.ChangeFiles.Remove(file);
+            
+            if (file != null)
+            {
+                this.DbContext.ChangeFiles.Remove(file);
+            }
         }
 
         public void DeleteChangeFiles(int changeId)
@@ -99,12 +108,15 @@
             foreach (var file in files)
             {
                 var existingFile =
-                    this.DbContext.ChangeFiles.Single(
+                    this.DbContext.ChangeFiles.SingleOrDefault(
                         f =>
                             f.Change_Id == file.ChangeId && f.ChangeArea == (int)file.Subtopic
                             && f.FileName == file.Name);
 
-                existingFiles.Add(existingFile);
+                if (existingFile != null)
+                {
+                    existingFiles.Add(existingFile);
+                }
             }
 
             existingFiles.ForEach(f => this.DbContext.ChangeFiles.Remove(f));

@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange
 {
     using System;
+    using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.Common.ValidationAttributes;
@@ -10,6 +11,7 @@
         #region Constructors and Destructors
 
         public UpdatedRegistrationFields(
+            List<Contact> contacts,
             int? ownerId,
             string description,
             string businessBenefits,
@@ -22,6 +24,7 @@
             int? approvedByUserId,
             string rejectExplanation)
         {
+            this.Contacts = contacts;
             this.OwnerId = ownerId;
             this.Description = description;
             this.BusinessBenefits = businessBenefits;
@@ -38,6 +41,8 @@
         #endregion
 
         #region Public Properties
+
+        public List<Contact> Contacts { get; private set; }
 
         public StepStatus Approval { get; private set; }
 
@@ -69,6 +74,7 @@
         public static UpdatedRegistrationFields CreateEmpty()
         {
             return new UpdatedRegistrationFields(
+                new List<Contact>(), 
                 null,
                 null,
                 null,
