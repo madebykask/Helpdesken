@@ -288,10 +288,12 @@
             if (userModel.UserRights.HasValue)
             {
                 var userRight = this._userService.GetUserRoleById(userModel.UserRights.Value);
-                if (copy.UserRoles != null)
+                if (copy.UserRoles == null)
                 {
-                    copy.UserRoles.Add(userRight);
+                    copy.UserRoles = new List<UserRole>();
                 }
+
+                copy.UserRoles.Add(userRight);
             }
 
             this._userService.SaveNewUser(copy, AAsSelected, CsSelected, OTsSelected, UserWorkingGroups, out errors);
