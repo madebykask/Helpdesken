@@ -2,15 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Web.Mvc;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
     using DH.Helpdesk.Web.Infrastructure;
-
 
     public class UsersController : BaseController
     {
@@ -233,7 +230,7 @@
         [HttpPost]
         public ActionResult Edit(int id, int[] AAsSelected, int[] CsSelected, int[] OTsSelected, int[] Departments, List<UserWorkingGroup> UserWorkingGroups, UserSaveViewModel userModel, string NewPassword, string ConfirmPassword, FormCollection coll)
         {
-            IDictionary<string, string> errors = new Dictionary<string, string>();
+            IDictionary<string, string> errors;
 
             var userToSave = new User();
 
@@ -244,22 +241,28 @@
                 userToSave.OrderPermission = this.returnOrderPermissionForSave(userModel);
                 userToSave.CaseInfoMail = this.returnCaseInfoMailForEditSave(userModel);
 
-                var b = this.TryUpdateModel(userToSave, "user");
+                this.TryUpdateModel(userToSave, "user");
 
                 if (userToSave.UserRoles != null)
-                    foreach (var delete in userToSave.UserRoles.ToList())
-                        userToSave.UserRoles.Remove(delete);
-
-                if (userModel.UserRights.HasValue)
                 {
-                    var userRight = this._userService.GetUserRoleById(userModel.UserRights.Value);
-                    userToSave.UserRoles.Add(userRight);
+                    foreach (var delete in userToSave.UserRoles.ToList())
+                    {
+                        userToSave.UserRoles.Remove(delete);
+                    }
+
+                    if (userModel.UserRights.HasValue)
+                    {
+                        var userRight = this._userService.GetUserRoleById(userModel.UserRights.Value);
+                        userToSave.UserRoles.Add(userRight);
+                    }
                 }
 
                 this._userService.SaveEditUser(userToSave, AAsSelected, CsSelected, OTsSelected, Departments, UserWorkingGroups, out errors);
 
                 if (errors.Count == 0)
+                {
                     return this.RedirectToAction("index", "users");
+                }
 
                 var model = this.CreateInputViewModel(userToSave);
 
@@ -271,15 +274,24 @@
             copy.Password = NewPassword;
 
             if (copy.Language_Id == 0)
+            {
                 copy.Language_Id = 2;
+            }
 
-            var tempCustomerUser = copy.CustomerUsers.ToList();
-            copy.CustomerUsers.Clear();
+            var tempCustomerUser = new List<CustomerUser>();
+            if (copy.CustomerUsers != null)
+            {
+                tempCustomerUser = copy.CustomerUsers.ToList();
+                copy.CustomerUsers.Clear();                
+            }
 
             if (userModel.UserRights.HasValue)
             {
                 var userRight = this._userService.GetUserRoleById(userModel.UserRights.Value);
-                copy.UserRoles.Add(userRight);
+                if (copy.UserRoles != null)
+                {
+                    copy.UserRoles.Add(userRight);
+                }
             }
 
             this._userService.SaveNewUser(copy, AAsSelected, CsSelected, OTsSelected, UserWorkingGroups, out errors);
@@ -290,7 +302,10 @@
             {
                 var ccu = tempCustomerUser.FirstOrDefault(x => x.Customer_Id == cu.Customer_Id);
 
-                if (ccu == null) continue;
+                if (ccu == null)
+                {
+                    continue;
+                }
 
                 if (ccu.CasePriorityFilter != null)
                 {
@@ -344,30 +359,37 @@
 
                 cu.CasePerformerFilter = "0";
 
-                _customerUserService.SaveCustomerUser(cu, out errors);
+                this._customerUserService.SaveCustomerUser(cu, out errors);
 
-                //Get CaseSettings
-                var caseSettingsToCopy = _caseSettingsService.GetCaseSettingsWithUser(cu.Customer_Id, userModel.CopyUserid, userToSave.UserGroup_Id).ToList();
-
-
-                foreach (var cs in caseSettingsToCopy)
+                var caseSettingsToCopy = new List<CaseSettings>();
+                if (userModel != null && userToSave != null)
                 {
-                    var newUserCaseSetting = new CaseSettings() { };
+                    this._caseSettingsService.GetCaseSettingsWithUser(cu.Customer_Id, userModel.CopyUserid, userToSave.UserGroup_Id);                    
+                }    
 
-                    newUserCaseSetting.User_Id = copy.Id;
-                    newUserCaseSetting.Customer_Id = cs.Customer_Id;
-                    newUserCaseSetting.Name = cs.Name;
-                    newUserCaseSetting.Line = cs.Line;
-                    newUserCaseSetting.MinWidth = cs.MinWidth;
-                    newUserCaseSetting.UserGroup = cs.UserGroup;
-                    newUserCaseSetting.ColOrder = cs.ColOrder;
+                if (caseSettingsToCopy != null)
+                {
+                    foreach (var cs in caseSettingsToCopy)
+                    {
+                        var newUserCaseSetting = new CaseSettings();
 
-                    this._caseSettingsService.SaveCaseSetting(newUserCaseSetting, out errors);
+                        newUserCaseSetting.User_Id = copy.Id;
+                        newUserCaseSetting.Customer_Id = cs.Customer_Id;
+                        newUserCaseSetting.Name = cs.Name;
+                        newUserCaseSetting.Line = cs.Line;
+                        newUserCaseSetting.MinWidth = cs.MinWidth;
+                        newUserCaseSetting.UserGroup = cs.UserGroup;
+                        newUserCaseSetting.ColOrder = cs.ColOrder;
+
+                        this._caseSettingsService.SaveCaseSetting(newUserCaseSetting, out errors);
+                    }                    
                 }
             }
 
             if (errors.Count == 0)
+            {
                 return this.RedirectToAction("index", "users");
+            }
 
             var copyModel = this.CreateInputViewModel(copy);
 
