@@ -481,7 +481,9 @@
             var existingChange = this.changeRepository.GetById(request.Change.Id);
             var processingSettings = this.changeFieldSettingRepository.GetProcessingSettings(request.Context.CustomerId);
             this.changeRestorer.Restore(request.Change, existingChange, processingSettings);
-            this.updateChangeRequestValidator.Validate(request, existingChange, processingSettings);
+
+            //should we compare existing change with values from form?
+//            this.updateChangeRequestValidator.Validate(request, existingChange, processingSettings);
 
             this.changeRepository.Update(request.Change);
             this.changeRepository.Commit();
