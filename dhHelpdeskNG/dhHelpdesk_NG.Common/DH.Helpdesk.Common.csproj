@@ -57,6 +57,7 @@
     <Compile Include="Enums\LanquageNameId.cs" />
     <Compile Include="Enums\SortBy.cs" />
     <Compile Include="Exceptions\PropertyNotFoundException.cs" />
+    <Compile Include="Extensions\Boolean\BoolExtensions.cs" />
     <Compile Include="Extensions\Boolean\ToIntExtension.cs" />
     <Compile Include="Extensions\DateTime\DateExtensions.cs" />
     <Compile Include="Extensions\Integer\ToBoolExtension.cs" />
