@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelMappers
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     using DH.Helpdesk.BusinessData.Enums.Changes.Fields;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeDetailedOverview;
@@ -220,10 +221,17 @@
                     new StringDisplayValue(fields.Owner));
             headers.Add(owner);
 
-            var affectedProcesses = new BusinessItemField(
-                RegistrationField.AffectedProcesses,
-                new ItemOverviewListDisplayValue(fields.AffectedProcesses));
-            headers.Add(affectedProcesses);
+            var affectedProcesses = fields.AffectedProcessesOverviews;
+            if (fields.AffectedProcesses != null && affectedProcesses != null)
+            {
+                foreach (var affectedProcess in affectedProcesses)
+                {
+                    var itemField = new BusinessItemField(
+                                        RegistrationField.GetAffectedProcess(affectedProcess.Value),
+                                        new BooleanDisplayValue(fields.AffectedProcesses.Select(ap => ap.Value).Contains(affectedProcess.Value)));
+                    headers.Add(itemField);
+                }                
+            }
 
             var affectedDepartments = new BusinessItemField(
                 RegistrationField.AffectedDepartments,

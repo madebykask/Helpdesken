@@ -33,5 +33,10 @@
         public static readonly string Approval = "Registration.Approval";
 
         public static readonly string RejectExplanation = "Registration.RejectExplanation";
+
+        public static string GetAffectedProcess(string value)
+        {
+            return string.Format("{0}.{1}", AffectedProcesses, value);
+        }
     }
 }

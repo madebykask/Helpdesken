@@ -201,13 +201,20 @@
             var changes = this.changeRepository.Search(parameters);
             var overviewSettings = this.GetChangeOverviewSettings(parameters.CustomerId, context.LanguageId, false);
 
-            var headers = changeOverviewSettingsToExcelHeadersMapper.Map(overviewSettings);
-            var businessItems = changes.Changes.Select(c => this.changeToBusinessItemMapper.Map(c)).ToList();
+            var affectedProcesses = this.changeGroupRepository.FindOverviews(context.CustomerId);
+            overviewSettings.Registration.AffectedProcessesOverviews = affectedProcesses;
+            var headers = this.changeOverviewSettingsToExcelHeadersMapper.Map(overviewSettings);
+            var businessItems = changes.Changes.Select(
+                                c =>
+                                {
+                                    c.Registration.AffectedProcessesOverviews = affectedProcesses;
+                                    return this.changeToBusinessItemMapper.Map(c);
+                                }).ToList();
 
             const string WorksheetName = "Changes";
             var content = this.excelFileComposer.Compose(headers, businessItems, WorksheetName);
 
-            var fileName = exportFileNameFormatter.Format("Changes", "xlsx");
+            var fileName = this.exportFileNameFormatter.Format("Changes", "xlsx");
             return new ExcelFile(content, fileName);
         }
 

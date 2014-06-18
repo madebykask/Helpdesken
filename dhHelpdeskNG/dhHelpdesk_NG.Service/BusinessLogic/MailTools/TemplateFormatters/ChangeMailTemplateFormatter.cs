@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Globalization;
+    using System.Text;
 
     using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
     using DH.Helpdesk.BusinessData.Models.MailTemplates;
@@ -33,6 +34,8 @@
 
         private readonly IWorkingGroupRepository workingGroupRepository;
 
+        private readonly ICustomerRepository customerRepository;
+
         #endregion
 
         #region Constructors and Destructors
@@ -47,7 +50,8 @@
             IUserRepository userRepository,
             IChangeCategoryRepository changeCategoryRepository,
             IChangePriorityRepository changePriorityRepository,
-            IChangeImplementationStatusRepository changeImplementationStatusRepository)
+            IChangeImplementationStatusRepository changeImplementationStatusRepository,
+            ICustomerRepository customerRepository)
         {
             this.changeStatusRepository = changeStatusRepository;
             this.changeObjectRepository = changeObjectRepository;
@@ -59,6 +63,7 @@
             this.changeCategoryRepository = changeCategoryRepository;
             this.changePriorityRepository = changePriorityRepository;
             this.changeImplementationStatusRepository = changeImplementationStatusRepository;
+            this.customerRepository = customerRepository;
         }
 
         #endregion
@@ -72,6 +77,13 @@
             int languageId)
         {
             var markValues = new Dictionary<string, string>();
+            
+            markValues.Add("[#3]", businessModel.Id.ToString());
+            var customer = this.customerRepository.GetOverview(customerId);
+            if (customer != null)
+            {
+                markValues.Add("[#4]", customer.Name);
+            }
 
             this.AddOrdererMarkValues(markValues, businessModel.Orderer);
             this.AddGeneralMarkValues(markValues, businessModel.General);
@@ -160,11 +172,24 @@
 
             var finishingDate = fields.FinishingDate.ToString();
 
+            var inventory = string.Empty;
+            if (fields.Inventories != null)
+            {
+                var sb = new StringBuilder();
+                foreach (var inv in fields.Inventories)
+                {
+                    sb.AppendLine(inv);
+                }
+
+                inventory = sb.ToString();
+            }
+
             markValues.Add("[#2]", priority);
             markValues.Add("[#5]", title);
             markValues.Add("[#1]", status);
             markValues.Add("[#30]", system);
             markValues.Add("[#6]", @object);
+            markValues.Add("[#55]", inventory);
             markValues.Add("[#34]", workingGroup);
             markValues.Add("[#13]", administrator);
             markValues.Add("[#64]", finishingDate);

@@ -4,6 +4,7 @@
 
     using DH.Helpdesk.BusinessData.Enums.Changes.Fields;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeOverview;
+    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport.ExcelExport;
     using DH.Helpdesk.Services.Localization;
@@ -39,7 +40,7 @@
 //            AddHeaderIfNeeded(businessModel.Registration.Email, RegistrationField.Email, headers);
 //            AddHeaderIfNeeded(businessModel.Registration.Company, RegistrationField.Company, headers);
             AddHeaderIfNeeded(businessModel.Registration.Owner, RegistrationField.Owner, headers);
-            AddHeaderIfNeeded(businessModel.Registration.AffectedProcesses, RegistrationField.AffectedProcesses, headers);
+            AddAffectedProcessesHeaderIfNeeded(businessModel.Registration.AffectedProcesses, businessModel.Registration.AffectedProcessesOverviews, headers);
             AddHeaderIfNeeded(businessModel.Registration.AffectedDepartments, RegistrationField.AffectedDepartments, headers);
             AddHeaderIfNeeded(businessModel.Registration.Description, RegistrationField.Description, headers);
             AddHeaderIfNeeded(businessModel.Registration.BusinessBenefits, RegistrationField.BusinessBenefits, headers);
@@ -96,6 +97,25 @@
 
             var header = new ExcelTableHeader(setting.Caption, fieldName);
             headers.Add(header);
+        }
+
+        private static void AddAffectedProcessesHeaderIfNeeded(
+                FieldOverviewSetting setting,
+                IEnumerable<ItemOverview> overviews,
+                List<ExcelTableHeader> headers)
+        {
+            if (!setting.Show)
+            {
+                return;
+            }
+
+            foreach (var overview in overviews)
+            {
+                var header = new ExcelTableHeader(
+                            string.Format("{0} - {1}", setting.Caption, overview.Name), 
+                            RegistrationField.GetAffectedProcess(overview.Value));
+                headers.Add(header);                
+            }
         }
     }
 }

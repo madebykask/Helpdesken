@@ -80,6 +80,11 @@
         {
             var contacts = new List<Contact>();
 
+            if (model == null || model.Registration == null || model.Registration.Contacts == null)
+            {
+                return contacts;
+            }
+
             CreateContactIfNeeded(model.Registration.Contacts.ContactOne, context, contacts);
             CreateContactIfNeeded(model.Registration.Contacts.ContactTwo, context, contacts);
             CreateContactIfNeeded(model.Registration.Contacts.ContactThree, context, contacts);

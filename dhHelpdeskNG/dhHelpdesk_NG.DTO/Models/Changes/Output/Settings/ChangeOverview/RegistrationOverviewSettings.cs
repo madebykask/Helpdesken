@@ -1,5 +1,8 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeOverview
 {
+    using System.Collections.Generic;
+
+    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Common.ValidationAttributes;
 
@@ -88,5 +91,7 @@
 
         [NotNull]
         public FieldOverviewSetting RejectExplanation { get; private set; }
+
+        public List<ItemOverview> AffectedProcessesOverviews { get; set; }        
     }
 }

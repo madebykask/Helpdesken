@@ -59,5 +59,7 @@
         public StepStatus Approval { get; private set; }
 
         public string RejectExplanation { get; private set; }
+
+        public List<ItemOverview> AffectedProcessesOverviews { get; set; }        
     }
 }
