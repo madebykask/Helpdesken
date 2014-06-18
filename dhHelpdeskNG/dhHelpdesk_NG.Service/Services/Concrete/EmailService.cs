@@ -8,6 +8,7 @@
 
     using DH.Helpdesk.BusinessData.Models.Email;
     using DH.Helpdesk.BusinessData.Models.MailTemplates;
+    using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Services.Infrastructure;
 
     public sealed class EmailService : IEmailService
@@ -154,20 +155,7 @@
 
         public bool IsValidEmail(string inputEmail)
         {
-            string strEmail = string.Empty;
-
-            if (string.IsNullOrEmpty(inputEmail) == false)
-                strEmail = inputEmail;
-
-            string strRegex = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}" +
-                    @"\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\" +
-                    @".)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
-
-            Regex re = new Regex(strRegex);
-            if (re.IsMatch(strEmail))
-                return (true);
-            else
-                return (false);
+            return EmailHelper.IsValid(inputEmail);
         }
 
         private string AddInformationToMailBodyAndSubject(string text, List<DH.Helpdesk.Domain.Field> fields)

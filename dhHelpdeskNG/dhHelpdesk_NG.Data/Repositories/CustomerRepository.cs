@@ -9,6 +9,7 @@
     using DH.Helpdesk.BusinessData.Models.Customer.Input;
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
 
@@ -61,12 +62,19 @@
 
         public MailAddress GetCustomerEmail(int customerId)
         {
-            return
-                this.DataContext.Customers.Where(c => c.Id == customerId)
+            var email = this.DataContext.Customers
+                    .Where(c => c.Id == customerId)
                     .Select(c => c.HelpdeskEmail)
                     .ToList()
-                    .Select(e => new MailAddress(e))
                     .FirstOrDefault();
+
+            if (string.IsNullOrEmpty(email) ||
+                !EmailHelper.IsValid(email))
+            {
+                return null;
+            }
+
+            return new MailAddress(email);
         }
 
         public ItemOverview GetOverview(int customerId)

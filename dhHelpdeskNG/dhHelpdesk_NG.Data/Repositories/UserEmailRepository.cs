@@ -5,6 +5,7 @@
     using System.Net.Mail;
 
     using DH.Helpdesk.Common.Extensions.String;
+    using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
 
@@ -24,7 +25,10 @@
                 return new List<MailAddress>();
             }
 
-            return emails.Split(";").Select(e => new MailAddress(e)).ToList();
+            return emails.Split(";")
+                .Where(EmailHelper.IsValid)
+                .Select(e => new MailAddress(e))
+                .ToList();
         }
     }
 }
