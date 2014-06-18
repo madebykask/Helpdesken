@@ -21,6 +21,7 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
             var statuses =
                 this.DataContext.ChangeImplementationStatuses.Where(s => s.Customer_Id == customerId)
                     .Select(s => new { s.Id, s.ImplementationStatus })
+                    .OrderBy(s => s.ImplementationStatus)
                     .ToList();
 
             return

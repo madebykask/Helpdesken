@@ -60,14 +60,14 @@
 
         #region Methods
 
-        protected abstract Dictionary<string, string> GetMarkValues(
+        protected abstract EmailMarkValues GetMarkValues(
             MailTemplate template,
             TBusinessModel businessModel,
             int customerId,
             int languageId);
 
         private static void CheckMarks(
-            Dictionary<string, string> markValues,
+            EmailMarkValues markValues,
             MatchCollection subjectMarks,
             MatchCollection bodyMarks)
         {

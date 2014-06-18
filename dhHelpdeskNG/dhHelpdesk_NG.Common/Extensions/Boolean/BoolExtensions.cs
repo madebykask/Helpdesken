@@ -2,9 +2,9 @@
 {
     public static class BoolExtensions
     {
-        public static string ToBoolString(this bool value)
+        public static string ToYesNoString(this bool value)
         {
-            return value ? "true" : "false";
+            return value ? "yes" : "no";
         }
     }
 }

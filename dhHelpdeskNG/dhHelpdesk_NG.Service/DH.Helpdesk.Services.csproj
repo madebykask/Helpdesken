@@ -67,6 +67,7 @@
     <Compile Include="BusinessLogic\BusinessModelMappers\ChangeOverviewSettingsToExcelTableHeadersMapper.cs" />
     <Compile Include="BusinessLogic\BusinessModelExport\ExportFileNameFormatter.cs" />
     <Compile Include="BusinessLogic\BusinessModelExport\IExportFileNameFormatter.cs" />
+    <Compile Include="BusinessLogic\MailTools\EmailMarkValues.cs" />
     <Compile Include="BusinessLogic\OtherTools\ITemporaryIdProvider.cs" />
     <Compile Include="DisplayValues\Changes\ContactsListDisplayValue.cs" />
     <Compile Include="DisplayValues\Changes\ItemOverviewListDisplayValue.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="BusinessLogic\BusinessModelRestorers\Changes\Concrete\ChangeRestorer.cs" />
     <Compile Include="BusinessLogic\BusinessModelRestorers\Changes\IChangeRestorer.cs" />
     <Compile Include="BusinessLogic\OtherTools\Concrete\TemporaryIdProvider.cs" />
+    <Compile Include="Helpers\ChangeHelper.cs" />
     <Compile Include="Infrastructure\ApplicationDefaultParameters.cs" />
     <Compile Include="Infrastructure\Cases\Concrete\CasesCalculator.cs" />
     <Compile Include="Infrastructure\Cases\ICasesCalculator.cs" />

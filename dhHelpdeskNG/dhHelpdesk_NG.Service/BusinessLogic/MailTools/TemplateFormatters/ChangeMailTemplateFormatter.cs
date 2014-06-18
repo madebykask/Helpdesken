@@ -1,6 +1,5 @@
 ﻿namespace DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters
 {
-    using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
     using System.Text;
@@ -10,6 +9,7 @@
     using DH.Helpdesk.Common.Extensions.Boolean;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Changes;
+    using DH.Helpdesk.Services.Helpers;
 
     public sealed class ChangeMailTemplateFormatter : MailTemplateFormatter<UpdatedChange>,
         IMailTemplateFormatter<UpdatedChange>
@@ -72,13 +72,13 @@
 
         #region Methods
 
-        protected override Dictionary<string, string> GetMarkValues(
+        protected override EmailMarkValues GetMarkValues(
             MailTemplate template,
             UpdatedChange businessModel,
             int customerId,
             int languageId)
         {
-            var markValues = new Dictionary<string, string>();
+            var markValues = new EmailMarkValues();
             
             markValues.Add("[#3]", businessModel.Id.ToString());
             var customer = this.customerRepository.GetOverview(customerId);
@@ -97,7 +97,7 @@
             return markValues;
         }
 
-        private void AddAnalyzeMarkValues(Dictionary<string, string> markValues, UpdatedAnalyzeFields fields)
+        private void AddAnalyzeMarkValues(EmailMarkValues markValues, UpdatedAnalyzeFields fields)
         {
             var category = fields.CategoryId.HasValue
                 ? this.changeCategoryRepository.GetCategoryName(fields.CategoryId.Value)
@@ -124,6 +124,9 @@
             var startDate = fields.StartDate.ToString();
             var finishDate = fields.FinishDate.ToString();
             var rejectExplanation = fields.RejectExplanation;
+            var implementationPlan = fields.HasImplementationPlan.ToYesNoString();
+            var recoveryPlan = fields.HasRecoveryPlan.ToYesNoString();
+            var approval = fields.Approval.StatusToString();
 
             markValues.Add("[#32]", category);
             markValues.Add("[#11]", priority);
@@ -136,16 +139,21 @@
             markValues.Add("[#19]", startDate);
             markValues.Add("[#20]", finishDate);
             markValues.Add("[#45]", rejectExplanation);
+            markValues.Add("[#35]", implementationPlan);
+            markValues.Add("[#36]", recoveryPlan);
+            markValues.Add("[#49]", approval);
         }
 
-        private void AddEvaluationMarkValues(Dictionary<string, string> markValues, UpdatedEvaluationFields fields)
+        private void AddEvaluationMarkValues(EmailMarkValues markValues, UpdatedEvaluationFields fields)
         {
             var changeEvaluation = fields.ChangeEvaluation;
+            var evaluationReady = fields.EvaluationReady.ToYesNoString();
 
-            markValues.Add("[#43]", fields.ChangeEvaluation);
+            markValues.Add("[#43]", changeEvaluation);
+            markValues.Add("[#54]", evaluationReady);
         }
 
-        private void AddGeneralMarkValues(Dictionary<string, string> markValues, UpdatedGeneralFields fields)
+        private void AddGeneralMarkValues(EmailMarkValues markValues, UpdatedGeneralFields fields)
         {
             var priority = fields.Priority.HasValue ? fields.Priority.ToString() : null;
             var title = fields.Title;
@@ -198,7 +206,7 @@
         }
 
         private void AddImplementationMarkValues(
-            Dictionary<string, string> markValues,
+            EmailMarkValues markValues,
             UpdatedImplementationFields fields)
         {
             var implementationStatus = fields.StatusId.HasValue
@@ -208,14 +216,22 @@
             var realStartDate = fields.RealStartDate.ToString();
             var finishingDate = fields.FinishingDate.ToString();
             var deviation = fields.Deviation;
+            var buildImplemented = fields.BuildImplemented.ToYesNoString();
+            var implementationPlanUsed = fields.ImplementationPlanUsed.ToYesNoString();
+            var recoveryPlanUsed = fields.RecoveryPlanUsed.ToYesNoString();
+            var implementationReady = fields.ImplementationReady.ToYesNoString();
 
             markValues.Add("[#21]", implementationStatus);
             markValues.Add("[#24]", realStartDate);
             markValues.Add("[#23]", finishingDate);
             markValues.Add("[#41]", deviation);
+            markValues.Add("[#40]", buildImplemented);
+            markValues.Add("[#39]", implementationPlanUsed);
+            markValues.Add("[#38]", recoveryPlanUsed);
+            markValues.Add("[#53]", implementationReady);
         }
 
-        private void AddOrdererMarkValues(Dictionary<string, string> markValues, UpdatedOrdererFields fields)
+        private void AddOrdererMarkValues(EmailMarkValues markValues, UpdatedOrdererFields fields)
         {
             var id = fields.Id;
             var name = fields.Name;
@@ -235,7 +251,7 @@
             markValues.Add("[#52]", department);
         }
 
-        private void AddRegistrationMarkValues(Dictionary<string, string> markValues, UpdatedRegistrationFields fields)
+        private void AddRegistrationMarkValues(EmailMarkValues markValues, UpdatedRegistrationFields fields)
         {
             var owner = fields.OwnerId.HasValue
                 ? this.changeGroupRepository.GetChangeGroupName(fields.OwnerId.Value)
@@ -264,7 +280,8 @@
                 }
             }
 
-            var verified = fields.Verified.ToBoolString();            
+            var verified = fields.Verified.ToYesNoString();
+            var approval = fields.Approval.StatusToString(); 
 
             markValues.Add("[#60]", name);
             markValues.Add("[#61]", phone);
@@ -277,6 +294,7 @@
             markValues.Add("[#47]", impact);
             markValues.Add("[#31]", desiredDate);
             markValues.Add("[#14]", verified);
+            markValues.Add("[#46]", approval);
             markValues.Add("[#50]", rejectExplanation);
         }
 
