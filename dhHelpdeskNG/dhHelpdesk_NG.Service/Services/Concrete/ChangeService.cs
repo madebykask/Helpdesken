@@ -527,7 +527,11 @@
                 newLog.CreatedDateAndTime = request.Context.DateAndTime;
             }
 
-            this.changeLogRepository.AddLogs(request.NewLogs.Where(l => l.Subtopic != Subtopic.InviteToCab).ToList());
+            var logsForSave = request.NewLogs.Any(l => l.Subtopic == Subtopic.Analyze)
+                                  ? request.NewLogs.Where(l => l.Subtopic != Subtopic.InviteToCab).ToList()
+                                  : request.NewLogs;
+
+            this.changeLogRepository.AddLogs(logsForSave);
             this.changeLogRepository.Commit();
 
             var auditOptionalData = new ChangeAuditData(history.Id, existingChange);
