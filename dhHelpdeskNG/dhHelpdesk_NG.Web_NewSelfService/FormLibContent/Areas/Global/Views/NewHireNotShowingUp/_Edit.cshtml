@@ -15,10 +15,6 @@
                 <li class="active @(Model.TabHasError("#ServiceRequestDetails") ? "error" : "")">
                     <a href="#ServiceRequestDetails">@Model.Translate("Service Request Details")</a></li>
             }
-            
-           
-          
-           
         </ul>
         <div class="content">
             <div class="row-fluid">
@@ -27,8 +23,6 @@
                     {
                         @Html.Partial("_TabServiceRequestDetails", Model)
                     }
-                    
-                   
                 </div>
             </div>
         </div>

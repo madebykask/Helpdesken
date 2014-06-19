@@ -5,7 +5,7 @@
 @using (Html.BeginForm("edit", "ChangeTermsConditions", new { id = Model.Contract.Id }, FormMethod.Post, new { area = "Global", novalidate = "novalidate" }))
 {   
     <span style="display: none;" id="narrowDownInit"></span>
-    @Html.Partial("_GlobalNavigation", Model)
+    @Html.Partial("_GlobalNavRev", Model)
     <div class="container containeralignright">
         @Html.Partial("_CurrentUser")
         @Html.Partial("_ErrorMessage", Model)

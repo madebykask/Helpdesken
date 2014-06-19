@@ -12,18 +12,26 @@
     </status>
     <!--LM-->
     <status value="10">
+        <userGroup name="Line Manager">
+            <visibleTabs>#ServiceRequestDetails,#Absences</visibleTabs>
+            <readOnlyTabs>#Absences</readOnlyTabs>
+        </userGroup>
         <visibleTabs>#ServiceRequestDetails,#Absences</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields>Department,BusinessUnit</readOnlyFields>
         <actions>
             <action status="20" internal-val="20" text="Submit to HR Unit">
-                <validateTabs>#ServiceRequestDetails,#Absences</validateTabs>
+                <validateTabs>#ServiceRequestDetails</validateTabs>
             </action>
             <action status="99" internal-val="70" text="Cancel service request"></action>
         </actions>
     </status>
     <!-- HRU -->
     <status value="20">
+        <userGroup name="Line Manager">
+            <visibleTabs>#ServiceRequestDetails,#Absences</visibleTabs>
+            <readOnlyTabs>#ServiceRequestDetails,#Absences</readOnlyTabs>
+        </userGroup>
         <visibleTabs>#ServiceRequestDetails,#Absences</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields>Department,BusinessUnit</readOnlyFields>

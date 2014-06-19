@@ -22,16 +22,10 @@
     </status>
     <!-- LM -->
     <status value="10">
-        <!--<group name="Line Manager">
+        <userGroup name="Line Manager">
             <visibleTabs>#servicerequestdetails,#OrganisationalAssignment</visibleTabs>
             <readOnlyTabs></readOnlyTabs>
-            <actions>
-                <action status="20" internal-val="20" text="Submit to HR Unit">
-                    <validateTabs>#servicerequestdetails,#OrganisationalAssignment</validateTabs>
-                </action>
-                <action status="99" internal-val="70" text="Cancel service request"></action>
-            </actions>
-        </group>-->
+        </userGroup>
         <visibleTabs>#servicerequestdetails,#OrganisationalAssignment</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields></readOnlyFields>
@@ -44,10 +38,10 @@
     </status>
     <!-- HRU -->
     <status value="20">
-        <!--<group name="Line Manager">
+        <userGroup name="Line Manager">
             <visibleTabs>#servicerequestdetails,#OrganisationalAssignment</visibleTabs>
             <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment</readOnlyTabs>
-        </group>-->
+        </userGroup>
         <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields></readOnlyFields>
@@ -67,10 +61,10 @@
     </status>
     <!-- SSC -->
     <status value="30">
-        <!--<group name="Line Manager">
+        <userGroup name="Line Manager">
             <visibleTabs>#servicerequestdetails,#OrganisationalAssignment</visibleTabs>
             <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment</readOnlyTabs>
-        </group>-->
+        </userGroup>
         <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
@@ -82,10 +76,10 @@
     </status>
     <!-- SSC -->
     <status value="40">
-        <!--<group name="Line Manager">
+        <userGroup name="Line Manager">
             <visibleTabs>#servicerequestdetails,#OrganisationalAssignment</visibleTabs>
             <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment</readOnlyTabs>
-        </group>-->
+        </userGroup>
         <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
@@ -96,10 +90,10 @@
     </status>
     <!-- SSC -->
     <status value="50">
-        <!--<group name="Line Manager">
+        <userGroup name="Line Manager">
             <visibleTabs>#servicerequestdetails,#OrganisationalAssignment</visibleTabs>
             <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment</readOnlyTabs>
-        </group>-->
+        </userGroup>
         <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
@@ -109,19 +103,19 @@
         </actions>
     </status>
     <status value="60">
-        <!--<group name="Line Manager">
+        <userGroup name="Line Manager">
             <visibleTabs>#servicerequestdetails,#OrganisationalAssignment</visibleTabs>
             <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment</readOnlyTabs>
-        </group>-->
+        </userGroup>
         <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
     </status>
     <status value="70">
-        <!--<group name="Line Manager">
+        <userGroup name="Line Manager">
             <visibleTabs>#servicerequestdetails,#OrganisationalAssignment</visibleTabs>
             <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment</readOnlyTabs>
-        </group>-->
+        </userGroup>
         <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</readOnlyTabs>
     </status>
