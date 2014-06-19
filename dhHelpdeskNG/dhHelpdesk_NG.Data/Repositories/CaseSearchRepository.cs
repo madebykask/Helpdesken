@@ -402,8 +402,8 @@
             sb.Append(", tblStatus.StatusName as Status_Id");
             //sb.Append(", tblStatus.Id as Status_Id_Value");
             sb.Append(", tblSupplier.Supplier as Supplier_Id");
-            string appId = ConfigurationManager.AppSettings["ApplicationIdentity"].ToString();
-            if (appId == "LineManager")
+            string appId = ConfigurationManager.AppSettings["InitFromSelfService"].ToString();
+            if (appId == "true")
                 sb.Append(", tblStateSecondary.AlternativeStateSecondaryName as StateSecondary_Id");
             else
                 sb.Append(", tblStateSecondary.StateSecondary as StateSecondary_Id");
