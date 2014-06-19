@@ -402,7 +402,11 @@
             sb.Append(", tblStatus.StatusName as Status_Id");
             //sb.Append(", tblStatus.Id as Status_Id_Value");
             sb.Append(", tblSupplier.Supplier as Supplier_Id");
-            sb.Append(", tblStateSecondary.StateSecondary as StateSecondary_Id");
+            string appId = ConfigurationManager.AppSettings["ApplicationIdentity"].ToString();
+            if (appId == "LineManager")
+                sb.Append(", tblStateSecondary.AlternativeStateSecondaryName as StateSecondary_Id");
+            else
+                sb.Append(", tblStateSecondary.StateSecondary as StateSecondary_Id");
             //sb.Append(", case when coalesce(tblOrder.Id, 0) = 0 then tblStateSecondary.StateSecondary else cast(tblOrder.Id as varchar(15))  + ' - ' + coalesce(tblStateSecondary.StateSecondary, '') end as StateSecondary_Id ");
             //sb.Append(", tblStateSecondary.StateSecondary");
             //sb.Append(", coalesce(tblStateSecondary.IncludeInCaseStatistics, 1) as IncludeInCaseStatistics");

@@ -131,7 +131,10 @@
          if (pCustomerId == -1 && SessionFacade.CurrentCustomerID > 0)
          {
              pCustomerId = SessionFacade.CurrentCustomerID;
-             SessionFacade.CurrentCustomer.Id = pCustomerId;
+             if (SessionFacade.CurrentCustomer != null)
+             {
+                 SessionFacade.CurrentCustomer.Id = pCustomerId;
+             }
          }
 
          var helper = ManualDependencyResolver.Get<ICommonFunctions>();
@@ -140,7 +143,7 @@
          var pActionSettings = helper.GetActionSettings(pCustomerId);
          
       } 
-    <div style="position: fixed; top: 30%; right: -2px; background: #fff; padding: 20px 20px 5px 20px; border: 1px solid #ccc;">
+    @*<div style="position: fixed; top: 30%; right: -2px; background: #fff; padding: 20px 20px 5px 20px; border: 1px solid #ccc;">
         <ul class="nav nav-pills nav-stacked">
             <li class="active">
                 <a href="#" data-toggle="modal" data-target="#myModal2">
@@ -149,14 +152,14 @@
                 </a>
             </li>
         </ul>
-    </div>
+    </div>*@
     <div class="jumbotron">
         <div class="container-fluid">
             <a href="index.html">
                 <div class="pull-left toplogo"></div>
             </a>
             <div class="pull-right small toplogout">
-                <a href="#">Emil Lundvall</a> | <a href="#">Log out</a>
+                <a href="#">@SessionFacade.CurrentSystemUser</a> | <a href="#">Log out</a>
             </div>
         </div>
     </div>
@@ -420,7 +423,7 @@
     <input type="hidden" value="@this.Request.RawUrl" id="rawUrl" />
 
     <!-- Modal Test by Jonas -->
-                            <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            @*<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog" style="width:900px;">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -496,7 +499,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>*@
 </body>
     
 </html>
