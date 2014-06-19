@@ -12,7 +12,7 @@
         public HistoryRecordModel(
             DateTime dateAndTime,
             UserName registeredBy,
-            string log,
+            List<string> log,
             List<FieldDifferencesModel> fieldsDifferences,
             List<string> emails)
         {
@@ -30,7 +30,7 @@
         public UserName RegisteredBy { get; set; }
 
         [LocalizedDisplay("Log")]
-        public string Log { get; set; }
+        public List<string> Log { get; set; }
 
         [NotNull]
         [LocalizedDisplay("History")]

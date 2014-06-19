@@ -10,7 +10,10 @@
         @Html.DisplayFor(m => m.RegisteredBy.LastName)
     </td>
     <td class="tdpointer">
-        @Html.DisplayFor(m => m.Log)
+        @foreach (var log in Model.Log)
+        {
+            <div>@log</div>
+        }
     </td>
     <td class="tdpointer">
         @foreach (var fieldDifferences in Model.FieldsDifferences)
@@ -28,7 +31,7 @@
     <td class="tdpointer">
         @foreach (var email in Model.Emails)
         {
-            @Html.Display(email)
+            <div>@email</div>
         }
     </td>
 </tr>

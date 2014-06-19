@@ -10,7 +10,7 @@
         public HistoriesDifference Compare(
             HistoryOverview previousHistory,
             HistoryOverview currentHistory,
-            LogOverview currentHistoryLog,
+            List<LogOverview> currentHistoryLog,
             List<EmailLogOverview> currentHistoryEmailLogs)
         {
             return previousHistory == null
@@ -20,7 +20,7 @@
 
         private static HistoriesDifference CreateDifferenceForFirstHistory(
             HistoryOverview firstHistory,
-            LogOverview log,
+            List<LogOverview> log,
             List<EmailLogOverview> emailLogs)
         {
             var history = new List<FieldDifference>();
@@ -68,11 +68,12 @@
             }
 
             var emails = emailLogs.Select(l => l.Email).ToList();
+            var logs = log.Select(l => l.Text).ToList();
 
             return new HistoriesDifference(
                 firstHistory.DateAndTime,
                 firstHistory.RegisteredBy,
-                log != null ? log.Text : null,
+                logs,
                 history,
                 emails);
         }
@@ -80,7 +81,7 @@
         private static HistoriesDifference CompareHistories(
             HistoryOverview previousHistory,
             HistoryOverview currentHistory,
-            LogOverview currentHistoryLog,
+            List<LogOverview> currentHistoryLog,
             List<EmailLogOverview> currentHistoryEmailLogs)
         {
             var history = new List<FieldDifference>();
@@ -136,13 +137,14 @@
             }
 
             var emails = currentHistoryEmailLogs.Select(l => l.Email).ToList();
+            var logs = currentHistoryLog.Select(l => l.Text).ToList();
 
-            if ((currentHistoryLog != null && !string.IsNullOrEmpty(currentHistoryLog.Text)) || history.Any() || emails.Any())
+            if (logs.Any() || history.Any() || emails.Any())
             {
                 return new HistoriesDifference(
                 currentHistory.DateAndTime,
                 currentHistory.RegisteredBy,
-                currentHistoryLog != null ? currentHistoryLog.Text : null,
+                logs,
                 history,
                 emails);
             }

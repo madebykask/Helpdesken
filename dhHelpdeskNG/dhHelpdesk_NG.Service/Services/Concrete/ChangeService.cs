@@ -527,7 +527,7 @@
                 newLog.CreatedDateAndTime = request.Context.DateAndTime;
             }
 
-            this.changeLogRepository.AddLogs(request.NewLogs);
+            this.changeLogRepository.AddLogs(request.NewLogs.Where(l => l.Subtopic != Subtopic.InviteToCab).ToList());
             this.changeLogRepository.Commit();
 
             var auditOptionalData = new ChangeAuditData(history.Id, existingChange);

@@ -126,8 +126,7 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
             {
                 var entity = new ChangeLogEntity
                              {
-                                 // ToDo: fix after first release.
-//                                 ChangeHistory_Id = log.ChangeHistoryId,
+                                 ChangeHistory_Id = log.ChangeHistoryId,
                                  ChangePart = (int)log.Subtopic,
                                  Change_Id = log.ChangeId,
                                  CreatedByUser_Id = log.CreatedByUserId,

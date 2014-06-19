@@ -6,7 +6,9 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
     using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
     using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Dal.Repositories.Changes;
     using DH.Helpdesk.Dal.Repositories.MailTemplates;
+    using DH.Helpdesk.Services.BusinessLogic.MailTools;
     using DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters;
     using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Services.Services;
@@ -27,6 +29,10 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
 
         private readonly IUserEmailRepository userEmailRepository;
 
+        private readonly IMailUniqueIdentifierProvider mailUniqueIdentifierProvider;
+
+        private readonly IChangeEmailLogRepository changeEmailLogRepository;
+
         #endregion
 
         #region Constructors and Destructors
@@ -37,7 +43,9 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
             IMailTemplateLanguageRepository mailTemplateLanguageRepository,
             IMailTemplateFormatter<UpdatedChange> mailTemplateFormatter,
             ICustomerRepository customerRepository,
-            IEmailService emailService)
+            IEmailService emailService, 
+            IMailUniqueIdentifierProvider mailUniqueIdentifierProvider, 
+            IChangeEmailLogRepository changeEmailLogRepository)
         {
             this.userEmailRepository = userEmailRepository;
             this.mailTemplateRepository = mailTemplateRepository;
@@ -45,6 +53,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
             this.mailTemplateFormatter = mailTemplateFormatter;
             this.customerRepository = customerRepository;
             this.emailService = emailService;
+            this.mailUniqueIdentifierProvider = mailUniqueIdentifierProvider;
+            this.changeEmailLogRepository = changeEmailLogRepository;
         }
 
         #endregion
@@ -101,6 +111,30 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
             }
 
             this.emailService.SendEmail(from, newOwnerEmails, mail);
+
+            var mailUniqueIdentifier = this.mailUniqueIdentifierProvider.Provide(
+                businessModel.Context.DateAndTime,
+                from);
+
+            if (string.IsNullOrEmpty(mailUniqueIdentifier))
+            {
+                return;
+            }
+
+            var emailLog = EmailLog.CreateNew(
+                optionalData.HistoryId,
+                newOwnerEmails,
+                (int)ChangeTemplate.AssignedToUser,
+                mailUniqueIdentifier,
+                businessModel.Context.DateAndTime);
+
+            if (emailLog == null)
+            {
+                return;
+            }
+
+            this.changeEmailLogRepository.AddEmailLog(emailLog);
+            this.changeEmailLogRepository.Commit();
         }
 
         #endregion

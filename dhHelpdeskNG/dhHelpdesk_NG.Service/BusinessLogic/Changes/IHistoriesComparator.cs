@@ -9,7 +9,7 @@
         HistoriesDifference Compare(
             HistoryOverview previousHistory,
             HistoryOverview currentHistory,
-            LogOverview currentHistoryLog,
+            List<LogOverview> currentHistoryLog,
             List<EmailLogOverview> currentHistoryEmailLogs);
     }
 }

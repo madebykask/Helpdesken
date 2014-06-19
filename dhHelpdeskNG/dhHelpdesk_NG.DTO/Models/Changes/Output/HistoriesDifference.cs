@@ -11,7 +11,7 @@
         public HistoriesDifference(
             DateTime dateAndTime,
             UserName registeredBy,
-            string log,
+            List<string> log,
             List<FieldDifference> history,
             List<string> emails)
         {
@@ -27,7 +27,7 @@
         [NotNull]
         public UserName RegisteredBy { get; private set; }
 
-        public string Log { get; private set; }
+        public List<string> Log { get; private set; }
 
         [NotNull]
         public List<FieldDifference> History { get; private set; }

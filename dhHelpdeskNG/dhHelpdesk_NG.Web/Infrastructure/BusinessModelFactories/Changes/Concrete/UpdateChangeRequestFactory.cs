@@ -410,6 +410,11 @@
                         List<ManualLog> logs,
                         IEmailService emailService)
         {
+            if (string.IsNullOrEmpty(logText))
+            {
+                return;
+            }
+
             var emails = string.IsNullOrEmpty(emailsString)
                 ? new List<MailAddress>(0)
                 : emailsString.Split(Environment.NewLine)
