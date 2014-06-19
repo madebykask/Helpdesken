@@ -154,7 +154,7 @@
                         <td>
                             @Model.Element("DeductionsType" + i.ToString())</td>
                     </tr>
-                     <tr class="allowance@(i.ToString())">
+                     <tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DeductionsPaymentType" + i.ToString())</td>
                         <td>
                             @Model.Element("DeductionsPaymentType" + i.ToString())</td>
@@ -186,13 +186,15 @@
                         <a id="addDeduction" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Deduction")</a></td>
                 </tr>
 
-                             </tbody>
+            </tbody>
         </table>
     </div>
 </div>
 
 
 <script>
+
+
 
             if (document.getElementById('DeductionsValidFrom').value == ''){
                 document.getElementById('DeductionsValidFrom').value = '@Model.GetAnswer("ChangeValidFrom")';
@@ -205,12 +207,12 @@
             }
         }
 
-
         var startDate = $('#ChangeValidFrom').val();
         var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
         var dStart = APIGlobal.DateTime.parseDate(startDate, format);
         var forcePicker = new Date(dStart.getFullYear(), dStart.getMonth(), dStart.getDate(), 0, 0, 0, 0);
-        $('#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3').not(".disabled").datepicker(
+        $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,' +
+            '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3').not(".disabled").datepicker(
         {
             onRender: function (ev) {
                 return ev.valueOf() < forcePicker.valueOf() ? 'disabled' : '';
@@ -223,17 +225,14 @@
             var input = $('#AllowancesValidTo');
             if ($(this).val() == 'One Time') {
                 allowancesValidTo.value = "";
+                input.attr('readonly', 'readonly');
                 $('#date_AllowancesValidTo').datepicker("destroy");
                 $('#date_AllowancesValidTo').addClass("disabled");
-                input.attr('readonly', 'readonly');
+                
             } else {
                 input.removeAttr('readonly', 'readonly');
-                input.not(".disabled").datepicker(
-                {
-                    onRender: function (ev) {
-                        return '';
-                    }
-                });
+                $('#date_AllowancesValidTo').datepicker();
+                $('#date_AllowancesValidTo').removeClass("disabled");
                 allowancesValidTo.value = '31.12.9999';
             }
         });
@@ -244,17 +243,14 @@
             var input = $('#AllowancesValidTo2');
             if ($(this).val() == 'One Time') {
                 allowancesValidTo2.value = "";
+                input.attr('readonly', 'readony');
                 $('#date_AllowancesValidTo2').datepicker("destroy");
                 $('#date_AllowancesValidTo2').addClass("disabled");
-                input.attr('readonly', 'readony');
+                
             } else {
                 input.removeAttr('readonly', 'readonly');
-                input.not(".disabled").datepicker(
-                {
-                    onRender: function (ev) {
-                        return '';
-                    }
-                });
+                $('#date_AllowancesValidTo2').datepicker();
+                $('#date_AllowancesValidTo2').removeClass("disabled");
                 allowancesValidTo2.value = '31.12.9999';
             }
         });
@@ -267,45 +263,37 @@
             var input = $('#AllowancesValidTo3');
             if ($(this).val() == 'One Time') {
                 allowancesValidTo3.value = "";
-                $('#date_AllowancesValidTo3').datepicker("destroy");
-                $('#date_AllowancesValidTo3').addClass("disabled");
                 input.attr('readonly', 'readony');
+                $('#date_AllowancesValidTo3').datepicker("destroy");
+                $('#date_AllowancesValidTo3').addClass("disabled");                
             } else {
                 input.removeAttr('readonly', 'readonly');
-                input.not(".disabled").datepicker(
-                {
-                    onRender: function (ev) {
-                        return '';
-                    }
-                });
+                $('#date_AllowancesValidTo3').datepicker();
+                $('#date_AllowancesValidTo3').removeClass("disabled");
                 allowancesValidTo3.value = '31.12.9999';
             }
         });
         $('#AllowancesPaymentType3').change();
+
 
         $('#DeductionsPaymentType').change(function () {
             var deductionsValidTo = document.getElementById('DeductionsValidTo');
 
             var input = $('#DeductionsValidTo');
             if ($(this).val() == 'One Time') {
-            
+                deductionsValidTo.value = "";
+                input.attr('readonly', 'readonly');
                 $('#date_DeductionsValidTo').datepicker("destroy");
                 $('#date_DeductionsValidTo').addClass("disabled");
-                input.attr('readonly', 'readony');
-                deductionsValidTo.value = "";
 
-            }
-            else{
+            } else {
                 input.removeAttr('readonly', 'readonly');
-                input.not(".disabled").datepicker(
-                {
-                    onRender: function(ev) {
-                        return '';
-                    }
-                });
-                deductionsValidTo.value = '31.12.9999';     
+                $('#date_DeductionsValidTo').datepicker();
+                $('#date_DeductionsValidTo').removeClass("disabled");
+                deductionsValidTo.value = '31.12.9999';
             }
         });
+        $('#DeductionsPaymentType').change();
 
 
         $('#DeductionsPaymentType2').change(function () {
@@ -314,22 +302,18 @@
             var input = $('#DeductionsValidTo2');
             if ($(this).val() == 'One Time') {
                 deductionsValidTo2.value = "";
+                input.attr('readonly', 'readonly');
                 $('#date_DeductionsValidTo2').datepicker("destroy");
                 $('#date_DeductionsValidTo2').addClass("disabled");
-                input.attr('readonly', 'readony');
-            } 
-            else{
+
+            } else {
                 input.removeAttr('readonly', 'readonly');
-                input.not(".disabled").datepicker(
-                {
-                    onRender: function(ev) {
-                        return '';
-                    }
-                });
-                deductionsValidTo2.value = '31.12.9999';        
+                $('#date_DeductionsValidTo2').datepicker();
+                $('#date_DeductionsValidTo2').removeClass("disabled");
+                deductionsValidTo2.value = '31.12.9999';
             }
         });
-
+        $('#DeductionsPaymentType2').change();
 
         $('#DeductionsPaymentType3').change(function () {
             var deductionsValidTo3 = document.getElementById('DeductionsValidTo3');
@@ -337,22 +321,19 @@
             var input = $('#DeductionsValidTo3');
             if ($(this).val() == 'One Time') {
                 deductionsValidTo3.value = "";
+                input.attr('readonly', 'readonly');
                 $('#date_DeductionsValidTo3').datepicker("destroy");
                 $('#date_DeductionsValidTo3').addClass("disabled");
-                input.attr('readonly', 'readony');
-            } 
-            else {
+
+            } else {
                 input.removeAttr('readonly', 'readonly');
-                input.not(".disabled").datepicker(
-                {
-                    onRender: function (ev) {
-                        return '';
-                    }
-                });
+                $('#date_DeductionsValidTo3').datepicker();
+                $('#date_DeductionsValidTo3').removeClass("disabled");
                 deductionsValidTo3.value = '31.12.9999';
             }
         });
-    
+        $('#DeductionsPaymentType3').change();
+
 </script>
 
 

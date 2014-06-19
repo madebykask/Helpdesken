@@ -5,17 +5,16 @@
     <readOnlyTabs></readOnlyTabs>
     <readOnlyFields>BusinessUnit,Department</readOnlyFields>
     <actions>
-      <action status="10" internal-val="10" text="">
-        <validateTabs>#ServiceRequestDetails</validateTabs>
+      <!--<action status="10" internal-val="10" text="Send back to Line Manager"></action>-->
+      <action status="30" internal-val="30" text="Submit Service Request to SSC">
+        <validateTabs>#ServiceRequestDetails,#Absences</validateTabs>
       </action>
-      <action status="20" internal-val="20" text="">
-        <validateTabs>#ServiceRequestDetails</validateTabs>
-      </action>
+      <action status="99" internal-val="70" text="Cancel Service request"></action>
     </actions>
   </status>
   <!-- LM -->
   <status value="10">
-    <visibleTabs>#ServiceRequestDetails,#Absences,#documents</visibleTabs>
+    <visibleTabs>#ServiceRequestDetails,#Absences</visibleTabs>
     <readOnlyTabs></readOnlyTabs>
     <readOnlyFields>BusinessUnit,Department</readOnlyFields>
     <actions>
@@ -51,7 +50,7 @@
   </status>
   <!-- SSC -->
   <status value="40">
-    <visibleTabs>#ServiceRequestDetails,#Absences,#documents,#globalview</visibleTabs>
+    <visibleTabs>#ServiceRequestDetails,#Absences,#documents</visibleTabs>
     <readOnlyTabs>#ServiceRequestDetails,#Absences</readOnlyTabs>
     <readOnlyFields>BusinessUnit,Department</readOnlyFields>
     <actions>
@@ -70,8 +69,8 @@
     </actions>
   </status>-->
   <status value="60">
-    <visibleTabs>#ServiceRequestDetails,#Absences,#documents,#globalview</visibleTabs>
-    <readOnlyTabs>#ServiceRequestDetails,#Absences,#documents,#globalview</readOnlyTabs>
+    <visibleTabs>#ServiceRequestDetails,#Absences,#documents</visibleTabs>
+    <readOnlyTabs>#ServiceRequestDetails,#Absences,#documents</readOnlyTabs>
     <readOnlyFields></readOnlyFields>
     <actions></actions>
   </status>

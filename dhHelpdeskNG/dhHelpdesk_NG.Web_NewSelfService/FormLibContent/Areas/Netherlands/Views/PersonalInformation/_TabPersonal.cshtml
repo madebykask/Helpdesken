@@ -381,12 +381,12 @@
                 <!-- FISCAL DATA AND SOCIAL INSURANCE -->
                <tr>
                     <td class="tdstrong" colspan="2">
-                        <h4>@Model.Translate("Fisical Data")</h4>
+                        <h4>@Model.Translate("Fiscal Data")</h4>
                     </td>
                 </tr>  
                 
                 <tr>
-                    <td class="tdstrong">@Model.Label("Tax Deduction")</td>
+                    <td class="tdstrong">@Model.Label("TaxDeduction")</td>
                     <td>@Model.Element("TaxDeduction")</td>
                 </tr>
               
@@ -401,6 +401,10 @@
                 <tr>
                     <td class="tdstrong">@Model.Label("Language")</td>
                     <td>@Model.Element("Language")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Nationality")</td>
+                    <td>@Model.Element("Nationality")</td>
                 </tr>
                 
                 <!-- Education - COMMENTED OUT BECAUSE THIS IS NOT VALID FOR NETHERLANDS -->
@@ -597,7 +601,7 @@
                     </td>
                 </tr>                  
                 <tr>
-                    <td class="tdstrong">@Model.Label("Marital Status")</td>
+                    <td class="tdstrong">@Model.Label("MaritalStatus")</td>
                     <td>@Model.Element("MaritalStatus")</td>
                 </tr>
                 <tr>

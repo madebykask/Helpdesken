@@ -8,7 +8,7 @@
       <action status="30" internal-val="30" text="Submit Complete Service Request to SSC">
         <validateTabs>#ServiceRequestDetails,#Basic,#Complete</validateTabs>
       </action>
-      <action status="31" internal-val="30" init-form-guid="55A15759-7AB0-4081-A304-C43DBA784AB4" text="Submit Basic Service Request to SSC">
+      <action status="31" internal-val="30" init-form-guid="6E8C3A96-1BF4-40D6-A489-CFC4A9B97006" text="Submit Basic Service Request to SSC">
         <validateTabs>#ServiceRequestDetails,#Basic</validateTabs>
       </action>
       <action status="99" internal-val="70" text="Cancel Service request"></action>

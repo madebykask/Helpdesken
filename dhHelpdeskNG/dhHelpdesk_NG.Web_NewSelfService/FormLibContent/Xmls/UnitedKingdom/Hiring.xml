@@ -26,7 +26,7 @@
                     <option value="External">External</option>
                 </options>
             </element>
-            <element type="date" name="ContractStartDate" mandatory="1" label="Contract Start Date" format="dd.MM.yyyy">
+            <element type="date" name="ContractStartDate" mandatory="1" label="Contract Start Date" format="dd.MM.yyyy" future="1">
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
           <element type="date" name="InductionDate" mandatory="1" label="Induction Date" format="dd.MM.yyyy">
@@ -614,7 +614,7 @@
             <element type="select" name="BusinessUnit" label="Business Unit" mandatory="1">
                 <options>
                   <option value=""></option>
-                  <option value="﻿Store Belfast 113">﻿Store Belfast 113</option>
+                  <option value="Store Belfast 113">﻿Store Belfast 113</option>
                   <option value="Store Birmingham 142">Store Birmingham 142</option>
                   <option value="Store Bristol 264">Store Bristol 264</option>
                   <option value="Store Cardiff 267">Store Cardiff 267</option>
@@ -1535,7 +1535,7 @@
             <element type="typeahead-simple" name="HomeCostCentre" source="1" label="Home Cost Centre" mandatory="1">
               <regex inherit="maxfourdigit" message="" pattern=""></regex>  
               <options>
-                    <option value=""></option>
+                <option value=""></option>
                 <option value="﻿3300">﻿3300</option>
                 <option value="3320">3320</option>
                 <option value="3340">3340</option>
@@ -1619,7 +1619,7 @@
             <element type="typeahead-simple" source="1" name="CrossChargeCostCentre" label="Cross Charge Cost Centre">
                 <regex inherit="maxfourdigit" message="" pattern=""></regex>
               <options>
-                    <option value=""></option>
+                <option value=""></option>
                 <option value="﻿3300">﻿3300</option>
                 <option value="3320">3320</option>
                 <option value="3340">3340</option>
@@ -2145,13 +2145,6 @@
 
                 </options>
             </element>
-            <element type="select" name="LocalJobTitle" label="Local Job Title">
-                <options>
-                    <option value=""></option>
-                    <option value="Local Job Title 1">Local Job Title 1</option>
-                    <option value="Local Job Title 2">Local Job Title 2</option>
-                </options>
-            </element>
             <element type="select" name="NewPosition" label="New Position?" mandatory="1">
                 <options>
                     <option value=""></option>
@@ -2261,7 +2254,7 @@
                   <option value="Carol George">Carol George</option>
                   <option value="Carole Gutherson">Carole Gutherson</option>
                   <option value="Caroline Mitchell">Caroline Mitchell</option>
-                  <option value="Caroline O&apos;Keefe">Caroline O&apos;Keefe</option>
+                  <option value="Caroline OKeefe">Caroline OKeefe</option>
                   <option value="Carolyn Crighton">Carolyn Crighton</option>
                   <option value="Carolyn Young">Carolyn Young</option>
                   <option value="Carrie Ross">Carrie Ross</option>
@@ -2339,12 +2332,12 @@
                   <option value="Diane Healey">Diane Healey</option>
                   <option value="Dianne Woollam">Dianne Woollam</option>
                   <option value="Donald Sands">Donald Sands</option>
-                  <option value="Donna O&apos;Neill">Donna O&apos;Neill</option>
+                  <option value="Donna ONeill">Donna ONeill</option>
                   <option value="Douglas Allison">Douglas Allison</option>
                   <option value="Douglas Fraser">Douglas Fraser</option>
                   <option value="Duke Mahadevan">Duke Mahadevan</option>
                   <option value="Duncan Platt">Duncan Platt</option>
-                  <option value="Edward O&apos;Toole">Edward O&apos;Toole</option>
+                  <option value="Edward OToole">Edward OToole</option>
                   <option value="Eithne Lavin">Eithne Lavin</option>
                   <option value="Ekberg Åsa">Ekberg Åsa</option>
                   <option value="Elaine Stenning">Elaine Stenning</option>
@@ -2529,7 +2522,7 @@
                   <option value="Kathryn Goodall">Kathryn Goodall</option>
                   <option value="Kathryn Robinson">Kathryn Robinson</option>
                   <option value="Katie King">Katie King</option>
-                  <option value="Katie O&apos;Reilly">Katie O&apos;Reilly</option>
+                  <option value="Katie OReilly">Katie OReilly</option>
                   <option value="Keely Chapman">Keely Chapman</option>
                   <option value="Kees Stavenuiter">Kees Stavenuiter</option>
                   <option value="Keith Smith">Keith Smith</option>
@@ -2564,7 +2557,7 @@
                   <option value="Leslaw Warnawski">Leslaw Warnawski</option>
                   <option value="Lesley Worsfold">Lesley Worsfold</option>
                   <option value="Lewis Marshall">Lewis Marshall</option>
-                  <option value="Liam O&apos;Sullivan">Liam O&apos;Sullivan</option>
+                  <option value="Liam OSullivan">Liam OSullivan</option>
                   <option value="Lidia Kifle">Lidia Kifle</option>
                   <option value="Linda Reddy">Linda Reddy</option>
                   <option value="Linton Scarborough">Linton Scarborough</option>
@@ -2849,7 +2842,7 @@
                   <option value="Terry Harris">Terry Harris</option>
                   <option value="Thaira Parveen">Thaira Parveen</option>
                   <option value="Theo Wiedenmann">Theo Wiedenmann</option>
-                  <option value="Thomas O&apos;Leary">Thomas O&apos;Leary</option>
+                  <option value="Thomas OLeary">Thomas OLeary</option>
                   <option value="Timothy Stoakes">Timothy Stoakes</option>
                   <option value="Tony Brown">Tony Brown</option>
                   <option value="Tracey Boyland">Tracey Boyland</option>
@@ -2865,14 +2858,13 @@
                   <option value="Victoria Gibson">Victoria Gibson</option>
                   <option value="Victoria Richards">Victoria Richards</option>
                   <option value="Viraj Desai">Viraj Desai</option>
-                  <option value="Vivian O&apos;Reilly">Vivian O&apos;Reilly</option>
+                  <option value="Vivian OReilly">Vivian OReilly</option>
                   <option value="Wayne Lloyd">Wayne Lloyd</option>
                   <option value="Wayne Pereira">Wayne Pereira</option>
                   <option value="Wayne Raviraj">Wayne Raviraj</option>
                   <option value="Wendy Jess">Wendy Jess</option>
                   <option value="Wim Blaauw">Wim Blaauw</option>
                   <option value="Xiangyi Sun">Xiangyi Sun</option>
-
                 </options>
             </element>
           <element type="typeahead-simple" source="1" name="ManagersJobTitle" label=" Manager's Job Title" mandatory="1">
@@ -3036,7 +3028,6 @@
                 </options>
             </element>
             <element type="select" name="ProbationPeriod" label="Probation Period" mandatory="1" default="Yes">
-
                 <options>
                     <option value=""></option>
                     <option value="Yes">Yes</option>
@@ -3204,7 +3195,7 @@
                   <option value="Kirsty Knighton">Kirsty Knighton</option>
                   <option value="Lee Tupshafski">Lee Tupshafski</option>
                   <option value="Lewis Marshall">Lewis Marshall</option>
-                  <option value="Liam O&apos;Sullivan">Liam O&apos;Sullivan</option>
+                  <option value="Liam OSullivan">Liam OSullivan</option>
                   <option value="Linton Scarborough">Linton Scarborough</option>
                   <option value="Lisa Brown">Lisa Brown</option>
                   <option value="Lisa Filer">Lisa Filer</option>
@@ -6556,5 +6547,22 @@
             </options>
           </element>
         </tab>
+
+      <tab name="#SSCUseOnly" label="SSC use only">
+        <element type="text" name="HolidayFull" label="Holiday full">
+          <regex inherit="unsignednum" pattern="" message=""></regex>
+        </element>
+        <element type="select" name="AdditionDeduction" label="Addition/Deduction">
+          <options>
+            <option value=""></option>
+            <option value="addition">addition</option>
+            <option value="deduction">deduction</option>
+          </options>
+          <regex inherit="amount" pattern="" message=""></regex>
+        </element>
+        <element type="text" name="HolidayAdjustment" label="Holiday Adjustment">
+          <regex inherit="unsignednum" pattern="" message=""></regex>
+        </element>
+      </tab>
     </fields>
 </form>

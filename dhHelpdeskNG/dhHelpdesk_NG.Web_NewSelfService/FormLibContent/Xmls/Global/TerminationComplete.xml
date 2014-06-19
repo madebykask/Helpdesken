@@ -43,7 +43,7 @@
         <options>
             <option value=""></option>
             <option value ="Casual Termination">Casual Termination</option>
-            <option value ="Expiry Of Contract">Expiry of Contract</option>
+            <option value ="Expiry of Contract">Expiry of Contract</option>
             <option value ="Dismissal">Dismissal</option>
             <option value ="Retirement">Retirement</option>
             <option value ="Resignation">Resignation</option>

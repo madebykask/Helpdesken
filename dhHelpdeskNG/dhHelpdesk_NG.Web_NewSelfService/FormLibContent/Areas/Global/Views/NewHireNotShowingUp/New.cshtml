@@ -8,8 +8,9 @@
 @section Script {
     <script type="text/javascript">
 
-        $(function () {
-            validate.run(20);
+        $(document).on('change', '#actionState', function (e) {
+            var val = $(this).val();
+            validate.run(val);
         });
 
     </script>
@@ -18,10 +19,10 @@
 }
 @using (Html.BeginForm("new", "NewHireNotShowingUp", FormMethod.Post, new { area = "Global", novalidate = "novalidate" }))
 {
-    @Html.Partial("_GlobalNavigation", Model)
+ @Html.Partial("_GlobalNavRev", Model)
     <div class="container containeralignright">
         @Html.Partial("_CurrentUser")  
-        @Html.Partial("_ErrorMessage", Model)    
+        @Html.Partial("_ErrorMessage", Model)  
         <ul class="nav nav-tabs">
             <li class="active"><a href="#ServiceRequestDetails">@Model.Translate("Service Request Details")</a></li>
             

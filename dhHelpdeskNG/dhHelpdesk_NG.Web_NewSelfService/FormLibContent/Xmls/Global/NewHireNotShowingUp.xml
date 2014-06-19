@@ -5,7 +5,7 @@
   <!ENTITY state SYSTEM "Templates/NewHireNotShowingUpState.xml">
 ]>
 
-<form id="" customerId="28">
+<form id="90" guid="D7B783DA-E11C-4937-99B0-48191381C956" customerId="28">
   &languages;
   &regexs;
   &state;
@@ -37,11 +37,8 @@
       <element name="ProcessBeforeDate" type="date" label="Process before date:" mandatory="1" default="31.12.9999" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      
-      
+      <element type="textarea" name="Comment" label="Comment"></element>
     </tab>
-
-    
 
   </fields>
 </form>

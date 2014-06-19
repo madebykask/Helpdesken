@@ -147,7 +147,7 @@
 
             //7
             string text7 = "Het betreft een {0} dienstverband. Het gemiddeld te werken uren per week bedraagt {1} uur. De werknemer behoort tot de categorie {2}.";
-            list.Add(new PdfListItem { Text = string.Format(text7, Model.GetAnswer("ContractType"), Model.GetAnswer("ContractedHours"), GetPayRollCategoryText(Model.GetAnswer("PayrollCategory"))) });
+            list.Add(new PdfListItem { Text = string.Format(text7, Model.GetAnswer("ContractType").ToLower(), Model.GetAnswer("ContractedHours"), GetPayRollCategoryText(Model.GetAnswer("PayrollCategory"))) });
 
 
             //8

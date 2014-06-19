@@ -126,7 +126,7 @@
                     <option value="Local Job Title 2">Local Job Title 2</option>
                 </options>
             </element>
-            <element type="select" name="NewPosition" label="New Position?">
+            <element type="select" name="NewPosition" label="New Position?" mandatory="1">
                 <options>
                     <option value=""></option>
                     <option value="New Position">New Position</option>
@@ -341,9 +341,12 @@
             <element type="text" name="EmergencyPostalCode" label="Postal code" mandatory="1"></element>
             <element type="text" name="EmergencyCity" label="City" mandatory="1"></element>
             <element type="text" name="EmergencyCountry" label="Country" mandatory="1"></element>
+          <element type="text" name="EmergencyContactRelationship" label="Emergency Contact/Relationship">
+            <mandatoryIfNotEmpty name="EmergencyAddressLine1"></mandatoryIfNotEmpty>
+          </element>
 
 
-            <!--Family Member/Dependents-->
+          <!--Family Member/Dependents-->
             <element type="hidden" name="FamilyMembers" default="1"></element>
             <element type="select" name="FamilyMember" label="Family Member">
                 <options>
@@ -442,6 +445,13 @@
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
             <element type="text" name="EmployeeDocumentIssuePlace" label="Issue Place"></element>
+          <element type="select" name="EmployeeDocumentIssuePlaceCountry" label="Issue Place Country">
+            <options>
+              <option value=""></option>
+              <option value="Country 1">Country 1</option>
+              <option value="Country 2">Country 2</option>
+            </options>
+          </element>
 
             <!--Global mobility Dependants-->
             <element type="select" name="DependantFamilyMember" label="Dependant Family Member">
@@ -473,6 +483,13 @@
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
             <element type="text" name="DependantsDocumentIssuePlace" label="Issue Place" ></element>
+          <element type="select" name="DependantsDocumentIssuePlaceCountry" label="Issue Place Country" >
+            <options>
+              <option value=""></option>
+              <option value="Country 1">Country 1</option>
+              <option value="Country 2">Country 2</option>
+            </options>
+          </element>
 
             <!--Bank Account Details-->
             <!--<element type="select" name="BankType" label="Bank Type" mandatory="1" default="Main Bank">

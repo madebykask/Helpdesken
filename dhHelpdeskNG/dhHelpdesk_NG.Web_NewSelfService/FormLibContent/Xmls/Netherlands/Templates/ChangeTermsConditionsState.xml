@@ -1,21 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <state status="0">
-    <status value="0">
-        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
-        <readOnlyTabs></readOnlyTabs>
-      <readOnlyFields>BusinessUnit,Department</readOnlyFields>
-        <actions>
-            <action status="10" internal-val="10" text="">
-                <validateTabs>#ServiceRequestDetails</validateTabs>
-            </action>
-            <action status="20" internal-val="20" text="">
-                <validateTabs>#ServiceRequestDetails</validateTabs>
-            </action>
-        </actions>
-    </status>
+  <status value="0">
+    <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
+    <readOnlyTabs></readOnlyTabs>
+    <readOnlyFields>BusinessUnit,Department</readOnlyFields>
+    <actions>
+      <action status="30" internal-val="30" text="Submit Service Request to SSC">
+        <validateTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</validateTabs>
+      </action>
+      <action status="10" internal-val="10" text="Send back to Line Manager">
+      </action>
+    </actions>
+  </status>
     <!-- LM -->
     <status value="10">
-        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#documents</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
       <readOnlyFields>BusinessUnit,Department</readOnlyFields>
         <actions>

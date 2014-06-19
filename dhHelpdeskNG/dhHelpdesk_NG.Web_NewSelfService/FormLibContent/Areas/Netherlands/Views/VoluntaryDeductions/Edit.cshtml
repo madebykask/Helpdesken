@@ -15,6 +15,11 @@
 @section Script {
 
     <script>
+        $(document).on('change', '#Extent', function (e) {
+            e.preventDefault();
+            if ($(this).val() === 'Full time')
+                $('#Workload').val('100');
+        });
 
         validate.run($('#actionState').val());
 

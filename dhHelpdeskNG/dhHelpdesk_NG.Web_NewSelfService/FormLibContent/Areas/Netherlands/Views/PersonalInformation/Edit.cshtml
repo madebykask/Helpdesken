@@ -15,6 +15,12 @@
 @section Script {
 
     <script>
+        
+        $(document).on('change', '#Extent', function (e) {
+            e.preventDefault();
+            if ($(this).val() === 'Full time')
+                $('#Workload').val('100');
+        });
 
         validate.run($('#actionState').val());
 
@@ -22,7 +28,7 @@
             var val = $(this).val();
             validate.run(val);
         });
-
+     
         $(document).on('click', '#btnMailingAddress, #btnEmergencyAddress', function (e) {
             e.preventDefault();
 

@@ -51,7 +51,7 @@
       <element type="text" name="PermanentCity" label="City" mandatory="1"></element>
     </tab>
     <!--Basic Termination Details-->
-    <tab name="#Basic" label="Basic">
+    <!-- <tab name="#Basic" label="Basic">
       <element name="BasicTerminationType" type="select" label="Termination Type" mandatory="1">
         &pre_termination_reason;
         <options>
@@ -71,7 +71,8 @@
       <element name="LastDayOfEmployment" type="date" format="dd.MM.yyyy" mandatory="1" label="Last Day of Employment">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <!--CDS Section Header-->
+      
+   
       <element name="LockCDSAccountFrom" type="date" format="dd.MM.yyyy" mandatory="1" label="Lock CDS Account from:">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
@@ -87,6 +88,53 @@
           <option value=""></option>
           <option value="Yes">Yes</option>
           <option value="No">No</option>
+        </options>
+      </element>
+    </tab> -->
+
+    <tab name="#Complete" label="Complete">
+      <element name="CompleteTerminationType" type="select" label="Termination Type" mandatory="1">
+        <options>
+          <option value=""></option>
+          <option value ="Casual Termination">Casual Termination</option>
+          <option value ="Expiry of Contract">Expiry of Contract</option>
+          <option value ="Dismissal">Dismissal</option>
+          <option value ="Retirement">Retirement</option>
+          <option value ="Resignation">Resignation</option>
+          <option value ="Redundancy">Redundancy</option>
+          <option value ="Other">Other</option>
+          <option value ="Termination in probation period by employee">Termination in probation period by employee</option>
+          <option value ="Termination in probation period by employer">Termination in probation period by employer</option>
+          <option value ="Mutual cancelation agreement">Mutual cancelation agreement</option>
+        </options>
+        &pre_termination_reason;
+      </element>
+      <element name="TerminationReason" type="select" label="Termination Reason" mandatory="1">
+        <options>
+          <option value=""></option>
+          <option value ="Casual Termination">Casual Termination</option>
+          <option value ="Expiry of Contract">Expiry of Contract</option>
+          <option value ="International Transfer begins">International Transfer begins</option>
+          <option value ="International Transfer ends">International Transfer ends</option>
+          <option value ="End of Backpacker Assignment">End of Backpacker Assignment</option>
+          <option value ="Dismissal - Without Notice">Dismissal - Without Notice</option>
+          <option value ="Dismissal - With Notice">Dismissal - With Notice</option>
+          <option value ="Retirement">Retirement</option>
+          <option value ="Early Retirement">Early Retirement</option>
+          <option value ="Resignation">Resignation</option>
+          <option value ="Redundancy">Redundancy</option>
+          <option value ="Invalidity">Invalidity</option>
+          <option value ="Death">Death</option>
+          <option value ="Termination in probation period by employee">Termination in probation period by employee</option>
+          <option value ="Termination in probation period by employer">Termination in probation period by employer</option>
+          <option value ="Mutual cancelation agreement">Mutual cancelation agreement</option>
+        </options>
+      </element>
+      <element name="TerminationPaymentMethod" type="select" label="Termination Payment Method" mandatory="1">
+        <options>
+          <option value ="By Payroll">By Payroll</option>
+          <option value ="By Off cycle">By Off cycle</option>
+          <option value ="By Manual Payment">By Manual Payment</option>
         </options>
       </element>
     </tab>

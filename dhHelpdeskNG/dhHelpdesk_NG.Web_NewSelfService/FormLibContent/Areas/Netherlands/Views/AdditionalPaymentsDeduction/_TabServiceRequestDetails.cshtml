@@ -56,7 +56,11 @@
                 <tr>
                     <td class="tdstrong">@Model.Label("ChangeValidFrom")</td>
                     <td>
-                        @Model.Element("ChangeValidFrom")</td>
+                        @Model.Element("ChangeValidFrom")
+                        <div id="notice_OldDate" style="display:none;" class="notice">
+                            @Model.Translate("The date you've entered is in the past. Are you sure you want to backdate Change date?")
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("ChangeValidTo")</td>
@@ -83,6 +87,37 @@
 
 
 <script>
+    
+
+    var nowTemp = new Date();
+    var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+
+    $('#date_ChangeValidTo').datepicker("destroy");
+
+
+    var noticeOldDate = $('#notice_OldDate');
+    $('#date_ChangeValidFrom').not(".disabled").datepicker({
+        onRender: function (date) {
+            return '';
+        }
+    }).on('changeDate', function (ev) {
+
+        noticeOldDate.hide();
+
+        if (ev.date.valueOf() < now.valueOf())
+            noticeOldDate.show();
+    }).data('datepicker');
+
+    $('#ChangeValidFrom').change(function () {
+        $('#date_ChangeValidFrom').datepicker("destroy");
+        var validFrom = $('#ChangeValidFrom').val();
+        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+        var dvalidFrom = APIGlobal.DateTime.parseDate(validFrom, format);
+        noticeOldDate.hide();
+        if (dvalidFrom.valueOf() < now.valueOf())
+            noticeOldDate.show();
+    });
+
     $('#ServiceRequestPriority').change(function () {
         $('#date_ProcessBeforeDate').datepicker("destroy");
 

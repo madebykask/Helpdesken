@@ -6,31 +6,15 @@
 @functions{
     public string GetContract()
     {
-        ////BusinessUnit = IKEA Competence B.V. = no documents yet
-        //if (Model.GetAnswer("BusinessUnit") == "IKEA Competence B.V.")
-        //{
-        //    return "";
-        //}
-        //else if (@Model.GetAnswer("BusinessUnit") == "Service Office Netherlands" && @Model.GetAnswer("EmploymentCategory") != "Apprentice" && @Model.GetAnswer("EmploymentCategory") != "Holiday Co-Worker")
-        //{
-        //    return "NetherlandsServiceOfficeContract";
-            
-        //}
-        //else if (@Model.GetAnswer("EmploymentCategory") == "Apprentice")
-        //{
-        //    return "NetherlandsApprenticeContract";
-        //}
-        //else if (@Model.GetAnswer("EmploymentCategory") == "Holiday Co-Worker")
-        //{
-        //    return "ContractHoliday";
-        //}    
-        //else
-        //{
-        //    //Default
-        //return "ContractDutch";
-        //}
 
-        return "Permanent";
+        if (Model.GetAnswer("EmploymentCategory") == "Permanent")
+        {
+            return "Permanent";
+        }
+        else
+        {
+        return "";
+        }
         
     }
 }
@@ -51,9 +35,9 @@
                     <th>&nbsp;</th>
                 </tr>
             </thead>
-           @* @if (!string.IsNullOrEmpty(Model.GetAnswer("EmploymentCategory")))
+            @if (!string.IsNullOrEmpty(Model.GetAnswer("EmploymentCategory")))
             {
-            *@<tbody>
+            <tbody>
             @if (!string.IsNullOrEmpty(GetContract()))
 {
     
@@ -74,7 +58,7 @@
     
 }
             </tbody>
-             @*}*@
+             }
         </table>
     </div>
    @* }*@

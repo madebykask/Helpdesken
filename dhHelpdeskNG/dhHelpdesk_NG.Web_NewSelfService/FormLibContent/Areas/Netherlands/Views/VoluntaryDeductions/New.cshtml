@@ -7,9 +7,18 @@
 }
 @section Script {
     <script type="text/javascript">
+        
+        $(document).on('change', '#Extent', function (e) {
+            e.preventDefault();
+            if ($(this).val() === 'Full time')
+                $('#Workload').val('100');
+        });
 
-        $(function () {
-            validate.run(20);
+        validate.run($('#actionState').val());
+
+        $(document).on('change', '#actionState', function (e) {
+            var val = $(this).val();
+            validate.run(val);
         });
 
     </script>
@@ -18,7 +27,7 @@
 }
 @using (Html.BeginForm("new", "VoluntaryDeductions", FormMethod.Post, new { area = "netherlands", novalidate = "novalidate" }))
 {
-    @Html.Partial("_GlobalNavigation", Model)
+    @Html.Partial("_GlobalNavRev", Model)
     <div class="container containeralignright">
         @Html.Partial("_CurrentUser")  
         @Html.Partial("_ErrorMessage", Model)    
@@ -53,31 +62,3 @@
     </div>
     <input type="hidden" id="activeTab" name="activeTab" value="@Model.ActiveTab" />    
 }
-<script>
-    function selectIndexChangeServiceRequestPriority() {
-        var d = new Date();
-        var day = d.getDate() + 2;
-        if (this.options[this.selectedIndex].value == 'Urgent') {
-
-
-            $('#date_ProcessBeforeDate').datepicker(
-            {
-
-                onRender: function (ev) {
-                    if (ev.getDate() > day)
-                        return '';
-                    return 'disabled';
-                }
-
-
-            });
-        }
-        else {
-            document.getElementById('ProcessBeforeDate').value = document.getElementById('ContractStartDate').value;
-        }
-    }
-
-    document.getElementById('ServiceRequestPriority').onchange = selectIndexChangeServiceRequestPriority;
-
-
-</script>

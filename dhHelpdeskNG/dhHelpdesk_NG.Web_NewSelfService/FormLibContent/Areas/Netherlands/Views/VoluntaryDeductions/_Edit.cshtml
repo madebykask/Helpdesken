@@ -2,7 +2,7 @@
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
 
-@using (Html.BeginForm("edit", "VoluntaryDeductions", FormMethod.Post, new { area = "Netherlands", novalidate = "novalidate" }))
+@using (Html.BeginForm("edit", "VoluntaryDeductions", new { id = Model.Contract.Id }, FormMethod.Post, new { area = "Netherlands", novalidate = "novalidate" }))
 {   
     <span style="display: none;" id="narrowDownInit"></span>
     @Html.Partial("_GlobalNavigation", Model)

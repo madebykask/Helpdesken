@@ -866,7 +866,7 @@
                     <option value=""></option>
                     <option value="Store Eindhoven 087">Store Eindhoven 087</option>
                     <option value="Store Amsterdam 088">Store Amsterdam 088</option>
-                    <option value="Store Herleen 089">Store Herleen 089</option>
+                    <option value="Store Heerlen 089">Store Heerlen 089</option>
                     <option value="Store Utrecht 270">Store Utrecht 270</option>
                     <option value="Store Duiven 272">Store Duiven 272</option>
                     <option value="Store Barendrecht 274">Store Barendrecht 274</option>
@@ -2853,7 +2853,7 @@
                     <option value=""></option>
                     <option value="Store Eindhoven 087">Store Eindhoven 087</option>
                     <option value="Store Amsterdam 088">Store Amsterdam 088</option>
-                    <option value="Store Herleen 089">Store Herleen 089</option>
+                    <option value="Store Heerlen 089">Store Heerlen 089</option>
                     <option value="Store Utrecht 270">Store Utrecht 270</option>
                     <option value="Store Duiven 272">Store Duiven 272</option>
                     <option value="Store Barendrecht 274">Store Barendrecht 274</option>
@@ -3820,6 +3820,7 @@
                     <option value="Level 1">Level 1</option>
                     <option value="Level 2">Level 2</option>
                 </options>
+              <mandatoryIf name="PayrollCategory">Hourly,Monthly,No Salary,MT/DEP/SM</mandatoryIf>
             </element>
             <element type="select" name="TaxAssignment" label="Tax Assignment">
                 <options>
@@ -6180,9 +6181,9 @@
                     <option value="No">No</option>
                 </options>
             </element>
-            <element type="text" name="DependantsLastName" label="Dependant's Last Name"></element>
-            <element type="text" name="DependantsFirstName" label="Dependant's First Name"></element>
-            <element type="date" name="DependantsDateOfBirth" label="Dependant's Date of birth" format="dd.MM.yyyy">
+            <element type="text" name="DependantsLastName" label="Dependants Last Name"></element>
+            <element type="text" name="DependantsFirstName" label="Dependants First Name"></element>
+            <element type="date" name="DependantsDateOfBirth" label="Dependants Date of birth" format="dd.MM.yyyy">
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
 
@@ -6202,9 +6203,9 @@
                     <option value="No">No</option>
                 </options>
             </element>
-            <element type="text" name="DependantsLastName2" label="Dependant's Last Name"></element>
-            <element type="text" name="DependantsFirstName2" label="Dependant's First Name"></element>
-            <element type="date" name="DependantsDateOfBirth2" label="Dependant's Date of birth" format="dd.MM.yyyy">
+            <element type="text" name="DependantsLastName2" label="Dependants Last Name"></element>
+            <element type="text" name="DependantsFirstName2" label="Dependants First Name"></element>
+            <element type="date" name="DependantsDateOfBirth2" label="Dependants Date of birth" format="dd.MM.yyyy">
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
 
@@ -6224,9 +6225,9 @@
                     <option value="No">No</option>
                 </options>
             </element>
-            <element type="text" name="DependantsLastName3" label="Dependant's Last Name"></element>
-            <element type="text" name="DependantsFirstName3" label="Dependant's First Name"></element>
-            <element type="date" name="DependantsDateOfBirth3" label="Dependant's Date of birth" format="dd.MM.yyyy">
+            <element type="text" name="DependantsLastName3" label="Dependants Last Name"></element>
+            <element type="text" name="DependantsFirstName3" label="Dependants First Name"></element>
+            <element type="date" name="DependantsDateOfBirth3" label="Dependants Date of birth" format="dd.MM.yyyy">
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
 
@@ -8373,7 +8374,7 @@
 
             <!--Nationality / Language-->
 
-            <element type="typeahead-simple" source="1" name="Language" label="Language" default="Dutch">
+          <!-- <element type="typeahead-simple" source="1" name="Language" label="Language" default="Dutch">
                 
                   <options>
                     <option value=""></option>
@@ -8421,9 +8422,10 @@
                     <option value="Afrikaans">Afrikaans</option>
                 </options>
             </element>
+-->
 
-
-            <!--Education--><!-- COMMENTED OUT BECAUSE NETHERLANDS CHANGED THEIR MIND
+            <!--Education-->
+            <!-- COMMENTED OUT BECAUSE NETHERLANDS CHANGED THEIR MIND
             <element type="hidden" name="Educations" default="1"></element>
             <element type="text" name="EducationalEstablishment" label="Educational Establishment"></element>
             <element type="text" name="InstituteLocation" label="Institute Location"></element>

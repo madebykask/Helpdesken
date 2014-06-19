@@ -10,15 +10,15 @@
         @Html.Partial("_FormInfo", Model)
         @Html.Partial("_ErrorMessage", Model)
         <ul class="nav nav-tabs">
-            @if(Model.VisibleTab("#ServiceRequestDetails"))
+            @if (Model.VisibleTab("#ServiceRequestDetails"))
             {
                 <li class="active @(Model.TabHasError("#ServiceRequestDetails") ? "error" : "")">
                     <a href="#ServiceRequestDetails">@Model.Translate("Service Request Details")</a></li>
             }
-            @if(Model.VisibleTab("#Basic"))
+            @if (Model.VisibleTab("#Complete"))
             {
-                <li class="@(Model.TabHasError("#Basic") ? "error" : "")">
-                    <a href="#Basic">@Model.Translate("Basic Termination Details")</a></li>
+                <li class="@(Model.TabHasError("#Complete") ? "error" : "")">
+                    <a href="#Complete">@Model.Translate("Complete Termination Details")</a></li>
             }
             @if(Model.VisibleTab("#documents"))
             {
@@ -38,9 +38,9 @@
                     {
                         @Html.Partial("_TabServiceRequestDetails", Model)
                     }
-                    @if (Model.VisibleTab("#Basic"))
+                    @if (Model.VisibleTab("#Complete"))
                     {
-                        @Html.Partial("_TabBasic", Model)
+                        @Html.Partial("_TabComplete", Model)
                     }
                     @if(Model.VisibleTab("#documents"))
                     {

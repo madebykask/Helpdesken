@@ -11,7 +11,7 @@
             <action status="30" internal-val="30" text="Submit Complete Service Request to SSC">
                 <validateTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</validateTabs>
             </action>
-            <action status="31" internal-val="30" init-form-guid="2BEC7193-FE4E-4314-B8CE-4CF5C619975B" text="Submit Basic Service Request to SSC">
+            <action status="31" internal-val="30" init-form-guid="8C9F42D1-E9F2-4E68-A66A-439F04918AE9" text="Submit Basic Service Request to SSC">
                 <validateTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</validateTabs>
             </action>
             <action status="99" internal-val="70" text="Cancel Service request"></action>
@@ -19,7 +19,7 @@
     </status>
     <!-- LM -->
     <status value="10">
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#documents</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -39,7 +39,7 @@
             <action status="30" internal-val="30" text="Submit Complete Service Request to SSC">
                 <validateTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</validateTabs>
             </action>
-            <action status="31" internal-val="30" init-form-guid="2BEC7193-FE4E-4314-B8CE-4CF5C619975B" text="Submit Basic Service Request to SSC">
+            <action status="31" internal-val="30" init-form-guid="8C9F42D1-E9F2-4E68-A66A-439F04918AE9" text="Submit Basic Service Request to SSC">
                 <validateTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</validateTabs>
             </action>
             <action status="99" internal-val="70" text="Cancel Service request"></action>
@@ -47,7 +47,7 @@
     </status>
     <!-- SSC -->
     <status value="30">
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents,#SSCUseOnly</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -58,7 +58,7 @@
     </status>
     <!-- SSC -->
     <status value="40">
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents,#globalview</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents,#globalview,#SSCUseOnly</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -68,7 +68,7 @@
     </status>
     <!-- SSC -->
     <status value="50">
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents,#globalview</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents,#globalview,#SSCUseOnly</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -77,7 +77,7 @@
         </actions>
     </status>
     <status value="60">
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents,#SSCUseOnly</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>

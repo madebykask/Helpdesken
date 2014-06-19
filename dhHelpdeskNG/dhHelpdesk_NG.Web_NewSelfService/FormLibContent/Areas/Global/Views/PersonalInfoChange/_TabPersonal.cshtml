@@ -107,6 +107,10 @@
                     <td class="tdstrong">@Model.Label("EmergencyCountry")</td>
                     <td>@Model.Element("EmergencyCountry")</td>
                 </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyContactRelationship")</td>
+                    <td>@Model.Element("EmergencyContactRelationship")</td>
+                </tr>
                 
 
 
@@ -271,16 +275,16 @@
       <div class="span6">
         <table class="table">
             <tbody>
-                <!-- Bank Account Details -->
+                 <!-- Bank Account Details -->
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Bank Account Details")</h4>
                     </td>
                 </tr>
-                <tr>
+@*                <tr>
                     <td class="tdstrong">@Model.Label("BankType")</td>
                     <td>@Model.Element("BankType")</td>
-                </tr>
+                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("Payee")</td>
                     <td>@Model.Element("Payee")</td>
@@ -306,9 +310,14 @@
                     <td>@Model.Element("PaymentCurrency")</td>
                 </tr>
 
-                <tr class="SecondBank">
+@*                <tr class="SecondBank">
                     <td class="tdstrong">@Model.Label("BankType2")</td>
                     <td>@Model.Element("BankType2")</td>
+                </tr>*@
+                <tr class="SecondBank">
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Second Bank Account Details")</h4>
+                    </td>
                 </tr>
                 <tr class="SecondBank">
                     <td class="tdstrong">@Model.Label("Payee2")</td>
@@ -334,14 +343,11 @@
                     <td class="tdstrong">@Model.Label("PaymentCurrency2")</td>
                     <td>@Model.Element("PaymentCurrency2")</td>
                 </tr>
-
-                
-
+               
                 <tr id="addBankButton">
                     <td colspan="2">
-                        <a id="addBank" class="btn btn-link btn-mini pull-right">@Model.Translate("Add other Bank")</a></td>
+                        <a id="addBank" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Bank")</a></td>
                 </tr>
-
 
                 <tr>
                     <td class="tdstrong">@Model.Label("OtherBankPercentageOrAmount")</td>
@@ -537,17 +543,18 @@
         }
     }
 
-    var SecondBank = document.getElementsByClassName('SecondBank'), i;
-    for (var i = 0; i < SecondBank.length; i++) {
-        SecondBank[i].style.display = 'none';
+    if (!('@Model.GetAnswer("IBAN2")' === "")) {
+        $(".SecondBank").show();
+        $("#addBankButton").hide();
+    }
+    else {
+        $(".SecondBank").hide();
     }
 
     document.getElementById('addBank').onclick = function () {
-        var SecondBank = document.getElementsByClassName('SecondBank'), i;
-        for (var i = 0; i < SecondBank.length; i++) {
-            SecondBank[i].style.display = 'table-row';
-        }
-        
+        $(".SecondBank").show();
+        $("#addBankButton").hide();
+
     };
 
 

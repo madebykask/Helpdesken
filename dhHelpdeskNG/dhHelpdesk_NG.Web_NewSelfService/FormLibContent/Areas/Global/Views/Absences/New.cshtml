@@ -52,11 +52,15 @@
         <div class="content">
             <div class="row-fluid">
                 <div class="tab-content">   
-                     
+                    @if(Model.VisibleTab("#ServiceRequestDetails"))
+                    {
                         @Html.Partial("_TabServiceRequestDetails", Model)
+                    }
                     
+                    @if (Model.VisibleTab("#Absences"))
+                    {
                         @Html.Partial("_TabAbsences", Model)
-                                                                                      
+                    }
                 </div>
             </div>
         </div>

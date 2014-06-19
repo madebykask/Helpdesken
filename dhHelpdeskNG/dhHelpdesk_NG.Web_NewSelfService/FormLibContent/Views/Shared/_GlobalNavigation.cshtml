@@ -6,7 +6,7 @@
     var freezeAction = "";
     var freeze = "";
 
-    if(ECT.FormLib.FormLibSessions.User.WorkingGroups != null 
+    if(ECT.FormLib.FormLibSessions.User.WorkingGroups != null
         && ECT.FormLib.FormLibSessions.User.WorkingGroups.FirstOrDefault(x => x.Id == Model.Contract.WorkingGroupId) == null)
     {
         freezeAction = "disabled";
@@ -44,7 +44,15 @@
                     </li>
                     <li>
                         <div class="margintopleft" style="padding: 5px;">
-                            @Model.Translate(Model.Contract.StateSecondary)
+                            @if(FormLibUtils.IsSelfService() 
+                                && !string.IsNullOrEmpty(Model.Contract.AlternativeStateSecondaryName))
+                            {
+                                @Model.Translate(Model.Contract.AlternativeStateSecondaryName)
+                            }
+                            else
+                            {
+                                @Model.Translate(Model.Contract.StateSecondary)
+                            }
                         </div>
                     </li>
                 </ul>

@@ -55,8 +55,10 @@
     
 
     function selectIndexChangeTerminationType() {
-        document.getElementById('CompleteTerminationType').value = document.getElementById('BasicTerminationType').value;
-        
+        if (document.getElementById('CompleteTerminationType'))
+        {
+            document.getElementById('CompleteTerminationType').value = document.getElementById('BasicTerminationType').value;
+        }
     }
 
     document.getElementById('BasicTerminationType').onchange = selectIndexChangeTerminationType;

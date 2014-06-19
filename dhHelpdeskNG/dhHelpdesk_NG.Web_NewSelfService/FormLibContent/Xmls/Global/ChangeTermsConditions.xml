@@ -15,7 +15,7 @@
     <!--Tab ServiceRequestDetails-->
     <tab name="#ServiceRequestDetails" label="Service Request Details">
       <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" mandatory="1"></element>
-      <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1"></element>
+      <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1"></element>     
       <element name="LastName" type="text" label="Co-Worker Last Name" mandatory="1"></element>
       <element name="IKEAEmailAddress" type="text" label="IKEA Email Address" mandatory="1"></element>
       <element name="IKEANetworkID" type="text" label="IKEA Network ID" mandatory="1"></element>

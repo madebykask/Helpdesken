@@ -1004,7 +1004,7 @@
           <option value="December">December</option>
         </options>
       </element>
-      <element name="AbsenceHoursAlreadyUsed" type="text" label="Absence Hours already used">
+      <element name="AbsenceHoursAlreadyUsed" type="text" label="Absence hours already used">
         <regex inherit="unsignednum" message="" pattern=""></regex>
         <mandatoryIf name ="AbsenceType">Short term care leave (paid leave)</mandatoryIf>
       </element>

@@ -40,7 +40,7 @@
           <option value="Not Urgent">Not Urgent</option>
         </options>
       </element>
-      <element name="ProcessBeforeDate" type="date" label="Process before date:" mandatory="1" default="31.12.9999" format="dd.MM.yyyy">
+      <element name="ProcessBeforeDate" type="date" label="Process before date:" mandatory="1" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
     </tab>
@@ -75,10 +75,12 @@
         </options>
       </element>
       <element type="date" name="DeductionsValidFrom" label="Valid from:" format="dd.MM.yyyy">
+        <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
         <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="date" name="DeductionsValidTo" label="Valid to:" default="31.12.9999" format="dd.MM.yyyy">
+        <laterThanOrEqual name="DeductionsValidFrom"></laterThanOrEqual>
         <mandatoryIf name="PaymentType">Recurring</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
@@ -111,10 +113,12 @@
         </options>
       </element>
       <element type="date" name="DeductionsValidFrom2" label="Valid from:"  format="dd.MM.yyyy">
+        <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
         <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="date" name="DeductionsValidTo2" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <laterThanOrEqual name="DeductionsValidFrom2"></laterThanOrEqual>
         <mandatoryIf name="PaymentType2">Recurring</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
@@ -147,10 +151,12 @@
         </options>
       </element>
       <element type="date" name="DeductionsValidFrom3" label="Valid from:"  format="dd.MM.yyyy">
+        <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
         <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="date" name="DeductionsValidTo3" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <laterThanOrEqual name="DeductionsValidFrom3"></laterThanOrEqual>
         <mandatoryIf name="PaymentType3">Recurring</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
       </element>

@@ -7,9 +7,17 @@
 }
 @section Script {
     <script type="text/javascript">
+        $(document).on('change', '#Extent', function (e) {
+            e.preventDefault();
+            if ($(this).val() === 'Full time')
+                $('#Workload').val('100');
+        });
 
-        $(function () {
-            validate.run(20);
+        validate.run($('#actionState').val());
+
+        $(document).on('change', '#actionState', function (e) {
+            var val = $(this).val();
+            validate.run(val);
         });
 
     </script>
@@ -18,7 +26,7 @@
 }
 @using (Html.BeginForm("new", "AdditionalPaymentsDeduction", FormMethod.Post, new { area = "Netherlands", novalidate = "novalidate" }))
 {
-    @Html.Partial("_GlobalNavigation", Model)
+    @Html.Partial("_GlobalNavRev", Model)
     <div class="container containeralignright">
         @Html.Partial("_CurrentUser")  
         @Html.Partial("_ErrorMessage", Model)    

@@ -3,114 +3,126 @@
 @using ECT.FormLib.Models;
 
 <div class="tab-pane" id="OrganisationalAssignment">
-    <div class="span5">
+    <div class="span8">
         <table class="table">
             <tbody>
                 <tr>
-                    <td class="tdstrong" colspan="2">
-                        <h4>@Model.Translate("Organisation")</h4>
-                    </td>
+                    <td class="tdstrong" colspan="2"><h4>@Model.Translate("Organisation")</h4></td>
+                    <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("Country")</td>
                     <td>@Model.Element("Country")</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("Company")</td>
                     <td>@Model.Element("Company")</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("NewBusinessUnit")</td>
                     <td>@Model.Element("NewBusinessUnit")</td>
+                    <td></td>
                 </tr>
                
                 <tr>
                     <td class="tdstrong">@Model.Label("NewDepartment")</td>
                     <td>@Model.Element("NewDepartment")</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("HomeCostCentre")</td>
                     <td>@Model.Element("HomeCostCentre")</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("CostAllocation")</td>
                     <td>@Model.Element("CostAllocation")</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("CrossChargeCostCentre")</td>
                     <td>@Model.Element("CrossChargeCostCentre")</td>
+                    <td></td>
                 </tr>
                 <tr>
-                    <td class="tdstrong" colspan="2">
-                        <h4>@Model.Translate("Job")</h4>
-                    </td>
+                    <td class="tdstrong" colspan="2"><h4>@Model.Translate("Job")</h4></td>
+                    <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("JobTitle")</td>
                     <td>@Model.Element("JobTitle")</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("LocalJobTitle")</td>
                     <td>@Model.Element("LocalJobTitle")</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("NewPosition")</td>
                     <td>@Model.Element("NewPosition")</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("ReportsToLineManager")</td>
                     <td>@Model.Element("ReportsToLineManager")</td>
+                    <td></td>
                 </tr>
-
-                
-
-            </tbody>
+@*            </tbody>
         </table>
     </div>
      <div class="span6">
         <table class="table">
-            <tbody>
+            <tbody>*@
                 <tr>
-                    <td class="tdstrong" colspan="2">
-                        <h4>@Model.Translate("Employment Conditions")</h4>
-                    </td>
+                    <td class="tdstrong" colspan="2"><h4>@Model.Translate("Employment Conditions")</h4></td>
+                    <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("EmploymentCategory")</td>
                     <td>@Model.Element("EmploymentCategory")</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("ContractedHours")</td>
                     <td>@Model.Element("ContractedHours")</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("ContractType")</td>
                     <td>@Model.Element("ContractType")</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("ProbationPeriod")</td>
                     <td>@Model.Element("ProbationPeriod")</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("ProbationEndDate")</td>
                     <td>@Model.Element("ProbationEndDate")</td>
+                    <td></td>
                 </tr>
                 <tr>
-                    <td class="tdstrong" colspan="2">
-                        <h4>@Model.Translate("CDS")</h4>
-                    </td>
+                    <td class="tdstrong" colspan="2"><h4>@Model.Translate("CDS")</h4></td>
+                     <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("PrimarySite")</td>
                     <td>@Model.Element("PrimarySite")</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("TECApprover")</td>
                     <td>@Model.Element("TECApprover")</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("HelpDesk")</td>
                     <td>@Model.Element("HelpDesk")</td>
+                    <td></td>
                 </tr>
             </tbody>
         </table>
@@ -121,13 +133,22 @@
 <script>
     
     function selectIndexChangeProbationPeriod() {
-        if ((this.options[this.selectedIndex].value == 'Not Applicable') || (this.options[this.selectedIndex].value == 'No')) {
-                document.getElementById('ProbationEndDate').disabled = true;
-            } else {
-                document.getElementById('ProbationEndDate').disabled = false;
-            }
-    }
 
+        var probitionEndDate = document.getElementById('ProbationEndDate');
+        var probitionEndDatePicker = document.getElementById('date_ProbationEndDate');
+        if ((this.options[this.selectedIndex].value == 'No') || this.options[this.selectedIndex].value == 'Not Applicable') {
+            probitionEndDatePicker.disabled = true;
+            probitionEndDatePicker.className = probitionEndDatePicker.className + " disabled";
+            probitionEndDate.disabled = true;
+            probitionEndDate.className = probitionEndDate.className + " disabled";
+
+        } else {
+            probitionEndDate.disabled = false;
+            $(probitionEndDate).removeClass("disabled");
+            probitionEndDatePicker.disabled = false;
+            $(probitionEndDatePicker).removeClass("disabled");
+        }
+    }
     document.getElementById('ProbationPeriod').onchange = selectIndexChangeProbationPeriod;
 
   

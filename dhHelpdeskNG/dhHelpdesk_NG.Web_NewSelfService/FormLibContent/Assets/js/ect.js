@@ -1,4 +1,5 @@
 ﻿
+
 // Globals
 var isEmbed = window != window.parent;
 var site = site || {};
@@ -217,11 +218,28 @@ var globalTypeAheadOptions = {
         }
 
         $('input[name="BusinessUnit"]').val(item.unit);
+        $('#emOLD_BusinessUnit').text(item.unit);
+        $('#OLD_BusinessUnit').val(item.unit);
+
         $('input[name="Department"]').val(item.company);
+        $('#emOLD_Department').text(item.company);
+        $('#OLD_Department').val(item.company);
+
         $('input[name="FirstName"]').val(item.firstname);
+        $('#emOLD_FirstName').text(item.firstname);
+        $('#OLD_FirstName').val(item.firstname);
+
         $('input[name="LastName"]').val(item.lastname);
+        $('#emOLD_LastName').text(item.lastname);
+        $('#OLD_LastName').val(item.lastname);
+
         $('input[name="IKEAEmailAddress"]').val(item.email);
+        $('#emOLD_IKEAEmailAddress').text(item.email);
+        $('#OLD_IKEAEmailAddress').val(item.email);
+
         $('input[name="IKEANetworkID"]').val(item.num);
+        $('#emOLD_IKEANetworkID').text(item.num);
+        $('#OLD_IKEANetworkID').val(item.num);
 
 
         return item.num;
@@ -828,6 +846,154 @@ var familyMembers = function () {
     });
 };
 
+
+var employeeDocuments = function () {
+
+    var emptyElements = function () {
+        return $('[class^=employeeDocument]')
+                                    .filter(function () { return $(this).css('display') !== 'none'; })
+                                    .find(':text, :radio, :checkbox, select')
+                                    .filter(function () {
+                                        return $(this).val() == '';
+                                    });
+    };
+
+    $('[class^=employeeDocument]').hide();
+    $('.employeeDocument').show();
+    var counter = parseInt($('#EmployeeDocuments').val());
+
+    var max = 3;
+
+    var elements = $('[class^=employeeDocument]').find(':text, :radio, :checkbox, select');
+
+    var enabled = elements.eq(0).is(':enabled');
+
+    for (var i = 1; i <= counter; i++)
+        $('.employeeDocument' + i).show();
+
+    if (emptyElements().length == 0 && (counter < max) && enabled)
+        $('#addEmployeeDocumentTr').show();
+    else
+        $('#addEmployeeDocumentTr').hide();
+
+    var elements = $('[class^=employeeDocument]').find(':text, :radio, :checkbox, select');
+
+    elements.change(function () {
+        if (emptyElements().length == 0 && (counter < max) && enabled)
+            $('#addEmployeeDocumentTr').show();
+        else
+            $('#addEmployeeDocumentTr').hide();
+    });
+
+    $('#addEmployeeDocument').click(function (e) {
+        e.preventDefault();
+        counter++;
+        $('#EmployeeDocuments').val(counter);
+        if (counter <= max)
+            $('[class=employeeDocument' + counter + ']').show();
+        $('#addEmployeeDocumentTr').hide();
+    });
+};
+
+var dependantFamilyMembers = function () {
+
+    var emptyElements = function () {
+        return $('[class^=dependantFamilyMember]')
+                                    .filter(function () { return $(this).css('display') !== 'none'; })
+                                    .find(':text, :radio, :checkbox, select')
+                                    .filter(function () {
+                                        return $(this).val() == '';
+                                    });
+    };
+
+    $('[class^=dependantFamilyMember]').hide();
+    $('.dependantFamilyMember').show();
+    var counter = parseInt($('#DependantFamilyMembers').val());
+
+    var max = 3;
+
+    var elements = $('[class^=dependantFamilyMember]').find(':text, :radio, :checkbox, select');
+
+    var enabled = elements.eq(0).is(':enabled');
+
+    for (var i = 1; i <= counter; i++)
+        $('.dependantFamilyMember' + i).show();
+
+    if (emptyElements().length == 0 && (counter < max) && enabled)
+        $('#addDependantFamilyMembersTr').show();
+    else
+        $('#addDependantFamilyMembersTr').hide();
+
+    var elements = $('[class^=dependantFamilyMember]').find(':text, :radio, :checkbox, select');
+
+    elements.change(function () {
+        if (emptyElements().length == 0 && (counter < max) && enabled)
+            $('#addDependantFamilyMembersTr').show();
+        else
+            $('#addDependantFamilyMembersTr').hide();
+    });
+
+    $('#addDependantFamilyMember').click(function (e) {
+        e.preventDefault();
+        counter++;
+
+        $('#DependantFamilyMembers').val(counter);
+        if (counter <= max)
+            $('[class=dependantFamilyMember' + counter + ']').show();
+        $('#addDependantFamilyMembersTr').hide();
+    });
+};
+
+var dependantsDocuments = function () {
+
+    var emptyElements = function () {
+        return $('[class^=globalMobilityDependantDocument]')
+                                    .filter(function () { return $(this).css('display') !== 'none'; })
+                                    .find(':text, :radio, :checkbox, select')
+                                    .filter(function () {
+                                        return $(this).val() == '';
+                                    });
+    };
+
+    $('[class^=globalMobilityDependantDocument]').hide();
+    $('.globalMobilityDependantDocument').show();
+    var counter = parseInt($('#DependantsDocuments').val());
+
+    var max = 3;
+
+    var elements = $('[class^=globalMobilityDependantDocument]').find(':text, :radio, :checkbox, select');
+
+    var enabled = elements.eq(0).is(':enabled');
+
+    for (var i = 1; i <= counter; i++)
+        $('.globalMobilityDependantDocument' + i).show();
+
+    if (emptyElements().length == 0 && (counter < max) && enabled)
+        $('#addGlobalMobilityDependantDocumentTr').show();
+    else
+        $('#addGlobalMobilityDependantDocumentTr').hide();
+
+    var elements = $('[class^=globalMobilityDependantDocument]').find(':text, :radio, :checkbox, select');
+
+    elements.change(function () {
+        if (emptyElements().length == 0 && (counter < max) && enabled)
+            $('#addGlobalMobilityDependantDocumentTr').show();
+        else
+            $('#addGlobalMobilityDependantDocumentTr').hide();
+    });
+
+    $('#addGlobalMobilityDependantDocument').click(function (e) {
+        e.preventDefault();
+        counter++;
+
+        $('#DependantsDocuments').val(counter);
+        if (counter <= max)
+            $('[class=globalMobilityDependantDocument' + counter + ']').show();
+        $('#addGlobalMobilityDependantDocumentTr').hide();
+    });
+};
+
+
 var allowances = function () {
 
     var emptyElements = function () {
@@ -1231,6 +1397,9 @@ var init = function () {
 
     narrowDownInit();
     familyMembers();
+    employeeDocuments();
+    dependantFamilyMembers();
+    dependantsDocuments();
     allowances();
     deductions();
     education();
@@ -1356,7 +1525,7 @@ var init = function () {
         var startDate = new Date();
         startDate.setHours(0, 0, 0, 0);
 
-        dateHiringDate.datepicker()
+        dateHiringDate.not(".disabled").datepicker()
             .on('changeDate', function (e) {
                 if (!(e.date.getDate() === 1 || e.date.getDate() === 15)) {
                     noticeHiringDateWrong.show();

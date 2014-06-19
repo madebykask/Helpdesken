@@ -33,6 +33,9 @@
                     <td class="tdstrong">@Model.Label("PaymentDate")</td>
                     <td>
                         @Model.Element("PaymentDate")
+                        <div id="notice_PaymentDate" style="display:none;" class="notice">
+                            @Model.Translate("The date you've entered is in the past. Are you sure you want to continue?")
+                        </div>
                     </td>
                 </tr>
                 <tr>
@@ -51,7 +54,38 @@
 
 <script>
     
-    
+    var noticePaymentDate = $('#notice_PaymentDate');
+    var datePaymentDate = $('#date_PaymentDate');
+    if (noticePaymentDate.length > 0 && noticePaymentDate.length > 0) {
+        var startDate = new Date();
+        startDate.setHours(0, 0, 0, 0);
+
+        datePaymentDate.datepicker()
+            .on('changeDate', function (e) {
+                
+                if (e.date.valueOf() < startDate.valueOf()) {
+                    noticePaymentDate.show();
+                } else {
+                    noticePaymentDate.hide();
+                }
+            });
+    }
+
+
+    $('#PaymentDate').change(function () {
+        var startDate = $('#PaymentDate').val();
+        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+        var dstartDate = APIGlobal.DateTime.parseDate(startDate, format);
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+        noticePaymentDate.hide();
+        
+        if (dstartDate.valueOf() < now.valueOf())
+            noticePaymentDate.show();
+
+        }
+    );
+
       
     
 </script>

@@ -6,7 +6,7 @@
     var url = Url.CurrentController() + "typeahead";
 }
 
-@using (Html.BeginForm("edit", "PersonalInfoChange", FormMethod.Post, new { area = "Global", novalidate = "novalidate" }))
+@using (Html.BeginForm("edit", "PersonalInfoChange", new { id = Model.Contract.Id }, FormMethod.Post, new { area = "Global", novalidate = "novalidate" }))
 {   
     <span style="display: none;" id="narrowDownInit" url="@url"></span>
     @Html.Partial("_GlobalNavigation", Model)
@@ -35,7 +35,7 @@
                     @if (Model.VisibleTab("#Personal"))
                     {
                         @Html.Partial("_TabPersonal", Model)
-                    }                                
+                    }   
                 </div>
             </div>
         </div>

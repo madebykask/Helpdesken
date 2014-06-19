@@ -4,26 +4,42 @@
 
 @{
     ViewBag.Title = Model.Translate("Netherlands") + " - " + Model.Translate("Service Request Details");
+    var url = Url.CurrentController() + "typeahead";
 }
 
 @section Script {
     <script type="text/javascript">
 
-        $(function () {
-            validate.run(20);
+        //$(function () {
+        //    validate.run(20);
+        //});
+
+
+
+        $(document).on('change', '#Extent', function (e) {
+            e.preventDefault();
+            if ($(this).val() === 'Full time')
+                $('#Workload').val('100');
+        });
+
+        validate.run($('#actionState').val());
+
+        $(document).on('change', '#actionState', function (e) {
+            var val = $(this).val();
+            validate.run(val);
         });
 
     </script>
 
      @Html.Partial("_Validate", Model)
 }
-
 @using (Html.BeginForm("new", "Absences", FormMethod.Post, new { area = "Netherlands", novalidate = "novalidate" }))
 {
-    @Html.Partial("_GlobalNavigation", Model)
+    <span style="display: none;" id="narrowDownInit" url="@url"></span>
+     @Html.Partial("_GlobalNavRev", Model)
     <div class="container containeralignright">
         @Html.Partial("_CurrentUser")  
-        @Html.Partial("_ErrorMessage", Model)    
+        @Html.Partial("_ErrorMessage", Model)     
         <ul class="nav nav-tabs">
             @if(Model.VisibleTab("#ServiceRequestDetails"))
             {

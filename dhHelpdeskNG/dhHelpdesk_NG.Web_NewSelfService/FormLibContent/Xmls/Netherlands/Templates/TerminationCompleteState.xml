@@ -16,7 +16,7 @@
     </status>
     <!-- LM -->
     <status value="10">
-        <visibleTabs>#ServiceRequestDetails,#documents</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
       <readOnlyFields>BusinessUnit,Department</readOnlyFields>
         <actions>

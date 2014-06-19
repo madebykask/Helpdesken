@@ -67,6 +67,9 @@
       <element type="text" name="EmergencyPostalCode" label="Postal code" mandatory="1"></element>
       <element type="text" name="EmergencyCity" label="City" mandatory="1"></element>
       <element type="text" name="EmergencyCountry" label="Country" mandatory="1"></element>
+      <element type="text" name="EmergencyContactRelationship" label="Emergency Contact/Relationship">
+        <mandatoryIfNotEmpty name="EmergencyAddressLine1"></mandatoryIfNotEmpty>
+      </element>
       
       
       
@@ -163,7 +166,14 @@
       <element type="text" name="EmployeeDocumentCountry" label="Country"></element>
       <element type="text" name="EmployeeDocumentNo" label="Document No"></element>
       <element type="date" name="EmployeeDocumentIssueDate" label="Issue Date" format="dd.MM.yyyy"></element>
-      <element type="text" name="EmployeeDocumentIssuePlace" label="Issue Place" format="dd.MM.yyyy"></element>
+      <element type="text" name="EmployeeDocumentIssuePlace" label="Issue Place"></element>
+      <element type="select" name="EmployeeDocumentIssuePlaceCountry" label="Issue Place Country">
+        <options>
+          <option value=""></option>
+          <option value="Country 1">Country 1</option>
+          <option value="Country 2">Country 2</option>
+        </options>
+      </element>
 
       <!--Global mobility Dependants-->
       <element type="select" name="DependantFamilyMember" label="Dependant Family Member">
@@ -190,10 +200,17 @@
       <element type="text" name="DependantsDocumentCountry" label="Country"></element>
       <element type="text" name="DependantsDocumentNo" label="Document No"></element>
       <element type="date" name="DependantsDocumentIssueDate" label="Issue Date" format="dd.MM.yyyy"></element>
-      <element type="text" name="DependantsDocumentIssuePlace" label="Issue Place" format="dd.MM.yyyy"></element>
+      <element type="text" name="DependantsDocumentIssuePlace" label="Issue Place"></element>
+      <element type="select" name="DependantsDocumentIssuePlaceCountry" label="Issue Place Country">
+        <options>
+          <option value=""></option>
+          <option value="Country 1">Country 1</option>
+          <option value="Country 2">Country 2</option>
+        </options>
+      </element>
 
       <!--Bank Account Details-->
-      <element type="text" name="BankType" label="Bank Type" mandatory="1" default="Main Bank"></element>
+      
       <element type="text" name="Payee" label="Payee" mandatory="1"></element>
       <element type="select" name="BankCountry" label="Bank Country" mandatory="1">
         <options>
@@ -207,13 +224,7 @@
       <element type="text" name="IBAN" label="IBAN" mandatory="1"></element>
       <element type="text" name="PaymentCurrency" label="Payment Currency" mandatory="1"></element>
 
-      <element type="select" name="BankType2" label="Bank Type" default="Other Bank">
-        <options>
-          <option value=""></option>
-          <option value="Main Bank">Main Bank</option>
-          <option value="Other Bank">Other Bank</option>
-        </options>
-      </element>
+      
       <element type="text" name="Payee2" label="Payee"></element>
       <element type="select" name="BankCountry2" label="Bank Country">
         <options>

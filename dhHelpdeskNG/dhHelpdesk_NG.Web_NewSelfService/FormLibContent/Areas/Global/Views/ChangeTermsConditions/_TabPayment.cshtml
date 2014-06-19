@@ -3,67 +3,57 @@
 @using ECT.FormLib.Models;
 
 <div class="tab-pane" id="Payment">
-    <div class="span5">
+    <div class="span8">
         <table class="table">
             <tbody>
                 <tr>
-                    <td class="tdstrong" colspan="2">
-                        <h4>@Model.Translate("Basic pay")</h4>
-                    </td>
+                    <td class="tdstrong" colspan="2"><h4>@Model.Translate("Basic pay")</h4></td>
+                    <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("PayrollCategory")</td>
-                    <td>
-                        @Model.Element("PayrollCategory")
-                    </td>
+                    <td>@Model.Element("PayrollCategory")</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("BasicPayAmount")</td>
-                    <td>
-                        @Model.Element("BasicPayAmount")
-                    </td>
+                    <td>@Model.Element("BasicPayAmount")</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("BasicPayChangeReason")</td>
-                    <td>
-                        @Model.Element("BasicPayChangeReason")
-                    </td>
+                    <td>@Model.Element("BasicPayChangeReason")</td>
+                    <td></td>
                 </tr>
 
                 <tr>
-                    <td class="tdstrong" colspan="2">
-                        <h4>@Model.Translate("Allowances")</h4>
-                    </td>
+                    <td class="tdstrong" colspan="2"><h4>@Model.Translate("Allowances")</h4></td>
+                    <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("AllowancesType")</td>
-                    <td>
-                        @Model.Element("AllowancesType")
-                    </td>
+                    <td>@Model.Element("AllowancesType")</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("AllowancesAmountUnits")</td>
-                    <td>
-                        @Model.Element("AllowancesAmountUnits")
-                    </td>
+                    <td>@Model.Element("AllowancesAmountUnits")</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("AllowancesNetGross")</td>
-                    <td>
-                        @Model.Element("AllowancesNetGross")
-                    </td>
+                    <td>@Model.Element("AllowancesNetGross")</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("AllowancesValidFrom")</td>
-                    <td>
-                        @Model.Element("AllowancesValidFrom")
-                    </td>
+                    <td>@Model.Element("AllowancesValidFrom")</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("AllowancesValidTo")</td>
-                    <td>
-                        @Model.Element("AllowancesValidTo")
-                    </td>
+                    <td>@Model.Element("AllowancesValidTo")</td>
+                    <td></td>
                 </tr>
                 
                 @for(int i = 2; i <= 3; i++)
@@ -72,31 +62,37 @@
                         <td class="tdstrong" colspan="2">
                             <h4>@Model.Translate("Allowances") @(i.ToString())</h4>
                         </td>
+                        <td></td>
                     </tr>
                     <tr class="allowance@(i.ToString())">
                         <td class="tdstrong">@Model.Label("AllowancesType" + i.ToString())</td>
                         <td>
                             @Model.Element("AllowancesType" + i.ToString())</td>
+                        <td></td>
                     </tr>
                     <tr class="allowance@(i.ToString())">
                         <td class="tdstrong">@Model.Label("AllowancesAmountUnits" + i.ToString())</td>
                         <td>
                             @Model.Element("AllowancesAmountUnits" + i.ToString())</td>
+                        <td></td>
                     </tr>
                     <tr class="allowance@(i.ToString())">
                         <td class="tdstrong">@Model.Label("AllowancesNetGross" + i.ToString())</td>
                         <td>
                             @Model.Element("AllowancesNetGross" + i.ToString())</td>
+                        <td></td>
                     </tr>
                     <tr class="allowance@(i.ToString())">
                         <td class="tdstrong">@Model.Label("AllowancesValidFrom" + i.ToString())</td>
                         <td>
                             @Model.Element("AllowancesValidFrom" + i.ToString())</td>
+                        <td></td>
                     </tr>
                     <tr class="allowance@(i.ToString())">
                         <td class="tdstrong">@Model.Label("AllowancesValidTo" + i.ToString())</td>
                         <td>
                             @Model.Element("AllowancesValidTo" + i.ToString())</td>
+                        <td></td>
                     </tr>
                 }
                 <tr id="addAllowanceTr">
@@ -105,46 +101,42 @@
                         <a id="addAllowance" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Allowance")</a></td>
                 </tr>
 
-            </tbody>
+  @*          </tbody>
         </table>
     </div>
     <div class="span6">
         <table class="table">
-            <tbody>
+            <tbody>*@
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Deductions")</h4>
                     </td>
+                    <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("DeductionsType")</td>
-                    <td>
-                        @Model.Element("DeductionsType")
-                    </td>
+                    <td>@Model.Element("DeductionsType")</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("DeductionsAmountUnits")</td>
-                    <td>
-                        @Model.Element("DeductionsAmountUnits")
-                    </td>
+                    <td>@Model.Element("DeductionsAmountUnits")</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("DeductionsNetGross")</td>
-                    <td>
-                        @Model.Element("DeductionsNetGross")
-                    </td>
+                    <td>@Model.Element("DeductionsNetGross")</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("DeductionsValidFrom")</td>
-                    <td>
-                        @Model.Element("DeductionsValidFrom")
-                    </td>
+                    <td>@Model.Element("DeductionsValidFrom")</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("DeductionsValidTo")</td>
-                    <td>
-                        @Model.Element("DeductionsValidTo")
-                    </td>
+                    <td>@Model.Element("DeductionsValidTo")</td>
+                    <td></td>
                 </tr>
                 
                  @for(int i = 2; i <= 3; i++)
@@ -153,51 +145,57 @@
                         <td class="tdstrong" colspan="2">
                             <h4>@Model.Translate("Deductions") @(i.ToString())</h4>
                         </td>
+                        <td></td>
                     </tr>
                     <tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DeductionsType" + i.ToString())</td>
                         <td>
                             @Model.Element("DeductionsType" + i.ToString())</td>
+                        <td></td>
                     </tr>
                     <tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DeductionsAmountUnits" + i.ToString())</td>
                         <td>
                             @Model.Element("DeductionsAmountUnits" + i.ToString())</td>
+                        <td></td>
                     </tr>
                     <tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DeductionsNetGross" + i.ToString())</td>
                         <td>
                             @Model.Element("DeductionsNetGross" + i.ToString())</td>
+                        <td></td>
                     </tr>
                     <tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DeductionsValidFrom" + i.ToString())</td>
                         <td>
                             @Model.Element("DeductionsValidFrom" + i.ToString())</td>
+                        <td></td>
                     </tr>
                     <tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DeductionsValidTo" + i.ToString())</td>
                         <td>
                             @Model.Element("DeductionsValidTo" + i.ToString())</td>
+                        <td></td>
                     </tr>
                 }
                 <tr id="addDeductionTr">
                     <td colspan="2">
                         @Model.Element("Deductions")
                         <a id="addDeduction" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Deduction")</a></td>
-                </tr>
-               
-                
+                </tr> 
 
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Bonus Eligibility")</h4>
                     </td>
+                    <td class="tdstrong" >
+                        <h4>@Model.Translate("Current record")</h4>
+                    </td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("OneIKEABonusLevel")</td>
-                    <td>
-                        @Model.Element("OneIKEABonusLevel")
-                    </td>
+                    <td>@Model.Element("OneIKEABonusLevel")</td>
+                    <td></td>
                 </tr>
              </tbody>
         </table>

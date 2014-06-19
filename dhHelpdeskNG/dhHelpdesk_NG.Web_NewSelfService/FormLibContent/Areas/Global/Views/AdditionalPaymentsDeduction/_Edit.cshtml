@@ -2,12 +2,12 @@
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
 
-@using (Html.BeginForm("edit", "AdditionalPaymentsDeduction", FormMethod.Post, new { area = "Global", novalidate = "novalidate" }))
+@using (Html.BeginForm("edit", "AdditionalPaymentsDeduction", new { id = Model.Contract.Id }, FormMethod.Post, new { area = "Global", novalidate = "novalidate" }))
 {   
     <span style="display: none;" id="narrowDownInit"></span>
-    @Html.Partial("_GlobalNavigation", Model)
+    @Html.Partial("_GlobalNavRev", Model)
     <div class="container containeralignright">
-        @Html.Partial("_CurrentUser")
+        @Html.Partial("_FormInfo", Model)
         @Html.Partial("_ErrorMessage", Model)
         <ul class="nav nav-tabs">
             @if(Model.VisibleTab("#ServiceRequestDetails"))

@@ -1436,6 +1436,7 @@
       </element>
       <element type="typeahead-simple" name="HomeCostCentre"  label="Home Cost Centre" mandatory="1" customid="changeModule">
         <regex inherit="unsignednum" pattern="" message=""></regex>
+        <regex inherit="maxfourdigit" pattern="" message=""></regex>
         <options>
           <option value=""></option>
           <option Department="Sales" value="﻿3000">﻿3000</option>
@@ -1500,6 +1501,7 @@
       </element>
       <element type="typeahead-simple" name="CrossChargeCostCentre" label="Cross Charge Cost Centre">
         <regex inherit="unsignednum" pattern="" message=""></regex>
+        <regex inherit="maxfourdigit" pattern="" message=""></regex>
         <options>
           <option value=""></option>
           <option Department="Sales" value="﻿3000">﻿3000</option>
@@ -2605,6 +2607,13 @@
         <!--<regex inherit="numMax40" pattern="" message=""></regex>-->
         <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
+      <element type="select" name="ContractType" label="Contract Type" mandatory="1">
+        <options>
+          <option value=""></option>
+          <option value="Part Time">Part Time</option>
+          <option value="Full Time">Full Time</option>
+        </options>
+      </element>
     <element name="ProbationPeriod" type="select" label="Probation period?" mandatory="1" default="No">
       <options>
         <option value="No">No</option>
@@ -3291,8 +3300,7 @@
           <option value="Juvenile Monthly">Juvenile Monthly</option>
           <option value="No Salary">No Salary</option>
         </options>
-        <mandatoryIf name="PayrollCategory">Monthly,Hourly</mandatoryIf>
-        <regex inherit="unsignednum" message="" pattern=""></regex>
+        <mandatoryIf name="PayrollCategory">Monthly,Hourly</mandatoryIf>       
       </element>
       <element type="text" name="BasicPayAmount" label="Basic Pay Amount" mandatory="1">
         <regex inherit="unsignednum" pattern="" message=""></regex>

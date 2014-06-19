@@ -42,8 +42,6 @@
                     </tr>
                 </thead>
                 <tbody>
-
-                   
                     @for (int i = 1; i <= int.Parse(Model.GetAnswer("AbsencesMulti")); i++)
                     {
                         string absenceNr = "";
@@ -55,7 +53,6 @@
 
                         if (!string.IsNullOrEmpty(Model.GetAnswer("AbsenceType" + absenceNr)))
                     {
-
                         <tr>
                             <td>@Model.GetAnswer("AbsenceType" + absenceNr)</td>
                             <td>pdf</td>

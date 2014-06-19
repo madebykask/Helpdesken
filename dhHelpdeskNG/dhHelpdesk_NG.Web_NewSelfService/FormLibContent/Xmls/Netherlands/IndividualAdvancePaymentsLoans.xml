@@ -42,7 +42,7 @@
 
     <tab name="#payment" label="Payment Information">
 
-      <element type="select" name="PaymentType" label="PaymentType" mandatory="1" default="Advance Payment">
+      <element type="select" name="PaymentType" label="Payment Type" mandatory="1" default="Advance Payment">
         <options>
           <option value=""></option>
           <option value="Advance Payment">Advance Payment</option>

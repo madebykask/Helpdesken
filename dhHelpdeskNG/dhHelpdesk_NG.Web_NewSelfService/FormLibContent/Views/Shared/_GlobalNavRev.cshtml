@@ -6,21 +6,31 @@
     var freezeAction = "";
     var freeze = "";
 
-    if(Model.Contract.Id > 0)
+    if(!FormLibUtils.IsSelfService())
     {
-        if(ECT.FormLib.FormLibSessions.User.WorkingGroups != null
-            && ECT.FormLib.FormLibSessions.User.WorkingGroups.FirstOrDefault(x => x.Id == Model.Contract.WorkingGroupId) == null)
+        if(Model.Contract.Id > 0)
         {
-            freezeAction = "disabled";
+            if(ECT.FormLib.FormLibSessions.User.WorkingGroups != null
+                && ECT.FormLib.FormLibSessions.User.WorkingGroups.FirstOrDefault(x => x.Id == Model.Contract.WorkingGroupId) == null)
+            {
+                Model.IsLooked = true;
+            }
+        }
+    }
+    else
+    {
+        if(Model.Contract.StateSecondaryId > 10)
+        {
             Model.IsLooked = true;
         }
     }
 
-    if(Model.IsLooked || Model.Contract.StateSecondaryId > 59)
+    if(Model.IsLooked || Model.Contract.StateSecondaryId > 59 /* over 59 then the case is closed or cancelled */)
     {
         freezeAction = "disabled";
         freeze = "disabled";
     }
+    
 }
 
 <div class="navbar navbar-inverse navbar-fixed-top">
@@ -46,7 +56,15 @@
                 </li>
                 <li>
                     <div class="margintopleft" style="padding: 5px;">
-                        @Model.Translate(Model.Contract.StateSecondary)
+                        @if(FormLibUtils.IsSelfService()
+                            && !string.IsNullOrEmpty(Model.Contract.AlternativeStateSecondaryName))
+                        {
+                            @Model.Translate(Model.Contract.AlternativeStateSecondaryName)
+                        }
+                        else
+                        {
+                            @Model.Translate(Model.Contract.StateSecondary)
+                        }
                     </div>
                 </li>
             </ul>
