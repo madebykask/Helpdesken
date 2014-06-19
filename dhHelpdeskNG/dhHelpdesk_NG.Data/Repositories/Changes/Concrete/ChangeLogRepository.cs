@@ -22,7 +22,10 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
         public void UpdateLogEmailLogId(int logId, int emailLogId)
         {
             var log = this.DbContext.ChangeLogs.Find(logId);
-            log.ChangeEMailLog_Id = emailLogId;
+            if (log != null)
+            {
+                log.ChangeEMailLog_Id = emailLogId;
+            }
         }
 
         public List<Log> FindLogsByChangeId(int changeId)
