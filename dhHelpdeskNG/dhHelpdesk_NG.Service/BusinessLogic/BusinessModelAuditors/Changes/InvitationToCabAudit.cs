@@ -2,6 +2,7 @@
 {
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Enums.MailTemplates;
     using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
@@ -53,66 +54,70 @@
 
         public void Audit(UpdateChangeRequest businessModel, ChangeAuditData optionalData)
         {
-            foreach (var log in businessModel.NewLogs)
+            var log = businessModel.NewLogs.FirstOrDefault(l => l.Subtopic == Subtopic.InviteToCab);
+
+            if (log == null)
             {
-                if (!log.Emails.Any())
-                {
-                    continue;
-                }
-
-                var templateId = this.mailTemplateRepository.GetTemplateId(
-                    ChangeTemplate.Cab,
-                    businessModel.Context.CustomerId);
-                if (!templateId.HasValue)
-                {
-                    continue;
-                }
-
-                var template = this.mailTemplateLanguageRepository.GetTemplate(
-                    templateId.Value,
-                    businessModel.Context.LanguageId);
-                if (template == null)
-                {
-                    continue;
-                }
-
-                var mail = this.mailTemplateFormatter.Format(
-                    template,
-                    businessModel.Change,
-                    businessModel.Context.CustomerId,
-                    businessModel.Context.LanguageId);
-                if (mail == null)
-                {
-                    continue;
-                }
-
-                var from = this.customerRepository.GetCustomerEmail(businessModel.Context.CustomerId);
-                if (from == null)
-                {
-                    continue;
-                }
-
-                var mailUniqueIdentifier = this.mailUniqueIdentifierProvider.Provide(
-                    businessModel.Context.DateAndTime,
-                    from);
-
-                this.emailService.SendEmail(from, log.Emails, mail);
-
-                var emailLog = EmailLog.CreateNew(
-                    optionalData.HistoryId,
-                    log.Emails,
-                    (int)ChangeTemplate.Cab,
-                    mailUniqueIdentifier,
-                    businessModel.Context.DateAndTime);
-
-                this.changeEmailLogRepository.AddEmailLog(emailLog);
-                this.changeEmailLogRepository.Commit();
-
-                log.ChangeEmailLogId = emailLog.Id;
-
-                this.changeLogRepository.UpdateLogEmailLogId(log.Id, emailLog.Id);
-                this.changeLogRepository.Commit();
+                return;
             }
+
+            if (!log.Emails.Any())
+            {
+                return;
+            }
+
+            var templateId = this.mailTemplateRepository.GetTemplateId(
+                ChangeTemplate.Cab,
+                businessModel.Context.CustomerId);
+            if (!templateId.HasValue)
+            {
+                return;
+            }
+
+            var template = this.mailTemplateLanguageRepository.GetTemplate(
+                templateId.Value,
+                businessModel.Context.LanguageId);
+            if (template == null)
+            {
+                return;
+            }
+
+            var mail = this.mailTemplateFormatter.Format(
+                template,
+                businessModel.Change,
+                businessModel.Context.CustomerId,
+                businessModel.Context.LanguageId);
+            if (mail == null)
+            {
+                return;
+            }
+
+            var from = this.customerRepository.GetCustomerEmail(businessModel.Context.CustomerId);
+            if (from == null)
+            {
+                return;
+            }
+
+            var mailUniqueIdentifier = this.mailUniqueIdentifierProvider.Provide(
+                businessModel.Context.DateAndTime,
+                from);
+
+            this.emailService.SendEmail(from, log.Emails, mail);
+
+            var emailLog = EmailLog.CreateNew(
+                optionalData.HistoryId,
+                log.Emails,
+                (int)ChangeTemplate.Cab,
+                mailUniqueIdentifier,
+                businessModel.Context.DateAndTime);
+
+            this.changeEmailLogRepository.AddEmailLog(emailLog);
+            this.changeEmailLogRepository.Commit();
+
+            log.ChangeEmailLogId = emailLog.Id;
+
+            this.changeLogRepository.UpdateLogEmailLogId(log.Id, emailLog.Id);
+            this.changeLogRepository.Commit();
         }
     }
 }

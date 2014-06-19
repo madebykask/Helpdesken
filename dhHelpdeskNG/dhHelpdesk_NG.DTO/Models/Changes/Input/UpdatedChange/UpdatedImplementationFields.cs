@@ -16,8 +16,10 @@
             bool implementationPlanUsed,
             string deviation,
             bool recoveryPlanUsed,
-            bool implementationReady)
+            bool implementationReady, 
+            string logNote)
         {
+            this.LogNote = logNote;
             this.StatusId = statusId;
             this.RealStartDate = realStartDate;
             this.FinishingDate = finishingDate;
@@ -49,13 +51,15 @@
         [IsId]
         public int? StatusId { get; private set; }
 
+        public string LogNote { get; private set; }
+
         #endregion
 
         #region Public Methods and Operators
 
         public static UpdatedImplementationFields CreateEmpty()
         {
-            return new UpdatedImplementationFields(null, null, null, false, false, null, false, false);
+            return new UpdatedImplementationFields(null, null, null, false, false, null, false, false, string.Empty);
         }
 
         #endregion

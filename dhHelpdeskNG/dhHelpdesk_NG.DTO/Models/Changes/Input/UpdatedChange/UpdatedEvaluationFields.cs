@@ -2,8 +2,9 @@
 {
     public sealed class UpdatedEvaluationFields
     {
-        public UpdatedEvaluationFields(string changeEvaluation, bool evaluationReady)
+        public UpdatedEvaluationFields(string changeEvaluation, bool evaluationReady, string logNote)
         {
+            this.LogNote = logNote;
             this.ChangeEvaluation = changeEvaluation;
             this.EvaluationReady = evaluationReady;
 
@@ -13,9 +14,11 @@
 
         public bool EvaluationReady { get; private set; }
 
+        public string LogNote { get; private set; }
+
         public static UpdatedEvaluationFields CreateEmpty()
         {
-            return new UpdatedEvaluationFields(null, false);
+            return new UpdatedEvaluationFields(null, false, string.Empty);
         }
     }
 }

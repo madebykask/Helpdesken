@@ -134,6 +134,7 @@
     <Compile Include="Models\Changes\Input\NewChange\NewImplementationFields.cs" />
     <Compile Include="Models\Changes\Input\NewChange\NewRegistrationFields.cs" />
     <Compile Include="Models\Changes\Input\UpdatedChange\UpdatedGeneralFields.cs" />
+    <Compile Include="Models\Changes\Input\UpdatedChange\UpdatedLogFields.cs" />
     <Compile Include="Models\Changes\Input\UpdatedChange\UpdatedOrdererFields.cs" />
     <Compile Include="Models\Changes\InventoryTypeWithInventories.cs" />
     <Compile Include="Models\Changes\ManualLog.cs" />

@@ -26,8 +26,10 @@
             StepStatus approval,
             DateTime? approvedDateAndTime,
             int? approvedByUserId,
-            string rejectExplanation)
+            string rejectExplanation, 
+            string logNote)
         {
+            this.LogNote = logNote;
             this.CategoryId = categoryId;
             this.PriorityId = priorityId;
             this.ResponsibleId = responsibleUserId;
@@ -92,6 +94,8 @@
         [MinValue(0)]
         public int YearlyCost { get; private set; }
 
+        public string LogNote { get; private set; }
+
         #endregion
 
         #region Public Methods and Operators
@@ -115,7 +119,8 @@
                 StepStatus.None,
                 null,
                 null,
-                null);
+                null,
+                string.Empty);
         }
 
         #endregion

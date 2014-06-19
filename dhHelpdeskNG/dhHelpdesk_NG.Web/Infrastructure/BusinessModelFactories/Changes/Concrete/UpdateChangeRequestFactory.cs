@@ -157,6 +157,8 @@
             var hasImplementationPlan = ConfigurableFieldModel<bool>.GetValueOrDefault(model.HasImplementationPlan);
             var hasRecoveryPlan = ConfigurableFieldModel<bool>.GetValueOrDefault(model.HasRecoveryPlan);
             var rejectExplanation = ConfigurableFieldModel<string>.GetValueOrDefault(model.RejectExplanation);
+            var logNote = model.Logs != null && model.Logs.Value != null ? 
+                        model.Logs.Value.Text : string.Empty;
 
             return new UpdatedAnalyzeFields(
                 model.CategoryId,
@@ -175,7 +177,8 @@
                 model.ApprovalValue,
                 approvedDateAndTime,
                 approvedByUserId,
-                rejectExplanation);
+                rejectExplanation,
+                logNote);
         }
 
         private static List<Contact> CreateContactCollection(InputModel model, OperationContext context)
@@ -278,9 +281,13 @@
                 return null;
             }
 
+            var logNote = model.Logs != null && model.Logs.Value != null ?
+            model.Logs.Value.Text : string.Empty;
+
             return new UpdatedEvaluationFields(
                 ConfigurableFieldModel<string>.GetValueOrDefault(model.ChangeEvaluation),
-                ConfigurableFieldModel<bool>.GetValueOrDefault(model.EvaluationReady));
+                ConfigurableFieldModel<bool>.GetValueOrDefault(model.EvaluationReady),
+                logNote);
         }
 
         private static UpdatedGeneralFields CreateGeneralPart(GeneralModel model, OperationContext context)
@@ -314,6 +321,9 @@
                 return null;
             }
 
+            var logNote = model.Logs != null && model.Logs.Value != null ?
+                        model.Logs.Value.Text : string.Empty;
+
             return new UpdatedImplementationFields(
                 model.ImplementationStatusId,
                 ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.RealStartDate),
@@ -322,7 +332,8 @@
                 ConfigurableFieldModel<bool>.GetValueOrDefault(model.ImplementationPlanUsed),
                 ConfigurableFieldModel<string>.GetValueOrDefault(model.ChangeDeviation),
                 ConfigurableFieldModel<bool>.GetValueOrDefault(model.RecoveryPlanUsed),
-                ConfigurableFieldModel<bool>.GetValueOrDefault(model.ImplementationReady));
+                ConfigurableFieldModel<bool>.GetValueOrDefault(model.ImplementationReady),
+                logNote);
         }
 
         private static List<NewFile> CreateNewFileCollection(
@@ -360,6 +371,19 @@
             if (inputModel.Analyze != null)
             {
                 CreateNewLogIfNeeded(inputModel.Analyze.Logs, Subtopic.Analyze, newLogs, emailService);
+
+                if (inputModel.Analyze.InviteToCab != null)
+                {
+                    var logText = inputModel.Analyze.Logs != null && inputModel.Analyze.Logs.Value != null
+                                      ? inputModel.Analyze.Logs.Value.Text
+                                      : string.Empty;
+
+                    CreateInviteToCabLogIfNeeded(
+                                        logText,
+                                        inputModel.Analyze.InviteToCab.Emails,
+                                        newLogs,
+                                        emailService);
+                }
             }
 
             if (inputModel.Implementation != null)
@@ -378,6 +402,23 @@
             }
 
             return newLogs;
+        }
+
+        private static void CreateInviteToCabLogIfNeeded(
+                        string logText,
+                        string emailsString,
+                        List<ManualLog> logs,
+                        IEmailService emailService)
+        {
+            var emails = string.IsNullOrEmpty(emailsString)
+                ? new List<MailAddress>(0)
+                : emailsString.Split(Environment.NewLine)
+                                .Where(emailService.IsValidEmail)
+                                .Select(e => new MailAddress(e))
+                                .ToList();
+
+            var newLog = ManualLog.CreateNew(logText, emails, Subtopic.InviteToCab);
+            logs.Add(newLog);
         }
 
         private static void CreateNewLogIfNeeded(
@@ -453,6 +494,20 @@
                 ConfigurableFieldModel<string>.GetValueOrDefault(model.RejectExplanation));
         }
 
+        private static UpdatedLogFields CreateUpdatedLogFields(Models.Changes.ChangeEdit.LogModel model)
+        {
+            var logNote = string.Empty;
+
+            if (model != null &&
+                model.Logs != null &&
+                model.Logs.Value != null)
+            {
+                logNote = model.Logs.Value.Text;
+            }
+
+            return new UpdatedLogFields(logNote);
+        }
+
         private static UpdatedChange CreateUpdatedChange(InputModel model, OperationContext context)
         {
             var id = int.Parse(model.Id);
@@ -463,8 +518,9 @@
             var analyze = CreateAnalyzePart(model.Analyze, context);
             var implementation = CreateImplementationPart(model.Implementation, context);
             var evaluation = CreateEvaluationPart(model.Evaluation, context);
+            var log = CreateUpdatedLogFields(model.Log);
 
-            return new UpdatedChange(id, orderer, general, registration, analyze, implementation, evaluation);
+            return new UpdatedChange(id, orderer, general, registration, analyze, implementation, evaluation, log);
         }
 
         #endregion

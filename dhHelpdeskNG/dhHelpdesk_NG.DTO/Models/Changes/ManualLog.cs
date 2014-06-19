@@ -43,7 +43,6 @@
 
         public Subtopic Subtopic { get; private set; }
 
-        [NotNullAndEmpty]
         public string Text { get; private set; }
 
         #endregion

@@ -1,6 +1,5 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange
 {
-    using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class UpdatedChange
@@ -14,7 +13,8 @@
             UpdatedRegistrationFields registration,
             UpdatedAnalyzeFields analyze,
             UpdatedImplementationFields implementation,
-            UpdatedEvaluationFields evaluation)
+            UpdatedEvaluationFields evaluation,
+            UpdatedLogFields log)
         {
             this.Id = id;
             this.Orderer = orderer;
@@ -23,6 +23,7 @@
             this.Analyze = analyze;
             this.Implementation = implementation;
             this.Evaluation = evaluation;
+            this.Log = log;
         }
 
         #endregion
@@ -43,6 +44,8 @@
         public UpdatedOrdererFields Orderer { get; internal set; }
 
         public UpdatedRegistrationFields Registration { get; internal set; }
+
+        public UpdatedLogFields Log { get; internal set; }
 
         #endregion
 

@@ -2,6 +2,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
 {
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Enums.MailTemplates;
     using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
@@ -63,7 +64,9 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
 
         public void Audit(UpdateChangeRequest businessModel, ChangeAuditData optionalData)
         {
-            foreach (var log in businessModel.NewLogs)
+            var logs = businessModel.NewLogs.Where(l => l.Subtopic != Subtopic.InviteToCab);
+
+            foreach (var log in logs)
             {
                 if (!log.Emails.Any())
                 {

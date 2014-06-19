@@ -68,6 +68,7 @@
                                 WorkingGroup = h.WorkingGroup_Id.HasValue ? h.WorkingGroup.WorkingGroupName : null,
                                 WorkingGroupId = h.WorkingGroup_Id,
                             })
+                    .OrderByDescending(h => h.DateAndTime)
                     .ToList();
 
             return

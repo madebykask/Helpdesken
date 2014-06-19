@@ -27,7 +27,6 @@
         [NotNull]
         public UserName RegisteredBy { get; private set; }
 
-        [NotNullAndEmpty]
         public string Text { get; private set; }
     }
 }

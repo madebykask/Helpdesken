@@ -10,6 +10,8 @@
 
         Evaluation = 3,
 
-        Log = 4
+        Log = 4,
+
+        InviteToCab = 5
     }
 }

@@ -93,8 +93,15 @@
             this.AddAnalyzeMarkValues(markValues, businessModel.Analyze);
             this.AddImplementationMarkValues(markValues, businessModel.Implementation);
             this.AddEvaluationMarkValues(markValues, businessModel.Evaluation);
+            this.AddLogMarkValues(markValues, businessModel.Log);
 
             return markValues;
+        }
+
+        private void AddLogMarkValues(EmailMarkValues markValues, UpdatedLogFields fields)
+        {
+            var logNote = fields.LogNote;
+            markValues.Add("[#59]", logNote);
         }
 
         private void AddAnalyzeMarkValues(EmailMarkValues markValues, UpdatedAnalyzeFields fields)
@@ -127,6 +134,7 @@
             var implementationPlan = fields.HasImplementationPlan.ToYesNoString();
             var recoveryPlan = fields.HasRecoveryPlan.ToYesNoString();
             var approval = fields.Approval.StatusToString();
+            var logNote = fields.LogNote;
 
             markValues.Add("[#32]", category);
             markValues.Add("[#11]", priority);
@@ -142,15 +150,18 @@
             markValues.Add("[#35]", implementationPlan);
             markValues.Add("[#36]", recoveryPlan);
             markValues.Add("[#49]", approval);
+            markValues.Add("[#56]", logNote);
         }
 
         private void AddEvaluationMarkValues(EmailMarkValues markValues, UpdatedEvaluationFields fields)
         {
             var changeEvaluation = fields.ChangeEvaluation;
             var evaluationReady = fields.EvaluationReady.ToYesNoString();
+            var logNote = fields.LogNote;
 
             markValues.Add("[#43]", changeEvaluation);
             markValues.Add("[#54]", evaluationReady);
+            markValues.Add("[#58]", logNote);
         }
 
         private void AddGeneralMarkValues(EmailMarkValues markValues, UpdatedGeneralFields fields)
@@ -220,6 +231,7 @@
             var implementationPlanUsed = fields.ImplementationPlanUsed.ToYesNoString();
             var recoveryPlanUsed = fields.RecoveryPlanUsed.ToYesNoString();
             var implementationReady = fields.ImplementationReady.ToYesNoString();
+            var logNote = fields.LogNote;
 
             markValues.Add("[#21]", implementationStatus);
             markValues.Add("[#24]", realStartDate);
@@ -229,6 +241,7 @@
             markValues.Add("[#39]", implementationPlanUsed);
             markValues.Add("[#38]", recoveryPlanUsed);
             markValues.Add("[#53]", implementationReady);
+            markValues.Add("[#57]", logNote);
         }
 
         private void AddOrdererMarkValues(EmailMarkValues markValues, UpdatedOrdererFields fields)
