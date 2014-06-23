@@ -80,6 +80,11 @@
 
             var sql = this.ReturnCaseSearchSql(f, customerSetting, customerUserSetting, userId, userUserId, showNotAssignedWorkingGroups, userGroupId, restrictedCasePermission, gs, s);
 
+            if (string.IsNullOrEmpty(sql))
+            {
+                return ret;
+            }
+
             using (var con = new OleDbConnection(dsn)) 
             {
                 using (var cmd = new OleDbCommand())
@@ -350,12 +355,12 @@
 
         private string ReturnCaseSearchSql(CaseSearchFilter f, Setting customerSetting, CustomerUser customerUserSetting, int userId, string userUserId, int showNotAssignedWorkingGroups, int userGroupId, int restrictedCasePermission, GlobalSetting gs, ISearch s)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             // fields
             sb.Append("select distinct ");
             //vid avslutade ärenden visas bara första 500, TODO fungerar inte i Oracle 
-            if (f.CaseProgress == "1")
+            if (f != null && f.CaseProgress == "1")
                 sb.Append(" top 500 ");
 
 	        sb.Append("tblCase.Id ");
@@ -402,7 +407,14 @@
             sb.Append(", tblStatus.StatusName as Status_Id");
             //sb.Append(", tblStatus.Id as Status_Id_Value");
             sb.Append(", tblSupplier.Supplier as Supplier_Id");
-            string appId = ConfigurationManager.AppSettings["InitFromSelfService"].ToString();
+            string appId = string.Empty;
+            try
+            {
+                appId = ConfigurationManager.AppSettings["InitFromSelfService"];
+            }
+            catch (Exception)
+            {
+            }
             if (appId == "true")
                 sb.Append(", tblStateSecondary.AlternativeStateSecondaryName as StateSecondary_Id");
             else
@@ -509,14 +521,14 @@
 
             // order by
             sb.Append("order by ");
-            string sort = s.SortBy.Replace("_temporary_.", string.Empty);
+            string sort = s != null ? s.SortBy.Replace("_temporary_.", string.Empty) : string.Empty;
             if (string.IsNullOrEmpty(sort))
             {
                 sort = " CaseNumber ";
             }
 
             sb.Append(sort);
-            if (!s.Ascending)
+            if (s != null && !s.Ascending)
                 sb.Append(" desc");
 
             return sb.ToString();
@@ -524,6 +536,11 @@
 
         private string ReturnCustomCaseSearchWhere(CaseSearchFilter f, string userUserId)
         {
+            if (f == null)
+            {
+                return string.Empty;
+            }
+
             var sb = new StringBuilder();
 
             // kund 
@@ -595,6 +612,11 @@
         }
         private string ReturnCaseSearchWhere(CaseSearchFilter f, Setting customerSetting, int userId, string userUserId, int showNotAssignedWorkingGroups, int userGroupId, int restrictedCasePermission, GlobalSetting gs)
         {
+            if (f == null || customerSetting == null || gs == null)
+            {
+                return string.Empty;
+            }
+
             var sb = new StringBuilder();
 
             // kund 
