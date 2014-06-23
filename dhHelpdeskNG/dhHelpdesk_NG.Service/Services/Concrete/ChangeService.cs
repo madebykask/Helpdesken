@@ -606,7 +606,7 @@
 
             if (settings.General.Administrator.Show || settings.Analyze.Responsible.Show)
             {
-                users = this.userRepository.FindActiveOverviews(customerId);
+                users = this.userRepository.FindUsersWithPermissionsForCustomers(new[] { customerId });
             }
 
             if (settings.Registration.Owner.Show || settings.Registration.AffectedProcesses.Show)

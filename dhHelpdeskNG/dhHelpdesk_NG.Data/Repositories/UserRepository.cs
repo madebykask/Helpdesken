@@ -45,6 +45,8 @@ namespace DH.Helpdesk.Dal.Repositories
         UserName GetUserName(int userId);
 
         ItemOverview FindActiveOverview(int userId);
+
+        List<ItemOverview> FindUsersWithPermissionsForCustomers(int[] customers);
     }
 
     public sealed class UserRepository : RepositoryBase<User>, IUserRepository
@@ -87,6 +89,23 @@ namespace DH.Helpdesk.Dal.Repositories
 
             return
                 overviews.Select(o => new ItemOverview(o.Name, o.Value.ToString(CultureInfo.InvariantCulture)))
+                    .OrderBy(o => o.Name)
+                    .ToList();
+        }
+
+        public List<ItemOverview> FindUsersWithPermissionsForCustomers(int[] customers)
+        {
+            var users =
+                this.DataContext.Users.Where(
+                        u => u.IsActive != 0)
+                    .Select(u => new { Name = u.FirstName + u.SurName, Value = u.Id, u.Cs })
+                    .ToList();
+
+            return
+                users
+                    .Where(u => u.Cs != null &&
+                        u.Cs.Select(c => c.Id).Intersect(customers).Any())
+                    .Select(o => new ItemOverview(o.Name, o.Value.ToString(CultureInfo.InvariantCulture)))
                     .OrderBy(o => o.Name)
                     .ToList();
         }

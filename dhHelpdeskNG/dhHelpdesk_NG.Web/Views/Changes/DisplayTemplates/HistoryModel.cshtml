@@ -22,7 +22,11 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var historyRecord in Model.HistoryRecords)
+        @{
+            var historyRecords = Model.HistoryRecords;
+            historyRecords.Reverse();
+        }
+        @foreach (var historyRecord in historyRecords)
         {
             @Html.DisplayFor(m => historyRecord)
         }

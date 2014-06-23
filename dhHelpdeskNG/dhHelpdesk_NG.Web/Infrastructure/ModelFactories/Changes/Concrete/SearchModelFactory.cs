@@ -47,7 +47,7 @@
                 response.SearchOptions.Administrators,
                 filter.AdministratorIds);
 
-            var show = CreateShowSelectList();
+            var show = CreateShowSelectList(filter.Status);
 
             SortFieldModel sortField = null;
 
@@ -87,7 +87,7 @@
             return new ConfigurableSearchFieldModel<MultiSelectList>(setting.Caption, list);
         }
 
-        private static SelectList CreateShowSelectList()
+        private static SelectList CreateShowSelectList(ChangeStatus? status)
         {
             var activeItem = new SelectListItem();
             activeItem.Text = Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation);
@@ -101,7 +101,7 @@
             noneItem.Text = Translation.Get("Alla", Enums.TranslationSource.TextTranslation);
 
             var showItems = new List<SelectListItem> { activeItem, finishedItem, noneItem };
-            return new SelectList(showItems, "Value", "Text");
+            return new SelectList(showItems, "Value", "Text", status);
         }
 
         #endregion
