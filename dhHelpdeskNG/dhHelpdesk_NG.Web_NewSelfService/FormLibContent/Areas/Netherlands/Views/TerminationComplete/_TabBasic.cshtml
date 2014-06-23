@@ -64,49 +64,26 @@
     document.getElementById('BasicTerminationType').onchange = selectIndexChangeTerminationType;
 
     var noticeHiringDate = $('#notice_HiringDate');
-    var nowTemp = new Date();
-    var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-
-    var lastDay = $('#date_LastDayOfEmployment').not(".disabled").datepicker({
-        onRender: function (date) {
-            return '';
-        }
-    }).on('changeDate', function (ev) {
-
-        noticeHiringDate.hide();
-
-        if (ev.date.valueOf() < now.valueOf())
-            noticeHiringDate.show();       
-    }).data('datepicker');
-
+    var noticeHiringDateWrong = $('#notice_HiringDateWrong');
 
     $('#LastDayOfEmployment').change(function () {
-        var lastDayOfEmployment = $('#LastDayOfEmployment').val();
+        var startDate = $('#LastDayOfEmployment').val();
         var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
-        var dlastDayOfEmployment = APIGlobal.DateTime.parseDate(lastDayOfEmployment, format);
+        var dstartDate = APIGlobal.DateTime.parseDate(startDate, format);
         var nowTemp = new Date();
         var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
         noticeHiringDate.hide();
-        if (dlastDayOfEmployment.valueOf() < now.valueOf())
+        noticeHiringDateWrong.hide();
+        if (!(dstartDate.getDate() === 1 || dstartDate.getDate() === 15))
+            noticeHiringDateWrong.show();
+
+        if (dstartDate.valueOf() < now.valueOf())
             noticeHiringDate.show();
+                
     });
 
 
-    //function changedLastDayOfEmployment() {
-    //    var noticeHiringDate = $('#notice_HiringDate');
-
-    //    var hiringdate = new Date(document.getElementById('LastDayOfEmployment').value);
-    //    var startDate = new Date();
-    //    startDate.setHours(0, 0, 0, 0);
-    //    if (hiringdate.valueOf() > startDate.valueOf()) {
-    //        noticeHiringDate.show();
-    //    } else {
-    //        noticeHiringDate.hide();
-    //    }
-    //}
-
-    //document.getElementById('LastDayOfEmployment').onchange = changedLastDayOfEmployment;
-
+    
 
     function selectIndexChangeProbationPeriod() {
         var probitionEndDate = document.getElementById('ProbationEndDate');

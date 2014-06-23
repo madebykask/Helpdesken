@@ -2,32 +2,37 @@
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
 @using ECT.FormLib.Pdfs;
+@using System.Globalization;
 @{
     Layout = null;
 }
 
 @functions{
 
+    public string GetDateInWords(string Date)
+    {
+        string s = Date.Replace(".", "-");
+        DateTime dt = DateTime.ParseExact(s, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+        return string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:d MMMMMM yyyy}", dt);
+    }
+
     public string GetAllowancesText(string AllowancesType, string AllowancesAmountUnits)
     {
 
         if (Model.GetAnswer(AllowancesType).ToLower() == "150C - Hourly FLT Skills (Fork Lift Truck Allowance)".ToLower() | Model.GetAnswer(AllowancesType).ToLower() == "150C - Hourly FLT Skills (Fork Lift Truck Allowance Milton Keynes)".ToLower())
         {
-            return "<br />" + "In addition you will receive a fork lift truck skills allowance of £" + Model.GetAnswer(AllowancesAmountUnits) + " per hour (subject to having a valid fork lift truck licence and using this skill).";
+            return "In addition you will receive a fork lift truck skills allowance of £" + Model.GetAnswer(AllowancesAmountUnits) + " per hour (subject to having a valid fork lift truck licence and using this skill).";
         }
 
         if (Model.GetAnswer(AllowancesType).ToLower() == "150P - NIght Premium".ToLower() | Model.GetAnswer(AllowancesType).ToLower() == "150P - NIght Premium London 1".ToLower() | Model.GetAnswer(AllowancesType).ToLower() == "150P - NIght Premium London 2".ToLower() | Model.GetAnswer(AllowancesType).ToLower() == "150P - NIght Premium London 3".ToLower() | Model.GetAnswer(AllowancesType).ToLower() == "150U - Night Premium Dist".ToLower() | Model.GetAnswer(AllowancesType).ToLower() == "300G - Night Shift".ToLower())
         {
-            return "<br />" + "In addition you will receive a night allowance of £" + Model.GetAnswer(AllowancesAmountUnits) + " per hour for hours worked between 22.00 and 06.00 (subject to working a minimum of one hour during this period)";
+            return "In addition you will receive a night allowance of £" + Model.GetAnswer(AllowancesAmountUnits) + " per hour for hours worked between 22.00 and 06.00 (subject to working a minimum of one hour during this period)";
         }
 
         if (Model.GetAnswer(AllowancesType).ToLower() == "300D - First Aid Allowance".ToLower())
         {
-            return "<br />" + "In addition you will receive a First Aid skills allowance of £" + Model.GetAnswer(AllowancesAmountUnits) + " per annum (subject to valid qualification and using this skill).";
+            return "In addition you will receive a First Aid skills allowance of £" + Model.GetAnswer(AllowancesAmountUnits) + " per annum (subject to valid qualification and using this skill).";
         }
-
-
-
 
         return "";
     }
@@ -100,6 +105,7 @@
     
     public string getPayInfoText()
     {
+        //Hourly
         if (Model.GetAnswer("PayrollCategory").ToLower() == "Hourly".ToLower())
         {
             if (Model.GetAnswer("BusinessUnit").ToLower() == "Store Bristol 264".ToLower())
@@ -161,7 +167,6 @@
         }
         
     }
-    
 
     public string GetServiceAreaText()
     {
@@ -290,9 +295,10 @@
         <br />
         @Model.GetAnswer("PermanentCity")
         <br />
+        @Model.GetAnswer("PermanentPostalCode")
         <br />
         <br />
-
+        <br />
 
         Dear @Model.GetAnswer("FirstName"),<br />
 
@@ -311,30 +317,22 @@
         <br />
         The principal Terms and Conditions of your employment will be as follows:
 
-
-
-
           @{
               var list = new List<PdfListItem>();
               var pdfList = new List<PdfListItem>();
 
               var brText = "<br /><br />";
 
-              //DateTime ContractStartDate = DateTime.Parse(Model.GetAnswer("ContractStartDate"));
-              //string strContractStartDate = string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:d MMMMMM yyyy}", ContractStartDate);
-
-              //dd.mm.yyyy
-
               //1
-              string text1 = "Your first day of employment with IKEA " + Model.Department.Unit + " will be on " + Model.GetAnswer("ContractStartDate") + "(CHANGE DATEFORMAT). This counts as part of your continuous service with IKEA which began on ";
+              string text1 = "Your first day of employment with IKEA " + Model.Department.Unit + " will be on " + GetDateInWords(Model.GetAnswer("ContractStartDate")) + ". This counts as part of your continuous service with IKEA which began on ";
 
               if (!string.IsNullOrEmpty(Model.GetAnswer("PreviousContractStartDate")))
               {
-                  text1 += " " + Model.GetAnswer("PreviousContractStartDate") + " (CHANGE DATEFORMAT)";
+                  text1 += " " + GetDateInWords(Model.GetAnswer("PreviousContractStartDate")) + " ";
               }
               else
               {
-                  text1 += " " + Model.GetAnswer("ContractStartDate") + " (CHANGE DATEFORMAT)";
+                  text1 += " " + GetDateInWords(Model.GetAnswer("ContractStartDate")) + " ";
               }
 
               list.Add(new PdfListItem { Text = text1 });
@@ -357,7 +355,7 @@
               list.Add(new PdfListItem { Text = text2 });
 
               //3
-              string text3 = "The " + Model.GetAnswer("ServiceArea") + " is your primary area of work. You will on occasions be expected to work in other areas within the Store/Unit to support the business need.";
+              string text3 = "The " + GetServiceAreaText() + " is your primary area of work. You will on occasions be expected to work in other areas within the Store/Unit to support the business need.";
 
               list.Add(new PdfListItem { Text = text3 });
 
@@ -366,35 +364,34 @@
               list.Add(new PdfListItem { Text = text4 });
 
               //5
-              //slutade här! Payrollcategory SAKNAS
-              string text5 = "Your starting salary will be £" + Model.GetAnswer("BasicPayAmount");// + " <Pay info from Payroll Category/PM1>. Next review date will be <Date of next salary review in WORDS>.";
+              string text5 = "Your starting salary will be £" + Model.GetAnswer("BasicPayAmount");
 
-
+              //Add PayInfoText
               text5 += getPayInfoText();
+              text5 += " Next review date will be " + GetDateInWords(Model.GetAnswer("DateOfNextSalaryReview")) +".";
 
               text5 += "<br />";
 
               if (!string.IsNullOrEmpty(Model.GetAnswer("AllowancesType")))
               {
                   //1
-
                   text5 += GetAllowancesText("AllowancesType", "AllowancesAmountUnits");
-
+                  text5 += "<br /><br />";
               }
 
               if (!string.IsNullOrEmpty(Model.GetAnswer("AllowancesType2")))
               {
                   //2
                   text5 += GetAllowancesText("AllowancesType2", "AllowancesAmountUnits2");
+                  text5 += "<br /><br />";
               }
 
               if (!string.IsNullOrEmpty(Model.GetAnswer("AllowancesType3")))
               {
                   //3
                   text5 += GetAllowancesText("AllowancesType3", "AllowancesAmountUnits3");
+                  text5 += "<br /><br />";
               }
-
-              text5 += "<br /><br />";
 
               text5 += "Your annual holiday entitlement (inclusive of 8 days annual public holidays) per calendar year is " + Model.GetAnswer("HolidayFull") + " hours. Holiday entitlement runs from 1st September – 31st August and is calculated on a pro rata basis. Your holiday entitlement for the current holiday year is " + Model.GetAnswer("HolidayCurrent") + " hours.";
               text5 += "<br /><br />";
@@ -409,16 +406,17 @@
               text5 += "<br /><br />";
 
               text5 += "If you have taken more holiday entitlement than you have accrued during the holiday year, the balance will be deducted from any outstanding pay. Payment for holidays in these circumstances will be made on a pro rata basis to your service in the current holiday year and compensatory days, as specified, are excluded from this calculation.";
-              text5 += "<br /><br />";
 
               list.Add(new PdfListItem { Text = text5 });
-
 
               //BENEFITS
               string benefit1Text = GetBenefit1Text();
 
               if (!string.IsNullOrEmpty(benefit1Text))
               {
+
+                  benefit1Text.Insert(0, "<br /><br />");
+                  
                   list.Add(new PdfListItem { Text = benefit1Text });
               }
 
@@ -426,6 +424,7 @@
 
               if (!string.IsNullOrEmpty(benefit2Text))
               {
+                  benefit2Text.Insert(0, "<br /><br />");
                   list.Add(new PdfListItem { Text = benefit2Text });
               }
 
@@ -433,6 +432,7 @@
 
               if (!string.IsNullOrEmpty(benefit3Text))
               {
+                  benefit3Text.Insert(0, "<br /><br />");
                   list.Add(new PdfListItem { Text = benefit3Text });
               }
 
@@ -440,14 +440,13 @@
 
               if (!string.IsNullOrEmpty(benefit4Text))
               {
+                  benefit4Text.Insert(0, "<br /><br />");
                   list.Add(new PdfListItem { Text = benefit4Text });
               }
 
               //BENEFITS END
 
-
               //MEDICAL INFO
-
               if (Model.GetAnswer("ServiceArea").ToLower() == "IKEA Food Serv".ToLower())
               {
                   list.Add(new PdfListItem { Text = "Please complete and return the Pre-Employment Medical Questionnaire and Food Handling Questionnaire (if applicable to your role) in the confidential envelope provided. Only our Occupational Health Advisor will read it. Please note that this offer of employment is subject to a satisfactory result. <br /><br />" });
@@ -459,13 +458,15 @@
               }
               //MEDICAL INFO END
 
-
-
               string text11 = "Your employment will be probationary for the first six months. During your probationary period, you will be given advice and support to enable you to meet the expectation of the job and your performance will be assessed to determine suitability for the role. The probationary period may be extended at the company’s discretion, but will not, in any case, exceed nine months. The notice period during your probationary period is one week from either side.";
-              text11 += "<br /><br />";
 
               string probationText = GetProbationtext();
 
+              if (!string.IsNullOrEmpty(probationText))
+              {
+                  text11 += "<br /><br />";
+              }
+              
               text11 += probationText;
 
               list.Add(new PdfListItem { Text = text11 });
@@ -495,19 +496,12 @@
               text13 += "<br />&nbsp;2.&nbsp;Your P45 if you have one.";
               text13 += "<br />&nbsp;3.&nbsp;Official proof of your National Insurance number, for example your National Insurance card or an original letter from a government agency.  If you do not have a National Insurance number you must provide proof that you have applied for one within the first month of employment.";
 
-              text13 += "<br /><br />";
-
               list.Add(new PdfListItem { Text = text13 });
 
               //14
               string text14 = "IKEA reserves the right to vary terms and conditions of employment subject to consultation and reasonable notice.";
               list.Add(new PdfListItem { Text = text14 });
-           
-            
           }
-
-
-
 
         @if (list.Count > 1)
         {
@@ -519,12 +513,10 @@
                 {
                     foreach (var item in list[i].SubList)
                     {
-            <br />
+            @*<br />*@
             <p style="text-align: left; font-family: Verdana; font-size: 11px; padding-left: 20px; padding-right: 50px;">&bull; @Html.Raw(item.Text) </p>
                     }
                 }
-
-
             }
         }
         else
@@ -535,22 +527,8 @@
             }
         }
 
-        <text>  This letter, together with the Terms and Conditions Appendix and Section 1 of the Co-worker handbook forms the basis of your contract.
+        <text> <br /> This letter, together with the Terms and Conditions Appendix and Section 1 of the Co-worker handbook forms the basis of your contract.
           </text>
-
-        <text>
-
-
-            I would be grateful if you could sign the enclosed copy of this letter as acceptance of the offer and bring it with you to your first day of induction, along with your completed starter pack.  In the meantime if you have any queries at all please do not hesitate to call us on @Model.Department.TelNbr. We look forward to seeing you on the day.
-        </text>
-
-        <br />
-        <br />
-        WELCOME TO IKEA
-        <br />
-        Yours sincerely
-
-
         <endpage />
     </div>
 </body>

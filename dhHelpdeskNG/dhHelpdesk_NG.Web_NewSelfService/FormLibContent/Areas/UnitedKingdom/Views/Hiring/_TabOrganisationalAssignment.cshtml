@@ -2,6 +2,14 @@
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
 
+@{
+    const string CompanyName = "IKEA Distribution Services Limited";
+    const string EmployeeCategory = "Permanent";
+    const string PartTime = "Part Time";
+    const string FullTime = "Full Time";
+    const string ZeroHours = "Zero Hours";
+}
+
 <div class="tab-pane" id="OrganisationalAssignment">
     <div class="span5">
         <table class="table">
@@ -88,7 +96,7 @@
                     <td class="tdstrong">@Model.Label("ContractedHours")</td>
                     <td>@Model.Element("ContractedHours")</td>
                 </tr>
-                 <tr>
+                <tr>
                     <td class="tdstrong">@Model.Label("DaysPerWeek")</td>
                     <td>@Model.Element("DaysPerWeek")</td>
                 </tr>
@@ -129,7 +137,63 @@
 
 <script>
 
-   @* var startDate = $('#ContractStartDate').val();
+    $(function () {
+
+        if ($('#EmploymentCategory').val == '@EmployeeCategory') {
+            $('#ContractEndDate').prop('disabled', true);
+            $('#date_ContractEndDate').addClass("disabled");
+        }
+
+        $('#Company').change(function () {
+            var value = $(this).val();
+
+            if (value == '@CompanyName') {
+                $('#CostAllocation, #CrossChargeCostCentre').prop('disabled', true);
+            }
+            else {
+                $('#CostAllocation, #CrossChargeCostCentre').prop('disabled', false);
+            }
+        });
+
+        $('#EmploymentCategory').change(function () {
+            var value = $(this).val();
+
+            if (value == '@EmployeeCategory') {
+                $('#date_ContractEndDate').datepicker("destroy");
+                $('#date_ContractEndDate').addClass("disabled");
+                $('#ContractEndDate').prop('disabled', true);
+            }
+            else {
+                $('#ContractEndDate').prop('disabled', false);
+                $("#ContractEndDate").removeClass("disabled");
+            }
+        });
+
+        $('#ContractedHours').on("input", function () {
+            var value = $(this).val();
+
+            if (value >= 16 && value <= 38) {
+                $('#ContractType option[value="' + '@PartTime' + '"]').prop('selected', true);
+            }
+            else if (value >= 39 && value <= 40) {
+                $('#ContractType option[value="' + '@FullTime' + '"]').prop('selected', true);
+            }
+            else if (value == "0") {
+                $('#ContractType option[value="' + '@ZeroHours' + '"]').prop('selected', true);
+            }
+            else
+            {
+                $('#ContractType option[value=""]').prop('selected', true);
+            }
+        });
+
+        $('#ProbationPeriod').change(function () {
+
+        });
+
+    });
+
+    @* var startDate = $('#ContractStartDate').val();
     var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
     var dStart = APIGlobal.DateTime.parseDate(startDate, format);
     var forcePicker = new Date(dStart.getFullYear(), dStart.getMonth(), dStart.getDate(), 0, 0, 0, 0);

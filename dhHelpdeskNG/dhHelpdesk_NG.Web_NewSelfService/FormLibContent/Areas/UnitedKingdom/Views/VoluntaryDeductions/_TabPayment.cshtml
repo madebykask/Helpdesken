@@ -139,9 +139,11 @@
         }
         else{
             input.removeAttr('readonly', 'readonly');
+            
             input.not(".disabled").datepicker(
             {
-                onRender: function(ev) {
+                onRender: function (ev) {
+
                     return '';
                 }
             });

@@ -7,9 +7,20 @@
     public string GetContract()
     {
 
-        if (Model.GetAnswer("EmploymentCategory") == "Permanent")
+        //IF <Employment Category/OA12> = Permanent AND <Business Unit/OA3> different than U.K & IE Contact Centre or Distribution Services Ltd or Distribution Service Office
+        
+        if (Model.GetAnswer("EmploymentCategory").ToLower() == "Permanent".ToLower())
         {
+
+            if (Model.GetAnswer("BusinessUnit").ToLower() != "Peterborough Contact Centre".ToLower() && Model.GetAnswer("BusinessUnit").ToLower() != "Distribution Centre Peterborough 012".ToLower() && Model.GetAnswer("BusinessUnit").ToLower() != "Distribution Service Office".ToLower())
+            {
             return "Permanent";
+            }
+            else
+            {
+                return "";
+            }
+               
         }
         else
         {

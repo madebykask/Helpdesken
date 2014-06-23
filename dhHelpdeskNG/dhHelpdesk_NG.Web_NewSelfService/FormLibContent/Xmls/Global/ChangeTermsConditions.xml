@@ -84,11 +84,11 @@
           <option value="Department 2">Department 2</option>
         </options>
       </element>
-      <element name="HomeCostCentre" type="select" label="Home Cost Centre" mandatory="1">
+      <element name="HomeCostCenter" type="select" label="Home Cost Center" mandatory="1">
         <options>
           <option value=""></option>
-          <option value="Home Cost Centre 1">Home Cost Centre 1</option>
-          <option value="Home Cost Centre 2">Home Cost Centre 2</option>
+          <option value="Home Cost Center 1">Home Cost Center 1</option>
+          <option value="Home Cost Center 2">Home Cost Center 2</option>
         </options>
       </element>
       <element name="CostAllocation" type="text" label="Cost Allocation" default="100%"></element>
@@ -115,8 +115,8 @@
       <element name="ReportsToLineManager" type="select" label="Reports to Line Manager" mandatory="1">
         <options>
           <option value=""></option>
-          <option value="LineManager 1">LineManager 1</option>
-          <option value="LineManager 2">LineManager 2</option>
+          <option value="Line Manager 1">Line Manager 1</option>
+          <option value="Line Manager 2">Line Manager 2</option>
         </options>
       </element>
     

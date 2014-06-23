@@ -181,16 +181,9 @@
         var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
         noticeHiringDate.hide();
         noticeHiringDateWrong.hide();
-        //if (!(dstartDate.getDate() === 1 || dstartDate.getDate() === 15))
-        //    noticeHiringDateWrong.show();
-
+       
         if (dstartDate.valueOf() < now.valueOf())
             noticeHiringDate.show();
-
-        //if (!(dstartDate.getDate() === 1 || dstartDate.getDate() === 15) && (dstartDate.valueOf() < now.valueOf())) {
-        //    noticeHiringDateWrong.show();
-        //    noticeHiringDate.show();
-        //}
     });
 
 </script>

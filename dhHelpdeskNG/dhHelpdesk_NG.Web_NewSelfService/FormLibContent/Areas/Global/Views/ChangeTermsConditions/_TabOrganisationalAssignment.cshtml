@@ -2,6 +2,12 @@
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
 
+
+@{
+    var fillOldVal = TempData["oldValues"];
+    var newfill = (List<KeyValuePair<string, string>>)fillOldVal;
+}
+
 <div class="tab-pane" id="OrganisationalAssignment">
     <div class="span8">
         <table class="table">
@@ -13,38 +19,59 @@
                 <tr>
                     <td class="tdstrong">@Model.Label("Country")</td>
                     <td>@Model.Element("Country")</td>
-                    <td></td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_Country" name="OLD_Country" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_Country").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_Country">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_Country").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("Company")</td>
                     <td>@Model.Element("Company")</td>
-                    <td></td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_Company" name="OLD_Company" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_Company").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_Company">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_Company").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("NewBusinessUnit")</td>
                     <td>@Model.Element("NewBusinessUnit")</td>
-                    <td></td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_NewBusinessUnit" name="OLD_NewBusinessUnit" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_NewBusinessUnit").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_NewBusinessUnit">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_NewBusinessUnit").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
                 </tr>
                
                 <tr>
                     <td class="tdstrong">@Model.Label("NewDepartment")</td>
                     <td>@Model.Element("NewDepartment")</td>
-                    <td></td>
+                    <td>
+                         <input type="hidden" class="oldValue"  id="OLD_NewDepartment" name="OLD_NewDepartment" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_NewDepartment").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_NewDepartment">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_NewDepartment").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
                 </tr>
                 <tr>
-                    <td class="tdstrong">@Model.Label("HomeCostCentre")</td>
-                    <td>@Model.Element("HomeCostCentre")</td>
-                    <td></td>
+                    <td class="tdstrong">@Model.Label("HomeCostCenter")</td>
+                    <td>@Model.Element("HomeCostCenter")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_HomeCostCenter" name="OLD_HomeCostCenter" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_HomeCostCenter").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_HomeCostCenter">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_HomeCostCenter").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("CostAllocation")</td>
                     <td>@Model.Element("CostAllocation")</td>
-                    <td></td>
+                    <td>
+                        @*<input type="hidden" class="oldValue"  id="OLD_CostAllocation" name="OLD_CostAllocation" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_CostAllocation").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_CostAllocation">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_CostAllocation").Select(x => x.Value).FirstOrDefault() : "")</em>*@
+                    </td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("CrossChargeCostCentre")</td>
                     <td>@Model.Element("CrossChargeCostCentre")</td>
-                    <td></td>
+                    <td>
+                         <input type="hidden" class="oldValue"  id="OLD_CrossChargeCostCentre" name="OLD_CrossChargeCostCentre" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_CrossChargeCostCentre").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_CrossChargeCostCentre">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_CrossChargeCostCentre").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
                 </tr>
                 <tr>
                     <td class="tdstrong" colspan="2"><h4>@Model.Translate("Job")</h4></td>
@@ -53,12 +80,18 @@
                 <tr>
                     <td class="tdstrong">@Model.Label("JobTitle")</td>
                     <td>@Model.Element("JobTitle")</td>
-                    <td></td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_JobTitle" name="OLD_JobTitle" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_JobTitle").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_JobTitle">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_JobTitle").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("LocalJobTitle")</td>
                     <td>@Model.Element("LocalJobTitle")</td>
-                    <td></td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_LocalJobTitle" name="OLD_LocalJobTitle" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_LocalJobTitle").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_LocalJobTitle">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_LocalJobTitle").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("NewPosition")</td>
@@ -68,7 +101,10 @@
                 <tr>
                     <td class="tdstrong">@Model.Label("ReportsToLineManager")</td>
                     <td>@Model.Element("ReportsToLineManager")</td>
-                    <td></td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_ReportsToLineManager" name="OLD_ReportsToLineManager" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_ReportsToLineManager").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_ReportsToLineManager">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_ReportsToLineManager").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
                 </tr>
 @*            </tbody>
         </table>
@@ -83,12 +119,18 @@
                 <tr>
                     <td class="tdstrong">@Model.Label("EmploymentCategory")</td>
                     <td>@Model.Element("EmploymentCategory")</td>
-                    <td></td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_EmploymentCategory" name="OLD_EmploymentCategory" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_EmploymentCategory").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_EmploymentCategory">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_EmploymentCategory").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("ContractedHours")</td>
                     <td>@Model.Element("ContractedHours")</td>
-                    <td></td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_ContractedHours" name="OLD_ContractedHours" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_ContractedHours").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_ContractedHours">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_ContractedHours").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("ContractType")</td>
@@ -151,6 +193,26 @@
     }
     document.getElementById('ProbationPeriod').onchange = selectIndexChangeProbationPeriod;
 
-  
+
+    //var iconFlag = '<i class="icon-flag"></i>';
+    //var elemOld = $('input[name^="OLD_"]');
+    //var elem = new Array();
+
+    //elemOld.each(function (e) {
+    //    var $this = $(this);
+    //    var $that = $('#' + $this.attr('id').replace('OLD_', ''));
+    //    $this.parent().find('.icon-flag').remove();
+    //    if ($that.val() !== $this.val() && $this.parent().find('.icon-flag').length == 0)
+    //        $this.parent().prepend($(iconFlag));
+
+    //    $that.keyup(function (e) {
+    //        var old = $('#OLD_' + $(this).attr('id'));
+    //        old.parent().find('.icon-flag').remove();
+
+    //        if ($(this).val() !== old.val() && old.parent().find('.icon-flag').length == 0)
+    //            old.parent().prepend($(iconFlag));
+
+    //    });
+    //});
 
 </script>

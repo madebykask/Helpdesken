@@ -23,7 +23,7 @@
         <readOnlyFields>BusinessUnit,Department</readOnlyFields>
         <actions>
             <action status="20" internal-val="20" text="Submit to HR Unit">
-                <validateTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</validateTabs>
+                <validateTabs>#ServiceRequestDetails,#OrganisationalAssignment</validateTabs>
             </action>
             <action status="99" internal-val="70" text="Cancel Service request"></action>
         </actions>

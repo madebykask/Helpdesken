@@ -16,10 +16,8 @@
         <regex inherit="employeeno" message="" pattern=""></regex>
       </element>
       <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1">
-        <regex inherit="alphaCharachter" message="" pattern=""></regex>
       </element>
       <element name="LastName" type="text" label="Co-Worker Last name" mandatory="1">
-        <regex inherit="alphaCharachter" message="" pattern=""></regex>
       </element>
       <element name="IKEAEmailAddress" type="text" label="IKEA Email Address" mandatory="1">
         <regex inherit="email" message="" pattern=""></regex>

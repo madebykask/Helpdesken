@@ -37,7 +37,7 @@
     </status>
     <!-- SSC -->
     <status value="30">
-        <visibleTabs>#ServiceRequestDetails,#Absences</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Absences,#SscUseOnly</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Absences</readOnlyTabs>
         <readOnlyFields>Department,BusinessUnit</readOnlyFields>
         <actions>
@@ -50,7 +50,7 @@
     </status>
     <!-- SSC -->
     <status value="40">
-        <visibleTabs>#ServiceRequestDetails,#Absences</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Absences,#SscUseOnly</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Absences</readOnlyTabs>
         <readOnlyFields>Department,BusinessUnit</readOnlyFields>
         <actions>
@@ -60,7 +60,7 @@
     </status>
     <!-- SSC -->
     <status value="60">
-        <visibleTabs>#ServiceRequestDetails,#Absences</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Absences,#SscUseOnly</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Absences</readOnlyTabs>
         <readOnlyFields>Department,BusinessUnit</readOnlyFields>
     </status>

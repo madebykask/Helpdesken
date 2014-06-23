@@ -55,7 +55,7 @@
           <option value="Pension">Pension</option>
         </options>
       </element>
-      <element type="select" name="PaymentType" label="Payment Type" mandatory="1">
+      <element type="select" name="PaymentType" label="Payment Type">
         <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>
@@ -63,11 +63,11 @@
           <option value="Recurring">Recurring</option>        
         </options>
       </element>
-      <element type="text" name="DeductionsAmountUnits" label="Amount/Units" mandatory="1">
+      <element type="text" name="DeductionsAmountUnits" label="Amount/Units">
         <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
         <regex inherit="unsignednum" message="" pattern=""></regex>
       </element>
-      <element type="select" name="DeductionsNetGross" label="Net/Gross" mandatory="1">
+      <element type="select" name="DeductionsNetGross" label="Net/Gross">
         <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>
@@ -75,12 +75,12 @@
           <option value="Gross">Gross</option>
         </options>
       </element>
-      <element type="date" name="DeductionsValidFrom" label="Valid from:" format="dd.MM.yyyy" mandatory="1">
+      <element type="date" name="DeductionsValidFrom" label="Valid from:" format="dd.MM.yyyy" >
         <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
         <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element type="date" name="DeductionsValidTo" label="Valid to:" default="31.12.9999" format="dd.MM.yyyy" mandatory="1">
+      <element type="date" name="DeductionsValidTo" label="Valid to:" default="31.12.9999" format="dd.MM.yyyy">
         <laterThanOrEqual name="DeductionsValidFrom"></laterThanOrEqual>
         <mandatoryIf name="PaymentType">Recurring</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>

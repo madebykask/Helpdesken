@@ -1209,7 +1209,7 @@
           <option value="Zimbabwe">Zimbabwe</option>
         </options>
       </element>
-      <element type="text" name="EmployeeDocumentNo" label="Document No"></element>
+      <element type="text" name="EmployeeDocumentNo" label="Document No."></element>
       <element type="date" name="EmployeeDocumentIssueDate" label="Issue Date" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>

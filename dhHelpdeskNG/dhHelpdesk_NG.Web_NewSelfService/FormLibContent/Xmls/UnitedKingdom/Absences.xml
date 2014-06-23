@@ -5,7 +5,7 @@
   <!ENTITY state SYSTEM "Templates/AbsencesState.xml">
 ]>
 
-<form id="47" guid="F201E255-F79B-44F5-9BC3-C7F07E1B5351" customerId="28">
+<form id="111" guid="2EE3E70E-1E67-4694-BC1F-0FD0C38AE61F" customerId="30">
   &languages;
   &regexs;
   &state;
@@ -17,12 +17,17 @@
       </element>
       <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1"></element>
       <element name="LastName" type="text" label="Co-Worker Last name" mandatory="1"></element>
-      <element name="IKEAEmailAddress" type="text" label="IKEA Email Address" mandatory="1"></element>
-      <element name="IKEANetworkID" type="text"  label="IKEA Network ID" mandatory="1"></element>
+      <element name="IKEAEmailAddress" type="text" label="IKEA Email Address" mandatory="1">
+        <regex inherit="email" pattern="" message=""></regex>
+      </element>
+      <element name="IKEANetworkID" type="text"  label="IKEA Network ID" mandatory="1">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
       <element name="BusinessUnit" type="text" label="Business Unit"></element>
       <element name="Department" type="text" label="Department"></element>
       <element name="TECoWorker" type="select" label="Is Co-Worker a TE?" mandatory="1">
         <options>
+          <option value=""></option>
           <option value ="No">No</option>
           <option value ="Yes">Yes</option>
         </options>
@@ -41,7 +46,7 @@
 
     <!--Absences-->
     <tab name="#Absences" label="Absences">
-      <element name="Absences" type="hidden" default="1"></element>
+      <element name="AbsencesMulti" type="hidden" default="1"></element>
       <element name="AbsenceType" type="select" label="Absence Type" mandatory="1">
         <options>
           <option value=""></option>
@@ -56,8 +61,10 @@
       <element name="ExpectedDateChildBirth" type="date" format="dd.MM.yyyy" label="Expected date of child's birth">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element name="Seniority" type="select" label="Absence Type" mandatory="1">
+      <element name="Seniority" type="select" label="Seniority" >
+        <mandatoryIfNotEmpty name="AbsenceType"></mandatoryIfNotEmpty>
         <options>
+          <option value=""></option>
           <option value="﻿Under 26 weeks">﻿Under 26 weeks</option>
           <option value="26 weeks - 1 year">26 weeks - 1 year</option>
           <option value="1 - 2 years">1 - 2 years</option>
@@ -88,8 +95,10 @@
       <element name="ExpectedDateChildBirth2" type="date" format="dd.MM.yyyy" label="Expected date of child's birth">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element name="Seniority2" type="select" label="Absence Type" mandatory="1">
+      <element name="Seniority2" type="select" label="Seniority">
+        <mandatoryIfNotEmpty name="AbsenceType2"></mandatoryIfNotEmpty>
         <options>
+          <option value=""></option>
           <option value="﻿Under 26 weeks">﻿Under 26 weeks</option>
           <option value="26 weeks - 1 year">26 weeks - 1 year</option>
           <option value="1 - 2 years">1 - 2 years</option>
@@ -126,8 +135,10 @@
       <element name="ExpectedDateChildBirth3" type="date" format="dd.MM.yyyy" label="Expected date of child's birth">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element name="Seniority3" type="select" label="Absence Type" mandatory="1">
+      <element name="Seniority3" type="select" label="Seniority">
+        <mandatoryIfNotEmpty name="AbsenceType3"></mandatoryIfNotEmpty>
         <options>
+          <option value=""></option>
           <option value="﻿Under 26 weeks">﻿Under 26 weeks</option>
           <option value="26 weeks - 1 year">26 weeks - 1 year</option>
           <option value="1 - 2 years">1 - 2 years</option>
@@ -164,8 +175,10 @@
       <element name="ExpectedDateChildBirth4" type="date" format="dd.MM.yyyy" label="Expected date of child's birth">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element name="Seniority4" type="select" label="Absence Type" mandatory="1">
+      <element name="Seniority4" type="select" label="Seniority">
+        <mandatoryIfNotEmpty name="AbsenceType4"></mandatoryIfNotEmpty>
         <options>
+          <option value=""></option>
           <option value="﻿Under 26 weeks">﻿Under 26 weeks</option>
           <option value="26 weeks - 1 year">26 weeks - 1 year</option>
           <option value="1 - 2 years">1 - 2 years</option>
@@ -276,12 +289,10 @@
       <element name="EndsOn3" type="date" format="dd.MM.yyyy"  label="Ends on:">
         <laterThanOrEqual name="StartFrom3"></laterThanOrEqual>
         <mandatoryIf name ="CommutingType3" >Business Trip,Home Leave,Vacation</mandatoryIf>
-
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element  name="DestinationCountry3" type="text" label="Destination Country">
         <mandatoryIf name ="CommutingType3" >Business Trip,Home Leave,Vacation</mandatoryIf>
-
       </element>
       <element  name="TaxRelevant3" type="select" label="Tax Relevant">
         <mandatoryIf name ="CommutingType3" >Business Trip,Home Leave,Vacation</mandatoryIf>

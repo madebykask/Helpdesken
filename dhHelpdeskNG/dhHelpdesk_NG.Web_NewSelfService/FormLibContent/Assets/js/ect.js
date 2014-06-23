@@ -217,6 +217,27 @@ var globalTypeAheadOptions = {
             notice.show();
         }
 
+        $.ajax({
+            url: site.baseUrl + '/search/EmployeesExtendedInfo',
+            type: 'post',
+            data: { formGuid: $('#formGuid').val(), employeenumber: item.num },
+            dataType: 'json',
+            success: function (result) {
+                var resultList = jQuery.map(result, function (extendeditem) {                   
+                    var type = $('#' + extendeditem.FormFieldName).attr('type');
+                    if (type != 'text') {
+                        //$('#' + extendeditem.FormFieldName).append($('<option value="' + extendeditem.FormFieldValue +
+                        //    '">' + extendeditem.FormFieldValue + '</option>'));
+                        $('#' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
+                    }
+                        
+                    $('input[name="' + extendeditem.FormFieldName + '"]').val(extendeditem.FormFieldValue);
+                    $('#emOLD_' + extendeditem.FormFieldName).text(extendeditem.FormFieldValue);
+                    $('#OLD_' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);                            
+                });
+            }
+        });
+
         $('input[name="BusinessUnit"]').val(item.unit);
         $('#emOLD_BusinessUnit').text(item.unit);
         $('#OLD_BusinessUnit').val(item.unit);
@@ -318,13 +339,53 @@ var globalEmailTypeAheadOptions = {
             notice.show();
         }
 
+        $.ajax({
+            url: site.baseUrl + '/search/EmployeesExtendedInfo',
+            type: 'post',
+            data: { formGuid: $('#formGuid').val(), employeenumber: item.num },
+            dataType: 'json',
+            success: function (result) {
+                var resultList = jQuery.map(result, function (extendeditem) {
+                    var type = $('#' + extendeditem.FormFieldName).attr('type');
+                    if (type != 'text') {
+                        //$('#' + extendeditem.FormFieldName).append($('<option value="' + extendeditem.FormFieldValue +
+                        //    '">' + extendeditem.FormFieldValue + '</option>'));
+                        $('#' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
+                    }
+
+                    $('input[name="' + extendeditem.FormFieldName + '"]').val(extendeditem.FormFieldValue);
+                    $('#emOLD_' + extendeditem.FormFieldName).text(extendeditem.FormFieldValue);
+                    $('#OLD_' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
+                });
+            }
+        });
+
+
         $('input[name="Co-WorkerGlobalviewID"]').val(item.num);
+
         $('input[name="BusinessUnit"]').val(item.unit);
+        $('#emOLD_BusinessUnit').text(item.unit);
+        $('#OLD_BusinessUnit').val(item.unit);
+
         $('input[name="Department"]').val(item.company);
+        $('#emOLD_Department').text(item.company);
+        $('#OLD_Department').val(item.company);
+
         $('input[name="FirstName"]').val(item.firstname);
+        $('#emOLD_FirstName').text(item.firstname);
+        $('#OLD_FirstName').val(item.firstname);
+
         $('input[name="LastName"]').val(item.lastname);
+        $('#emOLD_LastName').text(item.lastname);
+        $('#OLD_LastName').val(item.lastname);
+
         $('input[name="IKEAEmailAddress"]').val(item.email);
+        $('#emOLD_IKEAEmailAddress').text(item.email);
+        $('#OLD_IKEAEmailAddress').val(item.email);
+
         $('input[name="IKEANetworkID"]').val(item.num);
+        $('#emOLD_IKEANetworkID').text(item.num);
+        $('#OLD_IKEANetworkID').val(item.num);
 
         return item.email;
     }
@@ -402,13 +463,52 @@ var globalNameTypeAheadOptions = {
             notice.show();
         }
 
+        $.ajax({
+            url: site.baseUrl + '/search/EmployeesExtendedInfo',
+            type: 'post',
+            data: { formGuid: $('#formGuid').val(), employeenumber: item.num },
+            dataType: 'json',
+            success: function (result) {
+                var resultList = jQuery.map(result, function (extendeditem) {
+                    var type = $('#' + extendeditem.FormFieldName).attr('type');
+                    if (type != 'text') {
+                        //$('#' + extendeditem.FormFieldName).append($('<option value="' + extendeditem.FormFieldValue +
+                        //    '">' + extendeditem.FormFieldValue + '</option>'));
+                        $('#' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
+                    }
+
+                    $('input[name="' + extendeditem.FormFieldName + '"]').val(extendeditem.FormFieldValue);
+                    $('#emOLD_' + extendeditem.FormFieldName).text(extendeditem.FormFieldValue);
+                    $('#OLD_' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
+                });
+            }
+        });
+
         $('input[name="Co-WorkerGlobalviewID"]').val(item.num);
+        
         $('input[name="BusinessUnit"]').val(item.unit);
+        $('#emOLD_BusinessUnit').text(item.unit);
+        $('#OLD_BusinessUnit').val(item.unit);
+
         $('input[name="Department"]').val(item.company);
+        $('#emOLD_Department').text(item.company);
+        $('#OLD_Department').val(item.company);
+
         $('input[name="FirstName"]').val(item.firstname);
+        $('#emOLD_FirstName').text(item.firstname);
+        $('#OLD_FirstName').val(item.firstname);
+
         $('input[name="LastName"]').val(item.lastname);
+        $('#emOLD_LastName').text(item.lastname);
+        $('#OLD_LastName').val(item.lastname);
+
         $('input[name="IKEAEmailAddress"]').val(item.email);
+        $('#emOLD_IKEAEmailAddress').text(item.email);
+        $('#OLD_IKEAEmailAddress').val(item.email);
+
         $('input[name="IKEANetworkID"]').val(item.num);
+        $('#emOLD_IKEANetworkID').text(item.num);
+        $('#OLD_IKEANetworkID').val(item.num);
 
 
         return item.firstname;
@@ -487,13 +587,54 @@ var globalLastNameTypeAheadOptions = {
             notice.show();
         }
 
+
+        $.ajax({
+            url: site.baseUrl + '/search/EmployeesExtendedInfo',
+            type: 'post',
+            data: { formGuid: $('#formGuid').val(), employeenumber: item.num },
+            dataType: 'json',
+            success: function (result) {
+                var resultList = jQuery.map(result, function (extendeditem) {
+                    var type = $('#' + extendeditem.FormFieldName).attr('type');
+                    if (type != 'text') {
+                        //$('#' + extendeditem.FormFieldName).append($('<option value="' + extendeditem.FormFieldValue +
+                        //    '">' + extendeditem.FormFieldValue + '</option>'));
+                        $('#' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
+                    }
+
+                    $('input[name="' + extendeditem.FormFieldName + '"]').val(extendeditem.FormFieldValue);
+                    $('#emOLD_' + extendeditem.FormFieldName).text(extendeditem.FormFieldValue);
+                    $('#OLD_' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
+                });
+            }
+        });
+
+
         $('input[name="Co-WorkerGlobalviewID"]').val(item.num);
+
         $('input[name="BusinessUnit"]').val(item.unit);
+        $('#emOLD_BusinessUnit').text(item.unit);
+        $('#OLD_BusinessUnit').val(item.unit);
+
         $('input[name="Department"]').val(item.company);
+        $('#emOLD_Department').text(item.company);
+        $('#OLD_Department').val(item.company);
+
         $('input[name="FirstName"]').val(item.firstname);
+        $('#emOLD_FirstName').text(item.firstname);
+        $('#OLD_FirstName').val(item.firstname);
+
         $('input[name="LastName"]').val(item.lastname);
+        $('#emOLD_LastName').text(item.lastname);
+        $('#OLD_LastName').val(item.lastname);
+
         $('input[name="IKEAEmailAddress"]').val(item.email);
+        $('#emOLD_IKEAEmailAddress').text(item.email);
+        $('#OLD_IKEAEmailAddress').val(item.email);
+
         $('input[name="IKEANetworkID"]').val(item.num);
+        $('#emOLD_IKEANetworkID').text(item.num);
+        $('#OLD_IKEANetworkID').val(item.num);
 
 
         return item.lastname;
