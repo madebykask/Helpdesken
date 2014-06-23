@@ -636,7 +636,7 @@
 
             if (settings.General.Administrator.Show)
             {
-                administrators = this.userRepository.FindActiveOverviews(customerId);
+                administrators = this.userRepository.FindUsersWithPermissionsForCustomers(new[] { customerId });
             }
 
             if (settings.Analyze.Logs.Show || settings.Implementation.Logs.Show || settings.Evaluation.Logs.Show)
