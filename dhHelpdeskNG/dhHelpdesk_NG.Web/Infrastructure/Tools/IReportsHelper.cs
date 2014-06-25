@@ -35,6 +35,17 @@
                             RegistratedCasesDayItem[] items,
                             out ReportFile file);
 
+       void CreateAverageSolutionTimeReport(
+                            ItemOverview customer,
+                            ItemOverview report,
+                            ItemOverview department,
+                            IEnumerable<ItemOverview> caseTypes,
+                            ItemOverview workingGroup,
+                            DateTime periodFrom,
+                            DateTime periodUntil,
+                            bool isPrint,
+                            out ReportFile file);
+
         byte[] GetReportImageFromCache(string objectId, string fileName);
 
         string GetReportPathFromCache(string objectId, string fileName);

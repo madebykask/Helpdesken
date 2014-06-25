@@ -29,5 +29,15 @@
                                                     int? workingGroupId,
                                                     int? administrator,
                                                     DateTime period);
+
+        AverageSolutionTimeOptionsResponse GetAverageSolutionTimeOptionsResponse(OperationContext context);
+
+        AverageSolutionTimeReportResponse GetAverageSolutionTimeReportResponse(
+                                                    OperationContext context,
+                                                    int? departmentId,
+                                                    int[] caseTypesIds,
+                                                    int? workingGroupId,
+                                                    DateTime periodFrom,
+                                                    DateTime periodUntil);
     }
 }

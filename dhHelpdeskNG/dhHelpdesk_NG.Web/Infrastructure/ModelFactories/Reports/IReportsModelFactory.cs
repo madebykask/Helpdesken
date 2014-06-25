@@ -24,5 +24,11 @@
         RegistratedCasesDayReport CreateRegistratedCasesDayReport(
                                 RegistratedCasesDayOptions options,
                                 OperationContext context);
+
+        AverageSolutionTimeOptions CreateAverageSolutionTimeOptions(OperationContext context);
+
+        AverageSolutionTimeReport CreateAverageSolutionTimeReport(
+                                AverageSolutionTimeOptions options,
+                                OperationContext context);
     }
 }

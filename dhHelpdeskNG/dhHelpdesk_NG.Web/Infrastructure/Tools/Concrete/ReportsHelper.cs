@@ -118,6 +118,41 @@
                             isPrint ? this.GetReportPathFromCache(objectId, fileName) : fileName);
         }
 
+        public void CreateAverageSolutionTimeReport(
+            ItemOverview customer,
+            ItemOverview report,
+            ItemOverview department,
+            IEnumerable<ItemOverview> caseTypes,
+            ItemOverview workingGroup,
+            DateTime periodFrom,
+            DateTime periodUntil,
+            bool isPrint,
+            out ReportFile file)
+        {
+            var from = periodFrom.RoundToMonth();
+            var until = periodUntil.RoundToMonth();
+
+            var x = new List<string>();
+            var y = new List<string>();
+            while (from <= until)
+            {
+                x.Add(from.ToMonthYear());
+                y.Add("1");
+                from = from.AddMonths(1);
+            }
+
+            var chart = this.CreateChart()
+                .AddSeries(
+                        xValue: x,
+                        yValues: y);
+            string objectId;
+            string fileName;
+            this.SaveToCache(chart, out objectId, out fileName);
+            file = new ReportFile(
+                            objectId,
+                            isPrint ? this.GetReportPathFromCache(objectId, fileName) : fileName);
+        }
+
         public byte[] GetReportImageFromCache(string objectId, string fileName)
         {
             return this.temporaryFilesCache.GetFileContent(fileName, objectId);

@@ -639,6 +639,8 @@
     <Compile Include="Models\Inventory\SearchModels\InventoryReportSearchViewModel.cs" />
     <Compile Include="Models\Inventory\SearchModels\ReportsSearchFilter.cs" />
     <Compile Include="Models\Inventory\SearchModels\ReportsSearchViewModel.cs" />
+    <Compile Include="Models\Reports\AverageSolutionTimeOptions.cs" />
+    <Compile Include="Models\Reports\AverageSolutionTimeReport.cs" />
     <Compile Include="Models\Reports\IndexModel.cs" />
     <Compile Include="Models\Reports\RegistratedCasesCaseTypeOptions.cs" />
     <Compile Include="Models\Reports\RegistratedCasesCaseTypeReport.cs" />
@@ -1500,6 +1502,9 @@
     <Content Include="Views\InventorySettings\EditorTemplates\Settings\NewInventoryFieldSettingModel.cshtml" />
     <Content Include="Views\InventorySettings\NewInventorySettings.cshtml" />
     <Content Include="Views\InventorySettings\EmptyInventorySettings.cshtml" />
+    <Content Include="Views\Reports\AverageSolutionTimeOptions.cshtml" />
+    <Content Include="Views\Reports\AverageSolutionTimePrint.cshtml" />
+    <Content Include="Views\Reports\AverageSolutionTimeView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

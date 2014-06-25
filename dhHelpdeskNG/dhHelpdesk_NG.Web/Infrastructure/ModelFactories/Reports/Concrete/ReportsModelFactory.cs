@@ -154,6 +154,56 @@
             return instance;
         }
 
+        public AverageSolutionTimeOptions CreateAverageSolutionTimeOptions(OperationContext context)
+        {
+            var response = this.reportsService.GetAverageSolutionTimeOptionsResponse(context);
+            var departments = CreateListField(response.Departments, true);
+            var caseTypes = CreateMultiSelectField(response.CaseTypes);
+            var workingGroups = CreateListField(response.WorkingGroups, true);
+            var today = DateTime.Today;
+            var instance = new AverageSolutionTimeOptions(
+                            departments,
+                            caseTypes,
+                            workingGroups,
+                            today,
+                            today);
+            return instance;
+        }
+
+        public AverageSolutionTimeReport CreateAverageSolutionTimeReport(AverageSolutionTimeOptions options, OperationContext context)
+        {
+            var response = this.reportsService.GetAverageSolutionTimeReportResponse(
+                            context,
+                            options.DepartmentId,
+                            options.CaseTypeIds.ToArray(),
+                            options.WorkingGroupId,
+                            options.PeriodFrom,
+                            options.PeriodUntil);
+
+            ReportFile file;
+            this.reportsHelper.CreateAverageSolutionTimeReport(
+                                        response.Customer,
+                                        response.ReportType,
+                                        response.Department,
+                                        response.CaseTypes,
+                                        response.WorkingGroup,
+                                        options.PeriodFrom,
+                                        options.PeriodUntil,
+                                        options.IsPrint,
+                                        out file);
+
+            var instance = new AverageSolutionTimeReport(
+                                    response.Customer,
+                                    response.ReportType,
+                                    response.Department,
+                                    options.CaseTypeIds != null && options.CaseTypeIds.Any() ? response.CaseTypes : null,
+                                    response.WorkingGroup,
+                                    options.PeriodFrom,
+                                    options.PeriodUntil,
+                                    file);
+            return instance;
+        }
+
         private static SelectList CreateListField(
             IEnumerable<ItemOverview> items,
             int selectedId)

@@ -83,6 +83,10 @@
                     return this.PartialView(
                                 "RegistratedCasesDayOptions", 
                                 this.reportsModelFactory.CreateRegistratedCasesDayOptions(this.OperationContext));
+                case ReportType.AverageSolutionTime:                    
+                    return this.PartialView(
+                                "AverageSolutionTimeOptions",
+                                this.reportsModelFactory.CreateAverageSolutionTimeOptions(this.OperationContext));
             }
 
             return null;
@@ -114,6 +118,20 @@
             }
 
             return this.PartialView("RegistratedCasesDayView", model);
+        }
+
+        [HttpPost]
+        [BadRequestOnNotValid]
+        public ActionResult AverageSolutionTime(AverageSolutionTimeOptions options)
+        {
+            var model = this.reportsModelFactory.CreateAverageSolutionTimeReport(options, this.OperationContext);
+
+            if (options.IsPrint)
+            {
+                return new PrintPdfResult(model, "AverageSolutionTimePrint");
+            }
+
+            return this.PartialView("AverageSolutionTimeView", model);
         }
 
         [HttpGet]

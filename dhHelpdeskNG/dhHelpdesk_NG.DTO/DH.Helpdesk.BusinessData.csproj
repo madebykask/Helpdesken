@@ -165,6 +165,8 @@
     <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ComputerSettings\ModelEditFieldSetting.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ComputerSettings\OperatingSystemFieldsSettings.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ComputerSettings\ProcessorFieldsSettings.cs" />
+    <Compile Include="Models\Reports\Output\AverageSolutionTimeOptionsResponse.cs" />
+    <Compile Include="Models\Reports\Output\AverageSolutionTimeReportResponse.cs" />
     <Compile Include="Models\Reports\Output\RegistratedCasesCaseTypeItem.cs" />
     <Compile Include="Models\Reports\Output\RegistratedCasesCaseTypeReportResponse.cs" />
     <Compile Include="Models\Inventory\ReportModel.cs" />

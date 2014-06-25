@@ -145,5 +145,42 @@
                                             administrator,
                                             items);
         }
+
+        public AverageSolutionTimeOptionsResponse GetAverageSolutionTimeOptionsResponse(OperationContext context)
+        {
+            var departments = this.departmentService.FindActiveOverviews(context.CustomerId);
+            var caseTypes = this.caseTypeService.GetOverviews(context.CustomerId);
+            var workingGroups = this.workingGroupService.GetOverviews(context.CustomerId);
+
+            return new AverageSolutionTimeOptionsResponse(
+                                                        departments,
+                                                        caseTypes,
+                                                        workingGroups);
+        }
+
+        public AverageSolutionTimeReportResponse GetAverageSolutionTimeReportResponse(
+                                            OperationContext context,
+                                            int? departmentId,
+                                            int[] caseTypesIds,
+                                            int? workingGroupId,
+                                            DateTime periodFrom,
+                                            DateTime periodUntil)
+        {
+            var customer = this.customerRepository.GetOverview(context.CustomerId);
+            var report = this.reportCustomerRepository.GetOverview(context.CustomerId, ReportType.RegistratedCasesDay);
+            var department = departmentId.HasValue ?
+                            this.departmentService.FindActiveOverview(departmentId.Value) :
+                            ItemOverview.CreateEmpty();
+            var caseTypes = this.caseTypeService.GetOverviews(context.CustomerId, caseTypesIds);
+            var workingGroup = workingGroupId.HasValue ?
+                            this.workingGroupService.GetOverviews(context.CustomerId, new[] { workingGroupId.Value }).FirstOrDefault() :
+                            ItemOverview.CreateEmpty();
+            return new AverageSolutionTimeReportResponse(
+                                            customer,
+                                            report,
+                                            department,
+                                            caseTypes,
+                                            workingGroup);
+        }
     }
 }
