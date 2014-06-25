@@ -1117,6 +1117,7 @@
     <Content Include="FormLibContent\Areas\UnitedKingdom\Views\Hiring\_TabDocuments.cshtml" />
     <Content Include="FormLibContent\Areas\UnitedKingdom\Views\Hiring\_TabSsc.cshtml" />
     <Content Include="FormLibContent\Areas\Netherlands\Views\TerminationBasic\_TabComplete.cshtml" />
+    <None Include="Properties\PublishProfiles\DH Dev.pubxml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.SelfService.Release.pubxml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.SelfService.Release_AL.pubxml" />
     <Content Include="Views\Documents\Index.cshtml" />
