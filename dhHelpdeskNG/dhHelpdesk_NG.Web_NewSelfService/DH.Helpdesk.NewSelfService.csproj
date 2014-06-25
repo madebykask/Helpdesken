@@ -640,6 +640,7 @@
     <Content Include="FormLibContent\Xmls\Netherlands\HiringBasic.xml" />
     <Content Include="FormLibContent\Xmls\Netherlands\I18n.xml" />
     <Content Include="FormLibContent\Xmls\Netherlands\IndividualAdvancePaymentsLoans.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\NewHireNotShowingUp.xml" />
     <Content Include="FormLibContent\Xmls\Netherlands\PersonalInformation.xml" />
     <Content Include="FormLibContent\Xmls\Netherlands\Templates\AbsencesState.xml" />
     <Content Include="FormLibContent\Xmls\Netherlands\Templates\AdditionalPaymentsDeductionState.xml" />
@@ -649,6 +650,7 @@
     <Content Include="FormLibContent\Xmls\Netherlands\Templates\HiringState.xml" />
     <Content Include="FormLibContent\Xmls\Netherlands\Templates\IndividualAdvancePaymentsLoansState.xml" />
     <Content Include="FormLibContent\Xmls\Netherlands\Templates\Languages.xml" />
+    <Content Include="FormLibContent\Xmls\Netherlands\Templates\NewHireNotShowingUpState.xml" />
     <Content Include="FormLibContent\Xmls\Netherlands\Templates\PersonalInformationState.xml" />
     <Content Include="FormLibContent\Xmls\Netherlands\Templates\Predefined_Allowances2_NetGross2.xml" />
     <Content Include="FormLibContent\Xmls\Netherlands\Templates\Predefined_Allowances3_NetGross3.xml" />
@@ -724,10 +726,25 @@
     <Content Include="FormLibContent\Xmls\Poland\Templates\TerminationState.xml" />
     <Content Include="FormLibContent\Xmls\Poland\Termination.xml" />
     <Content Include="FormLibContent\Xmls\Shared\SharedData.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\Absences.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\AdditionalPaymentsDeduction.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\ChangeTermsConditions.xml" />
     <Content Include="FormLibContent\Xmls\UnitedKingdom\Hiring.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\HiringBasic.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\NewHireNotShowingUp.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\PersonalInformation.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\Templates\AbsencesState.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\Templates\AdditionalPaymentsDeductionState.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\Templates\ChangeTermsConditionsState.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\Templates\HiringBasicOneState.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\Templates\HiringBasicState.xml" />
     <Content Include="FormLibContent\Xmls\UnitedKingdom\Templates\HiringState.xml" />
     <Content Include="FormLibContent\Xmls\UnitedKingdom\Templates\Languages.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\Templates\NewHireNotShowingUpState.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\Templates\PersonalInformationState.xml" />
     <Content Include="FormLibContent\Xmls\UnitedKingdom\Templates\Regexs.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\Templates\VoluntaryDeductionsState.xml" />
+    <Content Include="FormLibContent\Xmls\UnitedKingdom\VoluntaryDeductions.xml" />
     <Content Include="Global.asax" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -1092,6 +1109,7 @@
     <Content Include="FormLibContent\Areas\UnitedKingdom\Views\VoluntaryDeductions\_TabPayment.cshtml" />
     <Content Include="FormLibContent\Areas\UnitedKingdom\Views\VoluntaryDeductions\_TabServiceRequestDetails.cshtml" />
     <Content Include="FormLibContent\Areas\UnitedKingdom\Views\Hiring\_TabDocuments.cshtml" />
+    <Content Include="FormLibContent\Areas\UnitedKingdom\Views\Hiring\_TabSsc.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.SelfService.Release.pubxml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.SelfService.Release_AL.pubxml" />
     <Content Include="Views\Documents\Index.cshtml" />

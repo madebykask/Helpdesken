@@ -2,6 +2,13 @@
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
 
+@{
+    const string CompanyName = "IKEA Distribution Services Limited";
+    const string PartTime = "Part Time";
+    const string FullTime = "Full Time";
+    const string ZeroHours = "Zero Hours";
+}
+
 <div class="tab-pane" id="OrganisationalAssignment">
     <div class="span5">
         <table class="table">
@@ -132,16 +139,54 @@
 
 <script>
 
-    function selectIndexChangeProbationPeriod() {
-        if ((this.options[this.selectedIndex].value == 'Not Applicable') || (this.options[this.selectedIndex].value == 'No')) {
-            document.getElementById('ProbationEndDate').disabled = true;
-        } else {
-            document.getElementById('ProbationEndDate').disabled = false;
+    $(function () {
+
+        $('#ContractedHours').on("input", function () {
+            var value = $(this).val();
+
+            if (value >= 16 && value <= 38) {
+                $('#ContractType option[value="' + '@PartTime' + '"]').prop('selected', true);
+            }
+            else if (value >= 39 && value <= 40) {
+                $('#ContractType option[value="' + '@FullTime' + '"]').prop('selected', true);
+            }
+            else if (value == "0") {
+                $('#ContractType option[value="' + '@ZeroHours' + '"]').prop('selected', true);
+            }
+            else {
+                $('#ContractType option:not([value])').prop('selected', true);
+            }
+        });
+
+        $('#Company').change(function () {
+            var value = $(this).val();
+
+            if (value != '@CompanyName') {
+                $('#CostAllocation, #CrossChargeCostCentre').prop('disabled', true);
+            }
+            else {
+                $('#CostAllocation, #CrossChargeCostCentre').prop('disabled', false);
+            }
+        });
+
+        $('#ReportsToLineManager').change(function () {
+            ('#TECApprover').val($(this).val());
+        });
+
+        $('#BusinessUnit').change(function () {
+            ('#PrimarySite').val($(this).val());
+        });
+                       
+        function selectIndexChangeProbationPeriod() {
+            if ((this.options[this.selectedIndex].value == 'Not Applicable') || (this.options[this.selectedIndex].value == 'No')) {
+                document.getElementById('ProbationEndDate').disabled = true;
+            } else {
+                document.getElementById('ProbationEndDate').disabled = false;
+            }
         }
-    }
 
-    document.getElementById('ProbationPeriod').onchange = selectIndexChangeProbationPeriod;
-
+        document.getElementById('ProbationPeriod').onchange = selectIndexChangeProbationPeriod;
+    });
 
 
 </script>

@@ -43,7 +43,7 @@
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("Co-WorkerID")</td>
-                    <td>@Model.Element("Co-WorkerID")</td>
+                    <td>@Model.Element("Co-WorkerID", false)</td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("GlobalHRID")</td>
@@ -137,6 +137,9 @@
             </tbody>
         </table>
     </div>
+
+    <input type="hidden" id="CustomerId" value="@Model.CustomerId" />
+    <input type="hidden" id="formGuid" value="@Model.FormGuid" />
 </div>
 <script>
     

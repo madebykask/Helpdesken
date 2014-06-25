@@ -11,7 +11,7 @@
             <action status="30" internal-val="30" text="Submit Complete Service Request to SSC">
                 <validateTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</validateTabs>
             </action>
-            <action status="31" internal-val="30" init-form-guid="2BEC7193-FE4E-4314-B8CE-4CF5C619975B" text="Submit Basic Service Request to SSC">
+            <action status="31" internal-val="30" init-form-guid="8C9F42D1-E9F2-4E68-A66A-439F04918AE9" text="Submit Basic Service Request to SSC">
                 <validateTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</validateTabs>
             </action>
             <action status="99" internal-val="70" text="Cancel Service request"></action>
@@ -19,26 +19,18 @@
     </status>
     <!-- LM -->
     <status value="10">
-        <userGroup name="Line Manager">
-            <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#payment</visibleTabs>
-            <readOnlyTabs></readOnlyTabs>
-        </userGroup>
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
             <action status="20" internal-val="20" text="Submit to HR Unit">
-                <validateTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</validateTabs>
+                <validateTabs>#servicerequestdetails,#OrganisationalAssignment</validateTabs>
             </action>
             <action status="99" internal-val="70" text="Cancel Service request"></action>
         </actions>
     </status>
     <!-- HRU -->
     <status value="20">
-        <userGroup name="Line Manager">
-            <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#payment</visibleTabs>
-            <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#payment</readOnlyTabs>
-        </userGroup>
         <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields></readOnlyFields>
@@ -47,7 +39,7 @@
             <action status="30" internal-val="30" text="Submit Complete Service Request to SSC">
                 <validateTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</validateTabs>
             </action>
-            <action status="31" internal-val="30" init-form-guid="2BEC7193-FE4E-4314-B8CE-4CF5C619975B" text="Submit Basic Service Request to SSC">
+            <action status="31" internal-val="30" init-form-guid="8C9F42D1-E9F2-4E68-A66A-439F04918AE9" text="Submit Basic Service Request to SSC">
                 <validateTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</validateTabs>
             </action>
             <action status="99" internal-val="70" text="Cancel Service request"></action>
@@ -55,11 +47,7 @@
     </status>
     <!-- SSC -->
     <status value="30">
-        <userGroup name="Line Manager">
-            <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#payment</visibleTabs>
-            <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#payment</readOnlyTabs>
-        </userGroup>
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents,#SSCUseOnly</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -70,11 +58,7 @@
     </status>
     <!-- SSC -->
     <status value="40">
-        <userGroup name="Line Manager">
-            <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#payment</visibleTabs>
-            <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#payment</readOnlyTabs>
-        </userGroup>
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents,#globalview</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents,#globalview,#SSCUseOnly</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -84,11 +68,7 @@
     </status>
     <!-- SSC -->
     <status value="50">
-        <userGroup name="Line Manager">
-            <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#payment</visibleTabs>
-            <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#payment</readOnlyTabs>
-        </userGroup>
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents,#globalview</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents,#globalview,#SSCUseOnly</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -97,23 +77,15 @@
         </actions>
     </status>
     <status value="60">
-        <userGroup name="Line Manager">
-            <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#payment</visibleTabs>
-            <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#payment</readOnlyTabs>
-        </userGroup>
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents,#SSCUseOnly</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
         </actions>
     </status>
     <status value="70">
-        <userGroup name="Line Manager">
-            <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#payment</visibleTabs>
-            <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#payment</readOnlyTabs>
-        </userGroup>
         <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
     </status>
-</state>
+</state>   

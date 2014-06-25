@@ -72,7 +72,7 @@
                 <li class="@(Model.TabHasError("#personal") ? "error" : "")">
                     <a href="#personal">@Model.Translate("Personal Information")</a></li>
             }
-                        @if (Model.VisibleTab("#SSCUseOnly"))
+            @if (Model.VisibleTab("#SSCUseOnly"))
             {
                 <li class="@(Model.TabHasError("#SSCUseOnly") ? "error" : "")">
                     <a href="#SSCUseOnly">@Model.Translate("SSC use only")</a></li>

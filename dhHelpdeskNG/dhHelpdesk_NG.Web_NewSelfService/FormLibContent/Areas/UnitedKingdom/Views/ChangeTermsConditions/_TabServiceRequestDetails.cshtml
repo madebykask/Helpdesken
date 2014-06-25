@@ -123,58 +123,57 @@
 
 <script>
 
-    //var nowTemp = new Date();
-    //var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+    var nowTemp = new Date();
+    var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
 
-    //var noticeOldDate = $('#notice_OldDate');
-    //$('#date_ChangeValidFrom').not(".disabled").datepicker({
-    //    onRender: function (date) {
-    //        return '';
-    //    }
-    //}).on('changeDate', function (ev) {
+    var noticeOldDate = $('#notice_OldDate');
+    $('#date_ChangeValidFrom').not(".disabled").datepicker({
+        onRender: function (date) {
+            return '';
+        }
+    }).on('changeDate', function (ev) {
 
-    //    noticeOldDate.hide();
+        noticeOldDate.hide();
 
-    //    if (ev.date.valueOf() < now.valueOf())
-    //        noticeOldDate.show();
-    //}).data('datepicker');
+        if (ev.date.valueOf() < now.valueOf())
+            noticeOldDate.show();
+    }).data('datepicker');
 
-    //$('#ChangeValidFrom').change(function () {
-    //    var validFrom = $('#ChangeValidFrom').val();
-    //    var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
-    //    var dvalidFrom = APIGlobal.DateTime.parseDate(validFrom, format);
-    //    noticeOldDate.hide();
-    //    if (dvalidFrom.valueOf() < now.valueOf())
-    //        noticeOldDate.show();
-    //});
+    $('#ChangeValidFrom').change(function () {
+        var validFrom = $('#ChangeValidFrom').val();
+        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+        var dvalidFrom = APIGlobal.DateTime.parseDate(validFrom, format);
+        noticeOldDate.hide();
+        if (dvalidFrom.valueOf() < now.valueOf())
+            noticeOldDate.show();
+    });
 
-    //$('#ServiceRequestPriority').change(function () {
-    //    $('#date_ProcessBeforeDate').datepicker("destroy");
+    $('#ServiceRequestPriority').change(function () {
+        $('#date_ProcessBeforeDate').datepicker("destroy");
 
-    //    if ($(this).val() == 'Urgent') {
+        if ($(this).val() == 'Urgent') {
 
-    //        var endDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate() + 2, 0, 0, 0, 0);
+            var endDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate() + 2, 0, 0, 0, 0);
 
-    //        $('#date_ProcessBeforeDate').not(".disabled").datepicker(
-    //        {                
-    //            onRender: function (ev) {
-    //                return ev.valueOf() >= endDate.valueOf() || ev.valueOf() < now.valueOf() ? 'disabled' : '';
-    //            }
-    //        });
+            $('#date_ProcessBeforeDate').not(".disabled").datepicker(
+            {
+                onRender: function (ev) {
+                    return ev.valueOf() >= endDate.valueOf() || ev.valueOf() < now.valueOf() ? 'disabled' : '';
+                }
+            });
 
-    //        //$("#date_ProcessBeforeDate").on("keydown keypress keyup", false);
-    //    }
-    //    else        
-    //    {
-    //        $('#date_ProcessBeforeDate').not(".disabled").datepicker(
-    //        {
-    //            onRender: function (ev) {
-    //                return '';
-    //            }
-    //        });
+            //$("#date_ProcessBeforeDate").on("keydown keypress keyup", false);
+        }
+        else {
+            $('#date_ProcessBeforeDate').not(".disabled").datepicker(
+            {
+                onRender: function (ev) {
+                    return '';
+                }
+            });
 
-    //        //document.getElementById('ProcessBeforeDate').onkeypress = function () { return true; }
-    //    } 
-    //});
+            //document.getElementById('ProcessBeforeDate').onkeypress = function () { return true; }
+        }
+    });
 
 </script>

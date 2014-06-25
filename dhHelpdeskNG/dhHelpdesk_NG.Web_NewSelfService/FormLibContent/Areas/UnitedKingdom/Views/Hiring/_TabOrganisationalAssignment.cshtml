@@ -8,6 +8,7 @@
     const string PartTime = "Part Time";
     const string FullTime = "Full Time";
     const string ZeroHours = "Zero Hours";
+    const string DefaultProbationPeriod = "Yes";
 }
 
 <div class="tab-pane" id="OrganisationalAssignment">
@@ -139,25 +140,24 @@
 
     $(function () {
 
-        if ($('#EmploymentCategory').val == '@EmployeeCategory') {
-            $('#ContractEndDate').prop('disabled', true);
-            $('#date_ContractEndDate').addClass("disabled");
-        }
+        function setProbationEndDate(value) {
+            var probationEndDate = $('#ProbationEndDate');
 
-        $('#Company').change(function () {
-            var value = $(this).val();
+            if (value == '@DefaultProbationPeriod') {
+                var sStart = $('#ContractStartDate').val();
+                var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+                var dStart = APIGlobal.DateTime.parseDate(sStart, format);
 
-            if (value == '@CompanyName') {
-                $('#CostAllocation, #CrossChargeCostCentre').prop('disabled', true);
+                var endDate = new Date(dStart.getFullYear(), dStart.getMonth() + 6, dStart.getDate(), 0, 0, 0, 0);
+                var visibleDate = APIGlobal.DateTime.formatDate(endDate, format);
+                probationEndDate.val(visibleDate.toString());
             }
             else {
-                $('#CostAllocation, #CrossChargeCostCentre').prop('disabled', false);
+                probationEndDate.val("");
             }
-        });
+        };
 
-        $('#EmploymentCategory').change(function () {
-            var value = $(this).val();
-
+        function setEmployeeBehavior(value) {
             if (value == '@EmployeeCategory') {
                 $('#date_ContractEndDate').datepicker("destroy");
                 $('#date_ContractEndDate').addClass("disabled");
@@ -167,6 +167,24 @@
                 $('#ContractEndDate').prop('disabled', false);
                 $("#ContractEndDate").removeClass("disabled");
             }
+        }
+
+        setEmployeeBehavior($('#EmploymentCategory').val());
+        setProbationEndDate($('#ProbationPeriod').val());
+
+        $('#Company').change(function () {
+            var value = $(this).val();
+
+            if (value != '@CompanyName') {
+                $('#CostAllocation, #CrossChargeCostCentre').prop('disabled', true);
+            }
+            else {
+                $('#CostAllocation, #CrossChargeCostCentre').prop('disabled', false);
+            }
+        });
+
+        $('#EmploymentCategory').change(function () {
+            setEmployeeBehavior($(this).val());
         });
 
         $('#ContractedHours').on("input", function () {
@@ -181,157 +199,65 @@
             else if (value == "0") {
                 $('#ContractType option[value="' + '@ZeroHours' + '"]').prop('selected', true);
             }
-            else
-            {
-                $('#ContractType option[value=""]').prop('selected', true);
+            else {
+                $('#ContractType option:not([value])').prop('selected', true);
             }
-        });
+        });               
 
         $('#ProbationPeriod').change(function () {
-
+            setProbationEndDate($(this).val());
         });
 
+        $('#ReportsToLineManager').change(function () {
+            ('#TECApprover').val($(this).val());
+        });
+
+        $('#BusinessUnit').change(function () {
+            ('#PrimarySite').val($(this).val());
+        });
+
+        //var startDate = $('#ContractStartDate').val();
+        //var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+        //var dStart = APIGlobal.DateTime.parseDate(startDate, format);
+        //var forcePicker = new Date(dStart.getFullYear(), dStart.getMonth(), dStart.getDate(), 0, 0, 0, 0);
+        //$('#date_ContractEndDate').not(".disabled").datepicker(
+        //{
+        //    onRender: function (ev) {
+        //        return ev.valueOf() < forcePicker.valueOf() ? 'disabled' : '';
+        //    }
+        //});
+
+        $('#date_ContractStartDate').datepicker().on('changeDate', function (ev) {
+            //var sStart = $('#ContractStartDate').val();
+            //var sEnd = $('#ContractEndDate').val();
+            //var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+            //var dStart = APIGlobal.DateTime.parseDate(sStart, format);
+            //var dEnd = APIGlobal.DateTime.parseDate(sEnd, format);
+
+            //var probationPeriod = $('#ProbationPeriod');
+            //var probationEndDate = $('#ProbationEndDate');
+
+            //var probationDate = $('#date_ProbationEndDate').datepicker("destroy");
+            //var noticeProbationDate = $('#probationDate');
+
+
+            //if (APIGlobal.DateTime.dateInRange(dStart, dEnd, 6)) {
+            //    probationPeriod.val("Yes");
+            //    noticeProbationDate.show();
+            //    probationDate.show();
+
+            //    var endDate = new Date(dStart.getFullYear(), dStart.getMonth() + 2, dStart.getDate(), 0, 0, 0, 0);
+            //    var visibledaate = APIGlobal.DateTime.formatDate(endDate, format);
+            //    probationEndDate.val(visibledaate.toString());
+            //} else {
+            //    probationPeriod.val("No");
+
+            //    noticeProbationDate.hide();
+            //    probationDate.hide();
+            //    probationEndDate.val("");
+            //}
+            setProbationEndDate($('#ProbationPeriod').val());
+        });
     });
 
-    @* var startDate = $('#ContractStartDate').val();
-    var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
-    var dStart = APIGlobal.DateTime.parseDate(startDate, format);
-    var forcePicker = new Date(dStart.getFullYear(), dStart.getMonth(), dStart.getDate(), 0, 0, 0, 0);
-    $('#date_ContractEndDate').not(".disabled").datepicker(
-    {
-        onRender: function (ev) {
-            return ev.valueOf() < forcePicker.valueOf() ? 'disabled' : '';
-        }
-    });
-
-    $('#date_ContractStartDate, #date_ContractEndDate').datepicker().on('changeDate', function (ev) {
-        var sStart = $('#ContractStartDate').val();
-        var sEnd = $('#ContractEndDate').val();
-        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
-        var dStart = APIGlobal.DateTime.parseDate(sStart, format);
-        var dEnd = APIGlobal.DateTime.parseDate(sEnd, format);
-
-        var probationPeriod = $('#ProbationPeriod');
-        var probationEndDate = $('#ProbationEndDate');
-
-        var probationDate = $('#date_ProbationEndDate').datepicker("destroy");
-        var noticeProbationDate = $('#probationDate');
-
-
-        if (APIGlobal.DateTime.dateInRange(dStart, dEnd, 6)) {
-            probationPeriod.val("Yes");
-            noticeProbationDate.show();
-            probationDate.show();
-
-            var endDate = new Date(dStart.getFullYear(), dStart.getMonth() + 2, dStart.getDate(), 0, 0, 0, 0);
-            var visibledaate = APIGlobal.DateTime.formatDate(endDate, format);
-            probationEndDate.val(visibledaate.toString());
-        } else {
-            probationPeriod.val("No");
-
-            noticeProbationDate.hide();
-            probationDate.hide();
-            probationEndDate.val("");
-        }
-
-    });
-
-
-    function valueChangedContractEndDate() {
-
-        var contractstartdate = new Date('@Model.GetAnswer("ContractStartDate")');
-        var contractenddate = new Date(document.getElementById('ContractEndDate').value);
-
-        var datedifference = contractenddate.getMonth() - contractstartdate.getMonth();
-        
-    }
-
-    document.getElementById('ContractEndDate').onchange = valueChangedContractEndDate;
-
-    function selectIndexChangeLineManagertoTECApprover() {
-        document.getElementById('TECApprover').value = document.getElementById('ReportsToLineManager').value;
-    }
-    document.getElementById('ReportsToLineManager').onchange = selectIndexChangeLineManagertoTECApprover;
-
-    function selectIndexChangeBusinessUnittoPrimarySite() {
-        
-        document.getElementById('PrimarySite').value = document.getElementById('BusinessUnit').value;
-
-    }
-    document.getElementById('BusinessUnit').onchange = selectIndexChangeBusinessUnittoPrimarySite;
-
-    function selectIndexChangeEmploymentCategory() {
-        if (this.options[this.selectedIndex].value == 'Permanent') {
-            $('#date_ContractEndDate').datepicker("destroy");
-            $('#date_ContractEndDate').addClass("disabled");
-            document.getElementById("ContractEndDate").disabled = true;
-            document.getElementById("date_ContractEndDate").className = document.getElementById("date_ContractEndDate").className + " disabled";
-
-        }
-        else {
-            
-            document.getElementById('ContractEndDate').disabled = false;
-            $("#ContractEndDate").removeClass("disabled");
-        }
-
-    }
-    document.getElementById('EmploymentCategory').onchange = selectIndexChangeEmploymentCategory;
-    if (document.getElementById('EmploymentCategory').value == 'Permanent') {
-        document.getElementById("ContractEndDate").disabled = true;
-        document.getElementById("date_ContractEndDate").className = document.getElementById("date_ContractEndDate").className + " disabled";
-
-    }
-    
-    $("#EmploymentCategory").change(function () {
-        var defDate = '31.12.9999';
-        var allowancesValidTo = document.getElementById('AllowancesValidTo');
-        var allowancesValidTo2 = document.getElementById('AllowancesValidTo2');
-        var allowancesValidTo3 = document.getElementById('AllowancesValidTo3');
-
-        var deductionsValidTo = document.getElementById('DeductionsValidTo');
-        var deductionsValidTo2 = document.getElementById('DeductionsValidTo2');
-        var deductionsValidTo3 = document.getElementById('DeductionsValidTo3');
-        var allowancesPaymentType = $("#AllowancesPaymentType").val;
-
-        var sEnd = document.getElementById('ContractEndDate').value;
-
-
-        if ($(this).val() != 'Temporary') {
-            
-            allowancesValidTo.value = defDate;            
-            allowancesValidTo2.value = defDate;            
-            allowancesValidTo3.value = defDate;
-           
-            deductionsValidTo.value = defDate;
-            deductionsValidTo2.value = defDate;            
-            deductionsValidTo3.value = defDate;          
-        }
-        else 
-        {
-            if (allowancesPaymentType == 'Recurring')
-            {
-                allowancesValidTo.value = sEnd;
-                allowancesValidTo2.value = sEnd;
-                allowancesValidTo3.value = sEnd;
-
-                deductionsValidTo.value = sEnd;
-                deductionsValidTo2.value = sEnd;
-                deductionsValidTo3.value = sEnd;
-            }
-        }
-    });
-
-
-
-    function ValueChangeContractedHours() {
-
-        if (document.getElementById('ContractedHours').value > '35') {
-
-            document.getElementById('ContractType').selectedIndex = 2;
-        }
-        else {
-            document.getElementById('ContractType').selectedIndex = 1;
-        }
-    }
-    document.getElementById('ContractedHours').onchange = ValueChangeContractedHours;*@
 </script>

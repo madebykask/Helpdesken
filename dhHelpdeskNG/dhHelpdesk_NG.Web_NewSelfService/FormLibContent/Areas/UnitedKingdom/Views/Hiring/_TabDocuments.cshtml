@@ -28,13 +28,26 @@
         }
         
     }
+
+    //There are insufficient data for generating a contract
+    public string PrintText()
+    {
+
+        ////Should be implemented in status 20. Taken away after status 30.
+        //if (Model.Contract.StateSecondaryId >= 20 && Model.Contract.StateSecondaryId < 40)
+        //{
+           // return Model.Translate("Print draft");
+        //}
+        //else
+        //{
+          return Model.Translate("Print");
+        //}
+        
+    }
 }
 
 <div class="tab-pane" id="documents">
- @*   @if(Model.GetAnswer("BusinessUnit") != "Service Office Netherlands"
-         || Model.GetAnswer("EmploymentCategory") != "Apprentice" || Model.GetAnswer("BusinessUnit") != "IKEA Competence B.V.")
-    {
-    *@<div class="span12">
+<div class="span12">
         <table class="table-striped">
             <thead>
                 <tr>
@@ -63,16 +76,14 @@
                     caseId = Model.Contract.Id,
                     path = Path.Combine(Path.GetDirectoryName(Model.FormXmlPath), Path.GetFileNameWithoutExtension(Model.FormXmlPath)),
                     userId = FormLibSessions.User.UserId
-                })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@Model.Translate("Print")</a>
+                })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@PrintText()</a>
     </td>
 </tr>
-    
 }
             </tbody>
              }
         </table>
     </div>
-   @* }*@
 </div>
 
 

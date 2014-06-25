@@ -339,8 +339,14 @@
 
 
               //2
-              string text2 = "Please report to your place of work: IKEA " + Model.Department.Unit + ", " + Model.Department.StrAddr + " at " + Model.GetAnswer("InductionStartTime") + " for a full ";
 
+              //+ "*" + DateTime.ParseExact("21:45", "HH:mm", CultureInfo.InvariantCulture).ToString("h:mm tt") + "*"
+
+
+              string text2 = "Please report to your place of work: IKEA " + Model.Department.Unit + ", " + Model.Department.StrAddr + " at " + Model.GetAnswer("InductionStartTime")  + " for a full ";
+
+              //text2 += "*" + string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:h:mm tt}", DateTime.ParseExact("21:45", "HH:mm", CultureInfo.InvariantCulture)) + "*";
+              
               if (Model.GetAnswer("LengthOfInductionInDays").ToLower() == "1 day".ToLower())
               {
                   text2 += "day";
@@ -449,7 +455,7 @@
               //MEDICAL INFO
               if (Model.GetAnswer("ServiceArea").ToLower() == "IKEA Food Serv".ToLower())
               {
-                  list.Add(new PdfListItem { Text = "Please complete and return the Pre-Employment Medical Questionnaire and Food Handling Questionnaire (if applicable to your role) in the confidential envelope provided. Only our Occupational Health Advisor will read it. Please note that this offer of employment is subject to a satisfactory result. <br /><br />" });
+                  list.Add(new PdfListItem { Text = "Please complete and return the Pre-Employment Medical Questionnaire and Food Handling Questionnaire (if applicable to your role) in the confidential envelope provided. Only our Occupational Health Advisor will read it. Please note that this offer of employment is subject to a satisfactory result. <br /><br />" });
               }
 
               if (Model.GetAnswer("BusinessUnit").ToLower() == "Peterborough Contact Centre".ToLower())
