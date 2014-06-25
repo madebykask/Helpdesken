@@ -632,6 +632,12 @@
     <Content Include="FormLibContent\Xmls\Global\TerminationComplete.xml" />
     <Content Include="FormLibContent\Xmls\Global\VoluntaryDeductions.xml" />
     <Content Include="FormLibContent\Xmls\I18n.xml" />
+    <Content Include="FormLibContent\Xmls\Ireland\Hiring.xml" />
+    <Content Include="FormLibContent\Xmls\Ireland\Templates\HiringBasicOneState.xml" />
+    <Content Include="FormLibContent\Xmls\Ireland\Templates\HiringBasicState.xml" />
+    <Content Include="FormLibContent\Xmls\Ireland\Templates\HiringState.xml" />
+    <Content Include="FormLibContent\Xmls\Ireland\Templates\Languages.xml" />
+    <Content Include="FormLibContent\Xmls\Ireland\Templates\Regexs.xml" />
     <Content Include="FormLibContent\Xmls\Netherlands\Absences.xml" />
     <Content Include="FormLibContent\Xmls\Netherlands\AdditionalPaymentsDeduction.xml" />
     <Content Include="FormLibContent\Xmls\Netherlands\ChangeTermsConditions.xml" />
@@ -1110,6 +1116,7 @@
     <Content Include="FormLibContent\Areas\UnitedKingdom\Views\VoluntaryDeductions\_TabServiceRequestDetails.cshtml" />
     <Content Include="FormLibContent\Areas\UnitedKingdom\Views\Hiring\_TabDocuments.cshtml" />
     <Content Include="FormLibContent\Areas\UnitedKingdom\Views\Hiring\_TabSsc.cshtml" />
+    <Content Include="FormLibContent\Areas\Netherlands\Views\TerminationBasic\_TabComplete.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.SelfService.Release.pubxml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.SelfService.Release_AL.pubxml" />
     <Content Include="Views\Documents\Index.cshtml" />

@@ -17,8 +17,8 @@
     <!-- LM -->
     <status value="10">
         <userGroup name="Line Manager">
-            <visibleTabs>#ServiceRequestDetails,#Basic</visibleTabs>
-            <readOnlyTabs>#ServiceRequestDetails,#Basic</readOnlyTabs>
+            <visibleTabs>#ServiceRequestDetails</visibleTabs>
+            <readOnlyTabs>#ServiceRequestDetails</readOnlyTabs>
         </userGroup>
         <visibleTabs>#ServiceRequestDetails,#Basic</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
