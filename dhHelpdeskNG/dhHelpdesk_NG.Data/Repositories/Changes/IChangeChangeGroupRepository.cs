@@ -4,6 +4,7 @@
 
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Dal.Dal;
+    using DH.Helpdesk.Domain.Changes;
 
     public interface IChangeChangeGroupRepository : INewRepository
     {
@@ -16,5 +17,7 @@
         void AddChangeProcesses(int changeId, List<int> processIds);
 
         void UpdateChangeProcesses(int changeId, List<int> processIds);
+
+        List<ChangeChangeGroupEntity> FindByName(string name);
     }
 }

@@ -14,5 +14,7 @@
         void UpdateContacts(List<Contact> contacts);
 
         List<Contact> FindChangeContacts(int changeId);
+
+        List<Contact> FindChangeContacts(string phrase);
     }
 }

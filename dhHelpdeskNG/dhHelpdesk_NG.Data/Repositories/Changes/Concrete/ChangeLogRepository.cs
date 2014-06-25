@@ -141,5 +141,12 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
                 this.InitializeAfterCommit(log, entity);
             }
         }
+
+        public List<ChangeLogEntity> FingByText(string text)
+        {
+            return this.DbContext.ChangeLogs
+                .Where(l => l.LogText != null && l.LogText.Contains(text))
+                .ToList();
+        }
     }
 }

@@ -70,5 +70,26 @@
                                 c.ContactCompany))
                     .ToList();
         }
+
+        public List<Contact> FindChangeContacts(string phrase)
+        {
+            return
+                this.DbContext.ChangeContacts
+                    .Where(c => (c.ContactName != null && c.ContactName.ToLower().Contains(phrase.ToLower()))
+                            || (c.ContactPhone != null && c.ContactPhone.ToLower().Contains(phrase.ToLower()))
+                            || (c.ContactEMail != null && c.ContactEMail.ToLower().Contains(phrase.ToLower()))
+                            || (c.ContactCompany != null && c.ContactCompany.ToLower().Contains(phrase.ToLower())))
+                    .Select(c => new { c.Id, c.Change_Id, c.ContactName, c.ContactPhone, c.ContactEMail, c.ContactCompany })
+                    .ToList()
+                    .Select(
+                        c =>
+                            Contact.Create(
+                                c.Change_Id,
+                                c.ContactName,
+                                c.ContactPhone,
+                                c.ContactEMail,
+                                c.ContactCompany))
+                    .ToList();            
+        }
     }
 }

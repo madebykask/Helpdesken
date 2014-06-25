@@ -22,6 +22,23 @@
                    };
         }
 
+        public static Contact Create(
+            int changeId,
+            string name,
+            string phone,
+            string email,
+            string company)
+        {
+            return new Contact
+                   {
+                       ChangeId = changeId,
+                       Name = name,
+                       Phone = phone,
+                       Email = email,
+                       Company = company
+                   };
+        }
+
         public static Contact CreateNew(
             string name,
             string phone,

@@ -6,6 +6,7 @@ namespace DH.Helpdesk.Dal.Repositories.Changes
     using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.Dal.Dal;
+    using DH.Helpdesk.Domain.Changes;
 
     public interface IChangeLogRepository : INewRepository
     {
@@ -24,5 +25,7 @@ namespace DH.Helpdesk.Dal.Repositories.Changes
         void AddManualLog(ManualLog log);
 
         void AddLogs(List<ManualLog> logs);
+
+        List<ChangeLogEntity> FingByText(string text);
     }
 }

@@ -4,6 +4,7 @@
 
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Dal.Dal;
+    using DH.Helpdesk.Domain.Changes;
 
     public interface IChangeDepartmentRepository : INewRepository
     {
@@ -16,5 +17,7 @@
         void AddChangeDepartments(int changeId, List<int> departmentIds);
 
         void UpdateChangeDepartments(int changeId, List<int> departmentIds);
+
+        List<ChangeDepartmentEntity> FingByName(string name);
     }
 }

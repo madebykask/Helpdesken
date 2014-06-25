@@ -47,6 +47,8 @@ namespace DH.Helpdesk.Dal.Repositories
         ItemOverview FindActiveOverview(int userId);
 
         List<ItemOverview> FindUsersWithPermissionsForCustomers(int[] customers);
+
+        IEnumerable<User> FindUsersByName(string name);
     }
 
     public sealed class UserRepository : RepositoryBase<User>, IUserRepository
@@ -136,6 +138,14 @@ namespace DH.Helpdesk.Dal.Repositories
                         select u;
 
             return query;
+        }
+
+        public IEnumerable<User> FindUsersByName(string name)
+        {
+            return this.DataContext.Users
+                        .Where(u => u.FirstName.ToLower().Contains(name.ToLower())
+                                || u.SurName.ToLower().Contains(name.ToLower()))
+                        .ToList();
         }
 
         public IList<CustomerWorkingGroupForUser> GetWorkinggroupsForUserAndCustomer(int userId, int customerId)

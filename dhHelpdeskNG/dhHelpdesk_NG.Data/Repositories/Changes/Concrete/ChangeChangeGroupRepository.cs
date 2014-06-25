@@ -65,5 +65,12 @@
                 this.DbContext.ChangeChangeGroups.Add(newRelation);
             }
         }
+
+        public List<ChangeChangeGroupEntity> FindByName(string name)
+        {
+            return this.DbContext.ChangeChangeGroups
+                    .Where(cg => cg.ChangeGroup != null && cg.ChangeGroup.ChangeGroup.ToLower().Contains(name.ToLower()))
+                    .ToList();
+        }
     }
 }

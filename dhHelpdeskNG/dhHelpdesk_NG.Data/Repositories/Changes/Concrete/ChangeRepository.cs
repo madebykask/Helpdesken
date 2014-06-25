@@ -14,8 +14,8 @@
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeDetailedOverview;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.Common.Extensions.String;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Mappers;
@@ -34,23 +34,42 @@
 
         private readonly IBusinessModelToEntityMapper<UpdatedChange, ChangeEntity> updatedChangeToChangeEntityMapper;
 
+        private readonly IUserRepository userRepository;
+
+        private readonly IChangeContactRepository changeContactRepository;
+
+        private readonly IChangeChangeGroupRepository changeChangeGroupRepository;
+
+        private readonly IChangeDepartmentRepository changeDepartmentRepository;
+
+        private readonly IChangeLogRepository changeLogRepository;
+
         #endregion
 
         #region Constructors and Destructors
 
         public ChangeRepository(
             IDatabaseFactory databaseFactory,
-            IEntityToBusinessModelMapper<ChangeEntity, ChangeDetailedOverview>
-                changeEntityToChangeDetailedOverviewMapper,
+            IEntityToBusinessModelMapper<ChangeEntity, ChangeDetailedOverview> changeEntityToChangeDetailedOverviewMapper,
             IEntityToBusinessModelMapper<ChangeEntity, Change> changeEntityToChangeMapper,
             INewBusinessModelToEntityMapper<NewChange, ChangeEntity> newChangeToChangeEntityMapper,
-            IBusinessModelToEntityMapper<UpdatedChange, ChangeEntity> updatedChangeToChangeEntityMapper)
+            IBusinessModelToEntityMapper<UpdatedChange, ChangeEntity> updatedChangeToChangeEntityMapper, 
+            IUserRepository userRepository, 
+            IChangeContactRepository changeContactRepository, 
+            IChangeChangeGroupRepository changeChangeGroupRepository, 
+            IChangeDepartmentRepository changeDepartmentRepository, 
+            IChangeLogRepository changeLogRepository)
             : base(databaseFactory)
         {
             this.changeEntityToChangeDetailedOverviewMapper = changeEntityToChangeDetailedOverviewMapper;
             this.changeEntityToChangeMapper = changeEntityToChangeMapper;
             this.newChangeToChangeEntityMapper = newChangeToChangeEntityMapper;
             this.updatedChangeToChangeEntityMapper = updatedChangeToChangeEntityMapper;
+            this.userRepository = userRepository;
+            this.changeContactRepository = changeContactRepository;
+            this.changeChangeGroupRepository = changeChangeGroupRepository;
+            this.changeDepartmentRepository = changeDepartmentRepository;
+            this.changeLogRepository = changeLogRepository;
         }
 
         #endregion
@@ -159,18 +178,37 @@
 
             if (!string.IsNullOrEmpty(parameters.Pharse))
             {
-                var pharseInLowerCase = parameters.Pharse.ToLower();
+                var pharse = parameters.Pharse != null ? parameters.Pharse.Trim() : parameters.Pharse;
+
+                var administrators = this.userRepository.FindUsersByName(pharse).Select(u => u.Id);
+                var contacts = this.changeContactRepository.FindChangeContacts(pharse).Select(c => c.ChangeId);
+                var affectedProcesses = this.changeChangeGroupRepository.FindByName(pharse).Select(cg => cg.Change_Id);
+                var affectedDepartments = this.changeDepartmentRepository.FingByName(pharse).Select(d => d.Change_Id);
+                var logs = this.changeLogRepository.FingByText(pharse).Select(l => l.Change_Id);
 
                 searchRequest =
                     searchRequest.Where(
                         c =>
-                        c.OrdererId.ToLower().Contains(pharseInLowerCase)
-                        || c.OrdererName.ToLower().Contains(pharseInLowerCase)
-                        || c.OrdererPhone.ToLower().Contains(pharseInLowerCase)
-                        || c.OrdererCellPhone.ToLower().Contains(pharseInLowerCase)
-                        || c.OrdererEMail.ToLower().Contains(pharseInLowerCase)
-                        || (c.OrdererDepartment_Id.HasValue
-                            && c.OrdererDepartment.DepartmentName.ToLower().Contains(pharseInLowerCase)));
+                        c.OrdererId.ToLower().Contains(pharse)
+                        || c.OrdererName.ToLower().Contains(pharse)
+                        || c.OrdererPhone.ToLower().Contains(pharse)
+                        || c.OrdererCellPhone.ToLower().Contains(pharse)
+                        || c.OrdererEMail.ToLower().Contains(pharse)
+                        || (c.OrdererDepartment_Id.HasValue && c.OrdererDepartment.DepartmentName.ToLower().Contains(pharse))
+                        || c.ChangeTitle.ToLower().Contains(pharse)
+                        || (c.ChangeStatus != null && c.ChangeStatus.ChangeStatus.Contains(pharse))
+                        || (c.System != null && c.System.SystemName.ToLower().Contains(pharse))
+                        || (c.ChangeObject != null && c.ChangeObject.ChangeObject.ToLower().Contains(pharse))
+                        || c.InventoryNumber.Contains(pharse)
+                        || (c.WorkingGroup != null && c.WorkingGroup.WorkingGroupName.ToLower().Contains(pharse))
+                        || (c.User_Id.HasValue && administrators.Contains(c.User_Id.Value))
+                        || contacts.Contains(c.Id)
+                        || affectedProcesses.Contains(c.Id)
+                        || affectedDepartments.Contains(c.Id)
+                        || c.ChangeDescription.Contains(pharse)
+                        || (c.ChangePriority != null && c.ChangePriority.ChangePriority.ToLower().Contains(pharse))
+                        || (c.ImplementationStatus != null && c.ImplementationStatus.ImplementationStatus.ToLower().Contains(pharse))
+                        || logs.Contains(c.Id));
             }
 
             var changesFound = searchRequest.Count();

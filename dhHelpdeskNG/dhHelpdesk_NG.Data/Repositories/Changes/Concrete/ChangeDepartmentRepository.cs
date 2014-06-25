@@ -64,5 +64,12 @@
                 this.DbContext.ChangeDepartments.Add(newRelation);
             }
         }
+
+        public List<ChangeDepartmentEntity> FingByName(string name)
+        {
+            return this.DbContext.ChangeDepartments
+                .Where(d => d.Department != null && d.Department.DepartmentName.ToLower().Contains(name.ToLower()))
+                .ToList();
+        }
     }
 }
