@@ -33,6 +33,7 @@ namespace DH.Helpdesk.Domain
         public DateTime CreatedDate { get; set; }
         public string TemplatePath { get; set; }
         public bool ShowInSelfService { get; set; }
+        public int? OrderNum { get; set; }
 
         public virtual CaseSolutionCategory CaseSolutionCategory { get; set; }
         public virtual CaseSolutionSchedule CaseSolutionSchedule { get; set; }
