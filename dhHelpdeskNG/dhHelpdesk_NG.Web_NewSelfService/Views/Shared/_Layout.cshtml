@@ -10,14 +10,14 @@
 <html>
 <head>
     <meta content="html/text; charset=utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>@Translation.Get("dhHelpdesk", Enums.TranslationSource.TextTranslation)</title>
 
     <link rel="stylesheet" href="@Url.Content("~/Content/css/bootstrap.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/css/selfservice.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/css/profile.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/js/jquery.plupload.queue/css/jquery.plupload.queue.css")" />
-    
+
 
     <script type="text/javascript" src="@Url.Content("~/Content/js/jquery-1.11.0.min.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.unobtrusive-ajax.min.js")"></script>
@@ -117,32 +117,55 @@
         });
 
     </script>
-</head> 
+    <!--COMMUNICATE SCRIPT---->
+    <script type='text/javascript'>
+        $(document).ready(function () {
+            $('.mapButton').click(function () {
+                var mapPos = parseInt($('.siteCom').css('left'), 10);
+                if (mapPos < 0) {
+                    $('.siteCom').animate({
+                        left: '+=500'
+                    }, 458, 'swing', function () {
+                        // Animation complete.
+                    });
+                }
+                else {
+                    $('.siteCom').animate({
+                        left: '-=500'
+                    }, 458, 'swing', function () {
+                        // Animation complete.
+                    });
+                }
+            });
+        });
+    </script>
+    <!--END COMMUNICATE SCRIPT---->
+</head>
 <body>
-     @{
-         int pCustomerId = -1;
+    @{
+        int pCustomerId = -1;
 
-         if (SessionFacade.CurrentCustomer != null)
-         {
-             pCustomerId = SessionFacade.CurrentCustomer.Id;
-             SessionFacade.CurrentCustomerID = pCustomerId;
-         }
+        if (SessionFacade.CurrentCustomer != null)
+        {
+            pCustomerId = SessionFacade.CurrentCustomer.Id;
+            SessionFacade.CurrentCustomerID = pCustomerId;
+        }
 
-         if (pCustomerId == -1 && SessionFacade.CurrentCustomerID > 0)
-         {
-             pCustomerId = SessionFacade.CurrentCustomerID;
-             if (SessionFacade.CurrentCustomer != null)
-             {
-                 SessionFacade.CurrentCustomer.Id = pCustomerId;
-             }
-         }
+        if (pCustomerId == -1 && SessionFacade.CurrentCustomerID > 0)
+        {
+            pCustomerId = SessionFacade.CurrentCustomerID;
+            if (SessionFacade.CurrentCustomer != null)
+            {
+                SessionFacade.CurrentCustomer.Id = pCustomerId;
+            }
+        }
 
-         var helper = ManualDependencyResolver.Get<ICommonFunctions>();
+        var helper = ManualDependencyResolver.Get<ICommonFunctions>();
 
-         var pCaseTemplates = helper.GetCaseTemplates(pCustomerId);
-         var pActionSettings = helper.GetActionSettings(pCustomerId);
+        var pCaseTemplates = helper.GetCaseTemplates(pCustomerId);
+        var pActionSettings = helper.GetActionSettings(pCustomerId);
          
-      } 
+    }
     @*<div style="position: fixed; top: 30%; right: -2px; background: #fff; padding: 20px 20px 5px 20px; border: 1px solid #ccc;">
         <ul class="nav nav-pills nav-stacked">
             <li class="active">
@@ -153,13 +176,71 @@
             </li>
         </ul>
     </div>*@
+
+    <!-- COMMUNICATE DIV--->
+    <div class="siteCom">
+        <div class="mapButton">
+            <div class="mapText"><span class="glyphicon glyphicon-arrow-up"></span> Communicate</div>
+        </div>
+        <div class="theMap">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label>
+                            Add comment:
+                        </label>
+                        <div>
+                            <textarea style="width:450px; height:100px;"></textarea>
+                        </div>
+                        <hr />
+                        <button type="button" class="btn btn-success">Send</button>
+                    </div>
+                    @*<div class="form-group row">
+                            <label class="col-md-2">
+                                Attached File:
+                            </label>
+                            <div class="col-md-10">
+                                <a href="#" role="button" data-toggle="modal" data-target="#myModal2" class="btn btn-default">Add</a>
+                            </div>
+                        </div>*@
+                </div>
+            </div>
+            <div style="padding: 20px; height: 100%; overflow: auto;">
+                <div style="padding: 10px; background: #f2f7fe; margin-bottom: 20px;">
+                    <p>Per Eriksson | 2014-04-05</p>
+                    <p>Lorem ipsum dölor. Sit amet cönsectetur ädipisicing elit sed do. Eiusmod tempör incididunt ut läbore et. Dolöre mågnå åliqua. Adipiscing lectus amet tempör suspendisse leo elementum.</p>
+                </div>
+                <div style="padding: 10px; background: #f2f7fe; margin-bottom: 20px;">
+                    <p>Daniel Lönnesjö | 2014-04-03</p>
+                    <p>Lorem ipsum dölor. Sit amet cönsectetur ädipisicing elit sed do. Eiusmod tempör incididunt ut läbore et. Dolöre mågnå åliqua. Adipiscing lectus amet tempör suspendisse leo elementum.Lorem ipsum dölor. Sit amet cönsectetur ädipisicing elit sed do. Eiusmod tempör incididunt ut läbore et. Sit amet cönsectetur ädipisicing elit sed do. Eiusmod tempör incididunt ut läbore et.</p>
+                </div>
+                <div style="padding: 10px; background: #f2f7fe; margin-bottom: 20px;">
+                    <p>Jonas Carlsson | 2014-04-01</p>
+                    <p>Lorem ipsum dölor. Sit amet cönsectetur ädipisicing elit sed do. Eiusmod tempör incididunt ut läbore et. Dolöre mågnå åliqua. Adipiscing lectus amet tempör suspendisse leo elementum.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- END COMMUNICATE DIV--->
+
     <div class="jumbotron">
         <div class="container-fluid">
             <a href="index.html">
                 <div class="pull-left toplogo"></div>
             </a>
             <div class="pull-right small toplogout">
-                <a href="#">@SessionFacade.CurrentSystemUser</a> | <a href="#">Log out</a>
+                <div class="btn-group">
+                  <a href="#" type="button" class="dropdown-toggle" data-toggle="dropdown">
+                    Select language <span class="caret"></span>
+                  </a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Dutch</a></li>
+                    <li><a href="#">English</a></li>
+                    <li><a href="#">Swedish</a></li>
+                  </ul>
+                </div>
+                 <span class="toplogout-space">|</span><a href="#">@SessionFacade.CurrentSystemUser</a><span class="toplogout-space">|</span><a href="#">Log out</a>
             </div>
         </div>
     </div>
@@ -181,12 +262,12 @@
                     {
                         if (start.Visibled)
                         {
-                            <li class="blue">
-                                <a href="@Url.Action("Index", "Start", new { customerId = pCustomerId, area = "" })">
-                                    <div class="@(string.IsNullOrEmpty(start.ObjectClass) ? "ico-home" : start.ObjectClass)"></div>
-                                    @start.ObjectValue
-                                </a>
-                            </li>
+                        <li class="blue">
+                            <a href="@Url.Action("Index", "Start", new { customerId = pCustomerId, area = "" })">
+                                <div class="@(string.IsNullOrEmpty(start.ObjectClass) ? "ico-home" : start.ObjectClass)"></div>
+                                @start.ObjectValue
+                            </a>
+                        </li>
                         }
                     }
                     else
@@ -198,43 +279,45 @@
                             </a>
                         </li>
                     }
-                    
+
                     @{ var serviceRequest = pActionSettings.SingleOrDefault(a => a.ObjectId == ActionObject.ServiceRequest);}
                     @if (serviceRequest != null)
                     {
                         if (serviceRequest.Visibled)
                         {
-                            <li class="dropdown blue">
-                                <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
-                                    <div class="@(string.IsNullOrEmpty(serviceRequest.ObjectClass) ? "ico-new" : serviceRequest.ObjectClass)"></div>
-                                    @serviceRequest.ObjectValue 
-                                </a>
-                      
-                                <ul class="dropdown-menu">
-                                    @if (pCaseTemplates != null)
+                        <li class="dropdown blue">
+                            <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
+                                <div class="@(string.IsNullOrEmpty(serviceRequest.ObjectClass) ? "ico-new" : serviceRequest.ObjectClass)"></div>
+                                @serviceRequest.ObjectValue
+                            </a>
+
+                            <ul class="dropdown-menu">
+                                @if (pCaseTemplates != null)
+                                {
+                                    foreach (var c in pCaseTemplates)
                                     {
-                                        foreach (var c in pCaseTemplates)
+                                    <li>
+                                        @if (string.IsNullOrEmpty(c.TemplatePath))
                                         {
-                                            <li>
-                                                @if (string.IsNullOrEmpty(c.TemplatePath))
-                                                {
-                                                    <a href="@Url.Action("NewCase", "case", new { customerId = pCustomerId, caseTemplateId = c.Id, area = "" })">
-                                                        <span class="glyphicon glyphicon-plus"></span> @c.Name <br />
-                                                        <span class="small"> @c.Description </span>
-                                                    </a>
-                                                }
-                                                else
-                                                {
-                                                    <a href="@Url.Content(c.TemplatePath.SetUrlParameters())">
-                                                        <span class="glyphicon glyphicon-plus"></span> @c.Name <br />
-                                                        <span class="small"> @c.Description </span>
-                                                    </a>
-                                                }   
-                                            </li>
+                                            <a href="@Url.Action("NewCase", "case", new { customerId = pCustomerId, caseTemplateId = c.Id, area = "" })">
+                                                <span class="glyphicon glyphicon-plus"></span>@c.Name
+                                                <br />
+                                                <span class="small">@c.Description </span>
+                                            </a>
                                         }
+                                        else
+                                        {
+                                            <a href="@Url.Content(c.TemplatePath.SetUrlParameters())">
+                                                <span class="glyphicon glyphicon-plus"></span>@c.Name
+                                                <br />
+                                                <span class="small">@c.Description </span>
+                                            </a>
+                                        }
+                                    </li>
                                     }
-                                </ul>                                                                                         
-                            </li>
+                                }
+                            </ul>
+                        </li>
                         }
                     }
                     else
@@ -244,68 +327,70 @@
                                 <div class="ico-new"></div>
                                 Order New Service Request  
                             </a>
-                      
+
                             <ul class="dropdown-menu">
                                 @if (pCaseTemplates != null)
                                 {
                                     foreach (var c in pCaseTemplates)
                                     {
-                                        <li>
-                                            @if (string.IsNullOrEmpty(c.TemplatePath))
-                                            {
-                                                <a href="@Url.Action("NewCase", "case", new { customerId = pCustomerId, caseTemplateId = c.Id, area = "" })">
-                                                    <span class="glyphicon glyphicon-plus"></span> @c.Name <br />
-                                                    <span class="small"> @c.Description </span>
-                                                </a>
-                                            }
-                                            else
-                                            {
-                                                <a href="@Url.Content(c.TemplatePath.SetUrlParameters())">
-                                                    <span class="glyphicon glyphicon-plus"></span> @c.Name <br />
-                                                    <span class="small"> @c.Description </span>
-                                                </a>
-                                            }   
-                                        </li>
+                                    <li>
+                                        @if (string.IsNullOrEmpty(c.TemplatePath))
+                                        {
+                                            <a href="@Url.Action("NewCase", "case", new { customerId = pCustomerId, caseTemplateId = c.Id, area = "" })">
+                                                <span class="glyphicon glyphicon-plus"></span>@c.Name
+                                                <br />
+                                                <span class="small">@c.Description </span>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a href="@Url.Content(c.TemplatePath.SetUrlParameters())">
+                                                <span class="glyphicon glyphicon-plus"></span>@c.Name
+                                                <br />
+                                                <span class="small">@c.Description </span>
+                                            </a>
+                                        }
+                                    </li>
                                     }
                                 }
-                            </ul>                                                                                         
+                            </ul>
                         </li>
                     }
-                    
+
                     @{ var ongoingService = pActionSettings.SingleOrDefault(a => a.ObjectId == ActionObject.OngoingService);}
                     @if (ongoingService != null)
                     {
                         if (ongoingService.Visibled)
                         {
-                            <li class="blue">                        
-                                <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = "2", area = "" })">
-                                    <div class="@(string.IsNullOrEmpty(ongoingService.ObjectClass) ? "ico-ongoing" : ongoingService.ObjectClass)"></div>
-                                    @ongoingService.ObjectValue                                    
-                                </a>
-                            </li>
+                        <li class="blue">
+                            <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = "2", area = "" })">
+                                <div class="@(string.IsNullOrEmpty(ongoingService.ObjectClass) ? "ico-ongoing" : ongoingService.ObjectClass)"></div>
+                                @ongoingService.ObjectValue
+                            </a>
+                        </li>
                         }
                     }
                     else
                     {
-                        <li class="blue">                        
+                        <li class="blue">
                             <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = "2", area = "" })">
                                 <div class="ico-ongoing"></div>
                                 Ongoing Service Requests
                             </a>
                         </li>
                     }
-                    
+
                     @{var finishedService = pActionSettings.SingleOrDefault(a => a.ObjectId == ActionObject.FinishedService);}
                     @if (finishedService != null)
                     {
                         if (finishedService.Visibled)
                         {
-                            <li class="blue">
-                                <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = "1", area = "" })">
-                                    <div class="@(string.IsNullOrEmpty(finishedService.ObjectClass) ? "ico-finished" : finishedService.ObjectClass)"></div>
-                                    @finishedService.ObjectValue                                    
-                                </a>
-                            </li>
+                        <li class="blue">
+                            <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = "1", area = "" })">
+                                <div class="@(string.IsNullOrEmpty(finishedService.ObjectClass) ? "ico-finished" : finishedService.ObjectClass)"></div>
+                                @finishedService.ObjectValue
+                            </a>
+                        </li>
                         }
                     }
                     else
@@ -323,12 +408,12 @@
                     {
                         if (document.Visibled)
                         {
-                            <li class="blue">
-                                <a href="@Url.Action("Index", "Documents", new { customerId = pCustomerId, area = "" })">
-                                    <div class="@(string.IsNullOrEmpty(document.ObjectClass) ? "ico-documents" : document.ObjectClass)"></div>
-                                    @document.ObjectValue
-                                </a>
-                            </li>
+                        <li class="blue">
+                            <a href="@Url.Action("Index", "Documents", new { customerId = pCustomerId, area = "" })">
+                                <div class="@(string.IsNullOrEmpty(document.ObjectClass) ? "ico-documents" : document.ObjectClass)"></div>
+                                @document.ObjectValue
+                            </a>
+                        </li>
                         }
                     }
                     else
@@ -340,18 +425,18 @@
                             </a>
                         </li>
                     }
-                    
+
                     @{var coWorker = pActionSettings.SingleOrDefault(a => a.ObjectId == ActionObject.CoWorker);}
                     @if (coWorker != null)
                     {
                         if (coWorker.Visibled)
                         {
-                            <li class="blue">
-                                <a href="@Url.Action("Index", "CoWorkers", new { customerId = pCustomerId, area = "" })">
-                                    <div class="@(string.IsNullOrEmpty(coWorker.ObjectClass) ? "ico-coworkers" : coWorker.ObjectClass)"></div>
-                                    @coWorker.ObjectValue
-                                </a>
-                            </li>
+                        <li class="blue">
+                            <a href="@Url.Action("Index", "CoWorkers", new { customerId = pCustomerId, area = "" })">
+                                <div class="@(string.IsNullOrEmpty(coWorker.ObjectClass) ? "ico-coworkers" : coWorker.ObjectClass)"></div>
+                                @coWorker.ObjectValue
+                            </a>
+                        </li>
                         }
                     }
                     else
@@ -363,38 +448,38 @@
                             </a>
                         </li>
                     }
-                    
-                     
+
+
                     @{var help = pActionSettings.SingleOrDefault(a => a.ObjectId == ActionObject.Help);}
                     @if (help != null)
                     {
                         if (help.Visibled)
                         {
-                            <li class="dropdown blue">
-                                <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
-                                    <div class="@(string.IsNullOrEmpty(help.ObjectClass) ? "ico-help" : help.ObjectClass)"></div>
-                                    @help.ObjectValue
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="@Url.Action("FindYourWay", "Help", new { customerId = pCustomerId, area = "" })">Find Your Way</a></li>
-                                    <li><a href="@Url.Action("Index", "Help", new { customerId = pCustomerId, area = "" })">Help</a></li>
-                                    <li><a href="@Url.Action("About", "Help", new { customerId = pCustomerId, area = "" })">About</a></li>
-                                </ul>
-                            </li>
+                        <li class="dropdown blue">
+                            <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
+                                <div class="@(string.IsNullOrEmpty(help.ObjectClass) ? "ico-help" : help.ObjectClass)"></div>
+                                @help.ObjectValue
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="@Url.Action("FindYourWay", "Help", new { customerId = pCustomerId, area = "" })">Find Your Way</a></li>
+                                <li><a href="@Url.Action("Index", "Help", new { customerId = pCustomerId, area = "" })">Help</a></li>
+                                <li><a href="@Url.Action("About", "Help", new { customerId = pCustomerId, area = "" })">About</a></li>
+                            </ul>
+                        </li>
                         }
                     }
                     else
                     {<li class="dropdown blue">
-                         <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
-                             <div class="ico-help"></div>
-                             Need Help?
-                         </a>
-                         <ul class="dropdown-menu">
-                             <li><a href="@Url.Action("FindYourWay", "Help", new { customerId = pCustomerId, area = "" })">Find Your Way</a></li>
-                             <li><a href="@Url.Action("Index", "Help", new { customerId = pCustomerId, area = "" })">Help</a></li>
-                             <li><a href="@Url.Action("About", "Help", new { customerId = pCustomerId, area = "" })">About</a></li>
-                         </ul>
-                     </li>
+                        <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
+                            <div class="ico-help"></div>
+                            Need Help?
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="@Url.Action("FindYourWay", "Help", new { customerId = pCustomerId, area = "" })">Find Your Way</a></li>
+                            <li><a href="@Url.Action("Index", "Help", new { customerId = pCustomerId, area = "" })">Help</a></li>
+                            <li><a href="@Url.Action("About", "Help", new { customerId = pCustomerId, area = "" })">About</a></li>
+                        </ul>
+                    </li>
                     }
                 </ul>
             </div>
@@ -423,7 +508,7 @@
     <input type="hidden" value="@this.Request.RawUrl" id="rawUrl" />
 
     <!-- Modal Test by Jonas -->
-                            @*<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    @*<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog" style="width:900px;">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -501,5 +586,5 @@
                                 </div>
                             </div>*@
 </body>
-    
+
 </html>

@@ -108,3 +108,7 @@
     cursor: not-allowed;
     background-color: #eee;
 }
+
+.marginbuttontop {
+    margin-top: 1px;
+}
