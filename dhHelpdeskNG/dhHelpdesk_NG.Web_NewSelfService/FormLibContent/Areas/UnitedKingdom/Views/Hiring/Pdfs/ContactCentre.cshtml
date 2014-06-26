@@ -1,0 +1,40 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@using ECT.FormLib.Pdfs;
+@using System.Globalization;
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<body>
+    <div>
+        <table style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
+            <tr style="text-align: right;">
+                <td>@string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:d MMMMMM yyyy}", DateTime.Now)</td>
+            </tr>
+        </table>
+
+         <p style="text-align: left; font-family: Verdana; font-size: 11px;"><strong>PRIVATE & CONFIDENTIAL</strong></p>
+        @Model.GetAnswer("FirstName") @Model.GetAnswer("LastName")<br />
+        @Model.GetAnswer("PermanentAddressLine1")
+        <br />
+        @Model.GetAnswer("PermanentAddressLine2")
+        <br />
+        @Model.GetAnswer("PermanentCity")
+        <br />
+        @Model.GetAnswer("PermanentPostalCode")
+        <br />
+        <br />
+        <br />
+
+        Dear @Model.GetAnswer("FirstName"),<br />
+
+        I am very pleased to be able to confirm to you our offer of the permanent position of @Model.GetAnswer("JobTitle") within the <Serv Area from Department/OA.CS.4.1> at the IKEA UK & IE Contact Centre based in Peterborough.
+        
+
+           <endpage />
+    </div>
+</body>
+</html>

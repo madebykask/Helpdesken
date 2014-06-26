@@ -881,7 +881,7 @@
                     <option value="CCCN">CCCN</option>
                 </options>
             </element>
-            <element type="typeahead-simple" source="1" name="Team" label="Team" mandatory="1">
+            <element type="typeahead-simple" source="1" name="Department" label="Department" mandatory="1">
                 <options>
                     <option value="﻿Accounting SO">﻿Accounting SO</option>
                     <option value="AOS Amsterdam Store">AOS Amsterdam Store</option>
@@ -1626,65 +1626,32 @@
                     <option value="Sales">Sales</option>
                 </options>
             </element>
-            <element type="typeahead-simple" source="1" name="Department" label="Department" mandatory="1">
+            <element type="typeahead-simple" source="1" name="ServiceArea" label="Service Area" mandatory="1">
                 <!--&pre_department_homecostcentre;-->
-                &pre_department_crosschargecostcentre;
-                <options>
-                    <option value=""></option>
-                    <option value="﻿Accounting">﻿Accounting</option>
-                    <option value="ACTIVITY">ACTIVITY</option>
-                    <option value="Activity House">Activity House</option>
-                    <option value="Administration">Administration</option>
-                    <option value="BA Deputies">BA Deputies</option>
-                    <option value="BEDROOMS">BEDROOMS</option>
-                    <option value="CHILDREN&apos;S IKEA">CHILDREN&apos;S IKEA</option>
-                    <option value="Communic &amp; Interior">Communic &amp; Interior</option>
-                    <option value="Competence Developm">Competence Developm</option>
-                    <option value="Controlling / BN">Controlling / BN</option>
-                    <option value="COOKING &amp; EATING">COOKING &amp; EATING</option>
-                    <option value="Customer Service">Customer Service</option>
-                    <option value="Decoration, outd&amp;oth">Decoration, outd&amp;oth</option>
-                    <option value="EO Rebuild">EO Rebuild</option>
-                    <option value="Expansion Team">Expansion Team</option>
-                    <option value="Family">Family</option>
-                    <option value="Finance">Finance</option>
-                    <option value="Goods receiving">Goods receiving</option>
-                    <option value="HomeOrg&amp;second stora">HomeOrg&amp;second stora</option>
-                    <option value="Human Resource">Human Resource</option>
-                    <option value="IKEA Food Services">IKEA Food Services</option>
-                    <option value="IKEA Green (rec&amp;env)">IKEA Green (rec&amp;env)</option>
-                    <option value="IT">IT</option>
-                    <option value="KITCHEN">KITCHEN</option>
-                    <option value="LIGHTING">LIGHTING</option>
-                    <option value="LIVING ROOMS">LIVING ROOMS</option>
-                    <option value="Logistics Common">Logistics Common</option>
-                    <option value="Maintenance">Maintenance</option>
-                    <option value="Management Group">Management Group</option>
-                    <option value="Marketing">Marketing</option>
-                    <option value="Mobility">Mobility</option>
-                    <option value="Non operational">Non operational</option>
-                    <option value="Operations common">Operations common</option>
-                    <option value="Payroll">Payroll</option>
-                    <option value="PR">PR</option>
-                    <option value="Project EO 1">Project EO 1</option>
-                    <option value="Property Common">Property Common</option>
-                    <option value="Quality Common">Quality Common</option>
-                    <option value="Re-invoice InterCmp">Re-invoice InterCmp</option>
-                    <option value="Relocation">Relocation</option>
-                    <option value="Sales">Sales</option>
-                    <option value="Self serve">Self serve</option>
-                    <option value="Self Service">Self Service</option>
-                    <option value="Showroom">Showroom</option>
-                    <option value="Staff Pool">Staff Pool</option>
-                    <option value="Stock Control">Stock Control</option>
-                    <option value="Support Common">Support Common</option>
-                    <option value="TEXTILES &amp; RUGS">TEXTILES &amp; RUGS</option>
-                    <option value="Trainees&amp;Apprentices">Trainees&amp;Apprentices</option>
-                    <option value="Training">Training</option>
-                    <option value="WORK IKEA">WORK IKEA</option>
-                </options>
+                <!--&pre_department_crosschargecostcentre;-->
+              <option value="﻿Business Suppor">﻿Business Suppor</option>
+              <option value="Com&amp;In">Com&amp;In</option>
+              <option value="Customer Relati">Customer Relati</option>
+              <option value="Customer Servic">Customer Servic</option>
+              <option value="Finance &amp; Admin">Finance &amp; Admin</option>
+              <option value="Front Office">Front Office</option>
+              <option value="HRSC">HRSC</option>
+              <option value="Human Resources">Human Resources</option>
+              <option value="IKEA Business">IKEA Business</option>
+              <option value="IKEA Food">IKEA Food</option>
+              <option value="Implementation">Implementation</option>
+              <option value="Logistics">Logistics</option>
+              <option value="Management Team">Management Team</option>
+              <option value="Marketing">Marketing</option>
+              <option value="Operations">Operations</option>
+              <option value="Other">Other</option>
+              <option value="Property &amp; Expa">Property &amp; Expa</option>
+              <option value="Sales">Sales</option>
+              <option value="Solutions">Solutions</option>
+              <option value="Support">Support</option>
+
             </element>
-            <element type="typeahead-simple" name="HomeCostCentre" label="Home Cost Centre" mandatory="1">
+            <element type="typeahead-simple" name="HomeCostCentre" label="Home Cost Center" mandatory="1">
                 <regex inherit="unsignednum" pattern="" message=""></regex>
                 <options>
                     <option value=""></option>

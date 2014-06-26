@@ -194,18 +194,36 @@
 
 <script>
 
+    function setPaymentDatePickersBehavior() {
+        var startDate = $('#ChangeValidFrom').val();
+        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+        var dStart = APIGlobal.DateTime.parseDate(startDate, format);
+        var forcePicker = new Date(dStart.getFullYear(), dStart.getMonth(), dStart.getDate(), 0, 0, 0, 0);
+        $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,' +
+            '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3').not(".disabled").datepicker(
+        {
+            onRender: function (ev) {
+                return ev.valueOf() < forcePicker.valueOf() ? 'disabled' : '';
+            },
+        });
+    }
+
+    setPaymentDatePickersBehavior();
 
 
-            if (document.getElementById('DeductionsValidFrom').value == ''){
-                document.getElementById('DeductionsValidFrom').value = '@Model.GetAnswer("ChangeValidFrom")';
-            for (var i = 2; i <= 3; i++) {
-            
-                var DeductionsValidFrom = "DeductionsValidFrom" + [i].toString();
-            
-                document.getElementById(DeductionsValidFrom).value = '@Model.GetAnswer("ChangeValidFrom")';
-                
-            }
-        }
+    $('#date_ChangeValidFrom').on('changeDate', function (ev) {
+
+        $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,' +
+        '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3').not(".disabled").datepicker('destroy');
+
+        setPaymentDatePickersBehavior();
+
+        $('#AllowancesValidFrom,#AllowancesValidFrom2,#AllowancesValidFrom3,' +
+        '#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3').val($('#ChangeValidFrom').val());
+    }).data('datepicker');
+
+
+
 
         var startDate = $('#ChangeValidFrom').val();
         var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
@@ -228,10 +246,10 @@
                 input.attr('readonly', 'readonly');
                 $('#date_AllowancesValidTo').datepicker("destroy");
                 $('#date_AllowancesValidTo').addClass("disabled");
-                
+
             } else {
                 input.removeAttr('readonly', 'readonly');
-                $('#date_AllowancesValidTo').datepicker();
+                $('#date_AllowancesValidTo').not(".disabled").datepicker();
                 $('#date_AllowancesValidTo').removeClass("disabled");
                 allowancesValidTo.value = '31.12.9999';
             }

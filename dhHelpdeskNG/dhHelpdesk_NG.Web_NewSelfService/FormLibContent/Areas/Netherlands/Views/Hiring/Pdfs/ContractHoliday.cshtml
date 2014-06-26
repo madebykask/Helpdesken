@@ -79,7 +79,7 @@
 
             
             //5            
-            if (Model.GetAnswer("ProbationPeriod") == "Yes")
+            if (Model.GetAnswer("ProbationPeriod").ToLower() == "Yes".ToLower())
             {
               list.Add(new PdfListItem { Text = "De eerste twee maanden van het dienstverband gelden als proeftijd. Tijdens de proeftijd hebben beide partijen het recht om het dienstverband met onmiddellijke ingang op te zeggen en te beëindigen." });
             }

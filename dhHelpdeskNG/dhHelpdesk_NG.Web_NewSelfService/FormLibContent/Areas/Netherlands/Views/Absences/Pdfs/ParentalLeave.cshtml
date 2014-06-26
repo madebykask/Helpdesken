@@ -59,7 +59,7 @@
         <br />
             <br />
 
-            Jij hebt aan je leidinggevende het verzoek gedaan om van @Model.GetAnswer("AbsenceStartFrom" +Model.AbsenceNr) tot @Model.GetAnswer("AbsenceEndsOn"+Model.AbsenceNr), @Model.GetAnswer("AbsenceHoursWeekly") per week onbetaald ouderschapsverlof op te nemen. Je neemt in deze periode in totaal @Model.GetAnswer("AbsenceHours"+Model.AbsenceNr) uur ouderschapsverlof op, van de @Model.GetAnswer("Totalparentalleaveentitlement") uur waar je aanspraak op kan maken. Je leidinggevende gaat hiermee akkoord. 
+            Jij hebt aan je leidinggevende het verzoek gedaan om van @Model.GetAnswer("AbsenceStartFrom" +Model.AbsenceNr) tot en met @Model.GetAnswer("AbsenceEndsOn"+Model.AbsenceNr), @Model.GetAnswer("AbsenceHoursWeekly") uur per week onbetaald ouderschapsverlof op te nemen. Je neemt in deze periode in totaal @Model.GetAnswer("AbsenceHours"+Model.AbsenceNr) uur ouderschapsverlof op, van de @Model.GetAnswer("Totalparentalleaveentitlement") uur waar je aanspraak op kan maken. Je leidinggevende gaat hiermee akkoord.
         <br />
             <br />
         </p>
@@ -82,22 +82,23 @@
         <br />
         <p style="text-align: left; font-family: Verdana; font-size: 11px;">
             Wij willen je erop wijzen dat je het bovengenoemde ouderschapsverlof niet kan wijzigen of voortijdig kan stopzetten. Wanneer je het ouderschapsverlof voor @Model.GetAnswer("ChildName") stopzet, vervallen de resterende aangevraagde verlofuren, tenzij de reden van de onderbreking een volgend zwangerschaps-, bevallings- of adptieverlofverlof is.
-
         <br />
             <br />
             Tijdens de periode van onbetaald ouderschapsverlof wordt de pensioenopbouw voortgezet waarbij zowel het werkgevers- als werknemersdeel van de pensioenpremie voor rekening komen van IKEA. 
         <br />
             <br />
 
-            @if (Model.GetAnswer("AbsenceLongerThan2Months") == "Yes")
+            @if (Model.GetAnswer("AbsenceLongerThan2Months").ToLower() == "Yes".ToLower())
             {
                 <text>
                 Aangezien je verlof langer dan twee aaneengesloten maanden duurt, verzoeken wij je, om je OV-abonnement op je laatste werkdag voorafgaand aan je verlof te retourneren met bijgevoegde enveloppe.
+               
         <br />
                 <br />
                 </text>
             }
             Na afloop van je ouderschapsverlof zal je weer werkzaam zijn voor @Model.GetAnswer("ContractedHoursOldData") uur per week.
+            
         </p>
         <endpage />
     </div>

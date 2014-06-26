@@ -6,277 +6,6 @@
 @{
     Layout = null;
 }
-
-@functions{
-
-    public string GetDateInWords(string Date)
-    {
-        string s = Date.Replace(".", "-");
-        DateTime dt = DateTime.ParseExact(s, "dd-MM-yyyy", CultureInfo.InvariantCulture);
-        return string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:d MMMMMM yyyy}", dt);
-    }
-
-    public string GetAllowancesText(string AllowancesType, string AllowancesAmountUnits)
-    {
-
-        if (Model.GetAnswer(AllowancesType).ToLower() == "150C - Hourly FLT Skills (Fork Lift Truck Allowance)".ToLower() | Model.GetAnswer(AllowancesType).ToLower() == "150C - Hourly FLT Skills (Fork Lift Truck Allowance Milton Keynes)".ToLower())
-        {
-            return "In addition you will receive a fork lift truck skills allowance of £" + Model.GetAnswer(AllowancesAmountUnits) + " per hour (subject to having a valid fork lift truck licence and using this skill).";
-        }
-
-        if (Model.GetAnswer(AllowancesType).ToLower() == "150P - NIght Premium".ToLower() | Model.GetAnswer(AllowancesType).ToLower() == "150P - NIght Premium London 1".ToLower() | Model.GetAnswer(AllowancesType).ToLower() == "150P - NIght Premium London 2".ToLower() | Model.GetAnswer(AllowancesType).ToLower() == "150P - NIght Premium London 3".ToLower() | Model.GetAnswer(AllowancesType).ToLower() == "150U - Night Premium Dist".ToLower() | Model.GetAnswer(AllowancesType).ToLower() == "300G - Night Shift".ToLower())
-        {
-            return "In addition you will receive a night allowance of £" + Model.GetAnswer(AllowancesAmountUnits) + " per hour for hours worked between 22.00 and 06.00 (subject to working a minimum of one hour during this period)";
-        }
-
-        if (Model.GetAnswer(AllowancesType).ToLower() == "300D - First Aid Allowance".ToLower())
-        {
-            return "In addition you will receive a First Aid skills allowance of £" + Model.GetAnswer(AllowancesAmountUnits) + " per annum (subject to valid qualification and using this skill).";
-        }
-
-        return "";
-    }
-
-
-    //BenefitLevel
-
-    public string GetBenefit1Text()
-    {
-
-        if (Model.GetAnswer("BenefitLevel").ToLower() == "Level 1".ToLower() | Model.GetAnswer("BenefitLevel").ToLower() == "Level 2".ToLower() | Model.GetAnswer("BenefitLevel").ToLower() == "Level 3".ToLower())
-        {
-            return "You will be entitled to Private Medical Health (BUPA) for yourself and where applicable your partner and children paid for by IKEA. You will also receive Dental Insurance cover paid for by IKEA for yourself and your partner.";
-        }
-
-        return "";
-    }
-
-    public string GetBenefit2Text()
-    {
-        if (Model.GetAnswer("BenefitLevel").ToLower() == "Level 1".ToLower())
-        {
-            return "You have the benefit of up to 13 weeks paid sick leave in any rolling year from your first day at IKEA.";
-        }
-
-        if (Model.GetAnswer("BenefitLevel").ToLower() == "Level 2".ToLower() | Model.GetAnswer("BenefitLevel").ToLower() == "Level 3".ToLower())
-        {
-            return "You have the benefit of up to 26 weeks paid sick leave in any calendar year from your first day at IKEA.";
-        }
-
-        return "";
-    }
-
-    public string GetBenefit3Text()
-    {
-        if (Model.GetAnswer("BenefitLevel").ToLower() == "Level 2".ToLower() | Model.GetAnswer("BenefitLevel").ToLower() == "Level 3".ToLower())
-        {
-            return "Permanent Health Insurance (PHI) will provide you with 75% of your salary, in the event that you are unable to work due to chronic or disabling illness. You are entitled to Health Check every 2 years with Nuffield.";
-        }
-
-        return "";
-    }
-
-    public string GetBenefit4Text()
-    {
-        if (Model.GetAnswer("BenefitLevel").ToLower() == "Level 3".ToLower())
-        {
-            return "You are eligible for a company car or car allowance of £7,200. You will receive the benefit of a 10% pension contribution, made by IKEA when you join the IKEA pension scheme.";
-        }
-
-        return "";
-    }
-
-    public string GetProbationtext()
-    {
-
-        if (Model.GetAnswer("BenefitLevel").ToLower() == "Co-worker".ToLower() | Model.GetAnswer("BenefitLevel").ToLower() == "Level 1".ToLower())
-        {
-            return "If it is agreed your probationary period is extended beyond your first six months’ then your notice period will remain as one week from either side. Likewise, where you intend to resign from your employment, during your probationary period you will be required to give the company one week’s notice in writing. During the probationary period the provisions of the company disciplinary procedure will not apply. Beyond the probationary period you will give/be given 4 weeks’ notice in writing.";
-        }
-
-        if (Model.GetAnswer("BenefitLevel").ToLower() == "Level 2".ToLower() | Model.GetAnswer("BenefitLevel").ToLower() == "Level 3".ToLower())
-        {
-            return "If it is agreed your probationary period is extended beyond your first six months’ then your notice period will remain as one week from either side. Likewise, where you intend to resign from your employment, during your probationary period you will be required to give the company one week’s notice in writing. During the probationary period the provisions of the company disciplinary procedure will not apply. Beyond the probationary period you will give/be given 12 weeks’ notice in writing.";
-        }
-
-        return "";
-    }
-    
-    
-    public string getPayInfoText()
-    {
-        //Hourly
-        if (Model.GetAnswer("PayrollCategory").ToLower() == "Hourly".ToLower())
-        {
-            if (Model.GetAnswer("BusinessUnit").ToLower() == "Store Bristol 264".ToLower())
-            {
-                return " per hour (plus £0.10 location allowance) payable monthly in arrears in accordance with the terms set out from time to time in our Company Handbook. Salary is inclusive of all hours/days worked.";
-            }
-
-            if (Model.GetAnswer("BusinessUnit").ToLower() == "Store London Croydon 144".ToLower() | Model.GetAnswer("BusinessUnit").ToLower() == "Service Office UK".ToLower() | Model.GetAnswer("BusinessUnit").ToLower() == "Store London Tottenham 255".ToLower() | Model.GetAnswer("BusinessUnit").ToLower() == "Store London Wembley 141".ToLower() | Model.GetAnswer("BusinessUnit").ToLower() == "IKEA Property Services".ToLower())
-            {
-                return " per hour (plus £1.28 location allowance) payable monthly in arrears in accordance with the terms set out from time to time in our Company Handbook. Salary is inclusive of all hours/days worked.";
-            }
-
-            if (Model.GetAnswer("BusinessUnit").ToLower() == "Store London Lakeside 262".ToLower())
-            {
-                return " per hour (plus £0.77 location allowance) payable monthly in arrears in accordance with the terms set out from time to time in our Company Handbook. Salary is inclusive of all hours/days worked.";
-            }
-
-            if (Model.GetAnswer("BusinessUnit").ToLower() == "Store Milton Keynes 185".ToLower())
-            {
-                return " per hour (plus £0.35 location allowance) payable monthly in arrears in accordance with the terms set out from time to time in our Company Handbook. Salary is inclusive of all hours/days worked.";
-            }
-            
-            if (Model.GetAnswer("BusinessUnit").ToLower() == "Peterborough Contact Centre".ToLower())
-            {
-                return  " per hour payable monthly in arrears on the last Friday of each month by direct transfer into your Bank or Building Society account.";   
-            }
-
-            return " per hour payable monthly in arrears in accordance with the terms set out from time to time in our Company Handbook. Salary is inclusive of all hours/days worked.";   
-        }
-        //"Salaried", "Salaried Management" or "Salaried Senior Management"
-        else
-        {
-            if (Model.GetAnswer("BusinessUnit").ToLower() == "Store Bristol 264".ToLower())
-            {
-                return " per annum (plus £203 per annum location allowance) payable monthly in arrears in accordance with the terms set out from time to time in our Company Handbook. Salary is inclusive of all hours/days worked.";
-            }
-
-            if (Model.GetAnswer("BusinessUnit").ToLower() == "Store London Croydon 144".ToLower() | Model.GetAnswer("BusinessUnit").ToLower() == "Service Office UK".ToLower() | Model.GetAnswer("BusinessUnit").ToLower() == "Store London Tottenham 255".ToLower() | Model.GetAnswer("BusinessUnit").ToLower() == "Store London Wembley 141".ToLower() | Model.GetAnswer("BusinessUnit").ToLower() == "IKEA Property Services".ToLower())
-            {
-             return " per annum (plus £2,600 per annum location allowance) payable monthly in arrears in accordance with the terms set out from time to time in our Company Handbook. Salary is inclusive of all hours/days worked.";   
-            }
-            
-            if (Model.GetAnswer("BusinessUnit").ToLower() == "Store London Lakeside 262".ToLower())
-            {
-                return " per annum (plus £1,560 per annum location allowance) payable monthly in arrears in accordance with the terms set out from time to time in our Company Handbook. Salary is inclusive of all hours/days worked.";
-            }
-            
-            if (Model.GetAnswer("BusinessUnit").ToLower() == "Store Milton Keynes 185".ToLower())
-            {
-                return " per annum (plus £709 per annum location allowance) payable monthly in arrears in accordance with the terms set out from time to time in our Company Handbook. Salary is inclusive of all hours/days worked.";
-            }
-
-            if (Model.GetAnswer("BusinessUnit").ToLower() == "Peterborough Contact Centre".ToLower())
-            {
-                return " per annum payable monthly in arrears on the last Friday of each month by direct transfer into your Bank or Building Society account.  Salary is inclusive of all hours/days worked.";
-            }
-            
-            return " per annum payable monthly in arrears in accordance with the terms set out from time to time in our Company Handbook. Salary is inclusive of all hours/days worked.";
-        }
-        
-    }
-
-    public string GetServiceAreaText()
-    {
-        string serviceArea = Model.GetAnswer("ServiceArea").ToLower();
-
-        if (serviceArea == "﻿Bus Navigation".ToLower())
-        {
-            return "Business Navigation & Operations Department";
-        }
-
-        if (serviceArea == "CDC Operations".ToLower())
-        {
-            return "CDC Operations Department";
-        }
-
-        if (serviceArea == "Comm-In".ToLower())
-        {
-            return "Communication & Interior Design Department";
-        }
-
-        if (serviceArea == "Cust Distrib".ToLower())
-        {
-            return "Customer Distribution Department".ToLower();
-        }
-
-        if (serviceArea == "Cust Relations".ToLower())
-        {
-            return "Customer Relations Department";
-        }
-
-        if (serviceArea == "Cust Services".ToLower())
-        {
-            return "Customer Services Department";
-        }
-
-        if (serviceArea == "Facilities".ToLower())
-        {
-            return "Facilities Department";
-        }
-
-        if (serviceArea == "Finance &amp; Admin".ToLower() | serviceArea == "Finance & Admin".ToLower())
-        {
-            return "Finance & Administration Department";
-        }
-
-        if (serviceArea == "HR".ToLower())
-        {
-            return "Human Resources Department";
-        }
-
-        if (serviceArea == "IKEA Food Serv".ToLower())
-        {
-            return "IKEA Food Department";
-        }
-
-        if (serviceArea == "Internationals".ToLower())
-        {
-            return "Internationals Department";
-        }
-
-        if (serviceArea == "Logistics".ToLower())
-        {
-            return "Logistics Department";
-        }
-
-        if (serviceArea == "Marketing".ToLower())
-        {
-            return "Marketing Department";
-        }
-
-        if (serviceArea == "Operational Sup".ToLower())
-        {
-            return "Operational Support Department".ToLower();
-        }
-
-        if (serviceArea == "Operations".ToLower())
-        {
-            return "Operations Department";
-        }
-
-        if (serviceArea == "Projects".ToLower())
-        {
-            return "Projects Department";
-        }
-
-        if (serviceArea == "Property".ToLower())
-        {
-            return "Property Department";
-        }
-
-        if (serviceArea == "Resource Plann".ToLower())
-        {
-            return "Resource Planning Department";   
-        }
-
-        if (serviceArea == "Sales".ToLower())
-        {
-            return "Sales Department";
-        }
-
-        if (serviceArea == "Warehouse Oper".ToLower())
-        {
-            return "Warehouse";   
-        }
-
-        return Model.GetAnswer("ServiceArea");
-    }
-
-}
-
 <!DOCTYPE html>
 <html>
 <body>
@@ -302,7 +31,7 @@
 
         Dear @Model.GetAnswer("FirstName"),<br />
 
-        I am very pleased to be able to confirm to you our offer of the position of @Model.GetAnswer("JobTitle") in @GetServiceAreaText() at IKEA @Model.Department.Unit reporting to the 
+        I am very pleased to be able to confirm to you our offer of the position of @Model.GetAnswer("JobTitle") in @UnitedKingdomPdfPage.GetServiceAreaText(Model.GetAnswer("ServiceArea")) at IKEA @Model.Department.Unit reporting to the 
         
         @if (@Model.GetAnswer("ManagersJobTitle").ToLower() == "Shopkeeper".ToLower())
         {
@@ -324,15 +53,15 @@
               var brText = "<br /><br />";
 
               //1
-              string text1 = "Your first day of employment with IKEA " + Model.Department.Unit + " will be on " + GetDateInWords(Model.GetAnswer("ContractStartDate")) + ". This counts as part of your continuous service with IKEA which began on ";
+              string text1 = "Your first day of employment with IKEA " + Model.Department.Unit + " will be on " + UnitedKingdomPdfPage.GetDateInWords(Model.GetAnswer("ContractStartDate")) + ". This counts as part of your continuous service with IKEA which began on ";
 
               if (!string.IsNullOrEmpty(Model.GetAnswer("PreviousContractStartDate")))
               {
-                  text1 += " " + GetDateInWords(Model.GetAnswer("PreviousContractStartDate")) + " ";
+                  text1 += " " + UnitedKingdomPdfPage.GetDateInWords(Model.GetAnswer("PreviousContractStartDate")) + " ";
               }
               else
               {
-                  text1 += " " + GetDateInWords(Model.GetAnswer("ContractStartDate")) + " ";
+                  text1 += " " + UnitedKingdomPdfPage.GetDateInWords(Model.GetAnswer("ContractStartDate")) + " ";
               }
 
               list.Add(new PdfListItem { Text = text1 });
@@ -342,8 +71,10 @@
 
               //+ "*" + DateTime.ParseExact("21:45", "HH:mm", CultureInfo.InvariantCulture).ToString("h:mm tt") + "*"
 
+              //string InductionStartTime = string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:h:mm tt}", DateTime.ParseExact(Model.GetAnswer("InductionStartTime"), "HH:mm", CultureInfo.InvariantCulture));
+              //string InductionEndTime = string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:h:mm tt}", DateTime.ParseExact(Model.GetAnswer("InductionEndTime"), "HH:mm", CultureInfo.InvariantCulture));
 
-              string text2 = "Please report to your place of work: IKEA " + Model.Department.Unit + ", " + Model.Department.StrAddr + " at " + Model.GetAnswer("InductionStartTime")  + " for a full ";
+              string text2 = "Please report to your place of work: IKEA " + Model.Department.Unit + ", " + Model.Department.StrAddr + " at " + UnitedKingdomPdfPage.GetAmPm(Model.GetAnswer("InductionStartTime")) + " for a full ";
 
               //text2 += "*" + string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:h:mm tt}", DateTime.ParseExact("21:45", "HH:mm", CultureInfo.InvariantCulture)) + "*";
               
@@ -356,12 +87,12 @@
                   text2 += Model.GetAnswer("LengthOfInductionInDays");
               }
 
-              text2 += " introduction, finishing at " + Model.GetAnswer("InductionEndTime") + ".";
+              text2 += " introduction, finishing at " + UnitedKingdomPdfPage.GetAmPm(Model.GetAnswer("InductionEndTime")) + ".";
 
               list.Add(new PdfListItem { Text = text2 });
 
               //3
-              string text3 = "The " + GetServiceAreaText() + " is your primary area of work. You will on occasions be expected to work in other areas within the Store/Unit to support the business need.";
+              string text3 = "The " + UnitedKingdomPdfPage.GetServiceAreaText(Model.GetAnswer("ServiceArea")) + " is your primary area of work. You will on occasions be expected to work in other areas within the Store/Unit to support the business need.";
 
               list.Add(new PdfListItem { Text = text3 });
 
@@ -373,29 +104,29 @@
               string text5 = "Your starting salary will be £" + Model.GetAnswer("BasicPayAmount");
 
               //Add PayInfoText
-              text5 += getPayInfoText();
-              text5 += " Next review date will be " + GetDateInWords(Model.GetAnswer("DateOfNextSalaryReview")) +".";
+              text5 += UnitedKingdomPdfPage.GetPayInfoText(Model);
+              text5 += " Next review date will be " + UnitedKingdomPdfPage.GetDateInWords(Model.GetAnswer("DateOfNextSalaryReview")) + ".";
 
               text5 += "<br />";
 
               if (!string.IsNullOrEmpty(Model.GetAnswer("AllowancesType")))
               {
                   //1
-                  text5 += GetAllowancesText("AllowancesType", "AllowancesAmountUnits");
+                  text5 += "<br />" + UnitedKingdomPdfPage.GetAllowancesText("AllowancesType", "AllowancesAmountUnits", Model);
                   text5 += "<br /><br />";
               }
 
               if (!string.IsNullOrEmpty(Model.GetAnswer("AllowancesType2")))
               {
                   //2
-                  text5 += GetAllowancesText("AllowancesType2", "AllowancesAmountUnits2");
+                  text5 += UnitedKingdomPdfPage.GetAllowancesText("AllowancesType2", "AllowancesAmountUnits2", Model);
                   text5 += "<br /><br />";
               }
 
               if (!string.IsNullOrEmpty(Model.GetAnswer("AllowancesType3")))
               {
                   //3
-                  text5 += GetAllowancesText("AllowancesType3", "AllowancesAmountUnits3");
+                  text5 += UnitedKingdomPdfPage.GetAllowancesText("AllowancesType3", "AllowancesAmountUnits3", Model);
                   text5 += "<br /><br />";
               }
 
@@ -416,7 +147,7 @@
               list.Add(new PdfListItem { Text = text5 });
 
               //BENEFITS
-              string benefit1Text = GetBenefit1Text();
+              string benefit1Text = UnitedKingdomPdfPage.GetBenefit1Text(Model);
 
               if (!string.IsNullOrEmpty(benefit1Text))
               {
@@ -426,7 +157,7 @@
                   list.Add(new PdfListItem { Text = benefit1Text });
               }
 
-              string benefit2Text = GetBenefit2Text();
+              string benefit2Text = UnitedKingdomPdfPage.GetBenefit2Text(Model);
 
               if (!string.IsNullOrEmpty(benefit2Text))
               {
@@ -434,7 +165,7 @@
                   list.Add(new PdfListItem { Text = benefit2Text });
               }
 
-              string benefit3Text = GetBenefit3Text();
+              string benefit3Text = UnitedKingdomPdfPage.GetBenefit3Text(Model);
 
               if (!string.IsNullOrEmpty(benefit3Text))
               {
@@ -442,7 +173,7 @@
                   list.Add(new PdfListItem { Text = benefit3Text });
               }
 
-              string benefit4Text = GetBenefit4Text();
+              string benefit4Text = UnitedKingdomPdfPage.GetBenefit4Text(Model);
 
               if (!string.IsNullOrEmpty(benefit4Text))
               {
@@ -466,7 +197,7 @@
 
               string text11 = "Your employment will be probationary for the first six months. During your probationary period, you will be given advice and support to enable you to meet the expectation of the job and your performance will be assessed to determine suitability for the role. The probationary period may be extended at the company’s discretion, but will not, in any case, exceed nine months. The notice period during your probationary period is one week from either side.";
 
-              string probationText = GetProbationtext();
+              string probationText = UnitedKingdomPdfPage.GetProbationtext(Model);
 
               if (!string.IsNullOrEmpty(probationText))
               {

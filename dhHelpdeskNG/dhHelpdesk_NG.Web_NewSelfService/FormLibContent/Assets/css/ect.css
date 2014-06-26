@@ -72,7 +72,7 @@ legend {
 
 .nobullits {
     list-style-type: none;
-    padding-left: 0;
+    padding-left: 0 ;
     margin-left: 0;
 }
 
@@ -206,26 +206,33 @@ body > .navbar {
 }
 
 /*****************MULTI CHECKBOXES UL********************************/
-.multicheck ul {
-    list-style: none;
-    margin-left: 0;
-    margin-right: 30px;
+.multicheck ul
+{
+	list-style: none;
+	margin-left:0;
+	margin-right:30px;
+
 }
 
-    .multicheck ul li {
-        display: inline;
-        float: left;
-    }
+.multicheck ul li
+{
+	display:inline;
+	float:left;
 
-        .multicheck ul li ul {
-            list-style: none;
-            margin-left: 10px;
-        }
+}
 
-            .multicheck ul li ul li {
-                display: list-item;
-                float: none;
-            }
+.multicheck ul li ul
+{
+	list-style: none;
+	margin-left:10px;
+}
+
+.multicheck ul li ul li
+{
+	display:list-item;
+	float:none;
+
+}
 
 
 /* Sections
@@ -1142,6 +1149,15 @@ form.bs-docs-example {
     padding-bottom: 8px;
 }
 
+.nav-tabs > li:last-child > a, .nav-pills > li:last-child > a {
+    margin-right: 0px;
+}
+
+.nav-tabs a:hover i[class*="icon-"],
+.nav-tabs li.active a i[class*="icon-"] {
+    background-image: url("../img/glyphicons-halflings.png");
+}
+
 .asterisk {
     font-weight: bold;
     float: right;
@@ -1169,5 +1185,17 @@ label.error, .notice {
 
 /* ie-8 fix append input problem */
 .row-fluid [class*="span"] {
-    min-height: 20px\9;
+   min-height: 20px\9;
+}
+
+.options_block {
+    border-left: 8px solid #d9d9d9;
+    padding: 3px 0 5px 10px;
+}
+
+#attachments h4 {
+    color: #999;
+    font-size: 14px;
+    background: #ddd;
+    padding: 3px;
 }

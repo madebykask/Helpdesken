@@ -6,7 +6,7 @@
     <div class="span5">
         <table class="table">
             <tbody>
-                 <tr>
+                <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Deductions")</h4>
                     </td>
@@ -47,8 +47,8 @@
                         @Model.Element("DeductionsValidTo")
                     </td>
                 </tr>
-                
-                 @for(int i = 2; i <= 3; i++)
+
+                @for (int i = 2; i <= 3; i++)
                 {
                     <tr class="deduction@(i.ToString())" id="deduction@(i.ToString())">
                         <td class="tdstrong" colspan="2">
@@ -60,7 +60,7 @@
                         <td>
                             @Model.Element("DeductionsType" + i.ToString())</td>
                     </tr>
-                     <tr class="deduction@(i.ToString())">
+                    <tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("PaymentType" + i.ToString())</td>
                         <td>
                             @Model.Element("PaymentType" + i.ToString())</td>
@@ -92,65 +92,51 @@
                         <a id="addDeduction" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Deduction")</a></td>
                 </tr>
 
-               
+
 
             </tbody>
         </table>
     </div>
-    
+
 </div>
 
 <script>
-                          
-    if (document.getElementById('DeductionsValidFrom').value == ''){
+
+    if (document.getElementById('DeductionsValidFrom').value == '') {
         document.getElementById('DeductionsValidFrom').value = '@Model.GetAnswer("ChangeValidFrom")';
         for (var i = 2; i <= 3; i++) {
-            
+
             var DeductionsValidFrom = "DeductionsValidFrom" + [i].toString();
-            
+
             document.getElementById(DeductionsValidFrom).value = '@Model.GetAnswer("ChangeValidFrom")';
-                
+
         }
     }
 
+    function setPaymentDatePickersBehavior() {
+        var startDate = $('#ChangeValidFrom').val();
+        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+        var dStart = APIGlobal.DateTime.parseDate(startDate, format);
+        var forcePicker = new Date(dStart.getFullYear(), dStart.getMonth(), dStart.getDate(), 0, 0, 0, 0);
+        $('#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3').not(".disabled").datepicker(
+        {
+            onRender: function (ev) {
+                return ev.valueOf() < forcePicker.valueOf() ? 'disabled' : '';
+            },
+        });
+    }
 
-    var startDate = $('#ChangeValidFrom').val();
-    var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
-    var dStart = APIGlobal.DateTime.parseDate(startDate, format);
-    var forcePicker = new Date(dStart.getFullYear(), dStart.getMonth(), dStart.getDate(), 0, 0, 0, 0);
-    $('#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3').not(".disabled").datepicker(
-    {
-        onRender: function (ev) {
-            return ev.valueOf() < forcePicker.valueOf() ? 'disabled' : '';
-        }
-    });
+    setPaymentDatePickersBehavior();
 
-    $('#PaymentType').change(function () {
-        var deductionsValidTo = document.getElementById('DeductionsValidTo');
+    $('#date_ChangeValidFrom').on('changeDate', function (ev) {
 
-        var input = $('#DeductionsValidTo');
-        if ($(this).val() == 'One Time') {
-            
-            $('#date_DeductionsValidTo').datepicker("destroy");
-            $('#date_DeductionsValidTo').addClass("disabled");
-            input.attr('readonly', 'readony');
-            deductionsValidTo.value = "";
+        $('#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3').not(".disabled").datepicker('destroy');
 
-        }
-        else{
-            input.removeAttr('readonly', 'readonly');
-            
-            input.not(".disabled").datepicker(
-            {
-                onRender: function (ev) {
+        setPaymentDatePickersBehavior();
 
-                    return '';
-                }
-            });
-            deductionsValidTo.value = '31.12.9999';     
-        }
-    });
-
+        $('#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3').val($('#ChangeValidFrom').val());
+    }).data('datepicker');
+    $('#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3').on("keydown keypress keyup", false);
 
     $('#PaymentType2').change(function () {
         var deductionsValidTo2 = document.getElementById('DeductionsValidTo2');
@@ -161,16 +147,16 @@
             $('#date_DeductionsValidTo2').datepicker("destroy");
             $('#date_DeductionsValidTo2').addClass("disabled");
             input.attr('readonly', 'readony');
-        } 
-        else{
+        }
+        else {
             input.removeAttr('readonly', 'readonly');
             input.not(".disabled").datepicker(
             {
-                onRender: function(ev) {
+                onRender: function (ev) {
                     return '';
                 }
             });
-            deductionsValidTo2.value = '31.12.9999';        
+            deductionsValidTo2.value = '31.12.9999';
         }
     });
 
@@ -184,7 +170,7 @@
             $('#date_DeductionsValidTo3').datepicker("destroy");
             $('#date_DeductionsValidTo3').addClass("disabled");
             input.attr('readonly', 'readony');
-        } 
+        }
         else {
             input.removeAttr('readonly', 'readonly');
             input.not(".disabled").datepicker(

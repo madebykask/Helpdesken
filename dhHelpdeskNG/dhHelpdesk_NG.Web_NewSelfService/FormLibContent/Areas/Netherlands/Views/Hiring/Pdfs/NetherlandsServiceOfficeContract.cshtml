@@ -6,49 +6,6 @@
     Layout = null;
     Model.Language = "nl";
 }
-
-@functions{
-    public string GetPayRollCategoryText(string PayrollCategory)
-    {
-
-        if (PayrollCategory == "Juvenile Monthly" | PayrollCategory == "MT/Dep/SM")
-        {
-            return Model.Translate("Monthly", Model.Language).ToLower();
-        }
-        else if (PayrollCategory == "Juvenile Hourly")
-        {
-            return Model.Translate("Hourly", Model.Language).ToLower();
-        }
-        else
-        {
-            return Model.Translate(PayrollCategory, Model.Language).ToLower();
-        }
-    }
-
-    public static string GetLetter(int value)
-    {
-        //skickar in Count från sublist, därför plus 1
-        value++;
-
-        string[] alpha2 = new string[5];
-
-        alpha2[0] = "a";
-        alpha2[1] = "b";
-        alpha2[2] = "c";
-        alpha2[3] = "d";
-        alpha2[4] = "e";
-
-        return "." + alpha2[value].ToString() + ". ";
-    }
-
-    public static string FirstLetterToUpperCase(string text)
-    {
-
-        return char.ToUpper(text[0]) + text.Substring(1);
-    }
-   
-}
-
 <!DOCTYPE html>
 <html>
 
@@ -117,13 +74,13 @@
             list.Add(new PdfListItem { Text = string.Format(text2, Model.GetAnswer("LocalJobTitle"), Model.GetAnswer("PayScaleLevel")) });
 
             //3
-            if (Model.GetAnswer("EmploymentCategory") == "Permanent")
+            if (Model.GetAnswer("EmploymentCategory").ToLower() == "Permanent".ToLower())
             {
                 string text3 = "Deze arbeidsovereenkomst wordt afgesloten voor onbepaalde tijd.";
                 list.Add(new PdfListItem { Text = text3 });
             }
 
-            if (Model.GetAnswer("EmploymentCategory") == "Temporary")
+            if (Model.GetAnswer("EmploymentCategory").ToLower() == "Temporary".ToLower())
             {
                 string text3 = "Deze arbeidsovereenkomst wordt afgesloten voor bepaalde tijd. Looptijd van het contract is van {0} tot en met {1} en eindigt derhalve van rechtswege aan het einde van de overeengekomen periode, zonder dat hiervoor enige opzegging is vereist.";
                 list.Add(new PdfListItem { Text = string.Format(text3, Model.GetAnswer("ContractStartDate"), Model.GetAnswer("ContractEndDate")) });
@@ -139,7 +96,7 @@
 
 
             //6
-            if (Model.GetAnswer("ProbationPeriod") == "Yes")
+            if (Model.GetAnswer("ProbationPeriod").ToLower() == "Yes".ToLower())
             {
                 string text6 = "De eerste twee maanden van het dienstverband gelden als proeftijd. Tijdens de proeftijd hebben beide partijen het recht om het dienstverband met onmiddellijke ingang op te zeggen en te beëindigen.";
                 list.Add(new PdfListItem { Text = text6 });
@@ -147,18 +104,18 @@
 
             //7
             string text7 = "Het betreft een {0} dienstverband. Het gemiddeld te werken uren per week bedraagt {1} uur. De werknemer behoort tot de categorie {2}.";
-            list.Add(new PdfListItem { Text = string.Format(text7, Model.GetAnswer("ContractType").ToLower(), Model.GetAnswer("ContractedHours"), GetPayRollCategoryText(Model.GetAnswer("PayrollCategory"))) });
+            list.Add(new PdfListItem { Text = string.Format(text7, Model.GetAnswer("ContractType").ToLower(), Model.GetAnswer("ContractedHours"), NetherlandsPdfPage.GetPayRollCategoryText(Model.GetAnswer("PayrollCategory"), Model)) });
 
 
             //8
-            if (Model.GetAnswer("ContractType") == "Full Time")
+            if (Model.GetAnswer("ContractType").ToLower() == "Full Time".ToLower())
             {
                 string text8 = "Het salaris bedraagt € {0} bruto per maand. {1} De salarisbetalingen vinden telkens aan het einde van de kalendermaand plaats.";
                 list.Add(new PdfListItem { Text = string.Format(text8, Model.GetAnswer("BasicPay"), brText) });
             }
 
             //8 START
-            if (Model.GetAnswer("ContractType") == "Part Time")
+            if (Model.GetAnswer("ContractType").ToLower() == "Part Time".ToLower())
             {
                 string text8 = "Het salaris bedraagt € {0} bruto per uur. {1} De salarisbetalingen vinden telkens aan het einde van de kalendermaand plaats.";
                 list.Add(new PdfListItem { Text = string.Format(text8, Model.GetAnswer("BasicPayAmount"), brText) });
@@ -171,77 +128,77 @@
             pdfList = new List<PdfListItem>();
 
 
-            if (Model.GetAnswer("TypeOfBenefit") == "Company Car" | Model.GetAnswer("TypeOfBenefit2") == "Company Car" | Model.GetAnswer("TypeOfBenefit3") == "Company Car")
+            if (Model.GetAnswer("TypeOfBenefit").ToLower() == "Company Car".ToLower() | Model.GetAnswer("TypeOfBenefit2").ToLower() == "Company Car".ToLower() | Model.GetAnswer("TypeOfBenefit3").ToLower() == "Company Car".ToLower())
             {
                 string text8b =  "Werknemer heeft recht op gebruik van een lease-auto categorie {0}. {1}";
 
                 //Need to do this check because you can add 3 benefits
 
-                if (Model.GetAnswer("TypeOfBenefit") == "Company Car")
+                if (Model.GetAnswer("TypeOfBenefit").ToLower() == "Company Car".ToLower())
                 {
                     string TypeOfCar = Model.Translate(Model.GetAnswer("TypeOfCar").ToLower(), Model.Language);
-                    pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + GetLetter(pdfList.Count) + text8b, Model.GetAnswer("Category"), FirstLetterToUpperCase(TypeOfCar)) });
+                    pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + NetherlandsPdfPage.GetLetter(pdfList.Count) + text8b, Model.GetAnswer("Category"), NetherlandsPdfPage.FirstLetterToUpperCase(TypeOfCar)) });
                 }
 
-                if (Model.GetAnswer("TypeOfBenefit2") == "Company Car")
+                if (Model.GetAnswer("TypeOfBenefit2").ToLower() == "Company Car".ToLower())
                 {
                     string TypeOfCar2 = Model.Translate(Model.GetAnswer("TypeOfCar2").ToLower(), Model.Language);
-                    pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + GetLetter(pdfList.Count) + text8b, Model.GetAnswer("Category2"), FirstLetterToUpperCase(TypeOfCar2)) });
+                    pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + NetherlandsPdfPage.GetLetter(pdfList.Count) + text8b, Model.GetAnswer("Category2"), NetherlandsPdfPage.FirstLetterToUpperCase(TypeOfCar2)) });
                 }
 
 
-                if (Model.GetAnswer("TypeOfBenefit3") == "Company Car")
+                if (Model.GetAnswer("TypeOfBenefit3").ToLower() == "Company Car".ToLower())
                 {
                     string TypeOfCar3 = Model.Translate(Model.GetAnswer("TypeOfCar3").ToLower(), Model.Language);
-                    pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + GetLetter(pdfList.Count) + text8b, Model.GetAnswer("Category3"), FirstLetterToUpperCase(TypeOfCar3)) });
+                    pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + NetherlandsPdfPage.GetLetter(pdfList.Count) + text8b, Model.GetAnswer("Category3"), NetherlandsPdfPage.FirstLetterToUpperCase(TypeOfCar3)) });
                 }
 
             }
             else
             {
-                string text8b = list.Count.ToString() + GetLetter(pdfList.Count) + "De tegemoetkoming in de reiskosten wordt berekend conform de geldende IKEA CAO, artikel 29.";
+                string text8b = list.Count.ToString() + NetherlandsPdfPage.GetLetter(pdfList.Count) + "De tegemoetkoming in de reiskosten wordt berekend conform de geldende IKEA CAO, artikel 29.";
                 pdfList.Add(new PdfListItem { Text = text8b });
             }
 
             //8c 
-            if (Model.GetAnswer("PayrollCategory") == "MT/Dep/SM" && (Model.GetAnswer("PayScaleLevel") == "9" || Model.GetAnswer("PayScaleLevel") == "10" || Model.GetAnswer("PayScaleLevel") == "11" || Model.GetAnswer("PayScaleLevel") == "12"))
+            if (Model.GetAnswer("PayrollCategory").ToLower() == "MT/Dep/SM".ToLower() && (Model.GetAnswer("PayScaleLevel") == "9" || Model.GetAnswer("PayScaleLevel") == "10" || Model.GetAnswer("PayScaleLevel") == "11" || Model.GetAnswer("PayScaleLevel") == "12"))
             {
-                string text8c = list.Count.ToString() + GetLetter(pdfList.Count) + "Als tegemoetkoming in kosten voor representatie en telefoongebruik  ontvang je een algemene onkostenvergoeding van EUR 50,- bruto per maand. Dit is conform CAO artikel 28A.";
+                string text8c = list.Count.ToString() + NetherlandsPdfPage.GetLetter(pdfList.Count) + "Als tegemoetkoming in kosten voor representatie en telefoongebruik  ontvang je een algemene onkostenvergoeding van EUR 50,- bruto per maand. Dit is conform CAO artikel 28A.";
                 pdfList.Add(new PdfListItem { Text = text8c });
             }
 
             //8d
-            if (Model.GetAnswer("TypeOfBenefit") == "Salary Revision" | Model.GetAnswer("TypeOfBenefit2") == "Salary Revision" | Model.GetAnswer("TypeOfBenefit3") == "Salary Revision")
+            if (Model.GetAnswer("TypeOfBenefit").ToLower() == "Salary Revision".ToLower() | Model.GetAnswer("TypeOfBenefit2").ToLower() == "Salary Revision".ToLower() | Model.GetAnswer("TypeOfBenefit3").ToLower() == "Salary Revision".ToLower())
             {
                 //Need to do this check because you can add 3 benefits
 
                 string text8d =  "Eerste salarisrevisie: {0}.";
 
-                if (Model.GetAnswer("TypeOfBenefit") == "Salary Revision")
+                if (Model.GetAnswer("TypeOfBenefit").ToLower() == "Salary Revision".ToLower())
                 {
                     if (!string.IsNullOrEmpty(Model.GetAnswer("NextRevisionDate")))
                     {
 
-                        pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + GetLetter(pdfList.Count) + text8d, Model.GetAnswer("NextRevisionDate")) });
+                        pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + NetherlandsPdfPage.GetLetter(pdfList.Count) + text8d, Model.GetAnswer("NextRevisionDate")) });
 
                     }
                 }
 
-                if (Model.GetAnswer("TypeOfBenefit2") == "Salary Revision")
+                if (Model.GetAnswer("TypeOfBenefit2").ToLower() == "Salary Revision".ToLower())
                 {
                     if (!string.IsNullOrEmpty(Model.GetAnswer("NextRevisionDate2")))
                     {
 
-                        pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + GetLetter(pdfList.Count) + text8d, Model.GetAnswer("NextRevisionDate2")) });
+                        pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + NetherlandsPdfPage.GetLetter(pdfList.Count) + text8d, Model.GetAnswer("NextRevisionDate2")) });
                     }
                 }
 
-                if (Model.GetAnswer("TypeOfBenefit3") == "Salary Revision")
+                if (Model.GetAnswer("TypeOfBenefit3").ToLower() == "Salary Revision".ToLower())
                 {
                     if (!string.IsNullOrEmpty(Model.GetAnswer("NextRevisionDate3")))
                     {
 
-                        pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + GetLetter(pdfList.Count) + text8d, Model.GetAnswer("NextRevisionDate3")) });
+                        pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + NetherlandsPdfPage.GetLetter(pdfList.Count) + text8d, Model.GetAnswer("NextRevisionDate3")) });
                     }
                 }
 
@@ -292,10 +249,10 @@
 
             //11
             int PayScaleLevel = 0;
-            
-            
-            
-            if (Model.GetAnswer("PayScaleLevel").Length > 0 && Model.GetAnswer("PayScaleLevel") != "N/A")
+
+
+
+            if (Model.GetAnswer("PayScaleLevel").Length > 0 && Model.GetAnswer("PayScaleLevel").ToLower() != "N/A".ToLower())
             {
                 PayScaleLevel = int.Parse(Model.GetAnswer("PayScaleLevel"));
 

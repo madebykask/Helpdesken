@@ -52,12 +52,12 @@
                         @Model.Element("Department")
                     </td>
                 </tr>
-                
+
                 <tr>
                     <td class="tdstrong">@Model.Label("ChangeValidFrom")</td>
                     <td>
                         @Model.Element("ChangeValidFrom")
-                        <div id="notice_OldDate" style="display:none;" class="notice">
+                        <div id="notice_OldDate" style="display: none;" class="notice">
                             @Model.Translate("The date you've entered is in the past. Are you sure you want to backdate Change date?")
                         </div>
                     </td>
@@ -76,18 +76,18 @@
                     <td class="tdstrong">@Model.Label("ProcessBeforeDate")</td>
                     <td>
                         @Model.Element("ProcessBeforeDate")</td>
-                </tr>         
+                </tr>
             </tbody>
         </table>
     </div>
-    
+
     <input type="hidden" id="CustomerId" value="@Model.CustomerId" />
-    
+
 </div>
 
 
 <script>
-    
+
 
     var nowTemp = new Date();
     var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
@@ -118,33 +118,34 @@
             noticeOldDate.show();
     });
 
-    //$('#ServiceRequestPriority').change(function () {
-    //    $('#date_ProcessBeforeDate').datepicker("destroy");
+    $('#ServiceRequestPriority').change(function () {
+        $('#date_ProcessBeforeDate').datepicker("destroy");
 
-    //    if ($(this).val() == 'Urgent') {
+        if ($(this).val() == 'Urgent') {
 
-    //        var nowTemp = new Date();
-    //        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-    //        var endDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate() + 2, 0, 0, 0, 0);
+            var nowTemp = new Date();
+            var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+            var endDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate() + 2, 0, 0, 0, 0);
 
-    //        $('#date_ProcessBeforeDate').not(".disabled").datepicker(
-    //        {
-    //            onRender: function (ev) {
-    //                return ev.valueOf() >= endDate.valueOf() || ev.valueOf() < now.valueOf() ? 'disabled' : '';
-    //            }
-    //        });
+            $('#date_ProcessBeforeDate').not(".disabled").datepicker(
+            {
+                onRender: function (ev) {
+                    return ev.valueOf() >= endDate.valueOf() || ev.valueOf() < now.valueOf() ? 'disabled' : '';
+                }
+            });
 
-    //        //$("#date_ProcessBeforeDate").on("keydown keypress keyup", false);
-    //    }
-    //    else {
-    //        $('#date_ProcessBeforeDate').not(".disabled").datepicker(
-    //        {
-    //            onRender: function (ev) {
-    //                return '';
-    //            }
-    //        });
+            //$("#date_ProcessBeforeDate").on("keydown keypress keyup", false);
+        }
+        else {
+            $('#date_ProcessBeforeDate').not(".disabled").datepicker(
+            {
+                onRender: function (ev) {
+                    return '';
+                }
+            });
 
-    //        //document.getElementById('ProcessBeforeDate').onkeypress = function () { return true; }
-    //    }
-    //});
+            //document.getElementById('ProcessBeforeDate').onkeypress = function () { return true; }
+        }
+    });
+
 </script>

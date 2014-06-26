@@ -90,7 +90,7 @@
 
             // **** Applicable if additionally OA10 is "New Position for VAP store?" for units OA3: Store Amsterdam 088 or Store Heerlen 089 or Store Barendrecht 274
 
-            if (Model.GetAnswer("NewPosition") == "New Position for VAP store?" || (Model.GetAnswer("NewBusinessUnit") == "Store Amsterdam 088" | Model.GetAnswer("NewBusinessUnit") == "Store Heerlen 089" | Model.GetAnswer("NewBusinessUnit") == "Store Barendrecht 274"))
+            if (Model.GetAnswer("NewPosition").ToLower() == "New Position for VAP store?".ToLower() || (Model.GetAnswer("NewBusinessUnit").ToLower() == "Store Amsterdam 088".ToLower() | Model.GetAnswer("NewBusinessUnit").ToLower() == "Store Heerlen 089".ToLower() | Model.GetAnswer("NewBusinessUnit").ToLower() == "Store Barendrecht 274".ToLower()))
             {
              //   pdfList = new List<PdfListItem>();
 
@@ -161,7 +161,7 @@
             list.Add(new PdfListItem { Text = text8b});
 
             //Applicable if OA12 is "Permanent"
-            if (Model.GetAnswer("EmploymentCategory") == "Permanent")
+            if (Model.GetAnswer("EmploymentCategory").ToLower() == "Permanent".ToLower())
             {
                 string text9 = "Gemiddeld ben je {0} uur per week werkzaam volgens rooster, conform CAO. Je zal werkzaam zijn als {1}. In de bijlage vind je een toelichting op je nieuwe salarisbetaling.";
 

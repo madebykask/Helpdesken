@@ -21,6 +21,9 @@
                     <td class="tdstrong">@Model.Label("NumberOfWeeks")</td>
                     <td>
                         @Model.Element("NumberOfWeeks")
+                        <div id="AbsenceNotice" style="display: none;" class="notice">
+                            @Model.Translate("Incorrect number of weeks. Please verify.")
+                        </div>
                     </td>
                 </tr>
                 <tr>
@@ -80,6 +83,9 @@
                         <td class="tdstrong">@Model.Label("NumberOfWeeks" + i.ToString())</td>
                         <td>
                             @Model.Element("NumberOfWeeks" + i.ToString())
+                            <div id="AbsenceNotice@(i.ToString())" style="display: none;" class="notice">
+                                @Model.Translate("Incorrect number of weeks. Please verify.")
+                            </div>
                         </td>
                     </tr>
                     <tr class="absence@(i.ToString())">
@@ -314,7 +320,7 @@
             end3.setValue(newDate);
             $('#AbsenceEndsOn3').val('');
         }
-        end2.update();
+        end3.update();
         start.hide();
     }).data('datepicker');
 
@@ -328,6 +334,56 @@
     }).data('datepicker');
     $('#date_AbsenceEndsOn3').on("keydown keypress keyup", false);
 
+    $(function () {
 
+        function showAbsenceNotice(absenceTypeId, absenceNoticeId, value) {
+
+            var intValue = parseInt(value, 10);
+
+            $('#' + absenceNoticeId).hide();
+
+            if ($('#' + absenceTypeId).val() == '﻿Maternity leave') {
+                if (intValue <= 2 || intValue > 52) {
+                    $('#' + absenceNoticeId).show();
+                }
+            }
+            else if ($('#' + absenceTypeId).val() == 'Paternity leave') {
+                if (intValue < 1 || intValue > 2) {
+                    $('#' + absenceNoticeId).show();
+                }
+            }
+        }
+
+        $('#NumberOfWeeks').on('input', function () {
+            showAbsenceNotice('AbsenceType', 'AbsenceNotice', $(this).val());
+        });
+        $('#NumberOfWeeks2').on('input', function () {
+            showAbsenceNotice('AbsenceType2', 'AbsenceNotice2', $(this).val());
+        });
+        $('#NumberOfWeeks3').on('input', function () {
+            showAbsenceNotice('AbsenceType3', 'AbsenceNotice3', $(this).val());
+        });
+        $('#NumberOfWeeks4').on('input', function () {
+            showAbsenceNotice('AbsenceType4', 'AbsenceNotice4', $(this).val());
+        });
+
+        $('#AbsenceType').change(function () {
+            $('#AbsenceNotice').hide();
+            showAbsenceNotice('AbsenceType', 'AbsenceNotice', $('#NumberOfWeeks').val());
+        });
+        $('#AbsenceType2').change(function () {
+            $('#AbsenceNotice2').hide();
+            showAbsenceNotice('AbsenceType2', 'AbsenceNotice2', $('#NumberOfWeeks2').val());
+        });
+        $('#AbsenceType3').change(function () {
+            $('#AbsenceNotice3').hide();
+            showAbsenceNotice('AbsenceType3', 'AbsenceNotice3', $('#NumberOfWeeks3').val());
+        });
+        $('#AbsenceType4').change(function () {
+            $('#AbsenceNotice4').hide();
+            showAbsenceNotice('AbsenceType4', 'AbsenceNotice4', $('#NumberOfWeeks4').val());
+        });
+
+    });
 
 </script>

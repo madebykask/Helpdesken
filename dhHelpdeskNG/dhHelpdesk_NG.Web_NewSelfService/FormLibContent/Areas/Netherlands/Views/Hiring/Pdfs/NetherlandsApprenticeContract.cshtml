@@ -72,9 +72,9 @@
             var brText = "<br /><br />";
 
             //1
-            string text1 = "Dat IKEA de stagiair in de gelegenheid zal stellen in samenhang met zijn/haar opleiding praktische ervaringen op te doen met betrekking tot het werk in de volgende bedrijfsafdeling(en): {0} in de vestiging {1}, tijdens de periode {2} tot en met {3}, gedurende {4} uur per week, met uitzondering van de dagen of gedeelten van dagen dat er in de onderneming niet wordt gewerkt.";
+            string text1 = "Dat IKEA de stagiair in de gelegenheid zal stellen in samenhang met zijn/haar opleiding praktische ervaringen op te doen met betrekking tot het werk in de volgende bedrijfsafdeling(en): {0} in de vestiging {1}, tijdens de periode {2} tot en met {3}, gedurende {4} uur per week, met uitzon¬dering van de dagen of gedeelten van dagen dat er in de onder¬neming niet wordt gewerkt.";
 
-            list.Add(new PdfListItem { Text = string.Format(text1, Model.GetAnswer("Department"), Model.GetAnswer("BusinessUnit"), Model.GetAnswer("ContractStartDate"), Model.GetAnswer("ContractEndDate"), Model.GetAnswer("ContractedHours")) });
+            list.Add(new PdfListItem { Text = string.Format(text1, Model.GetAnswer("ServiceArea"), Model.GetAnswer("BusinessUnit"), Model.GetAnswer("ContractStartDate"), Model.GetAnswer("ContractEndDate"), Model.GetAnswer("ContractedHours")) });
     
             //2
             list.Add(new PdfListItem { Text = "De rechtspositie van de stagiair is die van leerling van de school waar hij/zij onderwijs volgt." });
@@ -88,7 +88,7 @@
 
             //5
             // string format
-            list.Add(new PdfListItem { Text = string.Format("IKEA zal aanstellen als praktijkbegeleider: {0} van de afdeling: {1}.", Model.GetAnswer("MentorAtIKEA"), Model.GetAnswer("Department")) });
+            list.Add(new PdfListItem { Text = string.Format("IKEA zal aanstellen als praktijkbegeleider: {0} van de afdeling: {1}.", Model.GetAnswer("MentorAtIKEA"), Model.GetAnswer("ServiceArea")) });
     
             //6
             list.Add(new PdfListItem { Text = "De stagiair verbindt zich om zowel tijdens de duur der stage als ook na afloop daarvan aan derden geen mededelingen te doen betreffende bijzonderheden van de IKEA organisatie." });
@@ -98,8 +98,12 @@
 
 
             //8
+            //IF Payroll Category = No Salary then paragraph number 8 should not appear on the contract
+            if (Model.GetAnswer("PayrollCategory").ToLower() != "No Salary".ToLower())
+            {
             list.Add(new PdfListItem { Text = string.Format("Stagevergoeding bruto per maand: EUR {0}. De vergoeding vindt telkens aan het einde van de kalendermaand plaats.", @Model.GetAnswer("BasicPay")) });
-
+            }
+                
             //9
             list.Add(new PdfListItem { Text = "De stagiair verklaart hiermee tevens kennis te hebben genomen van de IKEA Group Code of Conduct en de regels in Mijn IKEA en zich aan deze regels te zullen houden en verder met het bovenstaande akkoord te gaan." });
 

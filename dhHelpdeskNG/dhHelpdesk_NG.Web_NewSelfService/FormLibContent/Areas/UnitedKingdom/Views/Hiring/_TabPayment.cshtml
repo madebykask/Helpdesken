@@ -273,17 +273,31 @@
         var sEnd = document.getElementById('ContractEndDate');
 
 
-        var startDate = $('#ContractStartDate').val();
-        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
-        var dStart = APIGlobal.DateTime.parseDate(startDate, format);
-        var forcePicker = new Date(dStart.getFullYear(), dStart.getMonth(), dStart.getDate(), 0, 0, 0, 0);
+        function setPaymentDatePickersBehavior() {
+            var startDate = $('#ContractStartDate').val();
+            var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+            var dStart = APIGlobal.DateTime.parseDate(startDate, format);
+            var forcePicker = new Date(dStart.getFullYear(), dStart.getMonth(), dStart.getDate(), 0, 0, 0, 0);
+            $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,' +
+                '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3').not(".disabled").datepicker(
+            {
+                onRender: function (ev) {
+                    return ev.valueOf() < forcePicker.valueOf() ? 'disabled' : '';
+                },
+            });
+        }
+
+        setPaymentDatePickersBehavior();
+
+        $('#date_ContractStartDate').on('changeDate', function (ev) {
+
+            $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,' +
+            '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3').not(".disabled").datepicker('destroy');
+
+            setPaymentDatePickersBehavior();
+        }).data('datepicker');
         $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,' +
-            '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3').not(".disabled").datepicker(
-        {
-            onRender: function (ev) {
-                return ev.valueOf() < forcePicker.valueOf() ? 'disabled' : '';
-            }
-        });
+            '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3').on("keydown keypress keyup", false);
 
         $('#AllowancesPaymentType').change(function () {
             var allowancesValidTo = document.getElementById('AllowancesValidTo');

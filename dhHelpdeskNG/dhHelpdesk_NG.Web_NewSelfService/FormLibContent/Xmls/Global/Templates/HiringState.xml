@@ -3,7 +3,7 @@
     <!-- HRU -->
     <status value="0">
         <visibleTabs>
-            <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</visibleTabs>
+            <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#attachments</visibleTabs>
         </visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields></readOnlyFields>
@@ -42,7 +42,7 @@
             <visibleTabs>#servicerequestdetails,#OrganisationalAssignment</visibleTabs>
             <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>

@@ -2,6 +2,10 @@
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
 
+@{
+    const string IsTeWorker = "No";
+}
+
 <div class="tab-pane" id="Personal">
     <div class="span5">
         <table class="table">
@@ -219,38 +223,38 @@
 
                 @for (int i = 2; i <= 4; i++)
                 {
-                    <tr class="employeeDocument@(i.ToString())" id="employeeDocument@(i.ToString())">
+                    <tr class="globalmobility employeeDocument@(i.ToString())" id="employeeDocument@(i.ToString())">
                         <td class="tdstrong" colspan="2">
                             <h4>@Model.Translate("Global Mobility - Employee Documents")  @i.ToString()</h4>
                         </td>
                     </tr>
-                    <tr class="employeeDocument@(i.ToString())">
+                    <tr class="globalmobility employeeDocument@(i.ToString())">
                         <td class="tdstrong">@Model.Label("EmployeeDocumentType" + i.ToString())</td>
                         <td>@Model.Element("EmployeeDocumentType" + i.ToString())</td>
                     </tr>
-                    <tr class="employeeDocument@(i.ToString())">
+                    <tr class="globalmobility employeeDocument@(i.ToString())">
                         <td class="tdstrong">@Model.Label("EmployeeDocumentCountry" + i.ToString())</td>
                         <td>@Model.Element("EmployeeDocumentCountry" + i.ToString())</td>
                     </tr>
-                    <tr class="employeeDocument@(i.ToString())">
+                    <tr class="globalmobility employeeDocument@(i.ToString())">
                         <td class="tdstrong">@Model.Label("EmployeeDocumentNo" + i.ToString())</td>
                         <td>@Model.Element("EmployeeDocumentNo" + i.ToString())</td>
                     </tr>
-                    <tr class="employeeDocument@(i.ToString())">
+                    <tr class="globalmobility employeeDocument@(i.ToString())">
                         <td class="tdstrong">@Model.Label("EmployeeDocumentIssueDate" + i.ToString())</td>
                         <td>@Model.Element("EmployeeDocumentIssueDate" + i.ToString())</td>
                     </tr>
-                    <tr class="employeeDocument@(i.ToString())">
+                    <tr class="globalmobility employeeDocument@(i.ToString())">
                         <td class="tdstrong">@Model.Label("EmployeeDocumentIssuePlace" + i.ToString())</td>
                         <td>@Model.Element("EmployeeDocumentIssuePlace" + i.ToString())</td>
                     </tr>
-                    <tr class="employeeDocument@(i.ToString())">
+                    <tr class="globalmobility employeeDocument@(i.ToString())">
                         <td class="tdstrong">@Model.Label("EmployeeDocumentIssuePlaceCountry" + i.ToString())</td>
                         <td>@Model.Element("EmployeeDocumentIssuePlaceCountry" + i.ToString())</td>
                     </tr>
                 }
 
-                <tr id="addEmployeeDocumentTr">
+                <tr class="globalmobility" id="addEmployeeDocumentTr">
                     <td colspan="2">
                         @Model.Element("EmployeeDocuments")
                         <a id="addEmployeeDocument" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another employee documents")</a></td>
@@ -285,34 +289,34 @@
 
                 @for (int i = 2; i <= 4; i++)
                 {
-                    <tr class="dependantFamilyMember@(i.ToString())" id="dependantFamilyMember@(i.ToString())">
+                    <tr class="globalmobility dependantFamilyMember@(i.ToString())" id="dependantFamilyMember@(i.ToString())">
                         <td class="tdstrong" colspan="2">
                             <h4>@Model.Translate("Global Mobility - Dependants") @i.ToString()</h4>
                         </td>
                     </tr>
-                    <tr class="dependantFamilyMember@(i.ToString())">
+                    <tr class="globalmobility dependantFamilyMember@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DependantFamilyMember")</td>
                         <td>@Model.Element("DependantFamilyMember" + i.ToString())</td>
                     </tr>
-                    <tr class="dependantFamilyMember@(i.ToString())">
+                    <tr class="globalmobility dependantFamilyMember@(i.ToString())">
                         <td class="tdstrong">@Model.Label("Accompanying" + i.ToString())</td>
                         <td>@Model.Element("Accompanying" + i.ToString())</td>
                     </tr>
-                    <tr class="dependantFamilyMember@(i.ToString())">
+                    <tr class="globalmobility dependantFamilyMember@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DependantsLastName" + i.ToString())</td>
                         <td>@Model.Element("DependantsLastName" + i.ToString())</td>
                     </tr>
-                    <tr class="dependantFamilyMember@(i.ToString())">
+                    <tr class="globalmobility dependantFamilyMember@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DependantsFirstName" + i.ToString())</td>
                         <td>@Model.Element("DependantsFirstName" + i.ToString())</td>
                     </tr>
-                    <tr class="dependantFamilyMember@(i.ToString())">
+                    <tr class="globalmobility dependantFamilyMember@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DependantsDateOfBirth" + i.ToString())</td>
                         <td>@Model.Element("DependantsDateOfBirth" + i.ToString())</td>
                     </tr>
                 }
 
-                <tr id="addDependantFamilyMembersTr">
+                <tr class="globalmobility" id="addDependantFamilyMembersTr">
                     <td colspan="2">
                         @Model.Element("DependantFamilyMembers")
                         <a id="addDependantFamilyMember" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another global mobility dependant")</a></td>
@@ -351,38 +355,38 @@
 
                 @for (int i = 2; i <= 4; i++)
                 {
-                    <tr class="globalMobilityDependantDocument@(i.ToString())" id="globalMobilityDependantDocument@(i.ToString())">
+                    <tr class="globalmobility globalMobilityDependantDocument@(i.ToString())" id="globalMobilityDependantDocument@(i.ToString())">
                         <td class="tdstrong" colspan="2">
                             <h4>@Model.Translate("Global Mobility - Dependants Documents") @i.ToString()</h4>
                         </td>
                     </tr>
-                    <tr class="globalMobilityDependantDocument@(i.ToString())">
+                    <tr class="globalmobility globalMobilityDependantDocument@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DependantsDocumentType" + i.ToString())</td>
                         <td>@Model.Element("DependantsDocumentType" + i.ToString())</td>
                     </tr>
-                    <tr class="globalMobilityDependantDocument@(i.ToString())">
+                    <tr class="globalmobility globalMobilityDependantDocument@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DependantsDocumentCountry" + i.ToString())</td>
                         <td>@Model.Element("DependantsDocumentCountry" + i.ToString())</td>
                     </tr>
-                    <tr class="globalMobilityDependantDocument@(i.ToString())">
+                    <tr class="globalmobility globalMobilityDependantDocument@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DependantsDocumentNo" + i.ToString())</td>
                         <td>@Model.Element("DependantsDocumentNo" + i.ToString())</td>
                     </tr>
-                    <tr class="globalMobilityDependantDocument@(i.ToString())">
+                    <tr class="globalmobility globalMobilityDependantDocument@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DependantsDocumentIssueDate" + i.ToString())</td>
                         <td>@Model.Element("DependantsDocumentIssueDate" + i.ToString())</td>
                     </tr>
-                    <tr class="globalMobilityDependantDocument@(i.ToString())">
+                    <tr class="globalmobility globalMobilityDependantDocument@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DependantsDocumentIssuePlace" + i.ToString())</td>
                         <td>@Model.Element("DependantsDocumentIssuePlace" + i.ToString())</td>
                     </tr>
-                    <tr class="globalMobilityDependantDocument@(i.ToString())">
+                    <tr class="globalmobility globalMobilityDependantDocument@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DependantsDocumentIssuePlaceCountry" + i.ToString())</td>
                         <td>@Model.Element("DependantsDocumentIssuePlaceCountry" + i.ToString())</td>
                     </tr>
                 }
 
-                <tr id="addGlobalMobilityDependantDocumentTr">
+                <tr class="globalmobility" id="addGlobalMobilityDependantDocumentTr">
                     <td colspan="2">
                         @Model.Element("DependantsDocuments")
                         <a id="addGlobalMobilityDependantDocument" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another global mobility dependant document")</a></td>
@@ -414,7 +418,11 @@
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("BankKey")</td>
-                    <td>@Model.Element("BankKey")</td>
+                    <td>@Model.Element("BankKey")
+                        <div class="notice">
+                            @Model.Translate("Please enter sort code")
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("AccountNumber")</td>
@@ -441,7 +449,11 @@
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("TaxInformation")</td>
-                    <td>@Model.Element("TaxInformation")</td>
+                    <td>@Model.Element("TaxInformation")
+                        <div class="notice" id="taxInformationNotice">
+                            @Model.Translate("Please remember to attach the form.")
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <td class="tdstrong" colspan="2">
@@ -571,39 +583,52 @@
     </div>
 </div>
 
-
 <script>
 
+    function setGlobalMobilityBehavior(value) {
+        if (value == '@IsTeWorker') {
+            $(".globalmobility").hide();
+        } else {
+            $(".globalmobility").show();
+        }
+    }
+
+    function setTaxInformationBehavior(value) {
+        if (value == 'P45 attached') {
+            $('#taxInformationNotice').show();
+        }
+        else {
+            $('#taxInformationNotice').hide();
+        }
+    }
+
+    setGlobalMobilityBehavior($('#TECoWorker').val());
+    setTaxInformationBehavior($('#TaxInformation').val());
+
     if ('@Model.GetAnswer("NewToIKEA")' == 'New Hire') {
-
         $(".globalmobility").hide();
-
     }
 
-    //var teCoWorker = document.getElementById('TECoWorker').value;
-    //if (teCoWorker == 'No') {
+    $('#TECoWorker').change(function () {
+        setGlobalMobilityBehavior($(this).val());
+    });
 
-    //    $(".globalmobility").hide();
-    //} else {
-    //    debugger;
-    //    $(".globalmobility").show();
-    //}
+    $('#Institution').change(function () {
+        value = $(this).val();
 
+        if (value != 'Building Society') {
+            $("#BuildingSocietyRollNo").hide();
+            $('#BuildingSocietyRollNo').prop('disabled', true);
+        }
+        else {
+            $("#BuildingSocietyRollNo").show();
+            $('#BuildingSocietyRollNo').prop('disabled', false);
+        }
+    });
 
-    if (!('@Model.GetAnswer("IBAN2")' == "")) {
-        $(".SecondBank").show();
-        $("#addBankButton").hide();
-    }
-    else {
-        $(".SecondBank").hide();
-    }
-
-    //document.getElementById('addBank').onclick = function () {
-    //    $(".SecondBank").show();
-    //    $("#addBankButton").hide();
-
-    //};
-
+    $('#TaxInformation').change(function () {
+        setTaxInformationBehavior($(this).val());
+    });
 
     //document.getElementById('Payee').value = $('#FirstName').val() + ' ' + $('#LastName').val();
     //document.getElementById('Payee2').value = $('#FirstName').val() + ' ' + $('#LastName').val();
@@ -612,7 +637,7 @@
     var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
 
     var noticValidUntil = $('#notice_ValidUntilDate');
-    $('#date_DocumentValidUntil').not(".disabled").datepicker({
+    $('#date_ValidUntil').not(".disabled").datepicker({
         onRender: function (date) {
             return date.valueOf() < now.valueOf() ? 'disabled' : '';
         }
@@ -624,16 +649,19 @@
             noticValidUntil.show();
     }).data('datepicker');
 
-    $('#DocumentValidUntil').change(function () {
-        var lastDayOfEmployment = $('#DocumentValidUntil').val();
+    $('#ValidUntil').change(function () {
+        var startDate = $(this).val();
         var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
-        var dlastDayOfEmployment = APIGlobal.DateTime.parseDate(lastDayOfEmployment, format);
+        var dstartDate = APIGlobal.DateTime.parseDate(startDate, format);
         var nowTemp = new Date();
         var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-        noticValidUntil.hide();
-        if (dlastDayOfEmployment.valueOf() < now.valueOf())
-            noticValidUntil.show();
-    });
 
+        var noticeValidUntilDate = $('#notice_ValidUntilDate');
+        noticeValidUntilDate.hide();
+
+        if (dstartDate.valueOf() < now.valueOf()) {
+            noticeValidUntilDate.show();
+        }
+    });
 
 </script>

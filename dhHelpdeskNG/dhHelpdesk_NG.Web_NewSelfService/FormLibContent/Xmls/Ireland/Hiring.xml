@@ -1612,6 +1612,7 @@
           <option value="ICC3 WER DS">ICC3 WER DS</option>
         </options>
       </element>
+      <element name="PreviousBusinessUnit" type ="text" label="Previous Business Unit"></element>
     </tab>
 
     <tab name="#payment" label="Payment Information">
@@ -3903,7 +3904,6 @@
       <element type="text" name="PaymentCurrency" label="Payment Currency" mandatory="1" default="GBP">
         <regex inherit="currency" pattern="" message=""></regex>
       </element>
-
       <!--FISCAL DATA and SOCIAL INSURANCE -->
       <element type="select" name="TaxInformation" label="Tax Information">
         <options>

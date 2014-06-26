@@ -52,7 +52,7 @@
     </tab>
 
     <tab name="#Payment" label="Payment Information">
-      
+
       <element type="hidden" name="Allowances" default="1"></element>
       <element type="select" name="AllowancesType" label="Allowance Type">
 
@@ -272,7 +272,7 @@
         </options>
       </element>
       <element type="date" name="AllowancesValidFrom2" label="Valid from:" format="dd.MM.yyyy">
-        <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>        
+        <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
         <regex inherit="date" pattern="" message=""></regex>
         <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
       </element>
@@ -390,7 +390,7 @@
         <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
       </element>
       <element type="date" name="AllowancesValidTo3" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
-        <mandatoryIfNotEmpty name="AllowancesPaymentType3"></mandatoryIfNotEmpty>       
+        <mandatoryIfNotEmpty name="AllowancesPaymentType3"></mandatoryIfNotEmpty>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="hidden" name="Deductions" default="1"></element>
@@ -542,5 +542,5 @@
       </element>
     </tab>
 
-    </fields>
+  </fields>
 </form>

@@ -21,11 +21,11 @@
   
   <bsn message="Wrong format (NNNNNNNNN)">^\D*(?:\d\D*){9,}$</bsn>
   <timestamp message="Wrong format (HH:MM).">^[0-2][0-9]:[0-5][0-9]$</timestamp>
-  <bankKeyUk message="Wrong format (NNNNNN). Example: 123456">\d{6}</bankKeyUk>
-  <accountNumberUk message="Wrong format (NNNNNNNN). Example: 12345678">\d{8}</accountNumberUk>
-  <ibanUk message="Wrong format (LLNNNNNNNNNNNNNNNNNNNN). Example: LL12345678901234567890">[A-Z]{2}\d{20}</ibanUk>
-  <buildingSocietyUk message="Enter an 18-digit value. Example: 123456789012345678">\d{18}</buildingSocietyUk>
-  <nationalInsuranceNumber message="Wrong format (LLNNNNNNL). Example: AB434344C">[A-Z]{2}\d{6}[A-Z]{1}</nationalInsuranceNumber>
+  <bankKeyUk message="Wrong format (NNNNNN).">\d{6}</bankKeyUk>
+  <accountNumberUk message="Wrong format (NNNNNNNN).">\d{8}</accountNumberUk>
+  <ibanUk message="Wrong format (LLNNNNNNNNNNNNNNNNNNNN).">[A-Z]{2}\d{20}</ibanUk>
+  <buildingSocietyUk message="Enter an 18-digit value.">\d{18}</buildingSocietyUk>
+  <nationalInsuranceNumber message="Wrong format (LLNNNNNNL).">[A-Z]{2}\d{6}[A-Z]{1}</nationalInsuranceNumber>
   <bsn message="Wrong format (NNNNNNNNN)">^\D*(?:\d\D*){9,}$</bsn>
   <maxfourdigit message="Wrong format (NNNN).">^[0-9]{1,4}$</maxfourdigit>
   

@@ -56,16 +56,11 @@
         <br />
             <br />
 
-            In de maand @Model.GetAnswer("MonthTfTheLeave") heb jij @Model.GetAnswer("AbsenceHoursAlreadyUsed") uur kortdurend zorgverlof opgenomen met behoud van je salaris tot 100%. 
-
-        <br />
+            Van @Model.GetAnswer("AbsenceStartFrom" +Model.AbsenceNr) tot en met @Model.GetAnswer("AbsenceEndsOn"+Model.AbsenceNr).Trim() heb jij @Model.GetAnswer("AbsenceHours"+Model.AbsenceNr).Trim() uur kortdurend zorgverlof opgenomen met behoud van je salaris tot 100%. 
+               <br />
             <br />
-
-            Voor meer informatie over deze regeling verwijzen wij je naar ico-worker.com/nl of raadpleeg artikel 41C van de IKEA CAO.
-        </p>
+            Voor meer informatie over deze regeling verwijzen wij je naar ico-worker.com/nl of raadpleeg artikel 41C van de IKEA CAO.</p>
         <endpage />
     </div>
-
-
 </body>
 </html>

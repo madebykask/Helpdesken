@@ -11,7 +11,7 @@
     <script type="text/javascript">
 
         //$(function () {
-            //validate.run(20);
+        //validate.run(20);
         //});
 
         $(document).on('click', '#btnMailingAddress, #btnEmergencyAddress', function (e) {
@@ -42,15 +42,15 @@
 
     </script>
 
-     @Html.Partial("_Validate", Model)
+    @Html.Partial("_Validate", Model)
 }
-@using (Html.BeginForm("new", "Hiring", FormMethod.Post, new { area = "Netherlands", novalidate = "novalidate" }))
+@using(Html.BeginForm("new", "Hiring", FormMethod.Post, new { area = "Netherlands", novalidate = "novalidate" }))
 {
     <span style="display: none;" id="narrowDownInit" url="@url"></span>
-     @Html.Partial("_GlobalNavRev", Model)
+    @Html.Partial("_GlobalNavRev", Model)
     <div class="container containeralignright">
-        @Html.Partial("_CurrentUser")  
-        @Html.Partial("_ErrorMessage", Model)     
+        @Html.Partial("_CurrentUser")
+        @Html.Partial("_ErrorMessage", Model)
         <ul class="nav nav-tabs">
             @if(Model.VisibleTab("#servicerequestdetails"))
             {
@@ -75,16 +75,23 @@
         </ul>
         <div class="content">
             <div class="row-fluid">
-                <div class="tab-content">   
-                     
+                <div class="tab-content">
+                    @if(Model.VisibleTab("#servicerequestdetails"))
+                    {
                         @Html.Partial("_TabServiceRequestDetails", Model)
-                    
+                    }
+                    @if(Model.VisibleTab("#OrganisationalAssignment"))
+                    {
                         @Html.Partial("_TabOrganisationalAssignment", Model)  
-                    
+                    }
+                    @if(Model.VisibleTab("#payment"))
+                    {    
                         @Html.Partial("_TabPayment", Model)            
-                    
+                    }
+                    @if(Model.VisibleTab("#personal"))
+                    {
                         @Html.Partial("_TabPersonal", Model)
-                                                                                      
+                    }
                 </div>
             </div>
         </div>

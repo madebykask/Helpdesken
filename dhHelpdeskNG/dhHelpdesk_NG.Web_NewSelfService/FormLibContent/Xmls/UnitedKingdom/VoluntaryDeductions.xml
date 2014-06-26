@@ -64,11 +64,11 @@
         </options>
       </element>
       <element type="text" name="DeductionsAmountUnits" label="Amount/Units">
-        <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
+        <mandatoryIf name="DeductionsType">Pension</mandatoryIf>
         <regex inherit="unsignednum" message="" pattern=""></regex>
       </element>
       <element type="select" name="DeductionsNetGross" label="Net/Gross">
-        <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
+        <mandatoryIf name="DeductionsType">Pension</mandatoryIf>
         <options>
           <option value=""></option>
           <option value="Net">Net</option>
@@ -103,11 +103,11 @@
         </options>
       </element>
       <element type="text" name="DeductionsAmountUnits2" label="Amount/Units" >
-        <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
+        <mandatoryIf name="DeductionsType2">Pension</mandatoryIf>
         <regex inherit="unsignednum" message="" pattern=""></regex>
       </element>
       <element type="select" name="DeductionsNetGross2" label="Net/Gross" >
-        <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
+        <mandatoryIf name="DeductionsType2">Pension</mandatoryIf>
         <options>
           <option value=""></option>
           <option value="Net">Net</option>
@@ -142,11 +142,11 @@
         </options>
       </element>
       <element type="text" name="DeductionsAmountUnits3" label="Amount/Units" >
-        <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
+        <mandatoryIf name="DeductionsType2">Pension</mandatoryIf>
         <regex inherit="unsignednum" message="" pattern=""></regex>
       </element>
       <element type="select" name="DeductionsNetGross3" label="Net/Gross" >
-        <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
+        <mandatoryIf name="DeductionsType2">Pension</mandatoryIf>
         <options>
           <option value=""></option>
           <option value="Net">Net</option>

@@ -850,7 +850,8 @@
         </options>
       </element>
       <element type="text" name="EmergencyContactNumber" label="Emergency contact number"></element>
-      <element type="text" name="EmergencyContactRelationship" label="Emergency contact/relationship"></element>
+      <element type="text" name="EmergencyContactRelationship" label="Emergency contact/relationship">
+      </element>
 
       <!--Family Member/Dependents-->
       <element type="hidden" name="FamilyMembers" default="1"></element>
@@ -1310,7 +1311,7 @@
           <option value="Guinea-Bissau">Guinea-Bissau</option>
           <option value="Guyana">Guyana</option>
           <option value="Hong Kong">Hong Kong</option>
-          <option value="Heard/McDon.Isl">Heard/McDon.Isl</option>
+          <option value="Heard/McDon.Isl">Heard/McDon.Isl</option> 
           <option value="Honduras">Honduras</option>
           <option value="Croatia">Croatia</option>
           <option value="Haiti">Haiti</option>
@@ -4477,10 +4478,18 @@
           <option value="Zimbabwe">Zimbabwe</option>
         </options>
       </element>
-      <element type="text" name="BankKey" label="Bank Key" mandatory="1"></element>
-      <element type="text" name="AccountNumber" label="Account Number" mandatory="1"></element>
+      <element type="text" name="BankKey" label="Bank Key" mandatory="1">
+        <regex inherit="bankKeyUk" pattern="" message=""></regex>
+      </element>
+      <element type="text" name="AccountNumber" label="Account Number" mandatory="1">
+        <regex inherit="accountNumberUk" pattern="" message=""></regex>
+      </element>
       <element type="text" name="IBAN" label="IBAN" mandatory="1">
-        <regex inherit="iban" pattern="" message=""></regex>
+        <regex inherit="ibanUk" pattern="" message=""></regex>
+      </element>
+      <element type="text" name="BuildingSocietyRollNo" label="Building society roll no">
+        <mandatoryIf name="Institution">Building Society</mandatoryIf>
+        <regex inherit="buildingSocietyUk" pattern="" message=""></regex>
       </element>
       <element type="text" name="PaymentCurrency" label="Payment Currency" mandatory="1" default="GBP">
         <regex inherit="currency" pattern="" message=""></regex>
@@ -4494,7 +4503,9 @@
         </options>
       </element>
       <element type="text" name="SocialInsurance" label="Social Insurance" mandatory="1"></element>
-      <element type="text" name="NationalInsuranceNumber" label="National Insurance Number" mandatory="1"></element>
+      <element type="text" name="NationalInsuranceNumber" label="National Insurance Number" mandatory="1">
+        <regex inherit="nationalInsuranceNumber" pattern="" message=""></regex>
+      </element>
 
       <!--Nationality / Language-->
       <element type="typeahead-simple" source="1" name="Language" label="Language" default="English">
@@ -5098,6 +5109,7 @@
         </options>
       </element>
       <element type="typeahead-simple" source="1" name="CountryOfUse" label="Country of use" default="United Kingdom">
+        <mandatoryIf name="DocumentType">VISA</mandatoryIf>
         <options>
           <option value=""></option>
           <option value="﻿Unknown">﻿Unknown</option>
@@ -5353,7 +5365,9 @@
           <option value="Zimbabwe">Zimbabwe</option>
         </options>
       </element>
-      <element type="text" name="DocumentNO" label="Document No."></element>
+      <element type="text" name="DocumentNO" label="Document No.">
+        <mandatoryIf name="DocumentType">Passport</mandatoryIf>
+      </element>
       <element type="date" name="ValidUntil" label="Valid Until:" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
@@ -5375,12 +5389,19 @@
           <option value="Child">Child</option>
         </options>
       </element>
-      <element type="text" name="AdditionalMemberLastName" label="Additional Member - Last Name"></element>
-      <element type="text" name="AdditionalMemberFirsName" label="Additional Member - First Name"></element>
+      <element type="text" name="BupaMember" label="Additional Member - Last Name">
+        <mandatoryIf name="DocumentType">Partner,Child</mandatoryIf>
+      </element>
+      <element type="text" name="AdditionalMemberFirsName" label="Additional Member - First Name">
+        <mandatoryIf name="DocumentType">Partner,Child</mandatoryIf>
+      </element>
       <element type="date" name="AdditionalMemberDateOfBirth" label="Additiona lMember Date Of Birth" format="dd.MM.yyyy">
+        <mandatoryIf name="DocumentType">Partner,Child</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element type="text" name="AdditionalMemberRelationship" label="Additional member - Relationship"></element>
+      <element type="text" name="AdditionalMemberRelationship" label="Additional member - Relationship">
+        <mandatoryIf name="DocumentType">Partner,Child</mandatoryIf>
+      </element>
     </tab>
   </fields>
 </form>

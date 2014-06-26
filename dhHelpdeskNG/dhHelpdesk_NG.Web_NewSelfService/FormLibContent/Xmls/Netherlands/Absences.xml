@@ -965,51 +965,19 @@
       <!--Country Specifics-->
       
       <element name="ChildName" type="text" label="Child's Name">
-
-        <mandatoryIf name ="AbsenceType">Parental leave,Long term care leave (unpaid),Unpaid leave</mandatoryIf>      
       </element>
       <element name="ChildDateOfBirth" type="date" format="dd.MM.yyyy" label="Child's Date Of Birth">
         <regex inherit="date" pattern="" message=""></regex>
-        <mandatoryIf name ="AbsenceType">Parental leave,Long term care leave (unpaid),Unpaid leave</mandatoryIf>
       </element>
       <element name="AbsenceHoursWeekly" type="text" label="Absence hours weekly">
         <regex inherit="unsignednum" message="" pattern=""></regex>
-        <mandatoryIf name ="AbsenceType">Parental leave,Long term care leave (unpaid),Unpaid leave</mandatoryIf>
       </element>
       <element name="Totalparentalleaveentitlement" type="text" label="Total parental leave entitlement">
         <regex inherit="unsignednum" message="" pattern=""></regex>
-        <mandatoryIf name ="AbsenceType">Parental leave,Long term care leave (unpaid),Unpaid leave</mandatoryIf>
       </element>
       <element name="ContractedHoursOldData" type="text" label="Contracted Hours old data">
         <regex inherit="unsignednum" message="" pattern=""></regex>
-        <mandatoryIf name ="AbsenceType">Parental leave,Long term care leave (unpaid),Unpaid leave</mandatoryIf>
       </element>
-      <element name="MonthTfTheLeave" type="select" label="Month of the leave">
-        <mandatoryIf name ="AbsenceType">Short term care leave (paid leave)</mandatoryIf>
-        <options>
-          <option value=""></option>
-          <option value="January">January</option>
-          <option value="February">February</option>
-          <option value="March">March</option>
-          <option value="April">April</option>
-          <option value="May">May</option>
-          <option value="June">June</option>
-          <option value="July">July</option>
-          <option value="Agust">Agust</option>
-          <option value="September">September</option>          
-          <option value="October">October</option>
-          <option value="November">November</option>
-          <option value="December">December</option>
-        </options>
-      </element>
-      <element name="AbsenceHoursAlreadyUsed" type="text" label="Absence hours already used">
-        <regex inherit="unsignednum" message="" pattern=""></regex>
-        <mandatoryIf name ="AbsenceType">Short term care leave (paid leave)</mandatoryIf>
-      </element>
-      <!--<element name="PreviousContractHours" type="text" label="Previous contract hours">
-        <regex inherit="unsignednum" message="" pattern=""></regex>
-        <mandatoryIf name ="AbsenceType">Unpaid leave,Long term care leave (unpaid)</mandatoryIf>
-      </element>-->
       <element name="AbsenceLongerThan2Months" type="select" label="Absence longer than 2 months (for OV users)">
         <mandatoryIf name ="AbsenceType">Parental leave,Unpaid leave,Long term care leave (unpaid)</mandatoryIf>
         <options>

@@ -103,7 +103,7 @@
         <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
       </element>
       <element type="date" name="AllowancesValidTo" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
-        <mandatoryIfNotEmpty name="AllowancesPaymentType"></mandatoryIfNotEmpty>
+        <mandatoryIf name="AllowancesPaymentType">Recurring</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
 
@@ -150,7 +150,7 @@
         </options>
       </element>
       <element type="date" name="AllowancesValidFrom2" label="Valid from:" format="dd.MM.yyyy">
-        <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>        
+        <mandatoryIf name="AllowancesPaymentType">Recurring</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
         <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
       </element>
@@ -207,7 +207,7 @@
         <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
       </element>
       <element type="date" name="AllowancesValidTo3" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
-        <mandatoryIfNotEmpty name="AllowancesPaymentType3"></mandatoryIfNotEmpty>       
+        <mandatoryIf name="AllowancesPaymentType">Recurring</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="hidden" name="Deductions" default="1"></element>
@@ -245,7 +245,7 @@
         <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
       </element>
       <element type="date" name="DeductionsValidTo" label="Valid to:" default="31.12.9999" format="dd.MM.yyyy">
-        <mandatoryIf name="PaymentType">Recurring</mandatoryIf>
+        <mandatoryIf name="DeductionsPaymentType">Recurring</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
 

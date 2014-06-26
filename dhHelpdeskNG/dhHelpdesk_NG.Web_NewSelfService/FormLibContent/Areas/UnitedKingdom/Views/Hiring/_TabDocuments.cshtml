@@ -16,6 +16,12 @@
             {
             return "Permanent";
             }
+                //This template should be applicable for Permanent type and unit Contact Centre only which means both conditions must be met:
+//IF <Employment Category/OA12> = Permanent AND <Business Unit/OA3> = U.K & IE Contact Centre
+            else if (Model.GetAnswer("BusinessUnit").ToLower() == "Peterborough Contact Centre".ToLower())
+            {
+                return "ContactCentre";
+            }
             else
             {
                 return "";

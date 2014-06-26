@@ -4,7 +4,7 @@
 var isEmbed = window != window.parent;
 var site = site || {};
 site.baseUrl = "";
-
+var disableTypeahead = 1;
 // stolen from boostrap-datepicker.js DL...
 // Extend for general functions
 var APIGlobal = {
@@ -149,7 +149,11 @@ var validate = {
 var globalTypeAheadOptions = {
     items: 10,
     minLength: 3,
-    source: function (query, process) {
+    source: function (query, process) {        
+        if (disableTypeahead == 0) {           
+            disableTypeahead == 1;
+            return;
+        }
         return $.ajax({
             url: site.baseUrl + '/search/globalview',
             type: 'post',
@@ -787,7 +791,6 @@ var narrowDownInit = function () {
             }
         });
 
-        var url = init.attr('url');
         $('#CrossChargeCostCentre').typeahead({
             minLength: 1,
             source: function (query, process) {
@@ -812,7 +815,6 @@ var narrowDownInit = function () {
             }
         });
 
-        var url = init.attr('url');
         $('#TECApprover').typeahead({
             minLength: 1,
             source: function (query, process) {
@@ -837,7 +839,6 @@ var narrowDownInit = function () {
             }
         });
 
-        var url = init.attr('url');
         $('#HomeCostCentre').typeahead({
             minLength: 1,
             source: function (query, process) {
@@ -869,8 +870,7 @@ var narrowDownInit = function () {
                 });
             }
         });
-
-        var url = init.attr('url');
+        
         $('#ReportsToLineManager').typeahead({
             minLength: 1,
             source: function (query, process) {
@@ -894,9 +894,7 @@ var narrowDownInit = function () {
                 });
             }
         });
-
         
-
         var homeCostCenter = $('#HomeCostCenter');
         var depart = $('#Department');
 
@@ -928,7 +926,6 @@ var narrowDownInit = function () {
                 return item;
             }
         });
-
 
         if (homeCostCenter.length > 0) {
             if (depart.val() !== "" && homeCostCenter.val() === "")
@@ -1559,6 +1556,34 @@ var init = function () {
     $('#FirstName').typeahead(globalNameTypeAheadOptions);
     $('#LastName').typeahead(globalLastNameTypeAheadOptions);
 
+    $("#NewToIKEA").on('change', function () {        
+        $('#Co-WorkerID').typeahead(globalTypeAheadOptions);
+        if ($(this).val() == 'New Hire') {    
+            disableTypeahead = 0;            
+            $.ajax({
+                url: site.baseUrl + '/search/EmployeesExtendedInfo',
+                type: 'post',
+                data: { formGuid: $('#formGuid').val(), employeenumber: $('#Co-WorkerID').val() },
+                dataType: 'json',
+                success: function (result) {
+                    var resultList = jQuery.map(result, function (extendeditem) {
+                        var type = $('#' + extendeditem.FormFieldName).attr('type');
+                        if (type != 'text') {                          
+                            $('#' + extendeditem.FormFieldName).val("");
+                        }
+                        $('input[name="' + extendeditem.FormFieldName + '"]').val("");      
+                    });
+                }
+            });
+            $('#Co-WorkerID').val("");
+            $('#FirstName').val("");
+            $('#LastName').val("");
+        }
+        else {
+            disableTypeahead = 1;
+        }
+    });
+
     $('.nav-tabs a').click(function (e) {
         e.preventDefault();
         $(this).tab('show');
@@ -1636,7 +1661,7 @@ var init = function () {
 
     // Built for Global, sets LockCDSAccountFrom date to same date as last day of employment
     var LastDayOfEmployment = $('#date_LastDayOfEmployment');
-    LastDayOfEmployment.datepicker()
+    LastDayOfEmployment.not(".disabled").datepicker()
             .on('changeDate', function (e) {
                 document.getElementById('LockCDSAccountFrom').value = document.getElementById('LastDayOfEmployment').value;
 
@@ -1688,7 +1713,7 @@ var init = function () {
         var startDate = new Date();
         startDate.setHours(0, 0, 0, 0);
 
-        dateDatePicker.datepicker()
+        dateDatePicker.not(".disabled").datepicker()
             .on('changeDate', function (e) {
                 if (e.date.valueOf() < startDate.valueOf()) {
                     
@@ -1724,7 +1749,7 @@ var init = function () {
         var startDate = new Date();
         startDate.setHours(0, 0, 0, 0);
 
-        dateEffectiveDate.datepicker()
+        dateEffectiveDate.not(".disabled").datepicker()
             .on('changeDate', function (e) {
                 if (e.date.valueOf() < startDate.valueOf()) {
                     noticeEffectiveDate.show();
@@ -1983,6 +2008,8 @@ $(document).on('click', '.btn-delete-file', function (e) {
     })
         .done(function (data) {
             t.parent().remove();
+            if ($('#attachmentCounter').length > 0)
+                $('#attachmentCounter').html($('.btn-delete-file').length);
         });
 });
 

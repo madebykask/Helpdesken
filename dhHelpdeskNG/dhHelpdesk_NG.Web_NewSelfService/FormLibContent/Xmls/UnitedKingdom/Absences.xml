@@ -59,10 +59,11 @@
         <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
       <element name="ExpectedDateChildBirth" type="date" format="dd.MM.yyyy" label="Expected date of child's birth">
+        <mandatoryIf name ="AbsenceType" >Maternity Leave</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element name="Seniority" type="select" label="Seniority" >
-        <mandatoryIfNotEmpty name="AbsenceType"></mandatoryIfNotEmpty>
+        <mandatoryIf name ="AbsenceType" >Maternity Leave,Adoption leave</mandatoryIf>
         <options>
           <option value=""></option>
           <option value="﻿Under 26 weeks">﻿Under 26 weeks</option>
@@ -72,14 +73,20 @@
         </options>
       </element>
       <element name="AbsenceStartFrom" type="date" format="dd.MM.yyyy" mandatory="1" label="Absence starts from:">
+        <mandatoryIf name ="AbsenceType" >Maternity Leave,Adoption leave</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element name="AbsenceEndsOn" type="date" format="dd.MM.yyyy" mandatory="1" label="Absence ends on:">
+        <mandatoryIf name ="AbsenceType" >Maternity Leave,Adoption leave</mandatoryIf>
         <laterThanOrEqual name="AbsenceStartFrom"></laterThanOrEqual>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element name="AbsenceHours" type="text" mandatory="1" label="Absence hours"></element>
-      <element name="AbsenceDays" type="text" mandatory="1" label="Absence days"></element>
+      <element name="AbsenceHours" type="text" mandatory="1" label="Absence hours">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceDays" type="text" mandatory="1" label="Absence days">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
 
       <element name="AbsenceType2" type="select" label="Absence Type">
         <options>
@@ -93,10 +100,11 @@
         <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
       <element name="ExpectedDateChildBirth2" type="date" format="dd.MM.yyyy" label="Expected date of child's birth">
+        <mandatoryIf name ="AbsenceType2" >Maternity Leave</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element name="Seniority2" type="select" label="Seniority">
-        <mandatoryIfNotEmpty name="AbsenceType2"></mandatoryIfNotEmpty>
+        <mandatoryIf name ="AbsenceType2" >Maternity Leave,Adoption leave</mandatoryIf>
         <options>
           <option value=""></option>
           <option value="﻿Under 26 weeks">﻿Under 26 weeks</option>
@@ -106,19 +114,19 @@
         </options>
       </element>
       <element name="AbsenceStartFrom2" type="date" format="dd.MM.yyyy"  label="Absence starts from:">
-        <mandatoryIf name ="AbsenceType2" >Absence Type 1,Absence Type 2,Absence Type 3</mandatoryIf>
+        <mandatoryIf name ="AbsenceType2" >Maternity Leave,Adoption leave</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element name="AbsenceEndsOn2" type="date" format="dd.MM.yyyy"  label="Absence ends on:">
         <laterThanOrEqual name="AbsenceStartFrom2"></laterThanOrEqual>
-        <mandatoryIf name ="AbsenceType2" >Absence Type 1,Absence Type 2,Absence Type 3</mandatoryIf>
+        <mandatoryIf name ="AbsenceType2" >Maternity Leave,Adoption leave</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element name="AbsenceHours2" type="text" label="Absence hours">
-        <mandatoryIf name ="AbsenceType2" >Absence Type 1,Absence Type 2,Absence Type 3</mandatoryIf>
+        <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
       <element name="AbsenceDays2" type="text" label="Absence days">
-        <mandatoryIf name ="AbsenceType2" >Absence Type 1,Absence Type 2,Absence Type 3</mandatoryIf>
+        <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
 
       <element name="AbsenceType3" type="select" label="Absence Type" >
@@ -133,10 +141,11 @@
         <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
       <element name="ExpectedDateChildBirth3" type="date" format="dd.MM.yyyy" label="Expected date of child's birth">
+        <mandatoryIf name ="AbsenceType3" >Maternity Leave</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element name="Seniority3" type="select" label="Seniority">
-        <mandatoryIfNotEmpty name="AbsenceType3"></mandatoryIfNotEmpty>
+        <mandatoryIf name ="AbsenceType3" >Maternity Leave,Adoption leave</mandatoryIf>
         <options>
           <option value=""></option>
           <option value="﻿Under 26 weeks">﻿Under 26 weeks</option>
@@ -146,19 +155,19 @@
         </options>
       </element>
       <element name="AbsenceStartFrom3" type="date" format="dd.MM.yyyy" label="Absence starts from:">
-        <mandatoryIf name ="AbsenceType3" >Absence Type 1,Absence Type 2,Absence Type 3</mandatoryIf>
+        <mandatoryIf name ="AbsenceType3" >Maternity Leave,Adoption leave</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element name="AbsenceEndsOn3" type="date" format="dd.MM.yyyy" label="Absence ends on:">
         <laterThanOrEqual name="AbsenceStartFrom3"></laterThanOrEqual>
-        <mandatoryIf name ="AbsenceType3" >Absence Type 1,Absence Type 2,Absence Type 3</mandatoryIf>
+        <mandatoryIf name ="AbsenceType3" >Maternity Leave,Adoption leave</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element name="AbsenceHours3" type="text" label="Absence hours">
-        <mandatoryIf name ="AbsenceType3" >Absence Type 1,Absence Type 2,Absence Type 3</mandatoryIf>
+        <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
       <element name="AbsenceDays3" type="text" label="Absence days">
-        <mandatoryIf name ="AbsenceType3" >Absence Type 1,Absence Type 2,Absence Type 3</mandatoryIf>
+        <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
 
       <element name="AbsenceType4" type="select" label="Absence Type" >
@@ -173,10 +182,11 @@
         <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
       <element name="ExpectedDateChildBirth4" type="date" format="dd.MM.yyyy" label="Expected date of child's birth">
+        <mandatoryIf name ="AbsenceType4" >Maternity Leave</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element name="Seniority4" type="select" label="Seniority">
-        <mandatoryIfNotEmpty name="AbsenceType4"></mandatoryIfNotEmpty>
+        <mandatoryIf name ="AbsenceType4" >Maternity Leave,Adoption leave</mandatoryIf>
         <options>
           <option value=""></option>
           <option value="﻿Under 26 weeks">﻿Under 26 weeks</option>
@@ -186,19 +196,19 @@
         </options>
       </element>
       <element name="AbsenceStartFrom4" type="date" format="dd.MM.yyyy" label="Absence starts from:">
-        <mandatoryIf name ="AbsenceType4" >Absence Type 1,Absence Type 2,Absence Type 3</mandatoryIf>
+        <mandatoryIf name ="AbsenceType4" >Maternity Leave,Adoption leave</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element name="AbsenceEndsOn4" type="date" format="dd.MM.yyyy" label="Absence ends on:">
         <laterThanOrEqual name="AbsenceStartFrom4"></laterThanOrEqual>
-        <mandatoryIf name ="AbsenceType4" >Absence Type 1,Absence Type 2,Absence Type 3</mandatoryIf>
+        <mandatoryIf name ="AbsenceType4" >Maternity Leave,Adoption leave</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element name="AbsenceHours4" type="text" label="Absence hours">
-        <mandatoryIf name ="AbsenceType4" >Absence Type 1,Absence Type 2,Absence Type 3</mandatoryIf>
+        <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
       <element name="AbsenceDays4" type="text"  label="Absence days">
-        <mandatoryIf name ="AbsenceType4" >Absence Type 1,Absence Type 2,Absence Type 3</mandatoryIf>
+        <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
 
       <!--CDS-->
@@ -307,9 +317,11 @@
     <tab name="#SscUseOnly" label="SSC use only">
       <element name="AveragePay" type="text" label="Average Pay">
         <regex inherit="unsignednum" pattern="" message=""></regex>
+        <mandatoryIf name ="AbsenceType" >Maternity Leave,Adoption leave</mandatoryIf>
       </element>
       <element name="LowerRate" type="text" label="Lower Rate">
         <regex inherit="unsignednum" pattern="" message=""></regex>
+        <mandatoryIf name ="AbsenceType" >Maternity Leave,Adoption leave</mandatoryIf>
       </element>
     </tab>
   </fields>

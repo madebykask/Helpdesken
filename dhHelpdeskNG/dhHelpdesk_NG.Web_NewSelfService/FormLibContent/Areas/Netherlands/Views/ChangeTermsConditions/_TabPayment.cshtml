@@ -338,6 +338,18 @@
 </div>
 
 <script>
+    document.getElementById('AllowancesValidFrom').value = document.getElementById('ChangeValidFrom').value;
+    document.getElementById('DeductionsValidFrom').value = document.getElementById('ChangeValidFrom').value;
+
+    for (var i = 2; i <= 3; i++) {
+        //Defaults variables to ChangeValidFrom
+        var AllowancesValidFrom = "AllowancesValidFrom" + [i].toString();
+        var DeductionsValidFrom = "DeductionsValidFrom" + [i].toString();
+        document.getElementById(AllowancesValidFrom).value = document.getElementById('ChangeValidFrom').value;
+        document.getElementById(DeductionsValidFrom).value = document.getElementById('ChangeValidFrom').value;
+    }
+
+
     // Show notice if allowancestype comp.serv.allowance
     function selectIndexChangeAllowancesType() {
         if (this.options[this.selectedIndex].value == 'Comp.Serv.Allowance') {
@@ -356,7 +368,6 @@
 
     $('#AllowancesPaymentType').change(function () {
         var allowancesValidTo = document.getElementById('AllowancesValidTo');
-
         var input = $('#AllowancesValidTo');
         if ($(this).val() == 'One Time') {
             allowancesValidTo.value = "";
@@ -398,6 +409,7 @@
             $('#date_AllowancesValidTo2').addClass("disabled");
             input.attr('readonly', 'readony');
         } else {
+            $('#date_AllowancesValidTo2').removeClass("disabled");
             input.removeAttr('readonly');
             if (employmentCategory == 'Temporary')
                 allowancesValidTo2.value = sEnd.value;
@@ -419,6 +431,7 @@
             $('#date_AllowancesValidTo3').addClass("disabled");
             input.attr('readonly', 'readony');
         } else {
+            $('#date_AllowancesValidTo3').removeClass("disabled");
             input.removeAttr('readonly');
             if (employmentCategory == 'Temporary')
                 allowancesValidTo3.value = sEnd.value;
@@ -440,6 +453,7 @@
             input.attr('readonly', 'readony');
 
         } else {
+            $('#date_DeductionsValidTo').removeClass("disabled");
             input.removeAttr('readonly');
             if (employmentCategory == 'Temporary')
                 deductionsValidTo.value = sEnd.value;
@@ -460,6 +474,7 @@
             $('#date_DeductionsValidTo2').addClass("disabled");
             input.attr('readonly', 'readony');
         } else {
+            $('#date_DeductionsValidTo2').removeClass("disabled");
             input.removeAttr('readonly');
             if (employmentCategory == 'Temporary')
                 deductionsValidTo2.value = sEnd.value;
@@ -480,6 +495,7 @@
             $('#date_DeductionsValidTo3').addClass("disabled");
             input.attr('readonly', 'readony');
         } else {
+            $('#date_DeductionsValidTo3').removeClass("disabled");
             input.removeAttr('readonly');
             if (employmentCategory == 'Temporary')
                 deductionsValidTo3.value = sEnd.value;
@@ -490,11 +506,13 @@
     });
 
 
+
+
     //Next revisiondate
     $('#TypeOfBenefit').change(function () {
         $('#date_NextRevisionDate').datepicker("destroy");
 
-        if ($(this).val() == 'Salary Revision') {
+        
 
             var nowTemp = new Date();
             var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
@@ -507,23 +525,15 @@
             });
 
             $("#date_NextRevisionDate").on("keydown keypress keyup", false);
-        }
-        else {
-            $('#date_NextRevisionDate').not(".disabled").datepicker(
-            {
-                onRender: function (ev) {
-                    return '';
-                }
-
-            });
+        
+        
             document.getElementById('NextRevisionDate').onkeypress = function () { return true; }
-        }
-    });
+        });
 
     $('#TypeOfBenefit2').change(function () {
         $('#date_NextRevisionDate2').datepicker("destroy");
 
-        if ($(this).val() == 'Salary Revision') {
+        
 
             var nowTemp = new Date();
             var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
@@ -536,23 +546,14 @@
             });
 
             $("#date_NextRevisionDate2").on("keydown keypress keyup", false);
-        }
-        else {
-            $('#date_NextRevisionDate2').not(".disabled").datepicker(
-            {
-                onRender: function (ev) {
-                    return '';
-                }
-
-            });
+        
             document.getElementById('NextRevisionDate2').onkeypress = function () { return true; }
-        }
-    });
+        });
 
     $('#TypeOfBenefit3').change(function () {
         $('#date_NextRevisionDate3').datepicker("destroy");
 
-        if ($(this).val() == 'Salary Revision') {
+        
 
             var nowTemp = new Date();
             var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
@@ -565,18 +566,8 @@
             });
 
             $("#date_NextRevisionDate3").on("keydown keypress keyup", false);
-        }
-        else {
-            $('#date_NextRevisionDate3').not(".disabled").datepicker(
-            {
-                onRender: function (ev) {
-                    return '';
-                }
-
-            });
             document.getElementById('NextRevisionDate3').onkeypress = function () { return true; }
-        }
-    });
+        });
 
 
     function SelectIndexChangePayScaleLevel() {

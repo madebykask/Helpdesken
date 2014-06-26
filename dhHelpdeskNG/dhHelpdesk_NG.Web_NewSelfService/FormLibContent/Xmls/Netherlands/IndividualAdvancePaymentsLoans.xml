@@ -35,7 +35,7 @@
           <option value="Not Urgent">Not Urgent</option>
         </options>
       </element>
-      <element name="ProcessBeforeDate" type="date" label="Process before date:" mandatory="1" default="31.12.9999" format="dd.MM.yyyy">
+      <element name="ProcessBeforeDate" type="date" label="Process before date:" mandatory="1" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
     </tab>
