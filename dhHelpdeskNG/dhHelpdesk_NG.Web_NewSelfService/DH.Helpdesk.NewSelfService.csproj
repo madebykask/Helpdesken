@@ -311,6 +311,7 @@
     <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Models\SelfService\SelfServiceConfigurationModel.cs" />
     <Compile Include="Models\SelfService\SelfServiceModel.cs" />
+    <Compile Include="Models\Start\StartOverviewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

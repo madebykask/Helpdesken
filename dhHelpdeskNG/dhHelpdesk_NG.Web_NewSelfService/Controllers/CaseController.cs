@@ -129,7 +129,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             if (id.Is<Guid>())
             {
                 var guid = new Guid(id);
-                currentCase = _caseService.GetCaseByEMailGUID(guid);                                    
+                currentCase = _caseService.GetCaseByEMailGUID(guid );                                    
             }
             else
             {
