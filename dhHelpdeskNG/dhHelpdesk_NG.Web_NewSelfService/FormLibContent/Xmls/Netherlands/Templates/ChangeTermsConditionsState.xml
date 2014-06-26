@@ -15,8 +15,8 @@
     <!-- LM -->
     <status value="10">
         <userGroup name="Line Manager">
-            <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
-            <readOnlyTabs></readOnlyTabs>
+            <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
+            <readOnlyTabs>#OrganisationalAssignment</readOnlyTabs>
         </userGroup>
         <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
@@ -31,8 +31,8 @@
     <!-- HRU -->
     <status value="20">
         <userGroup name="Line Manager">
-            <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
-            <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
+            <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
+            <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</readOnlyTabs>
         </userGroup>
         <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#documents</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
@@ -48,8 +48,8 @@
     <!-- SSC -->
     <status value="30">
         <userGroup name="Line Manager">
-            <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
-            <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
+            <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
+            <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</readOnlyTabs>
         </userGroup>
         <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#documents</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</readOnlyTabs>
@@ -63,8 +63,8 @@
     <!-- SSC -->
     <status value="40">
         <userGroup name="Line Manager">
-            <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
-            <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
+            <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
+            <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</readOnlyTabs>
         </userGroup>
         <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#documents,#globalview</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</readOnlyTabs>
@@ -77,8 +77,8 @@
     <!-- SSC -->
     <status value="50">
         <userGroup name="Line Manager">
-            <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
-            <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
+            <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
+            <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</readOnlyTabs>
         </userGroup>
         <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#documents,#globalview</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#globalview</readOnlyTabs>
@@ -90,8 +90,8 @@
     </status>
     <status value="60">
         <userGroup name="Line Manager">
-            <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
-            <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
+            <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
+            <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</readOnlyTabs>
         </userGroup>
         <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#documents,#globalview</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#documents,#globalview</readOnlyTabs>
@@ -101,8 +101,8 @@
     </status>
     <status value="70">
         <userGroup name="Line Manager">
-            <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
-            <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
+            <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
+            <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</readOnlyTabs>
         </userGroup>
         <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</readOnlyTabs>

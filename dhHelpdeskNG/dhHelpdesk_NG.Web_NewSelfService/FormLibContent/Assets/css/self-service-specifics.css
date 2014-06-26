@@ -61,7 +61,6 @@
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
 
-
 #lmEmbedded .table > tbody > tr > td {
     border-top: none;
 }
@@ -96,23 +95,13 @@
     margin-left: -1px;
 }
 
-#lmEmbedded .nav-tabs > li > a {
+.nav-tabs > li > a {
     margin-right: 2px;
     line-height: 1.42857143;
     border: 1px solid transparent;
     border-radius: 0 0 0 0;
     background-color: transparent;
     color: #fff;
-}
-
-#lmEmbedded .nav-tabs > li.active > a {
-    margin-right: 2px;
-    line-height: 1.42857143;
-    border: 1px solid #ddd;
-    border-radius: 0 0 0 0;
-    background-color: #fff;
-    color: #333;
-    border-bottom: 1px solid #fff;
 }
 
 #lmEmbedded input[disabled], #lmEmbedded select[disabled], #lmEmbedded textarea[disabled], #lmEmbedded input[readonly], #lmEmbedded select[readonly], #lmEmbedded textarea[readonly] {

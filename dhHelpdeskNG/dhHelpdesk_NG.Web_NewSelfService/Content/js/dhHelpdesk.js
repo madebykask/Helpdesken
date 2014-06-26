@@ -593,30 +593,33 @@ function GetComputerSearchOptions() {
 }
 
 //multiselct med sök
-$('.multiselect').multiselect({
-    enableFiltering: true,
-    filterPlaceholder: '',
-    maxHeight: 250,
-    //maxHeight: false,
-    buttonClass: 'btn',
-    buttonWidth: '220px',
-    buttonContainer: '<span class="btn-group" />',
-    buttonText: function (options) {
-        if (options.length == 0) {
-            return '-- <i class="caret"></i>';
+var ms = $('.multiselect');
+if (ms.lenght > 0) {
+    ms.multiselect({
+        enableFiltering: true,
+        filterPlaceholder: '',
+        maxHeight: 250,
+        //maxHeight: false,
+        buttonClass: 'btn',
+        buttonWidth: '220px',
+        buttonContainer: '<span class="btn-group" />',
+        buttonText: function (options) {
+            if (options.length == 0) {
+                return '-- <i class="caret"></i>';
+            }
+            else if (options.length > 2) {
+                return options.length + ' selected  <i class="caret"></i>';
+            }
+            else {
+                var selected = '';
+                options.each(function () {
+                    selected += $(this).text() + ', ';
+                });
+                return selected.substr(0, selected.length - 2) + ' <i class="caret"></i>';
+            }
         }
-        else if (options.length > 2) {
-            return options.length + ' selected  <i class="caret"></i>';
-        }
-        else {
-            var selected = '';
-            options.each(function () {
-                selected += $(this).text() + ', ';
-            });
-            return selected.substr(0, selected.length - 2) + ' <i class="caret"></i>';
-        }
-    }
-});
+    });
+}
 
 function bindDeleteCaseFileBehaviorToDeleteButtons() {
     $('#case_files_table a[id^="delete_casefile_button_"]').click(function () {
