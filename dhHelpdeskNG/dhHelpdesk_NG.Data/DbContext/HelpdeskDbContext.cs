@@ -11,6 +11,7 @@
     using DH.Helpdesk.Dal.EntityConfigurations.DailyReport;
     using DH.Helpdesk.Dal.EntityConfigurations.Faq;
     using DH.Helpdesk.Dal.EntityConfigurations.Inventory;
+    using DH.Helpdesk.Dal.EntityConfigurations.Invoice;
     using DH.Helpdesk.Dal.EntityConfigurations.MailTemplates;
     using DH.Helpdesk.Dal.EntityConfigurations.Printers;
     using DH.Helpdesk.Dal.EntityConfigurations.Problems;
@@ -24,6 +25,7 @@
     using DH.Helpdesk.Domain.Computers;
     using DH.Helpdesk.Domain.Faq;
     using DH.Helpdesk.Domain.Inventory;
+    using DH.Helpdesk.Domain.Invoice;
     using DH.Helpdesk.Domain.MailTemplates;
     using DH.Helpdesk.Domain.Printers;
     using DH.Helpdesk.Domain.Problems;
@@ -460,6 +462,10 @@
 
         public DbSet<WorkingGroupEntity> WorkingGroups { get; set; }
 
+        public DbSet<InvoiceArticleUnitEntity> InvoiceArticleUnits { get; set; }
+ 
+        public DbSet<InvoiceArticleEntity> InvoiceArticles { get; set; } 
+
         #endregion
 
         #region Public Methods and Operators
@@ -672,6 +678,8 @@
             modelBuilder.Configurations.Add(new ModuleConfiguration());
             modelBuilder.Configurations.Add(new UserModuleConfiguration());
             modelBuilder.Configurations.Add(new CausingPartConfiguration());
+            modelBuilder.Configurations.Add(new InvoiceArticleUnitConfiguration());
+            modelBuilder.Configurations.Add(new InvoiceArticleConfiguration());
 
             #endregion
 

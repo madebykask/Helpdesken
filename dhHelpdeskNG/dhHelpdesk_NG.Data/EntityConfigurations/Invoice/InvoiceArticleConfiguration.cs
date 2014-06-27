@@ -1,0 +1,41 @@
+﻿namespace DH.Helpdesk.Dal.EntityConfigurations.Invoice
+{
+    using System.ComponentModel.DataAnnotations.Schema;
+    using System.Data.Entity.ModelConfiguration;
+
+    using DH.Helpdesk.Domain.Invoice;
+
+    internal sealed class InvoiceArticleConfiguration : EntityTypeConfiguration<InvoiceArticleEntity>
+    {
+        internal InvoiceArticleConfiguration()
+        {
+            this.HasKey(a => a.Id);
+            this.Property(a => a.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            this.Property(a => a.ParentId).IsOptional();
+            this.HasOptional(a => a.Parent)
+                .WithMany()
+                .HasForeignKey(a => a.ParentId)
+                .WillCascadeOnDelete(false);
+            this.Property(a => a.Number).IsRequired();
+            this.Property(a => a.Name).IsRequired().HasMaxLength(100);
+            this.Property(a => a.UnitId).IsRequired();
+            this.HasRequired(a => a.Unit)
+                .WithMany()
+                .HasForeignKey(a => a.UnitId)
+                .WillCascadeOnDelete(false);
+            this.Property(a => a.Ppu).IsRequired();
+            this.Property(a => a.ProductAreaId).IsRequired();
+            this.HasRequired(a => a.ProductArea)
+                .WithMany()
+                .HasForeignKey(a => a.ProductAreaId)
+                .WillCascadeOnDelete(false);
+            this.Property(a => a.CustomerId).IsRequired();
+            this.HasRequired(a => a.Customer)
+                .WithMany()
+                .HasForeignKey(a => a.CustomerId)
+                .WillCascadeOnDelete(false);
+
+            this.ToTable("tblInvoiceArticle");            
+        }
+    }
+}

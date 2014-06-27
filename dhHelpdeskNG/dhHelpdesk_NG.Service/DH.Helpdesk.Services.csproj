@@ -67,6 +67,8 @@
     <Compile Include="BusinessLogic\BusinessModelMappers\ChangeOverviewSettingsToExcelTableHeadersMapper.cs" />
     <Compile Include="BusinessLogic\BusinessModelExport\ExportFileNameFormatter.cs" />
     <Compile Include="BusinessLogic\BusinessModelExport\IExportFileNameFormatter.cs" />
+    <Compile Include="BusinessLogic\Invoice\IInvoiceImporter.cs" />
+    <Compile Include="BusinessLogic\Invoice\IkeaExcelImporter.cs" />
     <Compile Include="BusinessLogic\MailTools\EmailMarkValues.cs" />
     <Compile Include="BusinessLogic\OtherTools\ITemporaryIdProvider.cs" />
     <Compile Include="DisplayValues\Changes\ContactsListDisplayValue.cs" />

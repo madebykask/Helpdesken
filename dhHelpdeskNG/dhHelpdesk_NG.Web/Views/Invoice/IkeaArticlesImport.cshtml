@@ -1,0 +1,18 @@
+﻿@model DH.Helpdesk.Web.Models.Invoice.ArticlesImportModel
+
+@{
+    ViewBag.Title = Translation.Get("Import");
+}
+
+<h2>@Translation.Get("Import")</h2>
+
+<div class="content">
+    <div class="container">
+        @using (Html.BeginForm("IkeaArticlesImport", "Invoice", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.EditorFor(m => Model)
+            <input type="submit" value="@Translation.Get("Import")"/>
+        }        
+    </div>
+</div>
+

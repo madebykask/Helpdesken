@@ -173,6 +173,7 @@
     <Compile Include="App_Start\NinjectModules\Modules\EmailModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\FaqModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\InventoryModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Modules\InvoiceModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\LinkModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\NotifiersModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\ProblemModule.cs" />
@@ -312,6 +313,7 @@
     <Compile Include="Controllers\FaqController.cs" />
     <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\InventorySettingsController.cs" />
+    <Compile Include="Controllers\InvoiceController.cs" />
     <Compile Include="Controllers\NotifiersController.cs" />
     <Compile Include="Controllers\OperationLogController.cs" />
     <Compile Include="Areas\Admin\Controllers\CustomerController.cs" />
@@ -639,6 +641,7 @@
     <Compile Include="Models\Inventory\SearchModels\InventoryReportSearchViewModel.cs" />
     <Compile Include="Models\Inventory\SearchModels\ReportsSearchFilter.cs" />
     <Compile Include="Models\Inventory\SearchModels\ReportsSearchViewModel.cs" />
+    <Compile Include="Models\Invoice\ArticlesImportModel.cs" />
     <Compile Include="Models\Reports\AverageSolutionTimeOptions.cs" />
     <Compile Include="Models\Reports\AverageSolutionTimeReport.cs" />
     <Compile Include="Models\Reports\IndexModel.cs" />
@@ -1505,6 +1508,8 @@
     <Content Include="Views\Reports\AverageSolutionTimeOptions.cshtml" />
     <Content Include="Views\Reports\AverageSolutionTimePrint.cshtml" />
     <Content Include="Views\Reports\AverageSolutionTimeView.cshtml" />
+    <Content Include="Views\Invoice\EditorTemplates\ArticlesImportModel.cshtml" />
+    <Content Include="Views\Invoice\IkeaArticlesImport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

@@ -12,6 +12,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
     using DH.Helpdesk.BusinessData.Models.Calendar.Output;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.BusinessData.Models.Customer;
+    using DH.Helpdesk.BusinessData.Models.Customer.Input;
     using DH.Helpdesk.BusinessData.Models.Document.Output;
     using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
     using DH.Helpdesk.Dal.Infrastructure.Translate;
@@ -68,6 +69,10 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
                 .InSingletonScope();
 
             this.Bind<ITranslator>().To<Translator>().InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<Customer, CustomerOverview>>()
+                .To<CustomerToBusinessModel>()
+                .InSingletonScope();
         }
     }
 }

@@ -79,6 +79,8 @@
     <Compile Include="EntityConfigurations\Cases\CausingPartConfiguration.cs" />
     <Compile Include="EntityConfigurations\Changes\ChangeCouncilConfiguration.cs" />
     <Compile Include="EntityConfigurations\DailyReport\DailyReportConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Invoice\InvoiceArticleConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Invoice\InvoiceArticleUnitConfiguration.cs" />
     <Compile Include="EntityConfigurations\MailTemplates\MailTemplateLanguageConfiguration.cs" />
     <Compile Include="EntityConfigurations\Users\ModuleConfiguration.cs" />
     <Compile Include="EntityConfigurations\Users\UserModuleConfiguration.cs" />
@@ -146,6 +148,7 @@
     <Compile Include="Mappers\Changes\BusinessModelToEntity\UpdatedChangeToChangeEntityMapper.cs" />
     <Compile Include="Mappers\Changes\EntityToBusinessModel\ChangeFieldSettingsToChangeEditSettingsMapper.cs" />
     <Compile Include="Mappers\Customer\EntityToBusinessModel\CustomerSettingsToBusinessModelMapper.cs" />
+    <Compile Include="Mappers\Customer\EntityToBusinessModel\CustomerToBusinessModel.cs" />
     <Compile Include="Mappers\Documents\EntityToBusinessModel\DocumentToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Computer\ComputerFieldSettingsToFieldSettingsMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Printer\PrinterFieldSettingsToPrinterEditSettingsMapper.cs" />
@@ -164,6 +167,10 @@
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Server\ServerFieldSettingsToServerEditSettingsMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Printer\PrinterFieldSettingsToPrinterOverviewSettingsMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Server\ServerFieldSettingsToServerOverviewSettingsMapper.cs" />
+    <Compile Include="Mappers\Invoice\BusinessModelToEntity\InvoiceArticleToEntityMapper.cs" />
+    <Compile Include="Mappers\Invoice\BusinessModelToEntity\InvoiceArticleUnitToEntityMapper.cs" />
+    <Compile Include="Mappers\Invoice\EntityToBusinessModel\InvoiceArticleToBusinessModelMapper.cs" />
+    <Compile Include="Mappers\Invoice\EntityToBusinessModel\InvoiceArticleUnitToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Problems\ProblemEntityFromBusinessModelChanger.cs" />
     <Compile Include="Mappers\Problems\NewProblemToProblemEntityMapper.cs" />
     <Compile Include="Mappers\Problems\ProblemEntityToProblemOverviewMapper.cs" />
@@ -318,6 +325,10 @@
     <Compile Include="Repositories\IEMailGroupRepository.cs" />
     <Compile Include="Repositories\IEmailLogRepository.cs" />
     <Compile Include="Repositories\IMailTemplateIdentifierRepository.cs" />
+    <Compile Include="Repositories\Invoice\Concrete\InvoiceArticleRepository.cs" />
+    <Compile Include="Repositories\Invoice\Concrete\InvoiceArticleUnitRepository.cs" />
+    <Compile Include="Repositories\Invoice\IInvoiceArticleRepository.cs" />
+    <Compile Include="Repositories\Invoice\IInvoiceArticleUnitRepository.cs" />
     <Compile Include="Repositories\IUserEmailRepository.cs" />
     <Compile Include="Repositories\MailTemplates\IMailTemplateLanguageRepository.cs" />
     <Compile Include="Repositories\MailTemplates\IMailTemplateRepository.cs" />
