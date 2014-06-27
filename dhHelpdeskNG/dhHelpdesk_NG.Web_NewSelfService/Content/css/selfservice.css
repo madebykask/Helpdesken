@@ -18,7 +18,9 @@ h4 {
     width: 50px !important;
 }
 
-
+.btn {
+    margin-top: -2px !important;
+}
 
 /**NAVBAR***/
 
