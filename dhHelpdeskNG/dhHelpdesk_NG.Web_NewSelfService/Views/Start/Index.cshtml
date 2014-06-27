@@ -1,4 +1,4 @@
-﻿@model DH.Helpdesk.NewSelfService.Models.Case.UserCasesModel         
+﻿@model DH.Helpdesk.NewSelfService.Models.Case.UserCasesModel        
 
 @{
     ViewBag.Title = "Index";
@@ -7,140 +7,124 @@
 <div class="container-fluid dh-container">
     <div class="row">
         <div class="col-md-3">
-            <div class="row">
-                <div class="col-md-6">
-                    <div style="background: #0067b2; text-align: center; color: #fff;">
-                        <img src="@Url.Content("~/Content/img/ico-chat.png")" /><br />
-                        Change language
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div style="background: #db2524; text-align: center; color: #fff;">
-                        <img src="@Url.Content("~/Content/img/ico-help.png")" /><br />
-                        More info
-                    </div>
-                </div>
-            </div>
-            <div class="dh-container">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Bulletin board</div>
-                    <div class="panel-body">
-                        <p>Lörem ipsum dolor. Sit ämet cönsectetur adipisicing. Elit sed dö eiusmod tempor incididunt ut låböre. Et dolore magnä aliquå. Nullåm in äenean egestäs fåcilisis läcinia, ånte nisi.</p>
-                        <hr />
-                        <p>Lörem ipsum dolor. Sit ämet cönsectetur adipisicing. Elit sed dö eiusmod tempor incididunt ut låböre. Et dolore magnä aliquå. Nullåm in äenean egestäs fåcilisis läcinia, ånte nisi.</p>
-                        <hr />
-                        <p>Lörem ipsum dolor. Sit ämet cönsectetur adipisicing. Elit sed dö eiusmod tempor incididunt ut låböre. Et dolore magnä aliquå. Nullåm in äenean egestäs fåcilisis läcinia, ånte nisi.</p>
-                        <hr />
-                    </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">Bulletin board</div>
+                <div class="panel-body">
+                    <p>Lörem ipsum dolor. Sit ämet cönsectetur adipisicing. Elit sed dö eiusmod tempor incididunt ut låböre. Et dolore magnä aliquå. Nullåm in äenean egestäs fåcilisis läcinia, ånte nisi.</p>
+                    <hr />
+                    <p>Lörem ipsum dolor. Sit ämet cönsectetur adipisicing. Elit sed dö eiusmod tempor incididunt ut låböre. Et dolore magnä aliquå. Nullåm in äenean egestäs fåcilisis läcinia, ånte nisi.</p>
+                    <hr />
+                    <p>Lörem ipsum dolor. Sit ämet cönsectetur adipisicing. Elit sed dö eiusmod tempor incididunt ut låböre. Et dolore magnä aliquå. Nullåm in äenean egestäs fåcilisis läcinia, ånte nisi.</p>
+                    <hr />
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="panel panel-default table-responsive">
-                <div class="panel-heading">Ongoing Service Requests</div>
-                <div class="panel-body">
-                    <table class="table table-striped table-bordered table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            @if (Model.CaseSearchResult.CaseSettings != null)
+    <div class="col-md-6">
+        <div class="panel panel-default table-responsive">
+            <div class="panel-heading">Ongoing Service Requests</div>
+            <div class="panel-body">
+                <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            @if (Model.CaseSearchResult.CaseSettings != null)
                                             {
                                                 foreach (var c in Model.CaseSearchResult.CaseSettings)
                                                 {
                                                     if (c.Line == 1)
                                                     {
-                                                <th onclick=" sortCases('@c.Name') " class="thpointer" >
-                                                    @Translation.Get(c.Name, Enums.TranslationSource.CaseTranslation, c.Customer_Id)  <i class="@c.Name.SetCaseSortIcon()"></i>
-                                                </th>
+                                <th onclick=" sortCases('@c.Name') " class="thpointer" >
+                                    @Translation.Get(c.Name, Enums.TranslationSource.CaseTranslation, c.Customer_Id)  <i class="@c.Name.SetCaseSortIcon()"></i>
+                                </th>
                                                 }
                                             }
                                         }
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if (Model.CaseSearchResult.Cases.Any())
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.CaseSearchResult.Cases.Any())
                                         {                                            
                                             foreach (var r in Model.CaseSearchResult.Cases)
                                             {
 
                                                 var dynamicUrl = Model.DynamicCases.Where(w => w.CaseId == r.Id).Select(d => "~/" + d.FormPath).SingleOrDefault();
 
-                                                <tr>
-                                                    <!--fasta kolumner -->
-                                                    <td>
-                                                        <span class="glyphicon glyphicon-file"  title="@r.CaseIcon.CaseIconTitle()"></span>
-                                                    </td>
-                                                    <!-- valbara kolumner -->
-                                                
-                                                    @foreach (var c in r.Columns)
+                            <tr>
+                                <!--fasta kolumner -->
+                                <td>
+                                    <span class="glyphicon glyphicon-file"  title="@r.CaseIcon.CaseIconTitle()"></span>
+                                </td>
+                                <!-- valbara kolumner -->
+
+                                @foreach (var c in r.Columns)
                                                     {
-                                                        <td>
-                                                            @if (c.FieldType == 1)
+                                    <td>
+                                        @if (c.FieldType == 1)
                                                             {
-                                                                <!-- date -->
+                                            <!-- date -->
                                                                 if (string.IsNullOrEmpty(dynamicUrl))
                                                                 {
-                                                                    <a href ="@Url.Action("Index", "case", new { id = r.Id , area ="" })" > @Html.DisplayFor(m => c.DateTimeValue, "Date") </a>
+                                            <a href ="@Url.Action("Index", "case", new { id = r.Id , area ="" })" >@Html.DisplayFor(m => c.DateTimeValue, "Date") </a>
                                                                 }
                                                                 else
                                                                 {
-                                                                    <a href="@Url.Content(dynamicUrl.SetUrlParameters(r.Id))">@Html.DisplayFor(m => c.DateTimeValue, "Date")</a>
+                                            <a href="@Url.Content(dynamicUrl.SetUrlParameters(r.Id))">@Html.DisplayFor(m => c.DateTimeValue, "Date")</a>
                                                                 }
                                                             }
                                                             else if (c.FieldType == 2)
                                                             {
-                                                                <!-- dateTime -->
+                                            <!-- dateTime -->
                                                                 if (string.IsNullOrEmpty(dynamicUrl))
                                                                 {
-                                                                    <a href="@Url.Action("Index", "case", new { id = r.Id, area ="" })">@Html.DisplayFor(m => c.DateTimeValue, "DateAndTime")</a>
+                                            <a href="@Url.Action("Index", "case", new { id = r.Id, area ="" })">@Html.DisplayFor(m => c.DateTimeValue, "DateAndTime")</a>
                                                                 }
                                                                 else
                                                                 {
-                                                                    <a href="@Url.Content(dynamicUrl.SetUrlParameters(r.Id))">@Html.DisplayFor(m => c.DateTimeValue, "DateAndTime")</a>
+                                            <a href="@Url.Content(dynamicUrl.SetUrlParameters(r.Id))">@Html.DisplayFor(m => c.DateTimeValue, "DateAndTime")</a>
                                                                 }
                                                             }
                                                             else
                                                             {
                                                                 if (c.TranslateThis) 
                                                                 {
-                                                                    <!-- string -->
+                                            <!-- string -->
                                                                     if (string.IsNullOrEmpty(dynamicUrl))
                                                                     {
-                                                                        <a href="@Url.Action("Index", "case", new { id = r.Id, area ="" })">@Translation.Get(c.StringValue, Enums.TranslationSource.TextTranslation)</a>
+                                            <a href="@Url.Action("Index", "case", new { id = r.Id, area ="" })">@Translation.Get(c.StringValue, Enums.TranslationSource.TextTranslation)</a>
                                                                     }
                                                                     else
                                                                     {
-                                                                        <a href="@Url.Content(dynamicUrl.SetUrlParameters(r.Id))">@Translation.Get(c.StringValue, Enums.TranslationSource.TextTranslation)</a>
+                                            <a href="@Url.Content(dynamicUrl.SetUrlParameters(r.Id))">@Translation.Get(c.StringValue, Enums.TranslationSource.TextTranslation)</a>
                                                                     }
                                                                 }
                                                                 else
                                                                 {
                                                                     if (string.IsNullOrEmpty(dynamicUrl))
                                                                     {
-                                                                        <a href="@Url.Action("Index", "case", new { id = r.Id, area ="" })">@c.StringValue</a>
+                                            <a href="@Url.Action("Index", "case", new { id = r.Id, area ="" })">@c.StringValue</a>
                                                                     }
                                                                     else
                                                                     {
-                                                                        <a href="@Url.Content(dynamicUrl.SetUrlParameters(r.Id))">@c.StringValue</a>
+                                            <a href="@Url.Content(dynamicUrl.SetUrlParameters(r.Id))">@c.StringValue</a>
                                                                     }
                                                                 }
                                                             }
-                                                        </td>
+                                    </td>
                                                     }
-                                                </tr>
+                            </tr>
                                             }
                                         }
-                                    </tbody>
-                                </table>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <img src="@Url.Content("~/Content/img-profile/ikea-map.png")" />
-
-            <div class="dh-container">
-                <img src="@Url.Content("~/Content/img-profile/ikea-image.png")" />
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
+    <div class="col-md-3">
+        <img src="@Url.Content("~/Content/img-profile/ikea-map.png")" />
+
+        <div class="dh-container">
+            <img src="@Url.Content("~/Content/img-profile/ikea-image.png")" />
+        </div>
+    </div>
+</div>
 </div>
