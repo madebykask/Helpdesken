@@ -18,6 +18,8 @@ h4 {
     width: 50px !important;
 }
 
+
+
 /**NAVBAR***/
 
 .navbar {
@@ -358,6 +360,10 @@ h4 {
 @media (min-width: 768px) {
     input[type=text] {
         width: 300px;
+        height: 34px;
+        padding: 8px 12px;
+        font-size: 14px;
+        line-height: 1.42857143;
     }
 
     .chosen-search input[type=text] {

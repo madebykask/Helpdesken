@@ -49,6 +49,7 @@
     min-width: 200px;
     width: 200px;
     height: auto;
+    min-height: 30px;
     line-height: 1.42857143;
     color: #555;
     background-color: #fff;
@@ -109,6 +110,6 @@
     background-color: #eee;
 }
 
-.marginbuttontop {
+#lmEmbedded .marginbuttontop {
     margin-top: 1px;
 }
