@@ -72,12 +72,12 @@
                                                 <tr>
                                                     <!--fasta kolumner -->
                                                     <td>
-                                                        <span class="glyphicon glyphicon-file"  title="@r.CaseIcon.CaseIconTitle()"></span>
+                                                        <a href ="@Url.Action("Index", "case", new { id = r.Id , area ="" })" > <span class="glyphicon glyphicon-file"  title="@r.CaseIcon.CaseIconTitle()"></span> </a> 
                                                     </td>
                                                     <!-- valbara kolumner -->
                                                 
                                                     @foreach (var c in r.Columns)
-                                                    {
+                                                    {                                                        
                                                         <td>
                                                             @if (c.FieldType == 1)
                                                             {
