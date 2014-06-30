@@ -34,8 +34,8 @@
                 <li class="@(Model.TabHasError("#personal") ? "error" : "")">
                     <a href="#personal">@Model.Translate("Personal Information")</a></li>
             }
-           @if(Model.VisibleTab("#documents"))
-            {
+           @*@if(Model.VisibleTab("#documents"))
+            { 
                 <li class="@(Model.TabHasError("#documents") ? "error" : "")">
                     <a href="#documents">@Model.Translate("Documents")</a></li>
             } @*
@@ -72,10 +72,10 @@
                     {
                         @Html.Partial("_TabPersonal", Model)
                     }
-                    @if(Model.VisibleTab("#documents"))
+                    @*@if(Model.VisibleTab("#documents"))
                     {
                         @Html.Partial("_TabDocuments", Model)
-                    }
+                    }*@
                     @if (Model.VisibleTab("#SSCUseOnly"))
                     {
                         @Html.Partial("_TabSsc", Model)

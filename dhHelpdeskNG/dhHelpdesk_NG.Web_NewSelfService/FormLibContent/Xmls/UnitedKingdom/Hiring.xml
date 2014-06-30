@@ -616,7 +616,7 @@
       <element type="select" name="BusinessUnit" label="Business Unit" mandatory="1">
         <options>
           <option value=""></option>
-          <option value="Store Belfast 113">﻿Store Belfast 113</option>
+          <option value="Store Belfast 113">Store Belfast 113</option>
           <option value="Store Birmingham 142">Store Birmingham 142</option>
           <option value="Store Bristol 264">Store Bristol 264</option>
           <option value="Store Cardiff 267">Store Cardiff 267</option>
@@ -3047,7 +3047,7 @@
       <element name="PrimarySite" type="select" label="Primary Site" mandatory="1">
         <options>
           <option value=""></option>
-          <option value="﻿Store Belfast 113">﻿Store Belfast 113</option>
+          <option value="Store Belfast 113">Store Belfast 113</option>
           <option value="Store Birmingham 142">Store Birmingham 142</option>
           <option value="Store Bristol 264">Store Bristol 264</option>
           <option value="Store Cardiff 267">Store Cardiff 267</option>
@@ -3357,7 +3357,7 @@
       <element type="select" name="AllowancesType" label="Allowance Type">
         <options>
           <option value=""></option>
-          <option value="﻿150B - Hourly Location Allow">﻿150B - Hourly Location Allow</option>
+          <option value="﻿150B - Hourly Location Allow">150B - Hourly Location Allow</option>
           <option value="150C - Hourly FLT Skills (Fork Lift Truck Allowance)">150C - Hourly FLT Skills (Fork Lift Truck Allowance)</option>
           <option value="150C - Hourly FLT Skills (Fork Lift Truck Allowance Milton Keynes)">150C - Hourly FLT Skills (Fork Lift Truck Allowance Milton Keynes)</option>
           <option value="150D - Hourly Kitchen Skills">150D - Hourly Kitchen Skills</option>
@@ -3468,7 +3468,7 @@
       <element type="select" name="AllowancesType2" label="Allowance Type" >
         <options>
           <option value=""></option>
-          <option value="﻿150B - Hourly Location Allow">﻿150B - Hourly Location Allow</option>
+          <option value="150B - Hourly Location Allow">150B - Hourly Location Allow</option>
           <option value="150C - Hourly FLT Skills (Fork Lift Truck Allowance)">150C - Hourly FLT Skills (Fork Lift Truck Allowance)</option>
           <option value="150C - Hourly FLT Skills (Fork Lift Truck Allowance Milton Keynes)">150C - Hourly FLT Skills (Fork Lift Truck Allowance Milton Keynes)</option>
           <option value="150D - Hourly Kitchen Skills">150D - Hourly Kitchen Skills</option>
@@ -3580,7 +3580,7 @@
       <element type="select" name="AllowancesType3" label="Allowance Type" >
         <options>
           <option value=""></option>
-          <option value="﻿150B - Hourly Location Allow">﻿150B - Hourly Location Allow</option>
+          <option value="150B - Hourly Location Allow">150B - Hourly Location Allow</option>
           <option value="150C - Hourly FLT Skills (Fork Lift Truck Allowance)">150C - Hourly FLT Skills (Fork Lift Truck Allowance)</option>
           <option value="150C - Hourly FLT Skills (Fork Lift Truck Allowance Milton Keynes)">150C - Hourly FLT Skills (Fork Lift Truck Allowance Milton Keynes)</option>
           <option value="150D - Hourly Kitchen Skills">150D - Hourly Kitchen Skills</option>

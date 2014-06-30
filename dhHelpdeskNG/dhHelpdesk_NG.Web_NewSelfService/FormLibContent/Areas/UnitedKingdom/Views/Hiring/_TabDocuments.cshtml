@@ -6,32 +6,37 @@
 @functions{
     public string GetContract()
     {
-
-        //IF <Employment Category/OA12> = Permanent AND <Business Unit/OA3> different than U.K & IE Contact Centre or Distribution Services Ltd or Distribution Service Office
-        
-        if (Model.GetAnswer("EmploymentCategory").ToLower() == "Permanent".ToLower())
+        //This template is applicable only if <Contract Type/OA14> = “Zero Hour”
+        if (Model.GetAnswer("ContractType").ToLower() == "Zero Hours".ToLower())
         {
+            return "ZeroHour";
+        }
 
-            if (Model.GetAnswer("BusinessUnit").ToLower() != "Peterborough Contact Centre".ToLower() && Model.GetAnswer("BusinessUnit").ToLower() != "Distribution Centre Peterborough 012".ToLower() && Model.GetAnswer("BusinessUnit").ToLower() != "Distribution Service Office".ToLower())
-            {
-            return "Permanent";
-            }
-                //This template should be applicable for Permanent type and unit Contact Centre only which means both conditions must be met:
-//IF <Employment Category/OA12> = Permanent AND <Business Unit/OA3> = U.K & IE Contact Centre
-            else if (Model.GetAnswer("BusinessUnit").ToLower() == "Peterborough Contact Centre".ToLower())
-            {
-                return "ContactCentre";
-            }
-            else
-            {
-                return "";
-            }
-               
-        }
-        else
-        {
-        return "";
-        }
+        //<Business Unit/OA3> different than U.K & IE Contact Centre or Distribution Services Ltd or Distribution Service Office
+         if (Model.GetAnswer("BusinessUnit").ToLower() != "Peterborough Contact Centre".ToLower() && Model.GetAnswer("BusinessUnit").ToLower() != "Distribution Centre Peterborough 012".ToLower() && Model.GetAnswer("BusinessUnit").ToLower() != "Distribution Service Office".ToLower())
+         {
+          
+             //IF <Employment Category/OA12> = Temporary or Fixed Term AND <Business Unit/OA3> different than U.K & IE Contact Centre or Distribution Services Ltd or Distribution Service Office   
+             if (Model.GetAnswer("EmploymentCategory").ToLower() == "Temporary".ToLower() | Model.GetAnswer("EmploymentCategory").ToLower() == "Fixed Term".ToLower())
+             {
+                 return "TemporaryFixedTerm";
+             }
+
+             //IF <Employment Category/OA12> = Permanent AND <Business Unit/OA3> different than U.K & IE Contact Centre or Distribution Services Ltd or Distribution Service Office
+              if (Model.GetAnswer("EmploymentCategory").ToLower() == "Permanent".ToLower())
+              {
+                  return "Permanent";
+              }
+             
+         }
+         //This template should be applicable for Permanent type and unit Contact Centre only which means both conditions must be met:
+         //IF <Employment Category/OA12> = Permanent AND <Business Unit/OA3> = U.K & IE Contact Centre
+         else if (Model.GetAnswer("EmploymentCategory").ToLower() == "Permanent".ToLower() && Model.GetAnswer("BusinessUnit").ToLower() == "Peterborough Contact Centre".ToLower())
+         {
+             return "ContactCentre";
+         }
+
+         return "";
         
     }
 

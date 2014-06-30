@@ -168,16 +168,6 @@
         setEmployeeBehavior($('#EmploymentCategory').val());
         setProbationEndDate($('#ProbationPeriod').val());
 
-        $('#Company').change(function () {
-            var value = $(this).val();
-
-            if (value != '@CompanyName') {
-                $('#CostAllocation, #CrossChargeCostCentre').prop('disabled', true);
-            }
-            else {
-                $('#CostAllocation, #CrossChargeCostCentre').prop('disabled', false);
-            }
-        });
 
         $('#EmploymentCategory').change(function () {
             setEmployeeBehavior($(this).val());
@@ -198,18 +188,18 @@
             else {
                 $('#ContractType option:not([value])').prop('selected', true);
             }
-        });               
+        });
 
         $('#ProbationPeriod').change(function () {
             setProbationEndDate($(this).val());
         });
 
         $('#ReportsToLineManager').change(function () {
-            ('#TECApprover').val($(this).val());
+            $('#TECApprover').val($(this).val());
         });
 
         $('#BusinessUnit').change(function () {
-            ('#PrimarySite').val($(this).val());
+            $('#PrimarySite').val($(this).val());
         });
 
         //var startDate = $('#ContractStartDate').val();

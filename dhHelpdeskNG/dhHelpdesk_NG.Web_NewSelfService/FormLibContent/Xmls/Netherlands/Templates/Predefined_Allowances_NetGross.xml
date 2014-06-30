@@ -63,11 +63,11 @@
   </dependent>
   <dependent>
     <selected>Telephone Allowance (net)</selected>
-    <show>Gross</show>
+    <show>Net</show>
   </dependent>
   <dependent>
     <selected>Telephone Allowance (gross)</selected>
-    <show>Net</show>
+    <show>Gross</show>
   </dependent>
   <dependent>
     <selected>Comp.Serv.Allowance (BHV)</selected>

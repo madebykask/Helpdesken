@@ -18,7 +18,7 @@
             <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment</visibleTabs>
             <readOnlyTabs></readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields>BusinessUnit,Department</readOnlyFields>
         <actions>

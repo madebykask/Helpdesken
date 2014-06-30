@@ -2,7 +2,7 @@
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
 
-@using (Html.BeginForm("edit", "Absences", new { id = Model.Contract.Id }, FormMethod.Post, new { area = "Global", novalidate = "novalidate" }))
+@using(Html.BeginForm("edit", "Absences", new { id = Model.Contract.Id }, FormMethod.Post, new { area = "Global", novalidate = "novalidate" }))
 {   
     <span style="display: none;" id="narrowDownInit"></span>
     @Html.Partial("_GlobalNavRev", Model)
@@ -15,14 +15,18 @@
                 <li class="active @(Model.TabHasError("#ServiceRequestDetails") ? "error" : "")">
                     <a href="#ServiceRequestDetails">@Model.Translate("Service Request Details")</a></li>
             }
-            
-           @if(Model.VisibleTab("#Absences"))
+
+            @if(Model.VisibleTab("#Absences"))
             {
                 <li class="@(Model.TabHasError("#Absences") ? "error" : "")">
                     <a href="#Absences">@Model.Translate("Absences")</a></li>
             }
-          
-           
+            @if(Model.VisibleTab("#attachments"))
+            {
+                <li class="pull-right">
+                    <a href="#attachments"><i class="icon-file icon-white"></i>&nbsp;@Model.Translate("Attachments")&nbsp;(<b id="attachmentCounter">@(Model.Contract.CaseFiles != null ? Model.Contract.CaseFiles.Count() : 0)</b>)</a>
+                </li>
+            }
         </ul>
         <div class="content">
             <div class="row-fluid">
@@ -31,10 +35,14 @@
                     {
                         @Html.Partial("_TabServiceRequestDetails", Model)
                     }
-                    
-                    @if (Model.VisibleTab("#Absences"))
+
+                    @if(Model.VisibleTab("#Absences"))
                     {
                         @Html.Partial("_TabAbsences", Model)
+                    }
+                    @if(Model.VisibleTab("#attachments"))
+                    {
+                        @Html.Partial("_GlobalAttachments", Model)
                     }
                 </div>
             </div>

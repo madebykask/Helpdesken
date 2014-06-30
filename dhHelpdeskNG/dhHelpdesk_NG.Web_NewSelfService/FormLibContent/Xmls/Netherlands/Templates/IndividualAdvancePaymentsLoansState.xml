@@ -2,7 +2,7 @@
 <state status="0">
   <status value="0">
     <visibleTabs>
-      <visibleTabs>#servicerequestdetails,#payment</visibleTabs>
+      <visibleTabs>#servicerequestdetails,#payment,#attachments</visibleTabs>
     </visibleTabs>
     <readOnlyTabs></readOnlyTabs>
     <readOnlyFields>BusinessUnit,Department</readOnlyFields>
@@ -15,7 +15,7 @@
   </status>
   <!-- HRU -->
   <status value="20">
-    <visibleTabs>#servicerequestdetails,#payment</visibleTabs>
+    <visibleTabs>#servicerequestdetails,#payment,#attachments</visibleTabs>
     <readOnlyTabs></readOnlyTabs>
     <readOnlyFields>BusinessUnit,Department</readOnlyFields>
     <actions>
@@ -27,7 +27,7 @@
   </status>
   <!-- SSC -->
   <status value="30">
-    <visibleTabs>#servicerequestdetails,#payment</visibleTabs>
+    <visibleTabs>#servicerequestdetails,#payment,#attachments</visibleTabs>
     <readOnlyTabs>#servicerequestdetails,#payment</readOnlyTabs>
     <readOnlyFields>BusinessUnit,Department</readOnlyFields>
     <actions>
@@ -38,7 +38,7 @@
   </status>
   <!-- SSC -->
   <status value="40">
-    <visibleTabs>#servicerequestdetails,#payment</visibleTabs>
+    <visibleTabs>#servicerequestdetails,#payment,#attachments</visibleTabs>
     <readOnlyTabs>#servicerequestdetails,#payment</readOnlyTabs>
     <readOnlyFields>BusinessUnit,Department</readOnlyFields>
     <actions>
@@ -47,14 +47,14 @@
     </actions>
   </status>
     <status value="60">
-    <visibleTabs>#servicerequestdetails,#payment</visibleTabs>
+    <visibleTabs>#servicerequestdetails,#payment,#attachments</visibleTabs>
     <readOnlyTabs>#servicerequestdetails,#payment</readOnlyTabs>
     <readOnlyFields>BusinessUnit,Department</readOnlyFields>
     <actions>
     </actions>
   </status>
   <status value="70">
-    <visibleTabs>#servicerequestdetails,#payment</visibleTabs>
+    <visibleTabs>#servicerequestdetails,#payment,#attachments</visibleTabs>
     <readOnlyTabs>#servicerequestdetails,#payment</readOnlyTabs>
     <readOnlyFields>BusinessUnit,Department</readOnlyFields>
   </status>

@@ -13,7 +13,7 @@
   <booltrue>^1|1,0$</booltrue>
   <nip message="Wrong format (NNN-NNN-NN-NN).">^\d{3}\-\d{3}\-\d{2}\-\d{2}$</nip>
   <numMax40 message="Wrong format, enter maximum of 40">\b([0-9]|[1-3][0-9]|40)\b</numMax40>
-  <email message="Invalid E-mail format.">^[a-z0-9_\+-]+(\.[a-z0-9_\+-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*\.([a-z]{2,4})$</email>
+  <email message="Invalid E-mail format.">^[a-zA-Z0-9_\+-]+(\.[a-zA-Z0-9_\+-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.([a-zA-Z]{2,4})$</email>
   <currency message="Wrong format (LLL)">^[a-zA-Z.]{3,3}$</currency>
   <iban message="Wrong format (NLNN NNNN NNNN NNNN NN). Example: NL12 1234 1234 1234 12">NL\d{2}[ ]\d{4}[ ]\d{4}[ ]\d{4}[ ]\d{2}|NL\d{18}</iban>
   <bsn message="Wrong format (NNNNNNNNN)">^\D*(?:\d\D*){9,}$</bsn>

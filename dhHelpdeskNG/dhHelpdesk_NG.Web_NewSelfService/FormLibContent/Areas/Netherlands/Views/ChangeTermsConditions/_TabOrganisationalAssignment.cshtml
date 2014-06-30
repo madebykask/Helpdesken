@@ -95,10 +95,10 @@
                 <tr>
                     <td class="tdstrong">@Model.Label("LocalJobTitle")</td>
                     <td>@Model.Element("LocalJobTitle")</td>
-                    @*<td>
+                    <td>
                         <input type="hidden" class="oldValue"  id="OLD_LocalJobTitle" name="OLD_LocalJobTitle" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_LocalJobTitle").Select(x => x.Value).FirstOrDefault() : "")"/>
                         <em class="muted" id="emOLD_LocalJobTitle">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_LocalJobTitle").Select(x => x.Value).FirstOrDefault() : "")</em>
-                    </td>*@
+                    </td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("NewPosition")</td>

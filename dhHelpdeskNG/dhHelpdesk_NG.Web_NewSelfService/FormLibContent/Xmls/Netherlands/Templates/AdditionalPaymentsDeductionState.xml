@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <state status="0">
     <status value="0">
-        <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Payment,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields>BusinessUnit,Department</readOnlyFields>
         <actions>
@@ -17,7 +17,7 @@
             <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
             <readOnlyTabs></readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Payment,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields>BusinessUnit,Department</readOnlyFields>
         <actions>
@@ -33,7 +33,7 @@
             <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Payment,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields>BusinessUnit,Department</readOnlyFields>
         <actions>
@@ -50,7 +50,7 @@
             <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Payment,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
         <readOnlyFields>BusinessUnit,Department</readOnlyFields>
         <actions>
@@ -65,7 +65,7 @@
             <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Payment,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
         <readOnlyFields>BusinessUnit,Department</readOnlyFields>
         <actions>
@@ -78,7 +78,7 @@
             <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Payment,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
         <readOnlyFields>BusinessUnit,Department</readOnlyFields>
         <actions>
@@ -89,7 +89,7 @@
             <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Payment,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
     </status>

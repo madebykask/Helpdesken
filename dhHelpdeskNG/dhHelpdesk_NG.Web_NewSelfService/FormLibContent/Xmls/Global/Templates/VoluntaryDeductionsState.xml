@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <state status="0">
   <status value="0">
-    <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
+    <visibleTabs>#ServiceRequestDetails,#Payment,#attachments</visibleTabs>
     <readOnlyTabs></readOnlyTabs>
     <readOnlyFields>BusinessUnit,Department</readOnlyFields>
     <actions>
@@ -14,7 +14,7 @@
   
   <!-- HRU -->
   <status value="20">
-    <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
+    <visibleTabs>#ServiceRequestDetails,#Payment,#attachments</visibleTabs>
     <readOnlyTabs></readOnlyTabs>
     <readOnlyFields>BusinessUnit,Department</readOnlyFields>
     <actions>
@@ -27,8 +27,8 @@
   </status>
   <!-- SSC -->
   <status value="30">
-    <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
-    <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
+    <visibleTabs>#ServiceRequestDetails,#Payment,#attachments</visibleTabs>
+    <readOnlyTabs>#ServiceRequestDetails,#Payment,#attachments</readOnlyTabs>
     <readOnlyFields>BusinessUnit,Department</readOnlyFields>
     <actions>
       <action status="40" internal-val="40" text="Validity check OK"></action>
@@ -38,8 +38,8 @@
   </status>
   <!-- SSC -->
   <status value="40">
-    <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
-    <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
+    <visibleTabs>#ServiceRequestDetails,#Payment,#attachments</visibleTabs>
+    <readOnlyTabs>#ServiceRequestDetails,#Payment,#attachments</readOnlyTabs>
     <readOnlyFields>BusinessUnit,Department</readOnlyFields>
     <actions>
       <action status="60" internal-val="60" text="Global View update"></action>
@@ -47,15 +47,15 @@
     </actions>
   </status>
   <status value="60">
-    <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
-    <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
+    <visibleTabs>#ServiceRequestDetails,#Payment,#attachments</visibleTabs>
+    <readOnlyTabs>#ServiceRequestDetails,#Payment,#attachments</readOnlyTabs>
     <readOnlyFields>BusinessUnit,Department</readOnlyFields>
     <actions>
     </actions>
   </status>
   <status value="70">
-    <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
-    <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
+    <visibleTabs>#ServiceRequestDetails,#Payment,#attachments</visibleTabs>
+    <readOnlyTabs>#ServiceRequestDetails,#Payment,#attachments</readOnlyTabs>
     <readOnlyFields>BusinessUnit,Department</readOnlyFields>
   </status>
 </state>

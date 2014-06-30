@@ -221,26 +221,29 @@ var globalTypeAheadOptions = {
             notice.show();
         }
 
-        $.ajax({
-            url: site.baseUrl + '/search/EmployeesExtendedInfo',
-            type: 'post',
-            data: { formGuid: $('#formGuid').val(), employeenumber: item.num },
-            dataType: 'json',
-            success: function (result) {
-                var resultList = jQuery.map(result, function (extendeditem) {                   
-                    var type = $('#' + extendeditem.FormFieldName).attr('type');
-                    if (type != 'text') {
-                        //$('#' + extendeditem.FormFieldName).append($('<option value="' + extendeditem.FormFieldValue +
-                        //    '">' + extendeditem.FormFieldValue + '</option>'));
-                        $('#' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
-                    }
-                        
-                    $('input[name="' + extendeditem.FormFieldName + '"]').val(extendeditem.FormFieldValue);
-                    $('#emOLD_' + extendeditem.FormFieldName).text(extendeditem.FormFieldValue);
-                    $('#OLD_' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);                            
-                });
-            }
-        });
+        if ($('#formGuid').length > 0) {
+
+            $.ajax({
+                url: site.baseUrl + '/search/EmployeesExtendedInfo',
+                type: 'post',
+                data: { formGuid: $('#formGuid').val(), employeenumber: item.num },
+                dataType: 'json',
+                success: function (result) {
+                    var resultList = jQuery.map(result, function (extendeditem) {
+                        var type = $('#' + extendeditem.FormFieldName).attr('type');
+                        if (type != 'text') {
+                            //$('#' + extendeditem.FormFieldName).append($('<option value="' + extendeditem.FormFieldValue +
+                            //    '">' + extendeditem.FormFieldValue + '</option>'));
+                            $('#' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
+                        }
+
+                        $('input[name="' + extendeditem.FormFieldName + '"]').val(extendeditem.FormFieldValue);
+                        $('#emOLD_' + extendeditem.FormFieldName).text(extendeditem.FormFieldValue);
+                        $('#OLD_' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
+                    });
+                }
+            });
+        }
 
         $('input[name="BusinessUnit"]').val(item.unit);
         $('#emOLD_BusinessUnit').text(item.unit);
@@ -343,27 +346,28 @@ var globalEmailTypeAheadOptions = {
             notice.show();
         }
 
-        $.ajax({
-            url: site.baseUrl + '/search/EmployeesExtendedInfo',
-            type: 'post',
-            data: { formGuid: $('#formGuid').val(), employeenumber: item.num },
-            dataType: 'json',
-            success: function (result) {
-                var resultList = jQuery.map(result, function (extendeditem) {
-                    var type = $('#' + extendeditem.FormFieldName).attr('type');
-                    if (type != 'text') {
-                        //$('#' + extendeditem.FormFieldName).append($('<option value="' + extendeditem.FormFieldValue +
-                        //    '">' + extendeditem.FormFieldValue + '</option>'));
-                        $('#' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
-                    }
+        if ($('#formGuid').length > 0) {
+            $.ajax({
+                url: site.baseUrl + '/search/EmployeesExtendedInfo',
+                type: 'post',
+                data: { formGuid: $('#formGuid').val(), employeenumber: item.num },
+                dataType: 'json',
+                success: function (result) {
+                    var resultList = jQuery.map(result, function (extendeditem) {
+                        var type = $('#' + extendeditem.FormFieldName).attr('type');
+                        if (type != 'text') {
+                            //$('#' + extendeditem.FormFieldName).append($('<option value="' + extendeditem.FormFieldValue +
+                            //    '">' + extendeditem.FormFieldValue + '</option>'));
+                            $('#' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
+                        }
 
-                    $('input[name="' + extendeditem.FormFieldName + '"]').val(extendeditem.FormFieldValue);
-                    $('#emOLD_' + extendeditem.FormFieldName).text(extendeditem.FormFieldValue);
-                    $('#OLD_' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
-                });
-            }
-        });
-
+                        $('input[name="' + extendeditem.FormFieldName + '"]').val(extendeditem.FormFieldValue);
+                        $('#emOLD_' + extendeditem.FormFieldName).text(extendeditem.FormFieldValue);
+                        $('#OLD_' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
+                    });
+                }
+            });
+        }
 
         $('input[name="Co-WorkerGlobalviewID"]').val(item.num);
 
@@ -467,26 +471,28 @@ var globalNameTypeAheadOptions = {
             notice.show();
         }
 
-        $.ajax({
-            url: site.baseUrl + '/search/EmployeesExtendedInfo',
-            type: 'post',
-            data: { formGuid: $('#formGuid').val(), employeenumber: item.num },
-            dataType: 'json',
-            success: function (result) {
-                var resultList = jQuery.map(result, function (extendeditem) {
-                    var type = $('#' + extendeditem.FormFieldName).attr('type');
-                    if (type != 'text') {
-                        //$('#' + extendeditem.FormFieldName).append($('<option value="' + extendeditem.FormFieldValue +
-                        //    '">' + extendeditem.FormFieldValue + '</option>'));
-                        $('#' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
-                    }
+        if ($('#formGuid').length > 0) {
+            $.ajax({
+                url: site.baseUrl + '/search/EmployeesExtendedInfo',
+                type: 'post',
+                data: { formGuid: $('#formGuid').val(), employeenumber: item.num },
+                dataType: 'json',
+                success: function (result) {
+                    var resultList = jQuery.map(result, function (extendeditem) {
+                        var type = $('#' + extendeditem.FormFieldName).attr('type');
+                        if (type != 'text') {
+                            //$('#' + extendeditem.FormFieldName).append($('<option value="' + extendeditem.FormFieldValue +
+                            //    '">' + extendeditem.FormFieldValue + '</option>'));
+                            $('#' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
+                        }
 
-                    $('input[name="' + extendeditem.FormFieldName + '"]').val(extendeditem.FormFieldValue);
-                    $('#emOLD_' + extendeditem.FormFieldName).text(extendeditem.FormFieldValue);
-                    $('#OLD_' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
-                });
-            }
-        });
+                        $('input[name="' + extendeditem.FormFieldName + '"]').val(extendeditem.FormFieldValue);
+                        $('#emOLD_' + extendeditem.FormFieldName).text(extendeditem.FormFieldValue);
+                        $('#OLD_' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
+                    });
+                }
+            });
+        }
 
         $('input[name="Co-WorkerGlobalviewID"]').val(item.num);
         
@@ -591,28 +597,28 @@ var globalLastNameTypeAheadOptions = {
             notice.show();
         }
 
+        if ($('#formGuid').length > 0) {
+            $.ajax({
+                url: site.baseUrl + '/search/EmployeesExtendedInfo',
+                type: 'post',
+                data: { formGuid: $('#formGuid').val(), employeenumber: item.num },
+                dataType: 'json',
+                success: function (result) {
+                    var resultList = jQuery.map(result, function (extendeditem) {
+                        var type = $('#' + extendeditem.FormFieldName).attr('type');
+                        if (type != 'text') {
+                            //$('#' + extendeditem.FormFieldName).append($('<option value="' + extendeditem.FormFieldValue +
+                            //    '">' + extendeditem.FormFieldValue + '</option>'));
+                            $('#' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
+                        }
 
-        $.ajax({
-            url: site.baseUrl + '/search/EmployeesExtendedInfo',
-            type: 'post',
-            data: { formGuid: $('#formGuid').val(), employeenumber: item.num },
-            dataType: 'json',
-            success: function (result) {
-                var resultList = jQuery.map(result, function (extendeditem) {
-                    var type = $('#' + extendeditem.FormFieldName).attr('type');
-                    if (type != 'text') {
-                        //$('#' + extendeditem.FormFieldName).append($('<option value="' + extendeditem.FormFieldValue +
-                        //    '">' + extendeditem.FormFieldValue + '</option>'));
-                        $('#' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
-                    }
-
-                    $('input[name="' + extendeditem.FormFieldName + '"]').val(extendeditem.FormFieldValue);
-                    $('#emOLD_' + extendeditem.FormFieldName).text(extendeditem.FormFieldValue);
-                    $('#OLD_' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
-                });
-            }
-        });
-
+                        $('input[name="' + extendeditem.FormFieldName + '"]').val(extendeditem.FormFieldValue);
+                        $('#emOLD_' + extendeditem.FormFieldName).text(extendeditem.FormFieldValue);
+                        $('#OLD_' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
+                    });
+                }
+            });
+        }
 
         $('input[name="Co-WorkerGlobalviewID"]').val(item.num);
 
@@ -1555,35 +1561,39 @@ var init = function () {
     $('#IKEAEmailAddress').typeahead(globalEmailTypeAheadOptions);
     $('#FirstName').typeahead(globalNameTypeAheadOptions);
     $('#LastName').typeahead(globalLastNameTypeAheadOptions);
-
-    $("#NewToIKEA").on('change', function () {        
-        $('#Co-WorkerID').typeahead(globalTypeAheadOptions);
-        if ($(this).val() == 'New Hire') {    
-            disableTypeahead = 0;            
-            $.ajax({
-                url: site.baseUrl + '/search/EmployeesExtendedInfo',
-                type: 'post',
-                data: { formGuid: $('#formGuid').val(), employeenumber: $('#Co-WorkerID').val() },
-                dataType: 'json',
-                success: function (result) {
-                    var resultList = jQuery.map(result, function (extendeditem) {
-                        var type = $('#' + extendeditem.FormFieldName).attr('type');
-                        if (type != 'text') {                          
-                            $('#' + extendeditem.FormFieldName).val("");
+    
+    $("#NewToIKEA").on('change', function () {
+        if ($('#CustomerId').val() != '31' && ($('#formGuid').length > 0)) {
+            $('#Co-WorkerID').typeahead(globalTypeAheadOptions);
+            if ($(this).val() == 'Re-Hire') {
+                disableTypeahead = 1;
+            }
+            else {
+                disableTypeahead = 0;
+                if ($('#Co-WorkerID').length > 0) {
+                    $.ajax({
+                        url: site.baseUrl + '/search/EmployeesExtendedInfo',
+                        type: 'post',
+                        data: { formGuid: $('#formGuid').val(), employeenumber: $('#Co-WorkerID').val() },
+                        dataType: 'json',
+                        success: function (result) {
+                            var resultList = jQuery.map(result, function (extendeditem) {
+                                var type = $('#' + extendeditem.FormFieldName).attr('type');
+                                if (type != 'text') {
+                                    $('#' + extendeditem.FormFieldName).val("");
+                                }
+                                $('input[name="' + extendeditem.FormFieldName + '"]').val("");
+                            });
                         }
-                        $('input[name="' + extendeditem.FormFieldName + '"]').val("");      
                     });
+                    $('#Co-WorkerID').val("");
+                    $('#FirstName').val("");
+                    $('#LastName').val("");
                 }
-            });
-            $('#Co-WorkerID').val("");
-            $('#FirstName').val("");
-            $('#LastName').val("");
+            }            
         }
-        else {
-            disableTypeahead = 1;
-        }
-    });
-
+        });
+    
     $('.nav-tabs a').click(function (e) {
         e.preventDefault();
         $(this).tab('show');

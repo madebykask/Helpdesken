@@ -338,15 +338,24 @@
 </div>
 
 <script>
-    document.getElementById('AllowancesValidFrom').value = document.getElementById('ChangeValidFrom').value;
-    document.getElementById('DeductionsValidFrom').value = document.getElementById('ChangeValidFrom').value;
+    if (!document.getElementById('AllowancesValidFrom').value == '') {
+        document.getElementById('AllowancesValidFrom').value = document.getElementById('ChangeValidFrom').value;
+    }
+    if (!document.getElementById('DeductionsValidFrom').value == '') {
+        document.getElementById('DeductionsValidFrom').value = document.getElementById('ChangeValidFrom').value;
+    }
+    
 
     for (var i = 2; i <= 3; i++) {
         //Defaults variables to ChangeValidFrom
         var AllowancesValidFrom = "AllowancesValidFrom" + [i].toString();
         var DeductionsValidFrom = "DeductionsValidFrom" + [i].toString();
-        document.getElementById(AllowancesValidFrom).value = document.getElementById('ChangeValidFrom').value;
-        document.getElementById(DeductionsValidFrom).value = document.getElementById('ChangeValidFrom').value;
+        if (!document.getElementById(AllowancesValidFrom).value == '') {
+            document.getElementById(AllowancesValidFrom).value = document.getElementById('ChangeValidFrom').value;
+        }
+        if (!document.getElementById(DeductionsValidFrom).value == '') {
+            document.getElementById(DeductionsValidFrom).value = document.getElementById('ChangeValidFrom').value;
+        }
     }
 
 
@@ -509,10 +518,7 @@
 
 
     //Next revisiondate
-    $('#TypeOfBenefit').change(function () {
-        $('#date_NextRevisionDate').datepicker("destroy");
 
-        
 
             var nowTemp = new Date();
             var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
@@ -528,15 +534,6 @@
         
         
             document.getElementById('NextRevisionDate').onkeypress = function () { return true; }
-        });
-
-    $('#TypeOfBenefit2').change(function () {
-        $('#date_NextRevisionDate2').datepicker("destroy");
-
-        
-
-            var nowTemp = new Date();
-            var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
 
             $('#date_NextRevisionDate2').not(".disabled").datepicker(
             {
@@ -548,15 +545,10 @@
             $("#date_NextRevisionDate2").on("keydown keypress keyup", false);
         
             document.getElementById('NextRevisionDate2').onkeypress = function () { return true; }
-        });
 
-    $('#TypeOfBenefit3').change(function () {
-        $('#date_NextRevisionDate3').datepicker("destroy");
 
-        
 
-            var nowTemp = new Date();
-            var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+
 
             $('#date_NextRevisionDate3').not(".disabled").datepicker(
             {
@@ -567,7 +559,6 @@
 
             $("#date_NextRevisionDate3").on("keydown keypress keyup", false);
             document.getElementById('NextRevisionDate3').onkeypress = function () { return true; }
-        });
 
 
     function SelectIndexChangePayScaleLevel() {

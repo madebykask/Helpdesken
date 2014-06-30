@@ -287,8 +287,12 @@
         $('#AllowancesValidFrom,#AllowancesValidFrom2,#AllowancesValidFrom3,' +
         '#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3').val($('#ChangeValidFrom').val());
     }).data('datepicker');
-    $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,' +
-    '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3').on("keydown keypress keyup", false);
+    //$('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,' +
+    //'#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3').on("keydown keypress keyup", false);
+
+    // allowance and deduction datepickers
+    var employmentCategory = document.getElementById('EmploymentCategory').value;
+    var sEnd = document.getElementById('ChangeValidFrom');
 
     $('#AllowancesPaymentType').change(function () {
         var allowancesValidTo = document.getElementById('AllowancesValidTo');
@@ -327,7 +331,7 @@
         }
     });
     $('#AllowancesPaymentType2').change();
-    
+
     $('#AllowancesPaymentType3').change(function () {
         var allowancesValidTo3 = document.getElementById('AllowancesValidTo3');
 
@@ -346,7 +350,7 @@
         }
     });
     $('#AllowancesPaymentType3').change();
-    
+
     $('#DeductionsPaymentType').change(function () {
         var deductionsValidTo = document.getElementById('DeductionsValidTo');
 
@@ -366,7 +370,7 @@
         }
     });
     $('#DeductionsPaymentType').change();
-    
+
     $('#DeductionsPaymentType2').change(function () {
         var deductionsValidTo2 = document.getElementById('DeductionsValidTo2');
 
@@ -385,7 +389,7 @@
         }
     });
     $('#DeductionsPaymentType2').change();
-    
+
     $('#DeductionsPaymentType3').change(function () {
         var deductionsValidTo3 = document.getElementById('DeductionsValidTo3');
 
@@ -408,19 +412,19 @@
     function setOneIKEABonusLevel(value) {
         if (!value) {
             $('#OneIKEABonusLevel option[value="' + '@Level' + '"]').prop('selected', true);
-        }
-        else {
-            $('#OneIKEABonusLevel option:not([value])').prop('selected', true);
-        }
-    };
+}
+else {
+    $('#OneIKEABonusLevel option:not([value])').prop('selected', true);
+}
+};
 
-    $('#JobTitle').change(function () {
-        setOneIKEABonusLevel($(this).val());
-    });
-
+$('#JobTitle').change(function () {
     setOneIKEABonusLevel($(this).val());
+});
 
-    document.getElementById('AllowancesValidFrom').value = '@Model.GetAnswer("ChangeValidFrom")';
+setOneIKEABonusLevel($('#JobTitle').val());
+
+document.getElementById('AllowancesValidFrom').value = '@Model.GetAnswer("ChangeValidFrom")';
     document.getElementById('DeductionsValidFrom').value = '@Model.GetAnswer("ChangeValidFrom")';
 
     for (var i = 2; i <= 3; i++) {

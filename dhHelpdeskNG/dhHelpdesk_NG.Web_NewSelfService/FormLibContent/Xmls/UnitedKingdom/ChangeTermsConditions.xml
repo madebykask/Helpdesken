@@ -3630,7 +3630,7 @@
       <element type="date" name="AllowancesValidFrom2" label="Valid from:" format="dd.MM.yyyy">
         <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
         <regex inherit="date" pattern="" message=""></regex>
-        <laterThanOrEqual name="ContractStartDate"></laterThanOrEqual>
+        <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
       </element>
       <element type="date" name="AllowancesValidTo2" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
         <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
@@ -3740,7 +3740,7 @@
       <element type="date" name="AllowancesValidFrom3" label="Valid from:" format="dd.MM.yyyy">
         <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
         <regex inherit="date" pattern="" message=""></regex>
-        <laterThanOrEqual name="ContractStartDate"></laterThanOrEqual>
+        <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
       </element>
       <element type="date" name="AllowancesValidTo3" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
         <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
@@ -3787,7 +3787,7 @@
       </element>
       <element type="date" name="DeductionsValidFrom" label="Valid from:" format="dd.MM.yyyy">
         <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
-        <laterThanOrEqual name="ContractStartDate"></laterThanOrEqual>
+        <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="date" name="DeductionsValidTo" label="Valid to:" default="31.12.9999" format="dd.MM.yyyy">
@@ -3833,7 +3833,7 @@
       </element>
       <element type="date" name="DeductionsValidFrom2" label="Valid from:" format="dd.MM.yyyy">
         <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
-        <laterThanOrEqual name="ContractStartDate"></laterThanOrEqual>
+        <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="date" name="DeductionsValidTo2" label="Valid to:" default="31.12.9999" format="dd.MM.yyyy">
@@ -3879,7 +3879,7 @@
       </element>
       <element type="date" name="DeductionsValidFrom3" label="Valid from:" format="dd.MM.yyyy">
         <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
-        <laterThanOrEqual name="ContractStartDate"></laterThanOrEqual>
+        <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="date" name="DeductionsValidTo3" label="Valid to:" default="31.12.9999" format="dd.MM.yyyy">

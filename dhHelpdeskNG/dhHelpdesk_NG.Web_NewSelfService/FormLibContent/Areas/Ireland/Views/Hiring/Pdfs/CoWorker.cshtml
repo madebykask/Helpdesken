@@ -1,0 +1,98 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@using ECT.FormLib.Pdfs;
+@using System.Globalization;
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<body>
+      <div>
+        This template is applicable only if  *Job Title (Local job title/position name)/OA8* is different from:
+Safety & Security Manager or Safety and Security Function Support or Safety & Security Co-Worker
+Or Facility Specialist or Site Facility Mngmt Co-Worker or HR Generalist or HR Administrator or HR Manager or Staff Planer or Accounting assistant Reconciliation or Accountant – second condition If Pay Scale Group/PM.CS.1.1 is between 43 - 49
+
+           <table style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
+            <tr style="text-align: right;">
+                <td>@string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:d MMMMMM yyyy}", DateTime.Now)</td>
+            </tr>
+        </table>
+
+         <p style="text-align: left; font-family: Verdana; font-size: 11px;"><strong>PRIVATE & CONFIDENTIAL</strong><br />
+        @Model.GetAnswer("FirstName") @Model.GetAnswer("LastName")<br />
+        @Model.GetAnswer("PermanentAddressLine1")
+        <br />
+        @Model.GetAnswer("PermanentAddressLine2")
+        <br />
+        @Model.GetAnswer("PermanentCity")
+        <br />
+        @Model.GetAnswer("PermanentPostalCode")
+        <br />
+        
+        Dear @Model.GetAnswer("FirstName"),<br />
+        I am very pleased to be able to confirm to you our offer of the position of @Model.GetAnswer("JobTitle") at IKEA Dublin.
+        <br /><br />
+        The principal Terms and Conditions of your employment will be as follows:
+             </p>
+            @{
+              var list = new List<PdfListItem>();
+              var pdfList = new List<PdfListItem>();
+
+              var brText = "<br /><br />";
+              
+              //1
+              string text1 = "Your first day of employment with IKEA Ireland Ltd. will be on the " + CustomPdfPage.GetDateInWords(Model.GetAnswer("ContractStartDate")) + ".  Please report to your place of work: IKEA Dublin, St. Margaret’s Road, Ballymun Dublin 11, at " + CustomPdfPage.GetAmPm(Model.GetAnswer("InductionStartTime")) + " for " + CustomPdfPage.GetLengthOfInductionInDaysText(Model.GetAnswer("LengthOfInductionInDays")) + " introduction finishing at " + CustomPdfPage.GetAmPm(Model.GetAnswer("InductionEndTime")) + ".";
+              list.Add(new PdfListItem { Text = text1 });
+              
+              //2
+              string text2 = "The *****<span style='color:red;'>Serv Area from Department/OA.CS.4.1</span>*** is your primary area of work. You will on occasions be expected to work in other areas within the Store/Unit to support the business need.";
+              list.Add(new PdfListItem { Text = text2 });
+
+              string text3 = "Your hours of work will be " + Model.GetAnswer("ContractedHours") + " hours per week over " + Model.GetAnswer("DaysPerWeek") + ", Sunday – Saturday.";
+              list.Add(new PdfListItem { Text = text3 });
+              }
+
+              @if (list.Count > 1)
+        {
+            for (int i = 0; i < list.Count; i++)
+            { 
+            <br />                                        
+            <p style="text-align: left; font-family: Verdana; font-size: 11px; padding-right: 50px;">@(i + 1). @Html.Raw(list[i].Text)</p>
+                if (list[i].SubList != null && list[i].SubList.Count > 0)
+                {
+                    foreach (var item in list[i].SubList)
+                    {
+            @*<br />*@
+            <p style="text-align: left; font-family: Verdana; font-size: 11px; padding-left: 20px; padding-right: 50px;">&bull; @Html.Raw(item.Text) </p>
+                    }
+                }
+
+                if (list[i].SubList2 != null && list[i].SubList2.Count > 0)
+                {
+                    foreach (var item in list[i].SubList2)
+                    {
+              
+              <p style="text-align: left; font-family: Verdana; font-size: 11px; padding-left: 20px; padding-right: 50px;">@Html.Raw(item.Text) </p>
+                     
+                    }
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i == list.Count - 1; i++)
+            {
+            <p style="font-family: Verdana; font-size: 11px;">@Html.Raw(list[i])</p>
+            }
+        }
+
+          <p style="text-align: left; font-family: Verdana; font-size: 11px;">
+           <text> <br /> This letter, together with the Terms and Conditions Appendix and Section 1 of the Co-worker handbook forms the basis of your contract.
+          </text>
+            </p>
+<endpage />
+    </div>
+</body>
+</html>

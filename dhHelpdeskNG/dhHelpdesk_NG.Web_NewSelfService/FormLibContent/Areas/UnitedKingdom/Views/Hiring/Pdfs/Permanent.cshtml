@@ -16,7 +16,7 @@
             </tr>
         </table>
 
-        <p style="text-align: left; font-family: Verdana; font-size: 11px;"><strong>PRIVATE & CONFIDENTIAL</strong></p>
+        <p style="text-align: left; font-family: Verdana; font-size: 11px;"><strong>PRIVATE & CONFIDENTIAL</strong><br />
         @Model.GetAnswer("FirstName") @Model.GetAnswer("LastName")<br />
         @Model.GetAnswer("PermanentAddressLine1")
         <br />
@@ -27,8 +27,6 @@
         @Model.GetAnswer("PermanentPostalCode")
         <br />
         <br />
-        <br />
-
         Dear @Model.GetAnswer("FirstName"),<br />
 
         I am very pleased to be able to confirm to you our offer of the position of @Model.GetAnswer("JobTitle") in @UnitedKingdomPdfPage.GetServiceAreaText(Model.GetAnswer("ServiceArea")) at IKEA @Model.Department.Unit reporting to the 
@@ -41,11 +39,13 @@
         {
             <text> @Model.GetAnswer("ManagersJobTitle")</text><text>.</text>
         }
-        
+
         <br />
         <br />
         The principal Terms and Conditions of your employment will be as follows:
-
+         <br />
+            </p>
+        
           @{
               var list = new List<PdfListItem>();
               var pdfList = new List<PdfListItem>();
@@ -53,47 +53,28 @@
               var brText = "<br /><br />";
 
               //1
-              string text1 = "Your first day of employment with IKEA " + Model.Department.Unit + " will be on " + UnitedKingdomPdfPage.GetDateInWords(Model.GetAnswer("ContractStartDate")) + ". This counts as part of your continuous service with IKEA which began on ";
+              string text1 = "Your first day of employment with IKEA " + Model.Department.Unit + " will be on " + CustomPdfPage.GetDateInWords(Model.GetAnswer("ContractStartDate")) + ". This counts as part of your continuous service with IKEA which began on ";
 
               if (!string.IsNullOrEmpty(Model.GetAnswer("PreviousContractStartDate")))
               {
-                  text1 += " " + UnitedKingdomPdfPage.GetDateInWords(Model.GetAnswer("PreviousContractStartDate")) + " ";
+                  text1 += " " + CustomPdfPage.GetDateInWords(Model.GetAnswer("PreviousContractStartDate")) + " ";
               }
               else
               {
-                  text1 += " " + UnitedKingdomPdfPage.GetDateInWords(Model.GetAnswer("ContractStartDate")) + " ";
+                  text1 += " " + CustomPdfPage.GetDateInWords(Model.GetAnswer("ContractStartDate")) + " ";
               }
 
               list.Add(new PdfListItem { Text = text1 });
 
 
               //2
+              string text2 = "Please report to your place of work: IKEA " + Model.Department.Unit + ", " + Model.Department.StrAddr + " at " + CustomPdfPage.GetAmPm(Model.GetAnswer("InductionStartTime")) + " for a full ";
 
-              //+ "*" + DateTime.ParseExact("21:45", "HH:mm", CultureInfo.InvariantCulture).ToString("h:mm tt") + "*"
-
-              //string InductionStartTime = string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:h:mm tt}", DateTime.ParseExact(Model.GetAnswer("InductionStartTime"), "HH:mm", CultureInfo.InvariantCulture));
-              //string InductionEndTime = string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:h:mm tt}", DateTime.ParseExact(Model.GetAnswer("InductionEndTime"), "HH:mm", CultureInfo.InvariantCulture));
-
-              string text2 = "Please report to your place of work: IKEA " + Model.Department.Unit + ", " + Model.Department.StrAddr + " at " + UnitedKingdomPdfPage.GetAmPm(Model.GetAnswer("InductionStartTime")) + " for a full ";
-
-              //text2 += "*" + string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:h:mm tt}", DateTime.ParseExact("21:45", "HH:mm", CultureInfo.InvariantCulture)) + "*";
-              
-              if (Model.GetAnswer("LengthOfInductionInDays").ToLower() == "1 day".ToLower())
-              {
-                  text2 += "day";
-              }
-              else
-              {
-                  text2 += Model.GetAnswer("LengthOfInductionInDays");
-              }
-
-              text2 += " introduction, finishing at " + UnitedKingdomPdfPage.GetAmPm(Model.GetAnswer("InductionEndTime")) + ".";
-
+              text2 += CustomPdfPage.GetLengthOfInductionInDaysText(Model.GetAnswer("LengthOfInductionInDays")) + " introduction, finishing at " + CustomPdfPage.GetAmPm(Model.GetAnswer("InductionEndTime")) + ".";
               list.Add(new PdfListItem { Text = text2 });
 
               //3
               string text3 = "The " + UnitedKingdomPdfPage.GetServiceAreaText(Model.GetAnswer("ServiceArea")) + " is your primary area of work. You will on occasions be expected to work in other areas within the Store/Unit to support the business need.";
-
               list.Add(new PdfListItem { Text = text3 });
 
               //4 
@@ -101,18 +82,18 @@
               list.Add(new PdfListItem { Text = text4 });
 
               //5
-              string text5 = "Your starting salary will be £" + Model.GetAnswer("BasicPayAmount");
+              string text5 = "Your starting salary will be &pound;" + Model.GetAnswer("BasicPayAmount");
 
               //Add PayInfoText
               text5 += UnitedKingdomPdfPage.GetPayInfoText(Model);
-              text5 += " Next review date will be " + UnitedKingdomPdfPage.GetDateInWords(Model.GetAnswer("DateOfNextSalaryReview")) + ".";
+              text5 += " Next review date will be " + CustomPdfPage.GetDateInWords(Model.GetAnswer("DateOfNextSalaryReview")) + ".";
 
-              text5 += "<br />";
+              text5 += "<br /><br />";
 
               if (!string.IsNullOrEmpty(Model.GetAnswer("AllowancesType")))
               {
                   //1
-                  text5 += "<br />" + UnitedKingdomPdfPage.GetAllowancesText("AllowancesType", "AllowancesAmountUnits", Model);
+                  text5 += UnitedKingdomPdfPage.GetAllowancesText("AllowancesType", "AllowancesAmountUnits", Model);
                   text5 += "<br /><br />";
               }
 
@@ -153,7 +134,7 @@
               {
 
                   benefit1Text.Insert(0, "<br /><br />");
-                  
+
                   list.Add(new PdfListItem { Text = benefit1Text });
               }
 
@@ -203,7 +184,7 @@
               {
                   text11 += "<br /><br />";
               }
-              
+
               text11 += probationText;
 
               list.Add(new PdfListItem { Text = text11 });
@@ -231,7 +212,7 @@
 
               text13 += "<br />&nbsp;1.&nbsp;Bank/Building Society details.";
               text13 += "<br />&nbsp;2.&nbsp;Your P45 if you have one.";
-              text13 += "<br />&nbsp;3.&nbsp;Official proof of your National Insurance number, for example your National Insurance card or an original letter from a government agency.  If you do not have a National Insurance number you must provide proof that you have applied for one within the first month of employment.";
+              text13 += "<br />&nbsp;3.&nbsp;Official proof of your National Insurance number, for example your National Insurance card or an original letter from a government agency. If you do not have a National Insurance number you must provide proof that you have applied for one within the first month of employment.";
 
               list.Add(new PdfListItem { Text = text13 });
 
@@ -250,7 +231,7 @@
                 {
                     foreach (var item in list[i].SubList)
                     {
-            @*<br />*@
+@*<br />*@
             <p style="text-align: left; font-family: Verdana; font-size: 11px; padding-left: 20px; padding-right: 50px;">&bull; @Html.Raw(item.Text) </p>
                     }
                 }
@@ -264,9 +245,13 @@
             }
         }
 
+        <p style="text-align: left; font-family: Verdana; font-size: 11px;">
         <text> <br /> This letter, together with the Terms and Conditions Appendix and Section 1 of the Co-worker handbook forms the basis of your contract.
           </text>
+
+            </p>
         <endpage />
+
     </div>
 </body>
 </html>

@@ -22,7 +22,7 @@
                 </tr>
 
                 <!-- MAILING ADDRESS -->
-                <tr class="mailingaddress" id="mailingaddress">
+                @*<tr class="mailingaddress" id="mailingaddress">
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Mailing Address")
                             <button class="btn btn-mini pull-right" id="btnMailingAddress" data-prefix="Mailing">
@@ -50,7 +50,7 @@
                 <tr>
                     <td class="tdstrong">@Model.Label("MailingCountry")</td>
                     <td>@Model.Element("MailingCountry")</td>
-                </tr>
+                </tr>*@
 
                 <!-- EMERGENCY ADDRESS -->
                 <tr class="emergencyaddress" id="emergencyaddress">
@@ -475,18 +475,6 @@
         else {
             $('#taxInformationNotice').hide();
         }
-
-        if (value != 'Statement A/B or C') {
-            $('#StatementDetails option:not([value])').prop('selected', true);
-            $("#StatementDetails").hide();
-            $("#statementDetailsNotice").hide();
-            $('#StatementDetails').prop('disabled', true);
-        }
-        else {
-            $("#StatementDetails").show();
-            $('#StatementDetails').prop('disabled', false);
-        }
-
     }
 
     setTaxInformationBehavior($('#TaxInformation').val());
@@ -495,28 +483,7 @@
         setTaxInformationBehavior($(this).val());
     });
 
-    $('#StatementDetails').change(function () {
-        value = $(this).val();
-
-        switch (value) {
-            case "A":
-                $("#statementDetailsNotice").html("1st job since last 6 April and no taxable Jobseeker’s Allowance, Employment and Support Allowance, taxable Incapacity Benefit, State or Occupational Pension.");
-                $("#statementDetailsNotice").show();
-                break;
-            case "B":
-                $("#statementDetailsNotice").html("The only job but another job since last 6 April, or taxable Jobseeker’s Allowance of taxable Incapacity Benefit. No State or Occupational Pension.");
-                $("#statementDetailsNotice").show();
-                break;
-            case "C":
-                $("#statementDetailsNotice").html("Another job / receive State or Occupational Pension.");
-                $("#statementDetailsNotice").show();
-                break;
-            default:
-                $("#statementDetailsNotice").empty();
-                $("#statementDetailsNotice").hide();
-                break;
-        }
-    });
+   
 
 
 </script>

@@ -72,6 +72,12 @@
                 <li class="@(Model.TabHasError("#personal") ? "error" : "")">
                     <a href="#personal">@Model.Translate("Personal Information")</a></li>
             }
+            @if(Model.VisibleTab("#attachments"))
+            {
+                <li class="pull-right">
+                    <a href="#attachments"><i class="icon-file icon-white"></i>&nbsp;@Model.Translate("Attachments")&nbsp;(<b id="attachmentCounter">0</b>)</a>
+                </li>
+            }
         </ul>
         <div class="content">
             <div class="row-fluid">
@@ -91,6 +97,10 @@
                     @if(Model.VisibleTab("#personal"))
                     {
                         @Html.Partial("_TabPersonal", Model)
+                    }
+                                        @if(Model.VisibleTab("#attachments"))
+                    {
+                        @Html.Partial("_GlobalAttachments", Model)
                     }
                 </div>
             </div>
