@@ -30,6 +30,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Case;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Invoice;
     using DH.Helpdesk.Web.Infrastructure.Mvc;
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Models;
@@ -90,6 +91,10 @@ namespace DH.Helpdesk.Web.Controllers
         /// </summary>
         private readonly IWorkContext workContext;
 
+        private readonly IInvoiceArticleService invoiceArticleService;
+
+        private readonly IInvoiceArticlesModelFactory invoiceArticlesModelFactory;
+
         #endregion
 
         #region Constructor
@@ -137,7 +142,9 @@ namespace DH.Helpdesk.Web.Controllers
             IGlobalSettingService globalSettingService,
             IWorkContext workContext, 
             ICaseNotifierModelFactory caseNotifierModelFactory, 
-            INotifierService notifierService)
+            INotifierService notifierService, 
+            IInvoiceArticleService invoiceArticleService, 
+            IInvoiceArticlesModelFactory invoiceArticlesModelFactory)
             : base(masterDataService)
         {
             this._caseService = caseService;
@@ -182,6 +189,8 @@ namespace DH.Helpdesk.Web.Controllers
             this.workContext = workContext;
             this.caseNotifierModelFactory = caseNotifierModelFactory;
             this.notifierService = notifierService;
+            this.invoiceArticleService = invoiceArticleService;
+            this.invoiceArticlesModelFactory = invoiceArticlesModelFactory;
         }
 
         #endregion
@@ -473,6 +482,9 @@ namespace DH.Helpdesk.Web.Controllers
                     m.ParantPath_CaseType = ParentPathDefaultValue;
                     m.ParantPath_ProductArea = ParentPathDefaultValue;
                 }
+
+                var caseInvoiceArticles = this.invoiceArticleService.GetCaseArticles(id);
+                m.InvoiceArticles = this.invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoiceArticles);
             }
 
             AddViewDataValues();

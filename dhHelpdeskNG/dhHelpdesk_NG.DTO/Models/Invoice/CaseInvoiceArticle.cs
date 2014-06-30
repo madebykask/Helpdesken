@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Invoice
 {
+    using System.Web.Script.Serialization;
+
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.Common.ValidationAttributes;
 
@@ -32,6 +34,7 @@
         public int CaseId { get; private set; }
 
         [NotNull]
+        [ScriptIgnore]
         public CaseOverview Case { get; private set; }
 
         [NotNullAndEmpty]

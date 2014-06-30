@@ -10,6 +10,7 @@
     using DH.Helpdesk.BusinessData.Models.Projects.Output;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Changes;
+    using DH.Helpdesk.Web.Models.Invoice;
     using DH.Helpdesk.Web.Models.Shared;
 
     public class CaseInputViewModel
@@ -82,6 +83,8 @@
         public bool UpdateNotifierInformation { get; set; }
 
         public string FinishingCause { get; set; }
+
+        public CaseInvoiceArticlesModel InvoiceArticles { get; set; }
     }
 
     public class CaseIndexViewModel

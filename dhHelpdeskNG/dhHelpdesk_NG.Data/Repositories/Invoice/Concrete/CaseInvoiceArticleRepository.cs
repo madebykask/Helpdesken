@@ -23,7 +23,8 @@
         public CaseInvoiceArticle[] GetCaseArticles(int caseId)
         {
             var entities = this.DbContext.CaseInvoiceArticles
-                        .Where(a => a.CaseId == caseId);
+                        .Where(a => a.CaseId == caseId)
+                        .ToList();
 
             return entities
                     .Select(a => this.caseArticleMapper.Map(a))

@@ -3,6 +3,8 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 
+<script type="text/javascript" src="@Url.Content("~/Content/js/Invoice/invoice.js")"></script>
+
 @if(Model.case_ != null)
 {
     <div class="content twomenu">
@@ -298,6 +300,14 @@
                                                 </ul>
                                                 @Html.HiddenFor(model => model.case_.ProductArea_Id)                                                
                                             </div>
+                                        </td>
+                                    </tr>
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString())">
+                                        <td>
+                                            @Translation.Get("Articles to be invoiced")
+                                        </td>
+                                        <td colspan="2">
+                                            @Html.CaseInvoiceArticles(Model.InvoiceArticles)
                                         </td>
                                     </tr>
                                     <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.System_Id.ToString())">

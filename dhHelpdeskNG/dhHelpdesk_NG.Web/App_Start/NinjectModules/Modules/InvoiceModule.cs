@@ -5,6 +5,8 @@
     using DH.Helpdesk.Dal.Mappers.Invoice.BusinessModelToEntity;
     using DH.Helpdesk.Dal.Mappers.Invoice.EntityToBusinessModel;
     using DH.Helpdesk.Domain.Invoice;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Invoice;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Invoice.Concrete;
 
     using Ninject.Modules;
 
@@ -34,6 +36,10 @@
 
             this.Bind<IBusinessModelToEntityMapper<CaseInvoiceArticle, CaseInvoiceArticleEntity>>()
                 .To<CaseInvoiceArticleToEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IInvoiceArticlesModelFactory>()
+                .To<InvoiceArticlesModelFactory>()
                 .InSingletonScope();
         }
     }
