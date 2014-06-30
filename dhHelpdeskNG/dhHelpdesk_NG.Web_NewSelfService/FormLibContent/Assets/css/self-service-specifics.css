@@ -7,7 +7,7 @@
     position: relative;
     right: 0;
     left: 0;
-    z-index: 1030;
+    z-index: 999;
     margin-bottom: 0;
 }
 
@@ -114,4 +114,16 @@
     margin-top: 1px;
 }
 
+.navbar .nav > li > .dropdown-menu:before {
+    content: none;
+}
 
+.navbar .nav > li > .dropdown-menu:after {
+    content: none;
+}
+
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+  background-color: #f5f5f5;
+  background-image: none;
+  filter: none;
+}
