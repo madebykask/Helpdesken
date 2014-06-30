@@ -48,8 +48,8 @@
 #lmEmbedded input[type=text], select, textarea {
     min-width: 200px;
     width: 200px;
-    height: auto;
-    min-height: 30px;
+    height: 30px;
+    /*min-height: 30px;*/
     line-height: 1.42857143;
     color: #555;
     background-color: #fff;
@@ -76,9 +76,9 @@
 #lmEmbedded .input-prepend .add-on {
     display: inline-block;
     width: auto;
-    height: 26px;
-    min-height: 30px;
-    *min-height: 26px;
+    height: 30px;
+    /*min-height: 30px;*/
+    /**min-height: 26px;*/
     min-width: 16px;
     padding: 4px 5px;
     font-size: 14px;
