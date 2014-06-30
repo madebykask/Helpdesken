@@ -365,7 +365,22 @@ textarea
 
 
 
-/***CAROUSEL****/
+/***BUTTONS****/
+
+.btn-dhblue {
+  color: #fff;
+  background-color: #0067b2;
+  border-color: #0067b2;
+}
+.btn-dhblue:hover,
+.btn-dhblue:focus,
+.btn-dhblue:active,
+.btn-dhblue.active,
+.open .dropdown-toggle.btn-dhblue {
+  color: #fff;
+  background-color: #3276b1;
+  border-color: #285e8e;
+}
 
 
 
