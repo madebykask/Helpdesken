@@ -12,6 +12,7 @@
             this.HasKey(u => u.Id);
             this.Property(u => u.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(u => u.Name).IsRequired().HasMaxLength(20);
+            this.Property(u => u.CustomerId).IsRequired();
 
             this.ToTable("tblInvoiceArticleUnit");
         }

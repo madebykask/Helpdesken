@@ -10,11 +10,11 @@
 
         public string Name { get; set; }
 
-        public int UnitId { get; set; }
+        public int? UnitId { get; set; }
 
         public virtual InvoiceArticleUnitEntity Unit { get; set; }
 
-        public decimal Ppu { get; set; }
+        public decimal? Ppu { get; set; }
 
         public int ProductAreaId { get; set; }
 

@@ -4,8 +4,12 @@
 
     public sealed class InvoiceArticleUnit
     {
-        public InvoiceArticleUnit(int id, string name)
+        public InvoiceArticleUnit(
+                    int id, 
+                    string name, 
+                    int customerId)
         {
+            this.CustomerId = customerId;
             this.Name = name;
             this.Id = id;
         }
@@ -15,5 +19,8 @@
 
         [NotNull]
         public string Name { get; private set; }
+
+        [IsId]
+        public int CustomerId { get; private set; }
     }
 }

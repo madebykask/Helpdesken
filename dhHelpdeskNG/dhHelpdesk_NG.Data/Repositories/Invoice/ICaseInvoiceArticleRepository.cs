@@ -2,8 +2,8 @@
 {
     using DH.Helpdesk.BusinessData.Models.Invoice;
 
-    public interface IInvoiceArticleUnitRepository
+    public interface ICaseInvoiceArticleRepository
     {
-        InvoiceArticleUnit[] GetUnits(int customerId);
+        CaseInvoiceArticle[] GetCaseArticles(int caseId);
     }
 }

@@ -1,8 +1,11 @@
 ﻿namespace DH.Helpdesk.Web.NinjectModules.Modules
 {
     using DH.Helpdesk.BusinessData.Models.Case.Input;
+    using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Dal.Mappers.Cases.BusinessModelToEntity;
+    using DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel;
+    using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Computers;
     using DH.Helpdesk.Services.Infrastructure.Cases;
     using DH.Helpdesk.Services.Infrastructure.Cases.Concrete;
@@ -23,6 +26,10 @@
             this.Bind<ICasesCalculator>().To<CasesCalculator>().InRequestScope();
 
             this.Bind<ICaseModelFactory>().To<CaseModelFactory>().InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<Case, CaseOverview>>()
+                .To<CaseToBusinessModelMapper>()
+                .InSingletonScope();
         }
     }
 }

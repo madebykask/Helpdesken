@@ -102,6 +102,7 @@
             this.Bind<IInventorySettingsService>().To<InventorySettingsService>();
             this.Bind<IPlaceService>().To<PlaceService>();
             this.Bind<IOrganizationService>().To<OrganizationService>();
+            this.Bind<IInvoiceArticleService>().To<InvoiceArticleService>();
         }
 
         #endregion

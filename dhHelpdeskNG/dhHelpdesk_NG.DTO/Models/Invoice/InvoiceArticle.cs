@@ -12,9 +12,9 @@
                     InvoiceArticle parent, 
                     int number, 
                     string name, 
-                    int unitId, 
+                    int? unitId, 
                     InvoiceArticleUnit unit, 
-                    decimal ppu, 
+                    decimal? ppu, 
                     int productAreaId, 
                     ProductAreaOverview productArea, 
                     int customerId, 
@@ -46,18 +46,19 @@
         [NotNull]
         public string Name { get; private set; }
 
-        public int UnitId { get; private set; }
+        public int? UnitId { get; private set; }
 
-        [NotNull]
         public InvoiceArticleUnit Unit { get; private set; }
 
-        public decimal Ppu { get; private set; }
+        public decimal? Ppu { get; private set; }
 
+        [IsId]
         public int ProductAreaId { get; private set; }
 
         [NotNull]
         public ProductAreaOverview ProductArea { get; private set; }
 
+        [IsId]
         public int CustomerId { get; private set; }
 
         [NotNull]

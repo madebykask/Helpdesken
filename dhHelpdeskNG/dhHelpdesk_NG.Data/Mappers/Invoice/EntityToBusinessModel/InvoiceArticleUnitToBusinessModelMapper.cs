@@ -9,7 +9,8 @@
         {
             return new InvoiceArticleUnit(
                             entity.Id,
-                            entity.Name);
+                            entity.Name,
+                            entity.CustomerId);
         }
     }
 }

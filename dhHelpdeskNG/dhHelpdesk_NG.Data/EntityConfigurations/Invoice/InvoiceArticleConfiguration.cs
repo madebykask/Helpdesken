@@ -18,12 +18,12 @@
                 .WillCascadeOnDelete(false);
             this.Property(a => a.Number).IsRequired();
             this.Property(a => a.Name).IsRequired().HasMaxLength(100);
-            this.Property(a => a.UnitId).IsRequired();
-            this.HasRequired(a => a.Unit)
+            this.Property(a => a.UnitId).IsOptional();
+            this.HasOptional(a => a.Unit)
                 .WithMany()
                 .HasForeignKey(a => a.UnitId)
                 .WillCascadeOnDelete(false);
-            this.Property(a => a.Ppu).IsRequired();
+            this.Property(a => a.Ppu).IsOptional();
             this.Property(a => a.ProductAreaId).IsRequired();
             this.HasRequired(a => a.ProductArea)
                 .WithMany()

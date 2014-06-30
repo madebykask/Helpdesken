@@ -160,6 +160,7 @@
     <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\BusinessItem.cs" />
     <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\ExcelTableHeader.cs" />
     <Compile Include="Services\Concrete\ActionSettingService.cs" />
+    <Compile Include="Services\Concrete\InvoiceArticleService.cs" />
     <Compile Include="Services\Concrete\IOrganizationService.cs" />
     <Compile Include="Services\Concrete\IPlaceService.cs" />
     <Compile Include="Services\Concrete\OrganizationService.cs" />
@@ -179,6 +180,7 @@
     <Compile Include="Services\ICircularService.cs" />
     <Compile Include="Services\IComputerModulesService.cs" />
     <Compile Include="Services\IInventoryService.cs" />
+    <Compile Include="Services\IInvoiceArticleService.cs" />
     <Compile Include="Services\IQestionnaireQuestionOptionService.cs" />
     <Compile Include="Services\IQestionnaireQuestionService.cs" />
     <Compile Include="Services\IChangeService.cs" />

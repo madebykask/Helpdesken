@@ -12,6 +12,8 @@
     using DH.Helpdesk.Dal.Repositories.Faq.Concrete;
     using DH.Helpdesk.Dal.Repositories.Inventory;
     using DH.Helpdesk.Dal.Repositories.Inventory.Concrete;
+    using DH.Helpdesk.Dal.Repositories.Invoice;
+    using DH.Helpdesk.Dal.Repositories.Invoice.Concrete;
     using DH.Helpdesk.Dal.Repositories.MailTemplates;
     using DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete;
     using DH.Helpdesk.Dal.Repositories.Notifiers;
@@ -247,6 +249,9 @@
             this.Bind<IComputerUsersBlackListRepository>().To<ComputerUsersBlackListRepository>();
             this.Bind<IComputerInventoryRepository>().To<ComputerInventoryRepository>();
             this.Bind<ICausingPartRepository>().To<CausingPartRepository>();
+            this.Bind<IInvoiceArticleUnitRepository>().To<InvoiceArticleUnitRepository>();
+            this.Bind<IInvoiceArticleRepository>().To<InvoiceArticleRepository>();
+            this.Bind<ICaseInvoiceArticleRepository>().To<CaseInvoiceArticleRepository>();
         }
 
         #endregion

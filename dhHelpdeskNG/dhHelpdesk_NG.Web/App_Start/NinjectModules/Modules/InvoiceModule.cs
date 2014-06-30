@@ -27,6 +27,14 @@
             this.Bind<IEntityToBusinessModelMapper<InvoiceArticleUnitEntity, InvoiceArticleUnit>>()
                 .To<InvoiceArticleUnitToBusinessModelMapper>()
                 .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<CaseInvoiceArticleEntity, CaseInvoiceArticle>>()
+                .To<CaseInvoiceArticleToBusinessModelMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<CaseInvoiceArticle, CaseInvoiceArticleEntity>>()
+                .To<CaseInvoiceArticleToEntityMapper>()
+                .InSingletonScope();
         }
     }
 }
