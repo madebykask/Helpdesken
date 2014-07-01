@@ -510,23 +510,77 @@ input[type=text], select, textarea {
   height:100%;
   color:#fff;
   margin-top:-90%;
+  overflow: auto;
 }
 
 .siteCom .com-list {
     padding: 20px 20px 20px 15px;
     height: 100%;
-    overflow: auto;
 }
 
 .siteCom .com-list-com {
-    padding: 10px;
+    padding: 10px 10px 2px 10px;
+    background: #f2f7fe;
+    background:#5bc0de;
+    background:#fff;
+    color:#000;
+    margin-bottom: 20px;
+    border-right:5px solid #d96326;
+    border-right:5px solid #ffdf01;
+    margin-right:20px;
+    position:relative;
+}
+
+.siteCom .com-list-hd {
+    padding: 10px 10px 2px 10px;
     background: #f2f7fe;
     background:#5bc0de;
     background:#fff;
     color:#000;
     margin-bottom: 20px;
     border-left:5px solid #d96326;
-    border-left:5px solid #ffdf01;
+    margin-left:20px;
+    position:relative;
+}
+
+.siteCom > .arrow,
+.siteCom > .arrow:after {
+  position: absolute;
+  display: block;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+}
+.siteCom > .arrow {
+  border-width: 11px;
+}
+.siteCom > .arrow:after {
+  content: "";
+  border-width: 10px;
+}
+
+.list-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+}
+.siteCom .com-list-hd .list-arrow {
+  top: 45%;
+  right: -10px;
+  margin-top: -5px;
+  border-width: 10px 0 10px 10px;
+  border-left-color: #fff;
+}
+
+.siteCom .com-list-com .list-arrow {
+  top: 45%;
+  left: -10px;
+  margin-top: -5px;
+  border-width: 10px 10px 10px 0;
+  border-right-color: #fff;
 }
 
 /***BUTTONS****/
