@@ -4,6 +4,7 @@
 @using DH.Helpdesk.NewSelfService.Infrastructure.Common;
 @using DH.Helpdesk.Services.Infrastructure
 @using DH.Helpdesk.Common.Enums;
+@using DH.Helpdesk.NewSelfService.Models.Case;
 
 
 <!DOCTYPE html>
@@ -115,6 +116,7 @@
             // Delete dialog end
 
         });
+       
 
     </script>
     <!--COMMUNICATE SCRIPT---->
@@ -164,6 +166,13 @@
 
         var pCaseTemplates = helper.GetCaseTemplates(pCustomerId);
         var pActionSettings = helper.GetActionSettings(pCustomerId);
+
+        CaseLogModel pCaseLogs = null;
+        var currentCaseId = ViewBag.CurrentCaseId;
+        if (currentCaseId != null)
+        {
+            pCaseLogs = helper.GetCaseLogs(currentCaseId);
+        }
          
     }
     @*<div style="position: fixed; top: 30%; right: -2px; background: #fff; padding: 20px 20px 5px 20px; border: 1px solid #ccc;">
@@ -178,50 +187,59 @@
     </div>*@
 
     <!-- COMMUNICATE DIV--->
-    <div class="siteCom">
-        <div class="mapButton">
-            <div class="mapText"><span class="glyphicon glyphicon-arrow-up"></span> Communicate</div>
-        </div>
-        <div class="theMap">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-12">
-                        <label>
-                            Add comment:
-                        </label>
-                        <div>
-                            <textarea style="width:450px; height:100px;"></textarea>
-                        </div>
-                        <hr />
-                        <button type="button" class="btn btn-success">Send</button>
-                    </div>
-                    @*<div class="form-group row">
-                            <label class="col-md-2">
-                                Attached File:
+    @if (currentCaseId != null) 
+    {
+        <div class="siteCom">
+            <div class="mapButton">
+                <div class="mapText"><span class="glyphicon glyphicon-arrow-up"></span> Communicate</div>
+            </div>
+            <div class="theMap">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label>
+                                Add comment:
                             </label>
-                            <div class="col-md-10">
-                                <a href="#" role="button" data-toggle="modal" data-target="#myModal2" class="btn btn-default">Add</a>
+                            <div>
+                                <textarea id="myNote"  style="width:450px; height:100px;"></textarea>
                             </div>
-                        </div>*@
+                            <hr />
+                            <button  class="btn btn-success" onclick=" SendMyMail() ">Send</button>
+                        </div>
+                        @*<div class="form-group row">
+                                <label class="col-md-2">
+                                    Attached File:
+                                </label>
+                                <div class="col-md-10">
+                                    <a href="#" role="button" data-togg le="modal" data-target="#myModal2" class="btn btn-default">Add</a>
+                                </div>
+                            </div>*@
+                    </div>
                 </div>
-            </div>
-            <div class="com-list">
-                <div class="com-list-com">
-                    <p>Per Eriksson | 2014-04-05</p>
-                    <p>Lorem ipsum dölor. Sit amet cönsectetur ädipisicing elit sed do. Eiusmod tempör incididunt ut läbore et. Dolöre mågnå åliqua. Adipiscing lectus amet tempör suspendisse leo elementum.</p>
-                </div>
-                <div class="com-list-com">
-                    <p>Daniel Lönnesjö | 2014-04-03</p>
-                    <p>Lorem ipsum dölor. Sit amet cönsectetur ädipisicing elit sed do. Eiusmod tempör incididunt ut läbore et. Dolöre mågnå åliqua. Adipiscing lectus amet tempör suspendisse leo elementum.Lorem ipsum dölor. Sit amet cönsectetur ädipisicing elit sed do. Eiusmod tempör incididunt ut läbore et. Sit amet cönsectetur ädipisicing elit sed do. Eiusmod tempör incididunt ut läbore et.</p>
-                </div>
-                <div class="com-list-com">
-                    <p>Jonas Carlsson | 2014-04-01</p>
-                    <p>Lorem ipsum dölor. Sit amet cönsectetur ädipisicing elit sed do. Eiusmod tempör incididunt ut läbore et. Dolöre mågnå åliqua. Adipiscing lectus amet tempör suspendisse leo elementum.</p>
+                <div class="com-list">
+                    @if (pCaseLogs != null)
+                    {                                                
+                        foreach (var logItem in pCaseLogs.CaseLogs)
+                        {                            
+                            <div class="com-list-com">
+                                <p> 
+                                    @(logItem.User_Id==null? (logItem.RegUser==SessionFacade.CurrentSystemUser? "Me":logItem.RegUser):logItem.User.FirstName + " " + logItem.User.SurName) 
+                                    |  @Html.DisplayFor(l => logItem.LogDate , "Date") 
+                                </p>
+                                <p> @(logItem.Text_External != null?logItem.Text_External:logItem.Text_Internal)</p>
+                            </div>                            
+                        }
+                    }   
+                        
+                    @*<div class="com-list-com">
+                        <p>Per Eriksson | 2014-04-05</p>
+                        <p>Lorem ipsum dölor. Sit amet cönsectetur ädipisicing elit sed do. Eiusmod tempör incididunt ut läbore et. Dolöre mågnå åliqua. Adipiscing lectus amet tempör suspendisse leo elementum.</p>
+                    </div>
+                    *@
                 </div>
             </div>
         </div>
-    </div>
-
+    }
     <!-- END COMMUNICATE DIV--->
 
     <div class="jumbotron">
@@ -588,3 +606,27 @@
 </body>
 
 </html>
+
+
+<script type="text/javascript">
+
+    function SendMyMail() {        
+        if ('@currentCaseId' == null || '@currentCaseId' == "")
+            return;
+
+        @*alert($("#myNote").val() + ' : ' + '@currentCaseId');*@
+        var note = $('#myNote').val();
+        if (note == "") {
+            alert('Note text is empty!');
+        } else {
+            var caseId = '@currentCaseId';
+            //var curGuid = 'Model.MailGuid';
+
+            window.location.href = '@Url.Action("SendMail", "Case")' +
+                '?caseId=' + caseId +
+                '&extraNote=' + note;
+                //'&curGUID=' + curGuid;
+        }        
+    }
+
+</script>

@@ -8,6 +8,8 @@ using DH.Helpdesk.NewSelfService.Models.Case;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Dal.Enums;
+using System.Net;
+
 
 namespace DH.Helpdesk.NewSelfService.Controllers
 {    
@@ -23,7 +25,10 @@ namespace DH.Helpdesk.NewSelfService.Controllers
     using DH.Helpdesk.NewSelfService.Infrastructure.Tools;
     using DH.Helpdesk.Common.Tools;    
     using DH.Helpdesk.BusinessData.OldComponents;
-    using DH.Helpdesk.NewSelfService.Models;            
+    using DH.Helpdesk.NewSelfService.Models;
+    using System.Threading.Tasks;
+    using System.Net.Http;
+    using System.Net.Http.Headers;            
 
     public class CaseController : BaseController
     {
@@ -150,6 +155,11 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             }
             else
             {
+                if (currentCase.FinishingDate == null)
+                {                 
+                    ViewBag.CurrentCaseId = currentCase.Id;
+                }
+
                 currentCase.Description = currentCase.Description.Replace("\n", "<br />");            
                 customerId = currentCase.Customer_Id;
             }
@@ -160,9 +170,9 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             if (!CheckAndUpdateGlobalValues(customerId))
                 return null;
 
-            var languageId = currentCustomer.Language_Id;            
-            
-            var caseOverview = this.GetCaseOverviewModel(currentCase, languageId);                                    
+            var languageId = currentCustomer.Language_Id;                        
+            var caseOverview = this.GetCaseOverviewModel(currentCase, languageId);                                                
+
             caseOverview.ExLogFileGuid = currentCase.CaseGUID.ToString();
             caseOverview.MailGuid = id;
             
@@ -280,9 +290,14 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             return this.View("NewCase",model);
         }
 
+        
         [HttpGet]
-        public ActionResult UserCases(int customerId, string progressId )
+        [AllowAnonymous]
+        public async Task<ActionResult> UserCases(int customerId, string progressId)
         {
+            //var res = await GetCoWorkers();
+            //ViewBag.Res = res;
+
             var currentCustomer = this._customerService.GetCustomer(customerId);
             var languageId = currentCustomer.Language_Id;
 
@@ -428,7 +443,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
         }
 
         [HttpGet]
-        public RedirectToRouteResult SendMail(int caseId, string extraNote, string curGUID)
+        public RedirectToRouteResult SendMail(int caseId, string extraNote) // , string curGUID)
         {
             IDictionary<string, string> errors;
 
@@ -440,8 +455,8 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             // may be need change PersonsEmail
             int caseHistoryId = this._caseService.SaveCaseHistory(currentCase, 0, currentCase.PersonsEmail, out errors, currentCase.RegUserId);
 
-            var guid = new Guid(curGUID);
-            var emailLog = _caseService.GetEMailLogByGUID(guid);
+            //var guid = new Guid(curGUID);
+            //var emailLog = _caseService.GetEMailLogByGUID(guid);
 
             // save log
             var caseLog = new CaseLog
@@ -457,7 +472,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                                   EquipmentPrice = 0,
                                   Price = 0,
                                   Charge = false,
-                                  RegUser = emailLog.EmailAddress,
+                                  RegUser = SessionFacade.CurrentSystemUser, //emailLog.EmailAddress,
                                   SendMailAboutCaseToNotifier = true,
                                   SendMailAboutLog = true
                               };
@@ -505,7 +520,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
             this._caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, newLogFiles);
 
-            return RedirectToAction("Index", new { id = curGUID });
+            return RedirectToAction("Index", new { id = caseId });
         }
 
         [HttpPost]
@@ -793,6 +808,32 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                 ViewBag.PublicCaseTemplate = _caseSolutionService.GetCaseSolutions(customerId).ToList();
 
             return true;
+        }
+
+        private static async Task<string> GetCoWorkers()
+        {
+            var handler = new HttpClientHandler { Credentials = new NetworkCredential("AdminTest1", "asd123!") };
+            using (var client = new HttpClient(handler))
+            {
+                client.BaseAddress = new Uri("http://localhost:25172/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //var emp = "5700004";
+                var emp = "5301929";
+                var response = await client.GetAsync(String.Format("api/subordinates/{0}", emp));
+                if (response.IsSuccessStatusCode)
+                {
+                    var nums = await response.Content.ReadAsStringAsync();
+                    //var nums = await response.Content.ReadAsAsync<List<string>>();
+                    //foreach (var num in nums)
+                    //{
+                    //}
+                    return nums;
+                }
+            }
+
+            return "";
         }
 
     }
