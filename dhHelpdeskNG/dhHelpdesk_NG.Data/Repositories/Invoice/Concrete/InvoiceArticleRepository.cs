@@ -25,6 +25,7 @@
             var entities = this.DbContext.InvoiceArticles
                         .Where(a => a.CustomerId == customerId &&
                                 a.ProductAreaId == productAreaId)
+                        .OrderBy(a => a.Name)
                         .ToList();
 
             return entities

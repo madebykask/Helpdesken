@@ -3,6 +3,7 @@
     using System.IO;
     using System.Web.Mvc;
 
+    using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Services.BusinessLogic.Invoice;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
@@ -11,10 +12,27 @@
 
     public class InvoiceController : BaseController
     {
-        public InvoiceController(IMasterDataService masterDataService)
+        private readonly IInvoiceArticleService invoiceArticleService;
+
+        private readonly IWorkContext workContext;
+
+        public InvoiceController(
+            IMasterDataService masterDataService, 
+            IInvoiceArticleService invoiceArticleService, 
+            IWorkContext workContext)
             : base(masterDataService)
         {
+            this.invoiceArticleService = invoiceArticleService;
+            this.workContext = workContext;
         }
+
+        [HttpGet]
+        public JsonResult Articles(int productAreaId)
+        {
+            var articles = this.invoiceArticleService.GetArticles(this.workContext.Customer.CustomerId, productAreaId);
+            return this.Json(articles, JsonRequestBehavior.AllowGet);
+        }
+
 
         [HttpGet]
         public ViewResult IkeaArticlesImport()

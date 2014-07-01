@@ -10,7 +10,8 @@
     {
         public static MvcHtmlString CaseInvoiceArticles(
                         this HtmlHelper html,
-                        CaseInvoiceArticlesModel caseArticles)
+                        CaseInvoiceArticlesModel caseArticles,
+                        string productAreaSelector)
         {
             var result = new StringBuilder();
             var tag = new TagBuilder("input");
@@ -21,6 +22,7 @@
 
             tag.MergeAttribute("data-invoice", string.Empty);
             tag.MergeAttribute("data-invoice-case-articles", caseArticlesJson);
+            tag.MergeAttribute("data-invoice-product-area", productAreaSelector);
             result.Append(tag);
             return MvcHtmlString.Create(result.ToString());            
         }

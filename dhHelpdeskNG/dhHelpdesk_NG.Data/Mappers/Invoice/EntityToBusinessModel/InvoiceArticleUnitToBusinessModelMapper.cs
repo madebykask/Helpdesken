@@ -7,6 +7,11 @@
     {
         public InvoiceArticleUnit Map(InvoiceArticleUnitEntity entity)
         {
+            if (entity == null)
+            {
+                return null;
+            }
+
             return new InvoiceArticleUnit(
                             entity.Id,
                             entity.Name,

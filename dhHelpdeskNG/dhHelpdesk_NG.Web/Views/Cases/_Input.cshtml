@@ -298,7 +298,7 @@
                                                     <li><a href="#">@Translation.Get("--")</a></li>
                                                     @Html.ProductAreaDropdownButtonString(Model.productAreas)
                                                 </ul>
-                                                @Html.HiddenFor(model => model.case_.ProductArea_Id)                                                
+                                                @Html.HiddenFor(model => model.case_.ProductArea_Id, new { @class = "product-area-id"})                                                
                                             </div>
                                         </td>
                                     </tr>
@@ -307,7 +307,7 @@
                                             @Translation.Get("Articles to be invoiced")
                                         </td>
                                         <td colspan="2">
-                                            @Html.CaseInvoiceArticles(Model.InvoiceArticles)
+                                            @Html.CaseInvoiceArticles(Model.InvoiceArticles, "product-area-id")
                                         </td>
                                     </tr>
                                     <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.System_Id.ToString())">
