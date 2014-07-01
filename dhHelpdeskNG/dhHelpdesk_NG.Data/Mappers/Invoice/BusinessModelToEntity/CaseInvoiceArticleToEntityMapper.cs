@@ -9,7 +9,9 @@
         {
             entity.CaseId = businessModel.CaseId;
             entity.IsInvoiced = businessModel.IsInvoiced;
+            entity.Number = businessModel.Number;
             entity.Name = businessModel.Name;
+            entity.Amount = businessModel.Amount;
             entity.Ppu = businessModel.Ppu;
             entity.UnitId = businessModel.UnitId;
         }

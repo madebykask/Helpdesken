@@ -11,12 +11,16 @@
                 int id, 
                 int caseId, 
                 CaseOverview @case, 
+                int? number,
                 string name, 
+                int amount,
                 int unitId, 
                 InvoiceArticleUnit unit, 
                 decimal ppu, 
                 bool isInvoiced)
         {
+            this.Amount = amount;
+            this.Number = number;
             this.IsInvoiced = isInvoiced;
             this.Ppu = ppu;
             this.Unit = unit;
@@ -37,8 +41,12 @@
         [ScriptIgnore]
         public CaseOverview Case { get; private set; }
 
+        public int? Number { get; private set; }
+
         [NotNullAndEmpty]
         public string Name { get; private set; }
+
+        public int Amount { get; private set; }
 
         [IsId]
         public int UnitId { get; private set; }

@@ -16,7 +16,9 @@
                 .WithMany()
                 .HasForeignKey(a => a.CaseId)
                 .WillCascadeOnDelete(false);
+            this.Property(a => a.Number).IsOptional();
             this.Property(a => a.Name).IsRequired().HasMaxLength(100);
+            this.Property(a => a.Amount).IsRequired();
             this.Property(a => a.UnitId).IsRequired();
             this.HasRequired(a => a.Unit)
                 .WithMany()
