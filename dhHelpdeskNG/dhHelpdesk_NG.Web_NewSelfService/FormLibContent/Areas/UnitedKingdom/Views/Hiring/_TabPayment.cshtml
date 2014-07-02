@@ -295,9 +295,13 @@
             '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3').not(".disabled").datepicker('destroy');
 
             setPaymentDatePickersBehavior();
+
+            $('#AllowancesValidFrom,#AllowancesValidFrom2,#AllowancesValidFrom3,' +
+            '#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3').val($('#ChangeValidFrom').val());
+
         }).data('datepicker');
-        $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,' +
-            '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3').on("keydown keypress keyup", false);
+        //$('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,' +
+        //    '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3').on("keydown keypress keyup", false);
 
         $('#AllowancesPaymentType').change(function () {
             var allowancesValidTo = document.getElementById('AllowancesValidTo');
@@ -432,7 +436,23 @@
             setOneIKEABonusLevel($(this).val());
         });
 
-        setOneIKEABonusLevel($(this).val());
+        setOneIKEABonusLevel($('#JobTitle').val());
+
+        function setNewToIKEA(value) {
+            if (value == 'International Transfer') {
+                $('.globalmobility').hide();
+            }
+            else {
+                $('.globalmobility').show();
+            }
+        };
+
+        $('#NewToIKEA').change(function () {
+            setNewToIKEA($(this).val());
+        });
+
+        setNewToIKEA($('#NewToIKEA').val());
+
     });
 
     @*// Following script is for hiding global mobility class if NewToIKEA is equal to string 'International Transfer'

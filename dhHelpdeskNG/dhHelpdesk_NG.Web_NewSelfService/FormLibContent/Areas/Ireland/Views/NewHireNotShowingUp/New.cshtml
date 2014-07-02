@@ -1,0 +1,71 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+@{
+    ViewBag.Title = Model.Translate("Ireland") + " - " + Model.Translate("Service Request Details");
+}
+@section Script {
+    <script type="text/javascript">
+
+        $(document).on('change', '#actionState', function (e) {
+            var val = $(this).val();
+            validate.run(val);
+        });
+
+    </script>
+
+     @Html.Partial("_Validate", Model)
+}
+@using (Html.BeginForm("new", "NewHireNotShowingUp", FormMethod.Post, new { area = "Ireland", novalidate = "novalidate" }))
+{
+ @Html.Partial("_GlobalNavRev", Model)
+    <div class="container containeralignright">
+        @Html.Partial("_CurrentUser")  
+        @Html.Partial("_ErrorMessage", Model)  
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#ServiceRequestDetails">@Model.Translate("Service Request Details")</a></li>
+            
+        </ul>
+        <div class="content">
+            <div class="row-fluid">
+                <div class="tab-content">   
+                     
+                        @Html.Partial("_TabServiceRequestDetails", Model)
+                    
+            
+                                                                                      
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="activeTab" name="activeTab" value="@Model.ActiveTab" />    
+}
+<script>
+    function selectIndexChangeServiceRequestPriority() {
+        var d = new Date();
+        var day = d.getDate() + 2;
+        if (this.options[this.selectedIndex].value == 'Urgent') {
+
+
+            $('#date_ProcessBeforeDate').datepicker(
+            {
+
+                onRender: function (ev) {
+                    if (ev.getDate() > day)
+                        return '';
+                    return 'disabled';
+                }
+
+
+            });
+        }
+        else {
+            document.getElementById('ProcessBeforeDate').value = document.getElementById('ContractStartDate').value;
+        }
+    }
+
+    document.getElementById('ServiceRequestPriority').onchange = selectIndexChangeServiceRequestPriority;
+
+
+</script>

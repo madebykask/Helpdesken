@@ -19,8 +19,12 @@
          <p style="text-align: left; font-family: Verdana; font-size: 11px;"><strong>PRIVATE & CONFIDENTIAL</strong><br />
         @Model.GetAnswer("FirstName") @Model.GetAnswer("LastName")<br />
         @Model.GetAnswer("PermanentAddressLine1")
+        
+        @if (!string.IsNullOrEmpty(Model.GetAnswer("PermanentAddressLine2")))
+         {
         <br />
         @Model.GetAnswer("PermanentAddressLine2")
+         }
         <br />
         @Model.GetAnswer("PermanentCity")
         <br />
@@ -83,29 +87,34 @@
               string text5 = "Your starting salary will be &pound;" + Model.GetAnswer("BasicPayAmount");
               //Add PayInfoText
               text5 += UnitedKingdomPdfPage.GetPayInfoText(Model);
+              
               list.Add(new PdfListItem { Text = text5 });
               
               //6
               string text6 = "";
-              
-              if (!string.IsNullOrEmpty(Model.GetAnswer("AllowancesType")))
+
+              string allowancesText1 = UnitedKingdomPdfPage.GetAllowancesText("AllowancesType", "AllowancesAmountUnits", Model);
+              if (!string.IsNullOrEmpty(allowancesText1))
               {
                   //1
-                  text6 += UnitedKingdomPdfPage.GetAllowancesText("AllowancesType", "AllowancesAmountUnits", Model);
+                  
+                  text6 += allowancesText1;
                   text6 += "<br /><br />";
               }
 
-              if (!string.IsNullOrEmpty(Model.GetAnswer("AllowancesType2")))
+              string allowancesText2 = UnitedKingdomPdfPage.GetAllowancesText("AllowancesType2", "AllowancesAmountUnits2", Model);
+              if (!string.IsNullOrEmpty(allowancesText2))
               {
                   //2
-                  text6 += UnitedKingdomPdfPage.GetAllowancesText("AllowancesType2", "AllowancesAmountUnits2", Model);
+                  text6 += allowancesText2;
                   text6 += "<br /><br />";
               }
 
-              if (!string.IsNullOrEmpty(Model.GetAnswer("AllowancesType3")))
+              string allowancesText3 = UnitedKingdomPdfPage.GetAllowancesText("AllowancesType3", "AllowancesAmountUnits3", Model);
+              if (!string.IsNullOrEmpty(allowancesText3))
               {
                   //3
-                  text6 += UnitedKingdomPdfPage.GetAllowancesText("AllowancesType3", "AllowancesAmountUnits3", Model);
+                  text6 += allowancesText3;
                   text6 += "<br /><br />";
               }
 
@@ -187,22 +196,25 @@
               //10
 
               string text10 = "If you are unable to provide the original documentation listed above you will be required to bring documentation from a secondary list, the details of which are available from the Human Resources department. If you have any questions relating to the above, please contact the Human Resources Department on " + Model.Department.TelNbr + " prior to your first day of work.";
-
-              text10 += "<br /><br />On your first day please bring along with you the following:";
-              text10 += "<br />&nbsp;1.&nbsp;Bank/Building Society details.";
-              text10 += "<br />&nbsp;2.&nbsp;Your P45 if you have one.";
-              text10 += "<br />&nbsp;3.&nbsp;Official proof of your National Insurance number, for example your National Insurance card or an original letter from a government agency. If you do not have a National Insurance number you must provide proof that you have applied for one within the first month of employment.";
+              list.Add(new PdfListItem { Text = text10 });
+              
+              
+              string text11 = "On your first day please bring along with you the following:";
+              text11 += "<br />&nbsp;1.&nbsp;Bank/Building Society details.";
+              text11 += "<br />&nbsp;2.&nbsp;Your P45 if you have one.";
+              text11 += "<br />&nbsp;3.&nbsp;Official proof of your National Insurance number, for example your National Insurance card or an original letter from a government agency. If you do not have a National Insurance number you must provide proof that you have applied for one within the first month of employment.";
 
               
               if (!string.IsNullOrEmpty(Model.Department.Extra))
               {
-                  text10 += "<br /><br />" + Model.Department.Extra;
+                  text11 += "<br /><br />" + Model.Department.Extra;
               }
-              
-              list.Add(new PdfListItem { Text = text10 });
-
-              string text11 = "IKEA reserves the right to vary terms and conditions of employment subject to consultation and reasonable notice.";
               list.Add(new PdfListItem { Text = text11 });
+
+
+              //12
+              string text12 = "IKEA reserves the right to vary terms and conditions of employment subject to consultation and reasonable notice.";
+              list.Add(new PdfListItem { Text = text12 });
               
               
               

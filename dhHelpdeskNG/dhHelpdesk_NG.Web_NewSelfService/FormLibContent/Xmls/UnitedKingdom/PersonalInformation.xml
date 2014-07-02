@@ -873,7 +873,9 @@
           <option value="Female">Female</option>
         </options>
       </element>
-      <element type="date" name="FamilyMemberDateOfBirth" label="Date of Birth" format="dd.MM.yyyy"></element>
+      <element type="date" name="FamilyMemberDateOfBirth" label="Date of Birth" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
 
       <element type="select" name="FamilyMember2" label="Family Member">
         <options>
@@ -893,7 +895,9 @@
           <option value="Female">Female</option>
         </options>
       </element>
-      <element type="date" name="FamilyMemberDateOfBirth2" label="Date of Birth" format="dd.MM.yyyy"></element>
+      <element type="date" name="FamilyMemberDateOfBirth2" label="Date of Birth" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
 
       <element type="select" name="FamilyMember3" label="Family Member">
         <options>
@@ -913,7 +917,9 @@
           <option value="Female">Female</option>
         </options>
       </element>
-      <element type="date" name="FamilyMemberDateOfBirth3" label="Date of Birth" format="dd.MM.yyyy"></element>
+      <element type="date" name="FamilyMemberDateOfBirth3" label="Date of Birth" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
 
       <element type="select" name="FamilyMember4" label="Family Member">
         <options>
@@ -933,7 +939,9 @@
           <option value="Female">Female</option>
         </options>
       </element>
-      <element type="date" name="FamilyMemberDateOfBirth4" label="Date of Birth" format="dd.MM.yyyy"></element>
+      <element type="date" name="FamilyMemberDateOfBirth4" label="Date of Birth" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
 
       <!--Global mobility Employee Documents-->
       <element type="hidden" name="EmployeeDocuments" default="1"></element>
@@ -4222,7 +4230,7 @@
         </options>
       </element>
       <element type="text" name="Payee" label="Payee" mandatory="1"></element>
-      <element type="typeahead-simple" source="1" name="BankCountry" label="Bank Country" mandatory="1">
+      <element type="typeahead-simple" source="1" name="BankCountry" label="Bank Country" default="United Kingdom" mandatory="1">
         <options>
           <option value=""></option>
           <option value="﻿Unknown">﻿Unknown</option>
@@ -4499,7 +4507,7 @@
       <element type="select" name="TaxInformation" label="Tax Information">
         <options>
           <option value=""></option>
-          <option value="﻿P45 attached">﻿P45 attached</option>
+          <option value="P45 attached">P45 attached</option>
         </options>
       </element>
       <element type="text" name="SocialInsurance" label="Social Insurance" mandatory="1"></element>

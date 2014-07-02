@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <state status="0">
     <status value="0">
-        <visibleTabs>#ServiceRequestDetails,#Basic,#Complete</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Basic,#Complete,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields>BusinessUnit,Department</readOnlyFields>
         <actions>
@@ -36,7 +36,7 @@
             <visibleTabs>#ServiceRequestDetails,#Basic</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#Basic</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Basic,#Complete,#documents</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Basic,#Complete,#documents,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields>BusinessUnit,Department</readOnlyFields>
         <actions>
@@ -56,7 +56,7 @@
             <visibleTabs>#ServiceRequestDetails,#Basic</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#Basic</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Basic,#Complete,#documents</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Basic,#Complete,#documents,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Basic,#Complete</readOnlyTabs>
         <readOnlyFields>BusinessUnit,Department</readOnlyFields>
         <actions>
@@ -71,7 +71,7 @@
             <visibleTabs>#ServiceRequestDetails,#Basic</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#Basic</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Basic,#Complete,#documents,#globalview</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Basic,#Complete,#documents,#globalview,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Basic,#Complete</readOnlyTabs>
         <readOnlyFields>BusinessUnit,Department</readOnlyFields>
         <actions>
@@ -84,7 +84,7 @@
             <visibleTabs>#ServiceRequestDetails,#Basic</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#Basic</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Basic,#Complete,#documents,#globalview</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Basic,#Complete,#documents,#globalview,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Basic,#Complete</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -95,7 +95,7 @@
             <visibleTabs>#ServiceRequestDetails,#Basic</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#Basic</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Basic,#Complete</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Basic,#Complete,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Basic,#Complete</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
     </status>

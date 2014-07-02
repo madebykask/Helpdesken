@@ -104,33 +104,5 @@
         noticeOldDate.hide();
         if (dvalidFrom.valueOf() < now.valueOf())
             noticeOldDate.show();
-    });
-
-    $('#ServiceRequestPriority').change(function () {
-        $('#date_ProcessBeforeDate').not(".disabled").datepicker("destroy");
-
-       if ($(this).val() == 'Urgent') {
-           
-            var endDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate() + 2, 0, 0, 0, 0);
-
-            $('#date_ProcessBeforeDate').not(".disabled").datepicker(
-            {
-                onRender: function (ev) {
-                    return ev.valueOf() >= endDate.valueOf() || ev.valueOf() < now.valueOf() ? 'disabled' : '';
-                }
-            });
-            //$("#date_ProcessBeforeDate").on("keydown keypress keyup", false);
-            
-        }
-        else {
-            $('#date_ProcessBeforeDate').not(".disabled").datepicker(
-            {
-                onRender: function (ev) {
-                    return '';
-                }
-            });
-
-            //document.getElementById('ProcessBeforeDate').onkeypress = function () { return true; }
-        }
-    });
+    });  
 </script>

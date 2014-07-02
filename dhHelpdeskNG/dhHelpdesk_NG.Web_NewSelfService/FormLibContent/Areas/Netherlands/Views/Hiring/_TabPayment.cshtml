@@ -354,16 +354,6 @@
 
     }
 
-    document.getElementById('AllowancesValidFrom').value = '@Model.GetAnswer("ContractStartDate")';
-    document.getElementById('DeductionsValidFrom').value = '@Model.GetAnswer("ContractStartDate")';
-
-    for (var i = 2; i <= 3; i++) {
-        //Defaults variables to ContractStartDate
-        var AllowancesValidFrom = "AllowancesValidFrom" + [i].toString();
-        var DeductionsValidFrom = "DeductionsValidFrom" + [i].toString();
-        document.getElementById(AllowancesValidFrom).value = '@Model.GetAnswer("ContractStartDate")';
-        document.getElementById(DeductionsValidFrom).value = '@Model.GetAnswer("ContractStartDate")';
-    }
 
     // Show notice if allowancestype comp.serv.allowance
     function selectIndexChangeAllowancesType() {
@@ -401,22 +391,41 @@
     }
     document.getElementById('AllowancesType3').onchange = selectIndexChangeAllowancesType3;
 
+
+
+
+
+    function setPaymentDatePickersBehavior() {
+        var startDate = $('#ContractStartDate').val();
+        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+        var dStart = APIGlobal.DateTime.parseDate(startDate, format);
+        var forcePicker = new Date(dStart.getFullYear(), dStart.getMonth(), dStart.getDate(), 0, 0, 0, 0);
+        $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,' +
+            '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3').not(".disabled").datepicker(
+        {
+            onRender: function (ev) {
+                return ev.valueOf() < forcePicker.valueOf() ? 'disabled' : '';
+            },
+        });
+    }
+
+    setPaymentDatePickersBehavior();
+
+    $('#date_ContractStartDate').on('changeDate', function (ev) {
+
+        $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,' +
+        '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3').not(".disabled").datepicker('destroy');
+
+        setPaymentDatePickersBehavior();
+
+        $('#AllowancesValidFrom,#AllowancesValidFrom2,#AllowancesValidFrom3,' +
+        '#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3').val($('#ContractStartDate').val());
+    }).data('datepicker');
+
+
     // allowance and deduction datepickers
     var employmentCategory = document.getElementById('EmploymentCategory').value;
-    var sEnd = document.getElementById('ContractEndDate');
-    
-
-    var startDate = $('#ContractStartDate').val();
-    var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
-    var dStart = APIGlobal.DateTime.parseDate(startDate, format);
-    var forcePicker = new Date(dStart.getFullYear(), dStart.getMonth(), dStart.getDate(), 0, 0, 0, 0);
-    $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,' +
-        '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3').not(".disabled").datepicker(
-    {
-        onRender: function (ev) {
-            return ev.valueOf() < forcePicker.valueOf() ? 'disabled' : '';
-        }
-    });
+    var sEnd = document.getElementById('ContractStartDate');
 
     $('#AllowancesPaymentType').change(function () {
         var allowancesValidTo = document.getElementById('AllowancesValidTo');
@@ -429,7 +438,7 @@
             input.attr('readonly', 'readonly');
         } else {
             $('#date_AllowancesValidTo').removeClass("disabled");
-            input.removeAttr('readonly', 'readonly');           
+            input.removeAttr('readonly', 'readonly');
             if (employmentCategory == 'Temporary')
                 allowancesValidTo.value = sEnd.value;
             else
@@ -437,7 +446,7 @@
         }
     });
     $('#AllowancesPaymentType').change();
-    
+
     $('#AllowancesPaymentType2').change(function () {
         var allowancesValidTo2 = document.getElementById('AllowancesValidTo2');
         var input = $('#AllowancesValidTo2');
@@ -445,7 +454,7 @@
             allowancesValidTo2.value = "";
             $('#date_AllowancesValidTo2').datepicker("destroy");
             $('#date_AllowancesValidTo2').addClass("disabled");
-            input.attr('readonly', 'readony');            
+            input.attr('readonly', 'readony');
         } else {
             input.removeAttr('readonly');
             if (employmentCategory == 'Temporary')
@@ -456,12 +465,11 @@
     });
     $('#AllowancesPaymentType2').change();
 
-
     $('#AllowancesPaymentType3').change(function () {
         var allowancesValidTo3 = document.getElementById('AllowancesValidTo3');
 
         var input = $('#AllowancesValidTo3');
-        if ($(this).val() == 'One Time') {            
+        if ($(this).val() == 'One Time') {
             allowancesValidTo3.value = "";
             $('#date_AllowancesValidTo3').datepicker("destroy");
             $('#date_AllowancesValidTo3').addClass("disabled");
@@ -476,7 +484,6 @@
     });
     $('#AllowancesPaymentType3').change();
 
-
     $('#DeductionsPaymentType').change(function () {
         var deductionsValidTo = document.getElementById('DeductionsValidTo');
 
@@ -486,7 +493,7 @@
             $('#date_DeductionsValidTo').datepicker("destroy");
             $('#date_DeductionsValidTo').addClass("disabled");
             input.attr('readonly', 'readony');
-            
+
         } else {
             input.removeAttr('readonly');
             if (employmentCategory == 'Temporary')
@@ -496,7 +503,6 @@
         }
     });
     $('#DeductionsPaymentType').change();
-
 
     $('#DeductionsPaymentType2').change(function () {
         var deductionsValidTo2 = document.getElementById('DeductionsValidTo2');
@@ -516,8 +522,6 @@
         }
     });
     $('#DeductionsPaymentType2').change();
-
-
 
     $('#DeductionsPaymentType3').change(function () {
         var deductionsValidTo3 = document.getElementById('DeductionsValidTo3');

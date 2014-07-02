@@ -266,6 +266,10 @@
                     </td>
                 </tr>
                 <tr>
+                    <td class="tdstrong">@Model.Label("BankType")</td>
+                    <td>@Model.Element("BankType")</td>
+                </tr>
+                <tr>
                     <td class="tdstrong">@Model.Label("Institution")</td>
                     <td>@Model.Element("Institution")</td>
                 </tr>
@@ -367,8 +371,8 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="tdstrong">@Model.Label("StudentLoanNotFullyRepaid")</td>
-                    <td>@Model.Element("StudentLoanNotFullyRepaid")
+                    <td class="tdstrong">@Model.Label("StudentLoanNotFullyRePaid")</td>
+                    <td>@Model.Element("StudentLoanNotFullyRePaid")
                         <div class="notice">
                             @Model.Translate("Please select \"Yes\" if co-worker left a course of UK higher education before last 6 April and received his first Student Loan instalment on or after 1 September 1998")
                         </div>
@@ -503,11 +507,10 @@
         value = $(this).val();
 
         if (value != 'Building Society') {
-            $("#BuildingSocietyRollNo").hide();
+            $("#BuildingSocietyRollNo").val("");
             $('#BuildingSocietyRollNo').prop('disabled', true);
         }
         else {
-            $("#BuildingSocietyRollNo").show();
             $('#BuildingSocietyRollNo').prop('disabled', false);
         }
     });
@@ -526,6 +529,7 @@
             $("#StatementDetails").hide();
             $("#statementDetailsNotice").hide();
             $('#StatementDetails').prop('disabled', true);
+            $("label[for='StatementDetails']").hide();
         }
         else {
             $("#StatementDetails").show();

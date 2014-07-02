@@ -3,13 +3,14 @@
 @using ECT.FormLib.Models;
 
 <div class="tab-pane active" id="ServiceRequestDetails">
-    <div class="span5">
+    <div class="span8">
         <table class="table">
             <tbody>
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Details")</h4>
                     </td>
+                    <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("Co-WorkerGlobalviewID")</td>
@@ -83,17 +84,18 @@
                     <td>
                         @Model.Element("ProcessBeforeDate")</td>
                 </tr>
-            </tbody>
+   @*         </tbody>
         </table>
     </div>
 
     <div class="span6">
         <table class="table">
-            <tbody>
+            <tbody>*@
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Permanent Address")</h4>
                     </td>
+                    <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("PermanentAddressLine1")</td>
@@ -147,33 +149,5 @@
         if (dvalidFrom.valueOf() < now.valueOf())
             noticeOldDate.show();
     });
-
-    $('#ServiceRequestPriority').change(function () {
-        $('#date_ProcessBeforeDate').datepicker("destroy");
-
-        if ($(this).val() == 'Urgent') {
-
-            var endDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate() + 2, 0, 0, 0, 0);
-
-            $('#date_ProcessBeforeDate').not(".disabled").datepicker(
-            {
-                onRender: function (ev) {
-                    return ev.valueOf() >= endDate.valueOf() || ev.valueOf() < now.valueOf() ? 'disabled' : '';
-                }
-            });
-
-            //$("#date_ProcessBeforeDate").on("keydown keypress keyup", false);
-        }
-        else {
-            $('#date_ProcessBeforeDate').not(".disabled").datepicker(
-            {
-                onRender: function (ev) {
-                    return '';
-                }
-            });
-
-            //document.getElementById('ProcessBeforeDate').onkeypress = function () { return true; }
-        }
-    });
-
+   
 </script>

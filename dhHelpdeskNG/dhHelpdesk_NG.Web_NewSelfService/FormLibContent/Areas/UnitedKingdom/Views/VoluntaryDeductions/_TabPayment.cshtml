@@ -139,6 +139,28 @@
     $('#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3').on("keydown keypress keyup", false);
 
     $('#PaymentType2').change(function () {
+        var deductionsValidTo = document.getElementById('DeductionsValidTo');
+
+        var input = $('#DeductionsValidTo');
+        if ($(this).val() == 'One Time') {
+            deductionsValidTo2.value = "";
+            $('#date_DeductionsValidTo').datepicker("destroy");
+            $('#date_DeductionsValidTo').addClass("disabled");
+            input.attr('readonly', 'readony');
+        }
+        else {
+            input.removeAttr('readonly', 'readonly');
+            input.not(".disabled").datepicker(
+            {
+                onRender: function (ev) {
+                    return '';
+                }
+            });
+            deductionsValidTo2.value = '31.12.9999';
+        }
+    });
+
+    $('#PaymentType2').change(function () {
         var deductionsValidTo2 = document.getElementById('DeductionsValidTo2');
 
         var input = $('#DeductionsValidTo2');

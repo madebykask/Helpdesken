@@ -101,23 +101,6 @@
     <documentTypeCode><![CDATA[w102]]></documentTypeCode>
   </contract>
 
-  <contract process="ChangeTermsConditions" id="Appendix1" footerUse="false" barcodeUse="false" barcodeShowOnMinStateSecondaryId="40" signatureUse="false" employeeSignatureTextUse="false"  cityDateUse="false">
-    <lastParagraphText></lastParagraphText>
-    <employerSignatureText1></employerSignatureText1>
-    <employerSignatureText2></employerSignatureText2>
-    <employeeSignatureText></employeeSignatureText>
-    <documentTypeCode></documentTypeCode>
-  </contract>
-
-  <contract process="ChangeTermsConditions" id="Appendix2" footerUse="true" barcodeUse="false" barcodeShowOnMinStateSecondaryId="40" signatureUse="true" employeeSignatureTextUse="true"  cityDateUse="true">
-    <lastParagraphText><![CDATA[* Vestigingen die meer dan 12 koopzondagen/feestdagen per jaar geopend zijn, kunnen in overleg met de medewerker tot een maximum van 50% van het aantal openstellingen, contractuele afspraken maken over het extra inroosteren op deze zondagen/feestdagen.
-    ]]></lastParagraphText>
-    <employerSignatureText1><![CDATA[Met vriendelijke groet,]]></employerSignatureText1>
-    <employerSignatureText2><![CDATA[IKEA B.V. Nederland]]></employerSignatureText2>
-    <employeeSignatureText><![CDATA[voor akkoord,]]></employeeSignatureText>
-    <documentTypeCode></documentTypeCode>
-  </contract>
-
   <contract process="TerminationComplete" id="Termination" footerUse="true" barcodeUse="true" barcodeShowOnMinStateSecondaryId="40" signatureUse="true" employeeSignatureTextUse="true"  cityDateUse="false">
     <lastParagraphText>
       <![CDATA[We hopen je hiermee voldoende te hebben geïnformeerd. Als je nog vragen hebt kan je contact opnemen met jouw leidinggevende of met de afdeling HR van jouw vestiging.]]>

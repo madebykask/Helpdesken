@@ -10,13 +10,14 @@
 }
 
 <div class="tab-pane" id="OrganisationalAssignment">
-    <div class="span5">
+    <div class="span8">
         <table class="table">
             <tbody>
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Organisation")</h4>
                     </td>
+                    <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("Country")</td>
@@ -55,6 +56,7 @@
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Job")</h4>
                     </td>
+                    <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("JobTitle")</td>
@@ -72,16 +74,17 @@
                     <td class="tdstrong">@Model.Label("ReportsToLineManager")</td>
                     <td>@Model.Element("ReportsToLineManager")</td>
                 </tr>
-            </tbody>
+      @*      </tbody>
         </table>
     </div>
     <div class="span6">
         <table class="table">
-            <tbody>
+            <tbody>*@
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Employment Conditions")</h4>
                     </td>
+                    <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("EmploymentCategory")</td>
@@ -111,6 +114,7 @@
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("CDS")</h4>
                     </td>
+                    <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("PrimarySite")</td>

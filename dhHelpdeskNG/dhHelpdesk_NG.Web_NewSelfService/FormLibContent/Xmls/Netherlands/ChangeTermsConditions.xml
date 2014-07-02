@@ -3364,7 +3364,6 @@
         <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
       </element>
       <element type="date" name="AllowancesValidTo" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
-        <mandatoryIf name="AllowancesType">﻿Telephone Allowance,Building Supplement,Expense Allowance,Expenses Other,Comp.Serv.Allowance,Oberservation Allowance,Travel Allowance per Time,WGA Payment (UW),WGA Supplement Payment,Consignment Fee,ZKV Contribution ER N-G,ZVW Contribution ER,Miscellaneous Pay N-G,Miscellaneous Payment,Miscellaneous Payment,Rent Wage in Kind ER</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
 
@@ -3416,7 +3415,7 @@
         <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
       </element>
       <element type="date" name="AllowancesValidTo2" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
-        <mandatoryIf name="AllowancesType2">﻿Telephone Allowance,Building Supplement,Expense Allowance,Expenses Other,Comp.Serv.Allowance,Oberservation Allowance,Travel Allowance per Time,WGA Payment (UW),WGA Supplement Payment,Consignment Fee,ZKV Contribution ER N-G,ZVW Contribution ER,Miscellaneous Pay N-G,Miscellaneous Payment,Miscellaneous Payment,Rent Wage in Kind ER</mandatoryIf>
+
         <regex inherit="date" pattern="" message=""></regex>
       </element>
 
@@ -3468,7 +3467,6 @@
         <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
       </element>
       <element type="date" name="AllowancesValidTo3" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
-        <mandatoryIf name="AllowancesType3">﻿Telephone Allowance,Building Supplement,Expense Allowance,Expenses Other,Comp.Serv.Allowance,Oberservation Allowance,Travel Allowance per Time,WGA Payment (UW),WGA Supplement Payment,Consignment Fee,ZKV Contribution ER N-G,ZVW Contribution ER,Miscellaneous Pay N-G,Miscellaneous Payment,Miscellaneous Payment,Rent Wage in Kind ER</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
 
@@ -3531,7 +3529,7 @@
       </element>
       <element type="date" name="DeductionsValidFrom2" label="Valid from:"  format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
-        <laterThanOrEqual name="ContractStartDate"></laterThanOrEqual>
+        <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
       </element>
       <element type="date" name="DeductionsValidTo2" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
@@ -3562,7 +3560,7 @@
       </element>
       <element type="date" name="DeductionsValidFrom3" label="Valid from:"  format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
-        <laterThanOrEqual name="ContractStartDate"></laterThanOrEqual>
+        <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
       </element>
       <element type="date" name="DeductionsValidTo3" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
@@ -3615,7 +3613,7 @@
         <mandatoryIf name="TypeOfBenefit">Housing Allowance,Mobility Allowance</mandatoryIf>
         <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
-      <element type="date" name="NextRevisionDate" label="Next Revision Date" format="dd.MM.yyyy">
+      <element type="date" name="NextRevisionDate" label="Next Revision Date" future="1" format="dd.MM.yyyy">
               <mandatoryIf name="TypeOfBenefit">Salary Revision</mandatoryIf>
                 <regex inherit="date" message="" pattern=""></regex>
             </element>
@@ -3650,7 +3648,7 @@
       <element type="text" name="MonthlyAmount2" label="Monthly Amount">
         <mandatoryIf name="TypeOfBenefit2">Housing Allowance,Mobility Allowance</mandatoryIf>
       </element>
-      <element type="date" name="NextRevisionDate2" label="Next Revision Date" format="dd.MM.yyyy">
+      <element type="date" name="NextRevisionDate2" label="Next Revision Date" future="1" format="dd.MM.yyyy">
         <mandatoryIf name="TypeOfBenefit2">Salary Revision</mandatoryIf>
         <regex inherit="date" message="" pattern=""></regex>
       </element>
@@ -3685,7 +3683,7 @@
       <element type="text" name="MonthlyAmount3" label="Monthly Amount">
         <mandatoryIf name="TypeOfBenefit3">Housing Allowance,Mobility Allowance</mandatoryIf>
       </element>
-      <element type="date" name="NextRevisionDate3" label="Next Revision Date" format="dd.MM.yyyy">
+      <element type="date" name="NextRevisionDate3" label="Next Revision Date" future="1" format="dd.MM.yyyy">
         <mandatoryIf name="TypeOfBenefit3">Salary Revision</mandatoryIf>
         <regex inherit="date" message="" pattern=""></regex>
       </element>

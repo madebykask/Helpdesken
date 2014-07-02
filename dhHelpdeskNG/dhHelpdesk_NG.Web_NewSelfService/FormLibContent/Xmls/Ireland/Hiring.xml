@@ -1329,7 +1329,7 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
 
-      <element type="text" name="DeductionsType3" label="Deduction Type" >
+      <element type="select" name="DeductionsType3" label="Deduction Type" >
         <options>
           <option value=""></option>
           <option value="760D Rent Deduction">760D Rent Deduction</option>

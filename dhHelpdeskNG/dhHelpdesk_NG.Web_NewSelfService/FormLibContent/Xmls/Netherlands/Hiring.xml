@@ -3834,7 +3834,7 @@
               <mandatoryIf name="TypeOfBenefit">Housing Allowance,Mobility Allowance</mandatoryIf>
                 <regex inherit="unsignednum" pattern="" message=""></regex>
             </element>
-            <element type="date" name="NextRevisionDate" label="Next Revision Date" format="dd.MM.yyyy">
+            <element type="date" name="NextRevisionDate" label="Next Revision Date" future="1" format="dd.MM.yyyy">
               <mandatoryIf name="TypeOfBenefit">Salary Revision</mandatoryIf>
                 <regex inherit="date" message="" pattern=""></regex>
             </element>
@@ -3869,7 +3869,7 @@
             <element type="text" name="MonthlyAmount2" label="Monthly Amount">
               <mandatoryIf name="TypeOfBenefit2">Housing Allowance,Mobility Allowance</mandatoryIf>
             </element>
-            <element type="date" name="NextRevisionDate2" label="Next Revision Date" format="dd.MM.yyyy">
+            <element type="date" name="NextRevisionDate2" label="Next Revision Date" future="1" format="dd.MM.yyyy">
               <mandatoryIf name="TypeOfBenefit2">Salary Revision</mandatoryIf>
                 <regex inherit="date" message="" pattern=""></regex>
             </element>
@@ -3904,7 +3904,7 @@
             <element type="text" name="MonthlyAmount3" label="Monthly Amount">
               <mandatoryIf name="TypeOfBenefit3">Housing Allowance,Mobility Allowance</mandatoryIf>
             </element>
-            <element type="date" name="NextRevisionDate3" label="Next Revision Date" format="dd.MM.yyyy">
+            <element type="date" name="NextRevisionDate3" label="Next Revision Date" future="1" format="dd.MM.yyyy">
               <mandatoryIf name="TypeOfBenefit3">Salary Revision</mandatoryIf>
               <regex inherit="date" message="" pattern=""></regex>
             </element>

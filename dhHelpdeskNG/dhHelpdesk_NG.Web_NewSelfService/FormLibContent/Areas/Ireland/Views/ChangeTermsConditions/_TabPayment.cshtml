@@ -7,13 +7,14 @@
 }
 
 <div class="tab-pane" id="Payment">
-    <div class="span5">
+    <div class="span8">
         <table class="table">
             <tbody>
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Basic pay")</h4>
                     </td>
+                    <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("PayrollCategory")</td>
@@ -44,6 +45,7 @@
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Allowances")</h4>
                     </td>
+                    <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("AllowancesType")</td>
@@ -128,16 +130,17 @@
                         <a id="addAllowance" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Allowance")</a></td>
                 </tr>
 
-            </tbody>
+       @*     </tbody>
         </table>
     </div>
     <div class="span6">
         <table class="table">
-            <tbody>
+            <tbody>*@
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Deductions")</h4>
                     </td>
+                    <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("DeductionsType")</td>
@@ -223,6 +226,7 @@
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Bonus Eligibility")</h4>
                     </td>
+                    <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("OneIKEABonusLevel")</td>
@@ -234,6 +238,7 @@
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Country Specifics")</h4>
                     </td>
+                    <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("DateOfNextSalaryReview")</td>
@@ -260,6 +265,9 @@
             globalmobility[i].style.display = 'none';
         }
     }*@
+
+    @*var employmentCategory = document.getElementById('EmploymentCategory').value;
+    var sEnd = document.getElementById('ContractEndDate');
 
     function setPaymentDatePickersBehavior() {
         var startDate = $('#ChangeValidFrom').val();
@@ -412,13 +420,13 @@
         else {
             $('#OneIKEABonusLevel option:not([value])').prop('selected', true);
         }
-    };
+    };*@
 
-    $('#JobTitle').change(function () {
-        setOneIKEABonusLevel($(this).val());
-    });
+    //$('#JobTitle').change(function () {
+    //    setOneIKEABonusLevel($(this).val());
+    //});
 
-    setOneIKEABonusLevel($(this).val());
+@*    setOneIKEABonusLevel($(this).val());
 
     document.getElementById('AllowancesValidFrom').value = '@Model.GetAnswer("ChangeValidFrom")';
     document.getElementById('DeductionsValidFrom').value = '@Model.GetAnswer("ChangeValidFrom")';
@@ -428,6 +436,6 @@
         var DeductionsValidFrom = "DeductionsValidFrom" + [i].toString();
         document.getElementById(AllowancesValidFrom).value = '@Model.GetAnswer("ChangeValidFrom")';
         document.getElementById(DeductionsValidFrom).value = '@Model.GetAnswer("ChangeValidFrom")';
-    }
+    }*@
 
 </script>

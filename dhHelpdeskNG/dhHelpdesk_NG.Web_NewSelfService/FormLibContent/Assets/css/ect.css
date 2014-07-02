@@ -1199,3 +1199,5 @@ label.error, .notice {
     background: #ddd;
     padding: 3px;
 }
+
+.selectize-input div.item + input { display: none; }

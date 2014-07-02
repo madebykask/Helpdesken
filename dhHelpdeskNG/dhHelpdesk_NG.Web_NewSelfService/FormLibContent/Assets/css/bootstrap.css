@@ -3243,7 +3243,7 @@ table th[class*="span"],
           border-radius: 3px;
 }
 
-/*.fade {
+.fade {
   opacity: 0;
   -webkit-transition: opacity 0.15s linear;
      -moz-transition: opacity 0.15s linear;
@@ -3253,7 +3253,7 @@ table th[class*="span"],
 
 .fade.in {
   opacity: 1;
-}*/
+}
 
 .collapse {
   position: relative;
@@ -5287,7 +5287,7 @@ input[type="submit"].btn.btn-mini {
   background-color: #fff;
 }
 
-/*.modal-backdrop {
+.modal-backdrop {
   position: fixed;
   top: 0;
   right: 0;
@@ -5404,7 +5404,7 @@ input[type="submit"].btn.btn-mini {
 
 .modal-footer .btn-block + .btn-block {
   margin-left: 0;
-}*/
+}
 
 .tooltip {
   position: absolute;

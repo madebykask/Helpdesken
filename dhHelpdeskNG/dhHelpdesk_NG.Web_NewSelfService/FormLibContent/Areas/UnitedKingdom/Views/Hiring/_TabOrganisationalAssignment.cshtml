@@ -187,7 +187,7 @@
             setEmployeeBehavior($(this).val());
         });
 
-        $('#ContractedHours').on("input", function () {
+        $('#ContractedHours').on("input propertychange", function () {
             var value = $(this).val();
 
             if (value >= 16 && value <= 38) {

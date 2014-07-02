@@ -3,13 +3,14 @@
 @using ECT.FormLib.Models;
 
 <div class="tab-pane" id="Payment">
-    <div class="span5">
+    <div class="span8">
         <table class="table">
             <tbody>
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Basic pay")</h4>
                     </td>
+                    <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("PayrollCategory")</td>
@@ -58,6 +59,7 @@
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Allowances")</h4>
                     </td>
+                    <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("AllowancesType")</td>
@@ -143,16 +145,17 @@
                         <a id="addAllowance" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Allowance")</a></td>
                 </tr>
 
-            </tbody>
+          @*  </tbody>
         </table>
     </div>
     <div class="span6">
         <table class="table">
-            <tbody>
+            <tbody>*@
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Deductions")</h4>
                     </td>
+                    <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("DeductionsType")</td>
@@ -234,13 +237,12 @@
                         @Model.Element("Deductions")
                         <a id="addDeduction" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Deduction")</a></td>
                 </tr>
-               
-                
 
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Bonus Eligibility")</h4>
                     </td>
+                    <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("OneIKEABonusLevel")</td>
@@ -255,11 +257,11 @@
                     </td>
                 </tr>
 
-
                  <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Benefits:")</h4>
                     </td>
+                     <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("TypeOfBenefit")</td>
@@ -338,25 +340,34 @@
 </div>
 
 <script>
-    if (!document.getElementById('AllowancesValidFrom').value == '') {
-        document.getElementById('AllowancesValidFrom').value = document.getElementById('ChangeValidFrom').value;
+    function setPaymentDatePickersBehavior() {
+        var startDate = $('#ChangeValidFrom').val();
+        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+        var dStart = APIGlobal.DateTime.parseDate(startDate, format);
+        var forcePicker = new Date(dStart.getFullYear(), dStart.getMonth(), dStart.getDate(), 0, 0, 0, 0);
+        $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,' +
+            '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3').not(".disabled").datepicker(
+        {
+            onRender: function (ev) {
+                return ev.valueOf() < forcePicker.valueOf() ? 'disabled' : '';
+            },
+        });
     }
-    if (!document.getElementById('DeductionsValidFrom').value == '') {
-        document.getElementById('DeductionsValidFrom').value = document.getElementById('ChangeValidFrom').value;
-    }
-    
 
-    for (var i = 2; i <= 3; i++) {
-        //Defaults variables to ChangeValidFrom
-        var AllowancesValidFrom = "AllowancesValidFrom" + [i].toString();
-        var DeductionsValidFrom = "DeductionsValidFrom" + [i].toString();
-        if (!document.getElementById(AllowancesValidFrom).value == '') {
-            document.getElementById(AllowancesValidFrom).value = document.getElementById('ChangeValidFrom').value;
-        }
-        if (!document.getElementById(DeductionsValidFrom).value == '') {
-            document.getElementById(DeductionsValidFrom).value = document.getElementById('ChangeValidFrom').value;
-        }
-    }
+    setPaymentDatePickersBehavior();
+
+    $('#date_ChangeValidFrom').on('changeDate', function (ev) {
+
+        $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,' +
+        '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3').not(".disabled").datepicker('destroy');
+
+        setPaymentDatePickersBehavior();
+
+        $('#AllowancesValidFrom,#AllowancesValidFrom2,#AllowancesValidFrom3,' +
+        '#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3').val($('#ChangeValidFrom').val());
+    }).data('datepicker');
+
+
 
 
     // Show notice if allowancestype comp.serv.allowance
@@ -373,10 +384,11 @@
 
     // allowance and deduction datepickers
     var employmentCategory = document.getElementById('EmploymentCategory').value;
-    var sEnd = document.getElementById('ContractEndDate');
+    var sEnd = document.getElementById('ChangeValidFrom');
 
     $('#AllowancesPaymentType').change(function () {
         var allowancesValidTo = document.getElementById('AllowancesValidTo');
+
         var input = $('#AllowancesValidTo');
         if ($(this).val() == 'One Time') {
             allowancesValidTo.value = "";
@@ -391,23 +403,8 @@
             else
                 allowancesValidTo.value = '31.12.9999';
         }
-
     });
-
     $('#AllowancesPaymentType').change();
-
-    var startDate = $('#ChangeValidFrom').val();
-    var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
-    var dStart = APIGlobal.DateTime.parseDate(startDate, format);
-    var forcePicker = new Date(dStart.getFullYear(), dStart.getMonth(), dStart.getDate(), 0, 0, 0, 0);
-    $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,' +
-        '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3').not(".disabled").datepicker(
-    {
-        onRender: function (ev) {
-            return ev.valueOf() < forcePicker.valueOf() ? 'disabled' : '';
-        }
-    });
-
 
     $('#AllowancesPaymentType2').change(function () {
         var allowancesValidTo2 = document.getElementById('AllowancesValidTo2');
@@ -418,17 +415,14 @@
             $('#date_AllowancesValidTo2').addClass("disabled");
             input.attr('readonly', 'readony');
         } else {
-            $('#date_AllowancesValidTo2').removeClass("disabled");
             input.removeAttr('readonly');
             if (employmentCategory == 'Temporary')
                 allowancesValidTo2.value = sEnd.value;
             else
                 allowancesValidTo2.value = '31.12.9999';
-
         }
-
     });
-
+    $('#AllowancesPaymentType2').change();
 
     $('#AllowancesPaymentType3').change(function () {
         var allowancesValidTo3 = document.getElementById('AllowancesValidTo3');
@@ -440,16 +434,14 @@
             $('#date_AllowancesValidTo3').addClass("disabled");
             input.attr('readonly', 'readony');
         } else {
-            $('#date_AllowancesValidTo3').removeClass("disabled");
             input.removeAttr('readonly');
             if (employmentCategory == 'Temporary')
                 allowancesValidTo3.value = sEnd.value;
             else
                 allowancesValidTo3.value = '31.12.9999';
         }
-
     });
-
+    $('#AllowancesPaymentType3').change();
 
     $('#DeductionsPaymentType').change(function () {
         var deductionsValidTo = document.getElementById('DeductionsValidTo');
@@ -462,16 +454,14 @@
             input.attr('readonly', 'readony');
 
         } else {
-            $('#date_DeductionsValidTo').removeClass("disabled");
             input.removeAttr('readonly');
             if (employmentCategory == 'Temporary')
                 deductionsValidTo.value = sEnd.value;
             else
                 deductionsValidTo.value = '31.12.9999';
         }
-
     });
-
+    $('#DeductionsPaymentType').change();
 
     $('#DeductionsPaymentType2').change(function () {
         var deductionsValidTo2 = document.getElementById('DeductionsValidTo2');
@@ -483,16 +473,14 @@
             $('#date_DeductionsValidTo2').addClass("disabled");
             input.attr('readonly', 'readony');
         } else {
-            $('#date_DeductionsValidTo2').removeClass("disabled");
             input.removeAttr('readonly');
             if (employmentCategory == 'Temporary')
                 deductionsValidTo2.value = sEnd.value;
             else
                 deductionsValidTo2.value = '31.12.9999';
         }
-
     });
-
+    $('#DeductionsPaymentType2').change();
 
     $('#DeductionsPaymentType3').change(function () {
         var deductionsValidTo3 = document.getElementById('DeductionsValidTo3');
@@ -504,15 +492,14 @@
             $('#date_DeductionsValidTo3').addClass("disabled");
             input.attr('readonly', 'readony');
         } else {
-            $('#date_DeductionsValidTo3').removeClass("disabled");
             input.removeAttr('readonly');
             if (employmentCategory == 'Temporary')
                 deductionsValidTo3.value = sEnd.value;
             else
                 deductionsValidTo3.value = '31.12.9999';
         }
-
     });
+    $('#DeductionsPaymentType3').change();
 
 
 
@@ -530,7 +517,7 @@
                 }
             });
 
-            $("#date_NextRevisionDate").on("keydown keypress keyup", false);
+            
         
         
             document.getElementById('NextRevisionDate').onkeypress = function () { return true; }
@@ -542,7 +529,7 @@
                 }
             });
 
-            $("#date_NextRevisionDate2").on("keydown keypress keyup", false);
+            
         
             document.getElementById('NextRevisionDate2').onkeypress = function () { return true; }
 
@@ -557,7 +544,7 @@
                 }
             });
 
-            $("#date_NextRevisionDate3").on("keydown keypress keyup", false);
+            
             document.getElementById('NextRevisionDate3').onkeypress = function () { return true; }
 
 

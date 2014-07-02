@@ -118,7 +118,7 @@
 
             //7
             string text7 = "Het betreft een {0} dienstverband. Het gemiddeld te werken uren per week bedraagt {1}, volgens rooster. De werknemer behoort tot de categorie {2}. De werknemer is conform de IKEA CAO flexibel in tijd en uren in te roosteren tijdens weekdagen, zaterdagen en op zon- en feestdagen en verklaart zich hiermee uitdrukkelijk akkoord.";
-            list.Add(new PdfListItem { Text = string.Format(text7, Model.GetAnswer("ContractType").ToLower(), Model.GetAnswer("ContractedHours"), NetherlandsPdfPage.GetPayRollCategoryText(Model.GetAnswer("PayrollCategory"), Model)) });
+            list.Add(new PdfListItem { Text = string.Format(text7, Model.Translate(Model.GetAnswer("ContractType"), Model.Language).ToLower(), Model.GetAnswer("ContractedHours"), NetherlandsPdfPage.GetPayRollCategoryText(Model.GetAnswer("PayrollCategory"), Model)) });
 
             //8
             if (Model.GetAnswer("ContractType").ToLower() == "Full Time".ToLower())
@@ -260,9 +260,9 @@
                 text12 += "<br />- Bijzonder verlof met behoud van salaris (VI, artikel 42)";
                 text12 += "<br />- Gezondheidsbeleid (VII, artikel 45 t/m 52)";
                 text12 += "<br />- Verzekeringen (VIII artikel 55 t/m 59).";
-            }
 
-            text12 += brText + "De tussen haakjes vermelde artikelen verwijzen naar de desbetreffende bepalingen van de IKEA CAO zoals deze luidde ten tijde van het aangaan van de arbeidsovereenkomst. Indien een of meer van de bovengenoemde bepalingen of de nummering ervan in een latere IKEA CAO wijzigen, treden deze gewijzigde bepalingen in de plaats van die bepalingen.";
+                text12 += brText + "De tussen haakjes vermelde artikelen verwijzen naar de desbetreffende bepalingen van de IKEA CAO zoals deze luidde ten tijde van het aangaan van de arbeidsovereenkomst. Indien een of meer van de bovengenoemde bepalingen of de nummering ervan in een latere IKEA CAO wijzigen, treden deze gewijzigde bepalingen in de plaats van die bepalingen.";
+            }
 
 
             list.Add(new PdfListItem { Text = text12 });

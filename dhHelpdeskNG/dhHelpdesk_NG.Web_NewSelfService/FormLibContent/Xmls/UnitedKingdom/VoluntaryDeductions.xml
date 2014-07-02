@@ -50,7 +50,7 @@
       <element type="select" name="DeductionsType" label="Deduction Type" mandatory="1" >
         <options>
           <option value=""></option>
-          <option value="﻿760A - Charity Deduction">﻿760A - Charity Deduction</option>
+          <option value="760A - Charity Deduction">760A - Charity Deduction</option>
           <option value="770E - USDAW Union Deduction">770E - USDAW Union Deduction</option>
           <option value="Pension">Pension</option>
         </options>
@@ -64,11 +64,11 @@
         </options>
       </element>
       <element type="text" name="DeductionsAmountUnits" label="Amount/Units">
-        <mandatoryIf name="DeductionsType">Pension</mandatoryIf>
+        <mandatoryIf name="DeductionsType">760A - Charity Deduction,770E - USDAW Union Deduction</mandatoryIf>
         <regex inherit="unsignednum" message="" pattern=""></regex>
       </element>
       <element type="select" name="DeductionsNetGross" label="Net/Gross">
-        <mandatoryIf name="DeductionsType">Pension</mandatoryIf>
+        <mandatoryIf name="DeductionsType">760A - Charity Deduction,770E - USDAW Union Deduction</mandatoryIf>
         <options>
           <option value=""></option>
           <option value="Net">Net</option>
@@ -89,7 +89,7 @@
       <element type="select" name="DeductionsType2" label="Deduction Type" >
         <options>
           <option value=""></option>
-          <option value="﻿760A - Charity Deduction">﻿760A - Charity Deduction</option>
+          <option value="760A - Charity Deduction">760A - Charity Deduction</option>
           <option value="770E - USDAW Union Deduction">770E - USDAW Union Deduction</option>
           <option value="Pension">Pension</option>
         </options>
@@ -103,11 +103,11 @@
         </options>
       </element>
       <element type="text" name="DeductionsAmountUnits2" label="Amount/Units" >
-        <mandatoryIf name="DeductionsType2">Pension</mandatoryIf>
+        <mandatoryIf name="DeductionsType2">760A - Charity Deduction,770E - USDAW Union Deduction</mandatoryIf>
         <regex inherit="unsignednum" message="" pattern=""></regex>
       </element>
       <element type="select" name="DeductionsNetGross2" label="Net/Gross" >
-        <mandatoryIf name="DeductionsType2">Pension</mandatoryIf>
+        <mandatoryIf name="DeductionsType2">760A - Charity Deduction,770E - USDAW Union Deduction</mandatoryIf>
         <options>
           <option value=""></option>
           <option value="Net">Net</option>
@@ -128,7 +128,7 @@
       <element type="select" name="DeductionsType3" label="Deduction Type" >
         <options>
           <option value=""></option>
-          <option value="﻿760A - Charity Deduction">﻿760A - Charity Deduction</option>
+          <option value="760A - Charity Deduction">760A - Charity Deduction</option>
           <option value="770E - USDAW Union Deduction">770E - USDAW Union Deduction</option>
           <option value="Pension">Pension</option>
         </options>
@@ -142,11 +142,11 @@
         </options>
       </element>
       <element type="text" name="DeductionsAmountUnits3" label="Amount/Units" >
-        <mandatoryIf name="DeductionsType2">Pension</mandatoryIf>
+        <mandatoryIf name="DeductionsType3">760A - Charity Deduction,770E - USDAW Union Deduction</mandatoryIf>
         <regex inherit="unsignednum" message="" pattern=""></regex>
       </element>
       <element type="select" name="DeductionsNetGross3" label="Net/Gross" >
-        <mandatoryIf name="DeductionsType2">Pension</mandatoryIf>
+        <mandatoryIf name="DeductionsType3">760A - Charity Deduction,770E - USDAW Union Deduction</mandatoryIf>
         <options>
           <option value=""></option>
           <option value="Net">Net</option>

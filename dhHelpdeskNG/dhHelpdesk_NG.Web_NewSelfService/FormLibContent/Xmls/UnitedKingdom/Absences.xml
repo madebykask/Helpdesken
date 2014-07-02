@@ -57,6 +57,7 @@
       </element>
       <element name="NumberOfWeeks" type="text" label="Number of weeks">
         <regex inherit="unsignednum" pattern="" message=""></regex>
+        <regex inherit="weeks" pattern="" message=""></regex>
       </element>
       <element name="ExpectedDateChildBirth" type="date" format="dd.MM.yyyy" label="Expected date of child's birth">
         <mandatoryIf name ="AbsenceType" >Maternity Leave</mandatoryIf>

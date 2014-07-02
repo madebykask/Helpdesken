@@ -19,8 +19,11 @@
          <p style="text-align: left; font-family: Verdana; font-size: 11px;"><strong>PRIVATE & CONFIDENTIAL</strong><br />
         @Model.GetAnswer("FirstName") @Model.GetAnswer("LastName")<br />
         @Model.GetAnswer("PermanentAddressLine1")
+        @if (!string.IsNullOrEmpty(Model.GetAnswer("PermanentAddressLine2")))
+         {
         <br />
         @Model.GetAnswer("PermanentAddressLine2")
+         }
         <br />
         @Model.GetAnswer("PermanentCity")
         <br />

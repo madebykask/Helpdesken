@@ -1556,6 +1556,8 @@ var init = function () {
 
     var activeTab = $("#activeTab");
 
+    $(".search-select").selectize();
+
     $('.typeahead').typeahead(typeAheadOptions);
     $('#Co-WorkerGlobalviewID').typeahead(globalTypeAheadOptions);
     $('#IKEAEmailAddress').typeahead(globalEmailTypeAheadOptions);
@@ -1594,6 +1596,39 @@ var init = function () {
         }
         });
     
+    $('#ServiceRequestPriority').change(function () {
+        $('#date_ProcessBeforeDate').not(".disabled").datepicker("destroy");
+
+        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+        var endDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate() + 3, 0, 0, 0, 0);
+        var sRDateUrgent = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate() + 1, 0, 0, 0, 0);
+        var sRDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate() - 3, 0, 0, 0, 0);
+
+        if ($(this).val() == 'Urgent') {            
+            var visibledaate = APIGlobal.DateTime.formatDate(sRDateUrgent, format);
+            $('#ProcessBeforeDate').val(visibledaate);
+
+            $('#date_ProcessBeforeDate').not(".disabled").datepicker(
+            {
+                onRender: function (ev) {
+                    return ev.valueOf() >= endDate.valueOf() || ev.valueOf() < now.valueOf() ? 'disabled' : '';
+                }
+            });           
+        }
+        else {
+            var visibledate = APIGlobal.DateTime.formatDate(sRDate, format);
+            $('#ProcessBeforeDate').val(visibledate);
+                $('#date_ProcessBeforeDate').not(".disabled").datepicker(
+                {
+                    onRender: function (ev) {
+                        return ev.valueOf() > now.valueOf() ? 'disabled' : '';
+                    }
+                });
+        }
+    });
+
     $('.nav-tabs a').click(function (e) {
         e.preventDefault();
         $(this).tab('show');

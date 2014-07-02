@@ -22,12 +22,12 @@
         <options>
           <option value=""></option>
           <option value="New Hire">New Hire</option>
-          <option value="Re-Hire">Re-Hire</option>
-          <option value="InternationalTransfer">International Transfer</option>
+          <option value="International Transfer">International Transfer</option>
           <option value="External">External</option>
         </options>
       </element>
-      <element type="date" name="ContractStartDate" mandatory="1" label="Contract Start Date" format="dd.MM.yyyy" future="1">
+      <element type="date" name="ContractStartDate" label="Contract Start Date" format="dd.MM.yyyy" future="1">
+        <mandatoryIf name="EmploymentCategory">Fixed Term,Temporary</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="date" name="InductionDate" mandatory="1" label="Induction Date" format="dd.MM.yyyy">
@@ -88,7 +88,7 @@
       <element type="text" name="PermanentAddressLine2" label="Address line 2"></element>
       <element type="text" name="PermanentPostalCode" label="Postal code" mandatory="1"></element>
       <element type="text" name="PermanentCity" label="City" mandatory="1"></element>
-      <element type="typeahead-simple" source="1" name="PermanentCountry" label="Country" mandatory="1" default="United Kingdom">
+      <element type="search-select" source="1" name="PermanentCountry" label="Country" mandatory="1" default="United Kingdom">
         <options>
           <option value=""></option>
           <option value="﻿Unknown">﻿Unknown</option>
@@ -1534,7 +1534,7 @@
           <option value="Warehouse Oper">Warehouse Oper</option>
         </options>
       </element>
-      <element type="typeahead-simple" name="HomeCostCentre" source="1" label="Home Cost Centre" mandatory="1">
+      <element type="typeahead-simple" name="HomeCostCentre" source="1" label="Home Cost Centre">
         <regex inherit="maxfourdigit" message="" pattern=""></regex>
         <options>
           <option value=""></option>
@@ -3010,7 +3010,8 @@
         </options>
       </element>
       <element type="date" name="ContractEndDate" label="Contract End Date" format="dd.MM.yyyy">
-        <mandatoryIf name="EmploymentCategory">Fixed term,Temporary</mandatoryIf>
+        <mandatoryIf name="EmploymentCategory">Fixed Term,Temporary</mandatoryIf>
+        <lessThanOrEqual name="ContractStartDate"></lessThanOrEqual>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="text" name="ContractedHours" label="Contracted Hours" mandatory="1"></element>
@@ -3357,7 +3358,7 @@
       <element type="select" name="AllowancesType" label="Allowance Type">
         <options>
           <option value=""></option>
-          <option value="﻿150B - Hourly Location Allow">150B - Hourly Location Allow</option>
+          <option value="150B - Hourly Location Allow">150B - Hourly Location Allow</option>
           <option value="150C - Hourly FLT Skills (Fork Lift Truck Allowance)">150C - Hourly FLT Skills (Fork Lift Truck Allowance)</option>
           <option value="150C - Hourly FLT Skills (Fork Lift Truck Allowance Milton Keynes)">150C - Hourly FLT Skills (Fork Lift Truck Allowance Milton Keynes)</option>
           <option value="150D - Hourly Kitchen Skills">150D - Hourly Kitchen Skills</option>
@@ -3869,7 +3870,7 @@
       <element type="text" name="MailingAddressLine2" label="Address line 2"></element>
       <element type="text" name="MailingPostalCode" label="Postal code"></element>
       <element type="text" name="MailingCity" label="City"></element>
-      <element type="typeahead-simple" source="1" name="MailingCountry" label="Country">
+      <element type="typeahead-simple" source="1" name="MailingCountry" label="Country" default="United Kingdom">
         <options>
           <option value=""></option>
           <option value="﻿Unknown">﻿Unknown</option>
@@ -4130,7 +4131,7 @@
       <element type="text" name="EmergencyAddressLine2" label="Address line 2"></element>
       <element type="text" name="EmergencyPostalCode" label="Postal code"></element>
       <element type="text" name="EmergencyCity" label="City"></element>
-      <element type="typeahead-simple" source="1" name="EmergencyCountry" label="Country">
+      <element type="typeahead-simple" source="1" name="EmergencyCountry" label="Country" default="United Kingdom">
         <options>
           <option value=""></option>
           <option value="﻿Unknown">﻿Unknown</option>
@@ -4388,7 +4389,6 @@
       </element>
       <element type="text" name="EmergencyContactNumber" label="Emergency contact number"></element>
       <element type="text" name="EmergencyContactRelationship" label="Emergency contact/relationship">
-        <mandatoryIfNotEmpty name="EmergencyAddressLine1"></mandatoryIfNotEmpty>
       </element>
 
       <!--Family Member/Dependents-->
@@ -5577,6 +5577,7 @@
 
       <!--Bank Account Details-->
 
+      <element type="text" name="BankType" label="Bank Type" mandatory="1" default="Main Bank"></element>
       <element type="select" name="Institution" label="Institution" mandatory="1">
         <options>
           <option value=""></option>
@@ -5844,7 +5845,7 @@
       <element type="text" name="BankKey" label="Bank Key" mandatory="1">
         <regex inherit="bankKeyUk" pattern="" message=""></regex>
       </element>
-      <element type="text" name="AccountNumber" label="Account Number" mandatory="1">
+      <element type="text" name="AccountNumber" label="Account Number">
         <regex inherit="accountNumberUk" pattern="" message=""></regex>
       </element>
       <element type="text" name="IBAN" label="IBAN">
@@ -5867,7 +5868,7 @@
         </options>
       </element>
       <element type="select" name="StatementDetails" label="Statement Details">
-        <mandatoryIf name="Taxinformation">Statement A/B or C</mandatoryIf>
+        <mandatoryIf name="TaxInformation">Statement A/B or C</mandatoryIf>
         <options>
           <option value=""></option>
           <option value="A">A</option>
@@ -5875,7 +5876,7 @@
           <option value="C">C</option>
         </options>
       </element>
-      <element type="select" name="StudentLoanNotFullyRepaid" label="Student Loan not fully repaid?" default="No" mandatory="1">
+      <element type="select" name="StudentLoanNotFullyRePaid" label="Student Loan not fully repaid?" default="No" mandatory="1">
         <options>
           <option value=""></option>
           <option value="No">No</option>

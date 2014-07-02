@@ -104,7 +104,7 @@
 
             //7
             string text7 = "Het betreft een {0} dienstverband. Het gemiddeld te werken uren per week bedraagt {1} uur. De werknemer behoort tot de categorie {2}.";
-            list.Add(new PdfListItem { Text = string.Format(text7, Model.GetAnswer("ContractType").ToLower(), Model.GetAnswer("ContractedHours"), NetherlandsPdfPage.GetPayRollCategoryText(Model.GetAnswer("PayrollCategory"), Model)) });
+            list.Add(new PdfListItem { Text = string.Format(text7, Model.Translate(Model.GetAnswer("ContractType"), Model.Language).ToLower(), Model.GetAnswer("ContractedHours"), NetherlandsPdfPage.GetPayRollCategoryText(Model.GetAnswer("PayrollCategory"), Model)) });
 
 
             //8
@@ -228,7 +228,7 @@
             string text11 = "Op deze arbeidsovereenkomst zijn de van tijd tot tijd geldende IKEA CAO, de IKEA Group Code of Contact en de regels die zijn opgenomen in Mijn IKEA van toepassing. De IKEA CAO en de IKEA Group Code of Contact zijn te raadplegen op en downloaden via de internetsite <a href=\"http://www.ico-worker.com/nl\" target=\"_blank\" title=\"http://www.ico-worker.com/nl\" style=\"text-decoration: underline; color: blue;\">www.ico-worker.com/nl</a>. De inloggegevens voor deze site vind je in de bijgesloten brief. Op verzoek van de werknemer stuurt IKEA een digitale versie per e-mail of een geprinte versie per gewone post toe van de toepasselijke regels. Het boekje Mijn IKEA ontvang je tegelijk met deze arbeidsovereenkomst.";
 
 
-            if ((Model.GetAnswer("PayScaleType") == "IKEA NL CAO" | Model.GetAnswer("PayScaleType") == "IKEA NL geen CAO - out of scope") && ((Model.GetAnswer("PayScaleLevel") == "14" || Model.GetAnswer("PayScaleLevel") == "15")))
+            if ((Model.GetAnswer("PayScaleType").ToLower() == "IKEA NL CAO".ToLower() | Model.GetAnswer("PayScaleType").ToLower() == "IKEA NL geen CAO - out of scope".ToLower()) && ((Model.GetAnswer("PayScaleLevel") == "14" || Model.GetAnswer("PayScaleLevel") == "15")))
             {
                 text11 += brText + "Hoewel de IKEA CAO niet op deze arbeidsovereenkomst van toepassing is, worden de artikelen met de volgende onderwerpen uit de laatst overeengekomen IKEA CAO door ondertekening van deze arbeidsovereenkomst op de arbeidsovereenkomst van toepassing en worden die geacht daarvan onderdeel uit te maken, ook als de looptijd van deze CAO is verstreken en nog geen nieuwe CAO tot stand is gekomen:";
                 text11 += brText + "- Ontwikkel- en beoordelingscyclus (II, artikel 4)";
@@ -240,10 +240,10 @@
                 text11 += "<br />- Bijzonder verlof met behoud van salaris (VI, artikel 42)";
                 text11 += "<br />- Gezondheidsbeleid (VII, artikel 45 t/m 52)";
                 text11 += "<br />- Verzekeringen (VIII artikel 55 t/m 59).";
+
+                text11 += brText + "De tussen haakjes vermelde artikelen verwijzen naar de desbetreffende bepalingen van de IKEA CAO zoals deze luidde ten tijde van het aangaan van de arbeidsovereenkomst. Indien een of meer van de bovengenoemde bepalingen of de nummering ervan in een latere IKEA CAO wijzigen, treden deze gewijzigde bepalingen in de plaats van die bepalingen.";
+
             }
-
-
-            text11 += brText + "De tussen haakjes vermelde artikelen verwijzen naar de desbetreffende bepalingen van de IKEA CAO zoals deze luidde ten tijde van het aangaan van de arbeidsovereenkomst. Indien een of meer van de bovengenoemde bepalingen of de nummering ervan in een latere IKEA CAO wijzigen, treden deze gewijzigde bepalingen in de plaats van die bepalingen.";
 
             list.Add(new PdfListItem { Text = text11 });
 

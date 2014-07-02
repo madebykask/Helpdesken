@@ -3,7 +3,7 @@
 @using ECT.FormLib.Models;
 
 @{
-    ViewBag.Title = Model.Translate("Netherlands") + " - " + Model.Translate("Termination complete");
+    ViewBag.Title = Model.Translate("Ireland") + " - " + Model.Translate("Service Request Details");
 }
 
 @section Validation {
@@ -15,6 +15,12 @@
 @section Script {
 
     <script>
+
+        $(document).on('change', '#Extent', function (e) {
+            e.preventDefault();
+            if ($(this).val() === 'Full time')
+                $('#Workload').val('100');
+        });
 
         validate.run($('#actionState').val());
 

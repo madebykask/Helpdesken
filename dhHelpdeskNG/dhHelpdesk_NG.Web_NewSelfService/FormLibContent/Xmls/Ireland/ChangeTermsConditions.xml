@@ -56,7 +56,7 @@
           <option value="Not Urgent">Not Urgent</option>
         </options>
       </element>
-      <element name="ProcessBeforeDate" type="date" label="Process before date:" mandatory="1" default="31.12.9999" format="dd.MM.yyyy">
+      <element name="ProcessBeforeDate" type="date" label="Process before date:" mandatory="1" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
 
@@ -580,16 +580,16 @@
           <option value="Zimbabwe">Zimbabwe</option>
         </options>
       </element>
-      <element name="Company" type="typeahead-simple" label="Company" mandatory="1" source="1">
+      <element name="Company" type="typeahead-simple" label="Company" default="IKEA Ireland Ltd." mandatory="1" source="1">
         <options>
           <option value=""></option>
           <option value="﻿IKEA Ireland Ltd.">﻿IKEA Ireland Ltd.</option>
         </options>
       </element>
-      <element name="NewBusinessUnit" type="select" label="Business Unit" mandatory="1">
+      <element name="NewBusinessUnit" type="select" label="Business Unit" default="Store Dublin 038" mandatory="1">
         <options>
           <option value=""></option>
-          <option value="﻿Store Dublin 038">Store Dublin 038</option>
+          <option value="Store Dublin 038">Store Dublin 038</option>
         </options>
       </element>
       <element name="NewDepartment" type="select" label="Department" mandatory="1">
@@ -926,10 +926,10 @@
       </element>
 
       <!--CDS-->
-      <element name="PrimarySite" type="select" label="Primary Site" mandatory="1">
+      <element name="PrimarySite" type="select" label="Primary Site" default="Store Dublin 038" mandatory="1">
         <options>
           <option value=""></option>
-          <option value="﻿Store Dublin 038">﻿Store Dublin 038</option>
+          <option value="Store Dublin 038">﻿Store Dublin 038</option>
         </options>
       </element>
       <element name="TECApprover" type="typeahead-simple" label="TEC Approver" source="1" mandatory="1">
@@ -976,10 +976,10 @@
           <option value="Victoria Chambers">Victoria Chambers</option>
         </options>
       </element>
-      <element name="HelpDesk" type="select" label="Help Desk" mandatory="1">
+      <element name="HelpDesk" type="select" label="Help Desk" mandatory="1" default="ICC3 UK Retail">
         <options>
           <option value=""></option>
-          <option value="﻿ICC3 UK Retail">ICC3 UK Retail</option>
+          <option value="ICC3 UK Retail">ICC3 UK Retail</option>
         </options>
       </element>
     </tab>
@@ -1235,7 +1235,7 @@
           <option value="760A Charity">760A Charity</option>
         </options>
       </element>
-      <element type="select" name="DeductionsPaymentType" label="Deduction Payment Type">
+      <element type="select" name="DeductionsPaymentType" label="Payment Type">
         <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>
@@ -1275,7 +1275,7 @@
           <option value="760A Charity">760A Charity</option>
         </options>
       </element>
-      <element type="select" name="DeductionsPaymentType2" label="Deduction Payment Type">
+      <element type="select" name="DeductionsPaymentType2" label="Payment Type">
         <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>
@@ -1315,7 +1315,7 @@
           <option value="760A Charity">760A Charity</option>
         </options>
       </element>
-      <element type="select" name="DeductionsPaymentType3" label="Deduction Payment Type">
+      <element type="select" name="DeductionsPaymentType3" label="Payment Type">
         <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>

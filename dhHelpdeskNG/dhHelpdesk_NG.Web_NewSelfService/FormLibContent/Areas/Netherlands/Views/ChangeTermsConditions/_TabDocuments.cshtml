@@ -22,43 +22,13 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>@Model.Translate("ChangeTermsConditions")</td>
+                    <td>@Model.Translate("Contract")</td>
                     <td>pdf</td>
                     <td>&nbsp;</td>
                     <td>
                         <a href="@Url.Action("print", "ChangeTermsConditions", new
                                 {
                                     id = "ChangeTermsConditions",
-                                    caseId = Model.Contract.Id,
-                                    path = Path.Combine(Path.GetDirectoryName(Model.FormXmlPath), Path.GetFileNameWithoutExtension(Model.FormXmlPath)),
-                                    userId = FormLibSessions.User.UserId
-                                })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@Model.Translate("Print")</a>
-                    </td>
-                </tr>
-
-                 <tr>
-                    <td>@Model.Translate("Appendix1")</td>
-                    <td>pdf</td>
-                     <td>&nbsp;</td>
-                    <td>
-                        <a href="@Url.Action("print", "ChangeTermsConditions", new
-                                {
-                                    id = "Appendix1",
-                                    caseId = Model.Contract.Id,
-                                    path = Path.Combine(Path.GetDirectoryName(Model.FormXmlPath), Path.GetFileNameWithoutExtension(Model.FormXmlPath)),
-                                    userId = FormLibSessions.User.UserId
-                                })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@Model.Translate("Print")</a>
-                    </td>
-                </tr>
-
-                 <tr>
-                    <td>@Model.Translate("Appendix2")</td>
-                    <td>pdf</td>
-                     <td>&nbsp;</td>
-                    <td>
-                        <a href="@Url.Action("print", "ChangeTermsConditions", new
-                                {
-                                    id = "Appendix2",
                                     caseId = Model.Contract.Id,
                                     path = Path.Combine(Path.GetDirectoryName(Model.FormXmlPath), Path.GetFileNameWithoutExtension(Model.FormXmlPath)),
                                     userId = FormLibSessions.User.UserId

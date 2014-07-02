@@ -19,8 +19,11 @@
         <p style="text-align: left; font-family: Verdana; font-size: 11px;"><strong>PRIVATE & CONFIDENTIAL</strong><br />
         @Model.GetAnswer("FirstName") @Model.GetAnswer("LastName")<br />
         @Model.GetAnswer("PermanentAddressLine1")
+        @if (!string.IsNullOrEmpty(Model.GetAnswer("PermanentAddressLine2")))
+         {
         <br />
         @Model.GetAnswer("PermanentAddressLine2")
+         }
         <br />
         @Model.GetAnswer("PermanentCity")
         <br />
@@ -88,26 +91,30 @@
               text5 += UnitedKingdomPdfPage.GetPayInfoText(Model);
               text5 += " Next review date will be " + CustomPdfPage.GetDateInWords(Model.GetAnswer("DateOfNextSalaryReview")) + ".";
 
-              text5 += "<br /><br />";
+             text5 += "<br /><br />";
 
-              if (!string.IsNullOrEmpty(Model.GetAnswer("AllowancesType")))
+              string allowancesText1 = UnitedKingdomPdfPage.GetAllowancesText("AllowancesType", "AllowancesAmountUnits", Model);
+              if (!string.IsNullOrEmpty(allowancesText1))
               {
                   //1
-                  text5 += UnitedKingdomPdfPage.GetAllowancesText("AllowancesType", "AllowancesAmountUnits", Model);
+                 // text5 += "<br /><br />";
+                  text5 += allowancesText1;
                   text5 += "<br /><br />";
               }
 
-              if (!string.IsNullOrEmpty(Model.GetAnswer("AllowancesType2")))
+              string allowancesText2 = UnitedKingdomPdfPage.GetAllowancesText("AllowancesType2", "AllowancesAmountUnits2", Model);
+              if (!string.IsNullOrEmpty(allowancesText2))
               {
                   //2
-                  text5 += UnitedKingdomPdfPage.GetAllowancesText("AllowancesType2", "AllowancesAmountUnits2", Model);
+                  text5 += allowancesText2;
                   text5 += "<br /><br />";
               }
 
-              if (!string.IsNullOrEmpty(Model.GetAnswer("AllowancesType3")))
+              string allowancesText3 = UnitedKingdomPdfPage.GetAllowancesText("AllowancesType3", "AllowancesAmountUnits3", Model);
+              if (!string.IsNullOrEmpty(allowancesText3))
               {
                   //3
-                  text5 += UnitedKingdomPdfPage.GetAllowancesText("AllowancesType3", "AllowancesAmountUnits3", Model);
+                  text5 += allowancesText3;
                   text5 += "<br /><br />";
               }
 
