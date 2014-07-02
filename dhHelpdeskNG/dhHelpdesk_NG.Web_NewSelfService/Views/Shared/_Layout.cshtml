@@ -126,14 +126,14 @@
                 var mapPos = parseInt($('.siteCom').css('left'), 10);
                 if (mapPos < 0) {
                     $('.siteCom').animate({
-                        left: '+=500'
+                        left: '+=600'
                     }, 458, 'swing', function () {
                         // Animation complete.
                     });
                 }
                 else {
                     $('.siteCom').animate({
-                        left: '-=500'
+                        left: '-=600'
                     }, 458, 'swing', function () {
                         // Animation complete.
                     });
@@ -191,7 +191,7 @@
     {
         <div class="siteCom">
             <div class="mapButton">
-                <div class="mapText"><span class="glyphicon glyphicon-arrow-up"></span> Communicate</div>
+                <div class="mapText" title="Communicate"><span class="glyphicon glyphicon-comment"></span><span class="glyphicon glyphicon-certificate newcom"></span></div>
             </div>
             <div class="theMap">
                 <div class="container-fluid">
@@ -203,8 +203,8 @@
                             <div>
                                 <textarea id="myNote"  style="width:450px; height:100px;"></textarea>
                             </div>
-                            <hr />
                             <button  class="btn btn-success" onclick=" SendMyMail() ">Send</button>
+                            <hr />
                         </div>
                         @*<div class="form-group row">
                                 <label class="col-md-2">
