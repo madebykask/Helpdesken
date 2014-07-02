@@ -320,6 +320,7 @@
     <Content Include="Content\bootstrap-datepicker3.css" />
     <Content Include="Content\css\bootstrap.css" />
     <Content Include="Content\css\bootstrap.min.css" />
+    <Content Include="Content\css\dhplus.css" />
     <Content Include="Content\css\profile.css" />
     <Content Include="Content\css\selfservice.css" />
     <Content Include="Content\dialog.css" />
@@ -570,7 +571,6 @@
     <Content Include="FormLibContent\Assets\css\datepicker-new.css" />
     <Content Include="FormLibContent\Assets\css\datepicker.css" />
     <Content Include="FormLibContent\Assets\css\ect.css" />
-    <Content Include="FormLibContent\Assets\css\self-service-specifics.css" />
     <Content Include="FormLibContent\Assets\img\glyphicons-halflings-white.png" />
     <Content Include="FormLibContent\Assets\img\glyphicons-halflings.png" />
     <Content Include="FormLibContent\Assets\img\ico-save.png" />

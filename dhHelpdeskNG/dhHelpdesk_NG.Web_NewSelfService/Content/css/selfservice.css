@@ -605,6 +605,18 @@ input[type=text], select, textarea {
 }
 
 
+/*****MODAL***********/
+.modal-header.cohead {
+    background: #0067b2;
+    color: #fff;
+}
+
+.modal-header.cohead .close {
+    color: #fff;
+    opacity:1.0;
+}
+
+
 
 
 
