@@ -221,21 +221,21 @@
                     {                                                
                         foreach (var logItem in pCaseLogs.CaseLogs)
                         {                            
-                            <div class="com-list-com">
+                            <div class="@(string.IsNullOrEmpty(logItem.Text_External)?"com-list-hd":"com-list-com")" >
+                                <div class="list-arrow"></div>
                                 <p> 
                                     @(logItem.User_Id==null? (logItem.RegUser==SessionFacade.CurrentSystemUser? "Me":logItem.RegUser):logItem.User.FirstName + " " + logItem.User.SurName) 
                                     |  @Html.DisplayFor(l => logItem.LogDate , "Date") 
                                 </p>
-                                <p> @(logItem.Text_External != null?logItem.Text_External:logItem.Text_Internal)</p>
+                                <p>
+                                @(string.IsNullOrEmpty(logItem.Text_External)?                                
+                                Html.Raw(logItem.Text_Internal.Replace("\n", "<br />")):    
+                                   Html.Raw(logItem.Text_External.Replace("\n", "<br />")))
+                                </p>
                             </div>                            
                         }
                     }   
-                        
-                    @*<div class="com-list-com">
-                        <p>Per Eriksson | 2014-04-05</p>
-                        <p>Lorem ipsum dölor. Sit amet cönsectetur ädipisicing elit sed do. Eiusmod tempör incididunt ut läbore et. Dolöre mågnå åliqua. Adipiscing lectus amet tempör suspendisse leo elementum.</p>
-                    </div>
-                    *@
+                                          
                 </div>
             </div>
         </div>
