@@ -225,12 +225,12 @@
                                 <div class="list-arrow"></div>
                                 <p> 
                                     @(logItem.User_Id==null? (logItem.RegUser==SessionFacade.CurrentSystemUser? "Me":logItem.RegUser):logItem.User.FirstName + " " + logItem.User.SurName) 
-                                    |  @Html.DisplayFor(l => logItem.LogDate , "Date") 
+                                    |  @Html.DisplayFor(l => logItem.LogDate , "DateAndTime") 
                                 </p>
-                                <p>
-                                @(string.IsNullOrEmpty(logItem.Text_External)?                                
-                                Html.Raw(logItem.Text_Internal.Replace("\n", "<br />")):    
-                                   Html.Raw(logItem.Text_External.Replace("\n", "<br />")))
+                                <p>                                    
+                                    @(string.IsNullOrEmpty(logItem.Text_External)?                                
+                                    Html.Raw(logItem.Text_Internal.Replace("\n", "<br />")):    
+                                    Html.Raw(logItem.Text_External).Replace("\n", "<br />"))                                    
                                 </p>
                             </div>                            
                         }
@@ -616,6 +616,7 @@
 
         @*alert($("#myNote").val() + ' : ' + '@currentCaseId');*@
         var note = $('#myNote').val();
+        alert(note);
         if (note == "") {
             alert('Note text is empty!');
         } else {
