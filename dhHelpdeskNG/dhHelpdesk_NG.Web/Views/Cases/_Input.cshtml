@@ -307,7 +307,7 @@
                                             @Translation.Get("Articles to be invoiced")
                                         </td>
                                         <td colspan="2">
-                                            @Html.CaseInvoiceArticles(Model.InvoiceArticles, "product-area-id")
+                                            @Html.CaseInvoiceArticles(Model.InvoiceArticles, "product-area-id", Model.case_.Id)
                                         </td>
                                     </tr>
                                     <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.System_Id.ToString())">
