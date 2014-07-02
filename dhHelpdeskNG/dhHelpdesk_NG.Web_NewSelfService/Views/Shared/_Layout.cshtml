@@ -191,7 +191,16 @@
     {
         <div class="siteCom">
             <div class="mapButton">
-                <div class="mapText" title="Communicate"><span class="glyphicon glyphicon-comment"></span><span class="glyphicon glyphicon-certificate newcom"></span></div>
+                 @if ((pCaseLogs != null) && (pCaseLogs.CaseLogs != null) && (pCaseLogs.CaseLogs.Count > 0) && (!string.IsNullOrEmpty(pCaseLogs.CaseLogs[0].Text_Internal))) 
+                 {
+                    <div class="mapText" title="Communicate"><span class="glyphicon glyphicon-comment"></span><span class="glyphicon glyphicon-certificate newcom"></span></div>
+                 }
+                 else
+                 {
+                    <div class="mapText" title="Communicate"><span class="glyphicon glyphicon-comment"></span></div>
+                 }
+
+                
             </div>
             <div class="theMap">
                 <div class="container-fluid">
@@ -225,7 +234,7 @@
                                 <div class="list-arrow"></div>
                                 <p> 
                                     @(logItem.User_Id==null? (logItem.RegUser==SessionFacade.CurrentSystemUser? "Me":logItem.RegUser):logItem.User.FirstName + " " + logItem.User.SurName) 
-                                    |  @Html.DisplayFor(l => logItem.LogDate , "DateAndTime") 
+                                    |  @Html.DisplayFor(l => logItem.RegTime , "DateAndTime") 
                                 </p>
                                 <p>                                    
                                     @(string.IsNullOrEmpty(logItem.Text_External)?                                

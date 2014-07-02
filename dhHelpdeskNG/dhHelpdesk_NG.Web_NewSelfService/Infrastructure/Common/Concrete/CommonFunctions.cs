@@ -39,7 +39,7 @@ using DH.Helpdesk.NewSelfService.Models.Case;
 
         public CaseLogModel GetCaseLogs(int caseId)
         {            
-            var caseLogs = _logService.GetLogsByCaseId(caseId).OrderByDescending(l=> l.LogDate).ToList();
+            var caseLogs = _logService.GetLogsByCaseId(caseId).OrderByDescending(l=> l.RegTime).ToList();
             
             var caseLogModel = new CaseLogModel { CaseId = caseId, CaseLogs = caseLogs };
 
