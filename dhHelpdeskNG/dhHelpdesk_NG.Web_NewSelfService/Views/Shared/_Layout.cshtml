@@ -230,7 +230,7 @@
                                 <p>                                    
                                     @(string.IsNullOrEmpty(logItem.Text_External)?                                
                                     Html.Raw(logItem.Text_Internal.Replace("\n", "<br />")):    
-                                    Html.Raw(logItem.Text_External).Replace("\n", "<br />"))                                    
+                                    Html.Raw(logItem.Text_External.Replace("\n", "<br />")))                                    
                                 </p>
                             </div>                            
                         }
