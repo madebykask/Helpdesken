@@ -6,17 +6,13 @@
 
         public virtual Case Case { get; set; }
 
-        public int? Number { get; set; }
+        public int? ArticleId { get; set; }
+
+        public virtual InvoiceArticleEntity Article { get; set; }
 
         public string Name { get; set; }
 
         public int? Amount { get; set; }
-
-        public int? UnitId { get; set; }
-
-        public virtual InvoiceArticleUnitEntity Unit { get; set; }
-
-        public decimal? Ppu { get; set; }
 
         public short Position { get; set; }
 

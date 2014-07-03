@@ -208,13 +208,15 @@ $(function () {
                         if (article.HasChildren()) {
                             for (var i = 0; i < article.Children.length; i++) {
                                 var child = article.Children[i].ToCaseArticle();
-                                child.Amount = units;
+                                child.Article = article.Children[i];
+                                child.Amount = units;                                
                                 th.AddCaseArticle(child);
                                 th.AddToContainer(child);
                             }
                         } else {
                             var caseArticle = article.ToCaseArticle();
                             caseArticle.Amount = units;
+                            caseArticle.Article = article;
                             th.AddCaseArticle(caseArticle);
                             th.AddToContainer(caseArticle);
                         } 
@@ -322,7 +324,7 @@ $(function () {
                     eAmount.val(amount);
                 }
                 article.Amount = amount;
-                e.find(".article-total").text(article.GetTotal() + " " + article.Unit.Name);
+                e.find(".article-total").text(article.GetTotal() + " " + article.GetUnitName());
             }
         },
 
@@ -351,6 +353,10 @@ $(function () {
 
             this.Parent = null;
             this.Children = [];
+
+            this.IsBlank = function() {
+                return this.Number == null;
+            };
 
             this.AddChild = function(child) {
                 this.Children.push(child);
@@ -386,12 +392,9 @@ $(function () {
         CaseInvoiceArticle: function() {
             this.Id = null;
             this.CaseId = null;
-            this.Number = null;
+            this.Article = null;
             this.Name = null;
             this.Amount = null;
-            this.UnitId = null;
-            this.Unit = null;
-            this.Ppu = null;
             this.Position = null;
             this.IsInvoiced = null;
 
@@ -399,11 +402,10 @@ $(function () {
                 return '{' +
                         '"Id":"' + (this.Id >= 0 ? this.Id : 0) + '", ' +
                         '"CaseId":"' + this.CaseId + '", ' +
-                        '"Number":"' + (this.Number != null ? this.Number : '') + '", ' +
+                        '"ArticleId":"' + (this.Article != null && this.Article.Id > 0 ? this.Article.Id : '') + '", ' +
+                        '"Number":"' + this.GetNumber() + '", ' +
                         '"Name":"' + this.Name + '", ' +
-                        '"Amount":"' + (this.Amount != null ? this.Amount : '') + '", ' +
-                        '"UnitId":"' + (this.UnitId != null ? this.UnitId : '') + '", ' +
-                        '"Ppu":"' + (this.Ppu != null ? this.Ppu : '') + '", ' +
+                        '"Amount":"' + (this.Amount != null && !this.IsBlank() ? this.Amount : '') + '", ' +
                         '"Position":"' + this.Position + '", ' +
                         '"IsInvoiced":' + (this.IsInvoiced ? '"true"' : '"false"') +
                     '}';
@@ -413,14 +415,9 @@ $(function () {
                 var clone = new dhHelpdesk.CaseArticles.CaseInvoiceArticle();
                 clone.Id = this.Id;
                 clone.CaseId = this.CaseId;
-                clone.Number = this.Number;
+                clone.Article = this.Article;
                 clone.Name = this.Name;
                 clone.Amount = this.Amount;
-                clone.UnitId = this.UnitId;
-                if (this.Unit != null) {
-                    clone.Unit = this.Unit.Clone();
-                }
-                clone.Ppu = this.Ppu;
                 clone.Position = this.Position;
                 clone.IsInvoiced = this.IsInvoiced;
                 return clone;
@@ -433,18 +430,36 @@ $(function () {
             };
 
             this.IsBlank = function() {
-                return this.Number == null;
+                return this.Article == null || this.Article.IsBlank();
             };
 
             this.GetTotal = function() {
-                return this.Amount * this.Ppu;
+                if (this.Article != null) {
+                    return this.Amount * this.Article.Ppu;
+                }
+                return 0;
             };
 
             this.GetUnitName = function() {
-                if (this.Unit != null) {
-                    return this.Unit.Name;
+                if (this.Article != null && 
+                    this.Article.Unit != null) {
+                    return this.Article.Unit.Name;
                 }
                 return "";
+            };
+
+            this.GetNumber = function() {
+                if (this.Article != null) {
+                    return this.Article.Number;
+                }
+                return "";
+            }
+
+            this.GetPpu = function() {
+                if (this.Article != null) {
+                    return this.Article.Ppu;
+                }
+                return 0;
             };
 
             this.Render = function () {
@@ -465,20 +480,20 @@ $(function () {
 
                 if (this.IsInvoiced) {
                     return "<tr data-id='" + this.Id + "'>" +
-                            "<td>" + (this.Number != null ? this.Number : "") + "</td>" +
+                            "<td>" + this.GetNumber() + "</td>" +
                             "<td>" + this.Name + "</td>" +
                             "<td>" + this.Amount + "</td>" +
-                            "<td>" + this.Ppu + " " + this.GetUnitName() + "</td>" +
+                            "<td>" + this.GetPpu() + " " + this.GetUnitName() + "</td>" +
                             "<td>" + this.GetTotal() + " " + this.GetUnitName() + "</td>" +
                             "<td>invoiced</td>" +
                             "</tr>";
                 }
 
                 return "<tr data-id='" + this.Id + "'>" +
-                        "<td>" + (this.Number != null ? this.Number : "") + "</td>" +
+                        "<td>" + this.GetNumber() + "</td>" +
                         "<td>" + this.Name + "</td>" +
                         "<td>" + "<input onchange='dhHelpdesk.CaseArticles.UpdateArticle($(this).parent().parent())' type='text' maxlength='5' class='article-amount input-small-important' value='" + this.Amount + "' />" + "</td>" +
-                        "<td>" + this.Ppu + " " + this.GetUnitName() + "</td>" +
+                        "<td>" + this.GetPpu() + " " + this.GetUnitName() + "</td>" +
                         "<td class='article-total'>" + this.GetTotal() + " " + this.GetUnitName() + "</td>" +
                         "<td><a href='javascript:void()' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())'>delete</a></td>" +
                         "</tr>";
@@ -509,18 +524,26 @@ $(function () {
             var caseArticle = new dhHelpdesk.CaseArticles.CaseInvoiceArticle();
             caseArticle.Id = article.Id;
             caseArticle.CaseId = article.CaseId;
-            caseArticle.Number = article.Number;
+            if (article.Article != null) {
+                caseArticle.Article = new dhHelpdesk.CaseArticles.InvoiceArticle();
+                caseArticle.Article.Id = article.Article.Id;
+                caseArticle.Article.ParentId = article.Article.ParentId;
+                caseArticle.Article.Number = article.Article.Number;
+                caseArticle.Article.UnitId = article.Article.UnitId;
+                if (article.Article.Unit != null) {
+                    var unit = new dhHelpdesk.CaseArticles.InvoiceArticleUnit();
+                    unit.Id = article.Article.Unit.Id;
+                    unit.Name = article.Article.Unit.Name;
+                    unit.CustomerId = article.Article.Unit.CustomerId;
+                    caseArticle.Article.Unit = unit;
+                }
+                caseArticle.Article.Ppu = article.Article.Ppu;
+                caseArticle.Article.ProductAreaId = article.Article.ProductAreaId;
+                caseArticle.Article.CustomerId = article.Article.CustomerId;
+            }
             caseArticle.Name = article.Name;
             caseArticle.Amount = article.Amount;
             caseArticle.UnitId = article.UnitId;
-            if (article.Unit != null) {
-                var unit = new dhHelpdesk.CaseArticles.InvoiceArticleUnit();
-                unit.Id = article.Unit.Id;
-                unit.Name = article.Unit.Name;
-                unit.CustomerId = article.Unit.CustomerId;
-                caseArticle.Unit = unit;
-            }
-            caseArticle.Ppu = article.Ppu;
             caseArticle.Position = article.Position;
             caseArticle.IsInvoiced = article.IsInvoiced;
             dhHelpdesk.CaseArticles.AddCaseArticle(caseArticle);

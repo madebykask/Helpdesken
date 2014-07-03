@@ -27,9 +27,9 @@
         public CaseInvoiceArticle[] GetCaseArticles(int caseId)
         {
             var entities = this.DbContext.CaseInvoiceArticles
-                        .Where(a => a.CaseId == caseId)
-                        .OrderBy(a => a.Position)
-                        .ToList();
+                         .Where(a => a.CaseId == caseId)
+                         .OrderBy(a => a.Position)
+                         .ToList();
 
             return entities
                     .Select(a => this.toBusinessModelMapper.Map(a))

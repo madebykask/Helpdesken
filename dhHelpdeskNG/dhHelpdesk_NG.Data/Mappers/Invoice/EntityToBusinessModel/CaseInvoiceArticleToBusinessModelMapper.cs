@@ -7,30 +7,33 @@
 
     public sealed class CaseInvoiceArticleToBusinessModelMapper : IEntityToBusinessModelMapper<CaseInvoiceArticleEntity, CaseInvoiceArticle>
     {
-        private readonly IEntityToBusinessModelMapper<InvoiceArticleUnitEntity, InvoiceArticleUnit> unitMapper;
-
         private readonly IEntityToBusinessModelMapper<Case, CaseOverview> caseMapper;
 
+        private readonly IEntityToBusinessModelMapper<InvoiceArticleEntity, InvoiceArticle> articleMapper;
+
         public CaseInvoiceArticleToBusinessModelMapper(
-            IEntityToBusinessModelMapper<InvoiceArticleUnitEntity, InvoiceArticleUnit> unitMapper, 
-            IEntityToBusinessModelMapper<Case, CaseOverview> caseMapper)
+            IEntityToBusinessModelMapper<Case, CaseOverview> caseMapper, 
+            IEntityToBusinessModelMapper<InvoiceArticleEntity, InvoiceArticle> articleMapper)
         {
-            this.unitMapper = unitMapper;
             this.caseMapper = caseMapper;
+            this.articleMapper = articleMapper;
         }
 
         public CaseInvoiceArticle Map(CaseInvoiceArticleEntity entity)
         {
+            if (entity == null)
+            {
+                return null;
+            }
+
             return new CaseInvoiceArticle(
                         entity.Id,
                         entity.CaseId,
                         this.caseMapper.Map(entity.Case),
-                        entity.Number,
+                        entity.ArticleId,
+                        this.articleMapper.Map(entity.Article),
                         entity.Name,
                         entity.Amount,
-                        entity.UnitId,
-                        this.unitMapper.Map(entity.Unit),
-                        entity.Ppu,
                         entity.Position,
                         entity.IsInvoiced);
         }

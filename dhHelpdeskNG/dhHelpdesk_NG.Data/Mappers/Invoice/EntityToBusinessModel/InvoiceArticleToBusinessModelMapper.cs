@@ -26,6 +26,11 @@
 
         public InvoiceArticle Map(InvoiceArticleEntity entity)
         {
+            if (entity == null)
+            {
+                return null;
+            }
+
             return new InvoiceArticle(
                         entity.Id,
                         entity.ParentId,

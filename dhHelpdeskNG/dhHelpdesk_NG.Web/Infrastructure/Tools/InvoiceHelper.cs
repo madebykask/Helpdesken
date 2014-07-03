@@ -20,12 +20,10 @@
                                 item.Id,
                                 item.CaseId,
                                 null,
-                                item.Number,
+                                item.ArticleId,
+                                null,
                                 item.Name,
                                 item.Amount,
-                                item.UnitId,
-                                null,
-                                item.Ppu,
                                 item.Position,
                                 item.IsInvoiced));
                 }
@@ -44,15 +42,11 @@
 
             public int CaseId { get; set; }
 
-            public int? Number { get; set; }
+            public int? ArticleId { get; set; }
 
             public string Name { get; set; }
 
             public int? Amount { get; set; }
-
-            public int? UnitId { get; set; }
-
-            public decimal? Ppu { get; set; }
 
             public short Position { get; set; }
 
