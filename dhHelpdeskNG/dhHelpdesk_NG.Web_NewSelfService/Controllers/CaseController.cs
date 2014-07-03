@@ -442,8 +442,8 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             return this.File(fileContent, "application/octet-stream", fileName);
         }
 
-        [HttpGet]
-        public RedirectToRouteResult SendMail(int caseId, string extraNote) // , string curGUID)
+        [HttpPost]
+        public RedirectToRouteResult SaveExternalMessage(int caseId, string extraNote) // , string curGUID)
         {
             IDictionary<string, string> errors;
 

@@ -212,7 +212,7 @@
                             <div>
                                 <textarea id="myNote"  style="width:450px; height:100px;"></textarea>
                             </div>
-                            <button  class="btn btn-success" onclick=" SendMyMail() ">Send</button>
+                            <button  class="btn btn-success" onclick=" SaveExternalMessage() ">Send</button>
                             <hr />
                         </div>
                         @*<div class="form-group row">
@@ -619,24 +619,43 @@
 
 <script type="text/javascript">
 
-    function SendMyMail() {        
+    function SaveExternalMessage() {        
         if ('@currentCaseId' == null || '@currentCaseId' == "")
             return;
 
         @*alert($("#myNote").val() + ' : ' + '@currentCaseId');*@
         var note = $('#myNote').val();
-        //alert(note);
+        //alert(window.location.href);
+        var currentPath = window.location.href;
         if (note == "") {
             alert('Note text is empty!');
         } else {
-            var caseId = '@currentCaseId';
+            
             //var curGuid = 'Model.MailGuid';
 
-            window.location.href = '@Url.Action("SendMail", "Case")' +
-                '?caseId=' + caseId +
-                '&extraNote=' + note;
-                //'&curGUID=' + curGuid;
-        }        
+           @* window.location.href = '@Url.Action("SaveExternalMessage", "Case")' +
+                '?caseId=' + '@currentCaseId' +
+                '&extraNote=' + encodeURIComponent(note);*@
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveExternalMessage", "Case", new { area= ""})', 
+                contentType: "application/json; charset=utf-8",
+                data: "{ caseId: '@currentCaseId', extraNote:'" +note +"'}",
+                dataType: "html",
+                success: function (result) {
+                    window.location.href = currentPath;
+                    //location.reload();
+                    // Or if you are returning something
+                    //alert('I returned... ' + result.WhateverIsReturning);
+                },
+                error: function (result) {
+                    alert('Error to save message');
+                }
+            });
+        }
+
+        
     }
 
 </script>
