@@ -78,8 +78,8 @@
         </actions>
     </status>
     <status value="70">
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents</visibleTabs>
-        <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</readOnlyTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents,#SSCUseOnly</visibleTabs>
+        <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#SSCUseOnly</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
     </status>
 </state>

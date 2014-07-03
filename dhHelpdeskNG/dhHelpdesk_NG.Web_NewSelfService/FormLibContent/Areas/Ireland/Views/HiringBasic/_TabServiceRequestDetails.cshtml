@@ -143,14 +143,14 @@
 
     $('#ContractStartDate').change(function () {
         var startDate = $('#ContractStartDate').val();
-        
+
         var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
         var dstartDate = APIGlobal.DateTime.parseDate(startDate, format);
         var nowTemp = new Date();
         var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
         noticeHiringDate.hide();
         noticeHiringDateWrong.hide();
-       
+
         if (dstartDate.valueOf() < now.valueOf())
             noticeHiringDate.show();
     });

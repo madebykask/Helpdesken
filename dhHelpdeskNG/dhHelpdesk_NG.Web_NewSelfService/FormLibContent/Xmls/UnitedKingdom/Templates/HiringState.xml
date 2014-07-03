@@ -3,7 +3,7 @@
 <state status="0">
     <status value="0">
         <visibleTabs>
-            <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</visibleTabs>
+            <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#attachments</visibleTabs>
         </visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields></readOnlyFields>
@@ -23,7 +23,7 @@
             <visibleTabs>#servicerequestdetails,#OrganisationalAssignment</visibleTabs>
             <readOnlyTabs></readOnlyTabs>
         </userGroup>
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -39,7 +39,7 @@
             <visibleTabs>#servicerequestdetails,#OrganisationalAssignment</visibleTabs>
             <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -59,7 +59,7 @@
             <visibleTabs>#servicerequestdetails,#OrganisationalAssignment</visibleTabs>
             <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents,#SSCUseOnly</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents,#SSCUseOnly,#attachments</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -74,7 +74,7 @@
             <visibleTabs>#servicerequestdetails,#OrganisationalAssignment</visibleTabs>
             <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents,#globalview,#SSCUseOnly</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents,#globalview,#SSCUseOnly,#attachments</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -88,7 +88,7 @@
             <visibleTabs>#servicerequestdetails,#OrganisationalAssignment</visibleTabs>
             <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents,#globalview,#SSCUseOnly</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents,#globalview,#SSCUseOnly,#attachments</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -101,7 +101,7 @@
             <visibleTabs>#servicerequestdetails,#OrganisationalAssignment</visibleTabs>
             <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents,#SSCUseOnly</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents,#SSCUseOnly,#attachments</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -112,8 +112,8 @@
             <visibleTabs>#servicerequestdetails,#OrganisationalAssignment</visibleTabs>
             <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents</visibleTabs>
-        <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</readOnlyTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents,#SSCUseOnly,#attachments</visibleTabs>
+        <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#SSCUseOnly</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
     </status>
 </state>   

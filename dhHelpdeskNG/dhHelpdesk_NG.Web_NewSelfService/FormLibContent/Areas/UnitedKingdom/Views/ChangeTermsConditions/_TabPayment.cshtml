@@ -14,7 +14,7 @@
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Basic pay")</h4>
                     </td>
-                    <td class="tdstrong" >
+                    <td class="tdstrong">
                         <h4>@Model.Translate("Current record")</h4>
                     </td>
                 </tr>
@@ -47,7 +47,7 @@
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Allowances")</h4>
                     </td>
-                    <td class="tdstrong" >
+                    <td class="tdstrong">
                         <h4>@Model.Translate("Current record")</h4>
                     </td>
                 </tr>
@@ -134,7 +134,7 @@
                         <a id="addAllowance" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Allowance")</a></td>
                 </tr>
 
- @*           </tbody>
+                @*           </tbody>
         </table>
     </div>
     <div class="span6">
@@ -144,7 +144,7 @@
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Deductions")</h4>
                     </td>
-                    <td class="tdstrong" >
+                    <td class="tdstrong">
                         <h4>@Model.Translate("Current record")</h4>
                     </td>
                 </tr>
@@ -232,7 +232,7 @@
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Bonus Eligibility")</h4>
                     </td>
-                    <td class="tdstrong" >
+                    <td class="tdstrong">
                         <h4>@Model.Translate("Current record")</h4>
                     </td>
                 </tr>
@@ -246,7 +246,7 @@
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Country Specifics")</h4>
                     </td>
-                    <td class="tdstrong" >
+                    <td class="tdstrong">
                         <h4>@Model.Translate("Current record")</h4>
                     </td>
                 </tr>
@@ -324,7 +324,10 @@
             if (employmentCategory == 'Temporary')
                 allowancesValidTo.value = sEnd.value;
             else
-                allowancesValidTo.value = '31.12.9999';
+                if (allowancesValidTo.value == '') {
+                    allowancesValidTo.value = '31.12.9999';
+                }
+            $('#date_AllowancesValidTo').datepicker();
         }
     });
     $('#AllowancesPaymentType').change();
@@ -342,10 +345,14 @@
             if (employmentCategory == 'Temporary')
                 allowancesValidTo2.value = sEnd.value;
             else
-                allowancesValidTo2.value = '31.12.9999';
+                if (allowancesValidTo2.value == '') {
+                    allowancesValidTo2.value = '31.12.9999';
+                }
+            $('#date_AllowancesValidTo2').datepicker();
         }
     });
     $('#AllowancesPaymentType2').change();
+
 
     $('#AllowancesPaymentType3').change(function () {
         var allowancesValidTo3 = document.getElementById('AllowancesValidTo3');
@@ -361,10 +368,14 @@
             if (employmentCategory == 'Temporary')
                 allowancesValidTo3.value = sEnd.value;
             else
-                allowancesValidTo3.value = '31.12.9999';
+                if (allowancesValidTo3.value == '') {
+                    allowancesValidTo3.value = '31.12.9999';
+                }
+            $('#date_AllowancesValidTo3').datepicker();
         }
     });
     $('#AllowancesPaymentType3').change();
+
 
     $('#DeductionsPaymentType').change(function () {
         var deductionsValidTo = document.getElementById('DeductionsValidTo');
@@ -381,10 +392,14 @@
             if (employmentCategory == 'Temporary')
                 deductionsValidTo.value = sEnd.value;
             else
-                deductionsValidTo.value = '31.12.9999';
+                if (deductionsValidTo.value == '') {
+                    deductionsValidTo.value = '31.12.9999';
+                }
+            $('#date_DeductionsValidTo').datepicker();
         }
     });
     $('#DeductionsPaymentType').change();
+
 
     $('#DeductionsPaymentType2').change(function () {
         var deductionsValidTo2 = document.getElementById('DeductionsValidTo2');
@@ -400,10 +415,15 @@
             if (employmentCategory == 'Temporary')
                 deductionsValidTo2.value = sEnd.value;
             else
-                deductionsValidTo2.value = '31.12.9999';
+                if (deductionsValidTo2.value == '') {
+                    deductionsValidTo2.value = '31.12.9999';
+                }
+            $('#date_DeductionsValidTo2').datepicker();
         }
     });
     $('#DeductionsPaymentType2').change();
+
+
 
     $('#DeductionsPaymentType3').change(function () {
         var deductionsValidTo3 = document.getElementById('DeductionsValidTo3');
@@ -419,7 +439,10 @@
             if (employmentCategory == 'Temporary')
                 deductionsValidTo3.value = sEnd.value;
             else
-                deductionsValidTo3.value = '31.12.9999';
+                if (deductionsValidTo3.value == '') {
+                    deductionsValidTo3.value = '31.12.9999';
+                }
+            $('#date_DeductionsValidTo3').datepicker();
         }
     });
     $('#DeductionsPaymentType3').change();
@@ -440,7 +463,7 @@ $('#JobTitle').change(function () {
 setOneIKEABonusLevel($('#JobTitle').val());
 
 document.getElementById('AllowancesValidFrom').value = '@Model.GetAnswer("ChangeValidFrom")';
-    document.getElementById('DeductionsValidFrom').value = '@Model.GetAnswer("ChangeValidFrom")';
+document.getElementById('DeductionsValidFrom').value = '@Model.GetAnswer("ChangeValidFrom")';
 
     for (var i = 2; i <= 3; i++) {
         var AllowancesValidFrom = "AllowancesValidFrom" + [i].toString();

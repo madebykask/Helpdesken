@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <state status="0">
     <status value="0">
-        <visibleTabs>#ServiceRequestDetails,#Absences</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Absences,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields>Department,BusinessUnit</readOnlyFields>
         <actions>
@@ -17,7 +17,7 @@
             <visibleTabs>#ServiceRequestDetails,#Absences</visibleTabs>
             <readOnlyTabs>#Absences</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Absences</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Absences,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields>Department,BusinessUnit</readOnlyFields>
         <actions>
@@ -33,7 +33,7 @@
             <visibleTabs>#ServiceRequestDetails,#Absences</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#Absences</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Absences</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Absences,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields>Department,BusinessUnit</readOnlyFields>
         <actions>
@@ -49,7 +49,7 @@
             <visibleTabs>#ServiceRequestDetails,#Absences</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#Absences</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Absences,#SscUseOnly</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Absences,#SscUseOnly,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Absences</readOnlyTabs>
         <readOnlyFields>Department,BusinessUnit</readOnlyFields>
         <actions>
@@ -66,7 +66,7 @@
             <visibleTabs>#ServiceRequestDetails,#Absences</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#Absences</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Absences,#SscUseOnly</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Absences,#SscUseOnly,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Absences</readOnlyTabs>
         <readOnlyFields>Department,BusinessUnit</readOnlyFields>
         <actions>
@@ -82,7 +82,7 @@
             <visibleTabs>#ServiceRequestDetails,#Absences</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#Absences</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Absences,#SscUseOnly</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Absences,#SscUseOnly,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Absences</readOnlyTabs>
         <readOnlyFields>Department,BusinessUnit</readOnlyFields>
     </status>
@@ -92,7 +92,7 @@
             <visibleTabs>#ServiceRequestDetails,#Absences</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#Absences</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Absences</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Absences,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Absences</readOnlyTabs>
         <readOnlyFields>Department,BusinessUnit</readOnlyFields>
     </status>

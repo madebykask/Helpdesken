@@ -42,6 +42,12 @@
                 <li class="@(Model.TabHasError("#Payment") ? "error" : "")">
                     <a href="#Payment">@Model.Translate("Payment Information")</a></li>
             }
+            @if(Model.VisibleTab("#attachments"))
+            {
+                <li class="pull-right">
+                    <a href="#attachments"><i class="icon-file icon-white"></i>&nbsp;@Model.Translate("Attachments")&nbsp;(<b id="attachmentCounter">0</b>)</a>
+                </li>
+            }
         </ul>
         <div class="content">
             <div class="row-fluid">
@@ -55,6 +61,10 @@
                     {
                         @Html.Partial("_TabPayment", Model)
                     }                     
+                    @if(Model.VisibleTab("#attachments"))
+                    {
+                        @Html.Partial("_GlobalAttachments", Model)
+                    }
                 </div>
             </div>
         </div>

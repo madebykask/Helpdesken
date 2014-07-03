@@ -15,6 +15,9 @@
                     <td class="tdstrong">@Model.Label("DeductionsType")</td>
                     <td>
                         @Model.Element("DeductionsType")
+                        <div id="notice_DeductionsType" style="display: none;" class="notice">
+                            @Model.Translate("Please attach the Change of Contributions form.")
+                        </div>
                     </td>
                 </tr>
                 <tr>
@@ -58,7 +61,11 @@
                     <tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DeductionsType" + i.ToString())</td>
                         <td>
-                            @Model.Element("DeductionsType" + i.ToString())</td>
+                            @Model.Element("DeductionsType" + i.ToString())
+                            <div id="notice_DeductionsType@(i.ToString())" style="display: none;" class="notice">
+                                @Model.Translate("The BHV allowance is calculated according to CLA article 28")
+                            </div>
+                        </td>
                     </tr>
                     <tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("PaymentType" + i.ToString())</td>
@@ -138,12 +145,12 @@
     }).data('datepicker');
     $('#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3').on("keydown keypress keyup", false);
 
-    $('#PaymentType2').change(function () {
+    $('#PaymentType').change(function () {
         var deductionsValidTo = document.getElementById('DeductionsValidTo');
 
         var input = $('#DeductionsValidTo');
         if ($(this).val() == 'One Time') {
-            deductionsValidTo2.value = "";
+            deductionsValidTo.value = "";
             $('#date_DeductionsValidTo').datepicker("destroy");
             $('#date_DeductionsValidTo').addClass("disabled");
             input.attr('readonly', 'readony');
@@ -156,7 +163,9 @@
                     return '';
                 }
             });
-            deductionsValidTo2.value = '31.12.9999';
+            if (deductionsValidTo.value == '') {
+                deductionsValidTo.value = '31.12.9999';
+            }
         }
     });
 
@@ -178,7 +187,9 @@
                     return '';
                 }
             });
-            deductionsValidTo2.value = '31.12.9999';
+            if (deductionsValidTo2.value == '') {
+                deductionsValidTo2.value = '31.12.9999';
+            }
         }
     });
 
@@ -201,8 +212,29 @@
                     return '';
                 }
             });
-            deductionsValidTo3.value = '31.12.9999';
+            if (deductionsValidTo3.value == '') {
+                deductionsValidTo3.value = '31.12.9999';
+            }
         }
+    });
+
+    function showAbsenceNotice(NoticeId, value) {
+
+        $('#' + NoticeId).hide();
+
+        if (value == 'Pension') {
+            $('#' + NoticeId).show();
+        }
+    }
+
+    $('#DeductionsType').change(function () {
+        showAbsenceNotice('notice_DeductionsType', $(this).val());
+    });
+    $('#DeductionsType2').change(function () {
+        showAbsenceNotice('notice_DeductionsType2', $(this).val());
+    });
+    $('#DeductionsType3').change(function () {
+        showAbsenceNotice('notice_DeductionsType3', $(this).val());
     });
 
 </script>

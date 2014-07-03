@@ -318,7 +318,10 @@
                 if (employmentCategory == 'Temporary')
                     allowancesValidTo.value = sEnd.value;
                 else
-                    allowancesValidTo.value = '31.12.9999';
+                    if (allowancesValidTo.value == '') {
+                        allowancesValidTo.value = '31.12.9999';
+                    }
+                $('#date_AllowancesValidTo').datepicker();
             }
         });
         $('#AllowancesPaymentType').change();
@@ -336,7 +339,10 @@
                 if (employmentCategory == 'Temporary')
                     allowancesValidTo2.value = sEnd.value;
                 else
-                    allowancesValidTo2.value = '31.12.9999';
+                    if (allowancesValidTo2.value == '') {
+                        allowancesValidTo2.value = '31.12.9999';
+                    }
+                $('#date_AllowancesValidTo2').datepicker();
             }
         });
         $('#AllowancesPaymentType2').change();
@@ -356,7 +362,10 @@
                 if (employmentCategory == 'Temporary')
                     allowancesValidTo3.value = sEnd.value;
                 else
-                    allowancesValidTo3.value = '31.12.9999';
+                    if (allowancesValidTo3.value == '') {
+                        allowancesValidTo3.value = '31.12.9999';
+                    }
+                $('#date_AllowancesValidTo3').datepicker();
             }
         });
         $('#AllowancesPaymentType3').change();
@@ -377,7 +386,10 @@
                 if (employmentCategory == 'Temporary')
                     deductionsValidTo.value = sEnd.value;
                 else
-                    deductionsValidTo.value = '31.12.9999';
+                    if (deductionsValidTo.value == '') {
+                        deductionsValidTo.value = '31.12.9999';
+                    }
+                $('#date_DeductionsValidTo').datepicker();
             }
         });
         $('#DeductionsPaymentType').change();
@@ -397,7 +409,10 @@
                 if (employmentCategory == 'Temporary')
                     deductionsValidTo2.value = sEnd.value;
                 else
-                    deductionsValidTo2.value = '31.12.9999';
+                    if (deductionsValidTo2.value == '') {
+                        deductionsValidTo2.value = '31.12.9999';
+                    }
+                $('#date_DeductionsValidTo2').datepicker();
             }
         });
         $('#DeductionsPaymentType2').change();
@@ -418,7 +433,10 @@
                 if (employmentCategory == 'Temporary')
                     deductionsValidTo3.value = sEnd.value;
                 else
-                    deductionsValidTo3.value = '31.12.9999';
+                    if (deductionsValidTo3.value == '') {
+                        deductionsValidTo3.value = '31.12.9999';
+                    }
+                $('#date_DeductionsValidTo3').datepicker();
             }
         });
         $('#DeductionsPaymentType3').change();
@@ -426,11 +444,11 @@
         function setOneIKEABonusLevel(value) {
             if (!value) {
                 $('#OneIKEABonusLevel option[value="' + '@Level' + '"]').prop('selected', true);
-            }
-            else {
-                $('#OneIKEABonusLevel option:not([value])').prop('selected', true);
-            }
-        };
+    }
+    else {
+        $('#OneIKEABonusLevel option:not([value])').prop('selected', true);
+    }
+};
 
         $('#JobTitle').change(function () {
             setOneIKEABonusLevel($(this).val());

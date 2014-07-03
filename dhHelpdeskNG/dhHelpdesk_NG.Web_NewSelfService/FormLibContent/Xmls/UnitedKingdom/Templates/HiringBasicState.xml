@@ -52,8 +52,8 @@
         </actions>
     </status>
     <status value="70">
-        <visibleTabs>#servicerequestdetails,#personal</visibleTabs>
-        <readOnlyTabs>#servicerequestdetails,#personal</readOnlyTabs>
+        <visibleTabs>#servicerequestdetails,#personal,#SSCUseOnly</visibleTabs>
+        <readOnlyTabs>#servicerequestdetails,#personal,#SSCUseOnly</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
     </status>
 </state>    

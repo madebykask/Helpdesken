@@ -51,6 +51,13 @@
                 <li class="@(Model.TabHasError("#SSCUseOnly") ? "error" : "")">
                     <a href="#SSCUseOnly">@Model.Translate("SSC use only")</a></li>
             }
+            @if (Model.VisibleTab("#attachments"))
+            {
+                <li class="pull-right">
+                    <a href="#attachments"><i class="icon-file icon-white"></i>&nbsp;@Model.Translate("Attachments")&nbsp;(<b id="attachmentCounter">0</b>)</a>
+                </li>
+            }
+            
 @* @if(Model.VisibleTab("#documents"))
             {
                 <li class="@(Model.TabHasError("#documents") ? "error" : "")">
@@ -69,6 +76,10 @@
                     @Html.Partial("_TabOrganisationalAssignment", Model)
                     @Html.Partial("_TabPayment", Model)
                     @Html.Partial("_TabSsc", Model)
+                    @if(Model.VisibleTab("#attachments"))
+                    {
+                        @Html.Partial("_GlobalAttachments", Model)
+                    }
                 </div>
             </div>
         </div>

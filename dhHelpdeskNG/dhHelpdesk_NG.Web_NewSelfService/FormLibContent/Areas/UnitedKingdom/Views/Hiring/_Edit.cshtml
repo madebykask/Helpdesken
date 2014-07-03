@@ -44,13 +44,16 @@
                 <li class="@(Model.TabHasError("#globalview") ? "error" : "")">
                     <a href="#globalview" data-url="@Url.Action("GetGlobalViewFields", new { caseId = Model.Contract.Id, formGuid = Model.FormGuid })">@Model.Translate("Global View")</a></li>
             }
-
-            
-
             @if (Model.VisibleTab("#SSCUseOnly"))
             {
                 <li class="@(Model.TabHasError("#SSCUseOnly") ? "error" : "")">
                     <a href="#SSCUseOnly">@Model.Translate("SSC Use Only")</a></li>
+            }
+            @if(Model.VisibleTab("#attachments"))
+            {
+                <li class="pull-right">
+                    <a href="#attachments"><i class="icon-file icon-white"></i>&nbsp;@Model.Translate("Attachments")&nbsp;(<b id="attachmentCounter">@(Model.Contract.CaseFiles != null ? Model.Contract.CaseFiles.Count() : 0)</b>)</a>
+                </li>
             }
         </ul>
         <div class="content">
@@ -83,6 +86,10 @@
                     @if(Model.VisibleTab("#globalview"))
                     {
                         @Html.Partial("_TabGlobalView", Model)
+                    }
+                    @if(Model.VisibleTab("#attachments"))
+                    {
+                        @Html.Partial("_GlobalAttachments", Model)
                     }
                 </div>
             </div>

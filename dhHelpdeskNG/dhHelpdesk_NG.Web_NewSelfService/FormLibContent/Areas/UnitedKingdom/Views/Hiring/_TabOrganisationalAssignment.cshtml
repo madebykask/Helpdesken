@@ -164,12 +164,19 @@
                 $('#ContractEndDate').prop('disabled', true);
             }
             else {
+                $('#date_ContractEndDate').datepicker();
                 $('#ContractEndDate').prop('disabled', false);
                 $("#ContractEndDate").removeClass("disabled");
             }
         }
 
-        setEmployeeBehavior($('#EmploymentCategory').val());
+        if ($('EmploymentCategory').val() == '@EmployeeCategory') {
+            $('#date_ContractEndDate').datepicker("destroy");
+            $('#date_ContractEndDate').addClass("disabled");
+            $('#ContractEndDate').prop('disabled', true);
+        }
+
+        // setEmployeeBehavior($('#EmploymentCategory').val());
         setProbationEndDate($('#ProbationPeriod').val());
 
         $('#Company').change(function () {
@@ -202,7 +209,7 @@
             else {
                 $('#ContractType option:not([value])').prop('selected', true);
             }
-        });               
+        });
 
         $('#ProbationPeriod').change(function () {
             setProbationEndDate($(this).val());

@@ -4860,7 +4860,7 @@
           <option value="Work Permit">Work Permit</option>
         </options>
       </element>
-      <element type="typeahead-simple" source="1" name="CountryOfIssue" label="Country of issue" default="United Kingdom">
+      <element type="typeahead-simple" source="1" name="CountryOfIssue" label="Country of issue">
         <options>
           <option value=""></option>
           <option value="﻿Unknown">﻿Unknown</option>

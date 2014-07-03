@@ -2,7 +2,7 @@
 <state status="0">
   <!-- HRU -->
   <status value="0">
-    <visibleTabs>#ServiceRequestDetails,#Personal</visibleTabs>
+    <visibleTabs>#ServiceRequestDetails,#Personal,#attachments</visibleTabs>
     <readOnlyTabs></readOnlyTabs>
     <readOnlyFields>BusinessUnit,Department</readOnlyFields>
     <actions>
@@ -14,7 +14,7 @@
   </status>
   <!-- HRU -->
   <status value="20">
-    <visibleTabs>#ServiceRequestDetails,#Personal</visibleTabs>
+    <visibleTabs>#ServiceRequestDetails,#Personal,#attachments</visibleTabs>
     <readOnlyTabs></readOnlyTabs>
     <readOnlyFields>BusinessUnit,Department</readOnlyFields>
     <actions>
@@ -26,7 +26,7 @@
   </status>
   <!-- SSC -->
   <status value="30">
-    <visibleTabs>#ServiceRequestDetails,#Personal</visibleTabs>
+    <visibleTabs>#ServiceRequestDetails,#Personal,#attachments</visibleTabs>
     <readOnlyTabs>#ServiceRequestDetails,#Personal</readOnlyTabs>
     <readOnlyFields>BusinessUnit,Department</readOnlyFields>
     <actions>
@@ -37,7 +37,7 @@
   </status>
   <!-- SSC -->
   <status value="40">
-    <visibleTabs>#ServiceRequestDetails,#Personal,#globalview</visibleTabs>
+    <visibleTabs>#ServiceRequestDetails,#Personal,#globalview,#attachments</visibleTabs>
     <readOnlyTabs>#ServiceRequestDetails,#Personal</readOnlyTabs>
     <readOnlyFields>BusinessUnit,Department</readOnlyFields>
     <actions>
@@ -46,12 +46,12 @@
     </actions>
   </status>
   <status value="60">
-    <visibleTabs>#ServiceRequestDetails,#Personal,#globalview</visibleTabs>
+    <visibleTabs>#ServiceRequestDetails,#Personal,#globalview,#attachments</visibleTabs>
     <readOnlyTabs>#ServiceRequestDetails,#Personal,#globalview</readOnlyTabs>
     <readOnlyFields>BusinessUnit,Department</readOnlyFields>
   </status>
   <status value="70">
-    <visibleTabs>#ServiceRequestDetails,#Personal,#globalview</visibleTabs>
+    <visibleTabs>#ServiceRequestDetails,#Personal,#globalview,#attachments</visibleTabs>
     <readOnlyTabs>#ServiceRequestDetails,#Personal,#globalview</readOnlyTabs>
     <readOnlyFields>BusinessUnit,Department</readOnlyFields>
   </status>

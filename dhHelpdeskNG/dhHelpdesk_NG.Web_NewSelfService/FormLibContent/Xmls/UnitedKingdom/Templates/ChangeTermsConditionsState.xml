@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <state status="0">
     <status value="0">
-        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields>BusinessUnit,Department</readOnlyFields>
         <actions>
@@ -20,7 +20,7 @@
             <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
             <readOnlyTabs>#OrganisationalAssignment</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields>BusinessUnit,Department</readOnlyFields>
         <actions>
@@ -36,7 +36,7 @@
             <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields>BusinessUnit,Department</readOnlyFields>
         <actions>
@@ -53,7 +53,7 @@
             <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#SSCUseOnly</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#SSCUseOnly,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</readOnlyTabs>
         <readOnlyFields>BusinessUnit,Department</readOnlyFields>
         <actions>
@@ -68,7 +68,7 @@
             <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#globalview,#SSCUseOnly</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#globalview,#SSCUseOnly,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</readOnlyTabs>
         <readOnlyFields>BusinessUnit,Department</readOnlyFields>
         <actions>
@@ -82,7 +82,7 @@
             <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#globalview,#SSCUseOnly</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#globalview,#SSCUseOnly,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</readOnlyTabs>
         <readOnlyFields>BusinessUnit,Department</readOnlyFields>
         <actions>
@@ -95,7 +95,7 @@
             <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#globalview,#SSCUseOnly</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#globalview,#SSCUseOnly,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</readOnlyTabs>
         <readOnlyFields>BusinessUnit,Department</readOnlyFields>
         <actions>
@@ -106,8 +106,8 @@
             <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#SSCUseOnly</visibleTabs>
-        <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</readOnlyTabs>
+        <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#SSCUseOnly,#attachments</visibleTabs>
+        <readOnlyTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#SSCUseOnly</readOnlyTabs>
         <readOnlyFields>BusinessUnit,Department</readOnlyFields>
     </status>
 </state>

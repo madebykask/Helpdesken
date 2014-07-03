@@ -4215,7 +4215,7 @@
       <!--Bank Account Details-->
       
       <element type="text" name="Payee" label="Payee" mandatory="1"></element>
-      <element type="typeahead-simple" source="1" name="BankCountry" label="Bank Country" mandatory="1">
+      <element type="typeahead-simple" source="1" name="BankCountry" label="Bank Country" mandatory="1" default="Ireland">
         <options>
           <option value=""></option>
           <option value="﻿Unknown">﻿Unknown</option>
@@ -4543,7 +4543,7 @@
           <option value="Vietnamese">Vietnamese</option>
         </options>
       </element>
-      <element type="typeahead-simple" source="1" name="Nationality" label="Nationality" default="British" mandatory="1">
+      <element type="typeahead-simple" source="1" name="Nationality" label="Nationality" default="Irish" mandatory="1">
         <options>
           <option value=""></option>
           <option value="﻿Unknown">﻿Unknown</option>

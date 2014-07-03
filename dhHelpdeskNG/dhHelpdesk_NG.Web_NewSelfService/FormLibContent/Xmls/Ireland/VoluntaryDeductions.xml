@@ -64,11 +64,11 @@
         </options>
       </element>
       <element type="text" name="DeductionsAmountUnits" label="Amount/Units">
-        <mandatoryIf name="DeductionsType">Pension</mandatoryIf>
+        <mandatoryIf name="DeductionsType">﻿760A - Charity Deduction</mandatoryIf>
         <regex inherit="unsignednum" message="" pattern=""></regex>
       </element>
       <element type="select" name="DeductionsNetGross" label="Net/Gross">
-        <mandatoryIf name="DeductionsType">Pension</mandatoryIf>
+        <mandatoryIf name="DeductionsType">﻿760A - Charity Deduction</mandatoryIf>
         <options>
           <option value=""></option>
           <option value="Net">Net</option>
@@ -103,11 +103,11 @@
         </options>
       </element>
       <element type="text" name="DeductionsAmountUnits2" label="Amount/Units" >
-        <mandatoryIf name="DeductionsType2">Pension</mandatoryIf>
+        <mandatoryIf name="DeductionsType2">﻿760A - Charity Deduction</mandatoryIf>
         <regex inherit="unsignednum" message="" pattern=""></regex>
       </element>
       <element type="select" name="DeductionsNetGross2" label="Net/Gross" >
-        <mandatoryIf name="DeductionsType2">Pension</mandatoryIf>
+        <mandatoryIf name="DeductionsType2">﻿760A - Charity Deduction</mandatoryIf>
         <options>
           <option value=""></option>
           <option value="Net">Net</option>
@@ -142,11 +142,11 @@
         </options>
       </element>
       <element type="text" name="DeductionsAmountUnits3" label="Amount/Units" >
-        <mandatoryIf name="DeductionsType2">Pension</mandatoryIf>
+        <mandatoryIf name="DeductionsType2">﻿760A - Charity Deduction</mandatoryIf>
         <regex inherit="unsignednum" message="" pattern=""></regex>
       </element>
       <element type="select" name="DeductionsNetGross3" label="Net/Gross" >
-        <mandatoryIf name="DeductionsType2">Pension</mandatoryIf>
+        <mandatoryIf name="DeductionsType2">﻿760A - Charity Deduction</mandatoryIf>
         <options>
           <option value=""></option>
           <option value="Net">Net</option>

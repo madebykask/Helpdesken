@@ -601,6 +601,7 @@
     <Content Include="FormLibContent\Assets\js\ect.js" />
     <Content Include="FormLibContent\Assets\js\holder.js" />
     <Content Include="FormLibContent\Assets\js\html5shiv.js" />
+    <Content Include="FormLibContent\Assets\js\integration.js" />
     <Content Include="FormLibContent\Assets\js\jquery-1.11.0.js" />
     <Content Include="FormLibContent\Assets\js\jquery.js" />
     <Content Include="FormLibContent\Assets\js\jquery.loadTemplate-1.2.5.min.js" />

@@ -26,7 +26,7 @@
           <option value="External">External</option>
         </options>
       </element>
-      <element type="date" name="ContractStartDate" label="Contract Start Date" format="dd.MM.yyyy" future="1">
+      <element type="date" name="ContractStartDate" label="Contract Start Date" format="dd.MM.yyyy">
         <mandatoryIf name="EmploymentCategory">Fixed Term,Temporary</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
@@ -3011,7 +3011,7 @@
       </element>
       <element type="date" name="ContractEndDate" label="Contract End Date" format="dd.MM.yyyy">
         <mandatoryIf name="EmploymentCategory">Fixed Term,Temporary</mandatoryIf>
-        <lessThanOrEqual name="ContractStartDate"></lessThanOrEqual>
+        <laterThanOrEqual name="ContractStartDate"></laterThanOrEqual>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="text" name="ContractedHours" label="Contracted Hours" mandatory="1"></element>

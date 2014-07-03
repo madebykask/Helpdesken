@@ -26,7 +26,7 @@
           <option value="External">External</option>
         </options>
       </element>
-      <element type="date" name="ContractStartDate" mandatory="1" label="Contract Start Date" format="dd.MM.yyyy" future="1">
+      <element type="date" name="ContractStartDate" mandatory="1" label="Contract Start Date" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="date" name="InductionDate" mandatory="1" label="Induction Date" format="dd.MM.yyyy">

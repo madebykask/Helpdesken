@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <state status="0">
     <status value="0">
-        <visibleTabs>#ServiceRequestDetails</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -16,7 +16,7 @@
             <visibleTabs>#ServiceRequestDetails</visibleTabs>
             <readOnlyTabs></readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -32,7 +32,7 @@
             <visibleTabs>#ServiceRequestDetails</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -48,7 +48,7 @@
             <visibleTabs>#ServiceRequestDetails</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -61,7 +61,7 @@
             <visibleTabs>#ServiceRequestDetails</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -72,7 +72,7 @@
             <visibleTabs>#ServiceRequestDetails</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
     </status>

@@ -52,7 +52,7 @@
         </options>
       </element>-->
       <element type="text" name="PermanentAddressLine1" label="Address line 1" mandatory="1"></element>
-      <element type="text" name="PermanentAddressLine2" label="Address line 2" mandatory="1"></element>
+      <element type="text" name="PermanentAddressLine2" label="Address line 2"></element>
       <element type="text" name="PermanentAddressLine3" label="Address line 3"></element>
       <element type="text" name="PermanentPostalCode" label="Postal code" mandatory="1"></element>
       <element type="text" name="PermanentCity" label="City" mandatory="1"></element>

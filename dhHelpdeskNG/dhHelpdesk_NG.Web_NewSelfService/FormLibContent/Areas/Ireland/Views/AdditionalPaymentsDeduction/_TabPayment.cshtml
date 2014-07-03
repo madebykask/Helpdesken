@@ -251,7 +251,9 @@
             input.removeAttr('readonly', 'readonly');
             $('#date_AllowancesValidTo').not(".disabled").datepicker();
             $('#date_AllowancesValidTo').removeClass("disabled");
-            allowancesValidTo.value = '31.12.9999';
+            if (allowancesValidTo.value == '') {
+                allowancesValidTo.value = '31.12.9999';
+            }
         }
     });
     $('#AllowancesPaymentType').change();
@@ -269,7 +271,9 @@
             input.removeAttr('readonly', 'readonly');
             $('#date_AllowancesValidTo2').not(".disabled").datepicker();
             $('#date_AllowancesValidTo2').removeClass("disabled");
-            allowancesValidTo2.value = '31.12.9999';
+            if (allowancesValidTo2.value == '') {
+                allowancesValidTo2.value = '31.12.9999';
+            }
         }
     });
     $('#AllowancesPaymentType2').change();
@@ -288,7 +292,9 @@
             input.removeAttr('readonly', 'readonly');
             $('#date_AllowancesValidTo3').not(".disabled").datepicker();
             $('#date_AllowancesValidTo3').removeClass("disabled");
-            allowancesValidTo3.value = '31.12.9999';
+            if (allowancesValidTo3.value == '') {
+                allowancesValidTo3.value = '31.12.9999';
+            }
         }
     });
     $('#AllowancesPaymentType3').change();
@@ -308,7 +314,9 @@
             input.removeAttr('readonly', 'readonly');
             $('#date_DeductionsValidTo').not(".disabled").datepicker();
             $('#date_DeductionsValidTo').removeClass("disabled");
-            deductionsValidTo.value = '31.12.9999';
+            if (deductionsValidTo.value == '') {
+                deductionsValidTo.value = '31.12.9999';
+            }
         }
     });
     $('#DeductionsPaymentType').change();
@@ -328,7 +336,9 @@
             input.removeAttr('readonly', 'readonly');
             $('#date_DeductionsValidTo2').not(".disabled").datepicker();
             $('#date_DeductionsValidTo2').removeClass("disabled");
-            deductionsValidTo2.value = '31.12.9999';
+            if (deductionsValidTo2.value == '') {
+                deductionsValidTo2.value = '31.12.9999';
+            }
         }
     });
     $('#DeductionsPaymentType2').change();
@@ -347,7 +357,9 @@
             input.removeAttr('readonly', 'readonly');
             $('#date_DeductionsValidTo3').not(".disabled").datepicker();
             $('#date_DeductionsValidTo3').removeClass("disabled");
-            deductionsValidTo3.value = '31.12.9999';
+            if (deductionsValidTo3.value == '') {
+                deductionsValidTo3.value = '31.12.9999';
+            }
         }
     });
     $('#DeductionsPaymentType3').change();

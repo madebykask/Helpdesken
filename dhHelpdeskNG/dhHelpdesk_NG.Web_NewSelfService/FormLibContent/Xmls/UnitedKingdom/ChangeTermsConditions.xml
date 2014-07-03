@@ -3503,7 +3503,8 @@
       <element type="select" name="AllowancesPaymentType" label="Payment Type">
         <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
         <options>
-          <option value="﻿One Time">﻿One Time</option>
+          <option value=""></option>
+          <option value="One Time">One Time</option>
           <option value="Recurring">Recurring</option>
         </options>
       </element>
@@ -3612,7 +3613,8 @@
       <element type="select" name="AllowancesPaymentType2" label="Payment Type">
         <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
         <options>
-          <option value="﻿One Time">﻿One Time</option>
+          <option value=""></option>
+          <option value="One Time">One Time</option>
           <option value="Recurring">Recurring</option>
         </options>
       </element>
@@ -3722,7 +3724,8 @@
       <element type="select" name="AllowancesPaymentType3" label="Payment Type">
         <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
         <options>
-          <option value="﻿One Time">﻿One Time</option>
+          <option value=""></option>
+          <option value="One Time">One Time</option>
           <option value="Recurring">Recurring</option>
         </options>
       </element>
@@ -3770,7 +3773,7 @@
         <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>
-          <option value="﻿One Time">﻿One Time</option>
+          <option value="One Time">One Time</option>
           <option value="Recurring">Recurring</option>
         </options>
       </element>
@@ -3816,7 +3819,7 @@
         <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>
-          <option value="﻿One Time">﻿One Time</option>
+          <option value="One Time">One Time</option>
           <option value="Recurring">Recurring</option>
         </options>
       </element>
@@ -3862,7 +3865,7 @@
         <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>
-          <option value="﻿One Time">﻿One Time</option>
+          <option value="One Time">One Time</option>
           <option value="Recurring">Recurring</option>
         </options>
       </element>

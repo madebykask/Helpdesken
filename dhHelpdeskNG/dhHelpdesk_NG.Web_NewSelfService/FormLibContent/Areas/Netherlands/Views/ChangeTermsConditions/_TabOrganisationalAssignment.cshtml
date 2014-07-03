@@ -3,6 +3,9 @@
 @using ECT.FormLib.Models;
 
 @{
+    
+    //Layout = null;
+    //Model.Language = "nl";
     var fillOldVal = TempData["oldValues"];
     var newfill = (List<KeyValuePair<string, string>>)fillOldVal;
 }
@@ -96,8 +99,8 @@
                     <td class="tdstrong">@Model.Label("LocalJobTitle")</td>
                     <td>@Model.Element("LocalJobTitle")</td>
                     <td>
-                        <input type="hidden" class="oldValue"  id="OLD_LocalJobTitle" name="OLD_LocalJobTitle" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_LocalJobTitle").Select(x => x.Value).FirstOrDefault() : "")"/>
-                        <em class="muted" id="emOLD_LocalJobTitle">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_LocalJobTitle").Select(x => x.Value).FirstOrDefault() : "")</em>
+                        @*<input type="hidden" class="oldValue"  id="OLD_LocalJobTitle" name="OLD_LocalJobTitle" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_LocalJobTitle").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_LocalJobTitle">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_LocalJobTitle").Select(x => x.Value).FirstOrDefault() : "")</em>*@
                     </td>
                 </tr>
                 <tr>
@@ -218,7 +221,21 @@
 
 </div>
 
-<script>
+<script>   
+
+    //$('#JobTitle').change(function () {
+
+    //    var relatedvalue = $('option:selected', this).attr('relatedid');         
+    //    $('#LocalJobTitle').val(relatedvalue);
+    
+    //});
+
+    //$('#LocalJobTitle').change(function () {
+
+    //    var relatedvalue = $('option:selected', this).attr('relatedid');
+    //    $('#JobTitle').val(relatedvalue);
+
+    //});
 
     function selectIndexChangeProbationPeriod() {
         

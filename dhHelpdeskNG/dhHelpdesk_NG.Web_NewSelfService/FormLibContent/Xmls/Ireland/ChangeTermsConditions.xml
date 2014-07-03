@@ -580,7 +580,7 @@
           <option value="Zimbabwe">Zimbabwe</option>
         </options>
       </element>
-      <element name="Company" type="typeahead-simple" label="Company" default="IKEA Ireland Ltd." mandatory="1" source="1">
+      <element name="Company" type="select" label="Company" default="IKEA Ireland Ltd." mandatory="1">
         <options>
           <option value=""></option>
           <option value="﻿IKEA Ireland Ltd.">﻿IKEA Ireland Ltd.</option>
@@ -907,10 +907,6 @@
           <option value=""></option>
           <option value="﻿Part Time">﻿Part Time</option>
           <option value="Full Time">Full Time</option>
-          <option value="Zero Hours">Zero Hours</option>
-          <option value="Compressed">Compressed</option>
-          <option value="Annualised">Annualised</option>
-          <option value="Term Time">Term Time</option>
         </options>
       </element>
       <element name="ProbationPeriod" type="select" label="Probation period" mandatory="1" default="No">
@@ -1094,7 +1090,8 @@
       <element type="select" name="AllowancesPaymentType" label="Payment Type">
         <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
         <options>
-          <option value="﻿One Time">﻿One Time</option>
+          <option value=""></option>
+          <option value="One Time">One Time</option>
           <option value="Recurring">Recurring</option>
         </options>
       </element>
@@ -1114,7 +1111,7 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="date" name="AllowancesValidTo" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
-        <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
+        <mandatoryIf name="AllowancesType">Recurring</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
 

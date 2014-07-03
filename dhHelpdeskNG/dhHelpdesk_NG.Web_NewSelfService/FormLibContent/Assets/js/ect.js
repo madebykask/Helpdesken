@@ -1,9 +1,9 @@
-﻿
+﻿Selection
 
 // Globals
 var isEmbed = window != window.parent;
 var site = site || {};
-site.baseUrl = "";
+site.baseUrl = "/ect";
 var disableTypeahead = 1;
 // stolen from boostrap-datepicker.js DL...
 // Extend for general functions
@@ -171,6 +171,8 @@ var globalTypeAheadOptions = {
                         , companyId: item.CompanyId
                         , unit: item.Unit
                         , unitId: item.UnitId
+                        , department: item.Department
+                        , _function: item.Function
                         , caseNumber: item.CaseNumber
                         , regTime: item.RegTime
                         , email: item.Email
@@ -231,12 +233,9 @@ var globalTypeAheadOptions = {
                 success: function (result) {
                     var resultList = jQuery.map(result, function (extendeditem) {
                         var type = $('#' + extendeditem.FormFieldName).attr('type');
-                        if (type != 'text') {
-                            //$('#' + extendeditem.FormFieldName).append($('<option value="' + extendeditem.FormFieldValue +
-                            //    '">' + extendeditem.FormFieldValue + '</option>'));
+                        if (type != 'text') {                         
                             $('#' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
                         }
-
                         $('input[name="' + extendeditem.FormFieldName + '"]').val(extendeditem.FormFieldValue);
                         $('#emOLD_' + extendeditem.FormFieldName).text(extendeditem.FormFieldValue);
                         $('#OLD_' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
@@ -249,9 +248,9 @@ var globalTypeAheadOptions = {
         $('#emOLD_BusinessUnit').text(item.unit);
         $('#OLD_BusinessUnit').val(item.unit);
 
-        $('input[name="Department"]').val(item.company);
-        $('#emOLD_Department').text(item.company);
-        $('#OLD_Department').val(item.company);
+        $('input[name="Department"]').val(item.department);
+        $('#emOLD_Department').text(item.department);
+        $('#OLD_Department').val(item.department);
 
         $('input[name="FirstName"]').val(item.firstname);
         $('#emOLD_FirstName').text(item.firstname);
@@ -278,7 +277,7 @@ var globalTypeAheadOptions = {
 var globalEmailTypeAheadOptions = {
     items: 10,
     minLength: 3,
-    source: function (query, process) {
+    source: function (query, process) {        
         return $.ajax({
             url: site.baseUrl + '/search/globalview',
             type: 'post',
@@ -296,6 +295,8 @@ var globalEmailTypeAheadOptions = {
                         , companyId: item.CompanyId
                         , unit: item.Unit
                         , unitId: item.UnitId
+                        , department: item.Department
+                        , _function: item.Function
                         , caseNumber: item.CaseNumber
                         , regTime: item.RegTime
                         , email: item.Email
@@ -355,12 +356,9 @@ var globalEmailTypeAheadOptions = {
                 success: function (result) {
                     var resultList = jQuery.map(result, function (extendeditem) {
                         var type = $('#' + extendeditem.FormFieldName).attr('type');
-                        if (type != 'text') {
-                            //$('#' + extendeditem.FormFieldName).append($('<option value="' + extendeditem.FormFieldValue +
-                            //    '">' + extendeditem.FormFieldValue + '</option>'));
+                        if (type != 'text') {                           
                             $('#' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
                         }
-
                         $('input[name="' + extendeditem.FormFieldName + '"]').val(extendeditem.FormFieldValue);
                         $('#emOLD_' + extendeditem.FormFieldName).text(extendeditem.FormFieldValue);
                         $('#OLD_' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
@@ -369,15 +367,15 @@ var globalEmailTypeAheadOptions = {
             });
         }
 
-        $('input[name="Co-WorkerGlobalviewID"]').val(item.num);
+        $('input[name="Co-WorkerGlobalviewID"]').val(item.num);        
 
         $('input[name="BusinessUnit"]').val(item.unit);
         $('#emOLD_BusinessUnit').text(item.unit);
         $('#OLD_BusinessUnit').val(item.unit);
 
-        $('input[name="Department"]').val(item.company);
-        $('#emOLD_Department').text(item.company);
-        $('#OLD_Department').val(item.company);
+        $('input[name="Department"]').val(item.department);
+        $('#emOLD_Department').text(item.department);
+        $('#OLD_Department').val(item.department);
 
         $('input[name="FirstName"]').val(item.firstname);
         $('#emOLD_FirstName').text(item.firstname);
@@ -404,6 +402,10 @@ var globalNameTypeAheadOptions = {
     items: 10,
     minLength: 3,
     source: function (query, process) {
+        if (disableTypeahead == 0) {
+            disableTypeahead == 1;
+            return;
+        }
         return $.ajax({
             url: site.baseUrl + '/search/globalview',
             type: 'post',
@@ -421,6 +423,8 @@ var globalNameTypeAheadOptions = {
                         , companyId: item.CompanyId
                         , unit: item.Unit
                         , unitId: item.UnitId
+                        , department: item.Department
+                        , _function: item.Function
                         , caseNumber: item.CaseNumber
                         , regTime: item.RegTime
                         , email: item.Email
@@ -480,12 +484,9 @@ var globalNameTypeAheadOptions = {
                 success: function (result) {
                     var resultList = jQuery.map(result, function (extendeditem) {
                         var type = $('#' + extendeditem.FormFieldName).attr('type');
-                        if (type != 'text') {
-                            //$('#' + extendeditem.FormFieldName).append($('<option value="' + extendeditem.FormFieldValue +
-                            //    '">' + extendeditem.FormFieldValue + '</option>'));
+                        if (type != 'text') {                           
                             $('#' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
                         }
-
                         $('input[name="' + extendeditem.FormFieldName + '"]').val(extendeditem.FormFieldValue);
                         $('#emOLD_' + extendeditem.FormFieldName).text(extendeditem.FormFieldValue);
                         $('#OLD_' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
@@ -495,14 +496,15 @@ var globalNameTypeAheadOptions = {
         }
 
         $('input[name="Co-WorkerGlobalviewID"]').val(item.num);
+        $('input[name="Co-WorkerID"]').val(item.num);
         
         $('input[name="BusinessUnit"]').val(item.unit);
         $('#emOLD_BusinessUnit').text(item.unit);
         $('#OLD_BusinessUnit').val(item.unit);
 
-        $('input[name="Department"]').val(item.company);
-        $('#emOLD_Department').text(item.company);
-        $('#OLD_Department').val(item.company);
+        $('input[name="Department"]').val(item.department);
+        $('#emOLD_Department').text(item.department);
+        $('#OLD_Department').val(item.department);
 
         $('input[name="FirstName"]').val(item.firstname);
         $('#emOLD_FirstName').text(item.firstname);
@@ -530,6 +532,10 @@ var globalLastNameTypeAheadOptions = {
     items: 10,
     minLength: 3,
     source: function (query, process) {
+        if (disableTypeahead == 0) {
+            disableTypeahead == 1;
+            return;
+        }
         return $.ajax({
             url: site.baseUrl + '/search/globalview',
             type: 'post',
@@ -547,6 +553,8 @@ var globalLastNameTypeAheadOptions = {
                         , companyId: item.CompanyId
                         , unit: item.Unit
                         , unitId: item.UnitId
+                        , department: item.Department
+                        , _function: item.Function
                         , caseNumber: item.CaseNumber
                         , regTime: item.RegTime
                         , email: item.Email
@@ -606,12 +614,9 @@ var globalLastNameTypeAheadOptions = {
                 success: function (result) {
                     var resultList = jQuery.map(result, function (extendeditem) {
                         var type = $('#' + extendeditem.FormFieldName).attr('type');
-                        if (type != 'text') {
-                            //$('#' + extendeditem.FormFieldName).append($('<option value="' + extendeditem.FormFieldValue +
-                            //    '">' + extendeditem.FormFieldValue + '</option>'));
+                        if (type != 'text') {                           
                             $('#' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
                         }
-
                         $('input[name="' + extendeditem.FormFieldName + '"]').val(extendeditem.FormFieldValue);
                         $('#emOLD_' + extendeditem.FormFieldName).text(extendeditem.FormFieldValue);
                         $('#OLD_' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
@@ -621,14 +626,15 @@ var globalLastNameTypeAheadOptions = {
         }
 
         $('input[name="Co-WorkerGlobalviewID"]').val(item.num);
+        $('input[name="Co-WorkerID"]').val(item.num);
 
         $('input[name="BusinessUnit"]').val(item.unit);
         $('#emOLD_BusinessUnit').text(item.unit);
         $('#OLD_BusinessUnit').val(item.unit);
 
-        $('input[name="Department"]').val(item.company);
-        $('#emOLD_Department').text(item.company);
-        $('#OLD_Department').val(item.company);
+        $('input[name="Department"]').val(item.department);
+        $('#emOLD_Department').text(item.department);
+        $('#OLD_Department').val(item.department);
 
         $('input[name="FirstName"]').val(item.firstname);
         $('#emOLD_FirstName').text(item.firstname);
@@ -650,8 +656,6 @@ var globalLastNameTypeAheadOptions = {
         return item.lastname;
     }
 };
-
-
 
 var typeAheadOptions = {
     items: 10,
@@ -992,7 +996,6 @@ var familyMembers = function () {
 
 
 var employeeDocuments = function () {
-
     var emptyElements = function () {
         return $('[class^=employeeDocument]')
                                     .filter(function () { return $(this).css('display') !== 'none'; })
@@ -1034,7 +1037,7 @@ var employeeDocuments = function () {
         counter++;
         $('#EmployeeDocuments').val(counter);
         if (counter <= max)
-            $('[class=employeeDocument' + counter + ']').show();
+            $('[class*=employeeDocument' + counter + ']').show();
         $('#addEmployeeDocumentTr').hide();
     });
 };
@@ -1083,7 +1086,7 @@ var dependantFamilyMembers = function () {
 
         $('#DependantFamilyMembers').val(counter);
         if (counter <= max)
-            $('[class=dependantFamilyMember' + counter + ']').show();
+            $('[class*=dependantFamilyMember' + counter + ']').show();
         $('#addDependantFamilyMembersTr').hide();
     });
 };
@@ -1132,7 +1135,7 @@ var dependantsDocuments = function () {
 
         $('#DependantsDocuments').val(counter);
         if (counter <= max)
-            $('[class=globalMobilityDependantDocument' + counter + ']').show();
+            $('[class*=globalMobilityDependantDocument' + counter + ']').show();
         $('#addGlobalMobilityDependantDocumentTr').hide();
     });
 };
@@ -1564,6 +1567,11 @@ var init = function () {
     $('#FirstName').typeahead(globalNameTypeAheadOptions);
     $('#LastName').typeahead(globalLastNameTypeAheadOptions);
     
+    if ($("#NewToIKEA").val() == "")
+    {
+        disableTypeahead = 0;
+    }
+
     $("#NewToIKEA").on('change', function () {
         if ($('#CustomerId').val() != '31' && ($('#formGuid').length > 0)) {
             $('#Co-WorkerID').typeahead(globalTypeAheadOptions);
@@ -1571,7 +1579,7 @@ var init = function () {
                 disableTypeahead = 1;
             }
             else {
-                disableTypeahead = 0;
+                disableTypeahead = 0;                
                 if ($('#Co-WorkerID').length > 0) {
                     $.ajax({
                         url: site.baseUrl + '/search/EmployeesExtendedInfo',
@@ -1632,8 +1640,13 @@ var init = function () {
     $('.nav-tabs a').click(function (e) {
         e.preventDefault();
         $(this).tab('show');
-        var url = $(this).attr("data-url");
+        var url = $(this).attr("data-url"); 
         var hash = this.hash;
+
+        if (uploader != null && hash == '#attachments') {
+            uploader.refresh();
+        }
+
         if (url != undefined) {
             $.post(url, function (data) {
                 $(hash).find("#gvList").html(data.View);

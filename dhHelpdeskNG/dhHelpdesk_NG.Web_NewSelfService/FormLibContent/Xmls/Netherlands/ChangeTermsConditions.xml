@@ -1529,7 +1529,8 @@
         </options>
       </element>
       <!--Job-->
-      <element type="select" name="JobTitle" label="Job Title" mandatory="1">        
+      <element type="select" name="JobTitle" label="Job Title" mandatory="1">
+        &pre_jobtitle_payscalelevel;
         <options>
           <option value=""></option>
           <option value="﻿Business Navigator">﻿Business Navigator</option>
@@ -1705,7 +1706,6 @@
           <option value="Apprentice">Apprentice</option>
           <option value="Temporary Staff">Temporary Staff</option>
         </options>
-      &pre_jobtitle_payscalelevel;
       </element>
       <element type="select" name="LocalJobTitle" label="Local Job Title">
         <options>
