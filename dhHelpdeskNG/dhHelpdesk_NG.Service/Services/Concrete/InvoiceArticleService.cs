@@ -35,5 +35,10 @@
         {
             return this.caseInvoiceArticleRepository.GetCaseArticles(caseId);
         }
+
+        public void SaveCaseArticles(int caseId,  CaseInvoiceArticle[] articles)
+        {
+            this.caseInvoiceArticleRepository.SaveCaseArticles(caseId, articles);
+        }
     }
 }

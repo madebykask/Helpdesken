@@ -18,13 +18,14 @@
                 .WillCascadeOnDelete(false);
             this.Property(a => a.Number).IsOptional();
             this.Property(a => a.Name).IsRequired().HasMaxLength(100);
-            this.Property(a => a.Amount).IsRequired();
-            this.Property(a => a.UnitId).IsRequired();
+            this.Property(a => a.Amount).IsOptional();
+            this.Property(a => a.UnitId).IsOptional();
             this.HasRequired(a => a.Unit)
                 .WithMany()
                 .HasForeignKey(a => a.UnitId)
                 .WillCascadeOnDelete(false);
-            this.Property(a => a.Ppu).IsRequired();
+            this.Property(a => a.Ppu).IsOptional();
+            this.Property(a => a.Position).IsRequired();
             this.Property(a => a.IsInvoiced).IsRequired();
 
             this.ToTable("tblCaseInvoiceArticle");            

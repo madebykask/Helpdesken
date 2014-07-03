@@ -10,13 +10,15 @@
 
         public string Name { get; set; }
 
-        public int Amount { get; set; }
+        public int? Amount { get; set; }
 
-        public int UnitId { get; set; }
+        public int? UnitId { get; set; }
 
         public virtual InvoiceArticleUnitEntity Unit { get; set; }
 
-        public decimal Ppu { get; set; }
+        public decimal? Ppu { get; set; }
+
+        public short Position { get; set; }
 
         public bool IsInvoiced { get; set; }
     }

@@ -14,6 +14,7 @@
             entity.Amount = businessModel.Amount;
             entity.Ppu = businessModel.Ppu;
             entity.UnitId = businessModel.UnitId;
+            entity.Position = businessModel.Position;
         }
     }
 }

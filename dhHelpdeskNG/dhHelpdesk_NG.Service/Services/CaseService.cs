@@ -7,6 +7,7 @@
 
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
+    using DH.Helpdesk.BusinessData.Models.Invoice;
     using DH.Helpdesk.BusinessData.Models.Reports.Output;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
@@ -35,7 +36,15 @@
         IList<CaseHistory> GetCaseHistoryByCaseId(int caseId);
         List<DynamicCase> GetAllDynamicCases();
 
-        int SaveCase(Case cases, CaseLog caseLog, CaseMailSetting caseMailSetting, int userId, string adUser, out IDictionary<string, string> errors);
+        int SaveCase(
+            Case cases, 
+            CaseLog caseLog, 
+            CaseMailSetting caseMailSetting, 
+            int userId, 
+            string adUser,           
+            out IDictionary<string, string> errors,
+            CaseInvoiceArticle[] articles = null);
+
         int SaveCaseHistory(Case c, int userId, string adUser, out IDictionary<string, string> errors, string defaultUser = "");
         void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null);
         void UpdateFollowUpDate(int caseId, DateTime? time);
@@ -100,6 +109,8 @@
 
         private readonly ICaseMailer caseMailer;
 
+        private readonly IInvoiceArticleService invoiceArticleService;
+
         public CaseService(
             ICaseRepository caseRepository,
             ICaseFileRepository caseFileRepository,
@@ -122,7 +133,8 @@
             IFormFieldValueRepository formFieldValueRepository,
             ICustomerUserService customerUserService, 
             UserRepository userRepository, 
-            ICaseMailer caseMailer)
+            ICaseMailer caseMailer, 
+            IInvoiceArticleService invoiceArticleService)
         {
             this._unitOfWork = unitOfWork;
             this._caseRepository = caseRepository;
@@ -135,6 +147,7 @@
             this._workingGroupService = workingGroupService;
             this.userRepository = userRepository;
             this.caseMailer = caseMailer;
+            this.invoiceArticleService = invoiceArticleService;
             this._caseHistoryRepository = caseHistoryRepository;
             this._productAreaService = productAreaService;
             this._mailTemplateService = mailTemplateService;
@@ -456,7 +469,14 @@
             this._unitOfWork.Commit();
         }
 
-        public int SaveCase(Case cases, CaseLog caseLog, CaseMailSetting caseMailSetting, int userId, string adUser, out IDictionary<string, string> errors)
+        public int SaveCase(
+                Case cases, 
+                CaseLog caseLog, 
+                CaseMailSetting caseMailSetting, 
+                int userId, 
+                string adUser, 
+                out IDictionary<string, string> errors,
+                CaseInvoiceArticle[] articles = null)
         {
             int ret = 0;
 
@@ -496,8 +516,8 @@
             else            
                 ret = this.SaveCaseHistory(c, userId, adUser, out errors);    
             
+            this.invoiceArticleService.SaveCaseArticles(c.Id, articles);
             
-
             return ret;
         }
 

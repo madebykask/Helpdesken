@@ -31,6 +31,7 @@
                         entity.UnitId,
                         this.unitMapper.Map(entity.Unit),
                         entity.Ppu,
+                        entity.Position,
                         entity.IsInvoiced);
         }
     }

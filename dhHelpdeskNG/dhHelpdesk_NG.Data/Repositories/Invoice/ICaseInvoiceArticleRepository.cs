@@ -5,5 +5,7 @@
     public interface ICaseInvoiceArticleRepository
     {
         CaseInvoiceArticle[] GetCaseArticles(int caseId);
+
+        void SaveCaseArticles(int caseId, CaseInvoiceArticle[] articles);
     }
 }

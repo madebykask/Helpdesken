@@ -7,18 +7,24 @@
 
     public sealed class CaseInvoiceArticle
     {
+        public CaseInvoiceArticle()
+        {
+        }
+
         public CaseInvoiceArticle(
                 int id, 
                 int caseId, 
                 CaseOverview @case, 
                 int? number,
                 string name, 
-                int amount,
-                int unitId, 
+                int? amount,
+                int? unitId, 
                 InvoiceArticleUnit unit, 
-                decimal ppu, 
+                decimal? ppu, 
+                short position,
                 bool isInvoiced)
         {
+            this.Position = position;
             this.Amount = amount;
             this.Number = number;
             this.IsInvoiced = isInvoiced;
@@ -31,13 +37,10 @@
             this.Id = id;
         }
 
-        [IsId]
         public int Id { get; private set; }
 
-        [IsId]
         public int CaseId { get; private set; }
 
-        [NotNull]
         [ScriptIgnore]
         public CaseOverview Case { get; private set; }
 
@@ -46,16 +49,21 @@
         [NotNullAndEmpty]
         public string Name { get; private set; }
 
-        public int Amount { get; private set; }
+        public int? Amount { get; private set; }
 
-        [IsId]
-        public int UnitId { get; private set; }
+        public int? UnitId { get; private set; }
 
-        [NotNull]
         public InvoiceArticleUnit Unit { get; private set; }
 
-        public decimal Ppu { get; private set; }
+        public decimal? Ppu { get; private set; }
+
+        public short Position { get; private set; }
 
         public bool IsInvoiced { get; private set; }
+
+        public bool IsNew()
+        {
+            return this.Id <= 0;
+        }
     }
 }

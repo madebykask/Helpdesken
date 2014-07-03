@@ -10,25 +10,68 @@
 
     public class CaseInvoiceArticleRepository : Repository, ICaseInvoiceArticleRepository
     {
-        private readonly IEntityToBusinessModelMapper<CaseInvoiceArticleEntity, CaseInvoiceArticle> caseArticleMapper;
+        private readonly IEntityToBusinessModelMapper<CaseInvoiceArticleEntity, CaseInvoiceArticle> toBusinessModelMapper;
+
+        private readonly IBusinessModelToEntityMapper<CaseInvoiceArticle, CaseInvoiceArticleEntity> toEntityMapper;
 
         public CaseInvoiceArticleRepository(
                 IDatabaseFactory databaseFactory, 
-                IEntityToBusinessModelMapper<CaseInvoiceArticleEntity, CaseInvoiceArticle> caseArticleMapper)
+                IEntityToBusinessModelMapper<CaseInvoiceArticleEntity, CaseInvoiceArticle> toBusinessModelMapper, 
+                IBusinessModelToEntityMapper<CaseInvoiceArticle, CaseInvoiceArticleEntity> toEntityMapper)
             : base(databaseFactory)
         {
-            this.caseArticleMapper = caseArticleMapper;
+            this.toBusinessModelMapper = toBusinessModelMapper;
+            this.toEntityMapper = toEntityMapper;
         }
 
         public CaseInvoiceArticle[] GetCaseArticles(int caseId)
         {
             var entities = this.DbContext.CaseInvoiceArticles
                         .Where(a => a.CaseId == caseId)
+                        .OrderBy(a => a.Position)
                         .ToList();
 
             return entities
-                    .Select(a => this.caseArticleMapper.Map(a))
+                    .Select(a => this.toBusinessModelMapper.Map(a))
                     .ToArray();
+        }
+
+        public void SaveCaseArticles(int caseId, CaseInvoiceArticle[] articles)
+        {
+            if (articles == null)
+            {
+                return;
+            }
+
+            var ids = articles
+                    .Where(a => !a.IsNew())
+                    .Select(a => a.Id);
+            var articlesForDelete = this.DbContext.CaseInvoiceArticles
+                                .Where(a => a.CaseId == caseId &&
+                                    !ids.Contains(a.Id))
+                                .ToList();
+            foreach (var articleForDelete in articlesForDelete)
+            {
+                this.DbContext.CaseInvoiceArticles.Remove(articleForDelete);
+                this.Commit();
+            }
+
+            foreach (var article in articles)
+            {
+                CaseInvoiceArticleEntity entity;
+                if (article.IsNew())
+                {
+                    entity = new CaseInvoiceArticleEntity();
+                    this.toEntityMapper.Map(article, entity);
+                    this.DbContext.CaseInvoiceArticles.Add(entity);
+                    this.Commit();
+                    continue;
+                }
+
+                entity = this.DbContext.CaseInvoiceArticles.Find(article.Id);
+                this.toEntityMapper.Map(article, entity);
+                this.Commit();                            
+            }
         }
     }
 }

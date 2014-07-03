@@ -358,9 +358,10 @@ namespace DH.Helpdesk.Web.Controllers
                                     Case case_, 
                                     CaseLog caseLog, 
                                     CaseMailSetting caseMailSetting,
-                                    bool? updateNotifierInformation)
+                                    bool? updateNotifierInformation,
+                                    string caseInvoiceArticles)
         {
-            int caseId = this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation);
+            int caseId = this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation, caseInvoiceArticles);
             return this.RedirectToAction("edit", "cases", new { id = caseId, redirectFrom = "save", uni = updateNotifierInformation });
         }
 
@@ -369,9 +370,10 @@ namespace DH.Helpdesk.Web.Controllers
                                     Case case_, 
                                     CaseLog caseLog, 
                                     CaseMailSetting caseMailSetting,
-                                    bool? updateNotifierInformation)
+                                    bool? updateNotifierInformation,
+                                    string caseInvoiceArticles)
         {
-            this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation);
+            this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation, caseInvoiceArticles);
             return this.RedirectToAction("index", "cases", new { customerId = case_.Customer_Id });
         }
 
@@ -380,9 +382,10 @@ namespace DH.Helpdesk.Web.Controllers
                                     Case case_,
                                     CaseLog caseLog,
                                     CaseMailSetting caseMailSetting,
-                                    bool? updateNotifierInformation)
+                                    bool? updateNotifierInformation,
+                                    string caseInvoiceArticles)
         {
-            this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation);
+            this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation, caseInvoiceArticles);
             return this.RedirectToAction("new", "cases", new { customerId = case_.Customer_Id });
         }
 
@@ -391,9 +394,10 @@ namespace DH.Helpdesk.Web.Controllers
                                     Case case_,
                                     CaseLog caseLog,
                                     CaseMailSetting caseMailSetting,
-                                    bool? updateNotifierInformation)
+                                    bool? updateNotifierInformation,
+                                    string caseInvoiceArticles)
         {
-            int caseId = this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation);
+            int caseId = this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation, caseInvoiceArticles);
             return this.RedirectToAction("edit", "cases", new { id = caseId, redirectFrom = "save", uni = updateNotifierInformation });
         }
 
@@ -402,9 +406,10 @@ namespace DH.Helpdesk.Web.Controllers
                                     Case case_,
                                     CaseLog caseLog,
                                     CaseMailSetting caseMailSetting,
-                                    bool? updateNotifierInformation)
+                                    bool? updateNotifierInformation,
+                                    string caseInvoiceArticles)
         {
-            this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation);
+            this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation, caseInvoiceArticles);
             return this.RedirectToAction("index", "cases", new { customerId = case_.Customer_Id });
         }
 
@@ -413,9 +418,10 @@ namespace DH.Helpdesk.Web.Controllers
                                     Case case_,
                                     CaseLog caseLog,
                                     CaseMailSetting caseMailSetting,
-                                    bool? updateNotifierInformation)
+                                    bool? updateNotifierInformation,
+                                    string caseInvoiceArticles)
         {
-            this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation);
+            this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation, caseInvoiceArticles);
             return this.RedirectToAction("new", "cases", new { customerId = case_.Customer_Id });
         }
 
@@ -1114,7 +1120,12 @@ namespace DH.Helpdesk.Web.Controllers
 
         #region Private Methods and Operators
 
-        private int Save(Case case_, CaseLog caseLog, CaseMailSetting caseMailSetting, bool? updateNotifierInformation)
+        private int Save(
+                    Case case_, 
+                    CaseLog caseLog, 
+                    CaseMailSetting caseMailSetting, 
+                    bool? updateNotifierInformation,
+                    string caseInvoiceArticles)
         {
             bool edit = case_.Id == 0 ? false : true;
             IDictionary<string, string> errors;
@@ -1162,10 +1173,17 @@ namespace DH.Helpdesk.Web.Controllers
                         case_.OU_Id = oldCase.OU_Id;
                         case_.UserCode = oldCase.UserCode;
                     }
-            }      
-            
+            }
+
             // save case and case history
-            int caseHistoryId = this._caseService.SaveCase(case_, caseLog, caseMailSetting, SessionFacade.CurrentUser.Id, this.User.Identity.Name, out errors);
+            int caseHistoryId = this._caseService.SaveCase(
+                        case_, 
+                        caseLog, 
+                        caseMailSetting, 
+                        SessionFacade.CurrentUser.Id, 
+                        this.User.Identity.Name, 
+                        out errors,
+                        InvoiceHelper.ToCaseInvoiceArticles(caseInvoiceArticles));
 
             if (updateNotifierInformation.HasValue && updateNotifierInformation.Value)
             {

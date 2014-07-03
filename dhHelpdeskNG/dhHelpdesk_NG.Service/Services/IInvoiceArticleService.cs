@@ -9,5 +9,7 @@
         InvoiceArticle[] GetArticles(int customerId, int productAreaId);
 
         CaseInvoiceArticle[] GetCaseArticles(int caseId);
+
+        void SaveCaseArticles(int caseId, CaseInvoiceArticle[] articles);
     }
 }
