@@ -10,17 +10,23 @@
 namespace DH.Helpdesk.NewSelfService.NinjectModules.Modules
 {
     using DH.Helpdesk.BusinessData.Models.Case.Input;
+    using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.BusinessData.Models.Customer;
+    using DH.Helpdesk.BusinessData.Models.Customer.Input;
+    using DH.Helpdesk.BusinessData.Models.Invoice;
     using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
     using DH.Helpdesk.Dal.Infrastructure.Translate;
     using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Dal.Mappers.Cases.BusinessModelToEntity;
+    using DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel;
     using DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel;
+    using DH.Helpdesk.Dal.Mappers.Invoice.BusinessModelToEntity;
+    using DH.Helpdesk.Dal.Mappers.Invoice.EntityToBusinessModel;
     using DH.Helpdesk.Dal.Mappers.ProductArea.EntityToBusinessModel;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Computers;
+    using DH.Helpdesk.Domain.Invoice;
     using DH.Helpdesk.NewSelfService.Infrastructure.Translate;
-
     using Ninject.Modules;
 
     /// <summary>
@@ -46,6 +52,38 @@ namespace DH.Helpdesk.NewSelfService.NinjectModules.Modules
                 .InSingletonScope();
 
             this.Bind<ITranslator>().To<Translator>().InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<InvoiceArticle, InvoiceArticleEntity>>()
+                .To<InvoiceArticleToEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<InvoiceArticleUnit, InvoiceArticleUnitEntity>>()
+                .To<InvoiceArticleUnitToEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<InvoiceArticleEntity, InvoiceArticle>>()
+                .To<InvoiceArticleToBusinessModelMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<InvoiceArticleUnitEntity, InvoiceArticleUnit>>()
+                .To<InvoiceArticleUnitToBusinessModelMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<CaseInvoiceArticleEntity, CaseInvoiceArticle>>()
+                .To<CaseInvoiceArticleToBusinessModelMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<CaseInvoiceArticle, CaseInvoiceArticleEntity>>()
+                .To<CaseInvoiceArticleToEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<Case, CaseOverview>>()
+               .To<CaseToBusinessModelMapper>()
+               .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<Customer, CustomerOverview>>()
+               .To<CustomerToBusinessModel>()
+               .InSingletonScope();
         }
     }
 }
