@@ -336,7 +336,10 @@
                 case "productarea_id":
                     ProductArea p = dr.SafeGetInteger("ProductArea_Id").getProductAreaItem(pal);
                     if (p != null)
-                        ret = p.getProductAreaParentPath();
+                        if (ConfigurationManager.AppSettings["InitFromSelfService"] == "true")
+                            ret = p.Name;
+                        else                    
+                            ret = p.getProductAreaParentPath();
                     break;
                 default:
                     if (string.Compare(dr[col].GetType().FullName, "System.DateTime", true, CultureInfo.InvariantCulture) == 0)

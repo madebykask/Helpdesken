@@ -53,7 +53,8 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             SessionFacade.CurrentLanguageId = SessionFacade.CurrentCustomer.Language_Id;
             ViewBag.PublicCustomerId = customerId;
 
-            var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+            //var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+            var identity = User.Identity;
             if (identity != null)
             {
                 SessionFacade.CurrentSystemUser = identity.Name.GetUserFromAdPath();

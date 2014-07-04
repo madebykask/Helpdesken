@@ -128,9 +128,9 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             int customerId;
 
             Case currentCase = null;
-            var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
-            SessionFacade.CurrentSystemUser = identity.Name.GetUserFromAdPath();
-
+            //var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+            var identity = User.Identity;
+            SessionFacade.CurrentSystemUser = identity.Name.GetUserFromAdPath();            
             if (id.Is<Guid>())
             {
                 var guid = new Guid(id);
@@ -212,7 +212,8 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             var model = this.GetNewCaseModel(currentCustomer.Id, languageId);
             model.ExLogFileGuid = Guid.NewGuid().ToString();
 
-            var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+            //var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+            var identity = User.Identity;
       
             if (identity != null)
             {
@@ -306,11 +307,11 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
             UserCasesModel model = null;
 
-            var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+            //var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+            var identity = User.Identity;
             if (identity != null)
             {
-                string adUser = identity.Name; // "DATAHALLAND\\mg"
-                string regUser = adUser.GetUserFromAdPath();
+                string regUser = identity.Name.GetUserFromAdPath();                 
                 SessionFacade.CurrentSystemUser = regUser;
                 if (regUser != string.Empty)
                 {                    
@@ -803,10 +804,13 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             SessionFacade.CurrentLanguageId = SessionFacade.CurrentCustomer.Language_Id;
             //ViewBag.PublicCustomerId = customerId;
 
-            var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+            //var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+            var identity = User.Identity;
             if (identity != null)
+            {
+                SessionFacade.CurrentSystemUser = identity.Name.GetUserFromAdPath();
                 ViewBag.PublicCaseTemplate = _caseSolutionService.GetCaseSolutions(customerId).ToList();
-
+            }
             return true;
         }
 
