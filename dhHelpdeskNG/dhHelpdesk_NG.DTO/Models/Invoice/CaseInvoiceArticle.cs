@@ -46,7 +46,7 @@
 
         public InvoiceArticle Article { get; private set; }
 
-        [NotNullAndEmpty]
+        [NotNull]
         public string Name { get; private set; }
 
         public int? Amount { get; private set; }
