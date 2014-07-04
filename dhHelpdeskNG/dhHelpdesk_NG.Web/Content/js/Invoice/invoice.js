@@ -407,7 +407,7 @@ $(function () {
                         '"CaseId":"' + this.CaseId + '", ' +
                         '"ArticleId":"' + (this.Article != null && this.Article.Id > 0 ? this.Article.Id : '') + '", ' +
                         '"Number":"' + this.GetNumber() + '", ' +
-                        '"Name":"' + this.Name + '", ' +
+                        '"Name":"' + (this.Name != null ? this.Name : '') + '", ' +
                         '"Amount":"' + (this.Amount != null && !this.IsBlank() ? this.Amount : '') + '", ' +
                         '"Position":"' + this.Position + '", ' +
                         '"IsInvoiced":' + (this.IsInvoiced ? '"true"' : '"false"') +
