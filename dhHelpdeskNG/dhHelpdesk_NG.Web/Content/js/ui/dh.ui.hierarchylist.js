@@ -309,6 +309,9 @@ $(function () {
                 $this.before(empty);
 
                 $.getJSON(list.GetItemsUrl, function (data) {
+                    if (data == null || data.Groups == null) {
+                        return;
+                    }
                     for (var i = 0; i < data.Groups.length; i++) {
                         var listGroup = new dhHelpdesk.HierarchyList.Group();
                         list.AddGroup(listGroup);
