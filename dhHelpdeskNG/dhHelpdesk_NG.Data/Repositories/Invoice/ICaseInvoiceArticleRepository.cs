@@ -7,5 +7,7 @@
         CaseInvoiceArticle[] GetCaseArticles(int caseId);
 
         void SaveCaseArticles(int caseId, CaseInvoiceArticle[] articles);
+
+        void DeleteCaseArticles(int caseId);
     }
 }

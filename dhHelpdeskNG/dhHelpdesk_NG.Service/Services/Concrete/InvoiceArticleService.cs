@@ -40,5 +40,10 @@
         {
             this.caseInvoiceArticleRepository.SaveCaseArticles(caseId, articles);
         }
+
+        public void DeleteCaseArticles(int caseId)
+        {
+            this.caseInvoiceArticleRepository.DeleteCaseArticles(caseId);
+        }
     }
 }

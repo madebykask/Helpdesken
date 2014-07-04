@@ -157,6 +157,9 @@ $(function () {
                     var blank = new dhHelpdesk.CaseArticles.InvoiceArticle();
                     blank.Id = -1;
                     th.AddInvoiceArticle(blank);
+                    if (data == null) {
+                        return;
+                    }
                     for (var i = 0; i < data.length; i++) {
                         var a = data[i];
                         var article = new dhHelpdesk.CaseArticles.InvoiceArticle();
@@ -548,5 +551,6 @@ $(function () {
             caseArticle.IsInvoiced = article.IsInvoiced;
             dhHelpdesk.CaseArticles.AddCaseArticle(caseArticle);
         }
+        dhHelpdesk.CaseArticles.SaveCaseArticles();
     });
 });

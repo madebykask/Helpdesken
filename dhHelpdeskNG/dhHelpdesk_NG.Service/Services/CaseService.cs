@@ -264,6 +264,8 @@
                 this._caseFileRepository.Commit(); 
             }
 
+            this.invoiceArticleService.DeleteCaseArticles(id);
+
             var c = this._caseRepository.GetById(id);
             ret = c.CaseGUID; 
             this._caseRepository.Delete(c);
@@ -514,9 +516,12 @@
             if (userId == 0)
                 ret = this.SaveCaseHistory(c, userId, adUser, out errors, adUser);    
             else            
-                ret = this.SaveCaseHistory(c, userId, adUser, out errors);    
-            
-            this.invoiceArticleService.SaveCaseArticles(c.Id, articles);
+                ret = this.SaveCaseHistory(c, userId, adUser, out errors);
+
+            if (articles != null)
+            {
+                this.invoiceArticleService.SaveCaseArticles(c.Id, articles);                
+            }
             
             return ret;
         }

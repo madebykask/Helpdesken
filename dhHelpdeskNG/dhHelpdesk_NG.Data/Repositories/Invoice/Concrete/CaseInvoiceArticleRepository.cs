@@ -73,5 +73,17 @@
                 this.Commit();                            
             }
         }
+
+        public void DeleteCaseArticles(int caseId)
+        {
+            var articlesForDelete = this.DbContext.CaseInvoiceArticles
+                                .Where(a => a.CaseId == caseId)
+                                .ToList();
+            foreach (var articleForDelete in articlesForDelete)
+            {
+                this.DbContext.CaseInvoiceArticles.Remove(articleForDelete);
+                this.Commit();
+            }
+        }
     }
 }

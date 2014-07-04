@@ -27,9 +27,14 @@
         }
 
         [HttpGet]
-        public JsonResult Articles(int productAreaId)
+        public JsonResult Articles(int? productAreaId)
         {
-            var articles = this.invoiceArticleService.GetArticles(this.workContext.Customer.CustomerId, productAreaId);
+            if (!productAreaId.HasValue)
+            {
+                return this.Json(null, JsonRequestBehavior.AllowGet);
+            }
+
+            var articles = this.invoiceArticleService.GetArticles(this.workContext.Customer.CustomerId, productAreaId.Value);
             return this.Json(articles, JsonRequestBehavior.AllowGet);
         }
 
