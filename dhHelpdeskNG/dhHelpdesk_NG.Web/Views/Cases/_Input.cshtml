@@ -446,7 +446,7 @@
                                         <td>
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Description)
                                         </td>
-                                        <td>
+                                        <td colspan="2">
                                             @{
                                             var descriptionSize = Model.caseFieldSettings.getFieldSize(GlobalEnums.TranslationCaseFields.Description.ToString());
                                             if (descriptionSize == 0)
@@ -455,8 +455,6 @@
                                             }
                                             }
                                             @Html.TextAreaFor(model => model.case_.Description, new { rows = descriptionSize, @class = "case-description" })                                                                                        
-                                        </td>
-                                        <td>
                                             <img id="caseDescriptionPreview" 
                                                  src="@Url.Content("~/Content/icons/magnifier.png")" 
                                                  class="cursor-pointer" 

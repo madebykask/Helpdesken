@@ -118,10 +118,11 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
             {
                 if (this.settings == null)
                 {
-                    this.settings = (CustomerSettings)HttpContext.Current.Session[CustomerSettings];
+                    var settingsKey = this.GetSettingsKey();
+                    this.settings = (CustomerSettings)HttpContext.Current.Session[settingsKey];
                     if (this.settings == null)
                     {
-                        HttpContext.Current.Session[CustomerSettings] =
+                        HttpContext.Current.Session[settingsKey] =
                             this.settings = this.customerSettingsService.GetCustomerSettings(this.CustomerId);
                     }
                 }
@@ -135,10 +136,16 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
         /// </summary>
         public void Refresh()
         {
+            var settingsKey = this.GetSettingsKey();
+            HttpContext.Current.Session[settingsKey] = this.settings = null;
             this.customerId = null;
             this.workingDayStart = null;
             this.workingDayEnd = null;
-            HttpContext.Current.Session[CustomerSettings] = this.settings = null;
+        }
+
+        private string GetSettingsKey()
+        {
+            return string.Format("{0}{1}", CustomerSettings, this.CustomerId);
         }
     }
 }
