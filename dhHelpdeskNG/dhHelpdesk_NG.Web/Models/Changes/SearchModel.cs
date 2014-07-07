@@ -82,7 +82,7 @@
         [NotNull]
         public List<int> AdministratorIds { get; set; }
 
-        [LocalizedDisplay("Pharse")]
+        [LocalizedDisplay("Phrase")]
         public string Pharse { get; set; }
 
         [LocalizedDisplay("Show")]

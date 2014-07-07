@@ -521,7 +521,7 @@ $(function () {
                             "<td>" + this.Name + "</td>" +
                             "<td>" + this.Amount + "</td>" +
                             "<td>" + this.GetPpu() + "</td>" +
-                            "<td>" + this.GetTotal() + " " + this.GetUnitName() + "</td>" +
+                            "<td>" + this.GetTotal() + "</td>" +
                             "<td>invoiced</td>" +
                             "</tr>";
                 }
@@ -531,7 +531,7 @@ $(function () {
                         "<td>" + this.Name + "</td>" +
                         "<td>" + "<input onchange='dhHelpdesk.CaseArticles.UpdateArticle($(this).parent().parent())' type='text' maxlength='5' class='article-amount input-small-important' value='" + this.Amount + "' />" + "</td>" +
                         "<td>" + this.GetPpu() + "</td>" +
-                        "<td class='article-total'>" + this.GetTotal() + " " + this.GetUnitName() + "</td>" +
+                        "<td class='article-total'>" + this.GetTotal() + "</td>" +
                         "<td><a href='javascript:void()' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())'>delete</a></td>" +
                         "</tr>";
             };
