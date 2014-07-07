@@ -4,6 +4,7 @@
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Customer;
     using DH.Helpdesk.BusinessData.Models.Language.Output;
     using DH.Helpdesk.BusinessData.Models.Logs.Output;
     using DH.Helpdesk.BusinessData.Models.Problem.Output;
@@ -87,6 +88,8 @@
         public CaseInvoiceArticlesModel InvoiceArticles { get; set; }
 
         public string CaseInvoiceArticles { get; set; }
+
+        public CustomerSettings CustomerSettings { get; set; }
     }
 
     public class CaseIndexViewModel

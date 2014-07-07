@@ -250,11 +250,17 @@
                                         </label>
                                     </td>
                                     <td><label class="checkbox">
-                                        <input type="checkbox" name="setting.ModuleChangeManagement" @(Model.Setting.ModuleChangeManagement == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="setting.ModuleChangeManagement" value="0" />
-                                        &nbsp;@Translation.Get("Ändringshantering", Enums.TranslationSource.TextTranslation)
-                                        <input type="hidden" name="setting.ModuleAccount" value="0" />
-                                        <input type="hidden" name="setting.ModulePlanning" value="0" />
+                                            <input type="checkbox" name="setting.ModuleChangeManagement" @(Model.Setting.ModuleChangeManagement == 1 ? "checked=checked" : "") value="1"/>
+                                            <input type="hidden" name="setting.ModuleChangeManagement" value="0" />
+                                            &nbsp;@Translation.Get("Ändringshantering", Enums.TranslationSource.TextTranslation)
+                                            <input type="hidden" name="setting.ModuleAccount" value="0" />
+                                            <input type="hidden" name="setting.ModulePlanning" value="0" />
+                                        </label>
+                                    </td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="setting.ModuleCaseInvoice" @(Model.Setting.ModuleCaseInvoice == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="setting.ModuleCaseInvoice" value="0" />
+                                        &nbsp;@Translation.Get("Case Invoice")
                                         </label>
                                     </td>
                                 </tr>

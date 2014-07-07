@@ -119,6 +119,7 @@
             this.Property(x => x.XMLFileFolder).IsOptional().HasMaxLength(100);
             this.Property(x => x.XMLLogLevel).IsRequired();
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            this.Property(x => x.ModuleCaseInvoice).IsRequired();
 
             this.ToTable("tblsettings");
         }

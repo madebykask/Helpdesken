@@ -146,6 +146,8 @@ namespace DH.Helpdesk.BusinessData.Models.Customer
         /// </summary>
         public bool ModuleWatch { get; set; }
 
+        public bool ModuleCaseInvoice { get; set; }
+
         /// <summary>
         /// The is module on.
         /// </summary>

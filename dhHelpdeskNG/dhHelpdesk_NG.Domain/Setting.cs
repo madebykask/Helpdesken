@@ -105,7 +105,9 @@ namespace DH.Helpdesk.Domain
         public string SMSEMailDomainUserId { get; set; }
         public string SMSEMailDomainUserName { get; set; }
         public string XMLFileFolder { get; set; }
-
+        
         public virtual OrderState CloseOrderState { get; set; }
+
+        public int ModuleCaseInvoice { get; set; }
     }
 }

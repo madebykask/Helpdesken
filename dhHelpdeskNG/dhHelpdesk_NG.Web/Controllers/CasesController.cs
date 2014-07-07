@@ -491,6 +491,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 var caseInvoiceArticles = this.invoiceArticleService.GetCaseArticles(id);
                 m.InvoiceArticles = this.invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoiceArticles);
+                m.CustomerSettings = this.workContext.Customer.Settings;
             }
 
             AddViewDataValues();
@@ -1623,6 +1624,8 @@ namespace DH.Helpdesk.Web.Controllers
                 //{
                 //    m.CaseOwnerDefaultWorkingGroup = this._workingGroupService.GetWorkingGroup(m.RegByUser.Default_WorkingGroup_Id.Value);
                 //}
+
+                m.CustomerSettings = this.workContext.Customer.Settings;
             }
 
             return m;

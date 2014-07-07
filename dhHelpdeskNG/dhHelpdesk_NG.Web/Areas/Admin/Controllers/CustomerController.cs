@@ -645,8 +645,7 @@
                 LogNoteFormat = customerToCopySettings.LogNoteFormat,
                 CaseArchiveDays = customerToCopySettings.CaseArchiveDays,
                 CaseComplaintDays = customerToCopySettings.CaseComplaintDays,
-
-
+                ModuleCaseInvoice = customerToCopySettings.ModuleCaseInvoice
             };
 
             //Get CaseSettings to copy
