@@ -4,9 +4,23 @@
 }
 
 <div class="container-fluid dh-container">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading heading-color"><h3>Welcome @SessionFacade.CurrentSystemUser</h3></div>
+                <div class="panel-body">
+                    <p>Welcome to the Line manager portal. Here you can order a new service request and view your ongoing or finished requests.</p>
+                    <p>If want to know more before you start, please go to Find Your Way.</p>
+                    
+                </div>
+            </div>
+            <div>
+                <img src="@Url.Content("~/Content/img-profile/ikea-map.png")" />
+            </div>
+        </div>
         <div class="col-md-4">
             <div class="panel panel-default">
-                <div class="panel-heading">Bulletin board</div>
+                <div class="panel-heading"><span class="glyphicon glyphicon-star"></span> Bulletin board</div>
                 <div class="panel-body">
                     <p>Lörem ipsum dolor. Sit ämet cönsectetur adipisicing. Elit sed dö eiusmod tempor incididunt ut låböre. Et dolore magnä aliquå. Nullåm in äenean egestäs fåcilisis läcinia, ånte nisi.</p>
                     <hr />
@@ -20,10 +34,6 @@
                     <hr />
                 </div>
             </div>
-        </div>
-    <div class="row">
-        <div class="col-md-3">
-            <img src="@Url.Content("~/Content/img-profile/ikea-map.png")" />
         </div>
         <!--ON GOING--->
     @*<div class="col-md-6">

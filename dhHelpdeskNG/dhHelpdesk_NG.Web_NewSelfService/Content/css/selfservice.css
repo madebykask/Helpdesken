@@ -321,10 +321,22 @@ h4 {
 }
 .panel-default > .panel-heading {
   color: #fff;
-  background-color: #0067b2;
-  border-color: #0067b2;
+  background-color: #438eb9;
+  border-color: #438eb9;
+  font-weight:bold;
 }
 
+.panel-default > .panel-heading.heading-color {
+  color: #fff;
+  background-color: #d96326;
+  border-color: #d96326;
+}
+
+.panel-default > .panel-heading h3 {
+  line-height:normal;
+  font-size:18px;
+  margin:0;
+}
 
 /***TABS**************/
 .tab-pane
