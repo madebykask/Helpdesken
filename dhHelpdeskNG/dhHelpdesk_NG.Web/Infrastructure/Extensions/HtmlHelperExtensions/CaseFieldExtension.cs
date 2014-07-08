@@ -1,7 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 {
     using System.Collections.Generic;
-    using System.Security.Policy;
     using System.Text;
     using System.Web.Mvc;
 
@@ -22,26 +21,22 @@
             var caption = Translation.Get(field.ToString(), Enums.TranslationSource.CaseTranslation, customerId);
             var setting = settings.getCaseSettingsValue(field.ToString());
             var description = settingsEx.getFieldHelp(field.ToString());
-            var url = new UrlHelper(html.ViewContext.RequestContext);
 
             var result = new StringBuilder();
-            result.Append(caption);
+            var tag = new TagBuilder("span");
+            if (!string.IsNullOrEmpty(description))
+            {
+                tag.MergeAttribute("title", description);                
+            }
+
+            tag.SetInnerText(caption);
+            result.Append(tag);
 
             if (setting.Required.ToBool())
             {
-                var tag = new TagBuilder("span");
+                tag = new TagBuilder("span");
                 tag.MergeAttribute("class", "mandatorystar");
                 tag.SetInnerText(" * ");
-                result.Append(tag);
-            }
-
-            if (!string.IsNullOrEmpty(description))
-            {
-                var tag = new TagBuilder("img");
-                tag.MergeAttribute("src", url.Content("~/Content/icons/info.png"));
-                tag.MergeAttribute("class", "cursor-pointer ml05");
-                tag.MergeAttribute("data-case-field-caption", caption);
-                tag.MergeAttribute("data-case-field-description", description);
                 result.Append(tag);
             }
 

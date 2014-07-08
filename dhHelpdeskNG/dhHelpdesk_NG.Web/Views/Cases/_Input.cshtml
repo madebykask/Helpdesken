@@ -1136,21 +1136,6 @@
                     }
                 });
         });
-
-        $("[data-case-field-description]").click(function () {
-            var $this = $(this);
-            var caption = $this.attr("data-case-field-caption");
-            var description = $this.attr("data-case-field-description");
-            var d = $(document.createElement("div"))
-                .html(description)
-                .dialog({
-                    title: caption,
-                    modal: true,
-                    close: function () {
-                        d.dialog("destroy");
-                    }
-                });
-        });
     });
 
 </script>
