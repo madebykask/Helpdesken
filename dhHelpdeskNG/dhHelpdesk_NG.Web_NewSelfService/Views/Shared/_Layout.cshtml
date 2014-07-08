@@ -191,7 +191,7 @@
     {
         <div class="siteCom">
             <div class="mapButton">
-                 @if ((pCaseLogs != null) && (pCaseLogs.CaseLogs != null) && (pCaseLogs.CaseLogs.Count > 0) && (!string.IsNullOrEmpty(pCaseLogs.CaseLogs[0].Text_Internal))) 
+                 @if ((pCaseLogs != null) && (pCaseLogs.CaseLogs != null) && (pCaseLogs.CaseLogs.Count > 0) && (string.IsNullOrEmpty(pCaseLogs.CaseLogs[0].RegUser))) 
                  {
                     <div class="mapText" title="Communicate"><span class="glyphicon glyphicon-comment"></span><span class="glyphicon glyphicon-certificate newcom"></span></div>
                  }
@@ -230,16 +230,14 @@
                     {                                                
                         foreach (var logItem in pCaseLogs.CaseLogs)
                         {                            
-                            <div class="@(string.IsNullOrEmpty(logItem.Text_External)?"com-list-hd":"com-list-com")" >
+                            <div class="@(!string.IsNullOrEmpty(logItem.RegUser)?"com-list-hd":"com-list-com")" >
                                 <div class="list-arrow"></div>
                                 <p> 
                                     @(logItem.User_Id==null? (logItem.RegUser==SessionFacade.CurrentSystemUser? "Me":logItem.RegUser):logItem.User.FirstName + " " + logItem.User.SurName) 
                                     |  @Html.DisplayFor(l => logItem.RegTime , "DateAndTime") 
                                 </p>
                                 <p>                                    
-                                    @(string.IsNullOrEmpty(logItem.Text_External)?                                
-                                    Html.Raw(logItem.Text_Internal.Replace("\n", "<br />")):    
-                                    Html.Raw(logItem.Text_External.Replace("\n", "<br />")))                                    
+                                    @Html.Raw(logItem.Text_Internal.Replace("\n", "<br />"))                                                                       
                                 </p>
                             </div>                            
                         }
@@ -262,7 +260,7 @@
                     Select language <span class="caret"></span>
                   </a>
                   <ul class="dropdown-menu" role="menu">
-                    <li><a href="#">Dutch</a></li>
+                     <li><a href="#">Dutch</a></li>
                     <li><a href="#">English</a></li>
                     <li><a href="#">Swedish</a></li>
                   </ul>
@@ -284,7 +282,7 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    @{ var start = pActionSettings.SingleOrDefault(a => a.ObjectId == ActionObject.Start);}
+                    @{ var start = pActionSettings.SingleOrDefault(a => a.ObjectId == ActionObject .Start);}
                     @if (start != null)
                     {
                         if (start.Visibled)
