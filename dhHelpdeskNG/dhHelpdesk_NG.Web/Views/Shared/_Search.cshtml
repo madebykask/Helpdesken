@@ -306,6 +306,7 @@
                         </td>
                         <td>
                             <button id="btnSearch" name="btnSearch" class="btn">@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)</button>
+                            <button id="btnClearFilter" name="btnClearFilter" class="btn">@Translation.Get("Rensa")</button>
                         </td>
                     </tr>
                 </table>
@@ -317,6 +318,11 @@
 
 <script>
     $(function () {
+
+        $("#btnClearFilter").click(function() {
+            window.location.href = '@Url.Action("Index", "Cases", new { customerId = Model.customer != null ? Model.customer.Id : (int?)null, clearFilters = true })';
+            return false;
+        });
 
         $("#btnMore").click(function (e) {
             e.preventDefault();

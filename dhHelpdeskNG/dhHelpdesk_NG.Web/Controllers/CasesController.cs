@@ -197,8 +197,13 @@ namespace DH.Helpdesk.Web.Controllers
 
         #region Public Methods and Operators
 
-        public ActionResult Index(int? customerId)
+        public ActionResult Index(int? customerId, bool? clearFilters = false)
         {
+            if (clearFilters == true)
+            {
+                SessionFacade.CurrentCaseSearch = null;                
+            }
+
             ApplicationFacade.UpdateLoggedInUser(Session.SessionID, "");
 
             CaseIndexViewModel m = null;

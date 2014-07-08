@@ -61,9 +61,12 @@
                                 @if (Html.MasterModel().CustomerSetting.ModuleCase == 1)
                                 {                                     
                                     <li><a href="@Url.Action("index", "cases", new { area = "" })">
-                                        <img src="@Url.Content("~/Content/icons/case.png")" alt="cases" />
-                                        @Translation.Get("Ärendeöversikt", Enums.TranslationSource.TextTranslation)</a>
+                                            <img src="@Url.Content("~/Content/icons/case.png")" alt="cases" />
+                                            @Translation.Get("Ärendeöversikt", Enums.TranslationSource.TextTranslation)</a>
                                     </li>
+                                    <li><a href="@Url.Action("index", "cases", new { area = "" })">
+                                        <img src="@Url.Content("~/Content/icons/casesearch.png")" alt="search" />
+                                        @Translation.Get("Sök ärende", Enums.TranslationSource.TextTranslation)</a></li>                                    
                                     if (Html.MasterModel().CustomerSetting.ModuleProblem == 1 && SessionFacade.CurrentUser.UserGroupId > 1)
                                     {                                                
                                         <li><a href="@Url.Action("Index", "Problems", new { area = "" })">
@@ -96,9 +99,6 @@
                             <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
                                 @if (Html.MasterModel().CustomerSetting.ModuleCase == 1)
                                 {                                    
-                                    <li><a href="@Url.Action("index", "cases", new { area = "" })">
-                                        <img src="@Url.Content("~/Content/icons/casesearch.png")" alt="search" />
-                                        @Translation.Get("Sök ärende", Enums.TranslationSource.TextTranslation)</a></li>
                                     if (SessionFacade.CurrentUser.ReportPermission == 1)
                                     {                                        
                                         <li><a href="@Url.Action("index", "reports", new { area = "" })">

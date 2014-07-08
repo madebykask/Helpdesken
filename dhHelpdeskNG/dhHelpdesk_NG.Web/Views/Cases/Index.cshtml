@@ -98,8 +98,10 @@
             
             $.post('/Cases/SaveColSetting/', $("#frmColCaseSetting").serialize(), function (result) {                
             });
-                        
-            ShowToastMessage("Settings saved successfully.", 'success');
+
+            window.location.href = '@Url.Action("Index")';
+
+//            ShowToastMessage("Settings saved successfully.", 'success');
         }
         
         // msgType : Success,Warning,Notice,Error

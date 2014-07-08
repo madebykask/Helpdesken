@@ -4,7 +4,20 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 
                         
-
+<h4>
+    @if (Model.case_.CaseNumber > 0)
+    {
+        @Translation.Get("Ärende") <span>@Model.case_.CaseNumber - </span>
+    }
+    @if (Model.CaseLog.Id == 0) 
+    {
+        @Translation.Get("Kommunikation")
+    }            
+    else
+    {
+        @Translation.Get("Kommunikation")
+    }        
+</h4>
 <div class="secnavs">
     <div class="pull-left">
         <ul class="secnav">
@@ -53,20 +66,6 @@
         </ul>
     </div>
 </div>
-<h4>
-@if (Model.case_.CaseNumber > 0)
-{
-    @Translation.Get("Ärende") <span>@Model.case_.CaseNumber - </span>
-}
-    @if (Model.CaseLog.Id == 0) 
-    {
-        @Translation.Get("Ny loggpost")
-    }            
-    else
-    {
-        @Translation.Get("Loggpost")
-    }        
-</h4>
 <div class="row">
     <div class="span12">
         <table class="tableform">

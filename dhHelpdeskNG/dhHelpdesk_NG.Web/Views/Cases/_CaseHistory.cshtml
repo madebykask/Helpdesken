@@ -18,26 +18,29 @@
                 </thead>
                 <tbody>
                 @{
-                var h = Model.EmptyCaseHistory; }
-                    @foreach (var r in Model.case_.CaseHistories.OrderBy(x => x.Id))
+                    var histories = Model.case_.CaseHistories.OrderByDescending(x => x.Id).ToArray();
+                 }
+                    @for(var i = 0; i < histories.Length; i++)
                     {
+                        var current = histories[i];     
+                        var previous = i < histories.Length - 1 ? histories[i + 1] : null;         
                         <tr>
                             <td>
-                                @Html.DisplayFor(m => r.CreatedDate, "DateAndTime") 
+                                @Html.DisplayFor(m => current.CreatedDate, "DateAndTime") 
                             </td>
                             <td>
-                                @r.CreatedByUser
+                                @current.CreatedByUser
                             </td>
                             <td>
                                 <table class="tableintable">
-                                    @r.GetCaseHistoryInfo(h, Model.case_.Customer_Id, Model.DepartmentFilterFormat, Model.caseFieldSettings)
+                                    @current.GetCaseHistoryInfo(previous, Model.case_.Customer_Id, Model.DepartmentFilterFormat, Model.caseFieldSettings)
                                 </table>
                             </td>
                             <td>
-                                @if (r.Emaillogs != null)
+                                @if (current.Emaillogs != null)
                                 {
                                     <div>
-                                        @foreach (var l in r.Emaillogs)
+                                        @foreach (var l in current.Emaillogs)
                                         {    
                                             <p>
                                                 @l.EmailAddress (@l.MailId.GetMailTemplateName()) 
@@ -47,7 +50,6 @@
                                 }
                             </td>
                         </tr>
-                        h = r;
                     }
                 </tbody>
             }
