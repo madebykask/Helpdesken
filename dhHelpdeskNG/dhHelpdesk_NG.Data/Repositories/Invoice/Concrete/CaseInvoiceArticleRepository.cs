@@ -63,6 +63,7 @@
                 {
                     entity = new CaseInvoiceArticleEntity();
                     this.toEntityMapper.Map(article, entity);
+                    entity.CaseId = caseId;
                     this.DbContext.CaseInvoiceArticles.Add(entity);
                     this.Commit();
                     continue;
