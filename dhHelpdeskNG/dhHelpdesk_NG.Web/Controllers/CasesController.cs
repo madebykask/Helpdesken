@@ -1184,14 +1184,6 @@ namespace DH.Helpdesk.Web.Controllers
             var articles = !string.IsNullOrEmpty(caseInvoiceArticles)
                                ? InvoiceHelper.ToCaseInvoiceArticles(caseInvoiceArticles)
                                : null;
-            if (articles != null &&
-                caseLog.FinishingDate.HasValue)
-            {
-                foreach (var article in articles)
-                {
-                    article.MakeInvoiced();
-                }   
-            }
 
             // save case and case history
             int caseHistoryId = this._caseService.SaveCase(

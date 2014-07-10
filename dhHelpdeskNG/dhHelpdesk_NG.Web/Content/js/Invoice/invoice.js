@@ -20,6 +20,10 @@ $(function () {
 
         CaseId: null,
 
+        IsNewCase: function() {
+            return !(this.CaseId > 0);
+        },
+
         AddInvoiceArticle: function(article) {
             this._invoiceArticles.push(article);
         },
@@ -98,6 +102,10 @@ $(function () {
             this.CaseInvoiceArticlesElement.val(this.ToCaseArticlesJson());
         },
 
+        GetSavedArticles: function() {
+            return this.CaseInvoiceArticlesElement.val();
+        },
+
         GetCaseArticlesTotal: function () {
             var total = 0;
             var caseArticles = this.GetCaseArticles();
@@ -124,6 +132,38 @@ $(function () {
             for (var i = 0; i < this._caseArticlesBackup.length; i++) {
                 this._caseArticles.push(this._caseArticlesBackup[i].Clone());
             }
+        },
+
+        InvoiceArticles: function() {
+            this._caseArticlesBackup = [];
+            for (var i = 0; i < this._caseArticles.length; i++) {
+                var article = this._caseArticles[i];
+                article.IsInvoiced = true;
+                this._caseArticlesBackup.push(article.Clone());
+            }
+            this.SaveCaseArticles();
+            var th = this;
+            $.post("/invoice/SaveArticles", {
+                caseId: this.CaseId,
+                articles: this.GetSavedArticles()
+            },
+            function() {
+                th.ShowMessage('Articles invoiced.');
+            });
+        },
+
+        ShowMessage: function(message) {
+            $().toastmessage('showToast', {
+                text: message,
+                sticky: false,
+                position: 'top-center',
+                type: 'success',
+                closeText: '',
+                stayTime: 3000,
+                inEffectDuration: 1000,
+                close: function () {
+                }
+            });
         },
 
         Initialize: function (e) {
@@ -160,9 +200,18 @@ $(function () {
                                 th.CancelChanges();
                                 th._container.dialog("close");
                             }
-                        }
+                        }                        
                     ]
                 });
+
+                if (!th.IsNewCase()) {
+                    var invoiceBtn = $("<button>Invoice</button>");
+                    invoiceBtn.click(function() {
+                        th.InvoiceArticles();
+                        th._container.dialog("close");
+                    });
+                    th._container.parent().find(".ui-dialog-buttonset").prepend(invoiceBtn);
+                }
 
                 var articlesEl = th._container.find(".articles-params-article");
                 $.getJSON("/invoice/articles?productAreaId=" + th.ProductAreaElement.val(), function (data) {

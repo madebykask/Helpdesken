@@ -8,6 +8,7 @@
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
+    using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Models.Invoice;
 
     public class InvoiceController : BaseController
@@ -38,6 +39,14 @@
             return this.Json(articles, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public void SaveArticles(int caseId, string articles)
+        {
+            var caseArticles = !string.IsNullOrEmpty(articles)
+                   ? InvoiceHelper.ToCaseInvoiceArticles(articles)
+                   : null;
+            this.invoiceArticleService.SaveCaseArticles(caseId, caseArticles);
+        }
 
         [HttpGet]
         public ViewResult IkeaArticlesImport()
