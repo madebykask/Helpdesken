@@ -1,3 +1,4 @@
+*.orig
 Thumbs.db
 *.obj
 *.exe
