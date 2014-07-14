@@ -1,51 +1,76 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.ContactInformationFieldsModel
+<script>
+    $(function () {
+        $('#user_dialog_button').button().click(function () {
+            var value = $("#user_dialog_textbox").val();
+
+            if (!value) {
+                return;
+            }
+
+            $.get('@Url.Action("SearchComputerUsers")', { selected: value }, function (data) {
+                $("#user_dialog_container").html(data);
+                $("#user_select_div").parent().appendTo("#user_dialog_container");
+                $('#user_select_div').dialog('open');
+            });
+        });
+    });
+</script>
 <table class="tableform">
     @if (Model.UserStringId.Show)
     {
         <tr>
-            <th colspan="2" class="header">@Translation.Get("Användarinformation")</th>
+            <th colspan="4" class="header">@Translation.Get("Användarinformation")</th>
         </tr>
         <tr>
             <td class="span3">
                 <label>@Translation.Get(Model.UserStringId.Caption)</label>
             </td>
             <td class="span9">
-                @(!Model.UserStringId.IsReadOnly
-                      ? Html.TextBoxFor(m => m.UserStringId.Value)
-                      : Html.TextBoxFor(m => m.UserStringId.Value, new { @readonly = true }))
+                @if (!Model.UserStringId.IsReadOnly)
+                {
+                    @Html.TextBoxFor(m => m.UserStringId.Value, new { id = "user_dialog_textbox" })
+                    <input type="button" class="btn" id="user_dialog_button" value="@Translation.Get("Sök")" />
+                }
+                else
+                {
+                    @Html.TextBoxFor(m => m.UserStringId.Value, new { @readonly = true })
+                }
             </td>
         </tr>
         <tr>
             <td class="span3">
                 <label>@Translation.Get("Förnamn")</label>
             </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.UserName.FirstName, new { @readonly = true })
+            <td class="span9" id="firstname_dialog_td">
+                @Html.DisplayFor(m => m.UserName.FirstName)
             </td>
         </tr>
         <tr>
             <td class="span3">
                 <label>@Translation.Get("Efternamn")</label>
             </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.UserName.LastName, new { @readonly = true })
+            <td class="span9" id="surname_dialog_td">
+                @Html.DisplayFor(m => m.UserName.LastName)
             </td>
         </tr>
         <tr>
             <td class="span3">
                 <label>@Translation.Get("Avdelning")</label>
             </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.Department, new { @readonly = true })
+            <td class="span9" id="department_dialog_td">
+                @Html.DisplayFor(m => m.Department)
             </td>
         </tr>
         <tr>
             <td class="span3">
                 <label>@Translation.Get("Enhet")</label>
             </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.Unit, new { @readonly = true })
+            <td class="span9" id="unit_dialog_td">
+                @Html.DisplayFor(m => m.Unit)
             </td>
         </tr>
     }
 </table>
+<div id="user_dialog_container">
+</div>

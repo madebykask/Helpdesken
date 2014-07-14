@@ -16,7 +16,7 @@
         $('#type_dropdown').change(function () {
             var selectedValue = $(this).val();
 
-            $.post('@Url.Action("RenderContent")', { currentMode: selectedValue }, function (tabMarkup) {
+            $.get('@Url.Action("RenderContent")', { currentMode: selectedValue }, function (tabMarkup) {
                 $('#type_data_container').html(tabMarkup);
                 var url = '@Url.Action("RedirectToNewInventory", "Inventory")';
                 url += '?currentMode=' + selectedValue;

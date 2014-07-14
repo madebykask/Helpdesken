@@ -209,10 +209,8 @@
 
             var newSetting =
                 model.InventoryFieldSettingsViewModel.NewDynamicFieldViewModel.InventoryDynamicFieldSettingModel;
-            if (!string.IsNullOrWhiteSpace(newSetting.Caption) && newSetting.FieldType.HasValue)
-            {
-                this.AddDynamicFieldSetting(model.InventoryTypeModel.Id, newSetting);
-            }
+
+            this.AddDynamicFieldSetting(model.InventoryTypeModel.Id, newSetting);
 
             this.UpdateDynamicFieldsSettings(
                 model.InventoryFieldSettingsViewModel.InventoryDynamicFieldViewModelSettings);
@@ -294,6 +292,12 @@
             int inventoryTypeId,
             NewInventoryDynamicFieldSettingModel newSetting)
         {
+
+            if (string.IsNullOrWhiteSpace(newSetting.Caption) || !newSetting.FieldType.HasValue)
+            {
+                return;
+            }
+
             var dynamicFieldSetting = InventoryDynamicFieldSetting.CreateNew(
                 inventoryTypeId,
                 newSetting.InventoryTypeGroupId,

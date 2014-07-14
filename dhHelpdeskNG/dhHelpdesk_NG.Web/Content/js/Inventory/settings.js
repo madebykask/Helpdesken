@@ -1,14 +1,12 @@
 ﻿function applyInventorySettingsBehavior(parameters) {
     if (!parameters.textModeId) throw new Error('textModeId must be specified.');
 
-    $(".inventory_field_type_class option:not([value=" + parameters.textModeId + "]):selected, .new_inventory_field_type_class option:not([value=" + parameters.textModeId + "]):selected")
+    var objects = $(".inventory_field_type_class option:not([value=" + parameters.textModeId + "]):selected, .new_inventory_field_type_class option:not([value=" + parameters.textModeId + "]):selected")
         .closest("tr")
-        .find(".inventory_property_size_class, .new_inventory_property_size_class")
-        .hide();
-    $(".inventory_field_type_class option:not([value=" + parameters.textModeId + "]):selected, .new_inventory_field_type_class option:not([value=" + parameters.textModeId + "]):selected")
-        .closest("tr")
-        .find(".inventory_property_size_class, .new_inventory_property_size_class")
-        .disable = true;
+        .find(".inventory_property_size_class, .new_inventory_property_size_class");
+
+    objects.hide();
+    objects.disable = true;
 
     $(".inventory_field_type_class").change(function () {
         var value = $(this).val();

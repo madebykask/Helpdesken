@@ -244,7 +244,7 @@
             this.Bind<IComputerModelRepository>().To<ComputerModelRepository>();
             this.Bind<IComputerRepository>().To<ComputerRepository>();
             this.Bind<IComputerTypeRepository>().To<ComputerTypeRepository>();
-            this.Bind<IComputerUserCustomerUserGroupRepository>().To<ComputerUserCustomerUserGroupRepository>();
+            this.Bind<IComputerUsersRepository>().To<ComputerUsersRepository>();
             this.Bind<IComputerUserLogRepository>().To<ComputerUserLogRepository>();
             this.Bind<IComputerUsersBlackListRepository>().To<ComputerUsersBlackListRepository>();
             this.Bind<IComputerInventoryRepository>().To<ComputerInventoryRepository>();

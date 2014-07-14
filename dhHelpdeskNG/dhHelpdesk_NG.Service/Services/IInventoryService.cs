@@ -18,6 +18,8 @@
 
     public interface IInventoryService
     {
+        List<ComputerUserOverview> GetComputerUsers(int customerId, string searchFor);
+
         void AddInventoryType(InventoryType businessModel);
 
         void UpdateInventoryType(InventoryType businessModel);

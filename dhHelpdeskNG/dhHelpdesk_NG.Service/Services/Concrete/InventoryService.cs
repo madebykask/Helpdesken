@@ -51,6 +51,8 @@
 
         private readonly IInventoryDynamicFieldSettingsRepository inventoryDynamicFieldSettingsRepository;
 
+        private readonly IComputerUsersRepository computerUsersRepository;
+
         public InventoryService(
             IInventoryTypeRepository inventoryTypeRepository,
             IComputerRepository computerRepository,
@@ -63,7 +65,8 @@
             IOperationLogRepository operationLogRepository,
             InventoryTypeGroupRepository inventoryTypeGroupRepository,
             IInventoryFieldSettingsRepository inventoryFieldSettingsRepository,
-            IInventoryDynamicFieldSettingsRepository inventoryDynamicFieldSettingsRepository)
+            IInventoryDynamicFieldSettingsRepository inventoryDynamicFieldSettingsRepository,
+            IComputerUsersRepository computerUsersRepository)
         {
             this.inventoryTypeRepository = inventoryTypeRepository;
             this.computerRepository = computerRepository;
@@ -77,6 +80,12 @@
             this.inventoryTypeGroupRepository = inventoryTypeGroupRepository;
             this.inventoryFieldSettingsRepository = inventoryFieldSettingsRepository;
             this.inventoryDynamicFieldSettingsRepository = inventoryDynamicFieldSettingsRepository;
+            this.computerUsersRepository = computerUsersRepository;
+        }
+
+        public List<ComputerUserOverview> GetComputerUsers(int customerId, string searchFor)
+        {
+            return this.computerUsersRepository.GetOverviews(customerId, searchFor);
         }
 
         public void AddInventoryType(InventoryType businessModel)

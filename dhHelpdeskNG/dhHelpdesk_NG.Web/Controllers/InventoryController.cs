@@ -943,6 +943,14 @@
             return this.RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public PartialViewResult SearchComputerUsers(string selected)
+        {
+            var models = this.inventoryService.GetComputerUsers(SessionFacade.CurrentCustomer.Id, selected);
+
+            return this.PartialView("UserSelectDialog", models);
+        }
+
         #region Private
 
         private ReportViewModel BuildViewModel(

@@ -311,6 +311,8 @@
     <Compile Include="Repositories\Computers\IComputerRepository.cs" />
     <Compile Include="Repositories\Computers\IComputerFiledSettingsRepository.cs" />
     <Compile Include="Repositories\Computers\IComputerTypeRepository.cs" />
+    <Compile Include="Repositories\ComputerUserLogRepository.cs" />
+    <Compile Include="Repositories\ComputerUsersBlackListRepository.cs" />
     <Compile Include="Repositories\Concrete\EmailGroupEmailRepository.cs" />
     <Compile Include="Repositories\Concrete\EmailGroupRepository.cs" />
     <Compile Include="Repositories\Concrete\OrganizationUnitRepository.cs" />
@@ -325,6 +327,9 @@
     <Compile Include="Repositories\Changes\IChangeLogRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeFileRepository.cs" />
     <Compile Include="Repositories\EmailLogRepository.cs" />
+    <Compile Include="Repositories\IComputerUsersRepository.cs" />
+    <Compile Include="Repositories\IComputerUserLogRepository.cs" />
+    <Compile Include="Repositories\IComputerUsersBlackListRepository.cs" />
     <Compile Include="Repositories\IEmailGroupEmailRepository.cs" />
     <Compile Include="Repositories\IEMailGroupRepository.cs" />
     <Compile Include="Repositories\IEmailLogRepository.cs" />
