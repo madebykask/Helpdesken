@@ -1517,6 +1517,8 @@
     <Content Include="Views\Reports\AverageSolutionTimeView.cshtml" />
     <Content Include="Views\Invoice\EditorTemplates\ArticlesImportModel.cshtml" />
     <Content Include="Views\Invoice\IkeaArticlesImport.cshtml" />
+    <Content Include="Views\Inventory\_SendToDialog.cshtml" />
+    <Content Include="Views\Inventory\UserHistoryDialog.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

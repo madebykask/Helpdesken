@@ -1,4 +1,14 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.ContactInformationFieldsModel
+@{
+    
+    if (!ViewData.ContainsKey("ComputerId"))
+    {
+        throw new ArgumentNullException("ComputerId", "\"ComputerId\" ViewData parameter must be specified.");
+    }
+
+    var computerId = ViewData["ComputerId"];
+}
+
 <script>
     $(function () {
         $('#user_dialog_button').button().click(function () {
@@ -14,6 +24,16 @@
                 $('#user_select_div').dialog('open');
             });
         });
+
+        $('#history_dialog_button').button().click(function () {
+
+            $.get('@Url.Action("SearchComputerUserHistory")', { computerId: '@computerId' }, function (data) {
+                $("#user_history_dialog_container").html(data);
+                $("#user_history_select_div").parent().appendTo("#user_history_dialog_container");
+                $('#user_history_select_div').dialog('open');
+            });
+        });
+
     });
 </script>
 <table class="tableform">
@@ -31,6 +51,7 @@
                 {
                     @Html.TextBoxFor(m => m.UserStringId.Value, new { id = "user_dialog_textbox" })
                     <input type="button" class="btn" id="user_dialog_button" value="@Translation.Get("Sök")" />
+                    <input type="button" class="btn" id="history_dialog_button" value="@Translation.Get("Historik")" />
                 }
                 else
                 {
@@ -72,5 +93,8 @@
         </tr>
     }
 </table>
+@Html.HiddenFor(x => x.UserId, new { id = "user_dialog_userId" })
 <div id="user_dialog_container">
+</div>
+<div id="user_history_dialog_container">
 </div>

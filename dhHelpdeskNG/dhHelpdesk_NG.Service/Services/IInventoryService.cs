@@ -20,6 +20,8 @@
     {
         List<ComputerUserOverview> GetComputerUsers(int customerId, string searchFor);
 
+        List<ComputerUserOverview> GetComputerUserHistory(int computerId);
+
         void AddInventoryType(InventoryType businessModel);
 
         void UpdateInventoryType(InventoryType businessModel);

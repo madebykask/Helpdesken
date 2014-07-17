@@ -8,5 +8,7 @@ namespace DH.Helpdesk.Dal.Repositories
     public interface IComputerUsersRepository : INewRepository
     {
         List<ComputerUserOverview> GetOverviews(int customerId, string userId);
+
+        List<ComputerUserOverview> GetConnectedToComputerOverviews(int computerId);
     }
 }

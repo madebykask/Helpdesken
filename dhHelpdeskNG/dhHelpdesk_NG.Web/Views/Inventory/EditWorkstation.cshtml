@@ -47,6 +47,7 @@
             <div class="tab-pane tab-pane-border @computerTabClass" id="fragment-1">
                 @using (Html.BeginForm("EditWorkstation", "Inventory", FormMethod.Post, new { id = "workstation_edit_form" }))
                 {
+                    @Html.HiddenFor(m => m.ComputerViewModel.Id)
                     @Html.EditorFor(m => m.ComputerViewModel.WorkstationFieldsViewModel, "Computer/WorkstationFieldsViewModel")
                     @Html.EditorFor(m => m.ComputerViewModel.ChassisFieldsModel, "Computer/ChassisModel")
                     @Html.EditorFor(m => m.ComputerViewModel.InventoryFieldsModel, "Computer/InventoryModel")
@@ -57,7 +58,7 @@
                     @Html.EditorFor(m => m.ComputerViewModel.SoundFieldsModel, "Computer/SoundFieldsModel")
                     @Html.EditorFor(m => m.ComputerViewModel.ContractFieldsViewModel, "Computer/ContractFieldsViewModel")
                     @Html.EditorFor(m => m.ComputerViewModel.OtherFieldsModel, "Computer/OtherFieldsModel")
-                    @Html.EditorFor(m => m.ComputerViewModel.ContactInformationFieldsModel, "Computer/ContactInformationFieldsModel")
+                    @Html.EditorFor(m => m.ComputerViewModel.ContactInformationFieldsModel, "Computer/ContactInformationFieldsModel", new { ComputerId = Model.ComputerViewModel.Id })
                     @Html.EditorFor(m => m.ComputerViewModel.OrganizationFieldsViewModel, "Computer/OrganizationFieldsViewModel")
                     @Html.EditorFor(m => m.ComputerViewModel.PlaceFieldsViewModel, "Computer/PlaceFieldsViewModel")
                     @Html.EditorFor(m => m.ComputerViewModel.ContactFieldsModel, "Computer/ContactFieldsModel")
@@ -141,15 +142,15 @@
 
 <script type="text/javascript">
 
-    $('#computer_tab').click(function() {
+    $('#computer_tab').click(function () {
         $.post('@Url.Action("RememberTab", "Service")', { topic: '@PageName.ComputerEdit', tab: '@TabName.Computer' });
     });
 
-    $('#log_tab').click(function() {
+    $('#log_tab').click(function () {
         $.post('@Url.Action("RememberTab", "Service")', { topic: '@PageName.ComputerEdit', tab: '@TabName.ComputerLog' });
     });
 
-    $('#inventory_tab').click(function() {
+    $('#inventory_tab').click(function () {
         $.post('@Url.Action("RememberTab", "Service")', { topic: '@PageName.ComputerEdit', tab: '@TabName.Inventory' });
     });
 

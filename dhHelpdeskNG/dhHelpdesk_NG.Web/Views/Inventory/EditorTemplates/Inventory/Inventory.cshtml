@@ -194,11 +194,11 @@
                         @switch (item.FieldTypes)
                         {
                             case FieldTypes.Bool:
-                                var boolValue = item.Value != null && item.Value == DynamicFieldModel.True;
+                                var boolValue = !string.IsNullOrWhiteSpace(item.Value) && item.Value == DynamicFieldModel.True;
                                 @Html.CheckBoxFor(m => boolValue)
                                 break;
                             case FieldTypes.Date:
-                                var dateValue = item.Value != null ? (DateTime?)DateTime.Parse(item.Value) : null;
+                                var dateValue = !string.IsNullOrWhiteSpace(item.Value) ? (DateTime?)DateTime.Parse(item.Value) : null;
                                 @Html.EditorFor(m => dateValue, "DatePicker", new { id = "general_finishing_date_datepicker" })
                                 break;
                             case FieldTypes.Text:
@@ -206,7 +206,7 @@
                                 @Html.EditorFor(m => textValue)
                                 break;
                             case FieldTypes.Numeric:
-                                var intValue = item.Value != null ? (int?)int.Parse(item.Value) : null;
+                                var intValue = !string.IsNullOrWhiteSpace(item.Value) ? (int?)int.Parse(item.Value) : null;
                                 @Html.EditorFor(m => intValue)
                                 break;
                             default:

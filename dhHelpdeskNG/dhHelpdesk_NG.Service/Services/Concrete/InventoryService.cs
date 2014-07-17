@@ -88,6 +88,11 @@
             return this.computerUsersRepository.GetOverviews(customerId, searchFor);
         }
 
+        public List<ComputerUserOverview> GetComputerUserHistory(int computerId)
+        {
+            return this.computerUsersRepository.GetConnectedToComputerOverviews(computerId);
+        }
+
         public void AddInventoryType(InventoryType businessModel)
         {
             this.inventoryTypeRepository.Add(businessModel);

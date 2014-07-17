@@ -951,6 +951,14 @@
             return this.PartialView("UserSelectDialog", models);
         }
 
+        [HttpGet]
+        public PartialViewResult SearchComputerUserHistory(int computerId)
+        {
+            var models = this.inventoryService.GetComputerUserHistory(computerId);
+
+            return this.PartialView("UserHistoryDialog", models);
+        }
+
         #region Private
 
         private ReportViewModel BuildViewModel(

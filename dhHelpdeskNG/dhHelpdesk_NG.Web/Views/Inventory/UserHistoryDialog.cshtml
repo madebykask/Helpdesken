@@ -1,7 +1,7 @@
 ﻿@model List<DH.Helpdesk.BusinessData.Models.Inventory.Output.ComputerUserOverview>
 <script>
     $(function () {
-        $('#user_select_div').dialog({
+        $('#user_history_select_div').dialog({
             autoOpen: false,
             modal: false,
             resizable: false,
@@ -12,22 +12,10 @@
             height: 500,
         });
     });
-
-    function fillUserInputs(id, userId, firstName, surName, deparment, unit) {
-        $("#user_dialog_userId").val(id);
-        $("#user_dialog_textbox").val(userId);
-        $("#firstname_dialog_td").html(firstName);
-        $("#surname_dialog_td").html(surName);
-        $("#department_dialog_td").html(deparment);
-        $("#unit_dialog_td").html(unit);
-
-        $('#user_select_div').dialog('close');
-    }
-
 </script>
 
-<div id="user_select_div" title="@Translation.Get("Användarinformation")">
-    @Translation.Get("Klicka på raden för att lägga in informationen.")
+<div id="user_history_select_div" title="@Translation.Get("Historik")">
+    @Translation.Get("Historik.")
     <table class="table table-striped table-bordered table-hover">
         <thead>
             <tr>
@@ -50,7 +38,7 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr style="cursor: pointer"  onclick="fillUserInputs('@item.Id', '@item.UserId', '@item.FirstName', '@item.SurName', '@item.Department', '@item.Unit')">
+                <tr>
                     <td>@Html.DisplayFor(x => item.UserId)
                     </td>
                     <td>@Html.DisplayFor(x => item.FirstName)
