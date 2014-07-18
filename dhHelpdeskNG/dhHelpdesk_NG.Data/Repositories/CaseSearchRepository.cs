@@ -733,26 +733,26 @@
             // state secondery
             if (!string.IsNullOrWhiteSpace(f.StateSecondary))
                 sb.Append(" and (tblcase.StateSecondary_Id in (" + f.StateSecondary.SafeForSqlInject() + "))");
-            // free text
+
             if (!string.IsNullOrWhiteSpace(f.FreeTextSearch))
             {
-                string searchFor = f.FreeTextSearch.SafeForSqlInject().ToLower().createDBsearchstring(); 
-                sb.Append(" and (");
-                sb.Append(" lower(tblCase.CaseNumber) like '" + searchFor + "' ");
-                sb.Append(" or lower(tblCase.ReportedBy) like '" + searchFor + "' ");
-                sb.Append(" or lower(tblCase.Persons_Name) like '" + searchFor + "' ");
-                sb.Append(" or lower(tblCase.Persons_EMail) like '" + searchFor + "' ");
-                sb.Append(" or lower(tblCase.Persons_Phone) like '" + searchFor + "' ");
-                sb.Append(" or lower(tblCase.Persons_CellPhone) like '" + searchFor + "' ");
-                sb.Append(" or lower(tblCase.Place) like '" + searchFor + "' ");
-                sb.Append(" or lower(tblCase.Caption) like '" + searchFor + "' ");
-                sb.Append(" or " + this.InsensitiveSearch("tblCase.Description") + " like '" + searchFor + "' ");
-                sb.Append(" or lower(tblCase.Miscellaneous) like '" + searchFor + "' ");
-                sb.Append(" or lower(tblDepartment.Department) like '" + searchFor + "' ");
-                sb.Append(" or lower(tblDepartment.DepartmentId) like '" + searchFor + "' ");
-                sb.Append(" or tblCase.Id in (select Case_Id from tblLog where " + this.InsensitiveSearch("tblLog.Text_Internal") + " like '" + searchFor + "' or " + this.InsensitiveSearch("tblLog.Text_External") + " like '" + searchFor + "')");
-                sb.Append(" or tblCase.Id in (select Case_Id from tblFormFieldValue where lower(FormFieldValue) like '" + searchFor + "')");
-                sb.Append(")");
+                var text = f.FreeTextSearch; 
+                sb.Append(" AND (");
+                sb.Append(this.GetSqlLike("[tblCase].[CaseNumber]", text));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[ReportedBy]", text));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Name]", text));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_EMail]", text));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Phone]", text));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_CellPhone]", text));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Place]", text));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Caption]", text));
+                sb.AppendFormat(" OR [tblCase].[Description] LIKE '%{0}%'", text);
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Miscellaneous]", text));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblDepartment].[Department]", text));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblDepartment].[DepartmentId]", text));
+                sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblLog] WHERE [tblLog].[Text_Internal] LIKE '%{0}%' OR [tblLog].[Text_External] LIKE '%{0}%'))", text);
+                sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblFormFieldValue] WHERE {0}))", this.GetSqlLike("FormFieldValue", text));
+                sb.Append(") ");
             }
 
             //LockCaseToWorkingGroup
@@ -768,6 +768,33 @@
                     sb.Append(" or tblCase.WorkingGroup_Id is null ");
 
                 sb.Append(" or not exists (select id from tblWorkingGroup where Customer_Id = " + f.CustomerId + ")");
+                sb.Append(") ");
+            }
+
+            return sb.ToString();
+        }
+
+        private string GetSqlLike(string field, string text)
+        {
+            var sb = new StringBuilder();
+            if (!string.IsNullOrEmpty(field) && 
+                !string.IsNullOrEmpty(text))
+            {
+                sb.Append(" (");
+                var words = text
+                        .SafeForSqlInject()
+                        .ToLower()
+                        .Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+
+                for (var i = 0; i < words.Length; i++)
+                {
+                    sb.AppendFormat("(LOWER({0}) LIKE '%{1}%')", field, words[i].Trim());
+                    if (words.Length > 1 && i < words.Length - 1)
+                    {
+                        sb.Append(" OR ");
+                    }
+                }
+
                 sb.Append(") ");
             }
 
