@@ -1795,6 +1795,38 @@
                                 <input type="hidden" name="CaseFieldSettingWithLangauges[52].FieldHelp" value="0" />
                             </td>
                         </tr>
+                        <tr>
+                            <td>&nbsp;
+                            </td>
+                            <td>
+                                @Translation.Get("Closing Reason")
+                            </td>
+                            <td>
+                                <input type="checkbox" name="CaseFieldSettings[54].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.ClosingReason.ToString()) == 1 ? "checked=checked" : "") value="1"/>
+                                <input type="hidden" name="CaseFieldSettings[54].ShowOnStartPage" value="0" />
+                                <input type="hidden" name="CaseFieldSettings[54].Customer_Id" value="@Model.Customer.Id" />
+                                <input type="hidden" name="CaseFieldSettings[54].Name" value="ClosingReason" />
+                                <input type="hidden" name="CaseFieldSettings[54].Id" value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.ClosingReason.ToString())" />
+                            </td>
+                            <td>
+                                <input type="checkbox" name="CaseFieldSettings[54].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.ClosingReason.ToString()) == 1 ? "checked=checked" : "") value="1"/>
+                                <input type="hidden" name="CaseFieldSettings[54].ShowExternal" value="0" />
+                            </td>
+                            <td>
+                                <input type="text" name="CaseFieldSettingWithLangauges[54].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.ClosingReason.ToString())"/>
+                                <input type="hidden" name="CaseFieldSettingWithLangauges[54].Name" value="ClosingReason" />
+                            </td>
+                            <td>
+                                <input type="checkbox" name="CaseFieldSettings[54].Required" @(Model.CaseFieldSettings.getRequired(GlobalEnums.TranslationCaseFields.ClosingReason.ToString()) == 1 ? "checked=checked" : "") value="1"/>
+                                <input type="hidden" name="CaseFieldSettings[54].Required" value="0" />
+                            </td>
+                            <td>&nbsp;
+                            </td>
+                            <td>
+                                <input type="text" name="CaseFieldSettingWithLangauges[54].FieldHelp" value="@Model.CaseFieldSettingWithLangauges.getFieldHelp(GlobalEnums.TranslationCaseFields.ClosingReason.ToString())"/>
+                                <input type="hidden" name="CaseFieldSettingWithLangauges[54].FieldHelp" value="0" />
+                            </td>
+                        </tr>
                     </table>
                     <input type="hidden" id="LanguageId" name="LanguageId" value="@Model.Language.Id" />
                     @Html.HiddenFor(model => model.CaseFieldSettingLanguage.Language_Id)

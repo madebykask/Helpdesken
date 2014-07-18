@@ -135,9 +135,9 @@
                     @Html.TextAreaFor(model => model.case_.FinishingDescription)
                 </td>
             </tr>
-            <tr>
+            <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ClosingReason.ToString())">
                 <td>
-                    @Translation.Get("Closing reason") 
+                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ClosingReason) 
                 </td>
                 <td>
                     <div id="divFinishingType" class="btn-group">
@@ -151,7 +151,6 @@
                         </ul>
                         @Html.HiddenFor(model => model.CaseLog.FinishingType)
                     </div>
-
                 </td>
             </tr>
             <tr>
