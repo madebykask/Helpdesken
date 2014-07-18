@@ -4,6 +4,7 @@ using DH.Helpdesk.Domain;
 
 namespace DH.Helpdesk.Web.Models.Case
 {
+    using System;
     using System.Collections.Generic;
 
     public class CaseColumnsSettingsModel
@@ -68,8 +69,24 @@ namespace DH.Helpdesk.Web.Models.Case
         public IList<StateSecondary> SubStates { get; set; }        
         public string SelectedSubState { get; set; }
 
-        public CaseColumnsSettingsModel ColumnSettingModel { get; set; }
-        
+        public DateTime? CaseRegistrationDateStartFilter { get; set; }
+
+        public DateTime? CaseRegistrationDateEndFilter { get; set; }
+
+        public DateTime? CaseWatchDateStartFilter { get; set; }
+
+        public DateTime? CaseWatchDateEndFilter { get; set; }
+
+        public DateTime? CaseClosingDateStartFilter { get; set; }
+
+        public DateTime? CaseClosingDateEndFilter { get; set; }
+
+        public bool CaseRegistrationDateFilterShow { get; set; }
+
+        public bool CaseWatchDateFilterShow { get; set; }
+
+        public bool CaseClosingDateFilterShow { get; set; }
+
+        public CaseColumnsSettingsModel ColumnSettingModel { get; set; }        
     }
 }
-    

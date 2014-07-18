@@ -31,6 +31,15 @@
             this.Property(x => x.WatchDatePermission).IsRequired();
             this.Property(x => x.UserInfoPermission).IsRequired();
             this.Property(x => x.CasePriorityFilter).IsOptional().HasMaxLength(50);
+            this.Property(x => x.CaseRegistrationDateStartFilter).IsOptional();
+            this.Property(x => x.CaseRegistrationDateEndFilter).IsOptional();
+            this.Property(x => x.CaseWatchDateStartFilter).IsOptional();
+            this.Property(x => x.CaseWatchDateEndFilter).IsOptional();
+            this.Property(x => x.CaseClosingDateStartFilter).IsOptional();
+            this.Property(x => x.CaseClosingDateEndFilter).IsOptional();
+            this.Property(x => x.CaseRegistrationDateFilterShow).IsRequired();
+            this.Property(x => x.CaseWatchDateFilterShow).IsRequired();
+            this.Property(x => x.CaseClosingDateFilterShow).IsRequired();
 
             this.ToTable("tblcustomeruser");
         }

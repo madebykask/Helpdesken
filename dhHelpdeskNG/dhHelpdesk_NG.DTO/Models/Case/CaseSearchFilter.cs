@@ -1,6 +1,8 @@
 ﻿
 namespace DH.Helpdesk.BusinessData.Models.Case
 {
+    using System;
+
     public class CaseSearchFilter 
     {
         public int CustomerId { get; set; }
@@ -23,6 +25,18 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public string ParantPath_ProductArea { get; set; }
         public string ParantPath_CaseType { get; set; }
 
+        public DateTime? CaseRegistrationDateStartFilter { get; set; }
+
+        public DateTime? CaseRegistrationDateEndFilter { get; set; }
+
+        public DateTime? CaseWatchDateStartFilter { get; set; }
+
+        public DateTime? CaseWatchDateEndFilter { get; set; }
+
+        public DateTime? CaseClosingDateStartFilter { get; set; }
+
+        public DateTime? CaseClosingDateEndFilter { get; set; }
+
         public CaseSearchFilter Copy(CaseSearchFilter o)
         {
             var r = new CaseSearchFilter();
@@ -30,7 +44,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             r.CaseProgress = o.CaseProgress;
             r.CaseType = o.CaseType;
             r.Category = o.Category;
-            r.Country = o.Country ;
+            r.Country = o.Country;
             r.CustomerId = o.CustomerId;
             r.Department = o.Department;
             r.FreeTextSearch = o.FreeTextSearch;
@@ -46,7 +60,12 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             r.UserPerformer = o.UserPerformer;
             r.UserResponsible = o.UserResponsible;
             r.WorkingGroup = o.WorkingGroup;  
-                
+            r.CaseRegistrationDateStartFilter = o.CaseRegistrationDateStartFilter;    
+            r.CaseRegistrationDateEndFilter = o.CaseRegistrationDateEndFilter;    
+            r.CaseWatchDateStartFilter = o.CaseWatchDateStartFilter;    
+            r.CaseWatchDateEndFilter = o.CaseWatchDateEndFilter;    
+            r.CaseClosingDateStartFilter = o.CaseClosingDateStartFilter;
+            r.CaseClosingDateEndFilter = o.CaseClosingDateEndFilter;    
             return r;
         }
     }

@@ -71,22 +71,28 @@ namespace DH.Helpdesk.Services.Services
         public UserCaseSetting GetUserCaseSettings(int customerId, int userId)
         {
             var userSetting = this._customerUserRepository.GetCustomerSettings(customerId, userId);
-            return new UserCaseSetting
-                (
+            return new UserCaseSetting(
                   customerId,
                   userId,
-                  (userSetting.CaseRegionFilter!=null)?userSetting.CaseRegionFilter.Replace(" ", string.Empty): string.Empty,
-                  (userSetting.CaseUserFilter != null)? userSetting.CaseUserFilter.Replace(" ", string.Empty): string.Empty,
-                  (userSetting.CaseCaseTypeFilter !=null),
+                  (userSetting.CaseRegionFilter != null) ? userSetting.CaseRegionFilter.Replace(" ", string.Empty) : string.Empty,
+                  (userSetting.CaseUserFilter != null) ? userSetting.CaseUserFilter.Replace(" ", string.Empty) : string.Empty,
+                  userSetting.CaseCaseTypeFilter != null,
                   (userSetting.CaseProductAreaFilter != null) ? userSetting.CaseProductAreaFilter.Replace(" ", string.Empty) : string.Empty,
-                  (userSetting.CaseWorkingGroupFilter != null)? userSetting.CaseWorkingGroupFilter.Replace(" ", string.Empty) : string.Empty,
-                  (userSetting.CaseResponsibleFilter != null),
-                  (userSetting.CasePerformerFilter != null)? userSetting.CasePerformerFilter.Replace(" ", string.Empty) : string.Empty,
-                  (userSetting.CasePriorityFilter != null)? userSetting.CasePriorityFilter.Replace(" ", string.Empty) : string.Empty,
-                  (userSetting.CaseStatusFilter != null),
-                  (userSetting.CaseStateSecondaryFilter != null)? userSetting.CaseStateSecondaryFilter.Replace(" ", string.Empty) : string.Empty
-                );
-
+                  (userSetting.CaseWorkingGroupFilter != null) ? userSetting.CaseWorkingGroupFilter.Replace(" ", string.Empty) : string.Empty,
+                  userSetting.CaseResponsibleFilter != null,
+                  (userSetting.CasePerformerFilter != null) ? userSetting.CasePerformerFilter.Replace(" ", string.Empty) : string.Empty,
+                  (userSetting.CasePriorityFilter != null) ? userSetting.CasePriorityFilter.Replace(" ", string.Empty) : string.Empty,
+                  userSetting.CaseStatusFilter != null,
+                  (userSetting.CaseStateSecondaryFilter != null) ? userSetting.CaseStateSecondaryFilter.Replace(" ", string.Empty) : string.Empty,
+                  userSetting.CaseRegistrationDateStartFilter,
+                  userSetting.CaseRegistrationDateEndFilter,
+                  userSetting.CaseWatchDateStartFilter,
+                  userSetting.CaseWatchDateEndFilter,
+                  userSetting.CaseClosingDateStartFilter,
+                  userSetting.CaseClosingDateEndFilter,
+                  userSetting.CaseRegistrationDateFilterShow,
+                  userSetting.CaseWatchDateFilterShow,
+                  userSetting.CaseClosingDateFilterShow);
         }
 
         public void UpdateUserCaseSetting(UserCaseSetting newSetting)

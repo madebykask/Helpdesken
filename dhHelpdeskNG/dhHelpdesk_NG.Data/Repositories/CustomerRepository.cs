@@ -206,6 +206,16 @@
                 userSettingEntity.CaseStateSecondaryFilter = (newSetting.SubState == string.Empty)
                     ? null
                     : newSetting.SubState;
+
+                userSettingEntity.CaseRegistrationDateStartFilter = newSetting.CaseRegistrationDateStartFilter;
+                userSettingEntity.CaseRegistrationDateEndFilter = newSetting.CaseRegistrationDateEndFilter;
+                userSettingEntity.CaseWatchDateStartFilter = newSetting.CaseWatchDateStartFilter;
+                userSettingEntity.CaseWatchDateEndFilter = newSetting.CaseWatchDateEndFilter;
+                userSettingEntity.CaseClosingDateStartFilter = newSetting.CaseClosingDateStartFilter;
+                userSettingEntity.CaseClosingDateEndFilter = newSetting.CaseClosingDateEndFilter;
+                userSettingEntity.CaseRegistrationDateFilterShow = newSetting.CaseRegistrationDateFilterShow;
+                userSettingEntity.CaseWatchDateFilterShow = newSetting.CaseWatchDateFilterShow;
+                userSettingEntity.CaseClosingDateFilterShow = newSetting.CaseClosingDateFilterShow;
             }
         }
     }

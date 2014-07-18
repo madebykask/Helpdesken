@@ -272,6 +272,42 @@
                             </td>
                         </tr>                
                     }
+                    @if (Model.customerUserSetting.CaseRegistrationDateFilterShow)
+                    {
+                        <tr>
+                            <td>
+                                @Translation.Get(GlobalEnums.TranslationCaseFields.RegTime.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)
+                            </td>
+                            <td>
+                                @Html.EditorFor(m => m.CaseRegistrationDateStartFilter, "DatePicker", new { id = "CaseRegistrationDateStartFilter" })                                         
+                                @Html.EditorFor(m => m.CaseRegistrationDateEndFilter, "DatePicker", new { id = "CaseRegistrationDateEndFilter" })                                                                         
+                            </td>
+                        </tr>                
+                    }
+                    @if (Model.customerUserSetting.CaseWatchDateFilterShow)
+                    {
+                        <tr>
+                            <td>
+                                @Translation.Get(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)
+                            </td>
+                            <td>
+                                @Html.EditorFor(m => m.CaseWatchDateStartFilter, "DatePicker", new { id = "CaseWatchDateStartFilter" })                                         
+                                @Html.EditorFor(m => m.CaseWatchDateEndFilter, "DatePicker", new { id = "CaseWatchDateEndFilter" })                                                                         
+                            </td>
+                        </tr>                
+                    }
+                    @if (Model.customerUserSetting.CaseClosingDateFilterShow)
+                    {
+                        <tr>
+                            <td>
+                                @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)
+                            </td>
+                            <td>
+                                @Html.EditorFor(m => m.CaseClosingDateStartFilter, "DatePicker", new { id = "CaseClosingDateStartFilter" })                                         
+                                @Html.EditorFor(m => m.CaseClosingDateEndFilter, "DatePicker", new { id = "CaseClosingDateEndFilter" })                                                                         
+                            </td>
+                        </tr>                
+                    }
                     <tr>
                         <td>                            
                         </td>

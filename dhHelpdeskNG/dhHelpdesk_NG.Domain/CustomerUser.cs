@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.Domain
 {
+    using global::System;
+
     public class CustomerUser
     {
         public int Customer_Id { get; set; }
@@ -23,8 +25,26 @@
         public string CaseStatusFilter { get; set; }
         public string CaseResponsibleFilter { get; set; }
 
-        public virtual Customer Customer { get; set; }
-        public virtual User User { get; set; }
+        public DateTime? CaseRegistrationDateStartFilter { get; set; }
 
+        public DateTime? CaseRegistrationDateEndFilter { get; set; }
+
+        public DateTime? CaseWatchDateStartFilter { get; set; }
+
+        public DateTime? CaseWatchDateEndFilter { get; set; }
+
+        public DateTime? CaseClosingDateStartFilter { get; set; }
+
+        public DateTime? CaseClosingDateEndFilter { get; set; }
+                
+        public bool CaseRegistrationDateFilterShow { get; set; }
+                
+        public bool CaseWatchDateFilterShow { get; set; }
+
+        public bool CaseClosingDateFilterShow { get; set; }
+       
+        public virtual Customer Customer { get; set; }
+
+        public virtual User User { get; set; }
     }
 }

@@ -48,6 +48,22 @@
             return ret;
         }
 
+        public static DateTime? GetDate(this FormCollection form, string key)
+        {
+            if (string.IsNullOrEmpty(key))
+            {
+                return null;
+            }
+
+            DateTime date;
+            if (!DateTime.TryParse(form[key], out date))
+            {
+                return null;
+            }
+
+            return date;
+        }
+
         public static bool IsFormValueTrue(this FormCollection form, string key)
         {
             if (string.IsNullOrEmpty(key))

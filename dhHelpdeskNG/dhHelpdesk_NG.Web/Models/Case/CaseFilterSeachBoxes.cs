@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Models.Case
 {
+    using System;
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models;
@@ -27,6 +28,17 @@
         public IList<Status> filterStatus { get; set; }
         public IList<StateSecondary> filterStateSecondary { get; set; }
         public IList<Field> filterCaseProgress { get; set; }
-    }
-    
+
+        public DateTime? CaseRegistrationDateStartFilter { get; set; }
+
+        public DateTime? CaseRegistrationDateEndFilter { get; set; }
+
+        public DateTime? CaseWatchDateStartFilter { get; set; }
+
+        public DateTime? CaseWatchDateEndFilter { get; set; }
+
+        public DateTime? CaseClosingDateStartFilter { get; set; }
+
+        public DateTime? CaseClosingDateEndFilter { get; set; }
+    }    
 }

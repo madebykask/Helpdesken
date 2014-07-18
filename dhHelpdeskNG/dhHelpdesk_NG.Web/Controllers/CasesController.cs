@@ -292,6 +292,13 @@ namespace DH.Helpdesk.Web.Controllers
                         fd.filterStateSecondary = this._stateSecondaryService.GetStateSecondaries(cusId);
                     fd.filterCaseProgress = ObjectExtensions.GetFilterForCases(SessionFacade.CurrentUser.FollowUpPermission, fd.filterPriority, cusId);
 
+                    fd.CaseRegistrationDateStartFilter = fd.customerUserSetting.CaseRegistrationDateStartFilter;
+                    fd.CaseRegistrationDateEndFilter = fd.customerUserSetting.CaseRegistrationDateEndFilter;
+                    fd.CaseWatchDateStartFilter = fd.customerUserSetting.CaseWatchDateStartFilter;
+                    fd.CaseWatchDateEndFilter = fd.customerUserSetting.CaseWatchDateEndFilter;
+                    fd.CaseClosingDateStartFilter = fd.customerUserSetting.CaseClosingDateStartFilter;
+                    fd.CaseClosingDateEndFilter = fd.customerUserSetting.CaseClosingDateEndFilter;
+
                     var sm = this.GetCaseSearchModel(cusId, userId);
 
                     // hämta parent path för productArea 
@@ -881,6 +888,12 @@ namespace DH.Helpdesk.Web.Controllers
                 f.StateSecondary = frm.ReturnFormValue("lstFilterStateSecondary");
                 f.CaseProgress = frm.ReturnFormValue("lstFilterCaseProgress");
                 f.FreeTextSearch = frm.ReturnFormValue("txtFreeTextSearch");
+                f.CaseRegistrationDateStartFilter = frm.GetDate("CaseRegistrationDateStartFilter");
+                f.CaseRegistrationDateEndFilter = frm.GetDate("CaseRegistrationDateEndFilter");
+                f.CaseWatchDateStartFilter = frm.GetDate("CaseWatchDateStartFilter");
+                f.CaseWatchDateEndFilter = frm.GetDate("CaseWatchDateEndFilter");
+                f.CaseClosingDateStartFilter = frm.GetDate("CaseClosingDateStartFilter");
+                f.CaseClosingDateEndFilter = frm.GetDate("CaseClosingDateEndFilter");
 
                 var sm = this.GetCaseSearchModel(f.CustomerId, f.UserId);
                 sm.caseSearchFilter = f;
@@ -1021,21 +1034,29 @@ namespace DH.Helpdesk.Web.Controllers
                 ? ((frm.ReturnFormValue("lstSubState") == string.Empty) ? "0" : frm.ReturnFormValue("lstSubState"))
                 : string.Empty;
 
-            var newCaseSetting = new UserCaseSetting
-                (
-                customerId,
-                userId,
-                regions,
-                registerBy,
-                caseTypeCheck,
-                productArea,
-                workingGroup,
-                responsibleCheck,
-                administrator,
-                priority,
-                stateCheck,
-                subState
-                );
+
+            var newCaseSetting = new UserCaseSetting(
+                            customerId,
+                            userId,
+                            regions,
+                            registerBy,
+                            caseTypeCheck,
+                            productArea,
+                            workingGroup,
+                            responsibleCheck,
+                            administrator,
+                            priority,
+                            stateCheck,
+                            subState,
+                            frm.GetDate("CaseRegistrationDateStartFilter"),
+                            frm.GetDate("CaseRegistrationDateEndFilter"),
+                            frm.GetDate("CaseWatchDateStartFilter"),
+                            frm.GetDate("CaseWatchDateEndFilter"),
+                            frm.GetDate("CaseClosingDateStartFilter"),
+                            frm.GetDate("CaseClosingDateEndFilter"),
+                            frm.IsFormValueTrue("CaseRegistrationDateFilterShow"),
+                            frm.IsFormValueTrue("CaseWatchDateFilterShow"),
+                            frm.IsFormValueTrue("CaseClosingDateFilterShow"));
 
             _customerUserService.UpdateUserCaseSetting(newCaseSetting);
 
@@ -1286,6 +1307,12 @@ namespace DH.Helpdesk.Web.Controllers
                 f.UserResponsible = cu.CaseResponsibleFilter.ReturnCustomerUserValue();
                 f.WorkingGroup = cu.CaseWorkingGroupFilter.ReturnCustomerUserValue();
                 f.CaseProgress = "2";
+                f.CaseRegistrationDateStartFilter = cu.CaseRegistrationDateStartFilter;
+                f.CaseRegistrationDateEndFilter = cu.CaseRegistrationDateEndFilter;
+                f.CaseWatchDateStartFilter = cu.CaseWatchDateStartFilter;
+                f.CaseWatchDateEndFilter = cu.CaseWatchDateEndFilter;
+                f.CaseClosingDateStartFilter = cu.CaseClosingDateStartFilter;
+                f.CaseClosingDateEndFilter = cu.CaseClosingDateEndFilter;
                 s.SortBy = "CaseNumber";
                 s.Ascending = true;
 
@@ -1859,6 +1886,16 @@ namespace DH.Helpdesk.Web.Controllers
             ret.SubStateCheck = (userCaseSettings.SubState != string.Empty);
             ret.SubStates = subStates;
             ret.SelectedSubState = userCaseSettings.SubState;
+
+            ret.CaseRegistrationDateStartFilter = userCaseSettings.CaseRegistrationDateStartFilter;
+            ret.CaseRegistrationDateEndFilter = userCaseSettings.CaseRegistrationDateEndFilter;
+            ret.CaseWatchDateStartFilter = userCaseSettings.CaseWatchDateStartFilter;
+            ret.CaseWatchDateEndFilter = userCaseSettings.CaseWatchDateEndFilter;
+            ret.CaseClosingDateStartFilter = userCaseSettings.CaseClosingDateStartFilter;
+            ret.CaseClosingDateEndFilter = userCaseSettings.CaseClosingDateEndFilter;
+            ret.CaseRegistrationDateFilterShow = userCaseSettings.CaseRegistrationDateFilterShow;
+            ret.CaseWatchDateFilterShow = userCaseSettings.CaseWatchDateFilterShow;
+            ret.CaseClosingDateFilterShow = userCaseSettings.CaseClosingDateFilterShow;
 
             ret.ColumnSettingModel = GetCaseColumnSettingModel(customerId, userId);
 

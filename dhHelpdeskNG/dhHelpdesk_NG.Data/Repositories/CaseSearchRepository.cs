@@ -587,32 +587,62 @@
                 default:
                     sb.Append(" and (tblCase.FinishingDate is null)");
                     break;
-            }            
-            
-            // free text
+            }
+
+            if (f.CaseRegistrationDateStartFilter.HasValue)
+            {
+                sb.AppendFormat(" AND ([tblCase].[RegTime] >= '{0}')", f.CaseRegistrationDateStartFilter);
+            }
+
+            if (f.CaseRegistrationDateEndFilter.HasValue)
+            {
+                sb.AppendFormat(" AND ([tblCase].[RegTime] <= '{0}')", f.CaseRegistrationDateEndFilter);
+            }
+
+            if (f.CaseWatchDateStartFilter.HasValue)
+            {
+                sb.AppendFormat(" AND ([tblCase].[WatchDate] >= '{0}')", f.CaseWatchDateStartFilter);
+            }
+
+            if (f.CaseWatchDateEndFilter.HasValue)
+            {
+                sb.AppendFormat(" AND ([tblCase].[WatchDate] <= '{0}')", f.CaseWatchDateEndFilter);
+            }
+
+            if (f.CaseClosingDateStartFilter.HasValue)
+            {
+                sb.AppendFormat(" AND ([tblCase].[FinishingDate] >= '{0}')", f.CaseClosingDateStartFilter);
+            }
+
+            if (f.CaseClosingDateEndFilter.HasValue)
+            {
+                sb.AppendFormat(" AND ([tblCase].[FinishingDate] <= '{0}')", f.CaseClosingDateEndFilter);
+            }
+
             if (!string.IsNullOrWhiteSpace(f.FreeTextSearch))
             {
-                string searchFor = f.FreeTextSearch.SafeForSqlInject().ToLower().createDBsearchstring();
-                sb.Append(" and (");
-                sb.Append(" lower(tblCase.CaseNumber) like '" + searchFor + "' ");
-                sb.Append(" or lower(tblCase.ReportedBy) like '" + searchFor + "' ");
-                sb.Append(" or lower(tblCase.Persons_Name) like '" + searchFor + "' ");
-                sb.Append(" or lower(tblCase.Persons_EMail) like '" + searchFor + "' ");
-                sb.Append(" or lower(tblCase.Persons_Phone) like '" + searchFor + "' ");
-                sb.Append(" or lower(tblCase.Persons_CellPhone) like '" + searchFor + "' ");
-                sb.Append(" or lower(tblCase.Place) like '" + searchFor + "' ");
-                sb.Append(" or lower(tblCase.Caption) like '" + searchFor + "' ");
-                sb.Append(" or " + this.InsensitiveSearch("tblCase.Description") + " like '" + searchFor + "' ");
-                sb.Append(" or lower(tblCase.Miscellaneous) like '" + searchFor + "' ");
-                sb.Append(" or lower(tblDepartment.Department) like '" + searchFor + "' ");
-                sb.Append(" or lower(tblDepartment.DepartmentId) like '" + searchFor + "' ");
-                sb.Append(" or tblCase.Id in (select Case_Id from tblLog where " + this.InsensitiveSearch("tblLog.Text_Internal") + " like '" + searchFor + "' or " + this.InsensitiveSearch("tblLog.Text_External") + " like '" + searchFor + "')");
-                sb.Append(" or tblCase.Id in (select Case_Id from tblFormFieldValue where lower(FormFieldValue) like '" + searchFor + "')");
-                sb.Append(")");
+                var text = f.FreeTextSearch;
+                sb.Append(" AND (");
+                sb.Append(this.GetSqlLike("[tblCase].[CaseNumber]", text));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[ReportedBy]", text));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Name]", text));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_EMail]", text));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Phone]", text));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_CellPhone]", text));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Place]", text));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Caption]", text));
+                sb.AppendFormat(" OR [tblCase].[Description] LIKE '%{0}%'", text);
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Miscellaneous]", text));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblDepartment].[Department]", text));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblDepartment].[DepartmentId]", text));
+                sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblLog] WHERE [tblLog].[Text_Internal] LIKE '%{0}%' OR [tblLog].[Text_External] LIKE '%{0}%'))", text);
+                sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblFormFieldValue] WHERE {0}))", this.GetSqlLike("FormFieldValue", text));
+                sb.Append(") ");
             }
             
             return sb.ToString();
         }
+
         private string ReturnCaseSearchWhere(CaseSearchFilter f, Setting customerSetting, int userId, string userUserId, int showNotAssignedWorkingGroups, int userGroupId, int restrictedCasePermission, GlobalSetting gs)
         {
             if (f == null || customerSetting == null || gs == null)
@@ -733,6 +763,36 @@
             // state secondery
             if (!string.IsNullOrWhiteSpace(f.StateSecondary))
                 sb.Append(" and (tblcase.StateSecondary_Id in (" + f.StateSecondary.SafeForSqlInject() + "))");
+
+            if (f.CaseRegistrationDateStartFilter.HasValue)
+            {
+                sb.AppendFormat(" AND ([tblCase].[RegTime] >= '{0}')", f.CaseRegistrationDateStartFilter);
+            }
+
+            if (f.CaseRegistrationDateEndFilter.HasValue)
+            {
+                sb.AppendFormat(" AND ([tblCase].[RegTime] <= '{0}')", f.CaseRegistrationDateEndFilter);
+            }
+
+            if (f.CaseWatchDateStartFilter.HasValue)
+            {
+                sb.AppendFormat(" AND ([tblCase].[WatchDate] >= '{0}')", f.CaseWatchDateStartFilter);
+            }
+
+            if (f.CaseWatchDateEndFilter.HasValue)
+            {
+                sb.AppendFormat(" AND ([tblCase].[WatchDate] <= '{0}')", f.CaseWatchDateEndFilter);
+            }
+
+            if (f.CaseClosingDateStartFilter.HasValue)
+            {
+                sb.AppendFormat(" AND ([tblCase].[FinishingDate] >= '{0}')", f.CaseClosingDateStartFilter);
+            }
+
+            if (f.CaseClosingDateEndFilter.HasValue)
+            {
+                sb.AppendFormat(" AND ([tblCase].[FinishingDate] <= '{0}')", f.CaseClosingDateEndFilter);
+            }
 
             if (!string.IsNullOrWhiteSpace(f.FreeTextSearch))
             {

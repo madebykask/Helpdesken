@@ -205,6 +205,51 @@
                                 </td>                                                                                                                
                             </tr>  
                             }        
+                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.RegTime.ToString()) == 1)
+                            { 
+                                <tr>
+                                    <td class="span3">
+                                        @Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.RegTime.ToString()):
+                                    </td>                            
+                                    <td>
+                                        @Html.CheckBoxFor(m => m.CaseRegistrationDateFilterShow)
+                                    </td>                            
+                                    <td>
+                                        @Html.EditorFor(m => m.CaseRegistrationDateStartFilter, "DatePicker", new { id = "CaseRegistrationDateStartFilter" })                                         
+                                        @Html.EditorFor(m => m.CaseRegistrationDateEndFilter, "DatePicker", new { id = "CaseRegistrationDateEndFilter" })                                         
+                                    </td>                                                                                                                
+                                </tr>  
+                            }        
+                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.WatchDate.ToString()) == 1)
+                            { 
+                                <tr>
+                                    <td class="span3">
+                                        @Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.WatchDate.ToString()):
+                                    </td>                            
+                                    <td>
+                                        @Html.CheckBoxFor(m => m.CaseWatchDateFilterShow)
+                                    </td>                            
+                                    <td>
+                                        @Html.EditorFor(m => m.CaseWatchDateStartFilter, "DatePicker", new { id = "CaseWatchDateStartFilter" })                                         
+                                        @Html.EditorFor(m => m.CaseWatchDateEndFilter, "DatePicker", new { id = "CaseWatchDateEndFilter" })                                         
+                                    </td>                                                                                                                
+                                </tr>  
+                            }        
+                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.FinishingDate.ToString()) == 1)
+                            { 
+                                <tr>
+                                    <td class="span3">
+                                        @Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.FinishingDate.ToString()):
+                                    </td>                            
+                                    <td>
+                                        @Html.CheckBoxFor(m => m.CaseClosingDateFilterShow)
+                                    </td>                            
+                                    <td>
+                                        @Html.EditorFor(m => m.CaseClosingDateStartFilter, "DatePicker", new { id = "CaseClosingDateStartFilter" })                                         
+                                        @Html.EditorFor(m => m.CaseClosingDateEndFilter, "DatePicker", new { id = "CaseClosingDateEndFilter" })                                         
+                                    </td>                                                                                                                
+                                </tr>  
+                            }        
                         </table>
                     </div>
                 </div>
