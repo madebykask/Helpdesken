@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.NewSelfService.Controllers
+﻿namespace H.Helpdesk.NewSelfService.Controllers
 {
     using System.Web.Mvc;
 
@@ -18,12 +18,9 @@
             this._customerService = customerService;
         }
         
-        public ActionResult Index()
-        {
-            var customer = this._customerService.GetCustomer(1);
-
-            return this.View(customer);
-
+        public RedirectToRouteResult Index(int customerId=-1)
+        {     
+           return RedirectToAction("Index", "Start", new { customerId = customerId });                      
         }
     }
 }

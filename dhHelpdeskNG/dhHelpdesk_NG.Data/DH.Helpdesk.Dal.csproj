@@ -83,6 +83,7 @@
     <Compile Include="EntityConfigurations\Invoice\InvoiceArticleConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\InvoiceArticleUnitConfiguration.cs" />
     <Compile Include="EntityConfigurations\MailTemplates\MailTemplateLanguageConfiguration.cs" />
+    <Compile Include="EntityConfigurations\SSO\SSOLogConfiguration.cs" />
     <Compile Include="EntityConfigurations\Users\ModuleConfiguration.cs" />
     <Compile Include="EntityConfigurations\Users\UserModuleConfiguration.cs" />
     <Compile Include="Enums\Inventory\Computer\CommunicationFields.cs" />
@@ -542,6 +543,8 @@
     <Compile Include="Repositories\Servers\Concrete\ServerFieldSettingsRepository.cs" />
     <Compile Include="Repositories\Servers\Concrete\ServerLogicalDriveRepository.cs" />
     <Compile Include="Repositories\Servers\Concrete\ServerSoftwareRepository.cs" />
+    <Compile Include="Repositories\SSO\Concrete\SSORepository.cs" />
+    <Compile Include="Repositories\SSO\ISSORepository.cs" />
     <Compile Include="Repositories\UserEmailRepository.cs" />
     <Compile Include="Repositories\Users\Concrete\ModuleRepository.cs" />
     <Compile Include="Repositories\Users\Concrete\UserModuleRepository.cs" />

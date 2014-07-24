@@ -68,6 +68,7 @@
     <Compile Include="Tools\EmailHelper.cs" />
     <Compile Include="Tools\GuidHelper.cs" />
     <Compile Include="Tools\ReflectionHelper.cs" />
+    <Compile Include="Types\UserIdentity.cs" />
     <Compile Include="Types\UserName.cs" />
     <Compile Include="ValidationAttributes\IsIdAttribute.cs" />
     <Compile Include="ValidationAttributes\MaxLengthAttribute.cs" />

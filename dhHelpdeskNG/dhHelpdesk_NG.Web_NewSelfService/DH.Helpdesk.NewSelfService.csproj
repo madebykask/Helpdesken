@@ -158,6 +158,9 @@
     <Reference Include="System.ComponentModel.DataAnnotations">
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Web.Routing">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.dll</HintPath>
@@ -174,9 +177,6 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Abstractions">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Web.Routing">
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml">
@@ -216,6 +216,7 @@
     <Compile Include="Controllers\CoWorkersController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\DocumentsController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\InfoController.cs" />
@@ -295,6 +296,7 @@
     <Compile Include="Models\Common\GridColumnHeaderModel.cs" />
     <Compile Include="Models\Common\GridRowCellValueModel.cs" />
     <Compile Include="Models\Common\SortFieldModel.cs" />
+    <Compile Include="Models\Error\ErrorModel.cs" />
     <Compile Include="Models\ISearchModel.cs" />
     <Compile Include="Models\MasterPageViewModel.cs" />
     <Compile Include="Models\Notifiers\ConfigurableFields\BooleanFieldModel.cs" />
@@ -1116,6 +1118,8 @@
     <Content Include="Views\Help\About.cshtml" />
     <Content Include="Views\CoWorkers\Index.cshtml" />
     <Content Include="Views\Info\BulletinBoard.cshtml" />
+    <Content Include="Views\Error\Index.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\highlighter\" />
@@ -1141,7 +1145,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>59809</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

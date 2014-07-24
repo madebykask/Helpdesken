@@ -26,6 +26,8 @@ namespace DH.Helpdesk.NewSelfService
     using DH.Helpdesk.Dal.Repositories.Users.Concrete;
     using DH.Helpdesk.Dal.Repositories.WorkstationModules;
     using DH.Helpdesk.Dal.Repositories.WorkstationModules.Concrete;
+    using DH.Helpdesk.Dal.Repositories.SSO;
+    using DH.Helpdesk.Dal.Repositories.SSO.Concrete;
     using DH.Helpdesk.NewSelfService.Infrastructure.WorkContext;
     using DH.Helpdesk.NewSelfService.Infrastructure.WorkContext.Concrete;
     using DH.Helpdesk.NewSelfService.NinjectModules.Modules;
@@ -170,6 +172,7 @@ namespace DH.Helpdesk.NewSelfService
             kernel.Bind<IInvoiceArticleUnitRepository>().To<InvoiceArticleUnitRepository>();
             kernel.Bind<IInvoiceArticleRepository>().To<InvoiceArticleRepository>();
             kernel.Bind<ICaseInvoiceArticleRepository>().To<CaseInvoiceArticleRepository>();
+            kernel.Bind<ISSORepository>().To<SSORepository>();
                                        
             // Service             
             kernel.Bind<IMasterDataService>().To<MasterDataService>();            
@@ -209,7 +212,8 @@ namespace DH.Helpdesk.NewSelfService
             kernel.Bind<IStateSecondaryService>().To<StateSecondaryService>();
             kernel.Bind<ICaseSolutionService>().To<CaseSolutionService>();
             kernel.Bind<IActionSettingService>().To<ActionSettingService>();
-            kernel.Bind<IInvoiceArticleService>().To<InvoiceArticleService>();            
+            kernel.Bind<IInvoiceArticleService>().To<InvoiceArticleService>();
+            kernel.Bind<ISSOService>().To<SSOService>();            
             
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();

@@ -145,6 +145,7 @@
 </head>
 <body>
     @{
+        
         int pCustomerId = -1;
 
         if (SessionFacade.CurrentCustomer != null)
@@ -198,16 +199,14 @@
                  else
                  {
                     <div class="mapText" title="Communicate"><span class="glyphicon glyphicon-comment"></span></div>
-                 }
-
-                
+                 }                
             </div>
             <div class="theMap">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-12">
                             <label>
-                                Add comment:
+                                @Translation.Get("Add comment", Enums.TranslationSource.TextTranslation):
                             </label>
                             <div>
                                 <textarea id="myNote"  style="width:450px; height:100px;"></textarea>
@@ -257,15 +256,16 @@
             <div class="pull-right small toplogout">
                 <div class="dropdown">
                   <a href="#" type="button" class="dropdown-toggle" data-toggle="dropdown">
-                    Select language <span class="caret"></span>
+                    @Translation.Get("Select language", Enums.TranslationSource.TextTranslation)<span class="caret"></span>
                   </a>
                   <ul class="dropdown-menu" role="menu">
-                     <li><a href="#">Dutch</a></li>
-                    <li><a href="#">English</a></li>
-                    <li><a href="#">Swedish</a></li>
+                     <li><a href="#" onclick="ChangeLang(8)">Dutch</a></li>
+                     <li><a href="#" onclick="ChangeLang(2)">English</a></ li>
+                     <li><a href="#" onclick="ChangeLang(1)">Swedish</a></li>
+                     <li><a href="#" onclick="ChangeLang(12)">Chinese</a></li>
                   </ul>
                 </div>
-                 <span class="toplogout-space">|</span><a href="#">@SessionFacade.CurrentSystemUser</a><span class="toplogout-space">|</span><a href="#">Log out</a>
+                 <span class="toplogout-space">|</span><a href="#" >@SessionFacade.CurrentSystemUser</a><span class="toplogout-space">|</span><a href="#">@Translation.Get("Logga ut", Enums.TranslationSource.TextTranslation)</a>
             </div>
         </div>
     </div>
@@ -300,7 +300,7 @@
                         <li class="blue">
                             <a href="@Url.Action("Index", "Start", new { customerId = pCustomerId, area = "" })">
                                 <div class="ico-home"></div>
-                                Start
+                               @Translation.Get("Start", Enums.TranslationSource.TextTranslation) 
                             </a>
                         </li>
                     }
@@ -350,7 +350,7 @@
                         <li class="dropdown blue">
                             <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
                                 <div class="ico-new"></div>
-                                Order New Service Request  
+                                @Translation.Get("Order New Service Request", Enums.TranslationSource.TextTranslation)
                             </a>
 
                             <ul class="dropdown-menu">
@@ -400,7 +400,7 @@
                         <li class="blue">
                             <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = "2", area = "" })">
                                 <div class="ico-ongoing"></div>
-                                Ongoing Service Requests
+                                @Translation.Get("Ongoing Service Requests", Enums.TranslationSource.TextTranslation)
                             </a>
                         </li>
                     }
@@ -423,7 +423,7 @@
                         <li class="blue">
                             <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = "1", area = "" })">
                                 <div class="ico-finished"></div>
-                                Finished Service Requests
+                                @Translation.Get("Finished Service Requests", Enums.TranslationSource.TextTranslation)
                             </a>
                         </li>
                     }
@@ -446,7 +446,7 @@
                         <li class="blue">
                             <a href="@Url.Action("Index", "Documents", new { customerId = pCustomerId, area = "" })">
                                 <div class="ico-documents"></div>
-                                HR Documents
+                                @Translation.Get("HR Documents", Enums.TranslationSource.TextTranslation)
                             </a>
                         </li>
                     }
@@ -469,7 +469,7 @@
                         <li class="blue">
                             <a href="@Url.Action("Index", "CoWorkers", new { customerId = pCustomerId, area = "" })">
                                 <div class="ico-coworkers"></div>
-                                My Co-Workers
+                                @Translation.Get("My Co-Workers", Enums.TranslationSource.TextTranslation)
                             </a>
                         </li>
                     }
@@ -486,9 +486,9 @@
                                 @help.ObjectValue
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a href="@Url.Action("FindYourWay", "Help", new { customerId = pCustomerId, area = "" })">Find Your Way</a></li>
-                                <li><a href="@Url.Action("Index", "Help", new { customerId = pCustomerId, area = "" })">Help</a></li>
-                                <li><a href="@Url.Action("About", "Help", new { customerId = pCustomerId, area = "" })">About</a></li>
+                                <li><a href="@Url.Action("FindYourWay", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("Find Your Way", Enums.TranslationSource.TextTranslation)</a></li>
+                                <li><a href="@Url.Action("Index", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("Hjälp", Enums.TranslationSource.TextTranslation)</a></li>
+                                <li><a href="@Url.Action("About", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("Om", Enums.TranslationSource.TextTranslation)</a></li>
                             </ul>
                         </li>
                         }
@@ -497,12 +497,12 @@
                     {<li class="dropdown blue">
                         <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
                             <div class="ico-help"></div>
-                            Need Help?
+                            @Translation.Get("Need Help", Enums.TranslationSource.TextTranslation)?
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="@Url.Action("FindYourWay", "Help", new { customerId = pCustomerId, area = "" })">Find Your Way</a></li>
-                            <li><a href="@Url.Action("Index", "Help", new { customerId = pCustomerId, area = "" })">Help</a></li>
-                            <li><a href="@Url.Action("About", "Help", new { customerId = pCustomerId, area = "" })">About</a></li>
+                            <li><a href="@Url.Action("FindYourWay", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("Find Your Way", Enums.TranslationSource.TextTranslation)</a></li>
+                            <li><a href="@Url.Action("Index", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("Hjälp", Enums.TranslationSource.TextTranslation)</a></li>
+                            <li><a href="@Url.Action("About", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("Om", Enums.TranslationSource.TextTranslation)</a></li>
                         </ul>
                     </li>
                     }
@@ -616,25 +616,38 @@
 
 
 <script type="text/javascript">
+    
+    function ChangeLang(langId) {
+        //alert(languageId);        
+        
+        var currentPath = window.location.href;
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ChangeLanguage", "Case", new { area= ""})', 
+                contentType: "application/json; charset=utf-8",
+                data: "{ languageId:" + langId +"}",
+                dataType: "html",
+                success: function (result) {                   
+                    window.location.reload();                    
+                },
+                error: function (result) {
+                    alert('Error in change language');
+                }
+       });        
+    }
 
     function SaveExternalMessage() {        
         if ('@currentCaseId' == null || '@currentCaseId' == "")
             return;
-
-        @*alert($("#myNote").val() + ' : ' + '@currentCaseId');*@
+        
         var note = $('#myNote').val();
         //alert(window.location.href);
         var currentPath = window.location.href;
         if (note == "") {
             alert('Note text is empty!');
         } else {
-            
-            //var curGuid = 'Model.MailGuid';
-
-           @* window.location.href = '@Url.Action("SaveExternalMessage", "Case")' +
-                '?caseId=' + '@currentCaseId' +
-                '&extraNote=' + encodeURIComponent(note);*@
-
+                        
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("SaveExternalMessage", "Case", new { area= ""})', 

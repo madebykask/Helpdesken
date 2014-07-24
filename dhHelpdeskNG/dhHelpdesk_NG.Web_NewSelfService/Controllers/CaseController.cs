@@ -311,7 +311,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             var identity = User.Identity;
             if (identity != null)
             {
-                string regUser = identity.Name.GetUserFromAdPath();                 
+                string regUser = identity.Name ;                 
                 SessionFacade.CurrentSystemUser = regUser;
                 if (regUser != string.Empty)
                 {                    
@@ -580,6 +580,13 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             return _caseSolutionService.GetCaseSolutions(customerId).Where(t=> t.ShowInSelfService).ToList();             
         }
 
+        [HttpPost]
+        public JsonResult ChangeLanguage(int languageId)
+        {
+            SessionFacade.CurrentLanguageId = languageId;
+            return this.Json(languageId, JsonRequestBehavior.AllowGet);
+        }
+
         private int Save(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey)
         {           
             IDictionary<string, string> errors;
@@ -801,7 +808,8 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                 SessionFacade.CurrentCustomer = newCustomer;
             }
 
-            SessionFacade.CurrentLanguageId = SessionFacade.CurrentCustomer.Language_Id;
+            if (SessionFacade.CurrentLanguageId == null)
+               SessionFacade.CurrentLanguageId = SessionFacade.CurrentCustomer.Language_Id;
             //ViewBag.PublicCustomerId = customerId;
 
             //var identity = System.Security.Principal.WindowsIdentity.GetCurrent();

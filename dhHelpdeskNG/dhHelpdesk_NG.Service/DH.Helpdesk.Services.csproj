@@ -160,11 +160,13 @@
     <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\BusinessItem.cs" />
     <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\ExcelTableHeader.cs" />
     <Compile Include="Services\Concrete\ActionSettingService.cs" />
+    <Compile Include="Services\Concrete\SSOService.cs" />
     <Compile Include="Services\Concrete\InvoiceArticleService.cs" />
     <Compile Include="Services\Concrete\IOrganizationService.cs" />
     <Compile Include="Services\Concrete\IPlaceService.cs" />
     <Compile Include="Services\Concrete\OrganizationService.cs" />
     <Compile Include="Services\Concrete\PlaceService.cs" />
+    <Compile Include="Services\ISSOService.cs" />
     <Compile Include="Services\IActionSettingService.cs" />
     <Compile Include="Services\IInventorySettingsService.cs" />
     <Compile Include="Services\Concrete\InventorySettingsService.cs" />

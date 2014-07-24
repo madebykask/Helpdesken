@@ -186,6 +186,7 @@
     <Compile Include="LocalAdmin.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="LogFile.cs" />
+    <Compile Include="SSO\SSOLogEntity.cs" />
     <Compile Include="Users\ModuleEntity.cs" />
     <Compile Include="Users\UserModuleEntity.cs" />
     <Compile Include="WorkstationModules\LogicalDrive.cs" />

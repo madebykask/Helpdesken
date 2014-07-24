@@ -20,6 +20,7 @@
     using DH.Helpdesk.Dal.EntityConfigurations.Servers;
     using DH.Helpdesk.Dal.EntityConfigurations.Users;
     using DH.Helpdesk.Dal.EntityConfigurations.WorkstationModules;
+    using DH.Helpdesk.Dal.EntityConfigurations.SSO;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Changes;
     using DH.Helpdesk.Domain.Computers;
@@ -34,6 +35,7 @@
     using DH.Helpdesk.Domain.Servers;
     using DH.Helpdesk.Domain.Users;
     using DH.Helpdesk.Domain.WorkstationModules;
+    using DH.Helpdesk.Domain.SSO;
 
     using OperatingSystemConfiguration = DH.Helpdesk.Dal.EntityConfigurations.OperatingSystemConfiguration;
 
@@ -418,6 +420,8 @@
 
         public DbSet<Setting> Settings { get; set; }
 
+        public DbSet<SSOLogEntity> SSOLogs { get; set; }
+
         public DbSet<Software> Softwares { get; set; }
 
         public DbSet<StandardText> StandardTexts { get; set; }
@@ -632,6 +636,7 @@
             modelBuilder.Configurations.Add(new ServerLogicalDriveConfiguration());
             modelBuilder.Configurations.Add(new ServerSoftwareConfiguration());
             modelBuilder.Configurations.Add(new SettingConfiguration());
+            modelBuilder.Configurations.Add(new SSOLogConfiguration());
             modelBuilder.Configurations.Add(new StandardTextConfiguration());
             modelBuilder.Configurations.Add(new StateSecondaryConfiguration());
             modelBuilder.Configurations.Add(new StatusConfiguration());

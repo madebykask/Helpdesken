@@ -49,8 +49,8 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
                 SessionFacade.CurrentCustomer = newCustomer;
             }
-
-            SessionFacade.CurrentLanguageId = SessionFacade.CurrentCustomer.Language_Id;
+            if (SessionFacade.CurrentLanguageId == null)
+              SessionFacade.CurrentLanguageId = SessionFacade.CurrentCustomer.Language_Id;
             ViewBag.PublicCustomerId = customerId;
 
             //var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
