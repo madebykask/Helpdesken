@@ -589,35 +589,35 @@
                     break;
             }
 
-            if (f.CaseRegistrationDateStartFilter.HasValue)
-            {
-                sb.AppendFormat(" AND ([tblCase].[RegTime] >= '{0}')", f.CaseRegistrationDateStartFilter);
-            }
+            //if (f.CaseRegistrationDateStartFilter.HasValue)
+            //{
+            //    sb.AppendFormat(" AND ([tblCase].[RegTime] >= '{0}')", f.CaseRegistrationDateStartFilter);
+            //}
 
-            if (f.CaseRegistrationDateEndFilter.HasValue)
-            {
-                sb.AppendFormat(" AND ([tblCase].[RegTime] <= '{0}')", f.CaseRegistrationDateEndFilter);
-            }
+            //if (f.CaseRegistrationDateEndFilter.HasValue)
+            //{
+            //    sb.AppendFormat(" AND ([tblCase].[RegTime] <= '{0}')", f.CaseRegistrationDateEndFilter);
+            //}
 
-            if (f.CaseWatchDateStartFilter.HasValue)
-            {
-                sb.AppendFormat(" AND ([tblCase].[WatchDate] >= '{0}')", f.CaseWatchDateStartFilter);
-            }
+            //if (f.CaseWatchDateStartFilter.HasValue)
+            //{
+            //    sb.AppendFormat(" AND ([tblCase].[WatchDate] >= '{0}')", f.CaseWatchDateStartFilter);
+            //}
 
-            if (f.CaseWatchDateEndFilter.HasValue)
-            {
-                sb.AppendFormat(" AND ([tblCase].[WatchDate] <= '{0}')", f.CaseWatchDateEndFilter);
-            }
+            //if (f.CaseWatchDateEndFilter.HasValue)
+            //{
+            //    sb.AppendFormat(" AND ([tblCase].[WatchDate] <= '{0}')", f.CaseWatchDateEndFilter);
+            //}
 
-            if (f.CaseClosingDateStartFilter.HasValue)
-            {
-                sb.AppendFormat(" AND ([tblCase].[FinishingDate] >= '{0}')", f.CaseClosingDateStartFilter);
-            }
+            //if (f.CaseClosingDateStartFilter.HasValue)
+            //{
+            //    sb.AppendFormat(" AND ([tblCase].[FinishingDate] >= '{0}')", f.CaseClosingDateStartFilter);
+            //}
 
-            if (f.CaseClosingDateEndFilter.HasValue)
-            {
-                sb.AppendFormat(" AND ([tblCase].[FinishingDate] <= '{0}')", f.CaseClosingDateEndFilter);
-            }
+            //if (f.CaseClosingDateEndFilter.HasValue)
+            //{
+            //    sb.AppendFormat(" AND ([tblCase].[FinishingDate] <= '{0}')", f.CaseClosingDateEndFilter);
+            //}
 
             if (!string.IsNullOrWhiteSpace(f.FreeTextSearch))
             {

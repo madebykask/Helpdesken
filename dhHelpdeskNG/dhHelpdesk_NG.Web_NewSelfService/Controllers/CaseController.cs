@@ -87,9 +87,9 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                               IWorkingGroupService workingGroupService,
                               IStateSecondaryService stateSecondaryService,
                               ILogFileService logFileService,
-                              ICaseSolutionService caseSolutionService
-                             )
-                              : base(masterDataService)
+                              ICaseSolutionService caseSolutionService,
+                              ISSOService ssoService)
+                              : base(masterDataService, ssoService)
         {
             this._caseService = caseService;
             this._logService = logService;
@@ -141,17 +141,16 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                 currentCase = this._caseService.GetCaseById(Int32.Parse(id));                                    
                     
                 if (currentCase == null || identity == null)
-                    return null;
+                    return RedirectToAction("Index", "Error", new { message = "Can not find the Case!" });
 
                 if (currentCase != null && currentCase.RegUserId != identity.Name.GetUserFromAdPath())
-                    return null;
+                    return RedirectToAction("Index", "Error", new { message = "Can not find this Case in your cases!" }); ;
                 
             }
 
             if (currentCase == null)
             {
-                throw new HttpException((int)HttpStatusCode.NotFound, "Case not found...");
-                return null;
+                return RedirectToAction("Index", "Error", new { message = "Can not find the Case!" });
             }
             else
             {
@@ -164,11 +163,13 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                 customerId = currentCase.Customer_Id;
             }
                                                 
-            var currentCustomer = this._customerService.GetCustomer(customerId);                        
+            var currentCustomer = this._customerService.GetCustomer(customerId);
+            if (currentCustomer == null)
+                return RedirectToAction("Index", "Error", new { message = "Customer Id: " + customerId.ToString() + " is not valid!", errorCode = 108 });          
             currentCase.Customer = currentCustomer;
 
             if (!CheckAndUpdateGlobalValues(customerId))
-                return null;
+                return RedirectToAction("Index", "Error", new { message = "Customer is not specified!", errorCode = 101 }); ;
 
             var languageId = currentCustomer.Language_Id;                        
             var caseOverview = this.GetCaseOverviewModel(currentCase, languageId);                                                
@@ -204,10 +205,13 @@ namespace DH.Helpdesk.NewSelfService.Controllers
         {
             // *** New Case ***
             var currentCustomer = this._customerService.GetCustomer(customerId);
+            if (currentCustomer == null)
+                return RedirectToAction("Index", "Error", new { message = "Customer Id: " + customerId.ToString() + " is not valid!", errorCode = 108 });
+
             var languageId = currentCustomer.Language_Id;
 
             if (!CheckAndUpdateGlobalValues(customerId))
-                return null;
+                return RedirectToAction("Index", "Error", new { message = "Customer is not specified!", errorCode = 102 }); 
             
             var model = this.GetNewCaseModel(currentCustomer.Id, languageId);
             model.ExLogFileGuid = Guid.NewGuid().ToString();
@@ -291,32 +295,42 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             return this.View("NewCase",model);
         }
 
-        
-        [HttpGet]
-        [AllowAnonymous]
-        public async Task<ActionResult> UserCases(int customerId, string progressId)
+        //[AllowAnonymous]
+        //public async Task<ActionResult> UserCases(int customerId, string progressId)
+        [HttpGet]        
+        public ActionResult UserCases(int customerId, string progressId)
         {
             //var res = await GetCoWorkers();
             //ViewBag.Res = res;
 
             var currentCustomer = this._customerService.GetCustomer(customerId);
+            if (currentCustomer == null)
+                return RedirectToAction("Index", "Error", new { message = "Customer Id: " + customerId.ToString() + " is not valid!", errorCode = 108 });
+
             var languageId = currentCustomer.Language_Id;
 
             if (!CheckAndUpdateGlobalValues(customerId))
-                return null;
+                return RedirectToAction("Index", "Error", new { message = "Customer is not specified!", errorCode = 103 });
 
             UserCasesModel model = null;
 
             //var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+            if (progressId != "1" && progressId != "2")
+                return RedirectToAction("Index", "Error", new { message = "Process is not valid!", errorCode = 107 });
+
             var identity = User.Identity;
             if (identity != null)
             {
-                string regUser = identity.Name ;                 
+                string regUser = identity.Name;
                 SessionFacade.CurrentSystemUser = regUser;
                 if (regUser != string.Empty)
-                {                    
-                    model = this.GetUserCasesModel(currentCustomer.Id, languageId, regUser, "", 20, progressId);                                
-                }                
+                {
+                    model = this.GetUserCasesModel(currentCustomer.Id, languageId, regUser, "", 20, progressId);
+                }
+            }
+            else
+            {
+                return RedirectToAction("Index", "Error", new { message = "You don't have access to user cases! please login again.", errorCode = 104 });
             }
 
             return this.View("UserCases", model);
@@ -561,7 +575,10 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
                 if (!CheckAndUpdateGlobalValues(customerId))
                     return null;
-         
+
+                if (progressId != "1" && progressId != "2")
+                    return RedirectToAction("Index", "Error", new { message = "Process is not valid!", errorCode = 107 });
+
                 var model = GetUserCasesModel(customerId, languageId, userId,
                                               pharasSearch, maxRecords, progressId,
                                               sortBy, ascending);                
@@ -570,8 +587,8 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             }
             catch (Exception e)
             {
-                throw new HttpException((int)HttpStatusCode.PartialContent, e.Message);                
-                return View("Error");
+                return RedirectToAction("Index", "Error", new { message = "Error in load user cases!", errorCode = 106 });
+                //return View("Error");
             }            
         }
 
@@ -653,10 +670,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                                                  string pharasSearch, int maxRecords, string progressId = "",
                                                  string sortBy = "", bool ascending = false)
         {                                                 
-            var cusId = customerId;
-
-            if (progressId != "1" && progressId != "2")
-                return null;
+            var cusId = customerId;            
 
             var model = new UserCasesModel
                     {

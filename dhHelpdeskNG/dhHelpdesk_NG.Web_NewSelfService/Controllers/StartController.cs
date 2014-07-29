@@ -28,11 +28,11 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                                ICustomerService customerService,
                                ICaseSolutionService caseSolutionService,
                                ISSOService ssoService
-                              ):base(masterDataService)
+                              ):base(masterDataService,ssoService)
         {
             this._caseSolutionService = caseSolutionService;            
             this._customerService = customerService;
-            this._ssoService = ssoService;
+            //this._ssoService = ssoService;
         }
 
         //
@@ -73,69 +73,70 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
             //var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
 
-            ClaimsPrincipal principal = User as ClaimsPrincipal;
+            //ClaimsPrincipal principal = User as ClaimsPrincipal;
              
-            if (principal != null)
-            {
-                string claimData = "";
-                bool isFirst = true;
-                var userIdentity = new UserIdentity(); 
+            //if (principal != null)
+            //{
+            //    string claimData = "";
+            //    bool isFirst = true;
+            //    var userIdentity = new UserIdentity(); 
 
-                foreach (Claim claim in principal.Claims)
-                {
-                    var claimTypeArray = claim.Type.Split('/');
-                    var pureType = claimTypeArray.LastOrDefault();
-                    var value = claim.Value;
+            //    foreach (Claim claim in principal.Claims)
+            //    {
+            //        var claimTypeArray = claim.Type.Split('/');
+            //        var pureType = claimTypeArray.LastOrDefault();
+            //        var value = claim.Value;
 
-                    if (isFirst)
-                       claimData = "["+ ((pureType != null)?pureType.ToString():"Undefined")  + ": " + value.ToString() + "]";
-                    else
-                       claimData = claimData + " , [" + ((pureType != null) ? pureType.ToString() : "Undefined") + ": " + value.ToString() + "]";
+            //        if (isFirst)
+            //           claimData = "["+ ((pureType != null)?pureType.ToString():"Undefined")  + ": " + value.ToString() + "]";
+            //        else
+            //           claimData = claimData + " , [" + ((pureType != null) ? pureType.ToString() : "Undefined") + ": " + value.ToString() + "]";
 
-                    isFirst = false;                     
+            //        isFirst = false;                     
 
-                    if (pureType != null)
-                    {
+            //        if (pureType != null)
+            //        {
 
-                        if (pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings["ClaimDomain"].ToString().Replace(" ", "").ToLower())
-                             userIdentity.Domain = value;
+            //            if (pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings["ClaimDomain"].ToString().Replace(" ", "").ToLower())
+            //                 userIdentity.Domain = value;
 
-                        if (pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings["ClaimUserId"].ToString().Replace(" ", "").ToLower())
-                             userIdentity.UserId = value;
+            //            if (pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings["ClaimUserId"].ToString().Replace(" ", "").ToLower())
+            //                 userIdentity.UserId = value;
 
-                        if (pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings["ClaimEmployeeNumber"].ToString().Replace(" ", "").ToLower())                        
-                             userIdentity.EmployeeNumber = value;
+            //            if (pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings["ClaimEmployeeNumber"].ToString().Replace(" ", "").ToLower())                        
+            //                 userIdentity.EmployeeNumber = value;
 
-                        if (pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings["ClaimFirstName"].ToString().Replace(" ", "").ToLower())                        
-                           userIdentity.FirstName = value;
+            //            if (pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings["ClaimFirstName"].ToString().Replace(" ", "").ToLower())                        
+            //               userIdentity.FirstName = value;
 
-                        var m1 = pureType.Replace(" ", "").ToLower();
-                        var m2 = ConfigurationManager.AppSettings["ClaimLastName"].ToString().Replace(" ", "").ToLower();
-                        if (m1 == m2)                        
-                           userIdentity.LastName = value;
+            //            var m1 = pureType.Replace(" ", "").ToLower();
+            //            var m2 = ConfigurationManager.AppSettings["ClaimLastName"].ToString().Replace(" ", "").ToLower();
+            //            if (m1 == m2)                        
+            //               userIdentity.LastName = value;
 
-                        if (pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings["ClaimEmail"].ToString().Replace(" ", "").ToLower())
-                           userIdentity.Email = value;
+            //            if (pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings["ClaimEmail"].ToString().Replace(" ", "").ToLower())
+            //               userIdentity.Email = value;
                                                                                            
-                    }
-                }
+            //        }
+            //    }
                 
-                SessionFacade.CurrentSystemUser = userIdentity.UserId;
+            //    SessionFacade.CurrentSystemUser = userIdentity.UserId;
                 
-                var netId = principal.Identity.Name;
-                var ssoLog = new NewSSOLog()
-                {
-                    ApplicationId = ConfigurationManager.AppSettings["ApplicationId"].ToString(),
-                    NetworkId = netId,
-                    ClaimData = claimData,
-                    CreatedDate = DateTime.Now
-                };
+            //    var netId = principal.Identity.Name;
+            //    var ssoLog = new NewSSOLog()
+            //    {
+            //        ApplicationId = ConfigurationManager.AppSettings["ApplicationId"].ToString(),
+            //        NetworkId = netId,
+            //        ClaimData = claimData,
+            //        CreatedDate = DateTime.Now
+            //    };
                                
-                if (ConfigurationManager.AppSettings["SSOLog"].ToString().ToLower() == "true")
-                   _ssoService.SaveSSOLog(ssoLog);
+            //    if (ConfigurationManager.AppSettings["SSOLog"].ToString().ToLower() == "true")
+            //       _ssoService.SaveSSOLog(ssoLog);
 
-                ViewBag.PublicCaseTemplate = _caseSolutionService.GetCaseSolutions(customerId).ToList();
-            }
+            //    ViewBag.PublicCaseTemplate = _caseSolutionService.GetCaseSolutions(customerId).ToList();
+            //}
+            ViewBag.PublicCaseTemplate = _caseSolutionService.GetCaseSolutions(customerId).ToList();
 
             return true;
         }

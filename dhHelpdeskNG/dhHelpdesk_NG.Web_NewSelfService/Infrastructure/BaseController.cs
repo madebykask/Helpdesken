@@ -4,25 +4,99 @@
     using System.IO;
     using System.Web;
     using System.Web.Mvc;
+    using System.Linq;
 
     using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.NewSelfService.Infrastructure.Extensions;
     using DH.Helpdesk.NewSelfService.Models;
+    using DH.Helpdesk.Common.Types;
+    using System.Security.Claims;
+    using DH.Helpdesk.BusinessData.Models.SSO.Input;
+    using System.Configuration;
+    using DH.Helpdesk.Services.Services.Concrete;
 
 
     public class BaseController : Controller
     {
         private readonly IMasterDataService _masterDataService;
+        private readonly ISSOService _ssoService;
 
         public BaseController(
-            IMasterDataService masterDataService)
+            IMasterDataService masterDataService,
+            ISSOService ssoService)
         {
             this._masterDataService = masterDataService;
+            this._ssoService = ssoService;
         }
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext) //called before a controller action is executed, that is before ~/UserController/index 
         {
+
+            ClaimsPrincipal principal = User as ClaimsPrincipal;
+
+            if (principal != null)
+            {
+                string claimData = "";
+                bool isFirst = true;
+                var userIdentity = new UserIdentity();
+
+                foreach (Claim claim in principal.Claims)
+                {
+                    var claimTypeArray = claim.Type.Split('/');
+                    var pureType = claimTypeArray.LastOrDefault();
+                    var value = claim.Value;
+
+                    if (isFirst)
+                        claimData = "[" + ((pureType != null) ? pureType.ToString() : "Undefined") + ": " + value.ToString() + "]";
+                    else
+                        claimData = claimData + " , [" + ((pureType != null) ? pureType.ToString() : "Undefined") + ": " + value.ToString() + "]";
+
+                    isFirst = false;
+
+                    if (pureType != null)
+                    {
+
+                        if (pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings["ClaimDomain"].ToString().Replace(" ", "").ToLower())
+                            userIdentity.Domain = value;
+
+                        if (pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings["ClaimUserId"].ToString().Replace(" ", "").ToLower())
+                            userIdentity.UserId = value;
+
+                        if (pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings["ClaimEmployeeNumber"].ToString().Replace(" ", "").ToLower())
+                            userIdentity.EmployeeNumber = value;
+
+                        if (pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings["ClaimFirstName"].ToString().Replace(" ", "").ToLower())
+                            userIdentity.FirstName = value;
+
+                        var m1 = pureType.Replace(" ", "").ToLower();
+                        var m2 = ConfigurationManager.AppSettings["ClaimLastName"].ToString().Replace(" ", "").ToLower();
+                        if (m1 == m2)
+                            userIdentity.LastName = value;
+
+                        if (pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings["ClaimEmail"].ToString().Replace(" ", "").ToLower())
+                            userIdentity.Email = value;
+
+                    }
+                }
+
+                SessionFacade.CurrentSystemUser = userIdentity.UserId;
+
+                var netId = principal.Identity.Name;
+                var ssoLog = new NewSSOLog()
+                {
+                    ApplicationId = ConfigurationManager.AppSettings["ApplicationId"].ToString(),
+                    NetworkId = netId,
+                    ClaimData = claimData,
+                    CreatedDate = DateTime.Now
+                };
+
+                if (ConfigurationManager.AppSettings["SSOLog"].ToString().ToLower() == "true")
+                    _ssoService.SaveSSOLog(ssoLog);
+
+                
+            }
+
             //if (SessionFacade.CurrentUser != null)
             //{
                 this.SessionCheck(filterContext);
