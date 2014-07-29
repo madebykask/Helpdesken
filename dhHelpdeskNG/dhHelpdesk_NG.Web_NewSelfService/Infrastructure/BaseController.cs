@@ -32,7 +32,7 @@
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext) //called before a controller action is executed, that is before ~/UserController/index 
         {
-
+            //var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
             ClaimsPrincipal principal = User as ClaimsPrincipal;
 
             if (principal != null)
@@ -80,7 +80,7 @@
                     }
                 }
 
-                SessionFacade.CurrentSystemUser = userIdentity.UserId;
+                
 
                 var netId = principal.Identity.Name;
                 var ssoLog = new NewSSOLog()
@@ -91,9 +91,10 @@
                     CreatedDate = DateTime.Now
                 };
 
-                if (ConfigurationManager.AppSettings["SSOLog"].ToString().ToLower() == "true")
+                if (ConfigurationManager.AppSettings["SSOLog"].ToString().ToLower() == "true" && string.IsNullOrEmpty(SessionFacade.CurrentSystemUser))
                     _ssoService.SaveSSOLog(ssoLog);
 
+                SessionFacade.CurrentSystemUser = userIdentity.UserId;
                 
             }
 

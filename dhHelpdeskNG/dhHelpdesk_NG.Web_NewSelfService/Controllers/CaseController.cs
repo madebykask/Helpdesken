@@ -824,15 +824,19 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
             if (SessionFacade.CurrentLanguageId == null)
                SessionFacade.CurrentLanguageId = SessionFacade.CurrentCustomer.Language_Id;
-            //ViewBag.PublicCustomerId = customerId;
+
+            ViewBag.PublicCustomerId = customerId;
 
             //var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
-            var identity = User.Identity;
-            if (identity != null)
-            {
-                SessionFacade.CurrentSystemUser = identity.Name.GetUserFromAdPath();
-                ViewBag.PublicCaseTemplate = _caseSolutionService.GetCaseSolutions(customerId).ToList();
-            }
+            //var identity = User.Identity;
+            //if (identity != null)
+            //{
+            //    SessionFacade.CurrentSystemUser = identity.Name.GetUserFromAdPath();
+            //    
+            //}
+
+            ViewBag.PublicCaseTemplate = _caseSolutionService.GetCaseSolutions(customerId).ToList();
+
             return true;
         }
 

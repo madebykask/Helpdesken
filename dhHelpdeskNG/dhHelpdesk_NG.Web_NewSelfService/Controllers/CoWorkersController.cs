@@ -53,12 +53,13 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             ViewBag.PublicCustomerId = customerId;
 
             //var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
-            var identity = User.Identity;
-            if (identity != null)
-            {
-                SessionFacade.CurrentSystemUser = identity.Name.GetUserFromAdPath();
-                ViewBag.PublicCaseTemplate = _caseSolutionService.GetCaseSolutions(customerId).ToList();
-            }
+            //var identity = User.Identity;
+            //if (identity != null)
+            //{
+            //    SessionFacade.CurrentSystemUser = identity.Name.GetUserFromAdPath();
+            //    
+            //}
+            ViewBag.PublicCaseTemplate = _caseSolutionService.GetCaseSolutions(customerId).ToList();
             return true;
         }
     }
