@@ -49,6 +49,7 @@ namespace DH.Helpdesk.NewSelfService
     using DH.Helpdesk.Dal.Repositories.Problem.Concrete;
     using DH.Helpdesk.Dal.Repositories.Invoice;
     using DH.Helpdesk.Dal.Repositories.Invoice.Concrete;
+    using DH.Helpdesk.NewSelfService.WebServices;
     
     public static class NinjectWebCommon 
     {
@@ -213,7 +214,8 @@ namespace DH.Helpdesk.NewSelfService
             kernel.Bind<ICaseSolutionService>().To<CaseSolutionService>();
             kernel.Bind<IActionSettingService>().To<ActionSettingService>();
             kernel.Bind<IInvoiceArticleService>().To<InvoiceArticleService>();
-            kernel.Bind<ISSOService>().To<SSOService>();            
+            kernel.Bind<ISSOService>().To<SSOService>();
+            kernel.Bind<IAMAPIService>().To<AMAPIService>();            
             
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();

@@ -9,6 +9,7 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Computers;    
     using DH.Helpdesk.NewSelfService.Models;
+    using DH.Helpdesk.Common.Types;
 
     public static class SessionFacade
     {
@@ -30,8 +31,9 @@
         private const string _CURRENT_CALENDER_SEARCH = "CURRENT_CALENDER_SEARCH";
         private const string _CURRENT_BULLETINBOARD_SEARCH = "CURRENT_BULLETINBOARD_SEARCH";
         private const string _CURRENT_CASESOLUTION_SEARCH = "CURRENT_CASESOLUTION_SEARCH";
-        private const string _CURRENT_OPERATIONLOG_SEARCH = "CURRENT_OPERATIONLOG_SEARCH";
+        private const string _CURRENT_OPERATIONLOG_SEARCH = "CURRENT_OPERATIONLOG_SEARCH";        
         private const string _CURRENT_DOCUMENT_SEARCH = "CURRENT_DOCUMENT_SEARCH";
+        private const string _CURRENT_USER_IDENTITY = "CURRENT_USER_IDENTITY";
 
         public static int CurrentCustomerID
         {
@@ -81,6 +83,23 @@
                     HttpContext.Current.Session.Add(_CURRENT_USER, value);
                 else
                     HttpContext.Current.Session[_CURRENT_USER] = value;
+            }
+        }
+
+        public static UserIdentity CurrentUserIdentity
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_CURRENT_USER_IDENTITY] == null)
+                    return null;
+                return (UserIdentity)HttpContext.Current.Session[_CURRENT_USER_IDENTITY];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_CURRENT_USER_IDENTITY] == null)
+                    HttpContext.Current.Session.Add(_CURRENT_USER_IDENTITY, value);
+                else
+                    HttpContext.Current.Session[_CURRENT_USER_IDENTITY] = value;
             }
         }
 

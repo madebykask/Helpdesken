@@ -15,12 +15,17 @@
     using DH.Helpdesk.BusinessData.Models.SSO.Input;
     using System.Configuration;
     using DH.Helpdesk.Services.Services.Concrete;
+    using DH.Helpdesk.NewSelfService.WebServices;
+
+using System.Threading.Tasks;
+    using DH.Helpdesk.NewSelfService.WebServices.Common;
 
 
     public class BaseController : Controller
     {
         private readonly IMasterDataService _masterDataService;
         private readonly ISSOService _ssoService;
+        
 
         public BaseController(
             IMasterDataService masterDataService,
@@ -30,6 +35,8 @@
             this._ssoService = ssoService;
         }
 
+        //[AllowAnonymous]
+        //public async Task<ActionResult> UserCases(int customerId, string progressId)        
         protected override void OnActionExecuting(ActionExecutingContext filterContext) //called before a controller action is executed, that is before ~/UserController/index 
         {
             //var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
@@ -79,9 +86,7 @@
 
                     }
                 }
-
                 
-
                 var netId = principal.Identity.Name;
                 var ssoLog = new NewSSOLog()
                 {
@@ -93,18 +98,42 @@
 
                 if (ConfigurationManager.AppSettings["SSOLog"].ToString().ToLower() == "true" && string.IsNullOrEmpty(SessionFacade.CurrentSystemUser))
                     _ssoService.SaveSSOLog(ssoLog);
+                 
+                TempData["UserHasAccess"] = "true";
 
+                if (string.IsNullOrEmpty(userIdentity.UserId))
+                    TempData["UserHasAccess"] = "false";
+
+
+                userIdentity.EmployeeNumber =  "05405951";
+                if (SessionFacade.CurrentUserIdentity == null)
+                {
+                    if (string.IsNullOrEmpty(userIdentity.EmployeeNumber))
+                    {
+                        TempData["UserHasAccess"] = "false";                        
+                        filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = "You don't have access to the portal! (EmployeeNumber not specified)", errorCode = 001 }));
+                    }
+                    else
+                    {
+                        var  _amAPIService = new AMAPIService();
+                        var isEmploeeManager = AsyncHelpers.RunSync<bool>(() => _amAPIService.IsEmployeeManager(userIdentity.EmployeeNumber));
+                        if (!isEmploeeManager)
+                        {
+                            TempData["UserHasAccess"] = "false";                            
+                            filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = "You don't have access to the portal!", errorCode = 002 }));                            
+                        }
+
+                    }
+                }
                 SessionFacade.CurrentSystemUser = userIdentity.UserId;
+                SessionFacade.CurrentUserIdentity = userIdentity;      
                 
             }
 
-            //if (SessionFacade.CurrentUser != null)
-            //{
-                this.SessionCheck(filterContext);
-                this.SetTextTranslation(filterContext);
+          
+            this.SessionCheck(filterContext);
+            this.SetTextTranslation(filterContext);
 
-                //ApplicationFacade.RemoveCaseUserInfo(SessionFacade.CurrentUser.Id);
-            //}
         }
 
         protected override void OnActionExecuted(ActionExecutedContext filterContext) //called after a controller action is executed, that is after ~/UserController/index 
