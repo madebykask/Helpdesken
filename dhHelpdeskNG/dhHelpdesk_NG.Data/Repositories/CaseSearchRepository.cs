@@ -516,7 +516,7 @@
             sb.Append("left outer join tblUsers as tblUsers4 on tblProblem.ResponsibleUser_Id = tblUsers4.Id ");
 
             //where
-            if (userId == -1)
+            if (ConfigurationManager.AppSettings["ApplicationId"].ToString() == "Line Manager")
                 sb.Append(
                     this.ReturnCustomCaseSearchWhere(f,userUserId));
             else
@@ -549,9 +549,27 @@
             // kund 
             sb.Append(" where (tblCase.Customer_Id = " + f.CustomerId + ")");
             sb.Append(" and (tblCase.Deleted = 0)");
-            sb.Append(" and (tblCase.[RegUserId] = '" + userUserId + "')");
+            //sb.Append(" and (tblCase.[RegUserId] = '" + userUserId + "')");
+            switch (f.LMCaseList)
+            {
+                   
+                //Manager Cases Only
+                case "1":
+                    sb.Append(" and (tblCase.[RegUserId] = '" + userUserId + "' or tblCase.[ReportedBy] = " + f.ReportedBy + ")");
+                    break;
 
-                        
+                //CoWorkers Cases Only
+                case "2":
+                    sb.Append(" and (tblCase.[ReportedBy] in (" + f.ReportedBy + "))");
+                    break;
+
+                //Manager & Coworkers Cases
+                case "12":
+                    sb.Append(" and (tblCase.[RegUserId] = '" + userUserId + "' or tblCase.[ReportedBy] in (" + f.ReportedBy + ") )");                    
+                    break;
+                
+            }
+
             // ärende progress - iShow i gammal helpdesk
             switch (f.CaseProgress)
             {

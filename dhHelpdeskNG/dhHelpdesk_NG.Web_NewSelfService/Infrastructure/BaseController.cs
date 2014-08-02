@@ -119,8 +119,17 @@ using System.Threading.Tasks;
                         var isEmploeeManager = AsyncHelpers.RunSync<bool>(() => _amAPIService.IsEmployeeManager(userIdentity.EmployeeNumber));
                         if (!isEmploeeManager)
                         {
-                            TempData["UserHasAccess"] = "false";                            
-                            filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = "You don't have access to the portal!", errorCode = 002 }));                            
+                            TempData["UserHasAccess"] = "false";
+                            filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = "You don't have access to the portal!", errorCode = 002 }));
+                        }
+                        else
+                        {
+                            var employeeList = AsyncHelpers.RunSync<string>(() => _amAPIService.GetEmployeeFor(userIdentity.EmployeeNumber));
+
+                            var strEmployees = employeeList.ToString();
+                            strEmployees = strEmployees.Replace("[", string.Empty).Replace("]", string.Empty).Replace("\"", string.Empty);
+                            SessionFacade.CurrentCoWorkers = strEmployees.Split(',').ToList();
+                            TempData["EmployeeList"] = SessionFacade.CurrentCoWorkers;
                         }
 
                     }

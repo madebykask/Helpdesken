@@ -10,6 +10,7 @@
     using DH.Helpdesk.Domain.Computers;    
     using DH.Helpdesk.NewSelfService.Models;
     using DH.Helpdesk.Common.Types;
+    using DH.Helpdesk.BusinessData.Models.CoWorkers;
 
     public static class SessionFacade
     {
@@ -34,6 +35,7 @@
         private const string _CURRENT_OPERATIONLOG_SEARCH = "CURRENT_OPERATIONLOG_SEARCH";        
         private const string _CURRENT_DOCUMENT_SEARCH = "CURRENT_DOCUMENT_SEARCH";
         private const string _CURRENT_USER_IDENTITY = "CURRENT_USER_IDENTITY";
+        private const string _CURRENT_COWORKERS = "CURRENT_COWORKERS";
 
         public static int CurrentCustomerID
         {
@@ -83,6 +85,23 @@
                     HttpContext.Current.Session.Add(_CURRENT_USER, value);
                 else
                     HttpContext.Current.Session[_CURRENT_USER] = value;
+            }
+        }
+
+        public static List<string> CurrentCoWorkers
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_CURRENT_COWORKERS] == null)
+                    return null;
+                return (List<string>)HttpContext.Current.Session[_CURRENT_COWORKERS];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_CURRENT_COWORKERS] == null)
+                    HttpContext.Current.Session.Add(_CURRENT_COWORKERS, value);
+                else
+                    HttpContext.Current.Session[_CURRENT_COWORKERS] = value;
             }
         }
 

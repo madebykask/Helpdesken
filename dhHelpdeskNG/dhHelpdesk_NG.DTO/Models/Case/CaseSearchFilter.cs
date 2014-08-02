@@ -2,6 +2,7 @@
 namespace DH.Helpdesk.BusinessData.Models.Case
 {
     using System;
+    using System.Collections.Generic;
 
     public class CaseSearchFilter 
     {
@@ -24,6 +25,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public string FreeTextSearch { get; set; }
         public string ParantPath_ProductArea { get; set; }
         public string ParantPath_CaseType { get; set; }
+        public string ReportedBy { get; set; }
+        public string RegUserId { get; set; }        
 
         public DateTime? CaseRegistrationDateStartFilter { get; set; }
 
@@ -36,6 +39,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public DateTime? CaseClosingDateStartFilter { get; set; }
 
         public DateTime? CaseClosingDateEndFilter { get; set; }
+
+        public string LMCaseList { get; set; }
 
         public CaseSearchFilter Copy(CaseSearchFilter o)
         {
@@ -59,7 +64,9 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             r.UserId = o.UserId;
             r.UserPerformer = o.UserPerformer;
             r.UserResponsible = o.UserResponsible;
-            r.WorkingGroup = o.WorkingGroup;  
+            r.WorkingGroup = o.WorkingGroup;
+            r.ReportedBy = o.ReportedBy;
+            r.LMCaseList = o.LMCaseList;  
             r.CaseRegistrationDateStartFilter = o.CaseRegistrationDateStartFilter;    
             r.CaseRegistrationDateEndFilter = o.CaseRegistrationDateEndFilter;    
             r.CaseWatchDateStartFilter = o.CaseWatchDateStartFilter;    

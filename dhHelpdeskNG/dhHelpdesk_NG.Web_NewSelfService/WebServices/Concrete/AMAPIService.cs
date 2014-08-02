@@ -23,10 +23,23 @@ namespace DH.Helpdesk.NewSelfService.WebServices
     using System.Net.Http.Headers;
     using System.Web.Mvc;
     using System.Configuration;
-    
-    public class AMAPIService : IAMAPIService
-    {                    
 
+    public class APIInfo
+    {
+        public APIInfo()
+        {
+        }
+
+        public string UriPath { get; set; }
+
+        public string UserName { get; set; }
+
+        public string Password { get; set; }
+    }
+
+    public class AMAPIService : IAMAPIService
+    {
+        
         #region Public Methods and Operators
  
         public async Task<bool> IsEmployeeManager (string employeeNumber)        
@@ -44,11 +57,11 @@ namespace DH.Helpdesk.NewSelfService.WebServices
         [AllowAnonymous]
         private async Task<bool> WS_IsEmployeeManager(string employeeNumber)        
         {
-            var handler = new HttpClientHandler { Credentials = new NetworkCredential("AdminTest1", "asd123!") };
+            var apiInfo = GetApiInfo();
+            var handler = new HttpClientHandler { Credentials = new NetworkCredential(apiInfo.UserName, apiInfo.Password) };
             using (var client = new HttpClient(handler))
-            {
-                var uri = ConfigurationManager.AppSettings["dh_AccessManagmentUriAddress"].ToString();
-                client.BaseAddress = new Uri(uri);
+            {                
+                client.BaseAddress = new Uri(apiInfo.UriPath);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -58,7 +71,6 @@ namespace DH.Helpdesk.NewSelfService.WebServices
                     var res = await response.Content.ReadAsAsync<bool>();
                     return res;
                 }                
-
             }
 
             return false;            
@@ -68,11 +80,11 @@ namespace DH.Helpdesk.NewSelfService.WebServices
         [AllowAnonymous]
         private async Task<string> WS_GetEmployeeFor(string managerEmployeeNum)
         {
-            var handler = new HttpClientHandler { Credentials = new NetworkCredential("AdminTest1", "asd123!") };
+            var apiInfo = GetApiInfo();
+            var handler = new HttpClientHandler { Credentials = new NetworkCredential(apiInfo.UserName, apiInfo.Password) };
             using (var client = new HttpClient(handler))
-            {
-                var uri = ConfigurationManager.AppSettings["dh_AccessManagmentUriAddress"].ToString();
-                client.BaseAddress = new Uri(uri);
+            {                
+                client.BaseAddress = new Uri(apiInfo.UriPath);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -88,6 +100,18 @@ namespace DH.Helpdesk.NewSelfService.WebServices
 
         }
 
+        private APIInfo GetApiInfo()
+        {
+            var info = new APIInfo()
+            {   
+                UriPath = ConfigurationManager.AppSettings["AM_Api_UriPath"].ToString(),
+                UserName = ConfigurationManager.AppSettings["AM_Api_UserName"].ToString(),
+                Password = ConfigurationManager.AppSettings["AM_Api_Password"].ToString()
+            };
+
+            return info;
+        }
+        
         #endregion
     }
 }

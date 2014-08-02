@@ -294,14 +294,10 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
             return this.View("NewCase",model);
         }
-
-        //[AllowAnonymous]
-        //public async Task<ActionResult> UserCases(int customerId, string progressId)
+        
         [HttpGet]        
         public ActionResult UserCases(int customerId, string progressId)
-        {
-            //var res = await GetCoWorkers();
-            //ViewBag.Res = res;
+        {            
 
             var currentCustomer = this._customerService.GetCustomer(customerId);
             if (currentCustomer == null)
@@ -692,35 +688,73 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             cs.CustomerId = cusId;            
             cs.FreeTextSearch = pharasSearch;
             cs.CaseProgress = progressId;
+            cs.ReportedBy = "";
+            var caseListCondition = ConfigurationManager.AppSettings["CaseList"].ToString().ToLower().Split(',');
             
+
+            var LMtype = "";
+            if (caseListCondition.Contains("manager"))
+            {
+                LMtype = "1";
+                cs.RegUserId = curUser;
+                cs.ReportedBy = "'" + SessionFacade.CurrentUserIdentity.EmployeeNumber+ "'";
+            }
+
+            if (caseListCondition.Contains("coworkers"))
+            {
+                LMtype = LMtype + "2";
+                var employeeList = SessionFacade.CurrentCoWorkers;
+                foreach (var emp in employeeList)
+                {
+                    if (cs.ReportedBy == "")
+                        cs.ReportedBy = "'" + emp + "'";
+                    else
+                        cs.ReportedBy = cs.ReportedBy + "," + "'" + emp + "'";
+                }
+
+            }
+
+
+            //if (cs.ReportedBy == "")
+              //  cs.ReportedBy = "-1";
+            cs.LMCaseList = LMtype;
+
+            cs.ReportedBy = cs.ReportedBy ;
+
             search.SortBy = sortBy;
             search.Ascending = ascending;
 
             sm.Search = search;
             sm.caseSearchFilter = cs;
 
-            // 1: User in Customer Setting
-            srm.CaseSettings = this._caseSettingService.GetCaseSettingsByUserGroup(cusId, 1);            
+                        // 1: User in Customer Setting
+            srm.CaseSettings = this._caseSettingService.GetCaseSettingsByUserGroup(cusId, 1);
 
-            srm.Cases = this._caseSearchService.Search(
-                sm.caseSearchFilter,
-                srm.CaseSettings,
-                -1,
-                curUser,
-                1,
-                1,
-                1,                
-                search,
-                1,
-                1,
-                null).ToList(); // Take(maxRecords)
-            
+            if (LMtype == "")
+                srm.Cases = null;
+            else
+            {
+                srm.Cases = this._caseSearchService.Search(
+                    sm.caseSearchFilter,
+                    srm.CaseSettings,
+                    -1,
+                    curUser,
+                    1,
+                    1,
+                    1,
+                    search,
+                    1,
+                    1,
+                    null).ToList(); // Take(maxRecords)
+
+                var dynamicCases = _caseService.GetAllDynamicCases();
+                model.DynamicCases = dynamicCases;
+
+            }
+
             model.CaseSearchResult = srm;
             SessionFacade.CurrentCaseSearch = sm;
-
-            var dynamicCases = _caseService.GetAllDynamicCases();
-            model.DynamicCases = dynamicCases;
-
+            
             return model;           
         }
 
@@ -839,32 +873,6 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
             return true;
         }
-
-        private static async Task<string> GetCoWorkers()
-        {
-            var handler = new HttpClientHandler { Credentials = new NetworkCredential("AdminTest1", "asd123!") };
-            using (var client = new HttpClient(handler))
-            {
-                client.BaseAddress = new Uri("http://localhost:25172/");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                //var emp = "5700004";
-                var emp = "5301929";
-                var response = await client.GetAsync(String.Format("api/subordinates/{0}", emp));
-                if (response.IsSuccessStatusCode)
-                {
-                    var nums = await response.Content.ReadAsStringAsync();
-                    //var nums = await response.Content.ReadAsAsync<List<string>>();
-                    //foreach (var num in nums)
-                    //{
-                    //}
-                    return nums;
-                }
-            }
-
-            return "";
-        }
-
+        
     }
 }

@@ -176,7 +176,7 @@
 
         var employeeList = TempData["EmployeeList"];
         
-        CaseLogModel pCaseLogs = null;
+         CaseLogModel pCaseLogs = null;
         var currentCaseId = ViewBag.CurrentCaseId;
         if (currentCaseId != null)
         {
@@ -196,7 +196,7 @@
     </div>*@
 
     <!-- COMMUNICATE DIV--->
-    <input type="button" value ="@employeeList" />
+    @*<input type="button" value ="@employeeList" />*@
 
     @if (currentCaseId != null) 
     {

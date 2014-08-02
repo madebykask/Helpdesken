@@ -62,7 +62,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if (Model.CaseSearchResult.Cases.Any())
+                                        @if (Model.CaseSearchResult.Cases != null)
                                         {                                            
                                             foreach (var r in Model.CaseSearchResult.Cases)
                                             {

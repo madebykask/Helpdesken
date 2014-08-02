@@ -1,4 +1,6 @@
-﻿@{
+﻿@model DH.Helpdesk.NewSelfService.Models.CoWorkers.CoWorkersModel
+
+@{
     ViewBag.Title = "Index";
 }
 <!-- Modal -->
@@ -118,140 +120,44 @@
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th>Co-worker First name
-                                    </th>
-                                    <th>Co-worker Last name
-                                    </th>
-                                    <th>Job title – job key
-                                    </th>
-                                    <th>Email
-                                    </th>
-                                    <th>IKEA Inside
-                                    </th>
+                                    <th>Co-worker Employee Number</th>
+                                    <th>Co-worker First name</th>
+                                    <th>Co-worker Last name</th>
+                                    <th>Job title – job key</th>
+                                    <th>Email</th>
+                                    <th>IKEA Inside</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>
-                                        <button class="btn btn-dhblue btn-xs" data-toggle="modal" data-target="#myModal" title="Previous service requests for this co-worker"><span class="glyphicon glyphicon-folder-open"></span></button>
-                                    </td>
-                                    <td>
-                                        <a href="#" onclick="AddNewTab('Ruben')"> Ruben </a>
-                                    </td>
-                                    <td>van Burgsteden
-                                    </td>
-                                    <td>50047407	Sales Co-worker II
-                                    </td>
-                                    <td>rvb@ikea.com
-                                    </td>
-                                    <td><a href="#">[IKEA Inside <span class="glyphicon glyphicon-arrow-right"></span>]</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        
-                                    </td>
-                                    <td>Fransien
-                                    </td>
-                                    <td>Sanders-Dinnissen
-                                    </td>
-                                    <td>40002343	Receptionist
-                                    </td>
-                                    <td>fsd@ikea.com
-                                    </td>
-                                    <td><a href="#">[IKEA Inside <span class="glyphicon glyphicon-arrow-right"></span>]</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <button class="btn btn-dhblue btn-xs" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-folder-open"></span></button>
-                                    </td>
-                                    <td>Marike
-                                    </td>
-                                    <td>Eysten-Burghgraef
-                                    </td>
-                                    <td>40000359	Sales Team Leader
-                                    </td>
-                                    <td>meb@ikea.com
-                                    </td>
-                                    <td><a href="#">[IKEA Inside <span class="glyphicon glyphicon-arrow-right"></span>]</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        
-                                    </td>
-                                    <td>Cor-Louise 
-                                    </td>
-                                    <td>Gubbels-Driessen
-                                    </td>
-                                    <td>50047407	Sales Co-worker II
-                                    </td>
-                                    <td>cgd@ikea.com
-                                    </td>
-                                    <td><a href="#">[IKEA Inside <span class="glyphicon glyphicon-arrow-right"></span>]</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <button class="btn btn-dhblue btn-xs" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-folder-open"></span></button>
-                                    </td>
-                                    <td>Bets
-                                    </td>
-                                    <td>Zwartbol-Bouman
-                                    </td>
-                                    <td>40002254	Project Co-worker
-                                    </td>
-                                    <td>bzb@ikea.com
-                                    </td>
-                                    <td><a href="#">[IKEA Inside <span class="glyphicon glyphicon-arrow-right"></span>]</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <button class="btn btn-dhblue btn-xs" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-folder-open"></span></button>
-                                    </td>
-                                    <td>Rob
-                                    </td>
-                                    <td>Scheenhouwer
-                                    </td>
-                                    <td>40001657	Customer Services Team Manager
-                                    </td>
-                                    <td>rs@ikea.com
-                                    </td>
-                                    <td><a href="#">[IKEA Inside <span class="glyphicon glyphicon-arrow-right"></span>]</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <button class="btn btn-dhblue btn-xs" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-folder-open"></span></button>
-                                    </td>
-                                    <td>Patricia 
-                                    </td>
-                                    <td>Keesmaat
-                                    </td>
-                                    <td>40000359	Sales Team Leader
-                                    </td>
-                                    <td>pk@ikea.com
-                                    </td>
-                                    <td><a href="#">[IKEA Inside <span class="glyphicon glyphicon-arrow-right"></span>]</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <button class="btn btn-dhblue btn-xs" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-folder-open"></span></button>
-                                    </td>
-                                    <td>Corrie  
-                                    </td>
-                                    <td>Remy-Boei
-                                    </td>
-                                    <td>50047407	Sales Co-worker II
-                                    </td>
-                                    <td>crd@ikea.com
-                                    </td>
-                                    <td><a href="#">[IKEA Inside <span class="glyphicon glyphicon-arrow-right"></span>]</a>
-                                    </td>
-                                </tr>
+                                @if (Model.CoWorkers != null)
+                                {
+                                    foreach (var cw in Model.CoWorkers)
+                                    {
+                                         <tr>
+                                            <td>
+                                                <button class="btn btn-dhblue btn-xs" data-toggle="modal" data-target="#myModal" title="Previous service requests for this co-worker"><span class="glyphicon glyphicon-folder-open"></span></button>
+                                            </td>
+                                            <td>
+                                                <a href="#" onclick="AddNewTab('Ruben')"> @cw.EmployeeNumber </a>
+                                            </td>
+                                            <td>
+                                                <a href="#" onclick="AddNewTab('Ruben')"> @cw.FirstName </a>
+                                            </td>
+                                            <td>
+                                                <a href="#" onclick="AddNewTab('Ruben')"> @cw.LastName </a>
+                                            </td>
+                                            <td>
+                                                <a href="#" onclick="AddNewTab('Ruben')"> @cw.JobKey - @cw.JobKey </a>
+                                            </td>
+                                             <td>
+                                                <a href="#" onclick="AddNewTab('Ruben')"> @cw.Email </a>
+                                            </td>
+                                            <td>
+                                                <a href="#">[IKEA Inside <span class="glyphicon glyphicon-arrow-right"></span>]</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }                                                               
                             </tbody>
                         </table>
                     </div>
