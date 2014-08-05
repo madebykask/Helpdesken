@@ -5,5 +5,7 @@
     public interface IApplicationConfiguration
     {
         CultureInfo DefaultCulture { get; }
+
+        string ApplicationId { get; }
     }
 }

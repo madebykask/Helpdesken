@@ -1,10 +1,4 @@
-﻿using DH.Helpdesk.BusinessData.Models;
-using DH.Helpdesk.BusinessData.Models.Inventory.Input;
-using DH.Helpdesk.Dal.EntityConfigurations.Questionnaire;
-using DH.Helpdesk.Services.utils;
-using Ninject;
-
-namespace DH.Helpdesk.Web.Controllers
+﻿namespace DH.Helpdesk.Web.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -13,10 +7,10 @@ namespace DH.Helpdesk.Web.Controllers
     using System.Web;
     using System.Web.Mvc;
 
+    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.FinishingCause;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Common.Tools;
@@ -24,10 +18,9 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Dal.Utils;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Services.Services.Concrete;
     using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.Configuration;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Case;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Invoice;
@@ -86,14 +79,13 @@ namespace DH.Helpdesk.Web.Controllers
 
         private readonly INotifierService notifierService;
 
-        /// <summary>
-        /// The work context.
-        /// </summary>
         private readonly IWorkContext workContext;
 
         private readonly IInvoiceArticleService invoiceArticleService;
 
         private readonly IInvoiceArticlesModelFactory invoiceArticlesModelFactory;
+
+        private readonly IConfiguration configuration;
 
         #endregion
 
@@ -144,7 +136,8 @@ namespace DH.Helpdesk.Web.Controllers
             ICaseNotifierModelFactory caseNotifierModelFactory, 
             INotifierService notifierService, 
             IInvoiceArticleService invoiceArticleService, 
-            IInvoiceArticlesModelFactory invoiceArticlesModelFactory)
+            IInvoiceArticlesModelFactory invoiceArticlesModelFactory, 
+            IConfiguration configuration)
             : base(masterDataService)
         {
             this._caseService = caseService;
@@ -191,6 +184,7 @@ namespace DH.Helpdesk.Web.Controllers
             this.notifierService = notifierService;
             this.invoiceArticleService = invoiceArticleService;
             this.invoiceArticlesModelFactory = invoiceArticlesModelFactory;
+            this.configuration = configuration;
         }
 
         #endregion
@@ -334,7 +328,8 @@ namespace DH.Helpdesk.Web.Controllers
                         sm.Search,
                         this.workContext.Customer.WorkingDayStart,
                         this.workContext.Customer.WorkingDayEnd,
-                        this.workContext.Cache.Holidays);
+                        this.workContext.Cache.Holidays,
+                        this.configuration.Application.ApplicationId);
                     m.caseSearchResult = srm;
                     m.caseSearchFilterData = fd;
                     sm.Search.IdsForLastSearch = GetIdsFromSearchResult(srm.cases);
@@ -912,7 +907,8 @@ namespace DH.Helpdesk.Web.Controllers
                     sm.Search,
                     this.workContext.Customer.WorkingDayStart,
                     this.workContext.Customer.WorkingDayEnd,
-                    this.workContext.Cache.Holidays);
+                    this.workContext.Cache.Holidays,
+                    this.configuration.Application.ApplicationId);
 
                 sm.Search.IdsForLastSearch = GetIdsFromSearchResult(m.cases);
                 SessionFacade.CurrentCaseSearch = sm;

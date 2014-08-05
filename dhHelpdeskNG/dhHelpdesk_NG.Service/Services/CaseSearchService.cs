@@ -21,7 +21,8 @@
             ISearch s,
             int workingDayStart,
             int workingDayEnd,
-            IEnumerable<HolidayOverview> holidays);
+            IEnumerable<HolidayOverview> holidays,
+            string applicationId = null);
     }
 
     public class CaseSearchService : ICaseSearchService
@@ -52,7 +53,8 @@
                                 ISearch s,
                                 int workingDayStart,
                                 int workingDayEnd,
-                                IEnumerable<HolidayOverview> holidays)
+                                IEnumerable<HolidayOverview> holidays,
+                                string applicationId = null)
         {
             int productAreaId;
             var csf = new CaseSearchFilter();
@@ -60,7 +62,9 @@
 
             // ärenden som tillhör barn till föräldrer ska visas om vi filtrerar på föräldern
             if (int.TryParse(csf.ProductArea, out productAreaId))
+            {
                 csf.ProductArea = this._productAreaService.GetProductAreaWithChildren(productAreaId, ", ", "Id");
+            }
 
             return this._caseSearchRepository.Search(
                                                 csf, 
@@ -75,7 +79,8 @@
                                                 s,
                                                 workingDayStart,
                                                 workingDayEnd,
-                                                holidays);
+                                                holidays,
+                                                applicationId);
         }
 
     }

@@ -8,6 +8,7 @@
     internal sealed class ApplicationConfiguration : IApplicationConfiguration
     {
         private CultureInfo defaultCulture;
+        private string applicationId;
 
         public CultureInfo DefaultCulture
         {
@@ -42,6 +43,19 @@
                 }
 
                 return this.defaultCulture;
+            }
+        }
+
+        public string ApplicationId
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(this.applicationId))
+                {
+                    this.applicationId = ConfigurationManager.AppSettings["ApplicationId"];
+                }
+
+                return this.applicationId;
             }
         }
     }

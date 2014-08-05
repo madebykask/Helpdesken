@@ -36,7 +36,8 @@
             ISearch s,
             int workingDayStart,
             int workingDayEnd,
-            IEnumerable<HolidayOverview> holidays);
+            IEnumerable<HolidayOverview> holidays,
+            string applicationId);
     }
 
     public class CaseSearchRepository : ICaseSearchRepository
@@ -70,7 +71,8 @@
                                     ISearch s,
                                     int workingDayStart,
                                     int workingDayEnd,
-                                    IEnumerable<HolidayOverview> holidays)
+                                    IEnumerable<HolidayOverview> holidays,
+                                    string applicationId)
         {
             var dsn = ConfigurationManager.ConnectionStrings["HelpdeskOleDbContext"].ConnectionString;
             var customerUserSetting = this._customerUserRepository.GetCustomerSettings(f.CustomerId, userId);
@@ -78,7 +80,18 @@
             IList<CaseSearchResult> ret = new List<CaseSearchResult>();
             var caseTypes = this.caseTypeRepository.GetCaseTypeOverviews(f.CustomerId).ToArray();
 
-            var sql = this.ReturnCaseSearchSql(f, customerSetting, customerUserSetting, userId, userUserId, showNotAssignedWorkingGroups, userGroupId, restrictedCasePermission, gs, s);
+            var sql = this.ReturnCaseSearchSql(
+                                        f, 
+                                        customerSetting, 
+                                        customerUserSetting, 
+                                        userId, 
+                                        userUserId, 
+                                        showNotAssignedWorkingGroups, 
+                                        userGroupId, 
+                                        restrictedCasePermission, 
+                                        gs, 
+                                        s,
+                                        applicationId);
 
             if (string.IsNullOrEmpty(sql))
             {
@@ -356,7 +369,18 @@
             return ret; 
         }
 
-        private string ReturnCaseSearchSql(CaseSearchFilter f, Setting customerSetting, CustomerUser customerUserSetting, int userId, string userUserId, int showNotAssignedWorkingGroups, int userGroupId, int restrictedCasePermission, GlobalSetting gs, ISearch s)
+        private string ReturnCaseSearchSql(
+                    CaseSearchFilter f, 
+                    Setting customerSetting, 
+                    CustomerUser customerUserSetting, 
+                    int userId, 
+                    string userUserId, 
+                    int showNotAssignedWorkingGroups, 
+                    int userGroupId, 
+                    int restrictedCasePermission, 
+                    GlobalSetting gs, 
+                    ISearch s,
+                    string applicationId)
         {
             var sb = new StringBuilder();
 
@@ -515,12 +539,14 @@
             sb.Append("left outer join tblProblem on tblCase.Problem_Id = tblProblem.Id ");
             sb.Append("left outer join tblUsers as tblUsers4 on tblProblem.ResponsibleUser_Id = tblUsers4.Id ");
 
-            //where
-            if (ConfigurationManager.AppSettings["ApplicationId"].ToString() == "Line Manager")
-                sb.Append(
-                    this.ReturnCustomCaseSearchWhere(f,userUserId));
+            if (applicationId == "Line Manager")
+            {
+                sb.Append(this.ReturnCustomCaseSearchWhere(f, userUserId));
+            }
             else
-              sb.Append(this.ReturnCaseSearchWhere(f, customerSetting, userId, userUserId, showNotAssignedWorkingGroups, userGroupId, restrictedCasePermission, gs));
+            {
+                sb.Append(this.ReturnCaseSearchWhere(f, customerSetting, userId, userUserId, showNotAssignedWorkingGroups, userGroupId, restrictedCasePermission, gs));
+            }
 
             // order by
             sb.Append("order by ");

@@ -41,7 +41,8 @@
             var objects = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.Object,
                 options.Objects,
-                null);
+                null,
+                true);
 
             var inventoryDialog = this.configurableFieldModelFactory.CreateInventoryDialog(
                 settings.Inventory,
@@ -55,7 +56,8 @@
             var administrators = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.Administrator,
                 options.Administrators,
-                null);
+                null,
+                true);
 
             var finishingDate = this.configurableFieldModelFactory.CreateNullableDateTimeField(
                 settings.FinishingDate,
