@@ -365,6 +365,11 @@
             this.computerInventoryRepository.Commit();
         }
 
+        public ComputerShortOverview GetWorkstationShortInfo(int computerId)
+        {
+            return this.computerRepository.FindShortOverview(computerId);
+        }
+
         #endregion
     }
 }

@@ -16,5 +16,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
         ComputerFieldsSettingsOverview GetFieldSettingsOverview(int customerId, int languageId);
 
         ComputerFieldsSettingsOverviewForFilter GetFieldSettingsOverviewForFilter(int customerId, int languageId);
+
+        ComputerFieldsSettingsOverviewForShortInfo GetFieldSettingsOverviewForShortInfo(int customerId, int languageId);
     }
 }

@@ -27,6 +27,8 @@ namespace DH.Helpdesk.Services.Services
 
         ComputerFieldsSettingsOverviewForFilter GetWorkstationFieldSettingsOverviewForFilter(int customerId, int languageId);
 
+        ComputerFieldsSettingsOverviewForShortInfo GetWorkstationFieldSettingsForShortInfo(int customerId, int languageId);
+
         void UpdateServerFieldsSettings(ServerFieldsSettings businessModel);
 
         ServerFieldsSettings GetServerFieldSettingsForEdit(int customerId, int languageId);

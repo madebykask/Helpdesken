@@ -1,0 +1,136 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.ComputerModalViewModel
+<script>
+    $(function () {
+        $('#computer_short_info_select_div').dialog({
+            autoOpen: false,
+            modal: false,
+            resizable: false,
+            resizeable: false,
+            maxWidth: 1200,
+            maxHeight: 500,
+            width: 1200,
+            height: 500,
+        });
+    });
+</script>
+
+<div id="computer_short_info_select_div" title="@Translation.Get("Inventarie")">
+    <table class="tableform">
+        @if (Model.Settings.NameFieldSetting.IsShow || Model.Settings.ManufacturerFieldSetting.IsShow || Model.Settings.ComputerModelFieldSetting.IsShow || Model.Settings.SerialNumberFieldSetting.IsShow || Model.Settings.BiosVersionFieldSetting.IsShow || Model.Settings.BiosDateFieldSetting.IsShow)
+        {
+            <tr>
+                <th colspan="2" class="header">@Translation.Get("Hårdvara")</th>
+            </tr>
+        }
+        @if (Model.Settings.NameFieldSetting.IsShow)
+        {
+            <tr>
+                <td class="span3">@Translation.Get(Model.Settings.NameFieldSetting.Caption)</td>
+                <td>@Html.DisplayFor(m => m.ComputerShortOverview.ComputerName)</td>
+            </tr>
+        }
+        @if (Model.Settings.ManufacturerFieldSetting.IsShow)
+        {
+            <tr>
+                <td class="span3">@Translation.Get(Model.Settings.ManufacturerFieldSetting.Caption)</td>
+                <td>@Html.DisplayFor(m => m.ComputerShortOverview.Manufacturer)</td>
+            </tr>
+        }
+        @if (Model.Settings.ComputerModelFieldSetting.IsShow)
+        {
+            <tr>
+                <td class="span3">@Translation.Get(Model.Settings.ComputerModelFieldSetting.Caption)</td>
+                <td>@Html.DisplayFor(m => m.ComputerShortOverview.ComputerModelName)</td>
+            </tr>
+        }
+        @if (Model.Settings.SerialNumberFieldSetting.IsShow)
+        {
+            <tr>
+                <td class="span3">@Translation.Get(Model.Settings.SerialNumberFieldSetting.Caption)</td>
+                <td>@Html.DisplayFor(m => m.ComputerShortOverview.SerialNumber)</td>
+            </tr>
+        }
+        @if (Model.Settings.BiosVersionFieldSetting.IsShow)
+        {
+            <tr>
+                <td class="span3">@Translation.Get(Model.Settings.BiosVersionFieldSetting.Caption)</td>
+                <td>@Html.DisplayFor(m => m.ComputerShortOverview.BIOSVersion)</td>
+            </tr>
+        }
+        @if (Model.Settings.BiosDateFieldSetting.IsShow)
+        {
+            <tr>
+                <td class="span3">@Translation.Get(Model.Settings.BiosDateFieldSetting.Caption)</td>
+                <td>@Html.DisplayFor(m => m.ComputerShortOverview.BIOSDate)</td>
+            </tr>
+        }
+
+
+        @if (Model.Settings.OperatingSystemFieldSetting.IsShow)
+        {
+            <tr>
+                <td class="span3">@Translation.Get(Model.Settings.OperatingSystemFieldSetting.Caption)</td>
+                <td>@Html.DisplayFor(m => m.ComputerShortOverview.OperatingSystemName)</td>
+            </tr>
+        }
+        @if (Model.Settings.ServicePackFieldSetting.IsShow)
+        {
+            <tr>
+                <td class="span3">@Translation.Get(Model.Settings.ServicePackFieldSetting.Caption)</td>
+                <td>@Html.DisplayFor(m => m.ComputerShortOverview.ServicePack)</td>
+            </tr>
+        }
+
+        @if (Model.Settings.ProcessorFieldSetting.IsShow)
+        {
+            <tr>
+                <td class="span3">@Translation.Get(Model.Settings.ProcessorFieldSetting.Caption)</td>
+                <td>@Html.DisplayFor(m => m.ComputerShortOverview.ProccesorName)</td>
+            </tr>
+        }
+
+        @if (Model.Settings.MemoryFieldSetting.IsShow)
+        {
+            <tr>
+                <td class="span3">@Translation.Get(Model.Settings.MemoryFieldSetting.Caption)</td>
+                <td>@Html.DisplayFor(m => m.ComputerShortOverview.RAMName)</td>
+            </tr>
+        }
+
+
+
+        @if (Model.Settings.NicFieldSetting.IsShow)
+        {
+            <tr>
+                <td class="span3">@Translation.Get(Model.Settings.NicFieldSetting.Caption)</td>
+                <td>@Html.DisplayFor(m => m.ComputerShortOverview.NetworkAdapterName)</td>
+            </tr>
+        }
+        @if (Model.Settings.IpAddressFieldSetting.IsShow)
+        {
+            <tr>
+                <td class="span3">@Translation.Get(Model.Settings.IpAddressFieldSetting.Caption)</td>
+                <td>@Html.DisplayFor(m => m.ComputerShortOverview.IPAddress)</td>
+            </tr>
+        }
+        @if (Model.Settings.MacAddressFieldSetting.IsShow)
+        {
+            <tr>
+                <td class="span3">@Translation.Get(Model.Settings.MacAddressFieldSetting.Caption)</td>
+                <td>@Html.DisplayFor(m => m.ComputerShortOverview.MacAddress)</td>
+            </tr>
+        }
+        @if (Model.Settings.RasFieldSetting.IsShow)
+        {
+            <tr>
+                <td class="span3">@Translation.Get(Model.Settings.RasFieldSetting.Caption)</td>
+                <td>@Html.DisplayFor(m => m.ComputerShortOverview.RAS)</td>
+            </tr>
+        }
+        @if (Model.Settings.InfoFieldSetting.IsShow)
+        {
+        }
+
+
+    </table>
+</div>

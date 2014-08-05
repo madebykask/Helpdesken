@@ -38,6 +38,8 @@
 
         ReportModelWithInventoryType GetAllConnectedInventory(int inventoryTypeId, int? departmentId, string searchFor);
 
+        ComputerShortOverview GetWorkstationShortInfo(int computerId);
+
         #region Workstation
 
         void AddComputerLog(ComputerLog businessModel);

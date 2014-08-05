@@ -162,12 +162,14 @@
     <Compile Include="Models\Inventory\Edit\Settings\ComputerSettings\OperatingSystemFieldsSettings.cs" />
     <Compile Include="Models\Inventory\Edit\Settings\ComputerSettings\ProcessorFieldsSettings.cs" />
     <Compile Include="Models\Inventory\InventoryReportModel.cs" />
+    <Compile Include="Models\Inventory\Output\Computer\ComputerShortOverview.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ComputerSettings\ChassisFieldsSettings.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ComputerSettings\InventoryFieldsSettings.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ComputerSettings\MemoryFieldsSettings.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ComputerSettings\ModelEditFieldSetting.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ComputerSettings\OperatingSystemFieldsSettings.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ComputerSettings\ProcessorFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\ComputerFieldSettings\ComputerFieldsSettingsOverviewForShortInfo.cs" />
     <Compile Include="Models\Invoice\CaseInvoiceArticle.cs" />
     <Compile Include="Models\Invoice\InvoiceArticle.cs" />
     <Compile Include="Models\Invoice\InvoiceArticleUnit.cs" />

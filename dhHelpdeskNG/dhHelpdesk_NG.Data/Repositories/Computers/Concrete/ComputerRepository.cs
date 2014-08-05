@@ -177,6 +177,54 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             return computerAggregate;
         }
 
+        public ComputerShortOverview FindShortOverview(int id)
+        {
+            var anonymus =
+                this.DbSet.Where(x => x.Id == id)
+                    .Select(
+                        x =>
+                        new
+                            {
+                                x.Id,
+                                x.ComputerName,
+                                x.Manufacturer,
+                                x.ComputerModelName,
+                                x.SerialNumber,
+                                x.BIOSVersion,
+                                x.BIOSDate,
+                                OperatingSystemName = x.OS.Name,
+                                x.SP,
+                                ProcessorName = x.Processor.Name,
+                                RamName = x.RAM.Name,
+                                NicName = x.NIC.Name,
+                                x.IPAddress,
+                                x.MACAddress,
+                                x.RAS,
+                                x.Info
+                            })
+                    .Single();
+
+            var workstation = new ComputerShortOverview(
+                anonymus.Id,
+                anonymus.ComputerName,
+                anonymus.Manufacturer,
+                anonymus.ComputerModelName,
+                anonymus.SerialNumber,
+                anonymus.BIOSVersion,
+                anonymus.BIOSDate,
+                anonymus.OperatingSystemName,
+                anonymus.SP,
+                anonymus.ProcessorName,
+                anonymus.RamName,
+                anonymus.NicName,
+                anonymus.IPAddress,
+                anonymus.MACAddress,
+                anonymus.RAS.ToBool(),
+                anonymus.Info);
+
+            return workstation;
+        }
+
         public List<ComputerOverview> FindOverviews(
             int customerId,
             int? regionId,

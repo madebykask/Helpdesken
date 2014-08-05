@@ -83,6 +83,13 @@
             return models;
         }
 
+        public ComputerFieldsSettingsOverviewForShortInfo GetWorkstationFieldSettingsForShortInfo(int customerId, int languageId)
+        {
+            var models = this.computerFieldSettingsRepository.GetFieldSettingsOverviewForShortInfo(customerId, languageId);
+
+            return models;
+        }
+
         #endregion
 
         #region ServerSettings

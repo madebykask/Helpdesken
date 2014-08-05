@@ -944,6 +944,22 @@
         }
 
         [HttpGet]
+        public PartialViewResult SearchComputerShortInfo(int computerId)
+        {
+            var model = this.inventoryService.GetWorkstationShortInfo(computerId);
+            var settings = this.inventorySettingsService.GetWorkstationFieldSettingsForShortInfo(
+                SessionFacade.CurrentCustomer.Id,
+                SessionFacade.CurrentLanguageId);
+            var softwares = this.computerModulesService.GetComputerSoftware(computerId);
+            var drives = this.computerModulesService.GetComputerLogicalDrive(computerId);
+            var logs = this.inventoryService.GetWorkstationLogOverviews(computerId);
+
+            var viewModel = new ComputerModalViewModel(model, settings, softwares, drives, logs);
+
+            return this.PartialView("ComputerShortInfoDialog", viewModel);
+        }
+
+        [HttpGet]
         public PartialViewResult SearchComputerUsers(string selected)
         {
             var models = this.inventoryService.GetComputerUsers(SessionFacade.CurrentCustomer.Id, selected);

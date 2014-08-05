@@ -2,6 +2,22 @@
 @{
     var howerClass = Model.IsGrouped ? "header" : string.Empty;
 }
+
+<script>
+    function showComputerShortInfo(id) {
+
+        if (!id) {
+            return;
+        }
+
+        $.get('@Url.Action("SearchComputerShortInfo")', { computerId: id }, function (data) {
+                $("#computer_short_info_dialog_container").html(data);
+                $("#computer_short_info_select_div").parent().appendTo("#computer_short_info_dialog_container");
+                $('#computer_short_info_select_div').dialog('open');
+            });
+        };
+</script>
+
 <table id="tblCases" class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
@@ -14,20 +30,21 @@
             var items = Model.ReportModel.OrderBy(x => x.Item).ThenBy(x => x.Owner).GroupBy(x => x.Item);
             foreach (var item in items)
             {
-                <tr>
-                    <td class="@howerClass">@Html.DisplayFor(x => item.Key)
-                    </td>
-                </tr>
+            <tr>
+                <td class="@howerClass">@Html.DisplayFor(x => item.Key)
+                </td>
+            </tr>
                 if (Model.IsGrouped)
                 {
                     if (!item.Any())
                     {
                         continue;
                     }
+
                     foreach (var owner in item.Where(x => x.Owner != null))
                     {
-                        <tr>
-                            <td>@Html.DisplayFor(x => owner.Owner)
+                        <tr onclick=" showComputerShortInfo('@owner.OwnerId') ">
+                            <td class="tdpointer">@Html.DisplayFor(x => owner.Owner)
                             </td>
                         </tr>
                     }
@@ -36,5 +53,6 @@
         }
     </tbody>
 </table>
-
+<div id="computer_short_info_dialog_container">
+</div>
 

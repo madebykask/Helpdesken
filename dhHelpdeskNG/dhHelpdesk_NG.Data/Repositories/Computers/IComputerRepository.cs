@@ -37,6 +37,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
             bool isShowScrapped,
             int recordsOnPage);
 
+        ComputerShortOverview FindShortOverview(int id);
+
         void RemoveReferenceOnNic(int id);
 
         void RemoveReferenceOnRam(int id);

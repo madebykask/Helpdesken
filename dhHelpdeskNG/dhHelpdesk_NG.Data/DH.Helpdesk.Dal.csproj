@@ -154,6 +154,7 @@
     <Compile Include="Mappers\Customer\EntityToBusinessModel\CustomerToBusinessModel.cs" />
     <Compile Include="Mappers\Documents\EntityToBusinessModel\DocumentToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Computer\ComputerFieldSettingsToFieldSettingsMapper.cs" />
+    <Compile Include="Mappers\Inventory\EntityToBusinessModel\Computer\ComputerFieldSettingsToShortInfoSettingsMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Printer\PrinterFieldSettingsToPrinterEditSettingsMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Printer\PrinterFieldSettingsToFieldSettingsMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Computer\ComputerFieldSettingsToComputerEditSettingsMapper.cs" />

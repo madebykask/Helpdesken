@@ -607,6 +607,7 @@
     <Compile Include="Models\Inventory\ComputerModuleModeFilter.cs" />
     <Compile Include="Models\Inventory\EditModel\Computer\AccesoriesViewModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Computer\ChassisFieldsModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\ComputerModalViewModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Computer\ConfigurableFieldModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Computer\InventoryFieldsModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Computer\MemoryFieldsModel.cs" />
@@ -1519,6 +1520,7 @@
     <Content Include="Views\Invoice\IkeaArticlesImport.cshtml" />
     <Content Include="Views\Inventory\_SendToDialog.cshtml" />
     <Content Include="Views\Inventory\UserHistoryDialog.cshtml" />
+    <Content Include="Views\Inventory\ComputerShortInfoDialog.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

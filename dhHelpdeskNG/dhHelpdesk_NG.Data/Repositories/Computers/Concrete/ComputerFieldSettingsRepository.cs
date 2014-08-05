@@ -43,6 +43,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
     {
         private readonly IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, ComputerFieldsSettingsOverviewForFilter> entityToBusinessModelMapperForFilter;
 
+        private readonly IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, ComputerFieldsSettingsOverviewForShortInfo> entityToBusinessModelMapperForShortInfo;
+
         private readonly IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, ComputerFieldsSettingsOverview> entityToBusinessModelMapperForOverview;
 
         private readonly IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperDataForModelEdit>, ComputerFieldsSettingsForModelEdit> entityToBusinessModelMapperForModelEdit;
@@ -52,12 +54,14 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
         public ComputerFieldSettingsRepository(
             IDatabaseFactory databaseFactory,
             IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, ComputerFieldsSettingsOverviewForFilter> entityToBusinessModelMapperForFilter,
+            IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, ComputerFieldsSettingsOverviewForShortInfo> entityToBusinessModelMapperForShortInfo,
             IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, ComputerFieldsSettingsOverview> entityToBusinessModelMapperForOverview,
             IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperDataForModelEdit>, ComputerFieldsSettingsForModelEdit> entityToBusinessModelMapperForModelEdit,
             IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperData>, ComputerFieldsSettings> entityToBusinessModelMapperForEdit)
             : base(databaseFactory)
         {
             this.entityToBusinessModelMapperForFilter = entityToBusinessModelMapperForFilter;
+            this.entityToBusinessModelMapperForShortInfo = entityToBusinessModelMapperForShortInfo;
             this.entityToBusinessModelMapperForOverview = entityToBusinessModelMapperForOverview;
             this.entityToBusinessModelMapperForModelEdit = entityToBusinessModelMapperForModelEdit;
             this.entityToBusinessModelMapperForEdit = entityToBusinessModelMapperForEdit;
@@ -217,40 +221,19 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
         [CreateMissingComputerSettings("customerId")]
         public ComputerFieldsSettingsOverviewForFilter GetFieldSettingsOverviewForFilter(int customerId, int languageId)
         {
-            var languageTextId = this.GetLanguageTextId(languageId);
-            var settings = this.GetSettings(customerId);
-            List<FieldOverviewSettingMapperData> mapperData;
-
-            switch (languageTextId)
-            {
-                case LanguageTextId.Swedish:
-                    mapperData =
-                        settings.Select(
-                            s =>
-                            new FieldOverviewSettingMapperData
-                                {
-                                    Caption = s.Label,
-                                    FieldName = s.ComputerField,
-                                    Show = s.Show
-                                }).ToList();
-                    break;
-                case LanguageTextId.English:
-                    mapperData =
-                        settings.Select(
-                            s =>
-                            new FieldOverviewSettingMapperData
-                                {
-                                    Caption = s.Label_ENG,
-                                    FieldName = s.ComputerField,
-                                    Show = s.Show
-                                }).ToList();
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException("languageId");
-            }
+            var mapperData = this.GetFieldOverviewSettingMapperData(customerId, languageId);
 
             var settingCollection = new NamedObjectCollection<FieldOverviewSettingMapperData>(mapperData);
             return this.entityToBusinessModelMapperForFilter.Map(settingCollection);
+        }
+
+        [CreateMissingComputerSettings("customerId")]
+        public ComputerFieldsSettingsOverviewForShortInfo GetFieldSettingsOverviewForShortInfo(int customerId, int languageId)
+        {
+            var mapperData = this.GetFieldOverviewSettingMapperData(customerId, languageId);
+
+            var settingCollection = new NamedObjectCollection<FieldOverviewSettingMapperData>(mapperData);
+            return this.entityToBusinessModelMapperForShortInfo.Map(settingCollection);
         }
 
         private static void MapWorkstationFieldsSettings(
@@ -483,6 +466,43 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
         private string GetLanguageTextId(int languageId)
         {
             return this.DbContext.Languages.Find(languageId).LanguageID;
+        }
+
+        private List<FieldOverviewSettingMapperData> GetFieldOverviewSettingMapperData(int customerId, int languageId)
+        {
+            var languageTextId = this.GetLanguageTextId(languageId);
+            var settings = this.GetSettings(customerId);
+            List<FieldOverviewSettingMapperData> mapperData;
+
+            switch (languageTextId)
+            {
+                case LanguageTextId.Swedish:
+                    mapperData =
+                        settings.Select(
+                            s =>
+                            new FieldOverviewSettingMapperData
+                            {
+                                Caption = s.Label,
+                                FieldName = s.ComputerField,
+                                Show = s.Show
+                            }).ToList();
+                    break;
+                case LanguageTextId.English:
+                    mapperData =
+                        settings.Select(
+                            s =>
+                            new FieldOverviewSettingMapperData
+                            {
+                                Caption = s.Label_ENG,
+                                FieldName = s.ComputerField,
+                                Show = s.Show
+                            }).ToList();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("languageId");
+            }
+
+            return mapperData;
         }
     }
 }
