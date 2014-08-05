@@ -113,9 +113,9 @@ namespace DH.Helpdesk.Dal.Repositories.WorkstationModules.Concrete
             }
 
             var anonymus =
-                query.Where(x => x.OS_Id != null).Select(x => new { Item = x.OS.Name, Owner = x.ComputerName }).ToList();
+                query.Where(x => x.OS_Id != null).Select(x => new { Item = x.OS.Name, Owner = x.ComputerName, ComputerId = x.Id }).ToList();
 
-            var models = anonymus.Select(x => new ReportModel(x.Item, x.Owner)).ToList();
+            var models = anonymus.Select(x => new ReportModel(x.Item, x.Owner, x.ComputerId)).ToList();
 
             return models;
         }
@@ -135,10 +135,10 @@ namespace DH.Helpdesk.Dal.Repositories.WorkstationModules.Concrete
 
             var anonymus =
                 query.Where(x => x.OperatingSystem_Id != null)
-                    .Select(x => new { Item = x.OperatingSystem.Name, Owner = x.ServerName })
+                    .Select(x => new { Item = x.OperatingSystem.Name, Owner = x.ServerName, ServerId = x.Id })
                     .ToList();
 
-            var models = anonymus.Select(x => new ReportModel(x.Item, x.Owner)).ToList();
+            var models = anonymus.Select(x => new ReportModel(x.Item, x.Owner, x.ServerId)).ToList();
 
             return models;
         }

@@ -504,11 +504,11 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             }
 
             var anonymus =
-                query.Where(x => string.IsNullOrWhiteSpace(x.Location))
-                    .Select(x => new { Item = x.Location, Owner = x.ComputerName })
+                query.Where(x => x.Location != null && x.Location != string.Empty)
+                    .Select(x => new { Item = x.Location, Owner = x.ComputerName, ComputerId = x.Id })
                     .ToList();
 
-            var models = anonymus.Select(x => new ReportModel(x.Item, x.Owner)).ToList();
+            var models = anonymus.Select(x => new ReportModel(x.Item, x.Owner, x.ComputerId)).ToList();
 
             return models;
         }

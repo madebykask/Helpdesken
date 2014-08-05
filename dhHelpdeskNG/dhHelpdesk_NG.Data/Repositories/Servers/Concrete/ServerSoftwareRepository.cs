@@ -25,12 +25,12 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
                         c =>
                         new
                             {
-                                c.Id, 
-                                c.Server_Id, 
-                                c.Name, 
-                                c.Product_key, 
-                                c.Version, 
-                                c.Registration_code, 
+                                c.Id,
+                                c.Server_Id,
+                                c.Name,
+                                c.Product_key,
+                                c.Version,
+                                c.Registration_code,
                                 c.Manufacturer
                             })
                     .ToList();
@@ -60,9 +60,9 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
                 query = query.Where(x => x.Name.ToLower().Contains(pharseInLowerCase));
             }
 
-            var anonymus = query.Select(x => new { x.Name, x.Server.ServerName }).ToList();
+            var anonymus = query.Select(x => new { x.Name, x.Server.ServerName, ServerId = x.Server.Id }).ToList();
 
-            var models = anonymus.Select(x => new ReportModel(x.Name, x.ServerName)).ToList();
+            var models = anonymus.Select(x => new ReportModel(x.Name, x.ServerName, x.ServerId)).ToList();
 
             return models;
         }

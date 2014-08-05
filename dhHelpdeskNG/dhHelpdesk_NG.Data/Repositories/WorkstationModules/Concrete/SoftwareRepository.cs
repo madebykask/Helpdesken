@@ -64,9 +64,9 @@ namespace DH.Helpdesk.Dal.Repositories.WorkstationModules.Concrete
                 query = query.Where(x => x.Name.ToLower().Contains(pharseInLowerCase));
             }
 
-            var anonymus = query.Select(x => new { x.Name, x.Computer.ComputerName }).ToList();
+            var anonymus = query.Select(x => new { x.Name, x.Computer.ComputerName, ComputerId = x.Computer.Id }).ToList();
 
-            var models = anonymus.Select(x => new ReportModel(x.Name, x.ComputerName)).ToList();
+            var models = anonymus.Select(x => new ReportModel(x.Name, x.ComputerName, x.ComputerId)).ToList();
 
             return models;
         }

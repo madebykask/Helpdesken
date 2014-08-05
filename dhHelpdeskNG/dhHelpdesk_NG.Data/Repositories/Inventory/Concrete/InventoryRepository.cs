@@ -299,6 +299,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                                     {
                                         c.InventoryName,
                                         k.Computer.ComputerName,
+                                        ComputerId = (int?)k.Computer.Id,
                                         InventoryType_Id = ti.Id,
                                         InventoryTypeName = ti.Name
                                     }).ToList();
@@ -307,7 +308,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 
             var models =
                 grouped.Where(x => x.InventoryName != null)
-                    .Select(x => new ReportModel(x.InventoryName, x.ComputerName))
+                    .Select(x => new ReportModel(x.InventoryName, x.ComputerName, x.ComputerId))
                     .ToList();
 
             var model = new ReportModelWithInventoryType(

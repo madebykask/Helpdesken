@@ -246,11 +246,11 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
             }
 
             var anonymus =
-                query.Where(x => string.IsNullOrWhiteSpace(x.Location))
-                    .Select(x => new { Item = x.Location, Owner = x.ServerName })
+                query.Where(x => x.Location != null && x.Location != string.Empty)
+                    .Select(x => new { Item = x.Location, Owner = x.ServerName, ServerId = x.Id })
                     .ToList();
 
-            var models = anonymus.Select(x => new ReportModel(x.Item, x.Owner)).ToList();
+            var models = anonymus.Select(x => new ReportModel(x.Item, x.Owner, x.ServerId)).ToList();
 
             return models;
         }
