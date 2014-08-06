@@ -323,18 +323,13 @@
                 <table class="tableform">
                     <tr>
                         <td class="span3">
-                            @Translation.Get("Sök", Enums.TranslationSource.TextTranslation)
+                            @Translation.Get("Sök")
                         </td>
                         <td class="span4">
                             <input type="text" id="txtFreeTextSearch" value="@Model.caseSearchFilter.FreeTextSearch" name="txtFreeTextSearch" />
                         </td>
                         <td class="span5">
                             <button id="btnAdvancedFilter" name="btnAdvancedFilter" class="btn">@Translation.Get("Avancerad sökning")</button>                            
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            @Translation.Get("Visa", Enums.TranslationSource.TextTranslation)
                         </td>
                         <td>
                             <select id="lstfilterCaseProgress" name="lstfilterCaseProgress">
@@ -345,7 +340,7 @@
                             </select>
                         </td>
                         <td>
-                            <button id="btnSearch" name="btnSearch" class="btn">@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)</button>
+                            <button id="btnSearch" name="btnSearch" class="btn">@Translation.Get("Go")</button>
                         </td>
                     </tr>
                 </table>
