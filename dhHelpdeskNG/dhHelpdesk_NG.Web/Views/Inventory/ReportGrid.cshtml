@@ -5,6 +5,15 @@
 }
 
 <script type="text/javascript" src="@Url.Content("~/Content/js/Inventory/reports.js")"></script>
+<script type="text/javascript">
+    $(function () {
+        var inventoryParameters = {
+            url: '@Url.Action("SearchComputerShortInfo")'
+        };
+
+        applyComputerShortInfoBehavior(inventoryParameters);
+    });
+</script>
 
 <table id="tblCases" class="table table-striped table-bordered table-hover">
     <thead>
