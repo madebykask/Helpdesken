@@ -1,4 +1,5 @@
 ﻿
+@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Models.Changes.ChangeEdit.AnalyzeModel
      
 <table class="tableform">
@@ -6,7 +7,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Categories.Caption)</label>
+                <label>@Html.FieldCaption(Model.Categories)</label>
             </td>
             <td class="span9">
                 @Html.DropDownListFor(m => m.CategoryId, Model.Categories.Value)        
@@ -25,7 +26,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Priorities.Caption)</label>
+                <label>@Html.FieldCaption(Model.Priorities)</label>
             </td>
             <td class="span9">
                 @Html.DropDownListFor(m => m.PriorityId, Model.Priorities.Value)
@@ -36,7 +37,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Responsibles.Caption)</label>
+                <label>@Html.FieldCaption(Model.Responsibles)</label>
             </td>
             <td class="span9">
                 @Html.DropDownListFor(m => m.ResponsibleId, Model.Responsibles.Value)
@@ -67,7 +68,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.AttachedFiles.Caption)</label>
+                <label>@Html.FieldCaption(Model.AttachedFiles)</label>
             </td>    
             <td c8lass="span9">
                 <a href="#analyze_files_uploader_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Upload")</a>
@@ -96,7 +97,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Logs.Caption)</label>
+                <label>@Html.FieldCaption(Model.Logs)</label>
             </td>
             <td class="span9">
                 <div id="analyze_logs_container">
@@ -133,7 +134,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.ApprovalResults.Caption)</label>
+                <label>@Html.FieldCaption(Model.ApprovalResults)</label>
             </td>
             <td class="span9">
                 @Html.DropDownListFor(m => m.ApprovalValue, Model.ApprovalResults.Value)
@@ -141,7 +142,7 @@
         </tr>
         <tr>
             <td>
-                <label>@Translation.Get(Model.RejectExplanation.Caption)</label>
+                <label>@Html.FieldCaption(Model.RejectExplanation)</label>
             </td>
             <td>
                 @Html.TextAreaFor(m => m.RejectExplanation.Value)       

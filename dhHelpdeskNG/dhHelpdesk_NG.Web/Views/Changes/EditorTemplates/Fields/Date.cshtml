@@ -1,4 +1,5 @@
 ﻿
+@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Models.Changes.ChangeEdit.ConfigurableFieldModel<DateTime?>
            
 @if (!Model.Show)
@@ -8,7 +9,7 @@
 
 <tr>
     <td class="span3">
-        @Translation.Get(Model.Caption)
+        @Html.FieldCaption(Model)
     </td>
     <td class="span9">
         @Html.EditorFor(m => m.Value, "DatePicker", new { id = ViewData["Id"], inputAttributes = new Dictionary<string, object> { { "data-dh-is-required", Model.IsRequired } } })

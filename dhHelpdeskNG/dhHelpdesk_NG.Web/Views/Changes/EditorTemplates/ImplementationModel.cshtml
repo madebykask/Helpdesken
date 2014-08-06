@@ -1,4 +1,5 @@
 ﻿
+@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Models.Changes.ChangeEdit.ImplementationModel
            
 <table class="tableform">
@@ -6,7 +7,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.ImplementationStatuses.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Html.FieldCaption(Model.ImplementationStatuses)</label>
             </td>
             <td class="span9">
                 @Html.DropDownListFor(m => m.ImplementationStatusId, Model.ImplementationStatuses.Value)
@@ -23,7 +24,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.AttachedFiles.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Html.FieldCaption(Model.AttachedFiles)</label>
             </td>    
             <td class="span9">
                 <a href="#implementation_files_uploader_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Upload")</a>
@@ -52,7 +53,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Logs.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Html.FieldCaption(Model.Logs)</label>
             </td>
             <td class="span9">
                 <div id="implementation_logs_container">
@@ -62,7 +63,7 @@
         </tr>
         <tr>
             <td class="span3">
-                <label>@Translation.Get("Log Note", Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get("Log Note")</label>
             </td>
             <td class="span9">
                 @Html.TextAreaFor(m => m.Logs.Value.Text)
@@ -74,7 +75,7 @@
                 @Html.Partial("_SendToDialog", Model.Logs.Value.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "implementation_send_to_dialog" }, { "Callback", "fillImplementationSendLogNoteToEmailsTextArea" } }))
                 @Html.TextAreaFor(m => m.Logs.Value.Emails, new { id = "implementation_send_to_emails_textarea", @readonly = "readonly" })
                 <a id="implementation_send_to_button" class="btn">
-                    @Translation.Get("Send to...", Enums.TranslationSource.TextTranslation)
+                    @Translation.Get("Send to...")
                 </a>
             </td>
         </tr>

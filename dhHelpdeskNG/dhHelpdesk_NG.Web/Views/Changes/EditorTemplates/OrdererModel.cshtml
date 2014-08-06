@@ -1,4 +1,4 @@
-﻿
+﻿@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Models.Changes.ChangeEdit.OrdererModel
  
 <table class="tableform">
@@ -11,7 +11,7 @@
     {
         <tr>
             <td class="span3">
-                @Translation.Get(Model.Departments.Caption)
+                @Html.FieldCaption(Model.Departments)
             </td>
             <td>
                 @Html.DropDownListFor(m => m.DepartmentId, Model.Departments.Value, new { inputAttributes = new Dictionary<string, object> { { "id", "change_orderer_department" }} })

@@ -1,4 +1,5 @@
 ﻿
+@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Models.Changes.ChangeEdit.ConfigurableFieldModel<string>
            
 @if (!Model.Show)
@@ -28,7 +29,7 @@
 
 <tr>
     <td class="span3">
-        @Translation.Get(Model.Caption)
+        @Html.FieldCaption(Model)
     </td>
     <td class="span9">
         @Html.TextBoxFor(m => m.Value, htmlAttributes)

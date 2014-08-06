@@ -3,7 +3,7 @@
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
-    public sealed class ConfigurableFieldModel<TValue>
+    public sealed class ConfigurableFieldModel<TValue> : IConfigurableFieldModel
     {
         #region Constructors and Destructors
 

@@ -407,6 +407,7 @@
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\DropDownWithSubmenusExtension.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\TreeItem.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\HierarchyList.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\FieldCaptionExtension.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\HierarchyListExtension.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\InvoiceExtension.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\TreeExtension.cs" />
@@ -604,6 +605,7 @@
     <Compile Include="Models\Changes\SettingsEdit\SettingsModel.cs" />
     <Compile Include="Models\Changes\SettingsEdit\TextFieldSettingModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\ConfigurableFieldModel.cs" />
+    <Compile Include="Models\IConfigurableFieldModel.cs" />
     <Compile Include="Models\Inventory\ComputerModuleModeFilter.cs" />
     <Compile Include="Models\Inventory\EditModel\Computer\AccesoriesViewModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Computer\ChassisFieldsModel.cs" />

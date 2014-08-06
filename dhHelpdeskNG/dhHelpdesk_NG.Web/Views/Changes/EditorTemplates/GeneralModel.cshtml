@@ -1,4 +1,5 @@
 ﻿
+@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Models.Changes.ChangeEdit.GeneralModel
  
 <table class="tableform">
@@ -8,7 +9,7 @@
     {
         <tr>
             <td class="span3">
-                @Translation.Get(Model.Statuses.Caption)
+                @Html.FieldCaption(Model.Statuses)
             </td>
             <td class="span9">
                 @Html.DropDownListFor(m => m.StatusId, Model.Statuses.Value)
@@ -19,7 +20,7 @@
     {
         <tr>
             <td class="span3">
-                @Translation.Get(Model.Systems.Caption)
+                @Html.FieldCaption(Model.Systems)
             </td>
             <td class="span9">
                 @Html.DropDownListFor(m => m.SystemId, Model.Systems.Value)
@@ -30,7 +31,7 @@
     {
         <tr>
             <td class="span3">
-                @Translation.Get(Model.Objects.Caption)
+                @Html.FieldCaption(Model.Objects)
             </td>
             <td class="span9">
                 @Html.DropDownListFor(m => m.ObjectId, Model.Objects.Value)
@@ -41,7 +42,7 @@
     {
         <tr>
             <td class="span3">
-                @Translation.Get(Model.InventoryDialog.Caption)
+                @Html.FieldCaption(Model.InventoryDialog)
             </td>
             <td class="span9">
                 <input id="general_inventory_dialog_open_button" class="btn" type="button" value="..." />
@@ -53,7 +54,7 @@
     {
         <tr>
             <td class="span3">
-                @Translation.Get(Model.WorkingGroups.Caption)
+                @Html.FieldCaption(Model.WorkingGroups)
             </td>
             <td class="span9">
                 @Html.DropDownListFor(m => m.WorkingGroupId, Model.WorkingGroups.Value)
@@ -64,7 +65,7 @@
     {
         <tr>
             <td class="span3">
-                @Translation.Get(Model.Administrators.Caption)
+                @Html.FieldCaption(Model.Administrators)
             </td>
             <td class="span9">
                 @Html.DropDownListFor(m => m.AdministratorId, Model.Administrators.Value)

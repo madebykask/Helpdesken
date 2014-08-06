@@ -1,4 +1,5 @@
-﻿@model DH.Helpdesk.Web.Models.Changes.ChangeEdit.RegistrationModel
+﻿@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@model DH.Helpdesk.Web.Models.Changes.ChangeEdit.RegistrationModel
            
 <table class="tableform">
     @Html.EditorFor(m => m.Contacts, "Contacts/ContactsModel")
@@ -6,7 +7,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Owners.Caption)</label>
+                <label>@Html.FieldCaption(Model.Owners)</label>
             </td>
             <td class="span9">
                 @Html.DropDownListFor(m => m.OwnerId, Model.Owners.Value)
@@ -17,7 +18,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.AffectedProcesses.Caption)</label>
+                <label>@Html.FieldCaption(Model.AffectedProcesses)</label>
             </td>
             <td class="span9">
                 @Html.DropDownListFor(m => m.AffectedProcessIds, Model.AffectedProcesses.Value, new { @class = "multiselect multiselect-search", multiple = "multiple" })
@@ -28,7 +29,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.AffectedDepartments.Caption)</label>
+                <label>@Html.FieldCaption(Model.AffectedDepartments)</label>
             </td>
             <td class="span9">
                 @Html.DropDownListFor(m => m.AffectedDepartmentIds, Model.AffectedDepartments.Value, new { @class = "multiselect multiselect-search", multiple = "multiple" })
@@ -45,7 +46,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.AttachedFiles.Caption)</label>
+                <label>@Html.FieldCaption(Model.AttachedFiles)</label>
             </td>    
             <td class="span9">
                 <a href="#registration_files_uploader_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Upload")</a>
@@ -74,7 +75,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.ApprovalResults.Caption)</label>
+                <label>@Html.FieldCaption(Model.ApprovalResults)</label>
             </td>
             <td class="span9">
                 @Html.DropDownListFor(m => m.ApprovalValue, Model.ApprovalResults.Value)
@@ -82,7 +83,7 @@
         </tr>
         <tr>
             <td>
-                <label>@Translation.Get(Model.RejectExplanation.Caption)</label>
+                <label>@Html.FieldCaption(Model.RejectExplanation)</label>
             </td>
             <td>
                 @Html.TextAreaFor(m => m.RejectExplanation.Value)            
