@@ -41,5 +41,13 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
                 this.Update(obj);
             }
         }
+
+        public IList<ChangeStatusEntity> GetChangeStatuses(int customerId)
+        {
+            return this.DataContext.ChangeStatuses
+                            .Where(s => s.Customer_Id == customerId)
+                            .OrderBy(s => s.ChangeStatus)
+                            .ToList();
+        }
     }
 }

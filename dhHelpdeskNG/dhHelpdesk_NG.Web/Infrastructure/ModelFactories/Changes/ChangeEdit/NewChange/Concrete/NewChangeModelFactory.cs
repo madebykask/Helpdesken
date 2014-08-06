@@ -1,6 +1,9 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.NewChange.Concrete
 {
+    using System.Collections.Generic;
+
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.Domain.Changes;
     using DH.Helpdesk.Services.Response.Changes;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
 
@@ -39,14 +42,20 @@
         public InputModel Create(
                         string temporatyId, 
                         GetNewChangeEditDataResponse response,
-                        OperationContext context)
+                        OperationContext context,
+                        IList<ChangeStatusEntity> statuses)
         {
             var orderer = this.newOrdererModelFactory.Create(response.EditSettings.Orderer, response.EditOptions);
-            var general = this.newGeneralModelFactory.Create(response.EditSettings.General, response.EditOptions);
+            var general = this.newGeneralModelFactory.Create(
+                                    response.EditSettings.General, 
+                                    response.EditOptions,
+                                    context,
+                                    statuses);
 
             var registration = this.newRegistrationModelFactory.Create(
-                temporatyId,
-                response.EditSettings.Registration, response.EditOptions);
+                                    temporatyId,
+                                    response.EditSettings.Registration, 
+                                    response.EditOptions);
 
             var log = this.newLogModelFactory.Create(temporatyId, response.EditSettings.Log, response.EditOptions);
 

@@ -10,8 +10,6 @@
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Enums;
-    using DH.Helpdesk.Services;
-    using DH.Helpdesk.Services.BusinessLogic;
     using DH.Helpdesk.Services.BusinessLogic.OtherTools.Concrete;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Enums;
@@ -60,6 +58,8 @@
 
         private readonly IEmailService emailService;
 
+        private readonly IChangeStatusService changeStatusService;
+
         #endregion
 
         #region Constructors and Destructors
@@ -79,7 +79,8 @@
             IUpdateChangeRequestFactory updateChangeRequestFactory,
             IUpdatedSettingsFactory updatedSettingFactory,
             TemporaryIdProvider temporaryIdProvider, 
-            IEmailService emailService)
+            IEmailService emailService, 
+            IChangeStatusService changeStatusService)
             : base(masterDataService)
         {
             this.changeModelFactory = changeModelFactory;
@@ -94,6 +95,7 @@
             this.updatedSettingFactory = updatedSettingFactory;
             this.temporaryIdProvider = temporaryIdProvider;
             this.emailService = emailService;
+            this.changeStatusService = changeStatusService;
 
             this.editorStateCache = editorStateCacheFactory.CreateForModule(ModuleName.Changes);
             this.temporaryFilesCache = temporaryFilesCacheFactory.CreateForModule(ModuleName.Changes);
@@ -345,8 +347,12 @@
         {
             var temporaryId = this.temporaryIdProvider.ProvideTemporaryId();
             var response = this.changeService.GetNewChangeEditData(this.OperationContext);
-            var model = this.newChangeModelFactory.Create(temporaryId, response, this.OperationContext);
-
+            var statuses = this.changeStatusService.GetChangeStatuses(this.OperationContext.CustomerId);
+            var model = this.newChangeModelFactory.Create(
+                                            temporaryId, 
+                                            response, 
+                                            this.OperationContext,
+                                            statuses);
             return this.View(model);
         }
 

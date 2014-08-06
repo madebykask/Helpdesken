@@ -1,11 +1,7 @@
 namespace DH.Helpdesk.Dal.Repositories.Changes
 {
     using System.Collections.Generic;
-    using System.Globalization;
-    using System.Linq;
-
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain.Changes;
 
@@ -16,6 +12,7 @@ namespace DH.Helpdesk.Dal.Repositories.Changes
         string GetStatusName(int statusId);
 
         void ResetDefault(int exclude);
-    }
 
+        IList<ChangeStatusEntity> GetChangeStatuses(int customerId);
+    }
 }
