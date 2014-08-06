@@ -7,7 +7,7 @@ namespace DH.Helpdesk.Web.Models.Inventory
 
     public class ReportViewModel
     {
-        public ReportViewModel(List<ReportModel> reportModel, string header, bool isGrouped)
+        public ReportViewModel(List<ReportModelWrapper> reportModel, string header, bool isGrouped)
         {
             this.ReportModel = reportModel;
             this.Header = header;
@@ -15,7 +15,7 @@ namespace DH.Helpdesk.Web.Models.Inventory
         }
 
         [NotNull]
-        public List<ReportModel> ReportModel { get; set; }
+        public List<ReportModelWrapper> ReportModel { get; set; }
 
         public string Header { get; set; }
 

@@ -26,6 +26,8 @@
 
         void UpdateInventoryType(InventoryType businessModel);
 
+        void UpdateWorkstationInfo(int id, string info);
+
         void DeleteInventoryType(int id);
 
         InventoryType GetInventoryType(int id);

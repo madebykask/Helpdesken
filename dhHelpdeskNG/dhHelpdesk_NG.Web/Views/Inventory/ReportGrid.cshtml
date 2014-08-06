@@ -1,7 +1,11 @@
-﻿@model DH.Helpdesk.Web.Models.Inventory.ReportViewModel
+﻿@using DH.Helpdesk.BusinessData.Models.Inventory
+@model DH.Helpdesk.Web.Models.Inventory.ReportViewModel
 @{
     var howerClass = Model.IsGrouped ? "header" : string.Empty;
 }
+
+<script type="text/javascript" src="@Url.Content("~/Content/js/Inventory/reports.js")"></script>
+
 <table id="tblCases" class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
@@ -13,7 +17,7 @@
     </thead>
     <tbody>
         @{
-            var items = Model.ReportModel.OrderBy(x => x.Item).ThenBy(x => x.Owner).GroupBy(x => x.Item);
+            var items = Model.ReportModel.OrderBy(x => x.ReportModel.Item).ThenBy(x => x.ReportModel.Owner).GroupBy(x => x.ReportModel.Item);
             foreach (var item in items)
             {
                 <tr>
@@ -28,16 +32,27 @@
                 </tr>
                 if (Model.IsGrouped)
                 {
-                    foreach (var owner in item.Where(x => x.Owner != null))
+                    foreach (var owner in item.Where(x => x.ReportModel.Owner != null))
                     {
-                        <tr>
-                            <td colspan="2">@Html.DisplayFor(x => owner.Owner)
-                            </td>
-                        </tr>
+                        if (owner.ReportOwnerType == ReportModelWrapper.ReportOwnerTypes.Workstation)
+                        {
+                            <tr onclick=" showComputerShortInfo('@owner.ReportModel.OwnerId') ">
+                                <td colspan="2" class="tdpointer">@Html.DisplayFor(x => owner.ReportModel.Owner)
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="2">@Html.DisplayFor(x => owner.ReportModel.Owner)
+                                </td>
+                            </tr>
+                        }
                     }
                 }
             }
         }
     </tbody>
 </table>
-
+<div id="computer_short_info_dialog_container">
+</div>

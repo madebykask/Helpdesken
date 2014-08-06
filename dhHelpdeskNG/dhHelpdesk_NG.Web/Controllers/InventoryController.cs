@@ -920,7 +920,11 @@
                 filter.DepartmentId,
                 filter.SearchFor);
 
-            var viewModel = new ReportViewModel(models.ReportModel, models.InventoryName, filter.IsShowParentInventory);
+            var wrapReportModels = ReportModelWrapper.Wrap(
+                models.ReportModel,
+                ReportModelWrapper.ReportOwnerTypes.Workstation);
+
+            var viewModel = new ReportViewModel(wrapReportModels, models.InventoryName, filter.IsShowParentInventory);
             return this.PartialView("CustomTypeReportGrid", viewModel);
         }
 
@@ -975,6 +979,12 @@
             return this.PartialView("UserHistoryDialog", models);
         }
 
+        [HttpPost]
+        public void EditComputerInfo(int id, string info)
+        {
+            this.inventoryService.UpdateWorkstationInfo(id, info);
+        }
+
         #region Private
 
         private ReportViewModel BuildViewModel(
@@ -984,26 +994,40 @@
             string searchFor,
             bool isShowParentInventory)
         {
-            var models = new List<ReportModel>();
+            var wrapModels = new List<ReportModelWrapper>();
 
             switch (reportDataType)
             {
                 case ReportDataTypes.Workstation:
-                    models = this.GetComputerReportModels(reportType, departmentId, searchFor);
+                    wrapModels = this.CreateWorkstationReportModelWrappers(reportType, departmentId, searchFor);
                     break;
                 case ReportDataTypes.Server:
-                    models = this.GetServerReportModels(reportType, searchFor);
+                    wrapModels = this.CreateServerReportModelWrappers(reportType, searchFor);
                     break;
                 case ReportDataTypes.All:
-                    var computerSoftware = this.GetComputerReportModels(reportType, departmentId, searchFor);
-                    var serverSoftware = this.GetServerReportModels(reportType, searchFor);
-                    models = computerSoftware.Union(serverSoftware).ToList();
+                    var computerSoftware = this.CreateWorkstationReportModelWrappers(reportType, departmentId, searchFor);
+                    var serverSoftware = this.CreateServerReportModelWrappers(reportType, searchFor);
+                    wrapModels = computerSoftware.Union(serverSoftware).ToList();
                     break;
             }
 
-            var viewModel = new ReportViewModel(models, ((ReportTypes)reportType).ToString(), isShowParentInventory);
+            var viewModel = new ReportViewModel(wrapModels, ((ReportTypes)reportType).ToString(), isShowParentInventory);
 
             return viewModel;
+        }
+
+        private List<ReportModelWrapper> CreateWorkstationReportModelWrappers(int reportType, int? departmentId, string searchFor)
+        {
+            var computerModels = this.GetComputerReportModels(reportType, departmentId, searchFor);
+            var wrapModels = ReportModelWrapper.Wrap(computerModels, ReportModelWrapper.ReportOwnerTypes.Workstation);
+            return wrapModels;
+        }
+
+        private List<ReportModelWrapper> CreateServerReportModelWrappers(int reportType, string searchFor)
+        {
+            var serverModels = this.GetServerReportModels(reportType, searchFor);
+            var wrapModels = ReportModelWrapper.Wrap(serverModels, ReportModelWrapper.ReportOwnerTypes.Server);
+            return wrapModels;
         }
 
         private List<ReportModel> GetComputerReportModels(int reportType, int? departmentId, string searchFor)

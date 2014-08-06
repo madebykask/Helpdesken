@@ -109,7 +109,7 @@
         {
             this.computerInventoryRepository.DeleteByInventoryTypeId(id);
             this.computerInventoryRepository.Commit();
-            
+
             this.inventoryTypePropertyValueRepository.DeleteByInventoryTypeId(id);
             this.inventoryTypePropertyValueRepository.Commit();
 
@@ -198,6 +198,12 @@
         public void UpdateWorkstation(Computer businessModel)
         {
             throw new NotImplementedException();
+        }
+
+        public void UpdateWorkstationInfo(int id, string info)
+        {
+            this.computerRepository.UpdateInfo(id, info);
+            this.computerRepository.Commit();
         }
 
         public Computer GetWorkstation(int id)

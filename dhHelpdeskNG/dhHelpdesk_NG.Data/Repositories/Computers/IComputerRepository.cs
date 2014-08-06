@@ -15,6 +15,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
 
         void Update(Computer businessModel);
 
+        void UpdateInfo(int id, string info);
+
         Computer FindById(int id);
 
         List<ComputerResults> Search(int customerId, string searchFor);

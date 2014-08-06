@@ -39,6 +39,12 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             entity.ChangedDate = businessModel.ChangedDate;
         }
 
+        public void UpdateInfo(int id, string info)
+        {
+            var entity = this.DbSet.Find(id);
+            entity.Info = info;
+        }
+
         public Computer FindById(int id)
         {
             var anonymus =
