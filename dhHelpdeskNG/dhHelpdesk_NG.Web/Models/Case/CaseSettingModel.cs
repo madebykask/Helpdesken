@@ -87,6 +87,12 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public bool CaseClosingDateFilterShow { get; set; }
 
+        public bool ClosingReasonCheck { get; set; }
+
+        public IList<FinishingCause> ClosingReasons { get; set; }
+
+        public string CaseClosingReasonFilter { get; set; }
+
         public CaseColumnsSettingsModel ColumnSettingModel { get; set; }        
     }
 }

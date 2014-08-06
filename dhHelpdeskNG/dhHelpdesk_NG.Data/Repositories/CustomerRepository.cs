@@ -216,6 +216,7 @@
                 userSettingEntity.CaseRegistrationDateFilterShow = newSetting.CaseRegistrationDateFilterShow;
                 userSettingEntity.CaseWatchDateFilterShow = newSetting.CaseWatchDateFilterShow;
                 userSettingEntity.CaseClosingDateFilterShow = newSetting.CaseClosingDateFilterShow;
+                userSettingEntity.CaseClosingReasonFilter = newSetting.CaseClosingReasonFilter;
             }
         }
     }

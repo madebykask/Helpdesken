@@ -40,5 +40,7 @@
         public DateTime? CaseClosingDateStartFilter { get; set; }
 
         public DateTime? CaseClosingDateEndFilter { get; set; }
+
+        public IList<FinishingCause> ClosingReasons { get; set; }
     }    
 }

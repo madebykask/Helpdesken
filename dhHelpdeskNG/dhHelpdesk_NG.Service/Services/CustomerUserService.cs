@@ -92,7 +92,8 @@ namespace DH.Helpdesk.Services.Services
                   userSetting.CaseClosingDateEndFilter,
                   userSetting.CaseRegistrationDateFilterShow,
                   userSetting.CaseWatchDateFilterShow,
-                  userSetting.CaseClosingDateFilterShow);
+                  userSetting.CaseClosingDateFilterShow,
+                  (userSetting.CaseClosingReasonFilter != null) ? userSetting.CaseClosingReasonFilter.Replace(" ", string.Empty) : string.Empty);
         }
 
         public void UpdateUserCaseSetting(UserCaseSetting newSetting)

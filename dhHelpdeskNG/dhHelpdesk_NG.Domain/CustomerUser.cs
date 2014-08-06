@@ -42,7 +42,9 @@
         public bool CaseWatchDateFilterShow { get; set; }
 
         public bool CaseClosingDateFilterShow { get; set; }
-       
+
+        public string CaseClosingReasonFilter { get; set; }
+
         public virtual Customer Customer { get; set; }
 
         public virtual User User { get; set; }

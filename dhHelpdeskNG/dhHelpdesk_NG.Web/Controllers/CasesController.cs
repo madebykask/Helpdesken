@@ -292,6 +292,10 @@
                     fd.CaseWatchDateEndFilter = fd.customerUserSetting.CaseWatchDateEndFilter;
                     fd.CaseClosingDateStartFilter = fd.customerUserSetting.CaseClosingDateStartFilter;
                     fd.CaseClosingDateEndFilter = fd.customerUserSetting.CaseClosingDateEndFilter;
+                    if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseClosingReasonFilter))
+                    {
+                        fd.ClosingReasons = this._finishingCauseService.GetFinishingCauses(cusId);
+                    }
 
                     var sm = this.GetCaseSearchModel(cusId, userId);
 
@@ -889,6 +893,7 @@
                 f.CaseWatchDateEndFilter = frm.GetDate("CaseWatchDateEndFilter");
                 f.CaseClosingDateStartFilter = frm.GetDate("CaseClosingDateStartFilter");
                 f.CaseClosingDateEndFilter = frm.GetDate("CaseClosingDateEndFilter");
+                f.CaseClosingReasonFilter = frm.ReturnFormValue("lstFilterClosingReason");
 
                 var sm = this.GetCaseSearchModel(f.CustomerId, f.UserId);
                 sm.caseSearchFilter = f;
@@ -1030,6 +1035,10 @@
                 ? ((frm.ReturnFormValue("lstSubState") == string.Empty) ? "0" : frm.ReturnFormValue("lstSubState"))
                 : string.Empty;
 
+            var closingReasonCheck = frm.IsFormValueTrue("ClosingReasonCheck");
+            var closingReasons = closingReasonCheck
+                ? ((frm.ReturnFormValue("lstClosingReason") == string.Empty) ? "0" : frm.ReturnFormValue("lstClosingReason"))
+                : string.Empty;
 
             var newCaseSetting = new UserCaseSetting(
                             customerId,
@@ -1052,10 +1061,10 @@
                             frm.GetDate("CaseClosingDateEndFilter"),
                             frm.IsFormValueTrue("CaseRegistrationDateFilterShow"),
                             frm.IsFormValueTrue("CaseWatchDateFilterShow"),
-                            frm.IsFormValueTrue("CaseClosingDateFilterShow"));
+                            frm.IsFormValueTrue("CaseClosingDateFilterShow"),
+                            closingReasons);
 
-            _customerUserService.UpdateUserCaseSetting(newCaseSetting);
-
+            this._customerUserService.UpdateUserCaseSetting(newCaseSetting);
         }
 
         public void SaveColSetting(FormCollection frm)
@@ -1309,6 +1318,7 @@
                 f.CaseWatchDateEndFilter = cu.CaseWatchDateEndFilter;
                 f.CaseClosingDateStartFilter = cu.CaseClosingDateStartFilter;
                 f.CaseClosingDateEndFilter = cu.CaseClosingDateEndFilter;
+                f.CaseClosingReasonFilter = cu.CaseClosingReasonFilter.ReturnCustomerUserValue();
                 s.SortBy = "CaseNumber";
                 s.Ascending = true;
 
@@ -1316,7 +1326,9 @@
                 m.Search = s;
             }
             else
+            {
                 m = SessionFacade.CurrentCaseSearch;
+            }
 
             return m;
         }
@@ -1892,8 +1904,11 @@
             ret.CaseRegistrationDateFilterShow = userCaseSettings.CaseRegistrationDateFilterShow;
             ret.CaseWatchDateFilterShow = userCaseSettings.CaseWatchDateFilterShow;
             ret.CaseClosingDateFilterShow = userCaseSettings.CaseClosingDateFilterShow;
+            ret.CaseClosingReasonFilter = userCaseSettings.CaseClosingReasonFilter;
 
-            ret.ColumnSettingModel = GetCaseColumnSettingModel(customerId, userId);
+            ret.ClosingReasonCheck = userCaseSettings.CaseClosingReasonFilter != string.Empty;
+            ret.ClosingReasons = this._finishingCauseService.GetFinishingCauses(customerId);
+            ret.ColumnSettingModel = this.GetCaseColumnSettingModel(customerId, userId);
 
             return ret;
         }

@@ -40,6 +40,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public DateTime? CaseClosingDateEndFilter { get; set; }
 
+        public string CaseClosingReasonFilter { get; set; }
+
         public string LMCaseList { get; set; }
 
         public CaseSearchFilter Copy(CaseSearchFilter o)
@@ -72,7 +74,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             r.CaseWatchDateStartFilter = o.CaseWatchDateStartFilter;    
             r.CaseWatchDateEndFilter = o.CaseWatchDateEndFilter;    
             r.CaseClosingDateStartFilter = o.CaseClosingDateStartFilter;
-            r.CaseClosingDateEndFilter = o.CaseClosingDateEndFilter;    
+            r.CaseClosingDateEndFilter = o.CaseClosingDateEndFilter;
+            r.CaseClosingReasonFilter = o.CaseClosingReasonFilter;
             return r;
         }
     }

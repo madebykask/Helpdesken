@@ -249,7 +249,26 @@
                                         @Html.EditorFor(m => m.CaseClosingDateEndFilter, "DatePicker", new { id = "CaseClosingDateEndFilter" })                                         
                                     </td>                                                                                                                
                                 </tr>  
-                            }        
+                            }   
+                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.ClosingReason.ToString()) == 1) 
+                            { 
+                                <tr>
+                                    <td class="span3">
+                                        @Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.ClosingReason.ToString()):
+                                    </td>                            
+                                    <td>
+                                        @Html.CheckBoxFor(m => Model.ClosingReasonCheck)                                    
+                                    </td>                            
+                                    <td colspan="2">
+                                        <select id="lstClosingReason" name="lstClosingReason" class="multiselect multiselect-search" multiple="multiple">
+                                            @foreach (var e in Model.ClosingReasons)
+                                            {                                                                                                      
+                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.CaseClosingReasonFilter)>@e.Name</option>                                       
+                                            }
+                                        </select>
+                                    </td>                                                        
+                                </tr>
+                            }                                 
                         </table>
                     </div>
                 </div>

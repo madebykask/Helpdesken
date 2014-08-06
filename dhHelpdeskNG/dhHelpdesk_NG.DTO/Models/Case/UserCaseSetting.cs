@@ -25,8 +25,10 @@
                     DateTime? caseClosingDateEndFilter, 
                     bool caseRegistrationDateFilterShow, 
                     bool caseWatchDateFilterShow, 
-                    bool caseClosingDateFilterShow)
+                    bool caseClosingDateFilterShow, 
+                    string caseClosingReasonFilter)
         {
+            this.CaseClosingReasonFilter = caseClosingReasonFilter;
             this.CaseClosingDateFilterShow = caseClosingDateFilterShow;
             this.CaseWatchDateFilterShow = caseWatchDateFilterShow;
             this.CaseRegistrationDateFilterShow = caseRegistrationDateFilterShow;
@@ -91,5 +93,7 @@
         public bool CaseWatchDateFilterShow { get; private set; }
 
         public bool CaseClosingDateFilterShow { get; private set; }
+
+        public string CaseClosingReasonFilter { get; private set; }
     }
 }

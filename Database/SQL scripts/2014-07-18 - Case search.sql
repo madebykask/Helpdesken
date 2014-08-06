@@ -61,6 +61,13 @@ BEGIN
 END
 GO
 
+IF COL_LENGTH('dbo.tblCustomerUser','CaseClosingReasonFilter') IS NULL
+BEGIN
+	ALTER TABLE [dbo].[tblCustomerUser]
+	ADD [CaseClosingReasonFilter] NVARCHAR(50) NULL 
+END
+GO
+
 
 DECLARE @customerId INT
 DECLARE @customer_cursor CURSOR 
