@@ -53,7 +53,6 @@
 
             this.Bind<INewChangeModelFactory>().To<NewChangeModelFactory>().InSingletonScope();
             this.Bind<INewOrdererModelFactory>().To<NewOrdererModelFactory>().InSingletonScope();
-            this.Bind<INewGeneralModelFactory>().To<NewGeneralModelFactory>().InSingletonScope();
             this.Bind<INewRegistrationModelFactory>().To<NewRegistrationModelFactory>().InSingletonScope();
             this.Bind<INewLogModelFactory>().To<NewLogModelFactory>().InSingletonScope();
 

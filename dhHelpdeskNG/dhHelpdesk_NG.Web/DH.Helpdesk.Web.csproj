@@ -488,7 +488,6 @@
     <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\ExistingChange\Concrete\GeneralModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\ExistingChange\Concrete\HistoryModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\NewChange\INewGeneralModelFactory.cs" />
-    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\NewChange\Concrete\NewGeneralModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\NewChange\INewRegistrationModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\NewChange\Concrete\NewRegistrationModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\NewChange\INewOrdererModelFactory.cs" />
