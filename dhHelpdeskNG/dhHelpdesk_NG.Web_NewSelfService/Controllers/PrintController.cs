@@ -156,8 +156,9 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             IStatusService statusService,                                     
             ISettingService settingService,
             IFinishingCauseService finishingCauseService,
+            ICaseSolutionService caseSolutionService,
             ISSOService ssoService)
-            : base(masterDataService, ssoService)
+            : base(masterDataService, ssoService, caseSolutionService)
         {
             this.caseService = caseService;
             this.caseFieldSettingService = caseFieldSettingService;

@@ -20,60 +20,26 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
     public class StartController : BaseController
     {
-        private readonly ICustomerService _customerService;
-        private readonly ICaseSolutionService _caseSolutionService;
+        private readonly ICustomerService _customerService;        
         private readonly ISSOService _ssoService;
 
         public StartController(IMasterDataService masterDataService,
                                ICustomerService customerService,
                                ICaseSolutionService caseSolutionService,
                                ISSOService ssoService
-                              ):base(masterDataService,ssoService)
+                              ):base(masterDataService, ssoService, caseSolutionService)
         {
-            this._caseSolutionService = caseSolutionService;            
-            this._customerService = customerService;
-            //this._ssoService = ssoService;
+            
+            this._customerService = customerService;            
         }
 
         //
         // GET: /Start/
 
-        public ActionResult Index(int customerId = -1)
+        public  ActionResult Index(int customerId = -1)
         {
-            
-            if (customerId == -1)
-            {
-               return RedirectToAction("Index", "Error", new { message = "Customer is not specified!  CustomerId = ?" });
-            }
-
-            if (!CheckAndUpdateGlobalValues(customerId))
-            {
-               return RedirectToAction("Index", "Error", new { message = "custom Message" });                
-            }
             return this.View("Index");            
         }
-
         
-        private bool CheckAndUpdateGlobalValues(int customerId)
-        {
-            if ((SessionFacade.CurrentCustomer != null && SessionFacade.CurrentCustomer.Id != customerId) ||
-                (SessionFacade.CurrentCustomer == null))
-            {
-                var newCustomer = _customerService.GetCustomer(customerId);
-                if (newCustomer == null)
-                    return false;
-
-                SessionFacade.CurrentCustomer = newCustomer;
-            }
-
-            if (SessionFacade.CurrentLanguageId == null)
-                SessionFacade.CurrentLanguageId = SessionFacade.CurrentCustomer.Language_Id;
-
-            ViewBag.PublicCustomerId = customerId;            
-            ViewBag.PublicCaseTemplate = _caseSolutionService.GetCaseSolutions(customerId).ToList();
-
-            return true;
-        }
-
     }
 }

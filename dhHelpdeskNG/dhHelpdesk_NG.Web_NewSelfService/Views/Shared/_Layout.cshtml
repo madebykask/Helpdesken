@@ -12,7 +12,7 @@
 <head>
     <meta content="html/text; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>@Translation.Get("dhHelpdesk", Enums.TranslationSource.TextTranslation)</title>
+    <title>@Translation.Get("DH-Line Manager", Enums.TranslationSource.TextTranslation)</title>
 
     <link rel="stylesheet" href="@Url.Content("~/Content/css/bootstrap.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/css/selfservice.css")" />
@@ -661,7 +661,7 @@
 
         $.ajax({
             type: "POST",
-            url: '@Url.Action("ChangeLanguage", "Case", new { area= ""})', 
+            url: '@Url.Action("ChangeLanguage")', 
                 contentType: "application/json; charset=utf-8",
                 data: "{ languageId:" + langId +"}",
                 dataType: "html",

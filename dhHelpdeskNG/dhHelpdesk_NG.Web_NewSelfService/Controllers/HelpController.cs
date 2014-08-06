@@ -14,69 +14,30 @@ namespace DH.Helpdesk.NewSelfService.Controllers
     public class HelpController : BaseController
     {
         private readonly ICustomerService _customerService;
-        private readonly ICaseSolutionService _caseSolutionService;
- 
+      
         public HelpController(IMasterDataService masterDataService,
                                      ICustomerService customerService,
                                      ICaseSolutionService caseSolutionService,
                                      ISSOService ssoService
                                   )
-            : base(masterDataService, ssoService)
+            : base(masterDataService, ssoService, caseSolutionService)
         {
             this._customerService = customerService;
-            this._caseSolutionService = caseSolutionService;
         }
 
         public ActionResult Index(int customerId)
-        {
-            if (!CheckAndUpdateGlobalValues(customerId))
-                return null;
-
+        {      
             return View();
         }
        
         public ActionResult FindYourWay(int customerId)
-        {
-            if (!CheckAndUpdateGlobalValues(customerId))
-                return null;
-
+        {         
             return View();
         }
 
         public ActionResult About(int customerId)
-        {
-            if (!CheckAndUpdateGlobalValues(customerId))
-                return null;
-
+        {         
             return View();
-        }
-
-        private bool CheckAndUpdateGlobalValues(int customerId)
-        {
-            if ((SessionFacade.CurrentCustomer != null && SessionFacade.CurrentCustomer.Id != customerId) ||
-                (SessionFacade.CurrentCustomer == null))
-            {
-                var newCustomer = _customerService.GetCustomer(customerId);
-                if (newCustomer == null)
-                    return false;
-
-                SessionFacade.CurrentCustomer = newCustomer;
-            }
-            if (SessionFacade.CurrentLanguageId == null)
-              SessionFacade.CurrentLanguageId = SessionFacade.CurrentCustomer.Language_Id;
-            ViewBag.PublicCustomerId = customerId;
-
-            //var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
-            //var identity = User.Identity;
-            //if (identity != null)
-            //{
-            //    SessionFacade.CurrentSystemUser = identity.Name.GetUserFromAdPath();
-            //    
-            //}
-
-            ViewBag.PublicCaseTemplate = _caseSolutionService.GetCaseSolutions(customerId).ToList();
-            return true;
-        }
-       
+        }        
     }
 }

@@ -25,20 +25,58 @@ using System.Threading.Tasks;
     {
         private readonly IMasterDataService _masterDataService;
         private readonly ISSOService _ssoService;
+        private readonly ICaseSolutionService _caseSolutionService;
         
 
         public BaseController(
             IMasterDataService masterDataService,
-            ISSOService ssoService)
+            ISSOService ssoService,
+            ICaseSolutionService caseSolutionService)
         {
             this._masterDataService = masterDataService;
             this._ssoService = ssoService;
+            this._caseSolutionService = caseSolutionService;
         }
-
-        //[AllowAnonymous]
-        //public async Task<ActionResult> UserCases(int customerId, string progressId)        
+        
         protected override void OnActionExecuting(ActionExecutingContext filterContext) //called before a controller action is executed, that is before ~/UserController/index 
         {
+            var customerId = -1;
+
+            if (filterContext.ActionParameters.Keys.Contains("customerId"))
+            {
+                var customerIdPassed = filterContext.ActionParameters["customerId"];
+                if (customerIdPassed.ToString() != "")
+                    customerId = int.Parse(customerIdPassed.ToString());
+            }
+
+            
+            if ((SessionFacade.CurrentCustomer != null && SessionFacade.CurrentCustomer.Id != customerId && customerId != -1) || (SessionFacade.CurrentCustomer == null))
+            {                
+                var newCustomer = this._masterDataService.GetCustomer(customerId);
+                SessionFacade.CurrentCustomer = newCustomer;
+                ViewBag.PublicCustomerId = customerId;
+                ViewBag.PublicCaseTemplate = _caseSolutionService.GetCaseSolutions(customerId).ToList();
+            }
+
+            if (SessionFacade.CurrentCustomer == null && customerId == -1)
+            {
+                filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = "Invalid Customer Id! (-1)", errorCode = 101 }));
+                TempData["UserHasAccess"] = "false";
+            }
+
+            if (filterContext.ActionParameters.Keys.Contains("languageId"))
+            {                
+                var languageIdPassed = filterContext.ActionParameters["languageId"];
+                if (languageIdPassed.ToString() != "")                
+                    SessionFacade.CurrentLanguageId = int.Parse(languageIdPassed.ToString());                                    
+            }
+            else
+            {
+                if (SessionFacade.CurrentLanguageId == null && SessionFacade.CurrentCustomer != null)
+                    SessionFacade.CurrentLanguageId = SessionFacade.CurrentCustomer.Language_Id;
+            }
+                            
+
             //var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
             ClaimsPrincipal principal = User as ClaimsPrincipal;
 
@@ -63,7 +101,6 @@ using System.Threading.Tasks;
 
                     if (pureType != null)
                     {
-
                         if (pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings["ClaimDomain"].ToString().Replace(" ", "").ToLower())
                             userIdentity.Domain = value;
 
@@ -76,14 +113,11 @@ using System.Threading.Tasks;
                         if (pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings["ClaimFirstName"].ToString().Replace(" ", "").ToLower())
                             userIdentity.FirstName = value;
 
-                        var m1 = pureType.Replace(" ", "").ToLower();
-                        var m2 = ConfigurationManager.AppSettings["ClaimLastName"].ToString().Replace(" ", "").ToLower();
-                        if (m1 == m2)
+                        if (pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings["ClaimLastName"].ToString().Replace(" ", "").ToLower())
                             userIdentity.LastName = value;
-
+                        
                         if (pureType.Replace(" ", "").ToLower() == ConfigurationManager.AppSettings["ClaimEmail"].ToString().Replace(" ", "").ToLower())
                             userIdentity.Email = value;
-
                     }
                 }
                 
@@ -105,13 +139,13 @@ using System.Threading.Tasks;
                     TempData["UserHasAccess"] = "false";
 
 
-                userIdentity.EmployeeNumber =  "05405951";
+                //userIdentity.EmployeeNumber =  "05405951";
                 if (SessionFacade.CurrentUserIdentity == null)
                 {
                     if (string.IsNullOrEmpty(userIdentity.EmployeeNumber))
                     {
                         TempData["UserHasAccess"] = "false";                        
-                        filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = "You don't have access to the portal! (EmployeeNumber not specified)", errorCode = 001 }));
+                        filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = "You don't have access to the portal! (EmployeeNumber not specified)", errorCode = 101 }));
                     }
                     else
                     {
@@ -120,7 +154,7 @@ using System.Threading.Tasks;
                         if (!isEmploeeManager)
                         {
                             TempData["UserHasAccess"] = "false";
-                            filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = "You don't have access to the portal!", errorCode = 002 }));
+                            filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = "You don't have access to the portal!", errorCode = 102 }));
                         }
                         else
                         {
@@ -140,9 +174,16 @@ using System.Threading.Tasks;
             }
 
           
-            this.SessionCheck(filterContext);
+            //this.SessionCheck(filterContext);
             this.SetTextTranslation(filterContext);
 
+        }
+
+        //[HttpPost]
+        public ActionResult ChangeLanguage(int languageId)
+        {
+            SessionFacade.CurrentLanguageId = languageId;
+            return this.Json(languageId, JsonRequestBehavior.AllowGet);
         }
 
         protected override void OnActionExecuted(ActionExecutedContext filterContext) //called after a controller action is executed, that is after ~/UserController/index 
