@@ -48,14 +48,22 @@
 
         private readonly ICaseTypeRepository caseTypeRepository;
 
+        private readonly IFinishingCauseRepository finishingCauseRepository;
+
+        private readonly ILogRepository logRepository;
+
         public CaseSearchRepository(
                 ICustomerUserRepository customerUserRepository, 
                 IProductAreaRepository productAreaRepository, 
-                ICaseTypeRepository caseTypeRepository)
+                ICaseTypeRepository caseTypeRepository, 
+                IFinishingCauseRepository finishingCauseRepository, 
+                ILogRepository logRepository)
         {
             this._customerUserRepository = customerUserRepository;
             this._productAreaRepository = productAreaRepository;
             this.caseTypeRepository = caseTypeRepository;
+            this.finishingCauseRepository = finishingCauseRepository;
+            this.logRepository = logRepository;
         }
 
         public IList<CaseSearchResult> Search(
@@ -205,6 +213,27 @@
                     {
                         con.Close();
                     }
+                }
+            }
+
+            if (!string.IsNullOrEmpty(f.CaseClosingReasonFilter))
+            {
+                int closingReason;
+                if (int.TryParse(f.CaseClosingReasonFilter, out closingReason))
+                {
+                    var closingReasons = new List<int> { closingReason };
+                    var filtered = new List<CaseSearchResult>();
+                    foreach (var foundedCase in ret)
+                    {
+                        var log = this.logRepository.GetLastLog(foundedCase.Id);
+                        if (log != null && log.FinishingType.HasValue
+                            && closingReasons.Contains(log.FinishingType.Value))
+                        {
+                            filtered.Add(foundedCase);
+                        }
+                    }
+
+                    return this.SortSearchResult(filtered, s);
                 }
             }
 

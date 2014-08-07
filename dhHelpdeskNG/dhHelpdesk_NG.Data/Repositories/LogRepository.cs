@@ -27,6 +27,8 @@ namespace DH.Helpdesk.Dal.Repositories
         /// The result />.
         /// </returns>
         IEnumerable<BusinessData.Models.Logs.Output.LogOverview> GetCaseLogOverviews(int caseId);
+
+        Log GetLastLog(int caseId);
     }
 
     public class LogRepository : RepositoryBase<Log>, ILogRepository
@@ -110,6 +112,14 @@ namespace DH.Helpdesk.Dal.Repositories
                             LogFiles = l.LogFiles,
                             User = l.User
                         });
+        }
+
+        public Log GetLastLog(int caseId)
+        {
+            return this.Table
+                    .Where(l => l.Case_Id == caseId)
+                    .OrderByDescending(l => l.LogDate)
+                    .FirstOrDefault();
         }
     }
 
