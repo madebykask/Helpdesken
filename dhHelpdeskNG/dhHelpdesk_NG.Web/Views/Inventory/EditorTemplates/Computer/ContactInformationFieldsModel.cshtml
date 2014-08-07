@@ -1,10 +1,9 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.ContactInformationFieldsModel
 @{
-    
-    if (!ViewData.ContainsKey("ComputerId"))
-    {
-        throw new ArgumentNullException("ComputerId", "\"ComputerId\" ViewData parameter must be specified.");
-    }
+//    if (!ViewData.ContainsKey("ComputerId"))
+//    {
+//        throw new ArgumentNullException("ComputerId", "\"ComputerId\" ViewData parameter must be specified.");
+//    }
 
     var computerId = ViewData["ComputerId"];
 }
@@ -49,7 +48,10 @@
                 @if (!Model.UserStringId.IsReadOnly)
                 {
                     <input type="button" class="btn" id="user_dialog_button" value="@Translation.Get("Sök")" />
-                    <input type="button" class="btn" id="history_dialog_button" value="@Translation.Get("Historik")" />
+                    if (computerId != null)
+                    {
+                        <input type="button" class="btn" id="history_dialog_button" value="@Translation.Get("Historik")" />
+                    }
                 }
             </td>
         </tr>
