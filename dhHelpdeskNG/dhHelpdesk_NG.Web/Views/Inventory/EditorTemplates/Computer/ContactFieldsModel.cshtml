@@ -8,43 +8,7 @@
             <th colspan="2" class="header">@Translation.Get("Placering")</th>
         </tr>
     }
-    @if (Model.Name.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.Name.Caption)</label>
-            </td>
-            <td class="span9">
-                @(!Model.Name.IsReadOnly
-                      ? Html.TextBoxFor(m => m.Name.Value)
-                      : Html.TextBoxFor(m => m.Name.Value, new { @readonly = true }))
-            </td>
-        </tr>
-    }
-    @if (Model.Phone.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.Phone.Caption)</label>
-            </td>
-            <td class="span9">
-                @(!Model.Phone.IsReadOnly
-                      ? Html.TextBoxFor(m => m.Phone.Value)
-                      : Html.TextBoxFor(m => m.Phone.Value, new { @readonly = true }))
-            </td>
-        </tr>
-    }
-    @if (Model.Email.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.Email.Caption)</label>
-            </td>
-            <td class="span9">
-                @(!Model.Email.IsReadOnly
-                      ? Html.TextBoxFor(m => m.Email.Value)
-                      : Html.TextBoxFor(m => m.Email.Value, new { @readonly = true }))
-            </td>
-        </tr>
-    }
+    @Html.EditorFor(m => m.Name, "Fields/Text")
+    @Html.EditorFor(m => m.Phone, "Fields/Text")
+    @Html.EditorFor(m => m.Email, "Fields/Text")
 </table>

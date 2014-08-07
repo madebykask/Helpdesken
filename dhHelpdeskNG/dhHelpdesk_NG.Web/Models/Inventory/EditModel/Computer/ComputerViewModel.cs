@@ -3,8 +3,6 @@
     using System;
 
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Shared;
 
     public class ComputerViewModel
     {

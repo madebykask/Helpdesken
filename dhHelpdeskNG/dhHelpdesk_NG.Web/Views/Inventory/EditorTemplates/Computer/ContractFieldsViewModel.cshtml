@@ -28,129 +28,21 @@
                 }
                 else
                 {
-                    @(!Model.ContractFieldsModel.ContractStatusId.HasValue 
-                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true }) 
+                    @(!Model.ContractFieldsModel.ContractStatusId.HasValue
+                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true })
                         : Html.TextBoxFor(m => m.ContractStatuses.Value.SingleOrDefault(x => x.Value == Model.ContractFieldsModel.ContractStatusId.ToString()).Text, new { @readonly = true }))
                     @Html.HiddenFor(m => m.ContractFieldsModel.ContractStatusId)
                 }
             </td>
         </tr>
     }
-    @if (Model.ContractFieldsModel.ContractNumber.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.ContractFieldsModel.ContractNumber.Caption)</label>
-            </td>
-            <td class="span9">
-                @(!Model.ContractFieldsModel.ContractNumber.IsReadOnly
-                      ? Html.TextBoxFor(m => m.ContractFieldsModel.ContractNumber.Value)
-                      : Html.TextBoxFor(m => m.ContractFieldsModel.ContractNumber.Value, new { @readonly = true }))
-            </td>
-        </tr>
-    }
-    @if (Model.ContractFieldsModel.ContractStartDate.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.ContractFieldsModel.ContractStartDate.Caption)</label>
-            </td>
-            <td class="span9">
-                @(!Model.ContractFieldsModel.ContractStartDate.IsReadOnly
-                      ? Html.EditorFor(m => m.ContractFieldsModel.ContractStartDate.Value, "DatePicker", new { id = "computer_edit_contractstartdate_datepicker" })
-                      : Html.DisplayFor(m => m.ContractFieldsModel.ContractStartDate.Value, "Date"))
-            </td>
-        </tr>
-    }
-    @if (Model.ContractFieldsModel.ContractEndDate.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.ContractFieldsModel.ContractEndDate.Caption)</label>
-            </td>
-            <td class="span9">
-                @(!Model.ContractFieldsModel.ContractEndDate.IsReadOnly
-                      ? Html.EditorFor(m => m.ContractFieldsModel.ContractEndDate.Value, "DatePicker", new { id = "computer_edit_contractenddate_datepicker" })
-                      : Html.DisplayFor(m => m.ContractFieldsModel.ContractEndDate.Value, "Date"))
-            </td>
-        </tr>
-    }
-    @if (Model.ContractFieldsModel.PurchasePrice.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.ContractFieldsModel.PurchasePrice.Caption)</label>
-            </td>
-            <td class="span9">
-                @(!Model.ContractFieldsModel.PurchasePrice.IsReadOnly
-                      ? Html.TextBoxFor(m => m.ContractFieldsModel.PurchasePrice.Value)
-                      : Html.TextBoxFor(m => m.ContractFieldsModel.PurchasePrice.Value, new { @readonly = true }))
-            </td>
-        </tr>
-    }
-    @if (Model.ContractFieldsModel.AccountingDimension1.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.ContractFieldsModel.AccountingDimension1.Caption)</label>
-            </td>
-            <td class="span9">
-                @(!Model.ContractFieldsModel.AccountingDimension1.IsReadOnly
-                      ? Html.TextBoxFor(m => m.ContractFieldsModel.AccountingDimension1.Value)
-                      : Html.TextBoxFor(m => m.ContractFieldsModel.AccountingDimension1.Value, new { @readonly = true }))
-            </td>
-        </tr>
-    }
-    @if (Model.ContractFieldsModel.AccountingDimension2.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.ContractFieldsModel.AccountingDimension2.Caption)</label>
-            </td>
-            <td class="span9">
-                @(!Model.ContractFieldsModel.AccountingDimension2.IsReadOnly
-                      ? Html.TextBoxFor(m => m.ContractFieldsModel.AccountingDimension2.Value)
-                      : Html.TextBoxFor(m => m.ContractFieldsModel.AccountingDimension2.Value, new { @readonly = true }))
-            </td>
-        </tr>
-    }
-    @if (Model.ContractFieldsModel.AccountingDimension3.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.ContractFieldsModel.AccountingDimension3.Caption)</label>
-            </td>
-            <td class="span9">
-                @(!Model.ContractFieldsModel.AccountingDimension3.IsReadOnly
-                      ? Html.TextBoxFor(m => m.ContractFieldsModel.AccountingDimension3.Value)
-                      : Html.TextBoxFor(m => m.ContractFieldsModel.AccountingDimension3.Value, new { @readonly = true }))
-            </td>
-        </tr>
-    }
-    @if (Model.ContractFieldsModel.AccountingDimension4.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.ContractFieldsModel.AccountingDimension4.Caption)</label>
-            </td>
-            <td class="span9">
-                @(!Model.ContractFieldsModel.AccountingDimension4.IsReadOnly
-                      ? Html.TextBoxFor(m => m.ContractFieldsModel.AccountingDimension4.Value)
-                      : Html.TextBoxFor(m => m.ContractFieldsModel.AccountingDimension4.Value, new { @readonly = true }))
-            </td>
-        </tr>
-    }
-    @if (Model.ContractFieldsModel.AccountingDimension5.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.ContractFieldsModel.AccountingDimension5.Caption)</label>
-            </td>
-            <td class="span9">
-                @(!Model.ContractFieldsModel.AccountingDimension5.IsReadOnly
-                      ? Html.TextBoxFor(m => m.ContractFieldsModel.AccountingDimension5.Value)
-                      : Html.TextBoxFor(m => m.ContractFieldsModel.AccountingDimension5.Value, new { @readonly = true }))
-            </td>
-        </tr>
-    }
+    @Html.EditorFor(m => m.ContractFieldsModel.ContractNumber, "Fields/Text")
+    @Html.EditorFor(m => m.ContractFieldsModel.ContractStartDate, "Fields/Date", new { id = "computer_edit_contractstartdate_datepicker" })
+    @Html.EditorFor(m => m.ContractFieldsModel.ContractEndDate, "Fields/Date", new { id = "computer_edit_contractenddate_datepicker" })
+    @Html.EditorFor(m => m.ContractFieldsModel.PurchasePrice, "Fields/Number")
+    @Html.EditorFor(m => m.ContractFieldsModel.AccountingDimension1, "Fields/Text")
+    @Html.EditorFor(m => m.ContractFieldsModel.AccountingDimension2, "Fields/Text")
+    @Html.EditorFor(m => m.ContractFieldsModel.AccountingDimension3, "Fields/Text")
+    @Html.EditorFor(m => m.ContractFieldsModel.AccountingDimension4, "Fields/Text")
+    @Html.EditorFor(m => m.ContractFieldsModel.AccountingDimension5, "Fields/Text")
 </table>

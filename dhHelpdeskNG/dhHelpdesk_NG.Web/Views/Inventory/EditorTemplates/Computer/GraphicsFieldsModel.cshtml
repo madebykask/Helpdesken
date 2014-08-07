@@ -1,19 +1,10 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.GraphicsFieldsModel
 <table class="tableform">
-    <tr>
-        <th colspan="2" class="header">@Translation.Get("Grafik")</th>
-    </tr>
     @if (Model.VideoCard.Show)
     {
         <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.VideoCard.Caption)</label>
-            </td>
-            <td class="span9">
-                @(!Model.VideoCard.IsReadOnly
-                      ? Html.TextBoxFor(m => m.VideoCard.Value)
-                      : Html.TextBoxFor(m => m.VideoCard.Value, new { @readonly = true }))
-            </td>
+            <th colspan="2" class="header">@Translation.Get("Grafik")</th>
         </tr>
     }
+    @Html.EditorFor(m => m.VideoCard, "Fields/Text")
 </table>
