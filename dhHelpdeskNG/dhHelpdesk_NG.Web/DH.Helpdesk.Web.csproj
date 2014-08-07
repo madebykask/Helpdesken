@@ -428,6 +428,7 @@
     <Compile Include="Infrastructure\ModelFactories\Case\ICaseNotifierModelFactory.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedMinAttribute.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedIntegerAttribute.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\NewChange\Concrete\NewGeneralModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\ComputerFieldsSettingsViewModelBuilder.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\DynamicsFieldsModelBuilder.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\FieldSettingModelBuilder.cs" />
