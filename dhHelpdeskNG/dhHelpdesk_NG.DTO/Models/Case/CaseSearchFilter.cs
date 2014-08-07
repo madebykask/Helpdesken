@@ -42,6 +42,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public string CaseClosingReasonFilter { get; set; }
 
+        public string ParentPathClosingReason { get; set; }
+
         public string LMCaseList { get; set; }
 
         public CaseSearchFilter Copy(CaseSearchFilter o)
@@ -76,6 +78,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             r.CaseClosingDateStartFilter = o.CaseClosingDateStartFilter;
             r.CaseClosingDateEndFilter = o.CaseClosingDateEndFilter;
             r.CaseClosingReasonFilter = o.CaseClosingReasonFilter;
+            r.ParentPathClosingReason = o.ParentPathClosingReason;
             return r;
         }
     }

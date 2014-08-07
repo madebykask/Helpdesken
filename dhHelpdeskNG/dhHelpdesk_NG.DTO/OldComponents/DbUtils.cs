@@ -218,6 +218,22 @@
                 return ret;
             }
 
+            public static string GetFinishingCauseParentPath(this FinishingCause fc, string separator = " - ")
+            {
+                string ret = string.Empty;
+
+                if (fc.ParentFinishingCause == null)
+                {
+                    ret += fc.Name;
+                }
+                else
+                {
+                    ret += GetFinishingCauseParentPath(fc.ParentFinishingCause, separator) + separator + fc.Name;
+                }
+
+                return ret;
+            }
+
             public static CaseType getCaseTypeItem(this int id, IList<CaseType> list)
             {
                 CaseType ret = null;

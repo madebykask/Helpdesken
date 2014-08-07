@@ -91,7 +91,9 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public IList<FinishingCause> ClosingReasons { get; set; }
 
-        public string CaseClosingReasonFilter { get; set; }
+        public int ClosingReasonId { get; set; }
+
+        public string ClosingReasonPath { get; set; }
 
         public CaseColumnsSettingsModel ColumnSettingModel { get; set; }        
     }

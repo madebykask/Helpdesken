@@ -315,15 +315,17 @@
                                 @Translation.Get(GlobalEnums.TranslationCaseFields.ClosingReason.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)
                             </td>
                             <td>
-                                <select id="lstFilterClosingReason" name="lstFilterClosingReason" class="multiselect multiselect-search" multiple="multiple">
-                                    @foreach (var e in Model.ClosingReasons)
-                                    {
-                                        if (e.IsActive == 1)
-                                        {                        
-                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.CaseClosingReasonFilter)>@e.Name</option>
-                                        }
-                                    }
-                                </select>
+                                <div id="divClosingReason" class="btn-group pull-left">
+                                    <div id="divBreadcrumbs_ClosingReason" class="btn">@Model.caseSearchFilter.ParentPathClosingReason</div>
+                                    <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#">@Translation.Get("--")</a></li>
+                                        @Html.FinishingCauseDropdownButtonString(Model.ClosingReasons)
+                                    </ul>
+                                    <input type="hidden" class="hidden" value="@Model.caseSearchFilter.CaseClosingReasonFilter" id="hidFilterClosingReasonId" name="hidFilterClosingReasonId" />
+                                </div>
                             </td>
                         </tr>                
                     }

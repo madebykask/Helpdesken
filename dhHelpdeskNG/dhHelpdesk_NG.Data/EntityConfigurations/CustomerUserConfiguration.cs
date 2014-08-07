@@ -40,7 +40,7 @@
             this.Property(x => x.CaseRegistrationDateFilterShow).IsRequired();
             this.Property(x => x.CaseWatchDateFilterShow).IsRequired();
             this.Property(x => x.CaseClosingDateFilterShow).IsRequired();
-            this.Property(x => x.CaseClosingReasonFilter).IsOptional();
+            this.Property(x => x.CaseClosingReasonFilter).IsOptional().HasMaxLength(50);
 
             this.ToTable("tblcustomeruser");
         }

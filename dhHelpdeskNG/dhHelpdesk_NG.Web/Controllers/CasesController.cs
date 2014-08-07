@@ -301,6 +301,7 @@
 
                     // hämta parent path för productArea 
                     sm.caseSearchFilter.ParantPath_ProductArea = ParentPathDefaultValue;
+                    sm.caseSearchFilter.ParentPathClosingReason = ParentPathDefaultValue;
                     sm.caseSearchFilter.ParantPath_CaseType = ParentPathDefaultValue;
                     if (!string.IsNullOrWhiteSpace(sm.caseSearchFilter.ProductArea))
                     {
@@ -311,6 +312,19 @@
                                 sm.caseSearchFilter.ParantPath_ProductArea = p.getProductAreaParentPath();
                         }
                     }
+
+                    if (!string.IsNullOrWhiteSpace(sm.caseSearchFilter.CaseClosingReasonFilter))
+                    {
+                        if (sm.caseSearchFilter.CaseClosingReasonFilter != "0")
+                        {
+                            var fc = this._finishingCauseService.GetFinishingCause(sm.caseSearchFilter.CaseClosingReasonFilter.convertStringToInt());
+                            if (fc != null)
+                            {
+                                sm.caseSearchFilter.ParentPathClosingReason = fc.GetFinishingCauseParentPath();
+                            }
+                        }
+                    }
+
                     // hämta parent path för casetype
                     if ((sm.caseSearchFilter.CaseType > 0))
                     {
@@ -893,7 +907,7 @@
                 f.CaseWatchDateEndFilter = frm.GetDate("CaseWatchDateEndFilter");
                 f.CaseClosingDateStartFilter = frm.GetDate("CaseClosingDateStartFilter");
                 f.CaseClosingDateEndFilter = frm.GetDate("CaseClosingDateEndFilter");
-                f.CaseClosingReasonFilter = frm.ReturnFormValue("lstFilterClosingReason");
+                f.CaseClosingReasonFilter = frm.ReturnFormValue("hidFilterClosingReasonId").ReturnCustomerUserValue();
 
                 var sm = this.GetCaseSearchModel(f.CustomerId, f.UserId);
                 sm.caseSearchFilter = f;
@@ -1036,8 +1050,8 @@
                 : string.Empty;
 
             var closingReasonCheck = frm.IsFormValueTrue("ClosingReasonCheck");
-            var closingReasons = closingReasonCheck
-                ? ((frm.ReturnFormValue("lstClosingReason") == string.Empty) ? "0" : frm.ReturnFormValue("lstClosingReason"))
+            var closingReason = closingReasonCheck
+                ? ((frm.ReturnFormValue("ClosingReasonId") == string.Empty) ? "0" : frm.ReturnFormValue("ClosingReasonId"))
                 : string.Empty;
 
             var newCaseSetting = new UserCaseSetting(
@@ -1062,9 +1076,10 @@
                             frm.IsFormValueTrue("CaseRegistrationDateFilterShow"),
                             frm.IsFormValueTrue("CaseWatchDateFilterShow"),
                             frm.IsFormValueTrue("CaseClosingDateFilterShow"),
-                            closingReasons);
+                            closingReason);
 
             this._customerUserService.UpdateUserCaseSetting(newCaseSetting);
+            SessionFacade.CurrentCaseSearch = null;  
         }
 
         public void SaveColSetting(FormCollection frm)
@@ -1904,7 +1919,23 @@
             ret.CaseRegistrationDateFilterShow = userCaseSettings.CaseRegistrationDateFilterShow;
             ret.CaseWatchDateFilterShow = userCaseSettings.CaseWatchDateFilterShow;
             ret.CaseClosingDateFilterShow = userCaseSettings.CaseClosingDateFilterShow;
-            ret.CaseClosingReasonFilter = userCaseSettings.CaseClosingReasonFilter;
+
+            ret.ClosingReasons = this._finishingCauseService.GetFinishingCauses(customerId);
+            ret.ClosingReasonPath = "--";
+            int closingReason;
+            int.TryParse(userCaseSettings.CaseClosingReasonFilter, out closingReason);
+            ret.ClosingReasonId = closingReason;
+            if (closingReason > 0)
+            {
+
+                var fc = this._finishingCauseService.GetFinishingCause(ret.ClosingReasonId);
+                if (fc != null)
+                {
+                    ret.ClosingReasonPath = fc.GetFinishingCauseParentPath();
+                }
+            }
+
+            ret.ClosingReasonCheck = userCaseSettings.CaseClosingReasonFilter != string.Empty;
 
             ret.ClosingReasonCheck = userCaseSettings.CaseClosingReasonFilter != string.Empty;
             ret.ClosingReasons = this._finishingCauseService.GetFinishingCauses(customerId);
