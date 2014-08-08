@@ -133,29 +133,32 @@
                                 {
                                     foreach (var cw in Model.CoWorkers)
                                     {
-                                         <tr>
-                                            <td>
-                                                <button class="btn btn-dhblue btn-xs" data-toggle="modal" data-target="#myModal" title="Previous service requests for this co-worker"><span class="glyphicon glyphicon-folder-open"></span></button>
-                                            </td>
-                                            <td>
-                                                <a href="#" onclick="AddNewTab('Ruben')"> @cw.EmployeeNumber </a>
-                                            </td>
-                                            <td>
-                                                <a href="#" onclick="AddNewTab('Ruben')"> @cw.FirstName </a>
-                                            </td>
-                                            <td>
-                                                <a href="#" onclick="AddNewTab('Ruben')"> @cw.LastName </a>
-                                            </td>
-                                            <td>
-                                                <a href="#" onclick="AddNewTab('Ruben')"> @cw.JobKey - @cw.JobKey </a>
-                                            </td>
-                                             <td>
-                                                <a href="#" onclick="AddNewTab('Ruben')"> @cw.Email </a>
-                                            </td>
-                                            <td>
-                                                <a href="#">[IKEA Inside <span class="glyphicon glyphicon-arrow-right"></span>]</a>
-                                            </td>
-                                        </tr>
+                                        if (cw.EmployeeNumber != "")
+                                        {
+                                             <tr>
+                                                <td>
+                                                    <button class="btn btn-dhblue btn-xs" data-toggle="modal" data-target="#myModal" title="Previous service requests for this co-worker"><span class="glyphicon glyphicon-folder-open"></span></button>
+                                                </td>
+                                                <td>
+                                                    <a href="#" onclick="AddNewTab('Ruben')"> @cw.EmployeeNumber </a>
+                                                </td>
+                                                <td>
+                                                    <a href="#" onclick="AddNewTab('Ruben')"> @cw.FirstName </a>
+                                                </td>
+                                                <td>
+                                                    <a href="#" onclick="AddNewTab('Ruben')"> @cw.LastName </a>
+                                                </td>
+                                                <td>
+                                                    <a href="#" onclick="AddNewTab('Ruben')"> @cw.JobKey - @cw.JobKey </a>
+                                                </td>
+                                                 <td>
+                                                    <a href="#" onclick="AddNewTab('Ruben')"> @cw.Email </a>
+                                                </td>
+                                                <td>
+                                                    <a href="#">[IKEA Inside <span class="glyphicon glyphicon-arrow-right"></span>]</a>
+                                                </td>
+                                             </tr>
+                                        }
                                     }
                                 }                                                               
                             </tbody>

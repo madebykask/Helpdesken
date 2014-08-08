@@ -87,8 +87,11 @@ namespace DH.Helpdesk.NewSelfService.WebServices
                 client.BaseAddress = new Uri(apiInfo.UriPath);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            
+                //http://dhhelpdesk-ikea-bschr-am.datahalland.se/Api/ismanager/05599597
+                //var response = await client.GetAsync(String.Format("api/Subordinates/{0}", managerEmployeeNum));
 
-                var response = await client.GetAsync(String.Format("api/Subordinates/{0}", managerEmployeeNum));
+                var response = await client.GetAsync(String.Format("api/manager/{0}/$all", managerEmployeeNum));
                 if (response.IsSuccessStatusCode)
                 {
                     var res = await response.Content.ReadAsStringAsync();

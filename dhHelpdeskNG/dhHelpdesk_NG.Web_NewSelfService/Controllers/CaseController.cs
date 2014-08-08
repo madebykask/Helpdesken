@@ -685,10 +685,13 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                 var employeeList = SessionFacade.CurrentCoWorkers;
                 foreach (var emp in employeeList)
                 {
-                    if (cs.ReportedBy == "")
-                        cs.ReportedBy = "'" + emp + "'";
-                    else
-                        cs.ReportedBy = cs.ReportedBy + "," + "'" + emp + "'";
+                    if (emp != "")
+                    {
+                        if (cs.ReportedBy == "")
+                            cs.ReportedBy = "'" + emp + "'";
+                        else
+                            cs.ReportedBy = cs.ReportedBy + "," + "'" + emp + "'";
+                    }
                 }
 
             }
@@ -724,7 +727,8 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                     search,
                     1,
                     1,
-                    null).ToList(); // Take(maxRecords)
+                    null,
+                    "Line Manager").ToList(); // Take(maxRecords)
 
                 var dynamicCases = _caseService.GetAllDynamicCases();
                 model.DynamicCases = dynamicCases;
