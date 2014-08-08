@@ -8,12 +8,12 @@
         {
         }
 
-        public MemoryFieldsModel(int? ramId)
+        public MemoryFieldsModel(ConfigurableFieldModel<int?> ramId)
         {
             this.RAMId = ramId;
         }
 
-        [IsId]
-        public int? RAMId { get; set; }
+        [NotNull]
+        public ConfigurableFieldModel<int?> RAMId { get; set; }
     }
 }

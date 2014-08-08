@@ -10,7 +10,7 @@
         {
         }
 
-        public StateFieldsViewModel(StateFieldsModel stateFieldsModel, ConfigurableFieldModel<SelectList> states)
+        public StateFieldsViewModel(StateFieldsModel stateFieldsModel, SelectList states)
         {
             this.StateFieldsModel = stateFieldsModel;
             this.States = states;
@@ -20,6 +20,6 @@
         public StateFieldsModel StateFieldsModel { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> States { get; set; }
+        public SelectList States { get; set; }
     }
 }

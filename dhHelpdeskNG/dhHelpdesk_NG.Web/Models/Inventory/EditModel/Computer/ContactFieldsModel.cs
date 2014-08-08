@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Computer
 {
+    using DH.Helpdesk.Common.ValidationAttributes;
+
     public class ContactFieldsModel
     {
         public ContactFieldsModel()
@@ -13,10 +15,13 @@
             this.Email = email;
         }
 
+        [NotNull]
         public ConfigurableFieldModel<string> Name { get; set; }
 
+        [NotNull]
         public ConfigurableFieldModel<string> Phone { get; set; }
 
+        [NotNull]
         public ConfigurableFieldModel<string> Email { get; set; }
     }
 }

@@ -12,7 +12,7 @@
 
         public OperatingSystemFieldsViewModel(
             OperatingSystemFieldsModel operatingSystemFieldsModel,
-            ConfigurableFieldModel<SelectList> operatingSystems)
+            SelectList operatingSystems)
         {
             this.OperatingSystemFieldsModel = operatingSystemFieldsModel;
             this.OperatingSystems = operatingSystems;
@@ -22,6 +22,6 @@
         public OperatingSystemFieldsModel OperatingSystemFieldsModel { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> OperatingSystems { get; set; }
+        public SelectList OperatingSystems { get; set; }
     }
 }

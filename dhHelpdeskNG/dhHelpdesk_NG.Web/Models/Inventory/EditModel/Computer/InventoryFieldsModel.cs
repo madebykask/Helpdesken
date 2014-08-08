@@ -2,6 +2,8 @@
 {
     using System;
 
+    using DH.Helpdesk.Common.ValidationAttributes;
+
     public class InventoryFieldsModel
     {
         public InventoryFieldsModel()
@@ -14,8 +16,10 @@
             this.PurchaseDate = purchaseDate;
         }
 
+        [NotNull]
         public ConfigurableFieldModel<string> BarCode { get; set; }
 
+        [NotNull]
         public ConfigurableFieldModel<DateTime?> PurchaseDate { get; set; }
     }
 }

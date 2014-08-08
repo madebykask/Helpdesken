@@ -10,7 +10,7 @@
         {
         }
 
-        public CommunicationFieldsViewModel(CommunicationFieldsModel communicationFieldsModel, ConfigurableFieldModel<SelectList> networkAdapters)
+        public CommunicationFieldsViewModel(CommunicationFieldsModel communicationFieldsModel, SelectList networkAdapters)
         {
             this.CommunicationFieldsModel = communicationFieldsModel;
             this.NetworkAdapters = networkAdapters;
@@ -20,6 +20,6 @@
         public CommunicationFieldsModel CommunicationFieldsModel { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> NetworkAdapters { get; set; }
+        public SelectList NetworkAdapters { get; set; }
     }
 }

@@ -14,7 +14,7 @@
             PlaceFieldsModel placeFieldsModel,
             SelectList buildings,
             SelectList floors,
-            ConfigurableFieldModel<SelectList> rooms)
+            SelectList rooms)
         {
             this.PlaceFieldsModel = placeFieldsModel;
             this.Buildings = buildings;
@@ -32,6 +32,6 @@
         public SelectList Floors { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> Rooms { get; set; }
+        public SelectList Rooms { get; set; }
     }
 }

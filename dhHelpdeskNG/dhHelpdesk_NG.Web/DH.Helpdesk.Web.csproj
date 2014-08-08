@@ -1536,6 +1536,7 @@
     <Content Include="Views\Inventory\EditorTemplates\Fields\Time.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\Fields\TimeOutOfTable.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\Fields\WideText.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Fields\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

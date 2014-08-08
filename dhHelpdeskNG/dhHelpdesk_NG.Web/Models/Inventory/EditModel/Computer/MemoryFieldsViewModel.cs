@@ -10,7 +10,7 @@
         {
         }
 
-        public MemoryFieldsViewModel(MemoryFieldsModel memoryFieldsModel, ConfigurableFieldModel<SelectList> raMs)
+        public MemoryFieldsViewModel(MemoryFieldsModel memoryFieldsModel, SelectList raMs)
         {
             this.MemoryFieldsModel = memoryFieldsModel;
             this.RAMs = raMs;
@@ -20,6 +20,6 @@
         public MemoryFieldsModel MemoryFieldsModel { get; set; }
         
         [NotNull]
-        public ConfigurableFieldModel<SelectList> RAMs { get; set; }
+        public SelectList RAMs { get; set; }
     }
 }

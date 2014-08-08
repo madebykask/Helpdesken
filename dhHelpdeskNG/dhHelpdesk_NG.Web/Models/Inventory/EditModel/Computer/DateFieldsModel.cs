@@ -2,6 +2,8 @@
 {
     using System;
 
+    using DH.Helpdesk.Common.ValidationAttributes;
+
     public class DateFieldsModel
     {
         public DateFieldsModel()
@@ -18,10 +20,13 @@
             this.PathDirectory = pathDirectory;
         }
 
+        [NotNull]
         public ConfigurableFieldModel<DateTime?> SynchronizeDate { get; set; }
 
+        [NotNull]
         public ConfigurableFieldModel<DateTime?> ScanDate { get; set; }
 
+        [NotNull]
         public ConfigurableFieldModel<string> PathDirectory { get; set; }
     }
 }

@@ -11,7 +11,7 @@
         public PlaceFieldsModel(
             int? buildingId,
             int? floorId,
-            int? roomId,
+            ConfigurableFieldModel<int?> roomId,
             ConfigurableFieldModel<string> address,
             ConfigurableFieldModel<string> postalCode,
             ConfigurableFieldModel<string> postalAddress,
@@ -34,8 +34,8 @@
         [IsId]
         public int? FloorId { get; set; }
 
-        [IsId]
-        public int? RoomId { get; set; }
+        [NotNull]
+        public ConfigurableFieldModel<int?> RoomId { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<string> Address { get; set; }

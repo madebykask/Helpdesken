@@ -26,6 +26,7 @@
         [IsId]
         public int? UserId { get; set; }
 
+        [NotNull]
         public ConfigurableFieldModel<string> UserStringId { get; set; }
 
         public UserName UserName { get; set; }

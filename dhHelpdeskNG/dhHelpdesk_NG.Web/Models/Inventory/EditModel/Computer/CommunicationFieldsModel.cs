@@ -9,7 +9,7 @@
         }
 
         public CommunicationFieldsModel(
-            int? networkAdapterId,
+            ConfigurableFieldModel<int?> networkAdapterId,
             ConfigurableFieldModel<string> ipAddress,
             ConfigurableFieldModel<string> macAddress,
             ConfigurableFieldModel<bool> isRas,
@@ -22,8 +22,8 @@
             this.NovellClient = novellClient;
         }
 
-        [IsId]
-        public int? NetworkAdapterId { get; set; }
+        [NotNull]
+        public ConfigurableFieldModel<int?> NetworkAdapterId { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<string> IPAddress { get; set; }

@@ -12,9 +12,9 @@
 
         public OrganizationFieldsViewModel(
             OrganizationFieldsModel organizationFieldsModel,
-            ConfigurableFieldModel<SelectList> departments,
-            ConfigurableFieldModel<SelectList> domains,
-            ConfigurableFieldModel<SelectList> units)
+            SelectList departments,
+            SelectList domains,
+            SelectList units)
         {
             this.OrganizationFieldsModel = organizationFieldsModel;
             this.Departments = departments;
@@ -26,12 +26,12 @@
         public OrganizationFieldsModel OrganizationFieldsModel { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> Departments { get; set; }
+        public SelectList Departments { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> Domains { get; set; }
+        public SelectList Domains { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> Units { get; set; }
+        public SelectList Units { get; set; }
     }
 }

@@ -11,7 +11,7 @@
         }
 
         public ContractFieldsModel(
-            int? contractStatusId,
+            ConfigurableFieldModel<int?> contractStatusId,
             ConfigurableFieldModel<string> contractNumber,
             ConfigurableFieldModel<DateTime?> contractStartDate,
             ConfigurableFieldModel<DateTime?> contractEndDate,
@@ -34,8 +34,8 @@
             this.AccountingDimension5 = accountingDimension5;
         }
 
-        [IsId]
-        public int? ContractStatusId { get; set; }
+        [NotNull]
+        public ConfigurableFieldModel<int?> ContractStatusId { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<string> ContractNumber { get; set; }

@@ -11,7 +11,7 @@
         }
 
         public StateFieldsModel(
-            int idState,
+            ConfigurableFieldModel<int?> idState,
             ConfigurableFieldModel<bool> isStolen,
             ConfigurableFieldModel<string> replaced,
             ConfigurableFieldModel<bool> isSendBack,
@@ -24,7 +24,8 @@
             this.ScrapDate = scrapDate;
         }
 
-        public int StateId { get; set; }
+        [NotNull]
+        public ConfigurableFieldModel<int?> StateId { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<bool> IsStolen { get; set; }

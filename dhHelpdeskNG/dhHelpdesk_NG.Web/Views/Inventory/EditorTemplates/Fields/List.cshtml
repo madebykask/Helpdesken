@@ -1,0 +1,30 @@
+﻿@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.ConfigurableFieldModel<int?>
+@{
+    var list = (SelectList)ViewData["Source"];
+}
+
+@if (!Model.Show)
+{
+    return;
+}
+
+<tr>
+    <td class="span3">
+        @Html.FieldCaption(Model)
+    </td>
+    <td class="span9">
+        @if (!Model.IsReadOnly)
+        {
+            @Html.DropDownListFor(m => m.Value, list, string.Empty, new Dictionary<string, object> { { "data-dh-is-required", Model.IsRequired } })
+            @Html.HiddenFor(m => m.IsRequired)
+            @Html.ValidationMessageFor(m => m.Value)
+        }
+        else
+        {
+            @(!Model.Value.HasValue
+                ? Html.TextBoxFor(m => string.Empty, new { @readonly = true })
+                : Html.TextBoxFor(m => list.SingleOrDefault(x => x.Value == Model.Value.ToString()).Text, new { @readonly = true }))
+        }
+    </td>
+</tr>

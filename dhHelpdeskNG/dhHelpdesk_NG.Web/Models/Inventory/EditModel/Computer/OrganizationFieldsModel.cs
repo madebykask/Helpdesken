@@ -8,20 +8,23 @@
         {
         }
 
-        public OrganizationFieldsModel(int? deparmentId, int? domainId, int? unitId)
+        public OrganizationFieldsModel(
+            ConfigurableFieldModel<int?> deparmentId,
+            ConfigurableFieldModel<int?> domainId,
+            ConfigurableFieldModel<int?> unitId)
         {
             this.DepartmentId = deparmentId;
             this.DomainId = domainId;
             this.UnitId = unitId;
         }
 
-        [IsId]
-        public int? DepartmentId { get; set; }
+        [NotNull]
+        public ConfigurableFieldModel<int?> DepartmentId { get; set; }
 
-        [IsId]
-        public int? DomainId { get; set; }
+        [NotNull]
+        public ConfigurableFieldModel<int?> DomainId { get; set; }
 
-        [IsId]
-        public int? UnitId { get; set; }
+        [NotNull]
+        public ConfigurableFieldModel<int?> UnitId { get; set; }
     }
 }

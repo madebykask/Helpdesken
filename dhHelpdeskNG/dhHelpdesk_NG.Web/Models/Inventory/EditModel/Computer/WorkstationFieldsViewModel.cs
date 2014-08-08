@@ -12,8 +12,8 @@
 
         public WorkstationFieldsViewModel(
             WorkstationFieldsModel workstationFieldsModel,
-            ConfigurableFieldModel<SelectList> computerModels,
-            ConfigurableFieldModel<SelectList> computerTypes)
+            SelectList computerModels,
+            SelectList computerTypes)
         {
             this.WorkstationFieldsModel = workstationFieldsModel;
             this.ComputerModels = computerModels;
@@ -24,9 +24,9 @@
         public WorkstationFieldsModel WorkstationFieldsModel { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> ComputerModels { get; set; }
+        public SelectList ComputerModels { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> ComputerTypes { get; set; }
+        public SelectList ComputerTypes { get; set; }
     }
 }

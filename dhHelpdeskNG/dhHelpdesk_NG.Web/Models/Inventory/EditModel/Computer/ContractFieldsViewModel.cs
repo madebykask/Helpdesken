@@ -10,7 +10,7 @@
         {
         }
 
-        public ContractFieldsViewModel(ContractFieldsModel contractFieldsModel, ConfigurableFieldModel<SelectList> contractStatuses)
+        public ContractFieldsViewModel(ContractFieldsModel contractFieldsModel, SelectList contractStatuses)
         {
             this.ContractFieldsModel = contractFieldsModel;
             this.ContractStatuses = contractStatuses;
@@ -20,6 +20,6 @@
         public ContractFieldsModel ContractFieldsModel { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> ContractStatuses { get; set; }
+        public SelectList ContractStatuses { get; set; }
     }
 }

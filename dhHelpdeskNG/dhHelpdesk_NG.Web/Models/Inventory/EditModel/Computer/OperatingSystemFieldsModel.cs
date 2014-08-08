@@ -9,7 +9,7 @@
         }
 
         public OperatingSystemFieldsModel(
-            int? operatingSystemId,
+            ConfigurableFieldModel<int?> operatingSystemId,
             ConfigurableFieldModel<string> version,
             ConfigurableFieldModel<string> servicePackSystem,
             ConfigurableFieldModel<string> registrationCodeSystem,
@@ -22,15 +22,19 @@
             this.ProductKey = productKey;
         }
 
-        [IsId]
-        public int? OperatingSystemId { get; set; }
+        [NotNull]
+        public ConfigurableFieldModel<int?> OperatingSystemId { get; set; }
 
+        [NotNull]
         public ConfigurableFieldModel<string> Version { get; set; }
 
+        [NotNull]
         public ConfigurableFieldModel<string> ServicePack { get; set; }
 
+        [NotNull]
         public ConfigurableFieldModel<string> RegistrationCode { get; set; }
 
+        [NotNull]
         public ConfigurableFieldModel<string> ProductKey { get; set; }
     }
 }

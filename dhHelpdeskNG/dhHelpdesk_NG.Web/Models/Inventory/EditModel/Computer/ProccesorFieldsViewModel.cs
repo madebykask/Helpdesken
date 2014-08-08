@@ -10,7 +10,7 @@
         {
         }
 
-        public ProccesorFieldsViewModel(ProccesorFieldsModel proccesorFieldsModel, ConfigurableFieldModel<SelectList> proccessors)
+        public ProccesorFieldsViewModel(ProccesorFieldsModel proccesorFieldsModel, SelectList proccessors)
         {
             this.ProccesorFieldsModel = proccesorFieldsModel;
             this.Proccessors = proccessors;
@@ -20,6 +20,6 @@
         public ProccesorFieldsModel ProccesorFieldsModel { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> Proccessors { get; set; }
+        public SelectList Proccessors { get; set; }
     }
 }

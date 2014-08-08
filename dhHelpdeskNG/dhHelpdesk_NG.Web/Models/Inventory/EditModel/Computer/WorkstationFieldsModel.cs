@@ -13,13 +13,13 @@
         public WorkstationFieldsModel(
             ConfigurableFieldModel<string> name,
             ConfigurableFieldModel<string> manufacturer,
-            int? computerModelId,
+            ConfigurableFieldModel<int?> computerModelId,
             ConfigurableFieldModel<string> serialNumber,
             ConfigurableFieldModel<string> biosVersionFieldSetting,
             ConfigurableFieldModel<DateTime?> biosDate,
             ConfigurableFieldModel<string> theftmarkFieldSetting,
             ConfigurableFieldModel<string> carePackNumber,
-            int? computerTypeId,
+            ConfigurableFieldModel<int?> computerTypeId,
             ConfigurableFieldModel<string> locationFieldSetting)
         {
             this.Name = name;
@@ -40,8 +40,8 @@
         [NotNull]
         public ConfigurableFieldModel<string> Manufacturer { get; set; }
 
-        [IsId]
-        public int? ComputerModelId { get; set; }
+        [NotNull]
+        public ConfigurableFieldModel<int?> ComputerModelId { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<string> SerialNumber { get; set; }
@@ -58,8 +58,8 @@
         [NotNull]
         public ConfigurableFieldModel<string> CarePackNumber { get; set; }
 
-        [IsId]
-        public int? ComputerTypeId { get; set; }
+        [NotNull]
+        public ConfigurableFieldModel<int?> ComputerTypeId { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<string> Location { get; set; }
