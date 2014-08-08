@@ -22,9 +22,21 @@
                                     class="start-tile label my" 
                                     rel="tooltip" 
                                     data-toggle="tooltip" 
-                                    title="@Translation.Get("Changes")">
-                                @Model.GetCustomerChangesCount(customer.Customer_Id)                                           
-                            </a>                            
+                                    title="@Translation.Get("Mina ärenden")">
+                                @Model.GetUserCount(customer.Customer_Id)                                           
+                            </a>
+                            <a href="@Url.Action("Index", "Changes", new { customerId = customer.Customer_Id })" 
+                                    rel="tooltip" 
+                                    class="start-tile label closed" 
+                                    title="@Translation.Get("Avslutade ärenden")">
+                                @Model.GetClosedCount(customer.Customer_Id)                                            
+                            </a>
+                            <a href="@Url.Action("Index", "Changes", new { customerId = customer.Customer_Id })" 
+                                    rel="tooltip" 
+                                    class="start-tile label unread" 
+                                    title="@Translation.Get("Pågående ärenden")">
+                                @Model.GetInProgressCount(customer.Customer_Id)
+                            </a>
                         </td>
                     </tr>
                 }

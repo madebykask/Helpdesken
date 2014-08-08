@@ -223,7 +223,8 @@
                                                    : customers.Take(module.NumberOfRows.Value).ToArray();
                         model.CustomerChanges = this.modulesInfoFactory.GetCustomerChangesModel(
                             changesCustomers,
-                            this.changeService.GetCustomersChanges(changesCustomers.Select(c => c.Customer_Id).ToArray()));
+                            this.changeService.GetCustomersChanges(changesCustomers.Select(c => c.Customer_Id).ToArray()),
+                            SessionFacade.CurrentUser.Id);
                         break;
                 }
             }

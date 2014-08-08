@@ -10,13 +10,14 @@
     {
         public CustomerChangesModel()
         {
-            
         }
 
         public CustomerChangesModel(
                 IList<CustomerUser> customers, 
-                IEnumerable<CustomerChange> changes)
+                IEnumerable<CustomerChange> changes, 
+                int userId)
         {
+            this.UserId = userId;
             this.Changes = changes;
             this.Customers = customers;
         }
@@ -25,9 +26,21 @@
  
         public IEnumerable<CustomerChange> Changes { get; private set; }
 
-        public int GetCustomerChangesCount(int customerId)
+        public int UserId { get; private set; }
+
+        public int GetInProgressCount(int customerId)
         {
-            return this.Changes.Count(c => c.CustomerId == customerId);
+            return this.Changes.Count(c => c.CustomerId == customerId && !c.FinishingDate.HasValue);
+        }
+
+        public int GetClosedCount(int customerId)
+        {
+            return this.Changes.Count(c => c.CustomerId == customerId && c.FinishingDate.HasValue);
+        }
+
+        public int GetUserCount(int customerId)
+        {
+            return this.Changes.Count(c => c.CustomerId == customerId && c.UserId == this.UserId);
         }
     }
 }

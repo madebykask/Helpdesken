@@ -10,6 +10,7 @@
     {
          CustomerChangesModel GetCustomerChangesModel(
                 IList<CustomerUser> customers,
-                IEnumerable<CustomerChange> changes);
+                IEnumerable<CustomerChange> changes,
+                int userId);
     }
 }

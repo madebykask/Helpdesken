@@ -82,12 +82,18 @@
                                             .Select(c => new
                                             {
                                                 CustomerId = c.Customer_Id.Value, 
-                                                ChangeId = c.Id
+                                                ChangeId = c.Id,
+                                                c.FinishingDate,
+                                                UserId = c.User_Id
                                             })
                                             .ToList();
 
             return entities
-                    .Select(c => new CustomerChange(c.CustomerId, c.ChangeId))
+                    .Select(c => new CustomerChange(
+                                c.CustomerId, 
+                                c.ChangeId,
+                                c.FinishingDate,
+                                c.UserId))
                     .ToList();
         }
 
