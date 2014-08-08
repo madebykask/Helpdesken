@@ -6,6 +6,10 @@
 
     public class PlaceFieldsViewModel
     {
+        public PlaceFieldsViewModel()
+        {
+        }
+
         public PlaceFieldsViewModel(
             PlaceFieldsModel placeFieldsModel,
             SelectList buildings,

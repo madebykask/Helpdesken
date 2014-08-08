@@ -6,6 +6,10 @@
 
     public class WorkstationFieldsModel
     {
+        public WorkstationFieldsModel()
+        {
+        }
+
         public WorkstationFieldsModel(
             ConfigurableFieldModel<string> name,
             ConfigurableFieldModel<string> manufacturer,

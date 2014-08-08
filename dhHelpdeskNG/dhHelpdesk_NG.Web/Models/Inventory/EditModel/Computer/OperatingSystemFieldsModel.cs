@@ -4,6 +4,10 @@
 
     public class OperatingSystemFieldsModel
     {
+        public OperatingSystemFieldsModel()
+        {
+        }
+
         public OperatingSystemFieldsModel(
             int? operatingSystemId,
             ConfigurableFieldModel<string> version,

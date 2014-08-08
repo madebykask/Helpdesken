@@ -6,6 +6,10 @@
 
     public class MemoryFieldsViewModel
     {
+        public MemoryFieldsViewModel()
+        {
+        }
+
         public MemoryFieldsViewModel(MemoryFieldsModel memoryFieldsModel, ConfigurableFieldModel<SelectList> raMs)
         {
             this.MemoryFieldsModel = memoryFieldsModel;

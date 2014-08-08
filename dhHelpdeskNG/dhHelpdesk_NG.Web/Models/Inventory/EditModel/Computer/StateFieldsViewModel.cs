@@ -6,6 +6,10 @@
 
     public class StateFieldsViewModel
     {
+        public StateFieldsViewModel()
+        {
+        }
+
         public StateFieldsViewModel(StateFieldsModel stateFieldsModel, ConfigurableFieldModel<SelectList> states)
         {
             this.StateFieldsModel = stateFieldsModel;
