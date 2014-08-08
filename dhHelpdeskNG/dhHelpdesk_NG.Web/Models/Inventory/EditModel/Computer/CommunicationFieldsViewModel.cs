@@ -6,10 +6,6 @@
 
     public class CommunicationFieldsViewModel
     {
-        public CommunicationFieldsViewModel()
-        {
-        }
-
         public CommunicationFieldsViewModel(CommunicationFieldsModel communicationFieldsModel, ConfigurableFieldModel<SelectList> networkAdapters)
         {
             this.CommunicationFieldsModel = communicationFieldsModel;

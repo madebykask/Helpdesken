@@ -6,10 +6,6 @@
 
     public class ContractFieldsViewModel
     {
-        public ContractFieldsViewModel()
-        {
-        }
-
         public ContractFieldsViewModel(ContractFieldsModel contractFieldsModel, ConfigurableFieldModel<SelectList> contractStatuses)
         {
             this.ContractFieldsModel = contractFieldsModel;

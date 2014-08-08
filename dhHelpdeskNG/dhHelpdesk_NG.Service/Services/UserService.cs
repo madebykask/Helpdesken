@@ -719,10 +719,12 @@ namespace DH.Helpdesk.Services.Services
             {
                 case Module.Customers:
                     return 101;
-                case Module.Problems:
+                case Module.ChangeManagement:
                     return 102;
-                case Module.Statistics:
+                case Module.Problems:
                     return 103;
+                case Module.Statistics:
+                    return 104;
                 case Module.BulletinBoard:
                     return 201;
                 case Module.Calendar:

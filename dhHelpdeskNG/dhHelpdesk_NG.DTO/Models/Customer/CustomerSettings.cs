@@ -181,6 +181,8 @@ namespace DH.Helpdesk.BusinessData.Models.Customer
                     return true;
                 case Module.Statistics:
                     return true;
+                case Module.ChangeManagement:
+                    return this.ModuleChangeManagement;
             }
 
             return true;

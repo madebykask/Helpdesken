@@ -549,6 +549,11 @@
             return this.changeRepository.GetChangeOverview(id);
         }
 
+        public List<CustomerChange> GetCustomersChanges(int[] customersIds)
+        {
+            return this.changeRepository.GetCustomersChanges(customersIds);
+        }
+
         #endregion
 
         #region Methods

@@ -5,7 +5,16 @@
         <tr>
             <th colspan="2" class="header">@Translation.Get("Ljud")</th>
         </tr>
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.SoundCard.Caption)</label>
+            </td>
+            <td class="span9">
+                @(!Model.SoundCard.IsReadOnly
+                ? Html.TextBoxFor(m => m.SoundCard.Value)
+                : Html.TextBoxFor(m => m.SoundCard.Value, new { @readonly = true }))
+            </td>
+        </tr>
     }
-    @Html.EditorFor(m => m.SoundCard, "Fields/Text")
 </table>
 

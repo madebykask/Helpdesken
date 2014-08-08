@@ -23,17 +23,65 @@
                 }
                 else
                 {
-                    @(!Model.OperatingSystemFieldsModel.OperatingSystemId.HasValue
-                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true })
+                    @(!Model.OperatingSystemFieldsModel.OperatingSystemId.HasValue 
+                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true }) 
                         : Html.TextBoxFor(m => m.OperatingSystems.Value.SingleOrDefault(x => x.Value == Model.OperatingSystemFieldsModel.OperatingSystemId.ToString()).Text, new { @readonly = true }))
                     @Html.HiddenFor(m => m.OperatingSystemFieldsModel.OperatingSystemId)
                 }
             </td>
         </tr>
     }
-    @Html.EditorFor(m => m.OperatingSystemFieldsModel.Version, "Fields/Text")
-    @Html.EditorFor(m => m.OperatingSystemFieldsModel.ServicePack, "Fields/Text")
-    @Html.EditorFor(m => m.OperatingSystemFieldsModel.RegistrationCode, "Fields/Text")
-    @Html.EditorFor(m => m.OperatingSystemFieldsModel.ProductKey, "Fields/Text")
+    @if (Model.OperatingSystemFieldsModel.Version.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.OperatingSystemFieldsModel.Version.Caption)</label>
+            </td>
+            <td class="span9">
+                @(!Model.OperatingSystemFieldsModel.Version.IsReadOnly
+                      ? Html.TextBoxFor(m => m.OperatingSystemFieldsModel.Version.Value)
+                      : Html.TextBoxFor(m => m.OperatingSystemFieldsModel.Version.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+    @if (Model.OperatingSystemFieldsModel.ServicePack.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.OperatingSystemFieldsModel.ServicePack.Caption)</label>
+            </td>
+            <td class="span9">
+                @(!Model.OperatingSystemFieldsModel.ServicePack.IsReadOnly
+                      ? Html.TextBoxFor(m => m.OperatingSystemFieldsModel.ServicePack.Value)
+                      : Html.TextBoxFor(m => m.OperatingSystemFieldsModel.ServicePack.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+    @if (Model.OperatingSystemFieldsModel.RegistrationCode.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.OperatingSystemFieldsModel.RegistrationCode.Caption)</label>
+            </td>
+            <td class="span9">
+                @(!Model.OperatingSystemFieldsModel.RegistrationCode.IsReadOnly
+                      ? Html.TextBoxFor(m => m.OperatingSystemFieldsModel.RegistrationCode.Value)
+                      : Html.TextBoxFor(m => m.OperatingSystemFieldsModel.RegistrationCode.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+    @if (Model.OperatingSystemFieldsModel.ProductKey.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.OperatingSystemFieldsModel.ProductKey.Caption)</label>
+            </td>
+            <td class="span9">
+                @(!Model.OperatingSystemFieldsModel.ProductKey.IsReadOnly
+                      ? Html.TextBoxFor(m => m.OperatingSystemFieldsModel.ProductKey.Value)
+                      : Html.TextBoxFor(m => m.OperatingSystemFieldsModel.ProductKey.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
 </table>
 

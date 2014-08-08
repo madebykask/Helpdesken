@@ -2,10 +2,6 @@
 {
     public class GraphicsFieldsModel
     {
-        public GraphicsFieldsModel()
-        {
-        }
- 
         public GraphicsFieldsModel(ConfigurableFieldModel<string> videoCard)
         {
             this.VideoCard = videoCard;

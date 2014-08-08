@@ -10,6 +10,7 @@
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Case;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Link;
     using DH.Helpdesk.Web.Models;
 
@@ -47,6 +48,10 @@
 
         private readonly ICasesCalculator casesCalculator;
 
+        private readonly IModulesInfoFactory modulesInfoFactory;
+
+        private readonly IChangeService changeService;
+
         public HomeController(
             IBulletinBoardService bulletinBoardService,
             ICalendarService calendarService,
@@ -64,7 +69,9 @@
             IDocumentService documentService,
             IWorkContext workContext, 
             ICaseModelFactory caseModelFactory, 
-            ICasesCalculator casesCalculator)
+            ICasesCalculator casesCalculator, 
+            IModulesInfoFactory modulesInfoFactory, 
+            IChangeService changeService)
             : base(masterDataService)
         {
             this.bulletinBoardService = bulletinBoardService;
@@ -83,6 +90,8 @@
             this.workContext = workContext;
             this.caseModelFactory = caseModelFactory;
             this.casesCalculator = casesCalculator;
+            this.modulesInfoFactory = modulesInfoFactory;
+            this.changeService = changeService;
         }
 
         [HttpGet]
@@ -207,6 +216,14 @@
                                                                         customersIds, 
                                                                         this.casesCalculator,
                                                                         this.workContext.User.UserId);
+                        break;
+                    case Module.ChangeManagement:
+                        var changesCustomers = !module.NumberOfRows.HasValue
+                                                   ? customers
+                                                   : customers.Take(module.NumberOfRows.Value).ToArray();
+                        model.CustomerChanges = this.modulesInfoFactory.GetCustomerChangesModel(
+                            changesCustomers,
+                            this.changeService.GetCustomersChanges(changesCustomers.Select(c => c.Customer_Id).ToArray()));
                         break;
                 }
             }

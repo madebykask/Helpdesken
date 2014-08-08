@@ -6,10 +6,6 @@
 
     public class OperatingSystemFieldsViewModel
     {
-        public OperatingSystemFieldsViewModel()
-        {
-        }
-
         public OperatingSystemFieldsViewModel(
             OperatingSystemFieldsModel operatingSystemFieldsModel,
             ConfigurableFieldModel<SelectList> operatingSystems)

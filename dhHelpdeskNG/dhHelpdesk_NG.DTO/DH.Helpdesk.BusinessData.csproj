@@ -140,6 +140,7 @@
     <Compile Include="Models\Changes\InventoryTypeWithInventories.cs" />
     <Compile Include="Models\Changes\ManualLog.cs" />
     <Compile Include="Models\Changes\Output\Change\ChangeOverview.cs" />
+    <Compile Include="Models\Changes\Output\CustomerChange.cs" />
     <Compile Include="Models\Changes\Output\FieldProcessingSetting.cs" />
     <Compile Include="Models\Changes\Output\File.cs" />
     <Compile Include="Models\Changes\Output\SearchOptions.cs" />

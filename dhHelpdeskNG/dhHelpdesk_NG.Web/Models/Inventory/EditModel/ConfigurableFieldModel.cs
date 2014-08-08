@@ -3,7 +3,7 @@
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
-    public class ConfigurableFieldModel<TValue> : IConfigurableFieldModel
+    public class ConfigurableFieldModel<TValue>
     {
         public ConfigurableFieldModel()
         {

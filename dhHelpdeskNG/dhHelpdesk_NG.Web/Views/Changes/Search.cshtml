@@ -9,7 +9,7 @@
     });
 </script>
       
-@using (Ajax.BeginForm("ChangesGrid", "Changes", null, new AjaxOptions { UpdateTargetId = "changes_grid_container" }, new { id = "search_form" }))
+@using (Ajax.BeginForm("ChangesGrid", "Changes", new { customerId = ViewData["CustomerId"] }, new AjaxOptions { UpdateTargetId = "changes_grid_container" }, new { id = "search_form" }))
 {
     @Html.HiddenFor(m => m.SortField.Name, new { id = "sortFieldName" })
     @Html.HiddenFor(m => m.SortField.SortBy, new { id = "sortFieldBy" })

@@ -23,16 +23,64 @@
                 }
                 else
                 {
-                    @(!Model.CommunicationFieldsModel.NetworkAdapterId.HasValue
-                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true })
+                    @(!Model.CommunicationFieldsModel.NetworkAdapterId.HasValue 
+                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true }) 
                         : Html.TextBoxFor(m => m.NetworkAdapters.Value.SingleOrDefault(x => x.Value == Model.CommunicationFieldsModel.NetworkAdapterId.ToString()).Text, new { @readonly = true }))
                     @Html.HiddenFor(m => m.CommunicationFieldsModel.NetworkAdapterId)
                 }
             </td>
         </tr>
     }
-    @Html.EditorFor(m => m.CommunicationFieldsModel.IPAddress, "Fields/Text")
-    @Html.EditorFor(m => m.CommunicationFieldsModel.MacAddress, "Fields/Text")
-    @Html.EditorFor(m => m.CommunicationFieldsModel.IsRAS, "Fields/Text")
-    @Html.EditorFor(m => m.CommunicationFieldsModel.NovellClient, "Fields/Text")
+    @if (Model.CommunicationFieldsModel.IPAddress.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.CommunicationFieldsModel.IPAddress.Caption)</label>
+            </td>
+            <td class="span9">
+                @(!Model.CommunicationFieldsModel.IPAddress.IsReadOnly
+                      ? Html.TextBoxFor(m => m.CommunicationFieldsModel.IPAddress.Value)
+                      : Html.TextBoxFor(m => m.CommunicationFieldsModel.IPAddress.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+    @if (Model.CommunicationFieldsModel.MacAddress.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.CommunicationFieldsModel.MacAddress.Caption)</label>
+            </td>
+            <td class="span9">
+                @(!Model.CommunicationFieldsModel.MacAddress.IsReadOnly
+                      ? Html.TextBoxFor(m => m.CommunicationFieldsModel.MacAddress.Value)
+                      : Html.TextBoxFor(m => m.CommunicationFieldsModel.MacAddress.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+    @if (Model.CommunicationFieldsModel.IsRAS.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.CommunicationFieldsModel.IsRAS.Caption)</label>
+            </td>
+            <td class="span9">
+                @(!Model.CommunicationFieldsModel.IsRAS.IsReadOnly
+                      ? Html.CheckBoxFor(m => m.CommunicationFieldsModel.IsRAS.Value)
+                      : Html.CheckBoxFor(m => m.CommunicationFieldsModel.IsRAS.Value, new { @readonly = true, @disabled = "disabled" }))
+            </td>
+        </tr>
+    }
+    @if (Model.CommunicationFieldsModel.NovellClient.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.CommunicationFieldsModel.NovellClient.Caption)</label>
+            </td>
+            <td class="span9">
+                @(!Model.CommunicationFieldsModel.NovellClient.IsReadOnly
+                      ? Html.TextBoxFor(m => m.CommunicationFieldsModel.NovellClient.Value)
+                      : Html.TextBoxFor(m => m.CommunicationFieldsModel.NovellClient.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
 </table>

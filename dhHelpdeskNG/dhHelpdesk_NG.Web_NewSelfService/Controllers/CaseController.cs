@@ -683,15 +683,12 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             {
                 LMtype = LMtype + "2";
                 var employeeList = SessionFacade.CurrentCoWorkers;
-                if (employeeList != null)
+                foreach (var emp in employeeList)
                 {
-                    foreach (var emp in employeeList)
-                    {
-                        if (cs.ReportedBy == "")
-                            cs.ReportedBy = "'" + emp + "'";
-                        else
-                            cs.ReportedBy = cs.ReportedBy + "," + "'" + emp + "'";
-                    }
+                    if (cs.ReportedBy == "")
+                        cs.ReportedBy = "'" + emp + "'";
+                    else
+                        cs.ReportedBy = cs.ReportedBy + "," + "'" + emp + "'";
                 }
 
             }

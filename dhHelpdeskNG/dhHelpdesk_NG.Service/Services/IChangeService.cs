@@ -61,6 +61,8 @@
 
         ChangeOverview GetChangeOverview(int id);
 
+        List<CustomerChange> GetCustomersChanges(int[] customersIds);
+
         #endregion
     }
 }

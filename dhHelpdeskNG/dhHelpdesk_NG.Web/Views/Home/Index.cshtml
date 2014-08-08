@@ -74,6 +74,14 @@
     </div>                                        
     <div class="portlet" 
         data-usermodules="item" 
+        data-usermodules-moduleid="@(GetModuleId(Module.ChangeManagement))"
+        data-usermodules-position="@(GetModulePosition(Module.ChangeManagement))">
+        @{
+            Html.RenderPartial("ChangesInfo", Model.CustomerChanges);
+        }                                                                        
+    </div>                                        
+    <div class="portlet" 
+        data-usermodules="item" 
         data-usermodules-moduleid="@(GetModuleId(Module.Problems))"
         data-usermodules-position="@(GetModulePosition(Module.Problems))">
         @{

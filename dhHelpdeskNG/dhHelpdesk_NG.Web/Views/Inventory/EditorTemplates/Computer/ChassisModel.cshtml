@@ -5,7 +5,16 @@
         <tr>
             <th colspan="2" class="header">@Translation.Get("Chassis")</th>
         </tr>
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Chassis.Caption)</label>
+            </td>
+            <td class="span9">
+                @(!Model.Chassis.IsReadOnly
+                ? Html.TextBoxFor(m => m.Chassis.Value)
+                : Html.TextBoxFor(m => m.Chassis.Value, new { @readonly = true }))
+            </td>
+        </tr>
     }
-    @Html.EditorFor(m => m.Chassis, "Fields/Text")
 </table>
 

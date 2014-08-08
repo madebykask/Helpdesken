@@ -4,10 +4,6 @@
 
     public class PlaceFieldsModel
     {
-        public PlaceFieldsModel()
-        {
-        }
-
         public PlaceFieldsModel(
             int? buildingId,
             int? floorId,

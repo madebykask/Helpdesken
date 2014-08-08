@@ -154,7 +154,7 @@ using System.Threading.Tasks;
                         if (!isEmploeeManager)
                         {
                             TempData["UserHasAccess"] = "false";
-                            filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = "You don't have access to the portal! (Employee type is not accepted)", errorCode = 102 }));
+                            filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = "You don't have access to the portal!", errorCode = 102 }));
                         }
                         else
                         {

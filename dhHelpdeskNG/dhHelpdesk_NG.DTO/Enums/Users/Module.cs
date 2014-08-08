@@ -62,6 +62,11 @@ namespace DH.Helpdesk.BusinessData.Enums.Users
         /// <summary>
         /// The documents.
         /// </summary>
-        Documents = 10
+        Documents = 10,
+
+        /// <summary>
+        /// Change management
+        /// </summary>
+        ChangeManagement = 11
     }
 }

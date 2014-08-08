@@ -429,6 +429,7 @@
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedMinAttribute.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedIntegerAttribute.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\NewChange\Concrete\NewGeneralModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Common\IModulesInfoFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\ComputerFieldsSettingsViewModelBuilder.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\DynamicsFieldsModelBuilder.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\FieldSettingModelBuilder.cs" />
@@ -445,6 +446,7 @@
     <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\ServerFieldsSettingsViewModelBuilder.cs" />
     <Compile Include="Infrastructure\ModelFactories\Invoice\Concrete\InvoiceArticlesModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Invoice\IInvoiceArticlesModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Common\Concrete\ModulesInfoFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Reports\Concrete\ReportsModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Reports\IReportsModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\ComputerViewModelBuilder.cs" />
@@ -577,6 +579,7 @@
     <Compile Include="Models\Changes\ChangeEdit\OrdererModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\Contacts\ContactModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\Contacts\ContactsModel.cs" />
+    <Compile Include="Models\Changes\CustomerChangesModel.cs" />
     <Compile Include="Models\Changes\IndexModel.cs" />
     <Compile Include="Models\Changes\InventoryDialog\InventoryDialogModel.cs" />
     <Compile Include="Models\Changes\InventoryDialog\InventoryTypeModel.cs" />
@@ -1524,14 +1527,7 @@
     <Content Include="Views\Inventory\_SendToDialog.cshtml" />
     <Content Include="Views\Inventory\UserHistoryDialog.cshtml" />
     <Content Include="Views\Inventory\ComputerShortInfoDialog.cshtml" />
-    <Content Include="Views\Inventory\EditorTemplates\Fields\Date.cshtml" />
-    <Content Include="Views\Inventory\EditorTemplates\Fields\DateOutOfTable.cshtml" />
-    <Content Include="Views\Inventory\EditorTemplates\Fields\Flag.cshtml" />
-    <Content Include="Views\Inventory\EditorTemplates\Fields\Number.cshtml" />
-    <Content Include="Views\Inventory\EditorTemplates\Fields\Text.cshtml" />
-    <Content Include="Views\Inventory\EditorTemplates\Fields\Time.cshtml" />
-    <Content Include="Views\Inventory\EditorTemplates\Fields\TimeOutOfTable.cshtml" />
-    <Content Include="Views\Inventory\EditorTemplates\Fields\WideText.cshtml" />
+    <Content Include="Views\Shared\ChangesInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

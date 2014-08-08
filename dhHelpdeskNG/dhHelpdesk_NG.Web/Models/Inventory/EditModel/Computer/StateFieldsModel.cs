@@ -6,10 +6,6 @@
 
     public class StateFieldsModel
     {
-        public StateFieldsModel()
-        {
-        }
-
         public StateFieldsModel(
             int idState,
             ConfigurableFieldModel<bool> isStolen,

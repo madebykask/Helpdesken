@@ -4,10 +4,6 @@
 
     public class ProccesorFieldsModel
     {
-        public ProccesorFieldsModel()
-        {
-        }
-
         public ProccesorFieldsModel(int? proccesorId)
         {
             this.ProccesorId = proccesorId;

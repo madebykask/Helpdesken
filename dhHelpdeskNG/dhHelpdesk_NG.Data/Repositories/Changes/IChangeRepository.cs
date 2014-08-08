@@ -8,7 +8,6 @@ namespace DH.Helpdesk.Dal.Repositories.Changes
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Domain.Changes;
 
@@ -17,6 +16,8 @@ namespace DH.Helpdesk.Dal.Repositories.Changes
         List<ItemOverview> FindOverviewsExcludeSpecified(int customerId, int changeId);
             
         List<ItemOverview> FindOverviews(int customerId);
+
+        List<CustomerChange> GetCustomersChanges(int[] customersIds); 
 
         void AddChange(NewChange change);
 

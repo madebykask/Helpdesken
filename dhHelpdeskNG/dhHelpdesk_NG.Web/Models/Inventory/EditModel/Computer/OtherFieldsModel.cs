@@ -2,10 +2,6 @@
 {
     public class OtherFieldsModel
     {
-        public OtherFieldsModel()
-        {
-        }
-
         public OtherFieldsModel(ConfigurableFieldModel<string> info)
         {
             this.Info = info;

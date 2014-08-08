@@ -1,9 +1,8 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Computer
 {
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
-    public class ConfigurableFieldModel<TValue> : IConfigurableFieldModel
+    public class ConfigurableFieldModel<TValue>
     {
         public ConfigurableFieldModel()
         {
@@ -23,7 +22,7 @@
         [NotNullAndEmpty]
         public string Caption { get; set; }
 
-        [LocalizedRequiredFrom("IsRequired")]
+        //[LocalizedRequiredFrom("Show")]
         public TValue Value { get; set; }
 
         public bool IsRequired { get; set; }

@@ -5,7 +5,28 @@
         <tr>
             <th colspan="2" class="header">@Translation.Get("Inventering")</th>
         </tr>
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.BarCode.Caption)</label>
+            </td>
+            <td class="span9">
+                @(!Model.BarCode.IsReadOnly
+                ? Html.TextBoxFor(m => m.BarCode.Value)
+                : Html.TextBoxFor(m => m.BarCode.Value, new { @readonly = true }))
+            </td>
+        </tr>
     }
-    @Html.EditorFor(m => m.BarCode, "Fields/Text")
-    @Html.EditorFor(m => m.PurchaseDate, "Fields/Date", new { id = "purchasedate_datepicker" })
+    @if (Model.PurchaseDate.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.PurchaseDate.Caption)</label>
+            </td>
+            <td class="span9">
+                @(!Model.PurchaseDate.IsReadOnly 
+                    ? Html.EditorFor(m => m.PurchaseDate.Value, "DatePicker", new { id = "purchasedate_datepicker" }) 
+                    : Html.DisplayFor(m => m.PurchaseDate.Value, "Date"))
+            </td>
+        </tr>
+    }
 </table>

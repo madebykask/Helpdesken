@@ -6,10 +6,6 @@
 
     public class WorkstationFieldsViewModel
     {
-        public WorkstationFieldsViewModel()
-        {
-        }
-
         public WorkstationFieldsViewModel(
             WorkstationFieldsModel workstationFieldsModel,
             ConfigurableFieldModel<SelectList> computerModels,

@@ -4,10 +4,6 @@
 
     public class InventoryFieldsModel
     {
-        public InventoryFieldsModel()
-        {
-        }
-
         public InventoryFieldsModel(ConfigurableFieldModel<string> barCode, ConfigurableFieldModel<DateTime?> purchaseDate)
         {
             this.BarCode = barCode;

@@ -131,14 +131,17 @@
         }
 
         [HttpGet]
-        public PartialViewResult Changes()
+        public PartialViewResult Changes(int? customerId)
         {
+            this.ViewData["CustomerId"] = customerId;
             return this.PartialView();
         }
 
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
         [BadRequestOnNotValid]
-        public PartialViewResult ChangesGrid(SearchModel searchModel)
+        public PartialViewResult ChangesGrid(
+                            SearchModel searchModel,
+                            int? customerId)
         {
             var filters = searchModel != null
                 ? searchModel.ExtractFilters()
@@ -147,7 +150,7 @@
             SessionFacade.SavePageFilters(PageName.Changes, filters);
             
             var parameters = new SearchParameters(
-                this.OperationContext.CustomerId,
+                customerId.HasValue ? customerId.Value : this.OperationContext.CustomerId,
                 filters.StatusIds,
                 filters.ObjectIds,
                 filters.OwnerIds,

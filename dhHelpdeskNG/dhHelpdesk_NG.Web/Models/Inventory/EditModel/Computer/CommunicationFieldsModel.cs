@@ -4,10 +4,6 @@
 
     public class CommunicationFieldsModel
     {
-        public CommunicationFieldsModel()
-        {
-        }
-
         public CommunicationFieldsModel(
             int? networkAdapterId,
             ConfigurableFieldModel<string> ipAddress,

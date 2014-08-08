@@ -30,8 +30,56 @@
             </td>
         </tr>
     }
-    @Html.EditorFor(m => m.StateFieldsModel.IsStolen, "Fields/Flag")
-    @Html.EditorFor(m => m.StateFieldsModel.Replaced, "Fields/Text")
-    @Html.EditorFor(m => m.StateFieldsModel.IsSendBack, "Fields/Flag")
-    @Html.EditorFor(m => m.StateFieldsModel.ScrapDate, "Fields/Date", new { id = "computer_edit_scrapdate_datepicker" })
+    @if (Model.StateFieldsModel.IsStolen.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.StateFieldsModel.IsStolen.Caption)</label>
+            </td>
+            <td class="span9">
+                @(!Model.StateFieldsModel.IsStolen.IsReadOnly
+                      ? Html.CheckBoxFor(m => m.StateFieldsModel.IsStolen.Value)
+                      : Html.CheckBoxFor(m => m.StateFieldsModel.IsStolen.Value, new { @readonly = true, @disabled = "disabled" }))
+            </td>
+        </tr>
+    }
+    @if (Model.StateFieldsModel.Replaced.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.StateFieldsModel.Replaced.Caption)</label>
+            </td>
+            <td class="span9">
+                @(!Model.StateFieldsModel.Replaced.IsReadOnly
+                      ? Html.TextBoxFor(m => m.StateFieldsModel.Replaced.Value)
+                      : Html.TextBoxFor(m => m.StateFieldsModel.Replaced.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+    @if (Model.StateFieldsModel.IsSendBack.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.StateFieldsModel.IsSendBack.Caption)</label>
+            </td>
+            <td class="span9">
+                @(!Model.StateFieldsModel.IsSendBack.IsReadOnly
+                      ? Html.CheckBoxFor(m => m.StateFieldsModel.IsSendBack.Value)
+                      : Html.CheckBoxFor(m => m.StateFieldsModel.IsSendBack.Value, new { @readonly = true, @disabled = "disabled" }))
+            </td>
+        </tr>
+    }
+    @if (Model.StateFieldsModel.ScrapDate.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.StateFieldsModel.ScrapDate.Caption)</label>
+            </td>
+            <td class="span9">
+                @(!Model.StateFieldsModel.ScrapDate.IsReadOnly
+                      ? Html.EditorFor(m => m.StateFieldsModel.ScrapDate.Value, "DatePicker", new { id = "computer_edit_scrapdate_datepicker" })
+                      : Html.DisplayFor(m => m.StateFieldsModel.ScrapDate.Value, "Date"))
+            </td>
+        </tr>
+    }
 </table>

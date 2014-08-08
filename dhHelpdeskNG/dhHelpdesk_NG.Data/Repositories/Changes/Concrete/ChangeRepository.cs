@@ -15,7 +15,6 @@
     using DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeDetailedOverview;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Common.Enums;
-    using DH.Helpdesk.Common.Extensions.String;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Mappers;
@@ -75,6 +74,22 @@
         #endregion
 
         #region Public Methods and Operators
+
+        public List<CustomerChange> GetCustomersChanges(int[] customersIds)
+        {
+            var entities = this.DbContext.Changes.Where(c => c.Customer_Id.HasValue && 
+                                            customersIds.Contains(c.Customer_Id.Value))
+                                            .Select(c => new
+                                            {
+                                                CustomerId = c.Customer_Id.Value, 
+                                                ChangeId = c.Id
+                                            })
+                                            .ToList();
+
+            return entities
+                    .Select(c => new CustomerChange(c.CustomerId, c.ChangeId))
+                    .ToList();
+        }
 
         public void AddChange(NewChange change)
         {
@@ -306,7 +321,7 @@
                 return null;
             }
 
-            return new ChangeOverview()
+            return new ChangeOverview
                        {
                            Id = entity.Id,
                            ChangeTitle = entity.ChangeTitle

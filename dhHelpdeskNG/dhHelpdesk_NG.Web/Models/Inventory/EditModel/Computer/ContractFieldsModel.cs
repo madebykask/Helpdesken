@@ -6,10 +6,6 @@
 
     public class ContractFieldsModel
     {
-        public ContractFieldsModel()
-        {
-        }
-
         public ContractFieldsModel(
             int? contractStatusId,
             ConfigurableFieldModel<string> contractNumber,

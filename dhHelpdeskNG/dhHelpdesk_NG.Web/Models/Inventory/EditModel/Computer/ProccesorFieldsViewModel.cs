@@ -6,10 +6,6 @@
 
     public class ProccesorFieldsViewModel
     {
-        public ProccesorFieldsViewModel()
-        {
-        }
-
         public ProccesorFieldsViewModel(ProccesorFieldsModel proccesorFieldsModel, ConfigurableFieldModel<SelectList> proccessors)
         {
             this.ProccesorFieldsModel = proccesorFieldsModel;

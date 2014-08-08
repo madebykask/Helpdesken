@@ -26,6 +26,8 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
     using DH.Helpdesk.Dal.Mappers.ProductArea.EntityToBusinessModel;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Cases;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common.Concrete;
     using DH.Helpdesk.Web.Infrastructure.Translate;
 
     using Ninject.Modules;
@@ -73,6 +75,8 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<IEntityToBusinessModelMapper<Customer, CustomerOverview>>()
                 .To<CustomerToBusinessModel>()
                 .InSingletonScope();
+
+            this.Bind<IModulesInfoFactory>().To<ModulesInfoFactory>().InSingletonScope();
         }
     }
 }

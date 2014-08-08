@@ -1,0 +1,36 @@
+﻿@model DH.Helpdesk.Web.Models.Changes.CustomerChangesModel
+@if (Model != null && Model.Customers != null && Model.Customers.Any())
+{
+    <div class="box-header portlet-header">
+        <div class="start-tile-img label orange">
+            <img src="@Url.Content("~/Content/icons/customer.png")" alt="@Translation.Get("Kund")" />
+        </div>
+        <h4>@Translation.Get("Change Management Summary")</h4>
+    </div>
+    <div class="box-body portlet-content">
+        <div class="box-post">
+            <table class="table table-striped table-bordered table-hover">
+                <tbody>
+                @foreach (var customer in Model.Customers)
+                {     
+                    <tr>
+                        <td>
+                            <a href="@Url.Action("Index", "Changes", new { customerId = customer.Customer_Id })">
+                                @Html.DisplayFor(modelItem => customer.Customer.Name)
+                            </a>
+                            <a href="@Url.Action("Index", "Changes", new { customerId = customer.Customer_Id })" 
+                                    class="start-tile label my" 
+                                    rel="tooltip" 
+                                    data-toggle="tooltip" 
+                                    title="@Translation.Get("Changes")">
+                                @Model.GetCustomerChangesCount(customer.Customer_Id)                                           
+                            </a>                            
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+

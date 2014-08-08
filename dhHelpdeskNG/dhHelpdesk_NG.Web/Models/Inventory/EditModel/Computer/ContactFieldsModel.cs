@@ -2,10 +2,6 @@
 {
     public class ContactFieldsModel
     {
-        public ContactFieldsModel()
-        {
-        }
-
         public ContactFieldsModel(ConfigurableFieldModel<string> name, ConfigurableFieldModel<string> phone, ConfigurableFieldModel<string> email)
         {
             this.Name = name;
