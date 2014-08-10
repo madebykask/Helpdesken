@@ -1,28 +1,11 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.MemoryFieldsViewModel
 <table class="tableform">
-    @if (Model.RAMs.Show)
+    @if (Model.MemoryFieldsModel.RAMId.Show)
     {
         <tr>
             <th colspan="2" class="header">@Translation.Get("Minne")</th>
         </tr>
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.RAMs.Caption)</label>
-            </td>
-            <td class="span9">
-                @if (!Model.RAMs.IsReadOnly)
-                {
-                    @Html.DropDownListFor(m => m.MemoryFieldsModel.RAMId, Model.RAMs.Value, string.Empty)
-                }
-                else
-                {
-                    @(!Model.MemoryFieldsModel.RAMId.HasValue 
-                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true }) 
-                        : Html.TextBoxFor(m => m.RAMs.Value.SingleOrDefault(x => x.Value == Model.MemoryFieldsModel.RAMId.ToString()).Text, new { @readonly = true }))
-                    @Html.HiddenFor(m => m.MemoryFieldsModel.RAMId)
-                }
-            </td>
-        </tr>
     }
+    @Html.EditorFor(m => m.MemoryFieldsModel.RAMId, "Fields/List", new { Source = Model.RAMs })
 </table>
 

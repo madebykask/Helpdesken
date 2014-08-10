@@ -1,6 +1,6 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.ContractFieldsViewModel  
 <table class="tableform">
-    @if (Model.ContractStatuses.Show
+    @if (Model.ContractFieldsModel.ContractStatusId.Show
         || Model.ContractFieldsModel.ContractNumber.Show
         || Model.ContractFieldsModel.ContractStartDate.Show
         || Model.ContractFieldsModel.ContractEndDate.Show
@@ -15,27 +15,7 @@
             <th colspan="2" class="header">@Translation.Get("Avtal")</th>
         </tr>
     }
-    @if (Model.ContractStatuses.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.ContractStatuses.Caption)</label>
-            </td>
-            <td class="span9">
-                @if (!Model.ContractStatuses.IsReadOnly)
-                {
-                    @Html.DropDownListFor(m => m.ContractFieldsModel.ContractStatusId, Model.ContractStatuses.Value, string.Empty)
-                }
-                else
-                {
-                    @(!Model.ContractFieldsModel.ContractStatusId.HasValue
-                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true })
-                        : Html.TextBoxFor(m => m.ContractStatuses.Value.SingleOrDefault(x => x.Value == Model.ContractFieldsModel.ContractStatusId.ToString()).Text, new { @readonly = true }))
-                    @Html.HiddenFor(m => m.ContractFieldsModel.ContractStatusId)
-                }
-            </td>
-        </tr>
-    }
+    @Html.EditorFor(m => m.ContractFieldsModel.ContractStatusId, "Fields/List", new { Source = Model.ContractStatuses })
     @Html.EditorFor(m => m.ContractFieldsModel.ContractNumber, "Fields/Text")
     @Html.EditorFor(m => m.ContractFieldsModel.ContractStartDate, "Fields/Date", new { id = "computer_edit_contractstartdate_datepicker" })
     @Html.EditorFor(m => m.ContractFieldsModel.ContractEndDate, "Fields/Date", new { id = "computer_edit_contractenddate_datepicker" })

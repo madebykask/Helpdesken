@@ -2,13 +2,13 @@
 <table class="tableform">
     @if (Model.WorkstationFieldsModel.Name.Show
         || Model.WorkstationFieldsModel.Manufacturer.Show
-        || Model.ComputerModels.Show
+        || Model.WorkstationFieldsModel.ComputerModelId.Show
         || Model.WorkstationFieldsModel.SerialNumber.Show
         || Model.WorkstationFieldsModel.BIOSVersion.Show
         || Model.WorkstationFieldsModel.BIOSDate.Show
         || Model.WorkstationFieldsModel.Theftmark.Show
         || Model.WorkstationFieldsModel.CarePackNumber.Show
-        || Model.ComputerTypes.Show
+        || Model.WorkstationFieldsModel.ComputerTypeId.Show
         || Model.WorkstationFieldsModel.Location.Show)
     {
         <tr>
@@ -17,52 +17,12 @@
     }
     @Html.EditorFor(m => m.WorkstationFieldsModel.Name, "Fields/Text")
     @Html.EditorFor(m => m.WorkstationFieldsModel.Manufacturer, "Fields/Text")
-    @if (Model.ComputerModels.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.ComputerModels.Caption)</label>
-            </td>
-            <td class="span9">
-                @if (!Model.ComputerModels.IsReadOnly)
-                {
-                    @Html.DropDownListFor(m => m.WorkstationFieldsModel.ComputerModelId, Model.ComputerModels.Value, string.Empty)
-                }
-                else
-                {
-                    @(!Model.WorkstationFieldsModel.ComputerModelId.HasValue
-                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true })
-                        : Html.TextBoxFor(m => m.ComputerModels.Value.SingleOrDefault(x => x.Value == Model.WorkstationFieldsModel.ComputerModelId.ToString()).Text, new { @readonly = true }))
-                    @Html.HiddenFor(m => m.WorkstationFieldsModel.ComputerModelId)
-                }
-            </td>
-        </tr>
-    }
+    @Html.EditorFor(m => m.WorkstationFieldsModel.ComputerModelId, "Fields/List", new { Source = Model.ComputerModels })
     @Html.EditorFor(m => m.WorkstationFieldsModel.SerialNumber, "Fields/Text")
     @Html.EditorFor(m => m.WorkstationFieldsModel.BIOSVersion, "Fields/Text")
     @Html.EditorFor(m => m.WorkstationFieldsModel.BIOSDate, "Fields/Date", new { id = "computer_edit_biosdate_datepicker" })
     @Html.EditorFor(m => m.WorkstationFieldsModel.Theftmark, "Fields/Text")
     @Html.EditorFor(m => m.WorkstationFieldsModel.CarePackNumber, "Fields/Text")
-    @if (Model.ComputerTypes.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.ComputerTypes.Caption)</label>
-            </td>
-            <td class="span9">
-                @if (!Model.ComputerTypes.IsReadOnly)
-                {
-                    @Html.DropDownListFor(m => m.WorkstationFieldsModel.ComputerTypeId, Model.ComputerTypes.Value, string.Empty)
-                }
-                else
-                {
-                    @(!Model.WorkstationFieldsModel.ComputerTypeId.HasValue
-                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true })
-                        : Html.TextBoxFor(m => m.ComputerTypes.Value.SingleOrDefault(x => x.Value == Model.WorkstationFieldsModel.ComputerTypeId.ToString()).Text, new { @readonly = true }))
-                    @Html.HiddenFor(m => m.WorkstationFieldsModel.ComputerTypeId)
-                }
-            </td>
-        </tr>
-    }
+    @Html.EditorFor(m => m.WorkstationFieldsModel.ComputerTypeId, "Fields/List", new { Source = Model.ComputerTypes })
     @Html.EditorFor(m => m.WorkstationFieldsModel.Location, "Fields/Text")
 </table>

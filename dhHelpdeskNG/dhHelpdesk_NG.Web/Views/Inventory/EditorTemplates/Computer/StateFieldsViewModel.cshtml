@@ -1,7 +1,7 @@
 ﻿@using System.Globalization
 @model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.StateFieldsViewModel
 <table class="tableform">
-    @if (Model.States.Show
+    @if (Model.StateFieldsModel.StateId.Show
         || Model.StateFieldsModel.IsStolen.Show
         || Model.StateFieldsModel.Replaced.Show
         || Model.StateFieldsModel.IsSendBack.Show
@@ -11,25 +11,7 @@
             <th colspan="2" class="header">@Translation.Get("Status")</th>
         </tr>
     }
-    @if (Model.States.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.States.Caption)</label>
-            </td>
-            <td class="span9">
-                @if (!Model.States.IsReadOnly)
-                {
-                    @Html.DropDownListFor(m => m.StateFieldsModel.StateId, Model.States.Value)
-                }
-                else
-                {
-                    @Html.TextBoxFor(m => m.States.Value.SingleOrDefault(x => x.Value == Model.StateFieldsModel.StateId.ToString(CultureInfo.InvariantCulture)).Text, new { @readonly = true })
-                    @Html.HiddenFor(m => m.StateFieldsModel.StateId)
-                }
-            </td>
-        </tr>
-    }
+   @Html.EditorFor(m => m.StateFieldsModel.StateId, "Fields/List", new { Source = Model.States })
     @Html.EditorFor(m => m.StateFieldsModel.IsStolen, "Fields/Flag")
     @Html.EditorFor(m => m.StateFieldsModel.Replaced, "Fields/Text")
     @Html.EditorFor(m => m.StateFieldsModel.IsSendBack, "Fields/Flag")

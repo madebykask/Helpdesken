@@ -1,6 +1,6 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.OperatingSystemFieldsViewModel
 <table class="tableform">
-    @if (Model.OperatingSystems.Show
+    @if (Model.OperatingSystemFieldsModel.OperatingSystemId.Show
         || Model.OperatingSystemFieldsModel.Version.Show
         || Model.OperatingSystemFieldsModel.ServicePack.Show
         || Model.OperatingSystemFieldsModel.RegistrationCode.Show
@@ -10,28 +10,7 @@
             <th colspan="2" class="header">@Translation.Get("Operativsystem")</th>
         </tr>
     }
-    @if (Model.OperatingSystems.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.OperatingSystems.Caption)</label>
-            </td>
-            <td class="span9">
-                @if (!Model.OperatingSystems.IsReadOnly)
-                {
-                    @Html.DropDownListFor(m => m.OperatingSystemFieldsModel.OperatingSystemId, Model.OperatingSystems.Value, string.Empty)
-                }
-                else
-                {
-                    @(!Model.OperatingSystemFieldsModel.OperatingSystemId.HasValue
-                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true })
-                        : Html.TextBoxFor(m => m.OperatingSystems.Value.SingleOrDefault(x => x.Value == Model.OperatingSystemFieldsModel.OperatingSystemId.ToString()).Text, new { @readonly = true }))
-                    @Html.HiddenFor(m => m.OperatingSystemFieldsModel.OperatingSystemId)
-                }
-            </td>
-        </tr>
-    }
-    @Html.EditorFor(m => m.OperatingSystemFieldsModel.Version, "Fields/Text")
+    @Html.EditorFor(m => m.OperatingSystemFieldsModel.OperatingSystemId, "Fields/List", new { Source = Model.OperatingSystems })
     @Html.EditorFor(m => m.OperatingSystemFieldsModel.ServicePack, "Fields/Text")
     @Html.EditorFor(m => m.OperatingSystemFieldsModel.RegistrationCode, "Fields/Text")
     @Html.EditorFor(m => m.OperatingSystemFieldsModel.ProductKey, "Fields/Text")

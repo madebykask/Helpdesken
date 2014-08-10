@@ -1,6 +1,6 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.CommunicationFieldsViewModel
 <table class="tableform">
-    @if (Model.NetworkAdapters.Show
+    @if (Model.CommunicationFieldsModel.NetworkAdapterId.Show
         || Model.CommunicationFieldsModel.IPAddress.Show
         || Model.CommunicationFieldsModel.MacAddress.Show
         || Model.CommunicationFieldsModel.IsRAS.Show
@@ -10,27 +10,7 @@
             <th colspan="2" class="header">@Translation.Get("Kommunikation")</th>
         </tr>
     }
-    @if (Model.NetworkAdapters.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.NetworkAdapters.Caption)</label>
-            </td>
-            <td class="span9">
-                @if (!Model.NetworkAdapters.IsReadOnly)
-                {
-                    @Html.DropDownListFor(m => m.CommunicationFieldsModel.NetworkAdapterId, Model.NetworkAdapters.Value, string.Empty)
-                }
-                else
-                {
-                    @(!Model.CommunicationFieldsModel.NetworkAdapterId.HasValue
-                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true })
-                        : Html.TextBoxFor(m => m.NetworkAdapters.Value.SingleOrDefault(x => x.Value == Model.CommunicationFieldsModel.NetworkAdapterId.ToString()).Text, new { @readonly = true }))
-                    @Html.HiddenFor(m => m.CommunicationFieldsModel.NetworkAdapterId)
-                }
-            </td>
-        </tr>
-    }
+    @Html.EditorFor(m => m.CommunicationFieldsModel.NetworkAdapterId, "Fields/List", new { Source = Model.NetworkAdapters })
     @Html.EditorFor(m => m.CommunicationFieldsModel.IPAddress, "Fields/Text")
     @Html.EditorFor(m => m.CommunicationFieldsModel.MacAddress, "Fields/Text")
     @Html.EditorFor(m => m.CommunicationFieldsModel.IsRAS, "Fields/Text")

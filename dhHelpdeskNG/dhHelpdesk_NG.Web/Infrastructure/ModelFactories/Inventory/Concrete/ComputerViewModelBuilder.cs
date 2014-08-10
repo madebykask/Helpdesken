@@ -738,7 +738,10 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 operatingSystemsViewModel,
                 organizationViewModel,
                 processorViewModel,
-                workstationViewModel) { CustomerId = currentCustomerId };
+                workstationViewModel)
+                       {
+                           CustomerId = currentCustomerId
+                       };
         }
 
         private static SelectList CreateSelectList(
