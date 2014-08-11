@@ -23,8 +23,6 @@
         {
             switch (this.Value)
             {
-                case ComputerStatuses.None:
-                    return Translator.Translate(ComputerStatuses.None.ToString());
                 case ComputerStatuses.Active:
                     return Translator.Translate(ComputerStatuses.Active.ToString());
                 case ComputerStatuses.Stolen:

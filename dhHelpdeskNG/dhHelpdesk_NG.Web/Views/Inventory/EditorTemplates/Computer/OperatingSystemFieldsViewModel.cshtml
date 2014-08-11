@@ -11,6 +11,7 @@
         </tr>
     }
     @Html.EditorFor(m => m.OperatingSystemFieldsModel.OperatingSystemId, "Fields/List", new { Source = Model.OperatingSystems })
+    @Html.EditorFor(m => m.OperatingSystemFieldsModel.Version, "Fields/Text")
     @Html.EditorFor(m => m.OperatingSystemFieldsModel.ServicePack, "Fields/Text")
     @Html.EditorFor(m => m.OperatingSystemFieldsModel.RegistrationCode, "Fields/Text")
     @Html.EditorFor(m => m.OperatingSystemFieldsModel.ProductKey, "Fields/Text")

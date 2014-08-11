@@ -46,7 +46,7 @@
             this.Bind<IPrinterViewModelBuilder>().To<PrinterViewModelBuilder>().InSingletonScope();
             this.Bind<IInventoryViewModelBuilder>().To<InventoryViewModelBuilder>().InSingletonScope();
             this.Bind<IDynamicsFieldsModelBuilder>().To<DynamicsFieldsModelBuilder>().InSingletonScope();
-            
+
             this.Bind<IFieldSettingBuilder>().To<FieldSettingBuilder>().InSingletonScope();
             this.Bind<IFieldSettingModelBuilder>().To<FieldSettingModelBuilder>().InSingletonScope();
 
@@ -59,6 +59,8 @@
             this.Bind<IServerFieldsSettingsViewModelBuilder>().To<ServerFieldsSettingsViewModelBuilder>().InSingletonScope();
             this.Bind<IPrinterFieldsSettingsViewModelBuilder>().To<PrinterFieldsSettingsViewModelBuilder>().InSingletonScope();
             this.Bind<IInventoryFieldSettingsEditViewModelBuilder>().To<InventoryFieldSettingsEditViewModelBuilder>().InSingletonScope();
+
+            this.Bind<IComputerBuilder>().To<ComputerBuilder>().InSingletonScope();
         }
     }
 }

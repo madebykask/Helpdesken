@@ -15,6 +15,7 @@
     using DH.Helpdesk.Web.Enums.Inventory;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
+    using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory;
     using DH.Helpdesk.Web.Models.Inventory;
@@ -48,6 +49,8 @@
 
         private readonly IDynamicsFieldsModelBuilder dynamicsFieldsModelBuilder;
 
+        private readonly IComputerBuilder computerBuilder;
+
         public InventoryController(
             IMasterDataService masterDataService,
             IInventoryService inventoryService,
@@ -59,7 +62,8 @@
             IServerViewModelBuilder serverViewModelBuilder,
             IPrinterViewModelBuilder printerViewModelBuilder,
             IInventoryViewModelBuilder inventoryViewModelBuilder,
-            IDynamicsFieldsModelBuilder dynamicsFieldsModelBuilder)
+            IDynamicsFieldsModelBuilder dynamicsFieldsModelBuilder,
+            IComputerBuilder computerBuilder)
             : base(masterDataService)
         {
             this.inventoryService = inventoryService;
@@ -72,6 +76,7 @@
             this.printerViewModelBuilder = printerViewModelBuilder;
             this.inventoryViewModelBuilder = inventoryViewModelBuilder;
             this.dynamicsFieldsModelBuilder = dynamicsFieldsModelBuilder;
+            this.computerBuilder = computerBuilder;
         }
 
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")] // todo
@@ -351,9 +356,12 @@
 
         [HttpPost]
         [BadRequestOnNotValid]
-        public ViewResult EditWorkstation(ComputerViewModel computerViewModel)
+        public RedirectToRouteResult EditWorkstation(ComputerViewModel computerViewModel)
         {
-            return this.View("EditWorkstation");
+            var businessModel = this.computerBuilder.BuildForUpdate(computerViewModel);
+            this.inventoryService.UpdateWorkstation(businessModel);
+
+            return this.RedirectToAction("Index");
         }
 
         [HttpGet]

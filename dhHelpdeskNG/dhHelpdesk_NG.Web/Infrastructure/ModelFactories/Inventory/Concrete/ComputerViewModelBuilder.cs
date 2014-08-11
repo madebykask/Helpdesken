@@ -225,7 +225,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
             var state = CreateNullableIntegerField(
                 settings.StateFieldsSettings.StateFieldSetting,
-                model.StateFields.State);
+                model.StateFields.State == 0 ? null : (int?)model.StateFields.State);
             var stolen =
                 CreateBooleanField(
                     settings.StateFieldsSettings.StolenFieldSetting,
@@ -605,7 +605,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
             var chassisFieldModel = new ChassisFieldsModel(chassis);
 
-            var state = CreateNullableIntegerField(settings.StateFieldsSettings.StateFieldSetting, null);
+            var state = CreateNullableIntegerField(settings.StateFieldsSettings.StateFieldSetting, 0);
             var stolen = CreateBooleanField(settings.StateFieldsSettings.StolenFieldSetting, false);
             var replaced = CreateStringField(settings.StateFieldsSettings.ReplacedWithFieldSetting, null);
             var sendBack = CreateBooleanField(settings.StateFieldsSettings.SendBackFieldSetting, false);

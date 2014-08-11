@@ -4,6 +4,23 @@
 
     public class PlaceFields
     {
+        // todo
+        public PlaceFields(
+            int? roomId,
+            string address,
+            string postalCode,
+            string postalAddress,
+            string location,
+            string location2)
+        {
+            this.RoomId = roomId;
+            this.Address = address;
+            this.PostalCode = postalCode;
+            this.PostalAddress = postalAddress;
+            this.Location = location;
+            this.Location2 = location2;
+        }
+
         public PlaceFields(
             int? buildingId,
             int? floorId,

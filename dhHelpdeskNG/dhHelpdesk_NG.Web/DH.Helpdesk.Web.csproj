@@ -352,6 +352,8 @@
     <Compile Include="Infrastructure\Binders\NullableDateTimeBinder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\ComputerFieldsSettingsBuilder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\FieldSettingBuilder.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Inventory\IComputerBuilder.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Inventory\INewComputerBuilder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\IInventoryFieldsSettingsBuilder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\InventoryFieldsSettingsBuilder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\IComputerFieldsSettingsBuilder.cs" />
@@ -360,6 +362,7 @@
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\IServerFieldsSettingsBuilder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\PrinterFieldsSettingsBuilder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\ServerFieldsSettingsBuilder.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\UpdatedComputerBuilder.cs" />
     <Compile Include="Infrastructure\Configuration\Concrete\ApplicationConfiguration.cs" />
     <Compile Include="Infrastructure\ActionFilters\BadRequestOnNotValidAttribute.cs" />
     <Compile Include="Infrastructure\Configuration\Concrete\Configuration.cs" />

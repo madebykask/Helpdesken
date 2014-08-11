@@ -5,6 +5,12 @@
 
     public class ContactInformationFields
     {
+        // todo
+        public ContactInformationFields(int? userId)
+        {
+            this.UserId = userId;
+        }
+
         public ContactInformationFields(
             int? userId,
             string userStringId,
