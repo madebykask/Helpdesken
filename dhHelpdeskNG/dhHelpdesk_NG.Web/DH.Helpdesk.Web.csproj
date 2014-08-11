@@ -1528,6 +1528,14 @@
     <Content Include="Views\Inventory\UserHistoryDialog.cshtml" />
     <Content Include="Views\Inventory\ComputerShortInfoDialog.cshtml" />
     <Content Include="Views\Shared\ChangesInfo.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Fields\Date.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Fields\DateOutOfTable.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Fields\Flag.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Fields\Number.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Fields\Text.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Fields\Time.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Fields\TimeOutOfTable.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Fields\WideText.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

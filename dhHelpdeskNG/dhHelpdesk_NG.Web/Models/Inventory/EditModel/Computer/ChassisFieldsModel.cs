@@ -2,6 +2,10 @@
 {
     public class ChassisFieldsModel
     {
+        public ChassisFieldsModel()
+        {
+        }
+
         public ChassisFieldsModel(ConfigurableFieldModel<string> chassis)
         {
             this.Chassis = chassis;

@@ -4,6 +4,10 @@
 
     public class OrganizationFieldsModel
     {
+        public OrganizationFieldsModel()
+        {
+        }
+
         public OrganizationFieldsModel(int? deparmentId, int? domainId, int? unitId)
         {
             this.DepartmentId = deparmentId;

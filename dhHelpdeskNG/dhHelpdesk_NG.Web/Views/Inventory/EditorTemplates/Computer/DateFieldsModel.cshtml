@@ -8,40 +8,8 @@
             <th colspan="2" class="header">@Translation.Get("Status")</th>
         </tr>
     }
-    @if (Model.ScanDate.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.ScanDate.Caption)</label>
-            </td>
-            <td class="span9">
-                @(!Model.ScanDate.IsReadOnly ? Html.EditorFor(m => m.ScanDate.Value, "DatePicker", new { id = "computer_edit_scandate_datepicker" }) : Html.DisplayFor(m => m.ScanDate.Value, "Date"))
-            </td>
-        </tr>
-    }
-    @if (Model.SynchronizeDate.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.SynchronizeDate.Caption)</label>
-            </td>
-            <td class="span9">
-                @(!Model.SynchronizeDate.IsReadOnly ? Html.EditorFor(m => m.SynchronizeDate.Value, "DatePicker", new { id = "computer_edit_syncdate_datepicker" }) : Html.DisplayFor(m => m.SynchronizeDate.Value, "Date"))
-            </td>
-        </tr>
-    }
-    @if (Model.PathDirectory.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.PathDirectory.Caption)</label>
-            </td>
-            <td class="span9">
-                @(!Model.PathDirectory.IsReadOnly
-                      ? Html.TextBoxFor(m => m.PathDirectory.Value)
-                      : Html.TextBoxFor(m => m.PathDirectory.Value, new { @readonly = true }))
-            </td>
-        </tr>
-    }
+    @Html.EditorFor(m => m.ScanDate, "Fields/Date", new { id = "computer_edit_scandate_datepicker" })
+    @Html.EditorFor(m => m.SynchronizeDate, "Fields/Date", new { id = "computer_edit_syncdate_datepicker" })
+    @Html.EditorFor(m => m.PathDirectory, "Fields/Text")
 </table>
 

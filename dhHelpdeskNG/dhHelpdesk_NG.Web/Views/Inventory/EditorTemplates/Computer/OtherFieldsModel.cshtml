@@ -5,15 +5,6 @@
         <tr>
             <th colspan="2" class="header">@Translation.Get("Övrigt")</th>
         </tr>
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.Info.Caption)</label>
-            </td>
-            <td class="span9">
-                @(!Model.Info.IsReadOnly
-                ? Html.TextAreaFor(m => m.Info.Value)
-                : Html.TextAreaFor(m => m.Info.Value, new { @readonly = true }))
-            </td>
-        </tr>
     }
+    @Html.EditorFor(m => m.Info, "Fields/WideText")
 </table>

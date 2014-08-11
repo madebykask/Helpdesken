@@ -5,6 +5,10 @@
 
     public class ContactInformationFieldsModel
     {
+        public ContactInformationFieldsModel()
+        {
+        }
+
         public ContactInformationFieldsModel(
             int? userId,
             ConfigurableFieldModel<string> userStringId,

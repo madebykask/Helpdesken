@@ -2,6 +2,10 @@
 {
     public class SoundFieldsModel
     {
+        public SoundFieldsModel()
+        {
+        }
+
         public SoundFieldsModel(ConfigurableFieldModel<string> soundCard)
         {
             this.SoundCard = soundCard;

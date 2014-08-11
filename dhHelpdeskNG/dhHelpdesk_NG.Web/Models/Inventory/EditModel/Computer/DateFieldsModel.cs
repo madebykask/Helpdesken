@@ -4,6 +4,10 @@
 
     public class DateFieldsModel
     {
+        public DateFieldsModel()
+        {
+        }
+
         public DateFieldsModel(
             ConfigurableFieldModel<DateTime?> synchronizeDate,
             ConfigurableFieldModel<DateTime?> scanDate,

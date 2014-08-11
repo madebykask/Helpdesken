@@ -4,6 +4,10 @@
 
     public class MemoryFieldsModel
     {
+        public MemoryFieldsModel()
+        {
+        }
+
         public MemoryFieldsModel(int? ramId)
         {
             this.RAMId = ramId;
