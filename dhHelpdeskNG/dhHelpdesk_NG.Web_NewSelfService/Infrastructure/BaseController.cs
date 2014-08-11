@@ -19,6 +19,8 @@
 
 using System.Threading.Tasks;
     using DH.Helpdesk.NewSelfService.WebServices.Common;
+    using System.Collections.Generic;
+    using DH.Helpdesk.BusinessData.Models.ServiceAPI.AMAPI.Output;
 
 
     public class BaseController : Controller
@@ -132,44 +134,42 @@ using System.Threading.Tasks;
 
                 if (ConfigurationManager.AppSettings["SSOLog"].ToString().ToLower() == "true" && string.IsNullOrEmpty(SessionFacade.CurrentSystemUser))
                     _ssoService.SaveSSOLog(ssoLog);
-                 
-                TempData["UserHasAccess"] = "true";
+
+                SessionFacade.UserHasAccess = true;                                                        
 
                 if (string.IsNullOrEmpty(userIdentity.UserId))
-                    TempData["UserHasAccess"] = "false";
+                    SessionFacade.UserHasAccess = false;                                                        
 
 
-                //userIdentity.EmployeeNumber =  "05405951";
+                //userIdentity.EmployeeNumber =  "05405956";
                 if (SessionFacade.CurrentUserIdentity == null)
                 {
                     if (string.IsNullOrEmpty(userIdentity.EmployeeNumber))
                     {
-                        TempData["UserHasAccess"] = "false";                        
+                        SessionFacade.UserHasAccess = false;                                                        
                         filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = "You don't have access to the portal! (EmployeeNumber not specified)", errorCode = 101 }));
                     }
                     else
                     {
                         var  _amAPIService = new AMAPIService();
-                        var isEmploeeManager = AsyncHelpers.RunSync<bool>(() => _amAPIService.IsEmployeeManager(userIdentity.EmployeeNumber));
-                        if (!isEmploeeManager)
+                        var employee = AsyncHelpers.RunSync<APIEmployee>(() => _amAPIService.GetEmployeeFor(userIdentity.EmployeeNumber));
+                        if (employee.IsManager)
                         {
-                            TempData["UserHasAccess"] = "false";
-                            filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = "You don't have access to the portal!", errorCode = 102 }));
+                            SessionFacade.CurrentCoWorkers = employee.Subordinates;
+                            SessionFacade.CurrentSystemUser = userIdentity.UserId;
+                            SessionFacade.CurrentUserIdentity = userIdentity;
+                            SessionFacade.UserHasAccess = false;                                                        
                         }
                         else
                         {
-                            var employeeList = AsyncHelpers.RunSync<string>(() => _amAPIService.GetEmployeeFor(userIdentity.EmployeeNumber));
-
-                            var strEmployees = employeeList.ToString();
-                            strEmployees = strEmployees.Replace("[", string.Empty).Replace("]", string.Empty).Replace("\"", string.Empty);
-                            SessionFacade.CurrentCoWorkers = strEmployees.Split(',').ToList();
-                            TempData["EmployeeList"] = SessionFacade.CurrentCoWorkers;
-                        }
-
+                            SessionFacade.UserHasAccess = true;                                                        
+                            SessionFacade.CurrentCoWorkers = employee.Subordinates;
+                            filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = "You don't have access to the portal!", errorCode = 102 }));
+                        }                        
+                                                
                     }
                 }
-                SessionFacade.CurrentSystemUser = userIdentity.UserId;
-                SessionFacade.CurrentUserIdentity = userIdentity;      
+                     
                 
             }
 

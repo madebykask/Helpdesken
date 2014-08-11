@@ -12,8 +12,9 @@ namespace DH.Helpdesk.NewSelfService.Controllers
         //
         // GET: /Error/
         [HttpGet]
-        public ActionResult Index(int errorCode=-1, string message = "")
+        public ActionResult Index(int errorCode = -1, string message = "")
         {
+            
             var model = new ErrorModel()
             {
                 ErrorCode = errorCode,

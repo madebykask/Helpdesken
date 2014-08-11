@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.NewSelfService.WebServices
 {
+    using DH.Helpdesk.BusinessData.Models.ServiceAPI.AMAPI.Output;
     using System.Collections.Generic;
     using System.Threading.Tasks;    
 
@@ -8,7 +9,7 @@
         
        Task<bool> IsEmployeeManager (string employeeNumber);
 
-       Task<string> GetEmployeeFor(string managerEmployeeNum);
+       Task<APIEmployee> GetEmployeeFor(string employeeNum);
 
     }
 }

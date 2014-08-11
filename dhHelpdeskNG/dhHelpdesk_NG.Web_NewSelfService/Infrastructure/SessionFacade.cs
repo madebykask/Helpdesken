@@ -11,6 +11,7 @@
     using DH.Helpdesk.NewSelfService.Models;
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.BusinessData.Models.CoWorkers;
+    using DH.Helpdesk.BusinessData.Models.ServiceAPI.AMAPI.Output;
 
     public static class SessionFacade
     {
@@ -36,6 +37,7 @@
         private const string _CURRENT_DOCUMENT_SEARCH = "CURRENT_DOCUMENT_SEARCH";
         private const string _CURRENT_USER_IDENTITY = "CURRENT_USER_IDENTITY";
         private const string _CURRENT_COWORKERS = "CURRENT_COWORKERS";
+        private const string _USER_HAS_ACCESS = "USER_HAS_ACCESS";
 
         public static int CurrentCustomerID
         {
@@ -71,6 +73,23 @@
             }
         }
 
+        public static bool UserHasAccess
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_USER_HAS_ACCESS] == null)
+                    return false;
+                return (bool)HttpContext.Current.Session[_USER_HAS_ACCESS];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_USER_HAS_ACCESS] == null)
+                    HttpContext.Current.Session.Add(_USER_HAS_ACCESS, false);
+                else
+                    HttpContext.Current.Session[_USER_HAS_ACCESS] = value;
+            }
+        }
+
         public static UserOverview CurrentUser
         {
             get
@@ -88,13 +107,13 @@
             }
         }
 
-        public static List<string> CurrentCoWorkers
+        public static List<SubordinateResponseItem> CurrentCoWorkers
         {
             get
             {
                 if (HttpContext.Current.Session[_CURRENT_COWORKERS] == null)
                     return null;
-                return (List<string>)HttpContext.Current.Session[_CURRENT_COWORKERS];
+                return (List<SubordinateResponseItem>)HttpContext.Current.Session[_CURRENT_COWORKERS];
             }
             set
             {

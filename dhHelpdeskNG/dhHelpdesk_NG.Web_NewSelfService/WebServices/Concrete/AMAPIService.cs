@@ -23,6 +23,8 @@ namespace DH.Helpdesk.NewSelfService.WebServices
     using System.Net.Http.Headers;
     using System.Web.Mvc;
     using System.Configuration;
+    using Newtonsoft.Json;
+    using DH.Helpdesk.BusinessData.Models.ServiceAPI.AMAPI.Output;
 
     public class APIInfo
     {
@@ -37,6 +39,9 @@ namespace DH.Helpdesk.NewSelfService.WebServices
         public string Password { get; set; }
     }
 
+   
+
+
     public class AMAPIService : IAMAPIService
     {
         
@@ -47,10 +52,10 @@ namespace DH.Helpdesk.NewSelfService.WebServices
             var res = await WS_IsEmployeeManager(employeeNumber);            
             return res;            
         }
-        
-        public async Task<string> GetEmployeeFor(string managerEmployeeNum)
+
+        public async Task<APIEmployee> GetEmployeeFor(string employeeNum)
         {
-            var res = await WS_GetEmployeeFor(managerEmployeeNum);
+            var res = await WS_GetEmployeesFor(employeeNum);
             return res;
         }
 
@@ -78,8 +83,9 @@ namespace DH.Helpdesk.NewSelfService.WebServices
         }
 
         [AllowAnonymous]
-        private async Task<string> WS_GetEmployeeFor(string managerEmployeeNum)
+        private async Task<APIEmployee> WS_GetEmployeesFor(string employeeNum)
         {
+            var res = new APIEmployee() { IsManager = false, Subordinates = null };         
             var apiInfo = GetApiInfo();
             var handler = new HttpClientHandler { Credentials = new NetworkCredential(apiInfo.UserName, apiInfo.Password) };
             using (var client = new HttpClient(handler))
@@ -87,19 +93,15 @@ namespace DH.Helpdesk.NewSelfService.WebServices
                 client.BaseAddress = new Uri(apiInfo.UriPath);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            
-                //http://dhhelpdesk-ikea-bschr-am.datahalland.se/Api/ismanager/05599597
-                //var response = await client.GetAsync(String.Format("api/Subordinates/{0}", managerEmployeeNum));
-
-                var response = await client.GetAsync(String.Format("api/manager/{0}/$all", managerEmployeeNum));
+                                
+                var response = await client.GetAsync(String.Format("api/manager/{0}/$all", employeeNum));
                 if (response.IsSuccessStatusCode)
                 {
-                    var res = await response.Content.ReadAsStringAsync();
-                    return res;
+                    var res1 = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<APIEmployee>(res1);                    
                 }
-
             }            
-            return "";
+            return res;
 
         }
 

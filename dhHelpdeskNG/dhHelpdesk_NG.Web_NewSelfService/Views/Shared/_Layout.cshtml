@@ -167,16 +167,14 @@
 
         var pCaseTemplates = helper.GetCaseTemplates(pCustomerId);
         var pActionSettings = helper.GetActionSettings(pCustomerId);
-        var hideMenu = false;
+        var hideMenu = true;
         
-        if (TempData["UserHasAccess"] == null ||  TempData["UserHasAccess"] != "true" ) 
+        if (SessionFacade.UserHasAccess == true) 
         {           
-            hideMenu = true;           
+            hideMenu = false;           
         }
-
-        var employeeList = TempData["EmployeeList"];
-        
-         CaseLogModel pCaseLogs = null;
+                
+        CaseLogModel pCaseLogs = null;
         var currentCaseId = ViewBag.CurrentCaseId;
         if (currentCaseId != null)
         {
