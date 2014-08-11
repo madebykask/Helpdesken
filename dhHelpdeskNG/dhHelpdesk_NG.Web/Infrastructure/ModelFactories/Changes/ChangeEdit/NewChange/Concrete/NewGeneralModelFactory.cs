@@ -45,7 +45,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.NewCh
             var changeStatuses = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.Status,
                 options.Statuses,
-                defaultStatus != null ? defaultStatus.Id.ToString(CultureInfo.InvariantCulture) : null);
+                defaultStatus != null ? defaultStatus.Id.ToString(CultureInfo.InvariantCulture) : null,
+                true);
 
             var systems = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.System,

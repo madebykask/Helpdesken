@@ -30,12 +30,12 @@
 
         public int GetInProgressCount(int customerId)
         {
-            return this.Changes.Count(c => c.CustomerId == customerId && !c.FinishingDate.HasValue);
+            return this.Changes.Count(c => c.CustomerId == customerId && (c.ChangeStatus == null || c.ChangeStatus.CompletionStatus == 0));
         }
 
         public int GetClosedCount(int customerId)
         {
-            return this.Changes.Count(c => c.CustomerId == customerId && c.FinishingDate.HasValue);
+            return this.Changes.Count(c => c.CustomerId == customerId && c.ChangeStatus != null && c.ChangeStatus.CompletionStatus != 0);
         }
 
         public int GetUserCount(int customerId)

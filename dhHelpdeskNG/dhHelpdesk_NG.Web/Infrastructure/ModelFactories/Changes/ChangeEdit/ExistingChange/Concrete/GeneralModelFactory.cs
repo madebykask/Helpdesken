@@ -38,7 +38,8 @@
             var statuses = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.Status,
                 options.Statuses,
-                fields.StatusId.ToString());
+                fields.StatusId.ToString(),
+                true);
 
             var systems = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.System,

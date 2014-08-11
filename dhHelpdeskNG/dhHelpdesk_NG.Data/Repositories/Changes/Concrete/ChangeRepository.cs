@@ -83,7 +83,7 @@
                                             {
                                                 CustomerId = c.Customer_Id.Value, 
                                                 ChangeId = c.Id,
-                                                c.FinishingDate,
+                                                c.ChangeStatus,
                                                 UserId = c.User_Id
                                             })
                                             .ToList();
@@ -92,7 +92,7 @@
                     .Select(c => new CustomerChange(
                                 c.CustomerId, 
                                 c.ChangeId,
-                                c.FinishingDate,
+                                c.ChangeStatus,
                                 c.UserId))
                     .ToList();
         }
@@ -156,10 +156,10 @@
             switch (parameters.Status)
             {
                 case ChangeStatus.Active:
-                    searchRequest = searchRequest.Where(c => c.ChangeStatus.CompletionStatus == 0);
+                    searchRequest = searchRequest.Where(c => c.ChangeStatus == null || c.ChangeStatus.CompletionStatus == 0);
                     break;
                 case ChangeStatus.Finished:
-                    searchRequest = searchRequest.Where(c => c.ChangeStatus.CompletionStatus != 0);
+                    searchRequest = searchRequest.Where(c => c.ChangeStatus != null && c.ChangeStatus.CompletionStatus != 0);
                     break;
             }
 
