@@ -10,6 +10,7 @@
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Enums;
+    using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Services.BusinessLogic.OtherTools.Concrete;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Enums;
@@ -60,6 +61,8 @@
 
         private readonly IChangeStatusService changeStatusService;
 
+        private readonly IWorkContext workContext;
+
         #endregion
 
         #region Constructors and Destructors
@@ -80,7 +83,8 @@
             IUpdatedSettingsFactory updatedSettingFactory,
             TemporaryIdProvider temporaryIdProvider, 
             IEmailService emailService, 
-            IChangeStatusService changeStatusService)
+            IChangeStatusService changeStatusService, 
+            IWorkContext workContext)
             : base(masterDataService)
         {
             this.changeModelFactory = changeModelFactory;
@@ -96,6 +100,7 @@
             this.temporaryIdProvider = temporaryIdProvider;
             this.emailService = emailService;
             this.changeStatusService = changeStatusService;
+            this.workContext = workContext;
 
             this.editorStateCache = editorStateCacheFactory.CreateForModule(ModuleName.Changes);
             this.temporaryFilesCache = temporaryFilesCacheFactory.CreateForModule(ModuleName.Changes);
@@ -133,6 +138,11 @@
         [HttpGet]
         public PartialViewResult Changes(int? customerId)
         {
+            if (customerId.HasValue)
+            {
+                this.workContext.Customer.SetCustomer(customerId.Value);                
+            }
+
             this.ViewData["CustomerId"] = customerId;
             return this.PartialView();
         }

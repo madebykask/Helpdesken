@@ -13,6 +13,7 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
 
     using DH.Helpdesk.BusinessData.Models.Customer;
     using DH.Helpdesk.Dal.Infrastructure.Context;
+    using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.Services;
 
     /// <summary>
@@ -29,6 +30,8 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
         /// The customer settings service.
         /// </summary>
         private readonly ISettingService customerSettingsService;
+
+        private readonly ICustomerService customerService;
 
         /// <summary>
         /// The customer id.
@@ -49,16 +52,13 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
         /// The settings.
         /// </summary>
         private CustomerSettings settings;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CustomerContext"/> class.
-        /// </summary>
-        /// <param name="customerSettingsService">
-        /// The customer settings service.
-        /// </param>
-        public CustomerContext(ISettingService customerSettingsService)
+       
+        public CustomerContext(
+                ISettingService customerSettingsService, 
+                ICustomerService customerService)
         {
             this.customerSettingsService = customerSettingsService;
+            this.customerService = customerService;
         }
 
         /// <summary>
@@ -141,6 +141,29 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
             this.customerId = null;
             this.workingDayStart = null;
             this.workingDayEnd = null;
+        }
+
+        public void SetCustomer(int cusId)
+        {
+            var currentCustomer = this.GetCurrentCustomer();
+            if (currentCustomer != null && currentCustomer.Id == cusId)
+            {
+                return;
+            }
+
+            var customer = this.customerService.GetCustomer(cusId);
+            if (customer == null)
+            {
+                return;
+            }
+
+            SessionFacade.CurrentCustomer = customer;
+            this.Refresh();
+        }
+
+        private Customer GetCurrentCustomer()
+        {
+            return SessionFacade.CurrentCustomer;
         }
 
         private string GetSettingsKey()

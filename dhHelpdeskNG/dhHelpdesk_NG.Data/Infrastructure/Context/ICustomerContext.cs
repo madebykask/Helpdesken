@@ -40,5 +40,7 @@ namespace DH.Helpdesk.Dal.Infrastructure.Context
         /// The refresh.
         /// </summary>
         void Refresh();
+
+        void SetCustomer(int customerId);
     }
 }
