@@ -7,6 +7,8 @@
         void ValidateDateTimeField(
             DateTime? newValue, DateTime? oldValue, string fieldName, ElementaryValidationRule rule);
 
+        void ValidateDateTimeField(DateTime? newValue, string fieldName, ElementaryValidationRule rule);
+
         void ValidateBooleanField(
             bool newValue, bool oldValue, string fieldName, ElementaryValidationRule rule);
 

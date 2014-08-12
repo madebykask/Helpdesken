@@ -9,12 +9,17 @@
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ComputerFieldSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.PrinterFieldSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ServerFieldSettings;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ProcessingSetttings.ComputerSettings;
     using DH.Helpdesk.Common.Collections;
     using DH.Helpdesk.Dal.MapperData.Inventory;
     using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Dal.Mappers.Inventory.EntityToBusinessModel.Computer;
     using DH.Helpdesk.Dal.Mappers.Inventory.EntityToBusinessModel.Printer;
     using DH.Helpdesk.Dal.Mappers.Inventory.EntityToBusinessModel.Server;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Inventory;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Inventory.Concrete;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Inventory;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Inventory.Concrete;
     using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory;
     using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concrete;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory;
@@ -31,7 +36,7 @@
             this.Bind<IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperData>, ComputerFieldsSettings>>().To<ComputerFieldSettingsToFieldSettingsMapper>().InSingletonScope();
             this.Bind<IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, ComputerFieldsSettingsOverviewForFilter>>().To<ComputerFieldSettingsToSearchSettingsMapper>().InSingletonScope();
             this.Bind<IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, ComputerFieldsSettingsOverviewForShortInfo>>().To<ComputerFieldSettingsToShortInfoSettingsMapper>().InSingletonScope();
-
+            this.Bind<IEntityToBusinessModelMapper<NamedObjectCollection<FieldProcessingSettingMapperData>, ComputerFieldsSettingsProcessing>>().To<ComputerSettingsToComputerProcessingSettingsMapper>();
             this.Bind<IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperDataForModelEdit>, ServerFieldsSettingsForModelEdit>>().To<ServerFieldSettingsToServerEditSettingsMapper>().InSingletonScope();
             this.Bind<IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, ServerFieldsSettingsOverview>>().To<ServerFieldSettingsToServerOverviewSettingsMapper>().InSingletonScope();
             this.Bind<IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperData>, ServerFieldsSettings>>().To<ServerFieldSettingsToFieldSettingsMapper>().InSingletonScope();
@@ -61,6 +66,9 @@
             this.Bind<IInventoryFieldSettingsEditViewModelBuilder>().To<InventoryFieldSettingsEditViewModelBuilder>().InSingletonScope();
 
             this.Bind<IComputerBuilder>().To<ComputerBuilder>().InSingletonScope();
+
+            this.Bind<IComputerRestorer>().To<ComputerRestorer>().InSingletonScope();
+            this.Bind<IComputerValidator>().To<ComputerValidator>().InSingletonScope();
         }
     }
 }

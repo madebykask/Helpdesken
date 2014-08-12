@@ -133,6 +133,7 @@
     <Compile Include="Infrastructure\Translate\ITranslator.cs" />
     <Compile Include="MapperData\Changes\FieldEditSettingMapperData.cs" />
     <Compile Include="MapperData\Inventory\FieldOverviewSettingMapperData.cs" />
+    <Compile Include="MapperData\Inventory\FieldProcessingSettingMapperData.cs" />
     <Compile Include="MapperData\Inventory\FieldSettingMapperData.cs" />
     <Compile Include="MapperData\Inventory\FieldSettingMapperDataForModelEdit.cs" />
     <Compile Include="MapperData\Inventory\InventoryFieldSettingMapperData.cs" />
@@ -155,6 +156,7 @@
     <Compile Include="Mappers\Documents\EntityToBusinessModel\DocumentToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Computer\ComputerFieldSettingsToFieldSettingsMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Computer\ComputerFieldSettingsToShortInfoSettingsMapper.cs" />
+    <Compile Include="Mappers\Inventory\EntityToBusinessModel\Computer\ComputerFieldSettingsToComputerProcessingSettingsMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Printer\PrinterFieldSettingsToPrinterEditSettingsMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Printer\PrinterFieldSettingsToFieldSettingsMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Computer\ComputerFieldSettingsToComputerEditSettingsMapper.cs" />

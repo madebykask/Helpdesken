@@ -8,6 +8,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ComputerSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ComputerFieldSettings;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ProcessingSetttings.ComputerSettings;
     using DH.Helpdesk.Common.Collections;
     using DH.Helpdesk.Common.Extensions.Boolean;
     using DH.Helpdesk.Dal.Attributes.Inventory;
@@ -47,6 +48,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
 
         private readonly IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, ComputerFieldsSettingsOverview> entityToBusinessModelMapperForOverview;
 
+        private readonly IEntityToBusinessModelMapper<NamedObjectCollection<FieldProcessingSettingMapperData>, ComputerFieldsSettingsProcessing> entityToBusinessModelMapperForProcessing;
+
         private readonly IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperDataForModelEdit>, ComputerFieldsSettingsForModelEdit> entityToBusinessModelMapperForModelEdit;
 
         private readonly IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperData>, ComputerFieldsSettings> entityToBusinessModelMapperForEdit;
@@ -56,6 +59,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, ComputerFieldsSettingsOverviewForFilter> entityToBusinessModelMapperForFilter,
             IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, ComputerFieldsSettingsOverviewForShortInfo> entityToBusinessModelMapperForShortInfo,
             IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, ComputerFieldsSettingsOverview> entityToBusinessModelMapperForOverview,
+            IEntityToBusinessModelMapper<NamedObjectCollection<FieldProcessingSettingMapperData>, ComputerFieldsSettingsProcessing> entityToBusinessModelMapperForProcessing,
             IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperDataForModelEdit>, ComputerFieldsSettingsForModelEdit> entityToBusinessModelMapperForModelEdit,
             IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperData>, ComputerFieldsSettings> entityToBusinessModelMapperForEdit)
             : base(databaseFactory)
@@ -63,6 +67,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             this.entityToBusinessModelMapperForFilter = entityToBusinessModelMapperForFilter;
             this.entityToBusinessModelMapperForShortInfo = entityToBusinessModelMapperForShortInfo;
             this.entityToBusinessModelMapperForOverview = entityToBusinessModelMapperForOverview;
+            this.entityToBusinessModelMapperForProcessing = entityToBusinessModelMapperForProcessing;
             this.entityToBusinessModelMapperForModelEdit = entityToBusinessModelMapperForModelEdit;
             this.entityToBusinessModelMapperForEdit = entityToBusinessModelMapperForEdit;
         }
@@ -216,6 +221,25 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
 
             var settingCollection = new NamedObjectCollection<FieldOverviewSettingMapperData>(mapperData);
             return this.entityToBusinessModelMapperForOverview.Map(settingCollection);
+        }
+
+        [CreateMissingComputerSettings("customerId")]
+        public ComputerFieldsSettingsProcessing GetFieldSettingsProcessing(int customerId)
+        {
+            var settings = this.GetSettings(customerId);
+
+            List<FieldProcessingSettingMapperData> mapperData = settings.Select(
+                s =>
+                new FieldProcessingSettingMapperData
+                    {
+                        FieldName = s.ComputerField,
+                        Show = s.ShowInList,
+                        ReadOnly = s.ReadOnly,
+                        Required = s.Required
+                    }).ToList();
+
+            var settingCollection = new NamedObjectCollection<FieldProcessingSettingMapperData>(mapperData);
+            return this.entityToBusinessModelMapperForProcessing.Map(settingCollection);
         }
 
         [CreateMissingComputerSettings("customerId")]

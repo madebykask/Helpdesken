@@ -362,7 +362,7 @@
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\IServerFieldsSettingsBuilder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\PrinterFieldsSettingsBuilder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\ServerFieldsSettingsBuilder.cs" />
-    <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\UpdatedComputerBuilder.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\ComputerBuilder.cs" />
     <Compile Include="Infrastructure\Configuration\Concrete\ApplicationConfiguration.cs" />
     <Compile Include="Infrastructure\ActionFilters\BadRequestOnNotValidAttribute.cs" />
     <Compile Include="Infrastructure\Configuration\Concrete\Configuration.cs" />

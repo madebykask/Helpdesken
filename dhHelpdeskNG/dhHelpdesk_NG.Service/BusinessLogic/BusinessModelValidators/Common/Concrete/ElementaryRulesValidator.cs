@@ -26,6 +26,18 @@
             }
         }
 
+        public void ValidateDateTimeField(DateTime? newValue, string fieldName, ElementaryValidationRule rule)
+        {
+            if (rule.ReadOnly)
+            {
+                ValidateReadOnly(newValue, fieldName);
+            }
+            else if (rule.Required)
+            {
+                ValidateRequired(newValue, fieldName);
+            }
+        }
+
         public void ValidateBooleanField(bool newValue, bool oldValue, string fieldName, ElementaryValidationRule rule)
         {
             if (rule.ReadOnly)
@@ -126,6 +138,16 @@
         private static void ValidateReadOnly(object newValue, object oldValue, string fieldName)
         {
             if (object.Equals(newValue, oldValue))
+            {
+                return;
+            }
+
+            throw new ElementaryValidationRulesException(fieldName, ReadOnlyMessage);
+        }
+
+        private static void ValidateReadOnly(object value, string fieldName)
+        {
+            if (value == null)
             {
                 return;
             }

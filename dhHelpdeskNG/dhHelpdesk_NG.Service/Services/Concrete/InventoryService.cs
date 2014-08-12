@@ -22,6 +22,8 @@
     using DH.Helpdesk.Dal.Repositories.Inventory.Concrete;
     using DH.Helpdesk.Dal.Repositories.Printers;
     using DH.Helpdesk.Dal.Repositories.Servers;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Inventory;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Inventory;
     using DH.Helpdesk.Services.Requests.Inventory;
     using DH.Helpdesk.Services.Response.Inventory;
 
@@ -53,6 +55,10 @@
 
         private readonly IComputerUsersRepository computerUsersRepository;
 
+        private readonly IComputerRestorer computerRestorer;
+
+        private readonly IComputerValidator computerValidator;
+
         public InventoryService(
             IInventoryTypeRepository inventoryTypeRepository,
             IComputerRepository computerRepository,
@@ -66,7 +72,9 @@
             InventoryTypeGroupRepository inventoryTypeGroupRepository,
             IInventoryFieldSettingsRepository inventoryFieldSettingsRepository,
             IInventoryDynamicFieldSettingsRepository inventoryDynamicFieldSettingsRepository,
-            IComputerUsersRepository computerUsersRepository)
+            IComputerUsersRepository computerUsersRepository,
+            IComputerRestorer computerRestorer,
+            IComputerValidator computerValidator)
         {
             this.inventoryTypeRepository = inventoryTypeRepository;
             this.computerRepository = computerRepository;
@@ -81,6 +89,8 @@
             this.inventoryFieldSettingsRepository = inventoryFieldSettingsRepository;
             this.inventoryDynamicFieldSettingsRepository = inventoryDynamicFieldSettingsRepository;
             this.computerUsersRepository = computerUsersRepository;
+            this.computerRestorer = computerRestorer;
+            this.computerValidator = computerValidator;
         }
 
         public List<ComputerUserOverview> GetComputerUsers(int customerId, string searchFor)
