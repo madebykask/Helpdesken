@@ -35,9 +35,8 @@
 #lmEmbedded .chosen-search input[type=text] {
     width: auto;
 }
-
 #lmEmbedded select {
-    width: 306px;
+    /*width: 314px;*/
 }
 
 #lmEmbedded textarea {
@@ -46,8 +45,8 @@
 }
 
 #lmEmbedded input[type=text], select, textarea {
-    min-width: 200px;
-    width: 306px;
+    /*min-width: 314px;*/
+    width: 314px;
     height: 30px;
     /*min-height: 30px;*/
     line-height: 1.42857143;
