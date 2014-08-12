@@ -37,7 +37,7 @@
 }
 
 #lmEmbedded select {
-    width: 200px;
+    width: 306px;
 }
 
 #lmEmbedded textarea {
@@ -47,7 +47,7 @@
 
 #lmEmbedded input[type=text], select, textarea {
     min-width: 200px;
-    width: 200px;
+    width: 306px;
     height: 30px;
     /*min-height: 30px;*/
     line-height: 1.42857143;
