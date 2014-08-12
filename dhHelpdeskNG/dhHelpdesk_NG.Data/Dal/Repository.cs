@@ -3,6 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.Data.Entity;
+    using System.Data.Entity.Validation;
+    using System.Text;
 
     using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.Dal.DbContext;
@@ -37,7 +39,31 @@
 
         public void Commit()
         {
-            this.DbContext.SaveChanges();
+            try
+            {
+                this.DbContext.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                var sb = new StringBuilder();
+                foreach (var validationErrors in ex.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        sb.AppendLine(string.Format(
+                                                "Property: {0}; Value: {1}; Error message: {2}",
+                                                validationError.PropertyName,
+                                                validationErrors.Entry.Property(validationError.PropertyName).CurrentValue,
+                                                validationError.ErrorMessage));
+                        global::System.Diagnostics.Trace.TraceInformation(
+                            "Property: {0} Error: {1}",
+                            validationError.PropertyName,
+                            validationError.ErrorMessage);
+                    }
+                }
+
+                throw new Exception(sb.ToString());
+            }
 
             foreach (var initializeAfterCommit in this.InitializeAfterCommitActions)
             {

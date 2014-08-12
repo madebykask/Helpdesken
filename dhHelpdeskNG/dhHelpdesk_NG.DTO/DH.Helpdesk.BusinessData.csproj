@@ -153,6 +153,7 @@
     <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\RegistrationProcessingSettings.cs" />
     <Compile Include="Models\Changes\GetSearchDataResponse.cs" />
     <Compile Include="Models\CoWorkers\CoWorkersModel.cs" />
+    <Compile Include="Models\Customer\UserCustomer.cs" />
     <Compile Include="Models\FinishingCause\FinishingCauseInfo.cs" />
     <Compile Include="Models\Inventory\Output\ComputerUserOverview.cs" />
     <Compile Include="Models\Inventory\Edit\Inventory\TypeGroupModel.cs" />

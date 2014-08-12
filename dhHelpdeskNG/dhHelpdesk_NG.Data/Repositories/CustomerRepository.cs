@@ -6,11 +6,13 @@
     using System.Net.Mail;
 
     using DH.Helpdesk.BusinessData.Models;
-    using DH.Helpdesk.BusinessData.Models.Customer.Input;
     using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Customer;
+    using DH.Helpdesk.BusinessData.Models.Customer.Input;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Domain;
 
     #region CUSTOMER
@@ -42,10 +44,10 @@
 
         public IList<Customer> CustomersForUser(int userId)
         {
-            var query = (from customer in this.DataContext.Set<Customer>()
+            var query = from customer in this.DataContext.Set<Customer>()
                          join customerUser in this.DataContext.Set<CustomerUser>().Where(o => o.User_Id == userId) on customer.Id equals customerUser.Customer_Id
                          orderby customer.Name
-                         select customer);
+                         select customer;
 
             return query.ToList();
         }
@@ -97,7 +99,7 @@
     public interface ICustomerUserRepository : IRepository<CustomerUser>
     {
         CustomerUser GetCustomerSettings(int customer, int user);
-        IList<CustomerUser> GetCustomerUsersForStart(int userId);
+        IList<UserCustomer> GetCustomerUsersForStart(int userId);
         IList<CustomerUserList> GetCustomerUsersForStartFinal(int userId);
         IList<CustomerUser> GetCustomerUsersForCustomer(int customeId);
         IList<CustomerUser> GetCustomerUsersForUser(int userId);
@@ -106,9 +108,14 @@
 
     public class CustomerUserRepository : RepositoryBase<CustomerUser>, ICustomerUserRepository
     {
-        public CustomerUserRepository(IDatabaseFactory databaseFactory)
+        private readonly IEntityToBusinessModelMapper<Setting, CustomerSettings> customerSettingsMapper;
+
+        public CustomerUserRepository(
+                IDatabaseFactory databaseFactory, 
+                IEntityToBusinessModelMapper<Setting, CustomerSettings> customerSettingsMapper)
             : base(databaseFactory)
         {
+            this.customerSettingsMapper = customerSettingsMapper;
         }
 
         public CustomerUser GetCustomerSettings(int customer, int user)
@@ -121,31 +128,35 @@
                     .FirstOrDefault();
         }
 
-        public IList<CustomerUser> GetCustomerUsersForStart(int userId)
+        public IList<UserCustomer> GetCustomerUsersForStart(int userId)
         {
-            var query = (from cu in this.DataContext.CustomerUsers
+            var entities = (from cu in this.DataContext.CustomerUsers
                          join c in this.DataContext.Customers on cu.Customer_Id equals c.Id
                          join u in this.DataContext.Users on cu.User_Id equals u.Id
+                         join s in this.DataContext.Settings on c.Id equals s.Customer_Id
                          where u.Id == userId
-                         select cu);
+                         select new { UserId = u.Id, Customer = cu, Settings = s })
+                         .ToList();
 
-            return query.ToList();
+            return entities
+                    .Select(uc => new UserCustomer(uc.UserId, uc.Customer, this.customerSettingsMapper.Map(uc.Settings)))
+                    .ToList();
         }
 
         public IList<CustomerUser> GetCustomerUsersForCustomer(int customerId)
         {
-            var query = (from cu in this.DataContext.CustomerUsers
+            var query = from cu in this.DataContext.CustomerUsers
                          where cu.Customer_Id == customerId
-                         select cu);
+                         select cu;
 
             return query.ToList();
         }
 
         public IList<CustomerUser> GetCustomerUsersForUser(int userId)
         {
-            var query = (from cu in this.DataContext.CustomerUsers
+            var query = from cu in this.DataContext.CustomerUsers
                          where cu.User_Id == userId
-                         select cu);
+                         select cu;
 
             return query.ToList();
         }
