@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.NewSelfService.WebServices
 {
-    using DH.Helpdesk.BusinessData.Models.ServiceAPI.AMAPI.Output;
+
+    using DH.Helpdesk.Common.Classes.ServiceAPI.AMAPI.Output;
     using System.Collections.Generic;
     using System.Threading.Tasks;    
 

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-namespace DH.Helpdesk.BusinessData.Models.ServiceAPI.AMAPI.Output
+namespace DH.Helpdesk.Common.Classes.ServiceAPI.AMAPI.Output
 {
     public class APIEmployee
     {

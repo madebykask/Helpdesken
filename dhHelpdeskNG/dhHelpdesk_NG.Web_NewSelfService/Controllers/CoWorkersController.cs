@@ -8,8 +8,8 @@ using System.Web.Mvc;
 
 namespace DH.Helpdesk.NewSelfService.Controllers
 {
-    using DH.Helpdesk.BusinessData.Models.ServiceAPI.AMAPI.Output;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+    using DH.Helpdesk.Common.Classes.ServiceAPI.AMAPI.Output;
     using DH.Helpdesk.NewSelfService.Models.CoWorkers;
     using DH.Helpdesk.NewSelfService.WebServices;
     using DH.Helpdesk.NewSelfService.WebServices.Common;

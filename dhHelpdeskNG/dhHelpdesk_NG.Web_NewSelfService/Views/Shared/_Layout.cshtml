@@ -167,13 +167,20 @@
 
         var pCaseTemplates = helper.GetCaseTemplates(pCustomerId);
         var pActionSettings = helper.GetActionSettings(pCustomerId);
-        var hideMenu = true;
         
-        if (SessionFacade.UserHasAccess == true) 
+        var hideMenu = false;
+        
+        if (SessionFacade.UserHasAccess == false) 
         {           
-            hideMenu = false;           
+            hideMenu = true;           
         }
-                
+
+        var showLanguageSelect = false;
+        if (TempData["ShowLanguageSelect"] != null && TempData["ShowLanguageSelect"].ToString().ToLower() == "true")
+        {
+            showLanguageSelect = true;
+        }
+               
         CaseLogModel pCaseLogs = null;
         var currentCaseId = ViewBag.CurrentCaseId;
         if (currentCaseId != null)
@@ -261,26 +268,30 @@
         <div class="container-fluid">
              <a href="@Url.Action("Index", "Start", new { customerId = pCustomerId, area = "" })">
                 <div class="pull-left toplogo"></div>
-            </a>
+             </a>
             <div class="pull-right small toplogout">
-                <div class="dropdown">
-                  <a href="#" type="button" class="dropdown-toggle" data-toggle="dropdown">
-                    @Translation.Get("Select language", Enums.TranslationSource.TextTranslation)<span class="caret"></span>
-                  </a>
-                  <ul class="dropdown-menu" role="menu">
-                     <li><a href="#" onclick="ChangeLang(8)">Dutch</a></li>
-                     <li><a href="#" onclick="ChangeLang(2)">English</a></ li>
-                     <li><a href="#" onclick="ChangeLang(1)">Swedish</a></li>
-                     <li><a href="#" onclick="ChangeLang(12)">Chinese</a></li>
-                  </ul>
-                </div>
-                 @if (!hideMenu)
-                 {
+            
+                
+                    <div class="dropdown"> 
+                      <a href="#" type="button" class="dropdown-toggle" data-toggle="dropdown">
+                        @Translation.Get("Select language", Enums.TranslationSource.TextTranslation)<span class="caret"></span>
+                      </a>
+                      <ul class="dropdown-menu" role="menu">
+                         <li><a href="#" onclick="ChangeLang(8)">Dutch</a></li>
+                         <li><a href="#" onclick="ChangeLang(2)">English</a></ li>
+                         <li><a href="#" onclick="ChangeLang(1)">Swedish</a></li>
+                         <li><a href="#" onclick="ChangeLang(12)">Chinese</a></li>
+                      </ul>
+                    </div>
+                @if (!hideMenu)
+                {
+                    <span class="toplogout-space"> | </span>
+                    <a href="#" > User: @SessionFacade.CurrentSystemUser</a> 
                      <span class="toplogout-space"> | </span>
-                      <a href="#" >@SessionFacade.CurrentSystemUser</a> 
-                     <span class="toplogout-space"> | </span>
-                      <a href="#">@Translation.Get("Logga ut", Enums.TranslationSource.TextTranslation)</a>
-                 }
+                    
+                     @*<a href="#">@Translation.Get("Logga ut", Enums.TranslationSource.TextTranslation)</a>*@
+                }
+                
             </div>
         </div>
     </div>
@@ -654,7 +665,9 @@
     
     function ChangeLang(langId) {
         //alert(languageId);        
-        
+        if ('@showLanguageSelect' == false)
+            return;
+
         var currentPath = window.location.href;
 
         $.ajax({

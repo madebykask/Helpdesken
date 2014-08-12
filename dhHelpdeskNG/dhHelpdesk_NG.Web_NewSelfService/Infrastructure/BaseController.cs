@@ -20,7 +20,8 @@
 using System.Threading.Tasks;
     using DH.Helpdesk.NewSelfService.WebServices.Common;
     using System.Collections.Generic;
-    using DH.Helpdesk.BusinessData.Models.ServiceAPI.AMAPI.Output;
+    using DH.Helpdesk.Common.Classes.ServiceAPI.AMAPI.Output;
+   
 
 
     public class BaseController : Controller
@@ -44,6 +45,8 @@ using System.Threading.Tasks;
         {
             var customerId = -1;
 
+            TempData["ShowLanguageSelect"] = true;
+
             if (filterContext.ActionParameters.Keys.Contains("customerId"))
             {
                 var customerIdPassed = filterContext.ActionParameters["customerId"];
@@ -63,7 +66,7 @@ using System.Threading.Tasks;
             if (SessionFacade.CurrentCustomer == null && customerId == -1)
             {
                 filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = "Invalid Customer Id! (-1)", errorCode = 101 }));
-                TempData["UserHasAccess"] = "false";
+                SessionFacade.UserHasAccess = false;
             }
 
             if (filterContext.ActionParameters.Keys.Contains("languageId"))
@@ -74,7 +77,7 @@ using System.Threading.Tasks;
             }
             else
             {
-                if (SessionFacade.CurrentLanguageId == null && SessionFacade.CurrentCustomer != null)
+                if (SessionFacade.CurrentCustomer != null)
                     SessionFacade.CurrentLanguageId = SessionFacade.CurrentCustomer.Language_Id;
             }
                             
@@ -135,42 +138,46 @@ using System.Threading.Tasks;
                 if (ConfigurationManager.AppSettings["SSOLog"].ToString().ToLower() == "true" && string.IsNullOrEmpty(SessionFacade.CurrentSystemUser))
                     _ssoService.SaveSSOLog(ssoLog);
 
-                SessionFacade.UserHasAccess = true;                                                        
+                //SessionFacade.UserHasAccess = true;
 
                 if (string.IsNullOrEmpty(userIdentity.UserId))
-                    SessionFacade.UserHasAccess = false;                                                        
-
-
-                //userIdentity.EmployeeNumber =  "05405956";
-                if (SessionFacade.CurrentUserIdentity == null)
+                    SessionFacade.UserHasAccess = false;
+                else
                 {
-                    if (string.IsNullOrEmpty(userIdentity.EmployeeNumber))
+                    
+                    var defaultEmployeeNumber = ConfigurationManager.AppSettings["DefaultEmployeeNumber"].ToString();
+                    if (!string.IsNullOrEmpty(defaultEmployeeNumber))
+                        userIdentity.EmployeeNumber = defaultEmployeeNumber;
+
+                    //userIdentity.EmployeeNumber = "31000000";
+                    SessionFacade.UserHasAccess = true;
+                    if (SessionFacade.CurrentCoWorkers == null)
                     {
-                        SessionFacade.UserHasAccess = false;                                                        
-                        filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = "You don't have access to the portal! (EmployeeNumber not specified)", errorCode = 101 }));
-                    }
-                    else
-                    {
-                        var  _amAPIService = new AMAPIService();
-                        var employee = AsyncHelpers.RunSync<APIEmployee>(() => _amAPIService.GetEmployeeFor(userIdentity.EmployeeNumber));
-                        if (employee.IsManager)
+                        if (string.IsNullOrEmpty(userIdentity.EmployeeNumber))
                         {
-                            SessionFacade.CurrentCoWorkers = employee.Subordinates;
-                            SessionFacade.CurrentSystemUser = userIdentity.UserId;
-                            SessionFacade.CurrentUserIdentity = userIdentity;
-                            SessionFacade.UserHasAccess = false;                                                        
+                            SessionFacade.UserHasAccess = false;
+                            filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = "You don't have access to the portal! (EmployeeNumber is not specified)", errorCode = 101 }));
                         }
                         else
                         {
-                            SessionFacade.UserHasAccess = true;                                                        
-                            SessionFacade.CurrentCoWorkers = employee.Subordinates;
-                            filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = "You don't have access to the portal!", errorCode = 102 }));
-                        }                        
-                                                
+                            var _amAPIService = new AMAPIService();
+                            var employee = AsyncHelpers.RunSync<APIEmployee>(() => _amAPIService.GetEmployeeFor(userIdentity.EmployeeNumber));
+                            if (employee.IsManager)
+                            {
+                                SessionFacade.CurrentCoWorkers = employee.Subordinates;
+                                SessionFacade.CurrentSystemUser = userIdentity.UserId;
+                                SessionFacade.CurrentUserIdentity = userIdentity;
+                            }
+                            else
+                            {
+                                SessionFacade.UserHasAccess = false;
+                                SessionFacade.CurrentCoWorkers = new List<SubordinateResponseItem>();
+                                filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = "You don't have access to the portal! (user is not manager)", errorCode = 102 }));
+                            }
+
+                        }
                     }
-                }
-                     
-                
+                }                                     
             }
 
           

@@ -24,7 +24,8 @@ namespace DH.Helpdesk.NewSelfService.WebServices
     using System.Web.Mvc;
     using System.Configuration;
     using Newtonsoft.Json;
-    using DH.Helpdesk.BusinessData.Models.ServiceAPI.AMAPI.Output;
+    using DH.Helpdesk.Common.Classes.ServiceAPI.AMAPI.Output;
+
 
     public class APIInfo
     {

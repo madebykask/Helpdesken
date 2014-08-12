@@ -11,8 +11,8 @@
     using DH.Helpdesk.NewSelfService.Models;
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.BusinessData.Models.CoWorkers;
-    using DH.Helpdesk.BusinessData.Models.ServiceAPI.AMAPI.Output;
-
+    using DH.Helpdesk.Common.Classes.ServiceAPI.AMAPI.Output;
+    
     public static class SessionFacade
     {
         private const string _CURRENT_USER = "CURRENT_USER";
