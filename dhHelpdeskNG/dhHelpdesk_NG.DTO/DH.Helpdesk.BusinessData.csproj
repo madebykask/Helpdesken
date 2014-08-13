@@ -155,6 +155,7 @@
     <Compile Include="Models\CoWorkers\CoWorkersModel.cs" />
     <Compile Include="Models\Customer\UserCustomer.cs" />
     <Compile Include="Models\FinishingCause\FinishingCauseInfo.cs" />
+    <Compile Include="Models\Inventory\ComputerHistory.cs" />
     <Compile Include="Models\Inventory\Output\ComputerUserOverview.cs" />
     <Compile Include="Models\Inventory\Edit\Inventory\TypeGroupModel.cs" />
     <Compile Include="Models\Inventory\Edit\Settings\ComputerSettings\ChassisFieldsSettings.cs" />

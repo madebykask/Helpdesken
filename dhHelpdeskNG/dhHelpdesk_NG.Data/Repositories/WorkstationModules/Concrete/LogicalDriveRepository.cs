@@ -22,5 +22,11 @@ namespace DH.Helpdesk.Dal.Repositories.WorkstationModules.Concrete
 
             return overviews;
         }
+
+        public void DeleteByComputerId(int computerId)
+        {
+            var entities = this.DbContext.LogicalDrives.Where(x => x.Computer_Id == computerId).ToList();
+            entities.ForEach(x => this.DbContext.LogicalDrives.Remove(x));
+        }
     }
 }

@@ -8,5 +8,7 @@ namespace DH.Helpdesk.Dal.Repositories.WorkstationModules
     public interface ILogicalDriveRepository : INewRepository
     {
         List<LogicalDriveOverview> Find(int computerId);
+
+        void DeleteByComputerId(int id);
     }
 }

@@ -70,5 +70,11 @@ namespace DH.Helpdesk.Dal.Repositories.WorkstationModules.Concrete
 
             return models;
         }
+
+        public void DeleteByComputerId(int computerId)
+        {
+            var entities = this.DbSet.Where(x => x.Computer_Id == computerId).ToList();
+            entities.ForEach(x => this.DbSet.Remove(x));
+        }
     }
 }

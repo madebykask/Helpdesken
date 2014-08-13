@@ -31,13 +31,19 @@ namespace DH.Helpdesk.Dal.Repositories
             // collation conflict between "SQL_SwedishStd_Pref_CP1_CI_AS" and "SQL_Latin1_General_CP1_CI_AS" in the equal to operation.
             // var anonymus = this.DbContext.ComputerHistories.Where(x => x.Computer_Id == computerId).Join(this.DbSet, x => x.UserId, x => x.UserId, (x, y) => y);*
 
-            // todo replace with *
+            // todo need to replace with *
             var ids = this.DbContext.ComputerHistories.Where(x => x.Computer_Id == computerId).Select(x => x.UserId).ToList();
             var anonymus = this.DbSet.Where(x => ids.Contains(x.UserId));
 
             var models = GetConnectedToComputerOverviews(anonymus);
 
             return models;
+        }
+
+        public string FindUserGuidById(int id)
+        {
+            var guid = this.DbSet.Where(x => x.Id == id).Select(x => x.UserId).Single();
+            return guid;
         }
 
         private static List<ComputerUserOverview> GetConnectedToComputerOverviews(IQueryable<ComputerUser> queryable)

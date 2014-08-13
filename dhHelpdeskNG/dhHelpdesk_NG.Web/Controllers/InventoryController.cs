@@ -27,7 +27,7 @@
     using DH.Helpdesk.Web.Models.Inventory.OptionsAggregates;
     using DH.Helpdesk.Web.Models.Inventory.SearchModels;
 
-    public class InventoryController : BaseController
+    public class InventoryController : UserInteractionController
     {
         private readonly IInventoryService inventoryService;
 
@@ -359,7 +359,7 @@
         public RedirectToRouteResult EditWorkstation(ComputerViewModel computerViewModel)
         {
             var businessModel = this.computerBuilder.BuildForUpdate(computerViewModel);
-            this.inventoryService.UpdateWorkstation(businessModel);
+            this.inventoryService.UpdateWorkstation(businessModel, this.OperationContext);
 
             return this.RedirectToAction("Index");
         }
@@ -447,9 +447,11 @@
         }
 
         [HttpGet]
-        public ViewResult DeleteWorkstation(int id)
+        public RedirectToRouteResult DeleteWorkstation(int id)
         {
-            throw new NotImplementedException();
+            this.inventoryService.DeleteWorkstation(id);
+
+            return this.RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -488,9 +490,12 @@
 
         [HttpPost]
         [BadRequestOnNotValid]
-        public ViewResult NewWorkstation(ComputerViewModel computerViewModel)
+        public RedirectToRouteResult NewWorkstation(ComputerViewModel computerViewModel)
         {
-            throw new NotImplementedException();
+            var businessModel = this.computerBuilder.BuildForAdd(computerViewModel, this.OperationContext);
+            this.inventoryService.AddWorkstation(businessModel, this.OperationContext);
+
+            return this.RedirectToAction("Index");
         }
 
         [HttpGet]

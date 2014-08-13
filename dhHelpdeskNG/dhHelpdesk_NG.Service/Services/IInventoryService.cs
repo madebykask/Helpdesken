@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
 
+    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Computer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory;
@@ -48,11 +49,11 @@
 
         void DeleteComputerLog(int id);
 
-        void AddWorkstation(Computer businessModel);
+        void AddWorkstation(Computer businessModel, OperationContext context);
 
         void DeleteWorkstation(int id);
 
-        void UpdateWorkstation(Computer businessModel);
+        void UpdateWorkstation(Computer businessModel, OperationContext context);
 
         Computer GetWorkstation(int id);
 

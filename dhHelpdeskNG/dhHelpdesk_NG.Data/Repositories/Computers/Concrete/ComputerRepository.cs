@@ -27,6 +27,16 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             Map(entity, businessModel);
             entity.Customer_Id = businessModel.CustomerId;
             entity.CreatedDate = businessModel.CreatedDate;
+            entity.ChangedDate = businessModel.CreatedDate; // todo
+
+            // todo
+            entity.ComputerGUID = string.Empty;
+            entity.ComputerModelName = string.Empty;
+            entity.HardDrive = string.Empty;
+            entity.LoggedUser = string.Empty;
+            entity.MonitorModel = string.Empty;
+            entity.MonitorSerialnumber = string.Empty;
+            entity.MonitorTheftMark = string.Empty;
 
             this.DbSet.Add(entity);
             this.InitializeAfterCommit(businessModel, entity);
@@ -57,7 +67,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                                 FloorId = (int?)x.Room.Floor_Id,
                                 BuildingId = (int?)x.Room.Floor.Building_Id,
                                 UserId = (int?)x.User.Id,
-                                UserStringId = x.User.LogonName,
+                                UserStringId = x.User.UserId,
                                 UserFirstName = x.User.FirstName,
                                 UserSurName = x.User.SurName,
                                 UserDepartmentName = x.User.Department.DepartmentName,
@@ -347,7 +357,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                             DomainName = x.Domain.Name,
                             UnitName = x.OU.Name,
                             RoomName = x.Room.Name,
-                            UserId = x.User.LogonName,
+                            UserId = x.User.UserId,
                             UserDepartmentName = x.User.Department.DepartmentName,
                             UserUnitName = x.User.OU.Name
                         }).Take(recordsOnPage).ToList();
@@ -569,16 +579,16 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
 
         private static void Map(Domain.Computers.Computer entity, Computer businessModel)
         {
-            entity.ComputerName = businessModel.WorkstationFields.ComputerName;
-            entity.Manufacturer = businessModel.WorkstationFields.Manufacturer;
+            entity.ComputerName = businessModel.WorkstationFields.ComputerName ?? string.Empty;
+            entity.Manufacturer = businessModel.WorkstationFields.Manufacturer ?? string.Empty;
             entity.ComputerModel_Id = businessModel.WorkstationFields.ComputerModelId;
-            entity.SerialNumber = businessModel.WorkstationFields.SerialNumber;
-            entity.BIOSVersion = businessModel.WorkstationFields.BIOSVersion;
+            entity.SerialNumber = businessModel.WorkstationFields.SerialNumber ?? string.Empty;
+            entity.BIOSVersion = businessModel.WorkstationFields.BIOSVersion ?? string.Empty;
             entity.BIOSDate = businessModel.WorkstationFields.BIOSDate;
-            entity.TheftMark = businessModel.WorkstationFields.Theftmark;
-            entity.CarePackNumber = businessModel.WorkstationFields.CarePackNumber;
+            entity.TheftMark = businessModel.WorkstationFields.Theftmark ?? string.Empty;
+            entity.CarePackNumber = businessModel.WorkstationFields.CarePackNumber ?? string.Empty;
             entity.ComputerType_Id = businessModel.WorkstationFields.ComputerTypeId;
-            entity.Location = businessModel.WorkstationFields.Location;
+            entity.Location = businessModel.WorkstationFields.Location ?? string.Empty;
 
             entity.Processor_Id = businessModel.ProccesorFields.ProccesorId;
 
@@ -587,25 +597,25 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             entity.OU_Id = businessModel.OrganizationFields.UnitId;
 
             entity.OS_Id = businessModel.OperatingSystemFields.OperatingSystemId;
-            entity.Version = businessModel.OperatingSystemFields.Version;
-            entity.SP = businessModel.OperatingSystemFields.ServicePack;
+            entity.Version = businessModel.OperatingSystemFields.Version ?? string.Empty;
+            entity.SP = businessModel.OperatingSystemFields.ServicePack ?? string.Empty;
             entity.RegistrationCode = businessModel.OperatingSystemFields.RegistrationCode;
             entity.ProductKey = businessModel.OperatingSystemFields.ProductKey;
 
             entity.RAM_ID = businessModel.MemoryFields.RAMId;
 
-            entity.BarCode = businessModel.InventoryFields.BarCode;
+            entity.BarCode = businessModel.InventoryFields.BarCode ?? string.Empty;
             entity.PurchaseDate = businessModel.InventoryFields.PurchaseDate;
 
-            entity.ChassisType = businessModel.ChassisFields.Chassis;
+            entity.ChassisType = businessModel.ChassisFields.Chassis ?? string.Empty;
 
             entity.Status = businessModel.StateFields.State;
             entity.Stolen = businessModel.StateFields.IsStolen.ToInt();
-            entity.ReplacedWithComputerName = businessModel.StateFields.Replaced;
+            entity.ReplacedWithComputerName = businessModel.StateFields.Replaced ?? string.Empty;
             entity.SendBack = businessModel.StateFields.IsSendBack.ToInt();
             entity.ScrapDate = businessModel.StateFields.ScrapDate;
 
-            entity.SoundCard = businessModel.SoundFields.SoundCard;
+            entity.SoundCard = businessModel.SoundFields.SoundCard ?? string.Empty;
 
             entity.Room_Id = businessModel.PlaceFields.RoomId;
             entity.LocationAddress = businessModel.PlaceFields.Address;
@@ -616,7 +626,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
 
             entity.Info = businessModel.OtherFields.Info;
 
-            entity.VideoCard = businessModel.GraphicsFields.VideoCard;
+            entity.VideoCard = businessModel.GraphicsFields.VideoCard ?? string.Empty;
 
             entity.ContractStatus_Id = businessModel.ContractFields.ContractStatusId;
             entity.ContractNumber = businessModel.ContractFields.ContractNumber;
@@ -636,14 +646,14 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             entity.ContactEmailAddress = businessModel.ContactFields.Email;
 
             entity.NIC_ID = businessModel.CommunicationFields.NetworkAdapterId;
-            entity.IPAddress = businessModel.CommunicationFields.IPAddress;
-            entity.MACAddress = businessModel.CommunicationFields.MacAddress;
+            entity.IPAddress = businessModel.CommunicationFields.IPAddress ?? string.Empty;
+            entity.MACAddress = businessModel.CommunicationFields.MacAddress ?? string.Empty;
             entity.RAS = businessModel.CommunicationFields.IsRAS.ToInt();
-            entity.NovellClient = businessModel.CommunicationFields.NovellClient;
+            entity.NovellClient = businessModel.CommunicationFields.NovellClient ?? string.Empty;
 
             entity.SyncChangedDate = businessModel.DateFields.SynchronizeDate;
             entity.ScanDate = businessModel.DateFields.ScanDate;
-            entity.LDAPPath = businessModel.DateFields.PathDirectory;
+            entity.LDAPPath = businessModel.DateFields.PathDirectory ?? string.Empty;
         }
     }
 }

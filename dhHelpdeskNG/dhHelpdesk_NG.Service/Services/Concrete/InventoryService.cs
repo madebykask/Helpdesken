@@ -5,6 +5,7 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Enums.Inventory;
+    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Computer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory;
@@ -22,6 +23,7 @@
     using DH.Helpdesk.Dal.Repositories.Inventory.Concrete;
     using DH.Helpdesk.Dal.Repositories.Printers;
     using DH.Helpdesk.Dal.Repositories.Servers;
+    using DH.Helpdesk.Dal.Repositories.WorkstationModules;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Inventory;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Inventory;
     using DH.Helpdesk.Services.Requests.Inventory;
@@ -59,6 +61,14 @@
 
         private readonly IComputerValidator computerValidator;
 
+        private readonly IComputerFieldSettingsRepository computerFieldSettingsRepository;
+
+        private readonly IComputerHistoryRepository computerHistoryRepository;
+
+        private readonly ILogicalDriveRepository logicalDriveRepository;
+
+        private readonly ISoftwareRepository softwareRepository;
+
         public InventoryService(
             IInventoryTypeRepository inventoryTypeRepository,
             IComputerRepository computerRepository,
@@ -74,7 +84,11 @@
             IInventoryDynamicFieldSettingsRepository inventoryDynamicFieldSettingsRepository,
             IComputerUsersRepository computerUsersRepository,
             IComputerRestorer computerRestorer,
-            IComputerValidator computerValidator)
+            IComputerValidator computerValidator,
+            IComputerFieldSettingsRepository computerFieldSettingsRepository,
+            IComputerHistoryRepository computerHistoryRepository,
+            ILogicalDriveRepository logicalDriveRepository,
+            ISoftwareRepository softwareRepository)
         {
             this.inventoryTypeRepository = inventoryTypeRepository;
             this.computerRepository = computerRepository;
@@ -91,6 +105,10 @@
             this.computerUsersRepository = computerUsersRepository;
             this.computerRestorer = computerRestorer;
             this.computerValidator = computerValidator;
+            this.computerFieldSettingsRepository = computerFieldSettingsRepository;
+            this.computerHistoryRepository = computerHistoryRepository;
+            this.logicalDriveRepository = logicalDriveRepository;
+            this.softwareRepository = softwareRepository;
         }
 
         public List<ComputerUserOverview> GetComputerUsers(int customerId, string searchFor)
@@ -195,19 +213,56 @@
             this.computerLogRepository.Commit();
         }
 
-        public void AddWorkstation(Computer businessModel)
+        public void AddWorkstation(Computer businessModel, OperationContext context)
         {
-            throw new NotImplementedException();
+            var settings = this.computerFieldSettingsRepository.GetFieldSettingsProcessing(context.CustomerId);
+
+            this.computerValidator.Validate(businessModel, settings);
+            this.computerRepository.Add(businessModel);
+            this.computerRepository.Commit();
+
+            if (businessModel.ContactInformationFields.UserId.HasValue)
+            {
+                this.AddUserHistory(businessModel.Id, businessModel.ContactInformationFields.UserId.Value);
+            }
         }
 
         public void DeleteWorkstation(int id)
         {
-            throw new NotImplementedException();
+            this.computerHistoryRepository.DeleteByComputerId(id);
+            this.computerRepository.Commit();
+
+            this.computerLogRepository.DeleteByComputerId(id);
+            this.computerLogRepository.Commit();
+
+            this.computerInventoryRepository.DeleteByComputerId(id);
+            this.computerInventoryRepository.Commit();
+
+            this.logicalDriveRepository.DeleteByComputerId(id);
+            this.logicalDriveRepository.Commit();
+
+            this.softwareRepository.DeleteByComputerId(id);
+            this.softwareRepository.Commit();
+
+            this.computerRepository.DeleteById(id);
+            this.computerRepository.Commit();
         }
 
-        public void UpdateWorkstation(Computer businessModel)
+        public void UpdateWorkstation(Computer businessModel, OperationContext context)
         {
-            throw new NotImplementedException();
+            var existingBusinessModel = this.computerRepository.FindById(businessModel.Id);
+            var settings = this.computerFieldSettingsRepository.GetFieldSettingsProcessing(context.CustomerId);
+            this.computerRestorer.Restore(businessModel, existingBusinessModel, settings);
+            this.computerValidator.Validate(businessModel, existingBusinessModel, settings);
+            this.computerRepository.Update(businessModel);
+            this.computerRepository.Commit();
+
+            if (businessModel.ContactInformationFields.UserId.HasValue
+                && (businessModel.ContactInformationFields.UserId.Value
+                    != existingBusinessModel.ContactInformationFields.UserId))
+            {
+                this.AddUserHistory(businessModel.Id, businessModel.ContactInformationFields.UserId.Value);
+            }
         }
 
         public void UpdateWorkstationInfo(int id, string info)
@@ -386,6 +441,13 @@
             return this.computerRepository.FindShortOverview(computerId);
         }
 
+        private void AddUserHistory(int computerId, int connectingUserId)
+        {
+            var userGuid = this.computerUsersRepository.FindUserGuidById(connectingUserId);
+            var computerHistory = new ComputerHistory(computerId, userGuid, DateTime.Now);
+            this.computerHistoryRepository.Add(computerHistory);
+            this.computerHistoryRepository.Commit();
+        }
         #endregion
     }
 }

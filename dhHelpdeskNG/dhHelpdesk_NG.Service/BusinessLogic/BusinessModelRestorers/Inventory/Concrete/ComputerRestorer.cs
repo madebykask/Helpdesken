@@ -454,7 +454,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Inventory.Co
 
         private bool CreateValidationRule(ProcessingFieldSetting setting)
         {
-            return !setting.IsShow || setting.IsReadOnly;
+            return setting.IsShow && !setting.IsReadOnly;
         }
     }
 }

@@ -233,7 +233,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                 new FieldProcessingSettingMapperData
                     {
                         FieldName = s.ComputerField,
-                        Show = s.ShowInList,
+                        Show = s.Show,
                         ReadOnly = s.ReadOnly,
                         Required = s.Required
                     }).ToList();

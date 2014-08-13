@@ -10,5 +10,7 @@ namespace DH.Helpdesk.Dal.Repositories
         List<ComputerUserOverview> GetOverviews(int customerId, string userId);
 
         List<ComputerUserOverview> GetConnectedToComputerOverviews(int computerId);
+
+        string FindUserGuidById(int id);
     }
 }

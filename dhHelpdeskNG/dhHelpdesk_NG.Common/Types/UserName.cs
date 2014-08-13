@@ -13,7 +13,7 @@
         [NotNullAndEmpty]
         public string FirstName { get; private set; }
 
-        [NotNullAndEmpty]
+        // [NotNullAndEmpty]
         public string LastName { get; private set; }
 
         public string GetFullName()

@@ -11,5 +11,7 @@ namespace DH.Helpdesk.Dal.Repositories.WorkstationModules
         List<SoftwareOverview> Find(int computerId);
 
         List<ReportModel> FindAllComputerSoftware(int customerId, int? departmentId, string searchFor);
+
+        void DeleteByComputerId(int computerId);
     }
 }
