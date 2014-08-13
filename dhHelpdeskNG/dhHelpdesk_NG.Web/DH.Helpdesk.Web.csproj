@@ -415,6 +415,8 @@
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\InvoiceExtension.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\TreeExtension.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\UrlExtension.cs" />
+    <Compile Include="Infrastructure\Extensions\ModelError.cs" />
+    <Compile Include="Infrastructure\Extensions\ModelExtensions.cs" />
     <Compile Include="Infrastructure\Extensions\ObjectExtensions.cs" />
     <Compile Include="Infrastructure\Extensions\PagingExtensions.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\DropDownItem.cs" />

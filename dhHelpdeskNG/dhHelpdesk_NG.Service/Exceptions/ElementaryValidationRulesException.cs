@@ -5,12 +5,12 @@
     public sealed class ElementaryValidationRulesException : BusinessLogicException
     {
         public ElementaryValidationRulesException(string fieldName, string message)
-            : base(message)
+            : base(string.Format(@"FieldName: ""{0}""; Message: ""{1}"".", fieldName, message))
         {
             this.FieldName = fieldName;
         }
 
         [NotNullAndEmpty]
-        public string FieldName { get; private set; }
+        public string FieldName { get; private set; }       
     }
 }

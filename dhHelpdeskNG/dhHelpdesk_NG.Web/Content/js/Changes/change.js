@@ -211,3 +211,9 @@
 
     $('#change_orderer_id').typeahead(getChangeComputerUserSearchOptions());
 }
+
+(function ($) {
+    $.validator.setDefaults({
+        ignore: ""
+    });
+}(jQuery));
