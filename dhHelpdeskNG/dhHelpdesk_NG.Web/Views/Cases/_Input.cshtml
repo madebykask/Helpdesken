@@ -398,7 +398,7 @@
                                                 </select>
                                             </td> 
                                         }                                                                                                                           
-                                        <td  style="float:left;">                                                                             
+                                        <td style="float:left;">                                                                             
                                             <select id="case__Supplier_Id" name="case_.Supplier_Id">
                                                 <option value="">&nbsp;</option>
                                                 @if (Model.suppliers != null)
@@ -434,11 +434,11 @@
                                         <td colspan="2">
                                             @if (Model.customerUserSetting.CaptionPermission == 1 || Model.case_.Id == 0)
                                             {                                                
-                                                @Html.TextBoxFor(model => model.case_.Caption, new { maxlength = "60" })
+                                                @Html.TextBoxFor(model => model.case_.Caption, new { maxlength = "60", @class="width90" })
                                             }
                                             else
                                             {                                            
-                                                @Html.TextBoxFor(model => model.case_.Caption, new { maxlength = "60", @readonly = "readonly" })
+                                                @Html.TextBoxFor(model => model.case_.Caption, new { maxlength = "60", @readonly = "readonly", @class = "width90" })
                                             }         
                                         </td>
                                     </tr>
@@ -454,7 +454,7 @@
                                                 descriptionSize = 5;
                                             }
                                             }
-                                            @Html.TextAreaFor(model => model.case_.Description, new { rows = descriptionSize, @class = "case-description" })                                                                                        
+                                            @Html.TextAreaFor(model => model.case_.Description, new { rows = descriptionSize, @class = "case-description width90" })                                                                                        
                                             <img id="caseDescriptionPreview" 
                                                  src="@Url.Content("~/Content/icons/magnifier.png")" 
                                                  class="cursor-pointer" 
