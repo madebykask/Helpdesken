@@ -2,47 +2,50 @@
 
 <!DOCTYPE html>
 <html>
-<head>
-    <meta content="html/text; charset=utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
-    <title>@Translation.Get("dhHelpdesk", Enums.TranslationSource.TextTranslation)</title>
+    <head>
+        <meta content="html/text; charset=utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+        <title>@Translation.Get("dhHelpdesk")</title>
 
-    <link rel="stylesheet" href="@Url.Content("~/Content/themes/base/minified/jquery-ui.min.css")" />
-    <link rel="stylesheet" href="@Url.Content("~/Content/css/bootstrap.css")" />
-    <link rel="stylesheet" href="@Url.Content("~/Content/css/dhhelpdesk.css")" />
-    <link rel="stylesheet" href="@Url.Content("~/Content/css/profile.css")" />
-    <link rel="stylesheet" href="@Url.Content("~/Content/js/jquery.plupload.queue/css/jquery.plupload.queue.css")" />
-    <link rel="stylesheet" href="@Url.Content("~/Content/css/jquery.toastmessage.css")" />
-    <link rel="stylesheet" href="@Url.Content("~/Content/css/bootstrap-timepicker.min.css")" />
+        <link rel="stylesheet" href="@Url.Content("~/Content/themes/base/minified/jquery-ui.min.css")" />
+        <link rel="stylesheet" href="@Url.Content("~/Content/css/bootstrap.css")" />
+        <link rel="stylesheet" href="@Url.Content("~/Content/css/dhhelpdesk.css")" />
+        <link rel="stylesheet" href="@Url.Content("~/Content/css/profile.css")" />
+        <link rel="stylesheet" href="@Url.Content("~/Content/js/jquery.plupload.queue/css/jquery.plupload.queue.css")" />
+        <link rel="stylesheet" href="@Url.Content("~/Content/css/jquery.toastmessage.css")" />
+        <link rel="stylesheet" href="@Url.Content("~/Content/css/bootstrap-timepicker.min.css")" />
 
-    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery-1.8.3.min.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.unobtrusive-ajax.min.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.validate.min.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.validate.unobtrusive.min.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery-ui-1.9.2.min.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap-multiselect.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap-datepicker.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap-timepicker.min.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Content/js/plupload.full.min.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.plupload.queue/jquery.plupload.queue.min.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Content/js/MicrosoftAjax.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Content/js/MicrosoftMvcAjax.js")"></script>
+        <script type="text/javascript" src="@Url.Content("~/Content/js/jquery-1.8.3.min.js")"></script>
+        <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.unobtrusive-ajax.min.js")"></script>
+        <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.validate.min.js")"></script>
+        <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.validate.unobtrusive.min.js")"></script>
+        <script type="text/javascript" src="@Url.Content("~/Content/js/jquery-ui-1.9.2.min.js")"></script>
+        <script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap.js")"></script>
+        <script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap-multiselect.js")"></script>
+        <script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap-datepicker.js")"></script>
+        <script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap-timepicker.min.js")"></script>
+        <script type="text/javascript" src="@Url.Content("~/Content/js/plupload.full.min.js")"></script>
+        <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.plupload.queue/jquery.plupload.queue.min.js")"></script>
+        <script type="text/javascript" src="@Url.Content("~/Content/js/MicrosoftAjax.js")"></script>
+        <script type="text/javascript" src="@Url.Content("~/Content/js/MicrosoftMvcAjax.js")"></script>
 
-    <script type="text/javascript" src="@Url.Content("~/Content/js/Shared/custom.validation.requiredfrom.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Content/js/Shared/custom.validation.maxlengthfrom.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Content/js/Shared/sortby.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.toastmessage.js")"> </script>
-    <script type="text/javascript" src="@Url.Content("~/Content/js/dhHelpdesk-head.js")"></script>
+        <script type="text/javascript" src="@Url.Content("~/Content/js/Shared/custom.validation.requiredfrom.js")"></script>
+        <script type="text/javascript" src="@Url.Content("~/Content/js/Shared/custom.validation.maxlengthfrom.js")"></script>
+        <script type="text/javascript" src="@Url.Content("~/Content/js/Shared/sortby.js")"></script>
+        <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.toastmessage.js")"> </script>
+        <script type="text/javascript" src="@Url.Content("~/Content/js/dhHelpdesk-head.js")"></script>
     
     
-    <script type="text/javascript" src="@Url.Content("~/Content/js/ui/dh.ui.hierarchylist.js")"></script>
+        <script type="text/javascript" src="@Url.Content("~/Content/js/ui/dh.ui.hierarchylist.js")"></script>
 
-</head>
-@if (Html.MasterModel() != null && SessionFacade.CurrentUser != null)
-{    
-    if (Html.MasterModel().CustomerSetting != null)  
-    {    
+    </head>
+    @{
+        var model = Html.MasterModel();
+        if (model == null || model.CustomerSetting == null || SessionFacade.CurrentUser == null)
+        {
+            return;
+        }
+    }
     <body>
         <div class="navbar fixed">
             <div class="navbar-container">
@@ -55,36 +58,36 @@
                     <ul class="nav dh-nav">
                         <li class="orange">
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                <i class="icon-folder-open icon-white"></i>@Translation.Get("Ärenden", Enums.TranslationSource.TextTranslation)<i class="icon-chevron-down icon-white"></i>
+                                <i class="icon-folder-open icon-white"></i>@Translation.Get("Ärenden")<i class="icon-chevron-down icon-white"></i>
                             </a>
                             <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
-                                @if (Html.MasterModel().CustomerSetting.ModuleCase == 1)
+                                @if (model.IsCaseVisible())
                                 {                                     
                                     <li><a href="@Url.Action("index", "cases", new { area = "" })">
                                             <img src="@Url.Content("~/Content/icons/case.png")" alt="cases" />
-                                            @Translation.Get("Ärendeöversikt", Enums.TranslationSource.TextTranslation)</a>
+                                            @Translation.Get("Ärendeöversikt")</a>
                                     </li>
                                     <li><a href="@Url.Action("index", "cases", new { area = "" })">
-                                        <img src="@Url.Content("~/Content/icons/casesearch.png")" alt="search" />
-                                        @Translation.Get("Sök ärende", Enums.TranslationSource.TextTranslation)</a></li>                                    
-                                    if (Html.MasterModel().CustomerSetting.ModuleProblem == 1 && SessionFacade.CurrentUser.UserGroupId > 1)
+                                            <img src="@Url.Content("~/Content/icons/casesearch.png")" alt="search" />
+                                            @Translation.Get("Sök ärende")</a></li>                                    
+                                    if (model.IsProblemVisible())
                                     {                                                
                                         <li><a href="@Url.Action("Index", "Problems", new { area = "" })">
-                                            <img src="@Url.Content("~/Content/icons/problem.png")" alt="problem" />
-                                            @Translation.Get("Problem", Enums.TranslationSource.TextTranslation)</a></li> 
+                                                <img src="@Url.Content("~/Content/icons/problem.png")" alt="problem" />
+                                                @Translation.Get("Problem")</a></li> 
                                     }
-                                    if (Html.MasterModel().CustomerSetting.ModuleChangeManagement == 1 && SessionFacade.CurrentUser.UserGroupId > 2)
+                                    if (model.IsChangeManagementVisible())
                                     {                                                
                                         <!-- TODO finns inställningar på användare tblUsers_tblUserRole -->
                                         <li><a href="@Url.Action("index", "changes", new { area = "" })">
-                                            <img src="@Url.Content("~/Content/icons/changes.png")" alt="changes" />
-                                            @Translation.Get("Ändringshantering", Enums.TranslationSource.TextTranslation)</a></li>
+                                                <img src="@Url.Content("~/Content/icons/changes.png")" alt="changes" />
+                                                @Translation.Get("Ändringshantering")</a></li>
                                     }
-                                    if (SessionFacade.CurrentUser.UserGroupId > 2 || SessionFacade.CurrentUser.CaseSolutionPermission == 1)
+                                    if (model.IsCaseSolutionVisible())
                                     {
                                         <li><a href="@Url.Action("index", "casesolution", new { area = "" })">
-                                            <img src="@Url.Content("~/Content/icons/casetemplate.png")" alt="casesolution" />
-                                            @Translation.Get("Ärendemallar", Enums.TranslationSource.TextTranslation)</a></li>
+                                                <img src="@Url.Content("~/Content/icons/casetemplate.png")" alt="casesolution" />
+                                                @Translation.Get("Ärendemallar")</a></li>
                                     }
                                 }                                    
                                 <li>
@@ -92,136 +95,142 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="green">
-                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                <i class="icon-briefcase icon-white"></i>@Translation.Get("Moduler", Enums.TranslationSource.TextTranslation)<i class="icon-chevron-down icon-white"></i>
-                            </a>
-                            <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
-                                @if (Html.MasterModel().CustomerSetting.ModuleCase == 1)
-                                {                                    
-                                    if (SessionFacade.CurrentUser.ReportPermission == 1)
-                                    {                                        
-                                        <li><a href="@Url.Action("index", "reports", new { area = "" })">
-                                            <img src="@Url.Content("~/Content/icons/reports.png")" alt="reports" />
-                                            @Translation.Get("Rapporter", Enums.TranslationSource.TextTranslation)</a></li>                                    
+                        @if (model.IsModulesVisible())
+                        {
+                            <li class="green">
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                    <i class="icon-briefcase icon-white"></i>@Translation.Get("Moduler")<i class="icon-chevron-down icon-white"></i>
+                                </a>
+                                <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+                                    @if (model.IsCaseVisible())
+                                    {                                    
+                                        if (model.IsReportVisible())
+                                        {                                        
+                                            <li><a href="@Url.Action("index", "reports", new { area = "" })">
+                                                    <img src="@Url.Content("~/Content/icons/reports.png")" alt="reports" />
+                                                    @Translation.Get("Rapporter")</a></li>                                    
+                                        }                                    
+                                    }                                                                        
+                                    @if (model.IsFaqVisible())
+                                    {    
+                                        <li><a href="@Url.Action("index", "faq", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/faq.png")" alt="faq" />
+                                                @Translation.Get("FAQ")</a></li>
+                                    }              
+                                    @if (model.IsCalendarVisible())
+                                    {    
+                                        <li><a href="@Url.Action("index", "calendar", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/news.png")" alt="news" />
+                                                @Translation.Get("Aktuellt")</a></li>
                                     }                                    
-                                }                                                                        
-                                @if (Html.MasterModel().CustomerSetting.ModuleFAQ == 1)
-                                {    
-                                    <li><a href="@Url.Action("index", "faq", new { area = "" })">
-                                        <img src="@Url.Content("~/Content/icons/faq.png")" alt="faq" />
-                                        @Translation.Get("FAQ", Enums.TranslationSource.TextTranslation)</a></li>
-                                }              
-                                @if (Html.MasterModel().CustomerSetting.ModuleCalendar == 1 && (SessionFacade.CurrentUser.CalendarPermission == 1 || SessionFacade.CurrentUser.UserGroupId > 2))
-                                {    
-                                    <li><a href="@Url.Action("index", "calendar", new { area = "" })">
-                                        <img src="@Url.Content("~/Content/icons/news.png")" alt="news" />
-                                        @Translation.Get("Aktuellt", Enums.TranslationSource.TextTranslation)</a></li>
-                                }                                    
-                                @if (Html.MasterModel().CustomerSetting.ModuleOrder == 1 && (SessionFacade.CurrentUser.OrderPermission > 0 || SessionFacade.CurrentUser.UserGroupId > 2))
-                                {    
-                                    <li><a href="@Url.Action("index", "order", new { area = "" })">
-                                        <img src="@Url.Content("~/Content/icons/order.png")" alt="order" />
-                                        @Translation.Get("Beställningar", Enums.TranslationSource.TextTranslation)</a></li>
-                                }
-                                @if (Html.MasterModel().CustomerSetting.ModuleAccount == 1 && (SessionFacade.CurrentUser.OrderPermission == 2 || SessionFacade.CurrentUser.UserGroupId > 2))
-                                {    
-                                    <li><a href="@Url.Action("index", "accounts", new { area = "" })">
-                                        <img src="@Url.Content("~/Content/icons/orderaccount.png")" alt="account" />
-                                        @Translation.Get("Beställning kontobehörighet", Enums.TranslationSource.TextTranslation)</a></li>
-                                }                                
-                                @if (Html.MasterModel().CustomerSetting.ModuleChecklist == 1 && SessionFacade.CurrentUser.UserGroupId > 1)
-                                {    
-                                    <li><a href="@Url.Action("index", "checklist")">
-                                        <img src="@Url.Content("~/Content/icons/checklist.png")" alt="checklist" />
-                                        @Translation.Get("Checklista", Enums.TranslationSource.TextTranslation)</a></li>
-                                }                                                                            
-                                @if (Html.MasterModel().CustomerSetting.ModuleDailyReport == 1 && SessionFacade.CurrentUser.UserGroupId > 1)
-                                {    
-                                    <li><a href="@Url.Action("index", "dailyreport", new { area = "" })">
-                                        <img src="@Url.Content("~/Content/icons/dailyreport.png")" alt="dailyreport" />
-                                        @Translation.Get("Dagrapport", Enums.TranslationSource.TextTranslation)</a></li>
-                                }                                                                        
-                                @if (Html.MasterModel().CustomerSetting.ModuleOperationLog == 1 && SessionFacade.CurrentUser.UserGroupId > 1)
-                                {    
-                                    <li><a href="@Url.Action("index", "operationlog", new { area = "" })">
-                                        <img src="@Url.Content("~/Content/icons/operationlog.png")" alt="operationlog" />
-                                        @Translation.Get("Driftlogg", Enums.TranslationSource.TextTranslation)</a></li>
-                                }                                    
-                                @if (Html.MasterModel().CustomerSetting.ModuleInventory > 0 && SessionFacade.CurrentUser.UserGroupId > 1)
-                                {    
-                                    <li><a href="@Url.Action("Index", "Inventory", new { area = "" })">
-                                        <img src="@Url.Content("~/Content/icons/inventory.png")" alt="inventory" />
-                                        @Translation.Get("Inventarier", Enums.TranslationSource.TextTranslation)</a></li> 
-                                }                                    
-                                <li>
-                                    <img src="@Url.Content("~/Content/img/dhhelpdesk-menuend.png")" alt="Start" />
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="purple">
-                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                <i class="icon-wrench icon-white"></i>
-                                @Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation) @Translation.Get("Moduler", Enums.TranslationSource.TextTranslation)
-                                <i class="icon-chevron-down icon-white"></i>
-                            </a>
-                            <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
-                                @if (Html.MasterModel().CustomerSetting.ModuleBulletinBoard == 1 && (SessionFacade.CurrentUser.BulletinBoardPermission == 1 || SessionFacade.CurrentUser.UserGroupId > 2))
-                                {                                    
+                                    @if (model.IsOrderVisible())
+                                    {    
+                                        <li><a href="@Url.Action("index", "order", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/order.png")" alt="order" />
+                                                @Translation.Get("Beställningar")</a></li>
+                                    }
+                                    @if (model.IsAccountVisible())
+                                    {    
+                                        <li><a href="@Url.Action("index", "accounts", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/orderaccount.png")" alt="account" />
+                                                @Translation.Get("Beställning kontobehörighet")</a></li>
+                                    }                                
+                                    @if (model.IsCheckListVisuble())
+                                    {    
+                                        <li><a href="@Url.Action("index", "checklist")">
+                                                <img src="@Url.Content("~/Content/icons/checklist.png")" alt="checklist" />
+                                                @Translation.Get("Checklista")</a></li>
+                                    }                                                                            
+                                    @if (model.IsDailyReportVisible())
+                                    {    
+                                        <li><a href="@Url.Action("index", "dailyreport", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/dailyreport.png")" alt="dailyreport" />
+                                                @Translation.Get("Dagrapport")</a></li>
+                                    }                                                                        
+                                    @if (model.IsOperationLogVisible())
+                                    {    
+                                        <li><a href="@Url.Action("index", "operationlog", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/operationlog.png")" alt="operationlog" />
+                                                @Translation.Get("Driftlogg")</a></li>
+                                    }                                    
+                                    @if (model.IsInventoryVisible())
+                                    {    
+                                        <li><a href="@Url.Action("Index", "Inventory", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/inventory.png")" alt="inventory" />
+                                                @Translation.Get("Inventarier")</a></li> 
+                                    }                                    
                                     <li>
-                                        <a href="@Url.Action("index", "bulletinboard", new { area = "" })">
-                                            <img src="@Url.Content("~/Content/icons/bulletinboard.png")" alt="bulletinboard" />
-                                            @Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation)
-                                        </a>
+                                        <img src="@Url.Content("~/Content/img/dhhelpdesk-menuend.png")" alt="Start" />
                                     </li>
-                                }
-                                @if (Html.MasterModel().CustomerSetting.ModulePlanning == 1 && SessionFacade.CurrentUser.UserGroupId > 1)
-                                {                                    
-                                    <li><a href="@Url.Action("index", "planning", new { area = "" })">
-                                        <img src="@Url.Content("~/Content/icons/planning.png")" alt="planning" />
-                                        @Translation.Get("Planering", Enums.TranslationSource.TextTranslation)</a></li>
-                                }                                    
-                                @if (Html.MasterModel().CustomerSetting.ModuleProject == 1 && SessionFacade.CurrentUser.UserGroupId > 1)
-                                {                                    
-                                    <li><a href="@Url.Action("Index", "Projects", new { area = "" })">
-                                        <img src="@Url.Content("~/Content/icons/project.png")" alt="project" />
-                                        @Translation.Get("Projekt", Enums.TranslationSource.TextTranslation)</a></li>
-                                }                                    
-                                @if (Html.MasterModel().CustomerSetting.ModuleQuestion == 1 && SessionFacade.CurrentUser.UserGroupId > 2)
-                                {                                    
-                                    <li><a href="@Url.Action("index", "question", new { area = "" })">
-                                        <img src="@Url.Content("~/Content/icons/registerquestion.png")" alt="question" />
-                                        @Translation.Get("Frågeregistrering", Enums.TranslationSource.TextTranslation)</a></li>
-                                }                                    
-                                @if (Html.MasterModel().CustomerSetting.ModuleQuestionnaire == 1 && SessionFacade.CurrentUser.UserGroupId > 2)
-                                {                                    
-                                    <li><a href="@Url.Action("index", "questionnaire", new { area = "" })">
-                                        <img src="@Url.Content("~/Content/icons/questionnaire.png")" alt="questionnarie" />
-                                        @Translation.Get("Enkät", Enums.TranslationSource.TextTranslation)</a></li>
-                                }                                    
-                                @if (Html.MasterModel().CustomerSetting.ModuleLicense == 1 && SessionFacade.CurrentUser.UserGroupId > 1)
-                                {                                    
-                                    <li><a href="@Url.Action("index", "license", new { area = "" })">
-                                        <img src="@Url.Content("~/Content/icons/Licens.png")" alt="license" />
-                                        @Translation.Get("Licenshantering", Enums.TranslationSource.TextTranslation)</a></li>
-                                }                                    
-                                @if (Html.MasterModel().CustomerSetting.ModuleDocument == 1 && SessionFacade.CurrentUser.UserGroupId > 1)
-                                {                                    
-                                    <li><a href="@Url.Action("index", "document", new { area = "" })">
-                                        <img src="@Url.Content("~/Content/icons/documenthandling.png")" alt="document" />
-                                        @Translation.Get("Dokumenthantering", Enums.TranslationSource.TextTranslation)</a></li> 
-                                }                                                                        
-                                @if (Html.MasterModel().CustomerSetting.ModuleComputerUser == 1 && SessionFacade.CurrentUser.UserGroupId > 1)
-                                {                                    
-                                    <li><a href="@Url.Action("index", "Notifiers", new { area = "" })">
-                                        <img src="@Url.Content("~/Content/icons/notifier.png")" alt="computeruser" />
-                                        @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation)</a></li>
-                                }                                    
-                                <li>
-                                    <img src="@Url.Content("~/Content/img/dhhelpdesk-menuend.png")" alt="Start" />
-                                </li>
-                            </ul>
-                        </li>
+                                </ul>
+                            </li>                            
+                        }
+                        @if (model.IsSettingsModulesVisible())
+                        {
+                            <li class="purple">
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                    <i class="icon-wrench icon-white"></i>
+                                    @Translation.Get("Inställningar") @Translation.Get("Moduler")
+                                    <i class="icon-chevron-down icon-white"></i>
+                                </a>
+                                <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+                                    @if (model.IsBulletinBoardVisible())
+                                    {                                    
+                                        <li>
+                                            <a href="@Url.Action("index", "bulletinboard", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/bulletinboard.png")" alt="bulletinboard" />
+                                                @Translation.Get("Anslagstavla")
+                                            </a>
+                                        </li>
+                                    }
+                                    @if (model.IsPlanningVisible())
+                                    {                                    
+                                        <li><a href="@Url.Action("index", "planning", new { area = "" })">
+                                            <img src="@Url.Content("~/Content/icons/planning.png")" alt="planning" />
+                                            @Translation.Get("Planering")</a></li>
+                                    }                                    
+                                    @if (model.IsProjectVisible())
+                                    {                                    
+                                        <li><a href="@Url.Action("Index", "Projects", new { area = "" })">
+                                            <img src="@Url.Content("~/Content/icons/project.png")" alt="project" />
+                                            @Translation.Get("Projekt")</a></li>
+                                    }                                    
+                                    @if (model.IsQuestionVisible())
+                                    {                                    
+                                        <li><a href="@Url.Action("index", "question", new { area = "" })">
+                                            <img src="@Url.Content("~/Content/icons/registerquestion.png")" alt="question" />
+                                            @Translation.Get("Frågeregistrering")</a></li>
+                                    }                                    
+                                    @if (model.IsQuestionnaireVisible())
+                                    {                                    
+                                        <li><a href="@Url.Action("index", "questionnaire", new { area = "" })">
+                                            <img src="@Url.Content("~/Content/icons/questionnaire.png")" alt="questionnarie" />
+                                            @Translation.Get("Enkät")</a></li>
+                                    }                                    
+                                    @if (model.IsLicenseVisible())
+                                    {                                    
+                                        <li><a href="@Url.Action("index", "license", new { area = "" })">
+                                            <img src="@Url.Content("~/Content/icons/Licens.png")" alt="license" />
+                                            @Translation.Get("Licenshantering")</a></li>
+                                    }                                    
+                                    @if (model.IsDocumentVisible())
+                                    {                                    
+                                        <li><a href="@Url.Action("index", "document", new { area = "" })">
+                                            <img src="@Url.Content("~/Content/icons/documenthandling.png")" alt="document" />
+                                            @Translation.Get("Dokumenthantering")</a></li> 
+                                    }                                                                        
+                                    @if (model.IsComputerUserVisible())
+                                    {                                    
+                                        <li><a href="@Url.Action("index", "Notifiers", new { area = "" })">
+                                            <img src="@Url.Content("~/Content/icons/notifier.png")" alt="computeruser" />
+                                            @Translation.Get("Anmälare")</a></li>
+                                    }                                    
+                                    <li>
+                                        <img src="@Url.Content("~/Content/img/dhhelpdesk-menuend.png")" alt="Start" />
+                                    </li>
+                                </ul>
+                            </li>                            
+                        }
                         <li class="light-blue">
                             <a data-toggle="dropdown" href="#" class="dropdown-toggle">
                                 <i class="icon-user icon-white"></i>
@@ -237,12 +246,12 @@
                                 <li class="dropdown-submenu">
                                     <a href="#">
                                         <i class="icon-refresh"></i>
-                                        @Translation.Get("Kunder", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Kunder")
                                     </a>
                                     <ul class="dropdown-menu">
-                                    @if (Html.MasterModel().Customers != null)
+                                    @if (model.Customers != null)
                                     {
-                                        foreach (var customer in Html.MasterModel().Customers)
+                                        foreach (var customer in model.Customers)
                                         {
                                             <li>
                                                 <a href="@Url.Action("Index", "cases", new { customerId = customer.Id })">@customer.Name</a>
@@ -251,32 +260,32 @@
                                     }                                    
                                     </ul>
                                 </li>
-                                @if (SessionFacade.CurrentUser.UserGroupId > 2)
+                                @if (model.IsCustomerOrSystemAdministrator())
                                 {
                                     <li>
                                         <a href="@Url.Action("index", "start", new { area = "admin" })" target="_blank">
                                             <i class="icon-wrench"></i>
-                                            @Translation.Get("Administration", Enums.TranslationSource.TextTranslation)
+                                            @Translation.Get("Administration")
                                         </a>
                                     </li>
                                 }
                                 <li>
-                                    <a href="@Url.Action("edit", "profile", new { id = SessionFacade.CurrentUser.Id})">
+                                    <a href="@Url.Action("edit", "profile", new { id = SessionFacade.CurrentUser.Id })">
                                         <i class="icon-user"></i>
-                                        @Translation.Get("Profil", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Profil")
                                     </a>
                                 </li>
                                 <li>
                                     <a href="@Url.Action("index", "about")" >
                                         <i class="icon-info-sign"></i>
-                                        @Translation.Get("Om", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Om")
                                     </a>
                                 </li>
                                 <li class="divider"></li>
                                 <li>
                                     <a href="@Url.Action("login", "login")">
                                         <i class="icon-off"></i>
-                                        @Translation.Get("Logga ut", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Logga ut")
                                     </a>
                                 </li>
                             </ul>
@@ -290,9 +299,7 @@
         @RenderSection("Dialogs", false)
         <script type="text/javascript" src="@Url.Content("~/Content/js/dhHelpdesk.js")"></script>
         @RenderSection("Scripts", false)
-        <input type="hidden" value="@this.Request.RawUrl" id="rawUrl" />
+        <input type="hidden" value="@Request.RawUrl" id="rawUrl" />
         @Html.Partial("_Translations", null)
     </body>
-    }
-}
 </html>

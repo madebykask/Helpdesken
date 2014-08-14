@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Changes.Concrete
 {
+    using DH.Helpdesk.BusinessData.Enums.Changes.Fields;
     using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeProcessing;
@@ -37,25 +38,25 @@
             this.elementaryRulesValidator.ValidateStringField(
                 updatedFields.Id,
                 existingFields.Id,
-                "Id",
+                OrdererField.Id,
                 new ElementaryValidationRule(!settings.Id.Show, settings.Id.Required));
 
             this.elementaryRulesValidator.ValidateStringField(
                 updatedFields.Name,
                 existingFields.Name,
-                "Name",
+                OrdererField.Name,
                 new ElementaryValidationRule(!settings.Name.Show, settings.Name.Required));
 
             this.elementaryRulesValidator.ValidateStringField(
                 updatedFields.Phone,
                 existingFields.Phone,
-                "Phone",
+                OrdererField.Phone,
                 new ElementaryValidationRule(!settings.Phone.Show, settings.Phone.Required));
 
             this.elementaryRulesValidator.ValidateStringField(
                 updatedFields.CellPhone,
                 existingFields.CellPhone,
-                "CellPhone",
+                OrdererField.CellPhone,
                 new ElementaryValidationRule(!settings.CellPhone.Show, settings.CellPhone.Required));
         }
 
@@ -65,55 +66,55 @@
             this.elementaryRulesValidator.ValidateIntegerField(
                 updatedFields.Priority,
                 existingFields.Priority,
-                "Priority",
+                GeneralField.Priority,
                 new ElementaryValidationRule(!settings.Priority.Show, settings.Priority.Required));
 
             this.elementaryRulesValidator.ValidateStringField(
                 updatedFields.Title,
                 existingFields.Title,
-                "Title",
+                GeneralField.Title,
                 new ElementaryValidationRule(!settings.Title.Show, settings.Title.Required));
 
             this.elementaryRulesValidator.ValidateIntegerField(
                 updatedFields.StatusId,
                 existingFields.StatusId,
-                "StatusId",
+                GeneralField.Status,
                 new ElementaryValidationRule(!settings.Status.Show, settings.Status.Required));
 
             this.elementaryRulesValidator.ValidateIntegerField(
                 updatedFields.SystemId,
                 existingFields.SystemId,
-                "SystemId",
+                GeneralField.System,
                 new ElementaryValidationRule(!settings.System.Show, settings.System.Required));
 
             this.elementaryRulesValidator.ValidateIntegerField(
                 updatedFields.ObjectId,
                 existingFields.ObjectId,
-                "ObjectId",
+                GeneralField.Object,
                 new ElementaryValidationRule(!settings.Object.Show, settings.Object.Required));
 
             this.elementaryRulesValidator.ValidateIntegerField(
                 updatedFields.WorkingGroupId,
                 existingFields.WorkingGroupId,
-                "WorkingGroupId",
+                GeneralField.WorkingGroup,
                 new ElementaryValidationRule(!settings.WorkingGroup.Show, settings.WorkingGroup.Required));
 
             this.elementaryRulesValidator.ValidateIntegerField(
                 updatedFields.AdministratorId,
                 existingFields.AdministratorId,
-                "AdministratorId",
+                GeneralField.Administrator,
                 new ElementaryValidationRule(!settings.Administrator.Show, settings.Administrator.Required));
 
             this.elementaryRulesValidator.ValidateDateTimeField(
                 updatedFields.FinishingDate,
                 existingFields.FinishingDate,
-                "FinishingDate",
+                GeneralField.FinishingDate,
                 new ElementaryValidationRule(!settings.FinishingDate.Show, settings.FinishingDate.Required));
 
             this.elementaryRulesValidator.ValidateBooleanField(
                 updatedFields.Rss,
                 existingFields.Rss,
-                "Rss",
+                GeneralField.Rss,
                 new ElementaryValidationRule(!settings.Rss.Show, settings.Rss.Required));
         }
 
@@ -125,55 +126,55 @@
             this.elementaryRulesValidator.ValidateIntegerField(
                 updatedFields.OwnerId,
                 existingFields.OwnerId,
-                "OwnerId",
+                RegistrationField.Owner,
                 new ElementaryValidationRule(!settings.Owner.Show, settings.Owner.Required));
 
             this.elementaryRulesValidator.ValidateStringField(
                 updatedFields.Description,
                 existingFields.Description,
-                "Description",
+                RegistrationField.Description,
                 new ElementaryValidationRule(!settings.Description.Show, settings.Description.Required));
 
             this.elementaryRulesValidator.ValidateStringField(
                 updatedFields.BusinessBenefits,
                 existingFields.BusinessBenefits,
-                "BusinessBenefits",
+                RegistrationField.BusinessBenefits,
                 new ElementaryValidationRule(!settings.BusinessBenefits.Show, settings.BusinessBenefits.Required));
 
             this.elementaryRulesValidator.ValidateStringField(
                 updatedFields.Consequence,
                 existingFields.Consequence,
-                "Consequence",
+                RegistrationField.Consequence,
                 new ElementaryValidationRule(!settings.Consequence.Show, settings.Consequence.Required));
 
             this.elementaryRulesValidator.ValidateStringField(
                 updatedFields.Impact,
                 existingFields.Impact,
-                "Impact",
+                RegistrationField.Impact,
                 new ElementaryValidationRule(!settings.Impact.Show, settings.Impact.Required));
 
             this.elementaryRulesValidator.ValidateDateTimeField(
                 updatedFields.DesiredDate,
                 existingFields.DesiredDate,
-                "DesiredDate",
+                RegistrationField.DesiredDate,
                 new ElementaryValidationRule(!settings.DesiredDate.Show, settings.DesiredDate.Required));
 
             this.elementaryRulesValidator.ValidateBooleanField(
                 updatedFields.Verified,
                 existingFields.Verified,
-                "Verified",
+                RegistrationField.Verified,
                 new ElementaryValidationRule(!settings.Verified.Show, settings.Verified.Required));
 
             this.elementaryRulesValidator.ValidateIntegerField(
                 (int)updatedFields.Approval,
                 (int)existingFields.Approval,
-                "Approval",
+                RegistrationField.Approval,
                 new ElementaryValidationRule(!settings.Approval.Show, settings.Approval.Required));
 
             this.elementaryRulesValidator.ValidateStringField(
                 updatedFields.RejectExplanation,
                 existingFields.RejectExplanation,
-                "RejectExplanation",
+                RegistrationField.RejectExplanation,
                 new ElementaryValidationRule(!settings.RejectExplanation.Show, settings.RejectExplanation.Required));
         }
 
@@ -183,87 +184,87 @@
             this.elementaryRulesValidator.ValidateIntegerField(
                 updatedFields.CategoryId,
                 existingFields.CategoryId,
-                "CategoryId",
+                AnalyzeField.Category,
                 new ElementaryValidationRule(!settings.Category.Show, settings.Category.Required));
 
             this.elementaryRulesValidator.ValidateIntegerField(
                 updatedFields.PriorityId,
                 existingFields.PriorityId,
-                "PriorityId",
+                AnalyzeField.Priority,
                 new ElementaryValidationRule(!settings.Priority.Show, settings.Priority.Required));
 
             this.elementaryRulesValidator.ValidateIntegerField(
                 updatedFields.ResponsibleId,
                 existingFields.ResponsibleId,
-                "ResponsibleId",
+                AnalyzeField.Responsible,
                 new ElementaryValidationRule(!settings.Responsible.Show, settings.Responsible.Required));
 
             this.elementaryRulesValidator.ValidateStringField(
                 updatedFields.Solution,
                 existingFields.Solution,
-                "Solution",
+                AnalyzeField.Solution,
                 new ElementaryValidationRule(!settings.Solution.Show, settings.Solution.Required));
 
             this.elementaryRulesValidator.ValidateRealField(
                 updatedFields.Cost,
                 existingFields.Cost,
-                "Cost",
+                AnalyzeField.Cost,
                 new ElementaryValidationRule(!settings.Cost.Show, settings.Cost.Required));
 
             this.elementaryRulesValidator.ValidateRealField(
                 updatedFields.YearlyCost,
                 existingFields.YearlyCost,
-                "YearlyCost",
+                AnalyzeField.YearlyCost,
                 new ElementaryValidationRule(!settings.YearlyCost.Show, settings.YearlyCost.Required));
 
             this.elementaryRulesValidator.ValidateIntegerField(
                 updatedFields.EstimatedTimeInHours,
                 existingFields.EstimatedTimeInHours,
-                "EstimatedTimeInHours",
+                AnalyzeField.EstimatedTimeInHours,
                 new ElementaryValidationRule(
                     !settings.EstimatedTimeInHours.Show, settings.EstimatedTimeInHours.Required));
 
             this.elementaryRulesValidator.ValidateStringField(
                 updatedFields.Risk,
                 existingFields.Risk,
-                "Risk",
+                AnalyzeField.Risk,
                 new ElementaryValidationRule(!settings.Risk.Show, settings.Risk.Required));
 
             this.elementaryRulesValidator.ValidateDateTimeField(
                 updatedFields.StartDate,
                 existingFields.StartDate,
-                "StartDate",
+                AnalyzeField.StartDate,
                 new ElementaryValidationRule(!settings.StartDate.Show, settings.StartDate.Required));
 
             this.elementaryRulesValidator.ValidateDateTimeField(
                 updatedFields.FinishDate,
                 existingFields.FinishDate,
-                "FinishDate",
+                AnalyzeField.FinishDate,
                 new ElementaryValidationRule(!settings.FinishDate.Show, settings.FinishDate.Required));
 
             this.elementaryRulesValidator.ValidateBooleanField(
                 updatedFields.HasImplementationPlan,
                 existingFields.HasImplementationPlan,
-                "HasImplementationPlan",
+                AnalyzeField.HasImplementationPlan,
                 new ElementaryValidationRule(
                     !settings.HasImplementationPlan.Show, settings.HasImplementationPlan.Required));
 
             this.elementaryRulesValidator.ValidateBooleanField(
                 updatedFields.HasRecoveryPlan,
                 existingFields.HasRecoveryPlan,
-                "HasRecoveryPlan",
+                AnalyzeField.HasRecoveryPlan,
                 new ElementaryValidationRule(!settings.HasRecoveryPlan.Show, settings.HasRecoveryPlan.Required));
 
             this.elementaryRulesValidator.ValidateIntegerField(
                 (int)updatedFields.Approval,
                 (int)existingFields.Approval,
-                "Approval",
+                AnalyzeField.Approval,
                 new ElementaryValidationRule(!settings.Approval.Show, settings.Approval.Required));
 
             this.elementaryRulesValidator.ValidateStringField(
                 updatedFields.RejectExplanation,
                 existingFields.RejectExplanation,
-                "RejectExplanation",
+                AnalyzeField.RejectExplanation,
                 new ElementaryValidationRule(!settings.RejectExplanation.Show, settings.RejectExplanation.Required));
         }
 
@@ -275,50 +276,50 @@
             this.elementaryRulesValidator.ValidateIntegerField(
                 updatedFields.StatusId,
                 existingFields.StatusId,
-                "StatusId",
+                ImplementationField.Status,
                 new ElementaryValidationRule(!settings.Status.Show, settings.Status.Required));
 
             this.elementaryRulesValidator.ValidateDateTimeField(
                 updatedFields.RealStartDate,
                 existingFields.RealStartDate,
-                "RealStartDate",
+                ImplementationField.RealStartDate,
                 new ElementaryValidationRule(!settings.RealStartDate.Show, settings.RealStartDate.Required));
 
             this.elementaryRulesValidator.ValidateDateTimeField(
                 updatedFields.FinishingDate,
                 existingFields.FinishingDate,
-                "FinishingDate",
+                ImplementationField.FinishingDate,
                 new ElementaryValidationRule(!settings.FinishingDate.Show, settings.FinishingDate.Required));
 
             this.elementaryRulesValidator.ValidateBooleanField(
                 updatedFields.BuildImplemented,
                 existingFields.BuildImplemented,
-                "BuildImplemented",
+                ImplementationField.BuildImplemented,
                 new ElementaryValidationRule(!settings.BuildImplemented.Show, settings.BuildImplemented.Required));
 
             this.elementaryRulesValidator.ValidateBooleanField(
                 updatedFields.ImplementationPlanUsed,
                 existingFields.ImplementationPlanUsed,
-                "ImplementationPlanUsed",
+                ImplementationField.ImplementationPlanUsed,
                 new ElementaryValidationRule(
                     !settings.ImplementationPlanUsed.Show, settings.ImplementationPlanUsed.Required));
 
             this.elementaryRulesValidator.ValidateStringField(
                 updatedFields.Deviation,
                 existingFields.Deviation,
-                "Deviation",
+                ImplementationField.Deviation,
                 new ElementaryValidationRule(!settings.Deviation.Show, settings.Deviation.Required));
 
             this.elementaryRulesValidator.ValidateBooleanField(
                 updatedFields.RecoveryPlanUsed,
                 existingFields.RecoveryPlanUsed,
-                "RecoveryPlanUsed",
+                ImplementationField.RecoveryPlanUsed,
                 new ElementaryValidationRule(!settings.RecoveryPlanUsed.Show, settings.RecoveryPlanUsed.Required));
 
             this.elementaryRulesValidator.ValidateBooleanField(
                 updatedFields.ImplementationReady,
                 existingFields.ImplementationReady,
-                "ImplementationReady",
+                ImplementationField.ImplementationReady,
                 new ElementaryValidationRule(!settings.ImplementationReady.Show, settings.ImplementationReady.Required));
         }
 
@@ -330,13 +331,13 @@
             this.elementaryRulesValidator.ValidateStringField(
                 updatedFields.ChangeEvaluation,
                 existingFields.ChangeEvaluation,
-                "ChangeEvaluation",
+                EvaluationField.ChangeEvaluation,
                 new ElementaryValidationRule(!settings.ChangeEvaluation.Show, settings.ChangeEvaluation.Required));
 
             this.elementaryRulesValidator.ValidateBooleanField(
                 updatedFields.EvaluationReady,
                 existingFields.EvaluationReady,
-                "EvaluationReady",
+                EvaluationField.EvaluationReady,
                 new ElementaryValidationRule(!settings.EvaluationReady.Show, settings.EvaluationReady.Required));
         }
     }
