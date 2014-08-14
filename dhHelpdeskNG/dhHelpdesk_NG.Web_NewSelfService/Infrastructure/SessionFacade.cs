@@ -84,7 +84,7 @@
             set
             {
                 if (HttpContext.Current.Session[_USER_HAS_ACCESS] == null)
-                    HttpContext.Current.Session.Add(_USER_HAS_ACCESS, false);
+                    HttpContext.Current.Session.Add(_USER_HAS_ACCESS, value);
                 else
                     HttpContext.Current.Session[_USER_HAS_ACCESS] = value;
             }

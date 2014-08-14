@@ -63,10 +63,10 @@ using System.Threading.Tasks;
                 ViewBag.PublicCaseTemplate = _caseSolutionService.GetCaseSolutions(customerId).ToList();
             }
 
-            if (SessionFacade.CurrentCustomer == null && customerId == -1)
+            if (SessionFacade.CurrentCustomer == null)
             {
-                filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = "Invalid Customer Id! (-1)", errorCode = 101 }));
                 SessionFacade.UserHasAccess = false;
+                filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = string.Format("Invalid Customer Id! ({0})", customerId), errorCode = 101 }));               
             }
 
             if (filterContext.ActionParameters.Keys.Contains("languageId"))
@@ -77,7 +77,7 @@ using System.Threading.Tasks;
             }
             else
             {
-                if (SessionFacade.CurrentCustomer != null)
+                if (SessionFacade.CurrentCustomer != null & (SessionFacade.CurrentLanguageId == null || (SessionFacade.CurrentLanguageId != null && SessionFacade.CurrentLanguageId == 0)))
                     SessionFacade.CurrentLanguageId = SessionFacade.CurrentCustomer.Language_Id;
             }
                             
