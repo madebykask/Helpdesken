@@ -5,10 +5,15 @@
     using System.Web.Mvc;
     using System.Web.Routing;
 
+    using DH.Helpdesk.Common.Logger;
     using DH.Helpdesk.Services.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.Attributes;
     using DH.Helpdesk.Web.Infrastructure.Binders;
     using DH.Helpdesk.Web.Infrastructure.Configuration;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Web.Infrastructure.Logger;
+
+    using Microsoft.Practices.ServiceLocation;
 
     public class MvcApplication : System.Web.HttpApplication
     {
@@ -16,7 +21,8 @@
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new HandleErrorAttribute());
+            // filters.Add(new HandleErrorAttribute());
+            filters.Add(new CustomHandleErrorAttribute());
         }
 
         public static void RegisterRoutes(RouteCollection routes)
@@ -51,6 +57,7 @@
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
             RegisterBinders();
+            ProcessStartupTasks();
         }
 
         protected void Application_BeginRequest(Object sender, EventArgs e)
@@ -67,6 +74,28 @@
             DataAnnotationsModelValidatorProvider.RegisterAdapter(
                 typeof(LocalizedStringLengthAttribute),
                 typeof(StringLengthAttributeAdapter));
+        }
+
+        /// <summary>
+        /// process startup tasks.
+        /// </summary>
+        private static void ProcessStartupTasks()
+        {
+            ILoggerService errorLoggerService = LogManager.Error;
+            foreach (var task in ServiceLocator.Current.GetAllInstances<IStartUpTask>())
+            {
+                try
+                {
+                    if (task != null && task.IsEnabled)
+                    {
+                        task.Configure();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    errorLoggerService.Error(ex);
+                }
+            }
         }
     }
 }
