@@ -3,7 +3,7 @@
 // Globals
 var isEmbed = window != window.parent;
 var site = site || {};
-site.baseUrl = "/ect";
+site.baseUrl = "";
 var disableTypeahead = 1;
 // stolen from boostrap-datepicker.js DL...
 // Extend for general functions

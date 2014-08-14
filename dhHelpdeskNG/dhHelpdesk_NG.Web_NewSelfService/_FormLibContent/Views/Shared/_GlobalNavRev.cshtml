@@ -1,0 +1,74 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+@{
+    var baseUrl = Url.CurrentController();
+    var freezeAction = "";
+    var freeze = "";
+
+    if(!FormLibUtils.IsSelfService())
+    {
+        if(Model.Contract.Id > 0)
+        {
+            if(ECT.FormLib.FormLibSessions.User.WorkingGroups != null
+                && ECT.FormLib.FormLibSessions.User.WorkingGroups.FirstOrDefault(x => x.Id == Model.Contract.WorkingGroupId) == null)
+            {
+                Model.IsLooked = true;
+            }
+        }
+    }
+    else
+    {
+        if(Model.Contract.StateSecondaryId > 10)
+        {
+            Model.IsLooked = true;
+        }
+    }
+
+    if(Model.IsLooked || Model.Contract.StateSecondaryId > 59 /* over 59 then the case is closed or cancelled */)
+    {
+        freezeAction = "disabled";
+        freeze = "disabled";
+    }
+    
+}
+<span style="display: none;" id="ajaxInfo" customerId="@Model.CustomerId" url="@baseUrl"></span>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner navbarbgcolor">
+        <div class="nav-collapse collapse">
+            <ul class="nav" id="navigation">
+                <li>
+                    <button type="submit" class="btn btnmarginleft" @freeze>
+                        @Model.Translate("Save")
+                    </button>
+                </li>
+                <li style="width: 400px;">
+                    <div class="input-append input-append-top margintopleft">
+                        <select name="actionState" id="actionState" class="ieselect" @freezeAction>
+                            <option value="">-- @Model.Translate("Select action") --</option>
+                            @foreach(var pair in Model.GetStatusActions())
+                            {
+                                <option @((pair.Key == Model.ActiveStatus ? "selected" : "")) value="@pair.Key">@Model.Translate(pair.Value)</option>
+                            }
+                        </select>
+                        <button class="btn" name="actionStateChange" id="actionStateChange" type="button" @freezeAction>@Model.Translate("Go") <i class="icon-chevron-right"></i></button>
+                    </div>
+                </li>
+                <li>
+                    <div class="margintopleft" style="padding: 5px;">
+                        @if(FormLibUtils.IsSelfService()
+                            && !string.IsNullOrEmpty(Model.Contract.AlternativeStateSecondaryName))
+                        {
+                            @Model.Translate(Model.Contract.AlternativeStateSecondaryName)
+                        }
+                        else
+                        {
+                            @Model.Translate(Model.Contract.StateSecondary)
+                        }
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

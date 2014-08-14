@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<predefined>
+  <name>DeductionsType</name>
+  <dependent>
+    <selected>Hourly</selected>
+    <show>
+      710C - Simply Health,
+      710B - Health Shield,
+      760H - Badge Charge,
+      760M - Uniform Deduction,
+      760O - ID Card,
+      770F - GMB,
+      76OR - TEC Expenses Deduction,
+      340V - Travel Allowance,
+      8500 - Advanced Deduction      
+    </show>
+  </dependent>
+  <dependent>
+    <selected>Salaried</selected>
+    <show>
+      300J - PHI-Private Health Ins,
+      710B - Health Shield,
+      710C - Simply Health,
+      760D - Rent Deduction,
+      760H - Badge Charge,
+      760O - ID Card,
+      76OR - TEC Expenses Deduction,
+      340V - Travel Allowance,
+      8500 - Advanced Deduction,
+      760M - Uniform Deduction
+    </show>
+  </dependent>
+
+  <dependent>
+    <selected>Salaried Management</selected>
+    <show>
+      300J - PHI-Private Health Ins,
+      710B - Health Shield,
+      710C - Simply Health,
+      760D - Rent Deduction,
+      760H - Badge Charge,
+      760O - ID Card,
+      76OR - TEC Expenses Deduction,
+      340V - Travel Allowance,
+      8500 - Advanced Deduction,
+      760M - Uniform Deduction
+    </show>
+  </dependent>
+
+  <dependent>
+    <selected>Salaried Senior Management</selected>
+    <show>
+      300J - PHI-Private Health Ins,
+      710B - Health Shield,
+      710C - Simply Health,
+      760D - Rent Deduction,
+      760H - Badge Charge,
+      760O - ID Card,
+      76OR - TEC Expenses Deduction,
+      340V - Travel Allowance,
+      8500 - Advanced Deduction,
+      760M - Uniform Deduction
+    </show>
+  </dependent>
+
+</predefined>

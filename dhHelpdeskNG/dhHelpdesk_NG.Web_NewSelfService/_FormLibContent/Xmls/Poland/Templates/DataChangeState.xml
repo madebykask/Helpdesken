@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<state status="0">
+    <status value="0">
+        <visibleTabs></visibleTabs>
+        <readOnlyTabs></readOnlyTabs>
+        <readOnlyFields></readOnlyFields>
+        <actions>
+            <action status="10" text="">
+                <validateWhatYouSee></validateWhatYouSee>
+            </action>
+        </actions>
+    </status>
+    <status value="10">
+        <visibleTabs>#selection,#change</visibleTabs>
+        <readOnlyTabs>#selection</readOnlyTabs>
+        <readOnlyFields></readOnlyFields>
+        <actions>
+            <action status="50" text="Full service request">
+                <validateWhatYouSee></validateWhatYouSee>
+            </action>
+            <action status="99" text="Cancel service request"></action>
+        </actions>
+    </status>
+    <status value="50">
+        <visibleTabs>#selection,#change</visibleTabs>
+        <readOnlyTabs>#selection,#change</readOnlyTabs>
+        <workingGroupRules workingGroup="SSC PA">
+            <visibleFields>HouseNumber,TwoWeekNotice,AdditionalPlaceOfWork,BasicPayInWords,JobTitle,PolishJobTitle,PersonReplaced,Street,StreetNumber,City,PostCode,Region,District,Community,Extent,Workload,BasicPay,BasicPayInWordsPolish,MonthlyHourly,WorkingTimeSchedule</visibleFields>
+        </workingGroupRules>
+        <readOnlyFields></readOnlyFields>
+        <actions>
+            <action status="60" text="Approve">
+                <workingGroupRules workingGroup="SSC PA">    <mandatoryFields>BasicPayInWords,JobTitle,PolishJobTitle,Street,StreetNumber,City,PostCode,Region,District,Community,Extent,Workload,BasicPay,BasicPayInWordsPolish,MonthlyHourly,WorkingTimeSchedule</mandatoryFields>
+                </workingGroupRules>
+                <validateWhatYouSee></validateWhatYouSee>
+            </action>
+            <action status="10" text="Reject"></action>
+            <action status="99" text="Cancel service request"></action>
+        </actions>
+    </status>
+    <status value="60">
+        <visibleTabs>#selection,#change,#documents,#globalview</visibleTabs>
+        <readOnlyTabs>#selection,#change</readOnlyTabs>
+        <readOnlyFields></readOnlyFields>
+        <actions>
+            <action status="65" text="GV Updated"></action>
+            <action status="99" text="Cancel service request"></action>
+        </actions>
+    </status>
+    <status value="65">
+        <visibleTabs>#selection,#change,#documents,#globalview</visibleTabs>
+        <readOnlyTabs>#selection,#change</readOnlyTabs>
+        <readOnlyFields></readOnlyFields>
+        <actions>
+            <action status="70" text="Quality ok"></action>
+            <action status="60" text="Quality not ok"></action>
+            <action status="99" text="Cancel service request"></action>
+        </actions>
+    </status>
+    <status value="70">
+        <visibleTabs>#selection,#change,#documents,#globalview</visibleTabs>
+        <readOnlyTabs>#selection,#change</readOnlyTabs>
+        <readOnlyFields></readOnlyFields>
+        <actions>
+            <action status="90" text="Close service request">
+                <validateWhatYouSee></validateWhatYouSee>
+            </action>
+            <action status="99" text="Cancel service request"></action>
+        </actions>
+    </status>
+    <status value="90">
+        <visibleTabs>#selection,#change,#documents,#globalview</visibleTabs>
+        <readOnlyTabs>#selection,#change,#globalview</readOnlyTabs>
+        <readOnlyFields></readOnlyFields>
+    </status>
+    <status value="99">
+        <visibleTabs>#selection,#change,#documents,#globalview</visibleTabs>
+        <readOnlyTabs>#selection,#change,#documents,#globalview</readOnlyTabs>
+        <readOnlyFields></readOnlyFields>
+    </status>
+</state>

@@ -1,8 +1,74 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <predefined>
   <name>CostCentre</name>
-
   <dependent>
+    <selected>Advanced</selected>
+    <show1>0,35</show1>
+    <show2></show2>
+    <show3></show3>
+  </dependent>
+  <dependent>
+    <selected>Fork Lift Truck Allowance</selected>
+    <show1>0,92</show1>
+    <show2></show2>
+    <show3></show3>
+  </dependent>
+  <dependent>
+    <selected>Kitchen Skills</selected>
+    <show1>1,48</show1>
+    <show2></show2>
+    <show3></show3>
+  </dependent>
+  <dependent>
+    <selected>Hourly AHP</selected>
+    <show1>0,27</show1>
+    <show2>Gross</show2>
+    <show3></show3>
+  </dependent>
+  <dependent>
+    <selected>Hourly Day</selected>
+    <show1>0,73</show1>
+    <show2></show2>
+    <show3></show3>
+  </dependent>
+  <dependent>
+    <selected>IKEA1 Skills</selected>
+    <show1>0,98</show1>
+    <show2></show2>
+    <show3></show3>
+  </dependent>
+  <dependent>
+    <selected>IKEA2 Skills</selected>
+    <show1>1,48</show1>
+    <show2></show2>
+    <show3></show3>
+  </dependent>
+  <dependent>
+    <selected>Manual Hand</selected>
+    <show1>0,35</show1>
+    <show2></show2>
+    <show3></show3>
+  </dependent>
+  <dependent>
+    <selected>Night Shift</selected>
+    <show1>2,03</show1>
+    <show2></show2>
+    <show3></show3>
+  </dependent>
+  <dependent>
+    <selected>Pallet Resue</selected>
+    <show1>0,17</show1>
+    <show2></show2>
+    <show3></show3>
+  </dependent>
+  <dependent>
+    <selected>Shunter Allow</selected>
+    <show1>0,35</show1>
+    <show2></show2>
+    <show3></show3>
+  </dependent>
+
+  <!--<dependent>
     <selected>150C - Hourly FLT Skills (Fork Lift Truck Allowance)_Hourly</selected>
     <show1>0,92</show1>
     <show2>Gross</show2>
@@ -998,6 +1064,6 @@
     <show1></show1>
     <show2>Net</show2>
     <show3></show3>
-  </dependent>
+  </dependent>-->
 
 </predefined>

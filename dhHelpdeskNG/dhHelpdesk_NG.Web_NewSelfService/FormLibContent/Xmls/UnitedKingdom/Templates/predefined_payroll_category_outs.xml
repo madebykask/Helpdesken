@@ -2,22 +2,14 @@
 <predefined>
   <name>CostCentre</name>
   <dependent>
-    <selected>Account Receivable Co-worker</selected>
+    <selected>A&amp;R Sales Reconciliation Co-worker</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Accountant</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Accounting Assistant</selected>
@@ -25,17 +17,9 @@
     <show2></show2>
     <show3></show3>
     <show4>46</show4>
-    <show5>Co-worker</show5>
-    <show6>Level 1</show6>
-  </dependent>
-  <dependent>
-    <selected>Accounting Assistant - Bookeeping</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show5>Level 2</show5>
+    <show6>Level 2</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Accounting Assistant - Reconciliation</selected>
@@ -45,33 +29,17 @@
     <show4></show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
-    <selected>Accounting Co-worker</selected>
+    <selected>Accounts Receivable Coworker</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Accounting General Ledger Co-worker</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Accounting Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4>54</show4>
-    <show5>Level 1</show5>
-    <show6>Level 2</show6>
+    <show7>Hourly</show7>
   </dependent>
   <dependent>
     <selected>Accounts Receivable Manager/Senior Financial Accountant</selected>
@@ -81,6 +49,17 @@
     <show4>53</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Activities Specialist</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Activity Co-worker</selected>
@@ -90,15 +69,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Activity Leader</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Hourly</show7>
   </dependent>
   <dependent>
     <selected>Activity Specialist</selected>
@@ -108,6 +79,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Admin Assistant</selected>
@@ -117,6 +89,7 @@
     <show4>50</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Administration Specialist</selected>
@@ -126,15 +99,7 @@
     <show4>52</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
-  </dependent>
-  <dependent>
-    <selected>Administrative Specialist</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Administrator</selected>
@@ -144,6 +109,17 @@
     <show4>49</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
+  </dependent>
+  <dependent>
+    <selected>Administrator Risk</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Advertising Manager</selected>
@@ -153,6 +129,7 @@
     <show4>53</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>After Sales Team Leader</selected>
@@ -162,6 +139,7 @@
     <show4></show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>ASM</selected>
@@ -171,15 +149,17 @@
     <show4></show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
-    <selected>ASM Cust &amp; Ops</selected>
+    <selected>Assembley Specialist</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Asset Manager</selected>
@@ -189,6 +169,7 @@
     <show4>54</show4>
     <show5>Level 1</show5>
     <show6>Level 2</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Assistant Store Manager</selected>
@@ -198,6 +179,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Backpacker</selected>
@@ -207,6 +189,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Bathshop Team Leader</selected>
@@ -216,6 +199,7 @@
     <show4></show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Benefits Specialist</selected>
@@ -225,6 +209,7 @@
     <show4>48</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Business Analyst</selected>
@@ -234,6 +219,7 @@
     <show4>51</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Business Development Manager</selected>
@@ -243,6 +229,7 @@
     <show4>54</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Business Development Specialist</selected>
@@ -252,6 +239,7 @@
     <show4>49</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Business Intelligence Analyst</selected>
@@ -261,6 +249,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Business Leader</selected>
@@ -270,6 +259,7 @@
     <show4>58</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Business leader Kitchen &amp; Dining</selected>
@@ -279,6 +269,7 @@
     <show4>59</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Business Navigation &amp; Operations Manager</selected>
@@ -288,6 +279,7 @@
     <show4></show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Business Navigation Analyst</selected>
@@ -297,6 +289,17 @@
     <show4>51</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
+  </dependent>
+  <dependent>
+    <selected>Business Navigation Co-Worker</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Hourly</show7>
   </dependent>
   <dependent>
     <selected>Business Navigation Manager</selected>
@@ -306,6 +309,7 @@
     <show4>58</show4>
     <show5>Level 3</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Business Navigation Team Leader</selected>
@@ -315,6 +319,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Business Navigator</selected>
@@ -324,6 +329,17 @@
     <show4>56</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Business Navigator in Training</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Business Navigator Trainee</selected>
@@ -333,6 +349,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Business Support Manager</selected>
@@ -342,6 +359,7 @@
     <show4>56</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Business Support Specialist</selected>
@@ -351,15 +369,7 @@
     <show4>54</show4>
     <show5></show5>
     <show6>Level 2</show6>
-  </dependent>
-  <dependent>
-    <selected>Business Systems &amp; Process Specialist</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4>50</show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Business Systems and Process Support</selected>
@@ -369,6 +379,7 @@
     <show4>50</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Capacity &amp; Flow Planner</selected>
@@ -378,6 +389,7 @@
     <show4>49</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Carpenter</selected>
@@ -387,24 +399,27 @@
     <show4></show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
-    <selected>Carpenter Co-worker</selected>
+    <selected>Cash Line Co-Worker</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Hourly</show7>
   </dependent>
   <dependent>
-    <selected>Cash Line Co-worker</selected>
+    <selected>Cash Office Team Leader</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Catalogue &amp; Brochure Specialist</selected>
@@ -414,24 +429,27 @@
     <show4>49</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
-    <selected>CC   Operations Training Specialist</selected>
+    <selected>CC Operations Training Specialist</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4>49</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
-    <selected>CD Transport Operations Manager</selected>
+    <selected>CDC Warehouse Operations Mgr</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>CDOS Co-worker</selected>
@@ -441,6 +459,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>CDOS Team Leader</selected>
@@ -450,15 +469,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>CDT Operational Field Responsible</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Central Ordering Specialist</selected>
@@ -468,15 +479,17 @@
     <show4>48</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
-    <selected>Change and implementation manager</selected>
+    <selected>Change and Implementation Manager</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Change Management Responsible</selected>
@@ -486,6 +499,17 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
+  </dependent>
+  <dependent>
+    <selected>Change Manager</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Checkout Services Co-worker</selected>
@@ -495,6 +519,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Hourly</show7>
   </dependent>
   <dependent>
     <selected>Checkout Services Manager</selected>
@@ -504,6 +529,7 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Checkout Services Team Leader</selected>
@@ -513,6 +539,17 @@
     <show4></show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
+  </dependent>
+  <dependent>
+    <selected>Chief Finance Officer</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Chief Financial Officer</selected>
@@ -522,6 +559,7 @@
     <show4></show4>
     <show5></show5>
     <show6>Level 3</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Com &amp; In Co-worker</selected>
@@ -531,6 +569,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Hourly</show7>
   </dependent>
   <dependent>
     <selected>Com &amp; In Manager</selected>
@@ -540,15 +579,27 @@
     <show4></show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
-    <selected>Com&amp;In Learning &amp; Development Leader</selected>
+    <selected>Comm &amp; In Manager</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
-    <show4>54</show4>
-    <show5>Level 2</show5>
-    <show6>Level 2</show6>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Commercial Activities Leader</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Commercial Activity Leader</selected>
@@ -558,6 +609,7 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Commercial Manager</selected>
@@ -567,15 +619,7 @@
     <show4>52</show4>
     <show5>Level 1</show5>
     <show6>Level 2</show6>
-  </dependent>
-  <dependent>
-    <selected>Commercial Planning Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Commercial Restaurant Manager</selected>
@@ -585,15 +629,7 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
-  </dependent>
-  <dependent>
-    <selected>Commercial Restaurant Team Leader</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Commercial Review Manager</selected>
@@ -603,6 +639,7 @@
     <show4>61</show4>
     <show5>Level 3</show5>
     <show6>Level 3</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Commercial Services Administrator</selected>
@@ -612,6 +649,7 @@
     <show4>46</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Commercial Services Team Leader</selected>
@@ -621,6 +659,7 @@
     <show4>47</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Commercial SFM &amp; Bistro Manager</selected>
@@ -630,33 +669,27 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
-    <selected>Commercial SFM &amp; Bistro Team Leader</selected>
+    <selected>Comm-In Learning &amp; Development Leader</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4>54</show4>
+    <show5>Level 2</show5>
+    <show6>Level 2</show6>
+    <show7>Hourly</show7>
+  </dependent>
+  <dependent>
+    <selected>Community Education Specialist</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Commercial Specialist</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Communications Specialist - Senior</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Comp &amp; Bens Specialist</selected>
@@ -666,6 +699,7 @@
     <show4>49</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Compensation &amp; Benefits Manager</selected>
@@ -675,15 +709,7 @@
     <show4>56</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
-  </dependent>
-  <dependent>
-    <selected>Competence Developer</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Competence Development Specialist</selected>
@@ -693,6 +719,7 @@
     <show4>52</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Construction Manager</selected>
@@ -702,6 +729,7 @@
     <show4>59</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Construction Project Manager</selected>
@@ -711,15 +739,17 @@
     <show4>55</show4>
     <show5>Level 1</show5>
     <show6>Level 2</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
-    <selected>Contact Center Manager</selected>
+    <selected>Contact Center Specialist</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Contact Centre Specialist</selected>
@@ -729,6 +759,7 @@
     <show4>50</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Country Activity Leader</selected>
@@ -738,24 +769,7 @@
     <show4>54</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
-  </dependent>
-  <dependent>
-    <selected>Country Com&amp;In Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Country Commercial Activity Leader</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Country CommIn Manager</selected>
@@ -765,51 +779,7 @@
     <show4>59</show4>
     <show5>Level 3</show5>
     <show6>Level 2</show6>
-  </dependent>
-  <dependent>
-    <selected>Country Customer Relations Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Country Facility Management Specialist</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Country Facility Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Country Family Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Country Graphic Communication Leader</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Country HR Manager</selected>
@@ -819,15 +789,7 @@
     <show4>63</show4>
     <show5>Level 3</show5>
     <show6>Level 2</show6>
-  </dependent>
-  <dependent>
-    <selected>Country IKEA Business Leader</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Country IKEA Food Manager</selected>
@@ -837,6 +799,7 @@
     <show4>60</show4>
     <show5>Level 3</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Country Implementation Leader</selected>
@@ -846,33 +809,27 @@
     <show4>51</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
-    <selected>Country In-Store Logistics Manager</selected>
+    <selected>Country Local Marketing Manager</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
-    <selected>Country Marketing Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Country PR &amp; Internal comms manager</selected>
+    <selected>Country PR &amp; Internal Comms Manager</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4>59</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Country Purchase Manager</selected>
@@ -880,8 +837,9 @@
     <show2></show2>
     <show3></show3>
     <show4>56</show4>
-    <show5>Level 2</show5>
+    <show5>Level 1</show5>
     <show6>Level 2</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Country Retail Manager</selected>
@@ -891,24 +849,17 @@
     <show4>67</show4>
     <show5>Level 3</show5>
     <show6>Level 3</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
-    <selected>Country Risk &amp; Compliance Manager</selected>
+    <selected>Country Risk and Compliance Manager</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
-  </dependent>
-  <dependent>
-    <selected>Country Risk Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Country Sales Manager</selected>
@@ -918,6 +869,7 @@
     <show4>63</show4>
     <show5>Level 3</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Country Visual Merchandise/ Activity Co-worker</selected>
@@ -927,6 +879,7 @@
     <show4>46</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Country Visual Merchandise/ Activity Manager</selected>
@@ -936,15 +889,17 @@
     <show4>54</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
-    <selected>Co-worker Relations Manager</selected>
+    <selected>Co-Worker Relations Manager</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4>56</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Credit Control Co-worker</selected>
@@ -954,6 +909,17 @@
     <show4></show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
+  </dependent>
+  <dependent>
+    <selected>Credit Control Manager &amp; Financial Acc</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Credit Control Manager &amp; Financial Accountant</selected>
@@ -963,6 +929,17 @@
     <show4>52</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Customer Care Administrator</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Customer Care Manager</selected>
@@ -972,6 +949,7 @@
     <show4>54</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Customer Care Specialist</selected>
@@ -981,6 +959,7 @@
     <show4>48</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Customer Delivery Manager</selected>
@@ -990,6 +969,7 @@
     <show4>55</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Customer Distribution Manager</selected>
@@ -999,6 +979,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Customer Fulfillment Manager</selected>
@@ -1008,6 +989,7 @@
     <show4>60</show4>
     <show5>Level 3</show5>
     <show6>Level 2</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Customer Insight Specialist</selected>
@@ -1017,15 +999,27 @@
     <show4>48</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
-    <selected>Customer Relations Co-worker</selected>
+    <selected>Customer Order Delivery Specialist</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
+  </dependent>
+  <dependent>
+    <selected>Customer Relations Co-Worker</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Hourly</show7>
   </dependent>
   <dependent>
     <selected>Customer Relations Manager</selected>
@@ -1035,6 +1029,7 @@
     <show4></show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Customer Relations Team Leader</selected>
@@ -1044,6 +1039,7 @@
     <show4></show4>
     <show5>Co-worker</show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Customer Service Co-worker</selected>
@@ -1053,6 +1049,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Hourly</show7>
   </dependent>
   <dependent>
     <selected>Customer Service Manager</selected>
@@ -1062,6 +1059,7 @@
     <show4>56</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Customer Service Manager - After Sales</selected>
@@ -1071,6 +1069,7 @@
     <show4>52</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Customer Service Manager - Commercial Services</selected>
@@ -1080,6 +1079,7 @@
     <show4>52</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Customer Service Manager - Customer Support</selected>
@@ -1089,6 +1089,7 @@
     <show4>52</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Customer Service Manager - Deliveries</selected>
@@ -1098,15 +1099,7 @@
     <show4>52</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
-  </dependent>
-  <dependent>
-    <selected>Customer Service Specialist</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Customer Service Team Leader</selected>
@@ -1116,6 +1109,7 @@
     <show4>47</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Customer Services Co-worker</selected>
@@ -1125,6 +1119,27 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Hourly</show7>
+  </dependent>
+  <dependent>
+    <selected>Customer Services CW Contact Centre</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Hourly</show7>
+  </dependent>
+  <dependent>
+    <selected>Customer Services CW Edinburgh Store</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Hourly</show7>
   </dependent>
   <dependent>
     <selected>Customer Services Manager</selected>
@@ -1134,15 +1149,47 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
-    <selected>Customer Services Team Manager</selected>
+    <selected>Customer Services Manager - Commercial</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Customer Services Manager in Training</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Customer Services Specialist</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried</show7>
+  </dependent>
+  <dependent>
+    <selected>Customer Services Team Leader</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Customs Co-worker</selected>
@@ -1152,33 +1199,17 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
-    <selected>Database specialist</selected>
+    <selected>DC &amp; ESP Contract Manager</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>DC Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>DC Quality Co-worker</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>DCG Operational Support Coordinator</selected>
@@ -1188,6 +1219,27 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
+  </dependent>
+  <dependent>
+    <selected>Deputy Business Navigation &amp; Ops Manager</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Deputy Business Navigation &amp; Ops Mgr</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Deputy Business Navigation and Operation</selected>
@@ -1197,24 +1249,17 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
-    <selected>Deputy Business Navigation Manager</selected>
+    <selected>Deputy Category Manager CDT</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Deputy Category Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Deputy Country CommIn Manager</selected>
@@ -1224,6 +1269,7 @@
     <show4></show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Deputy Customer Services Manager</selected>
@@ -1233,6 +1279,17 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Deputy eCommerce Manager</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Deputy E-Commerce Manager</selected>
@@ -1242,6 +1299,7 @@
     <show4>58</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Deputy Finance Manager</selected>
@@ -1251,6 +1309,7 @@
     <show4>56</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Deputy IF Manager</selected>
@@ -1260,6 +1319,17 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
+  </dependent>
+  <dependent>
+    <selected>Deputy Logistics Manager</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Deputy Marketing Manager</selected>
@@ -1269,6 +1339,7 @@
     <show4>59</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Deputy Retail Logistics Manager</selected>
@@ -1278,6 +1349,7 @@
     <show4>59</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Deputy Retail Manager</selected>
@@ -1287,6 +1359,7 @@
     <show4>64</show4>
     <show5>Level 3</show5>
     <show6>Level 3</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Deputy Risk Manager</selected>
@@ -1296,6 +1369,7 @@
     <show4>53</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Deputy Sales Manager</selected>
@@ -1305,24 +1379,37 @@
     <show4></show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Deputy Store Navigation and Operations Manager</selected>
-    <show1>-</show1>
+    <show1></show1>
     <show2>52</show2>
     <show3>52</show3>
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
-    <selected>Easy Buy Process Manager</selected>
+    <selected>Deputy Warehouse Team Leader</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Hourly Distribution</show7>
+  </dependent>
+  <dependent>
+    <selected>DS North Warehousing Logistics Manager</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Easy Buying Process Manager</selected>
@@ -1332,6 +1419,7 @@
     <show4>56</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Easy Buying Specialist</selected>
@@ -1341,15 +1429,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>eCommerce Business Process Specialist</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Hourly</show7>
   </dependent>
   <dependent>
     <selected>eCommerce Fraud Specialist</selected>
@@ -1359,6 +1439,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>E-Commerce Manager</selected>
@@ -1368,6 +1449,7 @@
     <show4>61</show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Ecommerce Operations Specialist</selected>
@@ -1377,6 +1459,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Engineering Manager</selected>
@@ -1386,15 +1469,7 @@
     <show4>54</show4>
     <show5></show5>
     <show6>Level 2</show6>
-  </dependent>
-  <dependent>
-    <selected>Environmental Specialist</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>ESP Operations Coordinator</selected>
@@ -1404,6 +1479,27 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
+  </dependent>
+  <dependent>
+    <selected>External Kitchen Planner</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried</show7>
+  </dependent>
+  <dependent>
+    <selected>Facilies Management Specialist</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Facilities Manager</selected>
@@ -1413,6 +1509,7 @@
     <show4>57</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Facility Co-worker</selected>
@@ -1422,6 +1519,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Hourly</show7>
   </dependent>
   <dependent>
     <selected>Facility Management Specialist</selected>
@@ -1431,6 +1529,7 @@
     <show4>50</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Facility Manager</selected>
@@ -1440,6 +1539,7 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Facility Specialist</selected>
@@ -1449,6 +1549,7 @@
     <show4></show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Family Co-ordinator</selected>
@@ -1458,6 +1559,7 @@
     <show4>49</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Family Co-worker</selected>
@@ -1467,6 +1569,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Hourly</show7>
   </dependent>
   <dependent>
     <selected>Family Manager</selected>
@@ -1476,24 +1579,17 @@
     <show4>53</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
-    <selected>Finance &amp; Admin Specialist</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4>47</show4>
-    <show5></show5>
-    <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Finance Business Support Manager</selected>
+    <selected>Finance Administrator</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Finance Manager</selected>
@@ -1503,6 +1599,7 @@
     <show4>58</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Financial Accountant</selected>
@@ -1512,6 +1609,7 @@
     <show4>48</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Financial Systems &amp; Projects Specialist</selected>
@@ -1521,6 +1619,7 @@
     <show4>53</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Food Business Analyst</selected>
@@ -1530,6 +1629,7 @@
     <show4>54</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Food Competence Developer</selected>
@@ -1539,6 +1639,7 @@
     <show4>54</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Food Production Specialist</selected>
@@ -1548,15 +1649,7 @@
     <show4></show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
-  </dependent>
-  <dependent>
-    <selected>Fraud &amp; Reconcilliation</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4>42</show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Fraud and Finance Specialist</selected>
@@ -1566,33 +1659,7 @@
     <show4>48</show4>
     <show5></show5>
     <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Full Serve Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Full Serve Team Leader</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Full Serve Warehouse Team Leader</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Furniture Builder</selected>
@@ -1602,6 +1669,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>General Ledger Co-worker</selected>
@@ -1611,6 +1679,7 @@
     <show4>45</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>General Ledger Specialist</selected>
@@ -1620,15 +1689,7 @@
     <show4>50</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
-  </dependent>
-  <dependent>
-    <selected>General Ledger Supervisor</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>General Ledger Team Leader</selected>
@@ -1638,6 +1699,7 @@
     <show4>48</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Goods Flow Co-worker</selected>
@@ -1647,6 +1709,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Hourly</show7>
   </dependent>
   <dependent>
     <selected>Goods Flow Manager</selected>
@@ -1656,15 +1719,7 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
-  </dependent>
-  <dependent>
-    <selected>Goods Flow Specialist</selected>
-    <show1>49</show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Goods Flow Team Leader</selected>
@@ -1674,6 +1729,17 @@
     <show4></show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
+  </dependent>
+  <dependent>
+    <selected>Goods Flow Team Leader (in Trainning)</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Hourly</show7>
   </dependent>
   <dependent>
     <selected>Goods Flow Team Manager</selected>
@@ -1683,6 +1749,7 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Graphic Communication Co-Worker</selected>
@@ -1692,6 +1759,7 @@
     <show4></show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Graphic Communication Leader</selected>
@@ -1701,15 +1769,17 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
-    <selected>Greeter</selected>
+    <selected>Group Technical Manager Property</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Handling Materials Administrator</selected>
@@ -1719,6 +1789,47 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
+  </dependent>
+  <dependent>
+    <selected>HFB 14,15 Manager</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried Management</show7>
+  </dependent>
+  <dependent>
+    <selected>HFB 16,17 Manager</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried Management</show7>
+  </dependent>
+  <dependent>
+    <selected>HFB 18,19 Manager</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried Management</show7>
+  </dependent>
+  <dependent>
+    <selected>HFB 4,5 Manager</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>HR Admin Manager</selected>
@@ -1728,6 +1839,7 @@
     <show4>53</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>HR Administrator</selected>
@@ -1737,15 +1849,27 @@
     <show4></show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
-    <selected>HR Co-worker</selected>
+    <selected>HR Co-Worker</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Hourly</show7>
+  </dependent>
+  <dependent>
+    <selected>HR Co-worker Backpacker</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>HR Generalist</selected>
@@ -1755,6 +1879,7 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>HR Manager</selected>
@@ -1764,6 +1889,7 @@
     <show4></show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>HR Operations Manager</selected>
@@ -1773,33 +1899,17 @@
     <show4>59</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
-    <selected>HR Service Center Manager</selected>
+    <selected>HR System Support Specialist</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>HRMS Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>HRMS Specialist</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>HRSC Manager</selected>
@@ -1809,6 +1919,7 @@
     <show4>56</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>IKEA Family Coordinator</selected>
@@ -1818,6 +1929,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>IKEA Food Co-worker</selected>
@@ -1827,15 +1939,27 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Hourly</show7>
   </dependent>
   <dependent>
-    <selected>IKEA FOOD Manager</selected>
+    <selected>IKEA Food Manager</selected>
     <show1>54</show1>
     <show2>54</show2>
     <show3>55</show3>
     <show4></show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
+  </dependent>
+  <dependent>
+    <selected>IKEA Food Manager In Training</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>IKEA Food Team Leader</selected>
@@ -1845,15 +1969,7 @@
     <show4></show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
-  </dependent>
-  <dependent>
-    <selected>Implementation Rollout Trainer</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Info &amp; Smaland Team Leader</selected>
@@ -1863,6 +1979,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Information &amp; Communication Specialist</selected>
@@ -1872,6 +1989,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Information Security Manager</selected>
@@ -1881,24 +1999,17 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
-    <selected>Information security responsible</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Instore Logistics Manager</selected>
+    <selected>InStore Logistics Manager</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4>56</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Interior Design Co-worker</selected>
@@ -1908,6 +2019,7 @@
     <show4></show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Interior Design Leader</selected>
@@ -1917,6 +2029,7 @@
     <show4>54</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Interior Design Manager</selected>
@@ -1926,15 +2039,7 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
-  </dependent>
-  <dependent>
-    <selected>Interior Designer Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Internal Communication Specialist</selected>
@@ -1944,6 +2049,7 @@
     <show4>49</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Internal Communications</selected>
@@ -1953,6 +2059,7 @@
     <show4>50</show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Internal Communications Specialist</selected>
@@ -1962,6 +2069,7 @@
     <show4>44</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Internal Communicator</selected>
@@ -1971,6 +2079,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Inventory Co-worker</selected>
@@ -1980,6 +2089,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Hourly Distribution</show7>
   </dependent>
   <dependent>
     <selected>iShop Administrator</selected>
@@ -1989,24 +2099,37 @@
     <show4>47</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
-    <selected>ISL Manager </selected>
-    <show1>54</show1>
-    <show2>55</show2>
-    <show3>56</show3>
-    <show4></show4>
-    <show5>Level 2</show5>
-    <show6>Level 2</show6>
-  </dependent>
-  <dependent>
-    <selected>IT Coordinator</selected>
+    <selected>ISL Manager</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
-    <show4>50</show4>
-    <show5>Co-worker</show5>
-    <show6>Level 1</show6>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
+  </dependent>
+  <dependent>
+    <selected>ISL Manager - Training</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
+  </dependent>
+  <dependent>
+    <selected>IT Co-ordinator</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4>50, 50</show4>
+    <show5>Co-worker, Co-worker</show5>
+    <show6>Level 1, Level 1</show6>
+    <show7>Salaried Management, Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>IT Developer</selected>
@@ -2016,15 +2139,7 @@
     <show4>49</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
-  </dependent>
-  <dependent>
-    <selected>IT Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>IT Project Manager</selected>
@@ -2034,15 +2149,7 @@
     <show4>52</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
-  </dependent>
-  <dependent>
-    <selected>IT Responsible</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>IT Support</selected>
@@ -2052,6 +2159,7 @@
     <show4>48</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>IT Team Leader</selected>
@@ -2061,15 +2169,7 @@
     <show4>53</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
-  </dependent>
-  <dependent>
-    <selected>IT Team Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>IT Team Manager Helpdesk</selected>
@@ -2079,6 +2179,7 @@
     <show4>51</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Kitchen- Country Implementation Group Leader</selected>
@@ -2088,6 +2189,27 @@
     <show4>56</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salaried Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Kitchen Installation CW Glasgow Store</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Hourly</show7>
+  </dependent>
+  <dependent>
+    <selected>Kitchen Installation Manager</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Kitchen Installation Specialist</selected>
@@ -2097,6 +2219,7 @@
     <show4></show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Kitchen Production Manager</selected>
@@ -2106,42 +2229,27 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
-    <selected>Kitchen Production Specialist</selected>
+    <selected>Kitchen Production Manager In Training</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
-    <selected>Kitchen Production Team Leader</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Laws &amp; Standards Manager</selected>
+    <selected>Law &amp; Standards Manager</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4>54</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
-  </dependent>
-  <dependent>
-    <selected>Learning &amp; Development Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4>57</show4>
-    <show5>Level 2</show5>
-    <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Learning &amp; Development Specialist</selected>
@@ -2151,6 +2259,17 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Learning and Development Manager</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Legal Affairs Manager</selected>
@@ -2160,33 +2279,17 @@
     <show4>56</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
-  </dependent>
-  <dependent>
-    <selected>Local Facility Management Specialist</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Local Marketing Leader</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Local Marketing Leader - Comms</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
+    <show1>50</show1>
+    <show2>50</show2>
+    <show3>50</show3>
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Local Marketing Leader (Store)</selected>
@@ -2196,6 +2299,7 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Local Marketing Manager</selected>
@@ -2205,24 +2309,37 @@
     <show4></show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
-    <selected>Local Marketing Specialist</selected>
+    <selected>Local Marketing Manager CMA</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
-    <show5>Co-worker</show5>
-    <show6>Level 1</show6>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
-    <selected>Local Marketing Specialist - IKEA FAMILY</selected>
+    <selected>Local Marketing Specialist</selected>
+    <show1>46</show1>
+    <show2>46</show2>
+    <show3>46</show3>
+    <show4></show4>
+    <show5>Co-worker</show5>
+    <show6>Level 1</show6>
+    <show7>Salaried</show7>
+  </dependent>
+  <dependent>
+    <selected>Local Marketing Specialist - IKEA Family</selected>
     <show1>49</show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Local Marketing Specialist - Local Comms</selected>
@@ -2232,24 +2349,27 @@
     <show4></show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Local Marketing Specialist (Web Channel)</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
+    <show1>47</show1>
+    <show2>47</show2>
+    <show3>47</show3>
     <show4></show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
-    <selected>Logistics Co-worker</selected>
+    <selected>Local Marketing Specialist Comms</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Logistics Manager</selected>
@@ -2259,6 +2379,27 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salary Senior Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Logistics Manager Trainee</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Logistics Specialist</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Maintenance Technician</selected>
@@ -2268,6 +2409,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Management &amp; Development Specialist</selected>
@@ -2277,33 +2419,27 @@
     <show4>54</show4>
     <show5>Level 1</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
-    <selected>Mapping &amp; Logistics Coordinator</selected>
+    <selected>Manager Shop Online</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
-    <selected>Market Intelligence Manager</selected>
+    <selected>Mapping Co-worker</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Marketing Catalogue/Brochure Specialist</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Hourly Distribution</show7>
   </dependent>
   <dependent>
     <selected>Marketing Coordinator</selected>
@@ -2313,6 +2449,7 @@
     <show4>46</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Marketing Database Manager</selected>
@@ -2322,6 +2459,7 @@
     <show4>53</show4>
     <show5>Level 1</show5>
     <show6>Level 2</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Marketing Intelligence Manager</selected>
@@ -2331,6 +2469,7 @@
     <show4>57</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Marketing Manager</selected>
@@ -2340,15 +2479,37 @@
     <show4>61</show4>
     <show5>Level 3</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
-    <selected>Meeting &amp; Travel Coordinator</selected>
+    <selected>Marketing Projects Manager</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
-    <show4>51</show4>
-    <show5>Co-worker</show5>
-    <show6>Level 1</show6>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Meeting &amp; Travel Co-ordinator</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried Management</show7>
+  </dependent>
+  <dependent>
+    <selected>MHE Responsible</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Hourly Distribution</show7>
   </dependent>
   <dependent>
     <selected>MHE Trainer</selected>
@@ -2358,6 +2519,17 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Hourly Distribution</show7>
+  </dependent>
+  <dependent>
+    <selected>National Purchaser</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Operational Support Co-worker</selected>
@@ -2367,15 +2539,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Operational Support Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Hourly Distribution</show7>
   </dependent>
   <dependent>
     <selected>Operational Support Team Leader</selected>
@@ -2385,6 +2549,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Operations Manager</selected>
@@ -2394,6 +2559,7 @@
     <show4>55</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Operations Planning Coordinator</selected>
@@ -2403,6 +2569,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Operations Specialist</selected>
@@ -2412,6 +2579,17 @@
     <show4>48</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
+  </dependent>
+  <dependent>
+    <selected>Operations Training Specialist</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>P2P Leader</selected>
@@ -2421,6 +2599,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Payroll &amp; Systems Manager</selected>
@@ -2430,15 +2609,7 @@
     <show4>53</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
-  </dependent>
-  <dependent>
-    <selected>Payroll Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Payroll Specialist</selected>
@@ -2448,6 +2619,7 @@
     <show4>45</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Payroll Team Leader</selected>
@@ -2457,15 +2629,17 @@
     <show4>48</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
-    <selected>PR &amp; Communication Manager</selected>
+    <selected>Pick &amp; Delivery Manager</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>PR &amp; internal Communication Manager</selected>
@@ -2475,6 +2649,7 @@
     <show4>55</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>PR Co-ordinator</selected>
@@ -2484,15 +2659,7 @@
     <show4>46</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
-  </dependent>
-  <dependent>
-    <selected>PR Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>PR Manager Commercial</selected>
@@ -2502,6 +2669,7 @@
     <show4>53</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>PR Manager Corporate</selected>
@@ -2511,24 +2679,7 @@
     <show4>54</show4>
     <show5>Level 1</show5>
     <show6>Level 2</show6>
-  </dependent>
-  <dependent>
-    <selected>Press &amp; PR Coordinator</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Press Contact Officer</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Press Officer</selected>
@@ -2538,6 +2689,7 @@
     <show4>49</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Process Developer</selected>
@@ -2547,6 +2699,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Procure to Pay Leader</selected>
@@ -2556,6 +2709,7 @@
     <show4>50</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Product Quality Technician</selected>
@@ -2565,6 +2719,7 @@
     <show4>45</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Project Administrator</selected>
@@ -2574,6 +2729,17 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
+  </dependent>
+  <dependent>
+    <selected>Project Co-ordinator</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Project Implementation Manager</selected>
@@ -2583,6 +2749,7 @@
     <show4>56</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Project Leader</selected>
@@ -2592,6 +2759,7 @@
     <show4>55</show4>
     <show5>Level 2</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Project Leader - Markethall</selected>
@@ -2601,6 +2769,7 @@
     <show4>56</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Project Leader Business Development</selected>
@@ -2610,6 +2779,7 @@
     <show4>52</show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Project Manager</selected>
@@ -2619,6 +2789,17 @@
     <show4>54</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Project Manager E-Commmerce</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Project Manager Picking and Delivery</selected>
@@ -2628,6 +2809,27 @@
     <show4></show4>
     <show5></show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Project Manager Property</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Project Sales Work Stream Leader</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Project Specialist</selected>
@@ -2637,6 +2839,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Project Specialist Finance</selected>
@@ -2646,6 +2849,17 @@
     <show4>46</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
+  </dependent>
+  <dependent>
+    <selected>Property Administrator</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Property Assistant</selected>
@@ -2655,6 +2869,7 @@
     <show4>48</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Property Manager</selected>
@@ -2664,6 +2879,17 @@
     <show4>58</show4>
     <show5>Level 3</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Publications Specialist</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Purchase Consultant</selected>
@@ -2673,6 +2899,7 @@
     <show4>52</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Purchaser</selected>
@@ -2682,6 +2909,7 @@
     <show4>52</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Q Store Quality Manager</selected>
@@ -2691,6 +2919,7 @@
     <show4>51</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Quality Auditor</selected>
@@ -2700,6 +2929,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Quality Co-worker</selected>
@@ -2709,15 +2939,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Quality Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Hourly</show7>
   </dependent>
   <dependent>
     <selected>Quality Specialist</selected>
@@ -2727,15 +2949,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Quality Support</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Quality Team Manager</selected>
@@ -2745,6 +2959,7 @@
     <show4>51</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Range &amp; Purchasing Manager</selected>
@@ -2754,15 +2969,17 @@
     <show4>55</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
-    <selected>Range &amp;Purchasing Manager</selected>
+    <selected>Range Specialist</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Range Support</selected>
@@ -2772,6 +2989,7 @@
     <show4></show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Real Estate &amp; Development Manager</selected>
@@ -2781,15 +2999,7 @@
     <show4>59</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
-  </dependent>
-  <dependent>
-    <selected>Real Estate Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Real Estate Project Manager</selected>
@@ -2799,15 +3009,17 @@
     <show4>55</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
-    <selected>ReceIve Payment Leader</selected>
+    <selected>Receive Payment Leader</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4>50</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Receive Payment Manager</selected>
@@ -2817,6 +3029,7 @@
     <show4>52</show4>
     <show5>Level 2</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Receptionist</selected>
@@ -2826,6 +3039,7 @@
     <show4>43</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Reconciliation Co-worker</selected>
@@ -2835,6 +3049,7 @@
     <show4>44</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Reconciliation Team Leader</selected>
@@ -2844,6 +3059,7 @@
     <show4>46</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Reconcilliation and Administration Specialist</selected>
@@ -2853,6 +3069,7 @@
     <show4>45</show4>
     <show5>Co-worker </show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Recovery Co-worker</selected>
@@ -2862,6 +3079,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Hourly</show7>
   </dependent>
   <dependent>
     <selected>Recovery Manager</selected>
@@ -2871,6 +3089,7 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Recovery Specialist</selected>
@@ -2880,6 +3099,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Recovery Team Leader</selected>
@@ -2889,6 +3109,7 @@
     <show4></show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Recruitment &amp; Succession Manager</selected>
@@ -2898,6 +3119,7 @@
     <show4>56</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Recruitment Specialist</selected>
@@ -2907,6 +3129,7 @@
     <show4>53</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Regional Safety &amp; Security Mgr</selected>
@@ -2916,24 +3139,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Replenishment Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Replenishment Team Leader</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Resource Planning Manager</selected>
@@ -2943,6 +3149,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Retail Capacity Manager</selected>
@@ -2952,6 +3159,7 @@
     <show4>53</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Retail Establishment Manager</selected>
@@ -2961,24 +3169,17 @@
     <show4>57</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
-    <selected>Retail Information Security Manager</selected>
+    <selected>Retail HR Manager</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Retail Logistics Capacity &amp; Flow Planner</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Retail Logistics Manager</selected>
@@ -2988,6 +3189,17 @@
     <show4>60</show4>
     <show5>Level 3</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Retail Manager</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Retail Operations Manager</selected>
@@ -2997,6 +3209,7 @@
     <show4>58</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Retail Preparation Manager</selected>
@@ -3006,6 +3219,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Retail Project Manager</selected>
@@ -3015,15 +3229,7 @@
     <show4>55</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
-  </dependent>
-  <dependent>
-    <selected>Retail Supply Chain Integration Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Retail Supply Integration Manager</selected>
@@ -3033,6 +3239,7 @@
     <show4>56</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Risk Manager</selected>
@@ -3042,6 +3249,7 @@
     <show4>57</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Safety &amp; Security Co-worker</selected>
@@ -3051,15 +3259,7 @@
     <show4></show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
-  </dependent>
-  <dependent>
-    <selected>Safety &amp; Security Function Support</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Safety &amp; Security Manager</selected>
@@ -3069,6 +3269,17 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Safety &amp; Security Manager in Training</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Safety &amp; Security Specialist</selected>
@@ -3078,15 +3289,27 @@
     <show4>48</show4>
     <show5>Co-worker </show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
-    <selected>Safety &amp; Security Team Leader</selected>
+    <selected>Safety and Security Function Support</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
+  </dependent>
+  <dependent>
+    <selected>Safety and Security Function Support (Sp</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Safety and Security Function Support (Specialist)</selected>
@@ -3096,15 +3319,7 @@
     <show4></show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
-  </dependent>
-  <dependent>
-    <selected>Sales &amp; Marketing Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Sales &amp; Supply Support Co-worker</selected>
@@ -3114,6 +3329,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Hourly</show7>
   </dependent>
   <dependent>
     <selected>Sales &amp; Supply Support Manager</selected>
@@ -3123,6 +3339,7 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Sales &amp; Supply Support Specialist</selected>
@@ -3132,6 +3349,7 @@
     <show4></show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Sales Co-worker</selected>
@@ -3141,6 +3359,17 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Hourly</show7>
+  </dependent>
+  <dependent>
+    <selected>Sales Co-worker Annualised</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Annualised</show7>
   </dependent>
   <dependent>
     <selected>Sales External Co-worker</selected>
@@ -3150,15 +3379,47 @@
     <show4></show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
-    <selected>Sales Leader</selected>
+    <selected>Sales Leader Bathroom</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Sales Leader Bedroom</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Sales Leader Childrens</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Sales Leader Cooking &amp; Eating</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Sales Leader Free Range</selected>
@@ -3168,6 +3429,57 @@
     <show4>55</show4>
     <show5></show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Sales Leader Home Decoration</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Sales Leader Home Organisation</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Sales Leader Kitchen &amp; Dining</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Sales Leader Lighting</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Sales Leader Living Room</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Sales Leader Range</selected>
@@ -3177,6 +3489,7 @@
     <show4>55</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Sales Leader Store</selected>
@@ -3186,6 +3499,27 @@
     <show4>56</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Sales Leader Textiles</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Sales Leader Work IKEA &amp; IKEA Business</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Sales Manager</selected>
@@ -3195,6 +3529,27 @@
     <show4></show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Sales Manager in Training</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Sales Manager UK</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Sales Reconcilation Team Leader</selected>
@@ -3204,6 +3559,7 @@
     <show4>47</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Sales Reconciliation Co-worker</selected>
@@ -3213,15 +3569,7 @@
     <show4>44</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
-  </dependent>
-  <dependent>
-    <selected>Sales Specialist</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Sales Specialist - Training</selected>
@@ -3231,6 +3579,27 @@
     <show4></show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
+  </dependent>
+  <dependent>
+    <selected>Sales Specialist - Trainning</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried</show7>
+  </dependent>
+  <dependent>
+    <selected>Sales Support  Manager</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Sales Support Specialist</selected>
@@ -3240,6 +3609,7 @@
     <show4>49</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Sales Support Specialist - Print &amp; Web</selected>
@@ -3249,15 +3619,17 @@
     <show4>48</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
-    <selected>Sales support Specialist - Worktops</selected>
+    <selected>Sales Support Specialist - Worktops</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4>48</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Sales Team Leader</selected>
@@ -3267,15 +3639,17 @@
     <show4></show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
-    <selected>Sales Team Leader BA 03</selected>
+    <selected>Scheduling Specialist</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Season &amp; Activities Team leader</selected>
@@ -3285,6 +3659,17 @@
     <show4></show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
+  </dependent>
+  <dependent>
+    <selected>Self Serve Manager in Training</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Self Serve Team Leader</selected>
@@ -3294,6 +3679,17 @@
     <show4></show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
+  </dependent>
+  <dependent>
+    <selected>Senior Financial Accountant</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>SEO Specialist</selected>
@@ -3303,33 +3699,27 @@
     <show4>50</show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
-    <selected>Services Function Support</selected>
+    <selected>Service Business Operations Manager</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
-    <selected>Services Function Support - Customer Order</selected>
+    <selected>Service Business Ops Field Responsible</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Services Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Services Specialist Systems</selected>
@@ -3339,6 +3729,7 @@
     <show4>51</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Services Team Leader</selected>
@@ -3348,24 +3739,47 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
-    <selected>Shopkeeper</selected>
+    <selected>Services Team Leader Contact Centre</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
-    <selected>Shopkeeper BA 60</selected>
+    <selected>Shopkeeper in Training</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Shopkeeper Sales</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Shopkeeper Sales HFB 18 &amp; 19 (Home Organ</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Shopkeeper Sales HFB 18 &amp; 19 (Home Organisation)</selected>
@@ -3375,6 +3789,7 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Shopkeeper Sales HFB1 &amp; 2 (Livingroom)</selected>
@@ -3384,6 +3799,7 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Shopkeeper Sales HFB10 (Lighting)</selected>
@@ -3393,6 +3809,7 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Shopkeeper Sales HFB11, 12 &amp; 13 (Textiles)</selected>
@@ -3402,6 +3819,7 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Shopkeeper Sales HFB14 &amp; 15 (Cooking Eating)</selected>
@@ -3411,6 +3829,7 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Shopkeeper Sales HFB16 &amp; 17 (Home Decoration)</selected>
@@ -3420,6 +3839,7 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Shopkeeper Sales HFB3 (Work IKEA)</selected>
@@ -3429,6 +3849,7 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Shopkeeper Sales HFB4 &amp; 5 (Bedrooms)</selected>
@@ -3438,6 +3859,7 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Shopkeeper Sales HFB6 (Bathshop)</selected>
@@ -3447,6 +3869,7 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Shopkeeper Sales HFB7 &amp; 8 (Kitchen Dining)</selected>
@@ -3456,6 +3879,7 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Shopkeeper Sales HFB9 (Childrens)</selected>
@@ -3465,6 +3889,7 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Shopkeeper Sales IKEA Business</selected>
@@ -3474,6 +3899,7 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Shopkeeper Sales Self Serve (Self Serve)</selected>
@@ -3483,6 +3909,7 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Site Facility Management Co-worker</selected>
@@ -3492,6 +3919,7 @@
     <show4></show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Hourly</show7>
   </dependent>
   <dependent>
     <selected>Site Facility Manager</selected>
@@ -3501,15 +3929,17 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
-    <selected>Social &amp; Environmental Manager</selected>
+    <selected>Smaland Coworker Croydon Store</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Hourly</show7>
   </dependent>
   <dependent>
     <selected>Social Media Manager</selected>
@@ -3519,6 +3949,7 @@
     <show4>53</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Solar Project Manager</selected>
@@ -3528,15 +3959,7 @@
     <show4>55</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
-  </dependent>
-  <dependent>
-    <selected>Solution Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Staff Planner</selected>
@@ -3546,6 +3969,17 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Staff Planning Business Navigator</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Staff Planning Business Navigator (in Training)</selected>
@@ -3555,6 +3989,7 @@
     <show4>51</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Staff Planning Super User</selected>
@@ -3564,6 +3999,7 @@
     <show4>50</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Staff Scheduler</selected>
@@ -3573,6 +4009,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Store Manager</selected>
@@ -3582,15 +4019,17 @@
     <show4></show4>
     <show5>Level 3</show5>
     <show6>Level 2*</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
-    <selected>Store Manager Assistant</selected>
+    <selected>Store Manager Milton Keynes 185</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Store Support Co-worker</selected>
@@ -3600,6 +4039,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Strategic Purchase Manager</selected>
@@ -3609,33 +4049,27 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
-    <selected>Subject Matter Expert</selected>
+    <selected>Study Centre Co Worker Manchester Store</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Hourly</show7>
   </dependent>
   <dependent>
-    <selected>Succession &amp; Recruitment Manager</selected>
+    <selected>Succession Manager - IKEA Group</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Succession Manager IKEA Grp</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Supply Support Specialist</selected>
@@ -3645,6 +4079,7 @@
     <show4>50</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Sustainability Developer</selected>
@@ -3654,6 +4089,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Sustainability Manager</selected>
@@ -3663,6 +4099,17 @@
     <show4>54</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Sustainability Project Leader</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Sustainability Responsible</selected>
@@ -3672,6 +4119,7 @@
     <show4></show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>System Specialist</selected>
@@ -3681,6 +4129,17 @@
     <show4>49</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
+  </dependent>
+  <dependent>
+    <selected>System Support Specialist</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Tax Compliance Specialist</selected>
@@ -3690,6 +4149,7 @@
     <show4>54</show4>
     <show5>Level 1</show5>
     <show6>Level 2</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Tax Manager</selected>
@@ -3699,6 +4159,7 @@
     <show4>56</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Tax Specialist</selected>
@@ -3708,24 +4169,37 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
-    <selected>Team Leader</selected>
+    <selected>Trainee</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
-    <selected>Team Manager</selected>
+    <selected>Trainee HR Manager</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
+  </dependent>
+  <dependent>
+    <selected>Trainee Web Editor</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Trainer</selected>
@@ -3735,6 +4209,17 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Hourly</show7>
+  </dependent>
+  <dependent>
+    <selected>Training</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Transport Planner</selected>
@@ -3744,15 +4229,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Treasurer</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Treasury Co-ordinator</selected>
@@ -3762,6 +4239,17 @@
     <show4>47</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
+  </dependent>
+  <dependent>
+    <selected>UK &amp; IE Commercial Review Manager</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>UK &amp; IE Contact Centre Manager</selected>
@@ -3771,6 +4259,17 @@
     <show4>59</show4>
     <show5>Level 3</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
+  </dependent>
+  <dependent>
+    <selected>UK &amp; IE Property Manager</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>UK &amp; IE Sustainability Manager</selected>
@@ -3780,6 +4279,27 @@
     <show4></show4>
     <show5>Level 3</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
+  </dependent>
+  <dependent>
+    <selected>UK Accounting Manager</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4>54</show4>
+    <show5>Level 1</show5>
+    <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
+  </dependent>
+  <dependent>
+    <selected>UK/IE Goods Flow Specialist</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>UKIT Manager</selected>
@@ -3789,6 +4309,7 @@
     <show4>57</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>UKIT Team Manager</selected>
@@ -3798,6 +4319,27 @@
     <show4>54</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salaried Management</show7>
+  </dependent>
+  <dependent>
+    <selected>VAP Manager</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salary Senior Management</show7>
+  </dependent>
+  <dependent>
+    <selected>Visual Merchandise / Activity Co-worker</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5></show5>
+    <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Visual Merchandise Leader</selected>
@@ -3807,6 +4349,7 @@
     <show4>54</show4>
     <show5>Level 2</show5>
     <show6>Level 2</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Visual Merchandise/Activity Co-worker</selected>
@@ -3816,6 +4359,7 @@
     <show4></show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Visual Merchandise/Activity Manager</selected>
@@ -3825,6 +4369,7 @@
     <show4></show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Warehouse Co-worker</selected>
@@ -3834,15 +4379,17 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Hourly Distribution</show7>
   </dependent>
   <dependent>
-    <selected>Warehouse Manager</selected>
+    <selected>Warehouse Co-worker Annualised</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Annualised</show7>
   </dependent>
   <dependent>
     <selected>Warehouse Team Leader</selected>
@@ -3852,15 +4399,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Warehousing Logistics Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Web Analyst</selected>
@@ -3870,24 +4409,7 @@
     <show4>49</show4>
     <show5></show5>
     <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Web Communications Manager</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4></show4>
-    <show5></show5>
-    <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Web Content Editor</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4>49</show4>
-    <show5></show5>
-    <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Web Editor</selected>
@@ -3897,6 +4419,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
     <selected>Web Manager</selected>
@@ -3906,24 +4429,17 @@
     <show4>54</show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried Management</show7>
   </dependent>
   <dependent>
-    <selected>Web Merchandiser</selected>
+    <selected>Website Manager</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4></show4>
     <show5></show5>
     <show6></show6>
-  </dependent>
-  <dependent>
-    <selected>Workforce Administrator</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4>44</show4>
-    <show5>Co-worker</show5>
-    <show6>Level 1</show6>
+    <show7>Salary Senior Management</show7>
   </dependent>
   <dependent>
     <selected>Workforce Manager</selected>
@@ -3933,6 +4449,7 @@
     <show4>51</show4>
     <show5>Level 1</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Workforce Scheduler</selected>
@@ -3942,6 +4459,7 @@
     <show4>48</show4>
     <show5>Co-worker </show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Workstream Leader</selected>
@@ -3951,5 +4469,6 @@
     <show4>50</show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
+    <show7>Salaried</show7>
   </dependent>
 </predefined>

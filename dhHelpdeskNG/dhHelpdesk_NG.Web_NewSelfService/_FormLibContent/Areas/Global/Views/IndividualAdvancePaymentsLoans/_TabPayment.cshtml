@@ -1,0 +1,98 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane" id="Payment">
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Advance Payment / Loan Details")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PaymentType")</td>
+                    <td>
+                        @Model.Element("PaymentType")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PaymentAmount")</td>
+                    <td>
+                        @Model.Element("PaymentAmount")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PaymentCurrency")</td>
+                    <td>
+                        @Model.Element("PaymentCurrency")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PaymentDate")</td>
+                    <td>
+                        @Model.Element("PaymentDate")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PaymentMethod")</td>
+                    <td>
+                        @Model.Element("PaymentMethod")
+                    </td>
+                </tr>
+             
+
+            </tbody>
+        </table>
+    </div>
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Loan Re-Payment")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionType")</td>
+                    <td>
+                        @Model.Element("DeductionType")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionAmountUnits")</td>
+                    <td>
+                        @Model.Element("DeductionAmountUnits")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionNetGross")</td>
+                    <td>
+                        @Model.Element("DeductionNetGross")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Re-PaymentType")</td>
+                    <td>
+                        @Model.Element("Re-PaymentType")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("1stPayment")</td>
+                    <td>
+                        @Model.Element("1stPayment")
+                    </td>
+                </tr>
+                
+                </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    
+    
+      
+    
+</script>

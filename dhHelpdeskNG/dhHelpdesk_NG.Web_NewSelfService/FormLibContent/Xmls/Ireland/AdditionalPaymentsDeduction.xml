@@ -48,7 +48,7 @@
           <option value="Standard">Standard</option>
         </options>
       </element>
-      
+
       <element type="text" name="PermanentAddressLine1" label="Address line 1" mandatory="1"></element>
       <element type="text" name="PermanentAddressLine2" label="Address line 2"></element>
       <element type="text" name="PermanentPostalCode" label="Postal code" mandatory="1"></element>
@@ -322,10 +322,10 @@
           <option value=""></option>
 
           <option value="Advanced Hrly">Advanced Hrly</option>
-          <option value="150V High Performer 11">150V High Performer 11</option>
-          <option value="150H High Performer 12">150H High Performer 12</option>
-          <option value="150X High Performer 13">150X High Performer 13</option>
-          <option value="150Y High Performer 14">150Y High Performer 14</option>
+          <option value="High Performer 11">150V High Performer 11</option>
+          <option value="High Performer 12">150H High Performer 12</option>
+          <option value="High Performer 13">150X High Performer 13</option>
+          <option value="High Performer 14">150Y High Performer 14</option>
           <option value="Power Stacker">Power Stacker</option>
           <option value="Fork Lift Truck">Fork Lift Truck</option>
           <option value="Night Shift Hrly">Night Shift Hrly</option>
@@ -680,7 +680,12 @@
         <!--&pre_deductionstype_deductionsnetgross;-->
         <options>
           <option value=""></option>
-          <option value="710C - Simply Health">710C - Simply Health</option>
+          <option value="760D Rent Deduction">760D Rent Deduction</option>
+          <option value="760M Uniform Deduction">760M Uniform Deduction</option>
+          <option value="500E Sal Sac-Cycle">500E Sal Sac-Cycle</option>
+          <option value="500F Sal Sac-Bus Ticket">500F Sal Sac-Bus Ticket</option>
+          <option value="760A Charity">760A Charity</option>
+          <!--<option value="710C - Simply Health">710C - Simply Health</option>
           <option value="710B - Health Shield">710B - Health Shield</option>
           <option value="760H - Badge Charge">760H - Badge Charge</option>
           <option value="760M - Uniform Deduction">760M - Uniform Deduction</option>
@@ -691,7 +696,7 @@
           <option value="300J - PHI-Private Health Ins">300J - PHI-Private Health Ins</option>
           <option value="710C - Simply Health">710C - Simply Health</option>
           <option value="760D - Rent Deduction">760D - Rent Deduction</option>
-          <option value="760O - ID Card">760O - ID Card</option>
+          <option value="760O - ID Card">760O - ID Card</option>-->
 
         </options>
       </element>

@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Contracts>
-<contract process="Hiring" id="Permanent" signatureUse="true">
-<lastParagraphText>
-<![CDATA[I would be grateful if you could sign the enclosed copy of this letter as acceptance of the offer and bring it with you to your first day of induction, along with your completed starter pack. In the meantime if you have any queries at all please do not hesitate to call us on {TelNbr}. We look forward to seeing you on the day.]]>
-</lastParagraphText>
-<lastParagraphText2><![CDATA[I, {FirstName} {LastName} confirm that this offer of employment is acceptable to me and I have read understood and agree to the Terms and Conditions in Section 1 of the Co-worker handbook and in the Terms and Conditions Appendix.
+  <contract process="Hiring" id="Permanent" signatureUse="true">
+    <lastParagraphText>
+      <![CDATA[I would be grateful if you could sign the enclosed copy of this letter as acceptance of the offer and bring it with you to your first day of induction, along with your completed starter pack. In the meantime if you have any queries at all please do not hesitate to call us on {TelNbr}. We look forward to seeing you on the day.]]>
+    </lastParagraphText>
+    <lastParagraphText2>
+      <![CDATA[I, {FirstName} {LastName} confirm that this offer of employment is acceptable to me and I have read understood and agree to the Terms and Conditions in Section 1 of the Co-worker handbook and in the Terms and Conditions Appendix.
 
 I authorise IKEA Ltd to source pre-employment references and authorise them to provide references when requested on future occasions. IKEA reserves the right to terminate employment if these references are not satisfactory.]]>
-</lastParagraphText2>
-<encTextLeft></encTextLeft>
-<encTextRight></encTextRight>
-</contract>
+    </lastParagraphText2>
+    <encTextLeft></encTextLeft>
+    <encTextRight></encTextRight>
+  </contract>
 
   <contract process="ChangeTermsConditions" id="Annualised" signatureUse="true">
     <lastParagraphText>
@@ -74,8 +75,7 @@ I authorise IKEA Ltd to source pre-employment references and authorise them to p
     <encTextLeft></encTextLeft>
     <encTextRight></encTextRight>
   </contract>
-  
-    
+
   <contract process="ChangeTermsConditions" id="LevelAchievedContactCentre" signatureUse="false">
     <lastParagraphText>
     </lastParagraphText>
@@ -84,24 +84,22 @@ I authorise IKEA Ltd to source pre-employment references and authorise them to p
     <encTextLeft></encTextLeft>
     <encTextRight></encTextRight>
   </contract>
-     
 
-    <contract process="ChangeTermsConditions" id="Secondment" signatureUse="true">
+  <contract process="ChangeTermsConditions" id="Secondment" signatureUse="true">
     <lastParagraphText>
     </lastParagraphText>
-      <lastParagraphText2>
-        <![CDATA[I, {FirstName} {LastName} have read and understood the contents of this letter.]]>
+    <lastParagraphText2>
+      <![CDATA[I, {FirstName} {LastName} have read and understood the contents of this letter.]]>
     </lastParagraphText2>
-      <encTextLeft><![CDATA[Enc.:]]></encTextLeft>
-      <encTextRight>
-        <![CDATA[Secondment Policy]]>
-      </encTextRight>
+    <encTextLeft><![CDATA[Enc.:]]></encTextLeft>
+    <encTextRight>
+      <![CDATA[Secondment Policy]]>
+    </encTextRight>
   </contract>
 
-  
   <contract process="ChangeTermsConditions" id="TCManagerLevel1And2" signatureUse="true">
     <lastParagraphText>
-      
+
     </lastParagraphText>
     <lastParagraphText2>
     </lastParagraphText2>
@@ -146,47 +144,50 @@ I authorise IKEA Ltd to source pre-employment references and authorise them to p
     <encTextRight></encTextRight>
   </contract>
 
-  <contract process="AdditionalPaymentsDeduction" id="Allowances" signatureUse="false">
+  <contract process="AdditionalPaymentsDeduction" id="AllowancesDoc" signatureUse="false">
     <lastParagraphText>
-      
     </lastParagraphText>
     <lastParagraphText2>
-     
     </lastParagraphText2>
     <encTextLeft></encTextLeft>
-    <encTextRight></encTextRight>
-  </contract>
-  
-  <contract process="Hiring" id="ContactCentre" signatureUse="true">
-<lastParagraphText>
-<![CDATA[I would be grateful if you could sign the enclosed copy of this letter as acceptance of the offer and return it to me, together with all of the other documentation. In the meantime if you have any queries at all please do not hesitate to call us on {TelNbr}. We look forward to seeing you on the day.]]>
-</lastParagraphText>
-<lastParagraphText2>
-<![CDATA[I, {FirstName} {LastName} confirm that this offer of employment is acceptable to me and I have read understood and agree to the Terms and Conditions in Section 1 of the Co-worker handbook and in the Terms and Conditions Appendix.
-   
-I authorise IKEA Ltd to source pre-employment references and authorise them to provide references when requested on future occasions.]]></lastParagraphText2>
-<encTextLeft><![CDATA[Enc.:]]></encTextLeft>
-<encTextRight>
-<![CDATA[Terms and Conditions Appendix
-Pre - Placement Questionnaire
-New Starter form
-Stamped Addressed envelope]]></encTextRight>
+    <encTextRight>
+    </encTextRight>
   </contract>
 
-<contract process="Hiring" id="ZeroHour" signatureUse="true">
+  <contract process="Hiring" id="ContactCentre" signatureUse="true">
+    <lastParagraphText>
+      <![CDATA[I would be grateful if you could sign the enclosed copy of this letter as acceptance of the offer and return it to me, together with all of the other documentation. In the meantime if you have any queries at all please do not hesitate to call us on {TelNbr}. We look forward to seeing you on the day.]]>
+    </lastParagraphText>
+    <lastParagraphText2>
+      <![CDATA[I, {FirstName} {LastName} confirm that this offer of employment is acceptable to me and I have read understood and agree to the Terms and Conditions in Section 1 of the Co-worker handbook and in the Terms and Conditions Appendix.
+   
+I authorise IKEA Ltd to source pre-employment references and authorise them to provide references when requested on future occasions.]]>
+    </lastParagraphText2>
+    <encTextLeft><![CDATA[Enc.:]]></encTextLeft>
+    <encTextRight>
+      <![CDATA[Terms and Conditions Appendix
+Pre - Placement Questionnaire
+New Starter form
+Stamped Addressed envelope]]>
+    </encTextRight>
+  </contract>
+
+  <contract process="Hiring" id="ZeroHour" signatureUse="true">
     <lastParagraphText>
       <![CDATA[I would be grateful if you could sign the enclosed copy of this letter as acceptance of the offer and terms and conditions.  In the meantime if you have any queries at all please do not hesitate to call us on {TelNbr}.]]>
     </lastParagraphText>
-    <lastParagraphText2><![CDATA[I {FirstName} {LastName} confirm that this offer of employment is acceptable to me and I have read understood and agree to the Terms and Conditions and in the Terms and Conditions Appendix.
+    <lastParagraphText2>
+      <![CDATA[I {FirstName} {LastName} confirm that this offer of employment is acceptable to me and I have read understood and agree to the Terms and Conditions and in the Terms and Conditions Appendix.
 
-I authorise IKEA Ltd to source pre-employment and authorise them to provide references when requested on future occasions. IKEA reserves the right to terminate employment if these references are not satisfactory.]]></lastParagraphText2>
+I authorise IKEA Ltd to source pre-employment and authorise them to provide references when requested on future occasions. IKEA reserves the right to terminate employment if these references are not satisfactory.]]>
+    </lastParagraphText2>
     <encTextLeft><![CDATA[Enc.:]]></encTextLeft>
     <encTextRight>
       <![CDATA[Terms and Conditions Appendix]]>
     </encTextRight>
   </contract>
 
-<contract process="Hiring" id="TemporaryFixedTerm" signatureUse="true">
+  <contract process="Hiring" id="TemporaryFixedTerm" signatureUse="true">
     <lastParagraphText>
       <![CDATA[I would be grateful if you could sign the enclosed copy of this letter as acceptance of the offer and terms and conditions.  Please bring this along to the Induction, along with your completed starter pack.  In the meantime if you have any queries at all please do not hesitate to call us on {TelNbr}. We look forward to seeing you on the day.]]>
     </lastParagraphText>

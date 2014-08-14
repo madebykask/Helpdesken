@@ -399,7 +399,7 @@
         });
 
 
-        
+
         $('#NewServiceArea').change(function () {
             //Line manager job title
             path = '';
@@ -407,7 +407,7 @@
             path = path + window.location.host + '/';
 
 
-            
+
             //path = site.baseUrl + '/FormLibContent/Xmls/UnitedKingdom/Templates/predefined_department_jobtitle_UK_outs.xml'
             path = site.baseUrl + '/FormLibContent/Xmls/UnitedKingdom/Templates/predefined_function_jobtitleUK_outs.xml'
 
@@ -475,7 +475,7 @@
             });
 
 
-            
+
 
         });
 
@@ -733,127 +733,143 @@
                 show = $sel.find('show1').text();
                 show2 = $sel.find('show2').text();
 
-                if (dep == '150B - Hourly Location Allow') {
+
+                if (dep.toString().trim() == 'Location Allowance') {
+
                     if (bus == 'Store Bristol 264') {
-                        //alert();
-                        if (document.getElementById('AllowancesAmountUnits3')) {
-                            document.getElementById('AllowancesAmountUnits3').value = '0,10';
+                        if (pay == 'Hourly') {
+                            if (document.getElementById('AllowancesAmountUnits3')) {
+                                document.getElementById('AllowancesAmountUnits3').value = '0,10';
+                            }
                         }
-                        res = '1';
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits3')) {
+                                document.getElementById('AllowancesAmountUnits3').value = '203,00';
+                            }
+                        }
                     }
                     else if (bus == 'Store London Croydon 144') {
-                        if (document.getElementById('AllowancesAmountUnits3')) {
-                            document.getElementById('AllowancesAmountUnits3').value = '1,28';
+                        if (pay == 'Hourly') {
+                            if (document.getElementById('AllowancesAmountUnits3')) {
+                                document.getElementById('AllowancesAmountUnits3').value = '1,28';
+                            }
                         }
-                        res = '1';
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits3')) {
+                                document.getElementById('AllowancesAmountUnits3').value = '2600,00';
+                            }
+                        }
                     }
                     else if (bus == 'Store London Lakeside 262') {
-                        if (document.getElementById('AllowancesAmountUnits3')) {
-                            document.getElementById('AllowancesAmountUnits3').value = '0,77';
+                        if (pay == 'Hourly') {
+                            if (document.getElementById('AllowancesAmountUnits3')) {
+                                document.getElementById('AllowancesAmountUnits3').value = '0,77';
+                            }
                         }
-                        res = '1';
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits3')) {
+                                document.getElementById('AllowancesAmountUnits3').value = '1560,00';
+                            }
+                        }
                     }
                     else if (bus == 'Store Milton Keynes 185') {
-                        if (document.getElementById('AllowancesAmountUnits3')) {
-                            document.getElementById('AllowancesAmountUnits3').value = '0,35';
+                        if (pay == 'Hourly') {
+                            if (document.getElementById('AllowancesAmountUnits3')) {
+                                document.getElementById('AllowancesAmountUnits3').value = '0,35';
+                            }
                         }
-                        res = '1';
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits3')) {
+                                document.getElementById('AllowancesAmountUnits3').value = '709,00';
+                            }
+                        }
                     }
                     else if (bus == 'Store London Tottenham 255') {
-                        if (document.getElementById('AllowancesAmountUnits3')) {
-                            document.getElementById('AllowancesAmountUnits3').value = '1,28';
+                        if (pay == 'Hourly') {
+                            if (document.getElementById('AllowancesAmountUnits3')) {
+                                document.getElementById('AllowancesAmountUnits3').value = '1,28';
+                            }
                         }
-                        res = '1';
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits3')) {
+                                document.getElementById('AllowancesAmountUnits3').value = '2600,00';
+                            }
+                        }
                     }
                     else if (bus == 'Store London Wembley 141') {
-                        if (document.getElementById('AllowancesAmountUnits3')) {
-                            document.getElementById('AllowancesAmountUnits3').value = '1,28';
+                        if (pay == 'Hourly') {
+                            if (document.getElementById('AllowancesAmountUnits3')) {
+                                document.getElementById('AllowancesAmountUnits3').value = '1,28';
+                            }
                         }
-                        res = '1';
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits3')) {
+                                document.getElementById('AllowancesAmountUnits3').value = '2600,00';
+                            }
+                        }
                     }
                     else if (bus == 'Service Office UK') {
-                        if (document.getElementById('AllowancesAmountUnits3')) {
-                            document.getElementById('AllowancesAmountUnits3').value = '1,28';
+                        if (pay == 'Hourly') {
+                            if (document.getElementById('AllowancesAmountUnits3')) {
+                                document.getElementById('AllowancesAmountUnits3').value = '1,28';
+                            }
                         }
-                        res = '1';
-                    }
-                }
-                else if (dep == '100B - Salary Location Allow') {
-                    if (bus == 'Store Bristol 264') {
-                        //alert();
-                        if (document.getElementById('AllowancesAmountUnits')) {
-                            document.getElementById('AllowancesAmountUnits').value = '203,00';
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits3')) {
+                                document.getElementById('AllowancesAmountUnits3').value = '2600,00';
+                            }
                         }
-                        res = '1';
-                    }
-                    else if (bus == 'Store London Croydon 144') {
-                        if (document.getElementById('AllowancesAmountUnits')) {
-                            document.getElementById('AllowancesAmountUnits').value = '2600,00';
-                        }
-                        res = '1';
-                    }
-                    else if (bus == 'Store London Lakeside 262') {
-                        if (document.getElementById('AllowancesAmountUnits')) {
-                            document.getElementById('AllowancesAmountUnits').value = '1560,00';
-                        }
-                        res = '1';
-                    }
-                    else if (bus == 'Store Milton Keynes 185') {
-                        if (document.getElementById('AllowancesAmountUnits')) {
-                            document.getElementById('AllowancesAmountUnits').value = '709,00';
-                        }
-                        res = '1';
-                    }
-                    else if (bus == 'Store London Tottenham 255') {
-                        if (document.getElementById('AllowancesAmountUnits')) {
-                            document.getElementById('AllowancesAmountUnits').value = '2600,00';
-                        }
-                        res = '1';
-                    }
-                    else if (bus == 'Store London Wembley 141') {
-                        if (document.getElementById('AllowancesAmountUnits')) {
-                            document.getElementById('AllowancesAmountUnits').value = '2600,00';
-                        }
-                        res = '1';
-                    }
-                    else if (bus == 'Service Office UK') {
-                        if (document.getElementById('AllowancesAmountUnits')) {
-                            document.getElementById('AllowancesAmountUnits').value = '2600,00';
-                        }
-                        res = '1';
                     }
                 }
                 else {
-                    if (department.toString().trim() == d.toString().trim()) {
+
+                    if (department.toString().trim() == dep.toString().trim()) {
 
                         if (show != '') {
                             if (document.getElementById('AllowancesAmountUnits3')) {
-                                document.getElementById('AllowancesAmountUnits3').value = show;
-                            }
 
-                            res = '1';
-                        }
-
-                        if (show2 != '') {
-                            var n = show2.indexOf(",");
-                            if (n == -1) {
-                                if (document.getElementById('AllowancesNetGross3')) {
-                                    document.getElementById('AllowancesNetGross3').value = show2;
+                                if (dep.toString().trim() == 'Advanced') {
+                                    if (bus.toString().trim() != 'Peterborough Contact Centre') {
+                                        document.getElementById('AllowancesAmountUnits3').value = show;
+                                    }
+                                    else {
+                                        document.getElementById('AllowancesAmountUnits3').value = '0,55';
+                                    }
                                 }
+                                else if (dep.toString().trim() == 'Fork Lift Truck Allowance') {
+                                    if (bus.toString().trim() != 'Store Milton Keynes 185') {
+                                        document.getElementById('AllowancesAmountUnits3').value = show;
+                                    }
+                                    else {
+                                        document.getElementById('AllowancesAmountUnits3').value = '1,72';
+                                    }
+                                }
+                                else if (dep.toString().trim() == 'Kitchen Skills')
+                                    if (bus.toString().trim() == 'Store Edinburgh 265') {
+                                        document.getElementById('AllowancesAmountUnits3').value = '1,00';
+                                    }
+
+                                    else if (bus.toString().trim() == 'Store London Tottenham 255' | bus == 'Store London Wembley 141' | bus == 'Store London Croydon 144' | bus == 'Store London Lakeside 262') {
+                                        document.getElementById('AllowancesAmountUnits3').value = '0,30';
+                                    }
+                                    else {
+                                        document.getElementById('AllowancesAmountUnits3').value = show;
+                                    }
                             }
                             else {
-                                var res = show2.substring(0, n);
-                                if (document.getElementById('AllowancesNetGross3')) {
-                                    document.getElementById('AllowancesNetGross3').value = res;
+                                if (document.getElementById('AllowancesAmountUnits3')) {
+                                    document.getElementById('AllowancesAmountUnits3').value = show;
                                 }
                             }
-                            res = '1';
+
                         }
 
+                        res = '1';
+                    }
 
-                        if (res == 1) {
-                            return;
-                        }
+
+                    if (res == 1) {
+                        return;
                     }
                 }
             });
@@ -892,7 +908,7 @@
 
             var d = dep + '_' + pay;
 
-
+        
             $(xml).find('dependent').each(function () {
 
 
@@ -905,129 +921,269 @@
                 show = $sel.find('show1').text();
                 show2 = $sel.find('show2').text();
 
-                if (dep == '150B - Hourly Location Allow') {
+                if (dep.toString().trim() == 'Location Allowance') {
+
                     if (bus == 'Store Bristol 264') {
-                        //alert();
-                        if (document.getElementById('AllowancesAmountUnits')) {
-                            document.getElementById('AllowancesAmountUnits').value = '0,10';
+                        if (pay == 'Hourly') {
+                            if (document.getElementById('AllowancesAmountUnits')) {
+                                document.getElementById('AllowancesAmountUnits').value = '0,10';
+                            }
                         }
-                        res = '1';
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits')) {
+                                document.getElementById('AllowancesAmountUnits').value = '203,00';
+                            }
+                        }
                     }
                     else if (bus == 'Store London Croydon 144') {
-                        if (document.getElementById('AllowancesAmountUnits')) {
-                            document.getElementById('AllowancesAmountUnits').value = '1,28';
+                        if (pay == 'Hourly') {
+                            if (document.getElementById('AllowancesAmountUnits')) {
+                                document.getElementById('AllowancesAmountUnits').value = '1,28';
+                            }
                         }
-                        res = '1';
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits')) {
+                                document.getElementById('AllowancesAmountUnits').value = '2600,00';
+                            }
+                        }
                     }
                     else if (bus == 'Store London Lakeside 262') {
-                        if (document.getElementById('AllowancesAmountUnits')) {
-                            document.getElementById('AllowancesAmountUnits').value = '0,77';
+                        if (pay == 'Hourly') {
+                            if (document.getElementById('AllowancesAmountUnits')) {
+                                document.getElementById('AllowancesAmountUnits').value = '0,77';
+                            }
                         }
-                        res = '1';
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits')) {
+                                document.getElementById('AllowancesAmountUnits').value = '1560,00';
+                            }
+                        }
                     }
                     else if (bus == 'Store Milton Keynes 185') {
-                        if (document.getElementById('AllowancesAmountUnits')) {
-                            document.getElementById('AllowancesAmountUnits').value = '0,35';
+                        if (pay == 'Hourly') {
+                            if (document.getElementById('AllowancesAmountUnits')) {
+                                document.getElementById('AllowancesAmountUnits').value = '0,35';
+                            }
                         }
-                        res = '1';
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits')) {
+                                document.getElementById('AllowancesAmountUnits').value = '709,00';
+                            }
+                        }
                     }
                     else if (bus == 'Store London Tottenham 255') {
-                        if (document.getElementById('AllowancesAmountUnits')) {
-                            document.getElementById('AllowancesAmountUnits').value = '1,28';
+                        if (pay == 'Hourly') {
+                            if (document.getElementById('AllowancesAmountUnits')) {
+                                document.getElementById('AllowancesAmountUnits').value = '1,28';
+                            }
                         }
-                        res = '1';
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits')) {
+                                document.getElementById('AllowancesAmountUnits').value = '2600,00';
+                            }
+                        }
                     }
                     else if (bus == 'Store London Wembley 141') {
-                        if (document.getElementById('AllowancesAmountUnits')) {
-                            document.getElementById('AllowancesAmountUnits').value = '1,28';
+                        if (pay == 'Hourly') {
+                            if (document.getElementById('AllowancesAmountUnits')) {
+                                document.getElementById('AllowancesAmountUnits').value = '1,28';
+                            }
                         }
-                        res = '1';
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits')) {
+                                document.getElementById('AllowancesAmountUnits').value = '2600,00';
+                            }
+                        }
                     }
                     else if (bus == 'Service Office UK') {
-                        if (document.getElementById('AllowancesAmountUnits')) {
-                            document.getElementById('AllowancesAmountUnits').value = '1,28';
+                        if (pay == 'Hourly') {
+                            if (document.getElementById('AllowancesAmountUnits')) {
+                                document.getElementById('AllowancesAmountUnits').value = '1,28';
+                            }
                         }
-                        res = '1';
-                    }
-                }
-                else if (dep == '100B - Salary Location Allow') {
-                    if (bus == 'Store Bristol 264') {
-                        //alert();
-                        if (document.getElementById('AllowancesAmountUnits')) {
-                            document.getElementById('AllowancesAmountUnits').value = '203,00';
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits')) {
+                                document.getElementById('AllowancesAmountUnits').value = '2600,00';
+                            }
                         }
-                        res = '1';
-                    }
-                    else if (bus == 'Store London Croydon 144') {
-                        if (document.getElementById('AllowancesAmountUnits')) {
-                            document.getElementById('AllowancesAmountUnits').value = '2600,00';
-                        }
-                        res = '1';
-                    }
-                    else if (bus == 'Store London Lakeside 262') {
-                        if (document.getElementById('AllowancesAmountUnits')) {
-                            document.getElementById('AllowancesAmountUnits').value = '1560,00';
-                        }
-                        res = '1';
-                    }
-                    else if (bus == 'Store Milton Keynes 185') {
-                        if (document.getElementById('AllowancesAmountUnits')) {
-                            document.getElementById('AllowancesAmountUnits').value = '709,00';
-                        }
-                        res = '1';
-                    }
-                    else if (bus == 'Store London Tottenham 255') {
-                        if (document.getElementById('AllowancesAmountUnits')) {
-                            document.getElementById('AllowancesAmountUnits').value = '2600,00';
-                        }
-                        res = '1';
-                    }
-                    else if (bus == 'Store London Wembley 141') {
-                        if (document.getElementById('AllowancesAmountUnits')) {
-                            document.getElementById('AllowancesAmountUnits').value = '2600,00';
-                        }
-                        res = '1';
-                    }
-                    else if (bus == 'Service Office UK') {
-                        if (document.getElementById('AllowancesAmountUnits')) {
-                            document.getElementById('AllowancesAmountUnits').value = '2600,00';
-                        }
-                        res = '1';
                     }
                 }
                 else {
-                    if (department.toString().trim() == d.toString().trim()) {
-
+                    
+                    if (department.toString().trim() == dep.toString().trim()) {
+                        
+                        
                         if (show != '') {
                             if (document.getElementById('AllowancesAmountUnits')) {
-                                document.getElementById('AllowancesAmountUnits').value = show;
-                            }
 
-                            res = '1';
-                        }
-
-                        if (show2 != '') {
-                            var n = show2.indexOf(",");
-                            if (n == -1) {
-                                if (document.getElementById('AllowancesAmountUnits')) {
-                                    document.getElementById('AllowancesNetGross').value = show2;
+                                if (dep.toString().trim() == 'Advanced') {
+                                    if (bus.toString().trim() != 'Peterborough Contact Centre') {
+                                        document.getElementById('AllowancesAmountUnits').value = show;
+                                    }
+                                    else {
+                                        document.getElementById('AllowancesAmountUnits').value = '0,55';
+                                    }
                                 }
+                                else if (dep.toString().trim() == 'Fork Lift Truck Allowance') {
+                                    if (bus.toString().trim() != 'Store Milton Keynes 185') {
+                                        document.getElementById('AllowancesAmountUnits').value = show;
+                                    }
+                                    else {
+                                        document.getElementById('AllowancesAmountUnits').value = '1,72';
+                                    }
+                                }
+                                else if (dep.toString().trim() == 'Kitchen Skills')
+                                    if (bus.toString().trim() == 'Store Edinburgh 265') {
+                                        document.getElementById('AllowancesAmountUnits').value = '1,00';
+                                    }
+
+                                    else if (bus.toString().trim() == 'Store London Tottenham 255' | bus == 'Store London Wembley 141' | bus == 'Store London Croydon 144' | bus == 'Store London Lakeside 262') {
+                                        document.getElementById('AllowancesAmountUnits').value = '0,30';
+                                    }
+                                    else {
+                                        document.getElementById('AllowancesAmountUnits').value = show;
+                                    }
                             }
                             else {
-                                var res = show2.substring(0, n);
                                 if (document.getElementById('AllowancesAmountUnits')) {
-                                    document.getElementById('AllowancesNetGross').value = res;
+                                    document.getElementById('AllowancesAmountUnits').value = show;
                                 }
                             }
-                            res = '1';
+
                         }
 
+                        res = '1';
+                    }
 
-                        if (res == 1) {
-                            return;
-                        }
+
+                    if (res == 1) {
+                        return;
                     }
                 }
+
+                //if (dep == '150B - Hourly Location Allow') {
+                //    if (bus == 'Store Bristol 264') {
+                //        //alert();
+                //        if (document.getElementById('AllowancesAmountUnits')) {
+                //            document.getElementById('AllowancesAmountUnits').value = '0,10';
+                //        }
+                //        res = '1';
+                //    }
+                //    else if (bus == 'Store London Croydon 144') {
+                //        if (document.getElementById('AllowancesAmountUnits')) {
+                //            document.getElementById('AllowancesAmountUnits').value = '1,28';
+                //        }
+                //        res = '1';
+                //    }
+                //    else if (bus == 'Store London Lakeside 262') {
+                //        if (document.getElementById('AllowancesAmountUnits')) {
+                //            document.getElementById('AllowancesAmountUnits').value = '0,77';
+                //        }
+                //        res = '1';
+                //    }
+                //    else if (bus == 'Store Milton Keynes 185') {
+                //        if (document.getElementById('AllowancesAmountUnits')) {
+                //            document.getElementById('AllowancesAmountUnits').value = '0,35';
+                //        }
+                //        res = '1';
+                //    }
+                //    else if (bus == 'Store London Tottenham 255') {
+                //        if (document.getElementById('AllowancesAmountUnits')) {
+                //            document.getElementById('AllowancesAmountUnits').value = '1,28';
+                //        }
+                //        res = '1';
+                //    }
+                //    else if (bus == 'Store London Wembley 141') {
+                //        if (document.getElementById('AllowancesAmountUnits')) {
+                //            document.getElementById('AllowancesAmountUnits').value = '1,28';
+                //        }
+                //        res = '1';
+                //    }
+                //    else if (bus == 'Service Office UK') {
+                //        if (document.getElementById('AllowancesAmountUnits')) {
+                //            document.getElementById('AllowancesAmountUnits').value = '1,28';
+                //        }
+                //        res = '1';
+                //    }
+                //}
+                //else if (dep == '100B - Salary Location Allow') {
+                //    if (bus == 'Store Bristol 264') {
+                //        //alert();
+                //        if (document.getElementById('AllowancesAmountUnits')) {
+                //            document.getElementById('AllowancesAmountUnits').value = '203,00';
+                //        }
+                //        res = '1';
+                //    }
+                //    else if (bus == 'Store London Croydon 144') {
+                //        if (document.getElementById('AllowancesAmountUnits')) {
+                //            document.getElementById('AllowancesAmountUnits').value = '2600,00';
+                //        }
+                //        res = '1';
+                //    }
+                //    else if (bus == 'Store London Lakeside 262') {
+                //        if (document.getElementById('AllowancesAmountUnits')) {
+                //            document.getElementById('AllowancesAmountUnits').value = '1560,00';
+                //        }
+                //        res = '1';
+                //    }
+                //    else if (bus == 'Store Milton Keynes 185') {
+                //        if (document.getElementById('AllowancesAmountUnits')) {
+                //            document.getElementById('AllowancesAmountUnits').value = '709,00';
+                //        }
+                //        res = '1';
+                //    }
+                //    else if (bus == 'Store London Tottenham 255') {
+                //        if (document.getElementById('AllowancesAmountUnits')) {
+                //            document.getElementById('AllowancesAmountUnits').value = '2600,00';
+                //        }
+                //        res = '1';
+                //    }
+                //    else if (bus == 'Store London Wembley 141') {
+                //        if (document.getElementById('AllowancesAmountUnits')) {
+                //            document.getElementById('AllowancesAmountUnits').value = '2600,00';
+                //        }
+                //        res = '1';
+                //    }
+                //    else if (bus == 'Service Office UK') {
+                //        if (document.getElementById('AllowancesAmountUnits')) {
+                //            document.getElementById('AllowancesAmountUnits').value = '2600,00';
+                //        }
+                //        res = '1';
+                //    }
+                //}
+                //else {
+                //    if (department.toString().trim() == d.toString().trim()) {
+
+                //        if (show != '') {
+                //            if (document.getElementById('AllowancesAmountUnits')) {
+                //                document.getElementById('AllowancesAmountUnits').value = show;
+                //            }
+
+                //            res = '1';
+                //        }
+
+                //        if (show2 != '') {
+                //            var n = show2.indexOf(",");
+                //            if (n == -1) {
+                //                if (document.getElementById('AllowancesAmountUnits')) {
+                //                    document.getElementById('AllowancesNetGross').value = show2;
+                //                }
+                //            }
+                //            else {
+                //                var res = show2.substring(0, n);
+                //                if (document.getElementById('AllowancesAmountUnits')) {
+                //                    document.getElementById('AllowancesNetGross').value = res;
+                //                }
+                //            }
+                //            res = '1';
+                //        }
+
+
+                //        if (res == 1) {
+                //            return;
+                //        }
+                //    }
+                //}
             });
         }
 
@@ -1098,126 +1254,143 @@
                 show = $sel.find('show1').text();
                 show2 = $sel.find('show2').text();
 
-                if (dep == '150B - Hourly Location Allow') {
+
+                if (dep.toString().trim() == 'Location Allowance') {
+
                     if (bus == 'Store Bristol 264') {
-                        //alert();
-                        if (document.getElementById('AllowancesAmountUnits2')) {
-                            document.getElementById('AllowancesAmountUnits2').value = '0,10';
+                        if (pay == 'Hourly') {
+                            if (document.getElementById('AllowancesAmountUnits2')) {
+                                document.getElementById('AllowancesAmountUnits2').value = '0,10';
+                            }
                         }
-                        res = '1';
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits2')) {
+                                document.getElementById('AllowancesAmountUnits2').value = '203,00';
+                            }
+                        }
                     }
                     else if (bus == 'Store London Croydon 144') {
-                        if (document.getElementById('AllowancesAmountUnits2')) {
-                            document.getElementById('AllowancesAmountUnits2').value = '1,28';
+                        if (pay == 'Hourly') {
+                            if (document.getElementById('AllowancesAmountUnits2')) {
+                                document.getElementById('AllowancesAmountUnits2').value = '1,28';
+                            }
                         }
-                        res = '1';
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits2')) {
+                                document.getElementById('AllowancesAmountUnits2').value = '2600,00';
+                            }
+                        }
                     }
                     else if (bus == 'Store London Lakeside 262') {
-                        if (document.getElementById('AllowancesAmountUnits2')) {
-                            document.getElementById('AllowancesAmountUnits2').value = '0,77';
+                        if (pay == 'Hourly') {
+                            if (document.getElementById('AllowancesAmountUnits2')) {
+                                document.getElementById('AllowancesAmountUnits2').value = '0,77';
+                            }
                         }
-                        res = '1';
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits2')) {
+                                document.getElementById('AllowancesAmountUnits2').value = '1560,00';
+                            }
+                        }
                     }
                     else if (bus == 'Store Milton Keynes 185') {
-                        if (document.getElementById('AllowancesAmountUnits2')) {
-                            document.getElementById('AllowancesAmountUnits2').value = '0,35';
+                        if (pay == 'Hourly') {
+                            if (document.getElementById('AllowancesAmountUnits2')) {
+                                document.getElementById('AllowancesAmountUnits2').value = '0,35';
+                            }
                         }
-                        res = '1';
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits2')) {
+                                document.getElementById('AllowancesAmountUnits2').value = '709,00';
+                            }
+                        }
                     }
                     else if (bus == 'Store London Tottenham 255') {
-                        if (document.getElementById('AllowancesAmountUnits2')) {
-                            document.getElementById('AllowancesAmountUnits2').value = '1,28';
+                        if (pay == 'Hourly') {
+                            if (document.getElementById('AllowancesAmountUnits2')) {
+                                document.getElementById('AllowancesAmountUnits2').value = '1,28';
+                            }
                         }
-                        res = '1';
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits2')) {
+                                document.getElementById('AllowancesAmountUnits2').value = '2600,00';
+                            }
+                        }
                     }
                     else if (bus == 'Store London Wembley 141') {
-                        if (document.getElementById('AllowancesAmountUnits2')) {
-                            document.getElementById('AllowancesAmountUnits2').value = '1,28';
+                        if (pay == 'Hourly') {
+                            if (document.getElementById('AllowancesAmountUnits2')) {
+                                document.getElementById('AllowancesAmountUnits2').value = '1,28';
+                            }
                         }
-                        res = '1';
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits2')) {
+                                document.getElementById('AllowancesAmountUnits2').value = '2600,00';
+                            }
+                        }
                     }
                     else if (bus == 'Service Office UK') {
-                        if (document.getElementById('AllowancesAmountUnits2')) {
-                            document.getElementById('AllowancesAmountUnits2').value = '1,28';
+                        if (pay == 'Hourly') {
+                            if (document.getElementById('AllowancesAmountUnits2')) {
+                                document.getElementById('AllowancesAmountUnits2').value = '1,28';
+                            }
                         }
-                        res = '1';
-                    }
-                }
-                else if (dep == '100B - Salary Location Allow') {
-                    if (bus == 'Store Bristol 264') {
-                        //alert();
-                        if (document.getElementById('AllowancesAmountUnits')) {
-                            document.getElementById('AllowancesAmountUnits').value = '203,00';
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits2')) {
+                                document.getElementById('AllowancesAmountUnits2').value = '2600,00';
+                            }
                         }
-                        res = '1';
-                    }
-                    else if (bus == 'Store London Croydon 144') {
-                        if (document.getElementById('AllowancesAmountUnits')) {
-                            document.getElementById('AllowancesAmountUnits').value = '2600,00';
-                        }
-                        res = '1';
-                    }
-                    else if (bus == 'Store London Lakeside 262') {
-                        if (document.getElementById('AllowancesAmountUnits')) {
-                            document.getElementById('AllowancesAmountUnits').value = '1560,00';
-                        }
-                        res = '1';
-                    }
-                    else if (bus == 'Store Milton Keynes 185') {
-                        if (document.getElementById('AllowancesAmountUnits')) {
-                            document.getElementById('AllowancesAmountUnits').value = '709,00';
-                        }
-                        res = '1';
-                    }
-                    else if (bus == 'Store London Tottenham 255') {
-                        if (document.getElementById('AllowancesAmountUnits')) {
-                            document.getElementById('AllowancesAmountUnits').value = '2600,00';
-                        }
-                        res = '1';
-                    }
-                    else if (bus == 'Store London Wembley 141') {
-                        if (document.getElementById('AllowancesAmountUnits')) {
-                            document.getElementById('AllowancesAmountUnits').value = '2600,00';
-                        }
-                        res = '1';
-                    }
-                    else if (bus == 'Service Office UK') {
-                        if (document.getElementById('AllowancesAmountUnits')) {
-                            document.getElementById('AllowancesAmountUnits').value = '2600,00';
-                        }
-                        res = '1';
                     }
                 }
                 else {
-                    if (department.toString().trim() == d.toString().trim()) {
+
+                    if (department.toString().trim() == dep.toString().trim()) {
 
                         if (show != '') {
                             if (document.getElementById('AllowancesAmountUnits2')) {
-                                document.getElementById('AllowancesAmountUnits2').value = show;
-                            }
-                            res = '1';
-                        }
 
-                        if (show2 != '') {
-                            var n = show2.indexOf(",");
-                            if (n == -1) {
-                                if (document.getElementById('AllowancesNetGross2')) {
-                                    document.getElementById('AllowancesNetGross2').value = show2;
+                                if (dep.toString().trim() == 'Advanced') {
+                                    if (bus.toString().trim() != 'Peterborough Contact Centre') {
+                                        document.getElementById('AllowancesAmountUnits2').value = show;
+                                    }
+                                    else {
+                                        document.getElementById('AllowancesAmountUnits2').value = '0,55';
+                                    }
                                 }
+                                else if (dep.toString().trim() == 'Fork Lift Truck Allowance') {
+                                    if (bus.toString().trim() != 'Store Milton Keynes 185') {
+                                        document.getElementById('AllowancesAmountUnits2').value = show;
+                                    }
+                                    else {
+                                        document.getElementById('AllowancesAmountUnits2').value = '1,72';
+                                    }
+                                }
+                                else if (dep.toString().trim() == 'Kitchen Skills')
+                                    if (bus.toString().trim() == 'Store Edinburgh 265') {
+                                        document.getElementById('AllowancesAmountUnits2').value = '1,00';
+                                    }
+
+                                    else if (bus.toString().trim() == 'Store London Tottenham 255' | bus == 'Store London Wembley 141' | bus == 'Store London Croydon 144' | bus == 'Store London Lakeside 262') {
+                                        document.getElementById('AllowancesAmountUnits2').value = '0,30';
+                                    }
+                                    else {
+                                        document.getElementById('AllowancesAmountUnits2').value = show;
+                                    }
                             }
                             else {
-                                var res = show2.substring(0, n);
-                                if (document.getElementById('AllowancesNetGross2')) {
-                                    document.getElementById('AllowancesNetGross2').value = res;
+                                if (document.getElementById('AllowancesAmountUnits2')) {
+                                    document.getElementById('AllowancesAmountUnits2').value = show;
                                 }
                             }
-                            res = '1';
+
                         }
 
+                        res = '1';
+                    }
 
-                        if (res == 1) {
-                            return;
-                        }
+
+                    if (res == 1) {
+                        return;
                     }
                 }
             });
@@ -1249,65 +1422,74 @@
 
             }
 
-            
-            if (pay == 'Hourly')
-            {
-                if (document.getElementById('BasicPayAmount')) {
 
-                    if (bus == 'Peterborough Contact Centre') {
-                        if (grp == 'STARTER' | grp=='FOUNDATION')
-                        {
+
+            if (pay == 'Hourly') {
+                if (bus == 'Peterborough Contact Centre') {
+                    if (grp == 'STARTER') {
+                        if (document.getElementById('BasicPayAmount')) {
                             document.getElementById('BasicPayAmount').value = '7,84'
                         }
                     }
-                    else if (bus=='Customer Distribution Centre Peterborough 269' | bus=='Distribution Centre Peterborough 012')
-                    {
-                        if (grp == 'STARTER')
-                        {
+                    else if (grp == 'FOUNDATION') {
+                        if (document.getElementById('BasicPayAmount')) {
+                            document.getElementById('BasicPayAmount').value = '7,84'
+                        }
+                    }
+                    else if (grp == 'ADVANCED') {
+                        if (document.getElementById('BasicPayAmount')) {
+                            document.getElementById('BasicPayAmount').value = ''
+                        }
+                    }
+                }
+                else if (bus == 'Customer Distribution Centre Peterborough 269' | bus == 'Distribution Centre Peterborough 012') {
+                    if (grp == 'STARTER') {
+                        if (document.getElementById('BasicPayAmount')) {
                             document.getElementById('BasicPayAmount').value = '8,45'
                         }
-                        else if (grp == 'MULTSKLL')
-                        {
+                    }
+                    else if (grp == 'MULTSKLL') {
+                        if (document.getElementById('BasicPayAmount')) {
                             document.getElementById('BasicPayAmount').value = '8,77'
                         }
-                        else if (grp == 'BOOKOFF')
-                        {
-                            document.getElementById('BasicPayAmount').value = '10,47'
+                    }
+                    else if (grp == 'BOOKOFF') {
+                        if (document.getElementById('BasicPayAmount')) {
+                            document.getElementById('BasicPayAmount').value = '10,77'
                         }
-                        else if (grp == 'QUALITY')
-                        {
+                    }
+                    else if (grp == 'QUALITY') {
+                        if (document.getElementById('BasicPayAmount')) {
                             document.getElementById('BasicPayAmount').value = '10,21'
                         }
-                        else if (grp == 'APPRENTICE 7.69')
-                        {
+                    }
+                    else if (grp == 'APPRENTICE 7.69') {
+                        if (document.getElementById('BasicPayAmount')) {
                             document.getElementById('BasicPayAmount').value = '7,69'
                         }
-                        else if (grp == 'APPRENTICE 7.69')
-                        {
+                    }
+                    else if (grp == 'APPRENTICE 6.66') {
+                        if (document.getElementById('BasicPayAmount')) {
                             document.getElementById('BasicPayAmount').value = '6,66'
                         }
                     }
-                    else
-                    {
-                        if (grp == 'STARTER')
-                        {
+                }
+                else {
+                    if (grp == 'STARTER') {
+                        if (document.getElementById('BasicPayAmount')) {
                             document.getElementById('BasicPayAmount').value = '7,13'
                         }
-                        else if (grp == 'FOUNDATION')
-                        {
+                    }
+                    else if (grp == 'FOUNDATION') {
+                        if (document.getElementById('BasicPayAmount')) {
                             document.getElementById('BasicPayAmount').value = '7,13'
                         }
-                        else if (grp == 'INTERN')
-                        {
+                    }
+                    else if (grp == 'INTERN') {
+                        if (document.getElementById('BasicPayAmount')) {
                             document.getElementById('BasicPayAmount').value = '6,50'
                         }
                     }
-
-
-
-                    //if (cat == 'Hourly' && grp == 'STARTER') {
-                    //    document.getElementById('BasicPayAmount').value = '9,77'
-                    //}
                 }
             }
 
@@ -1633,7 +1815,7 @@
                         document.getElementById('PayScaleGroup').value = 'STARTER';
                     }
                 }
-                
+
             }
         }
 

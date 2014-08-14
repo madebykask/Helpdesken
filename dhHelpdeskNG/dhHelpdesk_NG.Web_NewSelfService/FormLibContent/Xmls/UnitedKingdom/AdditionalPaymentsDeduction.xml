@@ -58,6 +58,42 @@
         <!--&pre_allowancestype_allowancesnetgross;-->
         <options>
           <option value=""></option>
+          <option value="Advanced">Advanced</option>
+          <option value="Car Allowance">Car Allowance</option>
+          <option value="Cash Adjustment">Cash Adjustment</option>
+          <option value="Commission">Commission</option>
+          <option value="Competance Pay">Competance Pay</option>
+          <option value="Electricity Home Workers">Electricity Home Workers</option>
+          <option value="First Aid Allowance">First Aid Allowance</option>
+          <option value="Fork Lift Truck Allowance">Fork Lift Truck Allowance</option>
+          <option value="Hourly ACE">Hourly ACE</option>
+          <option value="Hourly AHP">Hourly AHP</option>
+          <option value="Hourly Day">Hourly Day</option>
+          <option value="Housing Allowance">Housing Allowance</option>
+          <option value="IKEA1 Skills">IKEA1 Skills</option>
+          <option value="IKEA2 Skills">IKEA2 Skills</option>
+          <option value="Kitchen Skills">Kitchen Skills</option>
+          <option value="Loaders">Loaders</option>
+          <option value="Location Allowance">Location Allowance</option>
+          <option value="Manual Hand">Manual Hand</option>
+          <option value="Mortgage Subsidy">Mortgage Subsidy</option>
+          <option value="Night Shift">Night Shift</option>
+          <option value="NTG Double Housing">NTG Double Housing</option>
+          <option value="NTG Housing Costs">NTG Housing Costs</option>
+          <option value="NTG Relocation Allow">NTG Relocation Allow</option>
+          <option value="NTG Rent Allowance">NTG Rent Allowance</option>
+          <option value="Pallet Resue">Pallet Resue</option>
+          <option value="Relocation Allowance">Relocation Allowance</option>
+          <option value="Rent Allowance">Rent Allowance</option>
+          <option value="Responsibility Allowance">Responsibility Allowance</option>
+          <option value="Salary Day Ann Allow">Salary Day Ann Allow</option>
+          <option value="Salary Day Shift">Salary Day Shift</option>
+          <option value="Secondment">Secondment</option>
+          <option value="Shunter Allow">Shunter Allow</option>
+          <option value="Stand By Allowance">Stand By Allowance</option>
+          <option value="Keep in touch allowance">Keep in touch allowance</option>
+
+          <!--<option value=""></option>
           <option value="150B - Hourly Location Allow">150B - Hourly Location Allow</option>
           <option value="150C - Hourly FLT Skills (Fork Lift Truck Allowance)">150C - Hourly FLT Skills (Fork Lift Truck Allowance)</option>
           <option value="150C - Hourly FLT Skills (Fork Lift Truck Allowance Milton Keynes)">150C - Hourly FLT Skills (Fork Lift Truck Allowance Milton Keynes)</option>
@@ -133,7 +169,7 @@
           <option value="100C - Responsibility Allow">100C - Responsibility Allow</option>
           <option value="100J - Secondment">100J - Secondment</option>
           <option value="300A - Car Allowance">300A - Car Allowance</option>
-          <option value="300F - Mortgage Subsidy">300F - Mortgage Subsidy</option>
+          <option value="300F - Mortgage Subsidy">300F - Mortgage Subsidy</option>-->
 
         </options>
       </element>

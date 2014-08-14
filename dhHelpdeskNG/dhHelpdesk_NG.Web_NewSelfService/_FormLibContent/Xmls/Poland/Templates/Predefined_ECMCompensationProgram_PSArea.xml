@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<predefined>
+    <name>PSArea</name>
+    <dependent>
+        <selected>01 - ECM Retail &amp; Property</selected>
+        <show>01 - Level 1,02 - Level 2,03 - Level 3,04 - Level 4,05 - Level 5,06 - Level 6,07 - Level 7,08 - Level 8,09 - Level 9</show>
+    </dependent>
+    <dependent>
+        <selected>02 - ECM DS</selected>
+        <show>04 - Level 4,05 - Level 5,06 - Level 6,07 - Level 7,08 - Level 8,09 - Level 9,3A - Level 3A,3B - Level 3B</show>
+    </dependent>
+    <dependent>
+        <selected>03 - ECM Trading</selected>
+        <show>01 - Level 1,02 - Level 2,03 - Level 3,04 - Level 4,05 - Level 5,06 - Level 6,07 - Level 7,08 - Level 8</show>
+    </dependent>
+    <dependent>
+        <selected>04 - ECM IICP</selected>
+        <show>09 - Level 9</show>
+    </dependent>
+</predefined>

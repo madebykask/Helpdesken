@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<predefined>
+  <name>DeductionType</name>
+  <dependent>
+    <selected>Hourly</selected>
+    <show>
+      760D - Rent Deduction,
+      760M - Uniform Deduction      
+    </show>
+  </dependent>
+  <dependent>
+    <selected>Salaried</selected>
+    <show>
+      760D - Rent Deduction
+    </show>
+  </dependent>
+  <dependent>
+    <selected>Salaried Management</selected>
+    <show>
+      760D - Rent Deduction
+    </show>
+  </dependent>
+  <dependent>
+    <selected>Salaried Senior Management</selected>
+    <show>
+      760D - Rent Deduction
+    </show>
+  </dependent>
+  <dependent>
+    <selected></selected>
+    <show>
+      760D Rent Deduction,
+      760M Uniform Deduction,
+      760D Rent Deduction,
+      500E Sal Sac-Cycle,
+      500F Sal Sac-Bus Ticket,
+      760A Charity,
+    </show>
+  </dependent>
+</predefined>

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<predefined>
+<name>CostCentre</name>
+<dependent>
+<selected>Activities Dublin Store</selected>
+<show>3570</show>
+</dependent>
+<dependent>
+<selected>Business Navigation Dublin Store</selected>
+<show>6210, 6220</show>
+</dependent>
+<dependent>
+<selected>Checkout Services Dublin Store</selected>
+<show>6180</show>
+</dependent>
+<dependent>
+<selected>Comm In Dublin Store</selected>
+<show>6071</show>
+</dependent>
+<dependent>
+<selected>Customer Relations Dublin Store</selected>
+<show>7010</show>
+</dependent>
+<dependent>
+<selected>Customer Services  Dublin Store</selected>
+<show>6120</show>
+</dependent>
+<dependent>
+<selected>Customer Services Returns Dublin Store</selected>
+<show>6120</show>
+</dependent>
+<dependent>
+<selected>Facilities Dublin Store</selected>
+<show>6310</show>
+</dependent>
+<dependent>
+<selected>Family Dublin Store</selected>
+<show>6072</show>
+</dependent>
+<dependent>
+<selected>Goods Flow Dublin Store</selected>
+<show>4030</show>
+</dependent>
+<dependent>
+<selected>Goods Flow Team 1 Full Serve Dublin Sto</selected>
+<show>4050</show>
+</dependent>
+<dependent>
+<selected>Goods Flow Team 2 Replen Dublin Store</selected>
+<show>4040</show>
+</dependent>
+<dependent>
+<selected>Goods Flow Team 3 Goods Flow Dublin Sto</selected>
+<show>4030</show>
+</dependent>
+<dependent>
+<selected>Goodsflow Services Dublin Store</selected>
+<show>4040</show>
+</dependent>
+<dependent>
+<selected>HFB 1,2 Living &amp; Storage Dublin Store</selected>
+<show>3320</show>
+</dependent>
+<dependent>
+<selected>HFB 10 Lighting Dublin Store</selected>
+<show>3520</show>
+</dependent>
+<dependent>
+<selected>HFB 11,12,13 Textiles Dublin Store</selected>
+<show>3530</show>
+</dependent>
+<dependent>
+<selected>HFB 14,15 Cooking Eating Dublin Store</selected>
+<show>3540</show>
+</dependent>
+<dependent>
+<selected>HFB 16,17 Home Dec Dublin Store</selected>
+<show>3560</show>
+</dependent>
+<dependent>
+<selected>HFB 18,19 Home Org Dublin Store</selected>
+<show>3550</show>
+</dependent>
+<dependent>
+<selected>HFB 3 Work IKEA Dublin Store</selected>
+<show>3350</show>
+</dependent>
+<dependent>
+<selected>HFB 4,5 Bedrooms Dublin Store</selected>
+<show>3340</show>
+</dependent>
+<dependent>
+<selected>HFB 6 Bathshop Dublin Store</selected>
+<show>3380</show>
+</dependent>
+<dependent>
+<selected>HFB 7,8 Kitchens Dublin Store</selected>
+<show>3360</show>
+</dependent>
+<dependent>
+<selected>HFB 9 Childrens Dublin Store</selected>
+<show>3370</show>
+</dependent>
+<dependent>
+<selected>Human Resources Dublin Store</selected>
+<show>6600</show>
+</dependent>
+<dependent>
+<selected>IF Kitchen Dublin Store</selected>
+<show>3923</show>
+</dependent>
+<dependent>
+<selected>IKEA Food Dublin Store</selected>
+<show>7010</show>
+</dependent>
+<dependent>
+<selected>Interior Design Dublin Store</selected>
+<show>6071</show>
+</dependent>
+<dependent>
+<selected>Internationals Dublin Store</selected>
+<show>6299</show>
+</dependent>
+<dependent>
+<selected>Logistics Dublin Store</selected>
+<show>7010</show>
+</dependent>
+<dependent>
+<selected>Markethall Dublin Store</selected>
+<show>7010</show>
+</dependent>
+<dependent>
+<selected>Marketing Dublin Store</selected>
+<show>6070</show>
+</dependent>
+<dependent>
+<selected>Pick and Deliver Dublin Store</selected>
+<show>3300</show>
+</dependent>
+<dependent>
+<selected>Projects Dublin Store</selected>
+<show>8500</show>
+</dependent>
+<dependent>
+<selected>Q-Store Dublin Store</selected>
+<show>6400</show>
+</dependent>
+<dependent>
+<selected>Recovery Dublin Store</selected>
+<show>6330</show>
+</dependent>
+<dependent>
+<selected>Restaurant Dublin Store</selected>
+<show>3922</show>
+</dependent>
+<dependent>
+<selected>Safety &amp; Security Dublin Store</selected>
+<show>6320</show>
+</dependent>
+<dependent>
+<selected>Sales Supply Support Dublin Store</selected>
+<show>4020</show>
+</dependent>
+<dependent>
+<selected>Self Serve Dublin Store</selected>
+<show>3400</show>
+</dependent>
+<dependent>
+<selected>Showroom Dublin Store</selected>
+<show>7010</show>
+</dependent>
+<dependent>
+<selected>Store Dublin 038</selected>
+<show>7010</show>
+</dependent>
+<dependent>
+<selected>Swedish Food Market Dublin Store</selected>
+<show>3960</show>
+</dependent>
+<dependent>
+<selected>Visual Merchandising Dublin Store</selected>
+<show>6071</show>
+</dependent>
+</predefined>

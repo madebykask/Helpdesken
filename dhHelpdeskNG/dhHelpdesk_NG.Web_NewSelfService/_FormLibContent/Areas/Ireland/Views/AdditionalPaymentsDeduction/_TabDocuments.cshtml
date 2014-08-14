@@ -1,0 +1,116 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+
+@functions{
+    public string GetContract(string allowanceNr)
+    {
+        string allowanceType = Model.GetDocumentAnswer("AllowancesType" + allowanceNr).Trim().ToLower();
+
+     
+        switch (allowanceType)
+        {
+            case "fork lift truck":
+                return "Allowances";
+            case "100f salary flt skills":
+                return "Allowances";
+            case "power stacker":
+                return "Allowances";
+            default:
+                return "";
+        }
+       
+    }
+
+    public string PrintText()
+    {
+        return Model.Translate("Print");
+    }
+}
+
+<div class="tab-pane" id="documents">
+    <div class="span12">
+        @if (!string.IsNullOrEmpty(GetContract("")) | !string.IsNullOrEmpty(GetContract("2")) | !string.IsNullOrEmpty(GetContract("3")))
+        {
+            <table class="table-striped">
+                <thead>
+                    <tr>
+                        <th>@Model.Translate("Document")
+                        </th>
+                        <th>@Model.Translate("Type")
+                        </th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 1; i <= int.Parse(Model.GetAnswer("Allowances")); i++)
+                    {
+                        string allowanceNr = "";
+
+                        if (i > 1)
+                        {
+                            allowanceNr = i.ToString();
+                        }
+
+
+                        if (!string.IsNullOrEmpty(GetContract(allowanceNr)))
+                        {
+
+                            if (!string.IsNullOrEmpty(Model.GetAnswer("AllowancesType" + allowanceNr)))
+                            {
+                        <tr>
+                            <td>@Model.GetAnswer("AllowancesType" + allowanceNr)</td>
+                            <td>pdf</td>
+                            <td>&nbsp;</td>
+                            <td>
+                                <a href="@Url.Action("print", "AdditionalPaymentsDeduction", new
+                                {
+                                    id = GetContract(allowanceNr),
+                                    caseId = Model.Contract.Id,
+                                    path = Path.Combine(Path.GetDirectoryName(Model.FormXmlPath), Path.GetFileNameWithoutExtension(Model.FormXmlPath)),
+                                    userId = FormLibSessions.User.UserId,
+                                    allowanceNr = i
+                                })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@Model.Translate("Print")</a>
+                            </td>
+                        </tr>
+                            }
+
+                        }
+                    }
+                </tbody>
+                @*<tbody>
+
+
+                    <tr>
+                        <td>@Model.Translate("Contract")</td>
+                        <td>pdf</td>
+                        <td>&nbsp;</td>
+                        <td>
+                            <a href="@Url.Action("print", "AdditionalPaymentsDeduction", new
+                {
+                    id = GetContract(),
+                    caseId = Model.Contract.Id,
+                    path = Path.Combine(Path.GetDirectoryName(Model.FormXmlPath), Path.GetFileNameWithoutExtension(Model.FormXmlPath)),
+                    userId = FormLibSessions.User.UserId
+                })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@PrintText()</a>
+                        </td>
+                    </tr>
+
+                </tbody>*@
+
+            </table> }
+        else
+        {
+            <div class="alert alert-info"><strong><i class="icon-info-sign"></i>&nbsp;@Model.Translate("A document can not be created based on current selections")</strong></div>
+        }
+
+        @Html.Partial("_StaticDocuments", Model)
+    </div>
+</div>
+
+
+
+
+
