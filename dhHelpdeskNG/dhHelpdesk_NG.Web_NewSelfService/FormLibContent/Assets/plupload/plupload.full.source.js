@@ -1830,7 +1830,7 @@
                                         status: x
                                     });
                                     if (x >= 400) {
-                                        debugger;
+                                        //debugger;
                                         o.trigger("Error", {
                                             code: a.HTTP_ERROR,
                                             message: a.translate("HTTP Error."),

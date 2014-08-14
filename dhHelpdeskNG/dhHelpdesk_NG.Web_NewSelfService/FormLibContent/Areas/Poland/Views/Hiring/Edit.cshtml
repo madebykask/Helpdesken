@@ -60,7 +60,7 @@
 
         if ($('#WorkingTimeSchedule').val() === '') {
             $('#WorkingTimeSchedule').val('basic');
-            for (var i = 0; unitWorkTimeSystemArr.length; i++) {
+            for (var i = 0; i < unitWorkTimeSystemArr.length; i++) {
                 if (unitWorkTimeSystemArr[i] === $('#Unit').val()) {
                     $('#WorkingTimeSchedule').val('equivalent');
                     break;

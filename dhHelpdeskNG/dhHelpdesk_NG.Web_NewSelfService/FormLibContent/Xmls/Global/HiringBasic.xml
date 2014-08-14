@@ -33,12 +33,10 @@
         <options>
           <option value=""></option>
           <option value="Urgent">Urgent</option>
-          <option value="Not Urgent">Not Urgent</option>
+          <option value="Standard">Standard</option>
         </options>
       </element>
-      <element type="date" name="ProcessBeforeDate" mandatory="1" label="Process before date:" format="dd.MM.yyyy">
-        <regex inherit="date" pattern="" message=""></regex>
-      </element>
+      
       <element type="text" name="Co-WorkerID" label="Co-Worker ID"></element>
       <element type="text" name="GlobalHRID" label="Global HR ID"></element>
       <element type="select" name="Title" label="Title" >

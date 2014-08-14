@@ -1,4 +1,4 @@
-﻿Selection
+﻿//Selection
 
 // Globals
 var isEmbed = window != window.parent;
@@ -8,7 +8,7 @@ var disableTypeahead = 1;
 // stolen from boostrap-datepicker.js DL...
 // Extend for general functions
 var APIGlobal = {
-    DateTime : {
+    DateTime: {
         parseFormat: function (format) {
             var separator = format.match(/[.\/\-\s].*?/),
                 parts = format.split(/\W+/);
@@ -26,7 +26,7 @@ var APIGlobal = {
             date.setSeconds(0);
             date.setMilliseconds(0);
             if (parts.length === format.parts.length) {
-                var year = date.getFullYear(), day = date.getDate(), month = date.getMonth(); 
+                var year = date.getFullYear(), day = date.getDate(), month = date.getMonth();
                 for (var i = 0, cnt = format.parts.length; i < cnt; i++) {
                     val = parseInt(parts[i], 10) || 1;
                     switch (format.parts[i]) {
@@ -72,7 +72,7 @@ var APIGlobal = {
         dateInRange: function (start, end, months) {
             start.setMonth(start.getMonth() + months);
             var b = start <= end;
-            return b;       
+            return b;
         }
     }
 };
@@ -135,7 +135,7 @@ var multi = function () {
 var validate = {
     run: function (iState) {
         $(".asterisk").hide();
-        if (iState !== undefined && iState != '') {
+        if (iState !== undefined && iState != '' && $('#validate_' + iState).length > 0) {
             var json = $.parseJSON($('#validate_' + iState).val());
 
             for (var i = 0; i < json.length; i++) {
@@ -149,8 +149,8 @@ var validate = {
 var globalTypeAheadOptions = {
     items: 10,
     minLength: 3,
-    source: function (query, process) {        
-        if (disableTypeahead == 0) {           
+    source: function (query, process) {
+        if (disableTypeahead == 0) {
             disableTypeahead == 1;
             return;
         }
@@ -218,7 +218,7 @@ var globalTypeAheadOptions = {
 
         var notice = $('.typeahead-notice').hide();
 
-        if (item.caseNumber != undefined && item.caseNumber != '') {
+        if (item.caseNumber != undefined && item.caseNumber != '') { 
             notice.text(notice.text().replace('#', item.caseNumber));
             notice.show();
         }
@@ -231,12 +231,34 @@ var globalTypeAheadOptions = {
                 data: { formGuid: $('#formGuid').val(), employeenumber: item.num },
                 dataType: 'json',
                 success: function (result) {
+
                     var resultList = jQuery.map(result, function (extendeditem) {
                         var type = $('#' + extendeditem.FormFieldName).attr('type');
-                        if (type != 'text') {                         
+                        if (type != 'text') {
+
                             $('#' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
+
+                            $('#' + extendeditem.FormFieldName + ' option').filter(function () {
+                                return $(this).text() == extendeditem.FormFieldValue;
+                            }).prop('selected', true);
+
+                            if ($('#' + extendeditem.FormFieldName)[0] != undefined && $('#' + extendeditem.FormFieldName)[0].selectize) {
+                                $('#' + extendeditem.FormFieldName)[0].selectize.setValue(extendeditem.FormFieldValue);
+                            }
+
+                            if (extendeditem.FormFieldName == 'NewCompany')
+                                changeNewCompany(true);                 
+
+                            if (extendeditem.FormFieldName == 'EmploymentCategory' && extendeditem.FormFieldValue == 'Permanent') {
+                                $('#date_ContractEndDate').datepicker("destroy");
+                                $('#date_ContractEndDate').addClass("disabled");
+                                $('#ContractEndDate').prop('disabled', true);
+                            }
+
+                        } else {
+                            $('input[name="' + extendeditem.FormFieldName + '"]').val(extendeditem.FormFieldValue);
                         }
-                        $('input[name="' + extendeditem.FormFieldName + '"]').val(extendeditem.FormFieldValue);
+
                         $('#emOLD_' + extendeditem.FormFieldName).text(extendeditem.FormFieldValue);
                         $('#OLD_' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
                     });
@@ -244,9 +266,17 @@ var globalTypeAheadOptions = {
             });
         }
 
+        $('input[name="Company"]').val(item.company);
+        $('#emOLD_Company').text(item.company);
+        $('#OLD_Company').val(item.company);
+
         $('input[name="BusinessUnit"]').val(item.unit);
         $('#emOLD_BusinessUnit').text(item.unit);
         $('#OLD_BusinessUnit').val(item.unit);
+
+        $('input[name="ServiceArea"]').val(item._function);
+        $('#emOLD_ServiceArea').text(item._function);
+        $('#OLD_ServiceArea').val(item._function);
 
         $('input[name="Department"]').val(item.department);
         $('#emOLD_Department').text(item.department);
@@ -268,7 +298,6 @@ var globalTypeAheadOptions = {
         $('#emOLD_IKEANetworkID').text(item.num);
         $('#OLD_IKEANetworkID').val(item.num);
 
-
         return item.num;
     }
 };
@@ -277,7 +306,7 @@ var globalTypeAheadOptions = {
 var globalEmailTypeAheadOptions = {
     items: 10,
     minLength: 3,
-    source: function (query, process) {        
+    source: function (query, process) {
         return $.ajax({
             url: site.baseUrl + '/search/globalview',
             type: 'post',
@@ -292,7 +321,7 @@ var globalEmailTypeAheadOptions = {
                         , firstname: item.Name
                         , lastname: item.Surname
                         , company: item.Company
-                        , companyId: item.CompanyId
+                        , companyId: item.CompanyId0
                         , unit: item.Unit
                         , unitId: item.UnitId
                         , department: item.Department
@@ -356,10 +385,25 @@ var globalEmailTypeAheadOptions = {
                 success: function (result) {
                     var resultList = jQuery.map(result, function (extendeditem) {
                         var type = $('#' + extendeditem.FormFieldName).attr('type');
-                        if (type != 'text') {                           
+                        if (type != 'text') {
                             $('#' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
-                        }
-                        $('input[name="' + extendeditem.FormFieldName + '"]').val(extendeditem.FormFieldValue);
+
+                            $('#' + extendeditem.FormFieldName + ' option').filter(function () {
+                                return $(this).text() == extendeditem.FormFieldValue;
+                            }).prop('selected', true);
+
+                            if (extendeditem.FormFieldName == 'NewCompany')
+                                changeNewCompany(true);
+
+                            if (extendeditem.FormFieldName == 'EmploymentCategory' && extendeditem.FormFieldValue == 'Permanent') {
+                                $('#date_ContractEndDate').datepicker("destroy");
+                                $('#date_ContractEndDate').addClass("disabled");
+                                $('#ContractEndDate').prop('disabled', true);
+                            }
+
+                        } else {
+                            $('input[name="' + extendeditem.FormFieldName + '"]').val(extendeditem.FormFieldValue);
+                        }                       
                         $('#emOLD_' + extendeditem.FormFieldName).text(extendeditem.FormFieldValue);
                         $('#OLD_' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
                     });
@@ -367,11 +411,19 @@ var globalEmailTypeAheadOptions = {
             });
         }
 
-        $('input[name="Co-WorkerGlobalviewID"]').val(item.num);        
+        $('input[name="Co-WorkerGlobalviewID"]').val(item.num);
+
+        $('input[name="Company"]').val(item.company);
+        $('#emOLD_Company').text(item.company);
+        $('#OLD_Company').val(item.company);
 
         $('input[name="BusinessUnit"]').val(item.unit);
         $('#emOLD_BusinessUnit').text(item.unit);
         $('#OLD_BusinessUnit').val(item.unit);
+
+        $('input[name="ServiceArea"]').val(item._function);
+        $('#emOLD_ServiceArea').text(item._function);
+        $('#OLD_ServiceArea').val(item._function);
 
         $('input[name="Department"]').val(item.department);
         $('#emOLD_Department').text(item.department);
@@ -484,10 +536,25 @@ var globalNameTypeAheadOptions = {
                 success: function (result) {
                     var resultList = jQuery.map(result, function (extendeditem) {
                         var type = $('#' + extendeditem.FormFieldName).attr('type');
-                        if (type != 'text') {                           
+                        if (type != 'text') {
                             $('#' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
-                        }
-                        $('input[name="' + extendeditem.FormFieldName + '"]').val(extendeditem.FormFieldValue);
+
+                            $('#' + extendeditem.FormFieldName + ' option').filter(function () {
+                                return $(this).text() == extendeditem.FormFieldValue;
+                            }).prop('selected', true);
+
+                            if (extendeditem.FormFieldName == 'NewCompany')
+                                changeNewCompany(true);
+
+                            if (extendeditem.FormFieldName == 'EmploymentCategory' && extendeditem.FormFieldValue == 'Permanent') {
+                                $('#date_ContractEndDate').datepicker("destroy");
+                                $('#date_ContractEndDate').addClass("disabled");
+                                $('#ContractEndDate').prop('disabled', true);
+                            }
+
+                        } else {
+                            $('input[name="' + extendeditem.FormFieldName + '"]').val(extendeditem.FormFieldValue);
+                        }                        
                         $('#emOLD_' + extendeditem.FormFieldName).text(extendeditem.FormFieldValue);
                         $('#OLD_' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
                     });
@@ -497,10 +564,18 @@ var globalNameTypeAheadOptions = {
 
         $('input[name="Co-WorkerGlobalviewID"]').val(item.num);
         $('input[name="Co-WorkerID"]').val(item.num);
-        
+
+        $('input[name="Company"]').val(item.company);
+        $('#emOLD_Company').text(item.company);
+        $('#OLD_Company').val(item.company);
+
         $('input[name="BusinessUnit"]').val(item.unit);
         $('#emOLD_BusinessUnit').text(item.unit);
         $('#OLD_BusinessUnit').val(item.unit);
+
+        $('input[name="ServiceArea"]').val(item._function);
+        $('#emOLD_ServiceArea').text(item._function);
+        $('#OLD_ServiceArea').val(item._function);
 
         $('input[name="Department"]').val(item.department);
         $('#emOLD_Department').text(item.department);
@@ -614,10 +689,25 @@ var globalLastNameTypeAheadOptions = {
                 success: function (result) {
                     var resultList = jQuery.map(result, function (extendeditem) {
                         var type = $('#' + extendeditem.FormFieldName).attr('type');
-                        if (type != 'text') {                           
+                        if (type != 'text') {
                             $('#' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
-                        }
-                        $('input[name="' + extendeditem.FormFieldName + '"]').val(extendeditem.FormFieldValue);
+
+                            $('#' + extendeditem.FormFieldName + ' option').filter(function () {
+                                return $(this).text() == extendeditem.FormFieldValue;
+                            }).prop('selected', true);
+
+                            if (extendeditem.FormFieldName == 'NewCompany')
+                                changeNewCompany(true);
+
+                            if (extendeditem.FormFieldName == 'EmploymentCategory' && extendeditem.FormFieldValue == 'Permanent') {
+                                $('#date_ContractEndDate').datepicker("destroy");
+                                $('#date_ContractEndDate').addClass("disabled");
+                                $('#ContractEndDate').prop('disabled', true);
+                            }                       
+
+                        } else {
+                            $('input[name="' + extendeditem.FormFieldName + '"]').val(extendeditem.FormFieldValue);
+                        }                     
                         $('#emOLD_' + extendeditem.FormFieldName).text(extendeditem.FormFieldValue);
                         $('#OLD_' + extendeditem.FormFieldName).val(extendeditem.FormFieldValue);
                     });
@@ -628,9 +718,17 @@ var globalLastNameTypeAheadOptions = {
         $('input[name="Co-WorkerGlobalviewID"]').val(item.num);
         $('input[name="Co-WorkerID"]').val(item.num);
 
+        $('input[name="Company"]').val(item.company);
+        $('#emOLD_Company').text(item.company);
+        $('#OLD_Company').val(item.company);
+
         $('input[name="BusinessUnit"]').val(item.unit);
         $('#emOLD_BusinessUnit').text(item.unit);
         $('#OLD_BusinessUnit').val(item.unit);
+
+        $('input[name="ServiceArea"]').val(item._function);
+        $('#emOLD_ServiceArea').text(item._function);
+        $('#OLD_ServiceArea').val(item._function);
 
         $('input[name="Department"]').val(item.department);
         $('#emOLD_Department').text(item.department);
@@ -801,86 +899,86 @@ var narrowDownInit = function () {
             }
         });
 
-        $('#CrossChargeCostCentre').typeahead({
-            minLength: 1,
-            source: function (query, process) {
+        //$('#CrossChargeCostCentre').typeahead({
+        //    minLength: 1,
+        //    source: function (query, process) {
 
-                var node = this.$element.attr('data-node');
-                var dependent = $('#Department').val();
+        //        var node = this.$element.attr('data-node');
+        //        var dependent = $('#Department').val();
 
-                return $.ajax({
-                    url: url,
-                    type: 'post',
-                    data: { query: query, node: node, dependentAttribute: 'Department', dependentAttributeValue: dependent },
-                    dataType: 'json',
-                    success: function (result) {
+        //        return $.ajax({
+        //            url: url,
+        //            type: 'post',
+        //            data: { query: query, node: node, dependentAttribute: 'Department', dependentAttributeValue: dependent },
+        //            dataType: 'json',
+        //            success: function (result) {
 
-                        var resultList = jQuery.map(result, function (item) {
-                            return item;
-                        });
+        //                var resultList = jQuery.map(result, function (item) {
+        //                    return item;
+        //                });
 
-                        return process(resultList);
-                    }
-                });
-            }
-        });
+        //                return process(resultList);
+        //            }
+        //        });
+        //    }
+        //});
 
-        $('#TECApprover').typeahead({
-            minLength: 1,
-            source: function (query, process) {
+        //$('#TECApprover').typeahead({
+        //    minLength: 1,
+        //    source: function (query, process) {
 
-                var node = this.$element.attr('data-node');
-                var dependent = $('#ReportsToLineManager').val();
+        //        var node = this.$element.attr('data-node');
+        //        var dependent = $('#ReportsToLineManager').val();
 
-                return $.ajax({
-                    url: url,
-                    type: 'post',
-                    data: { query: query, node: node, dependentAttribute: 'ReportsToLineManager', dependentAttributeValue: dependent },
-                    dataType: 'json',
-                    success: function (result) {
+        //        return $.ajax({
+        //            url: url,
+        //            type: 'post',
+        //            data: { query: query, node: node, dependentAttribute: 'ReportsToLineManager', dependentAttributeValue: dependent },
+        //            dataType: 'json',
+        //            success: function (result) {
 
-                        var resultList = jQuery.map(result, function (item) {
-                            return item;
-                        });
+        //                var resultList = jQuery.map(result, function (item) {
+        //                    return item;
+        //                });
 
-                        return process(resultList);
-                    }
-                });
-            }
-        });
+        //                return process(resultList);
+        //            }
+        //        });
+        //    }
+        //});
 
-        $('#HomeCostCentre').typeahead({
-            minLength: 1,
-            source: function (query, process) {
+        //$('#HomeCostCentre').typeahead({
+        //    minLength: 1,
+        //    source: function (query, process) {
 
-                var node = this.$element.attr('data-node');
-                var dependent; 
-                var hiredependent = $('#Department').val();
-                var changedependent = $('#NewDepartment').val();
+        //        var node = this.$element.attr('data-node');
+        //        var dependent;
+        //        var hiredependent = $('#Department').val();
+        //        var changedependent = $('#NewDepartment').val();
 
-                var ci = $('#HomeCostCentre').attr("customid");
-                if (ci != 'changeModule') 
-                    dependent = hiredependent;
-                    else                    
-                    dependent = changedependent;
+        //        var ci = $('#HomeCostCentre').attr("customid");
+        //        if (ci != 'changeModule')
+        //            dependent = hiredependent;
+        //        else
+        //            dependent = changedependent;
 
-                return $.ajax({
-                    url: url,
-                    type: 'post',
-                    data: { query: query, node: node, dependentAttribute: 'Department', dependentAttributeValue: dependent },
-                    dataType: 'json',
-                    success: function (result) {
+        //        return $.ajax({
+        //            url: url,
+        //            type: 'post',
+        //            data: { query: query, node: node, dependentAttribute: 'Department', dependentAttributeValue: dependent },
+        //            dataType: 'json',
+        //            success: function (result) {
 
-                        var resultList = jQuery.map(result, function (item) {
-                            return item;
-                        });
+        //                var resultList = jQuery.map(result, function (item) {
+        //                    return item;
+        //                });
 
-                        return process(resultList);
-                    }
-                });
-            }
-        });
-        
+        //                return process(resultList);
+        //            }
+        //        });
+        //    }
+        //});
+
         $('#ReportsToLineManager').typeahead({
             minLength: 1,
             source: function (query, process) {
@@ -904,7 +1002,7 @@ var narrowDownInit = function () {
                 });
             }
         });
-        
+
         var homeCostCenter = $('#HomeCostCenter');
         var depart = $('#Department');
 
@@ -994,6 +1092,56 @@ var familyMembers = function () {
     });
 };
 
+
+
+//var terminationPayment = function () {
+
+//    var emptyElements = function () {
+
+//        return $('[class^=terminationPayment]')
+//                                    .filter(function () { return $(this).css('display') !== 'none'; })
+//                                    .find(':text, :radio, :checkbox, select')
+//                                    .filter(function () {
+//                                        return $(this).val() == '';
+//                                    });
+//    };
+
+//    $('[class^=terminationPayment]').hide();
+//    $('.terminationPayment').show();
+//    var counter = parseInt($('#TerminationPayments').val());
+
+//    var max = 3;
+
+//    var elements = $('[class^=terminationPayment]').find(':text, :radio, :checkbox, select');
+
+//    var enabled = elements.eq(0).is(':enabled');
+
+//    for (var i = 1; i <= counter; i++)
+//        $('.terminationPayment' + i).show();
+
+//    if (emptyElements().length == 0 && (counter < max) && enabled)
+//        $('#addTerminationPaymenttr').show();
+//    else
+//        //$('#addTerminationPaymenttr').hide();
+
+//    var elements = $('[class^=terminationPayment]').find(':text, :radio, :checkbox, select');
+
+//    elements.change(function () {
+//        if (emptyElements().length == 0 && (counter < max) && enabled)
+//            $('#addTerminationPaymenttr').show();
+//        else
+//            $('#addTerminationPaymenttr').hide();
+//    });
+
+//    $('#addTerminationPayment').click(function (e) {
+//        e.preventDefault();
+//        counter++;
+//        $('#TerminationPayments').val(counter);
+//        if (counter <= max)
+//            $('[class=terminationPayment' + counter + ']').show();
+//        //$('#addTerminationPaymenttr').hide();
+//    });
+//};
 
 var employeeDocuments = function () {
     var emptyElements = function () {
@@ -1233,7 +1381,7 @@ var deductions = function () {
     $('#addDeduction').click(function (e) {
         e.preventDefault();
         counter++;
-        
+
         $('#Deductions').val(counter);
         if (counter <= max)
             $('[class=deduction' + counter + ']').show();
@@ -1282,7 +1430,7 @@ var education = function () {
     $('#addEducation').click(function (e) {
         e.preventDefault();
         counter++;
-        
+
         $('#Educations').val(counter);
         if (counter <= max)
             $('[class=education' + counter + ']').show();
@@ -1332,7 +1480,7 @@ var benefits = function () {
     $('#addBenefit').click(function (e) {
         e.preventDefault();
         counter++;
-        
+
         $('#Benefits').val(counter);
         if (counter <= max)
             $('[class=benefits' + counter + ']').show();
@@ -1381,7 +1529,7 @@ var otherpreviousemployers = function () {
     $('#addOtherPreviousEmployers').click(function (e) {
         e.preventDefault();
         counter++;
-        
+
         $('#OtherPreviousEmployers').val(counter);
         if (counter <= max)
             $('[class=otherpreviousemployers' + counter + ']').show();
@@ -1389,54 +1537,7 @@ var otherpreviousemployers = function () {
     });
 };
 
-var terminationpayments = function () {
 
-    var emptyElements = function () {
-        return $('[class^=terminationpayments]')
-                                    .filter(function () { return $(this).css('display') !== 'none'; })
-                                    .find(':text, :radio, :checkbox, select')
-                                    .filter(function () {
-                                        return $(this).val() == '';
-                                    });
-    };
-
-    $('[class^=terminationpayments]').hide();
-    $('.terminationpayments').show();
-    var counter = parseInt($('#TerminationPayments').val());
-
-    var max = 3;
-
-    var elements = $('[class^=terminationpayments]').find(':text, :radio, :checkbox, select');
-
-    var enabled = elements.eq(0).is(':enabled');
-
-    for (var i = 1; i <= counter; i++)
-        $('.terminationpayments' + i).show();
-
-    if (emptyElements().length == 0 && (counter < max) && enabled)
-        $('#addTerminationPaymentsTr').show();
-    else
-        $('#addTerminationPaymentsTr').hide();
-
-    var elements = $('[class^=terminationpayments]').find(':text, :radio, :checkbox, select');
-
-    elements.change(function () {
-        if (emptyElements().length == 0 && (counter < max) && enabled)
-            $('#addTerminationPaymentsTr').show();
-        else
-            $('#addTerminationPaymentsTr').hide();
-    });
-
-    $('#addTerminationPaymentsTr').click(function (e) {
-        e.preventDefault();
-        counter++;
-        
-        $('#TerminationPaymentsTr').val(counter);
-        if (counter <= max)
-            $('[class=terminationpayments' + counter + ']').show();
-        $('#addTerminationPaymentsTr').hide();
-    });
-};
 
 var absencesmulti = function () {
 
@@ -1476,7 +1577,7 @@ var absencesmulti = function () {
             $('#addAbsenceTr').hide();
     });
 
-    $('#addAbsenceTr').click(function (e) {
+    $('#addAbsence').click(function (e) {
         e.preventDefault();
         counter++;
 
@@ -1530,7 +1631,7 @@ var detailsonglobalcommuting = function () {
     $('#addDetailsOnGlobalCommuting').click(function (e) {
         e.preventDefault();
         counter++;
-        
+
         $('#DetailsOnGlobalCommutings').val(counter);
         if (counter <= max)
             $('[class=detailsonglobalcommuting' + counter + ']').show();
@@ -1538,9 +1639,115 @@ var detailsonglobalcommuting = function () {
     });
 };
 
+var terminationpayments = function () {
 
+    var emptyElements = function () {
+        return $('[class^=terminationpayments]')
+                                    .filter(function () { return $(this).css('display') !== 'none'; })
+                                    .find(':text, :radio, :checkbox, select')
+                                    .filter(function () {
+                                        return $(this).val() == '';
+                                    });
+    };
+
+    $('[class^=terminationpayments]').hide();
+    $('.terminationpayments').show();
+    var counter = parseInt($('#TerminationPayments').val());
+
+    var max = 3;
+
+    var elements = $('[class^=terminationpayments]').find(':text, :radio, :checkbox, select');
+
+    var enabled = elements.eq(0).is(':enabled');
+
+    for (var i = 1; i <= counter; i++)
+        $('.terminationpayments' + i).show();
+
+    if (emptyElements().length == 0 && (counter < max) && enabled)
+        $('#addTerminationPaymentsTr').show();
+    else
+        $('#addTerminationPaymentsTr').hide();
+
+    var elements = $('[class^=terminationpayments]').find(':text, :radio, :checkbox, select');
+
+    elements.change(function () {
+        if (emptyElements().length == 0 && (counter < max) && enabled)
+            $('#addTerminationPaymentsTr').show();
+        else
+            $('#addTerminationPaymentsTr').hide();
+    });
+
+    $('#addTerminationPaymentsTr').click(function (e) {
+        e.preventDefault();
+        counter++;
+        $('#TerminationPayments').val(counter);
+        if (counter <= max)
+            $('[class=terminationpayments' + counter + ']').show();
+        $('#addTerminationPaymentsTr').hide();
+    });
+};
+
+
+/*
+var servicerequestpriority = function () {
+
+    $('#date_ProcessBeforeDate').not(".disabled").datepicker("destroy");
+
+    var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+    var nowTemp = new Date();
+    var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+    var endDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate() + 3, 0, 0, 0, 0);
+    var sRDateUrgent = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate() + 1, 0, 0, 0, 0);
+    var sRDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate() - 3, 0, 0, 0, 0);
+
+    if ($('#ServiceRequestPriority').val() == 'Urgent') {
+        var visibledaate = APIGlobal.DateTime.formatDate(sRDateUrgent, format);
+        $('#ProcessBeforeDate').val(visibledaate);
+
+        $('#date_ProcessBeforeDate').not(".disabled").datepicker(
+        {
+            onRender: function (ev) {
+                return ev.valueOf() >= endDate.valueOf() || ev.valueOf() < now.valueOf() ? 'disabled' : '';
+            }
+        });
+    }
+    else {
+        var visibledate = APIGlobal.DateTime.formatDate(sRDate, format);
+        $('#ProcessBeforeDate').val(visibledate);
+        $('#date_ProcessBeforeDate').not(".disabled").datepicker(
+        {
+            onRender: function (ev) {
+                return ev.valueOf() > now.valueOf() ? 'disabled' : '';
+            }
+        });
+    }
+};
+*/
+
+var cache = {};
 
 var init = function () {
+
+    // Prevent submit form on enter
+    $(window).keydown(function (event) {
+        if (event.keyCode == 13) {
+            event.preventDefault();
+            return false;
+        }
+    });
+
+    /*
+    var f = $('#LockedFields').val();
+
+    if (f != null) {       
+        var fi = [];
+        fi = f.split(';');
+        for (var l = 1 ; l < fi.length - 1 ; l++) {
+            $('#' + fi[l]).attr('disabled', true);
+            $('#date_' + fi[l]).addClass("disabled");
+        }
+    }
+    */
 
     narrowDownInit();
     familyMembers();
@@ -1556,31 +1763,61 @@ var init = function () {
     multi();
     detailsonglobalcommuting();
     benefits();
+    
+
 
     var activeTab = $("#activeTab");
 
     $(".search-select").selectize();
-
     $('.typeahead').typeahead(typeAheadOptions);
     $('#Co-WorkerGlobalviewID').typeahead(globalTypeAheadOptions);
     $('#IKEAEmailAddress').typeahead(globalEmailTypeAheadOptions);
     $('#FirstName').typeahead(globalNameTypeAheadOptions);
     $('#LastName').typeahead(globalLastNameTypeAheadOptions);
-    
-    if ($("#NewToIKEA").val() == "")
-    {
+
+    //var iconFlag = '<i class="icon-flag"></i>';
+    $('select').each(function (i) {
+        cache[$(this).attr('id')] = $(this).html();
+        /*
+        val = $(this).attr('id');
+
+        var txt = $(this).find('option:selected').text();
+
+        if ($('#' + val).val() !== $('#OLD_' + val).val() &&
+                $('#OLD_' + val).parent().find('.icon-flag').length == 0) {
+            $('#OLD_' + val).parent().prepend($(iconFlag));
+        }
+
+        if (txt == $('#OLD_' + val).val() &&
+             $('#OLD_' + val).parent().find('.icon-flag').length > 0) {
+            $('#OLD_' + val).parent().find('.icon-flag').remove();
+        }*/
+    });
+
+    /*
+    $('input').each(function (i) {
+        val = $(this).attr('id');
+        if ($('#' + val).val() !== $('#OLD_' + val).val() &&
+          $('#OLD_' + val).parent().find('.icon-flag').length == 0) {
+            $('#OLD_' + val).parent().prepend($(iconFlag));
+        }
+    });
+    */
+
+    if ($("#NewToIKEA").val() == "") {
         disableTypeahead = 0;
     }
 
     $("#NewToIKEA").on('change', function () {
+
         if ($('#CustomerId').val() != '31' && ($('#formGuid').length > 0)) {
             $('#Co-WorkerID').typeahead(globalTypeAheadOptions);
             if ($(this).val() == 'Re-Hire') {
                 disableTypeahead = 1;
             }
             else {
-                disableTypeahead = 0;                
-                if ($('#Co-WorkerID').length > 0) {
+                disableTypeahead = 0;
+                if ($('#Co-WorkerID').val() != "") {
                     $.ajax({
                         url: site.baseUrl + '/search/EmployeesExtendedInfo',
                         type: 'post',
@@ -1600,10 +1837,12 @@ var init = function () {
                     $('#FirstName').val("");
                     $('#LastName').val("");
                 }
-            }            
+            }
         }
-        });
-    
+    });
+
+    /*
+
     $('#ServiceRequestPriority').change(function () {
         $('#date_ProcessBeforeDate').not(".disabled").datepicker("destroy");
 
@@ -1614,7 +1853,7 @@ var init = function () {
         var sRDateUrgent = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate() + 1, 0, 0, 0, 0);
         var sRDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate() - 3, 0, 0, 0, 0);
 
-        if ($(this).val() == 'Urgent') {            
+        if ($(this).val() == 'Urgent') {
             var visibledaate = APIGlobal.DateTime.formatDate(sRDateUrgent, format);
             $('#ProcessBeforeDate').val(visibledaate);
 
@@ -1623,24 +1862,26 @@ var init = function () {
                 onRender: function (ev) {
                     return ev.valueOf() >= endDate.valueOf() || ev.valueOf() < now.valueOf() ? 'disabled' : '';
                 }
-            });           
+            });
         }
         else {
             var visibledate = APIGlobal.DateTime.formatDate(sRDate, format);
             $('#ProcessBeforeDate').val(visibledate);
-                $('#date_ProcessBeforeDate').not(".disabled").datepicker(
-                {
-                    onRender: function (ev) {
-                        return ev.valueOf() > now.valueOf() ? 'disabled' : '';
-                    }
-                });
+            $('#date_ProcessBeforeDate').not(".disabled").datepicker(
+            {
+                onRender: function (ev) {
+                    return ev.valueOf() > now.valueOf() ? 'disabled' : '';
+                }
+            });
         }
     });
+
+    */
 
     $('.nav-tabs a').click(function (e) {
         e.preventDefault();
         $(this).tab('show');
-        var url = $(this).attr("data-url"); 
+        var url = $(this).attr("data-url");
         var hash = this.hash;
 
         if (uploader != null && hash == '#attachments') {
@@ -1702,6 +1943,7 @@ var init = function () {
         var contractstartdate = new Date(document.getElementById('ContractStartDate').value);
         $('#date_AllowancesValidFrom, #date_ContractEndDate').not(".disabled").datepicker({
             onRender: function (date) {
+
                 return date.valueOf() < contractstartdate.valueOf() ? 'disabled' : '';
             }
         });
@@ -1714,7 +1956,7 @@ var init = function () {
             }
         });
     }
-    
+
 
 
     // Built for Global, sets LockCDSAccountFrom date to same date as last day of employment
@@ -1723,25 +1965,50 @@ var init = function () {
             .on('changeDate', function (e) {
                 document.getElementById('LockCDSAccountFrom').value = document.getElementById('LastDayOfEmployment').value;
 
-
-                //this rows is specific to Complete Termination Details
-                if (document.getElementById('PaymentDate') || document.getElementById('DeductionDate')) {
+                if (document.getElementById('PaymentDate')) {
                     document.getElementById('PaymentDate').value = document.getElementById('LastDayOfEmployment').value;
-                    document.getElementById('DeductionDate').value = document.getElementById('LastDayOfEmployment').value;
 
                     for (var i = 2; i <= 3; i++) {
                         var PaymentDate = "PaymentDate" + [i].toString();
-                        var DeductionDate = "DeductionDate" + [i].toString();
+
 
                         document.getElementById(PaymentDate).value = document.getElementById('LastDayOfEmployment').value;
+
+                    }
+                }
+                else {
+                    if (document.getElementById('TerminationPaymentDate')) {
+                        document.getElementById('TerminationPaymentDate').value = document.getElementById('LastDayOfEmployment').value;
+
+                        for (var i = 2; i <= 3; i++) {
+                            var PaymentDate = "TerminationPaymentDate" + [i].toString();
+
+
+                            document.getElementById(PaymentDate).value = document.getElementById('LastDayOfEmployment').value;
+
+                        }
+                    }
+                }
+
+                //this rows is specific to Complete Termination Details
+                if (document.getElementById('DeductionDate')) {
+
+                    document.getElementById('DeductionDate').value = document.getElementById('LastDayOfEmployment').value;
+
+                    for (var i = 2; i <= 3; i++) {
+
+                        var DeductionDate = "DeductionDate" + [i].toString();
+
+
                         document.getElementById(DeductionDate).value = document.getElementById('LastDayOfEmployment').value;
                     }
                 }
+
             });
 
 
 
-    //Specific to Netherlands. Shows a notice about date being in the past.
+
     var noticeHiringDate = $('#notice_HiringDate');
     var dateHiringDate = $('#date_HiringDate, #date_ContractStartDate, #date_LastDayOfEmployment');
     var noticeHiringDateWrong = $('#notice_HiringDateWrong');
@@ -1751,6 +2018,8 @@ var init = function () {
 
         dateHiringDate.not(".disabled").datepicker()
             .on('changeDate', function (e) {
+
+
                 if (!(e.date.getDate() === 1 || e.date.getDate() === 15)) {
                     noticeHiringDateWrong.show();
                 } else {
@@ -1774,10 +2043,10 @@ var init = function () {
         dateDatePicker.not(".disabled").datepicker()
             .on('changeDate', function (e) {
                 if (e.date.valueOf() < startDate.valueOf()) {
-                    
+
                     noticeFutureDate.show();
                 } else {
-                    
+
                     noticeFutureDate.hide();
                 }
             });
@@ -1821,15 +2090,15 @@ var init = function () {
 
     // predefined functions 
 
-    var cache = {};
-    $('select').each(function (i) {
-        cache[$(this).attr('id')] = $(this).html();
-    });
+    //var cache = {};
+    //$('select').each(function (i) {
+    //    cache[$(this).attr('id')] = $(this).html();
+    //});
 
     var predefined = $('.predefined');
 
     predefined.change(function (e) {
-
+        
         var $this = $(this);
         var value = $this.val();
         var hidden = $('.predefined_' + $this.attr('id'));
@@ -1840,6 +2109,14 @@ var init = function () {
             var json = $.parseJSON($(this).text());
             var dependent = $('#' + json.predefined.name);
             var selectCache = $(cache[json.predefined.name]);
+
+            // might give performance issues, other solutions might be creating of separate method for only search-select predefined elemens with using native api from selectize http://stackoverflow.com/questions/20458585/add-item-to-input-programmatically
+            
+            if (dependent[0] != undefined) {
+                if (dependent.selectize()) {
+                    dependent[0].selectize.destroy();
+                }
+            }
 
             for (var i = 0; i < json.predefined.dependent.length; i++) {
 
@@ -1880,6 +2157,13 @@ var init = function () {
                 });
             }
 
+            var childControl = document.getElementById(json.predefined.name);
+
+            // might give performance issues, other solutions might be creating of separate method for only search-select predefined elemens with using native api from selectize http://stackoverflow.com/questions/20458585/add-item-to-input-programmatically
+            if (dependent.hasClass("search-select")) {
+                dependent.selectize();
+            }
+
         });
 
     });
@@ -1887,6 +2171,9 @@ var init = function () {
     predefined.each(function () {
         $(this).change();
     });
+
+
+    //$('#HasEvent').val('false');
 
     validate.run($('#actionState').val());
 
@@ -1955,31 +2242,85 @@ var initUpload = function () {
     uploader.bind('FileUploaded', function (up, file) { /*$('#' + file.id + " b").html("100%");*/ });
 };
 
+//var f = "";
+//var hasChange = "";
 var actionStateChanged = function () {
 
+    /*f = $('#LockedFields').val();
+
+    if (f != null) {     
+        var fi = [];
+        fi = f.split(';');
+        for (var l = 1 ; l < fi.length - 1 ; l++) {
+            $('#' + fi[l]).prop('disabled', false);
+            $('#date_' + fi[l]).removeAttr("disabled");
+        }
+    }
+
+    hasChange = $('#FirstEventName').val();
+    */
     var form = $('form');
     var formData = form.serialize();
     var url = form.attr('action');
 
-    $.ajax({
-        type: "POST",
-        url: url,
-        data: formData
-    })
-    .done(function (data) {
-        if (data.View != '') {
-            $('form').replaceWith(data.View);
-            init();
-            if ($('#pickfiles').length > 0) {
-                initUpload();
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: formData
+        })
+        .done(function (data) {
+            if (data.View != '') {
+                $('form').replaceWith(data.View);
+                init();
+                
+                InitIntegration();
+
+                if ($('#pickfiles').length > 0) {
+                    initUpload();
+                }
+            } else {
+                reload(data.CancelCase);
             }
-        } else {  
-            reload(data.CancelCase);
-        }
-    });
+
+        }); 
 };
 
 $(document).on('submit', 'form', function (e) {
+    /*var f = $('#LockedFields').val();
+
+    if (f != null) {
+        $('#ChangeType').prop('disabled', false);       
+        var fi = [];
+        fi = f.split(';');
+        for (var l = 1 ; l < fi.length - 1 ; l++) {
+            $('#' + fi[l]).prop('disabled', false);
+            $('#date_' + fi[l]).removeAttr("disabled");
+        }
+    }    
+
+    allFieldname = $('#FirstEventName').val();
+    var lastvalidation = $('#LastValidation').val();
+    var val = $('#actionState').val();
+    if (allFieldname != '' && allFieldname != undefined) {
+
+        var url = '';
+        var ajaxInfo = $('#ajaxInfo');
+        if (ajaxInfo.length > 0) {
+            url = ajaxInfo.attr('url');
+        }
+
+        return $.ajax({
+            url: site.baseUrl + url + 'ChangeRules/',
+            type: 'post',
+            data: { id: val, eventFieldName: allFieldname },
+            dataType: 'json',
+            success: function (result) {
+                $('#validate_' + val).val(result);
+                $('#LastValidation').val(result);
+                validate.run(val);
+            }
+        });
+    }*/
 
     var elem = $('#navigation').find(':button, select').addClass("disabled").attr('readonly', 'readonly');
 
@@ -1998,6 +2339,17 @@ $(document).on('submit', 'form', function (e) {
 
 $(document).on('click', '#actionStateChange', function (e) {
 
+    //var hasChange = $('#FirstEventName').val();
+    var form = $('form');
+    var url = form.attr('action');
+    /*
+    if ((url.toString().indexOf("ChangeTermsConditions") > -1) && hasChange == "")
+    {
+        alert("It will not possible to go furthure in this process as you didn't make any changes.");
+        return;
+    }
+    */
+    
     if ($('#actionState').val() != '') {
 
         if ($('#actionState').val() == '99') {

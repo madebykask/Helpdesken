@@ -1,13 +1,13 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <predefined>
 <name>HomeCostCentre</name>
 <dependent>
-  <selected>﻿Sales</selected>
-  <show>3000</show>
+  <selected>Accounting SO</selected>
+  <show>6231,6230,6610</show>
 </dependent>
 <dependent>
-  <selected>Showroom</selected>
-  <show>3310</show>
+  <selected>AOS Maintenance Team 1</selected>
+  <show>3570</show>
 </dependent>
 <dependent>
   <selected>LIVING ROOMS</selected>

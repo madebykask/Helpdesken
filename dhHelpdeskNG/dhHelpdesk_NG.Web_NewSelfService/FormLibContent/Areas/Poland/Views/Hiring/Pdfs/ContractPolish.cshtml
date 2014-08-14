@@ -237,8 +237,18 @@
         </p>
 
         <p style="font-family: Verdana; font-size: 10px;">
-            @if(Model.GetAnswer("ContractType") == "Limited period"
-              && FormLibUtils.DateOver(Model.ConvertToDateTime("EffectiveDate"), Model.ConvertToDateTime("EndDate"), 6))
+
+                        @functions{
+                public static bool NewDateOver(DateTime? startDate, DateTime? endDate, int months)
+                {
+                    if (!startDate.HasValue || !endDate.HasValue) return false;
+                    DateTime a = startDate.Value.AddMonths(months);
+                    int result = DateTime.Compare(endDate.Value, a);
+                    return result >= 0;
+                }
+            }
+             @if (Model.GetAnswer("ContractType") == "Limited period"
+                && NewDateOver(Model.ConvertToDateTime("EffectiveDate"), Model.ConvertToDateTime("EndDate"), 6))
             {
                 <text>
                 Strony zgodnie ustaliły, że okres wypowiedzenia niniejszej umowy wynosi <strong>2 tygodnie</strong>.

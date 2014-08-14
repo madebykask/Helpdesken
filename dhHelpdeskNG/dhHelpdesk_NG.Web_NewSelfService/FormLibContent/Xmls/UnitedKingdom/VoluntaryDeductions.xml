@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE form [
   <!ENTITY languages SYSTEM "Templates/Languages.xml">
   <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
@@ -9,9 +9,7 @@
   &languages;
   &regexs;
   &state;
-
   <fields>
-
     <!--Tab ServiceRequestDetails-->
     <tab name="#ServiceRequestDetails" label="Service Request Details">
       <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" mandatory="1">
@@ -25,7 +23,9 @@
       <element name="IKEANetworkID" type="text" label="IKEA Network ID" mandatory="1">
         <regex inherit="unsignednum" message="" pattern=""></regex>
       </element>
+      <element name="Company" type="text" label="Company"></element>
       <element name="BusinessUnit" type="text" label="Business Unit"></element>
+      <element name="ServiceArea" type="text" label="Function"></element>
       <element name="Department" type="text" label="Department"></element>
       <element name="ChangeValidFrom" type="date" label="Change Valid from:" mandatory="1" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
@@ -37,11 +37,8 @@
         <options>
           <option value=""></option>
           <option value="Urgent">Urgent</option>
-          <option value="Not Urgent">Not Urgent</option>
+          <option value="Standard">Standard</option>
         </options>
-      </element>
-      <element name="ProcessBeforeDate" type="date" label="Process before date:" mandatory="1" format="dd.MM.yyyy">
-        <regex inherit="date" pattern="" message=""></regex>
       </element>
     </tab>
 

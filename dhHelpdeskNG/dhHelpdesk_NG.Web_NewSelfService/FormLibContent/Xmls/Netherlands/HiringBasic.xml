@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE form [
   <!ENTITY languages SYSTEM "Templates/Languages.xml">
   <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
@@ -38,11 +38,8 @@
             <options>
                 <option value=""></option>
                 <option value="Urgent">Urgent</option>
-                <option value="Not Urgent">Not Urgent</option>
+                <option value="Standard">Standard</option>
             </options>
-        </element>
-        <element type="date" name="ProcessBeforeDate" mandatory="1" label="Process before date:" format="dd.MM.yyyy">
-            <regex inherit="date" pattern="" message=""></regex>
         </element>
         <element type="text" name="Co-WorkerID" label="Co-Worker ID">
             <mandatoryIf name="NewToIKEA">International Transfer,Re-Hire</mandatoryIf>
@@ -77,7 +74,7 @@
         <element type="typeahead-simple" source="1" name="PermanentCountry" label="Country" mandatory="1" default="Netherlands">
             <options>
                 <option value=""></option>
-                <option value="﻿Unknown">﻿Unknown</option>
+                <option value="Unknown">Unknown</option>
                 <option value="Andorra">Andorra</option>
                 <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
                 <option value="Afghanistan">Afghanistan</option>
@@ -343,7 +340,7 @@
         <element type="typeahead-simple" source="1" name="Nationality" label="Nationality" default="Dutch" mandatory="1">
             <options>
                 <option value=""></option>
-                <option value="﻿Unknown">﻿Unknown</option>
+                <option value="Unknown">Unknown</option>
                 <option value="Angolan">Angolan</option>
                 <option value="Brazilian">Brazilian</option>
                 <option value="Swiss">Swiss</option>
@@ -600,7 +597,7 @@
       <element type="typeahead-simple" source="1" name="MailingCountry" label="Country">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -865,7 +862,7 @@
       <element type="typeahead-simple" source="1" name="EmergencyCountry" label="Country">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -1225,7 +1222,7 @@
       <element type="typeahead-simple" source="1" name="EmployeeDocumentCountry" label="Country" default="Netherlands">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -1753,7 +1750,7 @@
       <element type="typeahead-simple" source="1" name="EmployeeDocumentCountry2" label="Country" default="Netherlands">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -2015,7 +2012,7 @@
       <element type="typeahead-simple" source="1" name="EmployeeDocumentIssuePlaceCountry2" label="Issue Place Country" default="Netherlands">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -2281,7 +2278,7 @@
       <element type="typeahead-simple" source="1" name="EmployeeDocumentCountry3" label="Country" default="Netherlands">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -2543,7 +2540,7 @@
       <element type="typeahead-simple" source="1" name="EmployeeDocumentIssuePlaceCountry3" label="Issue Place Country" default="Netherlands">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -2876,7 +2873,7 @@
       <element type="typeahead-simple" source="1" name="DependantsDocumentCountry" label="Country" default="Netherlands">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -3138,7 +3135,7 @@
       <element type="typeahead-simple" source="1" name="DependantsDocumentIssuePlaceCountry" label="Issue Place Country" default="Netherlands">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -3404,7 +3401,7 @@
       <element type="typeahead-simple" source="1" name="DependantsDocumentCountry2" label="Country" default="Netherlands">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -3666,7 +3663,7 @@
       <element type="typeahead-simple" source="1" name="DependantsDocumentIssuePlaceCountry2" label="Issue Place Country" default="Netherlands">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -3932,7 +3929,7 @@
       <element type="typeahead-simple" source="1" name="DependantsDocumentCountry3" label="Country" default="Netherlands">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -4194,7 +4191,7 @@
       <element type="typeahead-simple" source="1" name="DependantsDocumentIssuePlaceCountry3" label="Issue Place Country" default="Netherlands">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -4460,7 +4457,7 @@
       <!--<element type="select" name="BankCountry" label="Bank Country" mandatory="1">
                 <options>
                     <option value=""></option>
-                    <option value="﻿Unknown">﻿Unknown</option>
+                    <option value="Unknown">Unknown</option>
                     <option value="Andorra">Andorra</option>
                     <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
                     <option value="Afghanistan">Afghanistan</option>
@@ -4733,7 +4730,7 @@
       <!--<element type="select" name="BankCountry2" label="Bank Country">
                 <options>
                     <option value=""></option>
-                    <option value="﻿Unknown">﻿Unknown</option>
+                    <option value="Unknown">Unknown</option>
                     <option value="Andorra">Andorra</option>
                     <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
                     <option value="Afghanistan">Afghanistan</option>
@@ -5007,7 +5004,7 @@
       <element type="typeahead-simple" source="1" name="Language" label="Language" default="Dutch">
         <options>
           <option value=""></option>
-          <option value="﻿Vietnamese">﻿Vietnamese</option>
+          <option value="Vietnamese">Vietnamese</option>
           <option value="Ukrainian">Ukrainian</option>
           <option value="Turkish">Turkish</option>
           <option value="Thai">Thai</option>
@@ -5083,7 +5080,7 @@
             <element type="select" name="OtherPreviousEmployerCountry" label="Country">
               <options>
                 <option value=""></option>
-                <option value="﻿Unknown">﻿Unknown</option>
+                <option value="Unknown">Unknown</option>
                 <option value="Andorra">Andorra</option>
                 <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
                 <option value="Afghanistan">Afghanistan</option>
@@ -5347,7 +5344,7 @@
             <element type="select" name="OtherPreviousEmployerCountry2" label="Country">
               <options>
                 <option value=""></option>
-                <option value="﻿Unknown">﻿Unknown</option>
+                <option value="Unknown">Unknown</option>
                 <option value="Andorra">Andorra</option>
                 <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
                 <option value="Afghanistan">Afghanistan</option>
@@ -5611,7 +5608,7 @@
             <element type="select" name="OtherPreviousEmployerCountry3" label="Country">
               <options>
                 <option value=""></option>
-                <option value="﻿Unknown">﻿Unknown</option>
+                <option value="Unknown">Unknown</option>
                 <option value="Andorra">Andorra</option>
                 <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
                 <option value="Afghanistan">Afghanistan</option>
@@ -5880,7 +5877,7 @@
       <element type="typeahead-simple" source="1" name="DocumentCountry" label="Country" default="Netherlands">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>

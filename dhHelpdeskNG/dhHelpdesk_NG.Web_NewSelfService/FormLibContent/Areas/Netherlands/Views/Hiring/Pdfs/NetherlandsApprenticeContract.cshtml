@@ -2,10 +2,12 @@
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
 @using ECT.FormLib.Pdfs;
+@using ECT.Model.Entities;
 
 @{
     Layout = null;
     Model.Language = "nl";
+
 }
 <!DOCTYPE html>
 <html>
@@ -20,41 +22,38 @@
             <br />
         </p>
         <p style="text-align: left;font-family: Verdana; font-size: 11px; padding-top: 30px;">
-            Tussen IKEA Nederland B.V., hierna te noemen IKEA, 
+            Tussen IKEA Nederland B.V., hierna te noemen IKEA, en
             <br />
             <br />
         </p>
         <table style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
-            @if (!string.IsNullOrEmpty(Model.GetAnswer("Initials")))
-            {
                 <tr>
                     <td width="30%" style="text-align: left;">Voorletters</td>
-                    <td width="70%" style="text-align: left;">: @Model.GetAnswer("Initials")</td>
+                    <td width="70%" style="text-align: left;">: @Model.GetDocumentAnswer("Initials",true)</td>
                 </tr>
-            }
             <tr>
-                <td style="text-align: left;">Roepnaam</td>
-                <td style="text-align: left;">: @Model.GetAnswer("FirstName")</td>
+                <td style="text-align: left;">Voornaam</td>
+                <td style="text-align: left;">: @Model.GetDocumentAnswer("FirstName",true)</td>
             </tr>
             <tr>
                 <td style="text-align: left;">Achternaam</td>
-                <td style="text-align: left;">: @Model.GetAnswer("Prefixes") @Model.GetAnswer("LastName")</td>
+                <td style="text-align: left;">: @Model.GetDocumentAnswer("Prefixes") @Model.GetDocumentAnswer("LastName",true)</td>
             </tr>
             <tr>
                 <td style="text-align: left;">Adres</td>
-                <td style="text-align: left;">: @Model.GetAnswer("PermanentAddressLine1") @Model.GetAnswer("PermanentAddressLine2") @Model.GetAnswer("PermanentAddressLine3")</td>
+                <td style="text-align: left;">: @Model.GetDocumentAnswer("PermanentAddressLine1",true) @Model.GetDocumentAnswer("PermanentAddressLine2") @Model.GetDocumentAnswer("PermanentAddressLine3")</td>
             </tr>
             <tr>
-                <td style="text-align: left;">Postcode /  woonplaats</td>
-                <td style="text-align: left;">: @Model.GetAnswer("PermanentPostalCode") @Model.GetAnswer("PermanentCity")</td>
+                <td style="text-align: left;">Postcode, woonplaats</td>
+                <td style="text-align: left;">: @Model.GetDocumentAnswer("PermanentPostalCode",true) @Model.GetDocumentAnswer("PermanentCity",true)</td>
             </tr>
             <tr>
                 <td style="text-align: left;">Geboortedatum</td>
-                <td style="text-align: left;">: @Model.GetAnswer("DateOfBirth")</td>
+                <td style="text-align: left;">: @Model.GetDocumentAnswer("DateOfBirth",true)</td>
             </tr>
             <tr>
                 <td style="text-align: left;">Verbonden aan</td>
-                <td style="text-align: left;">: @Model.GetAnswer("NameOfSchool")</td>
+                <td style="text-align: left;">: @Model.GetDocumentAnswer("NameOfSchool",true)</td>
             </tr>
         </table>
         <br />
@@ -75,7 +74,7 @@
             //1
             string text1 = "Dat IKEA de stagiair in de gelegenheid zal stellen in samenhang met zijn/haar opleiding praktische ervaringen op te doen met betrekking tot het werk in de volgende bedrijfsafdeling(en): {0} in de vestiging {1}, tijdens de periode {2} tot en met {3}, gedurende {4} uur per week, met uitzon¬dering van de dagen of gedeelten van dagen dat er in de onder¬neming niet wordt gewerkt.";
 
-            list.Add(new PdfListItem { Text = string.Format(text1, Model.GetAnswer("ServiceArea"), Model.GetAnswer("BusinessUnit"), Model.GetAnswer("ContractStartDate"), Model.GetAnswer("ContractEndDate"), Model.GetAnswer("ContractedHours")) });
+            list.Add(new PdfListItem { Text = string.Format(text1, Model.GetDocumentAnswer("ServiceArea", true), Model.GetDocumentAnswer("BusinessUnit", true), Model.GetDocumentAnswer("ContractStartDate", true), Model.GetDocumentAnswer("ContractEndDate", true), Model.GetDocumentAnswer("ContractedHours", true)) });
     
             //2
             list.Add(new PdfListItem { Text = "De rechtspositie van de stagiair is die van leerling van de school waar hij/zij onderwijs volgt." });
@@ -89,20 +88,20 @@
 
             //5
             // string format
-            list.Add(new PdfListItem { Text = string.Format("IKEA zal aanstellen als praktijkbegeleider: {0} van de afdeling: {1}.", Model.GetAnswer("MentorAtIKEA"), Model.GetAnswer("ServiceArea")) });
+            list.Add(new PdfListItem { Text = string.Format("IKEA zal aanstellen als praktijkbegeleider: {0} van de afdeling: {1}.", Model.GetDocumentAnswer("MentorAtIKEA", true), Model.GetDocumentAnswer("ServiceArea", true)) });
     
             //6
             list.Add(new PdfListItem { Text = "De stagiair verbindt zich om zowel tijdens de duur der stage als ook na afloop daarvan aan derden geen mededelingen te doen betreffende bijzonderheden van de IKEA organisatie." });
 
             //7
-            list.Add(new PdfListItem { Text = "Een stage overeenkomst kan op initiatief en met overeenstemming van IKEA of de stagiair en de vertegenwoordiger van de school, worden verbroken, verlengd of bekort." });
+            list.Add(new PdfListItem { Text = "Een stage overeenkomst kan op initiatief en met overeenstem¬ming van IKEA of de stagiair en de vertegenwoordiger van de school, worden verbroken, verlengd of bekort." });
 
 
             //8
             //IF Payroll Category = No Salary then paragraph number 8 should not appear on the contract
-            if (Model.GetAnswer("PayrollCategory").ToLower() != "No Salary".ToLower())
+            if (!string.IsNullOrEmpty(Model.GetDocumentAnswer("PayrollCategory")) && Model.GetDocumentAnswer("PayrollCategory").ToLower() != "No Salary".ToLower())
             {
-            list.Add(new PdfListItem { Text = string.Format("Stagevergoeding bruto per maand: EUR {0}. De vergoeding vindt telkens aan het einde van de kalendermaand plaats.", @Model.GetAnswer("BasicPay")) });
+                list.Add(new PdfListItem { Text = string.Format("Stagevergoeding bruto per maand: EUR {0}. De vergoeding vindt telkens aan het einde van de kalendermaand plaats.", @Model.GetDocumentAnswer("BasicPay", true)) });
             }
                 
             //9

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE form [
   <!ENTITY languages SYSTEM "Templates/Languages.xml">
   <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
@@ -38,13 +38,10 @@
         <options>
           <option value=""></option>
           <option value="Urgent">Urgent</option>
-          <option value="Not Urgent">Not Urgent</option>
+          <option value="Standard">Standard</option>
         </options>
       </element>
-      <element name="ProcessBeforeDate" type="date" label="Process before date:" mandatory="1" default="31.12.9999" format="dd.MM.yyyy">
-        <regex inherit="date" pattern="" message=""></regex>
-      </element>
-    
+          
     <!--Permanent Address-->
     <element type="text" name="PermanentAddressLine1" label="Address line 1" mandatory="1"></element>
       <element type="text" name="PermanentAddressLine2" label="Address line 2"></element>

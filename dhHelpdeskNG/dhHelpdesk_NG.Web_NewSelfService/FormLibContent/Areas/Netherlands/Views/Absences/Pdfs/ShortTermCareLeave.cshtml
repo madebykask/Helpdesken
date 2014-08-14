@@ -1,6 +1,8 @@
 ﻿@model ECT.FormLib.Models.FormModel
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
+@using ECT.FormLib.Pdfs;
+@using ECT.Model.Entities;
 
 @{
     Layout = null;
@@ -20,16 +22,13 @@
                 <td style="text-align:right;">     
                     <table style="font-family: Verdana; font-size: 11px;" border="0">
             <tr>
-               
-                <td style="text-align: left;">@Model.GetAnswer("FirstName") @Model.GetAnswer("LastName")</td>
+                <td style="text-align: left;">@Model.GetDocumentAnswer("FirstName",true) @Model.GetDocumentAnswer("LastName",true)</td>
             </tr>
             <tr>
-                
-                <td style="text-align: left;">@Model.GetAnswer("PermanentAddressLine1") @Model.GetAnswer("PermanentAddressLine2") @Model.GetAnswer("PermanentAddressLine3")</td>
+                <td style="text-align: left;">@Model.GetDocumentAnswer("PermanentAddressLine1",true) @Model.GetDocumentAnswer("PermanentAddressLine2") @Model.GetDocumentAnswer("PermanentAddressLine3")</td>
             </tr>
             <tr>
-                
-                <td style="text-align: left;">@Model.GetAnswer("PermanentPostalCode") @Model.GetAnswer("PermanentCity")</td>
+                <td style="text-align: left;">@Model.GetDocumentAnswer("PermanentPostalCode",true) @Model.GetDocumentAnswer("PermanentCity",true)</td>
             </tr>
         </table></td>
 
@@ -37,27 +36,20 @@
             </table>
         <p style="text-align: left; font-family: Verdana; font-size: 11px;">
             <br />
-            @if (Model.Department != null)
-            {
-                if (!string.IsNullOrEmpty(Model.Department.HeadOfDepartmentCity))
-                {
-                <text> @Model.Department.HeadOfDepartmentCity, </text>
-                
-                }
-            } @string.Format(new System.Globalization.CultureInfo("nl-NL"), "{0:d MMMM yyyy}", DateTime.Now)<br />
+            @CustomPdfPage.IsEmpty(Model.Department.HeadOfDepartmentCity, "City"), @string.Format(new System.Globalization.CultureInfo("nl-NL"), "{0:d MMMM yyyy}", DateTime.Now)<br />
             <br />
 
             Betreft: kortdurend zorgverlof<br />
             <br />
 
-            Beste @Model.GetAnswer("FirstName"),<br />
+            Beste @Model.GetDocumentAnswer("FirstName",true),<br />
             <br />
 
             Hierbij bevestigen wij je het volgende.
         <br />
             <br />
 
-            Van @Model.GetAnswer("AbsenceStartFrom" +Model.AbsenceNr) tot en met @Model.GetAnswer("AbsenceEndsOn"+Model.AbsenceNr).Trim() heb jij @Model.GetAnswer("AbsenceHours"+Model.AbsenceNr).Trim() uur kortdurend zorgverlof opgenomen met behoud van je salaris tot 100%. 
+            Van @Model.GetDocumentAnswer("AbsenceStartFrom" +Model.AbsenceNr,true) tot en met @Model.GetDocumentAnswer("AbsenceEndsOn"+Model.AbsenceNr,true).Trim() heb jij @Model.GetDocumentAnswer("AbsenceHours"+Model.AbsenceNr,true).Trim() uur kortdurend zorgverlof opgenomen met behoud van je salaris tot 100%. 
                <br />
             <br />
             Voor meer informatie over deze regeling verwijzen wij je naar ico-worker.com/nl of raadpleeg artikel 41C van de IKEA CAO.</p>

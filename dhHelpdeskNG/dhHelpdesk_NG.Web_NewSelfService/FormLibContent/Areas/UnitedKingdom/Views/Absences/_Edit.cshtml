@@ -5,9 +5,9 @@
 @using (Html.BeginForm("edit", "Absences", new { id = Model.Contract.Id }, FormMethod.Post, new { area = "UnitedKingdom", novalidate = "novalidate" }))
 {   
     <span style="display: none;" id="narrowDownInit"></span>
-    @Html.Partial("_GlobalNavigation", Model)
+    @Html.Partial("_GlobalNavRev", Model)
     <div class="container containeralignright">
-        @Html.Partial("_CurrentUser")
+        @Html.Partial("_FormInfo", Model)
         @Html.Partial("_ErrorMessage", Model)
         <ul class="nav nav-tabs">
             @if (Model.VisibleTab("#ServiceRequestDetails"))
@@ -21,6 +21,13 @@
                 <li class="@(Model.TabHasError("#Absences") ? "error" : "")">
                     <a href="#Absences">@Model.Translate("Absences")</a></li>
             }
+
+            @if(Model.VisibleTab("#documents"))
+            {
+                <li class="@(Model.TabHasError("#documents") ? "error" : "")">
+                    <a href="#documents">@Model.Translate("Documents")</a></li>
+            }
+
             @if (Model.VisibleTab("#SscUseOnly"))
             {
                 <li class="@(Model.TabHasError("#SscUseOnly") ? "error" : "")">
@@ -35,7 +42,7 @@
         </ul>
         <div class="content">
             <div class="row-fluid">
-                <div class="tab-content">
+                <div class="tab-content overflow-visible">
                     @if (Model.VisibleTab("#ServiceRequestDetails"))
                     {
                         @Html.Partial("_TabServiceRequestDetails", Model)
@@ -44,6 +51,11 @@
                     @if (Model.VisibleTab("#Absences"))
                     {
                         @Html.Partial("_TabAbsences", Model)
+                    }
+
+                      @if(Model.VisibleTab("#documents"))
+                    {
+                        @Html.Partial("_TabDocuments", Model)
                     }
 
                     @if (Model.VisibleTab("#SscUseOnly"))

@@ -1,0 +1,32 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+ @if (Model.StaticFiles!=null && Model.StaticFiles.Count > 0)
+{ 
+    <table class="table-striped">
+        <thead>
+            <tr>
+                <th>@Model.Translate("Document")
+                </th>
+                <th>@Model.Translate("Type")
+                </th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ECT.Model.Entities.StaticFile file in Model.StaticFiles){
+                <tr>
+                    <td>@file.Name</td>
+                    <td>@file.Extension</td>
+                    <td>&nbsp;</td>
+                    <td>
+                        <a href="@Url.Content(file.URL)" class="btn pull-right" target="_blank"><i class="icon-file"></i>&nbsp;@Model.Translate("Show")</a>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

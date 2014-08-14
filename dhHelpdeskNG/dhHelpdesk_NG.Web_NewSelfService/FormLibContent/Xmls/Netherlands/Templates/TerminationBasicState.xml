@@ -1,9 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <state status="0">
     <status value="0">
         <visibleTabs>#ServiceRequestDetails,#Complete</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
-      <readOnlyFields>BusinessUnit,Department</readOnlyFields>       
+      <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>
             <action status="10" internal-val="10" text="">
                 <validateFields></validateFields>
@@ -19,7 +19,7 @@
     <status value="20">
         <visibleTabs>#ServiceRequestDetails,#Complete,#documents</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails</readOnlyTabs>
-      <readOnlyFields>BusinessUnit,Department</readOnlyFields>
+      <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>
             <action status="40" internal-val="40" text="Submit Service Request to SSC">
                 <validateTabs>#ServiceRequestDetails,#Complete</validateTabs>
@@ -32,7 +32,7 @@
     <status value="40">
         <visibleTabs>#ServiceRequestDetails,#Complete,#documents,#globalview</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Complete</readOnlyTabs>
-      <readOnlyFields>BusinessUnit,Department</readOnlyFields>
+      <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>
             <action status="60" internal-val="60" text="Global View update"></action>
             <action status="99" internal-val="70" text="Cancel Service Request"></action>
@@ -41,7 +41,7 @@
     <status value="60">
         <visibleTabs>#ServiceRequestDetails,#Complete,#documents,#globalview</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Complete</readOnlyTabs>
-      <readOnlyFields>BusinessUnit,Department</readOnlyFields>
+      <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>
         </actions>
     </status>

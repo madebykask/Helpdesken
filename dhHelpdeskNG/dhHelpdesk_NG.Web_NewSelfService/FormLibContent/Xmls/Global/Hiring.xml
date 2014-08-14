@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE form [
     <!ENTITY languages SYSTEM "Templates/Languages.xml">
     <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
@@ -33,12 +33,10 @@
                 <options>
                     <option value=""></option>
                     <option value="Urgent">Urgent</option>
-                    <option value="Not Urgent">Not Urgent</option>
+                    <option value="Standard">Standard</option>
                 </options>
             </element>
-            <element type="date" name="ProcessBeforeDate" mandatory="1" label="Process before date:" format="dd.MM.yyyy">
-                <regex inherit="date" pattern="" message=""></regex>
-            </element>
+            
             <element type="text" name="Co-WorkerID" label="Co-Worker ID"></element>
             <element type="text" name="GlobalHRID" label="Global HR ID"></element>
             <element type="select" name="Title" label="Title" >
@@ -71,29 +69,30 @@
                     <option value="Country 3">Country 3</option>
                 </options>
             </element>
-            <element type="select" name="Company" label="Company" mandatory="1">
+            <element type="select" source="database" name="Company" label="Company" mandatory="1">
                 <options>
                     <option value=""></option>
-                    <option value="Company 1">Company 1</option>
+                    <!--<option value="Company 1">Company 1</option>
                     <option value="Company 2">Company 2</option>
-                    <option value="Company 3">Company 3</option>
+                    <option value="Company 3">Company 3</option>-->
                 </options>
             </element>
-            <element type="select" name="BusinessUnit" label="Business Unit" mandatory="1">
-                <options>
+            <element type="select" source="database" name="BusinessUnit" label="Business Unit" mandatory="1">
+                <!--<options>
                     <option value=""></option>
                     <option value="S1">Unit 1</option>
                     <option value="S2">Unit 2</option>
                     <option value="S3">Unit 3</option>
-                </options>
+                </options>-->
             </element>
-            <element type="select" name="Department" label="Department" mandatory="1">
-                <options>
+          <element type="select" source="database" name="ServiceArea" label="Function" mandatory="1"></element>
+            <element type="select" source="database" name="Department" label="Department" mandatory="1">
+                <!--<options>
                     <option value=""></option>
                     <option value="Department 1">Department 1</option>
                     <option value="Department 2">Department 2</option>
                     <option value="Department 3">Department 3</option>
-                </options>
+                </options>-->
             </element>
             <element type="select" name="HomeCostCentre" label="Home Cost Centre" mandatory="1">
                 <options>

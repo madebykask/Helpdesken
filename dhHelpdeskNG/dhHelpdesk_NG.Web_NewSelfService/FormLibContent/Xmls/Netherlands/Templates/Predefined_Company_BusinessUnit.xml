@@ -1,7 +1,7 @@
 ﻿<predefined>
     <name>BusinessUnit</name>
     <dependent>
-        <selected>IKEA B.V</selected>
+        <selected>118</selected>
         <show>
           Store Eindhoven 087,
           Store Amsterdam 088,
@@ -20,7 +20,7 @@
         </show>
     </dependent>
     <dependent>
-        <selected>IKEA Competence B.V.</selected>
+        <selected>119</selected>
         <show>IKEA Competence B.V.</show>
     </dependent>
 </predefined>

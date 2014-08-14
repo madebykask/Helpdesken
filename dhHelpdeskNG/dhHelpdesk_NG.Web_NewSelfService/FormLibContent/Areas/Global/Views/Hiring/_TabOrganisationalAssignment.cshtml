@@ -3,7 +3,7 @@
 @using ECT.FormLib.Models;
 
 <div class="tab-pane" id="OrganisationalAssignment">
-    <div class="span5">
+    <div class="span6">
         <table class="table">
             <tbody>
                 <tr>
@@ -23,7 +23,10 @@
                     <td class="tdstrong">@Model.Label("BusinessUnit")</td>
                     <td>@Model.Element("BusinessUnit")</td>
                 </tr>
-               
+                <tr>
+                    <td class="tdstrong">@Model.Label("ServiceArea")</td>
+                    <td>@Model.Element("ServiceArea")</td>
+                </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("Department")</td>
                     <td>@Model.Element("Department")</td>

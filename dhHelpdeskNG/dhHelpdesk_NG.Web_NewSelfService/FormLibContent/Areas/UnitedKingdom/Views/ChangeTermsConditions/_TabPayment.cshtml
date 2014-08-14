@@ -14,7 +14,7 @@
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Basic pay")</h4>
                     </td>
-                    <td class="tdstrong">
+                    <td class="tdstrong"> 
                         <h4>@Model.Translate("Current record")</h4>
                     </td>
                 </tr>
@@ -36,6 +36,12 @@
                         @Model.Element("BasicPayAmount")
                     </td>
                 </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MonthlySalaryRate")</td>
+                    <td>
+                        @Model.Element("MonthlySalaryRate")
+                    </td>
+                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("BasicPayChangeReason")</td>
                     <td>
@@ -128,18 +134,11 @@
                             @Model.Element("AllowancesValidTo" + i.ToString())</td>
                     </tr>
                 }
-                <tr id="addAllowanceTr">
+                <tr id="addAllowanceTrr">
                     <td colspan="2">
                         @Model.Element("Allowances")
                         <a id="addAllowance" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Allowance")</a></td>
                 </tr>
-
-                @*           </tbody>
-        </table>
-    </div>
-    <div class="span6">
-        <table class="table">
-            <tbody>*@
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Deductions")</h4>
@@ -223,7 +222,7 @@
                             @Model.Element("DeductionsValidTo" + i.ToString())</td>
                     </tr>
                 }
-                <tr id="addDeductionTr">
+                <tr id="addDeductionTrr">
                     <td colspan="2">
                         @Model.Element("Deductions")
                         <a id="addDeduction" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Deduction")</a></td>
@@ -309,143 +308,87 @@
     var employmentCategory = document.getElementById('EmploymentCategory').value;
     var sEnd = document.getElementById('ChangeValidFrom');
 
-    $('#AllowancesPaymentType').change(function () {
-        var allowancesValidTo = document.getElementById('AllowancesValidTo');
+    function setDefaultDate(id) {
+        var input = $('#' + id);
 
-        var input = $('#AllowancesValidTo');
-        if ($(this).val() == 'One Time') {
-            allowancesValidTo.value = "";
-            $('#date_AllowancesValidTo').datepicker("destroy");
-            $('#date_AllowancesValidTo').addClass("disabled");
-            input.attr('readonly', 'readonly');
-        } else {
-            $('#date_AllowancesValidTo').removeClass("disabled");
-            input.removeAttr('readonly', 'readonly');
-            if (employmentCategory == 'Temporary')
-                allowancesValidTo.value = sEnd.value;
-            else
-                if (allowancesValidTo.value == '') {
-                    allowancesValidTo.value = '31.12.9999';
-                }
-            $('#date_AllowancesValidTo').datepicker();
+        if (employmentCategory == 'Temporary') {
+            input.val(sEnd.value);
         }
+        else
+            if (input.val() == '') {
+                input.val('31.12.9999');
+            }
+    }
+
+    function disableDatePicker(id) {
+        var input = $('#' + id);
+        var datePicker = $('#date_' + id);
+
+        datePicker.datepicker("destroy");
+        datePicker.addClass("disabled");
+        input.val("");
+        input.attr('readonly', 'readonly');
+    }
+
+    function enableDatePicker(id) {
+        var input = $('#' + id);
+        var datePicker = $('#date_' + id);
+
+        datePicker.removeClass("disabled");
+        input.removeAttr('readonly', 'readonly');
+        setDefaultDate(id);
+        datePicker.datepicker();
+    }
+
+    function setDatePickerBehavior(id, value) {
+        var input = $('#' + id);
+
+        if (value == 'One Time') {
+            disableDatePicker(id);
+        } else {
+            enableDatePicker(id);
+        }
+    }
+
+    function setDefaultDatePickerBehavior(id, value) {
+        var input = $('#' + id);
+
+        if (value == 'One Time') {
+            disableDatePicker(id);
+        } else {
+            setDefaultDate(id);
+        }
+    }
+
+    $('#AllowancesPaymentType').change(function () {
+        setDatePickerBehavior('AllowancesValidTo', $(this).val());
     });
-    $('#AllowancesPaymentType').change();
+    setDefaultDatePickerBehavior('AllowancesValidTo', $('#AllowancesPaymentType').val());
 
     $('#AllowancesPaymentType2').change(function () {
-        var allowancesValidTo2 = document.getElementById('AllowancesValidTo2');
-        var input = $('#AllowancesValidTo2');
-        if ($(this).val() == 'One Time') {
-            allowancesValidTo2.value = "";
-            $('#date_AllowancesValidTo2').datepicker("destroy");
-            $('#date_AllowancesValidTo2').addClass("disabled");
-            input.attr('readonly', 'readony');
-        } else {
-            input.removeAttr('readonly');
-            if (employmentCategory == 'Temporary')
-                allowancesValidTo2.value = sEnd.value;
-            else
-                if (allowancesValidTo2.value == '') {
-                    allowancesValidTo2.value = '31.12.9999';
-                }
-            $('#date_AllowancesValidTo2').datepicker();
-        }
+        setDatePickerBehavior('AllowancesValidTo2', $(this).val());
     });
-    $('#AllowancesPaymentType2').change();
-
+    setDefaultDatePickerBehavior('AllowancesValidTo2', $('#AllowancesPaymentType2').val());
 
     $('#AllowancesPaymentType3').change(function () {
-        var allowancesValidTo3 = document.getElementById('AllowancesValidTo3');
-
-        var input = $('#AllowancesValidTo3');
-        if ($(this).val() == 'One Time') {
-            allowancesValidTo3.value = "";
-            $('#date_AllowancesValidTo3').datepicker("destroy");
-            $('#date_AllowancesValidTo3').addClass("disabled");
-            input.attr('readonly', 'readony');
-        } else {
-            input.removeAttr('readonly');
-            if (employmentCategory == 'Temporary')
-                allowancesValidTo3.value = sEnd.value;
-            else
-                if (allowancesValidTo3.value == '') {
-                    allowancesValidTo3.value = '31.12.9999';
-                }
-            $('#date_AllowancesValidTo3').datepicker();
-        }
+        setDatePickerBehavior('AllowancesValidTo3', $(this).val());
     });
-    $('#AllowancesPaymentType3').change();
-
+    setDefaultDatePickerBehavior('AllowancesValidTo3', $('#AllowancesPaymentType3').val());
 
     $('#DeductionsPaymentType').change(function () {
-        var deductionsValidTo = document.getElementById('DeductionsValidTo');
-
-        var input = $('#DeductionsValidTo');
-        if ($(this).val() == 'One Time') {
-            deductionsValidTo.value = "";
-            $('#date_DeductionsValidTo').datepicker("destroy");
-            $('#date_DeductionsValidTo').addClass("disabled");
-            input.attr('readonly', 'readony');
-
-        } else {
-            input.removeAttr('readonly');
-            if (employmentCategory == 'Temporary')
-                deductionsValidTo.value = sEnd.value;
-            else
-                if (deductionsValidTo.value == '') {
-                    deductionsValidTo.value = '31.12.9999';
-                }
-            $('#date_DeductionsValidTo').datepicker();
-        }
+        setDatePickerBehavior('DeductionsValidTo', $(this).val());
     });
-    $('#DeductionsPaymentType').change();
-
+    setDefaultDatePickerBehavior('DeductionsValidTo', $('#DeductionsPaymentType').val());
 
     $('#DeductionsPaymentType2').change(function () {
-        var deductionsValidTo2 = document.getElementById('DeductionsValidTo2');
-
-        var input = $('#DeductionsValidTo2');
-        if ($(this).val() == 'One Time') {
-            deductionsValidTo2.value = "";
-            $('#date_DeductionsValidTo2').datepicker("destroy");
-            $('#date_DeductionsValidTo2').addClass("disabled");
-            input.attr('readonly', 'readony');
-        } else {
-            input.removeAttr('readonly');
-            if (employmentCategory == 'Temporary')
-                deductionsValidTo2.value = sEnd.value;
-            else
-                if (deductionsValidTo2.value == '') {
-                    deductionsValidTo2.value = '31.12.9999';
-                }
-            $('#date_DeductionsValidTo2').datepicker();
-        }
+        setDatePickerBehavior('DeductionsValidTo2', $(this).val());
     });
-    $('#DeductionsPaymentType2').change();
-
-
+    setDefaultDatePickerBehavior('DeductionsValidTo2', $('#DeductionsPaymentType2').val());
 
     $('#DeductionsPaymentType3').change(function () {
-        var deductionsValidTo3 = document.getElementById('DeductionsValidTo3');
-
-        var input = $('#DeductionsValidTo3');
-        if ($(this).val() == 'One Time') {
-            deductionsValidTo3.value = "";
-            $('#date_DeductionsValidTo3').datepicker("destroy");
-            $('#date_DeductionsValidTo3').addClass("disabled");
-            input.attr('readonly', 'readony');
-        } else {
-            input.removeAttr('readonly');
-            if (employmentCategory == 'Temporary')
-                deductionsValidTo3.value = sEnd.value;
-            else
-                if (deductionsValidTo3.value == '') {
-                    deductionsValidTo3.value = '31.12.9999';
-                }
-            $('#date_DeductionsValidTo3').datepicker();
-        }
+        setDatePickerBehavior('DeductionsValidTo3', $(this).val());
     });
-    $('#DeductionsPaymentType3').change();
+    setDefaultDatePickerBehavior('DeductionsValidTo3', $('#DeductionsPaymentType3').val());
 
     function setOneIKEABonusLevel(value) {
         if (!value) {
@@ -462,14 +405,5 @@ $('#JobTitle').change(function () {
 
 setOneIKEABonusLevel($('#JobTitle').val());
 
-document.getElementById('AllowancesValidFrom').value = '@Model.GetAnswer("ChangeValidFrom")';
-document.getElementById('DeductionsValidFrom').value = '@Model.GetAnswer("ChangeValidFrom")';
-
-    for (var i = 2; i <= 3; i++) {
-        var AllowancesValidFrom = "AllowancesValidFrom" + [i].toString();
-        var DeductionsValidFrom = "DeductionsValidFrom" + [i].toString();
-        document.getElementById(AllowancesValidFrom).value = '@Model.GetAnswer("ChangeValidFrom")';
-        document.getElementById(DeductionsValidFrom).value = '@Model.GetAnswer("ChangeValidFrom")';
-    }
 
 </script>

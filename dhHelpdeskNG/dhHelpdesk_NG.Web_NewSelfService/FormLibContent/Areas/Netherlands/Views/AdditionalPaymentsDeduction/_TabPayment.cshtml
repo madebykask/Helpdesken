@@ -3,7 +3,7 @@
 @using ECT.FormLib.Models;
 
 <div class="tab-pane" id="Payment">
-    <div class="span5">
+    <div class="span6">
         <table class="table">
             <tbody>
                  
@@ -243,12 +243,12 @@
             var input = $('#AllowancesValidTo');
             if ($(this).val() == 'One Time') {
                 allowancesValidTo.value = "";
-                input.attr('readonly', 'readonly');
+                document.getElementById('AllowancesValidTo').disabled = true;
                 $('#date_AllowancesValidTo').datepicker("destroy");
                 $('#date_AllowancesValidTo').addClass("disabled");
 
             } else {
-                input.removeAttr('readonly', 'readonly');
+                document.getElementById('AllowancesValidTo').disabled = false;
                 $('#date_AllowancesValidTo').not(".disabled").datepicker();
                 $('#date_AllowancesValidTo').removeClass("disabled");
                 allowancesValidTo.value = '31.12.9999';
@@ -261,12 +261,12 @@
             var input = $('#AllowancesValidTo2');
             if ($(this).val() == 'One Time') {
                 allowancesValidTo2.value = "";
-                input.attr('readonly', 'readony');
+                document.getElementById('AllowancesValidTo2').disabled = true;
                 $('#date_AllowancesValidTo2').datepicker("destroy");
                 $('#date_AllowancesValidTo2').addClass("disabled");
                 
             } else {
-                input.removeAttr('readonly', 'readonly');
+                document.getElementById('AllowancesValidTo2').disabled = false;
                 $('#date_AllowancesValidTo2').datepicker();
                 $('#date_AllowancesValidTo2').removeClass("disabled");
                 allowancesValidTo2.value = '31.12.9999';
@@ -281,11 +281,11 @@
             var input = $('#AllowancesValidTo3');
             if ($(this).val() == 'One Time') {
                 allowancesValidTo3.value = "";
-                input.attr('readonly', 'readony');
+                document.getElementById('AllowancesValidTo3').disabled = true;
                 $('#date_AllowancesValidTo3').datepicker("destroy");
                 $('#date_AllowancesValidTo3').addClass("disabled");                
             } else {
-                input.removeAttr('readonly', 'readonly');
+                document.getElementById('AllowancesValidTo3').disabled = false;
                 $('#date_AllowancesValidTo3').datepicker();
                 $('#date_AllowancesValidTo3').removeClass("disabled");
                 allowancesValidTo3.value = '31.12.9999';
@@ -300,12 +300,12 @@
             var input = $('#DeductionsValidTo');
             if ($(this).val() == 'One Time') {
                 deductionsValidTo.value = "";
-                input.attr('readonly', 'readonly');
+                document.getElementById('DeductionsValidTo').disabled = true;
                 $('#date_DeductionsValidTo').datepicker("destroy");
                 $('#date_DeductionsValidTo').addClass("disabled");
 
             } else {
-                input.removeAttr('readonly', 'readonly');
+                document.getElementById('DeductionsValidTo').disabled = false;
                 $('#date_DeductionsValidTo').datepicker();
                 $('#date_DeductionsValidTo').removeClass("disabled");
                 deductionsValidTo.value = '31.12.9999';
@@ -320,12 +320,12 @@
             var input = $('#DeductionsValidTo2');
             if ($(this).val() == 'One Time') {
                 deductionsValidTo2.value = "";
-                input.attr('readonly', 'readonly');
+                document.getElementById('DeductionsValidTo2').disabled = true;
                 $('#date_DeductionsValidTo2').datepicker("destroy");
                 $('#date_DeductionsValidTo2').addClass("disabled");
 
             } else {
-                input.removeAttr('readonly', 'readonly');
+                document.getElementById('DeductionsValidTo2').disabled = false;
                 $('#date_DeductionsValidTo2').datepicker();
                 $('#date_DeductionsValidTo2').removeClass("disabled");
                 deductionsValidTo2.value = '31.12.9999';
@@ -339,12 +339,12 @@
             var input = $('#DeductionsValidTo3');
             if ($(this).val() == 'One Time') {
                 deductionsValidTo3.value = "";
-                input.attr('readonly', 'readonly');
+                document.getElementById('DeductionsValidTo3').disabled = true;
                 $('#date_DeductionsValidTo3').datepicker("destroy");
                 $('#date_DeductionsValidTo3').addClass("disabled");
 
             } else {
-                input.removeAttr('readonly', 'readonly');
+                document.getElementById('DeductionsValidTo3').disabled = false;
                 $('#date_DeductionsValidTo3').datepicker();
                 $('#date_DeductionsValidTo3').removeClass("disabled");
                 deductionsValidTo3.value = '31.12.9999';

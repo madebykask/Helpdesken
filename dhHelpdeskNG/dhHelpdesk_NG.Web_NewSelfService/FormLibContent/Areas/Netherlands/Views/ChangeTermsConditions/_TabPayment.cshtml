@@ -3,14 +3,14 @@
 @using ECT.FormLib.Models;
 
 <div class="tab-pane" id="Payment">
-    <div class="span8">
+    <div class="span6">
         <table class="table">
             <tbody>
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Basic pay")</h4>
                     </td>
-                    <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>
+                   @* <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>*@
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("PayrollCategory")</td>
@@ -59,7 +59,7 @@
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Allowances")</h4>
                     </td>
-                    <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>
+                   @* <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>*@
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("AllowancesType")</td>
@@ -145,17 +145,17 @@
                         <a id="addAllowance" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Allowance")</a></td>
                 </tr>
 
-          @*  </tbody>
+            </tbody>
         </table>
     </div>
     <div class="span6">
         <table class="table">
-            <tbody>*@
+            <tbody>
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Deductions")</h4>
                     </td>
-                    <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>
+                    @*<td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>*@
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("DeductionsType")</td>
@@ -242,7 +242,7 @@
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Bonus Eligibility")</h4>
                     </td>
-                    <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>
+                    @*<td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>*@
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("OneIKEABonusLevel")</td>
@@ -261,7 +261,7 @@
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Benefits:")</h4>
                     </td>
-                     <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>
+                    @* <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>*@
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("TypeOfBenefit")</td>
@@ -328,7 +328,7 @@
                             @Model.Element("NextRevisionDate" + i.ToString())</td>
                     </tr>
                 }
-                <tr id="addBenefitsTr">
+                <tr id="addBenefits">
                     <td colspan="2">
                         @Model.Element("Benefits")
                         <a id="addBenefit" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another benefit")</a></td>
@@ -368,8 +368,6 @@
     }).data('datepicker');
 
 
-
-
     // Show notice if allowancestype comp.serv.allowance
     function selectIndexChangeAllowancesType() {
         if (this.options[this.selectedIndex].value == 'Comp.Serv.Allowance') {
@@ -383,8 +381,12 @@
     document.getElementById('AllowancesType').onchange = selectIndexChangeAllowancesType;
 
     // allowance and deduction datepickers
-    var employmentCategory = document.getElementById('EmploymentCategory').value;
-    var sEnd = document.getElementById('ChangeValidFrom');
+    var employmentCategory = "";
+    $('#EmploymentCategory').change(function () {
+        employmentCategory = $(this).val();
+    });
+
+    var sEnd = document.getElementById('ContractEndDate');
 
     $('#AllowancesPaymentType').change(function () {
         var allowancesValidTo = document.getElementById('AllowancesValidTo');
@@ -394,11 +396,12 @@
             allowancesValidTo.value = "";
             $('#date_AllowancesValidTo').datepicker("destroy");
             $('#date_AllowancesValidTo').addClass("disabled");
-            input.attr('readonly', 'readonly');
+            input.prop('disabled', true);
         } else {
-            $('#date_AllowancesValidTo').removeClass("disabled");
-            input.removeAttr('readonly', 'readonly');
-            if (employmentCategory == 'Temporary')
+            $('#date_AllowancesValidTo').datepicker();
+            input.prop('disabled', false);
+            input.removeClass("disabled");
+            if ($(this).val() == 'Recurring' && employmentCategory == 'Temporary')
                 allowancesValidTo.value = sEnd.value;
             else
                 allowancesValidTo.value = '31.12.9999';
@@ -408,15 +411,19 @@
 
     $('#AllowancesPaymentType2').change(function () {
         var allowancesValidTo2 = document.getElementById('AllowancesValidTo2');
+
         var input = $('#AllowancesValidTo2');
+        
         if ($(this).val() == 'One Time') {
             allowancesValidTo2.value = "";
             $('#date_AllowancesValidTo2').datepicker("destroy");
             $('#date_AllowancesValidTo2').addClass("disabled");
-            input.attr('readonly', 'readony');
+            input.prop('disabled', true);
         } else {
-            input.removeAttr('readonly');
-            if (employmentCategory == 'Temporary')
+            $('#date_AllowancesValidTo2').datepicker();
+            input.prop('disabled', false);
+            input.removeClass("disabled");
+            if ($(this).val() == 'Recurring' && employmentCategory == 'Temporary')
                 allowancesValidTo2.value = sEnd.value;
             else
                 allowancesValidTo2.value = '31.12.9999';
@@ -432,10 +439,12 @@
             allowancesValidTo3.value = "";
             $('#date_AllowancesValidTo3').datepicker("destroy");
             $('#date_AllowancesValidTo3').addClass("disabled");
-            input.attr('readonly', 'readony');
+            input.prop('disabled', true);
         } else {
-            input.removeAttr('readonly');
-            if (employmentCategory == 'Temporary')
+            $('#date_AllowancesValidTo3').datepicker();
+            input.prop('disabled', false);
+            input.removeClass("disabled");
+            if ($(this).val() == 'Recurring' && employmentCategory == 'Temporary')
                 allowancesValidTo3.value = sEnd.value;
             else
                 allowancesValidTo3.value = '31.12.9999';
@@ -451,11 +460,13 @@
             deductionsValidTo.value = "";
             $('#date_DeductionsValidTo').datepicker("destroy");
             $('#date_DeductionsValidTo').addClass("disabled");
-            input.attr('readonly', 'readony');
+            input.prop('disabled', true);
 
         } else {
-            input.removeAttr('readonly');
-            if (employmentCategory == 'Temporary')
+            $('#date_DeductionsValidTo').datepicker();
+            input.prop('disabled', false);
+            input.removeClass("disabled");
+            if ($(this).val() == 'Recurring' && employmentCategory == 'Temporary')
                 deductionsValidTo.value = sEnd.value;
             else
                 deductionsValidTo.value = '31.12.9999';
@@ -474,7 +485,7 @@
             input.attr('readonly', 'readony');
         } else {
             input.removeAttr('readonly');
-            if (employmentCategory == 'Temporary')
+            if ($(this).val() == 'Recurring' && employmentCategory == 'Temporary')
                 deductionsValidTo2.value = sEnd.value;
             else
                 deductionsValidTo2.value = '31.12.9999';
@@ -493,7 +504,7 @@
             input.attr('readonly', 'readony');
         } else {
             input.removeAttr('readonly');
-            if (employmentCategory == 'Temporary')
+            if ($(this).val() == 'Recurring' && employmentCategory == 'Temporary')
                 deductionsValidTo3.value = sEnd.value;
             else
                 deductionsValidTo3.value = '31.12.9999';
@@ -564,5 +575,21 @@
 
     }
     document.getElementById('PayScaleLevel').onchange = SelectIndexChangePayScaleLevel;
+
+    // Set Type Of car Value
+
+    var pSL = "";
+    $('#PayScaleLevel').change(function () {
+        pSL = $('#PayScaleLevel').val();
+    });
+
+    //$('#TypeOfCar').change(function () {
+    //    if (pSL <= 12) {
+    //        $(this).val('');
+    //    }
+    //    if (pSL >= 15) {
+    //        $(this).val('benefit car, for business and private use');
+    //    }
+    //});
 
 </script>

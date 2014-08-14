@@ -3,7 +3,7 @@
 @using ECT.FormLib.Models;
 
 <div class="tab-pane active" id="servicerequestdetails">
-    <div class="span5">
+    <div class="span6">
         <table class="table">
             <tbody>
                 <tr>
@@ -55,9 +55,17 @@
                     <td>@Model.Element("ServiceRequestPriority")</td>
                 </tr>
                 <tr>
-                    <td class="tdstrong">@Model.Label("ProcessBeforeDate")</td>
-                    <td>@Model.Element("ProcessBeforeDate")</td>
-                </tr>
+                    <td class="tdstrong">@Model.Translate("SLA")</td>
+                    <td>
+                        @if (Model.Contract.CaseNumber != null)
+                        {
+                            @Model.Contract.PriorityName;
+                        }
+                        else if (Model.Form != null){ 
+                            @Model.Form.PriorityName;
+                        }
+                    </td>
+                </tr>  
                 <tr>
                     <td class="tdstrong">@Model.Label("Co-WorkerID")</td>
                     <td>@Model.Element("Co-WorkerID")</td>
@@ -115,6 +123,7 @@
                 <tr>
                     <td class="tdstrong">@Model.Label("PermanentCountry")</td>
                     <td>@Model.Element("PermanentCountry")</td>
+                    
                 </tr>
             </tbody>
         </table>
@@ -123,6 +132,24 @@
     <input type="hidden" id="formGuid" value="@Model.FormGuid" />
 </div>
 <script>
+
+  
+
+
+    var dateHiringDate = $('#date_ContractStartDate');
+    if (dateHiringDate.length > 0) {
+
+        dateHiringDate.not(".disabled").datepicker()
+            .on('changeDate', function (e) {
+                if (document.getElementById('InductionDate')) {
+                    $('#InductionDate').val($('#ContractStartDate').val());
+                }
+            });
+    }
+
+
+
+
     document.getElementById('NewToIKEA').onchange = selectIndexChangeNewToIKEA;
 
     function selectIndexChangeNewToIKEA() {
@@ -133,6 +160,8 @@
             document.getElementById('GlobalHRID').disabled = false;
         }
 
+
+
     }
     if (document.getElementById('NewToIKEA').value == 'New Hire') {
         document.getElementById('GlobalHRID').disabled = true;
@@ -142,6 +171,9 @@
     var noticeHiringDateWrong = $('#notice_HiringDateWrong');
 
     $('#ContractStartDate').change(function () {
+        
+        $('#InductionDate').val($('#ContractStartDate').val());
+
         var startDate = $('#ContractStartDate').val();
         
         var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');

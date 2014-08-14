@@ -1,11 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE form [
   <!ENTITY languages SYSTEM "Templates/Languages.xml">
   <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
   <!ENTITY state SYSTEM "Templates/PersonalInformationState.xml">
 ]>
 
-<form id="82" guid="0BDCBBC1-FCAB-43A4-B458-F662D67E1AAA" customerId="29">
+<form id="82" guid="0BDCBBC1-FCAB-43A4-B458-F662D67E1AAA" customerId="30">
   &languages;
   &regexs;
   &state;
@@ -13,7 +13,7 @@
     <!--Tab Service Request Details-->
     <tab name="#ServiceRequestDetails" label="Service Request Details">
       <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" mandatory="1">
-        <regex inherit="employeeno" message="" pattern=""></regex>
+        <regex inherit="employeeno" message="" pattern=""></regex> 
       </element>
       <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1">
         
@@ -27,7 +27,9 @@
       <element name="IKEANetworkID" type="text"  label="IKEA Network ID" mandatory="1">
         <regex inherit="unsignednum" message="" pattern=""></regex>
       </element>
+      <element name="Company" type="text" label="Company"></element>
       <element name="BusinessUnit" type="text" label="Business Unit"></element>
+      <element name="ServiceArea" type="text" label="Function"></element>
       <element name="Department" type="text" label="Department"></element>
       <element name="TECoWorker" type="select" label="Is Co-Worker a TE?" mandatory="1" default="No">
         <options>
@@ -45,11 +47,8 @@
         <options>
           <option value =""></option>
           <option value ="Urgent">Urgent</option>
-          <option value ="Not Urgent">Not Urgent</option>
+          <option value ="Standard">Standard</option>
         </options>
-      </element>
-      <element name="ProcessBeforeDate" type="date" format="dd.MM.yyyy" mandatory="1" label="Process before date:">
-        <regex inherit="date" pattern="" message=""></regex>
       </element>
     </tab>
     <!--Personal Information Tab-->
@@ -60,17 +59,19 @@
       <element type="text" name="ContactEMailAddress" label="Contact e-mail address">
         <regex inherit="email" message="" pattern=""></regex>
       </element>
-
-      <element type="text" name="PermanentAddressLine1" label="Address line 1" mandatory="1"></element>
+      <!--mandatory-->
+      <element type="text" name="PermanentAddressLine1" label="Address line 1"></element>
       <element type="text" name="PermanentAddressLine2" label="Address line 2"></element>
-      <element type="text" name="PermanentPostalCode" label="Postal code" mandatory="1">
-        <regex inherit="postcode" pattern="" message=""></regex>
+      <!--mandatory-->
+      <element type="text" name="PermanentPostalCode" label="Postal code">        
       </element>
-      <element type="text" name="PermanentCity" label="City" mandatory="1"></element>
-      <element type="typeahead-simple" source="1" name="PermanentCountry" label="Country" mandatory="1" default="United Kingdom">
+      <!--mandatory-->
+      <element type="text" name="PermanentCity" label="City"></element>
+      <!--mandatory-->
+      <element type="search-select" source="1" name="PermanentCountry" label="Country" default="United Kingdom">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -323,17 +324,19 @@
           <option value="Zimbabwe">Zimbabwe</option>
         </options>
       </element>
-      <element type="text" name="MailingAddressLine1" label="Address line 1" mandatory="1"></element>
+      <!--mandatory-->
+      <element type="text" name="MailingAddressLine1" label="Address line 1"></element>
       <element type="text" name="MailingAddressLine2" label="Address line 2"></element>
-      <element type="text" name="MailingPostalCode" label="Postal code" mandatory="1">
-        <regex inherit="postcode" message="" pattern=""></regex>
+      <!--mandatory-->
+      <element type="text" name="MailingPostalCode" label="Postal code">        
       </element>
-      <element type="text" name="MailingCity" label="City" mandatory="1"></element>
-      <element type="typeahead-simple" source="1" name="MailingCountry" label="Country" default="United Kingdom">
+      <!--mandatory-->
+      <element type="text" name="MailingCity" label="City"></element>
+      <element type="search-select" source="1" name="MailingCountry" label="Country" default="United Kingdom">
         <mandatoryIfNotEmpty name="MailingAddressLine1"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -586,17 +589,18 @@
           <option value="Zimbabwe">Zimbabwe</option>
         </options>
       </element>
-      <element type="text" name="EmergencyAddressLine1" label="Address line 1" mandatory="1"></element>
+      <!--mandatory-->
+      <element type="text" name="EmergencyAddressLine1" label="Address line 1"></element>
       <element type="text" name="EmergencyAddressLine2" label="Address line 2"></element>
-      <element type="text" name="EmergencyPostalCode" label="Postal code" mandatory="1">
-        <regex inherit="postcode" message="" pattern=""></regex>
-
+      <!--mandatory-->
+      <element type="text" name="EmergencyPostalCode" label="Postal code">        
       </element>
-      <element type="text" name="EmergencyCity" label="City" mandatory="1"></element>
-      <element type="typeahead-simple" source="1" name="EmergencyCountry" label="Country" default="United Kingdom">
+      <!--mandatory-->
+      <element type="text" name="EmergencyCity" label="City"></element>
+      <element type="search-select" source="1" name="EmergencyCountry" label="Country" default="United Kingdom">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -858,7 +862,7 @@
       <element type="select" name="FamilyMember" label="Family Member">
         <options>
           <option value=""></option>
-          <option value="﻿Spouse">﻿Spouse</option>
+          <option value="Spouse">Spouse</option>
           <option value="Child">Child</option>
           <option value="Sibling">Sibling</option>
           <option value="Cohabitation agreement">Cohabitation agreement</option>
@@ -880,7 +884,7 @@
       <element type="select" name="FamilyMember2" label="Family Member">
         <options>
           <option value=""></option>
-          <option value="﻿Spouse">﻿Spouse</option>
+          <option value="Spouse">Spouse</option>
           <option value="Child">Child</option>
           <option value="Sibling">Sibling</option>
           <option value="Cohabitation agreement">Cohabitation agreement</option>
@@ -902,7 +906,7 @@
       <element type="select" name="FamilyMember3" label="Family Member">
         <options>
           <option value=""></option>
-          <option value="﻿Spouse">﻿Spouse</option>
+          <option value="Spouse">Spouse</option>
           <option value="Child">Child</option>
           <option value="Sibling">Sibling</option>
           <option value="Cohabitation agreement">Cohabitation agreement</option>
@@ -924,7 +928,7 @@
       <element type="select" name="FamilyMember4" label="Family Member">
         <options>
           <option value=""></option>
-          <option value="﻿Spouse">﻿Spouse</option>
+          <option value="Spouse">Spouse</option>
           <option value="Child">Child</option>
           <option value="Sibling">Sibling</option>
           <option value="Cohabitation agreement">Cohabitation agreement</option>
@@ -948,7 +952,7 @@
       <element type="select" name="EmployeeDocumentType" label="Document Type">
         <options>
           <option value=""></option>
-          <option value="﻿Visa">﻿Visa</option>
+          <option value="Visa">Visa</option>
           <option value="Passport">Passport</option>
           <option value="Resident permit">Resident permit</option>
           <option value="Work Permit">Work Permit</option>
@@ -962,10 +966,10 @@
           <option value="Acc Partner Dental Form">Acc Partner Dental Form</option>
         </options>
       </element>
-      <element type="typeahead-simple" source="1" name="EmployeeDocumentCountry" label="Country" default="United Kingdom">
+      <element type="search-select" source="1" name="EmployeeDocumentCountry" label="Country" default="United Kingdom">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -1223,10 +1227,10 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="text" name="EmployeeDocumentIssuePlace" label="Issue Place"></element>
-      <element type="typeahead-simple" source="1" name="EmployeeDocumentIssuePlaceCountry" label="Issue Place Country" default="United Kingdom">
+      <element type="search-select" source="1" name="EmployeeDocumentIssuePlaceCountry" label="Issue Place Country" default="United Kingdom">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -1483,7 +1487,7 @@
       <element type="select" name="EmployeeDocumentType2" label="Document Type">
         <options>
           <option value=""></option>
-          <option value="﻿Visa">﻿Visa</option>
+          <option value="Visa">Visa</option>
           <option value="Passport">Passport</option>
           <option value="Resident permit">Resident permit</option>
           <option value="Work Permit">Work Permit</option>
@@ -1497,10 +1501,10 @@
           <option value="Acc Partner Dental Form">Acc Partner Dental Form</option>
         </options>
       </element>
-      <element type="typeahead-simple" source="1" name="EmployeeDocumentCountry2" label="Country" default="United Kingdom">
+      <element type="search-select" source="1" name="EmployeeDocumentCountry2" label="Country" default="United Kingdom">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -1758,10 +1762,10 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="text" name="EmployeeDocumentIssuePlace2" label="Issue Place"></element>
-      <element type="typeahead-simple" source="1" name="EmployeeDocumentIssuePlaceCountry2" label="Issue Place Country" default="United Kingdom">
+      <element type="search-select" source="1" name="EmployeeDocumentIssuePlaceCountry2" label="Issue Place Country" default="United Kingdom">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -2018,7 +2022,7 @@
       <element type="select" name="EmployeeDocumentType3" label="Document Type">
         <options>
           <option value=""></option>
-          <option value="﻿Visa">﻿Visa</option>
+          <option value="Visa">Visa</option>
           <option value="Passport">Passport</option>
           <option value="Resident permit">Resident permit</option>
           <option value="Work Permit">Work Permit</option>
@@ -2032,10 +2036,10 @@
           <option value="Acc Partner Dental Form">Acc Partner Dental Form</option>
         </options>
       </element>
-      <element type="typeahead-simple" source="1" name="EmployeeDocumentCountry3" label="Country" default="United Kingdom">
+      <element type="search-select" source="1" name="EmployeeDocumentCountry3" label="Country" default="United Kingdom">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -2293,10 +2297,10 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="text" name="EmployeeDocumentIssuePlace3" label="Issue Place"></element>
-      <element type="typeahead-simple" source="1" name="EmployeeDocumentIssuePlaceCountry3" label="Issue Place Country" default="United Kingdom">
+      <element type="search-select" source="1" name="EmployeeDocumentIssuePlaceCountry3" label="Issue Place Country" default="United Kingdom">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -2561,6 +2565,7 @@
         </options>
       </element>
       <element type="select" name="Accompanying" label="Accompanying">
+        <mandatoryIfNotEmpty name="DependantFamilyMember"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>
           <option value="Yes">Yes</option>
@@ -2581,6 +2586,7 @@
         </options>
       </element>
       <element type="select" name="Accompanying2" label="Accompanying">
+        <mandatoryIfNotEmpty name="DependantFamilyMember2"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>
           <option value="Yes">Yes</option>
@@ -2601,6 +2607,7 @@
         </options>
       </element>
       <element type="select" name="Accompanying3" label="Accompanying">
+        <mandatoryIfNotEmpty name="DependantFamilyMember3"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>
           <option value="Yes">Yes</option>
@@ -2618,7 +2625,7 @@
       <element type="select" name="DependantsDocumentType" label="Document Type">
         <options>
           <option value=""></option>
-          <option value="﻿Visa">﻿Visa</option>
+          <option value="Visa">Visa</option>
           <option value="Passport">Passport</option>
           <option value="Resident permit">Resident permit</option>
           <option value="Work Permit">Work Permit</option>
@@ -2632,10 +2639,10 @@
           <option value="Acc Partner Dental Form">Acc Partner Dental Form</option>
         </options>
       </element>
-      <element type="typeahead-simple" source="1" name="DependantsDocumentCountry" label="Country" default="United Kingdom">
+      <element type="search-select" source="1" name="DependantsDocumentCountry" label="Country" default="United Kingdom">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -2893,10 +2900,10 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="text" name="DependantsDocumentIssuePlace" label="Issue Place" ></element>
-      <element type="typeahead-simple" source="1" name="DependantsDocumentIssuePlaceCountry" label="Issue Place Country" default="United Kingdom">
+      <element type="search-select" source="1" name="DependantsDocumentIssuePlaceCountry" label="Issue Place Country" default="United Kingdom">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -3153,7 +3160,7 @@
       <element type="select" name="DependantsDocumentType2" label="Document Type">
         <options>
           <option value=""></option>
-          <option value="﻿Visa">﻿Visa</option>
+          <option value="Visa">Visa</option>
           <option value="Passport">Passport</option>
           <option value="Resident permit">Resident permit</option>
           <option value="Work Permit">Work Permit</option>
@@ -3167,10 +3174,10 @@
           <option value="Acc Partner Dental Form">Acc Partner Dental Form</option>
         </options>
       </element>
-      <element type="typeahead-simple" source="1" name="DependantsDocumentCountry2" label="Country" default="United Kingdom">
+      <element type="search-select" source="1" name="DependantsDocumentCountry2" label="Country" default="United Kingdom">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -3428,10 +3435,10 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="text" name="DependantsDocumentIssuePlace2" label="Issue Place"></element>
-      <element type="typeahead-simple" source="1" name="DependantsDocumentIssuePlaceCountry2" label="Issue Place Country" default="United Kingdom">
+      <element type="search-select" source="1" name="DependantsDocumentIssuePlaceCountry2" label="Issue Place Country" default="United Kingdom">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -3688,7 +3695,7 @@
       <element type="select" name="DependantsDocumentType3" label="Document Type">
         <options>
           <option value=""></option>
-          <option value="﻿Visa">﻿Visa</option>
+          <option value="Visa">Visa</option>
           <option value="Passport">Passport</option>
           <option value="Resident permit">Resident permit</option>
           <option value="Work Permit">Work Permit</option>
@@ -3702,10 +3709,10 @@
           <option value="Acc Partner Dental Form">Acc Partner Dental Form</option>
         </options>
       </element>
-      <element type="typeahead-simple" source="1" name="DependantsDocumentCountry3" label="Country" default="United Kingdom">
+      <element type="search-select" source="1" name="DependantsDocumentCountry3" label="Country" default="United Kingdom">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -3963,10 +3970,10 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="text" name="DependantsDocumentIssuePlace3" label="Issue Place"></element>
-      <element type="typeahead-simple" source="1" name="DependantsDocumentIssuePlaceCountry3" label="Issue Place Country" default="United Kingdom">
+      <element type="search-select" source="1" name="DependantsDocumentIssuePlaceCountry3" label="Issue Place Country" default="United Kingdom">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -4221,19 +4228,21 @@
       </element>
 
       <!--Bank Account Details-->
-      
-      <element type="select" name="Institution" label="Institution" mandatory="1">
+      <!--mandatory-->
+      <element type="select" name="Institution" label="Institution">
         <options>
           <option value=""></option>
-          <option value="﻿Bank">﻿Bank</option>
+          <option value="Bank">Bank</option>
           <option value="Building Society">Building Society</option>
         </options>
       </element>
-      <element type="text" name="Payee" label="Payee" mandatory="1"></element>
-      <element type="typeahead-simple" source="1" name="BankCountry" label="Bank Country" default="United Kingdom" mandatory="1">
+      <!--mandatory-->
+      <element type="text" name="Payee" label="Payee"></element>
+      <!--mandatory-->
+      <element type="search-select" source="1" name="BankCountry" label="Bank Country" default="United Kingdom">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -4486,20 +4495,24 @@
           <option value="Zimbabwe">Zimbabwe</option>
         </options>
       </element>
-      <element type="text" name="BankKey" label="Bank Key" mandatory="1">
+      <!--mandatory-->
+      <element type="text" name="BankKey" label="Bank Key">
         <regex inherit="bankKeyUk" pattern="" message=""></regex>
       </element>
-      <element type="text" name="AccountNumber" label="Account Number" mandatory="1">
+      <!--mandatory-->
+      <element type="text" name="AccountNumber" label="Account Number">
         <regex inherit="accountNumberUk" pattern="" message=""></regex>
       </element>
-      <element type="text" name="IBAN" label="IBAN" mandatory="1">
+      <!--mandatory-->
+      <element type="text" name="IBAN" label="IBAN">
         <regex inherit="ibanUk" pattern="" message=""></regex>
       </element>
       <element type="text" name="BuildingSocietyRollNo" label="Building society roll no">
         <mandatoryIf name="Institution">Building Society</mandatoryIf>
         <regex inherit="buildingSocietyUk" pattern="" message=""></regex>
       </element>
-      <element type="text" name="PaymentCurrency" label="Payment Currency" mandatory="1" default="GBP">
+      <!--mandatory-->
+      <element type="text" name="PaymentCurrency" label="Payment Currency" default="GBP">
         <regex inherit="currency" pattern="" message=""></regex>
       </element>
 
@@ -4510,16 +4523,18 @@
           <option value="P45 attached">P45 attached</option>
         </options>
       </element>
-      <element type="text" name="SocialInsurance" label="Social Insurance" mandatory="1"></element>
-      <element type="text" name="NationalInsuranceNumber" label="National Insurance Number" mandatory="1">
+      <!--mandatory-->
+      <element type="text" name="SocialInsurance" label="Social Insurance"></element>
+      <!--mandatory-->
+      <element type="text" name="NationalInsuranceNumber" label="National Insurance Number">
         <regex inherit="nationalInsuranceNumber" pattern="" message=""></regex>
       </element>
 
       <!--Nationality / Language-->
-      <element type="typeahead-simple" source="1" name="Language" label="Language" default="English">
+      <element type="search-select" source="1" name="Language" label="Language" default="English">
         <options>
           <option value=""></option>
-          <option value="﻿Afrikaans">﻿Afrikaans</option>
+          <option value="Afrikaans">Afrikaans</option>
           <option value="Arabic">Arabic</option>
           <option value="Bulgarian">Bulgarian</option>
           <option value="Catalan">Catalan</option>
@@ -4563,10 +4578,10 @@
           <option value="Vietnamese">Vietnamese</option>
         </options>
       </element>
-      <element type="typeahead-simple" source="1" name="Nationality" label="Nationality" default="British" mandatory="1">
+      <element type="search-select" source="1" name="Nationality" label="Nationality" default="British">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Angolan">Angolan</option>
           <option value="Brazilian">Brazilian</option>
           <option value="Swiss">Swiss</option>
@@ -4801,7 +4816,7 @@
       <element type="select" name="EthnicOrigin" label="Ethnic Origin">
         <options>
           <option value=""></option>
-          <option value="﻿White">﻿White</option>
+          <option value="White">White</option>
           <option value="Pakistani">Pakistani</option>
           <option value="Black – Other">Black – Other</option>
           <option value="Black – British">Black – British</option>
@@ -4822,7 +4837,7 @@
       <element type="select" name="NewTitle" label="Title">
         <options>
           <option value=""></option>
-          <option value="﻿Mr">﻿Mr</option>
+          <option value="Mr">Mr</option>
           <option value="Mrs">Mrs</option>
           <option value="Miss">Miss</option>
           <option value="Ms">Ms</option>
@@ -4835,7 +4850,7 @@
       <element type="select" name="MaritalStatus" label="Marital Status">
         <options>
           <option value=""></option>
-          <option value="﻿Single">﻿Single</option>
+          <option value="Single">Single</option>
           <option value="Married">Married</option>
           <option value="Divorced">Divorced</option>
           <option value="Civil partnership">Civil partnership</option>
@@ -4846,7 +4861,7 @@
       <element type="select" name="Gender" label="Gender">
         <options>
           <option value=""></option>
-          <option value="﻿Male">﻿Male</option>
+          <option value="Male">Male</option>
           <option value="Female">Female</option>
         </options>
       </element>
@@ -4855,15 +4870,15 @@
       <element type="select" name="DocumentType" label="Document Type">
         <options>
           <option value=""></option>
-          <option value="﻿Passport">﻿Passport</option>
+          <option value="Passport">Passport</option>
           <option value="Visa">Visa</option>
           <option value="Work Permit">Work Permit</option>
         </options>
       </element>
-      <element type="typeahead-simple" source="1" name="CountryOfIssue" label="Country of issue">
+      <element type="search-select" source="1" name="CountryOfIssue" label="Country of issue" default="United Kingdom">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -5116,11 +5131,11 @@
           <option value="Zimbabwe">Zimbabwe</option>
         </options>
       </element>
-      <element type="typeahead-simple" source="1" name="CountryOfUse" label="Country of use" default="United Kingdom">
-        <mandatoryIf name="DocumentType">VISA</mandatoryIf>
+      <element type="search-select" source="1" name="CountryOfUse" label="Country of use" default="United Kingdom">
+        <mandatoryIf name="DocumentType">Visa</mandatoryIf>
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -5381,35 +5396,166 @@
       </element>
 
       <!--Benefits-->
+      <element type="hidden" name="Bupas" default="1"></element>
       <element type="select" name="BupaHealthBenefit" label="BUPA Health Benefit">
         <options>
           <option value=""></option>
-          <option value="﻿BUPA medical">﻿BUPA medical</option>
+          <option value="BUPA medical">BUPA medical</option>
           <option value="BUPA dental">BUPA dental</option>
-          <option value="None">None</option>
+          <option value="BUPA medical and dental">BUPA medical and dental</option>
         </options>
       </element>
       <element type="select" name="BupaMember" label="BUPA member">
+        <mandatoryIf name="BupaHealthBenefit">BUPA medical,BUPA dental</mandatoryIf>
         <options>
           <option value=""></option>
-          <option value="﻿Co-worker">﻿Co-worker</option>
+          <option value="Co-worker">Co-worker</option>
           <option value="Partner">Partner</option>
           <option value="Child">Child</option>
         </options>
       </element>
-      <element type="text" name="BupaMember" label="Additional Member - Last Name">
-        <mandatoryIf name="DocumentType">Partner,Child</mandatoryIf>
+      <element type="text" name="AdditionalMemberLastName" label="Additional Member - Last Name">
+        <mandatoryIf name="BupaMember">Partner,Child</mandatoryIf>
       </element>
-      <element type="text" name="AdditionalMemberFirsName" label="Additional Member - First Name">
-        <mandatoryIf name="DocumentType">Partner,Child</mandatoryIf>
+      <element type="text" name="AdditionalMemberFirstName" label="Additional Member - First Name">
+        <mandatoryIf name="BupaMember">Partner,Child</mandatoryIf>
       </element>
-      <element type="date" name="AdditionalMemberDateOfBirth" label="Additiona lMember Date Of Birth" format="dd.MM.yyyy">
-        <mandatoryIf name="DocumentType">Partner,Child</mandatoryIf>
+      <element type="date" name="AdditionalMemberDateOfBirth" label="Additional Member Date Of Birth" format="dd.MM.yyyy">
+        <mandatoryIf name="BupaMember">Partner,Child</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element type="text" name="AdditionalMemberRelationship" label="Additional member - Relationship">
-        <mandatoryIf name="DocumentType">Partner,Child</mandatoryIf>
+      <element type="text" name="AdditionalMemberRelationship" label="Additional Member - Relationship">
+        <mandatoryIf name="BupaMember">Partner,Child</mandatoryIf>
       </element>
+
+      <element type="select" name="BupaHealthBenefit2" label="BUPA Health Benefit">
+        <options>
+          <option value=""></option>
+          <option value="BUPA medical">BUPA medical</option>
+          <option value="BUPA dental">BUPA dental</option>
+          <option value="BUPA medical and dental">BUPA medical and dental</option>
+        </options>
+      </element>
+      <element type="select" name="BupaMember2" label="BUPA member">
+        <mandatoryIf name="BupaHealthBenefit2">BUPA medical,BUPA dental</mandatoryIf>
+        <options>
+          <option value=""></option>
+          <option value="Co-worker">Co-worker</option>
+          <option value="Partner">Partner</option>
+          <option value="Child">Child</option>
+        </options>
+      </element>
+      <element type="text" name="AdditionalMemberLastName2" label="Additional Member - Last Name">
+        <mandatoryIf name="BupaMember2">Partner,Child</mandatoryIf>
+      </element>
+      <element type="text" name="AdditionalMemberFirstName2" label="Additional Member - First Name">
+        <mandatoryIf name="BupaMember2">Partner,Child</mandatoryIf>
+      </element>
+      <element type="date" name="AdditionalMemberDateOfBirth2" label="Additional Member Date Of Birth" format="dd.MM.yyyy">
+        <mandatoryIf name="BupaMember2">Partner,Child</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="text" name="AdditionalMemberRelationship2" label="Additional Member - Relationship">
+        <mandatoryIf name="BupaMember2">Partner,Child</mandatoryIf>
+      </element>
+
+      <element type="select" name="BupaHealthBenefit3" label="BUPA Health Benefit">
+        <options>
+          <option value=""></option>
+          <option value="BUPA medical">BUPA medical</option>
+          <option value="BUPA dental">BUPA dental</option>
+          <option value="BUPA medical and dental">BUPA medical and dental</option>
+        </options>
+      </element>
+      <element type="select" name="BupaMember3" label="BUPA member">
+        <mandatoryIf name="BupaHealthBenefit3">BUPA medical,BUPA dental</mandatoryIf>
+        <options>
+          <option value=""></option>
+          <option value="Co-worker">Co-worker</option>
+          <option value="Partner">Partner</option>
+          <option value="Child">Child</option>
+        </options>
+      </element>
+      <element type="text" name="AdditionalMemberLastName3" label="Additional Member - Last Name">
+        <mandatoryIf name="BupaMember3">Partner,Child</mandatoryIf>
+      </element>
+      <element type="text" name="AdditionalMemberFirstName3" label="Additional Member - First Name">
+        <mandatoryIf name="BupaMember3">Partner,Child</mandatoryIf>
+      </element>
+      <element type="date" name="AdditionalMemberDateOfBirth3" label="Additional Member Date Of Birth" format="dd.MM.yyyy">
+        <mandatoryIf name="BupaMember3">Partner,Child</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="text" name="AdditionalMemberRelationship3" label="Additional Member - Relationship">
+        <mandatoryIf name="BupaMember3">Partner,Child</mandatoryIf>
+      </element>
+
+
+
+      <element type="select" name="BupaHealthBenefit4" label="BUPA Health Benefit">
+        <options>
+          <option value=""></option>
+          <option value="BUPA medical">BUPA medical</option>
+          <option value="BUPA dental">BUPA dental</option>
+          <option value="BUPA medical and dental">BUPA medical and dental</option>
+        </options>
+      </element>
+      <element type="select" name="BupaMember4" label="BUPA member">
+        <mandatoryIf name="BupaHealthBenefit4">BUPA medical,BUPA dental</mandatoryIf>
+        <options>
+          <option value=""></option>
+          <option value="Co-worker">Co-worker</option>
+          <option value="Partner">Partner</option>
+          <option value="Child">Child</option>
+        </options>
+      </element>
+      <element type="text" name="AdditionalMemberLastName4" label="Additional Member - Last Name">
+        <mandatoryIf name="BupaMember4">Partner,Child</mandatoryIf>
+      </element>
+      <element type="text" name="AdditionalMemberFirstName4" label="Additional Member - First Name">
+        <mandatoryIf name="BupaMember4">Partner,Child</mandatoryIf>
+      </element>
+      <element type="date" name="AdditionalMemberDateOfBirth4" label="Additional Member Date Of Birth" format="dd.MM.yyyy">
+        <mandatoryIf name="BupaMember4">Partner,Child</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="text" name="AdditionalMemberRelationship4" label="Additional Member - Relationship">
+        <mandatoryIf name="BupaMember4">Partner,Child</mandatoryIf>
+      </element>
+
+
+
+      <element type="select" name="BupaHealthBenefit5" label="BUPA Health Benefit">
+        <options>
+          <option value=""></option>
+          <option value="BUPA medical">BUPA medical</option>
+          <option value="BUPA dental">BUPA dental</option>
+          <option value="BUPA medical and dental">BUPA medical and dental</option>
+        </options>
+      </element>
+      <element type="select" name="BupaMember5" label="BUPA member">
+        <mandatoryIf name="BupaHealthBenefit5">BUPA medical,BUPA dental</mandatoryIf>
+        <options>
+          <option value=""></option>
+          <option value="Co-worker">Co-worker</option>
+          <option value="Partner">Partner</option>
+          <option value="Child">Child</option>
+        </options>
+      </element>
+      <element type="text" name="AdditionalMemberLastName5" label="Additional Member - Last Name">
+        <mandatoryIf name="BupaMember5">Partner,Child</mandatoryIf>
+      </element>
+      <element type="text" name="AdditionalMemberFirstName5" label="Additional Member - First Name">
+        <mandatoryIf name="BupaMember5">Partner,Child</mandatoryIf>
+      </element>
+      <element type="date" name="AdditionalMemberDateOfBirth5" label="Additional Member Date Of Birth" format="dd.MM.yyyy">
+        <mandatoryIf name="BupaMember5">Partner,Child</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="text" name="AdditionalMemberRelationship5" label="Additional Member - Relationship">
+        <mandatoryIf name="BupaMember5">Partner,Child</mandatoryIf>
+      </element>
+      
     </tab>
   </fields>
 </form>

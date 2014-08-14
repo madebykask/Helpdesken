@@ -9,9 +9,9 @@
 @using (Html.BeginForm("edit", "PersonalInformation", new { id = Model.Contract.Id }, FormMethod.Post, new { area = "Ireland", novalidate = "novalidate" }))
 {   
     <span style="display: none;" id="narrowDownInit" url="@url"></span>
-    @Html.Partial("_GlobalNavigation", Model)
+    @Html.Partial("_GlobalNavRev", Model)
     <div class="container containeralignright">
-        @Html.Partial("_CurrentUser")
+        @Html.Partial("_FormInfo", Model)
         @Html.Partial("_ErrorMessage", Model)
         <ul class="nav nav-tabs">
             @if (Model.VisibleTab("#ServiceRequestDetails"))
@@ -24,10 +24,16 @@
                 <li class="@(Model.TabHasError("#Personal") ? "error" : "")">
                     <a href="#Personal">@Model.Translate("Personal Information")</a></li>
             }
+            @if(Model.VisibleTab("#attachments"))
+            {
+                <li class="pull-right">
+                    <a href="#attachments"><i class="icon-file icon-white"></i>&nbsp;@Model.Translate("Attachments")&nbsp;(<b id="attachmentCounter">@(Model.Contract.CaseFiles != null ? Model.Contract.CaseFiles.Count() : 0)</b>)</a>
+                </li>
+            }   
         </ul>
         <div class="content">
             <div class="row-fluid">
-                <div class="tab-content">
+                <div class="tab-content overflow-visible">
                     @if (Model.VisibleTab("#ServiceRequestDetails"))
                     {
                         @Html.Partial("_TabServiceRequestDetails", Model)
@@ -35,6 +41,10 @@
                     @if (Model.VisibleTab("#Personal"))
                     {
                         @Html.Partial("_TabPersonal", Model)
+                    }
+                    @if(Model.VisibleTab("#attachments"))
+                    {
+                        @Html.Partial("_GlobalAttachments", Model)
                     }
                 </div>
             </div>

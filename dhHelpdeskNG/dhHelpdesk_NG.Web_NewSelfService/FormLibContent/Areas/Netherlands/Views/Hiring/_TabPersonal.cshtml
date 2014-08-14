@@ -3,7 +3,7 @@
 @using ECT.FormLib.Models;
 
 <div class="tab-pane" id="personal">
-    <div class="span5">
+    <div class="span6">
         <table class="table">
             <tbody>
                 
@@ -553,7 +553,7 @@
 
 <script>
    
-    if ('@Model.GetAnswer("NewToIKEA")' == 'New Hire') {
+    if (document.getElementById('NewToIKEA').value == 'New Hire' || document.getElementById('NewToIKEA').value == 'Re-Hire') {
         
         $(".globalmobility").hide();
                

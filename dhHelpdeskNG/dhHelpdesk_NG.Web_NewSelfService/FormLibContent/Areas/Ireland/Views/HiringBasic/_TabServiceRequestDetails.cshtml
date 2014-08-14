@@ -3,7 +3,7 @@
 @using ECT.FormLib.Models;
 
 <div class="tab-pane active" id="servicerequestdetails">
-    <div class="span5">
+    <div class="span6">
         <table class="table">
             <tbody>
                 <tr>
@@ -55,8 +55,16 @@
                     <td>@Model.Element("ServiceRequestPriority")</td>
                 </tr>
                 <tr>
-                    <td class="tdstrong">@Model.Label("ProcessBeforeDate")</td>
-                    <td>@Model.Element("ProcessBeforeDate")</td>
+                    <td class="tdstrong">@Model.Translate("SLA")</td>
+                    <td>
+                        @if (Model.Contract.CaseNumber != null)
+                        {
+                            @Model.Contract.PriorityName;
+                        }
+                        else { 
+                            @Model.Form.PriorityName;
+                        }
+                    </td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("Co-WorkerID")</td>

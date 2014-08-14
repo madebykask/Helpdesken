@@ -35,11 +35,23 @@
                 </td>
             </tr>
             <tr>
+                    <td class="tdstrong">@Model.Label("Company")</td>
+                    <td>
+                        @Model.Element("Company")
+                    </td>
+                </tr>
+            <tr>
                 <td class="tdstrong">@Model.Label("BusinessUnit")</td>
                 <td>
                     @Model.Element("BusinessUnit")
                 </td>
             </tr>
+            <tr>
+                    <td class="tdstrong">@Model.Label("ServiceArea")</td>
+                    <td>
+                        @Model.Element("ServiceArea")
+                    </td>
+                </tr>
             <tr>
                 <td class="tdstrong">@Model.Label("Department")</td>
                 <td>
@@ -66,10 +78,17 @@
                     @Model.Element("ServiceRequestPriority")</td>
             </tr>
             <tr>
-                <td class="tdstrong">@Model.Label("ProcessBeforeDate")</td>
+                <td class="tdstrong">@Model.Translate("SLA")</td>
                 <td>
-                    @Model.Element("ProcessBeforeDate")</td>
-            </tr>         
+                    @if (Model.Contract.CaseNumber != null)
+                    {
+                        @Model.Contract.PriorityName;
+                    }
+                    else if (Model.Form != null){ 
+                        @Model.Form.PriorityName;
+                    }
+                </td>
+            </tr>       
         </table>
     </div>
 

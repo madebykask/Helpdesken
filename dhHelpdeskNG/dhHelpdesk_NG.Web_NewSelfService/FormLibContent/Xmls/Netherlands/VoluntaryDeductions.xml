@@ -1,8 +1,15 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE form [
   <!ENTITY languages SYSTEM "Templates/Languages.xml">
   <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
   <!ENTITY state SYSTEM "Templates/VoluntaryDeductionsState.xml">
+  <!ENTITY pre_paymenttype_reason SYSTEM "Templates/Predefined_PaymentType.xml">
+  <!ENTITY pre_paymenttype_reason2 SYSTEM "Templates/Predefined_PaymentType2.xml">
+  <!ENTITY pre_paymenttype_reason3 SYSTEM "Templates/Predefined_PaymentType3.xml">
+
+  <!ENTITY pre_deductions_netgross SYSTEM "Templates/Predefined_VoluntaryDeductions_NetGross.xml">
+  <!ENTITY pre_deductions_netgross2 SYSTEM "Templates/Predefined_VoluntaryDeductions_NetGross2.xml">
+  <!ENTITY pre_deductions_netgross3 SYSTEM "Templates/Predefined_VoluntaryDeductions_NetGross3.xml">
 ]>
 
 <form id="60" guid="45C821B6-B196-4CFB-829C-8B70D71533E3" customerId="29">
@@ -25,7 +32,9 @@
       <element name="IKEANetworkID" type="text" label="IKEA Network ID" mandatory="1">
         <regex inherit="unsignednum" message="" pattern=""></regex>
       </element>
+      <element name="Company" type="text" label="Company"></element>
       <element name="BusinessUnit" type="text" label="Business Unit"></element>
+      <element name="ServiceArea" type="text" label="Function"></element>
       <element name="Department" type="text" label="Department"></element>
       <element name="ChangeValidFrom" type="date" label="Change Valid from:" mandatory="1" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
@@ -37,17 +46,17 @@
         <options>
           <option value=""></option>
           <option value="Urgent">Urgent</option>
-          <option value="Not Urgent">Not Urgent</option>
+          <option value="Standard">Standard</option>
         </options>
       </element>
-      <element name="ProcessBeforeDate" type="date" label="Process before date:" mandatory="1" format="dd.MM.yyyy">
-        <regex inherit="date" pattern="" message=""></regex>
-      </element>
+      
     </tab>
 
     <tab name="#Payment" label="Payment Information">
       <element type="hidden" name="Deductions" default="1"></element>
       <element type="select" name="DeductionsType" label="Deduction Type" mandatory="1" >
+        &pre_paymenttype_reason;
+        &pre_deductions_netgross;
         <options>
           <option value=""></option>
           <option value="Union Membership">Union Membership</option>
@@ -86,6 +95,8 @@
       </element>
 
       <element type="select" name="DeductionsType2" label="Deduction Type" >
+        &pre_deductions_netgross2;
+        &pre_paymenttype_reason2;
         <options>
           <option value=""></option>
           <option value="Union Membership">Union Membership</option>
@@ -124,6 +135,8 @@
       </element>
 
       <element type="select" name="DeductionsType3" label="Deduction Type" >
+        &pre_paymenttype_reason3;
+        &pre_deductions_netgross3;
         <options>
           <option value=""></option>
           <option value="Union Membership">Union Membership</option>

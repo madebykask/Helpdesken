@@ -58,11 +58,27 @@
                     </td>
                 </tr>
                 <tr>
+                    <td class="tdstrong">@Model.Label("Company")</td>
+                    <td>@Model.Element("Company")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_Company" name="OLD_Company" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_Company").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_Company">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_Company").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+                <tr>
                     <td class="tdstrong">@Model.Label("BusinessUnit")</td>
                     <td>@Model.Element("BusinessUnit")</td>
                     <td>
                         <input type="hidden" class="oldValue" id="OLD_BusinessUnit" name="OLD_BusinessUnit" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_BusinessUnit").Select(x => x.Value).FirstOrDefault() : "")"/>
                         <em class="muted" id="emOLD_BusinessUnit">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_BusinessUnit").Select(x => x.Value).FirstOrDefault() : "")</em>                        
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ServiceArea")</td>
+                    <td>@Model.Element("ServiceArea")</td>
+                    <td>
+                         <input type="hidden" class="oldValue"  id="OLD_ServiceArea" name="OLD_ServiceArea" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_ServiceArea").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_ServiceArea">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_ServiceArea").Select(x => x.Value).FirstOrDefault() : "")</em>
                     </td>
                 </tr>
                 <tr>
@@ -99,17 +115,17 @@
                         @Model.Element("ServiceRequestPriority")</td>
                 </tr>
                 <tr>
-                    <td class="tdstrong">@Model.Label("ProcessBeforeDate")</td>
+                    <td class="tdstrong">@Model.Translate("SLA")</td>
                     <td>
-                        @Model.Element("ProcessBeforeDate")</td>
+                        @if (Model.Contract.CaseNumber != null)
+                        {
+                            @Model.Contract.PriorityName;
+                        }
+                        else { 
+                            @Model.Form.PriorityName;
+                        }
+                    </td>
                 </tr>         
-  @*          </tbody>
-        </table>
-    </div>
-    
-    <div class="span6">
-        <table class="table">
-            <tbody>*@
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Permanent Address")</h4>
@@ -159,10 +175,6 @@
                 <tr>
                     <td class="tdstrong">@Model.Label("PermanentCountry")</td>
                     <td>@Model.Element("PermanentCountry")</td>
-                    @*<td>
-                        <input type="hidden" class="oldValue" id="OLD_PermanentCountry" name="OLD_PermanentCountry" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentCountry").Select(x => x.Value).FirstOrDefault() : "")"/>
-                        <em class="muted" id="emOLD_PermanentCountry">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentCountry").Select(x => x.Value).FirstOrDefault() : "")</em>                        
-                    </td>*@
                 </tr>
             </tbody>
         </table>
@@ -172,7 +184,7 @@
 </div>
 
 <script>
-
+    
     var nowTemp = new Date();
     var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
 

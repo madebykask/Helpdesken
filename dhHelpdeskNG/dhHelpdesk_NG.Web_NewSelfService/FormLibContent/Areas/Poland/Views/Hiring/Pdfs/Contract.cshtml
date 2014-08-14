@@ -202,8 +202,20 @@
         </p>
 
         <p style="text-align:justify; font-family:Verdana; font-size:10px;">
+
+            @functions{
+                public static bool NewDateOver(DateTime? startDate, DateTime? endDate, int months)
+                {
+                    if (!startDate.HasValue || !endDate.HasValue) return false;
+                    DateTime a = startDate.Value.AddMonths(months);
+                    int result = DateTime.Compare(endDate.Value, a);
+                    return result >= 0;
+                }
+            }
+
+
             @if (Model.GetAnswer("ContractType") == "Limited period"
-                && FormLibUtils.DateOver(Model.ConvertToDateTime("EffectiveDate"), Model.ConvertToDateTime("EndDate"), 6))
+                && NewDateOver(Model.ConvertToDateTime("EffectiveDate"), Model.ConvertToDateTime("EndDate"), 6))
             {
                 <text>
                 The parties agreed that this Employment Agreement can be terminated with a two-week notice period by any of the Parties of the Agreement.

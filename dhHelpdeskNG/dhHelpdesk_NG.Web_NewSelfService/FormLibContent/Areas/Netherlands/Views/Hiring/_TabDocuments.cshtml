@@ -2,12 +2,48 @@
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
 
-<div class="tab-pane" id="documents">
-    @if(Model.GetAnswer("BusinessUnit") != "Service Office Netherlands"
-         || Model.GetAnswer("EmploymentCategory") != "Apprentice" || Model.GetAnswer("BusinessUnit") != "IKEA Competence B.V.")
+
+@functions{
+    public string GetContract()
     {
-    <div class="span12">
-        <table class="table-striped">
+           
+        //BusinessUnit = IKEA Competence B.V. = no documents yet
+        if (Model.GetDocumentAnswer("BusinessUnit").ToLower() == "IKEA Competence B.V.".ToLower())
+        {
+            return "";
+        }
+        else if (Model.GetDocumentAnswer("BusinessUnit").ToLower() == "Service Office Netherlands".ToLower() && Model.GetAnswer("EmploymentCategory").ToLower() != "Apprentice".ToLower() && Model.GetAnswer("EmploymentCategory").ToLower() != "Holiday Co-Worker".ToLower())
+        {
+            return "NetherlandsServiceOfficeContract";
+            
+        }
+        else if (Model.GetAnswer("EmploymentCategory").ToLower() == "Apprentice".ToLower())
+        {
+            return "NetherlandsApprenticeContract";
+        }
+        else if (Model.GetAnswer("EmploymentCategory").ToLower() == "Holiday Co-Worker".ToLower())
+        {
+            return "ContractHoliday";
+        }    
+        else
+        {
+            //Default
+        return "ContractDutch";
+        }
+    }
+}
+
+
+<div class="tab-pane" id="documents">
+       <div class="span12">
+
+                  
+
+
+        @if (!string.IsNullOrEmpty(GetContract()))
+{
+  
+           <table class="table-striped">
             <thead>
                 <tr>
                     <th>@Model.Translate("Document")
@@ -18,13 +54,30 @@
                     <th>&nbsp;</th>
                 </tr>
             </thead>
-            @if (!string.IsNullOrEmpty(Model.GetAnswer("EmploymentCategory")))
-            {
             <tbody>
-                @Html.Partial("_Documents", Model)
+                <tr>
+    <td>@Model.Translate("Contract")</td>
+    <td>pdf</td>
+    <td>&nbsp;</td>
+    <td>
+        <a href="@Url.Action("print", "hiring", new
+                {
+                    id = GetContract(),
+                    caseId = Model.Contract.Id,
+                    path = Path.Combine(Path.GetDirectoryName(Model.FormXmlPath), Path.GetFileNameWithoutExtension(Model.FormXmlPath)),
+                    userId = FormLibSessions.User.UserId
+                })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@Model.Translate("Print")</a>
+    </td>
+</tr>
+
             </tbody>
-             }
+             
         </table>
-    </div>
     }
+    else
+     {
+      <div class="alert alert-info"><strong><i class="icon-info-sign"></i>&nbsp;@Model.Translate("A document can not be created based on current selections")</strong></div>
+    }
+  
+</div>
 </div>

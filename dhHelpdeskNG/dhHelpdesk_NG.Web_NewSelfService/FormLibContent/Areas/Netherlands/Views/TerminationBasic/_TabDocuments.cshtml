@@ -3,7 +3,7 @@
 @using ECT.FormLib.Models;
 
 <div class="tab-pane" id="documents">
-@if(Model.GetAnswer("BusinessUnit") != "IKEA Competence B.V.")
+@if (Model.GetDocumentAnswer("BusinessUnit").ToLower() != "IKEA Competence B.V.".ToLower())
     {
     <div class="span12">
         <table class="table-striped">

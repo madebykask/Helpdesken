@@ -18,7 +18,7 @@
             document.getElementById(prefix + "PostalCode").value = document.getElementById('PermanentPostalCode').value;
             document.getElementById(prefix + "City").value = document.getElementById('PermanentCity').value;
             document.getElementById(prefix + "Country").value = document.getElementById('PermanentCountry').value;
-
+            alert(document.getElementById(prefix + "Country").value);
         });
 
         $(document).on('change', '#Extent', function (e) {
@@ -102,3 +102,7 @@
     </div>
     <input type="hidden" id="activeTab" name="activeTab" value="@Model.ActiveTab" /> 
 }
+
+<script>
+    InitIntegration();
+</script>

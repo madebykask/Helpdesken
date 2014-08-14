@@ -3,7 +3,7 @@
 @using ECT.FormLib.Models;
 
 <div class="tab-pane" id="Payment">
-    <div class="span5">
+    <div class="span6">
         <table class="table">
             <tbody>
                  <tr>
@@ -102,6 +102,24 @@
 
 <script>
                           
+    $('#DeductionsType').change(function () {
+        if (document.getElementById('DeductionsValidFrom').value == '')
+            document.getElementById('DeductionsValidFrom').value = document.getElementById('ChangeValidFrom').value;
+    });
+
+    $('#DeductionsType2').change(function () {
+        if (document.getElementById('DeductionsValidFrom2').value == '')
+            document.getElementById('DeductionsValidFrom2').value = document.getElementById('ChangeValidFrom').value;
+    });
+
+    $('#DeductionsType3').change(function () {
+        if (document.getElementById('DeductionsValidFrom3').value == '')
+            document.getElementById('DeductionsValidFrom3').value = document.getElementById('ChangeValidFrom').value;
+    });
+
+
+
+
     if (document.getElementById('DeductionsValidFrom').value == ''){
         document.getElementById('DeductionsValidFrom').value = '@Model.GetAnswer("ChangeValidFrom")';
         for (var i = 2; i <= 3; i++) {
@@ -133,12 +151,12 @@
             
             $('#date_DeductionsValidTo').datepicker("destroy");
             $('#date_DeductionsValidTo').addClass("disabled");
-            input.attr('readonly', 'readony');
+            document.getElementById('DeductionsValidTo').disabled = true;
             deductionsValidTo.value = "";
 
         }
         else{
-            input.removeAttr('readonly', 'readonly');
+            document.getElementById('DeductionsValidTo').disabled = false;
             input.not(".disabled").datepicker(
             {
                 onRender: function(ev) {
@@ -158,10 +176,10 @@
             deductionsValidTo2.value = "";
             $('#date_DeductionsValidTo2').datepicker("destroy");
             $('#date_DeductionsValidTo2').addClass("disabled");
-            input.attr('readonly', 'readony');
+            document.getElementById('DeductionsValidTo2').disabled = true;
         } 
         else{
-            input.removeAttr('readonly', 'readonly');
+            document.getElementById('DeductionsValidTo2').disabled = false;
             input.not(".disabled").datepicker(
             {
                 onRender: function(ev) {
@@ -181,10 +199,10 @@
             deductionsValidTo3.value = "";
             $('#date_DeductionsValidTo3').datepicker("destroy");
             $('#date_DeductionsValidTo3').addClass("disabled");
-            input.attr('readonly', 'readony');
+            document.getElementById('DeductionsValidTo3').disabled = true;
         } 
         else {
-            input.removeAttr('readonly', 'readonly');
+            document.getElementById('DeductionsValidTo3').disabled = false;
             input.not(".disabled").datepicker(
             {
                 onRender: function (ev) {

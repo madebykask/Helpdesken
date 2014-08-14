@@ -42,6 +42,12 @@
                         @Model.Element("IKEANetworkID", false)
                     </td>
                 </tr>
+                 <tr>
+                    <td class="tdstrong">@Model.Label("Company")</td>
+                    <td>
+                        @Model.Element("Company")
+                    </td>
+                </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("BusinessUnit")</td>
                     <td>
@@ -49,17 +55,21 @@
                     </td>
                 </tr>
                 <tr>
+                    <td class="tdstrong">@Model.Label("ServiceArea")</td>
+                    <td>@Model.Element("ServiceArea")</td>
+                </tr>
+                <tr>
                     <td class="tdstrong">@Model.Label("Department")</td>
                     <td>
                         @Model.Element("Department")
                     </td>
                 </tr>
-                <tr>
+                @*<tr>
                     <td class="tdstrong">@Model.Label("ChangeType")</td>
                     <td>
                         @Model.Element("ChangeType")
                     </td>
-                </tr>
+                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("ChangeValidFrom")</td>
                     <td>
@@ -80,17 +90,17 @@
                         @Model.Element("ServiceRequestPriority")</td>
                 </tr>
                 <tr>
-                    <td class="tdstrong">@Model.Label("ProcessBeforeDate")</td>
+                    <td class="tdstrong">@Model.Translate("SLA")</td>
                     <td>
-                        @Model.Element("ProcessBeforeDate")</td>
+                        @if (Model.Contract.CaseNumber != null)
+                        {
+                            @Model.Contract.PriorityName;
+                        }
+                        else { 
+                            @Model.Form.PriorityName;
+                        }
+                    </td>
                 </tr>
-   @*         </tbody>
-        </table>
-    </div>
-
-    <div class="span6">
-        <table class="table">
-            <tbody>*@
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Permanent Address")</h4>
@@ -117,6 +127,7 @@
         </table>
     </div>
     <input type="hidden" id="CustomerId" value="@Model.CustomerId" />
+    <input type="hidden" id="formGuid" value="@Model.FormGuid" />
 </div>
 
 <script>

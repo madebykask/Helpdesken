@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE form [
     <!ENTITY languages SYSTEM "Templates/Languages.xml">
     <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
@@ -19394,7 +19394,7 @@
             </element>
 
             <!-- Allowance -->
-            <element type="select" name="FunctionAllowance" label="Allowance" mandatory="1" validationgroup="FunctionAllowance">
+            <element type="select" name="FunctionAllowance" label="Allowance" validationgroup="FunctionAllowance">
                 <options>
                     <option value=""></option>
                     <option value="﻿1035 - PPOŻ supplement">﻿1035 - PPOŻ supplement</option>
@@ -19408,11 +19408,11 @@
                     <option value="1071 - Grossed-up housing supple">1071 - Grossed-up housing supple</option>
                 </options>
             </element>
-            <element type="text" name="FunctionAllowanceAmount" label="Amount" mandatory="1" validationgroup="FunctionAllowance">
+            <element type="text" name="FunctionAllowanceAmount" label="Amount" validationgroup="FunctionAllowance">
                 <mandatoryIfNotEmpty name="FunctionAllowance"></mandatoryIfNotEmpty>
                 <!--<regex inherit="amount" pattern="" message=""></regex>-->
             </element>
-            <element type="select" name="FunctionAllowanceGrossNett" label="Gross/nett" mandatory="1" validationgroup="FunctionAllowance">
+            <element type="select" name="FunctionAllowanceGrossNett" label="Gross/nett" validationgroup="FunctionAllowance">
                 <mandatoryIfNotEmpty name="FunctionAllowance"></mandatoryIfNotEmpty>
                 <options>
                     <option value=""></option>
@@ -19421,7 +19421,7 @@
                 </options>
             </element>
 
-            <element type="select" name="FunctionAllowance2" label="Allowance" mandatory="1" validationgroup="FunctionAllowance2">
+            <element type="select" name="FunctionAllowance2" label="Allowance"  validationgroup="FunctionAllowance2">
                 <options>
                     <option value=""></option>
                     <option value="﻿1035 - PPOŻ supplement">﻿1035 - PPOŻ supplement</option>
@@ -19435,11 +19435,11 @@
                     <option value="1071 - Grossed-up housing supple">1071 - Grossed-up housing supple</option>
                 </options>
             </element>
-            <element type="text" name="FunctionAllowanceAmount2" label="Amount" mandatory="1" validationgroup="FunctionAllowance2">
+            <element type="text" name="FunctionAllowanceAmount2" label="Amount" validationgroup="FunctionAllowance2">
                 <mandatoryIfNotEmpty name="FunctionAllowance2"></mandatoryIfNotEmpty>
                 <!--<regex inherit="amount" pattern="" message=""></regex>-->
             </element>
-            <element type="select" name="FunctionAllowanceGrossNett2" label="Gross/nett" mandatory="1" validationgroup="FunctionAllowance2">
+            <element type="select" name="FunctionAllowanceGrossNett2" label="Gross/nett" validationgroup="FunctionAllowance2">
                 <mandatoryIfNotEmpty name="FunctionAllowance2"></mandatoryIfNotEmpty>
                 <options>
                     <option value=""></option>
@@ -19448,7 +19448,7 @@
                 </options>
             </element>
 
-            <element type="select" name="FunctionAllowance3" label="Allowance" mandatory="1" validationgroup="FunctionAllowance3">
+            <element type="select" name="FunctionAllowance3" label="Allowance" validationgroup="FunctionAllowance3">
                 <options>
                     <option value=""></option>
                     <option value="﻿1035 - PPOŻ supplement">﻿1035 - PPOŻ supplement</option>
@@ -19462,11 +19462,11 @@
                     <option value="1071 - Grossed-up housing supple">1071 - Grossed-up housing supple</option>
                 </options>
             </element>
-            <element type="text" name="FunctionAllowanceAmount3" label="Amount" mandatory="1" validationgroup="FunctionAllowance3">
+            <element type="text" name="FunctionAllowanceAmount3" label="Amount" validationgroup="FunctionAllowance3">
                 <mandatoryIfNotEmpty name="FunctionAllowance3"></mandatoryIfNotEmpty>
                 <!--<regex inherit="amount" pattern="" message=""></regex>-->
             </element>
-            <element type="select" name="FunctionAllowanceGrossNett3" label="Gross/nett" mandatory="1" validationgroup="FunctionAllowance3">
+            <element type="select" name="FunctionAllowanceGrossNett3" label="Gross/nett" validationgroup="FunctionAllowance3">
                 <mandatoryIfNotEmpty name="FunctionAllowance3"></mandatoryIfNotEmpty>
                 <options>
                     <option value=""></option>

@@ -5,9 +5,9 @@
 @using (Html.BeginForm("edit", "VoluntaryDeductions", new { id = Model.Contract.Id }, FormMethod.Post, new { area = "UnitedKingdom", novalidate = "novalidate" }))
 {   
     <span style="display: none;" id="narrowDownInit"></span>
-    @Html.Partial("_GlobalNavigation", Model)
+    @Html.Partial("_GlobalNavRev", Model)
     <div class="container containeralignright">
-        @Html.Partial("_CurrentUser")
+        @Html.Partial("_FormInfo", Model)
         @Html.Partial("_ErrorMessage", Model)
         <ul class="nav nav-tabs">
             @if (Model.VisibleTab("#ServiceRequestDetails"))
@@ -30,7 +30,7 @@
         </ul>
         <div class="content">
             <div class="row-fluid">
-                <div class="tab-content">
+                <div class="tab-content overflow-visible">
                     @if (Model.VisibleTab("#ServiceRequestDetails"))
                     {
                         @Html.Partial("_TabServiceRequestDetails", Model)

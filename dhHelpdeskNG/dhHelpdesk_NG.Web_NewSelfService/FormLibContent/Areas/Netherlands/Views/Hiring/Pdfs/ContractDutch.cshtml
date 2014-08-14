@@ -2,14 +2,21 @@
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
 @using ECT.FormLib.Pdfs;
+@using ECT.Model.Entities;
 
 @{
     Layout = null;
     Model.Language = "nl";
+    
+    //set fields that are mandatory in the contract here. This can be done in a better way... /TA
+    Model.SetDocumentMandatoryField("ContractType");
 }
 <!DOCTYPE html>
 <html>
 <body>
+
+
+  
     <div>
         <p style="text-align: left; font-family: Verdana; font-size: 11px;">
             <strong>ARBEIDSOVEREENKOMST</strong><br />
@@ -21,37 +28,34 @@
             <br />
         </p>
         <table style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
-            @if (!string.IsNullOrEmpty(Model.GetAnswer("Initials")))
-            {
                 <tr>
                     <td width="30%" style="text-align: left;">Voorletters</td>
-                    <td width="70%" style="text-align: left;">: @Model.GetAnswer("Initials")</td>
+                    <td width="70%" style="text-align: left;">: @Model.GetDocumentAnswer("Initials", true)</td>
                 </tr>
-            }
             <tr>
-                <td style="text-align: left;">Roepnaam</td>
-                <td style="text-align: left;">: @Model.GetAnswer("FirstName")</td>
+                <td style="text-align: left;">Voornam</td>
+                <td style="text-align: left;">: @Model.GetDocumentAnswer("FirstName",true)</td>
             </tr>
             <tr>
                 <td style="text-align: left;">Achternaam</td>
-                <td style="text-align: left;">: @Model.GetAnswer("Prefixes") @Model.GetAnswer("LastName")</td>
+                <td style="text-align: left;">: @Model.GetDocumentAnswer("Prefixes") @Model.GetDocumentAnswer("LastName",true)</td>
             </tr>
             <tr>
                 <td style="text-align: left;">Adres</td>
-                <td style="text-align: left;">: @Model.GetAnswer("PermanentAddressLine1") @Model.GetAnswer("PermanentAddressLine2") @Model.GetAnswer("PermanentAddressLine3")</td>
+                <td style="text-align: left;">: @Model.GetDocumentAnswer("PermanentAddressLine1",true) @Model.GetDocumentAnswer("PermanentAddressLine2") @Model.GetDocumentAnswer("PermanentAddressLine3")</td>
             </tr>
             <tr>
-                <td style="text-align: left;">Postcode /  woonplaats</td>
-                <td style="text-align: left;">: @Model.GetAnswer("PermanentPostalCode") @Model.GetAnswer("PermanentCity")</td>
+                <td style="text-align: left;">Postcode / woonplaats</td>
+                <td style="text-align: left;">: @Model.GetDocumentAnswer("PermanentPostalCode",true) @Model.GetDocumentAnswer("PermanentCity",true)</td>
             </tr>
             <tr>
                 <td style="text-align: left;">Geboortedatum</td>
-                <td style="text-align: left;">: @Model.GetAnswer("DateOfBirth")</td>
+                <td style="text-align: left;">: @Model.GetDocumentAnswer("DateOfBirth",true)</td>
             </tr>
         </table>
         <p style="text-align: left;font-family: Verdana; font-size: 11px;">
             <br />
-            Hierna te noemen werknemer, wordt een arbeidsovereenkomst afgesloten waarvan de voorwaarden als volgt luiden:     
+            Hierna te noemen medewerker, wordt een arbeidsovereenkomst afgesloten waarvan de voorwaarden als volgt luiden:     
            <br />
         </p>
 
@@ -63,27 +67,27 @@
             var brText = "<br /><br />";
 
             //1
-            string text1 = "Met ingang van {0} treedt de werknemer bij de werkgever in dienst.";
-            list.Add(new PdfListItem { Text = string.Format(text1, Model.GetAnswer("ContractStartDate")) });
+            string text1 = "Met ingang van {0} treedt de medewerker bij de werkgever in dienst.";
+            list.Add(new PdfListItem { Text = string.Format(text1, Model.GetDocumentAnswer("ContractStartDate", true)) });
 
             //2
-            string text2 = "De werknemer wordt aangesteld in de functie van {0} bij de vestiging {1}. Deze functie is ingedeeld in functiegroep {2}. Tevens kan de werknemer op verzoek van de leidinggevende ingezet worden op andere afdelingen binnen IKEA.";
-            list.Add(new PdfListItem { Text = string.Format(text2, Model.GetAnswer("LocalJobTitle"), Model.GetAnswer("BusinessUnit"), Model.GetAnswer("PayScaleLevel")) });
+            string text2 = "De medewerker wordt aangesteld in de functie van {0} bij de vestiging {1}. Deze functie is ingedeeld in functieschaal {2}. Tevens kan de medewerker op verzoek van de manager ingezet worden op andere afdelingen binnen IKEA.";
+            list.Add(new PdfListItem { Text = string.Format(text2, Model.GetDocumentAnswer("LocalJobTitle", true), Model.GetDocumentAnswer("BusinessUnit", true), Model.GetDocumentAnswer("PayScaleLevel", true)) });
 
 
-            if ((Model.GetAnswer("BusinessUnit").ToLower() == "Store Amsterdam 088".ToLower() || Model.GetAnswer("BusinessUnit").ToLower() == "Store Heerlen 089".ToLower() || Model.GetAnswer("BusinessUnit").ToLower() == "Store Barendrecht 274".ToLower())
-                   && Model.GetAnswer("NewPosition") == "New Position for VAP store?")
+            if ((Model.GetDocumentAnswer("BusinessUnit").ToLower() == "Store Amsterdam 088".ToLower() || Model.GetDocumentAnswer("BusinessUnit").ToLower() == "Store Heerlen 089".ToLower() || Model.GetDocumentAnswer("BusinessUnit").ToLower() == "Store Barendrecht 274".ToLower())
+                   && Model.GetDocumentAnswer("NewPosition").ToLower() == "New Position for VAP store?".ToLower())
             {
 
                 //2+
 
-                string text2add = "De bovenstaande functie is specifiek voor de vestiging {0} en valt buiten de kaders van het functiegebouw van IKEA B.V. Op het moment dat VAPS constructie van IKEA {0} vervalt en IKEA {0} weer een reguliere vestiging wordt, zal dit consequenties hebben voor deze functie. Met jou zal dan moeten worden gesproken over herplaatsing in een andere functie behorende bij het functiegebouw van IKEA B.V.";
-                pdfList.Add(new PdfListItem { Text = string.Format(text2add, Model.GetAnswer("BusinessUnit")) });
+                string text2add = "De bovenstaande functie is specifiek voor de vestiging {0} en valt buiten de kaders van het functiegebouw van IKEA B.V. Op het moment dat VAPS constructie van IKEA {0} vervalt en IKEA {0} weer een reguliere vestiging wordt, heeft dit consequenties voor deze functie. Met jou wordt dan gesproken over herplaatsing in een andere functie behorende bij het functiegebouw van IKEA B.V.";
+                pdfList.Add(new PdfListItem { Text = string.Format(text2add, Model.GetDocumentAnswer("BusinessUnit", true)) });
                 list[list.Count - 1].SubList = pdfList;
             }
 
 
-            if (Model.GetAnswer("EmploymentCategory").ToLower() == "Permanent".ToLower())
+            if (Model.GetDocumentAnswer("EmploymentCategory").ToLower() == "Permanent".ToLower())
             {
                 //3
                 string text3a = "Deze arbeidsovereenkomst wordt afgesloten voor onbepaalde tijd.";
@@ -91,11 +95,12 @@
             }
 
 
-            if (Model.GetAnswer("EmploymentCategory").ToLower() == "Temporary".ToLower())
+            if (Model.GetDocumentAnswer("EmploymentCategory").ToLower() == "Temporary".ToLower())
             {
+               
                 //3
-                string text3b = "Deze arbeidsovereenkomst wordt afgesloten voor bepaalde tijd. Looptijd van het contract is van {0} tot en met {1} en eindigt derhalve van rechtswege aan het einde van de overeengekomen periode, zonder dat hiervoor enige opzegging is vereist.";
-                list.Add(new PdfListItem { Text = string.Format(text3b, Model.GetAnswer("ContractStartDate"), Model.GetAnswer("ContractEndDate")) });
+                string text3b = "Deze arbeidsovereenkomst wordt afgesloten voor bepaalde tijd. De looptijd van het contract is van {0} tot en met {1} en eindigt derhalve van rechtswege aan het einde van de overeengekomen periode, zonder dat hiervoor enige opzegging is vereist.";
+                list.Add(new PdfListItem { Text = string.Format(text3b, Model.GetDocumentAnswer("ContractStartDate", true), Model.GetDocumentAnswer("ContractEndDate", true)) });
             }
 
 
@@ -105,11 +110,11 @@
 
 
             //5
-            string text5 = "Het dienstverband tussen werkgever en werknemer eindigt in ieder geval van rechtswege bij het bereiken van de pensioengerechtigde leeftijd door werknemer.";
+            string text5 = "Het dienstverband tussen werkgever en medewerker eindigt in ieder geval van rechtswege bij het bereiken van de pensioengerechtigde leeftijd door medewerker.";
             list.Add(new PdfListItem { Text = text5 });
 
 
-            if (Model.GetAnswer("ProbationPeriod").ToLower() == "Yes".ToLower())
+            if (Model.GetDocumentAnswer("ProbationPeriod").ToLower() == "Yes".ToLower())
             {
                 //6
                 string text6 = "De eerste twee maanden van het dienstverband gelden als proeftijd. Tijdens de proeftijd hebben beide partijen het recht om het dienstverband met onmiddellijke ingang op te zeggen en te beëindigen.";
@@ -117,21 +122,24 @@
             }
 
             //7
-            string text7 = "Het betreft een {0} dienstverband. Het gemiddeld te werken uren per week bedraagt {1}, volgens rooster. De werknemer behoort tot de categorie {2}. De werknemer is conform de IKEA CAO flexibel in tijd en uren in te roosteren tijdens weekdagen, zaterdagen en op zon- en feestdagen en verklaart zich hiermee uitdrukkelijk akkoord.";
-            list.Add(new PdfListItem { Text = string.Format(text7, Model.Translate(Model.GetAnswer("ContractType"), Model.Language).ToLower(), Model.GetAnswer("ContractedHours"), NetherlandsPdfPage.GetPayRollCategoryText(Model.GetAnswer("PayrollCategory"), Model)) });
-
+            string text7 = "Het betreft een {0} dienstverband. Het gemiddeld te werken uren per week bedraagt {1}, volgens rooster. De medewerker behoort tot de categorie {2}. De medewerker is conform de IKEA CAO flexibel in tijd en uren in te roosteren tijdens weekdagen, zaterdagen en op zon- en feestdagen en verklaart zich hiermee uitdrukkelijk akkoord.";
+            list.Add(new PdfListItem { Text = string.Format(text7, Model.GetDocumentTranslatedAnswer("ContractType"), Model.GetDocumentAnswer("ContractedHours", true), NetherlandsPdfPage.GetPayRollCategoryText(Model.GetDocumentAnswer("PayrollCategory", true), Model)) });
+           
+            
             //8
-            if (Model.GetAnswer("ContractType").ToLower() == "Full Time".ToLower())
+            if (Model.GetDocumentAnswer("ContractType").ToLower() == "Full Time".ToLower())
             {
-                string text8 = "Het salaris bedraagt € {0} bruto per maand. {1} De salarisbetalingen vinden telkens aan het einde van de kalendermaand plaats.";
-                list.Add(new PdfListItem { Text = string.Format(text8, @Model.GetAnswer("BasicPay"), brText) });
+
+                string text8 = "8a.	Het salaris bedraagt € {0} bruto per maand. De salarisbetaling vindt telkens aan het einde van de kalendermaand plaats.";
+                list.Add(new PdfListItem { Text = string.Format(text8, Model.GetDocumentAnswer("BasicPay", true), brText) });
             }
 
             //8 START
-            if (Model.GetAnswer("ContractType").ToLower() == "Part Time".ToLower())
+            if (Model.GetDocumentAnswer("ContractType").ToLower() == "Part Time".ToLower())
             {
-                string text8 = "Het salaris bedraagt € {0} bruto per uur. {1} De salarisbetalingen vinden telkens aan het einde van de kalendermaand plaats.";
-                list.Add(new PdfListItem { Text = string.Format(text8, @Model.GetAnswer("BasicPayAmount"), brText) });
+
+                string text8 = "8a.	Het salaris bedraagt € {0} bruto per uur. 	De salarisbetaling vindt telkens aan het einde van de kalendermaand plaats.";
+                list.Add(new PdfListItem { Text = string.Format(text8, Model.GetDocumentAnswer("BasicPayAmount", true), brText) });
             }
 
             //SUBLIST
@@ -139,30 +147,45 @@
             //8b
 
             pdfList = new List<PdfListItem>();
-
-            if (Model.GetAnswer("TypeOfBenefit").ToLower() == "Company Car".ToLower() | Model.GetAnswer("TypeOfBenefit2").ToLower() == "Company Car".ToLower() | Model.GetAnswer("TypeOfBenefit3").ToLower() == "Company Car".ToLower())
+            
+         
+            
+            if (Model.GetDocumentAnswer("TypeOfBenefit").ToLower() == "Company Car".ToLower() | Model.GetDocumentAnswer("TypeOfBenefit2").ToLower() == "Company Car".ToLower() | Model.GetDocumentAnswer("TypeOfBenefit3").ToLower() == "Company Car".ToLower())
             {
                 string text8b = "Werknemer heeft recht op gebruik van een lease-auto categorie {0}. {1}";
 
                 //Need to do this check because you can add 3 benefits
 
-                if (Model.GetAnswer("TypeOfBenefit").ToLower() == "Company Car".ToLower())
+                if (Model.GetDocumentAnswer("TypeOfBenefit").ToLower() == "Company Car".ToLower())
                 {
-                    string TypeOfCar = Model.Translate(Model.GetAnswer("TypeOfCar").ToLower(), Model.Language);
-                    pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + NetherlandsPdfPage.GetLetter(pdfList.Count) + text8b, Model.GetAnswer("Category"), NetherlandsPdfPage.FirstLetterToUpperCase(TypeOfCar)) });
+                    //set mandatory for contract
+                    Model.SetDocumentMandatoryField("TypeOfCar");
+                    Model.SetDocumentMandatoryField("Category");
+                    
+                    string TypeOfCar = Model.GetDocumentTranslatedAnswer("TypeOfCar");
+                    
+                    pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + NetherlandsPdfPage.GetLetter(pdfList.Count) + text8b, Model.GetDocumentAnswer("Category"), NetherlandsPdfPage.FirstLetterToUpperCase(TypeOfCar)) });
                 }
 
-                if (Model.GetAnswer("TypeOfBenefit2").ToLower() == "Company Car".ToLower())
+                if (Model.GetDocumentAnswer("TypeOfBenefit2").ToLower() == "Company Car".ToLower())
                 {
-                    string TypeOfCar2 = Model.Translate(Model.GetAnswer("TypeOfCar2").ToLower(), Model.Language);
-                    pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + NetherlandsPdfPage.GetLetter(pdfList.Count) + text8b, Model.GetAnswer("Category2"), NetherlandsPdfPage.FirstLetterToUpperCase(TypeOfCar2)) });
+                    //set mandatory for contract
+                    Model.SetDocumentMandatoryField("TypeOfCar2");
+                    Model.SetDocumentMandatoryField("Category2");
+                    
+                    string TypeOfCar2 = Model.GetDocumentTranslatedAnswer("TypeOfCar2");
+                    pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + NetherlandsPdfPage.GetLetter(pdfList.Count) + text8b, Model.GetDocumentAnswer("Category2"), NetherlandsPdfPage.FirstLetterToUpperCase(TypeOfCar2)) });
                 }
 
 
-                if (Model.GetAnswer("TypeOfBenefit3").ToLower() == "Company Car".ToLower())
+                if (Model.GetDocumentAnswer("TypeOfBenefit3").ToLower() == "Company Car".ToLower())
                 {
-                    string TypeOfCar3 = Model.Translate(Model.GetAnswer("TypeOfCar3").ToLower(), Model.Language);
-                    pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + NetherlandsPdfPage.GetLetter(pdfList.Count) + text8b, Model.GetAnswer("Category3"), NetherlandsPdfPage.FirstLetterToUpperCase(TypeOfCar3)) });
+                    //set mandatory for contract
+                    Model.SetDocumentMandatoryField("TypeOfCar3");
+                    Model.SetDocumentMandatoryField("Category3");
+                    
+                    string TypeOfCar3 = Model.GetDocumentTranslatedAnswer("TypeOfCar3");
+                    pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + NetherlandsPdfPage.GetLetter(pdfList.Count) + text8b, Model.GetDocumentAnswer("Category3"), NetherlandsPdfPage.FirstLetterToUpperCase(TypeOfCar3)) });
                 }
 
             }
@@ -173,46 +196,36 @@
             }
 
             //8c
-            if (Model.GetAnswer("PayrollCategory").ToLower() == "MT/Dep/SM".ToLower() && (Model.GetAnswer("PayScaleLevel") == "9" || Model.GetAnswer("PayScaleLevel") == "10" || Model.GetAnswer("PayScaleLevel") == "11" || Model.GetAnswer("PayScaleLevel") == "12"))
+            if (Model.GetDocumentAnswer("PayrollCategory").ToLower() == "MT/Dep/SM".ToLower() && (Model.GetDocumentAnswer("PayScaleLevel") == "9" || Model.GetDocumentAnswer("PayScaleLevel") == "10" || Model.GetDocumentAnswer("PayScaleLevel") == "11" || Model.GetDocumentAnswer("PayScaleLevel") == "12"))
             {
-                string text8c = list.Count.ToString() + NetherlandsPdfPage.GetLetter(pdfList.Count) + "Als tegemoetkoming in kosten voor representatie en telefoongebruik  ontvang je een algemene onkostenvergoeding van EUR 50,- bruto per maand. Dit is conform CAO artikel 28A.";
+                string text8c = list.Count.ToString() + NetherlandsPdfPage.GetLetter(pdfList.Count) + "Als tegemoetkoming in kosten voor representatie en telefoongebruik ontvang je een algemene onkostenvergoeding van EUR 50,- bruto per maand. Dit is conform CAO artikel 28A.";
                 pdfList.Add(new PdfListItem { Text = text8c });
             }
 
             //8d
 
-            if (Model.GetAnswer("TypeOfBenefit") == "Salary Revision" | Model.GetAnswer("TypeOfBenefit2") == "Salary Revision" | Model.GetAnswer("TypeOfBenefit3") == "Salary Revision")
+            if (Model.GetDocumentAnswer("TypeOfBenefit") == "Salary Revision" | Model.GetDocumentAnswer("TypeOfBenefit2") == "Salary Revision" | Model.GetDocumentAnswer("TypeOfBenefit3") == "Salary Revision")
             {
                 //Need to do this check because you can add 3 benefits
 
                 string text8d = "Eerste salarisrevisie: {0}.";
 
-                if (Model.GetAnswer("TypeOfBenefit").ToLower() == "Salary Revision".ToLower())
+                if (Model.GetDocumentAnswer("TypeOfBenefit").ToLower() == "Salary Revision".ToLower())
                 {
-                    if (!string.IsNullOrEmpty(Model.GetAnswer("NextRevisionDate")))
-                    {
 
-                        pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + NetherlandsPdfPage.GetLetter(pdfList.Count) + text8d, Model.GetAnswer("NextRevisionDate")) });
+                    pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + NetherlandsPdfPage.GetLetter(pdfList.Count) + text8d, Model.GetDocumentAnswer("NextRevisionDate", true)) });
 
-                    }
                 }
 
-                if (Model.GetAnswer("TypeOfBenefit2").ToLower() == "Salary Revision".ToLower())
+                if (Model.GetDocumentAnswer("TypeOfBenefit2").ToLower() == "Salary Revision".ToLower())
                 {
-                    if (!string.IsNullOrEmpty(Model.GetAnswer("NextRevisionDate2")))
-                    {
+                    pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + NetherlandsPdfPage.GetLetter(pdfList.Count) + text8d, Model.GetDocumentAnswer("NextRevisionDate2", true)) });
 
-                        pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + NetherlandsPdfPage.GetLetter(pdfList.Count) + text8d, Model.GetAnswer("NextRevisionDate2")) });
-                    }
                 }
 
-                if (Model.GetAnswer("TypeOfBenefit3").ToLower() == "Salary Revision".ToLower())
+                if (Model.GetDocumentAnswer("TypeOfBenefit3").ToLower() == "Salary Revision".ToLower())
                 {
-                    if (!string.IsNullOrEmpty(Model.GetAnswer("NextRevisionDate3")))
-                    {
-
-                        pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + NetherlandsPdfPage.GetLetter(pdfList.Count) + text8d, Model.GetAnswer("NextRevisionDate3")) });
-                    }
+                    pdfList.Add(new PdfListItem { Text = string.Format(list.Count.ToString() + NetherlandsPdfPage.GetLetter(pdfList.Count) + text8d, Model.GetDocumentAnswer("NextRevisionDate3", true)) });
                 }
 
             }
@@ -230,14 +243,14 @@
 
 
             //10
-            if (Model.GetAnswer("BusinessUnit").ToLower() == "CCCN".ToLower())
+            if (Model.GetDocumentAnswer("BusinessUnit").ToLower() == "CCCN".ToLower())
             {
                 string text10 = "IKEA beschikt over faciliteiten om telefoongesprekken die worden gevoerd tussen klanten en medewerkers van het CCCN op te nemen. Deze gesprekken zijn bestemd voor trainingsdoeleinden om de medewerkers van IKEA te kunnen trainen. Werknemer verklaart zich door ondertekening van dit contract ermee bekend en akkoord dat IKEA van deze opname faciliteiten gebruik maakt.";
                 list.Add(new PdfListItem { Text = text10 });
             }
 
             //11
-            if (Model.GetAnswer("DocumentType").ToLower() == "Work Permit".ToLower())
+            if (Model.GetDocumentAnswer("DocumentType").ToLower() == "Work Permit".ToLower())
             {
                 string text11 = "Medewerkers die op basis van een verblijfsvergunning in Nederland verblijvenen bij wie arbeid (tijdelijk) is toegestaan, verplichten zich om bij iedere wijziging in hun verblijfsstatus (verblijfsvergunning) en/of werkstatus (werkvergunning) IKEA hierover te informeren.";
                 list.Add(new PdfListItem { Text = text11 });
@@ -247,7 +260,7 @@
             string text12 = "Op deze arbeidsovereenkomst zijn de van tijd tot tijd geldende IKEA CAO, de  IKEA Group Code of Conduct en de regels die zijn opgenomen in Mijn IKEA van toepassing. De IKEA CAO en de IKEA Group Code of Conduct zijn te raadplegen op en downloaden via de internetsite <a href=\"http://www.ico-worker.com/nl\" target=\"_blank\" title=\"http://www.ico-worker.com/nl\" style=\"text-decoration: underline; color: blue;\">www.ico-worker.com/nl</a>. De inloggegevens voor deze site vind je in de bijgesloten brief. Op verzoek van de werknemer stuurt IKEA een digitale versie per e-mail of een geprinte versie per gewone post toe van de toepasselijke regels. Het boekje Mijn IKEA ontvang je tegelijk met deze arbeidsovereenkomst.";
 
 
-            if ((Model.GetAnswer("PayScaleType").ToLower() == "IKEA NL CAO".ToLower() | Model.GetAnswer("PayScaleType").ToLower() == "IKEA NL geen CAO - out of scope".ToLower()) && ((Model.GetAnswer("PayScaleLevel") == "14" || Model.GetAnswer("PayScaleLevel") == "15")))
+            if ((Model.GetDocumentAnswer("PayScaleType").ToLower() == "IKEA NL CAO".ToLower() | Model.GetDocumentAnswer("PayScaleType").ToLower() == "IKEA NL geen CAO - out of scope".ToLower()) && ((Model.GetDocumentAnswer("PayScaleLevel") == "14" || Model.GetDocumentAnswer("PayScaleLevel") == "15")))
             {
 
                 text12 += brText + "Hoewel de IKEA CAO niet op deze arbeidsovereenkomst van toepassing is, worden de artikelen met de volgende onderwerpen uit de laatst overeengekomen IKEA CAO door ondertekening van deze arbeidsovereenkomst op de arbeidsovereenkomst van toepassing en worden die geacht daarvan onderdeel uit te maken, ook als de looptijd van deze CAO is verstreken en nog geen nieuwe CAO tot stand is gekomen:";
@@ -272,9 +285,16 @@
             //13
             int PayScaleLevel = 0;
 
-            if (Model.GetAnswer("PayScaleLevel").Length > 0 && Model.GetAnswer("PayScaleLevel").ToLower() != "N/A".ToLower())
+            if (Model.GetDocumentAnswer("PayScaleLevel").Length > 0 && Model.GetDocumentAnswer("PayScaleLevel").ToLower() != "N/A".ToLower())
             {
-                PayScaleLevel = int.Parse(Model.GetAnswer("PayScaleLevel"));
+                try
+                {
+                    PayScaleLevel = int.Parse(Model.GetDocumentAnswer("PayScaleLevel"));
+                }
+                catch (Exception)
+                {
+                }
+                
 
                 if (PayScaleLevel >= 14)
                 {
@@ -308,179 +328,7 @@
                 }
             }
     
-        
-@*        <newpage />*@
-
-
-        
-
-     @*   <p class="lastparagraph" style="text-align: left;font-family: Verdana; font-size: 11px;">
-            <br />
-            <br />
-            A. De werknemer verklaart hiermee voorafgaande aan ondertekening van de arbeidsovereenkomst kennis te hebben genomen van de IKEA CAO, de IKEA Group Code of Conduct en de regels in Mijn IKEA en verder met het bovenstaande akkoord te gaan.
-            <br />
-            <br />
-        </p>*@
-        <endpage />
-
-
-
-        
-       @* @if (Model.GetAnswer("BusinessUnit") == "Store Amsterdam 088")
-        {
-            <newpage />
-            <text>
-        
-        <div>
-        <p style="font-family: Verdana; font-size: 11px;">
-            <strong>Toelichting op salarisbetaling bij IKEA</strong><br />
-            <br />
-        </p>
-        <p style="font-family: Verdana; font-size: 11px;">
-            Bij IKEA maken we onderscheid tussen de salarisbetaling van een uurloon parttimer en een maandloon parttimer/fulltimer. 
-         <br />
-            <br />
-        </p>
-        <p style="font-family: Verdana; font-size: 11px;">
-            <strong>Uurloon parttimers</strong> krijgen maandelijks de gewerkte uren van de vorige maand uitbetaald. Alleen in je eerste maand van je dienstverband ontvang je salaris gebaseerd op je contracturen; je ontvangt dan salaris over uren die je nog niet gewerkt hebt. Pas in de daaropvolgende maand kan IKEA het aantal daadwerkelijke gewerkte uren plus toeslagen en reiskosten uit je eerste gewerkte maand berekenen en uitbetalen.
-         <br />
-            <br />
-        </p>
-        <p style="font-family: Verdana; font-size: 11px;">
-            <strong>Maandloonparttimers/fulltimers</strong> ontvangen de contracturen van de <u><i>lopende maand</i></u> + reiskosten en eventuele toeslagen van de <u><i>voorgaande maand</i></u>. 
-             <br />
-            <br />
-        </p>
-        <p style="font-family: Verdana; font-size: 11px;">
-            <strong>Wijziging contracturen</strong><br />
-            Als je contracturen wijzigen (je gaat meer of minder uren per week werken), zal je salaris bij je eerstvolgende salarisbetaling ook wijzigen. Ga je meer werken dan worden de extra contracturen op de eerstvolgende salarisbetaling uitbetaald, maar ga je minder werken dan worden de verlaagde contracturen juist in mindering gebracht. 
-             <br />
-            <br />
-            Hieronder kan je in 2 voorbeeldberekeningen zien hoe de uitbetaling van je contracturen wordt berekend:
-                <br />
-            <br />
-        </p>
-        <p style="font-family: Verdana; font-size: 11px;">
-            <strong>Uurloon parttimer met contractwijziging per 1 mei</strong>
-            <br />
-       
-        <table border="1" cellpadding="5">
-            <tr border="0">
-                <th border="0"></th>
-                <th border="0" align="center">april</th>
-                <th border="0" align="center">mei</th>
-                <th border="0" align="center">juni</th>
-            </tr>
-            <tr>
-                <td border="0">Contracturen</td>
-                <td align="right" valign="bottom">34,67</td>
-                <td align="right" valign="bottom">43,33</td>
-                <td align="right" valign="bottom">43,33</td>
-            </tr>
-            <tr>
-                <td border="0">Uurloon</td>
-                <td align="right" valign="bottom">€ 10,00</td>
-                <td align="right" valign="bottom">€ 10,00</td>
-                <td align="right" valign="bottom">€ 10,00</td>
-            </tr>
-            <tr>
-                <td border="0">"Basis" salaris</td>
-                <td align="right" valign="bottom"><strong>€ 346,70</strong></td>
-                <td align="right" valign="bottom"><strong>€ 433,30</strong></td>
-                <td align="right" valign="bottom"><strong>€ 433,30</strong></td>
-            </tr>
-            <tr height="30" border="0">
-                <td border="0" height="30" color="white">_</td>
-                <td border="0" height="30" color="white" align="right" valign="bottom"></td>
-                <td border="0" height="30" color="white" align="right" valign="bottom"></td>
-                <td border="0" height="30" color="white" align="right" valign="bottom"></td>
-            </tr>
-            <tr>
-                <td border="0" valign="top">Gewerkte uren huidige maand</td>
-                <td align="right" valign="bottom">36,00</td>
-                <td align="right" valign="bottom">41,00</td>
-                <td align="right" valign="bottom">45,00</td>
-            </tr>
-            <tr>
-                <td border="0">Minder/Meer Uren vorige maand (<i>gewerkte uren vorige maand -/- contracturen vorige maand</i>)</td>
-                <td align="right" valign="bottom">(39,67-34,67=)<br />
-                    5,00</td>
-                <td align="right" valign="bottom">(36-34,67=)<br />
-                    1,33</td>
-                <td align="right" valign="bottom" color="red">(41-43,33=)<br />
-                    2,33-</td>
-            </tr>
-            <tr>
-                <td border="0">Uurloon</td>
-                <td align="right" valign="bottom">€ 10,00</td>
-                <td align="right" valign="bottom">€ 10,00</td>
-                <td align="right" valign="bottom">€ 10,00</td>
-            </tr>
-
-            <tr>
-                <td border="0">Minder/meer salaris</td>
-                <td align="right" valign="bottom"><strong>€ 50,00</strong></td>
-                <td align="right" valign="bottom"><strong>€ 13,30</strong></td>
-                <td align="right" valign="bottom" color="red"><strong>€ 23,30-</strong></td>
-            </tr>
-            <tr>
-                <td border="0">Uitbetalingsbedrag huidige maand</td>
-                <td align="right" valign="bottom"><strong>€ 396,70</strong></td>
-                <td align="right" valign="bottom"><strong>€ 446,60</strong></td>
-                <td align="right" valign="bottom"><strong>€ 410,00</strong></td>
-            </tr>
-        </table>
-             </p>
-        <br />
-        <br />
-        <br />
-        <p style="font-family: Verdana; font-size: 11px;">
-            <strong>Maandloon parttimer/fulltimer met contractwijziging per 1 mei</strong>
-            <br />
-       
-        <table border="1" cellpadding="5">
-            <tr border="0">
-                <th border="0"></th>
-                <th border="0" align="center">april</th>
-                <th border="0" align="center">mei</th>
-                <th border="0" align="center">juni</th>
-            </tr>
-            <tr>
-                <td border="0">Contracturen</td>
-                <td align="right" valign="bottom">104,00</td>
-                <td align="right" valign="bottom">121,33</td>
-                <td align="right" valign="bottom">121,33</td>
-            </tr>
-            <tr>
-                <td border="0">Uurloon</td>
-                <td align="right" valign="bottom">€ 10,00</td>
-                <td align="right" valign="bottom">€ 10,00</td>
-                <td align="right" valign="bottom">€ 10,00</td>
-            </tr>
-            <tr>
-                <td border="0">"Basis" salaris</td>
-                <td align="right" valign="bottom"><strong>€ 1.040,00</strong></td>
-                <td align="right" valign="bottom"><strong>€ 1.213,30</strong></td>
-                <td align="right" valign="bottom"><strong>€ 1.213,30</strong></td>
-            </tr>
-            <tr>
-                <td border="0">Uitbetalingsbedrag<br />
-                    huidige maand</td>
-                <td align="right" valign="bottom"><strong>€ 1.040,00</strong></td>
-                <td align="right" valign="bottom"><strong>€ 1.213,30</strong></td>
-                <td align="right" valign="bottom"><strong>€ 1.213,30</strong></td>
-            </tr>
-        </table>
-             </p>
-      
-       
-    </div>
-        
-        
-        </text>
-            
-             <endpage />
-        }*@
+           <endpage />
 
     </div>
 </body>

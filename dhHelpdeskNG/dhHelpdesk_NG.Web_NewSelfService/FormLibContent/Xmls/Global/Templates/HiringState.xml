@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <state status="0">
     <!-- HRU -->
     <status value="0">
@@ -11,12 +11,12 @@
             <action status="30" internal-val="30" text="Submit Complete Service Request to SSC">
                 <validateTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</validateTabs>
             </action>
-            <!--<action status="31" internal-val="30" init-form-guid="AD29180D-AD5A-4694-9FD3-0A4B02F4D568" text="Submit Basic Service Request to SSC">
-        <validateTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</validateTabs>
-      </action>-->
-            <action status="31" internal-val="30" text="Submit Basic Service Request to SSC">
-                <validateTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</validateTabs>
+            <action status="31" internal-val="30" init-form-guid="AD29180D-AD5A-4694-9FD3-0A4B02F4D568" text="Submit Basic Service Request to SSC">
+              <validateTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</validateTabs>
             </action>
+            <!--<action status="31" internal-val="30" text="Submit Basic Service Request to SSC">
+                <validateTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</validateTabs>
+            </action>-->
             <action status="99" internal-val="70" text="Cancel Service request"></action>
         </actions>
     </status>
@@ -50,12 +50,12 @@
             <action status="30" internal-val="30" text="Submit Complete Service Request to SSC">
                 <validateTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</validateTabs>
             </action>
-            <!--<action status="31" internal-val="30" init-form-guid="AD29180D-AD5A-4694-9FD3-0A4B02F4D568" text="Submit Basic Service Request to SSC">
-                <validateTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</validateTabs>
-            </action>-->
-            <action status="31" internal-val="30" text="Submit Basic Service Request to SSC">
+            <action status="31" internal-val="30" init-form-guid="AD29180D-AD5A-4694-9FD3-0A4B02F4D568" text="Submit Basic Service Request to SSC">
                 <validateTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</validateTabs>
             </action>
+            <!--<action status="31" internal-val="30" text="Submit Basic Service Request to SSC">
+                <validateTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</validateTabs>
+            </action>-->
             <action status="99" internal-val="70" text="Cancel Service request"></action>
         </actions>
     </status>

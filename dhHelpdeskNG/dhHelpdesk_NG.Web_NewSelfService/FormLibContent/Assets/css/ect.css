@@ -1193,6 +1193,57 @@ label.error, .notice {
     padding: 3px;
 }
 
-.selectize-dropdown, .selectize-input {
-    line-height: 20px;
+/* Selectize jumping problem */
+.selectize-control.single .selectize-input input {
+    vertical-align: baseline;
 }
+
+/* Temporary solution for problem with text next to selectize  */
+/*.table th, .table td {
+  vertical-align: middle;
+}*/
+
+.selectize-input {
+ overflow: visible;
+}
+
+.table-striped.align-middle td {
+    vertical-align:middle;
+}
+
+#documents {
+    padding-top:10px;
+}
+
+#documents .alert-info {
+    margin-bottom:10px;
+}
+
+#documents .alert-error {
+    margin-bottom:0px;
+}
+
+.documents-error-message {
+    margin-right:20px; 
+    color:#ff0000;
+    margin-top:5px;
+}
+
+.overflow-visible {
+    overflow: visible !important;
+}
+
+input,
+textarea,
+.uneditable-input {
+  width: 306px;
+}
+
+select {
+    width: 320px;
+}
+
+/*
+    .date input {
+    width: 279px;
+}*/

@@ -75,7 +75,7 @@
             @if(Model.VisibleTab("#ServiceRequestDetails"))
             {
                 <li class="active @(Model.TabHasError("#ServiceRequestDetails") ? "error" : "")">
-                    <a href="#ServiceRequestDetails">@Model.Translate("Service Request Details")</a></li>
+                    <a href="#ServiceRequestDetails">@Model.Translate("Change Employment Terms & Conditions")</a></li>
             }
             @if(Model.VisibleTab("#OrganisationalAssignment"))
             {
@@ -97,6 +97,7 @@
         <div class="content">
             <div class="row-fluid">
                 <div class="tab-content">
+
 
                     @if(Model.VisibleTab("#ServiceRequestDetails"))
                     {

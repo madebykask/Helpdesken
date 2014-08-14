@@ -48,6 +48,13 @@
                 <li class="@(Model.TabHasError("#Absences") ? "error" : "")">
                     <a href="#Absences">@Model.Translate("Absences")</a></li>
             }
+
+            @if(Model.VisibleTab("#documents"))
+            {
+                <li class="@(Model.TabHasError("#documents") ? "error" : "")">
+                    <a href="#documents">@Model.Translate("Documents")</a></li>
+            }
+
             @if (Model.VisibleTab("#SscUseOnly"))
             {
                 <li class="@(Model.TabHasError("#SscUseOnly") ? "error" : "")">
@@ -62,7 +69,7 @@
         </ul>
         <div class="content">
             <div class="row-fluid">
-                <div class="tab-content">
+                <div class="tab-content overflow-visible">
                     @if (Model.VisibleTab("#ServiceRequestDetails"))
                     {
                         @Html.Partial("_TabServiceRequestDetails", Model)
@@ -71,6 +78,11 @@
                     @if (Model.VisibleTab("#Absences"))
                     {
                         @Html.Partial("_TabAbsences", Model)
+                    }
+
+                    @if(Model.VisibleTab("#documents"))
+                    {
+                        @Html.Partial("_TabDocuments", Model)
                     }
 
                     @if (Model.VisibleTab("#SscUseOnly"))

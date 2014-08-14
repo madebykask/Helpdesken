@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 
 <state status="0">
     <status value="0">
@@ -66,12 +66,14 @@
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
-            <action status="60" internal-val="60" text="Update other required systems"></action>
+            <action status="60" internal-val="60" text="Update other required systems">
+              <validateFields>NewCo-WorkerID</validateFields>
+            </action>
             <action status="99" internal-val="70" text="Cancel Service Request"></action>
         </actions>
     </status>
     <status value="60">
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents,#SSCUseOnly</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents,#globalview,#SSCUseOnly</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>

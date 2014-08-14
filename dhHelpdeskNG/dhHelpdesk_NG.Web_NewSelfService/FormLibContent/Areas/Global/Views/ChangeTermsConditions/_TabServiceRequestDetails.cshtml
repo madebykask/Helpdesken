@@ -9,7 +9,7 @@
 <div class="tab-pane active" id="ServiceRequestDetails">    
     <div class="span8">
         <table class="table">
-            <tbody>
+            <tbody> 
                 <tr>
                     <td class="tdstrong" colspan="2" style="width: auto">
                         <h4>@Model.Translate("Details")</h4>
@@ -92,9 +92,16 @@
                     <td></td>
                 </tr>
                 <tr>
-                    <td class="tdstrong">@Model.Label("ProcessBeforeDate")</td>
-                    <td>@Model.Element("ProcessBeforeDate")</td>
-                    <td></td>
+                    <td class="tdstrong">@Model.Translate("SLA")</td>
+                    <td>
+                        @if (Model.Contract.CaseNumber != null)
+                        {
+                            @Model.Contract.PriorityName;
+                        }
+                        else if (Model.Form != null){ 
+                            @Model.Form.PriorityName;
+                        }
+                    </td>
                 </tr>
                 @*    </tbody>
         </table>

@@ -3,7 +3,7 @@
 @using ECT.FormLib.Models;
 
 <div class="tab-pane active" id="servicerequestdetails">
-    <div class="span5">
+    <div class="span6">
         <table class="table">
             <tbody>
                 <tr>
@@ -38,8 +38,19 @@
                     <td>@Model.Element("ServiceRequestPriority")</td>
                 </tr>
                 <tr>
-                    <td class="tdstrong">@Model.Label("ProcessBeforeDate")</td>
-                    <td>@Model.Element("ProcessBeforeDate")</td>
+                    <td class="tdstrong">@Model.Translate("SLA")</td>
+                    <td>
+                        @if (Model.Contract.CaseNumber != null)
+                        {
+                            @Model.Contract.PriorityName;
+                        }
+                        else { 
+                            if (@Model.Form != null)
+                            {
+                            @Model.Form.PriorityName;
+                        }
+                        }
+                    </td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("Co-WorkerID")</td>
@@ -143,38 +154,6 @@
 </div>
 <script>
     
-
-    //$('#ServiceRequestPriority').change(function () {
-    //    $('#date_ProcessBeforeDate').not(".disabled").datepicker("destroy");
-
-    //    if ($(this).val() == 'Urgent') {
-
-    //        var nowTemp = new Date();
-    //        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-    //        var endDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate() + 2, 0, 0, 0, 0);
-
-    //        $('#date_ProcessBeforeDate').not(".disabled").datepicker(
-    //        {
-    //            onRender: function (ev) {
-    //                return ev.valueOf() >= endDate.valueOf() || ev.valueOf() < now.valueOf() ? 'disabled' : '';
-    //            }
-    //        });
-    //        //$("#date_ProcessBeforeDate").on("keydown keypress keyup", false);
-            
-    //    }
-    //    else {
-    //        $('#date_ProcessBeforeDate').not(".disabled").datepicker(
-    //        {
-    //            onRender: function (ev) {
-    //                return '';
-    //            }
-    //        });
-
-    //        //document.getElementById('ProcessBeforeDate').onkeypress = function () { return true; }
-    //    }
-    //});
-
-
     document.getElementById('NewToIKEA').onchange = selectIndexChangeNewToIKEA;
 
     function selectIndexChangeNewToIKEA() {
@@ -185,9 +164,26 @@
             document.getElementById('GlobalHRID').disabled = false;
         }
 
+        
+        if (this.value == 'International Transfer') {
+        
+            $(".globalmobility").show();
+        }
+        else {
+            $(".globalmobility").hide();
+        }
+
     }
     if (document.getElementById('NewToIKEA').value == 'New Hire') {
         document.getElementById('GlobalHRID').disabled = true;
+    }
+
+    if (document.getElementById('NewToIKEA').value == 'International Transfer') {
+
+        $(".globalmobility").show();
+    }
+    else {
+        $(".globalmobility").hide();
     }
 
     var noticeHiringDate = $('#notice_HiringDate');
@@ -208,7 +204,8 @@
             noticeHiringDate.show();
 
         if (!(dstartDate.getDate() === 1 || dstartDate.getDate() === 15) && (dstartDate.valueOf() < now.valueOf())) {
-            noticeHiringDateWrong.show();
+            if (!$('#EmploymentCategory').val() == 'Apprentice')
+            { noticeHiringDateWrong.show(); }
             noticeHiringDate.show();
         } 
     });

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE form [
   <!ENTITY languages SYSTEM "Templates/Languages.xml">
   <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
@@ -25,7 +25,9 @@
       <element name="IKEANetworkID" type="text" label="IKEA Network ID" mandatory="1">
         <regex inherit="unsignednum" message="" pattern=""></regex>
       </element>
-      <element name="BusinessUnit" type="text" label="Business Unit"></element>
+      <element name="Company" type="text" label="Company"></element>
+      <element name="BusinessUnit" type="text" label="Business Unit" default="Store Dublin 038"></element>
+      <element name="ServiceArea" type="text" label="Function"></element>
       <element name="Department" type="text" label="Department"></element>
       <element name="ChangeValidFrom" type="date" label="Change Valid from:" mandatory="1" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
@@ -37,12 +39,10 @@
         <options>
           <option value=""></option>
           <option value="Urgent">Urgent</option>
-          <option value="Not Urgent">Not Urgent</option>
+          <option value="Standard">Standard</option>
         </options>
       </element>
-      <element name="ProcessBeforeDate" type="date" label="Process before date:" mandatory="1" format="dd.MM.yyyy">
-        <regex inherit="date" pattern="" message=""></regex>
-      </element>
+      
     </tab>
 
     <tab name="#Payment" label="Payment Information">
@@ -50,9 +50,10 @@
       <element type="select" name="DeductionsType" label="Deduction Type" mandatory="1" >
         <options>
           <option value=""></option>
-          <option value="﻿760A - Charity Deduction">﻿760A - Charity Deduction</option>
-          <!--<option value="770E - USDAW Union Deduction">770E - USDAW Union Deduction</option>-->
+          <option value="Charity Deduction">Charity Deduction</option>
           <option value="Pension">Pension</option>
+          <option value="Cycle (salary sacrify)">Cycle (salary sacrify)</option>
+          <option value="Bus saver ticket (salary sacrify)">Bus saver ticket (salary sacrify)</option>
         </options>
       </element>
       <element type="select" name="PaymentType" label="Payment Type">
@@ -64,11 +65,11 @@
         </options>
       </element>
       <element type="text" name="DeductionsAmountUnits" label="Amount/Units">
-        <mandatoryIf name="DeductionsType">﻿760A - Charity Deduction</mandatoryIf>
+        <mandatoryIf name="DeductionsType">Charity Deduction, Cycle (salary sacrify),Bus saver ticket (salary sacrify)</mandatoryIf>
         <regex inherit="unsignednum" message="" pattern=""></regex>
       </element>
       <element type="select" name="DeductionsNetGross" label="Net/Gross">
-        <mandatoryIf name="DeductionsType">﻿760A - Charity Deduction</mandatoryIf>
+        <mandatoryIf name="DeductionsType">Charity Deduction, Cycle (salary sacrify),Bus saver ticket (salary sacrify)</mandatoryIf>
         <options>
           <option value=""></option>
           <option value="Net">Net</option>
@@ -89,9 +90,10 @@
       <element type="select" name="DeductionsType2" label="Deduction Type" >
         <options>
           <option value=""></option>
-          <option value="﻿760A - Charity Deduction">﻿760A - Charity Deduction</option>
-          <!--<option value="770E - USDAW Union Deduction">770E - USDAW Union Deduction</option>-->
+          <option value="Charity Deduction">Charity Deduction</option>
           <option value="Pension">Pension</option>
+          <option value="Cycle (salary sacrify)">Cycle (salary sacrify)</option>
+          <option value="Bus saver ticket (salary sacrify)">Bus saver ticket (salary sacrify)</option>
         </options>
       </element>
       <element type="select" name="PaymentType2" label="Payment Type" >
@@ -103,11 +105,11 @@
         </options>
       </element>
       <element type="text" name="DeductionsAmountUnits2" label="Amount/Units" >
-        <mandatoryIf name="DeductionsType2">﻿760A - Charity Deduction</mandatoryIf>
+        <mandatoryIf name="DeductionsType2">Charity Deduction, Cycle (salary sacrify),Bus saver ticket (salary sacrify)</mandatoryIf>
         <regex inherit="unsignednum" message="" pattern=""></regex>
       </element>
       <element type="select" name="DeductionsNetGross2" label="Net/Gross" >
-        <mandatoryIf name="DeductionsType2">﻿760A - Charity Deduction</mandatoryIf>
+        <mandatoryIf name="DeductionsType2">Charity Deduction, Cycle (salary sacrify),Bus saver ticket (salary sacrify)</mandatoryIf>
         <options>
           <option value=""></option>
           <option value="Net">Net</option>
@@ -128,9 +130,10 @@
       <element type="select" name="DeductionsType3" label="Deduction Type" >
         <options>
           <option value=""></option>
-          <option value="﻿760A - Charity Deduction">﻿760A - Charity Deduction</option>
-          <!--<option value="770E - USDAW Union Deduction">770E - USDAW Union Deduction</option>-->
+          <option value="Charity Deduction">Charity Deduction</option>
           <option value="Pension">Pension</option>
+          <option value="Cycle (salary sacrify)">Cycle (salary sacrify)</option>
+          <option value="Bus saver ticket (salary sacrify)">Bus saver ticket (salary sacrify)</option>
         </options>
       </element>
       <element type="select" name="PaymentType3" label="Payment Type" >
@@ -142,11 +145,11 @@
         </options>
       </element>
       <element type="text" name="DeductionsAmountUnits3" label="Amount/Units" >
-        <mandatoryIf name="DeductionsType2">﻿760A - Charity Deduction</mandatoryIf>
+        <mandatoryIf name="DeductionsType3">Charity Deduction, Cycle (salary sacrify),Bus saver ticket (salary sacrify)</mandatoryIf>
         <regex inherit="unsignednum" message="" pattern=""></regex>
       </element>
       <element type="select" name="DeductionsNetGross3" label="Net/Gross" >
-        <mandatoryIf name="DeductionsType2">﻿760A - Charity Deduction</mandatoryIf>
+        <mandatoryIf name="DeductionsType3">Charity Deduction, Cycle (salary sacrify),Bus saver ticket (salary sacrify)</mandatoryIf>
         <options>
           <option value=""></option>
           <option value="Net">Net</option>

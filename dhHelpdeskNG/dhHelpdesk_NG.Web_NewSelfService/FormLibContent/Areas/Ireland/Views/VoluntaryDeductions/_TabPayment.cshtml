@@ -3,7 +3,7 @@
 @using ECT.FormLib.Models;
 
 <div class="tab-pane" id="Payment">
-    <div class="span5">
+    <div class="span6">
         <table class="table">
             <tbody>
                 <tr>
@@ -87,7 +87,7 @@
                             @Model.Element("DeductionsValidTo" + i.ToString())</td>
                     </tr>
                 }
-                <tr id="addDeductionTr">
+                <tr id="addDeductionTrr">
                     <td colspan="2">
                         @Model.Element("Deductions")
                         <a id="addDeduction" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Deduction")</a></td>
@@ -161,78 +161,69 @@
 
         $('#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3').val($('#ChangeValidFrom').val());
     }).data('datepicker');
-    $('#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3').on("keydown keypress keyup", false);
+    
+
+    function setDefaultDate(id) {
+        var input = $('#' + id);
+
+        if (input.val() == '') {
+            input.val('31.12.9999');
+        }
+    }
+
+    function disableDatePicker(id) {
+        var input = $('#' + id);
+        var datePicker = $('#date_' + id);
+
+        datePicker.datepicker("destroy");
+        datePicker.addClass("disabled");
+        input.val("");
+        document.getElementById(id).disabled = true;
+    }
+
+    function enableDatePicker(id) {
+        var input = $('#' + id);
+        var datePicker = $('#date_' + id);
+
+        datePicker.removeClass("disabled");
+        document.getElementById(id).disabled = false;
+        setDefaultDate(id);
+        datePicker.datepicker();
+    }
+
+    function setDatePickerBehavior(id, value) {
+        var input = $('#' + id);
+
+        if (value == 'One Time') {
+            disableDatePicker(id);
+        } else {
+            enableDatePicker(id);
+        }
+    }
+
+    function setDefaultDatePickerBehavior(id, value) {
+        var input = $('#' + id);
+
+        if (value == 'One Time') {
+            disableDatePicker(id);
+        } else {
+            setDefaultDate(id);
+        }
+    }
 
     $('#PaymentType').change(function () {
-        var deductionsValidTo = document.getElementById('DeductionsValidTo');
-
-        var input = $('#DeductionsValidTo');
-        if ($(this).val() == 'One Time') {
-            deductionsValidTo.value = "";
-            $('#date_DeductionsValidTo').datepicker("destroy");
-            $('#date_DeductionsValidTo').addClass("disabled");
-            input.attr('readonly', 'readony');
-        }
-        else {
-            input.removeAttr('readonly', 'readonly');
-            input.not(".disabled").datepicker(
-            {
-                onRender: function (ev) {
-                    return '';
-                }
-            });
-            if (deductionsValidTo.value == '') {
-                deductionsValidTo.value = '31.12.9999';
-            }
-        }
+        setDatePickerBehavior('DeductionsValidTo', $(this).val());
     });
+    setDefaultDatePickerBehavior('DeductionsValidTo', $('#PaymentType').val());
 
     $('#PaymentType2').change(function () {
-        var deductionsValidTo2 = document.getElementById('DeductionsValidTo2');
-
-        var input = $('#DeductionsValidTo2');
-        if ($(this).val() == 'One Time') {
-            deductionsValidTo2.value = "";
-            $('#date_DeductionsValidTo2').datepicker("destroy");
-            $('#date_DeductionsValidTo2').addClass("disabled");
-            input.attr('readonly', 'readony');
-        }
-        else {
-            input.removeAttr('readonly', 'readonly');
-            input.not(".disabled").datepicker(
-            {
-                onRender: function (ev) {
-                    return '';
-                }
-            });
-            if (deductionsValidTo2.value == '') {
-                deductionsValidTo2.value = '31.12.9999';
-            }
-        }
+        setDatePickerBehavior('DeductionsValidTo2', $(this).val());
     });
+    setDefaultDatePickerBehavior('DeductionsValidTo2', $('#PaymentType2').val());
 
     $('#PaymentType3').change(function () {
-        var deductionsValidTo3 = document.getElementById('DeductionsValidTo3');
-
-        var input = $('#DeductionsValidTo3');
-        if ($(this).val() == 'One Time') {
-            deductionsValidTo3.value = "";
-            $('#date_DeductionsValidTo3').datepicker("destroy");
-            $('#date_DeductionsValidTo3').addClass("disabled");
-            input.attr('readonly', 'readony');
-        }
-        else {
-            input.removeAttr('readonly', 'readonly');
-            input.not(".disabled").datepicker(
-            {
-                onRender: function (ev) {
-                    return '';
-                }
-            });
-            if (deductionsValidTo3.value == '') {
-                deductionsValidTo3.value = '31.12.9999';
-            }
-        }
+        setDatePickerBehavior('DeductionsValidTo3', $(this).val());
     });
+    setDefaultDatePickerBehavior('DeductionsValidTo3', $('#PaymentType3').val());
 
 </script>

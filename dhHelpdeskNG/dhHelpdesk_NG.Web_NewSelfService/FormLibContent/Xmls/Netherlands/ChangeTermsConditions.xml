@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE form [
   <!ENTITY languages SYSTEM "Templates/Languages.xml">
   <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
@@ -39,15 +39,18 @@
       <element name="IKEANetworkID" type="text"  label="IKEA Network ID" mandatory="1">
         <regex inherit="unsignednum" message="" pattern=""></regex>
       </element>
+      <element name="Company" type="text" label="Company"></element>
       <element name="BusinessUnit" type="text" label="Business Unit"></element>
+      <element name="ServiceArea" type="text" label="Function"></element>
       <element name="Department" type="text" label="Department"></element>
       <element name="ChangeType" type="select" label="Change Type?" mandatory="1">
         <options>
           <option value=""></option>
           <option value="ONLY Pay Change">ONLY Pay Change</option>
           <option value="ONLY Change work hours">ONLY Change work hours</option>
-          <option value="Renew temporary contract">Renew temporary contract</option>
-          <option value="Change temporary to regular contract">Change temporary to regular contract</option>
+          <option value="ONLY Cost Centre Change">ONLY Cost Centre Change</option>
+          <option value="ONLY extend temporary contract">ONLY extend temporary contract</option>
+          <option value="ONLY temporary to regular">ONLY temporary to regular</option>
           <option value="Promotion">Promotion</option>
           <option value="Lateral Move">Lateral Move</option>
           <option value="Demotion">Demotion</option>
@@ -66,13 +69,10 @@
         <options>
           <option value=""></option>
           <option value="Urgent">Urgent</option>
-          <option value="Not Urgent">Not Urgent</option>
+          <option value="Standard">Standard</option>
         </options>
       </element>
-      <element name="ProcessBeforeDate" type="date" label="Process before date:" mandatory="1" format="dd.MM.yyyy">
-        <regex inherit="date" pattern="" message=""></regex>
-      </element>
-    
+      
     <!--Permanent Address-->
       <element type="text" name="PermanentAddressLine1" label="Address line 1" mandatory="1"></element>
       <element type="text" name="PermanentAddressLine2" label="Address line 2"></element>
@@ -85,7 +85,7 @@
       <element type="typeahead-simple" source="1" name="PermanentCountry" label="Country" mandatory="1" default="Netherlands">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -343,10 +343,10 @@
     <!--Tab OrganisationalAssignment-->
     <tab name="#OrganisationalAssignment" label="Organisational Assignment">
       <!--Organisation Assignment-->
-      <element type="typeahead-simple" source="1" name="OrganisationCountry" label="Country" mandatory="1" default="Netherlands">
+      <element type="typeahead-simple" source="1" name="OrganisationCountry" label="Country" default="Netherlands">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -599,15 +599,41 @@
           <option value="Zimbabwe">Zimbabwe</option>
         </options>
       </element>
-      <element type="select" name="Company" label="Company" mandatory="1">       
+      <!--<element type="select" name="NewCompany" label="Company">       
         <options>
           <option value=""></option>
           <option value="IKEA B.V">IKEA B.V</option>
           <option value="IKEA Competence B.V.">IKEA Competence B.V.</option>
         </options>
         &pre_company_businessunit;
+      </element>-->
+      
+      <element type="select" name="NewCompany" label="Company">
+        <options>
+          <option value=""></option>
+        </options>
       </element>
-      <element type="select" name="NewBusinessUnit" label="Business Unit" mandatory="1">     
+      
+      <element type="select" source="database" name="NewBusinessUnit" label="Business Unit" mandatory="1">
+        &pre_businessunit_localjobtitle;
+        <options>
+          <option value=""></option>
+        </options>
+      </element>
+
+      <element type="select" source="database" name="NewServiceArea" label="Function" mandatory="1">
+        <options>
+          <option value=""></option>
+        </options>
+      </element>
+      <element type="select" source="database" name="NewDepartment" label="Department" mandatory="1">
+        &pre_department_homecostcentre;
+        <options>
+          <option value=""></option>
+        </options>
+      </element>
+      
+      <!--<element type="select" name="NewBusinessUnit" label="Business Unit" mandatory="1">     
         <options>
           <option value=""></option>
           <option value="Store Eindhoven 087">Store Eindhoven 087</option>
@@ -626,14 +652,15 @@
           <option value="Service Office Netherlands">Service Office Netherlands</option>
           <option value="CCCN">CCCN</option>
         </options>
-        <!--&pre_businessunit_reportstolinemanager;
-        &pre_businessunit_jobtitle;-->
+        &pre_businessunit_reportstolinemanager;
+        &pre_businessunit_jobtitle;
         &pre_businessunit_localjobtitle;
-        <!--&pre_businessunit_primarysite;-->
+        &pre_businessunit_primarysite;
       </element>
-      <element type="typeahead-simple" source="1" name="ServiceArea" label="ServiceArea" mandatory="1">
+      
+      <element type="typeahead-simple" source="1" name="NewServiceArea" label="Function" mandatory="1">
         <options>
-          <option value="﻿Business Suppor">﻿Business Suppor</option>
+          <option value="Business Suppor">Business Suppor</option>
           <option value="Com&amp;In">Com&amp;In</option>
           <option value="Customer Relati">Customer Relati</option>
           <option value="Customer Servic">Customer Servic</option>
@@ -655,11 +682,12 @@
           <option value="Support">Support</option>       
         </options>
       </element>
+      
       <element type="typeahead-simple" source="1" name="NewDepartment" label="Department" mandatory="1" >
-        <!--&pre_department_homecostcentre;-->
-        <!--&pre_department_crosschargecostcentre;-->
+        &pre_department_homecostcentre;
+        &pre_department_crosschargecostcentre;
         <options>
-          <option value="﻿Accounting SO">﻿Accounting SO</option>
+          <option value="Accounting SO">Accounting SO</option>
           <option value="AOS Amsterdam Store">AOS Amsterdam Store</option>
           <option value="AOS Haarlem Store">AOS Haarlem Store</option>
           <option value="AOS Heerlen Store">AOS Heerlen Store</option>
@@ -1401,13 +1429,14 @@
           <option value="Business Navigation &amp; Operations">Business Navigation &amp; Operations</option>
           <option value="Sales">Sales</option>
         </options>
-      </element>
-      <element type="typeahead-simple" name="HomeCostCentre"  label="Home Cost Center" mandatory="1" customid="changeModule">
+      </element>-->
+      
+      <element type="typeahead-simple" name="HomeCostCentre" source="1"  label="Home Cost Centre" mandatory="1" customid="changeModule">
         <regex inherit="unsignednum" pattern="" message=""></regex>
         <regex inherit="maxfourdigit" pattern="" message=""></regex>
         <options>
           <option value=""></option>
-          <option Department="Sales" value="﻿3000">﻿3000</option>
+          <option Department="Sales" value="3000">3000</option>
           <option Department="Showroom" value="3310">3310</option>
           <option Department="LIVING ROOMS" value="3320">3320</option>
           <option Department="BEDROOMS" value="3340">3340</option>
@@ -1472,7 +1501,7 @@
         <regex inherit="maxfourdigit" pattern="" message=""></regex>
         <options>
           <option value=""></option>
-          <option Department="Sales" value="﻿3000">﻿3000</option>
+          <option Department="Sales" value="3000">3000</option>
           <option Department="Showroom" value="3310">3310</option>
           <option Department="LIVING ROOMS" value="3320">3320</option>
           <option Department="BEDROOMS" value="3340">3340</option>
@@ -1533,7 +1562,7 @@
         &pre_jobtitle_payscalelevel;
         <options>
           <option value=""></option>
-          <option value="﻿Business Navigator">﻿Business Navigator</option>
+          <option value="Business Navigator">Business Navigator</option>
           <option value="Administrator">Administrator</option>
           <option value="IT Co-worker">IT Co-worker</option>
           <option value="Maintenance Co-worker">Maintenance Co-worker</option>
@@ -1707,10 +1736,10 @@
           <option value="Temporary Staff">Temporary Staff</option>
         </options>
       </element>
-      <element type="select" name="LocalJobTitle" label="Local Job Title">
+      <element type="select" name="LocalJobTitle" label="Local Job Title" mandatory="1">
         <options>
           <option value=""></option>
-          <option value="﻿Business Nav">﻿Business Nav</option>
+          <option value="Business Nav">Business Nav</option>
           <option value="Mw Administratie">Mw Administratie</option>
           <option value="Mw Administratie - Forecast">Mw Administratie - Forecast</option>
           <option value="Mw IT Storesupprt">Mw IT Storesupprt</option>
@@ -1917,7 +1946,7 @@
       <element type="typeahead-simple" name="ReportsToLineManager" label="Reports to Line Manager" mandatory="1">
         <options>
           <option value=""></option>
-          <option newNewBusinessUnit="CCCN" value="﻿Els Meeuwissen">﻿Els Meeuwissen</option>
+          <option newNewBusinessUnit="CCCN" value="Els Meeuwissen">Els Meeuwissen</option>
           <option NewBusinessUnit="CCCN" value="Agnes Alkema">Agnes Alkema</option>
           <option NewBusinessUnit="CCCN" value="Team Leader CCCN store">Team Leader CCCN store</option>
           <option NewBusinessUnit="CCCN" value="Joyce Beuker">Joyce Beuker</option>
@@ -1945,7 +1974,7 @@
           <option NewBusinessUnit="IKEA Competence B.V." value="Marc Peeters">Marc Peeters</option>
           <option NewBusinessUnit="IKEA Competence B.V." value="Jan de Meyere">Jan de Meyere</option>
           <option NewBusinessUnit="IKEA Competence B.V." value="Sophie Martel">Sophie Martel</option>
-          <option NewBusinessUnit="Service Office Netherlands" value="﻿Frans Pars">﻿Frans Pars</option>
+          <option NewBusinessUnit="Service Office Netherlands" value="Frans Pars">Frans Pars</option>
           <option NewBusinessUnit="Service Office Netherlands" value="Erika Olhans">Erika Olhans</option>
           <option NewBusinessUnit="Service Office Netherlands" value="Denise Kouwenhoven">Denise Kouwenhoven</option>
           <option NewBusinessUnit="Service Office Netherlands" value="Country Com In Leader SO">Country Com In Leader SO</option>
@@ -2003,7 +2032,7 @@
           <option NewBusinessUnit="Service Office Netherlands" value="Norbert Roelofs">Norbert Roelofs</option>
           <option NewBusinessUnit="Service Office Netherlands" value="Mathias Storm">Mathias Storm</option>
           <option NewBusinessUnit="Service Office Netherlands" value="Frans Pars">Frans Pars</option>
-          <option NewBusinessUnit="Store Amersfoort 415" value="﻿Flavia Marfella-Fiume">﻿Flavia Marfella-Fiume</option>
+          <option NewBusinessUnit="Store Amersfoort 415" value="Flavia Marfella-Fiume">Flavia Marfella-Fiume</option>
           <option NewBusinessUnit="Store Amersfoort 415" value="Florencia Campanini">Florencia Campanini</option>
           <option NewBusinessUnit="Store Amersfoort 415" value="Marieke de Wit">Marieke de Wit</option>
           <option NewBusinessUnit="Store Amersfoort 415" value="Sanne Vermeulen">Sanne Vermeulen</option>
@@ -2046,7 +2075,7 @@
           <option NewBusinessUnit="Store Amersfoort 415" value="Sales Team Leader Amersfoort store">Sales Team Leader Amersfoort store</option>
           <option NewBusinessUnit="Store Amersfoort 415" value="Nico de Jong">Nico de Jong</option>
           <option NewBusinessUnit="Store Amersfoort 415" value="Rob Ritzer">Rob Ritzer</option>
-          <option NewBusinessUnit="Store Amsterdam 088" value="﻿Patrick Zweekhorst">﻿Patrick Zweekhorst</option>
+          <option NewBusinessUnit="Store Amsterdam 088" value="Patrick Zweekhorst">Patrick Zweekhorst</option>
           <option NewBusinessUnit="Store Amsterdam 088" value="Ursula Hesseling">Ursula Hesseling</option>
           <option NewBusinessUnit="Store Amsterdam 088" value="Annemarie van der Keur">Annemarie van der Keur</option>
           <option NewBusinessUnit="Store Amsterdam 088" value="Ole Sauren">Ole Sauren</option>
@@ -2101,7 +2130,7 @@
           <option NewBusinessUnit="Store Amsterdam 088" value="Martyn Brache">Martyn Brache</option>
           <option NewBusinessUnit="Store Amsterdam 088" value="Claudia Dicketmuller">Claudia Dicketmuller</option>
           <option NewBusinessUnit="Store Amsterdam 088" value="Peder Elfving">Peder Elfving</option>
-          <option NewBusinessUnit="Store Barendrecht 274" value="﻿Caroline van den Haspel">﻿Caroline van den Haspel</option>
+          <option NewBusinessUnit="Store Barendrecht 274" value="Caroline van den Haspel">Caroline van den Haspel</option>
           <option NewBusinessUnit="Store Barendrecht 274" value="Marjan van de Pol-Heemskerk">Marjan van de Pol-Heemskerk</option>
           <option NewBusinessUnit="Store Barendrecht 274" value="John van der Vorm">John van der Vorm</option>
           <option NewBusinessUnit="Store Barendrecht 274" value="Tamara Schouwenaars">Tamara Schouwenaars</option>
@@ -2151,7 +2180,7 @@
           <option NewBusinessUnit="Store Barendrecht 274" value="Barbara Kramer">Barbara Kramer</option>
           <option NewBusinessUnit="Store Barendrecht 274" value="Carola Vermaat">Carola Vermaat</option>
           <option NewBusinessUnit="Store Barendrecht 274" value="Fabrice Mangia">Fabrice Mangia</option>
-          <option NewBusinessUnit="Store Breda 403" value="﻿Hetty Lavrijsen">﻿Hetty Lavrijsen</option>
+          <option NewBusinessUnit="Store Breda 403" value="Hetty Lavrijsen">Hetty Lavrijsen</option>
           <option NewBusinessUnit="Store Breda 403" value="Kim Wolthof">Kim Wolthof</option>
           <option NewBusinessUnit="Store Breda 403" value="Miranda van Gelder">Miranda van Gelder</option>
           <option NewBusinessUnit="Store Breda 403" value="Ilona van der Linden">Ilona van der Linden</option>
@@ -2198,7 +2227,7 @@
           <option NewBusinessUnit="Store Breda 403" value="Mohamed el Filali">Mohamed el Filali</option>
           <option NewBusinessUnit="Store Breda 403" value="Rene Korthals">Rene Korthals</option>
           <option NewBusinessUnit="Store Breda 403" value="Stefan Kroes">Stefan Kroes</option>
-          <option NewBusinessUnit="Store Duiven 272" value="﻿Miriam Stox">﻿Miriam Stox</option>
+          <option NewBusinessUnit="Store Duiven 272" value="Miriam Stox">Miriam Stox</option>
           <option NewBusinessUnit="Store Duiven 272" value="Com &amp; In Team Leader Duiven store">Com &amp; In Team Leader Duiven store</option>
           <option NewBusinessUnit="Store Duiven 272" value="Wim Corman">Wim Corman</option>
           <option NewBusinessUnit="Store Duiven 272" value="Accounting Team Manager Duiven store">Accounting Team Manager Duiven store</option>
@@ -2247,7 +2276,7 @@
           <option NewBusinessUnit="Store Duiven 272" value="Store Manager Duiven store">Store Manager Duiven store</option>
           <option NewBusinessUnit="Store Duiven 272" value="Ellen Kummeling">Ellen Kummeling</option>
           <option NewBusinessUnit="Store Duiven 272" value="Rianne van Vugt-Krijgsman">Rianne van Vugt-Krijgsman</option>
-          <option NewBusinessUnit="Store Eindhoven 087" value="﻿Yvonne Oude Reimer">﻿Yvonne Oude Reimer</option>
+          <option NewBusinessUnit="Store Eindhoven 087" value="Yvonne Oude Reimer">Yvonne Oude Reimer</option>
           <option NewBusinessUnit="Store Eindhoven 087" value="Caro Smits">Caro Smits</option>
           <option NewBusinessUnit="Store Eindhoven 087" value="Eefje Rulkens">Eefje Rulkens</option>
           <option NewBusinessUnit="Store Eindhoven 087" value="Maartje Burgers">Maartje Burgers</option>
@@ -2297,7 +2326,7 @@
           <option NewBusinessUnit="Store Eindhoven 087" value="Kitty Willems-van Prooijen">Kitty Willems-van Prooijen</option>
           <option NewBusinessUnit="Store Eindhoven 087" value="Stefan van den Broek">Stefan van den Broek</option>
           <option NewBusinessUnit="Store Eindhoven 087" value="Rob Werkman">Rob Werkman</option>
-          <option NewBusinessUnit="Store Groningen 404" value="﻿Marjon Hiemstra">﻿Marjon Hiemstra</option>
+          <option NewBusinessUnit="Store Groningen 404" value="Marjon Hiemstra">Marjon Hiemstra</option>
           <option NewBusinessUnit="Store Groningen 404" value="Deputy Com &amp; In Manager">Deputy Com &amp; In Manager</option>
           <option NewBusinessUnit="Store Groningen 404" value="Brecht de Bruijn">Brecht de Bruijn</option>
           <option NewBusinessUnit="Store Groningen 404" value="Dorien Gonlag">Dorien Gonlag</option>
@@ -2343,7 +2372,7 @@
           <option NewBusinessUnit="Store Groningen 404" value="Deputy Sales Manager Groningen store">Deputy Sales Manager Groningen store</option>
           <option NewBusinessUnit="Store Groningen 404" value="Ben Leen">Ben Leen</option>
           <option NewBusinessUnit="Store Groningen 404" value="Jelle Visser">Jelle Visser</option>
-          <option NewBusinessUnit="Store Haarlem 378" value="﻿Wendy Jansse-van der Hoeven">﻿Wendy Jansse-van der Hoeven</option>
+          <option NewBusinessUnit="Store Haarlem 378" value="Wendy Jansse-van der Hoeven">Wendy Jansse-van der Hoeven</option>
           <option NewBusinessUnit="Store Haarlem 378" value="Debbie Bon-van Kampen">Debbie Bon-van Kampen</option>
           <option NewBusinessUnit="Store Haarlem 378" value="Irene Brouwer">Irene Brouwer</option>
           <option NewBusinessUnit="Store Haarlem 378" value="Elidia Willeboordse">Elidia Willeboordse</option>
@@ -2387,7 +2416,7 @@
           <option NewBusinessUnit="Store Haarlem 378" value="Elmar Veen">Elmar Veen</option>
           <option NewBusinessUnit="Store Haarlem 378" value="Diana Hartman">Diana Hartman</option>
           <option NewBusinessUnit="Store Haarlem 378" value="Carl Petersson">Carl Petersson</option>
-          <option NewBusinessUnit="Store Heerlen 089" value="﻿Francis Heuts">﻿Francis Heuts</option>
+          <option NewBusinessUnit="Store Heerlen 089" value="Francis Heuts">Francis Heuts</option>
           <option NewBusinessUnit="Store Heerlen 089" value="Nienke ten Hooven">Nienke ten Hooven</option>
           <option NewBusinessUnit="Store Heerlen 089" value="Peter Speetjens">Peter Speetjens</option>
           <option NewBusinessUnit="Store Heerlen 089" value="Eva Fischer">Eva Fischer</option>
@@ -2433,7 +2462,7 @@
           <option NewBusinessUnit="Store Heerlen 089" value="Jojanneke Samson-Haze">Jojanneke Samson-Haze</option>
           <option NewBusinessUnit="Store Heerlen 089" value="Kevin van der Linden">Kevin van der Linden</option>
           <option NewBusinessUnit="Store Heerlen 089" value="Patrice Dreano">Patrice Dreano</option>
-          <option NewBusinessUnit="Store Hengelo 312" value="﻿Patrick Leussink">﻿Patrick Leussink</option>
+          <option NewBusinessUnit="Store Hengelo 312" value="Patrick Leussink">Patrick Leussink</option>
           <option NewBusinessUnit="Store Hengelo 312" value="Interior Design Manager">Interior Design Manager</option>
           <option NewBusinessUnit="Store Hengelo 312" value="Ingrid Hartman">Ingrid Hartman</option>
           <option NewBusinessUnit="Store Hengelo 312" value="Ellis Wessels">Ellis Wessels</option>
@@ -2480,7 +2509,7 @@
           <option NewBusinessUnit="Store Hengelo 312" value="Tim Koppen">Tim Koppen</option>
           <option NewBusinessUnit="Store Hengelo 312" value="Maarten Yff">Maarten Yff</option>
           <option NewBusinessUnit="Store Hengelo 312" value="Harald Hondebrink">Harald Hondebrink</option>
-          <option NewBusinessUnit="Store Utrecht 270" value="﻿Rosanne den Braber-de Groot">﻿Rosanne den Braber-de Groot</option>
+          <option NewBusinessUnit="Store Utrecht 270" value="Rosanne den Braber-de Groot">Rosanne den Braber-de Groot</option>
           <option NewBusinessUnit="Store Utrecht 270" value="Karin Nieuwenhuize">Karin Nieuwenhuize</option>
           <option NewBusinessUnit="Store Utrecht 270" value="Selina Kok">Selina Kok</option>
           <option NewBusinessUnit="Store Utrecht 270" value="Puck Germing">Puck Germing</option>
@@ -2559,7 +2588,7 @@
         <mandatoryIf name="EmploymentCategory">Temporary,Apprentice,Holiday Co-Worker,Detached,Expat,Transferred Employee</mandatoryIf>
         <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
       </element>
-      <element name="ResidencePermitRestriction" type="select" label="Residence permit restriction?">
+      <element name="ResidencePermitRestriction" type="select" label="Residence permit restriction?" mandatory="1">
         <mandatoryIf name="EmploymentCategory">Permanent</mandatoryIf>
         <options>
           <option value=""></option>
@@ -2570,11 +2599,11 @@
     <element name="ContractedHours" type="text" label="Contracted Hours" mandatory="1">      
       <regex inherit="numMax40" pattern="" message=""></regex>
     </element>
-      <element name="PreviousContractHours" type="text" label="Previous contract hours">        
+      <!--<element name="PreviousContractHours" type="text" label="Previous contract hours">        
         <mandatoryIfNotEmpty name="ContractedHours"></mandatoryIfNotEmpty>
-        <!--<regex inherit="numMax40" pattern="" message=""></regex>-->
+        --><!--<regex inherit="numMax40" pattern="" message=""></regex>--><!--
         <regex inherit="unsignednum" pattern="" message=""></regex>
-      </element>
+      </element>-->
       <element type="select" name="ContractType" label="Contract Type" mandatory="1">
         <options>
           <option value=""></option>
@@ -2615,10 +2644,10 @@
 
         </options>
       </element>
-      <element name="TECApprover" type="typeahead-simple" label="TEC Approver">
+      <element name="TECApprover" type="typeahead-simple" label="TEC Approver" mandatory ="1">
         <options>
           <option value=""></option>
-          <option ReportsToLineManager="﻿Frans Pars" value="﻿Frans Pars">﻿Frans Pars</option>
+          <option ReportsToLineManager="Frans Pars" value="Frans Pars">Frans Pars</option>
           <option ReportsToLineManager="Patrick Zweekhorst" value="Patrick Zweekhorst">Patrick Zweekhorst</option>
           <option ReportsToLineManager="Wendy Jansse-van der Hoeven" value="Wendy Jansse-van der Hoeven">Wendy Jansse-van der Hoeven</option>
           <option ReportsToLineManager="Francis Heuts" value="Francis Heuts">Francis Heuts</option>
@@ -3248,7 +3277,7 @@
     
  <!--Tab: Payment Information-->
     <tab name="#Payment" label="Payment Information">
-      <element type="select" name="PayrollCategory" label="Payroll Category">
+      <element type="select" name="PayrollCategory" label="Payroll Category" mandatory="1">
         <mandatoryIf name="ChangeType">ONLY Pay Change</mandatoryIf>
         <options>
           <option value=""></option>
@@ -3259,7 +3288,7 @@
           <option value="No Salary">No Salary</option>
         </options>
       </element>
-      <element type="select" name="PayrollCategoryOldData" label="Payroll category old data" >
+      <element type="select" name="PayrollCategoryOldData" label="Payroll category old data" mandatory="1">
         <options>
           <option value=""></option>
           <option value="Hourly">Hourly</option>
@@ -3274,7 +3303,7 @@
         <regex inherit="unsignednum" pattern="" message=""></regex>
         <mandatoryIf name="ChangeType">ONLY Pay Change</mandatoryIf>
       </element>
-      <element type="select" name="PayScaleType" label="Pay Scale Type" default="IKEA NL CAO">
+      <element type="select" name="PayScaleType" label="Pay Scale Type" default="IKEA NL CAO" mandatory="1">
         <options>
           <option value=""></option>
           <option value="IKEA NL CAO">IKEA NL CAO</option>
@@ -3282,10 +3311,10 @@
           <option value="IKEA Competence">IKEA Competence</option>
         </options>
       </element>
-      <element type="select" name="PayScaleLevel" label="Pay Scale Level">
+      <element type="select" name="PayScaleLevel" label="Pay Scale Level" mandatory="1">
         <options>
           <option value=""></option>
-          <option value="﻿1">﻿1</option>
+          <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
           <option value="4">4</option>
@@ -3299,11 +3328,16 @@
           <option value="12">12</option>
           <option value="13">13</option>
           <option value="14">14</option>
-
+          <option value="15">15</option>
+          <option value="16">16</option>
+          <option value="17">17</option>
+          <option value="18">18</option>
+          <option value="19">19</option>
+          <option value="20">20</option>
         </options>
       </element>
-      <element type="text" name="BasicPay" label="Basic Pay Calculation"></element>
-      <element type="select" name="BasicPayChangeReason" label="Basic Pay Change Reason">
+      <element type="text" name="BasicPay" label="Basic Pay Calculation" mandatory="1"></element>
+      <element type="select" name="BasicPayChangeReason" label="Basic Pay Change Reason" mandatory="1">
         <mandatoryIf name="ChangeType">ONLY Pay Change</mandatoryIf>
         <options>
           <option value=""></option>
@@ -3320,7 +3354,7 @@
         &pre_allowancestype_allowancesnetgross;
         <options>
           <option value=""></option>
-          <option value="﻿Telephone Allowance">﻿Telephone Allowance</option>
+          <option value="Telephone Allowance">Telephone Allowance</option>
           <option value="Building Supplement">Building Supplement</option>
           <option value="Expense Allowance">Expense Allowance</option>
           <option value="Expenses Other">Expenses Other</option>
@@ -3339,7 +3373,7 @@
         </options>
       </element>
       <element type="select" name="AllowancesPaymentType" label="Payment Type">
-        <mandatoryIf name="AllowancesType">﻿Telephone Allowance,Building Supplement,Expense Allowance,Expenses Other,Comp.Serv.Allowance,Oberservation Allowance,Travel Allowance per Time,WGA Payment (UW),WGA Supplement Payment,Consignment Fee,ZKV Contribution ER N-G,ZVW Contribution ER,Miscellaneous Pay N-G,Miscellaneous Payment,Miscellaneous Payment,Rent Wage in Kind ER</mandatoryIf>
+        <mandatoryIf name="AllowancesType">Telephone Allowance,Building Supplement,Expense Allowance,Expenses Other,Comp.Serv.Allowance,Oberservation Allowance,Travel Allowance per Time,WGA Payment (UW),WGA Supplement Payment,Consignment Fee,ZKV Contribution ER N-G,ZVW Contribution ER,Miscellaneous Pay N-G,Miscellaneous Payment,Miscellaneous Payment,Rent Wage in Kind ER</mandatoryIf>
         <options>
           <option value=""></option>
           <option value="One Time">One Time</option>
@@ -3347,11 +3381,11 @@
         </options>
       </element>
       <element type="text" name="AllowancesAmountUnits" label="Amount/Units">
-        <mandatoryIf name="AllowancesType">﻿Telephone Allowance,Building Supplement,Expense Allowance,Expenses Other,Comp.Serv.Allowance,Oberservation Allowance,Travel Allowance per Time,WGA Payment (UW),WGA Supplement Payment,Consignment Fee,ZKV Contribution ER N-G,ZVW Contribution ER,Miscellaneous Pay N-G,Miscellaneous Payment,Miscellaneous Payment,Rent Wage in Kind ER</mandatoryIf>
+        <mandatoryIf name="AllowancesType">Telephone Allowance,Building Supplement,Expense Allowance,Expenses Other,Comp.Serv.Allowance,Oberservation Allowance,Travel Allowance per Time,WGA Payment (UW),WGA Supplement Payment,Consignment Fee,ZKV Contribution ER N-G,ZVW Contribution ER,Miscellaneous Pay N-G,Miscellaneous Payment,Miscellaneous Payment,Rent Wage in Kind ER</mandatoryIf>
         <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
       <element type="select" name="AllowancesNetGross" label="Net/Gross">
-        <mandatoryIf name="AllowancesType">﻿Telephone Allowance,Building Supplement,Expense Allowance,Expenses Other,Comp.Serv.Allowance,Oberservation Allowance,Travel Allowance per Time,WGA Payment (UW),WGA Supplement Payment,Consignment Fee,ZKV Contribution ER N-G,ZVW Contribution ER,Miscellaneous Pay N-G,Miscellaneous Payment,Miscellaneous Payment,Rent Wage in Kind ER</mandatoryIf>
+        <mandatoryIf name="AllowancesType">Telephone Allowance,Building Supplement,Expense Allowance,Expenses Other,Comp.Serv.Allowance,Oberservation Allowance,Travel Allowance per Time,WGA Payment (UW),WGA Supplement Payment,Consignment Fee,ZKV Contribution ER N-G,ZVW Contribution ER,Miscellaneous Pay N-G,Miscellaneous Payment,Miscellaneous Payment,Rent Wage in Kind ER</mandatoryIf>
         <options>
           <option value=""></option>
           <option value="Net">Net</option>
@@ -3359,7 +3393,7 @@
         </options>
       </element>
       <element type="date" name="AllowancesValidFrom" label="Valid from:" format="dd.MM.yyyy">
-        <mandatoryIf name="AllowancesType">﻿Telephone Allowance,Building Supplement,Expense Allowance,Expenses Other,Comp.Serv.Allowance,Oberservation Allowance,Travel Allowance per Time,WGA Payment (UW),WGA Supplement Payment,Consignment Fee,ZKV Contribution ER N-G,ZVW Contribution ER,Miscellaneous Pay N-G,Miscellaneous Payment,Miscellaneous Payment,Rent Wage in Kind ER</mandatoryIf>
+        <mandatoryIf name="AllowancesType">Telephone Allowance,Building Supplement,Expense Allowance,Expenses Other,Comp.Serv.Allowance,Oberservation Allowance,Travel Allowance per Time,WGA Payment (UW),WGA Supplement Payment,Consignment Fee,ZKV Contribution ER N-G,ZVW Contribution ER,Miscellaneous Pay N-G,Miscellaneous Payment,Miscellaneous Payment,Rent Wage in Kind ER</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
         <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
       </element>
@@ -3371,7 +3405,7 @@
         &pre_allowancestype2_allowancesnetgross2;
         <options>
           <option value=""></option>
-          <option value="﻿Telephone Allowance">﻿Telephone Allowance</option>
+          <option value="Telephone Allowance">Telephone Allowance</option>
           <option value="Building Supplement">Building Supplement</option>
           <option value="Expense Allowance">Expense Allowance</option>
           <option value="Expenses Other">Expenses Other</option>
@@ -3390,7 +3424,7 @@
         </options>
       </element>
       <element type="select" name="AllowancesPaymentType2" label="Payment Type">
-        <mandatoryIf name="AllowancesType2">﻿Telephone Allowance,Building Supplement,Expense Allowance,Expenses Other,Comp.Serv.Allowance,Oberservation Allowance,Travel Allowance per Time,WGA Payment (UW),WGA Supplement Payment,Consignment Fee,ZKV Contribution ER N-G,ZVW Contribution ER,Miscellaneous Pay N-G,Miscellaneous Payment,Miscellaneous Payment,Rent Wage in Kind ER</mandatoryIf>
+        <mandatoryIf name="AllowancesType2">Telephone Allowance,Building Supplement,Expense Allowance,Expenses Other,Comp.Serv.Allowance,Oberservation Allowance,Travel Allowance per Time,WGA Payment (UW),WGA Supplement Payment,Consignment Fee,ZKV Contribution ER N-G,ZVW Contribution ER,Miscellaneous Pay N-G,Miscellaneous Payment,Miscellaneous Payment,Rent Wage in Kind ER</mandatoryIf>
         <options>
           <option value=""></option>
           <option value="One Time">One Time</option>
@@ -3398,11 +3432,11 @@
         </options>
       </element>
       <element type="text" name="AllowancesAmountUnits2" label="Amount/Units" >
-        <mandatoryIf name="AllowancesType2">﻿Telephone Allowance,Building Supplement,Expense Allowance,Expenses Other,Comp.Serv.Allowance,Oberservation Allowance,Travel Allowance per Time,WGA Payment (UW),WGA Supplement Payment,Consignment Fee,ZKV Contribution ER N-G,ZVW Contribution ER,Miscellaneous Pay N-G,Miscellaneous Payment,Miscellaneous Payment,Rent Wage in Kind ER</mandatoryIf>
+        <mandatoryIf name="AllowancesType2">Telephone Allowance,Building Supplement,Expense Allowance,Expenses Other,Comp.Serv.Allowance,Oberservation Allowance,Travel Allowance per Time,WGA Payment (UW),WGA Supplement Payment,Consignment Fee,ZKV Contribution ER N-G,ZVW Contribution ER,Miscellaneous Pay N-G,Miscellaneous Payment,Miscellaneous Payment,Rent Wage in Kind ER</mandatoryIf>
         <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
       <element type="select" name="AllowancesNetGross2" label="Net/Gross" >
-        <mandatoryIf name="AllowancesType2">﻿Telephone Allowance,Building Supplement,Expense Allowance,Expenses Other,Comp.Serv.Allowance,Oberservation Allowance,Travel Allowance per Time,WGA Payment (UW),WGA Supplement Payment,Consignment Fee,ZKV Contribution ER N-G,ZVW Contribution ER,Miscellaneous Pay N-G,Miscellaneous Payment,Miscellaneous Payment,Rent Wage in Kind ER</mandatoryIf>
+        <mandatoryIf name="AllowancesType2">Telephone Allowance,Building Supplement,Expense Allowance,Expenses Other,Comp.Serv.Allowance,Oberservation Allowance,Travel Allowance per Time,WGA Payment (UW),WGA Supplement Payment,Consignment Fee,ZKV Contribution ER N-G,ZVW Contribution ER,Miscellaneous Pay N-G,Miscellaneous Payment,Miscellaneous Payment,Rent Wage in Kind ER</mandatoryIf>
         <options>
           <option value=""></option>
           <option value="Net">Net</option>
@@ -3410,7 +3444,7 @@
         </options>
       </element>
       <element type="date" name="AllowancesValidFrom2" label="Valid from:" format="dd.MM.yyyy">
-        <mandatoryIf name="AllowancesType2">﻿Telephone Allowance,Building Supplement,Expense Allowance,Expenses Other,Comp.Serv.Allowance,Oberservation Allowance,Travel Allowance per Time,WGA Payment (UW),WGA Supplement Payment,Consignment Fee,ZKV Contribution ER N-G,ZVW Contribution ER,Miscellaneous Pay N-G,Miscellaneous Payment,Miscellaneous Payment,Rent Wage in Kind ER</mandatoryIf>
+        <mandatoryIf name="AllowancesType2">Telephone Allowance,Building Supplement,Expense Allowance,Expenses Other,Comp.Serv.Allowance,Oberservation Allowance,Travel Allowance per Time,WGA Payment (UW),WGA Supplement Payment,Consignment Fee,ZKV Contribution ER N-G,ZVW Contribution ER,Miscellaneous Pay N-G,Miscellaneous Payment,Miscellaneous Payment,Rent Wage in Kind ER</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
         <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
       </element>
@@ -3423,7 +3457,7 @@
         &pre_allowancestype3_allowancesnetgross3;
         <options>
           <option value=""></option>
-          <option value="﻿Telephone Allowance">﻿Telephone Allowance</option>
+          <option value="Telephone Allowance">Telephone Allowance</option>
           <option value="Building Supplement">Building Supplement</option>
           <option value="Expense Allowance">Expense Allowance</option>
           <option value="Expenses Other">Expenses Other</option>
@@ -3442,7 +3476,7 @@
         </options>
       </element>
       <element type="select" name="AllowancesPaymentType3" label="Payment Type">
-        <mandatoryIf name="AllowancesType3">﻿Telephone Allowance,Building Supplement,Expense Allowance,Expenses Other,Comp.Serv.Allowance,Oberservation Allowance,Travel Allowance per Time,WGA Payment (UW),WGA Supplement Payment,Consignment Fee,ZKV Contribution ER N-G,ZVW Contribution ER,Miscellaneous Pay N-G,Miscellaneous Payment,Miscellaneous Payment,Rent Wage in Kind ER</mandatoryIf>
+        <mandatoryIf name="AllowancesType3">Telephone Allowance,Building Supplement,Expense Allowance,Expenses Other,Comp.Serv.Allowance,Oberservation Allowance,Travel Allowance per Time,WGA Payment (UW),WGA Supplement Payment,Consignment Fee,ZKV Contribution ER N-G,ZVW Contribution ER,Miscellaneous Pay N-G,Miscellaneous Payment,Miscellaneous Payment,Rent Wage in Kind ER</mandatoryIf>
         <options>
           <option value=""></option>
           <option value="One Time">One Time</option>
@@ -3450,11 +3484,11 @@
         </options>
       </element>
       <element type="text" name="AllowancesAmountUnits3" label="Amount/Units" >
-        <mandatoryIf name="AllowancesType3">﻿Telephone Allowance,Building Supplement,Expense Allowance,Expenses Other,Comp.Serv.Allowance,Oberservation Allowance,Travel Allowance per Time,WGA Payment (UW),WGA Supplement Payment,Consignment Fee,ZKV Contribution ER N-G,ZVW Contribution ER,Miscellaneous Pay N-G,Miscellaneous Payment,Miscellaneous Payment,Rent Wage in Kind ER</mandatoryIf>
+        <mandatoryIf name="AllowancesType3">Telephone Allowance,Building Supplement,Expense Allowance,Expenses Other,Comp.Serv.Allowance,Oberservation Allowance,Travel Allowance per Time,WGA Payment (UW),WGA Supplement Payment,Consignment Fee,ZKV Contribution ER N-G,ZVW Contribution ER,Miscellaneous Pay N-G,Miscellaneous Payment,Miscellaneous Payment,Rent Wage in Kind ER</mandatoryIf>
         <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
       <element type="select" name="AllowancesNetGross3" label="Net/Gross" >
-        <mandatoryIf name="AllowancesType3">﻿Telephone Allowance,Building Supplement,Expense Allowance,Expenses Other,Comp.Serv.Allowance,Oberservation Allowance,Travel Allowance per Time,WGA Payment (UW),WGA Supplement Payment,Consignment Fee,ZKV Contribution ER N-G,ZVW Contribution ER,Miscellaneous Pay N-G,Miscellaneous Payment,Miscellaneous Payment,Rent Wage in Kind ER</mandatoryIf>
+        <mandatoryIf name="AllowancesType3">Telephone Allowance,Building Supplement,Expense Allowance,Expenses Other,Comp.Serv.Allowance,Oberservation Allowance,Travel Allowance per Time,WGA Payment (UW),WGA Supplement Payment,Consignment Fee,ZKV Contribution ER N-G,ZVW Contribution ER,Miscellaneous Pay N-G,Miscellaneous Payment,Miscellaneous Payment,Rent Wage in Kind ER</mandatoryIf>
         <options>
           <option value=""></option>
           <option value="Net">Net</option>
@@ -3462,7 +3496,7 @@
         </options>
       </element>
       <element type="date" name="AllowancesValidFrom3" label="Valid from:"  format="dd.MM.yyyy">
-        <mandatoryIf name="AllowancesType3">﻿Telephone Allowance,Building Supplement,Expense Allowance,Expenses Other,Comp.Serv.Allowance,Oberservation Allowance,Travel Allowance per Time,WGA Payment (UW),WGA Supplement Payment,Consignment Fee,ZKV Contribution ER N-G,ZVW Contribution ER,Miscellaneous Pay N-G,Miscellaneous Payment,Miscellaneous Payment,Rent Wage in Kind ER</mandatoryIf>
+        <mandatoryIf name="AllowancesType3">Telephone Allowance,Building Supplement,Expense Allowance,Expenses Other,Comp.Serv.Allowance,Oberservation Allowance,Travel Allowance per Time,WGA Payment (UW),WGA Supplement Payment,Consignment Fee,ZKV Contribution ER N-G,ZVW Contribution ER,Miscellaneous Pay N-G,Miscellaneous Payment,Miscellaneous Payment,Rent Wage in Kind ER</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
         <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
       </element>

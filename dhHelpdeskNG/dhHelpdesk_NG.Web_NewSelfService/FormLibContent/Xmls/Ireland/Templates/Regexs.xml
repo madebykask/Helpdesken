@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <regexs>
   <date message="Wrong format (dd.mm.yyyy).">^(0?[1-9]|[12][0-9]|3[01])[\./](0?[1-9]|1[012])[\./]\d{4}$</date>
   <percentage message="Wrong format (NNN).">^-?[0-9]{0,2}(\,[0-9]{1,2})?$|^-?(100)(\,[0]{1,2})?$</percentage>
@@ -17,7 +17,10 @@
   <numFrom1To100 message="Wrong format, enter 1-100">^[1-9][0-9]?$|^100$</numFrom1To100>
   <email message="E-mail address must contain @">.+\@.+\..+</email>
   <currency message="Wrong format (LLL)">^[a-zA-Z.]{3,3}$</currency>
-  <iban message="Wrong format (GBNN NNNN NNNN NNNN NNNN NN). Example: GB12 1234 1234 1234 1234 12">GB\d{2}[ ]\d{4}[ ]\d{4}[ ]\d{4}[ ]\d{4}[ ]\d{2}|GB\d{22}</iban>
+  <iban message="Wrong format (IEXXXXXXXXXXXXXXXXXXXX)">IE\d{2}[ ]\d{4}[ ]\d{4}[ ]\d{4}[ ]\d{4}|IE\d{20}</iban>
   <bsn message="Wrong format (NNNNNNNNN)">^\D*(?:\d\D*){9,}$</bsn>
   <timestamp message="Wrong format (HH:MM).">^[0-2][0-9]:[0-5][0-9]$</timestamp>
+  <bankKey message="Wrong format (NNNNNN).">\d{6}</bankKey>
+  <accountNumber message="Wrong format (NNNNNNNN).">\d{8}</accountNumber>
+  <pps message="Wrong format (NNNNNNNL).">^\d{7}[a-zA-Z]$</pps>
 </regexs>

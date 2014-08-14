@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE form [
   <!ENTITY languages SYSTEM "Templates/Languages.xml">
   <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
@@ -31,7 +31,9 @@
       <element name="IKEANetworkID" type="text" label="IKEA Network ID" mandatory="1">
         <regex inherit="unsignednum" message="" pattern=""></regex>
       </element>
+      <element name="Company" type="text" label="Company"></element>
       <element name="BusinessUnit" type="text" label="Business Unit"></element>
+      <element name="ServiceArea" type="text" label="Function"></element>
       <element name="Department" type="text" label="Department"></element>
       <element name="ChangeValidFrom" type="date" label="Change Valid from:" mandatory="1" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
@@ -43,11 +45,8 @@
         <options>
           <option value=""></option>
           <option value="Urgent">Urgent</option>
-          <option value="Not Urgent">Not Urgent</option>
+          <option value="Standard">Standard</option>
         </options>
-      </element>
-      <element name="ProcessBeforeDate" type="date" label="Process before date:" mandatory="1" format="dd.MM.yyyy">
-        <regex inherit="date" pattern="" message=""></regex>
       </element>
     </tab>
 
@@ -59,7 +58,7 @@
         &pre_allowancestype_allowancesnetgross;
         <options>
           <option value=""></option>
-          <option value="﻿Telephone Allowance (net)">﻿Telephone Allowance (net)</option>
+          <option value="Telephone Allowance (net)">Telephone Allowance (net)</option>
           <option value="Telephone Allowance (gross)">Telephone Allowance (gross)</option>
           <option value="Building Supplement">Building Supplement</option>
           <option value="Expense Allowance">Expense Allowance</option>
@@ -111,7 +110,7 @@
         &pre_allowancestype2_allowancesnetgross2;
         <options>
           <option value=""></option>
-          <option value="﻿Telephone Allowance (net)">﻿Telephone Allowance (net)</option>
+          <option value="Telephone Allowance (net)">Telephone Allowance (net)</option>
           <option value="Telephone Allowance (gross)">Telephone Allowance (gross)</option>
           <option value="Building Supplement">Building Supplement</option>
           <option value="Expense Allowance">Expense Allowance</option>
@@ -155,7 +154,7 @@
         <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
       </element>
       <element type="date" name="AllowancesValidTo2" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
-        <mandatoryIfNotEmpty name="AllowancesPaymentType2"></mandatoryIfNotEmpty>
+        <mandatoryIf name="AllowancesPaymentType2">Recurring</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
 
@@ -163,7 +162,7 @@
         &pre_allowancestype3_allowancesnetgross3;
         <options>
           <option value=""></option>
-          <option value="﻿Telephone Allowance (net)">﻿Telephone Allowance (net)</option>
+          <option value="Telephone Allowance (net)">Telephone Allowance (net)</option>
           <option value="Telephone Allowance (gross)">Telephone Allowance (gross)</option>
           <option value="Building Supplement">Building Supplement</option>
           <option value="Expense Allowance">Expense Allowance</option>

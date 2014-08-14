@@ -1,9 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <state status="0">
     <status value="0">
         <visibleTabs>#ServiceRequestDetails,#Absences,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
-        <readOnlyFields>Department,BusinessUnit</readOnlyFields>
+      <readOnlyFields>Company,BusinessUnit,ServiceArea,Department,PermanentAddressLine1,PermanentAddressLine2,PermanentAddressLine3,PermanentPostalCode,PermanentCity,PermanentCountry</readOnlyFields>
         <actions>
             <action status="30" internal-val="30" text="Submit Service Request to SSC">
                 <validateTabs>#ServiceRequestDetails,#Absences</validateTabs>
@@ -15,11 +15,11 @@
     <status value="10">
         <userGroup name="Line Manager">
             <visibleTabs>#ServiceRequestDetails,#Absences</visibleTabs>
-            <readOnlyTabs>#Absences</readOnlyTabs>
+            <readOnlyTabs></readOnlyTabs>
         </userGroup>
         <visibleTabs>#ServiceRequestDetails,#Absences,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
-        <readOnlyFields>Department,BusinessUnit</readOnlyFields>
+      <readOnlyFields>Company,BusinessUnit,ServiceArea,Department,PermanentAddressLine1,PermanentAddressLine2,PermanentAddressLine3,PermanentPostalCode,PermanentCity,PermanentCountry</readOnlyFields>
         <actions>
             <action status="20" internal-val="20" text="Submit to HR Unit">
                 <validateTabs>#ServiceRequestDetails</validateTabs>
@@ -33,9 +33,9 @@
             <visibleTabs>#ServiceRequestDetails,#Absences</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#Absences</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Absences,#attachments</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Absences,#documents,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
-        <readOnlyFields>Department,BusinessUnit</readOnlyFields>
+      <readOnlyFields>Company,BusinessUnit,ServiceArea,Department,PermanentAddressLine1,PermanentAddressLine2,PermanentAddressLine3,PermanentPostalCode,PermanentCity,PermanentCountry</readOnlyFields>
         <actions>
           <action status="30" internal-val="30" text="Submit Service Request to SSC">
             <validateTabs>#ServiceRequestDetails,#Absences</validateTabs>
@@ -49,9 +49,9 @@
             <visibleTabs>#ServiceRequestDetails,#Absences</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#Absences</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Absences,#SscUseOnly,#attachments</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Absences,#documents,#SscUseOnly,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Absences</readOnlyTabs>
-        <readOnlyFields>Department,BusinessUnit</readOnlyFields>
+      <readOnlyFields>Company,BusinessUnit,ServiceArea,Department,PermanentAddressLine1,PermanentAddressLine2,PermanentAddressLine3,PermanentPostalCode,PermanentCity,PermanentCountry</readOnlyFields>
         <actions>
             <action status="40" internal-val="40" text="Validity check OK">
                 <validateTabs>#ServiceRequestDetails,#Absences,#SscUseOnly</validateTabs>
@@ -66,9 +66,9 @@
             <visibleTabs>#ServiceRequestDetails,#Absences</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#Absences</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Absences,#SscUseOnly,#attachments</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Absences,#documents,#SscUseOnly,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Absences</readOnlyTabs>
-        <readOnlyFields>Department,BusinessUnit</readOnlyFields>
+      <readOnlyFields>Company,BusinessUnit,ServiceArea,Department,PermanentAddressLine1,PermanentAddressLine2,PermanentAddressLine3,PermanentPostalCode,PermanentCity,PermanentCountry</readOnlyFields>
         <actions>
             <action status="60" internal-val="60" text="Global View Update">
               <validateTabs>#SscUseOnly</validateTabs>
@@ -80,20 +80,20 @@
     <status value="60">
         <userGroup name="Line Manager">
             <visibleTabs>#ServiceRequestDetails,#Absences</visibleTabs>
-            <readOnlyTabs>#ServiceRequestDetails,#Absences</readOnlyTabs>
+            <readOnlyTabs>#ServiceRequestDetails,#Absences,#SscUseOnly</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Absences,#SscUseOnly,#attachments</visibleTabs>
-        <readOnlyTabs>#ServiceRequestDetails,#Absences</readOnlyTabs>
-        <readOnlyFields>Department,BusinessUnit</readOnlyFields>
+        <visibleTabs>#ServiceRequestDetails,#Absences,#documents,#SscUseOnly,#attachments</visibleTabs>
+        <readOnlyTabs>#ServiceRequestDetails,#Absences,#documents</readOnlyTabs>
+      <readOnlyFields>Company,BusinessUnit,ServiceArea,Department,PermanentAddressLine1,PermanentAddressLine2,PermanentAddressLine3,PermanentPostalCode,PermanentCity,PermanentCountry</readOnlyFields>
     </status>
     <!-- SSC -->
     <status value="70">
         <userGroup name="Line Manager">
             <visibleTabs>#ServiceRequestDetails,#Absences</visibleTabs>
-            <readOnlyTabs>#ServiceRequestDetails,#Absences</readOnlyTabs>
+            <readOnlyTabs>#ServiceRequestDetails,#Absences,#SscUseOnly</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Absences,#attachments</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Absences,#attachments,#SscUseOnly</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Absences</readOnlyTabs>
-        <readOnlyFields>Department,BusinessUnit</readOnlyFields>
+      <readOnlyFields>Company,BusinessUnit,ServiceArea,Department,PermanentAddressLine1,PermanentAddressLine2,PermanentAddressLine3,PermanentPostalCode,PermanentCity,PermanentCountry</readOnlyFields>
     </status>
 </state>

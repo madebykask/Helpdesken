@@ -152,10 +152,12 @@
 		},
 		
 		place: function(){
-			var offset = this.component ? this.component.offset() : this.element.offset();
+		    var offset = this.component ? this.component.offset() : this.element.offset();
+		    var leftPos = offset.left;
+
 			this.picker.css({
 				top: offset.top + this.height,
-				left: offset.left
+				left: leftPos
 			});
 		},
 		

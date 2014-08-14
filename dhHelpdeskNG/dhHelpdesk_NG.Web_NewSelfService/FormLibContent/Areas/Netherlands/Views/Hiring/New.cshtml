@@ -8,7 +8,6 @@
 }
 
 @section Script {
-
     <script type="text/javascript">
 
         //$(function () {
@@ -24,9 +23,36 @@
             document.getElementById(prefix + "AddressLine3").value = document.getElementById('PermanentAddressLine3').value;
             document.getElementById(prefix + "PostalCode").value = document.getElementById('PermanentPostalCode').value;
             document.getElementById(prefix + "City").value = document.getElementById('PermanentCity').value;
-            document.getElementById(prefix + "Country").value = document.getElementById('PermanentCountry').value;
+            //document.getElementById(prefix + "Country").value = document.getElementById('PermanentCountry').value;
+
+            var value = document.getElementById('PermanentCountry').value;
+            
+            if ($('#PermanentCountry')[0].selectize) {
+                
+                var selectedText = $('#PermanentCountry')[0].selectize.getItem(value).text();
+              
+                if ($('#' + prefix + 'Country')[0].selectize) {
+                    $('#' + prefix + 'Country')[0].selectize.setValue(selectedText);
+                }
+                else {
+                    $('#' + prefix + 'Country').val(selectedText);
+                }
+            }
+            else {
+                
+                var selectedText = $('#PermanentCountry').find('option:selected').text();
+                if ($('#' + prefix + 'Country')[0].selectize) {
+                    $('#' + prefix + 'Country')[0].selectize.setValue(selectedText);
+                }
+                else {
+                    var selectedText = $('#PermanentCountry').find('option:selected').text();
+                    $('#' + prefix + 'Country').val(selectedText);
+                }
+            }
 
         });
+
+
 
         $(document).on('change', '#Extent', function (e) {
             e.preventDefault();
@@ -82,7 +108,7 @@
         </ul>
         <div class="content">
             <div class="row-fluid">
-                <div class="tab-content">
+                <div class="tab-content overflow-visible">
                     @if (Model.VisibleTab("#servicerequestdetails"))
                     {
                         @Html.Partial("_TabServiceRequestDetails", Model)
@@ -111,30 +137,7 @@
 }
 
 <script>
-    function selectIndexChangeServiceRequestPriority() {
-        var d = new Date();
-        var day = d.getDate() + 2;
-        if (this.options[this.selectedIndex].value == 'Urgent') {
-
-
-            $('#date_ProcessBeforeDate').datepicker(
-            {
-
-                onRender: function (ev) {
-                    if (ev.getDate() > day)
-                        return '';
-                    return 'disabled';
-                }
-
-
-            });
-        }
-        else {
-            document.getElementById('ProcessBeforeDate').value = document.getElementById('ContractStartDate').value;
-        }
-    }
-
-    document.getElementById('ServiceRequestPriority').onchange = selectIndexChangeServiceRequestPriority;
-
+  
+    InitIntegration();
 
 </script>

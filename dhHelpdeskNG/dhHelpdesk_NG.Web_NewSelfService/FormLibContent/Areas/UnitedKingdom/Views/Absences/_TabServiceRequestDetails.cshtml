@@ -3,7 +3,7 @@
 @using ECT.FormLib.Models;
 
 <div class="tab-pane active" id="ServiceRequestDetails">
-    <div class="span5">
+        <div class="span6">
         <table class="table">
             <tbody>
                 <tr>
@@ -41,9 +41,21 @@
                     </td>
                 </tr>
                 <tr>
+                    <td class="tdstrong">@Model.Label("Company")</td>
+                    <td>
+                        @Model.Element("Company")
+                    </td>
+                </tr>
+                <tr>
                     <td class="tdstrong">@Model.Label("BusinessUnit")</td>
                     <td>
                         @Model.Element("BusinessUnit")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ServiceArea")</td>
+                    <td>
+                        @Model.Element("ServiceArea")
                     </td>
                 </tr>
                 <tr>
@@ -64,13 +76,55 @@
                         @Model.Element("ServiceRequestPriority")</td>
                 </tr>
                 <tr>
-                    <td class="tdstrong">@Model.Label("ProcessBeforeDate")</td>
+                    <td class="tdstrong">@Model.Translate("SLA")</td>
                     <td>
-                        @Model.Element("ProcessBeforeDate")</td>
-                </tr>         
+                        @if (Model.Contract.CaseNumber != null)
+                        {
+                            @Model.Contract.PriorityName;
+                        }
+                        else { 
+                            @Model.Form.PriorityName;
+                        }
+                    </td>
+                </tr>     
+                
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Permanent Address")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentAddressLine1")</td>
+                    <td>@Model.Element("PermanentAddressLine1")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentAddressLine2")</td>
+                    <td>@Model.Element("PermanentAddressLine2")</td>
+                </tr>
+                                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentAddressLine3")</td>
+                    <td>@Model.Element("PermanentAddressLine3")</td>
+                </tr>
+                                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentPostalCode")</td>
+                    <td>@Model.Element("PermanentPostalCode")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentCity")</td>
+                    <td>@Model.Element("PermanentCity")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentCountry")</td>
+                    <td>@Model.Element("PermanentCountry")</td>
+                </tr>
+                   
             </tbody>
         </table>
     </div>
-    
+
+   
+    @*Get JobTitle from EMD /TAn *@
+    @Model.Element("JobTitle") 
     <input type="hidden" id="CustomerId" value="@Model.CustomerId" />
+    <input type="hidden" id="formGuid" value="@Model.FormGuid" />
 </div>

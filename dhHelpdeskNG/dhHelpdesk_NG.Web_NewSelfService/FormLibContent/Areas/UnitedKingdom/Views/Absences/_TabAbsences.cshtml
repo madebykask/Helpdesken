@@ -3,7 +3,7 @@
 @using ECT.FormLib.Models;
 
 <div class="tab-pane" id="Absences">
-    <div class="span5">
+    <div class="span6">
         <table class="table">
             <tbody>
                 <tr>
@@ -27,7 +27,8 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="tdstrong">@Model.Label("ExpectedDateChildBirth")</td>
+                    <td class="tdstrong">@Model.Label("ExpectedDateChildBirth")
+                    </td>
                     <td>
                         @Model.Element("ExpectedDateChildBirth")
                     </td>
@@ -53,7 +54,7 @@
                         @Model.Element("AbsenceEndsOn")
                     </td>
                 </tr>
-                <tr>
+               @* <tr>
                     <td class="tdstrong">@Model.Label("AbsenceHours")</td>
                     <td>
                         @Model.Element("AbsenceHours")
@@ -63,6 +64,18 @@
                     <td class="tdstrong">@Model.Label("AbsenceDays")</td>
                     <td>
                         @Model.Element("AbsenceDays")
+                    </td>
+                </tr>*@
+                <tr>
+                    <td class="tdstrong">@Model.Label("AdoptionPay")</td>
+                    <td>
+                        @Model.Element("AdoptionPay")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("CareerBreakLength")</td>
+                    <td>
+                        @Model.Element("CareerBreakLength")
                     </td>
                 </tr>
 
@@ -109,7 +122,7 @@
                         <td class="tdstrong">@Model.Label("AbsenceEndsOn" + i.ToString())</td>
                         <td>
                             @Model.Element("AbsenceEndsOn" + i.ToString())</td>
-                    </tr>
+                    </tr>@*
                     
                     <tr class="absence@(i.ToString())">
                         <td class="tdstrong">@Model.Label("AbsenceHours" + i.ToString())</td>
@@ -121,9 +134,20 @@
                         <td>
                             @Model.Element("AbsenceDays" + i.ToString())</td>
                     </tr>  
+                    
+                      *@<tr class="absence@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AdoptionPay" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AdoptionPay" + i.ToString())</td>
+                    </tr>  
+                    <tr class="absence@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("CareerBreakLength" + i.ToString())</td>
+                        <td>
+                            @Model.Element("CareerBreakLength" + i.ToString())</td>
+                    </tr>     
                 }
 
-                <tr id="addAbsenceTr">
+                <tr id="addAbsenceTrr">
                     <td colspan="2">
                         @Model.Element("AbsencesMulti")
                         <a id="addAbsence" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Absence")</a></td>
@@ -136,6 +160,7 @@
 </div>
 
 <script>
+
 
     var futureNotice = $('#notice_FutureDate');
     var nowTemp = new Date();
@@ -170,7 +195,7 @@
 
         end.hide();
     }).data('datepicker');
-    $('#date_AbsenceEndsOn').on("keydown keypress keyup", false);
+    
 
     // Absence 2 
     var start2 = $('#date_AbsenceStartFrom2').datepicker({
@@ -202,7 +227,7 @@
 
         end2.hide();
     }).data('datepicker');
-    $('#date_AbsenceEndsOn2').on("keydown keypress keyup", false);
+    
 
     // Absence 3 
     var start3 = $('#date_AbsenceStartFrom3').datepicker({
@@ -234,7 +259,7 @@
 
         end3.hide();
     }).data('datepicker');
-    $('#date_AbsenceEndsOn3').on("keydown keypress keyup", false);
+    
 
     $(function () {
 

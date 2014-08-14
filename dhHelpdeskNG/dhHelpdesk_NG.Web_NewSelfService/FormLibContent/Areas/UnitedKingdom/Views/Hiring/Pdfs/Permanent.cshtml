@@ -3,8 +3,19 @@
 @using ECT.FormLib.Models;
 @using ECT.FormLib.Pdfs;
 @using System.Globalization;
+@using ECT.Model.Entities;
 @{
     Layout = null;
+    Model.Language = "en";
+
+    //set fields that are mandatory in the contract here. This can be done in a better way... /TA
+    Model.SetDocumentMandatoryField("ServiceArea");
+    Model.SetDocumentMandatoryField("ContractStartDate");
+    Model.SetDocumentMandatoryField("InductionStartTime");
+    Model.SetDocumentMandatoryField("LengthOfInductionInDays");
+    Model.SetDocumentMandatoryField("InductionEndTime");
+    Model.SetDocumentMandatoryField("DateOfNextSalaryReview");
+   
 }
 <!DOCTYPE html>
 <html>
@@ -15,32 +26,31 @@
                 <td>@string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:d MMMMMM yyyy}", DateTime.Now)</td>
             </tr>
         </table>
-
         <p style="text-align: left; font-family: Verdana; font-size: 11px;"><strong>PRIVATE & CONFIDENTIAL</strong><br />
-        @Model.GetAnswer("FirstName") @Model.GetAnswer("LastName")<br />
-        @Model.GetAnswer("PermanentAddressLine1")
-        @if (!string.IsNullOrEmpty(Model.GetAnswer("PermanentAddressLine2")))
+        @Model.GetDocumentAnswer("FirstName",true) @Model.GetDocumentAnswer("LastName",true)<br />
+        @Model.GetDocumentAnswer("PermanentAddressLine1",true)
+        @if (!string.IsNullOrEmpty(Model.GetDocumentAnswer("PermanentAddressLine2")))
          {
         <br />
-        @Model.GetAnswer("PermanentAddressLine2")
+        @Model.GetDocumentAnswer("PermanentAddressLine2")
          }
         <br />
-        @Model.GetAnswer("PermanentCity")
+        @Model.GetDocumentAnswer("PermanentCity",true)
         <br />
-        @Model.GetAnswer("PermanentPostalCode")
+        @Model.GetDocumentAnswer("PermanentPostalCode",true)
         <br />
         <br />
-        Dear @Model.GetAnswer("FirstName"),<br />
+        Dear @Model.GetDocumentAnswer("FirstName",true),<br />
 
-        I am very pleased to be able to confirm to you our offer of the position of @Model.GetAnswer("JobTitle") in @UnitedKingdomPdfPage.GetServiceAreaText(Model.GetAnswer("ServiceArea")) at IKEA @Model.Department.Unit reporting to the 
+        I am very pleased to be able to confirm to you our offer of the position of @Model.GetDocumentAnswer("JobTitle",true) in @UnitedKingdomPdfPage.GetServiceAreaText("ServiceArea", Model) at IKEA @CustomPdfPage.IsEmpty(Model.Department.Unit, "Unit") reporting to the 
         
-        @if (@Model.GetAnswer("ManagersJobTitle").ToLower() == "Shopkeeper".ToLower())
+        @if (Model.GetDocumentAnswer("ManagersJobTitle").ToLower() == "Shopkeeper".ToLower())
         {
-            <text> @Model.GetAnswer("ManagersJobTitle") @Model.GetAnswer("Department")</text><text>.</text>
+            <text> @Model.GetDocumentAnswer("ManagersJobTitle", true) @Model.GetDocumentAnswer("Department", true)</text><text>.</text>
         }
         else
         {
-            <text> @Model.GetAnswer("ManagersJobTitle")</text><text>.</text>
+            <text> @Model.GetDocumentAnswer("ManagersJobTitle", true)</text><text>.</text>
         }
 
         <br />
@@ -56,46 +66,49 @@
               var brText = "<br /><br />";
 
               //1
-              string text1 = "Your first day of employment with IKEA " + Model.Department.Unit + " will be on " + CustomPdfPage.GetDateInWords(Model.GetAnswer("ContractStartDate")) + ". This counts as part of your continuous service with IKEA which began on ";
+              string text1 = "Your first day of employment with IKEA " + CustomPdfPage.IsEmpty(Model.Department.Unit, "Unit") + " will be on " + CustomPdfPage.GetDateInWords("ContractStartDate", Model) + ". This counts as part of your continuous service with IKEA which began on ";
 
-              if (!string.IsNullOrEmpty(Model.GetAnswer("PreviousContractStartDate")))
+              if (!string.IsNullOrEmpty(Model.GetDocumentAnswer("PreviousContractStartDate")))
               {
-                  text1 += " " + CustomPdfPage.GetDateInWords(Model.GetAnswer("PreviousContractStartDate")) + " ";
+                  text1 += " " + CustomPdfPage.GetDateInWords("PreviousContractStartDate",Model) + " ";
               }
               else
               {
-                  text1 += " " + CustomPdfPage.GetDateInWords(Model.GetAnswer("ContractStartDate")) + " ";
+                  text1 += " " + CustomPdfPage.GetDateInWords("ContractStartDate", Model) + " ";
               }
 
               list.Add(new PdfListItem { Text = text1 });
 
 
               //2
-              string text2 = "Please report to your place of work: IKEA " + Model.Department.Unit + ", " + Model.Department.StrAddr + " at " + CustomPdfPage.GetAmPm(Model.GetAnswer("InductionStartTime")) + " for a full ";
+              string text2 = "Please report to your place of work: IKEA " + CustomPdfPage.IsEmpty(Model.Department.Unit, "Unit") + ", " + CustomPdfPage.IsEmpty(Model.Department.StrAddr, "StrAddr") + " at " + CustomPdfPage.GetAmPm("InductionStartTime", Model) + " for a full ";
 
-              text2 += CustomPdfPage.GetLengthOfInductionInDaysText(Model.GetAnswer("LengthOfInductionInDays")) + " introduction, finishing at " + CustomPdfPage.GetAmPm(Model.GetAnswer("InductionEndTime")) + ".";
+              text2 += CustomPdfPage.GetLengthOfInductionInDaysText("LengthOfInductionInDays", Model) + " introduction, finishing at " + CustomPdfPage.GetAmPm("InductionEndTime", Model) + ".";
               list.Add(new PdfListItem { Text = text2 });
 
               //3
-              string text3 = "The " + UnitedKingdomPdfPage.GetServiceAreaText(Model.GetAnswer("ServiceArea")) + " is your primary area of work. You will on occasions be expected to work in other areas within the Store/Unit to support the business need.";
+              string text3 = "The " + UnitedKingdomPdfPage.GetServiceAreaText("ServiceArea", Model) + " is your primary area of work. You will on occasions be expected to work in other areas within the Store/Unit to support the business need.";
               list.Add(new PdfListItem { Text = text3 });
 
               //4 
-              string text4 = "Your hours of work will be " + Model.GetAnswer("ContractedHours") + " hours per week over " + Model.GetAnswer("DaysPerWeek") + " days, Sunday – Saturday.";
+              string text4 = "Your hours of work will be " + Model.GetDocumentAnswer("ContractedHours", true) + " hours per week over " + Model.GetDocumentAnswer("DaysPerWeek", true) + " days, Sunday – Saturday.";
               list.Add(new PdfListItem { Text = text4 });
 
               //5
-              string text5 = "Your starting salary will be &pound;" + Model.GetAnswer("BasicPayAmount");
+              string text5 = "Your starting salary will be &pound;" + Model.GetDocumentAnswer("BasicPayAmount", true);
 
               //Add PayInfoText
               text5 += UnitedKingdomPdfPage.GetPayInfoText(Model);
-              text5 += " Next review date will be " + CustomPdfPage.GetDateInWords(Model.GetAnswer("DateOfNextSalaryReview")) + ".";
-
-             text5 += "<br /><br />";
+              text5 += " Next review date will be " + CustomPdfPage.GetDateInWords("DateOfNextSalaryReview", Model) + ".";
+              text5 += "<br /><br />";
 
               string allowancesText1 = UnitedKingdomPdfPage.GetAllowancesText("AllowancesType", "AllowancesAmountUnits", Model);
               if (!string.IsNullOrEmpty(allowancesText1))
               {
+
+                  //Set mandatory!
+                  Model.SetDocumentMandatoryField("AllowancesAmountUnits");
+                  
                   //1
                  // text5 += "<br /><br />";
                   text5 += allowancesText1;
@@ -105,6 +118,9 @@
               string allowancesText2 = UnitedKingdomPdfPage.GetAllowancesText("AllowancesType2", "AllowancesAmountUnits2", Model);
               if (!string.IsNullOrEmpty(allowancesText2))
               {
+                  //Set mandatory!
+                  Model.SetDocumentMandatoryField("AllowancesAmountUnits2");
+                  
                   //2
                   text5 += allowancesText2;
                   text5 += "<br /><br />";
@@ -113,18 +129,21 @@
               string allowancesText3 = UnitedKingdomPdfPage.GetAllowancesText("AllowancesType3", "AllowancesAmountUnits3", Model);
               if (!string.IsNullOrEmpty(allowancesText3))
               {
+                  //Set mandatory!
+                  Model.SetDocumentMandatoryField("AllowancesAmountUnits3");
+                  
                   //3
                   text5 += allowancesText3;
                   text5 += "<br /><br />";
               }
 
-              text5 += "Your annual holiday entitlement (inclusive of 8 days annual public holidays) per calendar year is " + Model.GetAnswer("HolidayFull") + " hours. Holiday entitlement runs from 1st September – 31st August and is calculated on a pro rata basis. Your holiday entitlement for the current holiday year is " + Model.GetAnswer("HolidayCurrent") + " hours.";
+              text5 += "Your annual holiday entitlement (inclusive of 8 days annual public holidays) per calendar year is " + Model.GetDocumentAnswer("HolidayFull", true) + " hours. Holiday entitlement runs from 1st September – 31st August and is calculated on a pro rata basis. Your holiday entitlement for the current holiday year is " + Model.GetDocumentAnswer("HolidayCurrent", true) + " hours.";
               text5 += "<br /><br />";
 
-              text5 += "You must save holiday hours for days of store closure when you would normally be scheduled to work. The store will be closed on " + Model.Department.CloseDay + ".";
+              text5 += "You must save holiday hours for days of store closure when you would normally be scheduled to work. The store will be closed on " + CustomPdfPage.IsEmpty(Model.Department.CloseDay, "CloseDay") + ".";
               text5 += "<br /><br />";
 
-              text5 += "Untaken basic holiday entitlement can only be carried forward with prior permission from " + Model.Department.StoreManager + ". See the Co-worker handbook for details of when holiday can be taken.";
+              text5 += "Untaken basic holiday entitlement can only be carried forward with prior permission from " + CustomPdfPage.IsEmpty(Model.Department.StoreManager, "StoreManager") + ". See the Co-worker handbook for details of when holiday can be taken.";
               text5 += "<br /><br />";
 
               text5 += "Upon termination of your employment, you will normally be entitled to annual holiday with pay, or pay in lieu thereof, proportional to your length of service.";
@@ -172,12 +191,12 @@
               //BENEFITS END
 
               //MEDICAL INFO
-              if (Model.GetAnswer("ServiceArea").ToLower() == "IKEA Food Serv".ToLower())
+              if (Model.GetDocumentAnswer("ServiceArea").ToLower() == "IKEA Food Serv".ToLower())
               {
                   list.Add(new PdfListItem { Text = "Please complete and return the Pre-Employment Medical Questionnaire and Food Handling Questionnaire (if applicable to your role) in the confidential envelope provided. Only our Occupational Health Advisor will read it. Please note that this offer of employment is subject to a satisfactory result. <br /><br />" });
               }
 
-              if (Model.GetAnswer("BusinessUnit").ToLower() == "Peterborough Contact Centre".ToLower())
+              if (Model.GetDocumentAnswer("BusinessUnit").ToLower() == "Peterborough Contact Centre".ToLower())
               {
                   list.Add(new PdfListItem { Text = "Please complete and return the Pre-Employment Medical Questionnaire in the envelope provided.<br /><br />" });
               }
@@ -213,7 +232,7 @@
               list[list.Count - 1].SubList = pdfList;
 
               //13
-              string text13 = "If you are unable to provide the original documentation listed above you will be required to bring documentation from a secondary list, the details of which are available from the Human Resources department. If you have any questions relating to the above, please contact the Human Resources Department on " + Model.Department.StrAddr + " prior to your first day of work.";
+              string text13 = "If you are unable to provide the original documentation listed above you will be required to bring documentation from a secondary list, the details of which are available from the Human Resources department. If you have any questions relating to the above, please contact the Human Resources Department on " + CustomPdfPage.IsEmpty(Model.Department.StrAddr, "StrAddr") + " prior to your first day of work.";
 
               text13 += "<br /><br />On your first day please bring along with you the following:";
 

@@ -74,31 +74,4 @@
     </div>
     <input type="hidden" id="activeTab" name="activeTab" value="@Model.ActiveTab" />    
 }
-<script>
-    function selectIndexChangeServiceRequestPriority() {
-        var d = new Date();
-        var day = d.getDate() + 2;
-        if (this.options[this.selectedIndex].value == 'Urgent') {
 
-
-            $('#date_ProcessBeforeDate').datepicker(
-            {
-
-                onRender: function (ev) {
-                    if (ev.getDate() > day)
-                        return '';
-                    return 'disabled';
-                }
-
-
-            });
-        }
-        else {
-            //do nothing
-        }
-    }
-
-    document.getElementById('ServiceRequestPriority').onchange = selectIndexChangeServiceRequestPriority;
-
-
-</script>

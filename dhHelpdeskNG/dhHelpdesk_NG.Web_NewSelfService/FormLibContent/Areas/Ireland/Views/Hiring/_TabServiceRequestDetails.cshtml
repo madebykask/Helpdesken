@@ -3,7 +3,7 @@
 @using ECT.FormLib.Models;
 
 <div class="tab-pane active" id="servicerequestdetails">
-    <div class="span5">
+    <div class="span6">
         <table class="table">
             <tbody>
                 <tr>
@@ -55,8 +55,16 @@
                     <td>@Model.Element("ServiceRequestPriority")</td>
                 </tr>
                 <tr>
-                    <td class="tdstrong">@Model.Label("ProcessBeforeDate")</td>
-                    <td>@Model.Element("ProcessBeforeDate")</td>
+                    <td class="tdstrong">@Model.Translate("SLA")</td>
+                    <td>
+                        @if (Model.Contract.CaseNumber != null)
+                        {
+                            @Model.Contract.PriorityName;
+                        }
+                        else if (Model.Form != null){ 
+                            @Model.Form.PriorityName;
+                        }
+                    </td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("Co-WorkerID")</td>
@@ -105,10 +113,6 @@
                     <td>@Model.Element("PermanentAddressLine2")</td>
                 </tr>
                 <tr>
-                    <td class="tdstrong">@Model.Label("PermanentPostalCode")</td>
-                    <td>@Model.Element("PermanentPostalCode")</td>
-                </tr>
-                <tr>
                     <td class="tdstrong">@Model.Label("PermanentCity")</td>
                     <td>@Model.Element("PermanentCity")</td>
                 </tr>
@@ -122,6 +126,18 @@
     <input type="hidden" id="CustomerId" value="@Model.CustomerId" />
 </div>
 <script>
+
+    var dateHiringDate = $('#date_ContractStartDate');
+    if (dateHiringDate.length > 0) {
+
+        dateHiringDate.not(".disabled").datepicker()
+            .on('changeDate', function (e) {
+                if (document.getElementById('InductionDate')) {
+                    $('#InductionDate').val($('#ContractStartDate').val());
+                }
+            });
+    }
+
 
     document.getElementById('NewToIKEA').onchange = selectIndexChangeNewToIKEA;
 
@@ -155,4 +171,10 @@
             noticeHiringDate.show();
     });
 
+    function Payee() {
+        document.getElementById('Payee').value = (document.getElementById('FirstName').value + " " + document.getElementById('LastName').value);
+    }
+
+    $('#FirstName').change(function () { Payee(); });
+    $('#LastName').change(function () { Payee(); });
 </script>

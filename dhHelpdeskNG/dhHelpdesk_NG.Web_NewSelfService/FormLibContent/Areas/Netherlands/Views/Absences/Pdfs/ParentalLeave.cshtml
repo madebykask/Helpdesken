@@ -1,6 +1,8 @@
 ﻿@model ECT.FormLib.Models.FormModel
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
+@using ECT.FormLib.Pdfs;
+@using ECT.Model.Entities;
 
 @{
     Layout = null;
@@ -21,15 +23,15 @@
                     <table style="font-family: Verdana; font-size: 11px;" border="0">
             <tr>
                
-                <td style="text-align: left;">@Model.GetAnswer("FirstName") @Model.GetAnswer("LastName")</td>
+                <td style="text-align: left;">@Model.GetDocumentAnswer("FirstName",true) @Model.GetDocumentAnswer("LastName",true)</td>
             </tr>
             <tr>
                 
-                <td style="text-align: left;">@Model.GetAnswer("PermanentAddressLine1") @Model.GetAnswer("PermanentAddressLine2") @Model.GetAnswer("PermanentAddressLine3")</td>
+                <td style="text-align: left;">@Model.GetDocumentAnswer("PermanentAddressLine1",true) @Model.GetDocumentAnswer("PermanentAddressLine2") @Model.GetDocumentAnswer("PermanentAddressLine3")</td>
             </tr>
             <tr>
                 
-                <td style="text-align: left;">@Model.GetAnswer("PermanentPostalCode") @Model.GetAnswer("PermanentCity")</td>
+                <td style="text-align: left;">@Model.GetDocumentAnswer("PermanentPostalCode",true) @Model.GetDocumentAnswer("PermanentCity",true)</td>
             </tr>
         </table></td>
 
@@ -39,37 +41,31 @@
   
         <p style="text-align: left; font-family: Verdana; font-size: 11px;">
             <br />
-            @if (Model.Department != null)
-            {
-                if (!string.IsNullOrEmpty(Model.Department.HeadOfDepartmentCity))
-                {
-                <text> @Model.Department.HeadOfDepartmentCity, </text>
-                
-                }
-            } @string.Format(new System.Globalization.CultureInfo("nl-NL"), "{0:d MMMM yyyy}", DateTime.Now)<br />
+           @CustomPdfPage.IsEmpty(Model.Department.HeadOfDepartmentCity, "City"), @string.Format(new System.Globalization.CultureInfo("nl-NL"), "{0:d MMMM yyyy}", DateTime.Now)<br />
             <br />
 
             Betreft: onbetaald (ouderschap) verlof
         <br />
             <br />
 
-            Beste @Model.GetAnswer("FirstName"),<br />
+            Beste @Model.GetDocumentAnswer("FirstName",true),<br />
             <br />
 
             Hierbij bevestigen wij je het volgende.
         <br />
             <br />
 
-            Jij hebt aan je leidinggevende het verzoek gedaan om van @Model.GetAnswer("AbsenceStartFrom" +Model.AbsenceNr) tot en met @Model.GetAnswer("AbsenceEndsOn"+Model.AbsenceNr), @Model.GetAnswer("AbsenceHoursWeekly") uur per week onbetaald ouderschapsverlof op te nemen. Je neemt in deze periode in totaal @Model.GetAnswer("AbsenceHours"+Model.AbsenceNr) uur ouderschapsverlof op, van de @Model.GetAnswer("Totalparentalleaveentitlement") uur waar je aanspraak op kan maken. Je leidinggevende gaat hiermee akkoord.
+            Jij hebt aan je leidinggevende het verzoek gedaan om van @Model.GetDocumentAnswer("AbsenceStartFrom" +Model.AbsenceNr,true) tot en met @Model.GetDocumentAnswer("AbsenceEndsOn"+Model.AbsenceNr,true), @Model.GetDocumentAnswer("AbsenceHoursWeekly",true) uur per week onbetaald ouderschapsverlof op te nemen. Je neemt in deze periode in totaal @Model.GetDocumentAnswer("AbsenceHours"+Model.AbsenceNr,true) uur ouderschapsverlof op, van de @Model.GetDocumentAnswer("Totalparentalleaveentitlement",true) uur waar je aanspraak op kan maken. Je leidinggevende gaat hiermee akkoord.
         <br />
             <br />
         </p>
 
         <p style="text-align: justify; font-family: Verdana; font-size: 11px; padding-left: 20px; padding-right: 50px;">
 
-            @if (!string.IsNullOrEmpty(Model.GetAnswer("ChildDateOfBirth")) && !string.IsNullOrEmpty(Model.GetAnswer("ChildName")))
+            @if (!string.IsNullOrEmpty(Model.GetDocumentAnswer("ChildDateOfBirth")) && !string.IsNullOrEmpty(Model.GetDocumentAnswer("ChildName")))
             {
-                <text>- Dit ouderschapsverlof geldt voor @Model.GetAnswer("ChildName") geboren op @Model.GetAnswer("ChildDateOfBirth")
+                
+                <text>- Dit ouderschapsverlof geldt voor @Model.GetDocumentAnswer("ChildName",true) geboren op @Model.GetDocumentAnswer("ChildDateOfBirth",true)
 
                 </text>
             }
@@ -82,14 +78,14 @@
         </p>
         <br />
         <p style="text-align: left; font-family: Verdana; font-size: 11px;">
-            Wij willen je erop wijzen dat je het bovengenoemde ouderschapsverlof niet kan wijzigen of voortijdig kan stopzetten. Wanneer je het ouderschapsverlof voor @Model.GetAnswer("ChildName") stopzet, vervallen de resterende aangevraagde verlofuren, tenzij de reden van de onderbreking een volgend zwangerschaps-, bevallings- of adptieverlofverlof is.
+            Wij willen je erop wijzen dat je het bovengenoemde ouderschapsverlof niet kan wijzigen of voortijdig kan stopzetten. Wanneer je het ouderschapsverlof voor @Model.GetDocumentAnswer("ChildName",true) stopzet, vervallen de resterende aangevraagde verlofuren, tenzij de reden van de onderbreking een volgend zwangerschaps-, bevallings- of adptieverlofverlof is.
         <br />
             <br />
             Tijdens de periode van onbetaald ouderschapsverlof wordt de pensioenopbouw voortgezet waarbij zowel het werkgevers- als werknemersdeel van de pensioenpremie voor rekening komen van IKEA. 
         <br />
             <br />
 
-            @if (Model.GetAnswer("AbsenceLongerThan2Months").ToLower() == "Yes".ToLower())
+            @if (Model.GetDocumentAnswer("AbsenceLongerThan2Months").ToLower() == "Yes".ToLower())
             {
                 <text>
                 Aangezien je verlof langer dan twee aaneengesloten maanden duurt, verzoeken wij je, om je OV-abonnement op je laatste werkdag voorafgaand aan je verlof te retourneren met bijgevoegde enveloppe.
@@ -98,7 +94,7 @@
                 <br />
                 </text>
             }
-            Na afloop van je ouderschapsverlof zal je weer werkzaam zijn voor @Model.GetAnswer("ContractedHoursOldData") uur per week.
+            Na afloop van je ouderschapsverlof zal je weer werkzaam zijn voor @Model.GetDocumentAnswer("ContractedHoursOldData",true) uur per week.
             
         </p>
         <endpage />

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE form [
     <!ENTITY languages SYSTEM "Templates/Languages.xml">
     <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
@@ -19,7 +19,9 @@
             <element name="LastName" type="text" label="Co-Worker Last name" mandatory="1"></element>
             <element name="IKEAEmailAddress" type="text" label="IKEA Email Address" mandatory="1"></element>
             <element name="IKEANetworkID" type="text"  label="IKEA Network ID" mandatory="1"></element>
+            <element name="Company" type="text" label="Company"></element>
             <element name="BusinessUnit" type="text" label="Business Unit"></element>
+            <element name="ServiceArea" type="text" label="Function"></element>
             <element name="Department" type="text" label="Department"></element>
             <element name="TECoWorker" type="select" label="Is Co-Worker a TE?" mandatory="1">
                 <options>
@@ -30,13 +32,11 @@
             <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1">
                 <options>
                     <option value=""></option>
-                    <option value ="No">Urgent</option>
-                    <option value ="Yes">Not Urgent</option>
+                    <option value ="Urgent">Urgent</option>
+                    <option value ="Standard">Standard</option>
                 </options>
             </element>
-            <element name="ProcessBeforeDate" type="date" format="dd.MM.yyyy" mandatory="1" label="Process before date:">
-                <regex inherit="date" pattern="" message=""></regex>
-            </element>
+            
         </tab>
 
         <!--Absences-->

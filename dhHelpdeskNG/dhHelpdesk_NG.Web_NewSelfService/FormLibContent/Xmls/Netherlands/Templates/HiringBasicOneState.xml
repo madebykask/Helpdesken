@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 
 <state status="0">
     <status value="0">
@@ -41,7 +41,7 @@
     </status>
     <!-- SSC -->
     <status value="30">
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#SSCUseOnly</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -52,7 +52,7 @@
     </status>
     <!-- SSC -->
     <status value="40">
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents,#globalview</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents,#globalview,#SSCUseOnly</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -62,24 +62,26 @@
     </status>
     <!-- SSC -->
     <status value="50">
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents,#globalview</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents,#globalview,#SSCUseOnly</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
-            <action status="60" internal-val="60" text="Update other required systems"></action>
+            <action status="60" internal-val="60" text="Update other required systems">
+              <validateFields>NewCo-WorkerID</validateFields>
+            </action>
             <action status="99" internal-val="70" text="Cancel Service Request"></action>
         </actions>
     </status>
     <status value="60">
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents</visibleTabs>
-        <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</readOnlyTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents,#SSCUseOnly</visibleTabs>
+        <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#SSCUseOnly</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
         </actions>
     </status>
     <status value="70">
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents</visibleTabs>
-        <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</readOnlyTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents,#SSCUseOnly</visibleTabs>
+        <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#SSCUseOnly</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
     </status>
 </state>

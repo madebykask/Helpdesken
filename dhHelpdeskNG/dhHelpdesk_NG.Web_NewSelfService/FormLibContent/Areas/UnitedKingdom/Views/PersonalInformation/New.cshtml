@@ -7,7 +7,7 @@
 }
 
 @section Script {
-    <script>
+    <script type="text/javascript">
 
         $(document).on('click', '#btnMailingAddress, #btnEmergencyAddress', function (e) {
             e.preventDefault();
@@ -17,8 +17,32 @@
             document.getElementById(prefix + "AddressLine2").value = document.getElementById('PermanentAddressLine2').value;
             document.getElementById(prefix + "PostalCode").value = document.getElementById('PermanentPostalCode').value;
             document.getElementById(prefix + "City").value = document.getElementById('PermanentCity').value;
-            document.getElementById(prefix + "Country").value = document.getElementById('PermanentCountry').value;
+            //document.getElementById(prefix + "Country").value = document.getElementById('PermanentCountry').value;
 
+            var value = document.getElementById('PermanentCountry').value;
+
+            if ($('#PermanentCountry')[0].selectize) {
+
+                var selectedText = $('#PermanentCountry')[0].selectize.getItem(value).text();
+
+                if ($('#' + prefix + 'Country')[0].selectize) {
+                    $('#' + prefix + 'Country')[0].selectize.setValue(selectedText);
+                }
+                else {
+                    $('#' + prefix + 'Country').val(selectedText);
+                }
+            }
+            else {
+
+                var selectedText = $('#PermanentCountry').find('option:selected').text();
+                if ($('#' + prefix + 'Country')[0].selectize) {
+                    $('#' + prefix + 'Country')[0].selectize.setValue(selectedText);
+                }
+                else {
+                    var selectedText = $('#PermanentCountry').find('option:selected').text();
+                    $('#' + prefix + 'Country').val(selectedText);
+                }
+            }
         });
 
 
@@ -64,7 +88,7 @@
                 <li class="@(Model.TabHasError("#Personal") ? "error" : "")">
                     <a href="#Personal">@Model.Translate("Personal Information")</a></li>
             }
-            @if(Model.VisibleTab("#attachments"))
+            @if (Model.VisibleTab("#attachments"))
             {
                 <li class="pull-right">
                     <a href="#attachments"><i class="icon-file icon-white"></i>&nbsp;@Model.Translate("Attachments")&nbsp;(<b id="attachmentCounter">0</b>)</a>
@@ -73,7 +97,7 @@
         </ul>
         <div class="content">
             <div class="row-fluid">
-                <div class="tab-content">
+                <div class="tab-content overflow-visible">
                     @if (Model.VisibleTab("#ServiceRequestDetails"))
                     {
                         @Html.Partial("_TabServiceRequestDetails", Model)
@@ -82,7 +106,7 @@
                     {
                         @Html.Partial("_TabPersonal", Model)
                     }
-                    @if(Model.VisibleTab("#attachments"))
+                    @if (Model.VisibleTab("#attachments"))
                     {
                         @Html.Partial("_GlobalAttachments", Model)
                     }

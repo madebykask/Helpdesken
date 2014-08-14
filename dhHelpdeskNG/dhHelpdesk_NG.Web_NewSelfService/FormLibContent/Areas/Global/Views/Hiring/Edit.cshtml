@@ -25,7 +25,7 @@
             document.getElementById(prefix + "PostalCode").value = document.getElementById('PermanentPostalCode').value;
             document.getElementById(prefix + "City").value = document.getElementById('PermanentCity').value;
             document.getElementById(prefix + "Country").value = document.getElementById('PermanentCountry').value;
-            
+            //alert(document.getElementById(prefix + "Country").value);
         });
 
         $(document).on('change', '#Extent', function (e) {
@@ -54,3 +54,7 @@
 }
 
 @Html.Partial("_Edit", Model)
+
+<script>
+    InitIntegration();
+</script>

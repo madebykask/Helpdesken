@@ -8,7 +8,7 @@
 }
 
 <div class="tab-pane" id="Personal">
-    <div class="span5">
+    <div class="span6">
         <table class="table">
             <tbody>
                 <tr>
@@ -40,10 +40,7 @@
                     <td class="tdstrong">@Model.Label("PermanentAddressLine2")</td>
                     <td>@Model.Element("PermanentAddressLine2")</td>
                 </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("PermanentPostalCode")</td>
-                    <td>@Model.Element("PermanentPostalCode")</td>
-                </tr>
+
                 <tr>
                     <td class="tdstrong">@Model.Label("PermanentCity")</td>
                     <td>@Model.Element("PermanentCity")</td>
@@ -71,10 +68,7 @@
                     <td class="tdstrong">@Model.Label("MailingAddressLine2")</td>
                     <td>@Model.Element("MailingAddressLine2")</td>
                 </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("MailingPostalCode")</td>
-                    <td>@Model.Element("MailingPostalCode")</td>
-                </tr>
+
                 <tr>
                     <td class="tdstrong">@Model.Label("MailingCity")</td>
                     <td>@Model.Element("MailingCity")</td>
@@ -102,10 +96,7 @@
                     <td class="tdstrong">@Model.Label("EmergencyAddressLine2")</td>
                     <td>@Model.Element("EmergencyAddressLine2")</td>
                 </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("EmergencyPostalCode")</td>
-                    <td>@Model.Element("EmergencyPostalCode")</td>
-                </tr>
+
                 <tr>
                     <td class="tdstrong">@Model.Label("EmergencyCity")</td>
                     <td>@Model.Element("EmergencyCity")</td>
@@ -185,7 +176,7 @@
                     </tr>
                 }
 
-                <tr id="addFamilyMemberTr">
+                <tr id="addFamilyMemberTrr">
                     <td colspan="2">
                         @Model.Element("FamilyMembers")
                         <a id="addFamilyMember" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another family member")</a></td>
@@ -255,7 +246,7 @@
                     </tr>
                 }
 
-                <tr class="globalmobility-first" id="addEmployeeDocumentTr">
+                <tr class="globalmobility-first" id="addEmployeeDocumentTrr">
                     <td colspan="2">
                         @Model.Element("EmployeeDocuments")
                         <a id="addEmployeeDocument" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another employee documents")</a></td>
@@ -317,7 +308,7 @@
                     </tr>
                 }
 
-                <tr class="globalmobility-first" id="addDependantFamilyMembersTr">
+                <tr class="globalmobility-first" id="addDependantFamilyMembersTrr">
                     <td colspan="2">
                         @Model.Element("DependantFamilyMembers")
                         <a id="addDependantFamilyMember" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another global mobility dependant")</a></td>
@@ -387,7 +378,7 @@
                     </tr>
                 }
 
-                <tr class="globalmobility-first" id="addGlobalMobilityDependantDocumentTr">
+                <tr class="globalmobility-first" id="addGlobalMobilityDependantDocumentTrr">
                     <td colspan="2">
                         @Model.Element("DependantsDocuments")
                         <a id="addGlobalMobilityDependantDocument" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another global mobility dependant document")</a></td>
@@ -525,6 +516,10 @@
                 <tr>
                     <td class="tdstrong">@Model.Label("CountryOfIssue")</td>
                     <td>@Model.Element("CountryOfIssue")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("CountryOfUse")</td>
+                    <td>@Model.Element("CountryOfUse")</td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("DocumentNO")</td>

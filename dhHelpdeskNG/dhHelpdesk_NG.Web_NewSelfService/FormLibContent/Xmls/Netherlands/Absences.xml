@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE form [
   <!ENTITY languages SYSTEM "Templates/Languages.xml">
   <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
@@ -25,7 +25,9 @@
       <element name="IKEANetworkID" type="text"  label="IKEA Network ID" mandatory="1">
         <regex inherit="unsignednum" message="" pattern=""></regex>
       </element>
+      <element name="Company" type="text" label="Company"></element>
       <element name="BusinessUnit" type="text" label="Business Unit"></element>
+      <element name="ServiceArea" type="text" label="Function"></element>
       <element name="Department" type="text" label="Department"></element>
       <element name="TECoWorker" type="select" label="Is Co-Worker a TE?" mandatory="1">
         <options>
@@ -37,12 +39,10 @@
         <options>
           <option value=""></option>
           <option value ="Urgent">Urgent</option>
-          <option value ="Not Urgent">Not Urgent</option>
+          <option value ="Standard">Standard</option>
         </options>
       </element>
-      <element name="ProcessBeforeDate" type="date" format="dd.MM.yyyy" mandatory="1" label="Process before date:">
-        <regex inherit="date" pattern="" message=""></regex>
-      </element>
+      
       <!--Address-->
       <!--<element type="select" name="AddressType" label="Address Type" mandatory="1">
         <options>
@@ -59,7 +59,7 @@
       <!--<element type="typeahead-simple" source="1" name="PermanentCountry" label="Country" default="Netherlands">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -328,7 +328,7 @@
         <mandatoryIfNotEmpty name="MailingAddressLine1"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -593,7 +593,7 @@
       <element type="typeahead-simple" source="1" name="EmergencyCountry" label="Country">
         <options>
           <option value=""></option>
-          <option value="﻿Unknown">﻿Unknown</option>
+          <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
           <option value="Utd.Arab Emir.">Utd.Arab Emir.</option>
           <option value="Afghanistan">Afghanistan</option>
@@ -965,6 +965,7 @@
       <!--Country Specifics-->
       
       <element name="ChildName" type="text" label="Child's Name">
+        <mandatoryIf name=""></mandatoryIf>
       </element>
       <element name="ChildDateOfBirth" type="date" format="dd.MM.yyyy" label="Child's Date Of Birth">
         <regex inherit="date" pattern="" message=""></regex>

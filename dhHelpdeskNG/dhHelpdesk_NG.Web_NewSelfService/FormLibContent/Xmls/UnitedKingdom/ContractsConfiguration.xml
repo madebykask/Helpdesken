@@ -1,6 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <Contracts>
-<contract process="Hiring" id="Permanent">
+<contract process="Hiring" id="Permanent" signatureUse="true">
 <lastParagraphText>
 <![CDATA[I would be grateful if you could sign the enclosed copy of this letter as acceptance of the offer and bring it with you to your first day of induction, along with your completed starter pack. In the meantime if you have any queries at all please do not hesitate to call us on {TelNbr}. We look forward to seeing you on the day.]]>
 </lastParagraphText>
@@ -12,7 +12,152 @@ I authorise IKEA Ltd to source pre-employment references and authorise them to p
 <encTextRight></encTextRight>
 </contract>
 
-<contract process="Hiring" id="ContactCentre">
+  <contract process="ChangeTermsConditions" id="Annualised" signatureUse="true">
+    <lastParagraphText>
+      <![CDATA[I would be grateful if you could sign the enclosed copy of this letter as acceptance of the offer and bring it with you to your first day of induction, along with your completed starter pack. In the meantime if you have any queries at all please do not hesitate to call us on {TelNbr}. We look forward to seeing you on the day.
+      
+      ]]>
+    </lastParagraphText>
+    <lastParagraphText2>
+      <![CDATA[I, {FirstName} {LastName} confirm that this offer of employment is acceptable to me and I have read understood and agree to the Terms and Conditions in Section 1 of the Co-worker handbook and in the Terms and Conditions Appendix.
+
+I authorise IKEA Ltd to source pre-employment references and authorise them to provide references when requested on future occasions. IKEA reserves the right to terminate employment if these references are not satisfactory.]]>
+    </lastParagraphText2>
+    <encTextLeft><![CDATA[Enc.:]]></encTextLeft>
+    <encTextRight><![CDATA[Terms and Conditions Appendix]]></encTextRight>
+  </contract>
+
+  <contract process="ChangeTermsConditions" id="TermTime" signatureUse="true">
+    <lastParagraphText>
+      <![CDATA[I would be grateful if you could sign the enclosed copy of this letter as acceptance of the offer and bring it with you to your first day of induction, along with your completed starter pack. In the meantime if you have any queries at all please do not hesitate to call us on {TelNbr}. We look forward to seeing you on the day.
+      
+      ]]>
+    </lastParagraphText>
+    <lastParagraphText2>
+      <![CDATA[I, {FirstName} {LastName} confirm that this offer of employment is acceptable to me and I have read understood and agree to the Terms and Conditions in Section 1 of the Co-worker handbook and in the Terms and Conditions Appendix.
+
+I authorise IKEA Ltd to source pre-employment references and authorise them to provide references when requested on future occasions. IKEA reserves the right to terminate employment if these references are not satisfactory.]]>
+    </lastParagraphText2>
+    <encTextLeft><![CDATA[Enc.:]]></encTextLeft>
+    <encTextRight><![CDATA[Terms and Conditions Appendix]]></encTextRight>
+  </contract>
+
+  <contract process="ChangeTermsConditions" id="Compressed" signatureUse="true">
+    <lastParagraphText>
+      <![CDATA[I would be grateful if you could sign the enclosed copy of this letter as acceptance of the offer and bring it with you to your first day of induction, along with your completed starter pack. In the meantime if you have any queries at all please do not hesitate to call us on {TelNbr}. We look forward to seeing you on the day.
+      
+      ]]>
+    </lastParagraphText>
+    <lastParagraphText2>
+      <![CDATA[I, {FirstName} {LastName} confirm that this offer of employment is acceptable to me and I have read understood and agree to the Terms and Conditions in Section 1 of the Co-worker handbook and in the Terms and Conditions Appendix.
+
+I authorise IKEA Ltd to source pre-employment references and authorise them to provide references when requested on future occasions. IKEA reserves the right to terminate employment if these references are not satisfactory.]]>
+    </lastParagraphText2>
+    <encTextLeft></encTextLeft>
+    <encTextRight></encTextRight>
+  </contract>
+
+  <contract process="ChangeTermsConditions" id="ChangesOfPayHourPosition" signatureUse="false">
+    <lastParagraphText>
+    </lastParagraphText>
+    <lastParagraphText2>
+    </lastParagraphText2>
+    <encTextLeft></encTextLeft>
+    <encTextRight></encTextRight>
+  </contract>
+
+  <contract process="ChangeTermsConditions" id="LevelAchieved" signatureUse="false">
+    <lastParagraphText>
+    </lastParagraphText>
+    <lastParagraphText2>
+    </lastParagraphText2>
+    <encTextLeft></encTextLeft>
+    <encTextRight></encTextRight>
+  </contract>
+  
+    
+  <contract process="ChangeTermsConditions" id="LevelAchievedContactCentre" signatureUse="false">
+    <lastParagraphText>
+    </lastParagraphText>
+    <lastParagraphText2>
+    </lastParagraphText2>
+    <encTextLeft></encTextLeft>
+    <encTextRight></encTextRight>
+  </contract>
+     
+
+    <contract process="ChangeTermsConditions" id="Secondment" signatureUse="true">
+    <lastParagraphText>
+    </lastParagraphText>
+      <lastParagraphText2>
+        <![CDATA[I, {FirstName} {LastName} have read and understood the contents of this letter.]]>
+    </lastParagraphText2>
+      <encTextLeft><![CDATA[Enc.:]]></encTextLeft>
+      <encTextRight>
+        <![CDATA[Secondment Policy]]>
+      </encTextRight>
+  </contract>
+
+  
+  <contract process="ChangeTermsConditions" id="TCManagerLevel1And2" signatureUse="true">
+    <lastParagraphText>
+      
+    </lastParagraphText>
+    <lastParagraphText2>
+    </lastParagraphText2>
+    <encTextLeft></encTextLeft>
+    <encTextRight></encTextRight>
+  </contract>
+
+  <contract process="ChangeTermsConditions" id="CareerBreakEnd" signatureUse="false">
+    <lastParagraphText>
+      <![CDATA[If you have any queries with regard to the content of this letter or anything else, then please do not hesitate to contact me on {TelNbr}.
+      
+      
+      ]]>
+    </lastParagraphText>
+    <lastParagraphText2>
+      <![CDATA[In the meantime I would like to take the opportunity of welcoming you back into the department/business and hope that you have enjoyed your career break.]]>
+    </lastParagraphText2>
+    <encTextLeft></encTextLeft>
+    <encTextRight></encTextRight>
+  </contract>
+
+  <contract process="ChangeTermsConditions" id="RenewTempContract" signatureUse="false">
+    <lastParagraphText>
+    </lastParagraphText>
+    <lastParagraphText2>
+    </lastParagraphText2>
+    <encTextLeft></encTextLeft>
+    <encTextRight></encTextRight>
+  </contract>
+
+  <contract process="ChangeTermsConditions" id="TemporaryToPermanent" signatureUse="true">
+    <lastParagraphText>
+      <![CDATA[I would be grateful if you could sign the enclosed copy of this letter as acceptance of the offer and return it to me, together with all of the other documentation. In the meantime if you have any queries at all please do not hesitate to call us on {TelNbr}.
+      
+      
+      ]]>
+    </lastParagraphText>
+    <lastParagraphText2>
+      <![CDATA[I, {FirstName} {LastName} confirm that this offer of employment is acceptable to me and I have read understood and agree to the Terms and Conditions in Section 1 of the Co-worker handbook.]]>
+    </lastParagraphText2>
+    <encTextLeft></encTextLeft>
+    <encTextRight></encTextRight>
+  </contract>
+
+  <contract process="AdditionalPaymentsDeduction" id="Allowances" signatureUse="false">
+    <lastParagraphText>
+      
+    </lastParagraphText>
+    <lastParagraphText2>
+     
+    </lastParagraphText2>
+    <encTextLeft></encTextLeft>
+    <encTextRight></encTextRight>
+  </contract>
+  
+  <contract process="Hiring" id="ContactCentre" signatureUse="true">
 <lastParagraphText>
 <![CDATA[I would be grateful if you could sign the enclosed copy of this letter as acceptance of the offer and return it to me, together with all of the other documentation. In the meantime if you have any queries at all please do not hesitate to call us on {TelNbr}. We look forward to seeing you on the day.]]>
 </lastParagraphText>
@@ -28,7 +173,7 @@ New Starter form
 Stamped Addressed envelope]]></encTextRight>
   </contract>
 
-<contract process="Hiring" id="ZeroHour">
+<contract process="Hiring" id="ZeroHour" signatureUse="true">
     <lastParagraphText>
       <![CDATA[I would be grateful if you could sign the enclosed copy of this letter as acceptance of the offer and terms and conditions.  In the meantime if you have any queries at all please do not hesitate to call us on {TelNbr}.]]>
     </lastParagraphText>
@@ -41,7 +186,7 @@ I authorise IKEA Ltd to source pre-employment and authorise them to provide refe
     </encTextRight>
   </contract>
 
-<contract process="Hiring" id="TemporaryFixedTerm">
+<contract process="Hiring" id="TemporaryFixedTerm" signatureUse="true">
     <lastParagraphText>
       <![CDATA[I would be grateful if you could sign the enclosed copy of this letter as acceptance of the offer and terms and conditions.  Please bring this along to the Induction, along with your completed starter pack.  In the meantime if you have any queries at all please do not hesitate to call us on {TelNbr}. We look forward to seeing you on the day.]]>
     </lastParagraphText>
@@ -55,5 +200,55 @@ I authorise IKEA Ltd to source pre-employment and authorise them to provide refe
       <![CDATA[Terms and Conditions Appendix]]>
     </encTextRight>
   </contract>
+
+  <contract process="Absences" id="Maternity" signatureUse="false">
+    <lastParagraphText>
+      <![CDATA[Congratulations and best wishes for your pregnancy.
+      
+      ]]>
+    </lastParagraphText>
+    <lastParagraphText2>
+    </lastParagraphText2>
+    <encTextLeft></encTextLeft>
+    <encTextRight>
+    </encTextRight>
+  </contract>
+
+  <contract process="Absences" id="Adoption" signatureUse="false">
+    <lastParagraphText>
+      <![CDATA[If you decide not to return to work, you must still give IKEA notice as per your contract of employment. Your decision will not affect your entitlement to Statutory Adoption Pay.
+
+If you have any questions about any aspect of your adoption entitlements please do not hesitate to contact me.
+
+      ]]>
+    </lastParagraphText>
+    <lastParagraphText2>
+    </lastParagraphText2>
+    <encTextLeft></encTextLeft>
+    <encTextRight>
+    </encTextRight>
+  </contract>
+  <contract process="Absences" id="CareerBreak" signatureUse="false">
+    <lastParagraphText>
+      <![CDATA[Finally, I would like to take this opportunity to wish you all the best during your time off and thank you for all your hard work and commitment over the last few months.
+      ]]>
+    </lastParagraphText>
+    <lastParagraphText2>
+    </lastParagraphText2>
+    <encTextLeft></encTextLeft>
+    <encTextRight>
+    </encTextRight>
+  </contract>
+  <contract process="ChangeTermsConditions" id="Print" signatureUse="false">
+    <lastParagraphText>
+
+    </lastParagraphText>
+    <lastParagraphText2>
+
+    </lastParagraphText2>
+    <encTextLeft></encTextLeft>
+    <encTextRight></encTextRight>
+  </contract>
+
 </Contracts>
 
