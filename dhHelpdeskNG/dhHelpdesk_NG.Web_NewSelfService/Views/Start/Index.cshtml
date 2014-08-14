@@ -1,5 +1,4 @@
-﻿   
-@{
+﻿@{
     ViewBag.Title = "Index";
 }
 
@@ -7,44 +6,42 @@
     <div class="row">
         <div class="col-md-6">
             <div class="row">
-            <div class="col-md-12">
-            <div class="panel panel-default">
-                <div class="panel-heading heading-color"><h3>  @Translation.Get("Welcome", Enums.TranslationSource.TextTranslation) @SessionFacade.CurrentUserIdentity.FirstName </h3></div>
-                <div class="panel-body">
-                    <p>Welcome to the Line manager portal. Here you can order a new service request and view your ongoing or finished requests.</p>
-                    <p>If want to know more before you start, please go to Find Your Way.</p>                    
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <h3 style="margin-top: 1px;">@Translation.Get("Welcome", Enums.TranslationSource.TextTranslation) @SessionFacade.CurrentSystemUser to the MyHRportal</h3>
+                                    <p>Here you can create a new service request.</p>
+                                    <p>You can also view your ongoing or completed requests.</p>
+                                    <p>Need help? Start with Find your way</p>
+                                    <p><img src="@Url.Content("~/Content/img-profile/ikea-map.png")" /></p>
+                                </div>
+                                <div class="col-md-7">
+                                    <img src="@Url.Content("~/Content/img-profile/ikea-notepad.png")" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            </div>
-            </div>
-            <div class="row">
-            <div class="col-md-6">
-                <img src="@Url.Content("~/Content/img-profile/ikea-map.png")" />
-            </div>
-            <div class="col-md-6">
-                <img src="@Url.Content("~/Content/img-profile/ikea-image.png")" />
-            </div>
             </div>
         </div>
         <div class="col-md-4">
             <div class="panel panel-default">
                 <div class="panel-heading"><span class="glyphicon glyphicon-star"></span>@Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation) </div>
                 <div class="panel-body">
-                    <p>Lörem ipsum dolor. Sit ämet cönsectetur adipisicing. Elit sed dö eiusmod tempor incididunt ut låböre. Et dolore magnä aliquå. Nullåm in äenean egestäs fåcilisis läcinia, ånte nisi.</p>
+                    <p><strong>Lörem ipsum dolor.</strong><br /> Sit ämet cönsectetur adipisicing. Elit sed dö eiusmod tempor incididunt ut låböre.</p>
                     <hr />
-                    <p>Lörem ipsum dolor. Sit ämet cönsectetur adipisicing. Elit sed dö eiusmod tempor incididunt ut låböre. Et dolore magnä aliquå. Nullåm in äenean egestäs fåcilisis läcinia, ånte nisi.</p>
+                    <p><strong>Lörem ipsum dolor.</strong><br /> Sit ämet cönsectetur adipisicing. Elit sed dö eiusmod tempor incididunt ut låböre.</p>
                     <hr />
-                    <p>Lörem ipsum dolor. Sit ämet cönsectetur adipisicing. Elit sed dö eiusmod tempor incididunt ut låböre. Et dolore magnä aliquå. Nullåm in äenean egestäs fåcilisis läcinia, ånte nisi.</p>
+                    <p><strong>Lörem ipsum dolor.</strong><br /> Sit ämet cönsectetur adipisicing. Elit sed dö eiusmod tempor incididunt ut låböre.</p>
                     <hr />
-                    <p>Lörem ipsum dolor. Sit ämet cönsectetur adipisicing. Elit sed dö eiusmod tempor incididunt ut låböre. Et dolore magnä aliquå. Nullåm in äenean egestäs fåcilisis läcinia, ånte nisi.</p>
-                    <hr />
-                    <p>Lörem ipsum dolor. Sit ämet cönsectetur adipisicing. Elit sed dö eiusmod tempor incididunt ut låböre. Et dolore magnä aliquå. Nullåm in äenean egestäs fåcilisis läcinia, ånte nisi.</p>
-                    <hr />
+                    <img src="@Url.Content("~/Content/img-profile/ikea-peoplestart.png")" />
                 </div>
             </div>
         </div>
         <!--ON GOING--->
-    @*<div class="col-md-6">
+        @*<div class="col-md-6">
         <div class="panel panel-default table-responsive">
             <div class="panel-heading">Ongoing Service Requests</div>
             <div class="panel-body">
@@ -144,5 +141,11 @@
             </div>
         </div>
     </div>*@
-</div>
+    </div>
+    <div class="row">
+        <div class="col-md-10 small">
+            Version 1.2
+            <img src="@Url.Content("~/Content/img-profile/dh_solutions_slogan.png")" class="pull-right" />
+        </div>
+    </div>
 </div>
