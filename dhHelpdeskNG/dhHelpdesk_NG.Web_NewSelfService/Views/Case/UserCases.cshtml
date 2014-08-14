@@ -67,7 +67,7 @@
                                             foreach (var r in Model.CaseSearchResult.Cases)
                                             {
 
-                                                var dynamicUrl = Model.DynamicCases.Where(w => w.CaseId == r.Id).Select(d => "~/" + d.FormPath).SingleOrDefault();
+                                                var dynamicUrl = Model.DynamicCases.Where(w => w.CaseId == r.Id).Select(d => "~/" + d.FormPath).FirstOrDefault();
 
                                                 <tr>
                                                     <!--fasta kolumner -->

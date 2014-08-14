@@ -141,10 +141,13 @@ using System.Threading.Tasks;
                 //SessionFacade.UserHasAccess = true;
 
                 if (string.IsNullOrEmpty(userIdentity.UserId))
+                {
                     SessionFacade.UserHasAccess = false;
+                    filterContext.Result = new RedirectResult(Url.Action("Index", "Error", new { message = "You don't have access to the portal! (User Id is not specified)", errorCode = 101 }));
+                }
                 else
                 {
-                    
+
                     var defaultEmployeeNumber = ConfigurationManager.AppSettings["DefaultEmployeeNumber"].ToString();
                     if (!string.IsNullOrEmpty(defaultEmployeeNumber))
                         userIdentity.EmployeeNumber = defaultEmployeeNumber;
