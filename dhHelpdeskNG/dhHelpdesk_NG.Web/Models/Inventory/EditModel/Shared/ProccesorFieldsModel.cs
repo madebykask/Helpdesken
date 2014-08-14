@@ -4,12 +4,16 @@
 
     public class ProccesorFieldsModel
     {
-        public ProccesorFieldsModel(int? proccesorId)
+        public ProccesorFieldsModel()
+        {
+        }
+
+        public ProccesorFieldsModel(ConfigurableFieldModel<int?> proccesorId)
         {
             this.ProccesorId = proccesorId;
         }
 
-        [IsId]
-        public int? ProccesorId { get; set; }
+        [NotNull]
+        public ConfigurableFieldModel<int?> ProccesorId { get; set; }
     }
 }

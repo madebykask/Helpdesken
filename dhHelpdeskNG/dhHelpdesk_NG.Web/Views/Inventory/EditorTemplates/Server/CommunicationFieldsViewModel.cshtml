@@ -1,6 +1,6 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Server.CommunicationFieldsViewModel
 <table class="tableform">
-    @if (Model.NetworkAdapters.Show
+    @if (Model.CommunicationFieldsModel.NetworkAdapterId.Show
         || Model.CommunicationFieldsModel.IPAddress.Show
         || Model.CommunicationFieldsModel.MacAddress.Show)
     {
@@ -8,37 +8,7 @@
             <th colspan="2" class="header">@Translation.Get("Kommunikation")</th>
         </tr>
     }
-    @if (Model.NetworkAdapters.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.NetworkAdapters.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.DropDownListFor(m => m.CommunicationFieldsModel.NetworkAdapterId, Model.NetworkAdapters.Value, string.Empty)
-            </td>
-        </tr>
-    }
-    @if (Model.CommunicationFieldsModel.IPAddress.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.CommunicationFieldsModel.IPAddress.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.CommunicationFieldsModel.IPAddress.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.CommunicationFieldsModel.MacAddress.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.CommunicationFieldsModel.MacAddress.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.CommunicationFieldsModel.MacAddress.Value)
-            </td>
-        </tr>
-    }
+    @Html.EditorFor(m => m.CommunicationFieldsModel.NetworkAdapterId, "NotReadonlyFields/List", new { Source = Model.NetworkAdapters })
+    @Html.EditorFor(m => m.CommunicationFieldsModel.IPAddress, "NotReadonlyFields/Text")
+    @Html.EditorFor(m => m.CommunicationFieldsModel.MacAddress, "NotReadonlyFields/Text")
 </table>

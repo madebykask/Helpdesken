@@ -4,7 +4,15 @@
 
     public class PlaceFieldsModel
     {
-        public PlaceFieldsModel(int? buildingId, int? floorId, int? roomId, ConfigurableFieldModel<string> location)
+        public PlaceFieldsModel()
+        {
+        }
+
+        public PlaceFieldsModel(
+            int? buildingId,
+            int? floorId,
+            ConfigurableFieldModel<int?> roomId,
+            ConfigurableFieldModel<string> location)
         {
             this.BuildingId = buildingId;
             this.FloorId = floorId;
@@ -18,8 +26,8 @@
         [IsId]
         public int? FloorId { get; set; }
 
-        [IsId]
-        public int? RoomId { get; set; }
+        [NotNull]
+        public ConfigurableFieldModel<int?> RoomId { get; set; }
 
         public ConfigurableFieldModel<string> Location { get; set; }
     }

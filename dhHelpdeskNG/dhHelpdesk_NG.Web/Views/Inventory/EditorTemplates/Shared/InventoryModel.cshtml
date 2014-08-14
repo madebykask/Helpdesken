@@ -5,24 +5,8 @@
         <tr>
             <th colspan="2" class="header">@Translation.Get("Inventering")</th>
         </tr>
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.BarCode.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.BarCode.Value)
-            </td>
-        </tr>
     }
-    @if (Model.PurchaseDate.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.PurchaseDate.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.EditorFor(m => m.PurchaseDate.Value, "DatePicker", new { id = "purchasedate_datepicker" })
-            </td>
-        </tr>
-    }
+    @Html.EditorFor(m => m.BarCode, "NotReadonlyFields/Text")
+    @Html.EditorFor(m => m.PurchaseDate, "NotReadonlyFields/Date", new { id = "purchasedate_datepicker" })
+
 </table>

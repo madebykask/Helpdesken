@@ -47,6 +47,8 @@
 
         public ConfigurableFieldModel<DateTime> ChangedDate { get;  set; }
 
+        public bool IsOperationObject { get; set; }
+
         [NotNull]
         public GeneralFieldsModel GeneralFieldsModel { get;  set; }
 

@@ -5,13 +5,6 @@
         <tr>
             <th colspan="2" class="header">@Translation.Get("Lagring")</th>
         </tr>
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.Capasity.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextAreaFor(m => m.Capasity.Value)
-            </td>
-        </tr>
     }
+    @Html.EditorFor(m => m.Capasity, "NotReadonlyFields/WideText")
 </table>

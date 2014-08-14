@@ -15,26 +15,23 @@
             List<ItemOverview> items,
             string selectedValue);
 
+        SelectList CreateSelectList(
+            ModelEditFieldSetting setting,
+            Enum items,
+            string selectedValue);
+
         ConfigurableFieldModel<DateTime?> CreateNullableDateTimeField(
             ModelEditFieldSetting setting,
             DateTime? value);
 
         ConfigurableFieldModel<DateTime> CreateDateTimeField(ModelEditFieldSetting setting, DateTime value);
 
-        ConfigurableFieldModel<SelectList> CreateSelectListField(
-            ModelEditFieldSetting setting,
-            List<ItemOverview> items,
-            string selectedValue);
-
-        ConfigurableFieldModel<SelectList> CreateSelectListField(
-            ModelEditFieldSetting setting,
-            Enum items,
-            string selectedValue);
-
         ConfigurableFieldModel<string> CreateStringField(ModelEditFieldSetting setting, string value);
 
         ConfigurableFieldModel<bool> CreateBooleanField(ModelEditFieldSetting setting, bool value);
 
         ConfigurableFieldModel<int> CreateIntegerField(ModelEditFieldSetting setting, int value);
+
+        ConfigurableFieldModel<int?> CreateNullableIntegerField(ModelEditFieldSetting setting, int? value);
     }
 }

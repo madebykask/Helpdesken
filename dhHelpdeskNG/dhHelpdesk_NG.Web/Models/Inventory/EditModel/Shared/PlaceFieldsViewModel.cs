@@ -6,7 +6,11 @@
 
     public class PlaceFieldsViewModel
     {
-        public PlaceFieldsViewModel(PlaceFieldsModel placeFieldsModel, SelectList buildings, SelectList floors, ConfigurableFieldModel<SelectList> rooms)
+        public PlaceFieldsViewModel()
+        {
+        }
+
+        public PlaceFieldsViewModel(PlaceFieldsModel placeFieldsModel, SelectList buildings, SelectList floors, SelectList rooms)
         {
             this.PlaceFieldsModel = placeFieldsModel;
             this.Buildings = buildings;
@@ -24,6 +28,6 @@
         public SelectList Floors { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> Rooms { get; set; }
+        public SelectList Rooms { get; set; }
     }
 }

@@ -63,6 +63,23 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
                                 UserFirstName = k.FirstName,
                                 UserSurName = k.SurName
                             })
+                    .GroupJoin(
+                        this.DbContext.OperationObjects,
+                        s => s.Entity.ServerName,
+                        u => u.Name,
+                        (s, res) => new { s, res })
+                    .SelectMany(
+                        t => t.res.DefaultIfEmpty(),
+                        (t, k) =>
+                        new
+                            {
+                                t.s.Entity,
+                                t.s.BuildingId,
+                                t.s.FloorId,
+                                t.s.UserFirstName,
+                                t.s.UserSurName,
+                                OperationObjectName = k.Name
+                            })
                     .Single();
 
             var serverAggregate = Server.CreateForEdit(

@@ -10,60 +10,10 @@
             <th colspan="2" class="header">@Translation.Get("Server")</th>
         </tr>
     }
-    @if (Model.Name.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.Name.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.Name.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.Manufacturer.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.Manufacturer.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.Manufacturer.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.Description.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.Description.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.Description.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.Model.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.Model.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.Model.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.SerialNumber.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.SerialNumber.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.SerialNumber.Value)
-            </td>
-        </tr>
-    }
+    @Html.EditorFor(m => m.Name, "NotReadonlyFields/Text")
+    @Html.EditorFor(m => m.Manufacturer, "NotReadonlyFields/Text")
+    @Html.EditorFor(m => m.Description, "NotReadonlyFields/Text")
+    @Html.EditorFor(m => m.Model, "NotReadonlyFields/Text")
+    @Html.EditorFor(m => m.SerialNumber, "NotReadonlyFields/Text")
 </table>
 

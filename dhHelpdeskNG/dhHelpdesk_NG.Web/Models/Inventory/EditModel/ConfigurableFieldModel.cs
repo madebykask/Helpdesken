@@ -22,7 +22,7 @@
         [NotNullAndEmpty]
         public string Caption { get; set; }
 
-        //[LocalizedRequiredFrom("Show")]
+        [LocalizedRequiredFrom("IsRequired")]
         public TValue Value { get; set; }
 
         public bool IsRequired { get; set; }

@@ -8,7 +8,7 @@
     {
         public OrganizationFieldsViewModel(
             OrganizationFieldsModel organizationFieldsModel,
-            ConfigurableFieldModel<SelectList> departments)
+            SelectList departments)
         {
             this.OrganizationFieldsModel = organizationFieldsModel;
             this.Departments = departments;
@@ -18,6 +18,6 @@
         public OrganizationFieldsModel OrganizationFieldsModel { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> Departments { get; set; }
+        public SelectList Departments { get; set; }
     }
 }

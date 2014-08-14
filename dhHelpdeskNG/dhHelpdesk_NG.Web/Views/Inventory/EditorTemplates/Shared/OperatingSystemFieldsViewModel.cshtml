@@ -1,6 +1,6 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Shared.OperatingSystemFieldsViewModel
 <table class="tableform">
-    @if (Model.OperatingSystems.Show
+    @if (Model.OperatingSystemFieldsModel.OperatingSystemId.Show
         || Model.OperatingSystemFieldsModel.Version.Show
         || Model.OperatingSystemFieldsModel.ServicePack.Show
         || Model.OperatingSystemFieldsModel.RegistrationCode.Show
@@ -10,60 +10,10 @@
             <th colspan="2" class="header">@Translation.Get("Operativsystem")</th>
         </tr>
     }
-    @if (Model.OperatingSystems.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.OperatingSystems.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.DropDownListFor(m => m.OperatingSystemFieldsModel.OperatingSystemId, Model.OperatingSystems.Value, string.Empty)
-            </td>
-        </tr>
-    }
-    @if (Model.OperatingSystemFieldsModel.Version.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.OperatingSystemFieldsModel.Version.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.OperatingSystemFieldsModel.Version.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.OperatingSystemFieldsModel.ServicePack.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.OperatingSystemFieldsModel.ServicePack.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.OperatingSystemFieldsModel.ServicePack.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.OperatingSystemFieldsModel.RegistrationCode.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.OperatingSystemFieldsModel.RegistrationCode.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.OperatingSystemFieldsModel.RegistrationCode.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.OperatingSystemFieldsModel.ProductKey.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.OperatingSystemFieldsModel.ProductKey.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.OperatingSystemFieldsModel.ProductKey.Value)
-            </td>
-        </tr>
-    }
+    @Html.EditorFor(m => m.OperatingSystemFieldsModel.OperatingSystemId, "NotReadonlyFields/List", new { Source = Model.OperatingSystems })
+    @Html.EditorFor(m => m.OperatingSystemFieldsModel.Version, "NotReadonlyFields/Text")
+    @Html.EditorFor(m => m.OperatingSystemFieldsModel.ServicePack, "NotReadonlyFields/Text")
+    @Html.EditorFor(m => m.OperatingSystemFieldsModel.RegistrationCode, "NotReadonlyFields/Text")
+    @Html.EditorFor(m => m.OperatingSystemFieldsModel.ProductKey, "NotReadonlyFields/Text")
 </table>
 

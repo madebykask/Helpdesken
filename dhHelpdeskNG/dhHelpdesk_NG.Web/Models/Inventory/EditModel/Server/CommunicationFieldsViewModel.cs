@@ -6,9 +6,13 @@
 
     public class CommunicationFieldsViewModel
     {
+        public CommunicationFieldsViewModel()
+        {
+        }
+
         public CommunicationFieldsViewModel(
             CommunicationFieldsModel communicationFieldsModel,
-            ConfigurableFieldModel<SelectList> networkAdapters)
+            SelectList networkAdapters)
         {
             this.CommunicationFieldsModel = communicationFieldsModel;
             this.NetworkAdapters = networkAdapters;
@@ -18,6 +22,6 @@
         public CommunicationFieldsModel CommunicationFieldsModel { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> NetworkAdapters { get; set; }
+        public SelectList NetworkAdapters { get; set; }
     }
 }

@@ -26,6 +26,17 @@
             return list;
         }
 
+        public SelectList CreateSelectList(ModelEditFieldSetting setting, Enum items, string selectedValue)
+        {
+            if (!setting.IsShow)
+            {
+                return new SelectList(Enumerable.Empty<SelectListItem>());
+            }
+
+            var list = items.ToSelectList(selectedValue);
+            return list;
+        }
+        
         public ConfigurableFieldModel<DateTime?> CreateNullableDateTimeField(
             ModelEditFieldSetting setting,
             DateTime? value)
@@ -46,34 +57,6 @@
                              setting.Caption,
                              value,
                              setting.IsRequired);
-        }
-
-        public ConfigurableFieldModel<SelectList> CreateSelectListField(
-            ModelEditFieldSetting setting,
-            List<ItemOverview> items,
-            string selectedValue)
-        {
-            if (!setting.IsShow)
-            {
-                return ConfigurableFieldModel<SelectList>.CreateUnshowable();
-            }
-
-            var list = new SelectList(items, "Value", "Name", selectedValue);
-            return new ConfigurableFieldModel<SelectList>(setting.Caption, list, setting.IsRequired);
-        }
-
-        public ConfigurableFieldModel<SelectList> CreateSelectListField(
-            ModelEditFieldSetting setting,
-            Enum items,
-            string selectedValue)
-        {
-            if (!setting.IsShow)
-            {
-                return ConfigurableFieldModel<SelectList>.CreateUnshowable();
-            }
-
-            var list = items.ToSelectList(selectedValue);
-            return new ConfigurableFieldModel<SelectList>(setting.Caption, list, setting.IsRequired);
         }
 
         public ConfigurableFieldModel<string> CreateStringField(ModelEditFieldSetting setting, string value)
@@ -98,6 +81,13 @@
             return !setting.IsShow
                        ? ConfigurableFieldModel<int>.CreateUnshowable()
                        : new ConfigurableFieldModel<int>(setting.Caption, value, setting.IsRequired);
+        }
+
+        public ConfigurableFieldModel<int?> CreateNullableIntegerField(ModelEditFieldSetting setting, int? value)
+        {
+            return !setting.IsShow
+                       ? ConfigurableFieldModel<int?>.CreateUnshowable()
+                       : new ConfigurableFieldModel<int?>(setting.Caption, value, setting.IsRequired);
         }
     }
 }

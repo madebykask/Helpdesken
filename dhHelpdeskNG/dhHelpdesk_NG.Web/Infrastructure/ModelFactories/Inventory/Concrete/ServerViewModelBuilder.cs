@@ -50,22 +50,25 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                     settings.GeneralFieldsSettings.SerialNumberFieldSetting,
                     model.GeneralFields.SerialNumber);
 
-            var generalFieldsModel = new GeneralFieldsModel(
-                name,
-                manufacturer,
-                description,
-                serverModel,
-                serial);
+            var generalFieldsModel = new GeneralFieldsModel(name, manufacturer, description, serverModel, serial);
 
-            var proccesorFieldsModel = new ProccesorFieldsModel(model.ProccesorFields.ProccesorId);
+            var processor =
+                this.configurableFieldModelBuilder.CreateNullableIntegerField(
+                    settings.ProccesorFieldsSettings.ProccesorFieldSetting,
+                    model.ProccesorFields.ProccesorId);
+            var proccesorFieldsModel = new ProccesorFieldsModel(processor);
             var processors =
-                this.configurableFieldModelBuilder.CreateSelectListField(
+                this.configurableFieldModelBuilder.CreateSelectList(
                     settings.ProccesorFieldsSettings.ProccesorFieldSetting,
                     options.Processors,
                     model.ProccesorFields.ProccesorId.ToString());
 
             var processorViewModel = new ProccesorFieldsViewModel(proccesorFieldsModel, processors);
 
+            var operatingSystem =
+                this.configurableFieldModelBuilder.CreateNullableIntegerField(
+                    settings.OperatingSystemFieldsSettings.OperatingSystemFieldSetting,
+                    model.OperatingSystemFields.OperatingSystemId);
             var version =
                 this.configurableFieldModelBuilder.CreateStringField(
                     settings.OperatingSystemFieldsSettings.VersionFieldSetting,
@@ -83,15 +86,14 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                     settings.OperatingSystemFieldsSettings.ProductKeyFieldSetting,
                     model.OperatingSystemFields.ProductKey);
 
-            var operatingSystemFieldsModel =
-                new OperatingSystemFieldsModel(
-                    model.OperatingSystemFields.OperatingSystemId,
-                    version,
-                    servicePack,
-                    registratinCode,
-                    productKey);
+            var operatingSystemFieldsModel = new OperatingSystemFieldsModel(
+                operatingSystem,
+                version,
+                servicePack,
+                registratinCode,
+                productKey);
             var operatingSystems =
-                this.configurableFieldModelBuilder.CreateSelectListField(
+                this.configurableFieldModelBuilder.CreateSelectList(
                     settings.OperatingSystemFieldsSettings.OperatingSystemFieldSetting,
                     options.OperatingSystems,
                     model.OperatingSystemFields.OperatingSystemId.ToString());
@@ -100,9 +102,13 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 operatingSystemFieldsModel,
                 operatingSystems);
 
-            var memoryFieldsModel = new MemoryFieldsModel(model.MemoryFields.RAMId);
+            var memory =
+                this.configurableFieldModelBuilder.CreateNullableIntegerField(
+                    settings.MemoryFieldsSettings.RAMFieldSetting,
+                    model.MemoryFields.RAMId);
+            var memoryFieldsModel = new MemoryFieldsModel(memory);
             var memories =
-                this.configurableFieldModelBuilder.CreateSelectListField(
+                this.configurableFieldModelBuilder.CreateSelectList(
                     settings.MemoryFieldsSettings.RAMFieldSetting,
                     options.Rams,
                     model.MemoryFields.RAMId.ToString());
@@ -139,43 +145,53 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                     settings.PlaceFieldsSettings.LocationFieldSetting,
                     model.PlaceFields.Location);
 
+            var room =
+                this.configurableFieldModelBuilder.CreateNullableIntegerField(
+                    settings.PlaceFieldsSettings.RoomFieldSetting,
+                    model.PlaceFields.RoomId);
             var placeFieldsModel = new PlaceFieldsModel(
                 model.PlaceFields.BuildingId,
                 model.PlaceFields.FloorId,
-                model.PlaceFields.RoomId,
+                room,
                 location);
 
-            var buildings = this.configurableFieldModelBuilder.CreateSelectList(
-                settings.PlaceFieldsSettings.RoomFieldSetting,
-                options.Buildings,
-                model.PlaceFields.BuildingId.ToString());
-            var floors = this.configurableFieldModelBuilder.CreateSelectList(
-                settings.PlaceFieldsSettings.RoomFieldSetting,
-                options.Floors,
-                model.PlaceFields.FloorId.ToString());
+            var buildings =
+                this.configurableFieldModelBuilder.CreateSelectList(
+                    settings.PlaceFieldsSettings.RoomFieldSetting,
+                    options.Buildings,
+                    model.PlaceFields.BuildingId.ToString());
+            var floors =
+                this.configurableFieldModelBuilder.CreateSelectList(
+                    settings.PlaceFieldsSettings.RoomFieldSetting,
+                    options.Floors,
+                    model.PlaceFields.FloorId.ToString());
             var rooms =
-                this.configurableFieldModelBuilder.CreateSelectListField(
+                this.configurableFieldModelBuilder.CreateSelectList(
                     settings.PlaceFieldsSettings.RoomFieldSetting,
                     options.Rooms,
                     model.PlaceFields.RoomId.ToString());
 
             var placeFieldsViewModel = new PlaceFieldsViewModel(placeFieldsModel, buildings, floors, rooms);
 
-            var info = this.configurableFieldModelBuilder.CreateStringField(
-                settings.OtherFieldsSettings.InfoFieldSetting,
-                model.OtherFields.Info);
-            var other = this.configurableFieldModelBuilder.CreateStringField(
-                settings.OtherFieldsSettings.OtherFieldSetting,
-                model.OtherFields.Other);
+            var info =
+                this.configurableFieldModelBuilder.CreateStringField(
+                    settings.OtherFieldsSettings.InfoFieldSetting,
+                    model.OtherFields.Info);
+            var other =
+                this.configurableFieldModelBuilder.CreateStringField(
+                    settings.OtherFieldsSettings.OtherFieldSetting,
+                    model.OtherFields.Other);
             var url = this.configurableFieldModelBuilder.CreateStringField(
                 settings.OtherFieldsSettings.URLFieldSetting,
                 model.OtherFields.URL);
-            var url2 = this.configurableFieldModelBuilder.CreateStringField(
-                settings.OtherFieldsSettings.URL2FieldSetting,
-                model.OtherFields.URL2);
-            var owner = this.configurableFieldModelBuilder.CreateStringField(
-                settings.OtherFieldsSettings.OwnerFieldSetting,
-                model.OtherFields.Owner);
+            var url2 =
+                this.configurableFieldModelBuilder.CreateStringField(
+                    settings.OtherFieldsSettings.URL2FieldSetting,
+                    model.OtherFields.URL2);
+            var owner =
+                this.configurableFieldModelBuilder.CreateStringField(
+                    settings.OtherFieldsSettings.OwnerFieldSetting,
+                    model.OtherFields.Owner);
 
             var otherFieldModel = new OtherFieldsModel(info, other, url, url2, owner);
 
@@ -188,13 +204,14 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                     settings.CommunicationFieldsSettings.MacAddressFieldSetting,
                     model.CommunicationFields.MacAddress);
 
-            var communicationFieldsModel = new CommunicationFieldsModel(
-                model.CommunicationFields.NetworkAdapterId,
-                ip,
-                mac);
+            var communication =
+                this.configurableFieldModelBuilder.CreateNullableIntegerField(
+                    settings.CommunicationFieldsSettings.NetworkAdapterFieldSetting,
+                    model.CommunicationFields.NetworkAdapterId);
+            var communicationFieldsModel = new CommunicationFieldsModel(communication, ip, mac);
 
             var adapters =
-                this.configurableFieldModelBuilder.CreateSelectListField(
+                this.configurableFieldModelBuilder.CreateSelectList(
                     settings.CommunicationFieldsSettings.NetworkAdapterFieldSetting,
                     options.NetworkAdapters,
                     model.CommunicationFields.NetworkAdapterId.ToString());
@@ -255,15 +272,23 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 serverModel,
                 serial);
 
-            var proccesorFieldsModel = new ProccesorFieldsModel(null);
+            var processor =
+                this.configurableFieldModelBuilder.CreateNullableIntegerField(
+                    settings.ProccesorFieldsSettings.ProccesorFieldSetting,
+                    null);
+            var proccesorFieldsModel = new ProccesorFieldsModel(processor);
             var processors =
-                this.configurableFieldModelBuilder.CreateSelectListField(
+                this.configurableFieldModelBuilder.CreateSelectList(
                     settings.ProccesorFieldsSettings.ProccesorFieldSetting,
                     options.Processors,
                     null);
 
             var processorViewModel = new ProccesorFieldsViewModel(proccesorFieldsModel, processors);
 
+            var operatingSystem =
+                this.configurableFieldModelBuilder.CreateNullableIntegerField(
+                    settings.OperatingSystemFieldsSettings.OperatingSystemFieldSetting,
+                    null);
             var version =
                 this.configurableFieldModelBuilder.CreateStringField(
                     settings.OperatingSystemFieldsSettings.VersionFieldSetting,
@@ -283,13 +308,13 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
             var operatingSystemFieldsModel =
                 new OperatingSystemFieldsModel(
-                    null,
+                    operatingSystem,
                     version,
                     servicePack,
                     registratinCode,
                     productKey);
             var operatingSystems =
-                this.configurableFieldModelBuilder.CreateSelectListField(
+                this.configurableFieldModelBuilder.CreateSelectList(
                     settings.OperatingSystemFieldsSettings.OperatingSystemFieldSetting,
                     options.OperatingSystems,
                     null);
@@ -298,9 +323,13 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 operatingSystemFieldsModel,
                 operatingSystems);
 
-            var memoryFieldsModel = new MemoryFieldsModel(null);
+            var memory =
+                this.configurableFieldModelBuilder.CreateNullableIntegerField(
+                    settings.MemoryFieldsSettings.RAMFieldSetting,
+                    null);
+            var memoryFieldsModel = new MemoryFieldsModel(memory);
             var memories =
-                this.configurableFieldModelBuilder.CreateSelectListField(
+                this.configurableFieldModelBuilder.CreateSelectList(
                     settings.MemoryFieldsSettings.RAMFieldSetting,
                     options.Rams,
                     null);
@@ -336,11 +365,14 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 this.configurableFieldModelBuilder.CreateStringField(
                     settings.PlaceFieldsSettings.LocationFieldSetting,
                     null);
-
+            var room =
+                this.configurableFieldModelBuilder.CreateNullableIntegerField(
+                    settings.PlaceFieldsSettings.RoomFieldSetting,
+                    null);
             var placeFieldsModel = new PlaceFieldsModel(
                 null,
                 null,
-                null,
+                room,
                 location);
 
             var buildings = this.configurableFieldModelBuilder.CreateSelectList(
@@ -352,7 +384,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 options.Floors,
                 null);
             var rooms =
-                this.configurableFieldModelBuilder.CreateSelectListField(
+                this.configurableFieldModelBuilder.CreateSelectList(
                     settings.PlaceFieldsSettings.RoomFieldSetting,
                     options.Rooms,
                     null);
@@ -385,14 +417,18 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 this.configurableFieldModelBuilder.CreateStringField(
                     settings.CommunicationFieldsSettings.MacAddressFieldSetting,
                     null);
+            var communication =
+                this.configurableFieldModelBuilder.CreateNullableIntegerField(
+                    settings.CommunicationFieldsSettings.NetworkAdapterFieldSetting,
+                    null);
 
             var communicationFieldsModel = new CommunicationFieldsModel(
-                null,
+                communication,
                 ip,
                 mac);
 
             var adapters =
-                this.configurableFieldModelBuilder.CreateSelectListField(
+                this.configurableFieldModelBuilder.CreateSelectList(
                     settings.CommunicationFieldsSettings.NetworkAdapterFieldSetting,
                     options.NetworkAdapters,
                     null);

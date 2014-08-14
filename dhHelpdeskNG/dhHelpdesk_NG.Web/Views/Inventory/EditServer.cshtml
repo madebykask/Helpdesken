@@ -89,20 +89,21 @@
                         </thead>
                         <tbody>
                             @{
-                                var models = Model.Softwaries.Where(x => x.Name.Contains(Hotfix)).Select(x => x.Name).OrderBy(x => x);
+                        var models = Model.Softwaries.Where(x => x.Name.Contains(Hotfix)).Select(x => x.Name).OrderBy(x => x);
 
-                                foreach (var model in models)
-                                {
-                                    <tr>
-                                        <th>@Html.DisplayFor(x => model);
-                                        </th>
-                                    </tr>
-                                }
+                        foreach (var model in models)
+                        {
+                                <tr>
+                                    <th>@Html.DisplayFor(x => model);
+                                    </th>
+                                </tr>
+                        }
                             }
                         </tbody>
                     </table>
                 </div>
                 <div class="tab-pane tab-pane-border" id="fragment-5">
+                    @Html.Partial("OperationLogGrid", Model.OperaionLogs)
                 </div>
             </div>
         </div>

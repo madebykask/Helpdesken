@@ -4,8 +4,12 @@
 
     public class CommunicationFieldsModel
     {
+        public CommunicationFieldsModel()
+        {
+        }
+
         public CommunicationFieldsModel(
-            int? networkAdapterId,
+            ConfigurableFieldModel<int?> networkAdapterId,
             ConfigurableFieldModel<string> ipAddress,
             ConfigurableFieldModel<string> macAddress)
         {
@@ -14,11 +18,13 @@
             this.MacAddress = macAddress;
         }
 
-        [IsId]
-        public int? NetworkAdapterId { get; set; }
+        [NotNull]
+        public ConfigurableFieldModel<int?> NetworkAdapterId { get; set; }
 
+        [NotNull]
         public ConfigurableFieldModel<string> IPAddress { get; set; }
 
+        [NotNull]
         public ConfigurableFieldModel<string> MacAddress { get; set; }
     }
 }

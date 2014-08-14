@@ -10,61 +10,11 @@
             <th colspan="2" class="header">@Translation.Get("Övrigt")</th>
         </tr>
     }
-    @if (Model.Info.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.Info.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextAreaFor(m => m.Info.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.Other.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.Other.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextAreaFor(m => m.Other.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.URL.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.URL.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.URL.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.URL2.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.URL2.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.URL2.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.Owner.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.Owner.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.Owner.Value)
-            </td>
-        </tr>
-    }
+    @Html.EditorFor(m => m.Info, "NotReadonlyFields/WideText")
+    @Html.EditorFor(m => m.Other, "NotReadonlyFields/Text")
+    @Html.EditorFor(m => m.URL, "NotReadonlyFields/Text")
+    @Html.EditorFor(m => m.URL2, "NotReadonlyFields/Text")
+    @Html.EditorFor(m => m.Owner, "NotReadonlyFields/Text")
 </table>
 
 

@@ -32,14 +32,14 @@
     }
 </script>
 <table class="tableform">
-    @if (Model.Rooms.Show
+    @if (Model.PlaceFieldsModel.RoomId.Show
         || Model.PlaceFieldsModel.Location.Show)
     {
         <tr>
             <th colspan="2" class="header">@Translation.Get("Placering")</th>
         </tr>
     }
-    @if (Model.Rooms.Show)
+    @if (Model.PlaceFieldsModel.RoomId.Show)
     {
         <tr>
             <td class="span3">
@@ -57,24 +57,7 @@
                 @Html.DropDownListFor(m => m.PlaceFieldsModel.FloorId, Model.Floors, string.Empty, new { id = "floors_dropdown" })
             </td>
         </tr>
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.Rooms.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.DropDownListFor(m => m.PlaceFieldsModel.RoomId, Model.Rooms.Value, string.Empty, new { id = "rooms_dropdown" })
-            </td>
-        </tr>
     }
-    @if (Model.PlaceFieldsModel.Location.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.PlaceFieldsModel.Location.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.PlaceFieldsModel.Location.Value)
-            </td>
-        </tr>
-    }
+    @Html.EditorFor(m => m.PlaceFieldsModel.RoomId, "NotReadonlyFields/List", new { Source = Model.Rooms, id = "rooms_dropdown" })
+    @Html.EditorFor(m => m.PlaceFieldsModel.Location, "NotReadonlyFields/Text")
 </table>

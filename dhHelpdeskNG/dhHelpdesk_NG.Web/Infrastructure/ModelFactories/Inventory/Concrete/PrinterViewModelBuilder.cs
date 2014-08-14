@@ -63,6 +63,10 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
             var inventoryFieldModel = new InventoryFieldsModel(barCode, purchaseDate);
 
+            var room =
+                this.configurableFieldModelBuilder.CreateNullableIntegerField(
+                    settings.PlaceFieldsSettings.RoomFieldSetting,
+                    model.PlaceFields.RoomId);
             var location =
                 this.configurableFieldModelBuilder.CreateStringField(
                     settings.PlaceFieldsSettings.LocationFieldSetting,
@@ -71,7 +75,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             var placeFieldsModel = new PlaceFieldsModel(
                 model.PlaceFields.BuildingId,
                 model.PlaceFields.FloorId,
-                model.PlaceFields.RoomId,
+                room,
                 location);
 
             var buildings = this.configurableFieldModelBuilder.CreateSelectList(
@@ -83,7 +87,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 options.Floors,
                 model.PlaceFields.FloorId.ToString());
             var rooms =
-                this.configurableFieldModelBuilder.CreateSelectListField(
+                this.configurableFieldModelBuilder.CreateSelectList(
                     settings.PlaceFieldsSettings.RoomFieldSetting,
                     options.Rooms,
                     model.PlaceFields.RoomId.ToString());
@@ -124,15 +128,19 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 ip,
                 mac);
 
+            var department =
+                this.configurableFieldModelBuilder.CreateNullableIntegerField(
+                    settings.OrganizationFieldsSettings.DepartmentFieldSetting,
+                    model.OrganizationFields.DepartmentId);
             var ou =
                 this.configurableFieldModelBuilder.CreateStringField(
                     settings.OrganizationFieldsSettings.UnitFieldSetting,
                     model.OrganizationFields.UnitId);
 
-            var organizationFieldsModel = new OrganizationFieldsModel(model.OrganizationFields.DepartmentId, ou);
+            var organizationFieldsModel = new OrganizationFieldsModel(department, ou);
 
             var departments =
-                this.configurableFieldModelBuilder.CreateSelectListField(
+                this.configurableFieldModelBuilder.CreateSelectList(
                     settings.OrganizationFieldsSettings.DepartmentFieldSetting,
                     options.Departments,
                     model.OrganizationFields.DepartmentId.ToString());
@@ -187,6 +195,10 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
             var inventoryFieldModel = new InventoryFieldsModel(barCode, purchaseDate);
 
+            var room =
+                this.configurableFieldModelBuilder.CreateNullableIntegerField(
+                    settings.PlaceFieldsSettings.RoomFieldSetting,
+                    null);
             var location =
                 this.configurableFieldModelBuilder.CreateStringField(
                     settings.PlaceFieldsSettings.LocationFieldSetting,
@@ -195,7 +207,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             var placeFieldsModel = new PlaceFieldsModel(
                 null,
                 null,
-                null,
+                room,
                 location);
 
             var buildings = this.configurableFieldModelBuilder.CreateSelectList(
@@ -207,7 +219,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 options.Floors,
                 null);
             var rooms =
-                this.configurableFieldModelBuilder.CreateSelectListField(
+                this.configurableFieldModelBuilder.CreateSelectList(
                     settings.PlaceFieldsSettings.RoomFieldSetting,
                     options.Rooms,
                     null);
@@ -248,15 +260,19 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 ip,
                 mac);
 
+            var department =
+                this.configurableFieldModelBuilder.CreateNullableIntegerField(
+                    settings.OrganizationFieldsSettings.DepartmentFieldSetting,
+                    null);
             var ou =
                 this.configurableFieldModelBuilder.CreateStringField(
                     settings.OrganizationFieldsSettings.UnitFieldSetting,
                     null);
 
-            var organizationFieldsModel = new OrganizationFieldsModel(null, ou);
+            var organizationFieldsModel = new OrganizationFieldsModel(department, ou);
 
             var departments =
-                this.configurableFieldModelBuilder.CreateSelectListField(
+                this.configurableFieldModelBuilder.CreateSelectList(
                     settings.OrganizationFieldsSettings.DepartmentFieldSetting,
                     options.Departments,
                     null);

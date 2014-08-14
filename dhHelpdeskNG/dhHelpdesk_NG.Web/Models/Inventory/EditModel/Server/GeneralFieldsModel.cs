@@ -1,7 +1,13 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Server
 {
+    using DH.Helpdesk.Common.ValidationAttributes;
+
     public class GeneralFieldsModel
     {
+        public GeneralFieldsModel()
+        {
+        }
+
         public GeneralFieldsModel(
             ConfigurableFieldModel<string> name,
             ConfigurableFieldModel<string> manufacturer,
@@ -16,14 +22,19 @@
             this.SerialNumber = serialNumber;
         }
 
+        [NotNull]
         public ConfigurableFieldModel<string> Name { get; set; }
 
+        [NotNull]
         public ConfigurableFieldModel<string> Manufacturer { get; set; }
 
+        [NotNull]
         public ConfigurableFieldModel<string> Description { get; set; }
 
+        [NotNull]
         public ConfigurableFieldModel<string> Model { get; set; }
 
+        [NotNull]
         public ConfigurableFieldModel<string> SerialNumber { get; set; }
     }
 }

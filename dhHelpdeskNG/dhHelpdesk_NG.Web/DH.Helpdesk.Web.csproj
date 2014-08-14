@@ -1556,6 +1556,13 @@
     <Content Include="Views\Inventory\EditorTemplates\Fields\TimeOutOfTable.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\Fields\WideText.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\Fields\List.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\NotReadonlyFields\Date.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\NotReadonlyFields\Flag.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\NotReadonlyFields\List.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\NotReadonlyFields\Number.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\NotReadonlyFields\Text.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\NotReadonlyFields\WideText.cshtml" />
+    <Content Include="Views\Inventory\OperationLogGrid.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
