@@ -341,6 +341,7 @@
     <Content Include="Content\icons\case_log_urgent.png" />
     <Content Include="Content\img-profile\ikea-image.png" />
     <Content Include="Content\img-profile\ikea-map.png" />
+    <Content Include="Content\img-profile\ikea-people.png" />
     <Content Include="Content\img-profile\IKEA.png" />
     <Content Include="Content\img\close.gif" />
     <Content Include="Content\img\dhhelpdesk-login.png" />

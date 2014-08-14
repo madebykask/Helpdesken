@@ -147,6 +147,8 @@ using System.Threading.Tasks;
                 }
                 else
                 {
+                    SessionFacade.CurrentSystemUser = userIdentity.UserId;
+                    SessionFacade.CurrentUserIdentity = userIdentity;
 
                     var defaultEmployeeNumber = ConfigurationManager.AppSettings["DefaultEmployeeNumber"].ToString();
                     if (!string.IsNullOrEmpty(defaultEmployeeNumber))
@@ -154,7 +156,7 @@ using System.Threading.Tasks;
 
                     //userIdentity.EmployeeNumber = "31000000";
                     SessionFacade.UserHasAccess = true;
-                    if (SessionFacade.CurrentCoWorkers == null)
+                    if (SessionFacade.CurrentCoWorkers == null || (SessionFacade.CurrentCoWorkers != null && SessionFacade.CurrentCoWorkers.Count == 0))
                     {
                         if (string.IsNullOrEmpty(userIdentity.EmployeeNumber))
                         {
@@ -167,9 +169,7 @@ using System.Threading.Tasks;
                             var employee = AsyncHelpers.RunSync<APIEmployee>(() => _amAPIService.GetEmployeeFor(userIdentity.EmployeeNumber));
                             if (employee.IsManager)
                             {
-                                SessionFacade.CurrentCoWorkers = employee.Subordinates;
-                                SessionFacade.CurrentSystemUser = userIdentity.UserId;
-                                SessionFacade.CurrentUserIdentity = userIdentity;
+                                SessionFacade.CurrentCoWorkers = employee.Subordinates;                                
                             }
                             else
                             {

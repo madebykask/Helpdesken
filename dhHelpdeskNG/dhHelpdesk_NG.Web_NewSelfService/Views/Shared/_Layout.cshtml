@@ -289,7 +289,7 @@
                     <a href="#" > User: @SessionFacade.CurrentSystemUser</a> 
                      <span class="toplogout-space"> | </span>
                     
-                     @*<a href="#">@Translation.Get("Logga ut", Enums.TranslationSource.TextTranslation)</a>*@
+                     <a href="@System.Configuration.ConfigurationManager.AppSettings["LogoutUrl"].ToString()">@Translation.Get("Logga ut", Enums.TranslationSource.TextTranslation)</a>
                 }
                 
             </div>
