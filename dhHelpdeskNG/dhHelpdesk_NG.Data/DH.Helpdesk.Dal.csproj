@@ -169,6 +169,7 @@
     <Compile Include="Mappers\IEntityToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Computer\ComputerFieldSettingsToComputerOverviewSettingsMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Computer\ComputerFieldSettingsToSearchSettingsMapper.cs" />
+    <Compile Include="Mappers\Inventory\EntityToBusinessModel\Server\ServerFieldSettingsToServerProcessingSettingsMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Server\ServerFieldSettingsToFieldSettingsMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Server\ServerFieldSettingsToServerEditSettingsMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Printer\PrinterFieldSettingsToPrinterOverviewSettingsMapper.cs" />

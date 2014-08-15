@@ -10,6 +10,7 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.SharedSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ServerSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ServerFieldSettings;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ProcessingSetttings.ServerSettings;
     using DH.Helpdesk.Common.Collections;
     using DH.Helpdesk.Common.Extensions.Boolean;
     using DH.Helpdesk.Dal.Attributes.Inventory;
@@ -34,16 +35,20 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
 
         private readonly IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperData>, ServerFieldsSettings> entityToBusinessModelMapperForEdit;
 
+        private readonly IEntityToBusinessModelMapper<NamedObjectCollection<FieldProcessingSettingMapperData>, ServerFieldsSettingsProcessing> entityToBusinessModelMapperForProcessing;
+
         public ServerFieldSettingsRepository(
             IDatabaseFactory databaseFactory,
             IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, ServerFieldsSettingsOverview> entityToBusinessModelMapperForOverview,
             IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperDataForModelEdit>, ServerFieldsSettingsForModelEdit> entityToBusinessModelMapperForModelEdit,
-            IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperData>, ServerFieldsSettings> entityToBusinessModelMapperForEdit)
+            IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperData>, ServerFieldsSettings> entityToBusinessModelMapperForEdit,
+            IEntityToBusinessModelMapper<NamedObjectCollection<FieldProcessingSettingMapperData>, ServerFieldsSettingsProcessing> entityToBusinessModelMapperForProcessing)
             : base(databaseFactory)
         {
             this.entityToBusinessModelMapperForOverview = entityToBusinessModelMapperForOverview;
             this.entityToBusinessModelMapperForModelEdit = entityToBusinessModelMapperForModelEdit;
             this.entityToBusinessModelMapperForEdit = entityToBusinessModelMapperForEdit;
+            this.entityToBusinessModelMapperForProcessing = entityToBusinessModelMapperForProcessing;
         }
 
         public void Update(ServerFieldsSettings businessModel)
@@ -185,6 +190,24 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
 
             var settingCollection = new NamedObjectCollection<FieldOverviewSettingMapperData>(mapperData);
             return this.entityToBusinessModelMapperForOverview.Map(settingCollection);
+        }
+
+        [CreateMissingComputerSettings("customerId")]
+        public ServerFieldsSettingsProcessing GetFieldSettingsProcessing(int customerId)
+        {
+            var settings = this.GetSettings(customerId);
+
+            List<FieldProcessingSettingMapperData> mapperData = settings.Select(
+                s =>
+                new FieldProcessingSettingMapperData
+                {
+                    FieldName = s.ServerField,
+                    Show = s.Show,
+                    Required = s.Required
+                }).ToList();
+
+            var settingCollection = new NamedObjectCollection<FieldProcessingSettingMapperData>(mapperData);
+            return this.entityToBusinessModelMapperForProcessing.Map(settingCollection);
         }
 
         private static void MapGeneralFieldsSettings(

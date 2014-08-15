@@ -70,6 +70,7 @@
     <Compile Include="BusinessLogic\BusinessModelExport\IExportFileNameFormatter.cs" />
     <Compile Include="BusinessLogic\BusinessModelRestorers\Inventory\Concrete\ComputerRestorer.cs" />
     <Compile Include="BusinessLogic\BusinessModelRestorers\Inventory\IComputerRestorer.cs" />
+    <Compile Include="BusinessLogic\BusinessModelRestorers\Inventory\IServerRestorer.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Inventory\Concrete\ComputerValidator.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Inventory\IComputerValidator.cs" />
     <Compile Include="BusinessLogic\Invoice\IInvoiceImporter.cs" />

@@ -10,6 +10,7 @@
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.PrinterFieldSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ServerFieldSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ProcessingSetttings.ComputerSettings;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ProcessingSetttings.ServerSettings;
     using DH.Helpdesk.Common.Collections;
     using DH.Helpdesk.Dal.MapperData.Inventory;
     using DH.Helpdesk.Dal.Mappers;
@@ -37,9 +38,11 @@
             this.Bind<IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, ComputerFieldsSettingsOverviewForFilter>>().To<ComputerFieldSettingsToSearchSettingsMapper>().InSingletonScope();
             this.Bind<IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, ComputerFieldsSettingsOverviewForShortInfo>>().To<ComputerFieldSettingsToShortInfoSettingsMapper>().InSingletonScope();
             this.Bind<IEntityToBusinessModelMapper<NamedObjectCollection<FieldProcessingSettingMapperData>, ComputerFieldsSettingsProcessing>>().To<ComputerSettingsToComputerProcessingSettingsMapper>();
+
             this.Bind<IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperDataForModelEdit>, ServerFieldsSettingsForModelEdit>>().To<ServerFieldSettingsToServerEditSettingsMapper>().InSingletonScope();
             this.Bind<IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, ServerFieldsSettingsOverview>>().To<ServerFieldSettingsToServerOverviewSettingsMapper>().InSingletonScope();
             this.Bind<IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperData>, ServerFieldsSettings>>().To<ServerFieldSettingsToFieldSettingsMapper>().InSingletonScope();
+            this.Bind<IEntityToBusinessModelMapper<NamedObjectCollection<FieldProcessingSettingMapperData>, ServerFieldsSettingsProcessing>>().To<ServerFieldSettingsToServerProcessingSettingsMapper>().InSingletonScope();
 
             this.Bind<IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperDataForModelEdit>, PrinterFieldsSettingsForModelEdit>>().To<PrinterFieldSettingsToPrinterEditSettingsMapper>().InSingletonScope();
             this.Bind<IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, PrinterFieldsSettingsOverview>>().To<PrinterFieldSettingsToPrinterOverviewSettingsMapper>().InSingletonScope();
