@@ -341,6 +341,7 @@
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Areas\Admin\Controllers\UsersController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
+    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\UserInteractionController.cs" />
     <Compile Include="Enums\Changes\ChangeDeletedItem.cs" />
     <Compile Include="Enums\Changes\ClickedButton.cs" />
