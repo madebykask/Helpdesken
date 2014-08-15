@@ -5,7 +5,7 @@
     
 }
 <!-- Modal -->
-<input type="hidden" name="searchCoworkers" id ="searchCoworkers" value="" />
+
 <input type="hidden" name="JsonCoworkers" id ="JsonCoworkers" value="@Model.CoWorkers.ToJavaScriptObject()" />
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -181,29 +181,20 @@
 
     function DoSearch() {
         var s = $("#searchTxt").val();        
-        $("#searchCoworkers").val(s);
-        
-        
+                        
         var cwTable = $('#coWorkerTable');
         cwTable.children('tbody').remove();
 
         var newBody = "";
-        debugger;
-        var cws = jQuery.parseJSON($("#JsonCoworkers").val());
         
-        //alert(cws[0].EmployeeNumber);
-
-        //var obj = $.parseJSON('{"Name":"James Bond", "Age": "30"}');
-
-        //alert(obj.Name);
-        //alert(obj.Age);
+        var cws = jQuery.parseJSON($("#JsonCoworkers").val());                
 
         if (cws != null) {
             for (var i = 0; i < cws.length ; i++) {
                 cw = cws[i];
-                var mm = cw.EmployeeNumber + " " + cw.FirstName + " " + cw.LastName + " " + cw.JobKey + " " + cw.JobTitle + " " + cw.Email;
+                var txtSearch = cw.EmployeeNumber + " " + cw.FirstName + " " + cw.LastName + " " + cw.JobKey + " " + cw.JobTitle + " " + cw.Email;
 
-                if ((cw.EmployeeNumber != "") && (mm.toLowerCase().indexOf(s.toLowerCase()) >= 0)) {
+                if ((cw.EmployeeNumber != "") && (txtSearch.toLowerCase().indexOf(s.toLowerCase()) >= 0)) {
                     newBody +=
                                "<tr> " +
                                     "<td>" +
