@@ -3,9 +3,6 @@
     using System;
     using System.Web;
     using System.Web.Mvc;
-
-    using DH.Helpdesk.Common.Logger;
-
     using LogManager = DH.Helpdesk.Web.Infrastructure.Logger.LogManager;
 
     public class CustomHandleErrorAttribute : HandleErrorAttribute

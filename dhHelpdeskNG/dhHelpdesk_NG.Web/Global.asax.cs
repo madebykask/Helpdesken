@@ -2,11 +2,14 @@
 {
     using System;
     using System.Threading;
+    using System.Web;
     using System.Web.Mvc;
     using System.Web.Routing;
 
     using DH.Helpdesk.Common.Logger;
     using DH.Helpdesk.Services.Infrastructure;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Controllers;
     using DH.Helpdesk.Web.Infrastructure.Attributes;
     using DH.Helpdesk.Web.Infrastructure.Binders;
     using DH.Helpdesk.Web.Infrastructure.Configuration;
@@ -15,13 +18,12 @@
 
     using Microsoft.Practices.ServiceLocation;
 
-    public class MvcApplication : System.Web.HttpApplication
+    public class MvcApplication : HttpApplication
     {
         private readonly IConfiguration configuration = ManualDependencyResolver.Get<IConfiguration>();
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            // filters.Add(new HandleErrorAttribute());
             filters.Add(new CustomHandleErrorAttribute());
         }
 
@@ -31,18 +33,8 @@
 
             routes.MapRoute(
                 "Default",
-                // Route name
                 "{controller}/{action}/{id}",
                 new { area = "Admin", controller = "Home", action = "Index", id = UrlParameter.Optional });
-        }
-
-        /// <summary>
-        /// The register binders.
-        /// </summary>
-        private static void RegisterBinders()
-        {
-            ModelBinders.Binders.Add(typeof(DateTime), new DateTimeBinder());
-            ModelBinders.Binders.Add(typeof(DateTime?), new NullableDateTimeBinder());
         }
 
         protected void Application_Start()
@@ -60,9 +52,75 @@
             ProcessStartupTasks();
         }
 
-        protected void Application_BeginRequest(Object sender, EventArgs e)
+        protected void Application_BeginRequest(object sender, EventArgs e)
         {
             Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture = this.configuration.Application.DefaultCulture;
+        }
+
+        protected void Application_Error(object sender, EventArgs e)
+        {
+            var httpContext = ((MvcApplication)sender).Context;
+
+            var currentRouteData = RouteTable.Routes.GetRouteData(new HttpContextWrapper(httpContext));
+            var currentController = " ";
+            var currentAction = " ";
+
+            if (currentRouteData != null)
+            {
+                if (currentRouteData.Values["controller"] != null && !string.IsNullOrEmpty(currentRouteData.Values["controller"].ToString()))
+                {
+                    currentController = currentRouteData.Values["controller"].ToString();
+                }
+
+                if (currentRouteData.Values["action"] != null && !string.IsNullOrEmpty(currentRouteData.Values["action"].ToString()))
+                {
+                    currentAction = currentRouteData.Values["action"].ToString();
+                }
+            }
+
+            var ex = Server.GetLastError();
+
+            var controller = new ErrorController(ManualDependencyResolver.Get<IMasterDataService>());
+            var routeData = new RouteData();
+            var action = "Index";
+
+            if (ex is HttpException)
+            {
+                var httpEx = ex as HttpException;
+
+                switch (httpEx.GetHttpCode())
+                {
+                    case 404:
+                        action = "NotFound";
+                        break;
+
+                    // others if any
+                    default:
+                        action = "Index";
+                        break;
+                }
+            }
+
+            LogManager.Error.Error(new Exception(ex.Message, ex));
+
+            httpContext.ClearError();
+            httpContext.Response.Clear();
+            httpContext.Response.StatusCode = ex is HttpException ? ((HttpException)ex).GetHttpCode() : 500;
+            httpContext.Response.TrySkipIisCustomErrors = true;
+            routeData.Values["controller"] = "Error";
+            routeData.Values["action"] = action;
+
+            controller.ViewData.Model = new HandleErrorInfo(ex, currentController, currentAction);
+            ((IController)controller).Execute(new RequestContext(new HttpContextWrapper(httpContext), routeData));
+        } 
+
+        /// <summary>
+        /// The register binders.
+        /// </summary>
+        private static void RegisterBinders()
+        {
+            ModelBinders.Binders.Add(typeof(DateTime), new DateTimeBinder());
+            ModelBinders.Binders.Add(typeof(DateTime?), new NullableDateTimeBinder());
         }
 
         private static void RegisterLocalizedAttributes()

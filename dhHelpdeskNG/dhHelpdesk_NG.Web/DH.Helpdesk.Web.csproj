@@ -320,6 +320,7 @@
     <Compile Include="Controllers\CaseSolutionController.cs" />
     <Compile Include="Controllers\ChangeLanguageController.cs" />
     <Compile Include="Controllers\ChangesController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FaqController.cs" />
     <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\InventorySettingsController.cs" />
