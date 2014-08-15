@@ -84,6 +84,7 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
 
             var serverAggregate = Server.CreateForEdit(
                 anonymus.Entity.Id,
+                anonymus.OperationObjectName != null,
                 new BusinessData.Models.Inventory.Edit.Server.GeneralFields(
                     anonymus.Entity.ServerName,
                     anonymus.Entity.Manufacturer,

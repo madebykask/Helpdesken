@@ -6,6 +6,11 @@
 
     public class StateFields
     {
+        public StateFields(DateTime? syncChangeDate)
+        {
+            this.SyncChangeDate = syncChangeDate;
+        }
+
         public StateFields(DateTime? syncChangeDate, UserName createdBy)
         {
             this.SyncChangeDate = syncChangeDate;
@@ -15,5 +20,10 @@
         public DateTime? SyncChangeDate { get; set; }
 
         public UserName CreatedBy { get; set; }
+
+        public static StateFields CreateDefault()
+        {
+            return new StateFields(null);
+        }
     }
 }

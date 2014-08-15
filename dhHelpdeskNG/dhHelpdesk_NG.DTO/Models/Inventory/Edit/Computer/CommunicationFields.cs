@@ -28,5 +28,10 @@
         public bool IsRAS { get; set; }
 
         public string NovellClient { get; set; }
+
+        public static CommunicationFields CreateDefault()
+        {
+            return new CommunicationFields(null, null, null, false, null);
+        }
     }
 }

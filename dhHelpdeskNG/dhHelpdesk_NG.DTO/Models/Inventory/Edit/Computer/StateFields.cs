@@ -22,5 +22,10 @@
         public bool IsSendBack { get; set; }
 
         public DateTime? ScrapDate { get; set; }
+
+        public static StateFields CreateDefault()
+        {
+            return new StateFields(0, false, null, false, null);
+        }
     }
 }

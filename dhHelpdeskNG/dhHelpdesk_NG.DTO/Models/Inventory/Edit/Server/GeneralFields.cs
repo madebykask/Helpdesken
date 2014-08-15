@@ -20,5 +20,10 @@
         public string Model { get; set; }
 
         public string SerialNumber { get; set; }
+
+        public static GeneralFields CreateDefault()
+        {
+            return new GeneralFields(null, null, null, null, null);
+        }
     }
 }

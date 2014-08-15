@@ -8,5 +8,10 @@
         }
 
         public string SoundCard { get; set; }
+
+        public static SoundFields CreateDefault()
+        {
+            return new SoundFields(null);
+        }
     }
 }

@@ -65,11 +65,11 @@
 
         #region Server
 
-        void AddServer(Server businessModel);
+        void AddServer(Server businessModel, OperationContext context);
 
         void DeleteServer(int id);
 
-        void UpdateWorkstation(Server businessModel);
+        void UpdateServer(Server businessModel, OperationContext context);
 
         Server GetServer(int id);
 

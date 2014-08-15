@@ -12,6 +12,7 @@
         }
 
         public ServerViewModel(
+            bool isOperationObject,
             GeneralFieldsModel generalFields,
             OtherFieldsModel otherFields,
             StateFieldsModel stateFields,
@@ -24,6 +25,7 @@
             ProccesorFieldsViewModel proccesorFieldsViewModel,
             PlaceFieldsViewModel placeFieldsViewModel)
         {
+            this.IsOperationObject = isOperationObject;
             this.GeneralFieldsModel = generalFields;
             this.OtherFieldsModel = otherFields;
             this.StateFieldsModel = stateFields;

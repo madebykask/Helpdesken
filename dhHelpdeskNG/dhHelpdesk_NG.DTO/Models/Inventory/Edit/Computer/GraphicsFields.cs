@@ -8,5 +8,10 @@
         }
 
         public string VideoCard { get; set; }
+
+        public static GraphicsFields CreateDefault()
+        {
+            return new GraphicsFields(null);
+        }
     }
 }

@@ -370,10 +370,12 @@
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\IComputerFieldsSettingsBuilder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\IFieldSettingBuilder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\IPrinterFieldsSettingsBuilder.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Inventory\IServerBuilder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\IServerFieldsSettingsBuilder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\PrinterFieldsSettingsBuilder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\ServerFieldsSettingsBuilder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\ComputerBuilder.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\ServerBulider.cs" />
     <Compile Include="Infrastructure\Configuration\Concrete\ApplicationConfiguration.cs" />
     <Compile Include="Infrastructure\ActionFilters\BadRequestOnNotValidAttribute.cs" />
     <Compile Include="Infrastructure\Configuration\Concrete\Configuration.cs" />

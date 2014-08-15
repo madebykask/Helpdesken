@@ -8,5 +8,10 @@
         }
 
         public string Chassis { get; set; }
+
+        public static ChassisFields CreateDefault()
+        {
+            return new ChassisFields(null);
+        }
     }
 }

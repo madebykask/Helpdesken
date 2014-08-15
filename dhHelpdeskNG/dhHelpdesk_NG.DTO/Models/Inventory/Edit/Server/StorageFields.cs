@@ -8,5 +8,10 @@
         }
 
         public string Capasity { get; set; }
+
+        public static StorageFields CreateDefault()
+        {
+            return new StorageFields(null);
+        }
     }
 }

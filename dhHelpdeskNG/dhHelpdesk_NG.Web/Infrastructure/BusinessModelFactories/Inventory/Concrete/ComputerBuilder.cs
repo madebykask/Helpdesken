@@ -101,6 +101,11 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
 
         private static WorkstationFields CreateWorkstation(WorkstationFieldsModel fieldsModel)
         {
+            if (fieldsModel == null)
+            {
+                return WorkstationFields.CreateDefault();
+            }
+
             var name = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.Name);
             var manufacturer = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.Manufacturer);
             var model = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.ComputerModelId);
@@ -129,6 +134,11 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
 
         private static ChassisFields CreateChassis(ChassisFieldsModel fieldsModel)
         {
+            if (fieldsModel == null)
+            {
+                return ChassisFields.CreateDefault();
+            }
+
             var chassis = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.Chassis);
 
             return new ChassisFields(chassis);
@@ -136,6 +146,11 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
 
         private static InventoryFields CreateInventering(InventoryFieldsModel fieldsModel)
         {
+            if (fieldsModel == null)
+            {
+                return InventoryFields.CreateDefault();
+            }
+
             var barCode = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.BarCode);
             var purchaseDate = ConfigurableFieldModel<DateTime?>.GetValueOrDefault(fieldsModel.PurchaseDate);
 
@@ -146,6 +161,11 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
 
         private static OperatingSystemFields CretateOperatingSystem(OperatingSystemFieldsModel fieldsModel)
         {
+            if (fieldsModel == null)
+            {
+                return OperatingSystemFields.CreateDefault();
+            }
+
             var operatingSystem = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.OperatingSystemId);
             var version = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.Version);
             var servicePack = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.ServicePack);
@@ -164,6 +184,11 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
 
         private static ProcessorFields CreateProcessor(ProccesorFieldsModel fieldsModel)
         {
+            if (fieldsModel == null)
+            {
+                return ProcessorFields.CreateDefault();
+            }
+
             var processor = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.ProccesorId);
 
             var fields = new ProcessorFields(processor);
@@ -173,6 +198,11 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
 
         private static MemoryFields CreateMemory(MemoryFieldsModel fieldsModel)
         {
+            if (fieldsModel == null)
+            {
+                return MemoryFields.CreateDefault();
+            }
+
             var memory = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.RAMId);
 
             var fields = new MemoryFields(memory);
@@ -182,6 +212,11 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
 
         private static CommunicationFields CreateCommunication(CommunicationFieldsModel fieldsModel)
         {
+            if (fieldsModel == null)
+            {
+                return CommunicationFields.CreateDefault();
+            }
+
             var networkAdapter = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.NetworkAdapterId);
             var ipaddress = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.IPAddress);
             var macAddress = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.MacAddress);
@@ -200,6 +235,11 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
 
         private static GraphicsFields CreateGraphics(GraphicsFieldsModel fieldsModel)
         {
+            if (fieldsModel == null)
+            {
+                return GraphicsFields.CreateDefault();
+            }
+
             var graphics = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.VideoCard);
 
             var fields = new GraphicsFields(graphics);
@@ -209,6 +249,11 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
 
         private static SoundFields CreateSound(SoundFieldsModel fieldsModel)
         {
+            if (fieldsModel == null)
+            {
+                return SoundFields.CreateDefault();
+            }
+
             var sound = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.SoundCard);
 
             var fields = new SoundFields(sound);
@@ -218,6 +263,11 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
 
         private static ContractFields CreateContract(ContractFieldsModel fieldsModel)
         {
+            if (fieldsModel == null)
+            {
+                return ContractFields.CreateDefault();
+            }
+
             var contractStatusName = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.ContractStatusId);
             var contractNumber = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.ContractNumber);
             var contractStartDate = ConfigurableFieldModel<DateTime?>.GetValueOrDefault(fieldsModel.ContractStartDate);
@@ -246,6 +296,11 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
 
         private static OtherFields CreateOther(OtherFieldsModel fieldsModel)
         {
+            if (fieldsModel == null)
+            {
+                return OtherFields.CreateDefault();
+            }
+
             var info = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.Info);
 
             var fields = new OtherFields(info);
@@ -255,6 +310,11 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
 
         private static ContactInformationFields CreateContactInformation(ContactInformationFieldsModel fieldsModel)
         {
+            if (fieldsModel == null)
+            {
+                return ContactInformationFields.CreateDefault();
+            }
+
             // todo
             var fields = new ContactInformationFields(fieldsModel.UserId);
 
@@ -263,6 +323,11 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
 
         private static OrganizationFields CreateOrganization(OrganizationFieldsModel fieldsModel)
         {
+            if (fieldsModel == null)
+            {
+                return OrganizationFields.CreateDefault();
+            }
+
             var department = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.DepartmentId);
             var domain = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.DomainId);
             var unit = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.UnitId);
@@ -274,6 +339,11 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
 
         private static PlaceFields CreatePlace(PlaceFieldsModel fieldsModel)
         {
+            if (fieldsModel == null)
+            {
+                return PlaceFields.CreateDefault();
+            }
+
             var room = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.RoomId);
             var address = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.Address);
             var postalCode = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.PostalCode);
@@ -288,6 +358,11 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
 
         private static ContactFields CreateContact(ContactFieldsModel fieldsModel)
         {
+            if (fieldsModel == null)
+            {
+                return ContactFields.CreateDefault();
+            }
+
             var name = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.Name);
             var phone = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.Phone);
             var email = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.Email);
@@ -299,6 +374,11 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
 
         private static StateFields CreateState(StateFieldsModel fieldsModel)
         {
+            if (fieldsModel == null)
+            {
+                return StateFields.CreateDefault();
+            }
+
             var state = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.StateId);
             var stolen = ConfigurableFieldModel<bool>.GetValueOrDefault(fieldsModel.IsStolen);
             var replaced = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.Replaced);
@@ -312,6 +392,11 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
 
         private static DateFields CreateDate(DateFieldsModel fieldsModel)
         {
+            if (fieldsModel == null)
+            {
+                return DateFields.CreateDefault();
+            }
+
             var synchronizeDate = ConfigurableFieldModel<DateTime?>.GetValueOrDefault(fieldsModel.SynchronizeDate);
             var scanDate = ConfigurableFieldModel<DateTime?>.GetValueOrDefault(fieldsModel.ScanDate);
             var pathDirectory = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.PathDirectory);

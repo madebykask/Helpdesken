@@ -20,5 +20,10 @@
         public string URL2 { get; set; }
         
         public string Owner { get; set; }
+
+        public static OtherFields CreateDefault()
+        {
+            return new OtherFields(null, null, null, null, null);
+        }
     }
 }

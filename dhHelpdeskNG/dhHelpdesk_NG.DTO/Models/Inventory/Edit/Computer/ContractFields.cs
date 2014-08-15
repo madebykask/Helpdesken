@@ -51,5 +51,10 @@
         public string AccountingDimension4 { get; set; }
 
         public string AccountingDimension5 { get; set; }
+
+        public static ContractFields CreateDefault()
+        {
+            return new ContractFields(null, null, null, null, 0, null, null, null, null, null);
+        }
     }
 }

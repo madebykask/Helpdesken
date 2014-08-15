@@ -16,5 +16,10 @@
         public DateTime? ScanDate { get; set; }
 
         public string PathDirectory { get; set; }
+
+        public static DateFields CreateDefault()
+        {
+            return new DateFields(null, null, null);
+        }
     }
 }

@@ -12,6 +12,7 @@
                 </li>
                 <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt"), "Index", null, new { @class = "btn" })</li>
                 <li id="menu3">@Html.ActionLink(Translation.Get("Ta bort"), "DeleteServer", new { id = Model.ServerViewModel.Id }, new { @class = "btn" })</li>
+                <li id="menu4">@Html.CheckBoxFor(m => m.ServerViewModel.IsOperationObject) @Translation.Get("Driftobjekt")</li>
             </ul>
         </div>
     </div>
@@ -37,6 +38,7 @@
             </ul>
             <div class="tab-content">
                 <div class="tab-pane tab-pane-border active" id="fragment-1">
+                    @Html.HiddenFor(m => m.ServerViewModel.Id)
                     @Html.EditorFor(m => m.ServerViewModel.GeneralFieldsModel, "Server/GeneralFieldsModel")
                     @Html.EditorFor(m => m.ServerViewModel.ChassisFieldsModel, "Shared/ChassisModel")
                     @Html.EditorFor(m => m.ServerViewModel.InventoryFieldsModel, "Shared/InventoryModel")

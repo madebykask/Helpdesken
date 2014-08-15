@@ -11,5 +11,10 @@
 
         [IsId]
         public int? ProccesorId { get; set; }
+
+        public static ProcessorFields CreateDefault()
+        {
+            return new ProcessorFields(null);
+        }
     }
 }

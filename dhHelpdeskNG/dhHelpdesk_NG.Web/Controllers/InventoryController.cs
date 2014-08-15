@@ -51,6 +51,8 @@
 
         private readonly IComputerBuilder computerBuilder;
 
+        private readonly IServerBuilder serverBuilder;
+
         public InventoryController(
             IMasterDataService masterDataService,
             IInventoryService inventoryService,
@@ -63,7 +65,8 @@
             IPrinterViewModelBuilder printerViewModelBuilder,
             IInventoryViewModelBuilder inventoryViewModelBuilder,
             IDynamicsFieldsModelBuilder dynamicsFieldsModelBuilder,
-            IComputerBuilder computerBuilder)
+            IComputerBuilder computerBuilder,
+            IServerBuilder serverBuilder)
             : base(masterDataService)
         {
             this.inventoryService = inventoryService;
@@ -77,6 +80,7 @@
             this.inventoryViewModelBuilder = inventoryViewModelBuilder;
             this.dynamicsFieldsModelBuilder = dynamicsFieldsModelBuilder;
             this.computerBuilder = computerBuilder;
+            this.serverBuilder = serverBuilder;
         }
 
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")] // todo
@@ -390,9 +394,12 @@
 
         [HttpPost]
         [BadRequestOnNotValid]
-        public ViewResult EditServer(ServerViewModel serverViewModel)
+        public RedirectToRouteResult EditServer(ServerViewModel serverViewModel)
         {
-            return this.View("EditServer");
+            var businessModel = this.serverBuilder.BuildForUpdate(serverViewModel, this.OperationContext);
+            this.inventoryService.UpdateServer(businessModel, this.OperationContext);
+
+            return this.RedirectToAction("Index");
         }
 
         [HttpGet]

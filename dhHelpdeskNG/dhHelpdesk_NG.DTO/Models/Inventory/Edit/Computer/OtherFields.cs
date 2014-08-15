@@ -8,5 +8,10 @@
         }
 
         public string Info { get; set; }
+
+        public static OtherFields CreateDefault()
+        {
+            return new OtherFields(null);
+        }
     }
 }

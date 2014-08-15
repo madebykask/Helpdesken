@@ -19,5 +19,10 @@
 
         [IsId]
         public int? UnitId { get; set; }
+
+        public static OrganizationFields CreateDefault()
+        {
+            return new OrganizationFields(null, null, null);
+        }
     }
 }

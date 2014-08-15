@@ -59,5 +59,10 @@
         public string Location { get; set; }
 
         public string Location2 { get; set; }
+
+        public static PlaceFields CreateDefault()
+        {
+            return new PlaceFields(null, null, null, null, null, null);
+        }
     }
 }

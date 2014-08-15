@@ -69,6 +69,8 @@
 
             this.Bind<IComputerRestorer>().To<ComputerRestorer>().InSingletonScope();
             this.Bind<IComputerValidator>().To<ComputerValidator>().InSingletonScope();
+
+            this.Bind<IServerBuilder>().To<ServerBuilder>().InSingletonScope();
         }
     }
 }

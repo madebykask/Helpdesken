@@ -11,5 +11,10 @@
 
         [IsId]
         public int? RAMId { get; set; }
+
+        public static MemoryFields CreateDefault()
+        {
+            return new MemoryFields(null);
+        }
     }
 }

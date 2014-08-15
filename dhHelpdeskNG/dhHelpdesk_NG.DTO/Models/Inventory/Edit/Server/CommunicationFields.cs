@@ -17,5 +17,11 @@
         public string IPAddress { get; set; }
 
         public string MacAddress { get; set; }
+
+
+        public static CommunicationFields CreateDefault()
+        {
+            return new CommunicationFields(null, null, null);
+        }
     }
 }

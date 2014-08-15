@@ -51,5 +51,10 @@
         public int? ComputerTypeId { get; set; }
 
         public string Location { get; set; }
+
+        public static WorkstationFields CreateDefault()
+        {
+            return new WorkstationFields(null, null, null, null, null, null, null, null, null, null);
+        }
     }
 }

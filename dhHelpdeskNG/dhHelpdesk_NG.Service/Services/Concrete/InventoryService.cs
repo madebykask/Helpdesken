@@ -308,7 +308,7 @@
 
         #region Server
 
-        public void AddServer(Server businessModel)
+        public void AddServer(Server businessModel, OperationContext context)
         {
             throw new NotImplementedException();
         }
@@ -318,7 +318,7 @@
             throw new NotImplementedException();
         }
 
-        public void UpdateWorkstation(Server businessModel)
+        public void UpdateServer(Server businessModel, OperationContext context)
         {
             throw new NotImplementedException();
         }

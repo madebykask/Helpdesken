@@ -226,6 +226,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             var stateFieldsModel = new StateFieldsModel(syncDate, model.StateFields.CreatedBy);
 
             return new ServerViewModel(
+                model.IsOperationObject,
                 generalFieldsModel,
                 otherFieldModel,
                 stateFieldsModel,
@@ -443,6 +444,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             var stateFieldsModel = new StateFieldsModel(syncDate, null);
 
             return new ServerViewModel(
+                false,
                 generalFieldsModel,
                 otherFieldModel,
                 stateFieldsModel,

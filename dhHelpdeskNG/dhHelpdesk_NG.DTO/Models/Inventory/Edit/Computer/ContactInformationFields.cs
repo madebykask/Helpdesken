@@ -35,5 +35,10 @@
         public string Department { get; set; }
 
         public string Unit { get; set; }
+
+        public static ContactInformationFields CreateDefault()
+        {
+            return new ContactInformationFields(null);
+        }
     }
 }

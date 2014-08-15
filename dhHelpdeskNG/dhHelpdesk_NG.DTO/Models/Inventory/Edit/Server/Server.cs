@@ -10,6 +10,7 @@
     {
         private Server(
             ModelStates modelStates,
+            bool isOperationObject,
             GeneralFields generalFields,
             OtherFields otherFields,
             StateFields stateFields,
@@ -23,6 +24,7 @@
             CommunicationFields communicationFields)
             : base(modelStates)
         {
+            this.IsOperationObject = isOperationObject;
             this.GeneralFields = generalFields;
             this.OtherFields = otherFields;
             this.StateFields = stateFields;
@@ -38,6 +40,8 @@
 
         [IsId]
         public int CustomerId { get; private set; }
+
+        public bool IsOperationObject { get; private set; }
 
         [AllowRead(ModelStates.Updated | ModelStates.ForEdit)]
         public DateTime CreatedDate { get; private set; }
@@ -80,6 +84,7 @@
 
         public static Server CreateNew(
             int customerId,
+            bool isOperationObject,
             GeneralFields generalFields,
             OtherFields otherFields,
             StateFields stateFields,
@@ -95,6 +100,7 @@
         {
             var businessModel = new Server(
                 ModelStates.Created,
+                isOperationObject,
                 generalFields,
                 otherFields,
                 stateFields,
@@ -112,6 +118,7 @@
 
         public static Server CreateUpdated(
             int id,
+            bool isOperationObject,
             GeneralFields generalFields,
             OtherFields otherFields,
             StateFields stateFields,
@@ -127,6 +134,7 @@
         {
             var businessModel = new Server(
                 ModelStates.Updated,
+                isOperationObject,
                 generalFields,
                 otherFields,
                 stateFields,
@@ -144,6 +152,7 @@
 
         public static Server CreateForEdit(
             int id,
+            bool isOperationObject,
             GeneralFields generalFields,
             OtherFields otherFields,
             StateFields stateFields,
@@ -160,6 +169,7 @@
         {
             var businessModel = new Server(
                 ModelStates.ForEdit,
+                isOperationObject,
                 generalFields,
                 otherFields,
                 stateFields,

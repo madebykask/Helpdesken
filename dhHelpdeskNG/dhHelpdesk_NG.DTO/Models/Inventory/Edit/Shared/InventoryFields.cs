@@ -13,5 +13,10 @@
         public string BarCode { get; set; }
 
         public DateTime? PurchaseDate { get; set; }
+
+        public static InventoryFields CreateDefault()
+        {
+            return new InventoryFields(null, null);
+        }
     }
 }

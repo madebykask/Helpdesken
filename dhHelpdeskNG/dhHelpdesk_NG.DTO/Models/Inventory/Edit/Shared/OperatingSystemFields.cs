@@ -5,10 +5,10 @@
     public class OperatingSystemFields
     {
         public OperatingSystemFields(
-            int? operatingSystemId, 
-            string version, 
-            string servicePackSystem, 
-            string registrationCodeSystem, 
+            int? operatingSystemId,
+            string version,
+            string servicePackSystem,
+            string registrationCodeSystem,
             string productKey)
         {
             this.OperatingSystemId = operatingSystemId;
@@ -28,5 +28,10 @@
         public string RegistrationCode { get; set; }
 
         public string ProductKey { get; set; }
+
+        public static OperatingSystemFields CreateDefault()
+        {
+            return new OperatingSystemFields(null, null, null, null, null);
+        }
     }
 }

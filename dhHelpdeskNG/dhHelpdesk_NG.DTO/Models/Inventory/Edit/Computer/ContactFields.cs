@@ -14,5 +14,10 @@
         public string Phone { get; set; }
 
         public string Email { get; set; }
+
+        public static ContactFields CreateDefault()
+        {
+            return new ContactFields(null, null, null);
+        }
     }
 }
