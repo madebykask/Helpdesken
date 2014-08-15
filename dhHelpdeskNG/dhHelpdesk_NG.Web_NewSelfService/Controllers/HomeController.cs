@@ -4,18 +4,17 @@
 
     using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.NewSelfService.Infrastructure;
 
-    public class HomeController : Controller
-    {
-        private readonly ICustomerService _customerService;
-
-        
-        public HomeController(
-            ICustomerService customerService,
-            IMasterDataService masterDataService)
+    public class HomeController : BaseController
+    {                
+        public HomeController( IMasterDataService masterDataService,           
+                               ICaseSolutionService caseSolutionService,
+                               ISSOService ssoService
+                              ):base(masterDataService, ssoService, caseSolutionService)
             
         {
-            this._customerService = customerService;
+            //this._customerService = customerService;
         }
         
         public RedirectToRouteResult Index(int customerId=-1)
