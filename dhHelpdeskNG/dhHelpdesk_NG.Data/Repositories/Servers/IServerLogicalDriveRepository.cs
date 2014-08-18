@@ -8,5 +8,7 @@ namespace DH.Helpdesk.Dal.Repositories.Servers
     public interface IServerLogicalDriveRepository : INewRepository
     {
         List<LogicalDriveOverview> Find(int serverId);
+
+        void DeleteByServerId(int serverId);
     }
 }

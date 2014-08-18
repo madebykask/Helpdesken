@@ -66,5 +66,11 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
 
             return models;
         }
+
+        public void DeleteByServerId(int serverId)
+        {
+            var entities = this.DbContext.ServerSoftwares.Where(x => x.Server_Id == serverId).ToList();
+            entities.ForEach(x => this.DbContext.ServerSoftwares.Remove(x));
+        }
     }
 }

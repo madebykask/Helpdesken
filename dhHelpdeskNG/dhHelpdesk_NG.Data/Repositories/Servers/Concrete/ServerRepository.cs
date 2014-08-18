@@ -22,6 +22,7 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
             var entity = new Domain.Servers.Server();
             Map(entity, businessModel);
             entity.Customer_Id = businessModel.CustomerId;
+            entity.ChangedDate = businessModel.CreatedDate; // todo
             entity.CreatedDate = businessModel.CreatedDate;
 
             this.DbSet.Add(entity);
@@ -33,6 +34,21 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
             var entity = this.DbSet.Find(businessModel.Id);
             Map(entity, businessModel);
             entity.ChangedDate = businessModel.ChangedDate;
+        }
+
+        public string FindOperationObjectName(int id)
+        {
+            var anonymus =
+                this.DbSet.Where(x => x.Id == id)
+                    .GroupJoin(
+                        this.DbContext.OperationObjects,
+                        s => s.ServerName,
+                        u => u.Name,
+                        (s, res) => new { s, res })
+                    .SelectMany(t => t.res.DefaultIfEmpty(), (t, k) => new { OperationObjectName = k.Name })
+                    .Single();
+
+            return anonymus.OperationObjectName;
         }
 
         public Server FindById(int id)
@@ -275,41 +291,41 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
 
         private static void Map(Domain.Servers.Server entity, Server businessModel)
         {
-            entity.ServerName = businessModel.GeneralFields.Name;
-            entity.Manufacturer = businessModel.GeneralFields.Manufacturer;
-            entity.ServerDescription = businessModel.GeneralFields.Description;
-            entity.ServerModel = businessModel.GeneralFields.Model;
-            entity.SerialNumber = businessModel.GeneralFields.SerialNumber;
+            entity.ServerName = businessModel.GeneralFields.Name ?? string.Empty;
+            entity.Manufacturer = businessModel.GeneralFields.Manufacturer ?? string.Empty;
+            entity.ServerDescription = businessModel.GeneralFields.Description ?? string.Empty;
+            entity.ServerModel = businessModel.GeneralFields.Model ?? string.Empty;
+            entity.SerialNumber = businessModel.GeneralFields.SerialNumber ?? string.Empty;
 
-            entity.ChassisType = businessModel.ChassisFields.Chassis;
+            entity.ChassisType = businessModel.ChassisFields.Chassis ?? string.Empty;
 
-            entity.BarCode = businessModel.InventoryFields.BarCode;
+            entity.BarCode = businessModel.InventoryFields.BarCode ?? string.Empty;
             entity.PurchaseDate = businessModel.InventoryFields.PurchaseDate;
 
             entity.OperatingSystem_Id = businessModel.OperatingSystemFields.OperatingSystemId;
-            entity.Version = businessModel.OperatingSystemFields.Version;
-            entity.SP = businessModel.OperatingSystemFields.ServicePack;
-            entity.RegistrationCode = businessModel.OperatingSystemFields.RegistrationCode;
-            entity.ProductKey = businessModel.OperatingSystemFields.ProductKey;
+            entity.Version = businessModel.OperatingSystemFields.Version ?? string.Empty;
+            entity.SP = businessModel.OperatingSystemFields.ServicePack ?? string.Empty;
+            entity.RegistrationCode = businessModel.OperatingSystemFields.RegistrationCode ?? string.Empty;
+            entity.ProductKey = businessModel.OperatingSystemFields.ProductKey ?? string.Empty;
 
             entity.Processor_Id = businessModel.ProccesorFields.ProccesorId;
 
             entity.RAM_Id = businessModel.MemoryFields.RAMId;
 
-            entity.Harddrive = businessModel.StorageFields.Capasity;
+            entity.Harddrive = businessModel.StorageFields.Capasity ?? string.Empty;
 
             entity.NIC_Id = businessModel.CommunicationFields.NetworkAdapterId;
-            entity.IPAddress = businessModel.CommunicationFields.IPAddress;
-            entity.MACAddress = businessModel.CommunicationFields.MacAddress;
+            entity.IPAddress = businessModel.CommunicationFields.IPAddress ?? string.Empty;
+            entity.MACAddress = businessModel.CommunicationFields.MacAddress ?? string.Empty;
 
-            entity.Info = businessModel.OtherFields.Info;
-            entity.Miscellaneous = businessModel.OtherFields.Other;
-            entity.URL = businessModel.OtherFields.URL;
-            entity.URL2 = businessModel.OtherFields.URL2;
-            entity.Owner = businessModel.OtherFields.Owner;
+            entity.Info = businessModel.OtherFields.Info ?? string.Empty;
+            entity.Miscellaneous = businessModel.OtherFields.Other ?? string.Empty;
+            entity.URL = businessModel.OtherFields.URL ?? string.Empty;
+            entity.URL2 = businessModel.OtherFields.URL2 ?? string.Empty;
+            entity.Owner = businessModel.OtherFields.Owner ?? string.Empty;
 
             entity.Room_Id = businessModel.PlaceFields.RoomId;
-            entity.Location = businessModel.PlaceFields.Location;
+            entity.Location = businessModel.PlaceFields.Location ?? string.Empty;
 
             entity.SyncChangedDate = businessModel.StateFields.SyncChangeDate;
         }

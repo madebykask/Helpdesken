@@ -3,6 +3,7 @@ namespace DH.Helpdesk.Dal.Repositories.Servers
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ServerSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ServerSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ServerFieldSettings;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ProcessingSetttings.ServerSettings;
     using DH.Helpdesk.Dal.Dal;
 
     public interface IServerFieldSettingsRepository : INewRepository
@@ -14,5 +15,7 @@ namespace DH.Helpdesk.Dal.Repositories.Servers
         ServerFieldsSettingsForModelEdit GetFieldSettingsForModelEdit(int customerId, int languageId);
 
         ServerFieldsSettingsOverview GetFieldSettingsOverview(int customerId, int languageId);
+
+        ServerFieldsSettingsProcessing GetFieldSettingsProcessing(int customerId);
     }
 }

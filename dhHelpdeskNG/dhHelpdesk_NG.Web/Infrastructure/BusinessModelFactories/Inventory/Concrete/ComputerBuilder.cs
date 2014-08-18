@@ -11,7 +11,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
 
     public class ComputerBuilder : IComputerBuilder
     {
-        public Computer BuildForUpdate(ComputerViewModel model)
+        public Computer BuildForUpdate(ComputerViewModel model, OperationContext contex)
         {
             var workstation = CreateWorkstation(model.WorkstationFieldsViewModel.WorkstationFieldsModel);
             var chassis = CreateChassis(model.ChassisFieldsModel);
@@ -50,7 +50,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
                 organization,
                 processor,
                 workstation,
-                DateTime.Now);
+                contex.DateAndTime);
 
             return fieldsModel;
         }
@@ -94,7 +94,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
                 organization,
                 processor,
                 workstation,
-                DateTime.Now);
+                context.DateAndTime);
 
             return fieldsModel;
         }

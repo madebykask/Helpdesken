@@ -43,7 +43,7 @@
 
         public bool IsOperationObject { get; private set; }
 
-        [AllowRead(ModelStates.Updated | ModelStates.ForEdit)]
+        [AllowRead(ModelStates.Created | ModelStates.ForEdit)]
         public DateTime CreatedDate { get; private set; }
 
         [AllowRead(ModelStates.Updated | ModelStates.ForEdit)]

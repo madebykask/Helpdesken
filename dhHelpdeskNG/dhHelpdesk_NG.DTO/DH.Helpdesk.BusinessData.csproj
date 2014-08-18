@@ -209,6 +209,10 @@
     <Compile Include="Models\Invoice\CaseInvoiceArticle.cs" />
     <Compile Include="Models\Invoice\InvoiceArticle.cs" />
     <Compile Include="Models\Invoice\InvoiceArticleUnit.cs" />
+    <Compile Include="Models\Operation\OperationObject.cs" />
+    <Compile Include="Models\Operation\OperationObjectForInsert.cs" />
+    <Compile Include="Models\Operation\OperationObjectForUpdate.cs" />
+    <Compile Include="Models\Operation\OperationObjectForView.cs" />
     <Compile Include="Models\Reports\Output\AverageSolutionTimeOptionsResponse.cs" />
     <Compile Include="Models\Reports\Output\AverageSolutionTimeReportResponse.cs" />
     <Compile Include="Models\Reports\Output\RegistratedCasesCaseTypeItem.cs" />

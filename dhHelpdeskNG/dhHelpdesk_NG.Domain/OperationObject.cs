@@ -1,6 +1,9 @@
 ﻿namespace DH.Helpdesk.Domain
 {
+    using DH.Helpdesk.Domain.Printers;
+
     using global::System;
+    using global::System.Collections.Generic;
 
     public class OperationObject : Entity
     {
@@ -16,5 +19,6 @@
 
         public virtual Customer Customer { get; set; }
         public virtual WorkingGroupEntity WorkingGroup { get; set; }
+        public virtual ICollection<Printer> Printers { get; set; }
     }
 }

@@ -6,7 +6,7 @@
 
     public interface IComputerBuilder
     {
-        Computer BuildForUpdate(ComputerViewModel model);
+        Computer BuildForUpdate(ComputerViewModel model, OperationContext contex);
 
         Computer BuildForAdd(ComputerViewModel model, OperationContext context);
     }

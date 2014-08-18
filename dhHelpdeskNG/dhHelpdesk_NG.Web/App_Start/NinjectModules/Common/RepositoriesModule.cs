@@ -170,7 +170,6 @@
             this.Bind<IManufacturerRepository>().To<ManufacturerRepository>();
             this.Bind<INICRepository>().To<NICRepository>();
             this.Bind<IOperationLogCategoryRepository>().To<OperationLogCategoryRepository>();
-            this.Bind<IOperationLogEMailLogRepository>().To<OperationLogEMailLogRepository>();
             this.Bind<IOperationLogRepository>().To<OperationLogRepository>();
             this.Bind<IOperationObjectRepository>().To<OperationObjectRepository>();
             this.Bind<IOrderEMailLogRepository>().To<OrderEMailLogRepository>();
@@ -252,6 +251,8 @@
             this.Bind<IInvoiceArticleUnitRepository>().To<InvoiceArticleUnitRepository>();
             this.Bind<IInvoiceArticleRepository>().To<InvoiceArticleRepository>();
             this.Bind<ICaseInvoiceArticleRepository>().To<CaseInvoiceArticleRepository>();
+
+            this.Bind<IOperationLogEMailLogRepository>().To<OperationLogEMailLogRepository>();
         }
 
         #endregion

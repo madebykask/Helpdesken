@@ -12,15 +12,13 @@
         {
             this.HasKey(x => x.Id);
 
-            this.HasMany(u => u.WGs)
-                .WithMany(a => a.OperationLogs)
-                .Map(m =>
-                {
-                    m.MapLeftKey("OperationLog_Id");
-                    m.MapRightKey("WorkingGroup_Id");
-                    m.ToTable("tblOperationLog_tblWG");
-                }
-                );
+            this.HasMany(u => u.WGs).WithMany(a => a.OperationLogs).Map(
+                m =>
+                    {
+                        m.MapLeftKey("OperationLog_Id");
+                        m.MapRightKey("WorkingGroup_Id");
+                        m.ToTable("tblOperationLog_tblWG");
+                    });
 
             this.HasRequired(x => x.Customer)
                .WithMany()

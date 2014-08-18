@@ -11,5 +11,7 @@ namespace DH.Helpdesk.Dal.Repositories.Servers
         List<SoftwareOverview> Find(int computerId);
 
         List<ReportModel> FindAllServerSoftware(int customerId, string searchFor);
+
+        void DeleteByServerId(int serverId);
     }
 }

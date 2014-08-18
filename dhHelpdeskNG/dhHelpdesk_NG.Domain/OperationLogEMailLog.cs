@@ -4,7 +4,7 @@
 
     public class OperationLogEMailLog : Entity
     {
-        public int OperationLog_Id { get; set; }
+        public int? OperationLog_Id { get; set; }
         public string SMSText { get; set; }
         public string Recipients { get; set; }
         public DateTime CreatedDate { get; set; }

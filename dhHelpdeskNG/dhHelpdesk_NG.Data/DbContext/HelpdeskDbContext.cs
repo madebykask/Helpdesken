@@ -310,11 +310,11 @@
 
         public DbSet<OperationLogCategory> OperationLogCategories { get; set; }
 
-        public DbSet<OperationLogEMailLog> OperationLogEMailLogs { get; set; }
-
         public DbSet<OperationLog> OperationLogs { get; set; }
 
         public DbSet<OperationObject> OperationObjects { get; set; }
+
+        public DbSet<OperationLogEMailLog> OperationLogEMailLogs { get; set; }
 
         public DbSet<OrderEMailLog> OrderEMailLogs { get; set; }
 
@@ -598,6 +598,7 @@
             modelBuilder.Configurations.Add(new MailTemplateIdentifierConfiguration());
             modelBuilder.Configurations.Add(new MailTemplateLanguageConfiguration());
             modelBuilder.Configurations.Add(new OperationLogConfiguration());
+            modelBuilder.Configurations.Add(new OperationLogEmailLogConfiguration());
             modelBuilder.Configurations.Add(new OperationLogCategoryConfiguration());
             modelBuilder.Configurations.Add(new OperationObjectConfiguration());
             modelBuilder.Configurations.Add(new OperatingSystemConfiguration());

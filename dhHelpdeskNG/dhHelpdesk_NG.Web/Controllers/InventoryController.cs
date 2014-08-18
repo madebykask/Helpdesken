@@ -362,7 +362,7 @@
         [BadRequestOnNotValid]
         public RedirectToRouteResult EditWorkstation(ComputerViewModel computerViewModel)
         {
-            var businessModel = this.computerBuilder.BuildForUpdate(computerViewModel);
+            var businessModel = this.computerBuilder.BuildForUpdate(computerViewModel, this.OperationContext);
             this.inventoryService.UpdateWorkstation(businessModel, this.OperationContext);
 
             return this.RedirectToAction("Index");
@@ -462,9 +462,11 @@
         }
 
         [HttpGet]
-        public ViewResult DeleteServer(int id)
+        public RedirectToRouteResult DeleteServer(int id)
         {
-            throw new NotImplementedException();
+            this.inventoryService.DeleteServer(id);
+
+            return this.RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -523,9 +525,12 @@
 
         [HttpPost]
         [BadRequestOnNotValid]
-        public ViewResult NewServer(ServerViewModel serverViewModel)
+        public RedirectToRouteResult NewServer(ServerViewModel serverViewModel)
         {
-            throw new NotImplementedException();
+            var businessModel = this.serverBuilder.BuildForAdd(serverViewModel, this.OperationContext);
+            this.inventoryService.AddServer(businessModel, this.OperationContext);
+
+            return this.RedirectToAction("Index");
         }
 
         [HttpGet]

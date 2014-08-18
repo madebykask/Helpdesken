@@ -22,5 +22,11 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
 
             return overviews;
         }
+
+        public void DeleteByServerId(int serverId)
+        {
+            var entities = this.DbContext.ServerLogicalDrives.Where(x => x.Server_Id == serverId).ToList();
+            entities.ForEach(x => this.DbContext.ServerLogicalDrives.Remove(x));
+        }
     }
 }

@@ -13,6 +13,10 @@ namespace DH.Helpdesk.Dal.Repositories.Servers
 
         void Update(Server businessModel);
 
+        void DeleteById(int id);
+
+        string FindOperationObjectName(int id);
+
         Server FindById(int id);
 
         List<ServerOverview> FindOverviews(

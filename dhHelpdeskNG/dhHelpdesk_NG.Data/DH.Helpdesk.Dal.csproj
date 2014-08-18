@@ -83,6 +83,7 @@
     <Compile Include="EntityConfigurations\Invoice\InvoiceArticleConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\InvoiceArticleUnitConfiguration.cs" />
     <Compile Include="EntityConfigurations\MailTemplates\MailTemplateLanguageConfiguration.cs" />
+    <Compile Include="EntityConfigurations\OperationLogEmailLogConfiguration.cs" />
     <Compile Include="EntityConfigurations\SSO\SSOLogConfiguration.cs" />
     <Compile Include="EntityConfigurations\Users\ModuleConfiguration.cs" />
     <Compile Include="EntityConfigurations\Users\UserModuleConfiguration.cs" />

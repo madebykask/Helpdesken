@@ -16,6 +16,7 @@
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Printer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Server;
+    using DH.Helpdesk.BusinessData.Models.Operation;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Computers;
@@ -69,6 +70,20 @@
 
         private readonly ISoftwareRepository softwareRepository;
 
+        private readonly IServerFieldSettingsRepository serverFieldSettingsRepository;
+
+        private readonly IServerRestorer serverRestorer;
+
+        private readonly IServerValidator serverValidator;
+
+        private readonly IOperationObjectRepository operationObjectRepository;
+
+        private readonly IOperationLogEMailLogRepository operationLogEMailLogRepository;
+
+        private readonly IServerLogicalDriveRepository serverLogicalDriveRepository;
+
+        private readonly IServerSoftwareRepository serverSoftwareRepository;
+
         public InventoryService(
             IInventoryTypeRepository inventoryTypeRepository,
             IComputerRepository computerRepository,
@@ -88,7 +103,14 @@
             IComputerFieldSettingsRepository computerFieldSettingsRepository,
             IComputerHistoryRepository computerHistoryRepository,
             ILogicalDriveRepository logicalDriveRepository,
-            ISoftwareRepository softwareRepository)
+            ISoftwareRepository softwareRepository,
+            IServerFieldSettingsRepository serverFieldSettingsRepository,
+            IServerRestorer serverRestorer,
+            IServerValidator serverValidator,
+            IOperationObjectRepository operationObjectRepository,
+            IOperationLogEMailLogRepository operationLogEMailLogRepository,
+            IServerLogicalDriveRepository serverLogicalDriveRepository,
+            IServerSoftwareRepository serverSoftwareRepository)
         {
             this.inventoryTypeRepository = inventoryTypeRepository;
             this.computerRepository = computerRepository;
@@ -109,6 +131,13 @@
             this.computerHistoryRepository = computerHistoryRepository;
             this.logicalDriveRepository = logicalDriveRepository;
             this.softwareRepository = softwareRepository;
+            this.serverFieldSettingsRepository = serverFieldSettingsRepository;
+            this.serverRestorer = serverRestorer;
+            this.serverValidator = serverValidator;
+            this.operationObjectRepository = operationObjectRepository;
+            this.operationLogEMailLogRepository = operationLogEMailLogRepository;
+            this.serverLogicalDriveRepository = serverLogicalDriveRepository;
+            this.serverSoftwareRepository = serverSoftwareRepository;
         }
 
         public List<ComputerUserOverview> GetComputerUsers(int customerId, string searchFor)
@@ -310,17 +339,79 @@
 
         public void AddServer(Server businessModel, OperationContext context)
         {
-            throw new NotImplementedException();
+            var settings = this.serverFieldSettingsRepository.GetFieldSettingsProcessing(context.CustomerId);
+            this.serverValidator.Validate(businessModel, settings);
+            this.serverRepository.Add(businessModel);
+            this.serverRepository.Commit();
+
+            var isOperationObject = businessModel.IsOperationObject;
+
+            if (isOperationObject)
+            {
+                this.AddOperationObject(
+                    context,
+                    businessModel.GeneralFields.Name,
+                    businessModel.GeneralFields.Description);
+            }
         }
 
         public void DeleteServer(int id)
         {
-            throw new NotImplementedException();
+            this.serverLogicalDriveRepository.DeleteByServerId(id);
+            this.serverLogicalDriveRepository.Commit();
+
+            this.serverSoftwareRepository.DeleteByServerId(id);
+            this.serverSoftwareRepository.Commit();
+
+            var operationObjectName = this.serverRepository.FindOperationObjectName(id);
+            var isOperationObject = !string.IsNullOrWhiteSpace(operationObjectName);
+
+            if (isOperationObject)
+            {
+                this.DeleteOperationObject(operationObjectName);
+            }
+
+            this.serverRepository.DeleteById(id);
+            this.serverRepository.Commit();
         }
 
         public void UpdateServer(Server businessModel, OperationContext context)
         {
-            throw new NotImplementedException();
+            var existingBusinessModel = this.serverRepository.FindById(businessModel.Id);
+            var settings = this.serverFieldSettingsRepository.GetFieldSettingsProcessing(context.CustomerId);
+            this.serverRestorer.Restore(businessModel, existingBusinessModel, settings);
+            this.serverValidator.Validate(businessModel, existingBusinessModel, settings);
+            this.serverRepository.Update(businessModel);
+            this.serverRepository.Commit();
+
+            var isOperationObject = businessModel.IsOperationObject;
+            var isWasOperationObject = existingBusinessModel.IsOperationObject;
+            var newBusinessModelName = businessModel.GeneralFields.Name;
+            var oldBusinessModelName = existingBusinessModel.GeneralFields.Name;
+            if (isOperationObject)
+            {
+                if (isWasOperationObject)
+                {
+                    if (!oldBusinessModelName.Equals(newBusinessModelName))
+                    {
+                        this.UpdateOperationObject(
+                            context,
+                            newBusinessModelName,
+                            businessModel.GeneralFields.Description);
+                    }
+                }
+                else
+                {
+                    this.AddOperationObject(context, newBusinessModelName, businessModel.GeneralFields.Description);
+                }
+            }
+            else
+            {
+                if (isWasOperationObject)
+                {
+                    this.DeleteOperationObject(oldBusinessModelName);
+                }
+            }
         }
 
         public Server GetServer(int id)
@@ -441,6 +532,10 @@
             return this.computerRepository.FindShortOverview(computerId);
         }
 
+        #endregion
+
+        #region Private
+
         private void AddUserHistory(int computerId, int connectingUserId)
         {
             var userGuid = this.computerUsersRepository.FindUserGuidById(connectingUserId);
@@ -448,6 +543,45 @@
             this.computerHistoryRepository.Add(computerHistory);
             this.computerHistoryRepository.Commit();
         }
+
+        private void AddOperationObject(OperationContext context, string newBusinessModelName, string newDescription)
+        {
+            var insertedOperationObject = new OperationObjectForInsert(
+                context.CustomerId,
+                context.DateAndTime,
+                newBusinessModelName,
+                newDescription);
+            this.operationObjectRepository.Add(insertedOperationObject);
+            this.operationObjectRepository.Commit();
+        }
+
+        private void DeleteOperationObject(string oldBusinessModelName)
+        {
+            OperationObjectForView operationObject = this.operationObjectRepository.FindByName(oldBusinessModelName);
+            int operationObjectId = operationObject.Id;
+
+            List<int> operationLogIds = this.operationLogRepository.FindOperationObjectId(operationObjectId);
+
+            this.operationLogEMailLogRepository.DeleteByOperationLogIds(operationLogIds);
+            this.operationLogEMailLogRepository.Commit();
+
+            this.operationLogRepository.DeleteByOperationObjectId(operationObjectId);
+            this.operationLogRepository.Commit();
+
+            this.operationObjectRepository.DeleteById(operationObjectId);
+            this.operationObjectRepository.Commit();
+        }
+
+        private void UpdateOperationObject(OperationContext context, string newBusinessModelName, string newBusinessModelDescription)
+        {
+            var updatedOperationObject = new OperationObjectForUpdate(
+                context.DateAndTime,
+                newBusinessModelName,
+                newBusinessModelDescription);
+            this.operationObjectRepository.Update(updatedOperationObject);
+            this.operationObjectRepository.Commit();
+        }
+
         #endregion
     }
 }

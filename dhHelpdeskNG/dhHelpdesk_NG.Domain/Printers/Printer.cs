@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Domain.Printers
 {
     using global::System;
+    using global::System.Collections.Generic;
 
     public class Printer : Entity
     {
@@ -31,5 +32,6 @@
         public virtual Room Room { get; set; }
         public virtual User ChangedByUser { get; set; }
         public virtual Department Department { get; set; }
+        public virtual ICollection<OperationObject> OperationObjects { get; set; }
     }
 }

@@ -22,6 +22,14 @@
                  .HasForeignKey(x => x.WorkingGroup_Id)
                  .WillCascadeOnDelete(false);
 
+            this.HasMany(u => u.Printers).WithMany(a => a.OperationObjects).Map(
+                m =>
+                    {
+                        m.MapLeftKey("OperationObject_Id");
+                        m.MapRightKey("Printer_Id");
+                        m.ToTable("tblPrinterOperationObject");
+                    });
+
             this.Property(x => x.Customer_Id).IsRequired();
             this.Property(x => x.Description).IsRequired().HasMaxLength(200).HasColumnName("OperationObjectDescription");
             this.Property(x => x.IsActive).IsRequired().HasColumnName("Status");

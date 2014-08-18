@@ -52,6 +52,10 @@ namespace DH.Helpdesk.Dal.Repositories
         IEnumerable<OperationLogOverview> GetOperationLogOverviews(int[] customers);
 
         List<OperationServerLogOverview> GetOperationServerLogOverviews(int customerId, int serverId);
+
+        void DeleteByOperationObjectId(int operationObjectId);
+
+        List<int> FindOperationObjectId(int operationObjectId);
     }
 
     /// <summary>
@@ -100,21 +104,21 @@ namespace DH.Helpdesk.Dal.Repositories
                             ol.Customer_Id,
                             OOI = ob.Id,
                             OLCID = x == null ? 0 : x.Id
-                        } 
-                        into g
-                        select new OperationLogList
-                        {
-                            OperationLogAction = g.Key.LogAction,
-                            OperationLogAdmin = g.Key.UserID,
-                            CreatedDate = g.Key.CreatedDate,
-                            OperationLogCategoryName = g.Key.OLCName,
-                            OperationLogDescription = g.Key.LogText,
-                            OperationObjectName = g.Key.Name,
-                            Id = g.Key.Id,
-                            Customer_Id = g.Key.Customer_Id,
-                            OperationObject_ID = g.Key.OOI,
-                            OperationCategoriy_ID = g.Key.OLCID
-                        };
+                        }
+                            into g
+                            select new OperationLogList
+                            {
+                                OperationLogAction = g.Key.LogAction,
+                                OperationLogAdmin = g.Key.UserID,
+                                CreatedDate = g.Key.CreatedDate,
+                                OperationLogCategoryName = g.Key.OLCName,
+                                OperationLogDescription = g.Key.LogText,
+                                OperationObjectName = g.Key.Name,
+                                Id = g.Key.Id,
+                                Customer_Id = g.Key.Customer_Id,
+                                OperationObject_ID = g.Key.OOI,
+                                OperationCategoriy_ID = g.Key.OLCID
+                            };
 
             return query.ToList();
         }
@@ -155,7 +159,7 @@ namespace DH.Helpdesk.Dal.Repositories
                     ShowOnStartPage = o.ShowOnStartPage,
                     Us = o.Us,
                     WGs = o.WGs
-                })); 
+                }));
 
             return entities.Select(o => new OperationLogOverview()
                 {
@@ -202,6 +206,27 @@ namespace DH.Helpdesk.Dal.Repositories
 
             return overviews;
         }
+
+        public void DeleteByOperationObjectId(int operationObjectId)
+        {
+            var entities = this.Table.Where(x => x.OperationObject_Id == operationObjectId).ToList();
+            entities.ForEach(
+                x =>
+                {
+                    x.Us.Clear();
+                    x.WGs.Clear();
+                    this.Table.Remove(x);
+                });
+        }
+
+        public List<int> FindOperationObjectId(int operationObjectId)
+        {
+            var entities =
+                this.Table.Where(x => x.OperationObject_Id == operationObjectId)
+                    .Select(x => x.Id)
+                    .ToList();
+            return entities;
+        }
     }
 
     #endregion
@@ -234,31 +259,22 @@ namespace DH.Helpdesk.Dal.Repositories
 
     #endregion
 
-    #region OPERATIONLOGEMAILLOG
-
-    /// <summary>
-    /// The OperationLogEMailLogRepository interface.
-    /// </summary>
     public interface IOperationLogEMailLogRepository : IRepository<OperationLogEMailLog>
     {
+        void DeleteByOperationLogIds(List<int> operationLogId);
     }
 
-    /// <summary>
-    /// The operation log e mail log repository.
-    /// </summary>
     public class OperationLogEMailLogRepository : RepositoryBase<OperationLogEMailLog>, IOperationLogEMailLogRepository
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="OperationLogEMailLogRepository"/> class.
-        /// </summary>
-        /// <param name="databaseFactory">
-        /// The database factory.
-        /// </param>
         public OperationLogEMailLogRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
         }
-    }
 
-    #endregion
+        public void DeleteByOperationLogIds(List<int> operationLogId)
+        {
+            var entities = this.Table.Where(x => operationLogId.Contains(x.OperationLog_Id.Value)).ToList();
+            entities.ForEach(x => this.Table.Remove(x));
+        }
+    }
 }
