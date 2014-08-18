@@ -12,6 +12,7 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
     using System.Collections.Generic;
     using System.Web;
 
+    using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.BusinessData.Models.Users.Output;
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Domain;
@@ -32,10 +33,14 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
         /// </summary>
         private readonly IUserService userService;
 
+        private UserOverview user;
+
         /// <summary>
         /// The user id.
         /// </summary>
         private int? userId;
+
+        private string userName;
 
         /// <summary>
         /// The user working groups.
@@ -67,10 +72,23 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
             {
                 if (!this.userId.HasValue)
                 {
-                    this.userId = SessionFacade.CurrentUser.Id;
+                    this.userId = this.User.Id;
                 }
 
                 return this.userId.Value;
+            }
+        }
+
+        public string UserName
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(this.userName))
+                {
+                    this.userName = string.Format("{0} {1}", this.User.FirstName, this.User.SurName);
+                }
+
+                return this.userName;
             }
         }
 
@@ -83,7 +101,7 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
             {
                 if (this.userWorkingGroups == null)
                 {
-                    this.userWorkingGroups = SessionFacade.CurrentUser.UserWorkingGroups;
+                    this.userWorkingGroups = this.User.UserWorkingGroups;
                 }
 
                 return this.userWorkingGroups;
@@ -110,12 +128,26 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
             }
         }
 
+        private UserOverview User
+        {
+            get
+            {
+                if (this.user == null)
+                {
+                    this.user = SessionFacade.CurrentUser;
+                }
+
+                return this.user;
+            }
+        }
+
         /// <summary>
         /// The refresh.
         /// </summary>
         public void Refresh()
         {
             this.userId = null;
+            this.userName = null;
             this.userWorkingGroups = null;
             HttpContext.Current.Session[UserModules] = this.modules = null;
         }

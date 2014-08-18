@@ -33,10 +33,14 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
 
         private readonly ICustomerService customerService;
 
+        private Customer customer;
+
         /// <summary>
         /// The customer id.
         /// </summary>
         private int? customerId;
+
+        private string customerName;
 
         /// <summary>
         /// The working day start.
@@ -70,10 +74,23 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
             {
                 if (!this.customerId.HasValue)
                 {
-                    this.customerId = SessionFacade.CurrentCustomer.Id;    
+                    this.customerId = this.Customer.Id;    
                 }
 
                 return this.customerId.Value;
+            }
+        }
+
+        public string CustomerName
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(this.customerName))
+                {
+                    this.customerName = this.Customer.Name;
+                }
+
+                return this.customerName;
             }
         }
 
@@ -86,7 +103,7 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
             {
                 if (!this.workingDayStart.HasValue)
                 {
-                    this.workingDayStart = SessionFacade.CurrentCustomer.WorkingDayStart;
+                    this.workingDayStart = this.Customer.WorkingDayStart;
                 }
 
                 return this.workingDayStart.Value;
@@ -102,7 +119,7 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
             {
                 if (!this.workingDayEnd.HasValue)
                 {
-                    this.workingDayEnd = SessionFacade.CurrentCustomer.WorkingDayEnd;
+                    this.workingDayEnd = this.Customer.WorkingDayEnd;
                 }
 
                 return this.workingDayEnd.Value;
@@ -128,6 +145,19 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
                 }
 
                 return this.settings;
+            }
+        }
+
+        private Customer Customer
+        {
+            get
+            {
+                if (this.customer == null)
+                {
+                    this.customer = this.GetCurrentCustomer();
+                }
+
+                return this.customer;
             }
         }
 

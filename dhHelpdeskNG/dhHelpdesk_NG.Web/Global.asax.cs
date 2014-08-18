@@ -7,6 +7,7 @@
     using System.Web.Routing;
 
     using DH.Helpdesk.Common.Logger;
+    using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Services.Infrastructure;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Controllers;
@@ -21,6 +22,7 @@
     public class MvcApplication : HttpApplication
     {
         private readonly IConfiguration configuration = ManualDependencyResolver.Get<IConfiguration>();
+        private readonly IWorkContext workContext = ManualDependencyResolver.Get<IWorkContext>();
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
@@ -101,7 +103,12 @@
                 }
             }
 
-            LogManager.Error.Error(new Exception(ex.Message, ex));
+            LogManager.Error.Error(new ErrorContext(
+                                        ex,
+                                        currentController,
+                                        currentAction,
+                                        httpContext,
+                                        this.workContext).ToString());
 
             httpContext.ClearError();
             httpContext.Response.Clear();

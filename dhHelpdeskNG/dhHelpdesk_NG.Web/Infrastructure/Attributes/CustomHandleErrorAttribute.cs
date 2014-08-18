@@ -1,8 +1,12 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.Attributes
 {
-    using System;
     using System.Web;
     using System.Web.Mvc;
+
+    using DH.Helpdesk.Dal.Infrastructure.Context;
+    using DH.Helpdesk.Services.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.Logger;
+
     using LogManager = DH.Helpdesk.Web.Infrastructure.Logger.LogManager;
 
     public class CustomHandleErrorAttribute : HandleErrorAttribute
@@ -26,6 +30,9 @@
                 return;
             }
 
+            var controllerName = (string)filterContext.RouteData.Values["controller"];
+            var actionName = (string)filterContext.RouteData.Values["action"];
+
             // if the request is AJAX return JSON else view.
             if (filterContext.HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
@@ -41,8 +48,6 @@
             }
             else
             {
-                var controllerName = (string)filterContext.RouteData.Values["controller"];
-                var actionName = (string)filterContext.RouteData.Values["action"];
                 var model = new HandleErrorInfo(filterContext.Exception, controllerName, actionName);
 
                 filterContext.Result = new ViewResult
@@ -54,8 +59,15 @@
                                            };
             }
 
+            var workContext = ManualDependencyResolver.Get<IWorkContext>();
+
             // log the error using log4net.
-            LogManager.Error.Error(new Exception(filterContext.Exception.Message, filterContext.Exception));
+            LogManager.Error.Error(new ErrorContext(
+                                        filterContext.Exception,        
+                                        controllerName,
+                                        actionName,
+                                        filterContext.HttpContext.ApplicationInstance.Context,
+                                        workContext).ToString());
 
             filterContext.ExceptionHandled = true;
             filterContext.HttpContext.Response.Clear();

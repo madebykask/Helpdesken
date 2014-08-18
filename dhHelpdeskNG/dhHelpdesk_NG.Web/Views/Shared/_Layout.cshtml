@@ -40,13 +40,10 @@
 
     </head>
     @{
-        var model = Html.MasterModel();
-        if (model == null || model.CustomerSetting == null || SessionFacade.CurrentUser == null)
-        {
-            return;
-        }
+        var model = Html.MasterModel();        
     }
     <body>
+    @if(model != null && model.CustomerSetting != null && SessionFacade.CurrentUser != null) {    
         <div class="navbar fixed">
             <div class="navbar-container">
                 <a href="/">
@@ -186,44 +183,44 @@
                                     @if (model.IsPlanningVisible())
                                     {                                    
                                         <li><a href="@Url.Action("index", "planning", new { area = "" })">
-                                            <img src="@Url.Content("~/Content/icons/planning.png")" alt="planning" />
-                                            @Translation.Get("Planering")</a></li>
+                                                <img src="@Url.Content("~/Content/icons/planning.png")" alt="planning" />
+                                                @Translation.Get("Planering")</a></li>
                                     }                                    
                                     @if (model.IsProjectVisible())
                                     {                                    
                                         <li><a href="@Url.Action("Index", "Projects", new { area = "" })">
-                                            <img src="@Url.Content("~/Content/icons/project.png")" alt="project" />
-                                            @Translation.Get("Projekt")</a></li>
+                                                <img src="@Url.Content("~/Content/icons/project.png")" alt="project" />
+                                                @Translation.Get("Projekt")</a></li>
                                     }                                    
                                     @if (model.IsQuestionVisible())
                                     {                                    
                                         <li><a href="@Url.Action("index", "question", new { area = "" })">
-                                            <img src="@Url.Content("~/Content/icons/registerquestion.png")" alt="question" />
-                                            @Translation.Get("Frågeregistrering")</a></li>
+                                                <img src="@Url.Content("~/Content/icons/registerquestion.png")" alt="question" />
+                                                @Translation.Get("Frågeregistrering")</a></li>
                                     }                                    
                                     @if (model.IsQuestionnaireVisible())
                                     {                                    
                                         <li><a href="@Url.Action("index", "questionnaire", new { area = "" })">
-                                            <img src="@Url.Content("~/Content/icons/questionnaire.png")" alt="questionnarie" />
-                                            @Translation.Get("Enkät")</a></li>
+                                                <img src="@Url.Content("~/Content/icons/questionnaire.png")" alt="questionnarie" />
+                                                @Translation.Get("Enkät")</a></li>
                                     }                                    
                                     @if (model.IsLicenseVisible())
                                     {                                    
                                         <li><a href="@Url.Action("index", "license", new { area = "" })">
-                                            <img src="@Url.Content("~/Content/icons/Licens.png")" alt="license" />
-                                            @Translation.Get("Licenshantering")</a></li>
+                                                <img src="@Url.Content("~/Content/icons/Licens.png")" alt="license" />
+                                                @Translation.Get("Licenshantering")</a></li>
                                     }                                    
                                     @if (model.IsDocumentVisible())
                                     {                                    
                                         <li><a href="@Url.Action("index", "document", new { area = "" })">
-                                            <img src="@Url.Content("~/Content/icons/documenthandling.png")" alt="document" />
-                                            @Translation.Get("Dokumenthantering")</a></li> 
+                                                <img src="@Url.Content("~/Content/icons/documenthandling.png")" alt="document" />
+                                                @Translation.Get("Dokumenthantering")</a></li> 
                                     }                                                                        
                                     @if (model.IsComputerUserVisible())
                                     {                                    
                                         <li><a href="@Url.Action("index", "Notifiers", new { area = "" })">
-                                            <img src="@Url.Content("~/Content/icons/notifier.png")" alt="computeruser" />
-                                            @Translation.Get("Anmälare")</a></li>
+                                                <img src="@Url.Content("~/Content/icons/notifier.png")" alt="computeruser" />
+                                                @Translation.Get("Anmälare")</a></li>
                                     }                                    
                                     <li>
                                         <img src="@Url.Content("~/Content/img/dhhelpdesk-menuend.png")" alt="Start" />
@@ -249,15 +246,15 @@
                                         @Translation.Get("Kunder")
                                     </a>
                                     <ul class="dropdown-menu">
-                                    @if (model.Customers != null)
-                                    {
-                                        foreach (var customer in model.Customers)
+                                        @if (model.Customers != null)
                                         {
-                                            <li>
-                                                <a href="@Url.Action("Index", "cases", new { customerId = customer.Id })">@customer.Name</a>
-                                            </li>
-                                        }
-                                    }                                    
+                                            foreach (var customer in model.Customers)
+                                            {
+                                                <li>
+                                                    <a href="@Url.Action("Index", "cases", new { customerId = customer.Id })">@customer.Name</a>
+                                                </li>
+                                            }
+                                        }                                    
                                     </ul>
                                 </li>
                                 @if (model.IsCustomerOrSystemAdministrator())
@@ -294,12 +291,12 @@
                 </div>
             </div>
         </div>
-
-        @RenderBody()
-        @RenderSection("Dialogs", false)
-        <script type="text/javascript" src="@Url.Content("~/Content/js/dhHelpdesk.js")"></script>
-        @RenderSection("Scripts", false)
-        <input type="hidden" value="@Request.RawUrl" id="rawUrl" />
-        @Html.Partial("_Translations", null)
+    }
+    @RenderBody()
+    @RenderSection("Dialogs", false)
+    <script type="text/javascript" src="@Url.Content("~/Content/js/dhHelpdesk.js")"></script>
+    @RenderSection("Scripts", false)
+    <input type="hidden" value="@Request.RawUrl" id="rawUrl" />
+    @Html.Partial("_Translations", null)
     </body>
 </html>

@@ -21,6 +21,8 @@ namespace DH.Helpdesk.Dal.Infrastructure.Context
         /// </summary>
         int CustomerId { get; }
 
+        string CustomerName { get; }
+
         /// <summary>
         /// Gets the working day end.
         /// </summary>

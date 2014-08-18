@@ -6,6 +6,8 @@ using DH.Helpdesk.Services.Services;
 
 namespace DH.Helpdesk.NewSelfService.Infrastructure.WorkContext.Concrete
 {
+    using System;
+
     using DH.Helpdesk.NewSelfService.Infrastructure;
 
     internal sealed class UserContext : IUserContext
@@ -20,6 +22,14 @@ namespace DH.Helpdesk.NewSelfService.Infrastructure.WorkContext.Concrete
         public int UserId
         {
             get { return SessionFacade.CurrentUser.Id; }
+        }
+
+        public string UserName
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
 
         public ICollection<UserWorkingGroup> UserWorkingGroups

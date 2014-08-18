@@ -442,6 +442,7 @@
     <Compile Include="Infrastructure\Filters\Problems\ProblemFilter.cs" />
     <Compile Include="Infrastructure\Filters\Projects\ProjectFilter.cs" />
     <Compile Include="Infrastructure\Filters\Reports\ReportsFilter.cs" />
+    <Compile Include="Infrastructure\Logger\ErrorContext.cs" />
     <Compile Include="Infrastructure\Logger\Log4NetStartUpTask.cs" />
     <Compile Include="Infrastructure\Logger\LogManager.cs" />
     <Compile Include="Infrastructure\ModelFactories\Case\Concrete\CaseModelFactory.cs" />
