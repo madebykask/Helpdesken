@@ -1135,6 +1135,7 @@
     <Content Include="Views\Info\BulletinBoard.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <None Include="Properties\PublishProfiles\Test.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\highlighter\" />

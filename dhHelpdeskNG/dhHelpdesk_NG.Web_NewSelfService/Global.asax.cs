@@ -34,6 +34,7 @@
             ViewEngines.Engines.Add(new RazorViewEngine());
 
             ECT.FormLib.FormLibSetup.Setup();
+            ECT.FormLib.FormLibSetup.SetupRoutes(RouteTable.Routes);
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
