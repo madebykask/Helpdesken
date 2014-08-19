@@ -8,6 +8,7 @@
 
     using DH.Helpdesk.Common.Logger;
     using DH.Helpdesk.Dal.Infrastructure.Context;
+    using DH.Helpdesk.Services.Exceptions;
     using DH.Helpdesk.Services.Infrastructure;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Controllers;
@@ -101,6 +102,11 @@
                         action = "Index";
                         break;
                 }
+            }
+
+            if (ex is BusinessLogicException)
+            {
+                action = "BusinessLogicError";
             }
 
             LogManager.Error.Error(new ErrorContext(

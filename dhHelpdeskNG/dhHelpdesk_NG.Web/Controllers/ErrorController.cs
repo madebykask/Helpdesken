@@ -21,5 +21,10 @@
         {
             return this.View("Error");
         }
+
+        public ViewResult BusinessLogicError()
+        {
+            return this.View();
+        }
     }
 }

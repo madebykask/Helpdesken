@@ -4,6 +4,7 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.Dal.Infrastructure.Context;
+    using DH.Helpdesk.Services.Exceptions;
     using DH.Helpdesk.Services.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.Logger;
 
@@ -26,6 +27,11 @@
             }
 
             if (!this.ExceptionType.IsInstanceOfType(filterContext.Exception))
+            {
+                return;
+            }
+
+            if (filterContext.Exception is BusinessLogicException)
             {
                 return;
             }

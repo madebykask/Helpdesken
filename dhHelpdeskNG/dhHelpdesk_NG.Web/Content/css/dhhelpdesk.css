@@ -2592,3 +2592,11 @@ body.login {
 .width90 {
     width: 90%!important;
 }
+.error-title {
+    text-align: center;
+}
+.error-message {
+    padding: 10px; 
+    background: #ffa;
+    text-align: center;
+}

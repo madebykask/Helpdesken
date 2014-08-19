@@ -1568,6 +1568,7 @@
     <Content Include="Views\Inventory\EditorTemplates\NotReadonlyFields\Text.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\NotReadonlyFields\WideText.cshtml" />
     <Content Include="Views\Inventory\OperationLogGrid.cshtml" />
+    <Content Include="Views\Error\BusinessLogicError.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
