@@ -166,6 +166,20 @@ $(function () {
             });
         },
 
+        CreateBlankArticle: function() {
+            var blank = new dhHelpdesk.CaseArticles.InvoiceArticle();
+            blank.Id = -1;
+            return blank;
+        },
+
+        AddBlankArticle: function() {
+            var article = this.CreateBlankArticle();
+            var caseArticle = article.ToCaseArticle();
+            caseArticle.Article = article;
+            this.AddCaseArticle(caseArticle);
+            this.AddToContainer(caseArticle);
+        },
+
         Initialize: function (e) {
             var th = this;
             th.ProductAreaElement = $(document).find("." + e.attr("data-invoice-product-area"));
@@ -174,7 +188,7 @@ $(function () {
 
             var button = $(document.createElement("input"))
                 .attr("type", "button")
-                .attr("value", "...")
+                .attr("value", "Invoice articles")
                 .attr("title", "Articles to be invoiced")
                 .addClass("btn");
             button.click(function() {
@@ -213,14 +227,12 @@ $(function () {
                     th._container.parent().find(".ui-dialog-buttonset").prepend(invoiceBtn);
                 }
 
+                var addArticleEl = th._container.find(".articles-params");
                 var articlesEl = th._container.find(".articles-params-article");
                 $.getJSON("/invoice/articles?productAreaId=" + th.ProductAreaElement.val(), function (data) {
                     th.ClearInvoiceArticles();
-                    articlesEl.append("<option value='-1'>Blank optional row</option>");
-                    var blank = new dhHelpdesk.CaseArticles.InvoiceArticle();
-                    blank.Id = -1;
-                    th.AddInvoiceArticle(blank);
-                    if (data == null) {
+                    if (data == null || data.length == 0) {
+                        addArticleEl.hide();
                         return;
                     }
                     for (var i = 0; i < data.length; i++) {
@@ -327,7 +339,7 @@ $(function () {
                 rows += caseArticles[i].Render();
             }
 
-            var parameters = "<table>" +
+            var parameters = "<table class='articles-params'>" +
                 "<thead>" +
                 "<tr>" +
                 "<th>Select item</th>" +
@@ -351,11 +363,12 @@ $(function () {
                 "</body>" +
                 "</table>";
 
-            var table = "<table class='width100 table table-striped table-bordered table-hover'>" +
+            var table = "<table><tr><td class='width100'><table class='width100 table table-striped table-bordered table-hover'>" +
                 "<tr>" +
                 "<th>Art no</th>" +
                 "<th>Description</th>" +
                 "<th>Units</th>" +
+                "<th>Type</th>" +
                 "<th>PPU</th>" +
                 "<th>Total</th>" +
                 "<th></th>" +
@@ -363,7 +376,7 @@ $(function () {
                 "<tbody class='articles-rows'>" +
                 rows +
                 "</tbody>" +
-                "</table>";
+                "</table></td><td style='vertical-align: top;'><input type='button' onclick='dhHelpdesk.CaseArticles.AddBlankArticle(); return false;' value='\+' /></td></tr></table>";
 
             var total = "<div class='width100 textbold' style='text-align: right;'>Total: <span class='articles-total'>" + this.GetCaseArticlesTotal() + "</span></div>";
 
@@ -446,7 +459,7 @@ $(function () {
             };
 
             this.GetFullName = function () {
-                var fullName = "";
+                var fullName;
                 if (this.Number != null) {
                     fullName = this.Number + " - " + this.Name;
                 } else {
@@ -552,15 +565,15 @@ $(function () {
                 if (this.IsBlank()) {
                     if (this.IsInvoiced) {
                         return "<tr data-id='" + this.Id + "'>" +
-                                "<td colspan='5'>" + (this.Name != null ? this.Name : "") + "</td>" +
-                                "<td>invoiced</td>" +
+                                "<td colspan='6'>" + (this.Name != null ? this.Name : "") + "</td>" +
+                                "<td><i class='icon-thumbs-up icon-green'></i></td>" +
                                 "</tr>";
                     }
                     return "<tr data-id='" + this.Id + "'>" +
-                            "<td colspan='5'>" +
+                            "<td colspan='6'>" +
                             "<input onchange='dhHelpdesk.CaseArticles.UpdateArticle($(this).parent().parent())' type='text' class='width80 article-name' maxlength='100' value='" + (this.Name != null ? this.Name : "") + "' />" +
                             "</td>" +
-                            "<td><a href='javascript:void()' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())'>delete</a></td>" +
+                            "<td><a href='javascript:void()' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())'>x</a></td>" +
                             "</tr>";
                 }
 
@@ -569,9 +582,10 @@ $(function () {
                             "<td>" + this.GetNumber() + "</td>" +
                             "<td>" + this.Name + "</td>" +
                             "<td>" + this.Amount + "</td>" +
+                            "<td>" + this.GetUnitName() + "</td>" +
                             "<td>" + this.GetPpu() + "</td>" +
                             "<td>" + this.GetTotal() + "</td>" +
-                            "<td>invoiced</td>" +
+                            "<td><i class='icon-thumbs-up icon-green'></i></td>" +
                             "</tr>";
                 }
 
@@ -579,9 +593,10 @@ $(function () {
                         "<td>" + this.GetNumber() + "</td>" +
                         "<td>" + this.Name + "</td>" +
                         "<td>" + "<input onchange='dhHelpdesk.CaseArticles.UpdateArticle($(this).parent().parent())' type='text' maxlength='5' class='article-amount input-small-important' value='" + this.Amount + "' />" + "</td>" +
+                        "<td>" + this.GetUnitName() + "</td>" +
                         "<td>" + this.GetPpu() + "</td>" +
                         "<td class='article-total'>" + this.GetTotal() + "</td>" +
-                        "<td><a href='javascript:void()' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())'>delete</a></td>" +
+                        "<td><a href='javascript:void()' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())'>x</a></td>" +
                         "</tr>";
             };
         },
