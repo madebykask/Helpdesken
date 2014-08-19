@@ -6,6 +6,10 @@
 
     public class OrganizationFieldsViewModel
     {
+        public OrganizationFieldsViewModel()
+        {
+        }
+
         public OrganizationFieldsViewModel(
             OrganizationFieldsModel organizationFieldsModel,
             SelectList departments)

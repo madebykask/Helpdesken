@@ -8,37 +8,7 @@
             <th colspan="2" class="header">@Translation.Get("Kommunikation")</th>
         </tr>
     }
-    @if (Model.NetworkAdapterName.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.NetworkAdapterName.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.NetworkAdapterName.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.IPAddress.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.IPAddress.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.IPAddress.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.MacAddress.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.MacAddress.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.MacAddress.Value)
-            </td>
-        </tr>
-    }
+    @Html.EditorFor(m => m.NetworkAdapterName, "NotReadonlyFields/Text")
+    @Html.EditorFor(m => m.IPAddress, "NotReadonlyFields/Text")
+    @Html.EditorFor(m => m.MacAddress, "NotReadonlyFields/Text")
 </table>

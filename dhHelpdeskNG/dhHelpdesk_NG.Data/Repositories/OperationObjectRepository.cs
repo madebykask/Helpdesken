@@ -17,6 +17,8 @@ namespace DH.Helpdesk.Dal.Repositories
         OperationObjectForView FindByName(string name);
 
         void DeleteById(int id);
+
+        bool IsExist(string name);
     }
 
     public class OperationObjectRepository : RepositoryBase<OperationObject>, IOperationObjectRepository
@@ -66,6 +68,14 @@ namespace DH.Helpdesk.Dal.Repositories
             var entity = this.Table.Find(id);
             entity.Printers.Clear();
             this.Table.Remove(entity);
+        }
+
+        public bool IsExist(string name)
+        {
+            var anonymus = this.Table.FirstOrDefault(x => x.Name.Equals(name));
+            bool isExist = anonymus != null;
+
+            return isExist;
         }
 
         private void Map(BusinessData.Models.Operation.OperationObject businessModel, OperationObject entity)

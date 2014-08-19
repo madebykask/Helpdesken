@@ -9,50 +9,10 @@
             <th colspan="2" class="header">@Translation.Get("Övrigt")</th>
         </tr>
     }
-    @if (Model.NumberOfTrays.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.NumberOfTrays.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.NumberOfTrays.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.Driver.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.Driver.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.Driver.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.Info.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.Info.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextAreaFor(m => m.Info.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.URL.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.URL.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.URL.Value)
-            </td>
-        </tr>
-    }
+    @Html.EditorFor(m => m.NumberOfTrays, "NotReadonlyFields/Text")
+    @Html.EditorFor(m => m.Driver, "NotReadonlyFields/Text")
+    @Html.EditorFor(m => m.Info, "NotReadonlyFields/Text")
+    @Html.EditorFor(m => m.URL, "NotReadonlyFields/Text")
 </table>
 
 

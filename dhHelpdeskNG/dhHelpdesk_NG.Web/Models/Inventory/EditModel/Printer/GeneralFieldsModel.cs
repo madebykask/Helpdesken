@@ -2,6 +2,10 @@
 {
     public class GeneralFieldsModel
     {
+        public GeneralFieldsModel()
+        {
+        }
+
         public GeneralFieldsModel(
             ConfigurableFieldModel<string> name,
             ConfigurableFieldModel<string> manufacturer,

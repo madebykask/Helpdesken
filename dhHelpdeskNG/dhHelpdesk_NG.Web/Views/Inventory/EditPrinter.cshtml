@@ -23,6 +23,7 @@
             </ul>
             <div class="tab-content">
                 <div class="tab-pane tab-pane-border active" id="fragment-1">
+                    @Html.HiddenFor(m => m.Id)
                     @Html.EditorFor(m => m.GeneralFieldsModel, "Printer/GeneralFieldsModel")
                     @Html.EditorFor(m => m.InventoryFieldsModel, "Shared/InventoryModel")
                     @Html.EditorFor(m => m.CommunicationFieldsModel, "Printer/CommunicationFieldsModel")

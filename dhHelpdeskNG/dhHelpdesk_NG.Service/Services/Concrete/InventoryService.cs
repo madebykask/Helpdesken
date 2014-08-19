@@ -27,6 +27,7 @@
     using DH.Helpdesk.Dal.Repositories.WorkstationModules;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Inventory;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Inventory;
+    using DH.Helpdesk.Services.Exceptions;
     using DH.Helpdesk.Services.Requests.Inventory;
     using DH.Helpdesk.Services.Response.Inventory;
 
@@ -339,20 +340,32 @@
 
         public void AddServer(Server businessModel, OperationContext context)
         {
+            bool isExist = this.operationObjectRepository.IsExist(businessModel.GeneralFields.Name);
+            if (isExist)
+            {
+                throw new OperationObjectEditExeption(
+                    string.Format(
+                        "Server marked as operation object with the name {0} is alredy exist",
+                        businessModel.GeneralFields.Name));
+            }
+
             var settings = this.serverFieldSettingsRepository.GetFieldSettingsProcessing(context.CustomerId);
             this.serverValidator.Validate(businessModel, settings);
             this.serverRepository.Add(businessModel);
             this.serverRepository.Commit();
 
             var isOperationObject = businessModel.IsOperationObject;
-
-            if (isOperationObject)
+            if (!isOperationObject)
             {
-                this.AddOperationObject(
-                    context,
-                    businessModel.GeneralFields.Name,
-                    businessModel.GeneralFields.Description);
+                return;
             }
+
+            if (string.IsNullOrWhiteSpace(businessModel.GeneralFields.Name))
+            {
+                throw new OperationObjectEditExeption("Server can not be marked as operation object with empty name");
+            }
+
+            this.AddOperationObject(context, businessModel.GeneralFields.Name, businessModel.GeneralFields.Description);
         }
 
         public void DeleteServer(int id)
@@ -377,6 +390,15 @@
 
         public void UpdateServer(Server businessModel, OperationContext context)
         {
+            bool isExist = this.operationObjectRepository.IsExist(businessModel.GeneralFields.Name);
+            if (isExist)
+            {
+                throw new OperationObjectEditExeption(
+                    string.Format(
+                        "Server marked as operation object with the name {0} is alredy exist",
+                        businessModel.GeneralFields.Name));
+            }
+
             var existingBusinessModel = this.serverRepository.FindById(businessModel.Id);
             var settings = this.serverFieldSettingsRepository.GetFieldSettingsProcessing(context.CustomerId);
             this.serverRestorer.Restore(businessModel, existingBusinessModel, settings);
@@ -388,8 +410,15 @@
             var isWasOperationObject = existingBusinessModel.IsOperationObject;
             var newBusinessModelName = businessModel.GeneralFields.Name;
             var oldBusinessModelName = existingBusinessModel.GeneralFields.Name;
+
             if (isOperationObject)
             {
+                if (string.IsNullOrWhiteSpace(businessModel.GeneralFields.Name))
+                {
+                    throw new OperationObjectEditExeption(
+                        "Server can not be marked as operation object with empty name");
+                }
+
                 if (isWasOperationObject)
                 {
                     if (!oldBusinessModelName.Equals(newBusinessModelName))

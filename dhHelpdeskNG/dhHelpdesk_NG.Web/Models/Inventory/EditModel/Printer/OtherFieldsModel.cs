@@ -2,6 +2,10 @@
 {
     public class OtherFieldsModel
     {
+        public OtherFieldsModel()
+        {
+        }
+
         public OtherFieldsModel(
             ConfigurableFieldModel<string> numberOfTrays,
             ConfigurableFieldModel<string> driver,

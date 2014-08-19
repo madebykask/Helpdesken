@@ -106,6 +106,7 @@
     <Compile Include="BusinessLogic\BusinessModelRestorers\Changes\Concrete\ChangeRestorer.cs" />
     <Compile Include="BusinessLogic\BusinessModelRestorers\Changes\IChangeRestorer.cs" />
     <Compile Include="BusinessLogic\OtherTools\Concrete\TemporaryIdProvider.cs" />
+    <Compile Include="Exceptions\OperationObjectEditExeption.cs" />
     <Compile Include="Helpers\ChangeHelper.cs" />
     <Compile Include="Infrastructure\ApplicationDefaultParameters.cs" />
     <Compile Include="Infrastructure\Cases\Concrete\CasesCalculator.cs" />

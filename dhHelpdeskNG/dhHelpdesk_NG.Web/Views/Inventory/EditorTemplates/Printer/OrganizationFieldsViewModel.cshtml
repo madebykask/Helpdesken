@@ -1,32 +1,12 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Printer.OrganizationFieldsViewModel
 <table class="tableform">
-    @if (Model.Departments.Show
+    @if (Model.OrganizationFieldsModel.DepartmentId.Show
         || Model.OrganizationFieldsModel.UnitId.Show)
     {
         <tr>
             <th colspan="2" class="header">@Translation.Get("Organisation")</th>
         </tr>
     }
-    @if (Model.Departments.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.Departments.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.DropDownListFor(m => m.OrganizationFieldsModel.DepartmentId, Model.Departments.Value, string.Empty)
-            </td>
-        </tr>
-    }
-    @if (Model.OrganizationFieldsModel.UnitId.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.OrganizationFieldsModel.UnitId.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.OrganizationFieldsModel.UnitId.Value)
-            </td>
-        </tr>
-    }
+    @Html.EditorFor(m => m.OrganizationFieldsModel.DepartmentId, "NotReadonlyFields/List", new { Source = Model.Departments })
+    @Html.EditorFor(m => m.OrganizationFieldsModel.UnitId, "NotReadonlyFields/Text")
 </table>
