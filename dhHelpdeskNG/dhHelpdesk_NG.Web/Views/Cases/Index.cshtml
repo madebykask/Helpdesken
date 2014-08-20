@@ -138,7 +138,7 @@
             @if (SessionFacade.CurrentUser.CreateCasePermission == 1)
             {                                        
                 <li id="btnNewCase">
-                    @Html.ActionLink(Translation.Get("Clear case"), "new", "cases", new { customerId = Model.caseSearchFilterData.filterCustomerId } , new { @class = "btn" })
+                    @Html.ActionLink(Translation.Get("Skapa ärende"), "new", "cases", new { customerId = Model.caseSearchFilterData.filterCustomerId } , new { @class = "btn" })
                 </li>
                 <li id="btnCaseTemplate">                   
                     @Html.Partial("_CaseTemplateTree", Model.CaseTemplateTreeButton)

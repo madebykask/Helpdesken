@@ -23,6 +23,7 @@
                 .WillCascadeOnDelete(false);
             this.Property(a => a.Name).IsRequired().HasMaxLength(100);
             this.Property(a => a.Amount).IsOptional();
+            this.Property(a => a.Ppu).IsOptional();
             this.Property(a => a.Position).IsRequired();
             this.Property(a => a.IsInvoiced).IsRequired();
 

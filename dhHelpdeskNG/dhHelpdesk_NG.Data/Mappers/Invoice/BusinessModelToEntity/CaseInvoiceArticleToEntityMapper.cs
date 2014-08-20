@@ -12,6 +12,7 @@
             entity.ArticleId = businessModel.ArticleId;
             entity.Name = businessModel.Name;
             entity.Amount = businessModel.Amount;
+            entity.Ppu = businessModel.Ppu;
             entity.Position = businessModel.Position;
         }
     }

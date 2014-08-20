@@ -29,7 +29,7 @@
             var entities = this.DbContext.InvoiceArticles
                         .Where(a => a.CustomerId == customerId &&
                                 productAreas.Contains(a.ProductAreaId))
-                        .OrderBy(a => a.Name)
+                        .OrderBy(a => a.Number)
                         .ToList();
 
             return entities

@@ -1,11 +1,17 @@
 DECLARE @CustomerId INT
+SET @CustomerId = 1
+
+
+DELETE FROM [dbo].[tblCaseInvoiceArticle]
+DELETE FROM [dbo].[tblInvoiceArticle]
+DELETE FROM [dbo].[tblInvoiceArticleUnit]
+
 DECLARE @HumanResources INT
 DECLARE @IT INT
 DECLARE @Recruitment INT
 DECLARE @LearningTraining INT
 DECLARE @Celebration INT
 DECLARE @NewEmployee INT
-SET @CustomerId = 23
 
 SET @HumanResources = (SELECT [Id] FROM [dbo].[tblProductArea] WHERE [ProductArea] = 'Human Resources' AND [Customer_Id] = @CustomerId)
 IF @HumanResources IS NULL
@@ -68,6 +74,7 @@ DECLARE @IntroductionPackage INT
 DECLARE @RecruitmentStore INT
 DECLARE @NewEmployeePackage INT
 
+INSERT INTO [dbo].[tblInvoiceArticle] ([Number], [Name], [ProductAreaId], [CustomerId]) VALUES (5600, 'Test', @Recruitment, @CustomerId)
 INSERT INTO [dbo].[tblInvoiceArticle] ([Number], [Name], [ProductAreaId], [CustomerId]) VALUES (5610, 'Ad publication', @Recruitment, @CustomerId)
 SET @AdPublication = SCOPE_IDENTITY(); 
 INSERT INTO [dbo].[tblInvoiceArticle] ([Number], [Name], [ProductAreaId], [CustomerId]) VALUES (5620, 'Initial selection/screening per 50 candidates', @Recruitment, @CustomerId)

@@ -24,6 +24,7 @@
                                 null,
                                 item.Name,
                                 item.Amount,
+                                item.Ppu,
                                 item.Position,
                                 item.IsInvoiced));
                 }
@@ -47,6 +48,8 @@
             public string Name { get; set; }
 
             public int? Amount { get; set; }
+
+            public decimal? Ppu { get; set; }
 
             public short Position { get; set; }
 

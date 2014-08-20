@@ -7,8 +7,9 @@
 
     public sealed class CaseInvoiceArticle
     {
-        public CaseInvoiceArticle(int? articleId, InvoiceArticle article)
+        public CaseInvoiceArticle(int? articleId, InvoiceArticle article, decimal? ppu)
         {
+            this.Ppu = ppu;
             this.Article = article;
             this.ArticleId = articleId;
         }
@@ -21,9 +22,11 @@
                 InvoiceArticle article,
                 string name, 
                 int? amount,
+                decimal? ppu,
                 short position,
                 bool isInvoiced)
         {
+            this.Ppu = ppu;
             this.Article = article;
             this.ArticleId = articleId;
             this.Position = position;
@@ -50,6 +53,8 @@
         public string Name { get; private set; }
 
         public int? Amount { get; private set; }
+
+        public decimal? Ppu { get; private set; }
 
         public short Position { get; private set; }
 

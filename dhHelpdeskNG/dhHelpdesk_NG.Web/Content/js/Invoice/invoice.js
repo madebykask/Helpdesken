@@ -6,6 +6,8 @@ $(function () {
     dhHelpdesk.CaseArticles = {
         DefaultAmount: 1,
 
+        DefaultPpu: 0,
+
         _invoiceArticles: [],
 
         _caseArticles: [],
@@ -414,6 +416,17 @@ $(function () {
                     eAmount.val(amount);
                 }
                 article.Amount = amount;
+
+                var ePpu = e.find(".article-ppu");
+                if (ePpu.length > 0) {
+                    var ppu = ePpu.val();
+                    if (!this.IsInteger(ppu) || ppu <= 0) {
+                        ppu = dhHelpdesk.CaseArticles.DefaultPpu;
+                        ePpu.val(ppu);
+                    }
+                    article.Ppu = ppu;
+                }
+
                 e.find(".article-total").text(article.GetTotal() + " " + article.GetUnitName());
                 this.UpdateTotal();
             }
@@ -482,7 +495,6 @@ $(function () {
                 article.Amount = dhHelpdesk.CaseArticles.DefaultAmount;
                 article.UnitId = this.UnitId;
                 article.Unit = this.Unit;
-                article.Ppu = this.Ppu;
                 article.IsInvoiced = false;
                 return article;
             };
@@ -496,6 +508,7 @@ $(function () {
             this.Amount = null;
             this.Position = null;
             this.IsInvoiced = null;
+            this.Ppu = null;
 
             this.ToJSON = function() {
                 return '{' +
@@ -505,6 +518,7 @@ $(function () {
                         '"Number":"' + this.GetNumber() + '", ' +
                         '"Name":"' + (this.Name != null ? this.Name : '') + '", ' +
                         '"Amount":"' + (this.Amount != null && !this.IsBlank() ? this.Amount : '') + '", ' +
+                        '"Ppu":"' + (this.Ppu != null ? this.Ppu : '') + '", ' +
                         '"Position":"' + this.Position + '", ' +
                         '"IsInvoiced":' + (this.IsInvoiced ? '"true"' : '"false"') +
                     '}';
@@ -519,6 +533,7 @@ $(function () {
                 clone.Amount = this.Amount;
                 clone.Position = this.Position;
                 clone.IsInvoiced = this.IsInvoiced;
+                clone.Ppu = this.Ppu;
                 return clone;
             };
 
@@ -534,7 +549,7 @@ $(function () {
 
             this.GetTotal = function() {
                 if (this.Article != null) {
-                    return this.Amount * this.Article.Ppu;
+                    return this.Amount * this.GetPpu();
                 }
                 return 0;
             };
@@ -554,11 +569,17 @@ $(function () {
                 return "";
             }
 
-            this.GetPpu = function() {
-                if (this.Article != null) {
+            this.GetPpu = function () {
+
+                if (this.Ppu != null) {
+                    return this.Ppu;
+                }
+
+                if (this.Article != null &&
+                    this.Article.Ppu != null) {
                     return this.Article.Ppu;
                 }
-                return 0;
+                return dhHelpdesk.CaseArticles.DefaultPpu;
             };
 
             this.Render = function () {
@@ -594,7 +615,9 @@ $(function () {
                         "<td>" + this.Name + "</td>" +
                         "<td>" + "<input onchange='dhHelpdesk.CaseArticles.UpdateArticle($(this).parent().parent())' type='text' maxlength='5' class='article-amount input-small-important' value='" + this.Amount + "' />" + "</td>" +
                         "<td>" + this.GetUnitName() + "</td>" +
-                        "<td>" + this.GetPpu() + "</td>" +
+                        "<td>" +
+                            (this.Article.Ppu != null ? this.GetPpu() : "<input onchange='dhHelpdesk.CaseArticles.UpdateArticle($(this).parent().parent())' type='text' maxlength='5' class='article-ppu input-small-important' value='" + this.GetPpu() + "' />") +
+                        "</td>" +
                         "<td class='article-total'>" + this.GetTotal() + "</td>" +
                         "<td><a href='javascript:void()' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())'>x</a></td>" +
                         "</tr>";
@@ -647,6 +670,7 @@ $(function () {
             }
             caseArticle.Name = article.Name;
             caseArticle.Amount = article.Amount;
+            caseArticle.Ppu = article.Ppu;
             caseArticle.UnitId = article.UnitId;
             caseArticle.Position = article.Position;
             caseArticle.IsInvoiced = article.IsInvoiced;

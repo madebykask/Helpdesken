@@ -88,6 +88,7 @@ CREATE TABLE [dbo].[tblCaseInvoiceArticle]
 	[ArticleId] INT NULL,
 	[Name] NVARCHAR(100) NOT NULL,
 	[Amount] INT NULL,
+	[Ppu] DECIMAL NULL,
 	[Position] SMALLINT NOT NULL,
 	[IsInvoiced] BIT NOT NULL
 	CONSTRAINT [PK_tblCaseInvoiceArticle] PRIMARY KEY CLUSTERED 
