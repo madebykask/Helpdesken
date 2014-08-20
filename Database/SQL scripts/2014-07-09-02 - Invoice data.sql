@@ -1,5 +1,5 @@
 DECLARE @CustomerId INT
-SET @CustomerId = 1
+SET @CustomerId = 23
 
 
 DELETE FROM [dbo].[tblCaseInvoiceArticle]
