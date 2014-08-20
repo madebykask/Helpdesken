@@ -380,6 +380,7 @@
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public RedirectToRouteResult New(
                                     Case case_, 
                                     CaseLog caseLog, 
@@ -392,6 +393,7 @@
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public RedirectToRouteResult NewAndClose(
                                     Case case_, 
                                     CaseLog caseLog, 
@@ -404,6 +406,7 @@
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public RedirectToRouteResult NewAndAddCase(
                                     Case case_,
                                     CaseLog caseLog,
@@ -416,6 +419,7 @@
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public RedirectToRouteResult Edit(
                                     Case case_,
                                     CaseLog caseLog,
@@ -428,6 +432,7 @@
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public RedirectToRouteResult EditAndClose(
                                     Case case_,
                                     CaseLog caseLog,
@@ -440,6 +445,7 @@
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public RedirectToRouteResult EditAndAddCase(
                                     Case case_,
                                     CaseLog caseLog,
