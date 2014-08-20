@@ -42,5 +42,7 @@
         public DateTime? CaseClosingDateEndFilter { get; set; }
 
         public IList<FinishingCause> ClosingReasons { get; set; }
+
+        public bool IsClearFilters { get; set; }
     }    
 }

@@ -85,7 +85,11 @@
                                                 <td class="span4">
                                                     @Html.TextBoxFor(model => model.case_.PersonsName, new { maxlength = "50" })
                                                 </td>
-                                                <td class="span5"></td>
+                                                <td class="span5">
+                                                    <label class="checkbox">
+                                                        @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier) @Translation.Get("Do not send case notifications to user")
+                                                    </label>                                                    
+                                                </td>
                                             </tr>
                                             <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString())">
                                                 <td>

@@ -219,6 +219,7 @@
                 {
                     m = new CaseIndexViewModel();
                     var fd = new CaseSearchFilterData();
+                    fd.IsClearFilters = clearFilters == true;
                     var srm = new CaseSearchResultModel();
 
                     fd.customerUserSetting = cu;
