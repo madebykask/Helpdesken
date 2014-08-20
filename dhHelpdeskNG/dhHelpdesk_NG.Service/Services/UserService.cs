@@ -35,6 +35,7 @@ namespace DH.Helpdesk.Services.Services
         IList<UserRole> GetUserRoles();
         IList<UserWorkingGroup> GetUserWorkingGroups();
         IList<User> GetUsersForWorkingGroup(int customerId, int workingGroupId);
+        IList<User> GetUsersForWorkingGroup(int workingGroupId);
 
         User GetUser(int id);
         UserRole GetUserRoleById(int id);
@@ -198,6 +199,11 @@ namespace DH.Helpdesk.Services.Services
         public IList<User> GetUsersForWorkingGroup(int customerId, int workingGroupId)
         {
             return this._userRepository.GetUsersForWorkingGroup(customerId, workingGroupId).OrderBy(x => x.SurName).ThenBy(x => x.FirstName).ToList();    
+        }
+
+        public IList<User> GetUsersForWorkingGroup(int workingGroupId)
+        {
+            return this._userRepository.GetUsersForWorkingGroup(workingGroupId).OrderBy(x => x.SurName).ThenBy(x => x.FirstName).ToList();
         }
 
         public IList<UserLists> GetUserOnCases(int customerId)

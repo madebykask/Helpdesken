@@ -33,6 +33,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         IEnumerable<User> GetUsers(int customerId);
         IEnumerable<User> GetUsersForWorkingGroup(int customerId, int workingGroupId);
+        IEnumerable<User> GetUsersForWorkingGroup(int workingGroupId);
         IList<CustomerWorkingGroupForUser> ListForWorkingGroupsInUser(int userId);
         IList<CustomerWorkingGroupForUser> GetWorkinggroupsForUserAndCustomer(int userId, int customerId);
         IList<LoggedOnUsersOnIndexPage> LoggedOnUsers();
@@ -127,6 +128,15 @@ namespace DH.Helpdesk.Dal.Repositories
             var query = from u in this.DataContext.Users
                         join uw in this.DataContext.UserWorkingGroups on u.Id equals uw.User_Id
                         where u.Customer_Id == customerId && uw.WorkingGroup_Id == workingGroupId
+                        select u;
+            return query;
+        }
+
+        public IEnumerable<User> GetUsersForWorkingGroup(int workingGroupId)
+        {
+            var query = from u in this.DataContext.Users
+                        join uw in this.DataContext.UserWorkingGroups on u.Id equals uw.User_Id
+                        where uw.WorkingGroup_Id == workingGroupId
                         select u;
             return query;
         }
