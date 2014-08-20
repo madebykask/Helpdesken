@@ -196,6 +196,26 @@
                 existing.Info,
                 BusinessData.Enums.Inventory.Fields.Server.OtherFields.Info,
                 this.CreateValidationRule(updatedSettings.InfoFieldSetting));
+            this.elementaryRulesValidator.ValidateStringField(
+                updated.Other,
+                existing.Other,
+                BusinessData.Enums.Inventory.Fields.Server.OtherFields.Other,
+                this.CreateValidationRule(updatedSettings.OtherFieldSetting));
+            this.elementaryRulesValidator.ValidateStringField(
+                updated.URL,
+                existing.URL,
+                BusinessData.Enums.Inventory.Fields.Server.OtherFields.URL,
+                this.CreateValidationRule(updatedSettings.URLFieldSetting));
+            this.elementaryRulesValidator.ValidateStringField(
+                updated.URL2,
+                existing.URL2,
+                BusinessData.Enums.Inventory.Fields.Server.OtherFields.URL2,
+                this.CreateValidationRule(updatedSettings.URL2FieldSetting));
+            this.elementaryRulesValidator.ValidateStringField(
+                updated.Owner,
+                existing.Owner,
+                BusinessData.Enums.Inventory.Fields.Server.OtherFields.Owner,
+                this.CreateValidationRule(updatedSettings.OwnerFieldSetting));
         }
 
         private void ValidatePlace(PlaceFields updated, PlaceFields existing, PlaceFieldsSettings updatedSettings)
@@ -328,6 +348,22 @@
                 updated.Info,
                 BusinessData.Enums.Inventory.Fields.Server.OtherFields.Info,
                 this.CreateValidationRule(updatedSettings.InfoFieldSetting));
+            this.elementaryRulesValidator.ValidateStringField(
+                updated.Other,
+                BusinessData.Enums.Inventory.Fields.Server.OtherFields.Other,
+                this.CreateValidationRule(updatedSettings.OtherFieldSetting));
+            this.elementaryRulesValidator.ValidateStringField(
+                updated.URL,
+                BusinessData.Enums.Inventory.Fields.Server.OtherFields.URL,
+                this.CreateValidationRule(updatedSettings.URLFieldSetting));
+            this.elementaryRulesValidator.ValidateStringField(
+                updated.URL2,
+                BusinessData.Enums.Inventory.Fields.Server.OtherFields.URL2,
+                this.CreateValidationRule(updatedSettings.URL2FieldSetting));
+            this.elementaryRulesValidator.ValidateStringField(
+                updated.Owner,
+                BusinessData.Enums.Inventory.Fields.Server.OtherFields.Owner,
+                this.CreateValidationRule(updatedSettings.OwnerFieldSetting));
         }
 
         private void ValidatePlace(PlaceFields updated, PlaceFieldsSettings updatedSettings)

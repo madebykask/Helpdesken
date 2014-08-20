@@ -12,6 +12,8 @@ namespace DH.Helpdesk.Dal.Repositories.Printers
 
         void Update(Printer businessModel);
 
+        void DeleteById(int id);
+
         Printer FindById(int id);
 
         List<PrinterOverview> FindOverviews(int customerId, int? departmentId, string searchFor);

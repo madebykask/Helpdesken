@@ -17,5 +17,10 @@
         public string Info { get; set; }
 
         public string URL { get; set; }
+
+        public static OtherFields CreateDefault()
+        {
+            return new OtherFields(null, null, null, null);
+        }
     }
 }

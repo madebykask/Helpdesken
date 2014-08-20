@@ -8,7 +8,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Inventory.Co
 
     public class ComputerRestorer : Restorer, IComputerRestorer
     {
-        public void Restore(Computer computer, Computer existingComputer, ComputerFieldsSettingsProcessing settings)
+        public void Restore(ComputerForUpdate computer, ComputerForEdit existingComputer, ComputerFieldsSettingsProcessing settings)
         {
             this.RestoreWorkstation(
                 computer.WorkstationFields,
@@ -53,7 +53,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Inventory.Co
             this.RestorePlace(computer.PlaceFields, existingComputer.PlaceFields, settings.PlaceFieldsSettings);
             this.RestoreContact(computer.ContactFields, existingComputer.ContactFields, settings.ContactFieldsSettings);
             this.RestoreState(computer.StateFields, existingComputer.StateFields, settings.StateFieldsSettings);
-            this.RestoreDate(computer.DateFields, existingComputer.DateFields, settings.DateFieldsSettings);
+            
+            // this.RestoreDate(computer.DateFields, existingComputer.DateFields, settings.DateFieldsSettings);
         }
 
         private void RestoreWorkstation(

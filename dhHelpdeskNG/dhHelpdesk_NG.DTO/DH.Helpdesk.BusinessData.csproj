@@ -157,6 +157,9 @@
     <Compile Include="Models\Customer\UserCustomer.cs" />
     <Compile Include="Models\FinishingCause\FinishingCauseInfo.cs" />
     <Compile Include="Models\Inventory\ComputerHistory.cs" />
+    <Compile Include="Models\Inventory\Edit\Computer\ComputerForEdit.cs" />
+    <Compile Include="Models\Inventory\Edit\Computer\ComputerForInsert.cs" />
+    <Compile Include="Models\Inventory\Edit\Computer\ComputerForUpdate.cs" />
     <Compile Include="Models\Inventory\Output\ComputerUserOverview.cs" />
     <Compile Include="Models\Inventory\Edit\Inventory\TypeGroupModel.cs" />
     <Compile Include="Models\Inventory\Edit\Settings\ComputerSettings\ChassisFieldsSettings.cs" />
@@ -193,6 +196,11 @@
     <Compile Include="Models\Inventory\Output\Settings\ProcessingSetttings\ComputerSettings\SoundFieldsSettings.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ProcessingSetttings\ComputerSettings\StateFieldsSettings.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ProcessingSetttings\ComputerSettings\WorkstationFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ProcessingSetttings\PrinterSettings\GeneralFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ProcessingSetttings\PrinterSettings\OrganizationFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ProcessingSetttings\PrinterSettings\OtherFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ProcessingSetttings\PrinterSettings\PrinterFieldsSettingsProcessing.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ProcessingSetttings\PrinterSettings\StateFieldsSettings.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ProcessingSetttings\ProcessingFieldSetting.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ProcessingSetttings\ServerSettings\GeneralFieldsSettings.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ProcessingSetttings\ServerSettings\OtherFieldsSettings.cs" />

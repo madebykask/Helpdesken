@@ -2,6 +2,7 @@
 {
     using System;
 
+    using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public class ComputerViewModel
@@ -57,6 +58,8 @@
         public ConfigurableFieldModel<DateTime> CreatedDate { get;  set; }
 
         public ConfigurableFieldModel<DateTime> ChangedDate { get;  set; }
+
+        public UserName ChangedByUserName { get; set; }
 
         [NotNull]
         public DateFieldsModel DateFieldsModel { get;  set; }

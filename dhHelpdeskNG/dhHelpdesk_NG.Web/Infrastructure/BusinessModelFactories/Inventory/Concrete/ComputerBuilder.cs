@@ -11,7 +11,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
 
     public class ComputerBuilder : IComputerBuilder
     {
-        public Computer BuildForUpdate(ComputerViewModel model, OperationContext contex)
+        public ComputerForUpdate BuildForUpdate(ComputerViewModel model, OperationContext contex)
         {
             var workstation = CreateWorkstation(model.WorkstationFieldsViewModel.WorkstationFieldsModel);
             var chassis = CreateChassis(model.ChassisFieldsModel);
@@ -29,11 +29,10 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             var place = CreatePlace(model.PlaceFieldsViewModel.PlaceFieldsModel);
             var contact = CreateContact(model.ContactFieldsModel);
             var state = CreateState(model.StateFieldsViewModel.StateFieldsModel);
-            var date = CreateDate(model.DateFieldsModel);
-
-            var fieldsModel = Computer.CreateUpdated(
+            
+            // var date = CreateDate(model.DateFieldsModel); todo
+            var fieldsModel = new ComputerForUpdate(
                 model.Id,
-                date,
                 communication,
                 contact,
                 contactInformation,
@@ -50,17 +49,19 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
                 organization,
                 processor,
                 workstation,
+                contex.UserId,
                 contex.DateAndTime);
 
             return fieldsModel;
         }
 
-        public Computer BuildForAdd(ComputerViewModel model, OperationContext context)
+        public ComputerForInsert BuildForAdd(ComputerViewModel model, OperationContext context)
         {
             var workstation = CreateWorkstation(model.WorkstationFieldsViewModel.WorkstationFieldsModel);
             var chassis = CreateChassis(model.ChassisFieldsModel);
             var inventering = CreateInventering(model.InventoryFieldsModel);
-            var operatingSystem = CretateOperatingSystem(model.OperatingSystemFieldsViewModel.OperatingSystemFieldsModel);
+            var operatingSystem = CretateOperatingSystem(
+                model.OperatingSystemFieldsViewModel.OperatingSystemFieldsModel);
             var processor = CreateProcessor(model.ProccesorFieldsViewModel.ProccesorFieldsModel);
             var memory = CreateMemory(model.MemoryFieldsViewModel.MemoryFieldsModel);
             var communication = CreateCommunication(model.CommunicationFieldsViewModel.CommunicationFieldsModel);
@@ -73,11 +74,9 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             var place = CreatePlace(model.PlaceFieldsViewModel.PlaceFieldsModel);
             var contact = CreateContact(model.ContactFieldsModel);
             var state = CreateState(model.StateFieldsViewModel.StateFieldsModel);
-            var date = CreateDate(model.DateFieldsModel);
-
-            var fieldsModel = Computer.CreateNew(
-                context.CustomerId,
-                date,
+            
+            // var date = CreateDate(model.DateFieldsModel);
+            var fieldsModel = new ComputerForInsert(
                 communication,
                 contact,
                 contactInformation,
@@ -94,6 +93,8 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
                 organization,
                 processor,
                 workstation,
+                context.CustomerId,
+                context.UserId,
                 context.DateAndTime);
 
             return fieldsModel;
@@ -390,20 +391,20 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             return fields;
         }
 
-        private static DateFields CreateDate(DateFieldsModel fieldsModel)
-        {
-            if (fieldsModel == null)
-            {
-                return DateFields.CreateDefault();
-            }
+        //private static DateFields CreateDate(DateFieldsModel fieldsModel)
+        //{
+        //    if (fieldsModel == null)
+        //    {
+        //        return DateFields.CreateDefault();
+        //    }
 
-            var synchronizeDate = ConfigurableFieldModel<DateTime?>.GetValueOrDefault(fieldsModel.SynchronizeDate);
-            var scanDate = ConfigurableFieldModel<DateTime?>.GetValueOrDefault(fieldsModel.ScanDate);
-            var pathDirectory = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.PathDirectory);
+        //    var synchronizeDate = ConfigurableFieldModel<DateTime?>.GetValueOrDefault(fieldsModel.SynchronizeDate);
+        //    var scanDate = ConfigurableFieldModel<DateTime?>.GetValueOrDefault(fieldsModel.ScanDate);
+        //    var pathDirectory = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.PathDirectory);
 
-            var fields = new DateFields(synchronizeDate, scanDate, pathDirectory);
+        //    var fields = new DateFields(synchronizeDate, scanDate, pathDirectory);
 
-            return fields;
-        }
+        //    return fields;
+        //}
     }
 }

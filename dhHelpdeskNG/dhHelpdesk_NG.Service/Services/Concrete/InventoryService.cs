@@ -85,6 +85,12 @@
 
         private readonly IServerSoftwareRepository serverSoftwareRepository;
 
+        private readonly IPrinterFieldSettingsRepository printerFieldSettingsRepository;
+
+        private readonly IPrinterRestorer printerRestorer;
+
+        private readonly IPrinterValidator printerValidator;
+
         public InventoryService(
             IInventoryTypeRepository inventoryTypeRepository,
             IComputerRepository computerRepository,
@@ -111,7 +117,10 @@
             IOperationObjectRepository operationObjectRepository,
             IOperationLogEMailLogRepository operationLogEMailLogRepository,
             IServerLogicalDriveRepository serverLogicalDriveRepository,
-            IServerSoftwareRepository serverSoftwareRepository)
+            IServerSoftwareRepository serverSoftwareRepository,
+            IPrinterFieldSettingsRepository printerFieldSettingsRepository,
+            IPrinterRestorer printerRestorer,
+            IPrinterValidator printerValidator)
         {
             this.inventoryTypeRepository = inventoryTypeRepository;
             this.computerRepository = computerRepository;
@@ -139,6 +148,9 @@
             this.operationLogEMailLogRepository = operationLogEMailLogRepository;
             this.serverLogicalDriveRepository = serverLogicalDriveRepository;
             this.serverSoftwareRepository = serverSoftwareRepository;
+            this.printerFieldSettingsRepository = printerFieldSettingsRepository;
+            this.printerRestorer = printerRestorer;
+            this.printerValidator = printerValidator;
         }
 
         public List<ComputerUserOverview> GetComputerUsers(int customerId, string searchFor)
@@ -243,7 +255,7 @@
             this.computerLogRepository.Commit();
         }
 
-        public void AddWorkstation(Computer businessModel, OperationContext context)
+        public void AddWorkstation(ComputerForInsert businessModel, OperationContext context)
         {
             var settings = this.computerFieldSettingsRepository.GetFieldSettingsProcessing(context.CustomerId);
 
@@ -278,7 +290,7 @@
             this.computerRepository.Commit();
         }
 
-        public void UpdateWorkstation(Computer businessModel, OperationContext context)
+        public void UpdateWorkstation(ComputerForUpdate businessModel, OperationContext context)
         {
             var existingBusinessModel = this.computerRepository.FindById(businessModel.Id);
             var settings = this.computerFieldSettingsRepository.GetFieldSettingsProcessing(context.CustomerId);
@@ -301,7 +313,7 @@
             this.computerRepository.Commit();
         }
 
-        public Computer GetWorkstation(int id)
+        public ComputerForEdit GetWorkstation(int id)
         {
             return this.computerRepository.FindById(id);
         }
@@ -464,19 +476,28 @@
 
         #region Printer
 
-        public void AddPrinter(Printer businessModel)
+        public void AddPrinter(Printer businessModel, OperationContext context)
         {
-            throw new NotImplementedException();
+            var settings = this.printerFieldSettingsRepository.GetFieldSettingsProcessing(context.CustomerId);
+            this.printerValidator.Validate(businessModel, settings);
+            this.printerRepository.Add(businessModel);
+            this.printerRepository.Commit();
         }
 
         public void DeletePrinter(int id)
         {
-            throw new NotImplementedException();
+            this.printerRepository.DeleteById(id);
+            this.printerRepository.Commit();
         }
 
-        public void UpdatePrinter(Printer businessModel)
+        public void UpdatePrinter(Printer businessModel, OperationContext context)
         {
-            throw new NotImplementedException();
+            var existingBusinessModel = this.printerRepository.FindById(businessModel.Id);
+            var settings = this.printerFieldSettingsRepository.GetFieldSettingsProcessing(context.CustomerId);
+            this.printerRestorer.Restore(businessModel, existingBusinessModel, settings);
+            this.printerValidator.Validate(businessModel, existingBusinessModel, settings);
+            this.printerRepository.Update(businessModel);
+            this.printerRepository.Commit();
         }
 
         public Printer GetPrinter(int id)

@@ -16,7 +16,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Inventory.C
             this.elementaryRulesValidator = elementaryRulesValidator;
         }
 
-        public void Validate(Computer updatedComputer, Computer existingComputer, ComputerFieldsSettingsProcessing settings)
+        public void Validate(ComputerForUpdate updatedComputer, ComputerForEdit existingComputer, ComputerFieldsSettingsProcessing settings)
         {
             this.ValidateWorkstation(updatedComputer.WorkstationFields, existingComputer.WorkstationFields, settings.WorkstationFieldsSettings);
             this.ValidateChassis(updatedComputer.ChassisFields, existingComputer.ChassisFields, settings.ChassisFieldsSettings);
@@ -34,10 +34,11 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Inventory.C
             this.ValidatePlace(updatedComputer.PlaceFields, existingComputer.PlaceFields, settings.PlaceFieldsSettings);
             this.ValidateContact(updatedComputer.ContactFields, existingComputer.ContactFields, settings.ContactFieldsSettings);
             this.ValidateState(updatedComputer.StateFields, existingComputer.StateFields, settings.StateFieldsSettings);
-            this.ValidateDate(updatedComputer.DateFields, existingComputer.DateFields, settings.DateFieldsSettings);
+
+            // this.ValidateDate(updatedComputer.DateFields, existingComputer.DateFields, settings.DateFieldsSettings);
         }
 
-        public void Validate(Computer newComputer, ComputerFieldsSettingsProcessing settings)
+        public void Validate(ComputerForInsert newComputer, ComputerFieldsSettingsProcessing settings)
         {
             this.ValidateWorkstation(newComputer.WorkstationFields, settings.WorkstationFieldsSettings);
             this.ValidateChassis(newComputer.ChassisFields, settings.ChassisFieldsSettings);
@@ -55,7 +56,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Inventory.C
             this.ValidatePlace(newComputer.PlaceFields, settings.PlaceFieldsSettings);
             this.ValidateContact(newComputer.ContactFields, settings.ContactFieldsSettings);
             this.ValidateState(newComputer.StateFields, settings.StateFieldsSettings);
-            this.ValidateDate(newComputer.DateFields, settings.DateFieldsSettings);
+            
+            // this.ValidateDate(newComputer.DateFields, settings.DateFieldsSettings);
         }
 
         private void ValidateWorkstation(

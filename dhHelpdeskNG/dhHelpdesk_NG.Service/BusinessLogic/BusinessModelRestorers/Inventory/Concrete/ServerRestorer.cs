@@ -189,6 +189,26 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Inventory.Co
                 () => updated.Info,
                 existing.Info,
                 this.CreateValidationRule(updatedSettings.InfoFieldSetting));
+            this.RestoreFieldIfNeeded(
+                updated,
+                () => updated.Other,
+                existing.Other,
+                this.CreateValidationRule(updatedSettings.OtherFieldSetting));
+            this.RestoreFieldIfNeeded(
+                updated,
+                () => updated.URL,
+                existing.URL,
+                this.CreateValidationRule(updatedSettings.URLFieldSetting));
+            this.RestoreFieldIfNeeded(
+                updated,
+                () => updated.URL2,
+                existing.URL2,
+                this.CreateValidationRule(updatedSettings.URL2FieldSetting));
+            this.RestoreFieldIfNeeded(
+                updated,
+                () => updated.Owner,
+                existing.Owner,
+                this.CreateValidationRule(updatedSettings.OwnerFieldSetting));
         }
 
         private void RestorePlace(PlaceFields updated, PlaceFields existing, PlaceFieldsSettings updatedSettings)

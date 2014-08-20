@@ -10,6 +10,7 @@
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.PrinterFieldSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ServerFieldSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ProcessingSetttings.ComputerSettings;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ProcessingSetttings.PrinterSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ProcessingSetttings.ServerSettings;
     using DH.Helpdesk.Common.Collections;
     using DH.Helpdesk.Dal.MapperData.Inventory;
@@ -47,6 +48,7 @@
             this.Bind<IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperDataForModelEdit>, PrinterFieldsSettingsForModelEdit>>().To<PrinterFieldSettingsToPrinterEditSettingsMapper>().InSingletonScope();
             this.Bind<IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, PrinterFieldsSettingsOverview>>().To<PrinterFieldSettingsToPrinterOverviewSettingsMapper>().InSingletonScope();
             this.Bind<IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperData>, PrinterFieldsSettings>>().To<PrinterFieldSettingsToFieldSettingsMapper>().InSingletonScope();
+            this.Bind<IEntityToBusinessModelMapper<NamedObjectCollection<FieldProcessingSettingMapperData>, PrinterFieldsSettingsProcessing>>().To<PrinterFieldSettingsToPrinterProcessingSettingsMapper>().InSingletonScope();
 
             this.Bind<IConfigurableFieldModelBuilder>().To<ConfigurableFieldModelBuilder>().InSingletonScope();
             this.Bind<IComputerViewModelBuilder>().To<ComputerViewModelBuilder>().InSingletonScope();
@@ -77,6 +79,11 @@
 
             this.Bind<IServerRestorer>().To<ServerRestorer>().InSingletonScope();
             this.Bind<IServerValidator>().To<ServerValidator>().InSingletonScope();
+
+            this.Bind<IPrinterBuilder>().To<PrinterBuilder>().InSingletonScope();
+
+            this.Bind<IPrinterRestorer>().To<PrinterRestorer>().InSingletonScope();
+            this.Bind<IPrinterValidator>().To<PrinterValidator>().InSingletonScope();
         }
     }
 }

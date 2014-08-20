@@ -27,7 +27,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
     public class ComputerViewModelBuilder : IComputerViewModelBuilder
     {
         public ComputerViewModel BuildViewModel(
-            BusinessData.Models.Inventory.Edit.Computer.Computer model,
+            BusinessData.Models.Inventory.Edit.Computer.ComputerForEdit model,
             ComputerEditOptions options,
             ComputerFieldsSettingsForModelEdit settings)
         {
@@ -481,7 +481,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                        {
                            Id = model.Id,
                            CreatedDate = createdDate,
-                           ChangedDate = changedDate
+                           ChangedDate = changedDate,
+                           ChangedByUserName = model.DateFields.ChangedByUserName
                        };
         }
 

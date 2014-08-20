@@ -21,12 +21,13 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
         {
         }
 
-        public void Add(Computer businessModel)
+        public void Add(ComputerForInsert businessModel)
         {
             var entity = new Domain.Computers.Computer();
             Map(entity, businessModel);
             entity.Customer_Id = businessModel.CustomerId;
             entity.CreatedDate = businessModel.CreatedDate;
+            entity.ChangedByUser_Id = businessModel.ChangedByUserId;
             entity.ChangedDate = businessModel.CreatedDate; // todo
 
             // todo
@@ -42,11 +43,12 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             this.InitializeAfterCommit(businessModel, entity);
         }
 
-        public void Update(Computer businessModel)
+        public void Update(ComputerForUpdate businessModel)
         {
             var entity = this.DbSet.Find(businessModel.Id);
             Map(entity, businessModel);
             entity.ChangedDate = businessModel.ChangedDate;
+            entity.ChangedByUser_Id = businessModel.ChangedByUserId;
         }
 
         public void UpdateInfo(int id, string info)
@@ -55,7 +57,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             entity.Info = info;
         }
 
-        public Computer FindById(int id)
+        public ComputerForEdit FindById(int id)
         {
             var anonymus =
                 this.DbSet.Where(x => x.Id == id)
@@ -73,26 +75,51 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                                 UserDepartmentName = x.User.Department.DepartmentName,
                                 UserUnitName = x.User.OU.Name
                             })
+                    .GroupJoin(
+                        this.DbContext.Users,
+                        s => s.Entity.ChangedByUser_Id,
+                        u => u.Id,
+                        (s, res) => new { s, res })
+                    .SelectMany(
+                        t => t.res.DefaultIfEmpty(),
+                        (t, k) =>
+                        new
+                            {
+                                t.s.Entity,
+                                t.s.BuildingId,
+                                t.s.FloorId,
+                                t.s.UserId,
+                                t.s.UserStringId,
+                                t.s.UserFirstName,
+                                t.s.UserSurName,
+                                t.s.UserDepartmentName,
+                                t.s.UserUnitName,
+                                ChangedByUserId = (int?)k.Id,
+                                ChangedByUserFirstName = k.FirstName,
+                                ChangedByUserSurName = k.SurName
+                            })
                     .Single();
 
-            var workstation = new BusinessData.Models.Inventory.Edit.Computer.WorkstationFields(
-                anonymus.Entity.ComputerName,
-                anonymus.Entity.Manufacturer,
-                anonymus.Entity.ComputerModel_Id,
-                anonymus.Entity.SerialNumber,
-                anonymus.Entity.BIOSVersion,
-                anonymus.Entity.BIOSDate,
-                anonymus.Entity.TheftMark,
-                anonymus.Entity.CarePackNumber,
-                anonymus.Entity.ComputerType_Id,
-                anonymus.Entity.Location);
+            var workstation =
+                new BusinessData.Models.Inventory.Edit.Computer.WorkstationFields(
+                    anonymus.Entity.ComputerName,
+                    anonymus.Entity.Manufacturer,
+                    anonymus.Entity.ComputerModel_Id,
+                    anonymus.Entity.SerialNumber,
+                    anonymus.Entity.BIOSVersion,
+                    anonymus.Entity.BIOSDate,
+                    anonymus.Entity.TheftMark,
+                    anonymus.Entity.CarePackNumber,
+                    anonymus.Entity.ComputerType_Id,
+                    anonymus.Entity.Location);
 
             var processor = new BusinessData.Models.Inventory.Edit.Shared.ProcessorFields(anonymus.Entity.Processor_Id);
 
-            var organization = new BusinessData.Models.Inventory.Edit.Computer.OrganizationFields(
-                anonymus.Entity.Department_Id,
-                anonymus.Entity.Domain_Id,
-                anonymus.Entity.OU_Id);
+            var organization =
+                new BusinessData.Models.Inventory.Edit.Computer.OrganizationFields(
+                    anonymus.Entity.Department_Id,
+                    anonymus.Entity.Domain_Id,
+                    anonymus.Entity.OU_Id);
 
             var os = new BusinessData.Models.Inventory.Edit.Shared.OperatingSystemFields(
                 anonymus.Entity.OS_Id,
@@ -132,17 +159,18 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
 
             var graphics = new BusinessData.Models.Inventory.Edit.Computer.GraphicsFields(anonymus.Entity.VideoCard);
 
-            var contract = new BusinessData.Models.Inventory.Edit.Computer.ContractFields(
-                anonymus.Entity.ContractStatus_Id,
-                anonymus.Entity.ContractNumber,
-                anonymus.Entity.ContractStartDate,
-                anonymus.Entity.ContractEndDate,
-                anonymus.Entity.Price,
-                anonymus.Entity.AccountingDimension1,
-                anonymus.Entity.AccountingDimension2,
-                anonymus.Entity.AccountingDimension3,
-                anonymus.Entity.AccountingDimension4,
-                anonymus.Entity.AccountingDimension5);
+            var contract =
+                new BusinessData.Models.Inventory.Edit.Computer.ContractFields(
+                    anonymus.Entity.ContractStatus_Id,
+                    anonymus.Entity.ContractNumber,
+                    anonymus.Entity.ContractStartDate,
+                    anonymus.Entity.ContractEndDate,
+                    anonymus.Entity.Price,
+                    anonymus.Entity.AccountingDimension1,
+                    anonymus.Entity.AccountingDimension2,
+                    anonymus.Entity.AccountingDimension3,
+                    anonymus.Entity.AccountingDimension4,
+                    anonymus.Entity.AccountingDimension5);
 
             var contactInfo = new BusinessData.Models.Inventory.Edit.Computer.ContactInformationFields(
                 anonymus.UserId,
@@ -156,21 +184,22 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                 anonymus.Entity.ContactPhone,
                 anonymus.Entity.ContactEmailAddress);
 
-            var communication = new BusinessData.Models.Inventory.Edit.Computer.CommunicationFields(
-                anonymus.Entity.NIC_ID,
-                anonymus.Entity.IPAddress,
-                anonymus.Entity.MACAddress,
-                anonymus.Entity.RAS.ToBool(),
-                anonymus.Entity.NovellClient);
+            var communication =
+                new BusinessData.Models.Inventory.Edit.Computer.CommunicationFields(
+                    anonymus.Entity.NIC_ID,
+                    anonymus.Entity.IPAddress,
+                    anonymus.Entity.MACAddress,
+                    anonymus.Entity.RAS.ToBool(),
+                    anonymus.Entity.NovellClient);
 
             var date = new BusinessData.Models.Inventory.Edit.Computer.DateFields(
                 anonymus.Entity.SyncChangedDate,
                 anonymus.Entity.ScanDate,
-                anonymus.Entity.LDAPPath);
+                anonymus.Entity.LDAPPath,
+                anonymus.ChangedByUserId.HasValue ? new UserName(anonymus.ChangedByUserFirstName, anonymus.ChangedByUserSurName) : null);
 
-            var computerAggregate = Computer.CreateForEdit(
+            var computerAggregate = new ComputerForEdit(
                 anonymus.Entity.Id,
-                date,
                 communication,
                 contact,
                 contactInfo,
@@ -188,7 +217,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                 processor,
                 workstation,
                 anonymus.Entity.CreatedDate,
-                anonymus.Entity.ChangedDate);
+                anonymus.Entity.ChangedDate,
+                date);
 
             return computerAggregate;
         }
@@ -357,7 +387,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                             DomainName = x.Domain.Name,
                             UnitName = x.OU.Name,
                             RoomName = x.Room.Name,
-                            UserId = x.User.UserId,
+                            x.User.UserId,
                             UserDepartmentName = x.User.Department.DepartmentName,
                             UserUnitName = x.User.OU.Name
                         }).Take(recordsOnPage).ToList();
@@ -650,10 +680,6 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             entity.MACAddress = businessModel.CommunicationFields.MacAddress ?? string.Empty;
             entity.RAS = businessModel.CommunicationFields.IsRAS.ToInt();
             entity.NovellClient = businessModel.CommunicationFields.NovellClient ?? string.Empty;
-
-            entity.SyncChangedDate = businessModel.DateFields.SynchronizeDate;
-            entity.ScanDate = businessModel.DateFields.ScanDate;
-            entity.LDAPPath = businessModel.DateFields.PathDirectory ?? string.Empty;
         }
     }
 }

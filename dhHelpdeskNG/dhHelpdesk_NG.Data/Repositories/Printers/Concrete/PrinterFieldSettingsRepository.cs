@@ -11,6 +11,7 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.PrinterSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.PrinterFieldSettings;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ProcessingSetttings.PrinterSettings;
     using DH.Helpdesk.Common.Collections;
     using DH.Helpdesk.Common.Extensions.Boolean;
     using DH.Helpdesk.Dal.Attributes.Inventory;
@@ -34,17 +35,21 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
         private readonly IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperDataForModelEdit>, PrinterFieldsSettingsForModelEdit> entityToBusinessModelMapperForModelEdit;
 
         private readonly IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperData>, PrinterFieldsSettings> entityToBusinessModelMapperForEdit;
+        
+        private readonly IEntityToBusinessModelMapper<NamedObjectCollection<FieldProcessingSettingMapperData>, PrinterFieldsSettingsProcessing> entityToBusinessModelMapperForProcessing;
 
         public PrinterFieldSettingsRepository(
             IDatabaseFactory databaseFactory,
             IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, PrinterFieldsSettingsOverview> entityToBusinessModelMapperForOverview,
             IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperDataForModelEdit>, PrinterFieldsSettingsForModelEdit> entityToBusinessModelMapperForModelEdit,
-            IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperData>, PrinterFieldsSettings> entityToBusinessModelMapperForEdit)
+            IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperData>, PrinterFieldsSettings> entityToBusinessModelMapperForEdit,
+            IEntityToBusinessModelMapper<NamedObjectCollection<FieldProcessingSettingMapperData>, PrinterFieldsSettingsProcessing> entityToBusinessModelMapperForProcessing)
             : base(databaseFactory)
         {
             this.entityToBusinessModelMapperForOverview = entityToBusinessModelMapperForOverview;
             this.entityToBusinessModelMapperForModelEdit = entityToBusinessModelMapperForModelEdit;
             this.entityToBusinessModelMapperForEdit = entityToBusinessModelMapperForEdit;
+            this.entityToBusinessModelMapperForProcessing = entityToBusinessModelMapperForProcessing;
         }
 
         public void Update(PrinterFieldsSettings businessModel)
@@ -221,6 +226,24 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
             var overview = new PrinterFieldsSettingsOverviewForFilter(setting);
 
             return overview;
+        }
+
+        [CreateMissingComputerSettings("customerId")]
+        public PrinterFieldsSettingsProcessing GetFieldSettingsProcessing(int customerId)
+        {
+            var settings = this.GetSettings(customerId);
+
+            List<FieldProcessingSettingMapperData> mapperData = settings.Select(
+                s =>
+                new FieldProcessingSettingMapperData
+                {
+                    FieldName = s.PrinterField,
+                    Show = s.Show,
+                    Required = s.Required
+                }).ToList();
+
+            var settingCollection = new NamedObjectCollection<FieldProcessingSettingMapperData>(mapperData);
+            return this.entityToBusinessModelMapperForProcessing.Map(settingCollection);
         }
 
         private static void MapGeneralFieldsSettings(

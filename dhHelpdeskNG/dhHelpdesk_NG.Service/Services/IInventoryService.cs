@@ -49,13 +49,13 @@
 
         void DeleteComputerLog(int id);
 
-        void AddWorkstation(Computer businessModel, OperationContext context);
+        void AddWorkstation(ComputerForInsert businessModel, OperationContext context);
 
         void DeleteWorkstation(int id);
 
-        void UpdateWorkstation(Computer businessModel, OperationContext context);
+        void UpdateWorkstation(ComputerForUpdate businessModel, OperationContext context);
 
-        Computer GetWorkstation(int id);
+        ComputerForEdit GetWorkstation(int id);
 
         List<ComputerLogOverview> GetWorkstationLogOverviews(int id);
 
@@ -81,11 +81,11 @@
 
         #region Printer
 
-        void AddPrinter(Printer businessModel);
+        void AddPrinter(Printer businessModel, OperationContext context);
 
         void DeletePrinter(int id);
 
-        void UpdatePrinter(Printer businessModel);
+        void UpdatePrinter(Printer businessModel, OperationContext context);
 
         Printer GetPrinter(int id);
 

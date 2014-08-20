@@ -38,21 +38,21 @@
         public ConfigurableFieldModel<DateTime> ChangedDate { get; set; }
 
         [NotNull]
-        public GeneralFieldsModel GeneralFieldsModel { get; private set; }
+        public GeneralFieldsModel GeneralFieldsModel { get; set; }
 
         [NotNull]
-        public InventoryFieldsModel InventoryFieldsModel { get; private set; }
+        public InventoryFieldsModel InventoryFieldsModel { get; set; }
 
         [NotNull]
-        public CommunicationFieldsModel CommunicationFieldsModel { get; private set; }
+        public CommunicationFieldsModel CommunicationFieldsModel { get; set; }
 
         [NotNull]
-        public OtherFieldsModel OtherFieldsModel { get; private set; }
+        public OtherFieldsModel OtherFieldsModel { get; set; }
 
         [NotNull]
-        public OrganizationFieldsViewModel OrganizationFieldsViewModel { get; private set; }
+        public OrganizationFieldsViewModel OrganizationFieldsViewModel { get; set; }
 
         [NotNull]
-        public PlaceFieldsViewModel PlaceFieldsViewModel { get; private set; }
+        public PlaceFieldsViewModel PlaceFieldsViewModel { get; set; }
     }
 }

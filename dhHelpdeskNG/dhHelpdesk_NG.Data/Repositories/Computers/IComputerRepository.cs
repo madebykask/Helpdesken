@@ -11,15 +11,15 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
 
     public interface IComputerRepository : INewRepository
     {
-        void Add(Computer businessModel);
+        void Add(ComputerForInsert businessModel);
 
-        void Update(Computer businessModel);
+        void Update(ComputerForUpdate businessModel);
 
         void UpdateInfo(int id, string info);
 
         void DeleteById(int id);
 
-        Computer FindById(int id);
+        ComputerForEdit FindById(int id);
 
         List<ComputerResults> Search(int customerId, string searchFor);
 

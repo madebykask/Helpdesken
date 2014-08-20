@@ -21,6 +21,7 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
             var entity = new Domain.Printers.Printer();
             Map(entity, businessModel);
             entity.Customer_Id = businessModel.CustomerId;
+            entity.ChangedDate = businessModel.ChangedDate; // todo
             entity.CreatedDate = businessModel.CreatedDate;
 
             this.DbSet.Add(entity);
@@ -32,6 +33,13 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
             var entity = this.DbSet.Find(businessModel.Id);
             Map(entity, businessModel);
             entity.ChangedDate = businessModel.ChangedDate;
+        }
+
+        public override void DeleteById(int id)
+        {
+            var entity = this.DbSet.Find(id);
+            entity.OperationObjects.Clear();
+            base.DeleteById(id);
         }
 
         public Printer FindById(int id)
@@ -92,7 +100,7 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
                     anonymus.Entity.Room_Id,
                     anonymus.Entity.Location),
                 new StateFields(
-                    new UserName(anonymus.UserFirstName, anonymus.UserSurName)),
+                    !string.IsNullOrWhiteSpace(anonymus.UserFirstName) ? new UserName(anonymus.UserFirstName, anonymus.UserSurName) : null),
                 anonymus.Entity.CreatedDate,
                 anonymus.Entity.ChangedDate);
 
@@ -182,25 +190,28 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
 
         private static void Map(Domain.Printers.Printer entity, Printer businessModel)
         {
-            entity.PrinterName = businessModel.GeneralFields.Name;
-            entity.Manufacturer = businessModel.GeneralFields.Manufacturer;
-            entity.PrinterType = businessModel.GeneralFields.Model;
-            entity.SerialNumber = businessModel.GeneralFields.SerialNumber;
+            entity.PrinterName = businessModel.GeneralFields.Name ?? string.Empty;
+            entity.Manufacturer = businessModel.GeneralFields.Manufacturer ?? string.Empty;
+            entity.PrinterType = businessModel.GeneralFields.Model ?? string.Empty;
+            entity.SerialNumber = businessModel.GeneralFields.SerialNumber ?? string.Empty;
 
-            entity.BarCode = businessModel.InventoryFields.BarCode;
+            entity.BarCode = businessModel.InventoryFields.BarCode ?? string.Empty;
             entity.PurchaseDate = businessModel.InventoryFields.PurchaseDate;
 
-            entity.PrinterServer = businessModel.CommunicationFields.NetworkAdapterName;
-            entity.IPAddress = businessModel.CommunicationFields.IPAddress;
-            entity.MACAddress = businessModel.CommunicationFields.MacAddress;
+            entity.PrinterServer = businessModel.CommunicationFields.NetworkAdapterName ?? string.Empty;
+            entity.IPAddress = businessModel.CommunicationFields.IPAddress ?? string.Empty;
+            entity.MACAddress = businessModel.CommunicationFields.MacAddress ?? string.Empty;
 
-            entity.NumberOfTrays = businessModel.OtherFields.NumberOfTrays;
-            entity.DriverName = businessModel.OtherFields.Driver;
-            entity.Info = businessModel.OtherFields.Info;
-            entity.URL = businessModel.OtherFields.URL;
+            entity.NumberOfTrays = businessModel.OtherFields.NumberOfTrays ?? string.Empty;
+            entity.DriverName = businessModel.OtherFields.Driver ?? string.Empty;
+            entity.Info = businessModel.OtherFields.Info ?? string.Empty;
+            entity.URL = businessModel.OtherFields.URL ?? string.Empty;
 
             entity.Room_Id = businessModel.PlaceFields.RoomId;
-            entity.Location = businessModel.PlaceFields.Location;
+            entity.Location = businessModel.PlaceFields.Location ?? string.Empty;
+
+            entity.Department_Id = businessModel.OrganizationFields.DepartmentId;
+            entity.OU = businessModel.OrganizationFields.UnitId ?? string.Empty;
         }
     }
 }

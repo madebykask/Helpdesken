@@ -53,6 +53,8 @@
 
         private readonly IServerBuilder serverBuilder;
 
+        private readonly IPrinterBuilder printerBuilder;
+
         public InventoryController(
             IMasterDataService masterDataService,
             IInventoryService inventoryService,
@@ -66,7 +68,8 @@
             IInventoryViewModelBuilder inventoryViewModelBuilder,
             IDynamicsFieldsModelBuilder dynamicsFieldsModelBuilder,
             IComputerBuilder computerBuilder,
-            IServerBuilder serverBuilder)
+            IServerBuilder serverBuilder,
+            IPrinterBuilder printerBuilder)
             : base(masterDataService)
         {
             this.inventoryService = inventoryService;
@@ -81,6 +84,7 @@
             this.dynamicsFieldsModelBuilder = dynamicsFieldsModelBuilder;
             this.computerBuilder = computerBuilder;
             this.serverBuilder = serverBuilder;
+            this.printerBuilder = printerBuilder;
         }
 
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")] // todo
@@ -418,9 +422,12 @@
 
         [HttpPost]
         [BadRequestOnNotValid]
-        public ViewResult EditPrinter(PrinterViewModel printerViewModel)
+        public RedirectToRouteResult EditPrinter(PrinterViewModel printerViewModel)
         {
-            return this.View("EditPrinter");
+            var businessModel = this.printerBuilder.BuildForUpdate(printerViewModel, this.OperationContext);
+            this.inventoryService.UpdatePrinter(businessModel, this.OperationContext);
+
+            return this.RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -470,9 +477,11 @@
         }
 
         [HttpGet]
-        public ViewResult DeletePrinter(int id)
+        public RedirectToRouteResult DeletePrinter(int id)
         {
-            throw new NotImplementedException();
+            this.inventoryService.DeletePrinter(id);
+
+            return this.RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -551,9 +560,12 @@
 
         [HttpPost]
         [BadRequestOnNotValid]
-        public ViewResult NewPrinter(PrinterViewModel printerViewModel)
+        public RedirectToRouteResult NewPrinter(PrinterViewModel printerViewModel)
         {
-            throw new NotImplementedException();
+            var businessModel = this.printerBuilder.BuildForAdd(printerViewModel, this.OperationContext);
+            this.inventoryService.AddPrinter(businessModel, this.OperationContext);
+
+            return this.RedirectToAction("Index");
         }
 
         [HttpGet]

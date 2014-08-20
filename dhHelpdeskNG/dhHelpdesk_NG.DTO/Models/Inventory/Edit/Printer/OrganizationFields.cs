@@ -14,5 +14,10 @@
         public int? DepartmentId { get; set; }
 
         public string UnitId { get; set; }
+
+        public static OrganizationFields CreateDefault()
+        {
+            return new OrganizationFields(null, null);
+        }
     }
 }
