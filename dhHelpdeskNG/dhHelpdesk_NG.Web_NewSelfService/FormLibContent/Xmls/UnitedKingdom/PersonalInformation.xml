@@ -43,7 +43,7 @@
       <element name="ChangeValidTo" type="date" format="dd.MM.yyyy" mandatory="1" default="31.12.9999" label="Change Valid to:">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1">
+      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard">
         <options>
           <option value =""></option>
           <option value ="Urgent">Urgent</option>
@@ -62,6 +62,7 @@
       <!--mandatory-->
       <element type="text" name="PermanentAddressLine1" label="Address line 1"></element>
       <element type="text" name="PermanentAddressLine2" label="Address line 2"></element>
+      <!--<element type="text" name="PermanentAddressLine3" label="Address line 3"></element>-->
       <!--mandatory-->
       <element type="text" name="PermanentPostalCode" label="Postal code">        
       </element>

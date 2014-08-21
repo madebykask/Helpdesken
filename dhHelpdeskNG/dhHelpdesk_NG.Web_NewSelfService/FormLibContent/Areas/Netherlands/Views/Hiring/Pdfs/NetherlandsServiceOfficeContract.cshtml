@@ -113,7 +113,7 @@
                 //set mandatory for contract
                 Model.SetDocumentMandatoryField("BasicPay");
                        
-                string text8 = "Het salaris bedraagt € {0} bruto per maand. {1} De salarisbetalingen vinden telkens aan het einde van de kalendermaand plaats.";
+                string text8 = "Het salaris bedraagt &euro;  {0} bruto per maand. {1} De salarisbetalingen vinden telkens aan het einde van de kalendermaand plaats.";
                 list.Add(new PdfListItem { Text = string.Format(text8, Model.GetDocumentAnswer("BasicPay"), brText) });
             }
 
@@ -123,7 +123,7 @@
                 //set mandatory for contract
                 Model.SetDocumentMandatoryField("BasicPayAmount");
                 
-                string text8 = "Het salaris bedraagt € {0} bruto per uur. {1} De salarisbetalingen vinden telkens aan het einde van de kalendermaand plaats.";
+                string text8 = "Het salaris bedraagt &euro;  {0} bruto per uur. {1} De salarisbetalingen vinden telkens aan het einde van de kalendermaand plaats.";
                 list.Add(new PdfListItem { Text = string.Format(text8, Model.GetDocumentAnswer("BasicPayAmount"), brText) });
             }
 

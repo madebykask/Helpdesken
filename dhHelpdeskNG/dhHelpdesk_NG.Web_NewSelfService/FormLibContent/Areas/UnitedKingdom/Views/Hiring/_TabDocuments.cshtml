@@ -54,22 +54,20 @@
 
 <div class="tab-pane" id="documents">
     <div class="span12">
-        @if (!string.IsNullOrEmpty(GetContract()))
-        {
-            <table class="table-striped">
-                <thead>
-                    <tr>
-                        <th>@Model.Translate("Document")
-                        </th>
-                        <th>@Model.Translate("Type")
-                        </th>
-                        <th>&nbsp;</th>
-                        <th>&nbsp;</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-
+        <table class="table-striped">
+            <thead>
+                <tr>
+                    <th>@Model.Translate("Document")
+                    </th>
+                    <th>@Model.Translate("Type")
+                    </th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+            @if (!string.IsNullOrEmpty(GetContract()))
+            {
                     <tr>
                         <td>@Model.Translate("Contract")</td>
                         <td>pdf</td>
@@ -85,15 +83,15 @@
                         </td>
                     </tr>
 
-                </tbody>
+                 }
+            else
+            {
+                <tr><td colspan="4"><div class="alert alert-info"><strong><i class="icon-info-sign"></i>&nbsp;@Model.Translate("A document can not be created based on current selections")</strong></div></td></tr>
+            }
 
-            </table> }
-        else
-        {
-            <div class="alert alert-info"><strong><i class="icon-info-sign"></i>&nbsp;@Model.Translate("A document can not be created based on current selections")</strong></div>
-        }
-
-         @Html.Partial("_StaticDocuments", Model)
+            @Html.Partial("_StaticDocuments", Model)
+            </tbody>
+        </table>
     </div>
 </div>
 

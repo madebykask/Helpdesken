@@ -51,16 +51,16 @@
                 <td>
                     @Model.Element("TerminationAmountUnits")</td>
             </tr>
-             <tr>
+@*             <tr>
                 <td class="tdstrong">@Model.Label("TerminationNetGross")</td>
                 <td>
                     @Model.Element("TerminationNetGross")</td>
-            </tr>
+            </tr>*@
              <tr>
                 <td class="tdstrong">@Model.Label("OneIKEABonusDue")</td>
                 <td>
                     @Model.Element("OneIKEABonusDue")
-                                          <div id="notice_OneIKEABonusDue" style="display:none;" class="notice">
+                      <div id="notice_OneIKEABonusDue" style="display:none;" class="notice">
                             @Model.Translate("Check with SO Business Navigator")
                         </div>
                 </td>
@@ -68,7 +68,14 @@
                 <tr>
                 <td class="tdstrong">@Model.Label("TerminationPaymentDate")</td>
                 <td>
-                    @Model.Element("TerminationPaymentDate")</td>
+                    @Model.Element("TerminationPaymentDate")
+
+                                                                <div id="notice_TerminationPaymentDate" style="display:none;" class="notice">
+                            @Model.Translate("The date you've entered is in the past.")
+                                <br />
+                             @Model.Translate("Are you sure you want to backdate Payment Date?")
+                        </div>
+                </td>
             </tr>
 
 
@@ -90,11 +97,11 @@
                           <td>
                               @Model.Element("TerminationAmountUnits" + i.ToString())</td>
                       </tr>
-                      <tr class="terminationpayments@(i.ToString())">
+                      @*<tr class="terminationpayments@(i.ToString())">
                           <td class="tdstrong">@Model.Label("TerminationNetGross" + i.ToString())</td>
                           <td>
                               @Model.Element("TerminationNetGross" + i.ToString())</td>
-                      </tr>
+                      </tr>*@@*
                       <tr class="terminationpayments@(i.ToString())">
                           <td class="tdstrong">@Model.Label("OneIKEABonusDue" + i.ToString())</td>
                           <td>
@@ -115,10 +122,10 @@
                              @Model.Translate("Are you sure you want to backdate Payment Date?")
                         </div>
                           </td>
-                      </tr>
+                      </tr>*@
                   }
-
-               <tr id="addTerminationPaymentsTr">
+                
+                <tr id="addTerminationPaymentsTrr">
                     <td colspan="2">
                         @Model.Element("TerminationPayments")
                         <a id="addTerminationPayment" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another termination payment")</a></td>
@@ -140,20 +147,15 @@
                 <td>
                     @Model.Element("DeductionType")</td>
             </tr>
-                            <tr>
+@*                            <tr>
                 <td class="tdstrong">@Model.Label("OtherDeduction")</td>
                 <td>
                     @Model.Element("OtherDeduction")</td>
-            </tr>
+            </tr>*@
              <tr>
                 <td class="tdstrong">@Model.Label("DeductionAmountUnits")</td>
                 <td>
                     @Model.Element("DeductionAmountUnits")</td>
-            </tr>
-             <tr>
-                <td class="tdstrong">@Model.Label("DeductionNetGross")</td>
-                <td>
-                    @Model.Element("DeductionNetGross")</td>
             </tr>
                 <tr>
                 <td class="tdstrong">@Model.Label("DeductionDate")</td>
@@ -162,9 +164,9 @@
             </tr>
 
 
-                  @for (int i = 2; i <= 4; i++)
+                  @for (int i = 2; i <= 5; i++)
                   {
-                      <tr class="deduction@(i.ToString())" id="familyMember@(i.ToString())">
+                      <tr class="deduction@(i.ToString())" id="deduction@(i.ToString())">
                           <td class="tdstrong" colspan="2">
                               <h4>@Model.Translate("Deductions from Termination Payment") @i.ToString()</h4>
                           </td>
@@ -173,22 +175,18 @@
                           <td class="tdstrong">@Model.Label("DeductionType" + i.ToString())</td>
                           <td>
                               @Model.Element("DeductionType" + i.ToString())</td>
-                      </tr>
+                      </tr>@*
                       <tr class="deduction@(i.ToString())">
                           <td class="tdstrong">@Model.Label("OtherDeduction" + i.ToString())</td>
                           <td>
                               @Model.Element("OtherDeduction" + i.ToString())</td>
-                      </tr>
+                      </tr>*@
                       <tr class="deduction@(i.ToString())">
                           <td class="tdstrong">@Model.Label("DeductionAmountUnits" + i.ToString())</td>
                           <td>
                               @Model.Element("DeductionAmountUnits" + i.ToString())</td>
                       </tr>
-                      <tr class="deduction@(i.ToString())">
-                          <td class="tdstrong">@Model.Label("DeductionNetGross" + i.ToString())</td>
-                          <td>
-                              @Model.Element("DeductionNetGross" + i.ToString())</td>
-                      </tr>
+
                       <tr class="deduction@(i.ToString())">
                           <td class="tdstrong">@Model.Label("DeductionDate" + i.ToString())</td>
                           <td>
@@ -196,14 +194,40 @@
                       </tr>
                   }
                 
-                <tr id="addDeductionTr">
+                <tr id="addDeductionTrr">
                     <td colspan="2">
                         @Model.Element("Deductions")
                         <a id="addDeduction" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another termination payment")</a></td>
                 </tr>
 
-
-
+            <tr>
+                <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Returned IKEA property")</h4>
+                    </td>
+                </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("UnreturnedItems")</td>
+                <td>
+                    @Model.Element("UnreturnedItems")</td>
+            </tr>
+                 @for (int i = 2; i <= 5; i++)
+                 {
+                      <tr class="UnreturnedItem@(i.ToString())" id="UnreturnedItem@(i.ToString())">
+                          <td class="tdstrong" colspan="2">
+                              <h4>@Model.Translate("Returned IKEA property") @i.ToString()</h4>
+                          </td>
+                      </tr>
+                      <tr class="UnreturnedItem@(i.ToString())">
+                          <td class="tdstrong">@Model.Label("UnreturnedItems" + i.ToString())</td>
+                          <td>
+                              @Model.Element("UnreturnedItems" + i.ToString())</td>
+                      </tr>
+                 }
+                 <tr id="addUnreturnedItemTrr">
+                    <td colspan="2">
+                        @Model.Element("UnreturnedItemsMulti")
+                        <a id="addUnreturnedItem" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another unreturned item")</a></td>
+                </tr>
 
 
                 <tr>
@@ -237,14 +261,53 @@
         $('#notice_OneIKEABonusDue').show();
     });
 
-    $('#OneIKEABonusDue2').on('change', function () {
+    //$('#OneIKEABonusDue2').on('change', function () {
 
-        $('#notice_OneIKEABonusDue2').show();
+    //    $('#notice_OneIKEABonusDue2').show();
+    //});
+
+    //$('#OneIKEABonusDue3').on('change', function () {
+
+    //    $('#notice_OneIKEABonusDue3').show();
+    //});
+
+
+
+
+    $('#TerminationPaymentDate').change(function () {
+
+        var startDate = $('#TerminationPaymentDate').val();
+        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+        var dstartDate = APIGlobal.DateTime.parseDate(startDate, format);
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+
+        if (dstartDate.valueOf() < now.valueOf()) {
+            $('#notice_TerminationPaymentDate').show();
+        }
     });
 
-    $('#OneIKEABonusDue3').on('change', function () {
 
-        $('#notice_OneIKEABonusDue3').show();
-    });
-    
+    var TerminationPaymentDate = $('#notice_TerminationPaymentDate');
+    var dateDatePicker = $('#date_TerminationPaymentDate');
+    if (TerminationPaymentDate.length > 0) {
+        var startDate = new Date();
+        startDate.setHours(0, 0, 0, 0);
+
+        dateDatePicker.not(".disabled").datepicker()
+            .on('changeDate', function (e) {
+                if (e.date.valueOf() < startDate.valueOf()) {
+
+                    TerminationPaymentDate.show();
+                } else {
+
+                    TerminationPaymentDate.hide();
+                }
+            });
+    }
+
+
+
+
+
 </script>

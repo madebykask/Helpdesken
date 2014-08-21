@@ -1355,7 +1355,7 @@ var deductions = function () {
     $('.deduction').show();
     var counter = parseInt($('#Deductions').val());
 
-    var max = 3;
+    var max = 5;
 
     var elements = $('[class^=deduction]').find(':text, :radio, :checkbox, select');
 
@@ -1677,13 +1677,62 @@ var terminationpayments = function () {
             $('#addTerminationPaymentsTr').hide();
     });
 
-    $('#addTerminationPaymentsTr').click(function (e) {
+    $('#addTerminationPayment').click(function (e) {
         e.preventDefault();
         counter++;
         $('#TerminationPayments').val(counter);
         if (counter <= max)
             $('[class=terminationpayments' + counter + ']').show();
         $('#addTerminationPaymentsTr').hide();
+    });
+};
+
+
+var UnreturnedItem = function () {
+
+    var emptyElements = function () {
+        return $('[class^=UnreturnedItem]')
+                                    .filter(function () { return $(this).css('display') !== 'none'; })
+                                    .find(':text, :radio, :checkbox, select')
+                                    .filter(function () {
+                                        return $(this).val() == '';
+                                    });
+    };
+
+    $('[class^=UnreturnedItem]').hide();
+    $('.UnreturnedItem').show();
+    var counter = parseInt($('#UnreturnedItemsMulti').val());
+
+    var max = 5;
+
+    var elements = $('[class^=UnreturnedItem]').find(':text, :radio, :checkbox, select');
+
+    var enabled = elements.eq(0).is(':enabled');
+
+    for (var i = 1; i <= counter; i++)
+        $('.UnreturnedItem' + i).show();
+
+    if (emptyElements().length == 0 && (counter < max) && enabled)
+        $('#addUnreturnedItemTr').show();
+    else
+        $('#addUnreturnedItemTr').hide();
+
+    var elements = $('[class^=UnreturnedItem]').find(':text, :radio, :checkbox, select');
+
+    elements.change(function () {
+        if (emptyElements().length == 0 && (counter < max) && enabled)
+            $('#addUnreturnedItemTr').show();
+        else
+            $('#addUnreturnedItemTr').hide();
+    });
+
+    $('#addUnreturnedItem').click(function (e) {
+        e.preventDefault();
+        counter++;
+        $('#UnreturnedItemsMulti').val(counter);
+        if (counter <= max)
+            $('[class=UnreturnedItem' + counter + ']').show();
+        $('#addUnreturnedItemTr').hide();
     });
 };
 
@@ -1738,7 +1787,7 @@ var init = function () {
 
     /*
     var f = $('#LockedFields').val();
-
+     
     if (f != null) {       
         var fi = [];
         fi = f.split(';');
@@ -1748,7 +1797,7 @@ var init = function () {
         }
     }
     */
-
+     
     narrowDownInit();
     familyMembers();
     employeeDocuments();
@@ -1763,8 +1812,9 @@ var init = function () {
     multi();
     detailsonglobalcommuting();
     benefits();
+    UnreturnedItem();
     
-
+    InitIntegration();
 
     var activeTab = $("#activeTab");
 
@@ -1804,7 +1854,7 @@ var init = function () {
     });
     */
 
-    if ($("#NewToIKEA").val() == "") {
+    if ($("#NewToIKEA").length > 0 && $("#NewToIKEA").val() != 'Re-Hire') {
         disableTypeahead = 0;
     }
 
@@ -2184,13 +2234,13 @@ var uploader;
 var initUpload = function () {
 
     uploader = new plupload.Uploader({
-        runtimes: 'gears,html5,flash,silverlight,browserplus,html4',
+        runtimes: 'html5,flash,html4',
         browse_button: 'pickfiles',
         container: 'container',
         max_file_size: '30mb',
         url: site.baseUrl + '/files/upload',
-        flash_swf_url: site.baseUrl + '/assets/plupload/plupload.flash.swf',
-        silverlight_xap_url: site.baseUrl + '/assets/plupload/plupload.silverlight.xap'
+        flash_swf_url: site.baseUrl + '/FormLibContent/Assets/plupload/plupload.flash.swf'
+        //,silverlight_xap_url: site.baseUrl + '/FormLibContent/assets/plupload/plupload.silverlight.xap'
     });
 
     uploader.bind('Init', function (up, params) { /*$('#filelist').html("<div>Current runtime: " + params.runtime + "</div>");*/ });
@@ -2272,9 +2322,6 @@ var actionStateChanged = function () {
             if (data.View != '') {
                 $('form').replaceWith(data.View);
                 init();
-                
-                InitIntegration();
-
                 if ($('#pickfiles').length > 0) {
                     initUpload();
                 }
@@ -2320,7 +2367,7 @@ $(document).on('submit', 'form', function (e) {
                 validate.run(val);
             }
         });
-    }*/
+    }*/   
 
     var elem = $('#navigation').find(':button, select').addClass("disabled").attr('readonly', 'readonly');
 
@@ -2404,6 +2451,28 @@ $(document).on('click', '.print', function (e) {
                 window.open(url);
             }
         });
+});
+
+$(document).on('click', '.changeprint', function (e) {
+    e.preventDefault();
+
+    var $this = $(this);
+    var url = $this.attr('href');
+
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: { query: $('#changeform').serialize() }
+    })
+        .done(function (data) {
+            if (data.Exception)
+                location.href = location.href;
+            else {              
+                url = url.replace('ChangePrint', 'contract');
+                window.open(url);
+            }
+        });
+    
 });
 
 $(document).on('click', '.btn-delete-file', function (e) {

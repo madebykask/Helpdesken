@@ -16,7 +16,6 @@
                     <td>
                         <input type="text" value="@Model.Contract.Initiator" readonly="readonly"/></td>
                 </tr>
-                
                 <tr>
                     <td class="tdstrong">@Model.Label("NewToIKEA")</td>
                     <td>@Model.Element("NewToIKEA")</td>
@@ -38,14 +37,23 @@
                     <td class="tdstrong">@Model.Label("InductionStartTime")</td>
                     <td>@Model.Element("InductionStartTime")</td>
                 </tr>
+                                <tr>
+                    <td class="tdstrong">@Model.Label("InductionEndTime")</td>
+                    <td>@Model.Element("InductionEndTime")</td>
+                </tr>
+                                <tr>
+                    <td class="tdstrong">@Model.Label("InductionStartTime2")</td>
+                    <td>@Model.Element("InductionStartTime2")</td>
+                </tr>
+                                <tr>
+                    <td class="tdstrong">@Model.Label("InductionEndTime2")</td>
+                    <td>@Model.Element("InductionEndTime2")</td>
+                </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("LengthOfInductionInDays")</td>
                     <td>@Model.Element("LengthOfInductionInDays")</td>
                 </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("InductionEndTime")</td>
-                    <td>@Model.Element("InductionEndTime")</td>
-                </tr>
+
                 <tr>
                     <td class="tdstrong">@Model.Label("PreviousContractStartDate")</td>
                     <td>@Model.Element("PreviousContractStartDate")</td>
@@ -61,14 +69,14 @@
                         {
                             @Model.Contract.PriorityName;
                         }
-                        else { 
+                        else if (Model.Form != null){ 
                             @Model.Form.PriorityName;
                         }
                     </td>
-                </tr>   
+                </tr>  
                 <tr>
                     <td class="tdstrong">@Model.Label("Co-WorkerID")</td>
-                    <td>@Model.Element("Co-WorkerID")</td>
+                    <td>@Model.Element("Co-WorkerID" , false)</td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("GlobalHRID")</td>
@@ -80,11 +88,11 @@
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("FirstName")</td>
-                    <td>@Model.Element("FirstName")</td>
+                    <td>@Model.Element("FirstName" , false)</td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("LastName")</td>
-                    <td>@Model.Element("LastName")</td>
+                    <td>@Model.Element("LastName" , false)</td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("DateOfBirth")</td>
@@ -112,6 +120,10 @@
                     <td class="tdstrong">@Model.Label("PermanentAddressLine2")</td>
                     <td>@Model.Element("PermanentAddressLine2")</td>
                 </tr>
+                 <tr>
+                    <td class="tdstrong">@Model.Label("PermanentAddressLine3")</td>
+                    <td>@Model.Element("PermanentAddressLine3")</td>
+                </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("PermanentPostalCode")</td>
                     <td>@Model.Element("PermanentPostalCode")</td>
@@ -123,12 +135,32 @@
                 <tr>
                     <td class="tdstrong">@Model.Label("PermanentCountry")</td>
                     <td>@Model.Element("PermanentCountry")</td>
+                    
                 </tr>
             </tbody>
         </table>
     </div>
+    <input type="hidden" id="CustomerId" value="@Model.CustomerId" />
+    <input type="hidden" id="formGuid" value="@Model.FormGuid" />
 </div>
 <script>
+
+
+
+
+    var dateHiringDate = $('#date_ContractStartDate');
+    if (dateHiringDate.length > 0) {
+
+        dateHiringDate.not(".disabled").datepicker()
+            .on('changeDate', function (e) {
+                if (document.getElementById('InductionDate')) {
+                    $('#InductionDate').val($('#ContractStartDate').val());
+                }
+            });
+    }
+
+
+
 
     document.getElementById('NewToIKEA').onchange = selectIndexChangeNewToIKEA;
 
@@ -140,6 +172,8 @@
             document.getElementById('GlobalHRID').disabled = false;
         }
 
+
+
     }
     if (document.getElementById('NewToIKEA').value == 'New Hire') {
         document.getElementById('GlobalHRID').disabled = true;
@@ -149,24 +183,20 @@
     var noticeHiringDateWrong = $('#notice_HiringDateWrong');
 
     $('#ContractStartDate').change(function () {
+
+        $('#InductionDate').val($('#ContractStartDate').val());
+
         var startDate = $('#ContractStartDate').val();
-        
+
         var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
         var dstartDate = APIGlobal.DateTime.parseDate(startDate, format);
         var nowTemp = new Date();
         var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
         noticeHiringDate.hide();
         noticeHiringDateWrong.hide();
-        //if (!(dstartDate.getDate() === 1 || dstartDate.getDate() === 15))
-        //    noticeHiringDateWrong.show();
 
         if (dstartDate.valueOf() < now.valueOf())
             noticeHiringDate.show();
-
-        //if (!(dstartDate.getDate() === 1 || dstartDate.getDate() === 15) && (dstartDate.valueOf() < now.valueOf())) {
-        //    noticeHiringDateWrong.show();
-        //    noticeHiringDate.show();
-        //}
     });
 
 </script>

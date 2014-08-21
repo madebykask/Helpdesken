@@ -12,8 +12,14 @@
     //var lastValidation = TempData["LastValidation"];  
 }
 
+@functions{  
+    public string PrintText()
+    {
+        return Model.Translate("Print");
+    }
+}
 
-@using (Html.BeginForm("edit", "ChangeTermsConditions", new { id = Model.Contract.Id }, FormMethod.Post, new { area = "Ireland", novalidate = "novalidate" }))
+@using (Html.BeginForm("edit", "ChangeTermsConditions", new { id = Model.Contract.Id }, FormMethod.Post, new { area = "Ireland", novalidate = "novalidate", id = "changeform" }))
 {   
     @*<input type="hidden" name="LastValidation" id="LastValidation" value="@lastValidation" />
     <input type="hidden" name="LockedFields" id="LockedFields" value="@lockedFields" />
@@ -59,7 +65,16 @@
                 <li class="@(Model.TabHasError("#SSCUseOnly") ? "error" : "")">
                     <a href="#SSCUseOnly">@Model.Translate("SSC use only")</a></li>
             }
-
+            <li>
+                <a href="@Url.Action("ChangePrint", "ChangeTermsConditions", new
+                {
+                    id = "Print",
+                    caseId = Model.Contract.Id,
+                    path = "",
+                    userId = FormLibSessions.User.UserId,
+                    allowanceNr = ""
+                })" class="changeprint"><i class="icon-print icon-white"></i>&nbsp;@PrintText()</a>
+            </li>
              @if (Model.VisibleTab("#attachments"))
              {
                 <li class="pull-right">
@@ -201,8 +216,8 @@
          });
          */
 
-         InitIntegration();
-         changeNewCompany();
+         //InitIntegration();
+         //changeNewCompany();
 
     </script>
 }

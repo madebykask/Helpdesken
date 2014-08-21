@@ -3,7 +3,7 @@
 @using ECT.FormLib.Models;
 
 <div class="tab-pane active" id="ServiceRequestDetails"> 
-    <div class="span12">
+    <div class="span6">
         <table class="table">
             <tbody>       
             <tr>
@@ -93,6 +93,14 @@
                     <td class="tdstrong">@Model.Label("PermanentAddressLine2")</td>
                     <td>@Model.Element("PermanentAddressLine2")</td>
                 </tr>
+                 @* <tr>
+                    <td class="tdstrong">@Model.Label("PermanentAddressLine3")</td>
+                    <td>@Model.Element("PermanentAddressLine3")</td>
+                </tr>*@
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentPostalCode")</td>
+                    <td>@Model.Element("PermanentPostalCode")</td>
+                </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("PermanentCity")</td>
                     <td>@Model.Element("PermanentCity")</td>
@@ -105,9 +113,15 @@
              </tbody>
         </table>
     </div>
-
-
-
+    <div class="span6">
+        @{
+            Random rnd = new Random();
+            int nr = rnd.Next(1, 14);
+            string filename = "~/FormLibContent/Assets/img/UK/ikea-" + nr + ".png";
+        }
+  
+        <img src="@Url.Content(filename)" />
+    </div>
 
     <input type="hidden" id="CustomerId" value="@Model.CustomerId" />
     <input type="hidden" id="formGuid" value="@Model.FormGuid" />

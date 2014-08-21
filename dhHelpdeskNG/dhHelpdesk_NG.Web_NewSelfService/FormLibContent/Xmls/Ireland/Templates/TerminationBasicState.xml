@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <state status="0">
     <status value="0">
-        <visibleTabs>#ServiceRequestDetails,#Complete</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Complete,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
       <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>
@@ -17,7 +17,7 @@
 
     <!-- HRU -->
     <status value="20">
-        <visibleTabs>#ServiceRequestDetails,#Complete</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Complete,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails</readOnlyTabs>
       <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>
@@ -30,7 +30,7 @@
 
     <!-- SSC -->
     <status value="40">
-        <visibleTabs>#ServiceRequestDetails,#Complete,#globalview</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Complete,#globalview,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Complete</readOnlyTabs>
       <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>
@@ -39,14 +39,14 @@
         </actions>
     </status>
     <status value="60">
-        <visibleTabs>#ServiceRequestDetails,#Complete,#globalview</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Complete,#globalviewv</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Complete</readOnlyTabs>
       <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>
         </actions>
     </status>
     <status value="70">
-        <visibleTabs>#ServiceRequestDetails,#Complete</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Complete,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Complete</readOnlyTabs>
       <readOnlyFields>BusinessUnit,Department</readOnlyFields>
     </status>

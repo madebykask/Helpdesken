@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <predefined>
-  <name>CostCentre</name>
+  <name>PayrollCategory</name>
   <dependent>
     <selected>A&amp;R Sales Reconciliation Co-worker</selected>
     <show1></show1>

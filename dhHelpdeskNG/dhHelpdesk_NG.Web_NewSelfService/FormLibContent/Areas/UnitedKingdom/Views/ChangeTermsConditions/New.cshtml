@@ -94,9 +94,9 @@
             </div>
         </div>
     </div>
-    <input type="hidden" id="activeTab" name="activeTab" value="@Model.ActiveTab" />    
+    <input type="hidden" id="activeTab" name="activeTab" value="@Model.ActiveTab" />  
      @Html.Partial("_Validate", Model)
-    <script>
+    <script type="text/javascript">
 
         /*
         var json = $.parseJSON($("#MyInput").val());
@@ -343,10 +343,10 @@
         function changeNewBusinessUnitCallback() {
             var selectedText = $('#NewBusinessUnit').find('option:selected').text();
             $('#PrimarySite').val(selectedText);
-        }
+        } 
 
-        InitIntegration();
-        changeNewCompany();
+        //InitIntegration();
+        //changeNewCompany(); 
 </script>
 
 }

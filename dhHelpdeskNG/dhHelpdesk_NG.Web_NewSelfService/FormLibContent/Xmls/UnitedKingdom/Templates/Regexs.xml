@@ -8,7 +8,7 @@
     <postcode message="Wrong format (NNNN LL).">^[1-9][0-9]{3}\s?[a-zA-Z]{2}$</postcode>
     <employeeno message="Wrong format (08NNNNNN).">^08\d{6}$</employeeno>
     <amount message="Enter maximum four-digit value.">^-?\d{0,4}(\,|.[0-9]{1,5})?$</amount>
-    <unsignednum message="Please enter a numeric value">^-?\d*(\,|.[0-9]{1,5})?$</unsignednum>
+    <unsignednum message="Please enter a numeric value">^[0-9,.]*$</unsignednum>
     <alphaCharachter message="Only Charachters allowed">[^0-9]</alphaCharachter>
     <booltrue>^1|1,0$</booltrue>
     <nip message="Wrong format (NNN-NNN-NN-NN).">^\d{3}\-\d{3}\-\d{2}\-\d{2}$</nip>
@@ -29,6 +29,6 @@
     <maxfourdigit message="Wrong format (NNNN).">^[0-9]{1,4}$</maxfourdigit>
     <weeks message="Incorrect number of weeks. Please verify.">\b([2-9]|[2-5][0-2]|[2-4][0-9]|52)\b</weeks>
     <pps message="Wrong format: NNNNNNNL">\d{7}[a-zA-Z]{1}</pps>
-
+    <maxvalue12 message="Maximum Value is 12">\b([0-9]|1[0-2])\b</maxvalue12>
     <yearyear message="Please enter &quot;YYYY/YYYY&quot; value">^[0-9]{4}/[0-9]{4}$</yearyear>
 </regexs>

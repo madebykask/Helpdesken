@@ -100,7 +100,25 @@
             </tbody>
         </table>
     </div>
+    <div class="span6">
+        @{
+            Random rnd = new Random();
+            int nr = rnd.Next(1, 14);
+            string filename = "~/FormLibContent/Assets/img/UK/ikea-" + nr + ".png";
+        }
+  
+        <img src="@Url.Content(filename)" />
+    </div>
+
+    @Model.Element("PermanentAddressLine1")
+    @Model.Element("PermanentAddressLine2")
+    @Model.Element("PermanentAddressLine3")
+    @Model.Element("PermanentPostalCode")
+    @Model.Element("PermanentCity")
+    @Model.Element("PermanentCountry")
+
     <input type="hidden" id="CustomerId" value="@Model.CustomerId" />
+    <input type="hidden" id="formGuid" value="@Model.FormGuid" />
 </div>
 
 

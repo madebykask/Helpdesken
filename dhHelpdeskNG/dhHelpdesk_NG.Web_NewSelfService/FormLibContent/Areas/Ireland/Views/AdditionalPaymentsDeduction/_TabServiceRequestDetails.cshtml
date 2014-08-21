@@ -111,6 +111,11 @@
                     <td>
                         @Model.Element("PermanentAddressLine2")</td>
                 </tr>
+                 @*<tr>
+                    <td class="tdstrong">@Model.Label("PermanentAddressLine3")</td>
+                    <td>
+                        @Model.Element("PermanentAddressLine3")</td>
+                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("PermanentPostalCode")</td>
                     <td>
@@ -129,9 +134,17 @@
             </tbody>
         </table>
     </div>
-
+    <div class="span6">
+        @{
+            Random rnd = new Random();
+            int nr = rnd.Next(1, 14);
+            string filename = "~/FormLibContent/Assets/img/UK/ikea-" + nr + ".png";
+        }
+  
+        <img src="@Url.Content(filename)" />
+    </div>
     <input type="hidden" id="CustomerId" value="@Model.CustomerId" />
-            <input type="hidden" id="formGuid" value="@Model.FormGuid" />
+    <input type="hidden" id="formGuid" value="@Model.FormGuid" />
 
 </div>
 

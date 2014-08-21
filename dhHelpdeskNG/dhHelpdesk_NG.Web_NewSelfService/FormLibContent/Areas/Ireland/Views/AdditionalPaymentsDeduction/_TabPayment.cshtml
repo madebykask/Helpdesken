@@ -31,12 +31,12 @@
                         @Model.Element("AllowancesAmountUnits")
                     </td>
                 </tr>
-                <tr>
+@*                <tr>
                     <td class="tdstrong">@Model.Label("AllowancesNetGross")</td>
                     <td>
                         @Model.Element("AllowancesNetGross")
                     </td>
-                </tr>
+                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("AllowancesValidFrom")</td>
                     <td>
@@ -71,12 +71,12 @@
                         <td class="tdstrong">@Model.Label("AllowancesAmountUnits" + i.ToString())</td>
                         <td>
                             @Model.Element("AllowancesAmountUnits" + i.ToString())</td>
-                    </tr>
+                    </tr>@*
                     <tr class="allowance@(i.ToString())">
                         <td class="tdstrong">@Model.Label("AllowancesNetGross" + i.ToString())</td>
                         <td>
                             @Model.Element("AllowancesNetGross" + i.ToString())</td>
-                    </tr>
+                    </tr>*@
                     <tr class="allowance@(i.ToString())">
                         <td class="tdstrong">@Model.Label("AllowancesValidFrom" + i.ToString())</td>
                         <td>
@@ -123,12 +123,12 @@
                         @Model.Element("DeductionsAmountUnits")
                     </td>
                 </tr>
-                <tr>
+@*                <tr>
                     <td class="tdstrong">@Model.Label("DeductionsNetGross")</td>
                     <td>
                         @Model.Element("DeductionsNetGross")
                     </td>
-                </tr>
+                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("DeductionsValidFrom")</td>
                     <td>
@@ -163,12 +163,12 @@
                         <td class="tdstrong">@Model.Label("DeductionsAmountUnits" + i.ToString())</td>
                         <td>
                             @Model.Element("DeductionsAmountUnits" + i.ToString())</td>
-                    </tr>
+                    </tr>@*
                     <tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DeductionsNetGross" + i.ToString())</td>
                         <td>
                             @Model.Element("DeductionsNetGross" + i.ToString())</td>
-                    </tr>
+                    </tr>*@
                     <tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DeductionsValidFrom" + i.ToString())</td>
                         <td>
@@ -264,24 +264,24 @@
         datePicker.datepicker();
     }
 
-    function setDatePickerBehavior(id, value) {
+    function setDatePickerBehavior(id) {
         var input = $('#' + id);
 
-        if (value == 'One Time') {
-            disableDatePicker(id);
-        } else {
-            enableDatePicker(id);
-        }
+        //if (value == 'One Time') {
+        //    disableDatePicker(id);
+        //} else {
+        //    enableDatePicker(id);
+        //}
     }
 
-    function setDefaultDatePickerBehavior(id, value) {
+    function setDefaultDatePickerBehavior(id) {
         var input = $('#' + id);
 
-        if (value == 'One Time') {
-            disableDatePicker(id);
-        } else {
-            setDefaultDate(id);
-        }
+        //if (value == 'One Time') {
+        //    disableDatePicker(id);
+        //} else {
+        //    setDefaultDate(id);
+        //}
     }
 
 
@@ -295,17 +295,145 @@
         setAllowanceType();
 
     });
+
+    $('#AllowancesType3').change(function () {
+        //////////
+        //AllowancesType change function
+        //////////
+
+
+        setAllowanceType3();
+
+    });
+
     $('#AllowancesType2').change(function () {
         //////////
         //AllowancesType change function
         //////////
 
 
-        setAllowanceType();
+        setAllowanceType2();
 
     });
 
-    function setAllowanceTypeXML(xml) {
+    function setAllowanceTypeXML3(xml) {
+        //////////
+        //Sets allowance type units from predefined_allowancetype_units_outs.XML based on Allowance type
+        //////////
+
+        var show = ''
+        var show2 = ''
+
+        if (document.getElementById('AllowancesAmountUnits3')) {
+            document.getElementById('AllowancesAmountUnits3').value = '';
+        }
+        if (document.getElementById('AllowancesNetGross3')) {
+            document.getElementById('AllowancesNetGross3').value = '';
+        }
+
+        var res = '0';
+
+        var dep = '';
+        if (document.getElementById('AllowancesType3')) {
+            dep = document.getElementById('AllowancesType3').value;
+        }
+        //var bus = $("#BusinessUnit option:selected").text();
+
+        var d = dep;
+
+
+        $(xml).find('dependent').each(function () {
+
+
+            var $sel = $(this);
+            show = '';
+
+
+            var department = $sel.find('selected').text();
+
+            show = $sel.find('show').text();
+
+
+
+            if (department.toString().trim() == d.toString().trim()) {
+
+                if (show != '') {
+                    if (document.getElementById('AllowancesAmountUnits3')) {
+                        document.getElementById('AllowancesAmountUnits3').value = show;
+                    }
+                    res = '1';
+                }
+
+
+
+                if (res == 1) {
+                    return;
+                }
+            }
+
+        });
+    }
+
+    function setAllowanceTypeXML2(xml) {
+        //////////
+        //Sets allowance type units from predefined_allowancetype_units_outs.XML based on Allowance type
+        //////////
+
+        var show = ''
+        var show2 = ''
+
+        if (document.getElementById('AllowancesAmountUnits2')) {
+            document.getElementById('AllowancesAmountUnits2').value = '';
+        }
+        if (document.getElementById('AllowancesNetGross2')) {
+            document.getElementById('AllowancesNetGross2').value = '';
+        }
+
+        var res = '0';
+
+        var dep = '';
+        if (document.getElementById('AllowancesType2')) {
+            dep = document.getElementById('AllowancesType2').value;
+        }
+        //var bus = $("#BusinessUnit option:selected").text();
+
+        var d = dep;
+
+
+        $(xml).find('dependent').each(function () {
+
+
+            var $sel = $(this);
+            show = '';
+
+
+            var department = $sel.find('selected').text();
+
+            show = $sel.find('show').text();
+
+
+
+            if (department.toString().trim() == d.toString().trim()) {
+
+                if (show != '') {
+                    if (document.getElementById('AllowancesAmountUnits2')) {
+                        document.getElementById('AllowancesAmountUnits2').value = show;
+                    }
+                    res = '1';
+                }
+
+
+
+                if (res == 1) {
+                    return;
+                }
+            }
+
+        });
+    }
+
+    function setAllowanceTypeXML(xml)
+    {
         //////////
         //Sets allowance type units from predefined_allowancetype_units_outs.XML based on Allowance type
         //////////
@@ -322,7 +450,7 @@
 
         var res = '0';
 
-        var dep = '';
+        var dep =    '';
         if (document.getElementById('AllowancesType')) {
             dep = document.getElementById('AllowancesType').value;
         }
@@ -336,12 +464,12 @@
 
             var $sel = $(this);
             show = '';
-            show2 = '';
+            
 
             var department = $sel.find('selected').text();
 
-            show = $sel.find('show1').text();
-            show2 = $sel.find('show2').text();
+            show = $sel.find('show').text();
+            
 
             
             if (department.toString().trim() == d.toString().trim()) {
@@ -353,22 +481,7 @@
                     res = '1';
                 }
 
-                if (show2 != '') {
-                    var n = show2.indexOf(",");
-                    if (n == -1) {
-                        if (document.getElementById('AllowancesNetGross')) {
-                            document.getElementById('AllowancesNetGross').value = show2;
-                        }
-                    }
-                    else {
-                        var res = show2.substring(0, n);
-                        if (document.getElementById('AllowancesNetGross')) {
-                            document.getElementById('AllowancesNetGross').value = res;
-                        }
-                    }
-                    res = '1';
-                }
-
+                
 
                 if (res == 1) {
                     return;
@@ -378,18 +491,52 @@
         });
     }
 
-    function setAllowanceType() {
+    function setAllowanceType3() {
         //////////
         var path = window.location.protocol + '//';
         path = path + window.location.host + '/';
 
-        //var n = path.indexOf("localhost")
-        //if (n == -1) {
-        //    path = path + 'ect/FormLibContent/Xmls/Ireland/Templates/predefined_allowancetype_units_payment_IE_outs.xml'
-        //}
-        //else {
-        //    path = path + 'FormLibContent/Xmls/Ireland/Templates/predefined_allowancetype_units_payment_IE_outs.xml'
-        //}
+        path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_allowancetype_units_payment_IE_outs.xml'
+
+        $.ajax({
+            type: "GET",
+            url: path,
+            dataType: "xml",
+            success: setAllowanceTypeXML3,
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseText);
+                alert(textStatus);
+                alert(errorThrown);
+            }
+
+        });
+    }
+
+    function setAllowanceType2() {
+        //////////
+        var path = window.location.protocol + '//';
+        path = path + window.location.host + '/';
+
+        path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_allowancetype_units_payment_IE_outs.xml'
+
+        $.ajax({
+            type: "GET",
+            url: path,
+            dataType: "xml",
+            success: setAllowanceTypeXML2,
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseText);
+                alert(textStatus);
+                alert(errorThrown);
+            }
+
+        });
+    }
+
+    function setAllowanceType() {
+        //////////
+        var path = window.location.protocol + '//';
+        path = path + window.location.host + '/';
 
         path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_allowancetype_units_payment_IE_outs.xml'
 
@@ -409,34 +556,34 @@
 
 
     $('#AllowancesPaymentType').change(function () {
-        setDatePickerBehavior('AllowancesValidTo', $(this).val());
+        setDatePickerBehavior('AllowancesValidTo');
     });
-    setDefaultDatePickerBehavior('AllowancesValidTo', $('#AllowancesPaymentType').val());
+    setDefaultDatePickerBehavior('AllowancesValidTo');
 
-    $('#AllowancesPaymentType2').change(function () {
-        setDatePickerBehavior('AllowancesValidTo2', $(this).val());
-    });
-    setDefaultDatePickerBehavior('AllowancesValidTo2', $('#AllowancesPaymentType2').val());
+    //$('#AllowancesPaymentType2').change(function () {
+    //    setDatePickerBehavior('AllowancesValidTo2', $(this).val());
+    //});
+    //setDefaultDatePickerBehavior('AllowancesValidTo2', $('#AllowancesPaymentType2').val());
 
-    $('#AllowancesPaymentType3').change(function () {
-        setDatePickerBehavior('AllowancesValidTo3', $(this).val());
-    });
-    setDefaultDatePickerBehavior('AllowancesValidTo3', $('#AllowancesPaymentType3').val());
+    //$('#AllowancesPaymentType3').change(function () {
+    //    setDatePickerBehavior('AllowancesValidTo3', $(this).val());
+    //});
+    //setDefaultDatePickerBehavior('AllowancesValidTo3', $('#AllowancesPaymentType3').val());
 
     $('#DeductionsPaymentType').change(function () {
-        setDatePickerBehavior('DeductionsValidTo', $(this).val());
+        setDatePickerBehavior('DeductionsValidTo');
     });
-    setDefaultDatePickerBehavior('DeductionsValidTo', $('#DeductionsPaymentType').val());
+    setDefaultDatePickerBehavior('DeductionsValidTo');
 
-    $('#DeductionsPaymentType2').change(function () {
-        setDatePickerBehavior('DeductionsValidTo2', $(this).val());
-    });
-    setDefaultDatePickerBehavior('DeductionsValidTo2', $('#DeductionsPaymentType2').val());
+    //$('#DeductionsPaymentType2').change(function () {
+    //    setDatePickerBehavior('DeductionsValidTo2', $(this).val());
+    //});
+    //setDefaultDatePickerBehavior('DeductionsValidTo2', $('#DeductionsPaymentType2').val());
 
-    $('#DeductionsPaymentType3').change(function () {
-        setDatePickerBehavior('DeductionsValidTo3', $(this).val());
-    });
-    setDefaultDatePickerBehavior('DeductionsValidTo3', $('#DeductionsPaymentType3').val());
+    //$('#DeductionsPaymentType3').change(function () {
+    //    setDatePickerBehavior('DeductionsValidTo3', $(this).val());
+    //});
+    //setDefaultDatePickerBehavior('DeductionsValidTo3', $('#DeductionsPaymentType3').val());
 
 </script>
 

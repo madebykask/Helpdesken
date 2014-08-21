@@ -50,6 +50,9 @@
                 }
             }
 
+            var selectedTextPostal = $('#PermanentPostalCode').find('option:selected').text();
+            $('#' + prefix + 'PostalCode').val(selectedTextPostal);
+
         });
 
         $(document).on('change', '#Extent', function (e) {
@@ -136,5 +139,5 @@
 }
 
 <script>
-    InitIntegration();
+    //InitIntegration();
 </script>

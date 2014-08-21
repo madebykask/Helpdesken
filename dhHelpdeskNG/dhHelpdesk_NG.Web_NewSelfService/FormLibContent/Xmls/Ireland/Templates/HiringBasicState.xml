@@ -1,7 +1,7 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <state status="0">
     <status value="0">
-        <visibleTabs>#servicerequestdetails,#personal</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#personal,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -12,7 +12,7 @@
     </status>
     <!-- HRU -->
     <status value="20">
-        <visibleTabs>#servicerequestdetails,#personal</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#personal,#attachments</visibleTabs>
         <readOnlyTabs>#servicerequestdetails</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -24,7 +24,7 @@
     </status>
     <!-- SSC -->
     <status value="30">
-        <visibleTabs>#servicerequestdetails,#personal,#SSCUseOnly</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#personal,#SSCUseOnly,#attachments</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#personal</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -35,7 +35,7 @@
     </status>
     <!-- SSC -->
     <status value="40">
-        <visibleTabs>#servicerequestdetails,#personal,#globalview,#SSCUseOnly</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#personal,#globalview,#SSCUseOnly,#attachments</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#personal</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -45,14 +45,14 @@
     </status>
     <!-- SSC -->
     <status value="60">
-        <visibleTabs>#servicerequestdetails,#personal,#SSCUseOnly</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#personal,#globalview,#SSCUseOnly,#attachments</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#personal</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
         </actions>
     </status>
     <status value="70">
-        <visibleTabs>#servicerequestdetails,#personal</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#personal,#attachments</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#personal</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
     </status>

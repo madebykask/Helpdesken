@@ -35,6 +35,11 @@
         <br />
         @Model.GetDocumentAnswer("PermanentAddressLine2")
          }
+         @if (!string.IsNullOrEmpty(Model.GetDocumentAnswer("PermanentAddressLine3")))
+         {
+        <br />
+        @Model.GetDocumentAnswer("PermanentAddressLine3")
+         }
         <br />
         @Model.GetDocumentAnswer("PermanentCity",true)
         <br />

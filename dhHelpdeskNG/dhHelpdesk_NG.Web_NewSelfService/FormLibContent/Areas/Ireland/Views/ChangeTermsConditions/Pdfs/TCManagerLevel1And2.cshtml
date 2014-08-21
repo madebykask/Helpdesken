@@ -105,7 +105,7 @@
              {
                  case "150b - hourly location allow":
                  case "100b - salary location allow":
-                 <text> (plus €@Model.GetDocumentAnswer(FormLibConstants.FormField.AllowancesAmountUnits, true)
+                 <text> (plus &euro; @Model.GetDocumentAnswer(FormLibConstants.FormField.AllowancesAmountUnits, true)
                  per annum Location Allowance)</text>
                      break;
 
@@ -122,7 +122,7 @@
             @if (Model.GetDocumentAnswer(FormLibConstants.FormField.AllowancesType, true).ToLower() == "300G - Night Shift".ToLower())
             {
                 <text>@(paragraphNo.ToString()). In addition you will receive a night allowance
-                of €@Model.GetDocumentAnswer(FormLibConstants.FormField.AllowancesAmountUnits, true)
+                of &euro; @Model.GetDocumentAnswer(FormLibConstants.FormField.AllowancesAmountUnits, true)
                 per hour for hours worked between 24.00 and 07.00 (subject to working a minimum
                 of three hour during this period).  </text>
                 <text><br />

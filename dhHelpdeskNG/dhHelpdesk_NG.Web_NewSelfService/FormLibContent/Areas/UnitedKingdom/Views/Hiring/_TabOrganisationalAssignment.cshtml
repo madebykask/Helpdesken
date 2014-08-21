@@ -155,18 +155,19 @@
 
         function setProbationEndDate(value) {
             var probationEndDate = $('#ProbationEndDate');
+            if (document.getElementById('ProbationEndDate').value == '') {
+                if (value == '@DefaultProbationPeriod') {
+                    var sStart = $('#ContractStartDate').val();
+                    var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+                    var dStart = APIGlobal.DateTime.parseDate(sStart, format);
 
-            if (value == '@DefaultProbationPeriod') {
-                var sStart = $('#ContractStartDate').val();
-                var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
-                var dStart = APIGlobal.DateTime.parseDate(sStart, format);
-
-                var endDate = new Date(dStart.getFullYear(), dStart.getMonth() + 6, dStart.getDate() - 1, 0, 0, 0, 0);
-                var visibleDate = APIGlobal.DateTime.formatDate(endDate, format);
-                probationEndDate.val(visibleDate.toString());
-            }
-            else {
-                probationEndDate.val("");
+                    var endDate = new Date(dStart.getFullYear(), dStart.getMonth() + 6, dStart.getDate() - 1, 0, 0, 0, 0);
+                    var visibleDate = APIGlobal.DateTime.formatDate(endDate, format);
+                    probationEndDate.val(visibleDate.toString());
+                }
+                else {
+                    probationEndDate.val("");
+                }
             }
         };
 
@@ -244,11 +245,16 @@
             setProbationEndDate($(this).val());
         });
 
+        $('#date_ContractStartDate').datepicker().on('changeDate', function (ev) {
+
+            setProbationEndDate($('#ProbationPeriod').val());
+        });
+
         $('#ReportsToLineManager').change(function () {
             //////////
             //ReportsToLineManager change function
+            //If certain business units, TEC Approver=ReportsToLinemanager
             //////////
-            ///DONE IN CHANGE
 
             var bus = $("#BusinessUnit option:selected").text();
 
@@ -268,8 +274,11 @@
 
 
         $('#BusinessUnit').change(function () {
-            ///DONE IN CHANGE
-            //alert();
+            //////////
+            //Business unit change function
+            //Calls functions and sets Primary site=Business unit
+            //////////
+
             addTecProviders();
             setPayrollCategory();
             setBasicPayAmount();
@@ -308,10 +317,9 @@
 
         $('#AllowancesType').change(function () {
             //////////
-            //AllowancesType change function
+            //Alowance type change function
+            //Calls set Allowance type
             //////////
-            ///DONE IN CHANGE
-
 
             setAllowanceType();
 
@@ -319,9 +327,9 @@
 
         $('#AllowancesType2').change(function () {
             //////////
-            //AllowancesType change function
+            //Alowance type 2 change function
+            //Calls set Allowance type 2
             //////////
-            ///DONE IN CHANGE
 
             setAllowanceType2();
 
@@ -329,16 +337,206 @@
 
         $('#AllowancesType3').change(function () {
             //////////
-            //AllowancesType change function
+            //Alowance type 3 change function
+            //Calls set Allowance type 3
             //////////
-            ///DONE IN CHANGE
 
             setAllowanceType2();
 
         });
 
+
+        $('#ServiceArea').change(function () {
+            //////////
+            //Service area change function
+            //Calls setLineManagerJobTitle to add jobtitles based on function/service area
+            //////////
+
+            path = '';
+            var path = window.location.protocol + '//';
+            path = path + window.location.host + '/';
+
+
+
+            //path = site.baseUrl + '/FormLibContent/Xmls/UnitedKingdom/Templates/predefined_department_jobtitle_UK_outs.xml'
+            path = site.baseUrl + '/FormLibContent/Xmls/UnitedKingdom/Templates/predefined_function_jobtitleUK_outs.xml'
+
+
+            $.ajax({
+                type: "GET",
+                url: path,
+                dataType: "xml",
+                success: setLineManagerJobTitle,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
+                    alert(textStatus);
+                    alert(errorThrown);
+                }
+
+            });
+
+        });
+
+
+
+        $('#Department').change(function () {
+            //////////
+            //Department change function
+            //Calls setCostCentre to set costcentre, based on department
+            //Calls setLineManager to set Linemanagaer, based on department
+            //////////
+
+            //Cost centre department
+            var path = window.location.protocol + '//';
+            path = path + window.location.host + '/';
+
+
+            path = site.baseUrl + '/FormLibContent/Xmls/UnitedKingdom/Templates/predefined_department_costcentre_outs.xml'
+
+            $.ajax({
+                type: "GET",
+                url: path,
+                dataType: "xml",
+                success: setCostCentre,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
+                    alert(textStatus);
+                    alert(errorThrown);
+                }
+
+            });
+
+
+            //Line manager department
+            path = '';
+            var path = window.location.protocol + '//';
+            path = path + window.location.host + '/';
+
+
+            path = site.baseUrl + '/FormLibContent/Xmls/UnitedKingdom/Templates/predefined_linemanager_department_outs_UK.xml'
+
+            $.ajax({
+                type: "GET",
+                url: path,
+                dataType: "xml",
+                success: setLineManager,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
+                    alert(textStatus);
+                    alert(errorThrown);
+                }
+
+            });
+
+
+            //Line manager jobtitle
+            path = '';
+            var path = window.location.protocol + '//';
+            path = path + window.location.host + '/';
+
+
+            path = site.baseUrl + '/FormLibContent/Xmls/UnitedKingdom/Templates/predefined_department_jobtitle_UK_outs.xml'
+
+            $.ajax({
+                type: "GET",
+                url: path,
+                dataType: "xml",
+                success: setLineManagerJob,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
+                    alert(textStatus);
+                    alert(errorThrown);
+                }
+
+            });
+
+
+        });
+
+
+
+        $('#PayScaleGroup').change(function () {
+            //////////
+            //Payscalegroup change function
+            //Calls setBasicPayAmount to set amount based on payscale            
+            //////////
+
+            setBasicPayAmount();
+
+        });
+
+        //$('#PayrollCategory').change(function () {
+        jQuery('#PayrollCategory').change(function () {
+            //////////
+            //PayrollCategory change function
+            //Calls fanctions concerned by payrollcategory
+            //////////
+
+            addDeductionTypesOnPayroll();
+            addAllowanceOnPayroll();
+
+            addPayScaleOnPayroll();
+            setPayrollCategory();
+            setBasicPayAmount();
+            setAllowanceType();
+            setAllowanceType2();
+            setAllowanceType3();
+
+
+        });
+
+
+
+        function setLineManagerJob(xml) {
+            //////////
+            //addTecProvidersXML:
+            //Adds tec providers on selected businessunit
+            //////////
+
+            var show = ''
+
+            var dep = '';
+            if (document.getElementById('Department')) {
+                dep = $("#Department option:selected").text();
+            }
+
+
+            $(xml).find('dependent').each(function () {
+
+                var $sel = $(this);
+                show = '';
+
+                var department = $sel.find('selected').text();
+
+                show = $sel.find('show').text();
+
+                if (department == dep) {
+
+                    if (show != '') {
+                        var n = show.indexOf(",");
+
+                        if (n == -1) {
+
+                            $('#ManagersJobTitle')[0].selectize.setValue(show);
+                        }
+                        else {
+                            var res = show.substring(0, n);
+
+                            $('#ManagersJobTitle')[0].selectize.setValue(res);
+                        }
+                        return;
+                    }
+                }
+            });
+
+        }
+
         function setAllowanceType() {
             //////////
+            //SetAllowanceType:
+            //Calls setAllowanceTypeXML to set amount based on allowance type
+            //////////
+
             ///DONE IN CHANGE
             var path = window.location.protocol + '//';
             path = path + window.location.host + '/';
@@ -362,7 +560,10 @@
 
         function setAllowanceType2() {
             //////////
-            ///DONE IN CHANGE
+            //SetAllowanceType2:
+            //Calls setAllowanceTypeXML2 to set amount based on allowance type
+            //////////
+
             var path = window.location.protocol + '//';
             path = path + window.location.host + '/';
 
@@ -385,7 +586,10 @@
 
         function setAllowanceType3() {
             //////////
-            ///DONE IN CHANGE
+            //SetAllowanceType3:
+            //Calls setAllowanceTypeXML3 to set amount based on allowance type
+            //////////
+
             var path = window.location.protocol + '//';
             path = path + window.location.host + '/';
 
@@ -409,9 +613,9 @@
 
         function setAllowanceTypeXML(xml) {
             //////////
-            //Sets allowance type units from predefined_allowancetype_units_outs.XML based on Allowance type
+            //setAllowanceTypeXML:
+            //Sets amount from XML based on allowance type
             //////////
-            ///DONE IN CHANGE
 
             var show = ''
             var show2 = ''
@@ -577,8 +781,8 @@
                             }
                             else {
                                 if (document.getElementById('AllowancesAmountUnits')) {
-                                document.getElementById('AllowancesAmountUnits').value = show;
-                                    }
+                                    document.getElementById('AllowancesAmountUnits').value = show;
+                                }
                             }
 
                         }
@@ -593,146 +797,109 @@
                 }
 
 
-
-
-
-                ////OLD
-                //if (dep == '150B - Hourly Location Allow') {
-                //    if (bus == 'Store Bristol 264') {
-                //        //alert();
-                //        if (document.getElementById('AllowancesAmountUnits')) {
-                //            document.getElementById('AllowancesAmountUnits').value = '0,10';
-                //        }
-                //        res = '1';
-                //    }
-                //    else if (bus == 'Store London Croydon 144') {
-                //        if (document.getElementById('AllowancesAmountUnits')) {
-                //            document.getElementById('AllowancesAmountUnits').value = '1,28';
-                //        }
-                //        res = '1';
-                //    }
-                //    else if (bus == 'Store London Lakeside 262') {
-                //        if (document.getElementById('AllowancesAmountUnits')) {
-                //            document.getElementById('AllowancesAmountUnits').value = '0,77';
-                //        }
-                //        res = '1';
-                //    }
-                //    else if (bus == 'Store Milton Keynes 185') {
-                //        if (document.getElementById('AllowancesAmountUnits')) {
-                //            document.getElementById('AllowancesAmountUnits').value = '0,35';
-                //        }
-                //        res = '1';
-                //    }
-                //    else if (bus == 'Store London Tottenham 255') {
-                //        if (document.getElementById('AllowancesAmountUnits')) {
-                //            document.getElementById('AllowancesAmountUnits').value = '1,28';
-                //        }
-                //        res = '1';
-                //    }
-                //    else if (bus == 'Store London Wembley 141') {
-                //        if (document.getElementById('AllowancesAmountUnits')) {
-                //            document.getElementById('AllowancesAmountUnits').value = '1,28';
-                //        }
-                //        res = '1';
-                //    }
-                //    else if (bus == 'Service Office UK') {
-                //        if (document.getElementById('AllowancesAmountUnits')) {
-                //            document.getElementById('AllowancesAmountUnits').value = '1,28';
-                //        }
-                //        res = '1';
-                //    }
-                //}
-                //else if (dep == '100B - Salary Location Allow') {
-                //    if (bus == 'Store Bristol 264') {
-                //        if (document.getElementById('AllowancesAmountUnits')) {
-                //            document.getElementById('AllowancesAmountUnits').value = '203,00';
-                //        }
-                //        res = '1';
-                //    }
-                //    else if (bus == 'Store London Croydon 144') {
-                //        if (document.getElementById('AllowancesAmountUnits')) {
-                //            document.getElementById('AllowancesAmountUnits').value = '2600,00';
-                //        }
-                //        res = '1';
-                //    }
-                //    else if (bus == 'Store London Lakeside 262') {
-                //        if (document.getElementById('AllowancesAmountUnits')) {
-                //            document.getElementById('AllowancesAmountUnits').value = '1560,00';
-                //        }
-                //        res = '1';
-                //    }
-                //    else if (bus == 'Store Milton Keynes 185') {
-                //        if (document.getElementById('AllowancesAmountUnits')) {
-                //            document.getElementById('AllowancesAmountUnits').value = '709,00';
-                //        }
-                //        res = '1';
-                //    }
-                //    else if (bus == 'Store London Tottenham 255') {
-                //        if (document.getElementById('AllowancesAmountUnits')) {
-                //            document.getElementById('AllowancesAmountUnits').value = '2600,00';
-                //        }
-                //        res = '1';
-                //    }
-                //    else if (bus == 'Store London Wembley 141') {
-                //        if (document.getElementById('AllowancesAmountUnits')) {
-                //            document.getElementById('AllowancesAmountUnits').value = '2600,00';
-                //        }
-                //        res = '1';
-                //    }
-                //    else if (bus == 'Service Office UK') {
-                //        if (document.getElementById('AllowancesAmountUnits')) {
-                //            document.getElementById('AllowancesAmountUnits').value = '2600,00';
-                //        }
-                //        res = '1';
-                //    }
-                //}
-                //else {
-                //    if (department.toString().trim() == d.toString().trim()) {
-
-                //        if (show != '') {
-                //            if (document.getElementById('AllowancesAmountUnits')) {
-                //                document.getElementById('AllowancesAmountUnits').value = show;
-                //            }
-
-                //            res = '1';
-                //        }
-
-                //        if (show2 != '') {
-                //            var n = show2.indexOf(",");
-                //            if (n == -1) {
-                //                if (document.getElementById('AllowancesAmountUnits')) {
-                //                    document.getElementById('AllowancesNetGross').value = show2;
-                //                }
-                //            }
-                //            else {
-                //                var res = show2.substring(0, n);
-                //                if (document.getElementById('AllowancesAmountUnits')) {
-                //                    document.getElementById('AllowancesNetGross').value = res;
-                //                }
-                //            }
-                //            res = '1';
-                //        }
-
-
-                //        if (res == 1) {
-                //            return;
-                //        }
-                //    }
-                //}
             });
         }
 
 
-
-        function addAllowanceOnPayroll() {
+        function addPayScaleOnPayroll() {
             //////////
-            //Add deduction types on selected payroll category
+            //addPayScaleOnPayroll:
+            //Calls addPayScaleOnPayrollXML to add payscale on selected payroll category
             //////////
-            //DONE IN CHANGE
 
             var path = window.location.protocol + '//';
             path = path + window.location.host + '/';
 
+
+            path = site.baseUrl + '/FormLibContent/Xmls/UnitedKingdom/Templates/predefined_payroll_payscale_outs.xml'
+
+            $.ajax({
+                type: "GET",
+                url: path,
+                dataType: "xml",
+                success: addPayScaleOnPayrollXML,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
+                    alert(textStatus);
+                    alert(errorThrown);
+                }
+
+            });
+
+
+        }
+
+
+        function addPayScaleOnPayrollXML(xml) {
+            //////////
+            //addPayScaleOnPayrollXML:
+            //Adds payscale on selected payroll category
+            //////////
+
+            var show = ''
+            var dep = '';
+
+            if (document.getElementById('PayrollCategory')) {
+                dep = $("#PayrollCategory option:selected").text();
+            }
+
+            var temp = '';
+            //alert('dfa');
+            $(xml).find('dependent').each(function () {
+
+                var $sel = $(this);
+
+                show = '';
+
+                var department = $sel.find('selected').text();
+
+                show = $sel.find('show').text();
+
+                if (department.toString().trim() == dep.toString().trim()) {
+
+                    if (show != '') {
+
+                        var optionsarray = show.split(',');
+                        var seloption = "";
+
+                        $('#PayScaleGroup')
+                            .find('option')
+                            .remove();
+
+
+                        optionsarray.push('');
+
+
+                        $.each(optionsarray, function (key, value) {
+
+
+                            var s = value.replace(/\n/g, '');
+
+                            $('#PayScaleGroup')
+                                .append($("<option></option>")
+                                .attr("value", s)
+                                .text(s));
+                        });
+
+
+
+                        return;
+                    }
+
+
+                }
+            });
+
+        }
+
+        function addAllowanceOnPayroll() {
+            //////////
+            //addAllowanceOnPayroll:
+            //Calls addAllowanceOnPayrollXML to Add Allowance types on selected payscale
+            //////////
+
+            var path = window.location.protocol + '//';
+            path = path + window.location.host + '/';
 
             path = site.baseUrl + '/FormLibContent/Xmls/UnitedKingdom/Templates/predefined_payroll_allowance_outs.xml'
 
@@ -754,7 +921,11 @@
 
 
         function addAllowanceOnPayrollXML(xml) {
-            ///DONE IN CHANGE
+            //////////
+            //addAllowanceOnPayroll:
+            //Adds Allowance types on selected payscale
+            //////////
+
             var show = ''
             var dep = '';
 
@@ -785,6 +956,13 @@
                             .find('option')
                             .remove();
 
+                        $('#AllowancesType2')
+                                .find('option')
+                                .remove();
+
+                        $('#AllowancesType3')
+                            .find('option')
+                            .remove();
 
                         seloption = '<option value="' + temp + '">' + temp + '</option>';
 
@@ -794,6 +972,8 @@
 
 
                         $('#AllowancesType').append(seloption);
+                        $('#AllowancesType2').append(seloption);
+                        $('#AllowancesType3').append(seloption);
 
 
 
@@ -811,9 +991,9 @@
 
         function addTecProviders() {
             //////////
-            //Add deduction types on selected payroll category
+            //addAllowanceOnPayroll:
+            //Calls addTecProvidersXML to add tec providers on selected businessunit
             //////////
-            ///DONE IN CHANGE
 
             var path = window.location.protocol + '//';
             path = path + window.location.host + '/';
@@ -836,9 +1016,10 @@
 
         function addTecProvidersXML(xml) {
             //////////
-            //Sets Line manager from predefined_linemanager_department_outs.XML and selected department
+            //addTecProvidersXML:
+            //Adds tec providers on selected businessunit
             //////////
-            ///DONE IN CHANGE
+
             var show = ''
             if (document.getElementById('TECApprover')) {
                 $('#TECApprover')[0].selectize.setValue('');
@@ -847,7 +1028,6 @@
             if (document.getElementById('BusinessUnit')) {
                 dep = $("#BusinessUnit option:selected").text();
             }
-            //var line = $("#ReportsToLineManager option:selected").text();
 
             var line = '';
             if (document.getElementById('ReportsToLineManager')) {
@@ -855,7 +1035,6 @@
             }
 
             if (dep == 'Distribution Centre Peterborough 012' | dep == 'IKEA Property Services' | dep == 'Peterborough Contact Centre' | dep == 'Service Office UK' | dep == 'Customer Distribution Centre Peterborough 269') {
-                //alert(line);
                 if (document.getElementById('TECApprover')) {
                     $('#TECApprover')[0].selectize.setValue(line);
                 }
@@ -896,9 +1075,9 @@
 
         function setAllowanceTypeXML2(xml) {
             //////////
-            //Sets allowance type units from predefined_allowancetype_units_outs.XML based on Allowance type
+            //setAllowanceTypeXML2:
+            //Adds units on selected allowance type
             //////////
-            ///DONE IN CHANGE
 
             var show = ''
             var show2 = ''
@@ -1081,9 +1260,9 @@
 
         function setAllowanceTypeXML3(xml) {
             //////////
-            //Sets allowance type units from predefined_allowancetype_units_outs.XML based on Allowance type
+            //setAllowanceTypeXML3:
+            //Adds units on selected allowance type
             //////////
-            ///DONE IN CHANGE
 
             var show = ''
             var show2 = ''
@@ -1267,23 +1446,13 @@
 
 
 
-        //$('#PayrollCategory').change(function () {
-        jQuery('#PayrollCategory').change(function () {
-            //////////
-            //PAyroll category change function
-            //////////
-            ///DONE IN CHANGE
-            setBasicPayAmount();
-            addAllowanceOnPayroll();
-            setPayrollCategory();
-
-            addDeductionTypesOnPayroll();
-
-
-        });
 
         function addDeductionTypesOnPayrollXML(xml) {
-            ///DONE IN CHANGE
+            //////////
+            //setAllowanceTypeXML3:
+            //Adds deduction types on selected payroll category
+            //////////
+
             var show = ''
 
             var dep = '';
@@ -1338,9 +1507,9 @@
 
         function addDeductionTypesOnPayroll() {
             //////////
-            //Add deduction types on selected payroll category
+            //setAllowanceTypeXML3:
+            //Calls addDeductionTypesOnPayrollXML to add deduction types on selected payroll category
             //////////
-            ///DONE IN CHANGE
 
             var path = window.location.protocol + '//';
             path = path + window.location.host + '/';
@@ -1361,35 +1530,14 @@
                 }
 
             });
-
-
         }
-
-        $('#JobTitle').change(function () {
-            //////////
-            //JobTitle change function
-            //////////
-            ///DONE IN CHANGE
-
-            setPayrollCategory();
-        });
-
-        $('#PayScaleGroup').change(function () {
-            //////////
-            //pay scale group change functon to set basic pay amount
-            //////////
-            ///DONE IN CHANGE
-
-            setBasicPayAmount();
-
-        });
 
 
         function setBasicPayAmount() {
             //////////
-            //Sets Basic pay amount based on payroll category and pay scale group
+            //setBasicPayAmount:
+            //Sets amount on selected payroll category
             //////////
-            ///DONE IN CHANGE
 
             if (document.getElementById('BasicPayAmount')) {
                 document.getElementById('BasicPayAmount').value = ''
@@ -1402,7 +1550,7 @@
             }
             var grp = '';
             if (document.getElementById('PayScaleGroup')) {
-                grp = document.getElementById('PayScaleGroup').value;
+                grp = $("#PayScaleGroup option:selected").text();
             }
 
             var pay = '';
@@ -1411,42 +1559,51 @@
             }
 
 
-            if (pay == 'Hourly') {
 
-                if (bus == 'Peterborough Contact Centre') {
-                    if (grp == 'STARTER') {
+            if (pay.toString().trim() == 'Hourly') {
+                var show;
+
+                show = 'STARTER';
+
+                if (grp == '') {
+                    grp = 'STARTER';
+                    document.getElementById('PayScaleGroup').value = grp;
+                    document.getElementById('PayScaleGroup').selectedIndex = 1;
+                }
+
+                if (bus.toString().trim() == 'Peterborough Contact Centre') {
+                    if (grp.toString().trim() == 'STARTER') {
                         if (document.getElementById('BasicPayAmount')) {
                             document.getElementById('BasicPayAmount').value = '7,84'
                         }
                     }
                 }
-                else if (bus == 'Customer Distribution Centre Peterborough 269' | bus == 'Distribution Centre Peterborough 012') {
-                    if (grp == 'STARTER') {
+                else if (bus.toString().trim() == 'Customer Distribution Centre Peterborough 269' | bus == 'Distribution Centre Peterborough 012') {
+                    if (grp.toString().trim() == 'STARTER') {
 
                         if (document.getElementById('BasicPayAmount')) {
-                            //$('#BasicPayAmount')[0].selectize.setValue('8,45');
-
                             document.getElementById('BasicPayAmount').value = '8,45'
                         }
                     }
-                    else if (grp == 'APPRENT1') {
+                    else if (grp.toString().trim() == 'APPRENT1') {
                         if (document.getElementById('BasicPayAmount')) {
                             document.getElementById('BasicPayAmount').value = '7,69'
                         }
                     }
-                    else if (grp == 'APPRENT2') {
+                    else if (grp.toString().trim() == 'APPRENT2') {
                         if (document.getElementById('BasicPayAmount')) {
                             document.getElementById('BasicPayAmount').value = '6,66'
                         }
                     }
                 }
                 else {
-                    if (grp == 'STARTER') {
+
+                    if (grp.toString().trim() == 'STARTER') {
                         if (document.getElementById('BasicPayAmount')) {
                             document.getElementById('BasicPayAmount').value = '7,13'
                         }
                     }
-                    else if (grp == 'INTERN') {
+                    else if (grp.toString().trim() == 'INTERN') {
                         if (document.getElementById('BasicPayAmount')) {
                             document.getElementById('BasicPayAmount').value = '6,50'
                         }
@@ -1455,50 +1612,6 @@
 
             }
 
-            //if (bus == 'Store Cardiff 267' | bus == 'Store Edinburgh 265') {
-            //    if (grp == 'STARTER') {
-            //        if (document.getElementById('BasicPayAmount')) {
-            //            document.getElementById('BasicPayAmount').value = '6,31'
-            //        }
-            //    }
-            //}
-            //else if (bus == 'Peterborough Contact Centre') {
-            //    if (grp == 'STARTER') {
-            //        if (document.getElementById('BasicPayAmount')) {
-            //            document.getElementById('BasicPayAmount').value = '7,69'
-            //        }
-            //    }
-            //}
-            //else if (bus == 'Customer Distribution Centre Peterborough 269' | bus == 'Distribution Centre Peterborough 012') {
-            //    if (grp == 'STARTER') {
-            //        if (document.getElementById('BasicPayAmount')) {
-            //            document.getElementById('BasicPayAmount').value = '8,45'
-            //        }
-            //    }
-            //    else if (grp == 'APPRENT1') {
-            //        if (document.getElementById('BasicPayAmount')) {
-            //            document.getElementById('BasicPayAmount').value = '7,69'
-            //        }
-            //    }
-            //    else if (grp == 'APPRENT2') {
-            //        if (document.getElementById('BasicPayAmount')) {
-            //            document.getElementById('BasicPayAmount').value = '6,66'
-            //        }
-            //    }
-            //}
-            //else {
-
-            //    if (grp == 'STARTER') {
-            //        if (document.getElementById('BasicPayAmount')) {
-            //            document.getElementById('BasicPayAmount').value = '6,99'
-            //        }
-            //    }
-            //    else if (grp == 'INTERN') {
-            //        if (document.getElementById('BasicPayAmount')) {
-            //            document.getElementById('BasicPayAmount').value = '6,31'
-            //        }
-            //    }
-            //}
 
 
 
@@ -1506,9 +1619,10 @@
 
         function setCostCentre(xml) {
             //////////
-            //Sets cost centre from predefined_costcentre_department_outs.XML and selected department
+            //setCostCentre:
+            //Sets CostCentre selected department
             //////////
-            ///DONE IN CHANGE
+
 
             var show = ''
 
@@ -1548,93 +1662,7 @@
             });
         }
 
-        $('#ServiceArea').change(function () {
 
-            //Line manager job title
-            path = '';
-            var path = window.location.protocol + '//';
-            path = path + window.location.host + '/';
-
-
-
-            //path = site.baseUrl + '/FormLibContent/Xmls/UnitedKingdom/Templates/predefined_department_jobtitle_UK_outs.xml'
-            path = site.baseUrl + '/FormLibContent/Xmls/UnitedKingdom/Templates/predefined_function_jobtitleUK_outs.xml'
-
-
-            $.ajax({
-                type: "GET",
-                url: path,
-                dataType: "xml",
-                success: setLineManagerJobTitle,
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert(jqXHR.responseText);
-                    alert(textStatus);
-                    alert(errorThrown);
-                }
-
-            });
-
-        });
-
-
-
-        $('#Department').change(function () {
-            //////////
-            //Change function for Department
-            //////////
-            ///DONE IN CHANGE
-
-
-
-            //Cost centre department
-            var path = window.location.protocol + '//';
-            path = path + window.location.host + '/';
-
-
-            path = site.baseUrl + '/FormLibContent/Xmls/UnitedKingdom/Templates/predefined_department_costcentre_outs.xml'
-
-            $.ajax({
-                type: "GET",
-                url: path,
-                dataType: "xml",
-                success: setCostCentre,
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert(jqXHR.responseText);
-                    alert(textStatus);
-                    alert(errorThrown);
-                }
-
-            });
-
-
-            //Line manager department
-            path = '';
-            var path = window.location.protocol + '//';
-            path = path + window.location.host + '/';
-
-
-            path = site.baseUrl + '/FormLibContent/Xmls/UnitedKingdom/Templates/predefined_linemanager_department_outs_UK.xml'
-
-            $.ajax({
-                type: "GET",
-                url: path,
-                dataType: "xml",
-                success: setLineManager,
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert(jqXHR.responseText);
-                    alert(textStatus);
-                    alert(errorThrown);
-                }
-
-            });
-
-
-
-
-
-
-
-        });
 
 
 
@@ -1642,19 +1670,15 @@
 
         function setLineManagerJobTitle(xml) {
             //////////
-            //Sets Line manager job title from predefined_linemanager_jobtitle_outs.XML and selected line manager
+            //setLineManagerJobTitle:
+            //Adds Jobtitles on selected Function
             //////////
-            ///DONE IN CHANGE
+
+            $('#JobTitle').off('change');
 
             var show = ''
-            //var dep = $("#ReportsToLineManager option:selected").text();
-            //if (document.getElementById('ManagersJobTitle')) {
-            //    $('#ManagersJobTitle')[0].selectize.setValue('');
-            //}
+
             var dep = '';
-            //if (document.getElementById('ReportsToLineManager')) {
-            //    document.getElementById('ReportsToLineManager').value;
-            //}
 
             if (document.getElementById('ServiceArea')) {
                 dep = $("#ServiceArea option:selected").text();
@@ -1663,7 +1687,7 @@
             var selectize_tags = $("#JobTitle")[0].selectize
             selectize_tags.clearOptions();
 
-
+            
             $(xml).find('dependent').each(function () {
 
 
@@ -1682,9 +1706,11 @@
 
 
 
-
+                        //show = ' ,' + show;
                         var optionsarray = show.split(',');
-                        optionsarray.push('   ');
+                        optionsarray.unshift('');
+
+
 
                         $.each(optionsarray, function (i) {
                             selectize_tags.addOption({
@@ -1692,27 +1718,44 @@
                                 value: optionsarray[i]
                             });
                             selectize_tags.addItem(optionsarray[i])
+
                         });
 
-
-
+                        $('#JobTitle')[0].selectize.setValue('');
 
                         return;
 
                     }
                 }
             });
+
+            $('#JobTitle').on('change', function () {
+
+                //JobTitle change function                                  
+                setDefaultPayroll();
+                addDeductionTypesOnPayroll();
+                addAllowanceOnPayroll();
+                addPayScaleOnPayroll();
+                setPayrollCategory();
+                setBasicPayAmount();
+            });
+
+
+
         }
 
         function setLineManager(xml) {
             //////////
+            //setLineManager:
             //Sets Line manager from predefined_linemanager_department_outs.XML and selected department
             //////////
-            ///DONE IN CHANGE
 
             var show = ''
             if (document.getElementById('ReportsToLineManager')) {
                 $('#ReportsToLineManager')[0].selectize.setValue('');
+            }
+            if (document.getElementById('ManagerJobTitle')) {
+                $('#ManagerJobTitle')[0].selectize.setValue('');
             }
             var dep = '';
             if (document.getElementById('Department')) {
@@ -1751,17 +1794,26 @@
 
         function setPayrollCategory() {
             //////////
-            //Sets PayScaleGroup, OneIKEABonusLevel, BenefitLevel from predefined_payroll_category_outs.XML and selected Job title and payroll category
+            //setPayrollCategory:
+            //Sets Payscale from selected payroll cateogry
             //////////
-            ///DONE IN CHANGE
 
             var sal = '';
+
             if (document.getElementById('PayrollCategory')) {
                 sal = document.getElementById('PayrollCategory').value;
+                if (sal == '') {
+                    sal = $("#PayrollCategory option:selected").text();
+                }
+            }
+            var bus = '';
+            if (document.getElementById('BusinessUnit')) {
+                bus = $("#BusinessUnit option:selected").text();
+
             }
 
-            if (sal == 'Salaried' | sal == 'Salaried Management' | sal == 'Salaried Senior Management') {
 
+            if (sal.toString().trim() == 'Salaried' | sal.toString().trim() == 'Salaried Management' | sal.toString().trim() == 'Salaried Senior Management') {
 
 
                 var path = window.location.protocol + '//';
@@ -1770,6 +1822,7 @@
 
 
                 path = site.baseUrl + '/FormLibContent/Xmls/UnitedKingdom/Templates/predefined_payroll_category_outs.xml'
+
 
                 $.ajax({
                     type: "GET",
@@ -1787,31 +1840,55 @@
 
             }
             else if (sal == 'Hourly') {
+                //alert();
                 if (document.getElementById('PayScaleGroup')) {
-                    document.getElementById('PayScaleGroup').value = '';
+                    // debugger;
+                    document.getElementById('PayScaleGroup').value = 'STARTER';
+                    //document.getElementById('PayScaleGroup').selectedIndex = 2;
+                    //alert();
                 }
                 if (document.getElementById('BenefitLevel')) {
                     document.getElementById('BenefitLevel').value = '';
                 }
-
-
-
-
             }
+
         }
 
-        function setPayrollCategoryXML(xml) {
+        function setDefaultPayroll() {
             //////////
-            //Sets PayScaleGroup, OneIKEABonusLevel, BenefitLevel from predefined_payroll_category_outs.XML and selected Job title and payroll category
+            //setDefaultPayroll:
+            //Sets Payrpll category from jobtitle
             //////////
-            ///DONE IN CHANGE
+
+            var path = window.location.protocol + '//';
+            path = path + window.location.host + '/';
+
+            path = site.baseUrl + '/FormLibContent/Xmls/UnitedKingdom/Templates/predefined_payroll_category_outs.xml'
+
+
+
+            $.ajax({
+                type: "GET",
+                url: path,
+                dataType: "xml",
+                success: setDefaultPayrollXML,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
+                    alert(textStatus);
+                    alert(errorThrown);
+                }
+
+            });
+
+        }
+        function setDefaultPayrollXML(xml) {
+            //////////
+            //setDefaultPayrollXML:
+            //Sets Payrpll category from jobtitle
+            //////////
+
 
             var show = ''
-            var show2 = ''
-            var show3 = ''
-            var show4 = ''
-            var show5 = ''
-            var show6 = ''
             var res = '0';
 
             var dep = '';
@@ -1825,6 +1902,82 @@
             }
 
 
+
+            $(xml).find('dependent').each(function () {
+
+
+                var $sel = $(this);
+                show = '';
+
+                var department = $sel.find('selected').text();
+
+                show = $sel.find('show7').text();
+
+
+                if (department.toString().trim() == dep.toString().trim()) {
+
+
+                    res = '1';
+                    if (show != '') {
+                        var n = show.indexOf(",");
+                        if (n == -1) {
+                            if (document.getElementById('PayrollCategory')) {
+                                document.getElementById('PayrollCategory').value = show;
+                            }
+                        }
+                        else {
+                            var res = show.substring(0, n);
+                            if (document.getElementById('PayrollCategory')) {
+                                document.getElementById('PayrollCategory').value = res;
+                            }
+                        }
+                    }
+                    else {
+                        if (document.getElementById('PayrollCategory')) {
+                            document.getElementById('PayrollCategory').value = '';
+                        }
+                    }
+
+
+
+                }
+            });
+
+            addPayScaleOnPayroll();
+
+            setPayrollCategory();
+
+            setBasicPayAmount();
+        }
+
+        function setPayrollCategoryXML(xml) {
+            //////////
+            //setDefaultPayrollXML:
+            //Sets Payrpll category from jobtitle
+            //////////
+
+            var show = ''
+            var show2 = ''
+            var show3 = ''
+            var show4 = ''
+            var show5 = ''
+            var show6 = ''
+            var show7 = ''
+            var res = '0';
+
+            var dep = '';
+            if (document.getElementById('JobTitle')) {
+                dep = document.getElementById('JobTitle').value;
+            }
+
+            var bus = '';
+            if (document.getElementById('BusinessUnit')) {
+                bus = $("#BusinessUnit option:selected").text();
+            }
+
+
+
+
             $(xml).find('dependent').each(function () {
 
 
@@ -1835,8 +1988,10 @@
                 show4 = '';
                 show5 = '';
                 show6 = '';
+                show7 = '';
 
                 var department = $sel.find('selected').text();
+                var empty = '';
 
                 show = $sel.find('show1').text();
                 show2 = $sel.find('show2').text();
@@ -1844,18 +1999,23 @@
                 show4 = $sel.find('show4').text();
                 show5 = $sel.find('show5').text();
                 show6 = $sel.find('show6').text();
+                show7 = $sel.find('show7').text();
 
 
+                if (department.toString().trim() == dep.toString().trim()) {
 
-                if (department == dep) {
 
                     if (bus == 'Store Manchester 186' | bus == 'Store Belfast 113' | bus == 'Store Cardiff 267' | bus == 'Store Edinburgh 265' | bus == 'Store Gateshead 143' | bus == 'Store Milton Keynes 185' | bus == 'Store Coventry 150') {
                         res = '1';
+
+
                         if (show != '') {
                             var n = show.indexOf(",");
                             if (n == -1) {
                                 if (document.getElementById('PayScaleGroup')) {
+
                                     document.getElementById('PayScaleGroup').value = show;
+
                                 }
                             }
                             else {
@@ -1867,17 +2027,20 @@
                         }
                         else {
                             if (document.getElementById('PayScaleGroup')) {
-                                document.getElementById('PayScaleGroup').value = '';
+                                document.getElementById('PayScaleGroup').value = empty;
                             }
                         }
                     }
                     else if (bus == 'Store Bristol 264' | bus == 'Store London Tottenham 255' | bus == 'Store Glasgow 266' | bus == 'Store London Lakeside 262' | bus == 'Store Leeds 261' | bus == 'Store Nottingham 263' | bus == 'Store Southampton 125' | bus == 'Store Warrington 140' | bus == 'Store Birmingham 142') {
                         res = '1';
                         if (show2 != '') {
+
                             var n = show2.indexOf(",");
                             if (n == -1) {
                                 if (document.getElementById('PayScaleGroup')) {
+
                                     document.getElementById('PayScaleGroup').value = show2;
+
                                 }
                             }
                             else {
@@ -1890,7 +2053,8 @@
                         }
                         else {
                             if (document.getElementById('PayScaleGroup')) {
-                                document.getElementById('PayScaleGroup').value = '';
+
+                                document.getElementById('PayScaleGroup').value = empty;
                             }
                         }
                     }
@@ -1900,19 +2064,21 @@
                             var n = show3.indexOf(",");
                             if (n == -1) {
                                 if (document.getElementById('PayScaleGroup')) {
+
                                     document.getElementById('PayScaleGroup').value = show3;
                                 }
                             }
                             else {
                                 var res = show3.substring(0, n);
                                 if (document.getElementById('PayScaleGroup')) {
+
                                     document.getElementById('PayScaleGroup').value = res;
                                 }
                             }
                         }
                         else {
                             if (document.getElementById('PayScaleGroup')) {
-                                document.getElementById('PayScaleGroup').value = '';
+                                document.getElementById('PayScaleGroup').value = empty;
                             }
                         }
                     }
@@ -1922,6 +2088,7 @@
                             var n = show4.indexOf(",");
                             if (n == -1) {
                                 if (document.getElementById('PayScaleGroup')) {
+
                                     document.getElementById('PayScaleGroup').value = show4;
                                 }
                             }
@@ -1934,12 +2101,12 @@
                         }
                         else {
                             if (document.getElementById('PayScaleGroup')) {
-                                document.getElementById('PayScaleGroup').value = '';
+                                document.getElementById('PayScaleGroup').value = empty;
                             }
                         }
                     }
 
-                    setBasicPayAmount();
+                    //setBasicPayAmount();
 
                     if (show6 != '') {
                         var n = show6.indexOf(",");
@@ -1989,19 +2156,13 @@
                         $('#notice_BenefitLevel').show();
                     }
 
-                    if (res == 1) {
-                        return;
-                    }
                 }
             });
         }
 
 
 
-        $('#date_ContractStartDate').datepicker().on('changeDate', function (ev) {
 
-            setProbationEndDate($('#ProbationPeriod').val());
-        });
     });
 
 </script>

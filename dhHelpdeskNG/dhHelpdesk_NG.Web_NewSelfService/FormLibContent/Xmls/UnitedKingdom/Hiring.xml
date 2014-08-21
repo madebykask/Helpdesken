@@ -3,9 +3,9 @@
   <!ENTITY languages SYSTEM "Templates/Languages.xml">
   <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
   <!ENTITY state SYSTEM "Templates/HiringState.xml">
-  <!ENTITY pre_allowancestype_netgross SYSTEM "Templates/Predefined_Allowances_NetGross.xml">
+  <!--<!ENTITY pre_allowancestype_netgross SYSTEM "Templates/Predefined_Allowances_NetGross.xml">
   <!ENTITY pre_allowancestype_netgross2 SYSTEM "Templates/Predefined_Allowances_NetGross2.xml">
-  <!ENTITY pre_allowancestype_netgross3 SYSTEM "Templates/Predefined_Allowances_NetGross3.xml">
+  <!ENTITY pre_allowancestype_netgross3 SYSTEM "Templates/Predefined_Allowances_NetGross3.xml">-->
   <!ENTITY pre_payrollcategory_deductionstype SYSTEM "Templates/Predefined_PayrollCategory_DeductionsType.xml">
   <!ENTITY pre_payrollcategory_deductionstype2 SYSTEM "Templates/Predefined_PayrollCategory_DeductionsType2.xml">
   <!ENTITY pre_payrollcategory_deductionstype3 SYSTEM "Templates/Predefined_PayrollCategory_DeductionsType3.xml">
@@ -32,15 +32,29 @@
           <option value="Re-Hire">Re-Hire</option>
         </options>
       </element>
-      <element type="date" name="ContractStartDate" label="Contract Start Date" format="dd.MM.yyyy" mandatory="1">
+        <element type="date" name="ContractStartDate" label="Contract Start Date" format="dd.MM.yyyy" mandatory="1">
 
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="date" name="InductionDate" mandatory="1" label="Induction Date" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element type="text" name="InductionStartTime" mandatory="1" label="Induction Start Time">
+      <element type="text" name="InductionStartTime" mandatory="1" label="Induction Start Time - Day 1">
         <regex inherit="timestamp" pattern="" message=""></regex>
+      </element>
+
+      <element type="text" name="InductionEndTime" mandatory="1" label="Induction End Time - Day 1">
+        <regex inherit="timestamp" pattern="" message=""></regex>
+      </element>
+
+      <element type="text" name="InductionStartTime2" label="Induction Start Time - Day 2">
+        <regex inherit="timestamp" pattern="" message=""></regex>
+        <mandatoryIf name="LengthOfInductionInDays">2 days,3 days,4 days</mandatoryIf>
+      </element>
+
+      <element type="text" name="InductionEndTime2"  label="Induction End Time - Day 2">
+        <regex inherit="timestamp" pattern="" message=""></regex>
+        <mandatoryIf name="LengthOfInductionInDays">2 days,3 days,4 days</mandatoryIf>
       </element>
       <element type="select" name="LengthOfInductionInDays" mandatory="1" label="Length of Induction in days" default="2 days">
         <options>
@@ -51,14 +65,11 @@
           <option value="4 days">4 days</option>
         </options>
       </element>
-      <element type="text" name="InductionEndTime" mandatory="1" label="Induction End Time">
-        <regex inherit="timestamp" pattern="" message=""></regex>
-      </element>
       <element type="date" name="PreviousContractStartDate" label="Previous Contract Start Date" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
         <mandatoryIf name="NewToIKEA">Re-Hire</mandatoryIf>
       </element>
-      <element type="select" name="ServiceRequestPriority" mandatory="1" label="Service Request Priority">
+      <element type="select" name="ServiceRequestPriority" mandatory="1" label="Service Request Priority" default="Standard">
         <options>
           <option value=""></option>
           <option value="Urgent">Urgent</option>
@@ -67,7 +78,7 @@
       </element>
       <element type="text" name="Co-WorkerID" label="Co-Worker ID">
         <mandatoryIf name="NewToIKEA">International Transfer</mandatoryIf>
-        <regex inherit="employeeno" pattern="" message=""></regex>
+        <regex inherit="employeeno" pattern="" message="" ></regex>
       </element>
       <element type="text" name="GlobalHRID" label="Global HR ID">
         <mandatoryIf name="NewToIKEA">International Transfer</mandatoryIf>
@@ -90,6 +101,7 @@
       </element>
       <element type="text" name="PermanentAddressLine1" label="Address line 1" mandatory="1"></element>
       <element type="text" name="PermanentAddressLine2" label="Address line 2"></element>
+      <element type="text" name="PermanentAddressLine3" label="Address line 3"></element>
       <element type="text" name="PermanentPostalCode" label="Postal code" mandatory="1"></element>
       <element type="text" name="PermanentCity" label="City" mandatory="1"></element>
       <element type="search-select" source="1" name="PermanentCountry" label="Country" mandatory="1" default="United Kingdom">
@@ -1539,7 +1551,7 @@
           <option value="Warehouse Oper">Warehouse Oper</option>-->
         </options>
       </element>
-      <element type="search-select" name="HomeCostCentre" label="Home Cost Centre">
+      <element type="search-select" name="HomeCostCentre" label="Home Cost Centre" mandatory="1">
         <regex inherit="maxfourdigit" message="" pattern=""></regex>
         <options>
           <option value=""></option>
@@ -1622,7 +1634,7 @@
           <option value="8500">8500</option>
         </options>
       </element>
-      <element type="text" name="CostAllocation" label="Cost Allocation" default="100">
+      <element type="text" name="CostAllocation" label="Cost Allocation &#37;" default="100">
         <regex inherit="unsignednum" pattern="" message=""></regex>
         <regex inherit="numFrom1To100" pattern="" message=""></regex>
       </element>
@@ -2165,9 +2177,780 @@
         </options>
       </element>
       <element type="search-select" name="ReportsToLineManager" label="Reports to Line Manager" >
-        <options>
+        <options>                    
           <option value=""></option>
+          <option value="GEMMA ARRANZ">GEMMA ARRANZ</option>
+          <option value="Debbie Cox">Debbie Cox</option>
+          <option value="Wim Blaauw">Wim Blaauw</option>
+          <option value="Menno Besseling">Menno Besseling</option>
+          <option value="Pernille Hagild">Pernille Hagild</option>
+          <option value="Catherine Bell">Catherine Bell</option>
+          <option value="Ann Pendlebury">Ann Pendlebury</option>
+          <option value="Karen Hamilton">Karen Hamilton</option>
+          <option value="Heather Rooke">Heather Rooke</option>
+          <option value="Jo Smith">Jo Smith</option>
+          <option value="Sharon Pearce">Sharon Pearce</option>
+          <option value="Suzanne Gordon">Suzanne Gordon</option>
+          <option value="DARREN LANCASTER">DARREN LANCASTER</option>
+          <option value="Emily Birkin">Emily Birkin</option>
+          <option value="Matthew Fessey">Matthew Fessey</option>
+          <option value="Clare Rodgers">Clare Rodgers</option>
+          <option value="Iain Crone">Iain Crone</option>
+          <option value="Alex McCulloch">Alex McCulloch</option>
+          <option value="Mags McQuade">Mags McQuade</option>
+          <option value="Lorraine Packer">Lorraine Packer</option>
+          <option value="Beverley Aithwaite">Beverley Aithwaite</option>
+          <option value="Ben Rosser">Ben Rosser</option>
+          <option value="Alan Tarbuck">Alan Tarbuck</option>
+          <option value="Anthony Bowsher">Anthony Bowsher</option>
+          <option value="Jane Brookes">Jane Brookes</option>
+          <option value="Reuben Humphreys">Reuben Humphreys</option>
+          <option value="Jack Jackson">Jack Jackson</option>
+          <option value="Sarah Hunt">Sarah Hunt</option>
+          <option value="Lee Tupshafski">Lee Tupshafski</option>
+          <option value="Alan Felstead">Alan Felstead</option>
+          <option value="Roger Cooper">Roger Cooper</option>
+          <option value="Mattias Ronngard">Mattias Ronngard</option>
+          <option value="Sarah Williamson">Sarah Williamson</option>
+          <option value="Gerard Bos">Gerard Bos</option>
+          <option value="Sara Winn">Sara Winn</option>
+          <option value="Danny Chorley">Danny Chorley</option>
+          <option value="Gavin Lowe">Gavin Lowe</option>
+          <option value="Nicholas Earle">Nicholas Earle</option>
+          <option value="Lewis Marshall">Lewis Marshall</option>
+          <option value="Radhika Vyas-Shah">Radhika Vyas-Shah</option>
           <option value="Aaron Mitchell">Aaron Mitchell</option>
+          <option value="Michelle Roberts">Michelle Roberts</option>
+          <option value="Jeanette Hagberg">Jeanette Hagberg</option>
+          <option value="Delia Matrecano">Delia Matrecano</option>
+          <option value="Julian Masters">Julian Masters</option>
+          <option value="Natalie Cunningham">Natalie Cunningham</option>
+          <option value="Daniel Lundholm">Daniel Lundholm</option>
+          <option value="AARON MUSCA">AARON MUSCA</option>
+          <option value="Paula Gormlie">Paula Gormlie</option>
+          <option value="Peter Wright">Peter Wright</option>
+          <option value="Sajal Shah">Sajal Shah</option>
+          <option value="Claire Riley">Claire Riley</option>
+          <option value="Birgit Hartelius">Birgit Hartelius</option>
+          <option value="James Hanlon">James Hanlon</option>
+          <option value="Patrick Howie">Patrick Howie</option>
+          <option value="Nadine Murphy">Nadine Murphy</option>
+          <option value="Charlene Brookes">Charlene Brookes</option>
+          <option value="Joanna Yarrow">Joanna Yarrow</option>
+          <option value="Craig Slinger">Craig Slinger</option>
+          <option value="Gillian Drakeford">Gillian Drakeford</option>
+          <option value="Sumesh Arora">Sumesh Arora</option>
+          <option value="Tim Farlam">Tim Farlam</option>
+          <option value="Julie Charge">Julie Charge</option>
+          <option value="Andrew Goodman">Andrew Goodman</option>
+          <option value="Jain Jinks">Jain Jinks</option>
+          <option value="Amanda Morgan">Amanda Morgan</option>
+          <option value="Danielle Revely">Danielle Revely</option>
+          <option value="Christopher Hibbert">Christopher Hibbert</option>
+          <option value="Richard Eglin-Smith">Richard Eglin-Smith</option>
+          <option value="Elizabeth Shelley">Elizabeth Shelley</option>
+          <option value="Kirsty Knighton">Kirsty Knighton</option>
+          <option value="Stephen Fry">Stephen Fry</option>
+          <option value="Ratna Pierrel">Ratna Pierrel</option>
+          <option value="Steven Hobbs">Steven Hobbs</option>
+          <option value="Stephen Woods">Stephen Woods</option>
+          <option value="Emma Morris">Emma Morris</option>
+          <option value="Sharon Moylan">Sharon Moylan</option>
+          <option value="Shayne Swinscoe">Shayne Swinscoe</option>
+          <option value="Julie Carr">Julie Carr</option>
+          <option value="Gordon Bell">Gordon Bell</option>
+          <option value="Benedict Birch">Benedict Birch</option>
+          <option value="Lynne Bate">Lynne Bate</option>
+          <option value="Deborah Cooper">Deborah Cooper</option>
+          <option value="Ashley Doughty">Ashley Doughty</option>
+          <option value="Lena Borthwick">Lena Borthwick</option>
+          <option value="Andrea Stringer">Andrea Stringer</option>
+          <option value="Richard Powell">Richard Powell</option>
+          <option value="Janice Wilson">Janice Wilson</option>
+          <option value="Wayne Coleman">Wayne Coleman</option>
+          <option value="Mark Telford">Mark Telford</option>
+          <option value="Andrew Gillatt">Andrew Gillatt</option>
+          <option value="Julia Bason">Julia Bason</option>
+          <option value="Annette Hudson">Annette Hudson</option>
+          <option value="Mark Wilson">Mark Wilson</option>
+          <option value="Kevin Naughton">Kevin Naughton</option>
+          <option value="Geoffrey Hughes">Geoffrey Hughes</option>
+          <option value="Neil Staples">Neil Staples</option>
+          <option value="Richard Isherwood">Richard Isherwood</option>
+          <option value="Ricky Tipper">Ricky Tipper</option>
+          <option value="Darren Gill">Darren Gill</option>
+          <option value="Matthew Farrington">Matthew Farrington</option>
+          <option value="Trevor Yellop">Trevor Yellop</option>
+          <option value="Mark Dudley">Mark Dudley</option>
+          <option value="Geoffrey Hughes">Geoffrey Hughes</option>
+          <option value="Jason Crossland">Jason Crossland</option>
+          <option value="Matthew Humphrey">Matthew Humphrey</option>
+          <option value="Peter Fairchild">Peter Fairchild</option>
+          <option value="Simon Payne">Simon Payne</option>
+          <option value="Stephanie Shoesmith">Stephanie Shoesmith</option>
+          <option value="George Taylor">George Taylor</option>
+          <option value="Jay Brown">Jay Brown</option>
+          <option value="Michael Wells">Michael Wells</option>
+          <option value="Roger Thomson">Roger Thomson</option>
+          <option value="Stephen Baker">Stephen Baker</option>
+          <option value="Abdulwahid Mohamed">Abdulwahid Mohamed</option>
+          <option value="Graham Hyde">Graham Hyde</option>
+          <option value="Tony Brown">Tony Brown</option>
+          <option value="John Hunter">John Hunter</option>
+          <option value="Peter Linnell">Peter Linnell</option>
+          <option value="James Cameron">James Cameron</option>
+          <option value="Gordon Burgess">Gordon Burgess</option>
+          <option value="Gavin Dea">Gavin Dea</option>
+          <option value="Ivan Dickey">Ivan Dickey</option>
+          <option value="Marguerite Hagan">Marguerite Hagan</option>
+          <option value="Jonathan Freeland">Jonathan Freeland</option>
+          <option value="Ian Magill">Ian Magill</option>
+          <option value="Peter McMeekin">Peter McMeekin</option>
+          <option value="Mary Collins">Mary Collins</option>
+          <option value="David Meers">David Meers</option>
+          <option value="Ian Gamble">Ian Gamble</option>
+          <option value="Alison Walker">Alison Walker</option>
+          <option value="Stuart Graham">Stuart Graham</option>
+          <option value="Geoffrey Knipe">Geoffrey Knipe</option>
+          <option value="Clayton Leitch">Clayton Leitch</option>
+          <option value="Craig McBride">Craig McBride</option>
+          <option value="Catherine George">Catherine George</option>
+          <option value="Bob Van-Geldere">Bob Van-Geldere</option>
+          <option value="Peter Surgenor">Peter Surgenor</option>
+          <option value="Kevin Armstrong">Kevin Armstrong</option>
+          <option value="Neil Ferguson">Neil Ferguson</option>
+          <option value="Hetty Patrick">Hetty Patrick</option>
+          <option value="Joanne Williams">Joanne Williams</option>
+          <option value="Rebecca Davies">Rebecca Davies</option>
+          <option value="Rachel Trousdale">Rachel Trousdale</option>
+          <option value="Christie Gregg">Christie Gregg</option>
+          <option value="Shelley Hollywood">Shelley Hollywood</option>
+          <option value="Emma Calow">Emma Calow</option>
+          <option value="Matthew James">Matthew James</option>
+          <option value="Dawn Lloyd">Dawn Lloyd</option>
+          <option value="Imran Bostan">Imran Bostan</option>
+          <option value="Emma Brannigan - Lawson">Emma Brannigan - Lawson</option>
+          <option value="Daniel Green">Daniel Green</option>
+          <option value="Sophie Hale">Sophie Hale</option>
+          <option value="Mohammed Munir">Mohammed Munir</option>
+          <option value="Joanne Randle">Joanne Randle</option>
+          <option value="Scott Wilkes">Scott Wilkes</option>
+          <option value="Julie Wilson">Julie Wilson</option>
+          <option value="Stephanie Turner">Stephanie Turner</option>
+          <option value="Elizabeth Baker">Elizabeth Baker</option>
+          <option value="Elaine Law">Elaine Law</option>
+          <option value="Aynsley Logan">Aynsley Logan</option>
+          <option value="Peter Walker">Peter Walker</option>
+          <option value="Marsha Smith">Marsha Smith</option>
+          <option value="Salma Azad">Salma Azad</option>
+          <option value="Nadeem Yousaf">Nadeem Yousaf</option>
+          <option value="Edward O&apos;Toole">Edward O&apos;Toole</option>
+          <option value="Gary Roberts">Gary Roberts</option>
+          <option value="Maria Crosby">Maria Crosby</option>
+          <option value="Carolyn Crighton">Carolyn Crighton</option>
+          <option value="Jennifer Edwards">Jennifer Edwards</option>
+          <option value="David Carder">David Carder</option>
+          <option value="Christopher Mills">Christopher Mills</option>
+          <option value="Thomas O&apos;Leary">Thomas O&apos;Leary</option>
+          <option value="Sally Vaughan">Sally Vaughan</option>
+          <option value="Juno Houghton">Juno Houghton</option>
+          <option value="Andrew Davies">Andrew Davies</option>
+          <option value="Louis Eadon">Louis Eadon</option>
+          <option value="Adam Ball">Adam Ball</option>
+          <option value="Thaira Parveen">Thaira Parveen</option>
+          <option value="Catharine Cooper">Catharine Cooper</option>
+          <option value="Nicola Carter">Nicola Carter</option>
+          <option value="Daniel Cooney">Daniel Cooney</option>
+          <option value="Teresa James">Teresa James</option>
+          <option value="Ian Parry">Ian Parry</option>
+          <option value="Kasun Perera">Kasun Perera</option>
+          <option value="Richard Proudfoot">Richard Proudfoot</option>
+          <option value="Colin Sharp">Colin Sharp</option>
+          <option value="Philippa Teague">Philippa Teague</option>
+          <option value="James Crowley">James Crowley</option>
+          <option value="Jemma Neves">Jemma Neves</option>
+          <option value="Louise Soakell">Louise Soakell</option>
+          <option value="FEDERICA MARTELLINI">FEDERICA MARTELLINI</option>
+          <option value="Lisa Woods">Lisa Woods</option>
+          <option value="Dave Taylor">Dave Taylor</option>
+          <option value="Magnus Westerberg">Magnus Westerberg</option>
+          <option value="Berith Falch-Madsen">Berith Falch-Madsen</option>
+          <option value="Sibel Sever">Sibel Sever</option>
+          <option value="Lynn Maxwell">Lynn Maxwell</option>
+          <option value="David Dallimore">David Dallimore</option>
+          <option value="Gerald Anderson">Gerald Anderson</option>
+          <option value="Andrea Canu">Andrea Canu</option>
+          <option value="Jonathan Boyle">Jonathan Boyle</option>
+          <option value="Bill Grant">Bill Grant</option>
+          <option value="Lisa Filer">Lisa Filer</option>
+          <option value="Gareth Neville">Gareth Neville</option>
+          <option value="Asa Fermandell">Asa Fermandell</option>
+          <option value="Kash Henderson">Kash Henderson</option>
+          <option value="Natalia Mielewczyk">Natalia Mielewczyk</option>
+          <option value="Melissa Tillyard">Melissa Tillyard</option>
+          <option value="Andrew Kirk">Andrew Kirk</option>
+          <option value="Amy Brocklesby">Amy Brocklesby</option>
+          <option value="Allison Davies">Allison Davies</option>
+          <option value="Susan Brammer">Susan Brammer</option>
+          <option value="Shane Willn">Shane Willn</option>
+          <option value="Steve McLean">Steve McLean</option>
+          <option value="Jeffrey Baldrey">Jeffrey Baldrey</option>
+          <option value="Richard Owen">Richard Owen</option>
+          <option value="James Watson">James Watson</option>
+          <option value="Paul Dobson">Paul Dobson</option>
+          <option value="Louise Lock">Louise Lock</option>
+          <option value="Gary Morris">Gary Morris</option>
+          <option value="Allyn Burford">Allyn Burford</option>
+          <option value="Daniel Taylor">Daniel Taylor</option>
+          <option value="Lucy Clevett">Lucy Clevett</option>
+          <option value="Mark Gribben">Mark Gribben</option>
+          <option value="Jonathan Hayes">Jonathan Hayes</option>
+          <option value="Sandy Boettger">Sandy Boettger</option>
+          <option value="Paul Newell">Paul Newell</option>
+          <option value="Nicky McWilliam">Nicky McWilliam</option>
+          <option value="Kevin Greatwood">Kevin Greatwood</option>
+          <option value="Mandy Evans">Mandy Evans</option>
+          <option value="Sara Pratt">Sara Pratt</option>
+          <option value="Derek Waite">Derek Waite</option>
+          <option value="Jacqueline Hill">Jacqueline Hill</option>
+          <option value="Gary Cousins">Gary Cousins</option>
+          <option value="Michael Hawkins">Michael Hawkins</option>
+          <option value="Simon Green">Simon Green</option>
+          <option value="Stephen Elks">Stephen Elks</option>
+          <option value="Damian Oglesby">Damian Oglesby</option>
+          <option value="Philip Eccles">Philip Eccles</option>
+          <option value="Ashley Cooper">Ashley Cooper</option>
+          <option value="Jackie Timmins">Jackie Timmins</option>
+          <option value="Nirmal Jhumat">Nirmal Jhumat</option>
+          <option value="Joy Edwards">Joy Edwards</option>
+          <option value="Karen Sutton">Karen Sutton</option>
+          <option value="Allan Steel">Allan Steel</option>
+          <option value="Andrew Horn">Andrew Horn</option>
+          <option value="Marek Krol">Marek Krol</option>
+          <option value="Shane Mansfield">Shane Mansfield</option>
+          <option value="Alan Perkins">Alan Perkins</option>
+          <option value="Steven Mawi">Steven Mawi</option>
+          <option value="Michael Watson">Michael Watson</option>
+          <option value="Nathan Cheney">Nathan Cheney</option>
+          <option value="Louisa Burtonshaw">Louisa Burtonshaw</option>
+          <option value="Andrew Malone">Andrew Malone</option>
+          <option value="Chris Carter">Chris Carter</option>
+          <option value="Emma Murphy">Emma Murphy</option>
+          <option value="Ricky Singh">Ricky Singh</option>
+          <option value="Alessandra Wareing">Alessandra Wareing</option>
+          <option value="Claire Chapman">Claire Chapman</option>
+          <option value="Abigail Randle">Abigail Randle</option>
+          <option value="Jessica Kerrison">Jessica Kerrison</option>
+          <option value="Christopher Darling">Christopher Darling</option>
+          <option value="Kelly Duffy">Kelly Duffy</option>
+          <option value="Katie O&apos;Reilly">Katie O&apos;Reilly</option>
+          <option value="Ricardo Garcia">Ricardo Garcia</option>
+          <option value="Rachel Gould">Rachel Gould</option>
+          <option value="Ifrahim Iqbal">Ifrahim Iqbal</option>
+          <option value="Juan Diaz-Bravo">Juan Diaz-Bravo</option>
+          <option value="Xiangyi Sun">Xiangyi Sun</option>
+          <option value="Peter Wagner">Peter Wagner</option>
+          <option value="Jamie Foers">Jamie Foers</option>
+          <option value="Tom Woolverton">Tom Woolverton</option>
+          <option value="Paul Moore">Paul Moore</option>
+          <option value="Gillian Reilly">Gillian Reilly</option>
+          <option value="Tina McDonald-Sisk">Tina McDonald-Sisk</option>
+          <option value="Lisa O&apos;Brien">Lisa O&apos;Brien</option>
+          <option value="Stephen Ellis">Stephen Ellis</option>
+          <option value="Andrea Smith">Andrea Smith</option>
+          <option value="Melissa Rodrigues">Melissa Rodrigues</option>
+          <option value="Desmond Shelley">Desmond Shelley</option>
+          <option value="Raymond Cole">Raymond Cole</option>
+          <option value="Robin Dixon">Robin Dixon</option>
+          <option value="Karen Maritz">Karen Maritz</option>
+          <option value="Gerard Doyle">Gerard Doyle</option>
+          <option value="Neal Corbett">Neal Corbett</option>
+          <option value="Tihomir Damjanovic">Tihomir Damjanovic</option>
+          <option value="Leandro Godoy">Leandro Godoy</option>
+          <option value="Daniel Byrne">Daniel Byrne</option>
+          <option value="Tracey Finnegan">Tracey Finnegan</option>
+          <option value="Laragh King">Laragh King</option>
+          <option value="Chris Kelly">Chris Kelly</option>
+          <option value="Paul Ringwood">Paul Ringwood</option>
+          <option value="Rachel Faulkner">Rachel Faulkner</option>
+          <option value="Brenda Massyn">Brenda Massyn</option>
+          <option value="Hazel Dunne">Hazel Dunne</option>
+          <option value="Garry Ward">Garry Ward</option>
+          <option value="David Blazquez">David Blazquez</option>
+          <option value="Mark Dempsey">Mark Dempsey</option>
+          <option value="Lisa Bodkin">Lisa Bodkin</option>
+          <option value="Andrias O&apos;Shaughnessy">Andrias O&apos;Shaughnessy</option>
+          <option value="Keevagh Heverin">Keevagh Heverin</option>
+          <option value="David Looker">David Looker</option>
+          <option value="Kieran Clancy">Kieran Clancy</option>
+          <option value="Lynsey Ainsworth">Lynsey Ainsworth</option>
+          <option value="Louise Edwards">Louise Edwards</option>
+          <option value="Steven McLay">Steven McLay</option>
+          <option value="Peter Pretsell">Peter Pretsell</option>
+          <option value="Gavin Farwell">Gavin Farwell</option>
+          <option value="Sarah Forbes">Sarah Forbes</option>
+          <option value="Christine Gordon">Christine Gordon</option>
+          <option value="Paul Gough">Paul Gough</option>
+          <option value="Richard Halliday">Richard Halliday</option>
+          <option value="Bruce Hogg">Bruce Hogg</option>
+          <option value="Andrew MacGregor">Andrew MacGregor</option>
+          <option value="Jane Bisset">Jane Bisset</option>
+          <option value="Linton Scarborough">Linton Scarborough</option>
+          <option value="Elizabeth Stanton">Elizabeth Stanton</option>
+          <option value="Karen Stenhouse">Karen Stenhouse</option>
+          <option value="Kevin Todd">Kevin Todd</option>
+          <option value="Louise Brown">Louise Brown</option>
+          <option value="Kim Buwalda">Kim Buwalda</option>
+          <option value="Carolyn Young">Carolyn Young</option>
+          <option value="Lisa Thomson">Lisa Thomson</option>
+          <option value="Scott Fairbairn">Scott Fairbairn</option>
+          <option value="Gary Connelly">Gary Connelly</option>
+          <option value="Emma Fairbairn">Emma Fairbairn</option>
+          <option value="Scott Jackson">Scott Jackson</option>
+          <option value="Laura Anderson">Laura Anderson</option>
+          <option value="John Syme">John Syme</option>
+          <option value="Ross Fairbairn">Ross Fairbairn</option>
+          <option value="Gary Miller">Gary Miller</option>
+          <option value="Iain Rae">Iain Rae</option>
+          <option value="Julie-Anne Abblett">Julie-Anne Abblett</option>
+          <option value="Sean McArthur">Sean McArthur</option>
+          <option value="Alastair Tomney">Alastair Tomney</option>
+          <option value="Jenna Archibald">Jenna Archibald</option>
+          <option value="Caroline O&apos;Keefe">Caroline O&apos;Keefe</option>
+          <option value="Cameron Goodall">Cameron Goodall</option>
+          <option value="Paul Kinnen">Paul Kinnen</option>
+          <option value="Alan Harper">Alan Harper</option>
+          <option value="Andy Westland">Andy Westland</option>
+          <option value="Mark Kelly">Mark Kelly</option>
+          <option value="Stephen Kenny">Stephen Kenny</option>
+          <option value="James Lindsay">James Lindsay</option>
+          <option value="Lorraine Black">Lorraine Black</option>
+          <option value="Alison Campbell">Alison Campbell</option>
+          <option value="Ross Chalmers">Ross Chalmers</option>
+          <option value="Barry Gilmour">Barry Gilmour</option>
+          <option value="Martin McLaughlin">Martin McLaughlin</option>
+          <option value="Lynnette Reid">Lynnette Reid</option>
+          <option value="Frances Reilly">Frances Reilly</option>
+          <option value="Susan McAllion">Susan McAllion</option>
+          <option value="Aileen McCreadie">Aileen McCreadie</option>
+          <option value="David McIntyre">David McIntyre</option>
+          <option value="Louise Duffy">Louise Duffy</option>
+          <option value="Michelle MacLeod">Michelle MacLeod</option>
+          <option value="Joanne Mackenzie">Joanne Mackenzie</option>
+          <option value="Sharon McCracken">Sharon McCracken</option>
+          <option value="Richard Geddes">Richard Geddes</option>
+          <option value="Michael Kent">Michael Kent</option>
+          <option value="Linda Reddy">Linda Reddy</option>
+          <option value="Suzanne Senior">Suzanne Senior</option>
+          <option value="Kerrie Fox">Kerrie Fox</option>
+          <option value="Janice Chalkley">Janice Chalkley</option>
+          <option value="Terry Carrigan">Terry Carrigan</option>
+          <option value="Andrew Main">Andrew Main</option>
+          <option value="Theo Wiedenmann">Theo Wiedenmann</option>
+          <option value="Douglas Fraser">Douglas Fraser</option>
+          <option value="Emma Jones">Emma Jones</option>
+          <option value="Lee McDonald">Lee McDonald</option>
+          <option value="Aileen Peter">Aileen Peter</option>
+          <option value="Steven Travers">Steven Travers</option>
+          <option value="Mark Farquhar">Mark Farquhar</option>
+          <option value="Douglas Allison">Douglas Allison</option>
+          <option value="Kenneth McCann">Kenneth McCann</option>
+          <option value="Jeffrey Horrocks">Jeffrey Horrocks</option>
+          <option value="Lorraine Shilliday">Lorraine Shilliday</option>
+          <option value="Teresa Broadbent">Teresa Broadbent</option>
+          <option value="Benjamin Broadhead">Benjamin Broadhead</option>
+          <option value="Matthew Evers">Matthew Evers</option>
+          <option value="Kathleen Gardner">Kathleen Gardner</option>
+          <option value="Helen Denton">Helen Denton</option>
+          <option value="Katy Klawiter">Katy Klawiter</option>
+          <option value="Richard Mabbett">Richard Mabbett</option>
+          <option value="Robert Reid">Robert Reid</option>
+          <option value="Adam Riley">Adam Riley</option>
+          <option value="Lorna Sherwin">Lorna Sherwin</option>
+          <option value="John Whitelock">John Whitelock</option>
+          <option value="Scott Renshaw">Scott Renshaw</option>
+          <option value="Victoria Chesters">Victoria Chesters</option>
+          <option value="Gavin Hall">Gavin Hall</option>
+          <option value="Kyle Binks">Kyle Binks</option>
+          <option value="Julia Towler">Julia Towler</option>
+          <option value="Jonathan Hall">Jonathan Hall</option>
+          <option value="John Grindlay">John Grindlay</option>
+          <option value="Gulnara Valitova">Gulnara Valitova</option>
+          <option value="Tammy Wilde">Tammy Wilde</option>
+          <option value="Clare Burke">Clare Burke</option>
+          <option value="Matthew Gallagher">Matthew Gallagher</option>
+          <option value="James Smith">James Smith</option>
+          <option value="Kirsty Bingham">Kirsty Bingham</option>
+          <option value="Emily Murphy">Emily Murphy</option>
+          <option value="Luke Kennedy">Luke Kennedy</option>
+          <option value="Richard Hammond">Richard Hammond</option>
+          <option value="Margy Forshaw">Margy Forshaw</option>
+          <option value="Adam Gilbert">Adam Gilbert</option>
+          <option value="Andrew Callaghan">Andrew Callaghan</option>
+          <option value="Jessica Thornton">Jessica Thornton</option>
+          <option value="David Primrose">David Primrose</option>
+          <option value="Anthony Lavin">Anthony Lavin</option>
+          <option value="Lisa King">Lisa King</option>
+          <option value="Katherine Archer">Katherine Archer</option>
+          <option value="Pauline Fowler">Pauline Fowler</option>
+          <option value="Colin Aburn">Colin Aburn</option>
+          <option value="Stavroulla Davis">Stavroulla Davis</option>
+          <option value="Lisa Payne">Lisa Payne</option>
+          <option value="Faye Newman">Faye Newman</option>
+          <option value="Tracey Boyland">Tracey Boyland</option>
+          <option value="Angela Dring">Angela Dring</option>
+          <option value="John Moore">John Moore</option>
+          <option value="Gavin Nicholls">Gavin Nicholls</option>
+          <option value="Timothy Stoakes">Timothy Stoakes</option>
+          <option value="Garry Deakin">Garry Deakin</option>
+          <option value="Mercedes Fernandez-Sanchez">Mercedes Fernandez-Sanchez</option>
+          <option value="Joe Goldwater">Joe Goldwater</option>
+          <option value="David Rickford">David Rickford</option>
+          <option value="Ksenia Shishkina">Ksenia Shishkina</option>
+          <option value="Anthony Burt">Anthony Burt</option>
+          <option value="Andreas Grill">Andreas Grill</option>
+          <option value="Rebecca Miller">Rebecca Miller</option>
+          <option value="John Bukosi">John Bukosi</option>
+          <option value="Magdalena Biegajlo">Magdalena Biegajlo</option>
+          <option value="Claire Hartnoll">Claire Hartnoll</option>
+          <option value="Ivars Kalns-Timans">Ivars Kalns-Timans</option>
+          <option value="Duke Mahadevan">Duke Mahadevan</option>
+          <option value="Stephen Ribbands">Stephen Ribbands</option>
+          <option value="John Spence">John Spence</option>
+          <option value="Oya Arslan Ozmen">Oya Arslan Ozmen</option>
+          <option value="Kim Chin-Sung">Kim Chin-Sung</option>
+          <option value="Victoria Chambers">Victoria Chambers</option>
+          <option value="Szymon Rybinski">Szymon Rybinski</option>
+          <option value="Nicki Sales">Nicki Sales</option>
+          <option value="Matthew Kimber">Matthew Kimber</option>
+          <option value="Deborah Holland">Deborah Holland</option>
+          <option value="Richard Chin-Sung">Richard Chin-Sung</option>
+          <option value="GIULIANO MERONI">GIULIANO MERONI</option>
+          <option value="Shakeel Ahmed">Shakeel Ahmed</option>
+          <option value="Daniel Hatton">Daniel Hatton</option>
+          <option value="Lorraine Davies">Lorraine Davies</option>
+          <option value="Carla Santos-da-Fonseca">Carla Santos-da-Fonseca</option>
+          <option value="Anette Madsen">Anette Madsen</option>
+          <option value="Lidia Kifle">Lidia Kifle</option>
+          <option value="Wayne Pereira">Wayne Pereira</option>
+          <option value="Khalid Abow">Khalid Abow</option>
+          <option value="Isaac Edwards">Isaac Edwards</option>
+          <option value="Ashvin Ramhit">Ashvin Ramhit</option>
+          <option value="Michael Len">Michael Len</option>
+          <option value="Elena Roberts">Elena Roberts</option>
+          <option value="Marek Poznar">Marek Poznar</option>
+          <option value="Ross Lovell">Ross Lovell</option>
+          <option value="Agnieszka Lachowicz">Agnieszka Lachowicz</option>
+          <option value="Menakamoorthy Sathiamoorthy">Menakamoorthy Sathiamoorthy</option>
+          <option value="Anita Webster">Anita Webster</option>
+          <option value="Barry Reidy">Barry Reidy</option>
+          <option value="Lesley-Anne Papakyprianou">Lesley-Anne Papakyprianou</option>
+          <option value="Bharat Dhiman">Bharat Dhiman</option>
+          <option value="Imran Khan">Imran Khan</option>
+          <option value="Joanna Gajewska">Joanna Gajewska</option>
+          <option value="Anthony Lee">Anthony Lee</option>
+          <option value="Konstantinos Chandrinos">Konstantinos Chandrinos</option>
+          <option value="Evanthia Nikoglou">Evanthia Nikoglou</option>
+          <option value="Rishi Naidoo">Rishi Naidoo</option>
+          <option value="Mark Goodwin">Mark Goodwin</option>
+          <option value="Rosamaria Ziolkowski">Rosamaria Ziolkowski</option>
+          <option value="Joana Oliveira">Joana Oliveira</option>
+          <option value="Jonna Browall">Jonna Browall</option>
+          <option value="ANA PEDRO">ANA PEDRO</option>
+          <option value="Holly May">Holly May</option>
+          <option value="Joanne Aldridge">Joanne Aldridge</option>
+          <option value="Shane Chapman">Shane Chapman</option>
+          <option value="Julie Livingstone">Julie Livingstone</option>
+          <option value="Paul Smith">Paul Smith</option>
+          <option value="Fred Nason">Fred Nason</option>
+          <option value="Terry Harris">Terry Harris</option>
+          <option value="Vicky Cosentino">Vicky Cosentino</option>
+          <option value="Jaswant Bassi">Jaswant Bassi</option>
+          <option value="Kwok Cheung">Kwok Cheung</option>
+          <option value="Anna Martins">Anna Martins</option>
+          <option value="James Lawrence">James Lawrence</option>
+          <option value="Elizabeth Prowse">Elizabeth Prowse</option>
+          <option value="Gavin Scott">Gavin Scott</option>
+          <option value="Massimo Borella">Massimo Borella</option>
+          <option value="JUSTO CANDEL">JUSTO CANDEL</option>
+          <option value="Victoria Richards">Victoria Richards</option>
+          <option value="Danny Southam">Danny Southam</option>
+          <option value="Sean Smith">Sean Smith</option>
+          <option value="Keely Chapman">Keely Chapman</option>
+          <option value="Dawn Hart">Dawn Hart</option>
+          <option value="Malory Humbert">Malory Humbert</option>
+          <option value="Neil Duxbury">Neil Duxbury</option>
+          <option value="Maciej Moczynski">Maciej Moczynski</option>
+          <option value="Georgiana Frincu">Georgiana Frincu</option>
+          <option value="Darryl Pirie">Darryl Pirie</option>
+          <option value="Richard Rands">Richard Rands</option>
+          <option value="Simon Vassallo">Simon Vassallo</option>
+          <option value="Lesley Worsfold">Lesley Worsfold</option>
+          <option value="Jason Liang">Jason Liang</option>
+          <option value="Stephen Reid">Stephen Reid</option>
+          <option value="Helen Armstrong">Helen Armstrong</option>
+          <option value="Stephen Faddy">Stephen Faddy</option>
+          <option value="Andrew Medland">Andrew Medland</option>
+          <option value="Dawn Ord">Dawn Ord</option>
+          <option value="Graham Seed">Graham Seed</option>
+          <option value="Samantha Shaw">Samantha Shaw</option>
+          <option value="Rachael Tose">Rachael Tose</option>
+          <option value="Heidi Bell">Heidi Bell</option>
+          <option value="Donald Sands">Donald Sands</option>
+          <option value="Keith Smith">Keith Smith</option>
+          <option value="Kathryn Robinson">Kathryn Robinson</option>
+          <option value="Jill Cordes">Jill Cordes</option>
+          <option value="Amanda Darling">Amanda Darling</option>
+          <option value="Richard Scott">Richard Scott</option>
+          <option value="Robin Melville">Robin Melville</option>
+          <option value="Jordan Warriner">Jordan Warriner</option>
+          <option value="Lynn Anderson">Lynn Anderson</option>
+          <option value="Jose De-Blas">Jose De-Blas</option>
+          <option value="Donna O&apos;Neill">Donna O&apos;Neill</option>
+          <option value="Lis Gordon">Lis Gordon</option>
+          <option value="Sarah Smith">Sarah Smith</option>
+          <option value="Hayley Melville">Hayley Melville</option>
+          <option value="Paul O&apos;Neil">Paul O&apos;Neil</option>
+          <option value="Carole Gutherson">Carole Gutherson</option>
+          <option value="Victoria Gibson">Victoria Gibson</option>
+          <option value="Paul Colling">Paul Colling</option>
+          <option value="Calum Watson">Calum Watson</option>
+          <option value="Paul Young">Paul Young</option>
+          <option value="Stuart Harvey">Stuart Harvey</option>
+          <option value="Paul Kelly">Paul Kelly</option>
+          <option value="Michael Hunter">Michael Hunter</option>
+          <option value="Steven James">Steven James</option>
+          <option value="Darren Taylor">Darren Taylor</option>
+          <option value="Tracey Smith">Tracey Smith</option>
+          <option value="Wendy Jess">Wendy Jess</option>
+          <option value="Adele Morris">Adele Morris</option>
+          <option value="Caroline Mitchell">Caroline Mitchell</option>
+          <option value="Craig Judge">Craig Judge</option>
+          <option value="Lisa Sharpe">Lisa Sharpe</option>
+          <option value="Chris Smith">Chris Smith</option>
+          <option value="Melanie Wardle">Melanie Wardle</option>
+          <option value="Martin Smith">Martin Smith</option>
+          <option value="Ben Seymour">Ben Seymour</option>
+          <option value="Alexis Powell">Alexis Powell</option>
+          <option value="Jane Smallman">Jane Smallman</option>
+          <option value="Carol George">Carol George</option>
+          <option value="Charlene Connor">Charlene Connor</option>
+          <option value="Kirsteen Alexander">Kirsteen Alexander</option>
+          <option value="Jacqueline Annan">Jacqueline Annan</option>
+          <option value="Geraldine Paxton">Geraldine Paxton</option>
+          <option value="Simon Hudson">Simon Hudson</option>
+          <option value="Anna Kiddle">Anna Kiddle</option>
+          <option value="Chris Nourse">Chris Nourse</option>
+          <option value="Jonathan Seddon">Jonathan Seddon</option>
+          <option value="Katie King">Katie King</option>
+          <option value="Kirsty Collings">Kirsty Collings</option>
+          <option value="Michael Fry">Michael Fry</option>
+          <option value="Laura Blundell">Laura Blundell</option>
+          <option value="Julie Stapleton">Julie Stapleton</option>
+          <option value="Johanna Heuren">Johanna Heuren</option>
+          <option value="John Elliot">John Elliot</option>
+          <option value="Mark Collinson">Mark Collinson</option>
+          <option value="Tracy Chaplin">Tracy Chaplin</option>
+          <option value="Matthew Lomax">Matthew Lomax</option>
+          <option value="Ian Randle">Ian Randle</option>
+          <option value="Marianne Mills">Marianne Mills</option>
+          <option value="Ray Munroe">Ray Munroe</option>
+          <option value="Satish Patel">Satish Patel</option>
+          <option value="Ciran Kunner">Ciran Kunner</option>
+          <option value="Graeme Marshall">Graeme Marshall</option>
+          <option value="Sarah Garratt">Sarah Garratt</option>
+          <option value="Wayne Lloyd">Wayne Lloyd</option>
+          <option value="Maciej Kurbiel">Maciej Kurbiel</option>
+          <option value="SIMONA BUGANZA">SIMONA BUGANZA</option>
+          <option value="Steve Clayton">Steve Clayton</option>
+          <option value="Sean Derbyshire">Sean Derbyshire</option>
+          <option value="Reece Hill">Reece Hill</option>
+          <option value="Louise Bangee">Louise Bangee</option>
+          <option value="Dianne Woollam">Dianne Woollam</option>
+          <option value="Laura Fletcher">Laura Fletcher</option>
+          <option value="Gary Schofield">Gary Schofield</option>
+          <option value="Brenda Sorensen">Brenda Sorensen</option>
+          <option value="Kelly Holwill">Kelly Holwill</option>
+          <option value="Kelly Leonard">Kelly Leonard</option>
+          <option value="Dale Fricke">Dale Fricke</option>
+          <option value="Christopher Ackroyd">Christopher Ackroyd</option>
+          <option value="Robert Keens">Robert Keens</option>
+          <option value="Christine Hulme">Christine Hulme</option>
+          <option value="Michelle Dale">Michelle Dale</option>
+          <option value="John Johnston">John Johnston</option>
+          <option value="Carl Critchlow">Carl Critchlow</option>
+          <option value="Steven James">Steven James</option>
+          <option value="Martin Corker">Martin Corker</option>
+          <option value="Stevi Rhodes">Stevi Rhodes</option>
+          <option value="Alex Martin">Alex Martin</option>
+          <option value="Alan Brown">Alan Brown</option>
+          <option value="Dale Lloyd">Dale Lloyd</option>
+          <option value="Charlotte Baalham">Charlotte Baalham</option>
+          <option value="Danielle Smith">Danielle Smith</option>
+          <option value="Aiden Bennett">Aiden Bennett</option>
+          <option value="Felix Liew">Felix Liew</option>
+          <option value="Jayne Lawton">Jayne Lawton</option>
+          <option value="Ian Simpson">Ian Simpson</option>
+          <option value="Ian Chenery">Ian Chenery</option>
+          <option value="Cheryl Beckett">Cheryl Beckett</option>
+          <option value="Angela English">Angela English</option>
+          <option value="Gary Holmes">Gary Holmes</option>
+          <option value="Andrew Mansfield">Andrew Mansfield</option>
+          <option value="Claire Orsmond">Claire Orsmond</option>
+          <option value="Jeffrey Parker">Jeffrey Parker</option>
+          <option value="Raymond Sutton">Raymond Sutton</option>
+          <option value="James Goldthorpe">James Goldthorpe</option>
+          <option value="Andrew Cooper">Andrew Cooper</option>
+          <option value="Sarah Hayes">Sarah Hayes</option>
+          <option value="Andrea Watkins">Andrea Watkins</option>
+          <option value="Denise Mazzitelli">Denise Mazzitelli</option>
+          <option value="Tanis Caddick">Tanis Caddick</option>
+          <option value="Sarah Green">Sarah Green</option>
+          <option value="Mark Barr">Mark Barr</option>
+          <option value="Sarah Forshaw">Sarah Forshaw</option>
+          <option value="Lorena Lourido">Lorena Lourido</option>
+          <option value="Samantha Cook">Samantha Cook</option>
+          <option value="Mikhail Kireev">Mikhail Kireev</option>
+          <option value="Kate Moore">Kate Moore</option>
+          <option value="Craig Hall">Craig Hall</option>
+          <option value="Greg Marsh">Greg Marsh</option>
+          <option value="Martin Cliffe">Martin Cliffe</option>
+          <option value="Amy Hutchinson">Amy Hutchinson</option>
+          <option value="Tracie Kyle">Tracie Kyle</option>
+          <option value="Adam Prescott">Adam Prescott</option>
+          <option value="Kelly Heathwood">Kelly Heathwood</option>
+          <option value="James Haselhurst">James Haselhurst</option>
+          <option value="Jonathan Dillon">Jonathan Dillon</option>
+          <option value="Geoff Gotts">Geoff Gotts</option>
+          <option value="Nathalie Johnson">Nathalie Johnson</option>
+          <option value="Anthony Weeks">Anthony Weeks</option>
+          <option value="Nigel Fuller">Nigel Fuller</option>
+          <option value="Susan Roberts">Susan Roberts</option>
+          <option value="Stuart Knowles">Stuart Knowles</option>
+          <option value="Neil Fones">Neil Fones</option>
+          <option value="Barbara Harrison">Barbara Harrison</option>
+          <option value="Sharon Love">Sharon Love</option>
+          <option value="Imre Banhidi">Imre Banhidi</option>
+          <option value="John Maguire">John Maguire</option>
+          <option value="Julie Samuels">Julie Samuels</option>
+          <option value="John Keeler">John Keeler</option>
+          <option value="Gareth Payne">Gareth Payne</option>
+          <option value="Jessica Brennan">Jessica Brennan</option>
+          <option value="MANUEL FERRETE">MANUEL FERRETE</option>
+          <option value="Juan Garrido-Garcia">Juan Garrido-Garcia</option>
+          <option value="James Boarland">James Boarland</option>
+          <option value="Stephen Knott">Stephen Knott</option>
+          <option value="Saifar Rahman">Saifar Rahman</option>
+          <option value="Diane Burrows">Diane Burrows</option>
+          <option value="Christopher Speed-Andrews">Christopher Speed-Andrews</option>
+          <option value="Arslan Ali">Arslan Ali</option>
+          <option value="Luke Ockenden">Luke Ockenden</option>
+          <option value="Kerrie Fox">Kerrie Fox</option>
+          <option value="Felicity Gepp">Felicity Gepp</option>
+          <option value="Rocio Diaz-Ceballos">Rocio Diaz-Ceballos</option>
+          <option value="Victor Bravo Lopez">Victor Bravo Lopez</option>
+          <option value="Ines Cuenca">Ines Cuenca</option>
+          <option value="Matthew Webb">Matthew Webb</option>
+          <option value="Agnieszka Zabczyk">Agnieszka Zabczyk</option>
+          <option value="Manuel Rosales-Tovar">Manuel Rosales-Tovar</option>
+          <option value="Alesandro Mercedes-Rodriguez">Alesandro Mercedes-Rodriguez</option>
+          <option value="Fernando De-La-Fuente-Urdiales">Fernando De-La-Fuente-Urdiales</option>
+          <option value="James Sterry">James Sterry</option>
+          <option value="Hugo Lopez-Garcia">Hugo Lopez-Garcia</option>
+          <option value="Diane Healey">Diane Healey</option>
+          <option value="Ross Balneaves">Ross Balneaves</option>
+          <option value="Kathryn Goodall">Kathryn Goodall</option>
+          <option value="Dean Lawrence">Dean Lawrence</option>
+          <option value="MARIUSZ MATYJA">MARIUSZ MATYJA</option>
+          <option value="Izabela Kaminska">Izabela Kaminska</option>
+          <option value="Debra Rose">Debra Rose</option>
+          <option value="Ann Williams">Ann Williams</option>
+          <option value="Lynne Buckland">Lynne Buckland</option>
+          <option value="Sarah Claydon">Sarah Claydon</option>
+          <option value="Gary Pearce">Gary Pearce</option>
+          <option value="Piotr Scigalski">Piotr Scigalski</option>
+          <option value="Rob Cooper">Rob Cooper</option>
+          <option value="Nicole Jackson">Nicole Jackson</option>
+          <option value="Gavin Chilcott">Gavin Chilcott</option>
+          <option value="Darrell Carter">Darrell Carter</option>
+          <option value="Margaret Gibson">Margaret Gibson</option>
+          <option value="Simon Davison">Simon Davison</option>
+          <option value="Adam Baker">Adam Baker</option>
+          <option value="Lisa Bradshaw">Lisa Bradshaw</option>
+          <option value="Kathryn Frampton">Kathryn Frampton</option>
+          <option value="Marianne Jackson">Marianne Jackson</option>
+          <option value="Sarah Baker">Sarah Baker</option>
+          <option value="Tracey Pope">Tracey Pope</option>
+          <option value="Andrew Derome">Andrew Derome</option>
+          <option value="Christina Prince-Wright">Christina Prince-Wright</option>
+          <option value="Nicholas French">Nicholas French</option>
+          <option value="Niall Jones">Niall Jones</option>
+          <option value="Narinder Singh">Narinder Singh</option>
+          <option value="Matthew Reeves">Matthew Reeves</option>
+          <option value="Neil Martin">Neil Martin</option>
+          <option value="Marius Klin">Marius Klin</option>
+          <option value="Michelle Thomas">Michelle Thomas</option>
+          <option value="Neil Williams">Neil Williams</option>
+          <option value="Mark Nelson">Mark Nelson</option>
+          <option value="Mujgan Trowbridge">Mujgan Trowbridge</option>
+          <option value="Jane Goff">Jane Goff</option>
+          <option value="Kim Bonner">Kim Bonner</option>
+          <option value="ALEJANDRO PADILLA">ALEJANDRO PADILLA</option>
+          <option value="PATRICIO ALEMAN">PATRICIO ALEMAN</option>
+          <option value="Jaroslaw Lesniewski">Jaroslaw Lesniewski</option>
+          <option value="Ashraf Choudhury">Ashraf Choudhury</option>
+          <option value="Harsha Patel">Harsha Patel</option>
+          <option value="Matthew Vernalls">Matthew Vernalls</option>
+          <option value="Alison Bamford">Alison Bamford</option>
+          <option value="Greig McLeod">Greig McLeod</option>
+          <option value="Kerry Scobie">Kerry Scobie</option>
+          <option value="Jose Vidal">Jose Vidal</option>
+          <option value="Cajitan Rodrigues">Cajitan Rodrigues</option>
+          <option value="PEDRO DE-ABREU">PEDRO DE-ABREU</option>
+          <option value="Rashpal Bansal">Rashpal Bansal</option>
+          <option value="LUIS OLIVEIRA-LOPES">LUIS OLIVEIRA-LOPES</option>
+          <option value="Desiree Sanchez">Desiree Sanchez</option>
+          <option value="Laura Dawson">Laura Dawson</option>
+          <option value="Leslaw Warnawski">Leslaw Warnawski</option>
+          <option value="Mark Thompson">Mark Thompson</option>
+          <option value="Christopher Palmer">Christopher Palmer</option>
+          <option value="Monika Chodnicka">Monika Chodnicka</option>
+          <option value="Ricardo Roach">Ricardo Roach</option>
+          <option value="Constantinos Mourouzides">Constantinos Mourouzides</option>
+          <option value="Viraj Desai">Viraj Desai</option>
+          <option value="Christina Olsson">Christina Olsson</option>
+          <option value="David Moore">David Moore</option>
+          <option value="Gavin Paris">Gavin Paris</option>
+          <option value="Martin West">Martin West</option>
+          <option value="Christopher Kenneally">Christopher Kenneally</option>
+          <option value="Randip Virdee">Randip Virdee</option>
+          <option value="Gemma Wilson">Gemma Wilson</option>
+          <option value="Natalia Serrano">Natalia Serrano</option>
+          <option value="Sean Howell">Sean Howell</option>
+          <option value="Jaroslaw Wojcikiewicz">Jaroslaw Wojcikiewicz</option>
+          <option value="Ramon Gutierrez">Ramon Gutierrez</option>
+          <option value="Alessandro De-Pompeis">Alessandro De-Pompeis</option>
+          <option value="Karin Dahl">Karin Dahl</option>
+          <option value="ILKA SCHLOTTKE">ILKA SCHLOTTKE</option>
+          <option value="Debra MacLean">Debra MacLean</option>
+          <option value="Raymund Murphy">Raymund Murphy</option>
+          <option value="Sandie Goodwin">Sandie Goodwin</option>
+          <option value="Andrew Sutcliffe">Andrew Sutcliffe</option>
+          <option value="Jason Richards">Jason Richards</option>
+          <option value="Vivian O&apos;Reilly">Vivian O&apos;Reilly</option>
+          <option value="Claire Woodcock">Claire Woodcock</option>
+          <option value="Mark Edwards">Mark Edwards</option>
+          <option value="Alex Wanless">Alex Wanless</option>
+          <option value="Karen Chamberlain">Karen Chamberlain</option>
+          <option value="Harriet Clarke">Harriet Clarke</option>
+          <option value="Justin Bonnie">Justin Bonnie</option>
+          <option value="Liam O&apos;Sullivan">Liam O&apos;Sullivan</option>
+          <option value="Sonia Neaves">Sonia Neaves</option>
+
+
+
+
+          <!--<option value="Aaron Mitchell">Aaron Mitchell</option>
           <option value="Aaron Musca">Aaron Musca</option>
           <option value="Abdulwahid Mohamed">Abdulwahid Mohamed</option>
           <option value="Abigail Turnbull">Abigail Turnbull</option>
@@ -2811,7 +3594,7 @@
           <option value="Sr. Alejandro Padilla">Sr. Alejandro Padilla</option>
           <option value="Sr. Pedro De-Abreu">Sr. Pedro De-Abreu</option>
           <option value="Sra. Ana Pedro">Sra. Ana Pedro</option>
-          <option value="Sra. Gemma Arranz-Lorenzo">Sra. Gemma Arranz-Lorenzo</option>
+          <option value="Gemma Arranz-Lorenzo">Gemma Arranz-Lorenzo</option>
           <option value="Stavroulla Davis">Stavroulla Davis</option>
           <option value="Stephanie Shoesmith">Stephanie Shoesmith</option>
           <option value="Stephanie Turner">Stephanie Turner</option>
@@ -2875,7 +3658,7 @@
           <option value="Wayne Raviraj">Wayne Raviraj</option>
           <option value="Wendy Jess">Wendy Jess</option>
           <option value="Wim Blaauw">Wim Blaauw</option>
-          <option value="Xiangyi Sun">Xiangyi Sun</option>
+          <option value="Xiangyi Sun">Xiangyi Sun</option>-->
         </options>
       </element>
       <element type="search-select" name="ManagersJobTitle" label=" Manager's Job Title" mandatory="1">
@@ -2953,6 +3736,7 @@
           <option value="IT Team Manager">IT Team Manager</option>
           <option value="Kitchen Production Manager">Kitchen Production Manager</option>
           <option value="Kitchen Production Team Leader">Kitchen Production Team Leader</option>
+          <option value="Laws &amp; Standards Manager">Laws &amp; Standards Manager</option>
           <option value="Learning &amp; Development Manager">Learning &amp; Development Manager</option>
           <option value="Legal Affairs Manager">Legal Affairs Manager</option>
           <option value="Local Marketing Leader">Local Marketing Leader</option>
@@ -3380,7 +4164,7 @@
 
       <element type="hidden" name="Allowances" default="1"></element>
       <element type="select" name="AllowancesType" label="Allowance Type">
-        &pre_allowancestype_netgross;
+     
         <options>
           <option value=""></option>
           <option value="Advanced">Advanced</option>
@@ -3416,7 +4200,7 @@
           <option value="Secondment">Secondment</option>
           <option value="Shunter Allow">Shunter Allow</option>
           <option value="Stand By Allowance">Stand By Allowance</option>
-          <option value="Keep in touch allowance">Keep in touch allowance</option>
+          
 
           <!--<option value="150B - Hourly Location Allow">150B - Hourly Location Allow</option>
           <option value="150C - Hourly FLT Skills (Fork Lift Truck Allowance)">150C - Hourly FLT Skills (Fork Lift Truck Allowance)</option>
@@ -3497,41 +4281,76 @@
 
         </options>
       </element>
-      <element type="select" name="AllowancesPaymentType" label="Payment Type">
-        <mandatoryIf name="AllowancesType">150B - Hourly Location Allow,150C - Hourly FLT Skills (Fork Lift Truck Allowance),150C - Hourly FLT Skills (Fork Lift Truck Allowance Milton Keynes),150D - Hourly Kitchen Skills,150D - Hourly Kitchen Skills London,150D - Hourly Kitchen Skills Edinburgh,150E - Hourly IKEA1 Skills,150F - Hourly IKEA2 Skills,150G - Hourly Advanced Skills,150G - Hourly Advanced Skills Cardiff,150G - Hourly Advanced Skills Edinburgh,150H - Hourly CDP Skills,150P - NIght Premium,150P - NIght Premium London 1,150P - NIght Premium London 2,150P - NIght Premium London 3,150Q - Hrly Foundation Skills,150R - High Performer 11,150W - Work Experience,150Y - High Performer 12,150Z - High Performer 13,151X - High Performer 14,150Y - Hourly High Performer,150R - Hourly Good Example,150X - Hourly AHP,150J - Hourly First Aid,150N - Hourly Pallet Resue,150I - Hourly ACE,150O - Hourly Shunter Allow,150L - Hourly Manual Hand,150K - Hourly Loaders,150S - Hourly Day,150M - Hourly MHE/H&amp;S Resp,150V - Hourly Responsibility,150U - Night Premium Dist,340V - Travel Allowance,360B - Commission,340C - Cash Adjustment,340T - Stand By Allowance,4806 - NTG Relocation Allow,340O - Relocation Allowance,4805 - NTG Housing Costs,AWEM - SMP AWE Correction,AWEP - SPP AWE Correction,AWES - SSP AWE Correction,300B - Competance Pay,300N - NTG Double Housing,300M - NTG Rent Allowance,300D - First Aid Allowance,100B - Salary Location Allow,100D - Salary Advanced,100E - Salary Day Shift,100G - Salary Kitchen Skills,100H - Salary Work IKEA1 Skills,100I - Salary Work IKEA2 Skills,100N - SalaryHighPerformer FY13,100O - Salary Day Ann Allow,100P - London Living Allowance,100Q - Weekend Working Premium,100R - Unsocial Hours Premium,100S - SalaryHighPerformer FY14,300C - Electricity Home Workers,100F - Salary FLT Skills,300E - Housing Allowance,350F - Adj-Salary FLT Skills,350M - Adj-Housing Allowance,350A - Adj-Monthly Salary,350R - Adj-Rent Allowance,350C - Adj-Responsibility Allow,300G - Night Shift,4805 - NTG Housing Costs,300I - Rent Allowance,100C - Responsibility Allow,100J - Secondment,300A - Car Allowance,300F - Mortgage Subsidy</mandatoryIf>
+      <!--<element type="select" name="AllowancesPaymentType" label="Payment Type">
+        <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>
           <option value="One Time">One Time</option>
           <option value="Recurring">Recurring</option>
         </options>
-      </element>
+      </element>-->
       <element type="text" name="AllowancesAmountUnits" label="Amount/Units">
-        <mandatoryIf name="AllowancesType">150B - Hourly Location Allow,150C - Hourly FLT Skills (Fork Lift Truck Allowance),150C - Hourly FLT Skills (Fork Lift Truck Allowance Milton Keynes),150D - Hourly Kitchen Skills,150D - Hourly Kitchen Skills London,150D - Hourly Kitchen Skills Edinburgh,150E - Hourly IKEA1 Skills,150F - Hourly IKEA2 Skills,150G - Hourly Advanced Skills,150G - Hourly Advanced Skills Cardiff,150G - Hourly Advanced Skills Edinburgh,150H - Hourly CDP Skills,150P - NIght Premium,150P - NIght Premium London 1,150P - NIght Premium London 2,150P - NIght Premium London 3,150Q - Hrly Foundation Skills,150R - High Performer 11,150W - Work Experience,150Y - High Performer 12,150Z - High Performer 13,151X - High Performer 14,150Y - Hourly High Performer,150R - Hourly Good Example,150X - Hourly AHP,150J - Hourly First Aid,150N - Hourly Pallet Resue,150I - Hourly ACE,150O - Hourly Shunter Allow,150L - Hourly Manual Hand,150K - Hourly Loaders,150S - Hourly Day,150M - Hourly MHE/H&amp;S Resp,150V - Hourly Responsibility,150U - Night Premium Dist,340V - Travel Allowance,360B - Commission,340C - Cash Adjustment,340T - Stand By Allowance,4806 - NTG Relocation Allow,340O - Relocation Allowance,4805 - NTG Housing Costs,AWEM - SMP AWE Correction,AWEP - SPP AWE Correction,AWES - SSP AWE Correction,300B - Competance Pay,300N - NTG Double Housing,300M - NTG Rent Allowance,300D - First Aid Allowance,100B - Salary Location Allow,100D - Salary Advanced,100E - Salary Day Shift,100G - Salary Kitchen Skills,100H - Salary Work IKEA1 Skills,100I - Salary Work IKEA2 Skills,100N - SalaryHighPerformer FY13,100O - Salary Day Ann Allow,100P - London Living Allowance,100Q - Weekend Working Premium,100R - Unsocial Hours Premium,100S - SalaryHighPerformer FY14,300C - Electricity Home Workers,100F - Salary FLT Skills,300E - Housing Allowance,350F - Adj-Salary FLT Skills,350M - Adj-Housing Allowance,350A - Adj-Monthly Salary,350R - Adj-Rent Allowance,350C - Adj-Responsibility Allow,300G - Night Shift,4805 - NTG Housing Costs,300I - Rent Allowance,100C - Responsibility Allow,100J - Secondment,300A - Car Allowance,300F - Mortgage Subsidy</mandatoryIf>
+        <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
         <regex inherit="unsignednum" message="" pattern=""></regex>
       </element>
-      <element type="select" name="AllowancesNetGross" label="Net/Gross">
-        <mandatoryIf name="AllowancesType">150B - Hourly Location Allow,150C - Hourly FLT Skills (Fork Lift Truck Allowance),150C - Hourly FLT Skills (Fork Lift Truck Allowance Milton Keynes),150D - Hourly Kitchen Skills,150D - Hourly Kitchen Skills London,150D - Hourly Kitchen Skills Edinburgh,150E - Hourly IKEA1 Skills,150F - Hourly IKEA2 Skills,150G - Hourly Advanced Skills,150G - Hourly Advanced Skills Cardiff,150G - Hourly Advanced Skills Edinburgh,150H - Hourly CDP Skills,150P - NIght Premium,150P - NIght Premium London 1,150P - NIght Premium London 2,150P - NIght Premium London 3,150Q - Hrly Foundation Skills,150R - High Performer 11,150W - Work Experience,150Y - High Performer 12,150Z - High Performer 13,151X - High Performer 14,150Y - Hourly High Performer,150R - Hourly Good Example,150X - Hourly AHP,150J - Hourly First Aid,150N - Hourly Pallet Resue,150I - Hourly ACE,150O - Hourly Shunter Allow,150L - Hourly Manual Hand,150K - Hourly Loaders,150S - Hourly Day,150M - Hourly MHE/H&amp;S Resp,150V - Hourly Responsibility,150U - Night Premium Dist,340V - Travel Allowance,360B - Commission,340C - Cash Adjustment,340T - Stand By Allowance,4806 - NTG Relocation Allow,340O - Relocation Allowance,4805 - NTG Housing Costs,AWEM - SMP AWE Correction,AWEP - SPP AWE Correction,AWES - SSP AWE Correction,300B - Competance Pay,300N - NTG Double Housing,300M - NTG Rent Allowance,300D - First Aid Allowance,100B - Salary Location Allow,100D - Salary Advanced,100E - Salary Day Shift,100G - Salary Kitchen Skills,100H - Salary Work IKEA1 Skills,100I - Salary Work IKEA2 Skills,100N - SalaryHighPerformer FY13,100O - Salary Day Ann Allow,100P - London Living Allowance,100Q - Weekend Working Premium,100R - Unsocial Hours Premium,100S - SalaryHighPerformer FY14,300C - Electricity Home Workers,100F - Salary FLT Skills,300E - Housing Allowance,350F - Adj-Salary FLT Skills,350M - Adj-Housing Allowance,350A - Adj-Monthly Salary,350R - Adj-Rent Allowance,350C - Adj-Responsibility Allow,300G - Night Shift,4805 - NTG Housing Costs,300I - Rent Allowance,100C - Responsibility Allow,100J - Secondment,300A - Car Allowance,300F - Mortgage Subsidy</mandatoryIf>
+      <!--<element type="select" name="AllowancesNetGross" label="Net/Gross">
+        <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>
           <option value="Net">Net</option>
           <option value="Gross">Gross</option>
         </options>
-      </element>
+      </element>-->
       <element type="date" name="AllowancesValidFrom" label="Valid from:" format="dd.MM.yyyy">
-        <mandatoryIf name="AllowancesType">150B - Hourly Location Allow,150C - Hourly FLT Skills (Fork Lift Truck Allowance),150C - Hourly FLT Skills (Fork Lift Truck Allowance Milton Keynes),150D - Hourly Kitchen Skills,150D - Hourly Kitchen Skills London,150D - Hourly Kitchen Skills Edinburgh,150E - Hourly IKEA1 Skills,150F - Hourly IKEA2 Skills,150G - Hourly Advanced Skills,150G - Hourly Advanced Skills Cardiff,150G - Hourly Advanced Skills Edinburgh,150H - Hourly CDP Skills,150P - NIght Premium,150P - NIght Premium London 1,150P - NIght Premium London 2,150P - NIght Premium London 3,150Q - Hrly Foundation Skills,150R - High Performer 11,150W - Work Experience,150Y - High Performer 12,150Z - High Performer 13,151X - High Performer 14,150Y - Hourly High Performer,150R - Hourly Good Example,150X - Hourly AHP,150J - Hourly First Aid,150N - Hourly Pallet Resue,150I - Hourly ACE,150O - Hourly Shunter Allow,150L - Hourly Manual Hand,150K - Hourly Loaders,150S - Hourly Day,150M - Hourly MHE/H&amp;S Resp,150V - Hourly Responsibility,150U - Night Premium Dist,340V - Travel Allowance,360B - Commission,340C - Cash Adjustment,340T - Stand By Allowance,4806 - NTG Relocation Allow,340O - Relocation Allowance,4805 - NTG Housing Costs,AWEM - SMP AWE Correction,AWEP - SPP AWE Correction,AWES - SSP AWE Correction,300B - Competance Pay,300N - NTG Double Housing,300M - NTG Rent Allowance,300D - First Aid Allowance,100B - Salary Location Allow,100D - Salary Advanced,100E - Salary Day Shift,100G - Salary Kitchen Skills,100H - Salary Work IKEA1 Skills,100I - Salary Work IKEA2 Skills,100N - SalaryHighPerformer FY13,100O - Salary Day Ann Allow,100P - London Living Allowance,100Q - Weekend Working Premium,100R - Unsocial Hours Premium,100S - SalaryHighPerformer FY14,300C - Electricity Home Workers,100F - Salary FLT Skills,300E - Housing Allowance,350F - Adj-Salary FLT Skills,350M - Adj-Housing Allowance,350A - Adj-Monthly Salary,350R - Adj-Rent Allowance,350C - Adj-Responsibility Allow,300G - Night Shift,4805 - NTG Housing Costs,300I - Rent Allowance,100C - Responsibility Allow,100J - Secondment,300A - Car Allowance,300F - Mortgage Subsidy</mandatoryIf>
+        <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
         <regex inherit="date" pattern="" message=""></regex>
         <laterThanOrEqual name="ContractStartDate"></laterThanOrEqual>
       </element>
       <element type="date" name="AllowancesValidTo" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
-        <mandatoryIf name="AllowancesPaymentType">Recurring</mandatoryIf>
+        <!--<mandatoryIf name="AllowancesPaymentType">Recurring</mandatoryIf>-->
         <regex inherit="date" pattern="" message=""></regex>
       </element>
 
       <element type="select" name="AllowancesType2" label="Allowance Type" >
-        &pre_allowancestype_netgross2;
+        
         <options>
           <option value=""></option>
-          <option value="150B - Hourly Location Allow">150B - Hourly Location Allow</option>
+          <option value="Advanced">Advanced</option>
+          <option value="Car Allowance">Car Allowance</option>
+          <option value="Cash Adjustment">Cash Adjustment</option>
+          <option value="Commission">Commission</option>
+          <option value="Competance Pay">Competance Pay</option>
+          <option value="Electricity Home Workers">Electricity Home Workers</option>
+          <option value="First Aid Allowance">First Aid Allowance</option>
+          <option value="Fork Lift Truck Allowance">Fork Lift Truck Allowance</option>
+          <option value="Hourly ACE">Hourly ACE</option>
+          <option value="Hourly AHP">Hourly AHP</option>
+          <option value="Hourly Day">Hourly Day</option>
+          <option value="Housing Allowance">Housing Allowance</option>
+          <option value="IKEA1 Skills">IKEA1 Skills</option>
+          <option value="IKEA2 Skills">IKEA2 Skills</option>
+          <option value="Kitchen Skills">Kitchen Skills</option>
+          <option value="Loaders">Loaders</option>
+          <option value="Location Allowance">Location Allowance</option>
+          <option value="Manual Hand">Manual Hand</option>
+          <option value="Mortgage Subsidy">Mortgage Subsidy</option>
+          <option value="Night Shift">Night Shift</option>
+          <option value="NTG Double Housing">NTG Double Housing</option>
+          <option value="NTG Housing Costs">NTG Housing Costs</option>
+          <option value="NTG Relocation Allow">NTG Relocation Allow</option>
+          <option value="NTG Rent Allowance">NTG Rent Allowance</option>
+          <option value="Pallet Resue">Pallet Resue</option>
+          <option value="Relocation Allowance">Relocation Allowance</option>
+          <option value="Rent Allowance">Rent Allowance</option>
+          <option value="Responsibility Allowance">Responsibility Allowance</option>
+          <option value="Salary Day Ann Allow">Salary Day Ann Allow</option>
+          <option value="Salary Day Shift">Salary Day Shift</option>
+          <option value="Secondment">Secondment</option>
+          <option value="Shunter Allow">Shunter Allow</option>
+          <option value="Stand By Allowance">Stand By Allowance</option>
+
+
+          <!--<option value="150B - Hourly Location Allow">150B - Hourly Location Allow</option>
           <option value="150C - Hourly FLT Skills (Fork Lift Truck Allowance)">150C - Hourly FLT Skills (Fork Lift Truck Allowance)</option>
           <option value="150C - Hourly FLT Skills (Fork Lift Truck Allowance Milton Keynes)">150C - Hourly FLT Skills (Fork Lift Truck Allowance Milton Keynes)</option>
           <option value="150D - Hourly Kitchen Skills">150D - Hourly Kitchen Skills</option>
@@ -3606,45 +4425,80 @@
           <option value="100C - Responsibility Allow">100C - Responsibility Allow</option>
           <option value="100J - Secondment">100J - Secondment</option>
           <option value="300A - Car Allowance">300A - Car Allowance</option>
-          <option value="300F - Mortgage Subsidy">300F - Mortgage Subsidy</option>
+          <option value="300F - Mortgage Subsidy">300F - Mortgage Subsidy</option>-->
 
         </options>
       </element>
-      <element type="select" name="AllowancesPaymentType2" label="Payment Type">
-        <mandatoryIf name="AllowancesType2">150B - Hourly Location Allow,150C - Hourly FLT Skills (Fork Lift Truck Allowance),150C - Hourly FLT Skills (Fork Lift Truck Allowance Milton Keynes),150D - Hourly Kitchen Skills,150D - Hourly Kitchen Skills London,150D - Hourly Kitchen Skills Edinburgh,150E - Hourly IKEA1 Skills,150F - Hourly IKEA2 Skills,150G - Hourly Advanced Skills,150G - Hourly Advanced Skills Cardiff,150G - Hourly Advanced Skills Edinburgh,150H - Hourly CDP Skills,150P - NIght Premium,150P - NIght Premium London 1,150P - NIght Premium London 2,150P - NIght Premium London 3,150Q - Hrly Foundation Skills,150R - High Performer 11,150W - Work Experience,150Y - High Performer 12,150Z - High Performer 13,151X - High Performer 14,150Y - Hourly High Performer,150R - Hourly Good Example,150X - Hourly AHP,150J - Hourly First Aid,150N - Hourly Pallet Resue,150I - Hourly ACE,150O - Hourly Shunter Allow,150L - Hourly Manual Hand,150K - Hourly Loaders,150S - Hourly Day,150M - Hourly MHE/H&amp;S Resp,150V - Hourly Responsibility,150U - Night Premium Dist,340V - Travel Allowance,360B - Commission,340C - Cash Adjustment,340T - Stand By Allowance,4806 - NTG Relocation Allow,340O - Relocation Allowance,4805 - NTG Housing Costs,AWEM - SMP AWE Correction,AWEP - SPP AWE Correction,AWES - SSP AWE Correction,300B - Competance Pay,300N - NTG Double Housing,300M - NTG Rent Allowance,300D - First Aid Allowance,100B - Salary Location Allow,100D - Salary Advanced,100E - Salary Day Shift,100G - Salary Kitchen Skills,100H - Salary Work IKEA1 Skills,100I - Salary Work IKEA2 Skills,100N - SalaryHighPerformer FY13,100O - Salary Day Ann Allow,100P - London Living Allowance,100Q - Weekend Working Premium,100R - Unsocial Hours Premium,100S - SalaryHighPerformer FY14,300C - Electricity Home Workers,100F - Salary FLT Skills,300E - Housing Allowance,350F - Adj-Salary FLT Skills,350M - Adj-Housing Allowance,350A - Adj-Monthly Salary,350R - Adj-Rent Allowance,350C - Adj-Responsibility Allow,300G - Night Shift,4805 - NTG Housing Costs,300I - Rent Allowance,100C - Responsibility Allow,100J - Secondment,300A - Car Allowance,300F - Mortgage Subsidy</mandatoryIf>
+      <!--<element type="select" name="AllowancesPaymentType2" label="Payment Type">
+        <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>
           <option value="One Time">One Time</option>
           <option value="Recurring">Recurring</option>
         </options>
-      </element>
+      </element>-->
       <element type="text" name="AllowancesAmountUnits2" label="Amount/Units">
-        <mandatoryIf name="AllowancesType2">150B - Hourly Location Allow,150C - Hourly FLT Skills (Fork Lift Truck Allowance),150C - Hourly FLT Skills (Fork Lift Truck Allowance Milton Keynes),150D - Hourly Kitchen Skills,150D - Hourly Kitchen Skills London,150D - Hourly Kitchen Skills Edinburgh,150E - Hourly IKEA1 Skills,150F - Hourly IKEA2 Skills,150G - Hourly Advanced Skills,150G - Hourly Advanced Skills Cardiff,150G - Hourly Advanced Skills Edinburgh,150H - Hourly CDP Skills,150P - NIght Premium,150P - NIght Premium London 1,150P - NIght Premium London 2,150P - NIght Premium London 3,150Q - Hrly Foundation Skills,150R - High Performer 11,150W - Work Experience,150Y - High Performer 12,150Z - High Performer 13,151X - High Performer 14,150Y - Hourly High Performer,150R - Hourly Good Example,150X - Hourly AHP,150J - Hourly First Aid,150N - Hourly Pallet Resue,150I - Hourly ACE,150O - Hourly Shunter Allow,150L - Hourly Manual Hand,150K - Hourly Loaders,150S - Hourly Day,150M - Hourly MHE/H&amp;S Resp,150V - Hourly Responsibility,150U - Night Premium Dist,340V - Travel Allowance,360B - Commission,340C - Cash Adjustment,340T - Stand By Allowance,4806 - NTG Relocation Allow,340O - Relocation Allowance,4805 - NTG Housing Costs,AWEM - SMP AWE Correction,AWEP - SPP AWE Correction,AWES - SSP AWE Correction,300B - Competance Pay,300N - NTG Double Housing,300M - NTG Rent Allowance,300D - First Aid Allowance,100B - Salary Location Allow,100D - Salary Advanced,100E - Salary Day Shift,100G - Salary Kitchen Skills,100H - Salary Work IKEA1 Skills,100I - Salary Work IKEA2 Skills,100N - SalaryHighPerformer FY13,100O - Salary Day Ann Allow,100P - London Living Allowance,100Q - Weekend Working Premium,100R - Unsocial Hours Premium,100S - SalaryHighPerformer FY14,300C - Electricity Home Workers,100F - Salary FLT Skills,300E - Housing Allowance,350F - Adj-Salary FLT Skills,350M - Adj-Housing Allowance,350A - Adj-Monthly Salary,350R - Adj-Rent Allowance,350C - Adj-Responsibility Allow,300G - Night Shift,4805 - NTG Housing Costs,300I - Rent Allowance,100C - Responsibility Allow,100J - Secondment,300A - Car Allowance,300F - Mortgage Subsidy</mandatoryIf>
+        <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
         <regex inherit="unsignednum" message="" pattern=""></regex>
       </element>
-      <element type="select" name="AllowancesNetGross2" label="Net/Gross">
-        <mandatoryIf name="AllowancesType2">150B - Hourly Location Allow,150C - Hourly FLT Skills (Fork Lift Truck Allowance),150C - Hourly FLT Skills (Fork Lift Truck Allowance Milton Keynes),150D - Hourly Kitchen Skills,150D - Hourly Kitchen Skills London,150D - Hourly Kitchen Skills Edinburgh,150E - Hourly IKEA1 Skills,150F - Hourly IKEA2 Skills,150G - Hourly Advanced Skills,150G - Hourly Advanced Skills Cardiff,150G - Hourly Advanced Skills Edinburgh,150H - Hourly CDP Skills,150P - NIght Premium,150P - NIght Premium London 1,150P - NIght Premium London 2,150P - NIght Premium London 3,150Q - Hrly Foundation Skills,150R - High Performer 11,150W - Work Experience,150Y - High Performer 12,150Z - High Performer 13,151X - High Performer 14,150Y - Hourly High Performer,150R - Hourly Good Example,150X - Hourly AHP,150J - Hourly First Aid,150N - Hourly Pallet Resue,150I - Hourly ACE,150O - Hourly Shunter Allow,150L - Hourly Manual Hand,150K - Hourly Loaders,150S - Hourly Day,150M - Hourly MHE/H&amp;S Resp,150V - Hourly Responsibility,150U - Night Premium Dist,340V - Travel Allowance,360B - Commission,340C - Cash Adjustment,340T - Stand By Allowance,4806 - NTG Relocation Allow,340O - Relocation Allowance,4805 - NTG Housing Costs,AWEM - SMP AWE Correction,AWEP - SPP AWE Correction,AWES - SSP AWE Correction,300B - Competance Pay,300N - NTG Double Housing,300M - NTG Rent Allowance,300D - First Aid Allowance,100B - Salary Location Allow,100D - Salary Advanced,100E - Salary Day Shift,100G - Salary Kitchen Skills,100H - Salary Work IKEA1 Skills,100I - Salary Work IKEA2 Skills,100N - SalaryHighPerformer FY13,100O - Salary Day Ann Allow,100P - London Living Allowance,100Q - Weekend Working Premium,100R - Unsocial Hours Premium,100S - SalaryHighPerformer FY14,300C - Electricity Home Workers,100F - Salary FLT Skills,300E - Housing Allowance,350F - Adj-Salary FLT Skills,350M - Adj-Housing Allowance,350A - Adj-Monthly Salary,350R - Adj-Rent Allowance,350C - Adj-Responsibility Allow,300G - Night Shift,4805 - NTG Housing Costs,300I - Rent Allowance,100C - Responsibility Allow,100J - Secondment,300A - Car Allowance,300F - Mortgage Subsidy</mandatoryIf>
+      <!--<element type="select" name="AllowancesNetGross2" label="Net/Gross">
+        <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>
           <option value="Net">Net</option>
           <option value="Gross">Gross</option>
         </options>
-      </element>
+      </element>-->
       <element type="date" name="AllowancesValidFrom2" label="Valid from:" format="dd.MM.yyyy">
-        <mandatoryIf name="AllowancesType2">150B - Hourly Location Allow,150C - Hourly FLT Skills (Fork Lift Truck Allowance),150C - Hourly FLT Skills (Fork Lift Truck Allowance Milton Keynes),150D - Hourly Kitchen Skills,150D - Hourly Kitchen Skills London,150D - Hourly Kitchen Skills Edinburgh,150E - Hourly IKEA1 Skills,150F - Hourly IKEA2 Skills,150G - Hourly Advanced Skills,150G - Hourly Advanced Skills Cardiff,150G - Hourly Advanced Skills Edinburgh,150H - Hourly CDP Skills,150P - NIght Premium,150P - NIght Premium London 1,150P - NIght Premium London 2,150P - NIght Premium London 3,150Q - Hrly Foundation Skills,150R - High Performer 11,150W - Work Experience,150Y - High Performer 12,150Z - High Performer 13,151X - High Performer 14,150Y - Hourly High Performer,150R - Hourly Good Example,150X - Hourly AHP,150J - Hourly First Aid,150N - Hourly Pallet Resue,150I - Hourly ACE,150O - Hourly Shunter Allow,150L - Hourly Manual Hand,150K - Hourly Loaders,150S - Hourly Day,150M - Hourly MHE/H&amp;S Resp,150V - Hourly Responsibility,150U - Night Premium Dist,340V - Travel Allowance,360B - Commission,340C - Cash Adjustment,340T - Stand By Allowance,4806 - NTG Relocation Allow,340O - Relocation Allowance,4805 - NTG Housing Costs,AWEM - SMP AWE Correction,AWEP - SPP AWE Correction,AWES - SSP AWE Correction,300B - Competance Pay,300N - NTG Double Housing,300M - NTG Rent Allowance,300D - First Aid Allowance,100B - Salary Location Allow,100D - Salary Advanced,100E - Salary Day Shift,100G - Salary Kitchen Skills,100H - Salary Work IKEA1 Skills,100I - Salary Work IKEA2 Skills,100N - SalaryHighPerformer FY13,100O - Salary Day Ann Allow,100P - London Living Allowance,100Q - Weekend Working Premium,100R - Unsocial Hours Premium,100S - SalaryHighPerformer FY14,300C - Electricity Home Workers,100F - Salary FLT Skills,300E - Housing Allowance,350F - Adj-Salary FLT Skills,350M - Adj-Housing Allowance,350A - Adj-Monthly Salary,350R - Adj-Rent Allowance,350C - Adj-Responsibility Allow,300G - Night Shift,4805 - NTG Housing Costs,300I - Rent Allowance,100C - Responsibility Allow,100J - Secondment,300A - Car Allowance,300F - Mortgage Subsidy</mandatoryIf>
+        <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
         <laterThanOrEqual name="ContractStartDate"></laterThanOrEqual>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="date" name="AllowancesValidTo2" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
-        <mandatoryIf name="AllowancesPaymentType2">Recurring</mandatoryIf>
+        <!--<mandatoryIf name="AllowancesPaymentType2">Recurring</mandatoryIf>-->
         <regex inherit="date" pattern="" message=""></regex>
       </element>
 
       <element type="select" name="AllowancesType3" label="Allowance Type" >
-        &pre_allowancestype_netgross3;
+    
         <options>
           <option value=""></option>
-          <option value="150B - Hourly Location Allow">150B - Hourly Location Allow</option>
+          <option value="Advanced">Advanced</option>
+          <option value="Car Allowance">Car Allowance</option>
+          <option value="Cash Adjustment">Cash Adjustment</option>
+          <option value="Commission">Commission</option>
+          <option value="Competance Pay">Competance Pay</option>
+          <option value="Electricity Home Workers">Electricity Home Workers</option>
+          <option value="First Aid Allowance">First Aid Allowance</option>
+          <option value="Fork Lift Truck Allowance">Fork Lift Truck Allowance</option>
+          <option value="Hourly ACE">Hourly ACE</option>
+          <option value="Hourly AHP">Hourly AHP</option>
+          <option value="Hourly Day">Hourly Day</option>
+          <option value="Housing Allowance">Housing Allowance</option>
+          <option value="IKEA1 Skills">IKEA1 Skills</option>
+          <option value="IKEA2 Skills">IKEA2 Skills</option>
+          <option value="Kitchen Skills">Kitchen Skills</option>
+          <option value="Loaders">Loaders</option>
+          <option value="Location Allowance">Location Allowance</option>
+          <option value="Manual Hand">Manual Hand</option>
+          <option value="Mortgage Subsidy">Mortgage Subsidy</option>
+          <option value="Night Shift">Night Shift</option>
+          <option value="NTG Double Housing">NTG Double Housing</option>
+          <option value="NTG Housing Costs">NTG Housing Costs</option>
+          <option value="NTG Relocation Allow">NTG Relocation Allow</option>
+          <option value="NTG Rent Allowance">NTG Rent Allowance</option>
+          <option value="Pallet Resue">Pallet Resue</option>
+          <option value="Relocation Allowance">Relocation Allowance</option>
+          <option value="Rent Allowance">Rent Allowance</option>
+          <option value="Responsibility Allowance">Responsibility Allowance</option>
+          <option value="Salary Day Ann Allow">Salary Day Ann Allow</option>
+          <option value="Salary Day Shift">Salary Day Shift</option>
+          <option value="Secondment">Secondment</option>
+          <option value="Shunter Allow">Shunter Allow</option>
+          <option value="Stand By Allowance">Stand By Allowance</option>
+
+
+          <!--<option value="150B - Hourly Location Allow">150B - Hourly Location Allow</option>
           <option value="150C - Hourly FLT Skills (Fork Lift Truck Allowance)">150C - Hourly FLT Skills (Fork Lift Truck Allowance)</option>
           <option value="150C - Hourly FLT Skills (Fork Lift Truck Allowance Milton Keynes)">150C - Hourly FLT Skills (Fork Lift Truck Allowance Milton Keynes)</option>
           <option value="150D - Hourly Kitchen Skills">150D - Hourly Kitchen Skills</option>
@@ -3719,37 +4573,37 @@
           <option value="100C - Responsibility Allow">100C - Responsibility Allow</option>
           <option value="100J - Secondment">100J - Secondment</option>
           <option value="300A - Car Allowance">300A - Car Allowance</option>
-          <option value="300F - Mortgage Subsidy">300F - Mortgage Subsidy</option>
+          <option value="300F - Mortgage Subsidy">300F - Mortgage Subsidy</option>-->
 
         </options>
       </element>
-      <element type="select" name="AllowancesPaymentType3" label="Payment Type">
-        <mandatoryIf name="AllowancesType3">150B - Hourly Location Allow,150C - Hourly FLT Skills (Fork Lift Truck Allowance),150C - Hourly FLT Skills (Fork Lift Truck Allowance Milton Keynes),150D - Hourly Kitchen Skills,150D - Hourly Kitchen Skills London,150D - Hourly Kitchen Skills Edinburgh,150E - Hourly IKEA1 Skills,150F - Hourly IKEA2 Skills,150G - Hourly Advanced Skills,150G - Hourly Advanced Skills Cardiff,150G - Hourly Advanced Skills Edinburgh,150H - Hourly CDP Skills,150P - NIght Premium,150P - NIght Premium London 1,150P - NIght Premium London 2,150P - NIght Premium London 3,150Q - Hrly Foundation Skills,150R - High Performer 11,150W - Work Experience,150Y - High Performer 12,150Z - High Performer 13,151X - High Performer 14,150Y - Hourly High Performer,150R - Hourly Good Example,150X - Hourly AHP,150J - Hourly First Aid,150N - Hourly Pallet Resue,150I - Hourly ACE,150O - Hourly Shunter Allow,150L - Hourly Manual Hand,150K - Hourly Loaders,150S - Hourly Day,150M - Hourly MHE/H&amp;S Resp,150V - Hourly Responsibility,150U - Night Premium Dist,340V - Travel Allowance,360B - Commission,340C - Cash Adjustment,340T - Stand By Allowance,4806 - NTG Relocation Allow,340O - Relocation Allowance,4805 - NTG Housing Costs,AWEM - SMP AWE Correction,AWEP - SPP AWE Correction,AWES - SSP AWE Correction,300B - Competance Pay,300N - NTG Double Housing,300M - NTG Rent Allowance,300D - First Aid Allowance,100B - Salary Location Allow,100D - Salary Advanced,100E - Salary Day Shift,100G - Salary Kitchen Skills,100H - Salary Work IKEA1 Skills,100I - Salary Work IKEA2 Skills,100N - SalaryHighPerformer FY13,100O - Salary Day Ann Allow,100P - London Living Allowance,100Q - Weekend Working Premium,100R - Unsocial Hours Premium,100S - SalaryHighPerformer FY14,300C - Electricity Home Workers,100F - Salary FLT Skills,300E - Housing Allowance,350F - Adj-Salary FLT Skills,350M - Adj-Housing Allowance,350A - Adj-Monthly Salary,350R - Adj-Rent Allowance,350C - Adj-Responsibility Allow,300G - Night Shift,4805 - NTG Housing Costs,300I - Rent Allowance,100C - Responsibility Allow,100J - Secondment,300A - Car Allowance,300F - Mortgage Subsidy</mandatoryIf>
+      <!--<element type="select" name="AllowancesPaymentType3" label="Payment Type">
+        <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>
           <option value="One Time">One Time</option>
           <option value="Recurring">Recurring</option>
         </options>
-      </element>
+      </element>-->
       <element type="text" name="AllowancesAmountUnits3" label="Amount/Units">
-        <mandatoryIf name="AllowancesType3">150B - Hourly Location Allow,150C - Hourly FLT Skills (Fork Lift Truck Allowance),150C - Hourly FLT Skills (Fork Lift Truck Allowance Milton Keynes),150D - Hourly Kitchen Skills,150D - Hourly Kitchen Skills London,150D - Hourly Kitchen Skills Edinburgh,150E - Hourly IKEA1 Skills,150F - Hourly IKEA2 Skills,150G - Hourly Advanced Skills,150G - Hourly Advanced Skills Cardiff,150G - Hourly Advanced Skills Edinburgh,150H - Hourly CDP Skills,150P - NIght Premium,150P - NIght Premium London 1,150P - NIght Premium London 2,150P - NIght Premium London 3,150Q - Hrly Foundation Skills,150R - High Performer 11,150W - Work Experience,150Y - High Performer 12,150Z - High Performer 13,151X - High Performer 14,150Y - Hourly High Performer,150R - Hourly Good Example,150X - Hourly AHP,150J - Hourly First Aid,150N - Hourly Pallet Resue,150I - Hourly ACE,150O - Hourly Shunter Allow,150L - Hourly Manual Hand,150K - Hourly Loaders,150S - Hourly Day,150M - Hourly MHE/H&amp;S Resp,150V - Hourly Responsibility,150U - Night Premium Dist,340V - Travel Allowance,360B - Commission,340C - Cash Adjustment,340T - Stand By Allowance,4806 - NTG Relocation Allow,340O - Relocation Allowance,4805 - NTG Housing Costs,AWEM - SMP AWE Correction,AWEP - SPP AWE Correction,AWES - SSP AWE Correction,300B - Competance Pay,300N - NTG Double Housing,300M - NTG Rent Allowance,300D - First Aid Allowance,100B - Salary Location Allow,100D - Salary Advanced,100E - Salary Day Shift,100G - Salary Kitchen Skills,100H - Salary Work IKEA1 Skills,100I - Salary Work IKEA2 Skills,100N - SalaryHighPerformer FY13,100O - Salary Day Ann Allow,100P - London Living Allowance,100Q - Weekend Working Premium,100R - Unsocial Hours Premium,100S - SalaryHighPerformer FY14,300C - Electricity Home Workers,100F - Salary FLT Skills,300E - Housing Allowance,350F - Adj-Salary FLT Skills,350M - Adj-Housing Allowance,350A - Adj-Monthly Salary,350R - Adj-Rent Allowance,350C - Adj-Responsibility Allow,300G - Night Shift,4805 - NTG Housing Costs,300I - Rent Allowance,100C - Responsibility Allow,100J - Secondment,300A - Car Allowance,300F - Mortgage Subsidy</mandatoryIf>
+        <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
         <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
-      <element type="select" name="AllowancesNetGross3" label="Net/Gross">
-        <mandatoryIf name="AllowancesType3">150B - Hourly Location Allow,150C - Hourly FLT Skills (Fork Lift Truck Allowance),150C - Hourly FLT Skills (Fork Lift Truck Allowance Milton Keynes),150D - Hourly Kitchen Skills,150D - Hourly Kitchen Skills London,150D - Hourly Kitchen Skills Edinburgh,150E - Hourly IKEA1 Skills,150F - Hourly IKEA2 Skills,150G - Hourly Advanced Skills,150G - Hourly Advanced Skills Cardiff,150G - Hourly Advanced Skills Edinburgh,150H - Hourly CDP Skills,150P - NIght Premium,150P - NIght Premium London 1,150P - NIght Premium London 2,150P - NIght Premium London 3,150Q - Hrly Foundation Skills,150R - High Performer 11,150W - Work Experience,150Y - High Performer 12,150Z - High Performer 13,151X - High Performer 14,150Y - Hourly High Performer,150R - Hourly Good Example,150X - Hourly AHP,150J - Hourly First Aid,150N - Hourly Pallet Resue,150I - Hourly ACE,150O - Hourly Shunter Allow,150L - Hourly Manual Hand,150K - Hourly Loaders,150S - Hourly Day,150M - Hourly MHE/H&amp;S Resp,150V - Hourly Responsibility,150U - Night Premium Dist,340V - Travel Allowance,360B - Commission,340C - Cash Adjustment,340T - Stand By Allowance,4806 - NTG Relocation Allow,340O - Relocation Allowance,4805 - NTG Housing Costs,AWEM - SMP AWE Correction,AWEP - SPP AWE Correction,AWES - SSP AWE Correction,300B - Competance Pay,300N - NTG Double Housing,300M - NTG Rent Allowance,300D - First Aid Allowance,100B - Salary Location Allow,100D - Salary Advanced,100E - Salary Day Shift,100G - Salary Kitchen Skills,100H - Salary Work IKEA1 Skills,100I - Salary Work IKEA2 Skills,100N - SalaryHighPerformer FY13,100O - Salary Day Ann Allow,100P - London Living Allowance,100Q - Weekend Working Premium,100R - Unsocial Hours Premium,100S - SalaryHighPerformer FY14,300C - Electricity Home Workers,100F - Salary FLT Skills,300E - Housing Allowance,350F - Adj-Salary FLT Skills,350M - Adj-Housing Allowance,350A - Adj-Monthly Salary,350R - Adj-Rent Allowance,350C - Adj-Responsibility Allow,300G - Night Shift,4805 - NTG Housing Costs,300I - Rent Allowance,100C - Responsibility Allow,100J - Secondment,300A - Car Allowance,300F - Mortgage Subsidy</mandatoryIf>
+      <!--<element type="select" name="AllowancesNetGross3" label="Net/Gross">
+        <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>
           <option value="Net">Net</option>
           <option value="Gross">Gross</option>
         </options>
-      </element>
+      </element>-->
       <element type="date" name="AllowancesValidFrom3" label="Valid from:"  format="dd.MM.yyyy">
-        <mandatoryIf name="AllowancesType3">150B - Hourly Location Allow,150C - Hourly FLT Skills (Fork Lift Truck Allowance),150C - Hourly FLT Skills (Fork Lift Truck Allowance Milton Keynes),150D - Hourly Kitchen Skills,150D - Hourly Kitchen Skills London,150D - Hourly Kitchen Skills Edinburgh,150E - Hourly IKEA1 Skills,150F - Hourly IKEA2 Skills,150G - Hourly Advanced Skills,150G - Hourly Advanced Skills Cardiff,150G - Hourly Advanced Skills Edinburgh,150H - Hourly CDP Skills,150P - NIght Premium,150P - NIght Premium London 1,150P - NIght Premium London 2,150P - NIght Premium London 3,150Q - Hrly Foundation Skills,150R - High Performer 11,150W - Work Experience,150Y - High Performer 12,150Z - High Performer 13,151X - High Performer 14,150Y - Hourly High Performer,150R - Hourly Good Example,150X - Hourly AHP,150J - Hourly First Aid,150N - Hourly Pallet Resue,150I - Hourly ACE,150O - Hourly Shunter Allow,150L - Hourly Manual Hand,150K - Hourly Loaders,150S - Hourly Day,150M - Hourly MHE/H&amp;S Resp,150V - Hourly Responsibility,150U - Night Premium Dist,340V - Travel Allowance,360B - Commission,340C - Cash Adjustment,340T - Stand By Allowance,4806 - NTG Relocation Allow,340O - Relocation Allowance,4805 - NTG Housing Costs,AWEM - SMP AWE Correction,AWEP - SPP AWE Correction,AWES - SSP AWE Correction,300B - Competance Pay,300N - NTG Double Housing,300M - NTG Rent Allowance,300D - First Aid Allowance,100B - Salary Location Allow,100D - Salary Advanced,100E - Salary Day Shift,100G - Salary Kitchen Skills,100H - Salary Work IKEA1 Skills,100I - Salary Work IKEA2 Skills,100N - SalaryHighPerformer FY13,100O - Salary Day Ann Allow,100P - London Living Allowance,100Q - Weekend Working Premium,100R - Unsocial Hours Premium,100S - SalaryHighPerformer FY14,300C - Electricity Home Workers,100F - Salary FLT Skills,300E - Housing Allowance,350F - Adj-Salary FLT Skills,350M - Adj-Housing Allowance,350A - Adj-Monthly Salary,350R - Adj-Rent Allowance,350C - Adj-Responsibility Allow,300G - Night Shift,4805 - NTG Housing Costs,300I - Rent Allowance,100C - Responsibility Allow,100J - Secondment,300A - Car Allowance,300F - Mortgage Subsidy</mandatoryIf>
+        <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
         <laterThanOrEqual name="ContractStartDate"></laterThanOrEqual>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="date" name="AllowancesValidTo3" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
-        <mandatoryIf name="AllowancesPaymentType3">Recurring</mandatoryIf>
+        <!--<mandatoryIf name="AllowancesPaymentType3">Recurring</mandatoryIf>-->
         <regex inherit="date" pattern="" message=""></regex>
       </element>
 
@@ -3779,131 +4633,126 @@
 
         </options>
       </element>
-      <element type="select" name="DeductionsPaymentType" label="Payment Type">
+      <!--<element type="select" name="DeductionsPaymentType" label="Payment Type">
         <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>
           <option value="One Time">One Time</option>
           <option value="Recurring">Recurring</option>
         </options>
-      </element>
+      </element>-->
       <element type="text" name="DeductionsAmountUnits" label="Amount/Units" >
         <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
         <regex inherit="unsignednum" message="" pattern=""></regex>
       </element>
-      <element type="select" name="DeductionsNetGross" label="Net/Gross">
+      <!--<element type="select" name="DeductionsNetGross" label="Net/Gross">
         <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>
           <option value="Net">Net</option>
           <option value="Gross">Gross</option>
         </options>
-      </element>
+      </element>-->
       <element type="date" name="DeductionsValidFrom" label="Valid from:" format="dd.MM.yyyy">
         <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
         <regex inherit="date" pattern="" message=""></regex>
         <laterThanOrEqual name="ContractStartDate"></laterThanOrEqual>
       </element>
       <element type="date" name="DeductionsValidTo" label="Valid to:" default="31.12.9999" format="dd.MM.yyyy">
-        <mandatoryIf name="DeductionsPaymentType">Recurring</mandatoryIf>
+        <!--<mandatoryIf name="DeductionsPaymentType">Recurring</mandatoryIf>-->
         <regex inherit="date" pattern="" message=""></regex>
       </element>
 
       <element type="select" name="DeductionsType2" label="Deduction Type">
         <options>
           <option value=""></option>
-          <option value="﻿300J - PHI-Private Health Ins">﻿300J - PHI-Private Health Ins</option>
-          <option value="710B - Health Shield">710B - Health Shield</option>
-          <option value="710C - Simply Health">710C - Simply Health</option>
-          <option value="760A - Charity">760A - Charity</option>
-          <option value="760D - Rent Deduction">760D - Rent Deduction</option>
-          <option value="760H - Badge Charge">760H - Badge Charge</option>
-          <option value="760M - Uniform Deduction">760M - Uniform Deduction</option>
-          <option value="760O - ID Card">760O - ID Card</option>
-          <option value="770E - USDAW">770E - USDAW</option>
-          <option value="770F - GMB">770F - GMB</option>
+          <option value="Badge Charge">Badge Charge</option>
+          <option value="Uniform Deduction">Uniform Deduction</option>
+          <option value="ID Card">ID Card</option>
+          <option value="TEC Expenses Deduction">TEC Expenses Deduction</option>
+          <option value="Travel Allowance">Travel Allowance</option>
+          <option value="PHI-Private Health Ins">PHI-Private Health Ins</option>
+          <option value="Rent Deduction">Rent Deduction</option>
 
         </options>
       </element>
-      <element type="select" name="DeductionsPaymentType2" label="Payment Type">
+      <!--<element type="select" name="DeductionsPaymentType2" label="Payment Type">
         <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>
           <option value="One Time">One Time</option>
           <option value="Recurring">Recurring</option>
         </options>
-      </element>
+      </element>-->
       <element type="text" name="DeductionsAmountUnits2" label="Amount/Units">
         <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
         <regex inherit="unsignednum" message="" pattern=""></regex>
       </element>
-      <element type="select" name="DeductionsNetGross2" label="Net/Gross">
+      <!--<element type="select" name="DeductionsNetGross2" label="Net/Gross">
         <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>
           <option value="Net">Net</option>
           <option value="Gross">Gross</option>
         </options>
-      </element>
+      </element>-->
       <element type="date" name="DeductionsValidFrom2" label="Valid from:"  format="dd.MM.yyyy">
         <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
         <regex inherit="date" pattern="" message=""></regex>
         <laterThanOrEqual name="ContractStartDate"></laterThanOrEqual>
       </element>
       <element type="date" name="DeductionsValidTo2" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
-        <mandatoryIf name="DeductionsPaymentType2">Recurring</mandatoryIf>
+        <!--<mandatoryIf name="DeductionsPaymentType2">Recurring</mandatoryIf>-->
         <regex inherit="date" pattern="" message=""></regex>
       </element>
 
       <element type="select" name="DeductionsType3" label="Deduction Type" >
         <options>
           <option value=""></option>
-          <option value="﻿300J - PHI-Private Health Ins">﻿300J - PHI-Private Health Ins</option>
-          <option value="710B - Health Shield">710B - Health Shield</option>
-          <option value="710C - Simply Health">710C - Simply Health</option>
-          <option value="760A - Charity">760A - Charity</option>
-          <option value="760D - Rent Deduction">760D - Rent Deduction</option>
-          <option value="760H - Badge Charge">760H - Badge Charge</option>
-          <option value="760M - Uniform Deduction">760M - Uniform Deduction</option>
-          <option value="760O - ID Card">760O - ID Card</option>
-          <option value="770E - USDAW">770E - USDAW</option>
-          <option value="770F - GMB">770F - GMB</option>
+          <option value="Badge Charge">Badge Charge</option>
+          <option value="Uniform Deduction">Uniform Deduction</option>
+          <option value="ID Card">ID Card</option>
+          <option value="TEC Expenses Deduction">TEC Expenses Deduction</option>
+          <option value="Travel Allowance">Travel Allowance</option>
+          <option value="PHI-Private Health Ins">PHI-Private Health Ins</option>
+          <option value="Rent Deduction">Rent Deduction</option>
 
         </options>
       </element>
-      <element type="select" name="DeductionsPaymentType3" label="Payment Type">
+      <!--<element type="select" name="DeductionsPaymentType3" label="Payment Type">
         <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>
           <option value="One Time">One Time</option>
           <option value="Recurring">Recurring</option>
         </options>
-      </element>
+      </element>-->
       <element type="text" name="DeductionsAmountUnits3" label="Amount/Units">
         <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
         <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
-      <element type="select" name="DeductionsNetGross3" label="Net/Gross">
+      <!--<element type="select" name="DeductionsNetGross3" label="Net/Gross">
         <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
         <options>
           <option value=""></option>
           <option value="Net">Net</option>
           <option value="Gross">Gross</option>
         </options>
-      </element>
+      </element>-->
       <element type="date" name="DeductionsValidFrom3" label="Valid from:"  format="dd.MM.yyyy">
         <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
         <regex inherit="date" pattern="" message=""></regex>
         <laterThanOrEqual name="ContractStartDate"></laterThanOrEqual>
       </element>
       <element type="date" name="DeductionsValidTo3" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
-        <mandatoryIf name="DeductionsPaymentType3">Recurring</mandatoryIf>
+        <!--<mandatoryIf name="DeductionsPaymentType3">Recurring</mandatoryIf>-->
         <regex inherit="date" pattern="" message=""></regex>
       </element>
 
       <element type="select" name="OneIKEABonusLevel" label="One IKEA Bonus Level" default="Level 1" mandatory="1">
         <options>
           <option value=""></option>
+          <option value="Co-worker">Co-worker</option>
           <option value="Level 1">Level 1</option>
           <option value="Level 2">Level 2</option>
           <option value="Level 3">Level 3</option>

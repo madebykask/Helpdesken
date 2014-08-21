@@ -45,24 +45,24 @@
                         @Model.Element("AllowancesType")
                     </td>
                 </tr>
-                <tr>
+               @* <tr>
                     <td class="tdstrong">@Model.Label("AllowancesPaymentType")</td>
                     <td>
                         @Model.Element("AllowancesPaymentType")
                     </td>
-                </tr>
+                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("AllowancesAmountUnits")</td>
                     <td>
                         @Model.Element("AllowancesAmountUnits")
                     </td>
                 </tr>
-                <tr>
+@*                <tr>
                     <td class="tdstrong">@Model.Label("AllowancesNetGross")</td>
                     <td>
                         @Model.Element("AllowancesNetGross")
                     </td>
-                </tr>
+                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("AllowancesValidFrom")</td>
                     <td>
@@ -92,21 +92,21 @@
                             </div>
                         </td>
                     </tr>
-                    <tr class="allowance@(i.ToString())">
+                    @*<tr class="allowance@(i.ToString())">
                         <td class="tdstrong">@Model.Label("AllowancesPaymentType" + i.ToString())</td>
                         <td>
                             @Model.Element("AllowancesPaymentType" + i.ToString())</td>
-                    </tr>
+                    </tr>*@
                     <tr class="allowance@(i.ToString())">
                         <td class="tdstrong">@Model.Label("AllowancesAmountUnits" + i.ToString())</td>
                         <td>
                             @Model.Element("AllowancesAmountUnits" + i.ToString())</td>
-                    </tr>
+                    </tr>@*
                     <tr class="allowance@(i.ToString())">
                         <td class="tdstrong">@Model.Label("AllowancesNetGross" + i.ToString())</td>
                         <td>
                             @Model.Element("AllowancesNetGross" + i.ToString())</td>
-                    </tr>
+                    </tr>*@
                     <tr class="allowance@(i.ToString())">
                         <td class="tdstrong">@Model.Label("AllowancesValidFrom" + i.ToString())</td>
                         <td>
@@ -141,24 +141,24 @@
                         @Model.Element("DeductionsType")
                     </td>
                 </tr>
-                <tr>
+@*                <tr>
                     <td class="tdstrong">@Model.Label("DeductionsPaymentType")</td>
                     <td>
                         @Model.Element("DeductionsPaymentType")
                     </td>
-                </tr>
+                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("DeductionsAmountUnits")</td>
                     <td>
                         @Model.Element("DeductionsAmountUnits")
                     </td>
                 </tr>
-                <tr>
+@*                <tr>
                     <td class="tdstrong">@Model.Label("DeductionsNetGross")</td>
                     <td>
                         @Model.Element("DeductionsNetGross")
                     </td>
-                </tr>
+                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("DeductionsValidFrom")</td>
                     <td>
@@ -183,22 +183,22 @@
                         <td class="tdstrong">@Model.Label("DeductionsType" + i.ToString())</td>
                         <td>
                             @Model.Element("DeductionsType" + i.ToString())</td>
-                    </tr>
+                    </tr>@*
                     <tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DeductionsPaymentType" + i.ToString())</td>
                         <td>
                             @Model.Element("DeductionsPaymentType" + i.ToString())</td>
-                    </tr>
+                    </tr>*@
                     <tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DeductionsAmountUnits" + i.ToString())</td>
                         <td>
                             @Model.Element("DeductionsAmountUnits" + i.ToString())</td>
-                    </tr>
+                    </tr>@*
                     <tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DeductionsNetGross" + i.ToString())</td>
                         <td>
                             @Model.Element("DeductionsNetGross" + i.ToString())</td>
-                    </tr>
+                    </tr>*@
                     <tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DeductionsValidFrom" + i.ToString())</td>
                         <td>
@@ -262,8 +262,8 @@
                                 <tr>
                     <td class="tdstrong">@Model.Label("BenefitLevel")</td>
                     <td>@Model.Element("BenefitLevel")
-                        <div id="notice_BenefitLevel" style="display:none;" class="notice">
-                            @Model.Translate("Only enter values after consultation with UK & IE  Comps & Bens Mgr")
+                        <div id="notice_BenefitLevel" style="display:inline-block; color:black;" class="notice">
+                            @Model.Translate("If no default value, please consult UK & IE Comps & Bens Mgr")
                         </div>
                     </td>
                 </tr>
@@ -350,55 +350,47 @@
             datePicker.datepicker();
         }
 
-        function setDatePickerBehavior(id, value) {
+        function setDatePickerBehavior(id) {
             var input = $('#' + id);
 
-            if (value == 'One Time') {
-                disableDatePicker(id);
-            } else {
-                enableDatePicker(id);
-            }
+           
         }
 
-        function setDefaultDatePickerBehavior(id, value) {
+        function setDefaultDatePickerBehavior(id) {
             var input = $('#' + id);
 
-            if (value == 'One Time') {
-                disableDatePicker(id);
-            } else {
-                setDefaultDate(id);
-            }
+            
         }
 
-        $('#AllowancesPaymentType').change(function () {
-            setDatePickerBehavior('AllowancesValidTo', $(this).val());
+        $('#ContractStartDate').change(function () {
+            setDatePickerBehavior('AllowancesValidTo');
         });
-        setDefaultDatePickerBehavior('AllowancesValidTo', $('#AllowancesPaymentType').val());
+        setDefaultDatePickerBehavior('AllowancesValidTo');
 
-        $('#AllowancesPaymentType2').change(function () {
-            setDatePickerBehavior('AllowancesValidTo2', $(this).val());
-        });
-        setDefaultDatePickerBehavior('AllowancesValidTo2', $('#AllowancesPaymentType2').val());
+        //$('#AllowancesPaymentType2').change(function () {
+        //    setDatePickerBehavior('AllowancesValidTo2', $(this).val());
+        //});
+        //setDefaultDatePickerBehavior('AllowancesValidTo2', $('#AllowancesPaymentType2').val());
 
-        $('#AllowancesPaymentType3').change(function () {
-            setDatePickerBehavior('AllowancesValidTo3', $(this).val());
-        });
-        setDefaultDatePickerBehavior('AllowancesValidTo3', $('#AllowancesPaymentType3').val());
+        //$('#AllowancesPaymentType3').change(function () {
+        //    setDatePickerBehavior('AllowancesValidTo3', $(this).val());
+        //});
+        //setDefaultDatePickerBehavior('AllowancesValidTo3', $('#AllowancesPaymentType3').val());
 
-        $('#DeductionsPaymentType').change(function () {
-            setDatePickerBehavior('DeductionsValidTo', $(this).val());
+        $('#ContractStartDate').change(function () {
+            setDatePickerBehavior('DeductionsValidTo');
         });
-        setDefaultDatePickerBehavior('DeductionsValidTo', $('#DeductionsPaymentType').val());
+        setDefaultDatePickerBehavior('DeductionsValidTo');
 
-        $('#DeductionsPaymentType2').change(function () {
-            setDatePickerBehavior('DeductionsValidTo2', $(this).val());
-        });
-        setDefaultDatePickerBehavior('DeductionsValidTo2', $('#DeductionsPaymentType2').val());
+        //$('#DeductionsPaymentType2').change(function () {
+        //    setDatePickerBehavior('DeductionsValidTo2', $(this).val());
+        //});
+        //setDefaultDatePickerBehavior('DeductionsValidTo2', $('#DeductionsPaymentType2').val());
 
-        $('#DeductionsPaymentType3').change(function () {
-            setDatePickerBehavior('DeductionsValidTo3', $(this).val());
-        });
-        setDefaultDatePickerBehavior('DeductionsValidTo3', $('#DeductionsPaymentType3').val());
+        //$('#DeductionsPaymentType3').change(function () {
+        //    setDatePickerBehavior('DeductionsValidTo3', $(this).val());
+        //});
+        //setDefaultDatePickerBehavior('DeductionsValidTo3', $('#DeductionsPaymentType3').val());
 
 @*        function setOneIKEABonusLevel(value) {
             if (!value) {

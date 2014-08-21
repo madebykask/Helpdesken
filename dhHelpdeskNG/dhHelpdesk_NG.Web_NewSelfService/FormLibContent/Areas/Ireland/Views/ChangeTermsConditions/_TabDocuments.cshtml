@@ -26,22 +26,6 @@
     {
         ArrayList contracts = new ArrayList();
 
-        //switch (Model.GetAnswer(FormLibConstants.FormField.ChangeType).ToLower())
-        //{
-        //    case "only pay change":
-        //    case "only change work hours":
-        //    case "position change":
-        //    case "lateral move":
-        //    case "demotion":
-        //    case "re-organisation":
-        //    case "full time to part time":
-        //    case "part time to full time":
-        //    case "end short term assignment":
-        //    case "promotion":
-        //        contracts.Add("ChangesOfPayHourPosition");
-        //        break;
-
-        //}
         
         if (Model.GetAnswer(FormLibConstants.FormField.ChangeType).ToLower() == "Secondment".ToLower())
         {
@@ -114,59 +98,56 @@
 
 <div class="tab-pane" id="documents">
     <div class="span12">
-        
-        @if (contracts.Count > 0)
-        {
-            <table class="table-striped">
-                <thead>
-                    <tr>
-                        <th>@Model.Translate("Document")
-                        </th>
-                        <th>@Model.Translate("Type")
-                        </th>
-                        <th>&nbsp;</th>
-                        <th>&nbsp;</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    
-                    @for (int i = 0; i < contracts.Count; i++)
+        <table class="table-striped">
+            <thead>
+                <tr>
+                    <th>@Model.Translate("Document")
+                    </th>
+                    <th>@Model.Translate("Type")
+                    </th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+            @if (contracts.Count > 0)
+            {
+                for (int i = 0; i < contracts.Count; i++)
+                {
+                    //TODO: Solve this beautiful
+                    string[] contractAr = contracts[i].ToString().Split(' ');
+                    if(contractAr.Length > 0)
                     {
-                        //TODO: Solve this beautiful
-                        string[] contractAr = contracts[i].ToString().Split(' ');
-                        if(contractAr.Length > 0)
+                        string allowanceNr = "";
+                        if (contractAr.Length > 1)
                         {
-                            string allowanceNr = "";
-                            if (contractAr.Length > 1)
-                            {
-                                allowanceNr = contractAr[1];
-                            }
-                            <tr>
-                                <td>@Model.Translate("Contract") &nbsp; @contracts[i].ToString() </td>
-                                <td>pdf</td>
-                                <td>&nbsp;</td>
-                                <td>
-                                    <a href="@Url.Action("print", "ChangeTermsConditions", new
-                                    {
-                                        id = contractAr[0],
-                                        caseId = Model.Contract.Id,
-                                        path = Path.Combine(Path.GetDirectoryName(Model.FormXmlPath), Path.GetFileNameWithoutExtension(Model.FormXmlPath)),
-                                        userId = FormLibSessions.User.UserId,
-                                        allowanceNr = allowanceNr
-                                    })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@PrintText()</a>
-                                </td>
-                            </tr>
+                            allowanceNr = contractAr[1];
                         }
+                        <tr>
+                            <td>@Model.Translate("Contract") &nbsp; @contracts[i].ToString() </td>
+                            <td>pdf</td>
+                            <td>&nbsp;</td>
+                            <td>
+                                <a href="@Url.Action("print", "ChangeTermsConditions", new
+                                {
+                                    id = contractAr[0],
+                                    caseId = Model.Contract.Id,
+                                    path = Path.Combine(Path.GetDirectoryName(Model.FormXmlPath), Path.GetFileNameWithoutExtension(Model.FormXmlPath)),
+                                    userId = FormLibSessions.User.UserId,
+                                    allowanceNr = allowanceNr
+                                })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@PrintText()</a>
+                            </td>
+                        </tr>
                     }
-                </tbody>
-
-            </table> }
-        else
-        {
-            <div class="alert alert-info"><strong><i class="icon-info-sign"></i>&nbsp;@Model.Translate("A document can not be created based on current selections")</strong></div>
-        }
-
-         @Html.Partial("_StaticDocuments", Model)
+                }
+                 }
+            else
+            {
+                <tr><td colspan="4"><div class="alert alert-info"><strong><i class="icon-info-sign"></i>&nbsp;@Model.Translate("A document can not be created based on current selections")</strong></div></td></tr>
+            }
+             @Html.Partial("_StaticDocuments", Model)
+            </tbody>
+        </table>
     </div>
 </div>
 

@@ -837,7 +837,8 @@
 		 * This should propagate the event to the original DOM
 		 * input / select element.
 		 */
-		onChange: function() {
+		onChange: function () {
+		    
 			this.$input.trigger('change');
 		},
 	

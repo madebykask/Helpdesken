@@ -264,12 +264,12 @@
     $(function () {
 
         function showAbsenceNotice(absenceTypeId, absenceNoticeId, value) {
-
+            debugger;
             var intValue = parseInt(value, 10);
 
             $('#' + absenceNoticeId).hide();
 
-            if ($('#' + absenceTypeId).val() == '﻿Maternity leave') {
+            if ($('#' + absenceTypeId).val() == 'Maternity leave') {
                 if (intValue <= 2 || intValue > 52) {
                     $('#' + absenceNoticeId).show();
                 }
@@ -281,7 +281,7 @@
             }
         }
 
-        $('#NumberOfWeeks').on('input', function () {
+        $('#NumberOfWeeks').on('change', function () {
             showAbsenceNotice('AbsenceType', 'AbsenceNotice', $(this).val());
         });
         $('#NumberOfWeeks2').on('input', function () {

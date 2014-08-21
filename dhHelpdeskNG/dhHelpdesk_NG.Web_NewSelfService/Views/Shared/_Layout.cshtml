@@ -272,7 +272,7 @@
             <div class="pull-right small toplogout">
             
                 
-                    <div class="dropdown"> 
+                    @*<div class="dropdown"> 
                       <a href="#" type="button" class="dropdown-toggle" data-toggle="dropdown">
                         @Translation.Get("Select language", Enums.TranslationSource.TextTranslation)<span class="caret"></span>
                       </a>
@@ -282,12 +282,12 @@
                          <li><a href="#" onclick="ChangeLang(1)">Swedish</a></li>
                          <li><a href="#" onclick="ChangeLang(12)">Chinese</a></li>
                       </ul>
-                    </div>
+                    </div>*@
                 @if (!hideMenu)
                 {
-                    <span class="toplogout-space"> | </span>
+                    @*<span class="toplogout-space"> | </span>*@
                     <a href="#" > User: @SessionFacade.CurrentSystemUser</a> 
-                     <span class="toplogout-space"> | </span>
+                     @*<span class="toplogout-space"> | </span>*@
                     
                      @*<a href="@System.Configuration.ConfigurationManager.AppSettings["LogoutUrl"].ToString()">@Translation.Get("Logga ut", Enums.TranslationSource.TextTranslation)</a>*@
                 }

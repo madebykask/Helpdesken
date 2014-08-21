@@ -33,7 +33,7 @@
                   <option value ="Yes">Yes</option>
                 </options>
             </element>
-            <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1">
+            <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard">
                 <options>
                     <option value=""></option>
                     <option value ="Urgent">Urgent</option>
@@ -388,14 +388,7 @@
             <regex inherit="unsignednum" pattern="" message=""></regex>
             <mandatoryIfNotEmpty name="TerminationPaymentType"></mandatoryIfNotEmpty>
           </element>
-          <element name="TerminationNetGross" type="select" label="Net/Gross">
-            <mandatoryIfNotEmpty name="TerminationPaymentType"></mandatoryIfNotEmpty>
-            <options>
-              <option value=""></option>
-              <option value="Net">Net</option>
-              <option value="Gross">Gross</option>
-            </options>
-          </element>
+
           <element name="OneIKEABonusDue" type="text" label="One IKEA Bonus Due">
             <mandatoryIfNotEmpty name="TerminationPaymentType"></mandatoryIfNotEmpty>
             <regex inherit="unsignednum" pattern="" message=""></regex>
@@ -412,22 +405,15 @@
             <regex inherit="unsignednum" pattern="" message=""></regex>
             <mandatoryIfNotEmpty name="TerminationPaymentType2"></mandatoryIfNotEmpty>
           </element>
-          <element name="TerminationNetGross2" type="select" label="Net/Gross">
-            <mandatoryIfNotEmpty name="TerminationPaymentType2"></mandatoryIfNotEmpty>
-            <options>
-              <option value=""></option>
-              <option value="Net">Net</option>
-              <option value="Gross">Gross</option>
-            </options>
-          </element>
-          <element name="OneIKEABonusDue2" type="text" label="One IKEA Bonus Due">
+
+          <!--<element name="OneIKEABonusDue2" type="text" label="One IKEA Bonus Due">
             <mandatoryIfNotEmpty name="TerminationPaymentType2"></mandatoryIfNotEmpty>
             <regex inherit="unsignednum" pattern="" message=""></regex>
           </element>
           <element name="TerminationPaymentDate2" type="date" format="dd.MM.yyyy" label="Payment Date:">
             <regex inherit="date" pattern="" message=""></regex>
             <mandatoryIfNotEmpty name="TerminationPaymentType2"></mandatoryIfNotEmpty>
-          </element>
+          </element>-->
 
           <element name="TerminationPaymentType3" type="text" label="Payment Type">
 
@@ -436,22 +422,15 @@
             <regex inherit="unsignednum" pattern="" message=""></regex>
             <mandatoryIfNotEmpty name="TerminationPaymentType3"></mandatoryIfNotEmpty>
           </element>
-          <element name="TerminationNetGross3" type="select" label="Net/Gross">
-            <mandatoryIfNotEmpty name="TerminationPaymentType3"></mandatoryIfNotEmpty>
-            <options>
-              <option value=""></option>
-              <option value="Net">Net</option>
-              <option value="Gross">Gross</option>
-            </options>
-          </element>
-          <element name="OneIKEABonusDue3" type="text" label="One IKEA Bonus Due">
+
+          <!--<element name="OneIKEABonusDue3" type="text" label="One IKEA Bonus Due">
             <regex inherit="unsignednum" pattern="" message=""></regex>
             <mandatoryIfNotEmpty name="TerminationPaymentType3"></mandatoryIfNotEmpty>
           </element>
           <element name="TerminationPaymentDate3" type="date" format="dd.MM.yyyy" label="Payment Date:">
             <regex inherit="date" pattern="" message=""></regex>
             <mandatoryIfNotEmpty name="TerminationPaymentType3"></mandatoryIfNotEmpty>
-          </element>
+          </element>-->
 
           <element name="Deductions" type="hidden" default="1"></element>
           <element name="DeductionType" type="select" label="Deduction Type">
@@ -461,25 +440,19 @@
               <option value="Relocation/Rental deposit">Relocation/Rental deposit</option>
               <option value="Interest free loan">Interest free loan</option>
               <option value="TEC deduction">TEC deduction</option>
-              <option value="Other">Other</option>
+              
             </options>
           </element>
-          <element name="OtherDeduction" type="text" label="Other deduction">
+          <!--<element name="OtherDeduction" type="text" label="Other deduction">
             <mandatoryIf name="DeductionType">Other</mandatoryIf>
-          </element>
+          </element>-->
           <element name="DeductionAmountUnits" type="text" label="Amount/Units">
             <mandatoryIfNotEmpty name="DeductionType"></mandatoryIfNotEmpty>
             <regex inherit="unsignednum" pattern="" message=""></regex>
           </element>
-          <element name="DeductionNetGross" type="select" label="Net/Gross">
-            <mandatoryIfNotEmpty name="DeductionType"></mandatoryIfNotEmpty>
-            <options>
-              <option value=""></option>
-              <option value="Net">Net</option>
-              <option value="Gross">Gross</option>
-            </options>
-          </element>
+
           <element name="DeductionDate" type="date" format="dd.MM.yyyy" label="Deduction date:">
+            <regex inherit="date" pattern="" message=""></regex>
             <mandatoryIfNotEmpty name="DeductionType"></mandatoryIfNotEmpty>
           </element>
 
@@ -490,25 +463,19 @@
               <option value="Relocation/Rental deposit">Relocation/Rental deposit</option>
               <option value="Interest free loan">Interest free loan</option>
               <option value="TEC deduction">TEC deduction</option>
-              <option value="Other">Other</option>
+              
             </options>
           </element>
-          <element name="OtherDeduction2" type="text" label="Other deduction">
+          <!--<element name="OtherDeduction2" type="text" label="Other deduction">
             <mandatoryIfNotEmpty name="DeductionType2"></mandatoryIfNotEmpty>
-          </element>
+          </element>-->
           <element name="DeductionAmountUnits2" type="text" label="Amount/Units">
             <mandatoryIfNotEmpty name="DeductionType2"></mandatoryIfNotEmpty>
             <regex inherit="unsignednum" pattern="" message=""></regex>
           </element>
-          <element name="DeductionNetGross2" type="select" label="Net/Gross">
-            <mandatoryIfNotEmpty name="DeductionType2"></mandatoryIfNotEmpty>
-            <options>
-              <option value=""></option>
-              <option value="Net">Net</option>
-              <option value="Gross">Gross</option>
-            </options>
-          </element>
+
           <element name="DeductionDate2" type="date" format="dd.MM.yyyy" label="Deduction date:">
+            <regex inherit="date" pattern="" message=""></regex>
             <mandatoryIfNotEmpty name="DeductionType2"></mandatoryIfNotEmpty>
           </element>
 
@@ -519,29 +486,143 @@
               <option value="Relocation/Rental deposit">Relocation/Rental deposit</option>
               <option value="Interest free loan">Interest free loan</option>
               <option value="TEC deduction">TEC deduction</option>
-              <option value="Other">Other</option>
+              
             </options>
           </element>
-          <element name="OtherDeduction3" type="text" label="Other deduction">
+          <!--<element name="OtherDeduction3" type="text" label="Other deduction">
             <mandatoryIfNotEmpty name="DeductionType3"></mandatoryIfNotEmpty>
             
-          </element>
+          </element>-->
           <element name="DeductionAmountUnits3" type="text" label="Amount/Units">
             <mandatoryIfNotEmpty name="DeductionType3"></mandatoryIfNotEmpty>
             <regex inherit="unsignednum" pattern="" message=""></regex>
           </element>
-          <element name="DeductionNetGross3" type="select" label="Net/Gross">
-            <mandatoryIfNotEmpty name="DeductionType3"></mandatoryIfNotEmpty>
-            <options>
-              <option value=""></option>
-              <option value="Net">Net</option>
-              <option value="Gross">Gross</option>
-            </options>
-          </element>
+
           <element name="DeductionDate3" type="date" format="dd.MM.yyyy" label="Deduction date:">
+            <regex inherit="date" pattern="" message=""></regex>
             <mandatoryIfNotEmpty name="DeductionType3"></mandatoryIfNotEmpty>
           </element>
 
+
+
+
+
+
+
+          <element name="DeductionType4" type="select" label="Deduction Type">
+            <options>
+              <option value=""></option>
+              <option value="Education cost">Education cost</option>
+              <option value="Relocation/Rental deposit">Relocation/Rental deposit</option>
+              <option value="Interest free loan">Interest free loan</option>
+              <option value="TEC deduction">TEC deduction</option>
+
+            </options>
+          </element>
+          <!--<element name="OtherDeduction3" type="text" label="Other deduction">
+            <mandatoryIfNotEmpty name="DeductionType3"></mandatoryIfNotEmpty>
+            
+          </element>-->
+          <element name="DeductionAmountUnits4" type="text" label="Amount/Units">
+            <mandatoryIfNotEmpty name="DeductionType4"></mandatoryIfNotEmpty>
+            <regex inherit="unsignednum" pattern="" message=""></regex>
+          </element>
+
+          <element name="DeductionDate4" type="date" format="dd.MM.yyyy" label="Deduction date:">
+            <regex inherit="date" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DeductionType4"></mandatoryIfNotEmpty>
+          </element>
+
+
+
+
+          <element name="DeductionType5" type="select" label="Deduction Type">
+            <options>
+              <option value=""></option>
+              <option value="Education cost">Education cost</option>
+              <option value="Relocation/Rental deposit">Relocation/Rental deposit</option>
+              <option value="Interest free loan">Interest free loan</option>
+              <option value="TEC deduction">TEC deduction</option>
+
+            </options>
+          </element>
+          <!--<element name="OtherDeduction3" type="text" label="Other deduction">
+            <mandatoryIfNotEmpty name="DeductionType3"></mandatoryIfNotEmpty>
+            
+          </element>-->
+          <element name="DeductionAmountUnits5" type="text" label="Amount/Units">
+            <mandatoryIfNotEmpty name="DeductionType5"></mandatoryIfNotEmpty>
+            <regex inherit="unsignednum" pattern="" message=""></regex>
+          </element>
+
+          <element name="DeductionDate5" type="date" format="dd.MM.yyyy" label="Deduction date:">
+            <regex inherit="date" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DeductionType5"></mandatoryIfNotEmpty>
+          </element>
+          
+          
+          <element type="hidden" default="1" name="UnreturnedItemsMulti"></element>
+          <element type="select" name="UnreturnedItems" label="Unreturned items">
+            <options>
+              <option value=""></option>
+              <option value="ID Card/Uniform">ID Card/Uniform</option>
+              <option value="Mobile Phone">Mobile Phone</option>
+              <option value="Laptop">Laptop</option>
+              <option value="Company Credit Card">Company Credit Card</option>
+              <option value="Company Car">Company Car</option>
+              <option value="Other (Swipe card, etc)">Other (Swipe card, etc)</option>
+            </options>
+          </element>
+
+          <element type="select" name="UnreturnedItems2" label="Unreturned items">
+            <options>
+              <option value=""></option>
+              <option value="ID Card/Uniform">ID Card/Uniform</option>
+              <option value="Mobile Phone">Mobile Phone</option>
+              <option value="Laptop">Laptop</option>
+              <option value="Company Credit Card">Company Credit Card</option>
+              <option value="Company Car">Company Car</option>
+              <option value="Other (Swipe card, etc)">Other (Swipe card, etc)</option>
+            </options>
+          </element>
+
+
+          <element type="select" name="UnreturnedItems3" label="Unreturned items">
+            <options>
+              <option value=""></option>
+              <option value="ID Card/Uniform">ID Card/Uniform</option>
+              <option value="Mobile Phone">Mobile Phone</option>
+              <option value="Laptop">Laptop</option>
+              <option value="Company Credit Card">Company Credit Card</option>
+              <option value="Company Car">Company Car</option>
+              <option value="Other (Swipe card, etc)">Other (Swipe card, etc)</option>
+            </options>
+          </element>
+
+          <element type="select" name="UnreturnedItems4" label="Unreturned items">
+            <options>
+              <option value=""></option>
+              <option value="ID Card/Uniform">ID Card/Uniform</option>
+              <option value="Mobile Phone">Mobile Phone</option>
+              <option value="Laptop">Laptop</option>
+              <option value="Company Credit Card">Company Credit Card</option>
+              <option value="Company Car">Company Car</option>
+              <option value="Other (Swipe card, etc)">Other (Swipe card, etc)</option>
+            </options>
+          </element>
+
+          <element type="select" name="UnreturnedItems5" label="Unreturned items">
+            <options>
+              <option value=""></option>
+              <option value="ID Card/Uniform">ID Card/Uniform</option>
+              <option value="Mobile Phone">Mobile Phone</option>
+              <option value="Laptop">Laptop</option>
+              <option value="Company Credit Card">Company Credit Card</option>
+              <option value="Company Car">Company Car</option>
+              <option value="Other (Swipe card, etc)">Other (Swipe card, etc)</option>
+            </options>
+          </element>
+          
           <element name="PositionRemovedOMStructure" type="select" label="Position to be removed from the OM structure?" mandatory="1">
             <options>
               <option value=""></option>

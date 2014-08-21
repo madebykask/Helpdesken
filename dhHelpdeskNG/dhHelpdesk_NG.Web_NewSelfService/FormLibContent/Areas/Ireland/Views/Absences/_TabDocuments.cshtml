@@ -22,37 +22,37 @@
 }
 <div class="tab-pane" id="documents">
     <div class="span12">
-        @*Temp, do a loop instead /TAn*@
-        @if (!string.IsNullOrEmpty(GetContract("")) | !string.IsNullOrEmpty(GetContract("2")) | !string.IsNullOrEmpty(GetContract("3")) | !string.IsNullOrEmpty(GetContract("4")))
-        {
-            <table class="table-striped">
-                <thead>
-                    <tr>
-                        <th>@Model.Translate("Document")
-                        </th>
-                        <th>@Model.Translate("Type")
-                        </th>
-                        <th>&nbsp;
-                        </th>
-                        <th>&nbsp;
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (int i = 1; i <= int.Parse(Model.GetAnswer("AbsencesMulti")); i++)
+        <table class="table-striped">
+            <thead>
+                <tr>
+                    <th>@Model.Translate("Document")
+                    </th>
+                    <th>@Model.Translate("Type")
+                    </th>
+                    <th>&nbsp;
+                    </th>
+                    <th>&nbsp;
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            @*Temp, do a loop instead /TAn*@
+            @if (!string.IsNullOrEmpty(GetContract("")) | !string.IsNullOrEmpty(GetContract("2")) | !string.IsNullOrEmpty(GetContract("3")) | !string.IsNullOrEmpty(GetContract("4")))
+            {
+                for (int i = 1; i <= int.Parse(Model.GetAnswer("AbsencesMulti")); i++)
+                {
+                    string absenceNr = "";
+
+                    if (i > 1)
                     {
-                        string absenceNr = "";
+                        absenceNr = i.ToString();
+                    }
 
-                        if (i > 1)
+                    if (!string.IsNullOrEmpty(GetContract(absenceNr)))
+                    {
+
+                        if (!string.IsNullOrEmpty(Model.GetAnswer("AbsenceType" + absenceNr)))
                         {
-                            absenceNr = i.ToString();
-                        }
-
-                        if (!string.IsNullOrEmpty(GetContract(absenceNr)))
-                        {
-
-                            if (!string.IsNullOrEmpty(Model.GetAnswer("AbsenceType" + absenceNr)))
-                            {
                         <tr>
                             <td>@Model.GetAnswer("AbsenceType" + absenceNr)</td>
                             <td>pdf</td>
@@ -68,17 +68,18 @@
                                 })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@Model.Translate("Print")</a>
                             </td>
                         </tr>
-                            }
                         }
                     }
-                </tbody>
-            </table>
-        }
-        else
-        {
-            <div class="alert alert-info"><strong><i class="icon-info-sign"></i>&nbsp;@Model.Translate("A document can not be created based on current selections")</strong></div>
-        }
+                }
+                
+            }
+            else
+            {
+                <tr><td colspan="4"><div class="alert alert-info"><strong><i class="icon-info-sign"></i>&nbsp;@Model.Translate("A document can not be created based on current selections")</strong></div></td></tr>
+            }
 
-         @Html.Partial("_StaticDocuments", Model)
+            @Html.Partial("_StaticDocuments", Model)
+            </tbody>
+         </table>
     </div>
 </div>

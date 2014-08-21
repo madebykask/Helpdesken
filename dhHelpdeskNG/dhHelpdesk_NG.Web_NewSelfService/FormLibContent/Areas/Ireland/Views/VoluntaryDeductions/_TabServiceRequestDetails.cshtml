@@ -99,7 +99,15 @@
             </tbody>
         </table>
     </div>
-    
+    <div class="span6">
+        @{
+            Random rnd = new Random();
+            int nr = rnd.Next(1, 14);
+            string filename = "~/FormLibContent/Assets/img/UK/ikea-" + nr + ".png";
+        }
+  
+        <img src="@Url.Content(filename)" />
+    </div>
     <input type="hidden" id="CustomerId" value="@Model.CustomerId" />
     
 </div>

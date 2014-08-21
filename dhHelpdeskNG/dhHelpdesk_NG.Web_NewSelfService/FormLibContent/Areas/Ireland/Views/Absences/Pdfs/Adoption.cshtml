@@ -34,6 +34,8 @@
             <br />
             @Model.GetDocumentAnswer("PermanentCity", true)
             <br />
+            @Model.GetDocumentAnswer("PermanentPostalCode", true)
+            <br />
             <br />
             <br />
             <br />
@@ -76,7 +78,7 @@
 
             @if (Model.GetDocumentAnswer("Seniority").ToLower() == "1 - 2 years".ToLower() | Model.GetDocumentAnswer("Seniority").ToLower() == "Over 2 years".ToLower())
             {
-                <text>Your Adoption pay will be €@Model.GetDocumentAnswer("AdoptionPay", true) per week.</text>
+                <text>Your Adoption pay will be &euro; @Model.GetDocumentAnswer("AdoptionPay", true) per week.</text>
                   
                 <text><br />
                 <br /></text>

@@ -43,7 +43,7 @@
     <readOnlyTabs></readOnlyTabs>
     <readOnlyFields></readOnlyFields>
     <actions>
-      <!--<action status="10" internal-val="10" text="Send back to Line Manager"></action>-->
+      <action status="10" internal-val="10" text="Send back to Line Manager"></action>
       <action status="30" internal-val="30" text="Submit Complete Service Request to SSC">
         <validateTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</validateTabs>
       </action>
@@ -59,8 +59,8 @@
       <visibleTabs>#servicerequestdetails,#OrganisationalAssignment</visibleTabs>
       <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment</readOnlyTabs>
     </userGroup>
-    <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents,#SSCUseOnly,#attachments</visibleTabs>
-    <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</readOnlyTabs>
+    <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents,#SSCUseOnly,#attachments</visibleTabs>
+    <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</readOnlyTabs>
     <readOnlyFields></readOnlyFields>
     <actions>
       <action status="40" internal-val="40" text="Validity check OK"></action>
@@ -74,8 +74,8 @@
       <visibleTabs>#servicerequestdetails,#OrganisationalAssignment</visibleTabs>
       <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment</readOnlyTabs>
     </userGroup>
-    <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents,#globalview,#SSCUseOnly,#attachments</visibleTabs>
-    <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</readOnlyTabs>
+    <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents,#globalview,#SSCUseOnly,#attachments</visibleTabs>
+    <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</readOnlyTabs>
     <readOnlyFields></readOnlyFields>
     <actions>
       <action status="50" internal-val="50" text="Global View update"></action>
@@ -88,8 +88,8 @@
       <visibleTabs>#servicerequestdetails,#OrganisationalAssignment</visibleTabs>
       <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment</readOnlyTabs>
     </userGroup>
-    <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents,#globalview,#SSCUseOnly,#attachments</visibleTabs>
-    <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</readOnlyTabs>
+    <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents,#globalview,#SSCUseOnly,#attachments</visibleTabs>
+    <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</readOnlyTabs>
     <readOnlyFields></readOnlyFields>
 
     <actions>
@@ -104,8 +104,8 @@
       <visibleTabs>#servicerequestdetails,#OrganisationalAssignment</visibleTabs>
       <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment</readOnlyTabs>
     </userGroup>
-    <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents,#globalview,#SSCUseOnly,#attachments</visibleTabs>
-    <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#SSCUseOnly</readOnlyTabs>
+    <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents,#globalview,#SSCUseOnly,#attachments</visibleTabs>
+    <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#SSCUseOnly</readOnlyTabs>
     <readOnlyFields></readOnlyFields>
     <actions>
     </actions>
@@ -115,8 +115,8 @@
       <visibleTabs>#servicerequestdetails,#OrganisationalAssignment</visibleTabs>
       <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#SSCUseOnly</readOnlyTabs>
     </userGroup>
-    <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents,#SSCUseOnly,#attachments</visibleTabs>
-    <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#SSCUseOnly</readOnlyTabs>
+    <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents,#SSCUseOnly,#attachments</visibleTabs>
+    <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#SSCUseOnly</readOnlyTabs>
     <readOnlyFields></readOnlyFields>
   </status>
 </state>

@@ -22,9 +22,10 @@
             var prefix = $(this).attr('data-prefix');
             document.getElementById(prefix + "AddressLine1").value = document.getElementById('PermanentAddressLine1').value;
             document.getElementById(prefix + "AddressLine2").value = document.getElementById('PermanentAddressLine2').value;
-            
+
+
             document.getElementById(prefix + "City").value = document.getElementById('PermanentCity').value;
-            // document.getElementById(prefix + "Country").value = document.getElementById('PermanentCountry').value;
+            //document.getElementById(prefix + "Country").value = document.getElementById('PermanentCountry').value;
 
             var value = document.getElementById('PermanentCountry').value;
 
@@ -50,6 +51,10 @@
                     $('#' + prefix + 'Country').val(selectedText);
                 }
             }
+
+            var selectedTextPostal = $('#PermanentPostalCode').find('option:selected').text();
+            $('#' + prefix + 'PostalCode').val(selectedTextPostal);
+
         });
 
         $(document).on('change', '#Extent', function (e) {
@@ -72,5 +77,5 @@
 @Html.Partial("_Edit", Model)
 
 <script>
-    InitIntegration();
+    //InitIntegration();
 </script>

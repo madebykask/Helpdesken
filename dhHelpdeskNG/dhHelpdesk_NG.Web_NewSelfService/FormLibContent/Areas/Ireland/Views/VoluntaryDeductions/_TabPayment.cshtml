@@ -17,24 +17,24 @@
                         @Model.Element("DeductionsType")
                     </td>
                 </tr>
-                <tr>
+@*                <tr>
                     <td class="tdstrong">@Model.Label("PaymentType")</td>
                     <td>
                         @Model.Element("PaymentType")
                     </td>
-                </tr>
+                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("DeductionsAmountUnits")</td>
                     <td>
                         @Model.Element("DeductionsAmountUnits")
                     </td>
                 </tr>
-                <tr>
+@*                <tr>
                     <td class="tdstrong">@Model.Label("DeductionsNetGross")</td>
                     <td>
                         @Model.Element("DeductionsNetGross")
                     </td>
-                </tr>
+                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("DeductionsValidFrom")</td>
                     <td>
@@ -60,22 +60,22 @@
                         <td>
                             @Model.Element("DeductionsType" + i.ToString())
                         </td>
-                    </tr>
+                    </tr>@*
                     <tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("PaymentType" + i.ToString())</td>
                         <td>
                             @Model.Element("PaymentType" + i.ToString())</td>
-                    </tr>
+                    </tr>*@
                     <tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DeductionsAmountUnits" + i.ToString())</td>
                         <td>
                             @Model.Element("DeductionsAmountUnits" + i.ToString())</td>
-                    </tr>
+                    </tr>@*
                     <tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DeductionsNetGross" + i.ToString())</td>
                         <td>
                             @Model.Element("DeductionsNetGross" + i.ToString())</td>
-                    </tr>
+                    </tr>*@
                     <tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DeductionsValidFrom" + i.ToString())</td>
                         <td>
@@ -194,36 +194,36 @@
     function setDatePickerBehavior(id, value) {
         var input = $('#' + id);
 
-        if (value == 'One Time') {
-            disableDatePicker(id);
-        } else {
-            enableDatePicker(id);
-        }
+        //if (value == 'One Time') {
+        //    disableDatePicker(id);
+        //} else {
+        //    enableDatePicker(id);
+        //}
     }
 
-    function setDefaultDatePickerBehavior(id, value) {
+    function setDefaultDatePickerBehavior(id) {
         var input = $('#' + id);
 
-        if (value == 'One Time') {
-            disableDatePicker(id);
-        } else {
-            setDefaultDate(id);
-        }
+        //if (value == 'One Time') {
+        //    disableDatePicker(id);
+        //} else {
+        //    setDefaultDate(id);
+        //}
     }
 
     $('#PaymentType').change(function () {
-        setDatePickerBehavior('DeductionsValidTo', $(this).val());
+        setDatePickerBehavior('DeductionsValidTo');
     });
     setDefaultDatePickerBehavior('DeductionsValidTo', $('#PaymentType').val());
 
-    $('#PaymentType2').change(function () {
-        setDatePickerBehavior('DeductionsValidTo2', $(this).val());
-    });
-    setDefaultDatePickerBehavior('DeductionsValidTo2', $('#PaymentType2').val());
+    //$('#PaymentType2').change(function () {
+    //    setDatePickerBehavior('DeductionsValidTo2', $(this).val());
+    //});
+    //setDefaultDatePickerBehavior('DeductionsValidTo2', $('#PaymentType2').val());
 
-    $('#PaymentType3').change(function () {
-        setDatePickerBehavior('DeductionsValidTo3', $(this).val());
-    });
-    setDefaultDatePickerBehavior('DeductionsValidTo3', $('#PaymentType3').val());
+    //$('#PaymentType3').change(function () {
+    //    setDatePickerBehavior('DeductionsValidTo3', $(this).val());
+    //});
+    //setDefaultDatePickerBehavior('DeductionsValidTo3', $('#PaymentType3').val());
 
 </script>

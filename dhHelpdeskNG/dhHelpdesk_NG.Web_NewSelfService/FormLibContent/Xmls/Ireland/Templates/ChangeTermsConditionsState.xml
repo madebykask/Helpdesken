@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <state status="0">
     <status value="0">
         <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#attachments</visibleTabs>
@@ -16,7 +16,7 @@
     <status value="10">
         <userGroup name="Line Manager">
             <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment</visibleTabs>
-            <readOnlyTabs>#OrganisationalAssignment</readOnlyTabs>
+            <readOnlyTabs></readOnlyTabs>
         </userGroup>
         <visibleTabs>#ServiceRequestDetails,#OrganisationalAssignment,#Payment,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>

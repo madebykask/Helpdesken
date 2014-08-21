@@ -3,135 +3,18 @@
   <name>AllowancesType</name>
   <dependent>
     <selected>Hourly</selected>
-    <show>
-      Advanced Hrly,
-      High Performer 11,
-      High Performer 12,
-      High Performer 13,
-      High Performer 14,
-      Power Stacker,
-      150C - Fork Lift Truck,
-      Night Shift Hrly,
-      340T - Stand By Allowance,
-      360A - Bonus,
-      500A - Redundancy,
-      300N - NTG Double Housing,
-      300M - NTG Rent Allowance,
-      300E - Housing Allowance,
-      300F - Mortgage Subsidy,
-      4805 - NTG Housing Costs,
-      300I - Rent Allowance,
-      300A - Car Allowance,
-      350R - Adj-Rent Allowance,
-      350C - Adj-Responsibility Allow,
-      4806 - NTG Relocation Allow,
-      340O - Relocation Allowance,
-      360B - Commission,
-      340C - Cash Adjustment,
-      340T - Stand By Allowance,
-      AWEM - SMP AWE Correction,
-      AWEP - SPP AWE Correction,
-      AWES - SSP AWE Correction,
-      300B - Competance Pay
-    </show>
+    <show>Advanced Hrly,Car Allowance,Cash Adjustment,Commission,Competance Pay,Fork Lift Truck Allowance,Housing Allowance,IKEA1 Skills,IKEA2 Skills,Kitchen Skills,Mortgage Subsidy,Night Shift,NTG Double Housing,NTG Housing Costs,NTG Relocation Allow,NTG Rent Allowance,Power Stacker,Redundancy,Relocation Allowance,Rent Allowance,Responsibility Allow,Salary Advanced,Secondment,Stand By Allowance,</show>
   </dependent>
   <dependent>
     <selected>Salaried</selected>
-    <show>
-      340T - Stand By Allowance,
-      350A - Adj-Monthly Salary,
-      360A - Bonus,
-      100D - Salary Advanced,
-      100F - Salary FLT Skills,
-      100G - Salary Kitchen Skills,
-      100H - Salary Work IKEA1 Skills,
-      100I - Salary Work IKEA2 Skills,
-      300N - NTG Double Housing,
-      300M - NTG Rent Allowance,
-      300E - Housing Allowance,
-      300F - Mortgage Subsidy,
-      4805 - NTG Housing Costs,
-      300I - Rent Allowance,
-      300A - Car Allowance,
-      350R - Adj-Rent Allowance,
-      350C - Adj-Responsibility Allow,
-      4806 - NTG Relocation Allow,
-      340O - Relocation Allowance,
-      300G - Night Shift,
-      350F - Adj-Salary FLT Skills,
-      350M - Adj-Housing Allowance,
-      100C - Responsibility Allow,
-      100J - Secondment,
-      AWEM - SMP AWE Correction,
-      AWEP - SPP AWE Correction,
-      AWES - SSP AWE Correction,
-      300B - Competance Pay
-    </show>
+    <show>Advanced Hrly,Car Allowance,Cash Adjustment,Commission,Competance Pay,Fork Lift Truck Allowance,Housing Allowance,IKEA1 Skills,IKEA2 Skills,Kitchen Skills,Mortgage Subsidy,Night Shift,NTG Double Housing,NTG Housing Costs,NTG Relocation Allow,NTG Rent Allowance,Power Stacker,Redundancy,Relocation Allowance,Rent Allowance,Responsibility Allow,Salary Advanced,Secondment,Stand By Allowance,</show>
   </dependent>
   <dependent>
     <selected>Salaried Management</selected>
-    <show>
-      340T - Stand By Allowance,
-      350A - Adj-Monthly Salary,
-      360A - Bonus,
-      100D - Salary Advanced,
-      100F - Salary FLT Skills,
-      100G - Salary Kitchen Skills,
-      100H - Salary Work IKEA1 Skills,
-      100I - Salary Work IKEA2 Skills,
-      300N - NTG Double Housing,
-      300M - NTG Rent Allowance,
-      300E - Housing Allowance,
-      300F - Mortgage Subsidy,
-      4805 - NTG Housing Costs,
-      300I - Rent Allowance,
-      300A - Car Allowance,
-      350R - Adj-Rent Allowance,
-      350C - Adj-Responsibility Allow,
-      4806 - NTG Relocation Allow,
-      340O - Relocation Allowance,
-      300G - Night Shift,
-      350F - Adj-Salary FLT Skills,
-      350M - Adj-Housing Allowance,
-      100C - Responsibility Allow,
-      100J - Secondment,
-      AWEM - SMP AWE Correction,
-      AWEP - SPP AWE Correction,
-      AWES - SSP AWE Correction,
-      300B - Competance Pay
-    </show>
+    <show>Advanced Hrly,Car Allowance,Cash Adjustment,Commission,Competance Pay,Fork Lift Truck Allowance,Housing Allowance,IKEA1 Skills,IKEA2 Skills,Kitchen Skills,Mortgage Subsidy,Night Shift,NTG Double Housing,NTG Housing Costs,NTG Relocation Allow,NTG Rent Allowance,Power Stacker,Redundancy,Relocation Allowance,Rent Allowance,Responsibility Allow,Salary Advanced,Secondment,Stand By Allowance,</show>
   </dependent>
   <dependent>
     <selected>Salaried Senior Management</selected>
-    <show>
-      340T - Stand By Allowance,
-      350A - Adj-Monthly Salary,
-      360A - Bonus,
-      100D - Salary Advanced,
-      100F - Salary FLT Skills,
-      100G - Salary Kitchen Skills,
-      100H - Salary Work IKEA1 Skills,
-      100I - Salary Work IKEA2 Skills,
-      300N - NTG Double Housing,
-      300M - NTG Rent Allowance,
-      300E - Housing Allowance,
-      300F - Mortgage Subsidy,
-      4805 - NTG Housing Costs,
-      300I - Rent Allowance,
-      300A - Car Allowance,
-      350R - Adj-Rent Allowance,
-      350C - Adj-Responsibility Allow,
-      4806 - NTG Relocation Allow,
-      340O - Relocation Allowance,
-      300G - Night Shift,
-      350F - Adj-Salary FLT Skills,
-      350M - Adj-Housing Allowance,
-      100C - Responsibility Allow,
-      100J - Secondment,
-      AWEM - SMP AWE Correction,
-      AWEP - SPP AWE Correction,
-      AWES - SSP AWE Correction,
-      300B - Competance Pay
-    </show>
+    <show>Advanced Hrly,Car Allowance,Cash Adjustment,Commission,Competance Pay,Fork Lift Truck Allowance,Housing Allowance,IKEA1 Skills,IKEA2 Skills,Kitchen Skills,Mortgage Subsidy,Night Shift,NTG Double Housing,NTG Housing Costs,NTG Relocation Allow,NTG Rent Allowance,Power Stacker,Redundancy,Relocation Allowance,Rent Allowance,Responsibility Allow,Salary Advanced,Secondment,Stand By Allowance,</show>
   </dependent>
 </predefined>

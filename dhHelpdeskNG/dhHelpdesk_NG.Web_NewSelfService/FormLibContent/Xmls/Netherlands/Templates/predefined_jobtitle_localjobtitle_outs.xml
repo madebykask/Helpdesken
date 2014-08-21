@@ -1,0 +1,708 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<predefined>
+  <name>CostCentre</name>
+  <dependent>
+    <selected>Accounting Co-worker</selected>
+    <show>General Accounting Coworker</show>
+  </dependent>
+  <dependent>
+    <selected>Accounting Co-worker Senior</selected>
+    <show>Accounting Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Accounting Manager</selected>
+    <show>Accounting Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Accounting Team Manager</selected>
+    <show>Teammanager Business Controlling</show>
+  </dependent>
+  <dependent>
+    <selected>Accounts Payable Co-worker</selected>
+    <show>Accounts Payable/Receivable Coworker</show>
+  </dependent>
+  <dependent>
+    <selected>Activity Leader</selected>
+    <show>Activity Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Administration &amp; Routines Specialist</selected>
+    <show>Administration &amp; Routines Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Administrator</selected>
+    <show>Food Administrator,Medewerker Administratie,Medewerker Administratie - Forecast</show>
+  </dependent>
+  <dependent>
+    <selected>Apprentice</selected>
+    <show>Stagiaire</show>
+  </dependent>
+  <dependent>
+    <selected>Back-Office Co-worker</selected>
+    <show>Medewerker Solutions</show>
+  </dependent>
+  <dependent>
+    <selected>Backpacker</selected>
+    <show>Backpacker</show>
+  </dependent>
+  <dependent>
+    <selected>Build Up Service Specialist</selected>
+    <show>Retail Build-Up Coordinator</show>
+  </dependent>
+  <dependent>
+    <selected>Business Analyst</selected>
+    <show>Data Resource Analist</show>
+  </dependent>
+  <dependent>
+    <selected>Business Creator</selected>
+    <show>Business Creator IoS</show>
+  </dependent>
+  <dependent>
+    <selected>Business Information Analyst</selected>
+    <show>Business Information Analyst</show>
+  </dependent>
+  <dependent>
+    <selected>Business Navigation Manager</selected>
+    <show>Business Navigation Manager NL</show>
+  </dependent>
+  <dependent>
+    <selected>Business Navigator</selected>
+    <show>Business Navigation Manager,Deputy Business Navigation Manager,Business Navigator,Business Navigator</show>
+  </dependent>
+  <dependent>
+    <selected>Call Center Representative</selected>
+    <show>Medewerker Frontoffice</show>
+  </dependent>
+  <dependent>
+    <selected>Call Center Representative I</selected>
+    <show>Medewerker Frontoffice &amp; Support</show>
+  </dependent>
+  <dependent>
+    <selected>Carpenter Co-worker</selected>
+    <show>Carpenter Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Carts Co-worker</selected>
+    <show>Customer Relations Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Cash Line Co-worker</selected>
+    <show>Customer Relations Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Checkout Coworker IKEA FOOD</selected>
+    <show>IKEA Food Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Com &amp; In Co-worker</selected>
+    <show>Medewerker Com&amp;In</show>
+  </dependent>
+  <dependent>
+    <selected>Com&amp;In Learning &amp; Development Leader</selected>
+    <show>Com&amp;In Learning &amp; Development Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Commercial Activity Leader</selected>
+    <show>Commercial Activity Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Communication &amp; Interior Design Manager</selected>
+    <show>Communication &amp; Interior Design Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Communication Responsible</selected>
+    <show>Medewerker Communicatie</show>
+  </dependent>
+  <dependent>
+    <selected>Communications Specialist - Senior</selected>
+    <show>Specialist External Communication</show>
+  </dependent>
+  <dependent>
+    <selected>Competence Development Specialist</selected>
+    <show>Competence Development Specialist,Competence Development Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Construction Project Manager</selected>
+    <show>Construction Project Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Contact Center Manager</selected>
+    <show>Contact Center Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Country Com&amp;In Manager</selected>
+    <show>Country Com&amp;In Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Country Communication Manager</selected>
+    <show>Corporate Communication Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Country Customer Relations Manager</selected>
+    <show>Country Customer Relations Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Country Facility Manager</selected>
+    <show>Facility Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Country Food Specialist</selected>
+    <show>IF Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Country Graphic Communication Leader</selected>
+    <show>Country Graphic Communication Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Country HR Manager</selected>
+    <show>Country HR Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Country IKEA Food Manager</selected>
+    <show>Country IKEA FOOD Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Country In-Store Logistics Manager</selected>
+    <show>In-store Logistics Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Country Marketing Manager</selected>
+    <show>Country Marketing Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Country Retail Manager</selected>
+    <show>Country Retail Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Country Risk Manager</selected>
+    <show>Risk Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Country Sales Manager</selected>
+    <show>Country Sales Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Country Web &amp; Digital Manager</selected>
+    <show>Country Web &amp; Digital Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Co-worker Relations Manager</selected>
+    <show>People Relations Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Customer Delivery Coordinator</selected>
+    <show>Customer Delivery Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Customer Service Specialist</selected>
+    <show>Services Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Customer Services Manager</selected>
+    <show>Customer Relations Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Customer Services Team Assistant</selected>
+    <show>Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Customer Services Team Manager</selected>
+    <show>Teammanager Customer Relations</show>
+  </dependent>
+  <dependent>
+    <selected>Deputy Com &amp; In Manager</selected>
+    <show>Deputy Com &amp; In Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Deputy Logistics Manager</selected>
+    <show>Deputy Logistics Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Deputy Marketing Manager</selected>
+    <show>Deputy Marketing Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Deputy Retail Manager</selected>
+    <show>Deputy Country Retail Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Deputy Sales Manager</selected>
+    <show>Deputy Sales Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Deputy Shopkeeper</selected>
+    <show>Deputy Teammanager Sales</show>
+  </dependent>
+  <dependent>
+    <selected>Deputy Store Manager</selected>
+    <show>Deputy Store Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Dishwasher / Attendant</selected>
+    <show>IKEA Food Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Easy Buying Specialist</selected>
+    <show>Easy Buying Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>eCommerce BN Operations Manager</selected>
+    <show>Business Navigation &amp; Operations Manager</show>
+  </dependent>
+  <dependent>
+    <selected>eCommerce Merchandiser</selected>
+    <show>E-commerce Merchandiser</show>
+  </dependent>
+  <dependent>
+    <selected>eCommerce Shopkeeper</selected>
+    <show>Shopkeeper</show>
+  </dependent>
+  <dependent>
+    <selected>External Communication Co-worker</selected>
+    <show>Comm Coworker External Communication</show>
+  </dependent>
+  <dependent>
+    <selected>Finance &amp; Administration Manager</selected>
+    <show>Country Finance &amp; Administration Manager,Finance Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Food Safety Specialist</selected>
+    <show>Range Development &amp; Food Safety Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Frontliner</selected>
+    <show>Frontliner</show>
+  </dependent>
+  <dependent>
+    <selected>Furniture Builder</selected>
+    <show>Furniture Builder</show>
+  </dependent>
+  <dependent>
+    <selected>Global Commercial Review Manager</selected>
+    <show>Global Commercial Review Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Goods Flow Co-worker</selected>
+    <show>Goods Flow Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Goods Flow Co-worker I</selected>
+    <show>Goods Flow Co-worker </show>
+  </dependent>
+  <dependent>
+    <selected>Goods Flow Team Leader</selected>
+    <show>Goods Flow Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Graphic Communication Co-worker</selected>
+    <show>Graphic Communication Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Graphic Communication Leader</selected>
+    <show>Graphic Communication Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Graphic Communication Leader Expansion</selected>
+    <show>Graphic Communication Leader Expansion</show>
+  </dependent>
+  <dependent>
+    <selected>HR Generalist</selected>
+    <show>HR Generalist,HR Adviseur CCCN</show>
+  </dependent>
+  <dependent>
+    <selected>HR Manager</selected>
+    <show>HR Manager,HR Manager</show>
+  </dependent>
+  <dependent>
+    <selected>HR Operations Manager</selected>
+    <show>HR Operations Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>HR Service Center Co-worker</selected>
+    <show>HRSC Coworker - Caseworker</show>
+  </dependent>
+  <dependent>
+    <selected>HR Service Center Manager</selected>
+    <show>HR Service Center Manager</show>
+  </dependent>
+  <dependent>
+    <selected>HR Specialist</selected>
+    <show>HRSC Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>HRSC Payroll Specialist II</selected>
+    <show>HRSC Coworker – Payroll Administration</show>
+  </dependent>
+  <dependent>
+    <selected>IF Bistro &amp; Sweden Shop Co-worker</selected>
+    <show>IKEA Food Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>IF Specialist</selected>
+    <show>Bus Analyst &amp; SS Specialist IKEA FOOD</show>
+  </dependent>
+  <dependent>
+    <selected>IF Team Leader</selected>
+    <show>Teammanager IKEA Food</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Business Specialist</selected>
+    <show>IKEA Business Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Food Co-worker</selected>
+    <show>IKEA Food co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA FOOD Co-worker I</selected>
+    <show>IKEA Food Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Food Manager</selected>
+    <show>IKEA Food manager</show>
+  </dependent>
+  <dependent>
+    <selected>Info &amp; Smaland Co-worker</selected>
+    <show>Customer Relations Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Information &amp; Communication Coordinator</selected>
+    <show>Medewerker Traffic</show>
+  </dependent>
+  <dependent>
+    <selected>In-store Logistics Specialist</selected>
+    <show>In-store Logistics Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Interior Design Co-worker</selected>
+    <show>Interior Design Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Interior Design Leader</selected>
+    <show>Interior Design Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Interior Design Leader Expansion</selected>
+    <show>Interior Design Leader Expansion</show>
+  </dependent>
+  <dependent>
+    <selected>Interior Design Manager</selected>
+    <show>Interior Design Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Internal Information Coordinator</selected>
+    <show>Comm Coworker Internal Communication,Medewerker Informatie &amp; Communicatie</show>
+  </dependent>
+  <dependent>
+    <selected>Internet Coordinator</selected>
+    <show>Communication Coworker Internet</show>
+  </dependent>
+  <dependent>
+    <selected>IT Manager</selected>
+    <show>IT Manager</show>
+  </dependent>
+  <dependent>
+    <selected>IT Support</selected>
+    <show>IT Technicians</show>
+  </dependent>
+  <dependent>
+    <selected>Kitchen Production Specialist</selected>
+    <show>Kitchen Production Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Leadership Development Manager</selected>
+    <show>People Development Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Learning &amp; Development Specialist</selected>
+    <show>Competence Development Coworker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Marketing Co-worker</selected>
+    <show>Local Marketing Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Local Marketing Specialist</selected>
+    <show>Local Marketing Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Logistics Administration Co-worker</selected>
+    <show>Medewerker Sales Location Management</show>
+  </dependent>
+  <dependent>
+    <selected>Logistics Manager</selected>
+    <show>Logistics Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Logistics Team Leader</selected>
+    <show>Facility Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Maintenance Co-worker</selected>
+    <show>Maintenance Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Maintenance Manager</selected>
+    <show>Teammanager Maintenance,Maintenance Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Market Intelligence Manager</selected>
+    <show>Marketing Intelligence Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Marketing Relationship Manager</selected>
+    <show>Marketing Relationship Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Marketing Specialist</selected>
+    <show>Marketing Relationship Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Marketing Web Specialist</selected>
+    <show>Web Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Operations Manager</selected>
+    <show>Operations Manager,Operations Manager</show>
+  </dependent>
+  <dependent>
+    <selected>PR Co-worker</selected>
+    <show>Communication Coworker PR SO</show>
+  </dependent>
+  <dependent>
+    <selected>Press officer</selected>
+    <show>Press Officer</show>
+  </dependent>
+  <dependent>
+    <selected>Product Req &amp; Compliance Specialist</selected>
+    <show>PR&amp;C Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Project Co-worker</selected>
+    <show>Projectmedewerker</show>
+  </dependent>
+  <dependent>
+    <selected>Project Manager</selected>
+    <show>Project Manager,IT Project Manager,(IC) Project Mgr IKEA Food Services</show>
+  </dependent>
+  <dependent>
+    <selected>Property Manager</selected>
+    <show>Country Property &amp; Expansion Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Purchaser</selected>
+    <show>Purchaser</show>
+  </dependent>
+  <dependent>
+    <selected>Q-Store Quality Manager</selected>
+    <show>Q-store Quality Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Quality Assurance Analyst</selected>
+    <show>Medewerker Process &amp; Quality control</show>
+  </dependent>
+  <dependent>
+    <selected>Quality Co-worker</selected>
+    <show>Q store medewerker SO</show>
+  </dependent>
+  <dependent>
+    <selected>Quality Specialist</selected>
+    <show>Data Resource Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Receive Payment Leader</selected>
+    <show>Receive Payment Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Receptionist</selected>
+    <show>Customer Relations Co-worker,Receptionist</show>
+  </dependent>
+  <dependent>
+    <selected>Recovery Co-worker</selected>
+    <show>Recovery Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Recovery Team Leader</selected>
+    <show>Teammanager Recovery</show>
+  </dependent>
+  <dependent>
+    <selected>Recruitment Manager</selected>
+    <show>Staff Marketing &amp; Recruitment leader</show>
+  </dependent>
+  <dependent>
+    <selected>Recruitment Specialist</selected>
+    <show>Recruitment Coworker</show>
+  </dependent>
+  <dependent>
+    <selected>Retail Logistics Capacity &amp; Flow Planner</selected>
+    <show>Retail Flow &amp; Capacity Planner</show>
+  </dependent>
+  <dependent>
+    <selected>Retail Logistics Manager</selected>
+    <show>Country Retail Logistics Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Retail Preparation Manager</selected>
+    <show>Retail Preparation Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Retail Project Mnager</selected>
+    <show>Retail Project Manager,Retail projectmanager,Retail Project Manager Com&amp;in</show>
+  </dependent>
+  <dependent>
+    <selected>Retail Support Integration Manager</selected>
+    <show>Retail Support Integration Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Retail Sustainability Manager</selected>
+    <show>Sustainability Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Risk Specialist</selected>
+    <show>Risk Management Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Safety &amp; Security Co-worker</selected>
+    <show>Safety &amp; Security Co-worker,Safety &amp; Security Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Sales &amp; Supply Support Co-worker</selected>
+    <show>Medewerker Sales &amp; Supply Support</show>
+  </dependent>
+  <dependent>
+    <selected>Sales &amp; Supply Support Manager</selected>
+    <show>Sales &amp; Supply Support Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Sales &amp; Supply Support Specialist</selected>
+    <show>Sales &amp; Supply Support Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Sales Co-worker</selected>
+    <show>Sales Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Sales Co-worker II</selected>
+    <show>Sales Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Sales Leader</selected>
+    <show>Sales Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Sales Leader II</selected>
+    <show>Senior Sales Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Sales Manager</selected>
+    <show>Sales Manager,Sales Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Sales Navigator</selected>
+    <show>Sales Navigator</show>
+  </dependent>
+  <dependent>
+    <selected>Sales Planner</selected>
+    <show>Sales Planner</show>
+  </dependent>
+  <dependent>
+    <selected>Sales Space Specialist</selected>
+    <show>Sales Space Management Order. Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Sales Support Co-worker</selected>
+    <show>Sales Support Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Sales Support Specialist</selected>
+    <show>Sales Support Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Sales Team Leader</selected>
+    <show>Shopkeeper</show>
+  </dependent>
+  <dependent>
+    <selected>Shopping Experience Manager</selected>
+    <show>Shopping Experience Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Site Facility Manager</selected>
+    <show>Facility Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Software Specialist</selected>
+    <show>Funktioneel Beheerder</show>
+  </dependent>
+  <dependent>
+    <selected>Staff Scheduler</selected>
+    <show>Staff Planning Co-worker,Medewerker Planning</show>
+  </dependent>
+  <dependent>
+    <selected>Store Manager</selected>
+    <show>Store Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Supply Support Specialist</selected>
+    <show>Supply Support Specialist</show>
+  </dependent>
+  <dependent>
+    <selected>Support Analyst</selected>
+    <show>IT Service Desk Coworker</show>
+  </dependent>
+  <dependent>
+    <selected>System Developer</selected>
+    <show>IT Software Engineer</show>
+  </dependent>
+  <dependent>
+    <selected>System Specialist</selected>
+    <show>IT System Engineer</show>
+  </dependent>
+  <dependent>
+    <selected>Team Leader</selected>
+    <show>Teammanager CCCN</show>
+  </dependent>
+  <dependent>
+    <selected>Team Manager</selected>
+    <show>Team Manager Technicians</show>
+  </dependent>
+  <dependent>
+    <selected>Team Manager I</selected>
+    <show>Team Manager Service Desk</show>
+  </dependent>
+  <dependent>
+    <selected>Technical Specialist</selected>
+    <show>Project Manager Technical Installations</show>
+  </dependent>
+  <dependent>
+    <selected>Temporary Staff</selected>
+    <show>Vakantiekracht</show>
+  </dependent>
+  <dependent>
+    <selected>Translator</selected>
+    <show>Communication Coworker Translation</show>
+  </dependent>
+  <dependent>
+    <selected>User Support I</selected>
+    <show>Medewerker IT Service Desk</show>
+  </dependent>
+  <dependent>
+    <selected>Visual Merchandise Leader</selected>
+    <show>Visual Merchandise Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Visual Merchandise Leader Expansion</selected>
+    <show>Visual Merchandise Leader Expansion</show>
+  </dependent>
+  <dependent>
+    <selected>Visual Merchandise/Activity Co-worker</selected>
+    <show>Visual Merchandise/Activity Co-worker</show>
+  </dependent>
+  <dependent>
+    <selected>Visual Merchandise/Activity Manager</selected>
+    <show>Visual Merchandise/Activity Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Web Editor</selected>
+    <show>Web editor</show>
+  </dependent>
+</predefined>

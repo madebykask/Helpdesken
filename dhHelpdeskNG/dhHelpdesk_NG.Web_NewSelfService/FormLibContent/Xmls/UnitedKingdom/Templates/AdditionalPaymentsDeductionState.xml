@@ -50,7 +50,7 @@
             <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Payment,#attachments,#documents</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Payment,#attachments,#documents,#SSCUseOnly</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
       <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>
@@ -65,7 +65,7 @@
             <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Payment,#attachments,#documents</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Payment,#attachments,#documents,#SSCUseOnly</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
       <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>
@@ -78,8 +78,8 @@
             <visibleTabs>#ServiceRequestDetails,#Payment</visibleTabs>
             <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Payment,#attachments,#documents</visibleTabs>
-        <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
+        <visibleTabs>#ServiceRequestDetails,#Payment,#attachments,#documents,#SSCUseOnly</visibleTabs>
+        <readOnlyTabs>#ServiceRequestDetails,#Payment,#SSCUseOnly</readOnlyTabs>
       <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>
         </actions>

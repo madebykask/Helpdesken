@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Contracts>
-  <contract process="Hiring" id="CoWorker" signatureUse="true">
+  <contract process="Hiring" id="CoWorker" signatureUse="true" pageNumberUse="false" draftTextUse="true">
     <lastParagraphText>
       <![CDATA[I would be grateful if you could sign the enclosed copy of this letter as acceptance of the offer and return it to me. In the meantime if you have any queries at all please do not hesitate to call us on {TelNbr}. We look forward to seeing you on the day.]]>
     </lastParagraphText>
@@ -12,7 +12,7 @@
       <![CDATA[Terms and Conditions Appendix]]>
     </encTextRight>
   </contract>
-  <contract process="Hiring" id="Pc50to55CoWorker" signatureUse="true">
+  <contract process="Hiring" id="Pc50to55CoWorker" signatureUse="true" pageNumberUse="false" draftTextUse="true">
     <lastParagraphText>
       <![CDATA[I would be grateful if you could sign the enclosed copy of this letter as acceptance of the offer and return it to me. In the meantime if you have any queries at all please do not hesitate to call us on {TelNbr}. We look forward to seeing you on the day.]]>
     </lastParagraphText>
@@ -24,7 +24,7 @@
       <![CDATA[Terms and Conditions Appendix]]>
     </encTextRight>
   </contract>
-  <contract process="Hiring" id="Pc50to55CoWorker" signatureUse="true">
+  <contract process="Hiring" id="Pc50to55CoWorker" signatureUse="true" pageNumberUse="false" draftTextUse="true">
     <lastParagraphText>
       <![CDATA[I would be grateful if you could sign the enclosed copy of this letter as acceptance of the offer and return it to me. In the meantime if you have any queries at all please do not hesitate to call us on {TelNbr}. We look forward to seeing you on the day.]]>
     </lastParagraphText>
@@ -36,7 +36,7 @@
       <![CDATA[Terms and Conditions Appendix]]>
     </encTextRight>
   </contract>
-  <contract process="Hiring" id="Pc56to61CoWorker" signatureUse="true">
+  <contract process="Hiring" id="Pc56to61CoWorker" signatureUse="true" pageNumberUse="false" draftTextUse="true">
     <lastParagraphText>
       <![CDATA[I would be grateful if you could sign the enclosed copy of this letter as acceptance of the offer and return it to me. In the meantime if you have any queries at all please do not hesitate to call us on {TelNbr}. We look forward to seeing you on the day.]]>
     </lastParagraphText>
@@ -48,7 +48,7 @@
       <![CDATA[Terms and Conditions Appendix]]>
     </encTextRight>
   </contract>
-  <contract process="Hiring" id="Temporary_FixedTerm" signatureUse="true">
+  <contract process="Hiring" id="Temporary_FixedTerm" signatureUse="true" pageNumberUse="false" draftTextUse="true">
     <lastParagraphText>
       <![CDATA[I would be grateful if you could sign the enclosed copy of this letter as acceptance of the offer and return it to me. In the meantime if you have any queries at all please do not hesitate to call us on {TelNbr}. We look forward to seeing you on the day.]]>
     </lastParagraphText>
@@ -61,7 +61,7 @@
     </encTextRight>
   </contract>
 
-  <contract process="Hiring" id="Pc44to49HrAndPayroll" signatureUse="true">
+  <contract process="Hiring" id="Pc44to49HrAndPayroll" signatureUse="true" pageNumberUse="false" draftTextUse="true">
     <lastParagraphText>
       <![CDATA[I would be grateful if you could sign the enclosed copy of this letter as acceptance of the offer and return it to me. In the meantime if you have any queries at all please do not hesitate to call us on {TelNbr}. We look forward to seeing you on the day.]]>
     </lastParagraphText>
@@ -73,7 +73,7 @@
       <![CDATA[Terms and Conditions Appendix]]>
     </encTextRight>
   </contract>
-  <contract process="Hiring" id="Pc50to55HrAndPayroll" signatureUse="true">
+  <contract process="Hiring" id="Pc50to55HrAndPayroll" signatureUse="true" pageNumberUse="false" draftTextUse="true">
     <lastParagraphText>
       <![CDATA[I would be grateful if you could sign the enclosed copy of this letter as acceptance of the offer and return it to me. In the meantime if you have any queries at all please do not hesitate to call us on {TelNbr}. We look forward to seeing you on the day.]]>
     </lastParagraphText>
@@ -85,7 +85,7 @@
       <![CDATA[Terms and Conditions Appendix]]>
     </encTextRight>
   </contract>
-  <contract process="Hiring" id="Pc56to61HrAndPayroll" signatureUse="true">
+  <contract process="Hiring" id="Pc56to61HrAndPayroll" signatureUse="true" pageNumberUse="false" draftTextUse="true">
     <lastParagraphText>
       <![CDATA[I would be grateful if you could sign the enclosed copy of this letter as acceptance of the offer and return it to me. In the meantime if you have any queries at all please do not hesitate to call us on {TelNbr}. We look forward to seeing you on the day.]]>
     </lastParagraphText>
@@ -97,7 +97,7 @@
       <![CDATA[Terms and Conditions Appendix]]>
     </encTextRight>
   </contract>
-  <contract process="Hiring" id="Pc50to55RiskAndSecurity" signatureUse="true">
+  <contract process="Hiring" id="Pc50to55RiskAndSecurity" signatureUse="true" pageNumberUse="false" draftTextUse="true">
     <lastParagraphText>
       <![CDATA[I would be grateful if you could sign the enclosed copy of this letter as acceptance of the offer and return it to me. In the meantime if you have any queries at all please do not hesitate to call us on {TelNbr}. We look forward to seeing you on the day.]]>
     </lastParagraphText>
@@ -109,7 +109,7 @@
       <![CDATA[Terms and Conditions Appendix]]>
     </encTextRight>
   </contract>
-  <contract process="Absences" id="Maternity" signatureUse="false">
+  <contract process="Absences" id="Maternity" signatureUse="false" pageNumberUse="false" draftTextUse="true">
     <lastParagraphText>
       <![CDATA[Congratulations and best wishes for your pregnancy.
       
@@ -121,7 +121,7 @@
     <encTextRight>
     </encTextRight>
   </contract>
-  <contract process="Absences" id="Adoption" signatureUse="false">
+  <contract process="Absences" id="Adoption" signatureUse="false" pageNumberUse="false" draftTextUse="true">
     <lastParagraphText>
       <![CDATA[If you have any questions about any aspect of your adoption entitlements please do not hesitate to contact me.
       
@@ -134,7 +134,7 @@
     </encTextRight>
   </contract>
 
-  <contract process="Absences" id="CareerBreak" signatureUse="false">
+  <contract process="Absences" id="CareerBreak" signatureUse="false" pageNumberUse="false" draftTextUse="true">
     <lastParagraphText>
       <![CDATA[Finally, I would like to take this opportunity to wish you all the best during your time off and thank you for all your hard work and commitment over the last few months.
       
@@ -147,7 +147,7 @@
     </encTextRight>
   </contract>
 
-  <contract process="ChangeTermsConditions" id="LevelAchieved" signatureUse="false">
+  <contract process="ChangeTermsConditions" id="LevelAchieved" signatureUse="false" pageNumberUse="false" draftTextUse="true">
     <lastParagraphText>
     </lastParagraphText>
     <lastParagraphText2>
@@ -156,7 +156,7 @@
     <encTextRight></encTextRight>
   </contract>
 
-  <contract process="ChangeTermsConditions" id="Secondment" signatureUse="true">
+  <contract process="ChangeTermsConditions" id="Secondment" signatureUse="true" pageNumberUse="false" draftTextUse="true">
     <lastParagraphText>
     </lastParagraphText>
     <lastParagraphText2>
@@ -168,7 +168,7 @@
     </encTextRight>
   </contract>
 
-  <contract process="ChangeTermsConditions" id="Allowances" signatureUse="false">
+  <contract process="ChangeTermsConditions" id="Allowances" signatureUse="false" pageNumberUse="false" draftTextUse="true">
     <lastParagraphText>
     </lastParagraphText>
     <lastParagraphText2>
@@ -178,7 +178,21 @@
     </encTextRight>
   </contract>
 
-  <contract process="AdditionalPaymentsDeduction" id="AllowancesDoc" signatureUse="false">
+  <contract process="AdditionalPaymentsDeduction" id="AllowancesDoc" signatureUse="false" pageNumberUse="false" draftTextUse="true">
+    <lastParagraphText>
+<![CDATA[Please retain this letter for your records.
+    
+Congratulations!
+    ]]></lastParagraphText>
+    <lastParagraphText2>
+      
+    </lastParagraphText2>
+    <encTextLeft></encTextLeft>
+    <encTextRight>
+    </encTextRight>
+  </contract>
+
+  <contract process="ChangeTermsConditions" id="CareerBreakReturn" signatureUse="false" pageNumberUse="false" draftTextUse="true">
     <lastParagraphText>
     </lastParagraphText>
     <lastParagraphText2>
@@ -188,7 +202,7 @@
     </encTextRight>
   </contract>
 
-  <contract process="ChangeTermsConditions" id="CareerBreakReturn" signatureUse="false">
+  <contract process="ChangeTermsConditions" id="RenewTempContract" signatureUse="false" pageNumberUse="false" draftTextUse="true">
     <lastParagraphText>
     </lastParagraphText>
     <lastParagraphText2>
@@ -198,17 +212,7 @@
     </encTextRight>
   </contract>
 
-  <contract process="ChangeTermsConditions" id="RenewTempContract" signatureUse="false">
-    <lastParagraphText>
-    </lastParagraphText>
-    <lastParagraphText2>
-    </lastParagraphText2>
-    <encTextLeft></encTextLeft>
-    <encTextRight>
-    </encTextRight>
-  </contract>
-
-  <contract process="ChangeTermsConditions" id="TCManagerLevel1And2" signatureUse="true">
+  <contract process="ChangeTermsConditions" id="TCManagerLevel1And2" signatureUse="true" pageNumberUse="false" draftTextUse="true">
     <lastParagraphText>
 
     </lastParagraphText>
@@ -218,7 +222,7 @@
     <encTextRight></encTextRight>
   </contract>
 
-  <contract process="ChangeTermsConditions" id="TemporaryToPermanent" signatureUse="true">
+  <contract process="ChangeTermsConditions" id="TemporaryToPermanent" signatureUse="true" pageNumberUse="false" draftTextUse="true">
     <lastParagraphText>
       <![CDATA[I would be grateful if you could sign the enclosed copy of this letter as acceptance of the offer and return it to me, together with all of the other documentation. In the meantime if you have any queries at all please do not hesitate to call us on {TelNbr}.
       
@@ -234,7 +238,7 @@
     <encTextRight></encTextRight>
   </contract>
 
-  <contract process="ChangeTermsConditions" id="IEChangesOfTermsAndConditions" signatureUse="false">
+  <contract process="ChangeTermsConditions" id="IEChangesOfTermsAndConditions" signatureUse="false" pageNumberUse="false" draftTextUse="true">
     <lastParagraphText>
     </lastParagraphText>
     <lastParagraphText2>
@@ -242,5 +246,16 @@
     <encTextLeft></encTextLeft>
     <encTextRight></encTextRight>
   </contract>
+  
+  <contract process="ChangeTermsConditions" id="Print" signatureUse="false" pageNumberUse="true" draftTextUse="false">
+    <lastParagraphText>
 
+    </lastParagraphText>
+    <lastParagraphText2>
+
+    </lastParagraphText2>
+    <encTextLeft></encTextLeft>
+    <encTextRight></encTextRight>
+  </contract>
+  
 </Contracts>

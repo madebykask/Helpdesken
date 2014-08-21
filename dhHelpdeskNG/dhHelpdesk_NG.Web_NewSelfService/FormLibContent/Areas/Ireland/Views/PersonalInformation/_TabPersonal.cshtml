@@ -40,7 +40,10 @@
                     <td class="tdstrong">@Model.Label("PermanentAddressLine2")</td>
                     <td>@Model.Element("PermanentAddressLine2")</td>
                 </tr>
-
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentPostalCode")</td>
+                    <td>@Model.Element("PermanentPostalCode")</td>
+                </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("PermanentCity")</td>
                     <td>@Model.Element("PermanentCity")</td>
@@ -68,7 +71,10 @@
                     <td class="tdstrong">@Model.Label("MailingAddressLine2")</td>
                     <td>@Model.Element("MailingAddressLine2")</td>
                 </tr>
-
+                <tr>
+                    <td class="tdstrong">@Model.Label("MailingPostalCode")</td>
+                    <td>@Model.Element("MailingPostalCode")</td>
+                </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("MailingCity")</td>
                     <td>@Model.Element("MailingCity")</td>
@@ -96,7 +102,10 @@
                     <td class="tdstrong">@Model.Label("EmergencyAddressLine2")</td>
                     <td>@Model.Element("EmergencyAddressLine2")</td>
                 </tr>
-
+                 <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyPostalCode")</td>
+                    <td>@Model.Element("EmergencyPostalCode")</td>
+                </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("EmergencyCity")</td>
                     <td>@Model.Element("EmergencyCity")</td>
@@ -408,7 +417,7 @@
                     <td class="tdstrong">@Model.Label("BankKey")</td>
                     <td>@Model.Element("BankKey")
                         <div class="notice">
-                            @Model.Translate("Please enter sort code")
+                            @Model.Translate("Bank Key = Sort Code")
                         </div>
                     </td>
                 </tr>
@@ -522,8 +531,8 @@
                     <td>@Model.Element("CountryOfUse")</td>
                 </tr>
                 <tr>
-                    <td class="tdstrong">@Model.Label("DocumentNO")</td>
-                    <td>@Model.Element("DocumentNO")</td>
+                    <td class="tdstrong">@Model.Label("DocumentNo")</td>
+                    <td>@Model.Element("DocumentNo")</td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("ValidUntil")</td>

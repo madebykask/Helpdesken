@@ -95,11 +95,11 @@
             4.	
             @if (Model.GetDocumentAnswer(FormLibConstants.FormField.PayrollCategory, true) == "Hourly")
             {
-                <text>	Your starting rate of pay will be €@Model.GetDocumentAnswer(FormLibConstants.FormField.BasicPayAmount, true) calculated on pro rata basis payable monthly in arrears on the last Friday of each month by direct transfer into your Bank or Building Society account.  Next review date will be @Model.GetDocumentAnswer(FormLibConstants.FormField.DateOfNextSalaryReview, true).</text>
+                <text>	Your starting rate of pay will be &euro; @Model.GetDocumentAnswer(FormLibConstants.FormField.BasicPayAmount, true) calculated on pro rata basis payable monthly in arrears on the last Friday of each month by direct transfer into your Bank or Building Society account.  Next review date will be @Model.GetDocumentAnswer(FormLibConstants.FormField.DateOfNextSalaryReview, true).</text>
             }
             else
             {
-                <text>	Your starting salary will be €@Model.GetDocumentAnswer(FormLibConstants.FormField.BasicPayAmount, true) payable monthly in arrears on the last Friday of each month by direct transfer into your Bank or Building Society account.  Next review date will be @Model.GetDocumentAnswer(FormLibConstants.FormField.DateOfNextSalaryReview, true).</text>
+                <text>	Your starting salary will be &euro; @Model.GetDocumentAnswer(FormLibConstants.FormField.BasicPayAmount, true) payable monthly in arrears on the last Friday of each month by direct transfer into your Bank or Building Society account.  Next review date will be @Model.GetDocumentAnswer(FormLibConstants.FormField.DateOfNextSalaryReview, true).</text>
             }
             <br />
             <br />

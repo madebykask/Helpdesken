@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <state status="0">
     <status value="0">
-        <visibleTabs>#ServiceRequestDetails,#Basic</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Basic,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>
@@ -28,7 +28,7 @@
     </status>
     <!-- HRU -->
     <status value="20">
-        <visibleTabs>#ServiceRequestDetails,#Basic</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Basic,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
       <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>
@@ -44,7 +44,7 @@
     </status>
     <!-- SSC -->
     <status value="30">
-        <visibleTabs>#ServiceRequestDetails,#Basic</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Basic,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Basic</readOnlyTabs>
       <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>
@@ -55,7 +55,7 @@
     </status>
     <!-- SSC -->
     <status value="40">
-        <visibleTabs>#ServiceRequestDetails,#Basic,#globalview</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Basic,#globalview,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Basic</readOnlyTabs>
       <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>
@@ -64,14 +64,14 @@
         </actions>
     </status>
     <status value="60">
-        <visibleTabs>#ServiceRequestDetails,#Basic,#globalview</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Basic,#globalview,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Basic</readOnlyTabs>
       <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>
         </actions>
     </status>
     <status value="70">
-        <visibleTabs>#ServiceRequestDetails,#Basic</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Basic,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Basic</readOnlyTabs>
         <readOnlyFields>BusinessUnit,Department</readOnlyFields>
     </status>

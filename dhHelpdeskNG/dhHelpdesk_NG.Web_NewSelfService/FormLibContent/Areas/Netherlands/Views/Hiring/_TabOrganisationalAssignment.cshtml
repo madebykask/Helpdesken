@@ -205,6 +205,101 @@
     document.getElementById('ContractEndDate').onchange = valueChangedContractEndDate;
 
 
+    $('#ContractedHours').change(function () {
+
+        var h = document.getElementById('ContractedHours').value;
+        var calc = 0;
+        switch (h) {
+            case "1":
+                calc = 4.33;
+            case "2":
+                calc = 8.67;
+            case "3":
+                calc = 13.00;
+            case "4":
+                calc = 17.33;
+            case "5":
+                calc = 21.67;
+            case "6":
+                calc = 26.00;
+            case "7":
+                calc = 30.33;
+            case "8":
+                calc = 34.67;
+            case "9":
+                calc = 39.00;
+            case "10":
+                calc = 43.33;
+            case "11":
+                calc = 47.67;
+            case "12":
+                calc = 52.00;
+            case "13":
+                calc = 56.33;
+            case "14":
+                calc = 60.67;
+            case "15":
+                calc = 65.00;
+            case "16":
+                calc = 69.33;
+            case "17":
+                calc = 73.67;
+            case "18":
+                calc = 78.00;
+            case "19":
+                calc = 82.33;
+            case "20":
+                calc = 86.67;
+            case "21":
+                calc = 91.00;
+            case "22":
+                calc = 95.33;
+            case "23":
+                calc = 99.67;   
+            case "24":
+                calc = 104.00;
+            case "25":
+                calc = 108.33;
+            case "26":
+                calc = 112.67;
+            case "27":
+                calc = 117.00;
+            case "28":
+                calc = 121.33;
+            case "29":
+                calc = 125.67;
+            case "30":
+                calc = 130.00;
+            case "31":
+                calc = 134.33;
+            case "32":
+                calc = 138.67;
+            case "33":
+                calc = 143.00;
+            case "34":
+                calc = 147.33;
+            case "35":
+                calc = 151.67;
+            case "36":
+                calc = 156.00;
+            case "37":
+                calc = 160.33;
+            case "38":
+                calc = 164.67;
+            case "39":
+                calc = 169.00;
+            case "40":
+                calc = 173.33;
+            default:
+                1;
+                break;
+        }
+        document.getElementById('BasicPay').value = calc * h;
+        
+
+    });
+
+
 
     $('#Department').change(function () {
        
@@ -212,7 +307,64 @@
 
     });
 
+    $('#JobTitle').change(function () {
 
+        GetXML('predefined_jobtitle_localjobtitle_outs.xml', setLocalJobTitle);
+        GetXML('predefined_jobtitle_payscale_outs.xml', setPayScale);
+
+    });
+
+   
+
+    $('#BusinessUnit').change(function () {
+        var value = $(this).val();
+        if ($('#BusinessUnit')[0].selectize) {
+            var selectedText = $('#BusinessUnit')[0].selectize.getItem(value).text();
+
+            if ($('#PrimarySite')[0].selectize) {
+                $('#PrimarySite')[0].selectize.setValue(selectedText);
+            }
+            else {
+                $('#PrimarySite').val(selectedText);
+            }
+        }
+        else {
+            var selectedText = $('#BusinessUnit').find('option:selected').text();
+            if ($('#PrimarySite')[0].selectize) {
+                $('#PrimarySite')[0].selectize.setValue(selectedText);
+            }
+            else {
+                var selectedText = $('#BusinessUnit').find('option:selected').text();
+                $('#PrimarySite').val(selectedText);
+            }
+        }
+
+        GetXML('predefined_businessunit_linemanager_outs.xml', setLineManager);
+    });
+
+    $('#ReportsToLineManager').change(function () {
+        var value = $(this).val();
+        if ($('#ReportsToLineManager')[0].selectize) {
+            var selectedText = $('#ReportsToLineManager')[0].selectize.getItem(value).text();
+
+            if ($('#TECApprover')[0].selectize) {
+                $('#TECApprover')[0].selectize.setValue(selectedText);
+            }
+            else {
+                $('#TECApprover').val(selectedText);
+            }
+        }
+        else {
+            var selectedText = $('#ReportsToLineManager').find('option:selected').text();
+            if ($('#TECApprover')[0].selectize) {
+                $('#TECApprover')[0].selectize.setValue(selectedText);
+            }
+            else {
+                var selectedText = $('#ReportsToLineManager').find('option:selected').text();
+                $('#TECApprover').val(selectedText);
+            }
+        }
+    });
 
     function GetXML(xmlFile, url) {
         //////////
@@ -221,7 +373,7 @@
 
         var path = window.location.protocol + '//';
         path = path + window.location.host + '/';
-
+        
         path = site.baseUrl + '/FormLibContent/Xmls/Netherlands/Templates/' + xmlFile
 
         $.ajax({
@@ -240,7 +392,391 @@
 
     }
 
-    
+    function setDeductionUnits(xml) {
+        var show = ''
+
+        var dep = document.getElementById('DeductionsType').value;
+
+        $(xml).find('dependent').each(function () {
+
+            var $book = $(this);
+            show = '';
+
+            var department = $book.find('selected').text();
+
+            show = $book.find('show').text();
+
+            if (department == dep) {
+
+
+                if (show != '') {
+                    var n = show.indexOf(",");
+
+                    if (n == -1) {
+
+                        document.getElementById('DeductionsNetGross').value = show;
+
+                    }
+                    else {
+                        var res = show.substring(0, n);
+                        document.getElementById('DeductionsNetGross').value = res;
+
+
+                    }
+                    return;
+                }
+                else {
+                    document.getElementById('DeductionsNetGross ').value = '';
+                }
+            }
+        });
+    }
+
+    function setDeductionUnits2(xml) {
+        var show = ''
+
+        var dep = document.getElementById('DeductionsType2').value;
+
+        $(xml).find('dependent').each(function () {
+
+            var $book = $(this);
+            show = '';
+
+            var department = $book.find('selected').text();
+
+            show = $book.find('show').text();
+
+            if (department == dep) {
+
+
+                if (show != '') {
+                    var n = show.indexOf(",");
+
+                    if (n == -1) {
+
+                        document.getElementById('DeductionsNetGross2').value = show;
+
+                    }
+                    else {
+                        var res = show.substring(0, n);
+                        document.getElementById('DeductionsNetGross2').value = res;
+
+
+                    }
+                    return;
+                }
+                else {
+                    document.getElementById('DeductionsNetGross2').value = '';
+                }
+            }
+        });
+    }
+
+    function setDeductionUnits3(xml) {
+        var show = ''
+
+        var dep = document.getElementById('DeductionsType3').value;
+
+        $(xml).find('dependent').each(function () {
+
+            var $book = $(this);
+            show = '';
+
+            var department = $book.find('selected').text();
+
+            show = $book.find('show').text();
+
+            if (department == dep) {
+
+
+                if (show != '') {
+                    var n = show.indexOf(",");
+
+                    if (n == -1) {
+
+                        document.getElementById('DeductionsNetGross3').value = show;
+
+                    }
+                    else {
+                        var res = show.substring(0, n);
+                        document.getElementById('DeductionsNetGross3').value = res;
+
+
+                    }
+                    return;
+                }
+                else {
+                    document.getElementById('DeductionsNetGross3').value = '';
+                }
+            }
+        });
+    }
+
+    function setAllowanceUnits3(xml) {
+        var show = ''
+
+        var dep = document.getElementById('AllowancesType3').value;
+
+        $(xml).find('dependent').each(function () {
+
+            var $book = $(this);
+            show = '';
+
+            var department = $book.find('selected').text();
+
+            show = $book.find('show').text();
+
+            if (department == dep) {
+
+
+                if (show != '') {
+                    var n = show.indexOf(",");
+
+                    if (n == -1) {
+
+                        document.getElementById('AllowancesNetGross3').value = show;
+
+                    }
+                    else {
+                        var res = show.substring(0, n);
+                        document.getElementById('AllowancesNetGross3').value = res;
+
+
+                    }
+                    return;
+                }
+                else {
+                    document.getElementById('AllowancesNetGross3').value = '';
+                }
+            }
+        });
+    }
+
+
+    function setAllowanceUnits2(xml) {
+        var show = ''
+
+        var dep = document.getElementById('AllowancesType2').value;
+
+        $(xml).find('dependent').each(function () {
+
+            var $book = $(this);
+            show = '';
+
+            var department = $book.find('selected').text();
+
+            show = $book.find('show').text();
+
+            if (department == dep) {
+
+
+                if (show != '') {
+                    var n = show.indexOf(",");
+
+                    if (n == -1) {
+
+                        document.getElementById('AllowancesNetGross2').value = show;
+
+                    }
+                    else {
+                        var res = show.substring(0, n);
+                        document.getElementById('AllowancesNetGross2').value = res;
+
+
+                    }
+                    return;
+                }
+                else {
+                    document.getElementById('AllowancesNetGross2').value = '';
+                }
+            }
+        });
+    }
+
+    function setAllowanceUnits(xml) {
+        var show = ''
+
+        var dep = document.getElementById('AllowancesType').value;
+        
+        $(xml).find('dependent').each(function () {
+
+            var $book = $(this);
+            show = '';
+
+            var department = $book.find('selected').text();
+
+            show = $book.find('show').text();
+            
+            if (department == dep) {
+                
+
+                if (show != '') {
+                    var n = show.indexOf(",");
+
+                    if (n == -1) {
+
+                        document.getElementById('AllowancesNetGross').value = show;
+
+                    }
+                    else {
+                        var res = show.substring(0, n);
+                        document.getElementById('AllowancesNetGross').value = res;
+
+
+                    }
+                    return;
+                }
+                else {
+                    document.getElementById('AllowancesNetGross').value = '';
+                }
+            }
+        });
+    }
+
+    function setPayScale(xml) {
+        var show = ''
+        
+        var dep = document.getElementById('JobTitle').value;
+
+        $(xml).find('dependent').each(function () {
+
+            var $book = $(this);
+            show = '';
+
+            var department = $book.find('selected').text();
+
+            show = $book.find('show').text();
+
+
+            if (department == dep)
+            {
+
+                if (show != '') {
+                    var n = show.indexOf(",");
+                    
+                    if (n == -1) {
+                        
+                        document.getElementById('PayScaleLevel').value = show;
+
+                    }
+                    else {
+                        var res = show.substring(0, n);
+                        document.getElementById('PayScaleLevel').value = res;
+
+
+                    }
+                    return;
+                }
+                else {
+                    document.getElementById('PayScaleLevel').value = '';
+                }
+            }
+        });
+    }
+
+    function setLineManager(xml) {
+        //////////
+        //setLineManagerJobTitle:
+        //Adds Jobtitles on selected Function
+        //////////
+
+
+        var show = ''
+
+        var dep = '';
+
+        if (document.getElementById('BusinessUnit')) {
+            dep = $("#BusinessUnit option:selected").text();
+        }
+
+        var selectize_tags = $("#ReportsToLineManager")[0].selectize
+        selectize_tags.clearOptions();
+
+
+        $(xml).find('dependent').each(function () {
+
+
+            var $sel = $(this);
+            show = '';
+
+            var department = $sel.find('selected').text();
+
+            show = $sel.find('show').text();
+
+
+            if (department == dep) {
+
+                if (show != '') {
+
+
+                    //show = ' ,' + show;
+                    var optionsarray = show.split(',');
+                    optionsarray.unshift('');
+
+
+
+                    $.each(optionsarray, function (i) {
+                        selectize_tags.addOption({
+                            text: optionsarray[i],
+                            value: optionsarray[i]
+                        });
+                        selectize_tags.addItem(optionsarray[i])
+
+                    });
+
+                    $('#ReportsToLineManager')[0].selectize.setValue('');
+
+                    return;
+
+                }
+            }
+        });
+
+       
+
+    }
+
+
+    function setLocalJobTitle(xml) {
+        var show = ''
+        //var dep = $("#JobTitle option:selected").text();
+        //alert(dep);
+        var dep=document.getElementById('JobTitle').value;
+
+        $(xml).find('dependent').each(function () {
+
+            var $book = $(this);
+            show = '';
+
+            var department = $book.find('selected').text();
+
+            show = $book.find('show').text();
+
+            
+            if (department == dep) {
+                
+                if (show != '') {
+                    var n = show.indexOf(",");
+
+                    if (n == -1) {
+                        
+                       // alert(show);
+                        $('#LocalJobTitle')[0].selectize.setValue(show);
+                        
+
+                    }
+                    else {
+                        var res = show.substring(0, n);
+
+                        $('#LocalJobTitle')[0].selectize.setValue(res);
+                        
+                    }
+                    return;
+                }
+            }
+        });
+    }
+
 
     function setCostCentre(xml) {
         var show = ''
@@ -277,54 +813,8 @@
         });
     }
 
-    $('#ReportsToLineManager').change(function () {
-        var value = $(this).val();
-        if ($('#ReportsToLineManager')[0].selectize) {
-            var selectedText = $('#ReportsToLineManager')[0].selectize.getItem(value).text();
-
-            if ($('#TECApprover')[0].selectize) {
-                $('#TECApprover')[0].selectize.setValue(selectedText);
-            }
-            else {
-                $('#TECApprover').val(selectedText);
-            }
-        }
-        else {
-            var selectedText = $('#ReportsToLineManager').find('option:selected').text();
-            if ($('#TECApprover')[0].selectize) {
-                $('#TECApprover')[0].selectize.setValue(selectedText);
-            }
-            else {
-                var selectedText = $('#ReportsToLineManager').find('option:selected').text();
-                $('#TECApprover').val(selectedText);
-            }
-        }
-    });
-
-    $('#BusinessUnit').change(function () {
-        var value = $(this).val();
-        if ($('#BusinessUnit')[0].selectize) {
-            var selectedText = $('#BusinessUnit')[0].selectize.getItem(value).text();
-
-            if ($('#PrimarySite')[0].selectize) {
-                $('#PrimarySite')[0].selectize.setValue(selectedText);
-            }
-            else {
-                $('#PrimarySite').val(selectedText);
-            }
-        }
-        else {
-            var selectedText = $('#BusinessUnit').find('option:selected').text();
-            if ($('#PrimarySite')[0].selectize) {
-                $('#PrimarySite')[0].selectize.setValue(selectedText);
-            }
-            else {
-                var selectedText = $('#BusinessUnit').find('option:selected').text();
-                $('#PrimarySite').val(selectedText);
-            }
-        }
-    });
-
+   
+    
     function selectIndexChangeEmploymentCategory() {
         if (this.options[this.selectedIndex].value == 'Permanent') {
             $('#date_ContractEndDate').datepicker("destroy");

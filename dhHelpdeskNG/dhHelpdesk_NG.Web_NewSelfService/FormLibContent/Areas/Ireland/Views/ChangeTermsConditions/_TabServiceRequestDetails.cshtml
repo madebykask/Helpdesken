@@ -101,7 +101,7 @@
                         }
                     </td>
                 </tr>
-                <tr>
+               @* <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Permanent Address")</h4>
                     </td>
@@ -122,10 +122,28 @@
                 <tr>
                     <td class="tdstrong">@Model.Label("PermanentCountry")</td>
                     <td>@Model.Element("PermanentCountry")</td>
+                </tr>*@
+
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Country Specifics")</h4>
+                    </td>
+                    <td class="tdstrong">
+                        <h4>@Model.Translate("Current record")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("SecondmentDuration")</td>
+                    <td>@Model.Element("SecondmentDuration")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("CareerBreakReturn")</td>
+                    <td>@Model.Element("CareerBreakReturn")</td>
                 </tr>
             </tbody>
         </table>
     </div>
+
     <input type="hidden" id="CustomerId" value="@Model.CustomerId" />
     <input type="hidden" id="formGuid" value="@Model.FormGuid" />
 </div>

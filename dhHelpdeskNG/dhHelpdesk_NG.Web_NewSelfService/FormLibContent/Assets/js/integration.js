@@ -8,9 +8,16 @@ function changeCompany() {
     var companyId = $("#Company").val();
     var selectedValue = $("#val_BusinessUnit").val();
 
-    $('#BusinessUnit').find('option').remove().end().append('<option value=""></option>');
-    $('#ServiceArea').find('option').remove().end().append('<option value=""></option>');
-    $('#Department').find('option').remove().end().append('<option value=""></option>');
+    //$('#BusinessUnit').find('option').remove().end().append('<option value=""></option>');
+    //$('#ServiceArea').find('option').remove().end().append('<option value=""></option>');
+    //$('#Department').find('option').remove().end().append('<option value=""></option>');
+
+    $('#BusinessUnit').find('option').remove();
+    $("#BusinessUnit")[0].add(new Option("", " "));
+    $('#ServiceArea').find('option').remove();
+    $("#ServiceArea")[0].add(new Option("", " "));
+    $('#Department').find('option').remove();
+    $("#Department")[0].add(new Option("", " "));
 
     var ajaxInfo = $('#ajaxInfo');
     if (ajaxInfo.length > 0) {
@@ -20,12 +27,14 @@ function changeCompany() {
 
         if (url != '' && customerId != '' && companyId != '' && (!isNaN(parseFloat(companyId)) && isFinite(companyId))) {
 
-            var jqxhr = $.post(url + 'GetBusinessUnits?customerId=' + customerId + '&companyId=' + companyId, function () {
+            var jqxhr = $.post(url + 'GetBusinessUnits?customerId=' + customerId + '&companyId=' + companyId + "&ie=" + (new Date()).getTime(), function () {
 
             })
                 .done(function (data) {
                     $.each(data, function (i, e) {
-                        $('#BusinessUnit').append($("<option></option>").attr("value", e.Id).text(e.Name));
+                        //$('#BusinessUnit').append($("<option></option>").attr("value", e.Id).text(e.Name)); 
+
+                        $("#BusinessUnit")[0].add(new Option(e.Name, e.Id))
                     });
 
                     if (selectedValue != '') {
@@ -40,6 +49,7 @@ function changeCompany() {
 }
 
 function changeNewCompany(clear) {
+
     var companyId = $("#NewCompany").val();
     var hidden = $("#hidden_NewCompany");
 
@@ -49,9 +59,16 @@ function changeNewCompany(clear) {
     var selectedValue = $("#val_NewBusinessUnit").val();
     var oldValue = $('#OLD_NewBusinessUnit').val();
 
-    $('#NewBusinessUnit').find('option').remove().end().append('<option value=" "></option>');
-    $('#NewServiceArea').find('option').remove().end().append('<option value=" "></option>');
-    $('#NewDepartment').find('option').remove().end().append('<option value=" "></option>');
+    //$('#NewBusinessUnit').find('option').remove().end().append('<option value=" "></option>');
+    //$('#NewServiceArea').find('option').remove().end().append('<option value=" "></option>');
+    //$('#NewDepartment').find('option').remove().end().append('<option value=" "></option>');
+
+    $('#NewBusinessUnit').find('option').remove();
+    $("#NewBusinessUnit")[0].add(new Option("", " "));
+    $('#NewServiceArea').find('option').remove();
+    $("#NewServiceArea")[0].add(new Option("", " "));
+    $('#NewDepartment').find('option').remove();
+    $("#NewDepartment")[0].add(new Option("", " "));
 
     var ajaxInfo = $('#ajaxInfo');
     if (ajaxInfo.length > 0) {
@@ -61,10 +78,12 @@ function changeNewCompany(clear) {
 
         if (url != '' && customerId != '' && companyId != '' && companyId != undefined) {
 
-            var jqxhr = $.post(url + 'GetBusinessUnits?customerId=' + customerId + '&companyId=' + companyId, function () { })
+            var jqxhr = $.post(url + 'GetBusinessUnits?customerId=' + customerId + '&companyId=' + companyId + "&ie=" + (new Date()).getTime(), function () { })
                 .done(function (data) {
                     $.each(data, function (i, e) {
-                        $('#NewBusinessUnit').append($("<option></option>").attr("value", e.Id).text(e.Name));
+                        //$('#NewBusinessUnit').append($("<option></option>").attr("value", e.Id).text(e.Name));
+
+                        $("#NewBusinessUnit")[0].add(new Option(e.Name, e.Id))
                     });
 
                     if (clear && oldValue != '') {
@@ -94,8 +113,14 @@ function changeBusinessUnit() {
     var businessUnitId = $("#BusinessUnit").val();
     var selectedValue = $("#val_ServiceArea").val();
 
-    $('#ServiceArea').find('option').remove().end().append('<option value=""></option>');
-    $('#Department').find('option').remove().end().append('<option value=""></option>');
+    //$('#ServiceArea').find('option').remove().end().append('<option value=""></option>');
+    //$('#Department').find('option').remove().end().append('<option value=""></option>');
+
+    $('#ServiceArea').find('option').remove();
+    $("#ServiceArea")[0].add(new Option("", " "));
+    $('#Department').find('option').remove();
+    $("#Department")[0].add(new Option("", " "));
+
 
     var ajaxInfo = $('#ajaxInfo');
     if (ajaxInfo.length > 0) {
@@ -104,12 +129,14 @@ function changeBusinessUnit() {
 
         if (url != '' && businessUnitId != '') {
 
-            var jqxhr = $.post(url + 'GetFunctions?businessUnitId=' + businessUnitId, function () {
+            var jqxhr = $.post(url + 'GetFunctions?businessUnitId=' + businessUnitId + "&ie=" + (new Date()).getTime(), function () {
 
             })
                 .done(function (data) {
                     $.each(data, function (i, e) {
-                        $('#ServiceArea').append($("<option></option>").attr("value", e.Id).text(e.Name));
+                        //$('#ServiceArea').append($("<option></option>").attr("value", e.Id).text(e.Name));
+
+                        $("#ServiceArea")[0].add(new Option(e.Name, e.Id))
                     });
 
                     if (selectedValue != '') {
@@ -129,8 +156,13 @@ function changeNewBusinessUnit(clear) {
     var selectedValue = $("#val_NewServiceArea").val();
     var oldValue = $('#OLD_NewServiceArea').val();
 
-    $('#NewServiceArea').find('option').remove().end().append('<option value=" "></option>');
-    $('#NewDepartment').find('option').remove().end().append('<option value=" "></option>');
+    //$('#NewServiceArea').find('option').remove().end().append('<option value=" "></option>');
+    //$('#NewDepartment').find('option').remove().end().append('<option value=" "></option>');
+
+    $('#NewServiceArea').find('option').remove();
+    $("#NewServiceArea")[0].add(new Option("", " "));
+    $('#NewDepartment').find('option').remove();
+    $("#NewDepartment")[0].add(new Option("", " "));
 
     var ajaxInfo = $('#ajaxInfo');
     if (ajaxInfo.length > 0) {
@@ -139,10 +171,12 @@ function changeNewBusinessUnit(clear) {
 
         if (url != '' && $.trim(businessUnitId) != '') {
 
-            var jqxhr = $.post(url + 'GetFunctions?businessUnitId=' + businessUnitId, function () { })
+            var jqxhr = $.post(url + 'GetFunctions?businessUnitId=' + businessUnitId + "&ie=" + (new Date()).getTime(), function () { })
                 .done(function (data) {
                     $.each(data, function (i, e) {
-                        $('#NewServiceArea').append($("<option></option>").attr("value", e.Id).text(e.Name));
+                        //$('#NewServiceArea').append($("<option></option>").attr("value", e.Id).text(e.Name));
+
+                        $("#NewServiceArea")[0].add(new Option(e.Name, e.Id))
                     });
 
                     if (clear && oldValue != '') {
@@ -176,7 +210,10 @@ function changeFunctions() {
     var serviceAreaId = $("#ServiceArea").val();
     var selectedValue = $("#val_Department").val();
 
-    $('#Department').find('option').remove().end().append('<option value=""></option>');
+    //$('#Department').find('option').remove().end().append('<option value=""></option>');
+
+    $('#Department').find('option').remove();
+    $("#Department")[0].add(new Option("", " "));
 
     var ajaxInfo = $('#ajaxInfo');
     if (ajaxInfo.length > 0) {
@@ -185,12 +222,14 @@ function changeFunctions() {
 
         if (url != '' && serviceAreaId != '') {
 
-            var jqxhr = $.post(url + 'GetDepartments?serviceAreaId=' + serviceAreaId, function () {
+            var jqxhr = $.post(url + 'GetDepartments?serviceAreaId=' + serviceAreaId + "&ie=" + (new Date()).getTime(), function () {
 
             })
                 .done(function (data) {
                     $.each(data, function (i, e) {
-                        $('#Department').append($("<option></option>").attr("value", e.Id).text(e.Name));
+                        //$('#Department').append($("<option></option>").attr("value", e.Id).text(e.Name));
+
+                        $("#Department")[0].add(new Option(e.Name, e.Id))
                     });
 
                     if (selectedValue != '')
@@ -208,7 +247,10 @@ function changeNewFunctions(clear) {
     var selectedValue = $("#val_NewDepartment").val();
     var oldValue = $('#OLD_NewDepartment').val();
 
-    $('#NewDepartment').find('option').remove().end().append('<option value=" "></option>');
+    //$('#NewDepartment').find('option').remove().end().append('<option value=" "></option>');
+
+    $('#NewDepartment').find('option').remove();
+    $("#NewDepartment")[0].add(new Option("", " "));
 
     var ajaxInfo = $('#ajaxInfo');
     if (ajaxInfo.length > 0) {
@@ -217,10 +259,12 @@ function changeNewFunctions(clear) {
 
         if (url != '' && $.trim(serviceAreaId) != '') {
 
-            var jqxhr = $.post(url + 'GetDepartments?serviceAreaId=' + serviceAreaId, function () { })
+            var jqxhr = $.post(url + 'GetDepartments?serviceAreaId=' + serviceAreaId + "&ie=" + (new Date()).getTime(), function () { })
                 .done(function (data) {
                     $.each(data, function (i, e) {
-                        $('#NewDepartment').append($("<option></option>").attr("value", e.Id).text(e.Name));
+                        //$('#NewDepartment').append($("<option></option>").attr("value", e.Id).text(e.Name));
+
+                        $("#NewDepartment")[0].add(new Option(e.Name, e.Id))
                     });
 
                     if (clear && oldValue != '') {
@@ -244,30 +288,52 @@ function changeNewFunctions(clear) {
 
 function InitIntegration() {
 
-    $("#Company").change(function () {
-        changeCompany();
-    });
+    var company = $('#Company');
+    var businessUnit = $('#BusinessUnit');
+    var serviceArea = $('#ServiceArea');
 
-    $("#NewCompany").change(function () {
-        changeNewCompany();
-    });
+    if (serviceArea.length > 0 && serviceArea.is("select")) {
+        serviceArea.change(function () {
+            changeFunctions();
+        });
+    }
 
-    $("#BusinessUnit").change(function () {
-        changeBusinessUnit();
-    });
+    if (businessUnit.length > 0 && businessUnit.is("select")) {
+        businessUnit.change(function () {
+            changeBusinessUnit();
+        });
+    }
 
-    $("#NewBusinessUnit").change(function () {
-        changeNewBusinessUnit();
-    });
+    if (company.length > 0 && company.is("select")) {
+        company.change(function () {
+            changeCompany();
+        });
 
-    $("#ServiceArea").change(function () {
-        changeFunctions();
-    });
+        company.change();
+    }
 
-    $("#NewServiceArea").change(function () {
-        changeNewFunctions();
-    });
+    var newCompany = $('#NewCompany');
+    var newBusinessUnit = $('#NewBusinessUnit');
+    var newServiceArea = $('#NewServiceArea');
 
-    $("#Company").change();
+    if (newServiceArea.length > 0 && newServiceArea.is("select")) {
+        newServiceArea.change(function () {
+            changeNewFunctions();
+        });
+    }
+
+    if (newBusinessUnit.length > 0 && newBusinessUnit.is("select")) {
+        newBusinessUnit.change(function () {
+            changeNewBusinessUnit();
+        });
+    }
+
+    if (newCompany.length > 0 && newCompany.is("select")) {
+        newCompany.change(function () {
+            changeNewCompany();
+        });
+
+        newCompany.change();
+    }
 }
 

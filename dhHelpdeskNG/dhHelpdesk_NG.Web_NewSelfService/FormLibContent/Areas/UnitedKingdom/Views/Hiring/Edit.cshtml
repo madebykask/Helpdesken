@@ -22,6 +22,7 @@
             var prefix = $(this).attr('data-prefix');
             document.getElementById(prefix + "AddressLine1").value = document.getElementById('PermanentAddressLine1').value;
             document.getElementById(prefix + "AddressLine2").value = document.getElementById('PermanentAddressLine2').value;
+          //  document.getElementById(prefix + "AddressLine3").value = document.getElementById('PermanentAddressLine3').value;
             document.getElementById(prefix + "PostalCode").value = document.getElementById('PermanentPostalCode').value;
             document.getElementById(prefix + "City").value = document.getElementById('PermanentCity').value;
             document.getElementById(prefix + "Country").value = document.getElementById('PermanentCountry').value;
@@ -46,6 +47,6 @@
 
 @Html.Partial("_Edit", Model)
 
-<script>
-    InitIntegration();
+<script> 
+    //InitIntegration();
 </script>

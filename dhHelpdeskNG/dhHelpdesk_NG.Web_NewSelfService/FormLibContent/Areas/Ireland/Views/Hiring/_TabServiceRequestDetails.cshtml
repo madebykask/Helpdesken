@@ -30,7 +30,7 @@
                         </div>
                     </td>
                 </tr>
-                <tr>
+               <tr>
                     <td class="tdstrong">@Model.Label("InductionDate")</td>
                     <td>@Model.Element("InductionDate")</td>
                 </tr>
@@ -38,14 +38,23 @@
                     <td class="tdstrong">@Model.Label("InductionStartTime")</td>
                     <td>@Model.Element("InductionStartTime")</td>
                 </tr>
+                                <tr>
+                    <td class="tdstrong">@Model.Label("InductionEndTime")</td>
+                    <td>@Model.Element("InductionEndTime")</td>
+                </tr>
+                                <tr>
+                    <td class="tdstrong">@Model.Label("InductionStartTime2")</td>
+                    <td>@Model.Element("InductionStartTime2")</td>
+                </tr>
+                                <tr>
+                    <td class="tdstrong">@Model.Label("InductionEndTime2")</td>
+                    <td>@Model.Element("InductionEndTime2")</td>
+                </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("LengthOfInductionInDays")</td>
                     <td>@Model.Element("LengthOfInductionInDays")</td>
                 </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("InductionEndTime")</td>
-                    <td>@Model.Element("InductionEndTime")</td>
-                </tr>
+
                 <tr>
                     <td class="tdstrong">@Model.Label("PreviousContractStartDate")</td>
                     <td>@Model.Element("PreviousContractStartDate")</td>
@@ -111,6 +120,14 @@
                 <tr>
                     <td class="tdstrong">@Model.Label("PermanentAddressLine2")</td>
                     <td>@Model.Element("PermanentAddressLine2")</td>
+                </tr>
+                @*<tr>
+                    <td class="tdstrong">@Model.Label("PermanentAddressLine3")</td>
+                    <td>@Model.Element("PermanentAddressLine3")</td>
+                </tr>*@
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentPostalCode")</td>
+                    <td>@Model.Element("PermanentPostalCode")</td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("PermanentCity")</td>

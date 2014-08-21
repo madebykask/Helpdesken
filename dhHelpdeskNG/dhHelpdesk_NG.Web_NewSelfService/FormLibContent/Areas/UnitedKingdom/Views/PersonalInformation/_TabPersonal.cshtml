@@ -63,6 +63,14 @@
                         <em class="muted" id="emOLD_PermanentAddressLine2">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentAddressLine2").Select(x => x.Value).FirstOrDefault() : "")</em>
                     </td>
                 </tr>
+                 @*  <tr>
+                    <td class="tdstrong">@Model.Label("PermanentAddressLine3")</td>
+                    <td>@Model.Element("PermanentAddressLine3")</td>
+                                        <td>
+                        <input type="hidden" class="oldValue"  id="OLD_PermanentAddressLine3" name="OLD_PermanentAddressLine3" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentAddressLine3").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_PermanentAddressLine3">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentAddressLine3").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("PermanentPostalCode")</td>
                     <td>@Model.Element("PermanentPostalCode")</td>
@@ -450,7 +458,7 @@
                     <td class="tdstrong">@Model.Label("BankKey")</td>
                     <td>@Model.Element("BankKey")
                         <div class="notice">
-                            @Model.Translate("Please enter sort code")
+                            @Model.Translate("Bank Key = Sort Code")
                         </div>
                     </td>
                 </tr>
@@ -656,7 +664,7 @@
                     </tr>
                    }
 
-                <tr id="addBupaTr">
+                <tr id="addBupaTrr">
                     <td colspan="2">
                         @Model.Element("Bupas")
                         <a id="addBupa" class="btn btn-link btn-mini pull-right">@Model.Translate("I want to add an additional member")</a></td>
@@ -678,50 +686,89 @@
     
 <script>
     
+    function bupa(value) {
+        
+         $('#BupaMember').empty();
+
+         if ($(value).val() == 'BUPA medical') {
+             var o = new Option("", "");
+
+             $(o).html("");
+             $("#BupaMember").append(o);
+
+
+             var o = new Option("Co-worker", "Co-worker");
+
+             $(o).html("Co-worker");
+             $("#BupaMember").append(o);
+
+             var o = new Option("Partner", "Partner");
+
+             $(o).html("Partner");
+             $("#BupaMember").append(o);
+
+
+             var o = new Option("Child", "Child");
+
+             $(o).html("Child");
+             $("#BupaMember").append(o);
+         }
+
+         if ($(value).val() == 'BUPA dental') {
+             var o = new Option("", "");
+
+             $(o).html("");
+             $("#BupaMember").append(o);
+
+
+             var o = new Option("Co-worker", "Co-worker");
+
+             $(o).html("Co-worker");
+             $("#BupaMember").append(o);
+
+             var o = new Option("Partner", "Partner");
+
+             $(o).html("Partner");
+             $("#BupaMember").append(o);
+         }
+
+         if ($(value).val() == 'BUPA medical and dental') {
+             var o = new Option("", "");
+
+             $(o).html("");
+             $("#BupaMember").append(o);
+
+
+             var o = new Option("Co-worker", "Co-worker");
+
+             $(o).html("Co-worker");
+             $("#BupaMember").append(o);
+
+             var o = new Option("Partner", "Partner");
+
+             $(o).html("Partner");
+             $("#BupaMember").append(o);
+         }
+    };
+
     $('#BupaHealthBenefit').change(function () {
-        $('#BupaMember').empty();
+        bupa(this);
+    });
 
-        if ($('#BupaHealthBenefit').val() == 'BUPA medical') {
-            var o = new Option("", "");
-            
-            $(o).html("");
-            $("#BupaMember").append(o);
+    $('#BupaHealthBenefit2').change(function () {
+        bupa(this);
+    });
 
+    $('#BupaHealthBenefit3').change(function () {
+        bupa(this);
+    });
 
-            var o = new Option("Co-worker", "Co-worker");
-            
-            $(o).html("Co-worker");
-            $("#BupaMember").append(o);
+    $('#BupaHealthBenefit4').change(function () {
+        bupa(this);
+    });
 
-            var o = new Option("Partner", "Partner");
-
-            $(o).html("Partner");
-            $("#BupaMember").append(o);
-
-
-            var o = new Option("Child", "Child");
-
-            $(o).html("Child");
-            $("#BupaMember").append(o);
-        }
-
-        if ($('#BupaHealthBenefit').val() == 'BUPA dental') {
-            var o = new Option("", "");
-
-            $(o).html("");
-            $("#BupaMember").append(o);
-
-
-            var o = new Option("Co-worker", "Co-worker");
-
-            $(o).html("Co-worker");
-            $("#BupaMember").append(o);
-
-            var o = new Option("Partner", "Partner");
-
-            $(o).html("Partner");
-            $("#BupaMember").append(o);
-        }
+    $('#BupaHealthBenefit5').change(function () {
+        bupa(this);
     });
 
 

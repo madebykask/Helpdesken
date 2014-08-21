@@ -100,8 +100,8 @@
         
         //Not accepted jobtitles
         string[] jobTitlesNotAccepted = new string[] { "Safety & Security Manager".ToLower(), "Safety and Security Function Support (Specialist)".ToLower(), "Safety & Security Co-worker".ToLower(), "Facility Specialist".ToLower(), "Site Facility Management Co-worker".ToLower(), "HR Generalist".ToLower(), "HR Administrator".ToLower(), "HR Manager".ToLower(), "Staff Planner".ToLower(), "Accounting Assistant Reconciliation".ToLower(), "Accountant".ToLower() };
-        
-        if (payScaleGroupFromModel >= 43 && payScaleGroupFromModel <= 49)
+
+        if ((payScaleGroupFromModel >= 43 && payScaleGroupFromModel <= 49) | Model.GetDocumentAnswer("PayScaleGroup").ToLower() == "Starter".ToLower())
         {
             int pos = Array.IndexOf(jobTitlesNotAccepted, valueFromModel);
             if (pos == -1)
@@ -159,8 +159,6 @@
 
 <div class="tab-pane" id="documents">
     <div class="span12">
-       @if (!string.IsNullOrEmpty(GetContract()))
-       {
         <table class="table-striped align-middle">
             <thead>
                 <tr>
@@ -172,8 +170,10 @@
                     <th>&nbsp;</th>
                 </tr>
             </thead>
-
             <tbody>
+            @if (!string.IsNullOrEmpty(GetContract()))
+            {
+        
                         <tr>
                             <td>@Model.Translate("Contract")</td>
                             <td>pdf</td>
@@ -190,16 +190,16 @@
                                
                           </td>
                         </tr>
-                </tbody>
-            
-        </table>
-        }
-        else
-        {
-        <div class="alert alert-info"><strong><i class="icon-info-sign"></i>&nbsp;@Model.Translate("A document can not be created based on current selections")</strong></div>
-       }
+                
+            }
+            else
+            {
+            <tr><td colspan="4"><div class="alert alert-info"><strong><i class="icon-info-sign"></i>&nbsp;@Model.Translate("A document can not be created based on current selections")</strong></div></td></tr>
+            }
 
-         @Html.Partial("_StaticDocuments", Model)
+            @Html.Partial("_StaticDocuments", Model)
+            </tbody>
+        </table>
     </div>
 </div>
 

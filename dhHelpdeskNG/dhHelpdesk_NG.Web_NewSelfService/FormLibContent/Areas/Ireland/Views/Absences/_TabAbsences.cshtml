@@ -38,18 +38,7 @@
                         @Model.Element("AbsenceEndsOn")
                     </td>
                 </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("AbsenceHours")</td>
-                    <td>
-                        @Model.Element("AbsenceHours")
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("AbsenceDays")</td>
-                    <td>
-                        @Model.Element("AbsenceDays")
-                    </td>
-                </tr>
+               
                 <tr>
                     <td class="tdstrong">@Model.Label("AdoptionPay")</td>
                     <td>
@@ -92,17 +81,6 @@
                         <td>
                             @Model.Element("AbsenceEndsOn" + i.ToString())</td>
                     </tr>
-                    
-                    <tr class="absence@(i.ToString())">
-                        <td class="tdstrong">@Model.Label("AbsenceHours" + i.ToString())</td>
-                        <td>
-                            @Model.Element("AbsenceHours" + i.ToString())</td>
-                    </tr>  
-                    <tr class="absence@(i.ToString())">
-                        <td class="tdstrong">@Model.Label("AbsenceDays" + i.ToString())</td>
-                        <td>
-                            @Model.Element("AbsenceDays" + i.ToString())</td>
-                    </tr>  
                     <tr class="absence@(i.ToString())">
                         <td class="tdstrong">@Model.Label("AdoptionPay" + i.ToString())</td>
                         <td>

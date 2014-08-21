@@ -124,7 +124,7 @@
                 </tr>
 
 
-                @for (int i = 2; i <= 4; i++)
+                @for (int i = 2; i <= 3; i++)
                 {
                     <tr class="familyMember@(i.ToString())" id="familyMember@(i.ToString())">
                         <td class="tdstrong" colspan="2">
@@ -393,7 +393,7 @@
                     <td class="tdstrong">@Model.Label("BankKey")</td>
                     <td>@Model.Element("BankKey")
                         <div class="notice">
-                            @Model.Translate("Please enter sort code")
+                            @Model.Translate("Bank Key = Sort Code")
                         </div>
                     </td>
                 </tr>

@@ -2,7 +2,7 @@
 
 <state status="0">
     <status value="0">
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -16,7 +16,7 @@
     </status>
     <!-- LM -->
     <status value="10">
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -28,7 +28,7 @@
     </status>
     <!-- HRU -->
     <status value="20">
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -41,7 +41,7 @@
     </status>
     <!-- SSC -->
     <status value="30">
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#SSCUseOnly</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#SSCUseOnly,#attachments</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -52,7 +52,7 @@
     </status>
     <!-- SSC -->
     <status value="40">
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents,#globalview,#SSCUseOnly</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents,#globalview,#SSCUseOnly,#attachments</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -62,7 +62,7 @@
     </status>
     <!-- SSC -->
     <status value="50">
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents,#globalview,#SSCUseOnly</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents,#globalview,#SSCUseOnly,#attachments</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
@@ -73,14 +73,14 @@
         </actions>
     </status>
     <status value="60">
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents,#globalview,#SSCUseOnly</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents,#globalview,#SSCUseOnly,#attachments</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
         </actions>
     </status>
     <status value="70">
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#documents,#attachments</visibleTabs>
         <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
     </status>

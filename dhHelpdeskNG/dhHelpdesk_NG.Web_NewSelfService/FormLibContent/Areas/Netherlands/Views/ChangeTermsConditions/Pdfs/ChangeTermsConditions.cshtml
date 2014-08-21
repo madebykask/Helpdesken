@@ -102,7 +102,7 @@
 
             //2 *OBSERVERA ATT VI BEHÖVER JÄMFÖRA HÄR!!!!
             // Applicable if changing from co-worker to manager position, applicable If Pay Scale Level is 10 or more, or if it is 9, but the value in a field OA.CS.11.1 "Eligible for Management allowance?" is yes
-            string text2 = "Als tegemoetkoming in kosten voor representatie en telefoongebruik ontvang je een algemene onkostenvergoeding van € 50,- bruto per maand. Dit is conform CAO artikel 28A. Hiernaast ontvang je ook een reiskostenvergoeding conform CAO artikel 29C.";
+            string text2 = "Als tegemoetkoming in kosten voor representatie en telefoongebruik ontvang je een algemene onkostenvergoeding van &euro;  50,- bruto per maand. Dit is conform CAO artikel 28A. Hiernaast ontvang je ook een reiskostenvergoeding conform CAO artikel 29C.";
             list.Add(new PdfListItem { Text = text2 });
 
             //3 *OBSERVERA ATT VI BEHÖVER JÄMFÖRA HÄR!!!!
@@ -123,7 +123,7 @@
             //5
             if (Model.GetDocumentAnswer("ContractType").ToLower() == "Full time".ToLower())
             {
-                string text5 = "Je salaris zal gewijzigd worden naar € " + Model.GetDocumentAnswer("BasicPay") + " bruto per maand.";
+                string text5 = "Je salaris zal gewijzigd worden naar &euro;  " + Model.GetDocumentAnswer("BasicPay") + " bruto per maand.";
                 list.Add(new PdfListItem { Text = text5 });
             }
 
@@ -131,7 +131,7 @@
             if (Model.GetDocumentAnswer("ContractType").ToLower() == "Part Time".ToLower())
             {
 
-                string text6 = "Je salaris zal gewijzigd worden naar € " + Model.GetDocumentAnswer("BasicPayAmount", true) + " bruto per uur.";
+                string text6 = "Je salaris zal gewijzigd worden naar &euro;  " + Model.GetDocumentAnswer("BasicPayAmount", true) + " bruto per uur.";
                 list.Add(new PdfListItem { Text = text6 });
             }
 

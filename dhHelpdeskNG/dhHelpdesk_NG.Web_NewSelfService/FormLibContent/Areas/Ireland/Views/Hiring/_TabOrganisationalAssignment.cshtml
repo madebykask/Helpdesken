@@ -140,18 +140,20 @@
 
         function setProbationEndDate(value) {
             var probationEndDate = $('#ProbationEndDate');
+            if (document.getElementById('ProbationEndDate').value == '') {
+                if (value == '@DefaultProbationPeriod') {
 
-            if (value == '@DefaultProbationPeriod') {
-                var sStart = $('#ContractStartDate').val();
-                var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
-                var dStart = APIGlobal.DateTime.parseDate(sStart, format);
+                    var sStart = $('#ContractStartDate').val();
+                    var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+                    var dStart = APIGlobal.DateTime.parseDate(sStart, format);
 
-                var endDate = new Date(dStart.getFullYear(), dStart.getMonth() + 6, dStart.getDate(), 0, 0, 0, 0);
-                var visibleDate = APIGlobal.DateTime.formatDate(endDate, format);
-                probationEndDate.val(visibleDate.toString());
-            }
-            else {
-                probationEndDate.val("");
+                    var endDate = new Date(dStart.getFullYear(), dStart.getMonth() + 6, dStart.getDate() - 1, 0, 0, 0, 0);
+                    var visibleDate = APIGlobal.DateTime.formatDate(endDate, format);
+                    probationEndDate.val(visibleDate.toString());
+                }
+                else {
+                    probationEndDate.val("");
+                }
             }
         };
 
@@ -184,11 +186,11 @@
 
         document.getElementById('ContractedHours').onchange = function () {
             var value = $(this).val();
-            
+
             if (value >= 16 && value <= 38) {
-            
+
                 document.getElementById('ContractType').value = 'Part Time';
-                
+
             }
             else if (value >= 39) {
                 document.getElementById('ContractType').value = 'Full Time';
@@ -199,9 +201,101 @@
             }
         };
 
-        //$('#ContractedHours').change(function () {
-           
-        //});
+
+
+        $('#ServiceArea').change(function () {
+
+            //Line manager job title
+            path = '';
+            var path = window.location.protocol + '//';
+            path = path + window.location.host + '/';
+
+
+
+            path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_function_jobtitleIE_outs.xml'
+
+
+            $.ajax({
+                type: "GET",
+                url: path,
+                dataType: "xml",
+                success: setLineManagerDefault,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
+                    alert(textStatus);
+                    alert(errorThrown);
+                }
+
+            });
+
+        });
+
+        function setLineManagerDefault(xml) {
+            //////////
+            //Sets Line manager job title from predefined_linemanager_jobtitle_outs.XML and selected line manager
+            //////////
+            ///DONE IN CHANGE
+            $('#JobTitle').off('change');
+            var show = ''
+
+            var dep = '';
+
+
+            if (document.getElementById('ServiceArea')) {
+                dep = $("#ServiceArea option:selected").text();
+            }
+
+            var selectize_tags = $("#JobTitle")[0].selectize
+            selectize_tags.clearOptions();
+
+
+            $(xml).find('dependent').each(function () {
+
+
+                var $sel = $(this);
+                show = '';
+
+                var department = $sel.find('selected').text();
+
+                show = $sel.find('show').text();
+
+
+                if (department == dep) {
+
+                    if (show != '') {
+
+
+
+
+
+                        var optionsarray = show.split(',');
+                        optionsarray.unshift('');
+
+                        $.each(optionsarray, function (i) {
+                            selectize_tags.addOption({
+                                text: optionsarray[i],
+                                value: optionsarray[i]
+                            });
+                            selectize_tags.addItem(optionsarray[i])
+                        });
+
+                        $('#JobTitle')[0].selectize.setValue('');
+
+
+                        return;
+
+                    }
+                }
+            });
+
+            $('#JobTitle').on('change', function () {
+
+                setDefaultPayroll();
+                addPayScaleOnPayroll();
+                setPayrollCategory();
+                setBasicPayAmount();
+            });
+        }
 
         $('#ProbationPeriod').change(function () {
             //////////
@@ -226,7 +320,7 @@
             //else {
             //    path = path + 'FormLibContent/Xmls/Ireland/Templates/predefined_allowancetype_units_outs.xml'
             //}
-            path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_allowancetype_units_outs.xml'
+            path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_allowancetype_units_payment_IE_outs.xml'
 
             $.ajax({
                 type: "GET",
@@ -260,7 +354,7 @@
             //}
 
 
-            path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_allowancetype_units_outs.xml'
+            path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_allowancetype_units_payment_IE_outs.xml'
 
             $.ajax({
                 type: "GET",
@@ -293,7 +387,7 @@
             //    path = path + 'FormLibContent/Xmls/Ireland/Templates/predefined_allowancetype_units_outs.xml'
             //}
 
-            path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_allowancetype_units_outs.xml'
+            path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_allowancetype_units_payment_IE_outs.xml'
 
             $.ajax({
                 type: "GET",
@@ -341,7 +435,7 @@
 
                 var department = $sel.find('selected').text();
 
-                show = $sel.find('show1').text();
+                show = $sel.find('show').text();
                 show2 = $sel.find('show2').text();
 
                 if (department.toString().trim() == dep.toString().trim()) {
@@ -408,7 +502,7 @@
 
                 var department = $sel.find('selected').text();
 
-                show = $sel.find('show1').text();
+                show = $sel.find('show').text();
                 show2 = $sel.find('show2').text();
 
                 if (department.toString().trim() == dep.toString().trim()) {
@@ -478,7 +572,7 @@
 
                 var department = $sel.find('selected').text();
 
-                show = $sel.find('show1').text();
+                show = $sel.find('show').text();
                 show2 = $sel.find('show2').text();
 
                 if (department.toString().trim() == dep.toString().trim()) {
@@ -543,30 +637,210 @@
             }
         });
 
-        $('#JobTitle').change(function () {
-            //////////
-            //JobTitle change function
-            //////////
-            setPayrollCategory();
-        });
+        //$('#JobTitle').change(function () {
+        //    //////////
+        //    //JobTitle change function
+        //    //////////
+        //    setPayrollCategory();
+        //});
+
+
 
         $('#PayrollCategory').change(function () {
             //////////
             //PAyroll category change function
             //////////
 
+            addPayScaleOnPayroll();
             setPayrollCategory();
-            setBasicPayAmount();
-            addDeductionTypes();
 
+            addDeductionTypes();
+            setBasicPayAmount();
+            //addAllowanceTypes();
 
         });
 
-        function addDeductionTypesFunction(xml) {
-        
+        function addPayScaleOnPayroll() {
+            //////////
+            //Add deduction types on selected payroll category
+            //////////
+            //DONE IN CHANGE
+
+            var path = window.location.protocol + '//';
+            path = path + window.location.host + '/';
+
+
+            path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_payroll_payscale_outs.xml'
+
+            $.ajax({
+                type: "GET",
+                url: path,
+                dataType: "xml",
+                success: addPayScaleOnPayrollXML,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
+                    alert(textStatus);
+                    alert(errorThrown);
+                }
+
+            });
+
+
+        }
+
+
+        function setDefaultPayroll(xml) {
+
+            var path = window.location.protocol + '//';
+            path = path + window.location.host + '/';
+
+            path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_payroll_category_IE_outs.xml'
+
+
+            $.ajax({
+                type: "GET",
+                url: path,
+                dataType: "xml",
+                success: setDefaultPayrollXML,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
+                    alert(textStatus);
+                    alert(errorThrown);
+                }
+
+            });
+
+        }
+        function setDefaultPayrollXML(xml) {
+            //////////
+            //Sets PayScaleGroup, OneIKEABonusLevel, BenefitLevel from predefined_payroll_category_outs.XML and selected Job title and payroll category
+            //////////
+            ///DONE IN CHANGE
 
             var show = ''
-                                
+            var res = '0';
+
+            var dep = '';
+            if (document.getElementById('JobTitle')) {
+                dep = document.getElementById('JobTitle').value;
+            }
+
+            var bus = '';
+            if (document.getElementById('BusinessUnit')) {
+                bus = $("#BusinessUnit option:selected").text();
+            }
+
+
+
+            $(xml).find('dependent').each(function () {
+
+
+                var $sel = $(this);
+                show = '';
+
+                var department = $sel.find('selected').text();
+
+                show = $sel.find('show4').text();
+
+
+                if (department.toString().trim() == dep.toString().trim()) {
+
+
+                    res = '1';
+                    if (show != '') {
+                        var n = show.indexOf(",");
+                        if (n == -1) {
+                            if (document.getElementById('PayrollCategory')) {
+                                document.getElementById('PayrollCategory').value = show;
+
+                            }
+                        }
+                        else {
+                            var res = show.substring(0, n);
+                            if (document.getElementById('PayrollCategory')) {
+                                document.getElementById('PayrollCategory').value = res;
+                            }
+                        }
+                    }
+                    else {
+                        if (document.getElementById('PayrollCategory')) {
+                            document.getElementById('PayrollCategory').value = '';
+                        }
+                    }
+
+                    //  setBasicPayAmount();
+
+                }
+            });
+            addPayScaleOnPayroll();
+
+            setPayrollCategory();
+
+            setBasicPayAmount();
+        }
+        function addPayScaleOnPayrollXML(xml) {
+            ///DONE IN CHANGE
+            var show = ''
+            var dep = '';
+
+            if (document.getElementById('PayrollCategory')) {
+                dep = $("#PayrollCategory option:selected").text();
+            }
+
+            var temp = '';
+
+            $(xml).find('dependent').each(function () {
+
+                var $sel = $(this);
+
+                show = '';
+
+                var department = $sel.find('selected').text();
+
+                show = $sel.find('show').text();
+
+                if (department.toString().trim() == dep.toString().trim()) {
+
+                    if (show != '') {
+
+                        var optionsarray = show.split(',');
+                        var seloption = "";
+
+                        $('#PayScaleGroup')
+                            .find('option')
+                            .remove();
+
+
+
+                        optionsarray.push('');
+
+                        $.each(optionsarray, function (key, value) {
+
+                            var s = value.replace(/\n/g, '');
+
+                            $('#PayScaleGroup')
+                                .append($("<option></option>")
+                                .attr("value", s)
+                                .text(s));
+                        });
+
+
+
+                        return;
+                    }
+
+
+                }
+            });
+
+        }
+
+
+        function addDeductionTypesFunction(xml) {
+
+
+            var show = ''
+
             var dep = '';
             if (document.getElementById('PayrollCategory')) {
                 dep = document.getElementById('PayrollCategory').value;
@@ -577,16 +851,16 @@
 
 
                 var $sel = $(this);
-                
+
                 show = '';
-                
+
 
                 var department = $sel.find('selected').text();
-                
-                show = $sel.find('show').text();                
-                
+
+                show = $sel.find('show').text();
+
                 if (department.toString().trim() == dep.toString().trim()) {
-                    
+
                     if (show != '') {
 
                         var optionsarray = show.split(',');
@@ -604,7 +878,7 @@
                           .find('option')
                           .remove();
 
-                        
+
                         seloption = '<option value="' + temp + '">' + temp + '</option>';
 
                         $.each(optionsarray, function (i) {
@@ -613,13 +887,13 @@
                         $('#DeductionsType').append(seloption);
                         $('#DeductionsType2').append(seloption);
                         $('#DeductionsType3').append(seloption);
-                       
 
-                        
+
+
                         return;
                     }
 
-                    
+
                 }
             });
 
@@ -657,7 +931,7 @@
 
             });
 
-          
+
         }
 
         $('#PayScaleGroup').change(function () {
@@ -673,53 +947,77 @@
             //////////
             //Sets Basic pay amount based on payroll category and pay scale group
             //////////
+
+
             if (document.getElementById('BasicPayAmount')) {
                 document.getElementById('BasicPayAmount').value = ''
             }
-            var cat = '';
-            if (document.getElementById('PayrollCategory')) {
-                cat = document.getElementById('PayrollCategory').value;
+
+            if (document.getElementById('BusinessUnit')) {
+                bus = $("#BusinessUnit option:selected").text();
             }
             var grp = '';
             if (document.getElementById('PayScaleGroup')) {
-                grp = document.getElementById('PayScaleGroup').value;
+                //grp = document.getElementById('PayScaleGroup').value;
+                grp = $("#PayScaleGroup option:selected").text();
             }
 
-            if (document.getElementById('BasicPayAmount')) {
-                if (cat == 'Hourly' && grp == 'STARTER') {
-                    document.getElementById('BasicPayAmount').value = '9,77'
+            var pay = '';
+            if (document.getElementById('PayrollCategory')) {
+                pay = document.getElementById('PayrollCategory').value;
+
+            }
+
+
+
+            if (pay.toString().trim() == 'Hourly') {
+                var show;
+                //  alert();
+                show = 'STARTER';
+                //document.getElementById('PayScaleGroup').value = show;
+                //grp = show;
+
+                if (grp == '') {
+                    grp = 'STARTER';
+                    document.getElementById('PayScaleGroup').value = grp;
+                    document.getElementById('PayScaleGroup').selectedIndex = 1;
+                }
+
+
+                if (grp.toString().trim() == 'STARTER') {
+                    if (document.getElementById('BasicPayAmount')) {
+                        document.getElementById('BasicPayAmount').value = '9,77'
+                    }
                 }
             }
-
         }
 
         function setPayrollCategory() {
             //////////
             //Sets PayScaleGroup, OneIKEABonusLevel, BenefitLevel from predefined_payroll_category_outs.XML and selected Job title and payroll category
             //////////
-
-            if (document.getElementById('PayScaleGroup')) {
-                document.getElementById('PayScaleGroup').value = '';
-            }
-            if (document.getElementById('BenefitLevel')) {
-                document.getElementById('BenefitLevel').value = '';
-            }
-
-            //alert();
             var sal = '';
             if (document.getElementById('PayrollCategory')) {
                 sal = document.getElementById('PayrollCategory').value;
+                if (sal == '') {
+                    sal = $("#PayrollCategory option:selected").text();
+                }
             }
-           
-            if (sal == 'Salaried' | sal == 'Salaried Management' | sal == 'Salaried Senior Management') {
+
+            var bus = '';
+            if (document.getElementById('BusinessUnit')) {
+                bus = $("#BusinessUnit option:selected").text();
+            }
+
+            if (sal.toString().trim() == 'Salaried' | sal.toString().trim() == 'Salaried Management' | sal.toString().trim() == 'Salaried Senior Management') {
 
 
 
                 var path = window.location.protocol + '//';
                 path = path + window.location.host + '/';
 
-                
-                path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_payroll_category_outs.xml'
+
+                path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_payroll_category_IE_outs.xml'
 
                 $.ajax({
                     type: "GET",
@@ -749,7 +1047,7 @@
                 if (document.getElementById('PayScaleGroup')) {
                     document.getElementById('PayScaleGroup').value = 'STARTER';
                 }
-                
+
             }
         }
 
@@ -768,7 +1066,10 @@
             if (document.getElementById('JobTitle')) {
                 dep = document.getElementById('JobTitle').value;
             }
-           // alert(dep);
+            var bus = '';
+            if (document.getElementById('BusinessUnit')) {
+                bus = $("#BusinessUnit option:selected").text();
+            }
 
             $(xml).find('dependent').each(function () {
 
@@ -784,7 +1085,7 @@
                 show2 = $sel.find('show2').text();
                 show3 = $sel.find('show3').text();
 
-                
+
                 if (department.toString().trim() == dep.toString().trim()) {
                     //alert(show);
                     //alert(show2);
@@ -795,11 +1096,13 @@
                         if (n == -1) {
                             if (document.getElementById('PayScaleGroup')) {
                                 document.getElementById('PayScaleGroup').value = show;
+                                //$('#PayScaleGroup option[value="' + show + '"]').prop('selected', true);
                             }
                         }
                         else {
                             var res = show.substring(0, n);
                             if (document.getElementById('PayScaleGroup')) {
+                                //$('#PayScaleGroup option[value="' + res + '"]').prop('selected', true);
                                 document.getElementById('PayScaleGroup').value = res;
                             }
                         }
@@ -923,7 +1226,7 @@
 
             //path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_linemanager_jobtitle_outs.xml'
             path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_department_jobtitle_IE_outs.xml'
-            
+
             $.ajax({
                 type: "GET",
                 url: path,
@@ -965,11 +1268,72 @@
 
             });
 
+            //Line manager jobtitle
+            path = '';
+            var path = window.location.protocol + '//';
+            path = path + window.location.host + '/';
 
+
+            path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_department_jobtitle_IE_outs.xml'
+
+            $.ajax({
+                type: "GET",
+                url: path,
+                dataType: "xml",
+                success: setLineManagerJob,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
+                    alert(textStatus);
+                    alert(errorThrown);
+                }
+
+            });
 
         });
 
+        function setLineManagerJob(xml) {
+            //////////
+            //addTecProvidersXML:
+            //Adds tec providers on selected businessunit
+            //////////
 
+            var show = ''
+
+            var dep = '';
+            if (document.getElementById('Department')) {
+                dep = $("#Department option:selected").text();
+            }
+
+
+            $(xml).find('dependent').each(function () {
+
+                var $sel = $(this);
+                show = '';
+
+                var department = $sel.find('selected').text();
+
+                show = $sel.find('show').text();
+
+                if (department == dep) {
+
+                    if (show != '') {
+                        var n = show.indexOf(",");
+
+                        if (n == -1) {
+
+                            $('#ManagersJobTitle')[0].selectize.setValue(show);
+                        }
+                        else {
+                            var res = show.substring(0, n);
+
+                            $('#ManagersJobTitle')[0].selectize.setValue(res);
+                        }
+                        return;
+                    }
+                }
+            });
+
+        }
 
         function setTecApprover(xml) {
             //////////
@@ -1044,7 +1408,7 @@
             if (document.getElementById('Department')) {
                 dep = $("#Department option:selected").text();
             }
-            
+
 
             //alert(dep);
 
@@ -1093,7 +1457,7 @@
             if (document.getElementById('Department')) {
                 dep = $("#Department option:selected").text();
             }
-            
+
             $(xml).find('dependent').each(function () {
 
                 var $sel = $(this);
@@ -1104,13 +1468,13 @@
                 show = $sel.find('show').text();
 
                 if (department.toString().trim() == dep.toString().trim()) {
-                    
+
                     if (show != '') {
                         var n = show.indexOf(",");
 
                         if (n == -1) {
                             if (document.getElementById('ReportsToLineManager')) {
-                          
+
                                 $('#ReportsToLineManager')[0].selectize.setValue(show);
                             }
                         }

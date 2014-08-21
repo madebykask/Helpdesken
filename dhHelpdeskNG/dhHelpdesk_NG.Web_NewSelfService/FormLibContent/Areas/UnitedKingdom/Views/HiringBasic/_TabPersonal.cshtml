@@ -2,16 +2,16 @@
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
 
+
 @{
     const string IsTeWorker = "International Transfer";
     const string DefaultCountry = "United Kingdom";
 }
-
 <div class="tab-pane" id="personal">
     <div class="span6">
         <table class="table">
             <tbody>
-                
+
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Contact Details")</h4>
@@ -25,15 +25,15 @@
                     <td class="tdstrong">@Model.Label("ContactEMailAddress")</td>
                     <td>@Model.Element("ContactEMailAddress")</td>
                 </tr>
-                
-               <!-- MAILING ADDRESS -->
+
+                <!-- MAILING ADDRESS -->
                 <tr class="mailingaddress" id="mailingaddress">
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Mailing Address")
-                        <button class="btn btn-mini pull-right" id="btnMailingAddress" data-prefix="Mailing">
-                            <i class="icon-share"></i>&nbsp;@Model.Translate("Copy from Permanent Address")
-                        </button>
-                            </h4>
+                            <button class="btn btn-mini pull-right" id="btnMailingAddress" data-prefix="Mailing">
+                                <i class="icon-share"></i>&nbsp;@Model.Translate("Copy from Permanent Address")
+                            </button>
+                        </h4>
                     </td>
                 </tr>
                 <tr>
@@ -56,15 +56,15 @@
                     <td class="tdstrong">@Model.Label("MailingCountry")</td>
                     <td>@Model.Element("MailingCountry")</td>
                 </tr>
-                
+
                 <!-- EMERGENCY ADDRESS -->
                 <tr class="emergencyaddress" id="emergencyaddress">
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Emergency Address")
-                        <button class="btn btn-mini pull-right" id="btnEmergencyAddress" data-prefix="Emergency">
-                            <i class="icon-share"></i>&nbsp;@Model.Translate("Copy from Permanent Address")
-                        </button>
-                            </h4>
+                            <button class="btn btn-mini pull-right" id="btnEmergencyAddress" data-prefix="Emergency">
+                                <i class="icon-share"></i>&nbsp;@Model.Translate("Copy from Permanent Address")
+                            </button>
+                        </h4>
                     </td>
                 </tr>
                 <tr>
@@ -90,11 +90,11 @@
                 <tr>
                     <td class="tdstrong">@Model.Label("EmergencyContactNumber")</td>
                     <td>@Model.Element("EmergencyContactNumber")</td>
-                </tr>                
+                </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("EmergencyContactRelationship")</td>
                     <td>@Model.Element("EmergencyContactRelationship")</td>
-                </tr>                
+                </tr>
 
                 <!-- FAMILY MEMBER / DEPENDENTS -->
                 <tr>
@@ -122,53 +122,53 @@
                     <td class="tdstrong">@Model.Label("FamilyMemberDateOfBirth")</td>
                     <td>@Model.Element("FamilyMemberDateOfBirth")</td>
                 </tr>
-                
-                
-                  @for (int i = 2; i <= 4; i++)
-                  {
-                      <tr class="familyMember@(i.ToString())" id="familyMember@(i.ToString())">
-                          <td class="tdstrong" colspan="2">
-                              <h4>@Model.Translate("Family Member & Dependents") @i.ToString()</h4>
-                          </td>
-                      </tr>
-                      <tr class="familyMember@(i.ToString())">
-                          <td class="tdstrong">@Model.Label("FamilyMember" + i.ToString())</td>
-                          <td>
-                              @Model.Element("FamilyMember" + i.ToString())</td>
-                      </tr>
-                      <tr class="familyMember@(i.ToString())">
-                          <td class="tdstrong">@Model.Label("FamilyMemberLastName" + i.ToString())</td>
-                          <td>
-                              @Model.Element("FamilyMemberLastName" + i.ToString())</td>
-                      </tr>
-                      <tr class="familyMember@(i.ToString())">
-                          <td class="tdstrong">@Model.Label("FamilyMemberFirstName" + i.ToString())</td>
-                          <td>
-                              @Model.Element("FamilyMemberFirstName" + i.ToString())</td>
-                      </tr>
-                      <tr class="familyMember@(i.ToString())">
-                          <td class="tdstrong">@Model.Label("FamilyMemberGender" + i.ToString())</td>
-                          <td>
-                              @Model.Element("FamilyMemberGender" + i.ToString())</td>
-                      </tr>
-                      <tr class="familyMember@(i.ToString())">
-                          <td class="tdstrong">@Model.Label("FamilyMemberDateOfBirth" + i.ToString())</td>
-                          <td>
-                              @Model.Element("FamilyMemberDateOfBirth" + i.ToString())</td>
-                      </tr>
-                  }
-                
+
+
+                @for (int i = 2; i <= 4; i++)
+                {
+                    <tr class="familyMember@(i.ToString())" id="familyMember@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Family Member & Dependents") @i.ToString()</h4>
+                        </td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("FamilyMember" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FamilyMember" + i.ToString())</td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("FamilyMemberLastName" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FamilyMemberLastName" + i.ToString())</td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("FamilyMemberFirstName" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FamilyMemberFirstName" + i.ToString())</td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("FamilyMemberGender" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FamilyMemberGender" + i.ToString())</td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("FamilyMemberDateOfBirth" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FamilyMemberDateOfBirth" + i.ToString())</td>
+                    </tr>
+                }
+
                 <tr id="addFamilyMemberTrr">
                     <td colspan="2">
                         @Model.Element("FamilyMembers")
                         <a id="addFamilyMember" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another family member")</a></td>
                 </tr>
-                
 
-                
 
-                
-                 <!-- Global Mobility Employee Documents -->
+
+
+
+                <!-- Global Mobility Employee Documents -->
                 <tr class="globalmobility-first">
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Global Mobility - Employee Documents")</h4>
@@ -199,7 +199,7 @@
                     <td>@Model.Element("EmployeeDocumentIssuePlaceCountry")</td>
                 </tr>
 
-                @for (int i = 2; i <= 4; i++)
+                @for (int i = 2; i <= 3; i++)
                 {
                     <tr class="employeeDocument@(i.ToString()) globalmobility" id="employeeDocument@(i.ToString())">
                         <td class="tdstrong" colspan="2">
@@ -265,7 +265,7 @@
                     <td>@Model.Element("DependantsDateOfBirth")</td>
                 </tr>
 
-                @for (int i = 2; i <= 4; i++)
+                @for (int i = 2; i <= 3; i++)
                 {
                     <tr class="dependantFamilyMember@(i.ToString()) globalmobility" id="dependantFamilyMember@(i.ToString())">
                         <td class="tdstrong" colspan="2">
@@ -331,7 +331,7 @@
                     <td>@Model.Element("DependantsDocumentIssuePlaceCountry")</td>
                 </tr>
 
-                @for (int i = 2; i <= 4; i++)
+                @for (int i = 2; i <= 3; i++)
                 {
                     <tr class="globalMobilityDependantDocument@(i.ToString()) globalmobility" id="globalMobilityDependantDocument@(i.ToString())">
                         <td class="tdstrong" colspan="2">
@@ -369,10 +369,11 @@
                         @Model.Element("DependantsDocuments")
                         <a id="addGlobalMobilityDependantDocument" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another global mobility dependant document")</a></td>
                 </tr>
+
             </tbody>
         </table>
     </div>
-      <div class="span6">
+    <div class="span6">
         <table class="table">
             <tbody>
                 <!-- Bank Account Details -->
@@ -381,7 +382,7 @@
                         <h4>@Model.Translate("Bank Account Details")</h4>
                     </td>
                 </tr>
-                 <tr>
+                <tr>
                     <td class="tdstrong">@Model.Label("Institution")</td>
                     <td>@Model.Element("Institution")</td>
                 </tr>
@@ -395,7 +396,11 @@
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("BankKey")</td>
-                    <td>@Model.Element("BankKey")</td>
+                    <td>@Model.Element("BankKey")
+                        <div class="notice">
+                            @Model.Translate("Bank Key = Sort Code")
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("AccountNumber")</td>
@@ -462,24 +467,35 @@
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Fiscal Data")</h4>
                     </td>
-                </tr>                  
+                </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("TaxInformation")</td>
-                    <td>@Model.Element("TaxInformation")</td>
+                    <td>@Model.Element("TaxInformation")
+                        <div class="notice" id="taxInformationNotice">
+                            @Model.Translate("Please remember to attach the form.")
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("StatementDetails")</td>
-                    <td>@Model.Element("StatementDetails")</td>
+                    <td>@Model.Element("StatementDetails")
+                        <div id="statementDetailsNotice" class="notice">
+                        </div>
+                    </td>
                 </tr>
                 <tr>
-                    <td class="tdstrong">@Model.Label("StudentLoanNotFullyRepaid")</td>
-                    <td>@Model.Element("StudentLoanNotFullyRepaid")</td>
+                    <td class="tdstrong">@Model.Label("StudentLoanNotFullyRePaid")</td>
+                    <td>@Model.Element("StudentLoanNotFullyRePaid")
+                        <div class="notice">
+                            @Model.Translate("Please select \"Yes\" if co-worker left a course of UK higher education before last 6 April and received his first Student Loan instalment on or after 1 September 1998")
+                        </div>
+                    </td>
                 </tr>
-                 <tr>
+                <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Social Insurance")</h4>
                     </td>
-                </tr>                  
+                </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("NationalInsuranceNumber")</td>
                     <td>@Model.Element("NationalInsuranceNumber")</td>
@@ -490,7 +506,7 @@
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Nationality / Language")</h4>
                     </td>
-                </tr>                  
+                </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("Nationality")</td>
                     <td>@Model.Element("Nationality")</td>
@@ -507,7 +523,7 @@
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Country Specifics")</h4>
                     </td>
-                </tr>  
+                </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("MaritalStatus")</td>
                     <td>@Model.Element("MaritalStatus")</td>
@@ -517,7 +533,7 @@
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Documents")</h4>
                     </td>
-                </tr>  
+                </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("DocumentType")</td>
                     <td>@Model.Element("DocumentType")</td>
@@ -530,7 +546,7 @@
                     <td class="tdstrong">@Model.Label("DocumentCountryOfUse")</td>
                     <td>@Model.Element("DocumentCountryOfUse")</td>
                 </tr>
-                
+
                 <tr>
                     <td class="tdstrong">@Model.Label("DocumentNO")</td>
                     <td>@Model.Element("DocumentNO")</td>
@@ -538,30 +554,22 @@
                 <tr>
                     <td class="tdstrong">@Model.Label("DocumentValidUntil")</td>
                     <td>@Model.Element("DocumentValidUntil")
-                        <div id="notice_ValidUntilDate" style="display:none;" class="notice">
+                        <div id="notice_ValidUntilDate" style="display: none;" class="notice">
                             @Model.Translate("Please choose a date in the future")
                         </div>
                     </td>
                 </tr>
 
-                <tr>
-                    <td class="tdstrong" colspan="2">
-                        <h4>@Model.Translate("Benefits")</h4>
-                    </td>
-                </tr>  
-                <tr>
-                    <td class="tdstrong">@Model.Label("BenefitLevel")</td>
-                    <td>@Model.Element("BenefitLevel")</td>
-                </tr>
 
-           </tbody>
+
+            </tbody>
         </table>
     </div>
 </div>
 
 <script>
 
-@*    if ('@Model.GetAnswer("NewToIKEA")' == 'New Hire') {
+    @*    if ('@Model.GetAnswer("NewToIKEA")' == 'New Hire') {
 
         $(".globalmobility").hide();
 
@@ -600,14 +608,30 @@
             }
         }
 
-          if (!($('#NewToIKEA').val() == '@IsTeWorker')) {
-              $(".globalmobility-first").hide();
-              $(".globalmobility").hide();
-          }
+        if (!($('#NewToIKEA').val() == '@IsTeWorker')) {
+            $(".globalmobility-first").hide();
+            $(".globalmobility").hide();
+        }
 
-          $('#NewToIKEA').change(function () {
-              setGlobalMobilityBehavior($(this).val());
-          });
+        $('#NewToIKEA').change(function () {
+            setGlobalMobilityBehavior($(this).val());
+        });
+    });
+
+
+    $('#ContractStartDate').change(function () {
+        var startDate = $('#DocumentValidUntil').val();
+        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+        var dstartDate = APIGlobal.DateTime.parseDate(startDate, format);
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+
+        var noticeValidUntilDate = $('#notice_ValidUntilDate');
+        noticeValidUntilDate.hide();
+
+        if (dstartDate.valueOf() < now.valueOf()) {
+            noticeHiringDate.show();
+        }
     });
 
     $('#Institution').change(function () {
@@ -624,4 +648,55 @@
             $('#BuildingSocietyRollNo').prop('disabled', false);
         }
     });
+
+    function setTaxInformationBehavior(value) {
+        if (value == 'P45 attached') {
+            $('#taxInformationNotice').show();
+        }
+        else {
+            $('#taxInformationNotice').hide();
+        }
+
+        if (value != 'Statement A/B or C') {
+            $('#StatementDetails option:not([value])').prop('selected', true);
+            $("#statementDetailsNotice").hide();
+            $('#StatementDetails').prop('disabled', true);
+        }
+        else {
+            $("#StatementDetails").show();
+            $('#StatementDetails').prop('disabled', false);
+        }
+
+    }
+
+    setTaxInformationBehavior($('#TaxInformation').val());
+
+    $('#TaxInformation').change(function () {
+        setTaxInformationBehavior($(this).val());
+    });
+
+    $('#StatementDetails').change(function () {
+        value = $(this).val();
+
+        switch (value) {
+            case "A":
+                $("#statementDetailsNotice").html("1st job since last 6 April and no taxable Jobseeker’s Allowance, Employment and Support Allowance, taxable Incapacity Benefit, State or Occupational Pension.");
+                $("#statementDetailsNotice").show();
+                break;
+            case "B":
+                $("#statementDetailsNotice").html("The only job but another job since last 6 April, or taxable Jobseeker’s Allowance of taxable Incapacity Benefit. No State or Occupational Pension.");
+                $("#statementDetailsNotice").show();
+                break;
+            case "C":
+                $("#statementDetailsNotice").html("Another job / receive State or Occupational Pension.");
+                $("#statementDetailsNotice").show();
+                break;
+            default:
+                $("#statementDetailsNotice").empty();
+                $("#statementDetailsNotice").hide();
+                break;
+        }
+    });
+
+
 </script>

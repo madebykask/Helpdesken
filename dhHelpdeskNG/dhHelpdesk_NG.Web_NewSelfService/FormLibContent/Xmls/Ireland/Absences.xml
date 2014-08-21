@@ -13,7 +13,7 @@
     <!--Tab ServiceRequestDetails-->
     <tab name="#ServiceRequestDetails" label="Service Request Details">
       <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" mandatory="1">
-
+        <regex inherit="employeeno" pattern="" message=""></regex>
       </element>
       <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1"></element>
       <element name="LastName" type="text" label="Co-Worker Last name" mandatory="1"></element>
@@ -34,7 +34,7 @@
           <option value ="Yes">Yes</option>
         </options>
       </element>
-      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1">
+      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard">
         <options>
           <option value=""></option>
           <option value ="Urgent">Urgent</option>
@@ -45,6 +45,8 @@
 
       <element type="text" name="PermanentAddressLine1" label="Address line 1"></element>
       <element type="text" name="PermanentAddressLine2" label="Address line 2"></element>
+      <element type="text" name="PermanentAddressLine3" label="Address line 3"></element>
+      <element type="text" name="PermanentPostalCode" label="Postal Code"></element>
       <element type="text" name="PermanentCity" label="City"></element>
       <element type="search-select" name="PermanentCountry" label="Country" default="Ireland">
         <options>
@@ -322,8 +324,7 @@
         <mandatoryIf name ="AbsenceType" >Maternity leave,Adoption leave</mandatoryIf>
         <options>
           <option value=""></option>
-          <option value="Under 26 weeks">Under 26 weeks</option>
-          <option value="26 weeks - 1 year">26 weeks - 1 year</option>
+          <option value="Under 1 year">Under 1 year</option>
           <option value="1 - 2 years">1 - 2 years</option>
           <option value="Over 2 years">Over 2 years</option>
         </options>
@@ -337,12 +338,7 @@
         <laterThanOrEqual name="AbsenceStartFrom"></laterThanOrEqual>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element name="AbsenceHours" type="text" mandatory="1" label="Absence hours">
-        <regex inherit="unsignednum" pattern="" message=""></regex>
-      </element>
-      <element name="AbsenceDays" type="text" mandatory="1" label="Absence days">
-        <regex inherit="unsignednum" pattern="" message=""></regex>
-      </element>
+      
       <element name="AdoptionPay" type="text" label="Adoption Pay">
         <mandatoryIf name="AbsenceType">Adoption leave</mandatoryIf>
         <regex inherit="unsignednum" pattern="" message=""></regex>
@@ -371,8 +367,7 @@
         <mandatoryIf name ="AbsenceType2" >Maternity leave,Adoption leave</mandatoryIf>
         <options>
           <option value=""></option>
-          <option value="Under 26 weeks">Under 26 weeks</option>
-          <option value="26 weeks - 1 year">26 weeks - 1 year</option>
+          <option value="Under 1 year">Under 1 year</option>
           <option value="1 - 2 years">1 - 2 years</option>
           <option value="Over 2 years">Over 2 years</option>
         </options>
@@ -385,12 +380,6 @@
         <mandatoryIf name ="AbsenceType2" >Maternity leave,Adoption leave</mandatoryIf>
         <laterThanOrEqual name="AbsenceStartFrom2"></laterThanOrEqual>
         <regex inherit="date" pattern="" message=""></regex>
-      </element>
-      <element name="AbsenceHours2" type="text" label="Absence hours">
-        <regex inherit="unsignednum" pattern="" message=""></regex>
-      </element>
-      <element name="AbsenceDays2" type="text" label="Absence days">
-        <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
       <element name="AdoptionPay2" type="text" label="Adoption Pay">
         <mandatoryIf name="AbsenceType2">Adoption leave</mandatoryIf>
@@ -420,8 +409,7 @@
         <mandatoryIf name ="AbsenceType3" >Maternity leave,Adoption leave</mandatoryIf>
         <options>
           <option value=""></option>
-          <option value="Under 26 weeks">Under 26 weeks</option>
-          <option value="26 weeks - 1 year">26 weeks - 1 year</option>
+          <option value="Under 1 year">Under 1 year</option>
           <option value="1 - 2 years">1 - 2 years</option>
           <option value="Over 2 years">Over 2 years</option>
         </options>
@@ -434,12 +422,6 @@
         <mandatoryIf name ="AbsenceType3" >Maternity leave,Adoption leave</mandatoryIf>
         <laterThanOrEqual name="AbsenceStartFrom3"></laterThanOrEqual>
         <regex inherit="date" pattern="" message=""></regex>
-      </element>
-      <element name="AbsenceHours3" type="text" label="Absence hours">
-        <regex inherit="unsignednum" pattern="" message=""></regex>
-      </element>
-      <element name="AbsenceDays3" type="text" label="Absence days">
-        <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
       <element name="AdoptionPay3" type="text" label="Adoption Pay">
         <mandatoryIf name="AbsenceType3">Adoption leave</mandatoryIf>

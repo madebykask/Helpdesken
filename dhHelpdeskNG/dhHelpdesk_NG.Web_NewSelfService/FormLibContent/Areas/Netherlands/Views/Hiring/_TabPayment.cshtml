@@ -358,7 +358,7 @@
     };
 
     $('#NewToIKEA').change(function () {
-        debugger;
+        
         setNewToIKEA($(this).val());
     });
 
@@ -645,6 +645,45 @@
         }
     });
 
+    
+
+    $('#DeductionsType').change(function () {
+
+        GetXML('predefined_deduction_units_outs.xml', setDeductionUnits);
+
+
+    });
+    $('#DeductionsType').change(function () {
+
+        GetXML('predefined_deduction_units_outs.xml', setDeductionUnits);
+
+
+    });
+    $('#DeductionsType').change(function () {
+
+        GetXML('predefined_deduction_units_outs.xml', setDeductionUnits);
+
+
+    });
+
+    $('#AllowancesType').change(function () {
+        
+        GetXML('predefined_allowancetype_units_outs.xml', setAllowanceUnits);
+
+
+    });
+    $('#AllowancesType2').change(function () {
+
+        GetXML('predefined_allowancetype_units_outs.xml', setAllowanceUnits2);
+
+
+    });
+    $('#AllowancesType3').change(function () {
+
+        GetXML('predefined_allowancetype_units_outs.xml', setAllowanceUnits3);
+
+
+    });
 
     function SelectIndexChangePayScaleLevel() {
         if (document.getElementById('PayScaleLevel').value <= 12) {

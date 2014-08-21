@@ -4,144 +4,640 @@
 @using ECT.FormLib.Pdfs;
 @using System.Globalization;
 @using ECT.Model.Entities;
+@using System.Web.Hosting;
 
 @{
     Layout = null;
     Model.Language = "en";
+
+    var fillOldVal = TempData["oldValues"];
+    var newfill = (List<KeyValuePair<string, string>>)fillOldVal;
+
+    var imgPath = new DirectoryInfo(HostingEnvironment.MapPath(FormLibConstants.Paths.ImageDirectory)).FullName;
+    
+    
+    string OLD_JobTitle = newfill.Where(x => x.Key == "OLD_JobTitle").Select(x => x.Value).FirstOrDefault();
+
+    if (OLD_JobTitle == null)
+    {
+        OLD_JobTitle = "";
+    }
 }
 <!DOCTYPE html>
 <html>
-<body>
+<body style="font-family:Verdana, Arial;font-size:8px;">
+        <table>
+            <tr style="text-align: left;">
+                <td><img src="@imgPath/ikea-logo.png" /></td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <td><h3 style="font-weight:bold; font-size:14px;">Change of Terms and Conditions Form</h3></td>
+            </tr>
+        </table>
         <table class="table">
             <tbody>
                 <tr>
-                    <td class="tdstrong" colspan="2">
-                        <h4>@Model.Translate("Details")</h4>
+                    <td colspan="2">
+                        <strong>@Model.Translate("Details")</strong>
                     </td>
                 </tr>
                 <tr>
-                    <td class="tdstrong">@Model.Label("Co-WorkerGlobalviewID")</td>
-                    <td>@Model.Element("Co-WorkerGlobalviewID", false)</td>
+                    <td border="1">Co-Worker Globalview ID</td>
+                    <td border="1">@Model.GetAnswer("Co-WorkerGlobalviewID")</td>
                 </tr>
                 <tr>
-                    <td class="tdstrong">@Model.Label("FirstName")</td>
-                    <td>@Model.Element("FirstName", false)</td>
+                    <td class="tdstrong" border="1">Co-Worker First Name</td>
+                    <td border="1">@Model.GetAnswer("FirstName")</td>
                 </tr>
                 <tr>
-                    <td class="tdstrong">@Model.Label("LastName")</td>
-                    <td>@Model.Element("LastName", false)</td>
+                    <td class="tdstrong" border="1">Co-Worker Last Name</td>
+                    <td border="1">@Model.GetAnswer("LastName")</td>
                 </tr>
                 <tr>
-                    <td class="tdstrong">@Model.Label("IKEAEmailAddress")</td>
-                    <td>@Model.Element("IKEAEmailAddress", false)</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("IKEANetworkID")</td>
-                    <td>@Model.Element("IKEANetworkID", false)</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("Company")</td>
-                    <td>
-                        @Model.Element("Company")
+                    <td class="tdstrong" border="1">Change Valid from</td>
+                    <td border="1">
+                        @Model.GetAnswer("ChangeValidFrom")
                     </td>
                 </tr>
                 <tr>
-                    <td class="tdstrong">@Model.Label("BusinessUnit")</td>
-                    <td>
-                        @Model.Element("BusinessUnit")
+                    <td class="tdstrong" border="1">Change Valid to</td>
+                    <td border="1">
+                        @Model.GetAnswer("ChangeValidTo")</td>
+                </tr>
+                 @if (Model.GetAnswer("ServiceRequestPriority").ToLower() != "")
+                 {
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("ServiceRequestPriority")</td>
+                        <td border="1">
+                            @Model.GetAnswer("ServiceRequestPriority")</td>
+                    </tr>
+                 }
+                <tr>
+                    <td colspan="2">
+                        &nbsp;
                     </td>
                 </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("ServiceArea")</td>
-                    <td>@Model.Element("ServiceArea")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("Department")</td>
-                    <td>
-                        @Model.Element("Department")
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("ChangeValidFrom")</td>
-                    <td>
-                        @Model.Element("ChangeValidFrom")
-                        <div id="notice_OldDate" style="display: none;" class="notice">
-                            @Model.Translate("The date you've entered is in the past. Are you sure you want to backdate Change date?")
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("ChangeValidTo")</td>
-                    <td>
-                        @Model.Element("ChangeValidTo")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("ServiceRequestPriority")</td>
-                    <td>
-                        @Model.Element("ServiceRequestPriority")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Translate("SLA")</td>
-                    <td>
-                        @if (Model.Contract.CaseNumber != null)
-                        {
-                            @Model.Contract.PriorityName;
-                        }
-                        else { 
-                            @Model.Form.PriorityName;
-                        }
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tdstrong" colspan="2">
-                        <h4>@Model.Translate("Permanent Address")</h4>
-                    </td>
-                    <td class="tdstrong">
-                        <h4>@Model.Translate("Current record")</h4>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("PermanentAddressLine1")</td>
-                    <td>@Model.Element("PermanentAddressLine1")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("PermanentAddressLine2")</td>
-                    <td>@Model.Element("PermanentAddressLine2")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("PermanentAddressLine3")</td>
-                    <td>@Model.Element("PermanentAddressLine3")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("PermanentPostalCode")</td>
-                    <td>@Model.Element("PermanentPostalCode")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("PermanentCity")</td>
-                    <td>@Model.Element("PermanentCity")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("PermanentCountry")</td>
-                    <td>@Model.Element("PermanentCountry")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong" colspan="2">
-                        <h4>@Model.Translate("Country Specifics")</h4>
-                    </td>
-                    <td class="tdstrong">
-                        <h4>@Model.Translate("Current record")</h4>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("SecondmentDuration")</td>
-                    <td>@Model.Element("SecondmentDuration")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("CareerBreakReturn")</td>
-                    <td>@Model.Element("CareerBreakReturn")</td>
-                </tr>
+                 @if (Model.GetAnswer("SecondmentDuration").ToLower() != "" || Model.GetAnswer("CareerBreakReturn").ToLower() != "")
+                 {
+                    <tr>
+                        <td class="tdstrong" colspan="2">
+                            <strong>@Model.Translate("Country Specifics")</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("SecondmentDuration")</td>
+                        <td border="1">@Model.GetAnswer("SecondmentDuration")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("CareerBreakReturn")</td>
+                        <td border="1">@Model.GetAnswer("CareerBreakReturn")</td>
+                    </tr>
+                     <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                    </tr>
+                 }
+                
+                @if (Model.GetAnswer("Country").ToLower() != "" || Model.GetAnswer("NewCompany").ToLower() != "" || Model.GetAnswer("NewBusinessUnit").ToLower() != "" || Model.GetAnswer("NewServiceArea").ToLower() != "" || Model.GetAnswer("NewDepartment").ToLower() != "" || Model.GetAnswer("HomeCostCentre").ToLower() != "" || Model.GetAnswer("CostAllocation").ToLower() != "" || Model.GetAnswer("CrossChargeCostCentre").ToLower() != "")
+                 {
+                    <tr>
+                        <td class="tdstrong" colspan="2">
+                            <strong>@Model.Translate("Organisation")</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("Country")</td>
+                        <td border="1">@Model.GetAnswer("Country")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("NewCompany")</td>
+                        <td border="1">@Model.GetDocumentAnswer("NewCompany",false)</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("NewBusinessUnit")</td>
+                        <td border="1">@Model.GetDocumentAnswer("NewBusinessUnit",false)</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("NewServiceArea")</td>
+                        <td border="1">@Model.GetDocumentAnswer("NewServiceArea",false)</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("NewDepartment")</td>
+                        <td border="1">@Model.GetDocumentAnswer("NewDepartment",false)</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("HomeCostCentre")</td>
+                        <td border="1">@Model.GetAnswer("HomeCostCentre")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("CostAllocation")</td>
+                        <td border="1">@Model.GetAnswer("CostAllocation")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("CrossChargeCostCentre")</td>
+                        <td border="1">@Model.GetAnswer("CrossChargeCostCentre")</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                    </tr>
+                 }
+                
+                @if (OLD_JobTitle.ToLower() != Model.GetAnswer("JobTitle").ToLower() || Model.GetAnswer("NewPosition").ToLower() != "" || Model.GetAnswer("ReportsToLineManager").ToLower() != "" || Model.GetAnswer("ManagerJobTitle").ToLower() != "")
+                {
+                     <tr>
+                        <td class="tdstrong" colspan="2">
+                            <strong>@Model.Translate("Job")</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("JobTitle")</td>
+                        <td border="1">@Model.GetAnswer("JobTitle")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("NewPosition")</td>
+                        <td border="1">@Model.GetAnswer("NewPosition")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("ReportsToLineManager")</td>
+                        <td border="1">@Model.GetAnswer("ReportsToLineManager")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("ManagerJobTitle")</td>
+                        <td border="1">@Model.GetAnswer("ManagerJobTitle")</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                    </tr>
+                }
+                
+                @if (Model.GetAnswer("EmploymentCategory").ToLower() != "" || Model.GetAnswer("ContractedHours").ToLower() != "" || Model.GetAnswer("HoursPerWeek").ToLower() != "" || Model.GetAnswer("DaysPerWeek").ToLower() != "" || Model.GetAnswer("PreviousContractStartDate").ToLower() != "" || Model.GetAnswer("ContractType").ToLower() != "" || Model.GetAnswer("ProbationPeriod").ToLower() != "" || Model.GetAnswer("ProbationEndDate").ToLower() != "")
+                {
+                     <tr>
+                        <td class="tdstrong" colspan="2">
+                            <strong>@Model.Translate("Employment Conditions")</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("EmploymentCategory")</td>
+                        <td border="1">@Model.GetAnswer("EmploymentCategory")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("ContractedHours")</td>
+                        <td border="1">@Model.GetAnswer("ContractedHours")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("HoursPerWeek")</td>
+                        <td border="1">@Model.GetAnswer("HoursPerWeek")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("DaysPerWeek")</td>
+                        <td border="1">@Model.GetAnswer("DaysPerWeek")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("PreviousContractStartDate")</td>
+                        <td border="1">@Model.GetAnswer("PreviousContractStartDate")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("ContractType")</td>
+                        <td border="1">@Model.GetAnswer("ContractType")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("ProbationPeriod")</td>
+                        <td border="1">@Model.GetAnswer("ProbationPeriod")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("ProbationEndDate")</td>
+                        <td border="1">@Model.GetAnswer("ProbationEndDate")</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                    </tr>
+                }
+                
+                 @if (Model.GetAnswer("PrimarySite") != "" || Model.GetAnswer("TECApprover") != "" || Model.GetAnswer("HelpDesk") != "")
+                 {
+                    <tr>
+                        <td class="tdstrong" colspan="2">
+                            <strong>@Model.Translate("CDS")</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("PrimarySite")</td>
+                        <td border="1">@Model.GetAnswer("PrimarySite")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("TECApprover")</td>
+                        <td border="1">@Model.GetAnswer("TECApprover")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("HelpDesk")</td>
+                        <td border="1">@Model.GetAnswer("HelpDesk")</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                    </tr>
+                 }
+                 @if (Model.GetAnswer("ContractReviewDate") != "" || Model.GetAnswer("PreviousJobTitle") != "")
+                 {
+                    <tr>
+                        <td class="tdstrong" colspan="2">
+                            <strong>@Model.Translate("Country Specifics")..</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("ContractReviewDate")</td>
+                        <td border="1">@Model.GetAnswer("ContractReviewDate")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("PreviousJobTitle")</td>
+                        <td border="1">@Model.GetAnswer("PreviousJobTitle")</td>
+                    </tr>
+                    @*<tr>
+                        <td class="tdstrong">@Model.Label("EducationAuthority")</td>
+                        <td>@Model.GetAnswer("EducationAuthority")</td>
+                    </tr>*@
+                     <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                    </tr>
+                 }
+                 @if (Model.GetAnswer("PayrollCategory") != "" || Model.GetAnswer("PayScaleGroup") != "" || Model.GetAnswer("BasicPayAmount") != "" || Model.GetAnswer("MonthlySalaryRate") != "" || Model.GetAnswer("BasicPayChangeReason") != "")
+                 {
+                    <tr>
+                        <td class="tdstrong" colspan="2">
+                            <strong>@Model.Translate("Basic pay")</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("PayrollCategory")</td>
+                        <td border="1">@Model.GetAnswer("PayrollCategory")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("PayScaleGroup")</td>
+                        <td border="1">@Model.GetAnswer("PayScaleGroup")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("BasicPayAmount")</td>
+                        <td border="1">@Model.GetAnswer("BasicPayAmount")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("MonthlySalaryRate")</td>
+                        <td border="1">@Model.GetAnswer("MonthlySalaryRate")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("BasicPayChangeReason")</td>
+                        <td border="1">@Model.GetAnswer("BasicPayChangeReason")</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                    </tr>
+                 }
+                 @if (Model.GetAnswer("AllowancesType") != "" || Model.GetAnswer("AllowancesPaymentType") != "" || Model.GetAnswer("AllowancesAmountUnits") != "" || Model.GetAnswer("AllowancesValidFrom") != "")
+                 {
+                    <tr>
+                        <td class="tdstrong" colspan="2">
+                            <strong>@Model.Translate("Allowances")</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("AllowancesType")</td>
+                        <td border="1">@Model.GetAnswer("AllowancesType")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("AllowancesPaymentType")</td>
+                        <td border="1">@Model.GetAnswer("AllowancesPaymentType")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("AllowancesAmountUnits")</td>
+                        <td border="1">@Model.GetAnswer("AllowancesAmountUnits")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("AllowancesValidFrom")</td>
+                        <td border="1">@Model.GetAnswer("AllowancesValidFrom")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("AllowancesValidTo")</td>
+                        <td border="1">@Model.GetAnswer("AllowancesValidTo")</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                    </tr>
+                 }
+                @if (Model.GetAnswer("AllowancesType2") != "" || Model.GetAnswer("AllowancesPaymentType2") != "" || Model.GetAnswer("AllowancesAmountUnits2") != "" || Model.GetAnswer("AllowancesValidFrom2") != "")
+                 {
+                    <tr>
+                        <td class="tdstrong" colspan="2">
+                            <strong>@Model.Translate("Allowances2")</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("AllowancesType2")</td>
+                        <td border="1">@Model.GetAnswer("AllowancesType2")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("AllowancesPaymentType2")</td>
+                        <td border="1">@Model.GetAnswer("AllowancesPaymentType2")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("AllowancesAmountUnits2")</td>
+                        <td border="1">@Model.GetAnswer("AllowancesAmountUnits2")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("AllowancesValidFrom2")</td>
+                        <td border="1">@Model.GetAnswer("AllowancesValidFrom2")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("AllowancesValidTo2")</td>
+                        <td border="1">@Model.GetAnswer("AllowancesValidTo2")</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                    </tr>
+                 }
+                @if (Model.GetAnswer("AllowancesType3") != "" || Model.GetAnswer("AllowancesPaymentType3") != "" || Model.GetAnswer("AllowancesAmountUnits3") != "" || Model.GetAnswer("AllowancesValidFrom3") != "")
+                 {
+                    <tr>
+                        <td class="tdstrong" colspan="2">
+                            <strong>@Model.Translate("Allowances3")</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("AllowancesType3")</td>
+                        <td border="1">@Model.GetAnswer("AllowancesType3")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("AllowancesPaymentType3")</td>
+                        <td border="1">@Model.GetAnswer("AllowancesPaymentType3")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("AllowancesAmountUnits3")</td>
+                        <td border="1">@Model.GetAnswer("AllowancesAmountUnits3")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("AllowancesValidFrom3")</td>
+                        <td border="1">@Model.GetAnswer("AllowancesValidFrom3")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("AllowancesValidTo3")</td>
+                        <td border="1">@Model.GetAnswer("AllowancesValidTo3")</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                    </tr>
+                 }
+                @if (Model.GetAnswer("DeductionsType") != "" || Model.GetAnswer("DeductionsPaymentType") != "" || Model.GetAnswer("DeductionsAmountUnits") != "" || Model.GetAnswer("DeductionsValidFrom") != "")
+                 {
+                    <tr>
+                        <td class="tdstrong" colspan="2">
+                            <strong>@Model.Translate("Deductions")</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("DeductionsType")</td>
+                        <td border="1">@Model.GetAnswer("DeductionsType")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("DeductionsPaymentType")</td>
+                        <td border="1">@Model.GetAnswer("DeductionsPaymentType")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("DeductionsAmountUnits")</td>
+                        <td border="1">@Model.GetAnswer("DeductionsAmountUnits")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("DeductionsValidFrom")</td>
+                        <td border="1">@Model.GetAnswer("DeductionsValidFrom")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("DeductionsValidTo")</td>
+                        <td border="1">@Model.GetAnswer("DeductionsValidTo")</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                    </tr>
+                 }
+                @if (Model.GetAnswer("DeductionsType2") != "" || Model.GetAnswer("DeductionsPaymentType2") != "" || Model.GetAnswer("DeductionsAmountUnits2") != "" || Model.GetAnswer("DeductionsValidFrom2") != "")
+                 {
+                    <tr>
+                        <td class="tdstrong" colspan="2">
+                            <strong>@Model.Translate("Deductions2")</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("DeductionsType2")</td>
+                        <td border="1">@Model.GetAnswer("DeductionsType2")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("DeductionsPaymentType2")</td>
+                        <td border="1">@Model.GetAnswer("DeductionsPaymentType2")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("DeductionsAmountUnits2")</td>
+                        <td border="1">@Model.GetAnswer("DeductionsAmountUnits2")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("DeductionsValidFrom2")</td>
+                        <td border="1">@Model.GetAnswer("DeductionsValidFrom2")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("DeductionsValidTo2")</td>
+                        <td border="1">@Model.GetAnswer("DeductionsValidTo2")</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                    </tr>
+                 }
+                @if (Model.GetAnswer("DeductionsType3") != "" || Model.GetAnswer("DeductionsPaymentType3") != "" || Model.GetAnswer("DeductionsAmountUnits3") != "" || Model.GetAnswer("DeductionsValidFrom3") != "")
+                 {
+                    <tr>
+                        <td class="tdstrong" colspan="2">
+                            <strong>@Model.Translate("Deductions3")</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("DeductionsType3")</td>
+                        <td border="1">@Model.GetAnswer("DeductionsType3")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("DeductionsPaymentType3")</td>
+                        <td border="1">@Model.GetAnswer("DeductionsPaymentType3")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("DeductionsAmountUnits3")</td>
+                        <td border="1">@Model.GetAnswer("DeductionsAmountUnits3")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("DeductionsValidFrom3")</td>
+                        <td border="1">@Model.GetAnswer("DeductionsValidFrom3")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("DeductionsValidTo3")</td>
+                        <td border="1">@Model.GetAnswer("DeductionsValidTo3")</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                    </tr>
+                 }
+                @if (Model.GetAnswer("OneIKEABonusLevel") != "")
+                 {
+                    <tr>
+                        <td class="tdstrong" colspan="2">
+                            <strong>@Model.Translate("Bonus Eligibility")</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("OneIKEABonusLevel")</td>
+                        <td border="1">@Model.GetAnswer("OneIKEABonusLevel")</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                    </tr>
+                }
+                 @if (Model.GetAnswer("DateOfNextSalaryReview") != "" || Model.GetAnswer("BenefitLevel") != "")
+                 {
+                 
+                    <tr>
+                        <td class="tdstrong" colspan="2">
+                            <strong>@Model.Translate("Country Specifics")</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("DateOfNextSalaryReview")</td>
+                        <td border="1">@Model.GetAnswer("DateOfNextSalaryReview")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong" border="1">@Model.Label("BenefitLevel")</td>
+                        <td border="1">@Model.GetAnswer("BenefitLevel")</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                    </tr>
+                 }
             </tbody>
         </table>
-    <endpage />
+        <table>
+            <tr>
+                <td colspan="3">
+                    <strong>Authorisation signature: CO-WORKER</strong>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Co-worker
+                </td>
+                <td>
+                    ______________________
+                </td>
+                <td>
+                    Date: _ _/_ _/_ _ _ _
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <strong>Authorisation signature: CURRENT UNIT</strong>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Department Manager
+                </td>
+                <td>
+                     ______________________
+                </td>
+                <td>
+                    Date: _ _/_ _/_ _ _ _
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    SSG Member
+                </td>
+                <td>
+                     ______________________
+                </td>
+                <td>
+                    Date: _ _/_ _/_ _ _ _
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    HR Manager
+                </td>
+                <td>
+                     ______________________
+                </td>
+                <td>
+                    Date: _ _/_ _/_ _ _ _
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <strong>Authorisation signature: NEW  UNIT (If applicable)</strong>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Department Manager
+                </td>
+                <td>
+                     ______________________
+                </td>
+                <td>
+                    Date: _ _/_ _/_ _ _ _
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    SSG Member
+                </td>
+                <td>
+                     ______________________
+                </td>
+                <td>
+                    Date: _ _/_ _/_ _ _ _
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    HR Manager
+                </td>
+                <td>
+                     ______________________
+                </td>
+                <td>
+                    Date: _ _/_ _/_ _ _ _
+                </td>
+            </tr>
+        </table>
 </body>
 </html>

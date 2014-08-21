@@ -30,7 +30,7 @@
       <element name="ServiceArea" type="text" label="Function"></element>
       <element name="Department" type="text" label="Department"></element>
 
-      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1">
+      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard">
         <options>
           <option value=""></option>
           <option value="Urgent">Urgent</option>
@@ -82,7 +82,7 @@
         <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
         <regex inherit="unsignednum" message="" pattern=""></regex>
       </element>
-      <element type="select" name="DeductionsNetGross" label="Net/Gross" >
+      <!--<element type="select" name="DeductionsNetGross" label="Net/Gross" >
         <mandatoryIf name="PaymentType">Loan</mandatoryIf>
         <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
         <options>
@@ -90,8 +90,8 @@
           <option value="Net">Net</option>
           <option value="Gross">Gross</option>
         </options>
-      </element>
-      <element type="select" name="RePaymentType" label="Re-payment Type">
+      </element>-->
+      <!--<element type="select" name="RePaymentType" label="Re-payment Type">
         <mandatoryIf name="PaymentType">Loan</mandatoryIf>
         <options>
           <option value=""></option>
@@ -104,12 +104,19 @@
       <element type="date" name="1stPayment" label="1st Payment" format="dd.MM.yyyy" >
         <mandatoryIf name="PaymentType">Loan</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
-      </element>
+      </element>-->
       <element type="date" name="PaymentEndsOn" label="Payment ends on" format="dd.MM.yyyy" >
         <mandatoryIf name="PaymentType">Loan</mandatoryIf>
-        <laterThanOrEqual name="1stPayment"></laterThanOrEqual>
+        <!--<laterThanOrEqual name="1stPayment"></laterThanOrEqual>-->
         <regex inherit="date" pattern="" message=""></regex>
       </element>
+
+      <element type="text" name="NumberOfInstallments" label="Number Of Installments (months)">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+        <regex inherit="maxvalue12" pattern="" message=""></regex>
+      </element>
+
+
     </tab>
 
   </fields>

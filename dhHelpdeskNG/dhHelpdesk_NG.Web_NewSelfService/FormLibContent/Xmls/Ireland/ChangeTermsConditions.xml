@@ -19,7 +19,9 @@
       </element>
       <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1"></element>
       <element name="LastName" type="text" label="Co-Worker Last Name" mandatory="1"></element>
-      <element name="IKEAEmailAddress" type="text" label="IKEA Email Address" mandatory="1"></element>
+      <element name="IKEAEmailAddress" type="text" label="IKEA Email Address" mandatory="1">
+        <regex inherit="email" pattern="" message=""></regex>
+      </element>
       <element name="IKEANetworkID" type="text" label="IKEA Network ID" mandatory="1"></element>
       <element name="Company" type="text" label="Company"></element>
       <element name="BusinessUnit" type="text" label="Business Unit"></element>
@@ -53,22 +55,41 @@
       <element name="ChangeValidTo" type="date" label="Change Valid to:" mandatory="1" default="31.12.9999" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1">
+      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard">
         <options>
           <option value=""></option>
           <option value="Urgent">Urgent</option>
           <option value="Standard">Standard</option>
         </options>
       </element>
-      
+      <element type="select" name="SecondmentDuration" label="Secondment duration">
+        <options>
+          <option></option>
+          <option value="less than 1 year">less than 1 year</option>
+          <option value="1 - 2 years">1 - 2 years</option>
+          <option value="over 2 years">over 2 years</option>
+        </options>
+        <!--<mandatoryIf name="ChangeType">Secondment</mandatoryIf>-->
+      </element>
+      <element type="select" name="CareerBreakReturn" label="Career Break return - pay review">
+        <options>
+          <option></option>
+          <option value="immediately">immediately</option>
+          <option value="in six months from return">in six months from return</option>
+          <option value="timescales depend on time away">timescales depend on time away</option>
+        </options>
+        <!--<mandatoryIf name="ChangeType">Career Break End</mandatoryIf>-->
+      </element>
+
+
       <!--Permanent Address-->
       <!--Mandatory-->
-      <element type="text" name="PermanentAddressLine1" label="Address line 1"></element>
-      <element type="text" name="PermanentAddressLine2" label="Address line 2"></element>
+      <!--<element type="text" name="PermanentAddressLine1" label="Address line 1"></element>-->
+      <!--<element type="text" name="PermanentAddressLine2" label="Address line 2"></element>-->
       <!--Mandatory-->
-      <element type="text" name="PermanentCity" label="City"></element>
+      <!--<element type="text" name="PermanentCity" label="City"></element>-->
       <!--Mandatory-->
-      <element type="search-select" name="PermanentCountry" label="Country" source="1" default="Ireland">
+      <!--<element type="search-select" name="PermanentCountry" label="Country" source="1" default="Ireland">
         <options>
           <option value="Unknown">Unknown</option>
           <option value="Andorra">Andorra</option>
@@ -322,7 +343,10 @@
           <option value="Zambia">Zambia</option>
           <option value="Zimbabwe">Zimbabwe</option>
         </options>
-      </element>
+      </element>-->
+
+
+
     </tab>
 
     <!--Tab OrganisationalAssignment-->
@@ -676,11 +700,11 @@
       <!--Mandatory-->
       <element type="select" source="database" name="NewServiceArea" label="Function">
         <options>
-          <option value=""></option>       
+          <option value=""></option>
         </options>
       </element>
       <!--Mandatory-->
-      <element type="select" source="database" name="NewDepartment" label="Department"> 
+      <element type="select" source="database" name="NewDepartment" label="Department">
         <options>
           <option value=""></option>
         </options>
@@ -732,42 +756,6 @@
       <element type="search-select" name="HomeCostCentre" source="1" label="Home Cost Centre">
         <regex inherit="maxfourdigit" message="" pattern=""></regex>
         <options>
-          <!--<option value="3300">3300</option>
-          <option value="3320">3320</option>
-          <option value="3350">3350</option>
-          <option value="3360">3360</option>
-          <option value="3370">3370</option>
-          <option value="3380">3380</option>
-          <option value="3400">3400</option>
-          <option value="3520">3520</option>
-          <option value="3530">3530</option>
-          <option value="3540">3540</option>
-          <option value="3550">3550</option>
-          <option value="3560">3560</option>
-          
-         
-          <option value="4020">4020</option>
-          <option value="4030">4030</option>
-          <option value="4040">4040</option>
-          <option value="4050">4050</option>
-          <option value="6070">6070</option>
-          <option value="6071">6071</option>
-          <option value="6072">6072</option>
-          <option value="6120">6120</option>
-          <option value="6180">6180</option>
-          <option value="6210">6210</option>
-          <option value="6299">6299</option>
-          <option value="6310">6310</option>
-          <option value="6320">6320</option>
-          <option value="6330">6330</option>
-          <option value="6400">6400</option>
-          <option value="6600">6600</option>
-          <option value="7010">7010</option>
-          <option value="8240">8240</option>-->
-          <option value="﻿3570">﻿3570</option>
-          <option value="6071">6071</option>
-          <option value="7010">7010</option>
-          <option value="8500">8500</option>
           <option value="3300">3300</option>
           <option value="3320">3320</option>
           <option value="3340">3340</option>
@@ -782,7 +770,6 @@
           <option value="3550">3550</option>
           <option value="3560">3560</option>
           <option value="3570">3570</option>
-          <option value="3921">3921</option>
           <option value="3922">3922</option>
           <option value="3923">3923</option>
           <option value="3960">3960</option>
@@ -794,6 +781,7 @@
           <option value="6071">6071</option>
           <option value="6072">6072</option>
           <option value="6120">6120</option>
+          <option value="6190">6190</option>
           <option value="6180">6180</option>
           <option value="6210">6210</option>
           <option value="6299">6299</option>
@@ -803,10 +791,11 @@
           <option value="6400">6400</option>
           <option value="6600">6600</option>
           <option value="7010">7010</option>
-          <option value="8240">8240</option>
+          <option value="8500">8500</option>
+
         </options>
       </element>
-      
+
       <!--Job-->
       <!--Mandatory-->
       <!--<element name="JobTitle" type="typeahead-simple" label="Job Title" source="1">
@@ -1065,7 +1054,7 @@
           <option value="Visual Merchandise/Activity Manager">Visual Merchandise/Activity Manager</option>
         </options>
       </element>
-      
+
       <!--Mandatory-->
       <element name="NewPosition" type="select" label="New Position?">
         <options>
@@ -1120,7 +1109,42 @@
       <element type="search-select" source="1" name="ReportsToLineManager" label="Reports to Line Manager">
         <options>
           <option value=""></option>
+          <option value="﻿Peter Wagner">﻿Peter Wagner</option>
+          <option value="Jamie Foers">Jamie Foers</option>
+          <option value="Tom Woolverton">Tom Woolverton</option>
+          <option value="Paul Moore">Paul Moore</option>
+          <option value="Gillian Reilly">Gillian Reilly</option>
+          <option value="Tina McDonald-Sisk">Tina McDonald-Sisk</option>
+          <option value="Lisa O&apos;Brien">Lisa O&apos;Brien</option>
+          <option value="Stephen Ellis">Stephen Ellis</option>
           <option value="Andrea Smith">Andrea Smith</option>
+          <option value="Melissa Rodrigues">Melissa Rodrigues</option>
+          <option value="Desmond Shelley">Desmond Shelley</option>
+          <option value="Raymond Cole">Raymond Cole</option>
+          <option value="Robin Dixon">Robin Dixon</option>
+          <option value="Karen Maritz">Karen Maritz</option>
+          <option value="Gerard Doyle">Gerard Doyle</option>
+          <option value="Neal Corbett">Neal Corbett</option>
+          <option value="Tihomir Damjanovic">Tihomir Damjanovic</option>
+          <option value="Leandro Godoy">Leandro Godoy</option>
+          <option value="Daniel Byrne">Daniel Byrne</option>
+          <option value="Tracey Finnegan">Tracey Finnegan</option>
+          <option value="Laragh King">Laragh King</option>
+          <option value="Chris Kelly">Chris Kelly</option>
+          <option value="Paul Ringwood">Paul Ringwood</option>
+          <option value="Rachel Faulkner">Rachel Faulkner</option>
+          <option value="Brenda Massyn">Brenda Massyn</option>
+          <option value="Hazel Dunne">Hazel Dunne</option>
+          <option value="Garry Ward">Garry Ward</option>
+          <option value="David Blazquez">David Blazquez</option>
+          <option value="Mark Dempsey">Mark Dempsey</option>
+          <option value="Lisa Bodkin">Lisa Bodkin</option>
+          <option value="Andrias O&apos;Shaughnessy">Andrias O&apos;Shaughnessy</option>
+          <option value="Keevagh Heverin">Keevagh Heverin</option>
+          <option value="David Looker">David Looker</option>
+          <option value="Kieran Clancy">Kieran Clancy</option>
+
+          <!--<option value="Andrea Smith">Andrea Smith</option>
           <option value="Andrias O&apos;Shaughnessy">Andrias O&apos;Shaughnessy</option>
           <option value="Brenda Massyn">Brenda Massyn</option>
           <option value="Cassandra McManus">Cassandra McManus</option>
@@ -1157,7 +1181,7 @@
           <option value="Tina McDonald-Sisk">Tina McDonald-Sisk</option>
           <option value="Tom Woolverton">Tom Woolverton</option>
           <option value="Tracey Finnegan">Tracey Finnegan</option>
-          <option value="Miss Lisa Bodkin">Miss Lisa Bodkin</option>
+          <option value="Miss Lisa Bodkin">Miss Lisa Bodkin</option>-->
         </options>
       </element>
       <!--Mandatory-->
@@ -1223,7 +1247,11 @@
         </options>
       </element>
       <!--Mandatory-->
-      <element name="ContractedHours" type="text" label="Contracted Hours"></element>
+      <element type="text" name="ContractedHours" label="Contracted Hours">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+        <regex inherit="numMax39" pattern="" message=""></regex>
+      </element>
+      
       <!--Mandatory-->
       <element name="DaysPerWeek" type="select" label="Days Per Week" default="5">
         <options>
@@ -1251,7 +1279,7 @@
           <option value="Yes">Yes</option>
           <option value="No">No</option>
         </options>
-      </element>      
+      </element>
       <element name="ProbationEndDate" type="date" label="Probation end date" format="dd.MM.yyyy">
         <!--<mandatoryIf name="ProbationPeriod">Yes</mandatoryIf>-->
         <regex inherit="date" pattern="" message=""></regex>
@@ -1370,6 +1398,7 @@
         <options>
           <option value=""></option>
           <option value="Hourly">Hourly</option>
+          <option value="Annualised">Annualised</option>
           <option value="Salaried">Salaried</option>
           <option value="Salaried Management">Salaried Management</option>
           <option value="Salaried Senior Management">Salaried Senior Management</option>
@@ -1381,15 +1410,7 @@
         <options>
           <option value=""></option>
           <option value="STARTER">STARTER</option>
-          <option value="STARTER1">STARTER1</option>
-          <option value="STARTER2">STARTER2</option>
-          <option value="STARTER3">STARTER3</option>
-          <option value="STARTER4">STARTER4</option>
-          <option value="FOUNDN1">FOUNDN1</option>
-          <option value="FOUNDN2">FOUNDN2</option>
-          <option value="FOUNDN3">FOUNDN3</option>
-          <option value="FOUNDN4">FOUNDN4</option>
-          <option value="FOUNDN">FOUNDN</option>
+          <option value="FOUNDATION">FOUNDATION</option>
           <option value="43">43</option>
           <option value="44">44</option>
           <option value="45">45</option>
@@ -1456,6 +1477,31 @@
         <options>
           <option value=""></option>
           <option value="Advanced Hrly">Advanced Hrly</option>
+          <option value="Car Allowance">Car Allowance</option>
+          <option value="Cash Adjustment">Cash Adjustment</option>
+          <option value="Commission">Commission</option>
+          <option value="Competance Pay">Competance Pay</option>
+          <option value="Fork Lift Truck Allowance">Fork Lift Truck Allowance</option>
+          <option value="Housing Allowance">Housing Allowance</option>
+          <option value="IKEA1 Skills">IKEA1 Skills</option>
+          <option value="IKEA2 Skills">IKEA2 Skills</option>
+          <option value="Kitchen Skills">Kitchen Skills</option>
+          <option value="Mortgage Subsidy">Mortgage Subsidy</option>
+          <option value="Night Shift">Night Shift</option>
+          <option value="NTG Double Housing">NTG Double Housing</option>
+          <option value="NTG Housing Costs">NTG Housing Costs</option>
+          <option value="NTG Relocation Allow">NTG Relocation Allow</option>
+          <option value="NTG Rent Allowance">NTG Rent Allowance</option>
+          <option value="Power Stacker">Power Stacker</option>
+          <option value="Redundancy">Redundancy</option>
+          <option value="Relocation Allowance">Relocation Allowance</option>
+          <option value="Rent Allowance">Rent Allowance</option>
+          <option value="Responsibility Allow">Responsibility Allow</option>
+          <option value="Salary Advanced">Salary Advanced</option>
+          <option value="Secondment">Secondment</option>
+          <option value="Stand By Allowance">Stand By Allowance</option>
+
+          <!--<option value="Advanced Hrly">Advanced Hrly</option>
           <option value="High Performer 11">High Performer 11</option>
           <option value="High Performer 12">High Performer 12</option>
           <option value="High Performer 13">High Performer 13</option>
@@ -1472,17 +1518,17 @@
           <option value="100F Salary FLT Skills">100F Salary FLT Skills</option>
           <option value="100G Salary Kitchen Skills">100G Salary Kitchen Skills</option>
           <option value="100H Salary Work IKEA1 Skills">100H Salary Work IKEA1 Skills</option>
-          <option value="100I Salary Work IKEA2 Skills">100I Salary Work IKEA2 Skills</option>
+          <option value="100I Salary Work IKEA2 Skills">100I Salary Work IKEA2 Skills</option>-->
         </options>
       </element>
-      <element type="select" name="AllowancesPaymentType" label="Payment Type">
-        <!--<mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>-->
+      <!--<element type="select" name="AllowancesPaymentType" label="Payment Type">
+        --><!--<mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>--><!--
         <options>
           <option value=""></option>
           <option value="One Time">One Time</option>
           <option value="Recurring">Recurring</option>
         </options>
-      </element>
+      </element>-->
       <element type="text" name="AllowancesAmountUnits" label="Amount/Units">
         <!--<mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>-->
         <regex inherit="unsignednum" message="" pattern=""></regex>
@@ -1508,32 +1554,40 @@
         <options>
           <option value=""></option>
           <option value="Advanced Hrly">Advanced Hrly</option>
-          <option value="High Performer 11">High Performer 11</option>
-          <option value="High Performer 12">High Performer 12</option>
-          <option value="High Performer 13">High Performer 13</option>
-          <option value="High Performer 14">High Performer 14</option>
+          <option value="Car Allowance">Car Allowance</option>
+          <option value="Cash Adjustment">Cash Adjustment</option>
+          <option value="Commission">Commission</option>
+          <option value="Competance Pay">Competance Pay</option>
+          <option value="Fork Lift Truck Allowance">Fork Lift Truck Allowance</option>
+          <option value="Housing Allowance">Housing Allowance</option>
+          <option value="IKEA1 Skills">IKEA1 Skills</option>
+          <option value="IKEA2 Skills">IKEA2 Skills</option>
+          <option value="Kitchen Skills">Kitchen Skills</option>
+          <option value="Mortgage Subsidy">Mortgage Subsidy</option>
+          <option value="Night Shift">Night Shift</option>
+          <option value="NTG Double Housing">NTG Double Housing</option>
+          <option value="NTG Housing Costs">NTG Housing Costs</option>
+          <option value="NTG Relocation Allow">NTG Relocation Allow</option>
+          <option value="NTG Rent Allowance">NTG Rent Allowance</option>
           <option value="Power Stacker">Power Stacker</option>
-          <option value="Fork Lift Truck">Fork Lift Truck</option>
-          <option value="Night Shift Hrly">Night Shift Hrly</option>
-          <option value="340T Stand By Allowance">340T Stand By Allowance</option>
-          <option value="360A Bonus">360A Bonus</option>
-          <option value="500A Redundancy">500A Redundancy</option>
-          <option value="350A Adj-Monthly Salary">350A Adj-Monthly Salary</option>
-          <option value="100C Responsibility Allowance">100C Responsibility Allowance</option>
-          <option value="100D Salary Advanced">100D Salary Advanced</option>
-          <option value="100F Salary FLT Skills">100F Salary FLT Skills</option>
-          <option value="100G Salary Kitchen Skills">100G Salary Kitchen Skills</option>
-          <option value="100H Salary Work IKEA1 Skills">100H Salary Work IKEA1 Skills</option>
-          <option value="100I Salary Work IKEA2 Skills">100I Salary Work IKEA2 Skills</option>
+          <option value="Redundancy">Redundancy</option>
+          <option value="Relocation Allowance">Relocation Allowance</option>
+          <option value="Rent Allowance">Rent Allowance</option>
+          <option value="Responsibility Allow">Responsibility Allow</option>
+          <option value="Salary Advanced">Salary Advanced</option>
+          <option value="Secondment">Secondment</option>
+          <option value="Stand By Allowance">Stand By Allowance</option>
+
         </options>
       </element>
-      <element type="select" name="AllowancesPaymentType2" label="Payment Type">
-        <!--<mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>-->
+      <!--<element type="select" name="AllowancesPaymentType2" label="Payment Type">
+        --><!--<mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>--><!--
         <options>
+          <option value=""></option>
           <option value="One Time">One Time</option>
           <option value="Recurring">Recurring</option>
         </options>
-      </element>
+      </element>-->
       <element type="text" name="AllowancesAmountUnits2" label="Amount/Units">
         <!--<mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>-->
         <regex inherit="unsignednum" message="" pattern=""></regex>
@@ -1560,32 +1614,40 @@
         <options>
           <option value=""></option>
           <option value="Advanced Hrly">Advanced Hrly</option>
-          <option value="High Performer 11">High Performer 11</option>
-          <option value="High Performer 12">High Performer 12</option>
-          <option value="High Performer 13">High Performer 13</option>
-          <option value="High Performer 14">High Performer 14</option>
+          <option value="Car Allowance">Car Allowance</option>
+          <option value="Cash Adjustment">Cash Adjustment</option>
+          <option value="Commission">Commission</option>
+          <option value="Competance Pay">Competance Pay</option>
+          <option value="Fork Lift Truck Allowance">Fork Lift Truck Allowance</option>
+          <option value="Housing Allowance">Housing Allowance</option>
+          <option value="IKEA1 Skills">IKEA1 Skills</option>
+          <option value="IKEA2 Skills">IKEA2 Skills</option>
+          <option value="Kitchen Skills">Kitchen Skills</option>
+          <option value="Mortgage Subsidy">Mortgage Subsidy</option>
+          <option value="Night Shift">Night Shift</option>
+          <option value="NTG Double Housing">NTG Double Housing</option>
+          <option value="NTG Housing Costs">NTG Housing Costs</option>
+          <option value="NTG Relocation Allow">NTG Relocation Allow</option>
+          <option value="NTG Rent Allowance">NTG Rent Allowance</option>
           <option value="Power Stacker">Power Stacker</option>
-          <option value="Fork Lift Truck">Fork Lift Truck</option>
-          <option value="Night Shift Hrly">Night Shift Hrly</option>
-          <option value="340T Stand By Allowance">340T Stand By Allowance</option>
-          <option value="360A Bonus">360A Bonus</option>
-          <option value="500A Redundancy">500A Redundancy</option>
-          <option value="350A Adj-Monthly Salary">350A Adj-Monthly Salary</option>
-          <option value="100C Responsibility Allowance">100C Responsibility Allowance</option>
-          <option value="100D Salary Advanced">100D Salary Advanced</option>
-          <option value="100F Salary FLT Skills">100F Salary FLT Skills</option>
-          <option value="100G Salary Kitchen Skills">100G Salary Kitchen Skills</option>
-          <option value="100H Salary Work IKEA1 Skills">100H Salary Work IKEA1 Skills</option>
-          <option value="100I Salary Work IKEA2 Skills">100I Salary Work IKEA2 Skills</option>
+          <option value="Redundancy">Redundancy</option>
+          <option value="Relocation Allowance">Relocation Allowance</option>
+          <option value="Rent Allowance">Rent Allowance</option>
+          <option value="Responsibility Allow">Responsibility Allow</option>
+          <option value="Salary Advanced">Salary Advanced</option>
+          <option value="Secondment">Secondment</option>
+          <option value="Stand By Allowance">Stand By Allowance</option>
+
         </options>
       </element>
-      <element type="select" name="AllowancesPaymentType3" label="Payment Type">
-        <!--<mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>-->
+      <!--<element type="select" name="AllowancesPaymentType3" label="Payment Type">
+        --><!--<mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>--><!--
         <options>
+          <option value=""></option>
           <option value="One Time">One Time</option>
           <option value="Recurring">Recurring</option>
         </options>
-      </element>
+      </element>-->
       <element type="text" name="AllowancesAmountUnits3" label="Amount/Units">
         <regex inherit="unsignednum" message="" pattern=""></regex>
         <!--<mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>-->
@@ -1612,22 +1674,18 @@
       <element type="select" name="DeductionsType" label="Deduction Type" >
         <options>
           <option value=""></option>
-          <option value="760D Rent Deduction">760D Rent Deduction</option>
-          <option value="760M Uniform Deduction">760M Uniform Deduction</option>
-          <option value="760D Rent Deduction">760D Rent Deduction</option>
-          <option value="500E Sal Sac-Cycle">500E Sal Sac-Cycle</option>
-          <option value="500F Sal Sac-Bus Ticket">500F Sal Sac-Bus Ticket</option>
-          <option value="760A Charity">760A Charity</option>
+          <option value="Rent Deduction">Rent Deduction</option>
+          <option value="Uniform Deduction">Uniform Deduction</option>
         </options>
       </element>
-      <element type="select" name="DeductionsPaymentType" label="Payment Type">
-        <!--<mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>-->
+      <!--<element type="select" name="DeductionsPaymentType" label="Payment Type">
+        --><!--<mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>--><!--
         <options>
           <option value=""></option>
           <option value="One Time">One Time</option>
           <option value="Recurring">Recurring</option>
         </options>
-      </element>
+      </element>-->
       <element type="text" name="DeductionsAmountUnits" label="Amount/Units" >
         <regex inherit="unsignednum" message="" pattern=""></regex>
         <!--<mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>-->
@@ -1652,22 +1710,18 @@
       <element type="select" name="DeductionsType2" label="Deduction Type">
         <options>
           <option value=""></option>
-          <option value="760D Rent Deduction">760D Rent Deduction</option>
-          <option value="760M Uniform Deduction">760M Uniform Deduction</option>
-          <option value="760D Rent Deduction">760D Rent Deduction</option>
-          <option value="500E Sal Sac-Cycle">500E Sal Sac-Cycle</option>
-          <option value="500F Sal Sac-Bus Ticket">500F Sal Sac-Bus Ticket</option>
-          <option value="760A Charity">760A Charity</option>
+          <option value="Rent Deduction">Rent Deduction</option>
+          <option value="Uniform Deduction">Uniform Deduction</option>
         </options>
       </element>
-      <element type="select" name="DeductionsPaymentType2" label="Payment Type">
-        <!--<mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>-->
+      <!--<element type="select" name="DeductionsPaymentType2" label="Payment Type">
+        --><!--<mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>--><!--
         <options>
           <option value=""></option>
           <option value="One Time">One Time</option>
           <option value="Recurring">Recurring</option>
         </options>
-      </element>
+      </element>-->
       <element type="text" name="DeductionsAmountUnits2" label="Amount/Units">
         <regex inherit="unsignednum" message="" pattern=""></regex>
         <!--<mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>-->
@@ -1692,22 +1746,18 @@
       <element type="select" name="DeductionsType3" label="Deduction Type" >
         <options>
           <option value=""></option>
-          <option value="760D Rent Deduction">760D Rent Deduction</option>
-          <option value="760M Uniform Deduction">760M Uniform Deduction</option>
-          <option value="760D Rent Deduction">760D Rent Deduction</option>
-          <option value="500E Sal Sac-Cycle">500E Sal Sac-Cycle</option>
-          <option value="500F Sal Sac-Bus Ticket">500F Sal Sac-Bus Ticket</option>
-          <option value="760A Charity">760A Charity</option>
+          <option value="Rent Deduction">Rent Deduction</option>
+          <option value="Uniform Deduction">Uniform Deduction</option>
         </options>
       </element>
-      <element type="select" name="DeductionsPaymentType3" label="Payment Type">
-        <!--<mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>-->
+      <!--<element type="select" name="DeductionsPaymentType3" label="Payment Type">
+        --><!--<mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>--><!--
         <options>
           <option value=""></option>
           <option value="One Time">One Time</option>
           <option value="Recurring">Recurring</option>
         </options>
-      </element>
+      </element>-->
       <element type="text" name="DeductionsAmountUnits3" label="Amount/Units">
         <regex inherit="unsignednum" message="" pattern=""></regex>
         <!--<mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>-->
@@ -1733,6 +1783,7 @@
       <element type="select" name="OneIKEABonusLevel" label="One IKEA Bonus Level">
         <options>
           <option value=""></option>
+          <option value="Co-worker">Co-worker</option>
           <option value="Level 1">Level 1</option>
           <option value="Level 2">Level 2</option>
           <option value="Level 3">Level 3</option>
@@ -1771,6 +1822,7 @@
       <element type="text" name="HolidayAdjustment" label="Holiday Adjustment">
         <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
+      <element type="text" name="HolidayYear" label="Holiday Year"></element>
     </tab>
 
   </fields>

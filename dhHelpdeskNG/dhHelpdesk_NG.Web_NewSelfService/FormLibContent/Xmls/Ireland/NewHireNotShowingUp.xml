@@ -37,7 +37,7 @@
           <option value ="Yes">Yes</option>
         </options>
       </element>
-      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1">
+      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard">
         <options>
           <option value=""></option>
           <option value="Urgent">Urgent</option>

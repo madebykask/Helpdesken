@@ -20,15 +20,16 @@
     <!-- LM -->
     <status value="10">
         <userGroup name="Line Manager">
-            <visibleTabs>#servicerequestdetails,#OrganisationalAssignment</visibleTabs>
+            <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</visibleTabs>
             <readOnlyTabs></readOnlyTabs>
+            <readOnlyFields>ProbationPeriod</readOnlyFields>
         </userGroup>
-        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#attachments</visibleTabs>
+        <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
             <action status="20" internal-val="20" text="Submit to HR Unit">
-                <validateTabs>#servicerequestdetails,#OrganisationalAssignment</validateTabs>
+                <validateTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</validateTabs>
             </action>
             <action status="99" internal-val="70" text="Cancel Service request"></action>
         </actions>
@@ -36,14 +37,15 @@
     <!-- HRU -->
     <status value="20">
         <userGroup name="Line Manager">
-            <visibleTabs>#servicerequestdetails,#OrganisationalAssignment</visibleTabs>
-            <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment</readOnlyTabs>
+            <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</visibleTabs>
+            <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment</readOnlyTabs>
+            <readOnlyFields>ProbationPeriod</readOnlyFields>
         </userGroup>
         <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
-            <!--<action status="10" internal-val="10" text="Send back to Line Manager"></action>-->
+            <action status="10" internal-val="10" text="Send back to Line Manager"></action>
             <action status="30" internal-val="30" text="Submit Complete Service Request to SSC">
                 <validateTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal</validateTabs>
             </action>

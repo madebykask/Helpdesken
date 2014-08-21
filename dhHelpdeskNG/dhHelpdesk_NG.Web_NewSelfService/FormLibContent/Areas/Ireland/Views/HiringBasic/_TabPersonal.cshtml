@@ -2,11 +2,11 @@
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
 
+
 @{
     const string IsTeWorker = "International Transfer";
     const string DefaultCountry = "Ireland";
 }
-
 <div class="tab-pane" id="personal">
     <div class="span6">
         <table class="table">
@@ -167,7 +167,8 @@
 
 
 
-            <!-- Global Mobility Employee Documents -->
+
+                                <!-- Global Mobility Employee Documents -->
                 <tr class="globalmobility-first">
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Global Mobility - Employee Documents")</h4>
@@ -392,7 +393,7 @@
                     <td class="tdstrong">@Model.Label("BankKey")</td>
                     <td>@Model.Element("BankKey")
                         <div class="notice">
-                            @Model.Translate("Please enter sort code")
+                            @Model.Translate("Bank Key = Sort Code")
                         </div>
                     </td>
                 </tr>
@@ -540,6 +541,7 @@
 </div>
 
 <script>
+
     $(function () {
 
         function setGlobalMobilityBehavior(value) {
@@ -554,15 +556,15 @@
             }
         }
 
-            if (!($('#NewToIKEA').val() == '@IsTeWorker')) {
-                $(".globalmobility-first").hide();
-                $(".globalmobility").hide();
-            }
+        if (!($('#NewToIKEA').val() == '@IsTeWorker')) {
+            $(".globalmobility-first").hide();
+            $(".globalmobility").hide();
+        }
 
-            $('#NewToIKEA').change(function () {
-                setGlobalMobilityBehavior($(this).val());
-            });
+        $('#NewToIKEA').change(function () {
+            setGlobalMobilityBehavior($(this).val());
         });
+    });
 
     @*    if ('@Model.GetAnswer("NewToIKEA")' == 'New Hire') {
 

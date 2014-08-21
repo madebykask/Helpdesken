@@ -1,12 +1,20 @@
 ﻿@model ECT.FormLib.Models.FormModel
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
+@using System.Collections;
 
 @{
     var url = Url.CurrentController() + "typeahead";
 }
 
-@using(Html.BeginForm("edit", "ChangeTermsConditions", new { id = Model.Contract.Id }, FormMethod.Post, new { area = "UnitedKingdom", novalidate = "novalidate" }))
+@functions{  
+    public string PrintText()
+    {
+        return Model.Translate("Print");
+    }
+}
+
+@using(Html.BeginForm("edit", "ChangeTermsConditions", new { id = Model.Contract.Id }, FormMethod.Post, new { area = "UnitedKingdom", novalidate = "novalidate", id = "changeform" }))
 {   
     <span style="display: none;" id="narrowDownInit" url="@url"></span>
     @Html.Partial("_GlobalNavRev", Model)
@@ -45,6 +53,16 @@
                 <li class="@(Model.TabHasError("#SSCUseOnly") ? "error" : "")">
                     <a href="#SSCUseOnly">@Model.Translate("SSC use only")</a></li>
             }
+            <li>
+                <a href="@Url.Action("ChangePrint", "ChangeTermsConditions", new
+                {
+                    id = "Print",
+                    caseId = Model.Contract.Id,
+                    path = "",
+                    userId = FormLibSessions.User.UserId,
+                    allowanceNr = ""
+                })" class="changeprint"><i class="icon-print icon-white"></i>&nbsp;@PrintText()</a>
+            </li>
             @if(Model.VisibleTab("#attachments"))
             {
                 <li class="pull-right">
@@ -123,8 +141,8 @@
         $('#PrimarySite').val(selectedText);
     }
 
-    InitIntegration();
-    changeNewCompany();
+    //InitIntegration(); 
+    //changeNewCompany();
 
     validate.run($('#actionState').val());
 
@@ -132,6 +150,6 @@
         var val = $(this).val();
         validate.run(val);
     });
-
+         
     </script>
 }

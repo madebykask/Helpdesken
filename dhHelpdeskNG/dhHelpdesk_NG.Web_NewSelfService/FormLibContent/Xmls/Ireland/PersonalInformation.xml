@@ -43,7 +43,7 @@
       <element name="ChangeValidTo" type="date" format="dd.MM.yyyy" mandatory="1" default="31.12.9999" label="Change Valid to:">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1">
+      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard">
         <options>
           <option value =""></option>
           <option value ="Urgent">Urgent</option>
@@ -63,6 +63,7 @@
       <!--mandatory-->
       <element type="text" name="PermanentAddressLine1" label="Address line 1"></element>
       <element type="text" name="PermanentAddressLine2" label="Address line 2"></element>
+      <element type="text" name="PermanentPostalCode" label="Postal Code"></element>
       <!--mandatory-->
       <element type="text" name="PermanentCity" label="City"></element>
       <!--mandatory-->
@@ -325,6 +326,7 @@
       <!--mandatory-->
       <element type="text" name="MailingAddressLine1" label="Address line 1"></element>
       <element type="text" name="MailingAddressLine2" label="Address line 2"></element>
+      <element type="text" name="MailingPostalCode" label="Postal Code"></element>
       <!--mandatory-->
       <element type="text" name="MailingCity" label="City"></element>
       <element type="search-select" name="MailingCountry" label="Country" default="Ireland">
@@ -587,6 +589,7 @@
       <!--mandatory-->
       <element type="text" name="EmergencyAddressLine1" label="Address line 1"></element>
       <element type="text" name="EmergencyAddressLine2" label="Address line 2"></element>
+      <element type="text" name="EmergencyPostalCode" label="Postal Code"></element>
       <!--mandatory-->
       <element type="text" name="EmergencyCity" label="City"></element>
       <element type="search-select" name="EmergencyCountry" label="Country" default="Ireland">
@@ -5346,7 +5349,7 @@
           <option value="Zimbabwe">Zimbabwe</option>
         </options>
       </element>
-      <element type="text" name="DocumentNO" label="Document No.">
+      <element type="text" name="DocumentNo" label="Document No.">
         <mandatoryIf name="DocumentType">Passport</mandatoryIf>
       </element>
       <element type="date" name="ValidUntil" label="Valid Until:" format="dd.MM.yyyy">

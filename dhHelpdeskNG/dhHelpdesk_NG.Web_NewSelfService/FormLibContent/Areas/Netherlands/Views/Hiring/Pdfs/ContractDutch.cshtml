@@ -130,7 +130,7 @@
             if (Model.GetDocumentAnswer("ContractType").ToLower() == "Full Time".ToLower())
             {
 
-                string text8 = "8a.	Het salaris bedraagt € {0} bruto per maand. De salarisbetaling vindt telkens aan het einde van de kalendermaand plaats.";
+                string text8 = "8a.	Het salaris bedraagt &euro;  {0} bruto per maand. De salarisbetaling vindt telkens aan het einde van de kalendermaand plaats.";
                 list.Add(new PdfListItem { Text = string.Format(text8, Model.GetDocumentAnswer("BasicPay", true), brText) });
             }
 
@@ -138,7 +138,7 @@
             if (Model.GetDocumentAnswer("ContractType").ToLower() == "Part Time".ToLower())
             {
 
-                string text8 = "8a.	Het salaris bedraagt € {0} bruto per uur. 	De salarisbetaling vindt telkens aan het einde van de kalendermaand plaats.";
+                string text8 = "8a.	Het salaris bedraagt &euro;  {0} bruto per uur. 	De salarisbetaling vindt telkens aan het einde van de kalendermaand plaats.";
                 list.Add(new PdfListItem { Text = string.Format(text8, Model.GetDocumentAnswer("BasicPayAmount", true), brText) });
             }
 

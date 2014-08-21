@@ -3,7 +3,7 @@
     <status value="0">
         <visibleTabs>#ServiceRequestDetails,#Absences,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
-      <readOnlyFields>Company,BusinessUnit,ServiceArea,Department,PermanentAddressLine1,PermanentAddressLine2,PermanentAddressLine3,PermanentPostalCode,PermanentCity,PermanentCountry</readOnlyFields>
+      <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>
             <action status="30" internal-val="30" text="Submit Service Request to SSC">
                 <validateTabs>#ServiceRequestDetails,#Absences</validateTabs>
@@ -19,7 +19,7 @@
         </userGroup>
         <visibleTabs>#ServiceRequestDetails,#Absences,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
-      <readOnlyFields>Company,BusinessUnit,ServiceArea,Department,PermanentAddressLine1,PermanentAddressLine2,PermanentAddressLine3,PermanentPostalCode,PermanentCity,PermanentCountry</readOnlyFields>
+      <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>
             <action status="20" internal-val="20" text="Submit to HR Unit">
                 <validateTabs>#ServiceRequestDetails</validateTabs>
@@ -35,7 +35,7 @@
         </userGroup>
         <visibleTabs>#ServiceRequestDetails,#Absences,#documents,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
-      <readOnlyFields>Company,BusinessUnit,ServiceArea,Department,PermanentAddressLine1,PermanentAddressLine2,PermanentAddressLine3,PermanentPostalCode,PermanentCity,PermanentCountry</readOnlyFields>
+      <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>
           <action status="30" internal-val="30" text="Submit Service Request to SSC">
             <validateTabs>#ServiceRequestDetails,#Absences</validateTabs>
@@ -51,7 +51,7 @@
         </userGroup>
         <visibleTabs>#ServiceRequestDetails,#Absences,#documents,#SscUseOnly,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Absences</readOnlyTabs>
-      <readOnlyFields>Company,BusinessUnit,ServiceArea,Department,PermanentAddressLine1,PermanentAddressLine2,PermanentAddressLine3,PermanentPostalCode,PermanentCity,PermanentCountry</readOnlyFields>
+      <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>
             <action status="40" internal-val="40" text="Validity check OK">
                 <validateTabs>#ServiceRequestDetails,#Absences,#SscUseOnly</validateTabs>
@@ -68,7 +68,7 @@
         </userGroup>
         <visibleTabs>#ServiceRequestDetails,#Absences,#documents,#SscUseOnly,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Absences</readOnlyTabs>
-      <readOnlyFields>Company,BusinessUnit,ServiceArea,Department,PermanentAddressLine1,PermanentAddressLine2,PermanentAddressLine3,PermanentPostalCode,PermanentCity,PermanentCountry</readOnlyFields>
+      <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>
             <action status="60" internal-val="60" text="Global View Update">
               <validateTabs>#SscUseOnly</validateTabs>
@@ -84,7 +84,7 @@
         </userGroup>
         <visibleTabs>#ServiceRequestDetails,#Absences,#documents,#SscUseOnly,#attachments</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Absences,#documents</readOnlyTabs>
-      <readOnlyFields>Company,BusinessUnit,ServiceArea,Department,PermanentAddressLine1,PermanentAddressLine2,PermanentAddressLine3,PermanentPostalCode,PermanentCity,PermanentCountry</readOnlyFields>
+      <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
     </status>
     <!-- SSC -->
     <status value="70">
@@ -94,6 +94,6 @@
         </userGroup>
         <visibleTabs>#ServiceRequestDetails,#Absences,#attachments,#SscUseOnly</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Absences</readOnlyTabs>
-      <readOnlyFields>Company,BusinessUnit,ServiceArea,Department,PermanentAddressLine1,PermanentAddressLine2,PermanentAddressLine3,PermanentPostalCode,PermanentCity,PermanentCountry</readOnlyFields>
+      <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
     </status>
 </state>

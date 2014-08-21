@@ -512,24 +512,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
                     if(emailTo.Count > 0)
                         caseLog.EmailRecepientsExternalLog = string.Join(Environment.NewLine, emailTo);
-
-
-                    //var emails = _userService.GetUsersForWorkingGroup(currentCase.WorkingGroup_Id.Value).Where(u => u.Email.Trim() != string.Empty).Select(u => u.Email).ToList();
-                    //if(emails != null && emails.Count > 0)
-                    //{
-                    //    caseLog.EmailRecepientsExternalLog = string.Join(Environment.NewLine, emails);
-                    //}
-
-                    //if(currentCase.Performer_User_Id != 0)
-                    //{
-                    //    var userEmail = _userService.GetUser(currentCase.Performer_User_Id).Email;
-                    //    caseLog.EmailRecepientsExternalLog = userEmail;
-                    //}
                 }
-                //else // Send Mail to Working Group Email  
-                //{
-                //    caseLog.EmailRecepientsExternalLog = curWorkingGroup.EMail;
-                //}
             }
 
             var temporaryLogFiles = this._userTemporaryFilesStorage.GetFiles(currentCase.CaseGUID.ToString(), "");

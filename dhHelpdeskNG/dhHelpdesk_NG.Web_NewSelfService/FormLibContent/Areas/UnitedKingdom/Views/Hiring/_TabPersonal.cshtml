@@ -398,7 +398,7 @@
                     <td class="tdstrong">@Model.Label("BankKey")</td>
                     <td>@Model.Element("BankKey")
                         <div class="notice">
-                            @Model.Translate("Please enter sort code")
+                            @Model.Translate("Bank Key = Sort Code")
                         </div>
                     </td>
                 </tr>
@@ -596,8 +596,7 @@
 
     $(function () {
 
-        function setGlobalMobilityBehavior(value) {
-            debugger;
+        function setGlobalMobilityBehavior(value) {            
             if (!(value == '@IsTeWorker')) {
                 $("[class*=globalmobility]").hide();
                 $("[class*=globalmobility] input").val("");

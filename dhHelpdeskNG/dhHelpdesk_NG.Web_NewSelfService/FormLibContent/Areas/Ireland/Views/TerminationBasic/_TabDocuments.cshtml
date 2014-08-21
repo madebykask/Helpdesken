@@ -3,8 +3,6 @@
 @using ECT.FormLib.Models;
 
 <div class="tab-pane" id="documents">
-@if(Model.GetAnswer("BusinessUnit") != "IKEA Competence B.V.")
-    {
     <div class="span12">
         <table class="table-striped">
             <thead>
@@ -13,13 +11,15 @@
                     </th>
                     <th>@Model.Translate("Type")
                     </th>
-                  <th>&nbsp;
+                    <th>&nbsp;
                     </th>
                     <th>&nbsp;
                     </th>
                 </tr>
             </thead>
-      <tbody>
+            <tbody>
+            @if(Model.GetAnswer("BusinessUnit") != "IKEA Competence B.V.")
+            {
                 <tr>
                     <td>@Model.Translate("Termination")</td>
                     <td>pdf</td>
@@ -34,8 +34,10 @@
                                 })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@Model.Translate("Print")</a>
                     </td>
                 </tr>
+            
+            }
+            @Html.Partial("_StaticDocuments", Model)
             </tbody>
         </table>
     </div>    
-    }
 </div>
