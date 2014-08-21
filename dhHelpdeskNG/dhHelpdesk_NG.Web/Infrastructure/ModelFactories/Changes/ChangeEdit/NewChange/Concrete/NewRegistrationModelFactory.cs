@@ -48,7 +48,7 @@
                 contactFive,
                 contactSix);
 
-            var owners = this.configurableFieldModelFactory.CreateSelectListField(settings.Owner, options.Owners, null);
+            var owners = this.configurableFieldModelFactory.CreateSelectListField(settings.Owner, options.Owners, null, true);
 
             var affectedProcesses =
                 this.configurableFieldModelFactory.CreateMultiSelectListField(

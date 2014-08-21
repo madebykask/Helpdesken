@@ -37,7 +37,8 @@
             var departments = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.Department,
                 options.Departments,
-                fields.DepartmentId.ToString());
+                fields.DepartmentId.ToString(),
+                true);
 
             return new OrdererModel(id, name, phone, cellPhone, email, departments);
         }

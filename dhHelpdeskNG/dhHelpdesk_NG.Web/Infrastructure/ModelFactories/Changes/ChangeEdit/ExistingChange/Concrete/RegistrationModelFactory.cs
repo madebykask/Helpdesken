@@ -75,7 +75,8 @@
             var owners = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.Owner,
                 options.Owners,
-                fields.OwnerId.ToString());
+                fields.OwnerId.ToString(),
+                true);
 
             var affectedProcesses =
                 this.configurableFieldModelFactory.CreateMultiSelectListField(

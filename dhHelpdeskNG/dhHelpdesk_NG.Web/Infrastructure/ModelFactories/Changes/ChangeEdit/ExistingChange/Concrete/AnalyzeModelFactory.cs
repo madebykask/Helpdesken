@@ -47,7 +47,8 @@
             var categories = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.Category,
                 options.Categories,
-                analyze.CategoryId.ToString());
+                analyze.CategoryId.ToString(),
+                true);
 
             var relatedChanges = new MultiSelectList(
                 options.RelatedChanges,
@@ -58,12 +59,14 @@
             var priorities = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.Priority,
                 options.Priorities,
-                analyze.PriorityId.ToString());
+                analyze.PriorityId.ToString(),
+                true);
 
             var responsibles = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.Responsible,
                 options.Responsibles,
-                analyze.ResponsibleId.ToString());
+                analyze.ResponsibleId.ToString(),
+                true);
 
             var solution = this.configurableFieldModelFactory.CreateStringField(settings.Solution, analyze.Solution);
 
@@ -79,7 +82,8 @@
                 this.configurableFieldModelFactory.CreateSelectListField(
                     new FieldEditSetting(showCurrency, "Currency", false, null),
                     options.Currencies,
-                    analyze.CurrencyId.ToString());
+                    analyze.CurrencyId.ToString(),
+                    true);
 
             var estimatedTimeInHours =
                 this.configurableFieldModelFactory.CreateIntegerField(

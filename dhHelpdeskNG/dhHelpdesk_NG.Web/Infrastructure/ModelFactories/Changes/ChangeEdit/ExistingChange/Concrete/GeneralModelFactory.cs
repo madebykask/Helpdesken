@@ -44,7 +44,8 @@
             var systems = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.System,
                 options.Systems,
-                fields.SystemId.ToString());
+                fields.SystemId.ToString(),
+                true);
 
             var objects = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.Object,
@@ -60,7 +61,8 @@
             var workingGroups = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.WorkingGroup,
                 options.WorkingGroups,
-                fields.WorkingGroupId.ToString());
+                fields.WorkingGroupId.ToString(),
+                true);
 
             var administrators = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.Administrator,

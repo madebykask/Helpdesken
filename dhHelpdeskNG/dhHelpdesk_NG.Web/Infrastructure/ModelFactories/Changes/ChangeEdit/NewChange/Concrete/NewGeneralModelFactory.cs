@@ -51,7 +51,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.NewCh
             var systems = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.System,
                 options.Systems,
-                null);
+                null,
+                true);
 
             var objects = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.Object,
@@ -66,7 +67,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.NewCh
             var workingGroups = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.WorkingGroup,
                 options.WorkingGroups,
-                null);
+                null,
+                true);
 
             var administrators = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.Administrator,
