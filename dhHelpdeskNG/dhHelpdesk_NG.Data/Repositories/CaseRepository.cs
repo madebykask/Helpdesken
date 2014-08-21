@@ -62,6 +62,8 @@ namespace DH.Helpdesk.Dal.Repositories
                                                     int? workingGroupId,
                                                     int? administratorId,
                                                     DateTime period);
+
+        MyCase[] GetMyCases(int userId, int? count = null);
     }
 
     public class CaseRepository : RepositoryBase<Case>, ICaseRepository
@@ -402,6 +404,34 @@ namespace DH.Helpdesk.Dal.Repositories
                             RegistrationDate = c.RegTime
                         };
             return query.ToList();
+        }
+
+        public MyCase[] GetMyCases(int userId, int? count = null)
+        {
+            var entities = this.DataContext.Cases
+                            .Where(c => c.CaseResponsibleUser_Id == userId)
+                            .OrderByDescending(c => c.RegTime)
+                            .Select(c => new
+                            {
+                               c.Id,
+                               RegistrationDate = c.RegTime,
+                               Subject = c.Caption,
+                               InitiatorName = c.PersonsName
+                            });
+
+            if (count.HasValue)
+            {
+                entities = entities.Take(count.Value);
+            }
+
+            return entities
+                .ToArray()
+                .Select(c => new MyCase(
+                                c.Id,
+                                c.RegistrationDate,
+                                c.Subject,
+                                c.InitiatorName))
+                                .ToArray();
         }
 
         private void MarkCaseAsRead(int id)

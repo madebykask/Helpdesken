@@ -13,6 +13,7 @@
     using DH.Helpdesk.BusinessData.Models.Statistics.Output;
     using DH.Helpdesk.BusinessData.Models.Users.Output;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Web.Models.Case;
     using DH.Helpdesk.Web.Models.Changes;
     using DH.Helpdesk.Web.Models.Customers;
     using DH.Helpdesk.Web.Models.Link;
@@ -39,6 +40,8 @@
 
         private CustomerChangesModel customerChanges = new CustomerChangesModel();
 
+        private MyCasesModel myCases = new MyCasesModel();
+
         public IEnumerable<CustomerUser> CustomerUsers { get; set; }
 
         public IEnumerable<CustomerUserList> ForStartCaseCustomerUsers { get; set; }
@@ -59,9 +62,23 @@
             {
                 return this.customerChanges;
             }
+
             set
             {
                 this.customerChanges = value;
+            }
+        }
+
+        public MyCasesModel MyCases
+        {
+            get
+            {
+                return this.myCases;
+            }
+
+            set
+            {
+                this.myCases = value;
             }
         }
 

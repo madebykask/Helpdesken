@@ -229,6 +229,10 @@
                             this.changeService.GetCustomersChanges(changesCustomers.Select(c => c.Customer.Customer_Id).ToArray()),
                             SessionFacade.CurrentUser.Id);
                         break;
+                    case Module.Cases:
+                        var myCases = this.caseService.GetMyCases(this.workContext.User.UserId, module.NumberOfRows);
+                        model.MyCases = this.modulesInfoFactory.GetMyCasesModel(myCases);
+                        break;
                 }
             }
 

@@ -67,6 +67,8 @@ namespace DH.Helpdesk.BusinessData.Enums.Users
         /// <summary>
         /// Change management
         /// </summary>
-        ChangeManagement = 11
+        ChangeManagement = 11,
+
+        Cases = 12
     }
 }

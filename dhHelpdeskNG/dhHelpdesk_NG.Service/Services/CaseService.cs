@@ -81,6 +81,8 @@
                                             int? workingGroupId,
                                             int? administratorId,
                                             DateTime period);
+
+        MyCase[] GetMyCases(int userId, int? count = null);
     }
 
     public class CaseService : ICaseService
@@ -320,6 +322,11 @@
                                     workingGroupId,
                                     administratorId,
                                     period);
+        }
+
+        public MyCase[] GetMyCases(int userId, int? count = null)
+        {
+            return this._caseRepository.GetMyCases(userId, count);
         }
 
         public Case Copy(int copyFromCaseid, int userId, int languageId, string ipAddress, GlobalEnums.RegistrationSource source, string adUser)

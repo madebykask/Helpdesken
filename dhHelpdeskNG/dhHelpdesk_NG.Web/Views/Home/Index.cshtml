@@ -152,6 +152,14 @@
             Html.RenderPartial("DocumentsInfo", Model.DocumentOverviews);
         }                                                                                            
     </div>                                        
+    <div class="portlet" 
+        data-usermodules="item" 
+        data-usermodules-moduleid="@(GetModuleId(Module.Cases))"
+        data-usermodules-position="@(GetModulePosition(Module.Cases))">
+        @{
+            Html.RenderPartial("MyCasesInfo", Model.MyCases);
+        }                                                                                            
+    </div>                                        
 </div>
 @functions
 {

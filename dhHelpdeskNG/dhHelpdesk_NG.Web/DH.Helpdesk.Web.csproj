@@ -596,6 +596,7 @@
     <Compile Include="Models\Case\CaseTemplateTreeModel.cs" />
     <Compile Include="Models\Case\CaseViewModel.cs" />
     <Compile Include="Models\Case\CaseSettingModel.cs" />
+    <Compile Include="Models\Case\MyCasesModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\GeneralModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\InviteToModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\LogModel.cs" />
@@ -1569,6 +1570,7 @@
     <Content Include="Views\Inventory\EditorTemplates\NotReadonlyFields\WideText.cshtml" />
     <Content Include="Views\Inventory\OperationLogGrid.cshtml" />
     <Content Include="Views\Error\BusinessLogicError.cshtml" />
+    <Content Include="Views\Shared\MyCasesInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

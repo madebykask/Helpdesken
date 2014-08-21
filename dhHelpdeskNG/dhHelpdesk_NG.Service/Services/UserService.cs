@@ -737,6 +737,8 @@ namespace DH.Helpdesk.Services.Services
                     return 202;
                 case Module.Faq:
                     return 203;
+                case Module.Cases:
+                    return 204;
                 case Module.OperationalLog:
                     return 301;
                 case Module.DailyReport:
