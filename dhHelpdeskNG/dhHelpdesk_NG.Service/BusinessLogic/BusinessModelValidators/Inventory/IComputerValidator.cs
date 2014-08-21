@@ -5,7 +5,7 @@
 
     public interface IComputerValidator
     {
-        void Validate(ComputerForUpdate updatedComputer, ComputerForEdit existingComputer, ComputerFieldsSettingsProcessing settings);
+        void Validate(ComputerForUpdate updatedComputer, ComputerForRead existingComputer, ComputerFieldsSettingsProcessing settings);
 
         void Validate(ComputerForInsert newComputer, ComputerFieldsSettingsProcessing settings);
     }

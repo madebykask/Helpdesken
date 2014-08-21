@@ -6,8 +6,8 @@
 
     public interface IServerBuilder
     {
-        Server BuildForUpdate(ServerViewModel model, OperationContext context);
+        ServerForUpdate BuildForUpdate(ServerViewModel model, OperationContext context);
 
-        Server BuildForAdd(ServerViewModel model, OperationContext context);
+        ServerForInsert BuildForAdd(ServerViewModel model, OperationContext context);
     }
 }

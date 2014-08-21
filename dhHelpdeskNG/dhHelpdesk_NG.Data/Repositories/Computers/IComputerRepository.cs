@@ -19,7 +19,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
 
         void DeleteById(int id);
 
-        ComputerForEdit FindById(int id);
+        ComputerForRead FindById(int id);
 
         List<ComputerResults> Search(int customerId, string searchFor);
 

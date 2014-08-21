@@ -5,8 +5,8 @@
 
     public interface IPrinterValidator
     {
-        void Validate(Printer updatedPrinter, Printer existingPrinter, PrinterFieldsSettingsProcessing settings);
+        void Validate(PrinterForUpdate updatedPrinter, PrinterForRead existingPrinter, PrinterFieldsSettingsProcessing settings);
 
-        void Validate(Printer newPrinter, PrinterFieldsSettingsProcessing settings);
+        void Validate(PrinterForInsert newPrinter, PrinterFieldsSettingsProcessing settings);
     }
 }

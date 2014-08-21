@@ -8,7 +8,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Inventory.Co
 
     public class PrinterRestorer : Restorer, IPrinterRestorer
     {
-        public void Restore(Printer printer, Printer existingPrinter, PrinterFieldsSettingsProcessing settings)
+        public void Restore(PrinterForUpdate printer, PrinterForRead existingPrinter, PrinterFieldsSettingsProcessing settings)
         {
             this.RestoreGeneral(printer.GeneralFields, existingPrinter.GeneralFields, settings.GeneralFieldsSettings);
             this.RestoreInventoring(

@@ -16,23 +16,27 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
         {
         }
 
-        public void Add(Printer businessModel)
+        public void Add(PrinterForInsert businessModel)
         {
             var entity = new Domain.Printers.Printer();
             Map(entity, businessModel);
             entity.Customer_Id = businessModel.CustomerId;
-            entity.ChangedDate = businessModel.ChangedDate; // todo
             entity.CreatedDate = businessModel.CreatedDate;
+            entity.ChangedByUser_Id = businessModel.ChangedByUserId;
+
+            entity.ChangedDate = businessModel.CreatedDate; // todo
+            entity.Theftmark = string.Empty;
 
             this.DbSet.Add(entity);
             this.InitializeAfterCommit(businessModel, entity);
         }
 
-        public void Update(Printer businessModel)
+        public void Update(PrinterForUpdate businessModel)
         {
             var entity = this.DbSet.Find(businessModel.Id);
             Map(entity, businessModel);
             entity.ChangedDate = businessModel.ChangedDate;
+            entity.ChangedByUser_Id = businessModel.ChangedByUserId;
         }
 
         public override void DeleteById(int id)
@@ -42,7 +46,7 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
             base.DeleteById(id);
         }
 
-        public Printer FindById(int id)
+        public PrinterForRead FindById(int id)
         {
             var anonymus =
                 this.DbSet.Where(x => x.Id == id)
@@ -72,7 +76,7 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
                             })
                     .Single();
 
-            var serverAggregate = Printer.CreateForEdit(
+            var serverAggregate = new PrinterForRead(
                 anonymus.Entity.Id,
                 new BusinessData.Models.Inventory.Edit.Shared.InventoryFields(
                     anonymus.Entity.BarCode,
@@ -99,10 +103,12 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
                     anonymus.FloorId,
                     anonymus.Entity.Room_Id,
                     anonymus.Entity.Location),
-                new StateFields(
-                    !string.IsNullOrWhiteSpace(anonymus.UserFirstName) ? new UserName(anonymus.UserFirstName, anonymus.UserSurName) : null),
                 anonymus.Entity.CreatedDate,
-                anonymus.Entity.ChangedDate);
+                anonymus.Entity.ChangedDate,
+                new StateFields(
+                    !string.IsNullOrWhiteSpace(anonymus.UserFirstName)
+                        ? new UserName(anonymus.UserFirstName, anonymus.UserSurName)
+                        : null));
 
             return serverAggregate;
         }

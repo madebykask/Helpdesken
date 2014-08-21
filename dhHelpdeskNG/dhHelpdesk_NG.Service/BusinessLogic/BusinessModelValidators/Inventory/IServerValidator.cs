@@ -5,8 +5,8 @@
 
     public interface IServerValidator
     {
-        void Validate(Server updatedServer, Server existingServer, ServerFieldsSettingsProcessing settings);
+        void Validate(ServerForUpdate updatedServer, ServerForRead existingServer, ServerFieldsSettingsProcessing settings);
 
-        void Validate(Server newServer, ServerFieldsSettingsProcessing settings);
+        void Validate(ServerForInsert newServer, ServerFieldsSettingsProcessing settings);
     }
 }

@@ -16,7 +16,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Inventory.C
             this.elementaryRulesValidator = elementaryRulesValidator;
         }
 
-        public void Validate(ComputerForUpdate updatedComputer, ComputerForEdit existingComputer, ComputerFieldsSettingsProcessing settings)
+        public void Validate(ComputerForUpdate updatedComputer, ComputerForRead existingComputer, ComputerFieldsSettingsProcessing settings)
         {
             this.ValidateWorkstation(updatedComputer.WorkstationFields, existingComputer.WorkstationFields, settings.WorkstationFieldsSettings);
             this.ValidateChassis(updatedComputer.ChassisFields, existingComputer.ChassisFields, settings.ChassisFieldsSettings);

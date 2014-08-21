@@ -27,7 +27,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
     public class ComputerViewModelBuilder : IComputerViewModelBuilder
     {
         public ComputerViewModel BuildViewModel(
-            BusinessData.Models.Inventory.Edit.Computer.ComputerForEdit model,
+            BusinessData.Models.Inventory.Edit.Computer.ComputerForRead model,
             ComputerEditOptions options,
             ComputerFieldsSettingsForModelEdit settings)
         {

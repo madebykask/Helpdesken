@@ -16,7 +16,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
         }
 
         public ServerViewModel BuildViewModel(
-            Server model,
+            ServerForRead model,
             ServerEditOptions options,
             ServerFieldsSettingsForModelEdit settings)
         {
@@ -223,7 +223,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                     settings.StateFieldsSettings.SyncChangeDateFieldSetting,
                     model.StateFields.SyncChangeDate);
 
-            var stateFieldsModel = new StateFieldsModel(syncDate, model.StateFields.CreatedBy);
+            var stateFieldsModel = new StateFieldsModel(syncDate, model.StateFields.ChangedByUserName);
 
             return new ServerViewModel(
                 model.IsOperationObject,

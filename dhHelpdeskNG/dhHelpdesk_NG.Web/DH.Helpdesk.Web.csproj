@@ -647,6 +647,7 @@
     <Compile Include="Models\Inventory\EditModel\Computer\OperatingSystemFieldsViewModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Computer\ProccesorFieldsModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Computer\ProccesorFieldsViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Printer\StateFieldsModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Settings\Computer\ChassisFieldsSettingsModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Settings\Computer\FieldSettingModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Settings\Computer\InventoryFieldsSettingsModel.cs" />

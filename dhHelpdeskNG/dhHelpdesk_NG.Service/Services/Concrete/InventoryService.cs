@@ -233,12 +233,12 @@
             return models;
         }
 
-        public ReportModelWithInventoryType GetAllConnectedInventory(int inventoryTypeId, int? departmentId, string searchFor)
+        public ReportModelWithInventoryType GetAllConnectedInventory(
+            int inventoryTypeId,
+            int? departmentId,
+            string searchFor)
         {
-            return this.inventoryRepository.FindAllConnectedInventory(
-                inventoryTypeId,
-                departmentId,
-                searchFor);
+            return this.inventoryRepository.FindAllConnectedInventory(inventoryTypeId, departmentId, searchFor);
         }
 
         #region Workstation
@@ -313,7 +313,7 @@
             this.computerRepository.Commit();
         }
 
-        public ComputerForEdit GetWorkstation(int id)
+        public ComputerForRead GetWorkstation(int id)
         {
             return this.computerRepository.FindById(id);
         }
@@ -350,7 +350,7 @@
 
         #region Server
 
-        public void AddServer(Server businessModel, OperationContext context)
+        public void AddServer(ServerForInsert businessModel, OperationContext context)
         {
             bool isExist = this.operationObjectRepository.IsExist(businessModel.GeneralFields.Name);
             if (isExist)
@@ -400,28 +400,33 @@
             this.serverRepository.Commit();
         }
 
-        public void UpdateServer(Server businessModel, OperationContext context)
+        public void UpdateServer(ServerForUpdate businessModel, OperationContext context)
         {
-            bool isExist = this.operationObjectRepository.IsExist(businessModel.GeneralFields.Name);
-            if (isExist)
+            var existingBusinessModel = this.serverRepository.FindById(businessModel.Id);
+
+            var newBusinessModelName = businessModel.GeneralFields.Name;
+            var oldBusinessModelName = existingBusinessModel.GeneralFields.Name;
+
+            if (!oldBusinessModelName.Equals(newBusinessModelName))
             {
-                throw new OperationObjectEditExeption(
-                    string.Format(
-                        "Server marked as operation object with the name {0} is alredy exist",
-                        businessModel.GeneralFields.Name));
+                bool isExist = this.operationObjectRepository.IsExist(businessModel.GeneralFields.Name);
+                if (isExist)
+                {
+                    throw new OperationObjectEditExeption(
+                        string.Format(
+                            "Server marked as operation object with the name {0} is alredy exist",
+                            businessModel.GeneralFields.Name));
+                }
             }
 
-            var existingBusinessModel = this.serverRepository.FindById(businessModel.Id);
+            var isOperationObject = businessModel.IsOperationObject;
+            var isWasOperationObject = existingBusinessModel.IsOperationObject;
+
             var settings = this.serverFieldSettingsRepository.GetFieldSettingsProcessing(context.CustomerId);
             this.serverRestorer.Restore(businessModel, existingBusinessModel, settings);
             this.serverValidator.Validate(businessModel, existingBusinessModel, settings);
             this.serverRepository.Update(businessModel);
             this.serverRepository.Commit();
-
-            var isOperationObject = businessModel.IsOperationObject;
-            var isWasOperationObject = existingBusinessModel.IsOperationObject;
-            var newBusinessModelName = businessModel.GeneralFields.Name;
-            var oldBusinessModelName = existingBusinessModel.GeneralFields.Name;
 
             if (isOperationObject)
             {
@@ -438,7 +443,8 @@
                         this.UpdateOperationObject(
                             context,
                             newBusinessModelName,
-                            businessModel.GeneralFields.Description);
+                            businessModel.GeneralFields.Description,
+                            oldBusinessModelName);
                     }
                 }
                 else
@@ -455,7 +461,7 @@
             }
         }
 
-        public Server GetServer(int id)
+        public ServerForRead GetServer(int id)
         {
             return this.serverRepository.FindById(id);
         }
@@ -476,7 +482,7 @@
 
         #region Printer
 
-        public void AddPrinter(Printer businessModel, OperationContext context)
+        public void AddPrinter(PrinterForInsert businessModel, OperationContext context)
         {
             var settings = this.printerFieldSettingsRepository.GetFieldSettingsProcessing(context.CustomerId);
             this.printerValidator.Validate(businessModel, settings);
@@ -490,7 +496,7 @@
             this.printerRepository.Commit();
         }
 
-        public void UpdatePrinter(Printer businessModel, OperationContext context)
+        public void UpdatePrinter(PrinterForUpdate businessModel, OperationContext context)
         {
             var existingBusinessModel = this.printerRepository.FindById(businessModel.Id);
             var settings = this.printerFieldSettingsRepository.GetFieldSettingsProcessing(context.CustomerId);
@@ -500,7 +506,7 @@
             this.printerRepository.Commit();
         }
 
-        public Printer GetPrinter(int id)
+        public PrinterForRead GetPrinter(int id)
         {
             return this.printerRepository.FindById(id);
         }
@@ -607,7 +613,7 @@
 
         private void DeleteOperationObject(string oldBusinessModelName)
         {
-            OperationObjectForView operationObject = this.operationObjectRepository.FindByName(oldBusinessModelName);
+            OperationObjectForRead operationObject = this.operationObjectRepository.FindByName(oldBusinessModelName);
             int operationObjectId = operationObject.Id;
 
             List<int> operationLogIds = this.operationLogRepository.FindOperationObjectId(operationObjectId);
@@ -622,9 +628,17 @@
             this.operationObjectRepository.Commit();
         }
 
-        private void UpdateOperationObject(OperationContext context, string newBusinessModelName, string newBusinessModelDescription)
+        private void UpdateOperationObject(
+            OperationContext context,
+            string newBusinessModelName,
+            string newBusinessModelDescription,
+            string oldBusinessModelName)
         {
+            OperationObjectForRead operationObject = this.operationObjectRepository.FindByName(oldBusinessModelName);
+            int operationObjectId = operationObject.Id;
+
             var updatedOperationObject = new OperationObjectForUpdate(
+                operationObjectId,
                 context.DateAndTime,
                 newBusinessModelName,
                 newBusinessModelDescription);

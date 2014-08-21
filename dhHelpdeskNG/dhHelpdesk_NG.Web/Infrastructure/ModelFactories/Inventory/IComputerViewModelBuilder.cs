@@ -7,7 +7,7 @@
     public interface IComputerViewModelBuilder
     {
         ComputerViewModel BuildViewModel(
-            BusinessData.Models.Inventory.Edit.Computer.ComputerForEdit model,
+            BusinessData.Models.Inventory.Edit.Computer.ComputerForRead model,
             ComputerEditOptions options,
             ComputerFieldsSettingsForModelEdit settings);
 

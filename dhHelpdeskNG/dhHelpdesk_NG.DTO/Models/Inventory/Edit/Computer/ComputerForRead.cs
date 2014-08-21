@@ -5,9 +5,9 @@ namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Computer
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Shared;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class ComputerForEdit : Computer
+    public class ComputerForRead : Computer
     {
-        public ComputerForEdit(
+        public ComputerForRead(
             int id,
             CommunicationFields communicationFields,
             ContactFields contactFields,

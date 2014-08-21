@@ -5,6 +5,6 @@
 
     public interface IComputerRestorer
     {
-        void Restore(ComputerForUpdate computer, ComputerForEdit existingComputer, ComputerFieldsSettingsProcessing settings);
+        void Restore(ComputerForUpdate computer, ComputerForRead existingComputer, ComputerFieldsSettingsProcessing settings);
     }
 }

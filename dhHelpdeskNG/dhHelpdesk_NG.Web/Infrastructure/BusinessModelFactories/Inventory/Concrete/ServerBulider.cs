@@ -11,26 +11,25 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
 
     public class ServerBuilder : IServerBuilder
     {
-        public Server BuildForUpdate(ServerViewModel model, OperationContext context)
+        public ServerForUpdate BuildForUpdate(ServerViewModel model, OperationContext context)
         {
             var general = CreateGeneral(model.GeneralFieldsModel);
             var chassis = CreateChassis(model.ChassisFieldsModel);
             var inventering = CreateInventering(model.InventoryFieldsModel);
-            var operatingSystem = CretateOperatingSystem(model.OperatingSystemFieldsViewModel.OperatingSystemFieldsModel);
+            var operatingSystem = CretateOperatingSystem(
+                model.OperatingSystemFieldsViewModel.OperatingSystemFieldsModel);
             var processor = CreateProcessor(model.ProccesorFieldsViewModel.ProccesorFieldsModel);
             var memory = CreateMemory(model.MemoryFieldsViewModel.MemoryFieldsModel);
             var storage = CreateStorage(model.StorageFieldsModel);
             var communication = CreateCommunication(model.CommunicationFieldsViewModel.CommunicationFieldsModel);
             var other = CreateOther(model.OtherFieldsModel);
             var place = CreatePlace(model.PlaceFieldsViewModel.PlaceFieldsModel);
-            var state = CreateState(model.StateFieldsModel);
 
-            var fieldsModel = Server.CreateUpdated(
+            var fieldsModel = new ServerForUpdate(
                 model.Id,
                 model.IsOperationObject,
                 general,
                 other,
-                state,
                 storage,
                 chassis,
                 inventering,
@@ -38,32 +37,31 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
                 memory,
                 place,
                 processor,
+                communication,
                 context.DateAndTime,
-                communication);
+                context.UserId);
 
             return fieldsModel;
         }
 
-        public Server BuildForAdd(ServerViewModel model, OperationContext context)
+        public ServerForInsert BuildForAdd(ServerViewModel model, OperationContext context)
         {
             var general = CreateGeneral(model.GeneralFieldsModel);
             var chassis = CreateChassis(model.ChassisFieldsModel);
             var inventering = CreateInventering(model.InventoryFieldsModel);
-            var operatingSystem = CretateOperatingSystem(model.OperatingSystemFieldsViewModel.OperatingSystemFieldsModel);
+            var operatingSystem = CretateOperatingSystem(
+                model.OperatingSystemFieldsViewModel.OperatingSystemFieldsModel);
             var processor = CreateProcessor(model.ProccesorFieldsViewModel.ProccesorFieldsModel);
             var memory = CreateMemory(model.MemoryFieldsViewModel.MemoryFieldsModel);
             var storage = CreateStorage(model.StorageFieldsModel);
             var communication = CreateCommunication(model.CommunicationFieldsViewModel.CommunicationFieldsModel);
             var other = CreateOther(model.OtherFieldsModel);
             var place = CreatePlace(model.PlaceFieldsViewModel.PlaceFieldsModel);
-            var state = CreateState(model.StateFieldsModel);
 
-            var fieldsModel = Server.CreateNew(
-                context.CustomerId,
+            var fieldsModel = new ServerForInsert(
                 model.IsOperationObject,
                 general,
                 other,
-                state,
                 storage,
                 chassis,
                 inventering,
@@ -71,8 +69,10 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
                 memory,
                 place,
                 processor,
+                communication,
+                context.CustomerId,
                 context.DateAndTime,
-                communication);
+                context.UserId);
 
             return fieldsModel;
         }

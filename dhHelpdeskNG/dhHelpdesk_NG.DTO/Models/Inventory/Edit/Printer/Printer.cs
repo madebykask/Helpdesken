@@ -1,22 +1,18 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Printer
 {
-    using System;
-
-    using DH.Helpdesk.BusinessData.Attributes;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Shared;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class Printer : BusinessModel
+    public abstract class Printer : INewBusinessModel
     {
-        private Printer(
-            ModelStates modelStates,
+        protected Printer(
             InventoryFields inventoryFields,
             GeneralFields generalFields,
             CommunicationFields communicationFields,
             OtherFields otherFields,
             OrganizationFields organizationFields,
             PlaceFields placeFields)
-            : base(modelStates)
         {
             this.InventoryFields = inventoryFields;
             this.GeneralFields = generalFields;
@@ -27,13 +23,7 @@
         }
 
         [IsId]
-        public int CustomerId { get; private set; }
-
-        [AllowRead(ModelStates.Updated | ModelStates.ForEdit)]
-        public DateTime CreatedDate { get; private set; }
-
-        [AllowRead(ModelStates.Updated | ModelStates.ForEdit)]
-        public DateTime ChangedDate { get; private set; }
+        public int Id { get; set; }
 
         [NotNull]
         public GeneralFields GeneralFields { get; private set; }
@@ -52,77 +42,5 @@
 
         [NotNull]
         public PlaceFields PlaceFields { get; private set; }
-
-        [NotNull]
-        [AllowRead(ModelStates.ForEdit)]
-        public StateFields StateFields { get; private set; }
-
-        public static Printer CreateNew(
-            int customerId,
-            InventoryFields inventoryFields,
-            GeneralFields generalFields,
-            CommunicationFields communicationFields,
-            OtherFields otherFields,
-            OrganizationFields organizationFields,
-            PlaceFields placeFields,
-            DateTime createdDate)
-        {
-            var businessModel = new Printer(
-                ModelStates.Created,
-                inventoryFields,
-                generalFields,
-                communicationFields,
-                otherFields,
-                organizationFields,
-                placeFields) { CustomerId = customerId, CreatedDate = createdDate };
-
-            return businessModel;
-        }
-
-        public static Printer CreateUpdated(
-            int id,
-            InventoryFields inventoryFields,
-            GeneralFields generalFields,
-            CommunicationFields communicationFields,
-            OtherFields otherFields,
-            OrganizationFields organizationFields,
-            PlaceFields placeFields,
-            DateTime changedDate)
-        {
-            var businessModel = new Printer(
-                ModelStates.Updated,
-                inventoryFields,
-                generalFields,
-                communicationFields,
-                otherFields,
-                organizationFields,
-                placeFields) { Id = id, ChangedDate = changedDate };
-
-            return businessModel;
-        }
-
-        public static Printer CreateForEdit(
-            int id,
-            InventoryFields inventoryFields,
-            GeneralFields generalFields,
-            CommunicationFields communicationFields,
-            OtherFields otherFields,
-            OrganizationFields organizationFields,
-            PlaceFields placeFields,
-            StateFields stateFields,
-            DateTime createdDate,
-            DateTime changedDate)
-        {
-            var businessModel = new Printer(
-                ModelStates.ForEdit,
-                inventoryFields,
-                generalFields,
-                communicationFields,
-                otherFields,
-                organizationFields,
-                placeFields) { Id = id, CreatedDate = createdDate, ChangedDate = changedDate, StateFields = stateFields };
-
-            return businessModel;
-        }
     }
 }

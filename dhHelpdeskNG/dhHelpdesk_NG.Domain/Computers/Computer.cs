@@ -1,4 +1,5 @@
-﻿namespace DH.Helpdesk.Domain.Computers
+﻿
+namespace DH.Helpdesk.Domain.Computers
 {
     using DH.Helpdesk.Domain.WorkstationModules;
 

@@ -11,15 +11,15 @@
             this.SyncChangeDate = syncChangeDate;
         }
 
-        public StateFields(DateTime? syncChangeDate, UserName createdBy)
+        public StateFields(DateTime? syncChangeDate, UserName changedByUserName)
         {
             this.SyncChangeDate = syncChangeDate;
-            this.CreatedBy = createdBy;
+            this.ChangedByUserName = changedByUserName;
         }
 
         public DateTime? SyncChangeDate { get; set; }
 
-        public UserName CreatedBy { get; set; }
+        public UserName ChangedByUserName { get; set; }
 
         public static StateFields CreateDefault()
         {

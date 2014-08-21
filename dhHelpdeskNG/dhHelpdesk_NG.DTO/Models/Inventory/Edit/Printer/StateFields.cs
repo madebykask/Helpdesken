@@ -5,12 +5,12 @@
 
     public class StateFields
     {
-        public StateFields(UserName createdBy)
+        public StateFields(UserName changedByUserName)
         {
-            this.CreatedBy = createdBy;
+            this.ChangedByUserName = changedByUserName;
         }
 
         [NotNull]
-        public UserName CreatedBy { get; set; }
+        public UserName ChangedByUserName { get; set; }
     }
 }

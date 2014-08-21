@@ -4,9 +4,10 @@
 
     public class OperationObjectForUpdate : OperationObject
     {
-        public OperationObjectForUpdate(DateTime changeDate, string name, string description)
+        public OperationObjectForUpdate(int id, DateTime changeDate, string name, string description)
             : base(name, description)
         {
+            this.Id = id;
             this.ChangeDate = changeDate;
         }
 

@@ -5,6 +5,6 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Inventory
 
     public interface IServerRestorer
     {
-        void Restore(Server server, Server existingServer, ServerFieldsSettingsProcessing settings);
+        void Restore(ServerForUpdate server, ServerForRead existingServer, ServerFieldsSettingsProcessing settings);
     }
 }

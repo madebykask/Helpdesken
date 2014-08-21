@@ -17,23 +17,26 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
         {
         }
 
-        public void Add(Server businessModel)
+        public void Add(ServerForInsert businessModel)
         {
             var entity = new Domain.Servers.Server();
             Map(entity, businessModel);
             entity.Customer_Id = businessModel.CustomerId;
-            entity.ChangedDate = businessModel.CreatedDate; // todo
             entity.CreatedDate = businessModel.CreatedDate;
+            entity.ChangedByUser_Id = businessModel.ChangedByUserId;
+
+            entity.ChangedDate = businessModel.CreatedDate; // todo
 
             this.DbSet.Add(entity);
             this.InitializeAfterCommit(businessModel, entity);
         }
 
-        public void Update(Server businessModel)
+        public void Update(ServerForUpdate businessModel)
         {
             var entity = this.DbSet.Find(businessModel.Id);
             Map(entity, businessModel);
             entity.ChangedDate = businessModel.ChangedDate;
+            entity.ChangedByUser_Id = businessModel.ChangedByUserId;
         }
 
         public string FindOperationObjectName(int id)
@@ -51,7 +54,7 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
             return anonymus.OperationObjectName;
         }
 
-        public Server FindById(int id)
+        public ServerForRead FindById(int id)
         {
             var anonymus =
                 this.DbSet.Where(x => x.Id == id)
@@ -98,7 +101,7 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
                             })
                     .Single();
 
-            var serverAggregate = Server.CreateForEdit(
+            var serverAggregate = new ServerForRead(
                 anonymus.Entity.Id,
                 anonymus.OperationObjectName != null,
                 new BusinessData.Models.Inventory.Edit.Server.GeneralFields(
@@ -113,9 +116,6 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
                     anonymus.Entity.URL,
                     anonymus.Entity.URL2,
                     anonymus.Entity.Owner),
-                new BusinessData.Models.Inventory.Edit.Server.StateFields(
-                    anonymus.Entity.SyncChangedDate,
-                    !string.IsNullOrWhiteSpace(anonymus.UserFirstName) ? new UserName(anonymus.UserFirstName, anonymus.UserSurName) : null),
                 new BusinessData.Models.Inventory.Edit.Server.StorageFields(anonymus.Entity.Harddrive),
                 new BusinessData.Models.Inventory.Edit.Shared.ChassisFields(anonymus.Entity.ChassisType),
                 new BusinessData.Models.Inventory.Edit.Shared.InventoryFields(
@@ -134,12 +134,17 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
                     anonymus.Entity.Room_Id,
                     anonymus.Entity.Location),
                 new BusinessData.Models.Inventory.Edit.Shared.ProcessorFields(anonymus.Entity.Processor_Id),
-                anonymus.Entity.CreatedDate,
-                anonymus.Entity.ChangedDate,
                 new BusinessData.Models.Inventory.Edit.Server.CommunicationFields(
                     anonymus.Entity.NIC_Id,
                     anonymus.Entity.IPAddress,
-                    anonymus.Entity.MACAddress));
+                    anonymus.Entity.MACAddress),
+                new BusinessData.Models.Inventory.Edit.Server.StateFields(
+                    anonymus.Entity.SyncChangedDate,
+                    !string.IsNullOrWhiteSpace(anonymus.UserFirstName)
+                        ? new UserName(anonymus.UserFirstName, anonymus.UserSurName)
+                        : null),
+                anonymus.Entity.CreatedDate,
+                anonymus.Entity.ChangedDate);
 
             return serverAggregate;
         }
@@ -326,8 +331,6 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
 
             entity.Room_Id = businessModel.PlaceFields.RoomId;
             entity.Location = businessModel.PlaceFields.Location ?? string.Empty;
-
-            entity.SyncChangedDate = businessModel.StateFields.SyncChangeDate;
         }
     }
 }

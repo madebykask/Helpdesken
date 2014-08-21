@@ -6,8 +6,8 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory
 
     public interface IPrinterBuilder
     {
-        Printer BuildForUpdate(PrinterViewModel model, OperationContext context);
+        PrinterForUpdate BuildForUpdate(PrinterViewModel model, OperationContext context);
 
-        Printer BuildForAdd(PrinterViewModel model, OperationContext context);
+        PrinterForInsert BuildForAdd(PrinterViewModel model, OperationContext context);
     }
 }

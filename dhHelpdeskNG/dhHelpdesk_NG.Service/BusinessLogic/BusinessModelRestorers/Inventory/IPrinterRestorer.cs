@@ -5,6 +5,6 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Inventory
 
     public interface IPrinterRestorer
     {
-        void Restore(Printer printer, Printer existingPrinter, PrinterFieldsSettingsProcessing settings);
+        void Restore(PrinterForUpdate printer, PrinterForRead existingPrinter, PrinterFieldsSettingsProcessing settings);
     }
 }

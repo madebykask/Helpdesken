@@ -82,17 +82,6 @@
                                     @Html.DisplayFor(m => m.ComputerViewModel.CreatedDate.Value, "Date")
                                 </td>
                             </tr>
-                            if (Model.ComputerViewModel.ChangedByUserName != null)
-                            {
-                            <tr>
-                                <td class="span3">
-                                    <label>@Translation.Get("Changed by")</label>
-                                </td>
-                                <td class="span9">
-                                    @Html.DisplayFor(m => m.ComputerViewModel.ChangedByUserName.FirstName) @Html.DisplayFor(m => m.ComputerViewModel.ChangedByUserName.LastName)
-                                </td>
-                            </tr>
-                            }
                         }
                         @if (Model.ComputerViewModel.ChangedDate.Show)
                         {
@@ -104,6 +93,17 @@
                                     @Html.DisplayFor(m => m.ComputerViewModel.ChangedDate.Value, "Date")
                                 </td>
                             </tr>
+                            if (Model.ComputerViewModel.ChangedByUserName != null)
+                            {
+                                <tr>
+                                    <td class="span3">
+                                        <label>@Translation.Get("Changed by")</label>
+                                    </td>
+                                    <td class="span9">
+                                        @Html.DisplayFor(m => m.ComputerViewModel.ChangedByUserName.FirstName) @Html.DisplayFor(m => m.ComputerViewModel.ChangedByUserName.LastName)
+                                    </td>
+                                </tr>
+                            }
                         }
                     </table>
                 }

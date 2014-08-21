@@ -1,12 +1,18 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Operation
 {
-    public abstract class OperationObject
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
+    using DH.Helpdesk.Common.ValidationAttributes;
+
+    public abstract class OperationObject : INewBusinessModel
     {
         protected OperationObject(string name, string description)
         {
             this.Name = name;
             this.Description = description;
         }
+
+        [IsId]
+        public int Id { get; set; }
 
         public string Name { get; private set; }
 

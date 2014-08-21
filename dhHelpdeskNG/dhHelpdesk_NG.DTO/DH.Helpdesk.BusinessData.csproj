@@ -157,9 +157,15 @@
     <Compile Include="Models\Customer\UserCustomer.cs" />
     <Compile Include="Models\FinishingCause\FinishingCauseInfo.cs" />
     <Compile Include="Models\Inventory\ComputerHistory.cs" />
-    <Compile Include="Models\Inventory\Edit\Computer\ComputerForEdit.cs" />
+    <Compile Include="Models\Inventory\Edit\Computer\ComputerForRead.cs" />
     <Compile Include="Models\Inventory\Edit\Computer\ComputerForInsert.cs" />
     <Compile Include="Models\Inventory\Edit\Computer\ComputerForUpdate.cs" />
+    <Compile Include="Models\Inventory\Edit\Printer\PrinterForInsert.cs" />
+    <Compile Include="Models\Inventory\Edit\Printer\PrinterForRead.cs" />
+    <Compile Include="Models\Inventory\Edit\Printer\PrinterForUpdate.cs" />
+    <Compile Include="Models\Inventory\Edit\Server\ServerForInsert.cs" />
+    <Compile Include="Models\Inventory\Edit\Server\ServerForRead.cs" />
+    <Compile Include="Models\Inventory\Edit\Server\ServerForUpdate.cs" />
     <Compile Include="Models\Inventory\Output\ComputerUserOverview.cs" />
     <Compile Include="Models\Inventory\Edit\Inventory\TypeGroupModel.cs" />
     <Compile Include="Models\Inventory\Edit\Settings\ComputerSettings\ChassisFieldsSettings.cs" />
@@ -221,7 +227,7 @@
     <Compile Include="Models\Operation\OperationObject.cs" />
     <Compile Include="Models\Operation\OperationObjectForInsert.cs" />
     <Compile Include="Models\Operation\OperationObjectForUpdate.cs" />
-    <Compile Include="Models\Operation\OperationObjectForView.cs" />
+    <Compile Include="Models\Operation\OperationObjectForRead.cs" />
     <Compile Include="Models\Reports\Output\AverageSolutionTimeOptionsResponse.cs" />
     <Compile Include="Models\Reports\Output\AverageSolutionTimeReportResponse.cs" />
     <Compile Include="Models\Reports\Output\RegistratedCasesCaseTypeItem.cs" />

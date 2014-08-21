@@ -1,19 +1,15 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Server
 {
-    using System;
-
-    using DH.Helpdesk.BusinessData.Attributes;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Shared;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class Server : BusinessModel
+    public abstract class Server : INewBusinessModel
     {
-        private Server(
-            ModelStates modelStates,
+        protected Server(
             bool isOperationObject,
             GeneralFields generalFields,
             OtherFields otherFields,
-            StateFields stateFields,
             StorageFields storageFields,
             ChassisFields chassisFields,
             InventoryFields inventoryFields,
@@ -22,12 +18,10 @@
             PlaceFields placeFields,
             ProcessorFields proccesorFields,
             CommunicationFields communicationFields)
-            : base(modelStates)
         {
             this.IsOperationObject = isOperationObject;
             this.GeneralFields = generalFields;
             this.OtherFields = otherFields;
-            this.StateFields = stateFields;
             this.StorageFields = storageFields;
             this.ChassisFields = chassisFields;
             this.InventoryFields = inventoryFields;
@@ -39,24 +33,15 @@
         }
 
         [IsId]
-        public int CustomerId { get; private set; }
+        public int Id { get; set; }
 
         public bool IsOperationObject { get; private set; }
-
-        [AllowRead(ModelStates.Created | ModelStates.ForEdit)]
-        public DateTime CreatedDate { get; private set; }
-
-        [AllowRead(ModelStates.Updated | ModelStates.ForEdit)]
-        public DateTime ChangedDate { get; private set; }
 
         [NotNull]
         public GeneralFields GeneralFields { get; private set; }
 
         [NotNull]
         public OtherFields OtherFields { get; private set; }
-
-        [NotNull]
-        public StateFields StateFields { get; private set; }
 
         [NotNull]
         public StorageFields StorageFields { get; private set; }
@@ -81,108 +66,5 @@
 
         [NotNull]
         public CommunicationFields CommunicationFields { get; private set; }
-
-        public static Server CreateNew(
-            int customerId,
-            bool isOperationObject,
-            GeneralFields generalFields,
-            OtherFields otherFields,
-            StateFields stateFields,
-            StorageFields storageFields,
-            ChassisFields chassisFields,
-            InventoryFields inventoryFields,
-            OperatingSystemFields operatingSystemFields,
-            MemoryFields memoryFields,
-            PlaceFields placeFields,
-            ProcessorFields proccesorFields,
-            DateTime createdDate,
-            CommunicationFields communicationFields)
-        {
-            var businessModel = new Server(
-                ModelStates.Created,
-                isOperationObject,
-                generalFields,
-                otherFields,
-                stateFields,
-                storageFields,
-                chassisFields,
-                inventoryFields,
-                operatingSystemFields,
-                memoryFields,
-                placeFields,
-                proccesorFields,
-                communicationFields) { CustomerId = customerId, CreatedDate = createdDate };
-
-            return businessModel;
-        }
-
-        public static Server CreateUpdated(
-            int id,
-            bool isOperationObject,
-            GeneralFields generalFields,
-            OtherFields otherFields,
-            StateFields stateFields,
-            StorageFields storageFields,
-            ChassisFields chassisFields,
-            InventoryFields inventoryFields,
-            OperatingSystemFields operatingSystemFields,
-            MemoryFields memoryFields,
-            PlaceFields placeFields,
-            ProcessorFields proccesorFields,
-            DateTime changedDate,
-            CommunicationFields communicationFields)
-        {
-            var businessModel = new Server(
-                ModelStates.Updated,
-                isOperationObject,
-                generalFields,
-                otherFields,
-                stateFields,
-                storageFields,
-                chassisFields,
-                inventoryFields,
-                operatingSystemFields,
-                memoryFields,
-                placeFields,
-                proccesorFields,
-                communicationFields) { Id = id, ChangedDate = changedDate };
-
-            return businessModel;
-        }
-
-        public static Server CreateForEdit(
-            int id,
-            bool isOperationObject,
-            GeneralFields generalFields,
-            OtherFields otherFields,
-            StateFields stateFields,
-            StorageFields storageFields,
-            ChassisFields chassisFields,
-            InventoryFields inventoryFields,
-            OperatingSystemFields operatingSystemFields,
-            MemoryFields memoryFields,
-            PlaceFields placeFields,
-            ProcessorFields proccesorFields,
-            DateTime createdDate,
-            DateTime changedDate,
-            CommunicationFields communicationFields)
-        {
-            var businessModel = new Server(
-                ModelStates.ForEdit,
-                isOperationObject,
-                generalFields,
-                otherFields,
-                stateFields,
-                storageFields,
-                chassisFields,
-                inventoryFields,
-                operatingSystemFields,
-                memoryFields,
-                placeFields,
-                proccesorFields,
-                communicationFields) { Id = id, CreatedDate = createdDate, ChangedDate = changedDate };
-
-            return businessModel;
-        }
     }
 }

@@ -16,7 +16,7 @@
             this.elementaryRulesValidator = elementaryRulesValidator;
         }
 
-        public void Validate(Server updatedServer, Server existingServer, ServerFieldsSettingsProcessing settings)
+        public void Validate(ServerForUpdate updatedServer, ServerForRead existingServer, ServerFieldsSettingsProcessing settings)
         {
             this.ValidateGeneral(updatedServer.GeneralFields, existingServer.GeneralFields, settings.GeneralFieldsSettings);
             this.ValidateChassis(updatedServer.ChassisFields, existingServer.ChassisFields, settings.ChassisFieldsSettings);
@@ -30,7 +30,7 @@
             this.ValidatePlace(updatedServer.PlaceFields, existingServer.PlaceFields, settings.PlaceFieldsSettings);
         }
 
-        public void Validate(Server newServer, ServerFieldsSettingsProcessing settings)
+        public void Validate(ServerForInsert newServer, ServerFieldsSettingsProcessing settings)
         {
             this.ValidateGeneral(newServer.GeneralFields, settings.GeneralFieldsSettings);
             this.ValidateChassis(newServer.ChassisFields, settings.ChassisFieldsSettings);

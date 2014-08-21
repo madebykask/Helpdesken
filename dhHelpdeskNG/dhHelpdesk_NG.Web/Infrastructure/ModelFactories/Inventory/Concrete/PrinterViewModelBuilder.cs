@@ -16,7 +16,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
         }
 
         public PrinterViewModel BuildViewModel(
-            Printer model,
+            PrinterForRead model,
             PrinterEditOptions options,
             PrinterFieldsSettingsForModelEdit settings)
         {
@@ -147,13 +147,21 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
             var organizationViewModel = new OrganizationFieldsViewModel(organizationFieldsModel, departments);
 
+            var stateFieldsModel = new StateFieldsModel(model.StateFields.ChangedByUserName);
+
             return new PrinterViewModel(
                 generalFieldsModel,
                 inventoryFieldModel,
                 communicationFieldsModel,
                 otherFieldModel,
                 organizationViewModel,
-                placeFieldsViewModel) { Id = model.Id, CreatedDate = createdDate, ChangedDate = changedDate };
+                placeFieldsViewModel,
+                stateFieldsModel)
+                       {
+                           Id = model.Id,
+                           CreatedDate = createdDate,
+                           ChangedDate = changedDate
+                       };
         }
 
         public PrinterViewModel BuildViewModel(
@@ -279,13 +287,19 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
             var organizationViewModel = new OrganizationFieldsViewModel(organizationFieldsModel, departments);
 
+            var stateFieldsModel = new StateFieldsModel(null);
+
             return new PrinterViewModel(
                 generalFieldsModel,
                 inventoryFieldModel,
                 communicationFieldsModel,
                 otherFieldModel,
                 organizationViewModel,
-                placeFieldsViewModel) { CustomerId = currentCustomerId };
+                placeFieldsViewModel,
+                stateFieldsModel)
+                       {
+                           CustomerId = currentCustomerId
+                       };
         }
     }
 }

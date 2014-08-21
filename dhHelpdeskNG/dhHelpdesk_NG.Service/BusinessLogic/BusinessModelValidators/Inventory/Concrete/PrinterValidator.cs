@@ -16,7 +16,7 @@
             this.elementaryRulesValidator = elementaryRulesValidator;
         }
 
-        public void Validate(Printer updatedPrinter, Printer existingPrinter, PrinterFieldsSettingsProcessing settings)
+        public void Validate(PrinterForUpdate updatedPrinter, PrinterForRead existingPrinter, PrinterFieldsSettingsProcessing settings)
         {
             this.ValidateGeneral(updatedPrinter.GeneralFields, existingPrinter.GeneralFields, settings.GeneralFieldsSettings);
             this.ValidateInventoring(updatedPrinter.InventoryFields, existingPrinter.InventoryFields, settings.InventoryFieldsSettings);
@@ -25,7 +25,7 @@
             this.ValidateOrganization(updatedPrinter.OrganizationFields, existingPrinter.OrganizationFields, settings.OrganizationFieldsSettings);
         }
 
-        public void Validate(Printer newPrinter, PrinterFieldsSettingsProcessing settings)
+        public void Validate(PrinterForInsert newPrinter, PrinterFieldsSettingsProcessing settings)
         {
             this.ValidateGeneral(newPrinter.GeneralFields, settings.GeneralFieldsSettings);
             this.ValidateInventoring(newPrinter.InventoryFields, settings.InventoryFieldsSettings);

@@ -55,7 +55,7 @@
 
         void UpdateWorkstation(ComputerForUpdate businessModel, OperationContext context);
 
-        ComputerForEdit GetWorkstation(int id);
+        ComputerForRead GetWorkstation(int id);
 
         List<ComputerLogOverview> GetWorkstationLogOverviews(int id);
 
@@ -65,13 +65,13 @@
 
         #region Server
 
-        void AddServer(Server businessModel, OperationContext context);
+        void AddServer(ServerForInsert businessModel, OperationContext context);
 
         void DeleteServer(int id);
 
-        void UpdateServer(Server businessModel, OperationContext context);
+        void UpdateServer(ServerForUpdate businessModel, OperationContext context);
 
-        Server GetServer(int id);
+        ServerForRead GetServer(int id);
 
         List<OperationServerLogOverview> GetOperationServerLogOverviews(int id, int customerId);
 
@@ -81,13 +81,13 @@
 
         #region Printer
 
-        void AddPrinter(Printer businessModel, OperationContext context);
+        void AddPrinter(PrinterForInsert businessModel, OperationContext context);
 
         void DeletePrinter(int id);
 
-        void UpdatePrinter(Printer businessModel, OperationContext context);
+        void UpdatePrinter(PrinterForUpdate businessModel, OperationContext context);
 
-        Printer GetPrinter(int id);
+        PrinterForRead GetPrinter(int id);
 
         List<PrinterOverview> GetPrinters(PrintersFilter printersFilter);
 

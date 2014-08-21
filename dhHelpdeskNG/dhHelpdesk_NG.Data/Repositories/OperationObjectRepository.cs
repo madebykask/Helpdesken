@@ -14,7 +14,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         void Update(OperationObjectForUpdate businessModel);
 
-        OperationObjectForView FindByName(string name);
+        OperationObjectForRead FindByName(string name);
 
         void DeleteById(int id);
 
@@ -42,21 +42,22 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public void Update(OperationObjectForUpdate businessModel)
         {
-            var entity = this.Table.Single(x => x.Name.Equals(businessModel.Name));
+            var entity = this.Table.Find(businessModel.Id);
             this.Map(businessModel, entity);
             entity.ChangedDate = businessModel.ChangeDate;
         }
 
-        public OperationObjectForView FindByName(string name)
+        public OperationObjectForRead FindByName(string name)
         {
             var anonymus =
                 this.Table.Where(x => x.Name.Equals(name))
-                    .Select(x => new { x.Id, x.Name, x.Description, x.CreatedDate, x.ChangedDate }).Single();
+                    .Select(x => new { x.Id, x.Name, x.Description, x.CreatedDate, x.ChangedDate })
+                    .Single();
 
-            var businessModel = new OperationObjectForView(
+            var businessModel = new OperationObjectForRead(
+                anonymus.Id,
                 anonymus.Name,
                 anonymus.Description,
-                anonymus.Id,
                 anonymus.ChangedDate,
                 anonymus.CreatedDate);
 

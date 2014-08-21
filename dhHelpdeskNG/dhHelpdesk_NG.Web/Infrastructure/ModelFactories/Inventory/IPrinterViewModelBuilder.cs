@@ -7,7 +7,7 @@
     public interface IPrinterViewModelBuilder
     {
         PrinterViewModel BuildViewModel(
-            BusinessData.Models.Inventory.Edit.Printer.Printer model,
+            BusinessData.Models.Inventory.Edit.Printer.PrinterForRead model,
             PrinterEditOptions options,
             PrinterFieldsSettingsForModelEdit settings);
 

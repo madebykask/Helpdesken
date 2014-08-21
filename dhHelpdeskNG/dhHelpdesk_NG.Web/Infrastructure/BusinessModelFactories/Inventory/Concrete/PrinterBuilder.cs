@@ -11,7 +11,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
 
     public class PrinterBuilder : IPrinterBuilder
     {
-        public Printer BuildForUpdate(PrinterViewModel model, OperationContext context)
+        public PrinterForUpdate BuildForUpdate(PrinterViewModel model, OperationContext context)
         {
             var general = CreateGeneral(model.GeneralFieldsModel);
             var inventering = CreateInventering(model.InventoryFieldsModel);
@@ -20,7 +20,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             var place = CreatePlace(model.PlaceFieldsViewModel.PlaceFieldsModel);
             var organzation = CreateOrganization(model.OrganizationFieldsViewModel.OrganizationFieldsModel);
 
-            var fieldsModel = Printer.CreateUpdated(
+            var fieldsModel = new PrinterForUpdate(
                 model.Id,
                 inventering,
                 general,
@@ -28,12 +28,13 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
                 other,
                 organzation,
                 place,
-                context.DateAndTime);
+                context.DateAndTime,
+                context.UserId);
 
             return fieldsModel;
         }
 
-        public Printer BuildForAdd(PrinterViewModel model, OperationContext context)
+        public PrinterForInsert BuildForAdd(PrinterViewModel model, OperationContext context)
         {
             var general = CreateGeneral(model.GeneralFieldsModel);
             var inventering = CreateInventering(model.InventoryFieldsModel);
@@ -42,15 +43,16 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             var place = CreatePlace(model.PlaceFieldsViewModel.PlaceFieldsModel);
             var organzation = CreateOrganization(model.OrganizationFieldsViewModel.OrganizationFieldsModel);
 
-            var fieldsModel = Printer.CreateNew(
-                context.CustomerId,
+            var fieldsModel = new PrinterForInsert(
                 inventering,
                 general,
                 communication,
                 other,
                 organzation,
                 place,
-                context.DateAndTime);
+                context.CustomerId,
+                context.DateAndTime,
+                context.UserId);
 
             return fieldsModel;
         }

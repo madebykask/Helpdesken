@@ -8,7 +8,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Inventory.Co
 
     public class ComputerRestorer : Restorer, IComputerRestorer
     {
-        public void Restore(ComputerForUpdate computer, ComputerForEdit existingComputer, ComputerFieldsSettingsProcessing settings)
+        public void Restore(ComputerForUpdate computer, ComputerForRead existingComputer, ComputerFieldsSettingsProcessing settings)
         {
             this.RestoreWorkstation(
                 computer.WorkstationFields,

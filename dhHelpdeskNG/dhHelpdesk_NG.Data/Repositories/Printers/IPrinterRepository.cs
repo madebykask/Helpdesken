@@ -8,13 +8,13 @@ namespace DH.Helpdesk.Dal.Repositories.Printers
 
     public interface IPrinterRepository : INewRepository
     {
-        void Add(Printer businessModel);
+        void Add(PrinterForInsert businessModel);
 
-        void Update(Printer businessModel);
+        void Update(PrinterForUpdate businessModel);
 
         void DeleteById(int id);
 
-        Printer FindById(int id);
+        PrinterForRead FindById(int id);
 
         List<PrinterOverview> FindOverviews(int customerId, int? departmentId, string searchFor);
 

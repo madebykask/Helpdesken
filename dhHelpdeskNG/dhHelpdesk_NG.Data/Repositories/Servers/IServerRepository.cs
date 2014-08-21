@@ -9,15 +9,15 @@ namespace DH.Helpdesk.Dal.Repositories.Servers
 
     public interface IServerRepository : INewRepository
     {
-        void Add(Server businessModel);
+        void Add(ServerForInsert businessModel);
 
-        void Update(Server businessModel);
+        void Update(ServerForUpdate businessModel);
 
         void DeleteById(int id);
 
         string FindOperationObjectName(int id);
 
-        Server FindById(int id);
+        ServerForRead FindById(int id);
 
         List<ServerOverview> FindOverviews(
             int customerId,

@@ -28,6 +28,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             entity.Customer_Id = businessModel.CustomerId;
             entity.CreatedDate = businessModel.CreatedDate;
             entity.ChangedByUser_Id = businessModel.ChangedByUserId;
+
             entity.ChangedDate = businessModel.CreatedDate; // todo
 
             // todo
@@ -57,7 +58,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             entity.Info = info;
         }
 
-        public ComputerForEdit FindById(int id)
+        public ComputerForRead FindById(int id)
         {
             var anonymus =
                 this.DbSet.Where(x => x.Id == id)
@@ -198,7 +199,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                 anonymus.Entity.LDAPPath,
                 anonymus.ChangedByUserId.HasValue ? new UserName(anonymus.ChangedByUserFirstName, anonymus.ChangedByUserSurName) : null);
 
-            var computerAggregate = new ComputerForEdit(
+            var computerAggregate = new ComputerForRead(
                 anonymus.Entity.Id,
                 communication,
                 contact,

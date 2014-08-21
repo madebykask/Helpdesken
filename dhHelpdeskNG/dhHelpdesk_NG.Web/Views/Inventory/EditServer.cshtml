@@ -51,6 +51,12 @@
                     @Html.EditorFor(m => m.ServerViewModel.PlaceFieldsViewModel, "Shared/PlaceFieldsViewModel")
                     @Html.EditorFor(m => m.ServerViewModel.StateFieldsModel, "Server/StateModel")
                     <table class="tableform">
+                        @if (Model.ServerViewModel.CreatedDate.Show || Model.ServerViewModel.ChangedDate.Show)
+                        {
+                            <tr>
+                                <th colspan="2" class="header">@Translation.Get("Status")</th>
+                            </tr>
+                        }
                         @if (Model.ServerViewModel.CreatedDate.Show)
                         {
                             <tr>
@@ -72,6 +78,17 @@
                                     @Html.DisplayFor(m => m.ServerViewModel.ChangedDate.Value, "Date")
                                 </td>
                             </tr>
+                            if (Model.ServerViewModel.StateFieldsModel.ChangedByUserName != null)
+                            {
+                            <tr>
+                                <td class="span3">
+                                    <label>@Translation.Get("Changed by")</label>
+                                </td>
+                                <td class="span9">
+                                    @Html.DisplayFor(m => m.ServerViewModel.StateFieldsModel.ChangedByUserName.FirstName) @Html.DisplayFor(m => m.ServerViewModel.StateFieldsModel.ChangedByUserName.LastName)
+                                </td>
+                            </tr>
+                            }
                         }
                     </table>
                 </div>

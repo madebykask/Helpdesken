@@ -7,7 +7,7 @@
     public interface IServerViewModelBuilder
     {
         ServerViewModel BuildViewModel(
-            BusinessData.Models.Inventory.Edit.Server.Server model,
+            BusinessData.Models.Inventory.Edit.Server.ServerForRead model,
             ServerEditOptions options,
             ServerFieldsSettingsForModelEdit settings);
 

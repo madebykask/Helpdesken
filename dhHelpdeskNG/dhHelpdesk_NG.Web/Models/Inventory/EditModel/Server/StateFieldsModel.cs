@@ -11,15 +11,15 @@
         {
         }
 
-        public StateFieldsModel(ConfigurableFieldModel<DateTime?> syncChangeDate, UserName createdBy)
+        public StateFieldsModel(ConfigurableFieldModel<DateTime?> syncChangeDate, UserName changedByUserName)
         {
             this.SyncChangeDate = syncChangeDate;
-            this.CreatedBy = createdBy;
+            this.ChangedByUserName = changedByUserName;
         }
 
         [NotNull]
         public ConfigurableFieldModel<DateTime?> SyncChangeDate { get; set; }
 
-        public UserName CreatedBy { get; set; }
+        public UserName ChangedByUserName { get; set; }
     }
 }

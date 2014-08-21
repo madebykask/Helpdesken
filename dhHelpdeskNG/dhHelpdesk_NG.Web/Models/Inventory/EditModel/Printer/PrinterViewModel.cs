@@ -17,8 +17,10 @@
             CommunicationFieldsModel communicationFields,
             OtherFieldsModel otherFields,
             OrganizationFieldsViewModel organizationFieldsViewModel,
-            PlaceFieldsViewModel placeFieldsViewModel)
+            PlaceFieldsViewModel placeFieldsViewModel,
+            StateFieldsModel stateFieldsModel)
         {
+            this.StateFieldsModel = stateFieldsModel;
             this.GeneralFieldsModel = generalFields;
             this.InventoryFieldsModel = inventoryFields;
             this.CommunicationFieldsModel = communicationFields;
@@ -54,5 +56,8 @@
 
         [NotNull]
         public PlaceFieldsViewModel PlaceFieldsViewModel { get; set; }
+
+        [NotNull]
+        public StateFieldsModel StateFieldsModel { get; set; }
     }
 }

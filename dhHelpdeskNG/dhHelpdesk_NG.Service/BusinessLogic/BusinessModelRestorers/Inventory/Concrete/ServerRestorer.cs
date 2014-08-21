@@ -8,7 +8,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Inventory.Co
 
     public class ServerRestorer : Restorer, IServerRestorer
     {
-        public void Restore(Server server, Server existingServer, ServerFieldsSettingsProcessing settings)
+        public void Restore(ServerForUpdate server, ServerForRead existingServer, ServerFieldsSettingsProcessing settings)
         {
             this.RestoreGeneral(
                 server.GeneralFields,
