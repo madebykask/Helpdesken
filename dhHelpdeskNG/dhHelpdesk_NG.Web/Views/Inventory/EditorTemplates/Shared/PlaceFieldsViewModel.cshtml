@@ -1,35 +1,15 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Shared.PlaceFieldsViewModel
+<script type="text/javascript" src="@Url.Content("~/Content/js/Inventory/place-cascading.js")"></script>
+
 <script>
     $(function () {
-        $('#buildings_dropdown').change(function () {
-            var selectedBuilding = $(this).val();
-            $.get('@Url.Action("SearchFloorsByBuildingId")', { selected: selectedBuilding }, function (json) {
+        var parameters = {
+            floorsSearchUrl: '@Url.Action("SearchFloorsByBuildingId")',
+            roomsSearchUrl: '@Url.Action("SearchRoomsByFloorId")'
+        };
 
-                var sel = $('#floors_dropdown');
-                $('#rooms_dropdown').empty();
-                fillSelect(sel, json);
-            });
-        });
-
-        $('#floors_dropdown').change(function () {
-            var selectedFloor = $(this).val();
-            $.get('@Url.Action("SearchRoomsByFloorId")', { selected: selectedFloor }, function (json) {
-
-                var sel = $('#rooms_dropdown');
-                fillSelect(sel, json);
-            });
-        });
+        applyCascadingBehivarior(parameters);
     });
-
-    function fillSelect(select, json) {
-        select.empty();
-        select.prepend("<option></option>");
-
-        for (var i = 0; i < json.length; i++) {
-            var e = json[i];
-            $('<option>').text(e.Name).val(e.Value).appendTo(select);
-        }
-    }
 </script>
 <table class="tableform">
     @if (Model.PlaceFieldsModel.RoomId.Show

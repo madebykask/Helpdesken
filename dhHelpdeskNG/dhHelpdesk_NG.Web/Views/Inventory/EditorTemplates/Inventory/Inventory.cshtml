@@ -1,6 +1,17 @@
-﻿@using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings
-@using DH.Helpdesk.Web.Models.Inventory.EditModel.Inventory
+﻿@using DH.Helpdesk.Web.Models.Inventory.EditModel.Inventory
 @model InventoryEditViewModel
+<script type="text/javascript" src="@Url.Content("~/Content/js/Inventory/place-cascading.js")"></script>
+
+<script>
+    $(function () {
+        var parameters = {
+            floorsSearchUrl: '@Url.Action("SearchFloorsByBuildingId")',
+            roomsSearchUrl: '@Url.Action("SearchRoomsByFloorId")'
+        };
+
+        applyCascadingBehivarior(parameters);
+    });
+</script>
 <table class="tableform">
     @if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.DepartmentId.Show
          || Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Name.Show
@@ -42,7 +53,7 @@
                 <label>@Translation.Get("Byggnad")</label>
             </td>
             <td class="span9">
-                @Html.DropDownListFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.BuildingId, Model.InventoryViewModel.DefaultFieldsViewModel.Buildings);
+                @Html.DropDownListFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.BuildingId, Model.InventoryViewModel.DefaultFieldsViewModel.Buildings, string.Empty, new { id = "buildings_dropdown" })
             </td>
         </tr>
         <tr>
@@ -50,16 +61,11 @@
                 <label>@Translation.Get("Våning")</label>
             </td>
             <td class="span9">
-                @Html.DropDownListFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.FloorId, Model.InventoryViewModel.DefaultFieldsViewModel.Floors);
+                @Html.DropDownListFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.FloorId, Model.InventoryViewModel.DefaultFieldsViewModel.Floors, string.Empty, new { id = "floors_dropdown" })
             </td>
         </tr>
         <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.RoomId.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.DropDownListFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.RoomId, Model.InventoryViewModel.DefaultFieldsViewModel.Rooms);
-            </td>
+            @Html.EditorFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.RoomId, "CustomTypesFields/List", new { Source = Model.InventoryViewModel.DefaultFieldsViewModel.Rooms, id = "rooms_dropdown" })
         </tr>
     }
     @{
@@ -68,49 +74,20 @@
         foreach (var group in groups)
         {
             int id = group.Id;
-            var itemsInGroup = Model.DynamicFieldModels.Where(x => x.GroupId == id).OrderBy(x => x.Position).ToList();
+            var dynamicFieldModels = Model.DynamicFieldModels.Where(x => x.GroupId == id).OrderBy(x => x.Position).ToList();
 
-            if (!itemsInGroup.Any())
+            if (!dynamicFieldModels.Any())
             {
                 continue;
             }
 
-        <tr>
-            <th colspan="2" class="header">@Html.DisplayFor(m => group.Name)</th>
-        </tr>
+            <tr>
+                <th colspan="2" class="header">@Html.DisplayFor(m => group.Name)</th>
+            </tr>
 
-            foreach (var item in itemsInGroup)
+            for (int i = 0; i < dynamicFieldModels.Count; i++)
             {
-                // todo
-        <tr>
-            <td class="span3">
-                <label>@Html.DisplayFor(m => item.Caption)</label>
-            </td>
-            <td class="span9">
-                @switch (item.FieldTypes)
-                {
-                    case FieldTypes.Bool:
-                        var boolValue = !string.IsNullOrWhiteSpace(item.Value) && item.Value == DynamicFieldModel.True;
-                    @Html.CheckBoxFor(m => boolValue)
-                        break;
-                    case FieldTypes.Date:
-                        var dateValue = !string.IsNullOrWhiteSpace(item.Value) ? (DateTime?)DateTime.Parse(item.Value) : null;
-                    @Html.EditorFor(m => dateValue, "DatePicker", new { id = "general_finishing_date_datepicker" })
-                        break;
-                    case FieldTypes.Text:
-                        var textValue = new DynamicFieldStringValue(item.Value, item.MaxSize);
-                    @Html.EditorFor(m => textValue)
-                        break;
-                    case FieldTypes.Numeric:
-                        var intValue = !string.IsNullOrWhiteSpace(item.Value) ? (int?)int.Parse(item.Value) : null;
-                    @Html.EditorFor(m => intValue)
-                        break;
-                    default:
-                    @Html.EditorFor(m => item.Value)
-                        break;
-                }
-            </td>
-        </tr>
+                @Html.EditorFor(m => dynamicFieldModels[i], "DynamicFieldModel", new { Id = i })
             }
         }
     }

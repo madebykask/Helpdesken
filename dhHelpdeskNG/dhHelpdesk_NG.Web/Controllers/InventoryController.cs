@@ -455,7 +455,7 @@
 
         [HttpPost]
         [BadRequestOnNotValid]
-        public ViewResult EditInventory(InventoryEditViewModel inventoryEditViewModel)
+        public ViewResult EditInventory(InventoryViewModel inventoryViewModel, List<DynamicFieldModel> dynamicFieldModels)
         {
             return this.View("EditInventory");
         }
@@ -593,16 +593,6 @@
         [HttpPost]
         [BadRequestOnNotValid]
         public ViewResult NewInventory(InventoryEditViewModel inventoryEditViewModel)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ActionResult EditComputerModule()
-        {
-            throw new NotImplementedException();
-        }
-
-        public ActionResult NewComputerModule()
         {
             throw new NotImplementedException();
         }

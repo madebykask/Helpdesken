@@ -7,6 +7,10 @@
 
     public class InventoryEditViewModel
     {
+        public InventoryEditViewModel()
+        {
+        }
+
         public InventoryEditViewModel(
             InventoryViewModel inventoryViewModel,
             List<DynamicFieldModel> dynamicFieldModels,

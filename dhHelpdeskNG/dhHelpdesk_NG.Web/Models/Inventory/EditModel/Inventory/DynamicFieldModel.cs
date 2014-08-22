@@ -2,10 +2,15 @@
 {
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings;
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public class DynamicFieldModel
     {
         public const string True = "1";
+
+        public DynamicFieldModel()
+        {
+        }
 
         public DynamicFieldModel(
             int inventoryTypePropertyId,
@@ -37,24 +42,17 @@
 
         public int MaxSize { get; set; }
 
-        public FieldTypes FieldTypes { get; set; }
-
-        public string Value { get; set; }
-    }
-
-    public class DynamicFieldStringValue
-    {
-        public DynamicFieldStringValue(
-            string value,
-            int maxSize)
+        public bool IsUseMaxSize
         {
-            this.Value = value;
-            this.MaxSize = maxSize;
+            get
+            {
+                return this.FieldTypes == FieldTypes.Text;
+            }
         }
 
-        //[MaxSizeFrom("MaxSize")]
-        public string Value { get; set; }
+        public FieldTypes FieldTypes { get; set; }
 
-        public int MaxSize { get; set; }
+        [LocalizedMaxSizeFromAttribute("IsUseMaxSize", "MaxSize")]
+        public string Value { get; set; }
     }
 }

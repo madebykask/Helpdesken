@@ -42,7 +42,7 @@
             this.Info = info;
         }
 
-        public ConfigurableFieldModel<int?> DepartmentId { get; private set; }
+        public ConfigurableFieldModel<int?> DepartmentId { get; set; }
 
         [IsId]
         public int? BuildingId { get; set; }
@@ -53,29 +53,29 @@
         public ConfigurableFieldModel<int?> RoomId { get; set; }
 
         [IsId]
-        public int? ChangeByUserId { get; private set; }
+        public int? ChangeByUserId { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<string> Name { get; private set; }
+        public ConfigurableFieldModel<string> Name { get; set; }
 
-        public ConfigurableFieldModel<string> Model { get; private set; }
-
-        [NotNull]
-        public ConfigurableFieldModel<string> Manufacturer { get; private set; }
+        public ConfigurableFieldModel<string> Model { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<string> SerialNumber { get; private set; }
+        public ConfigurableFieldModel<string> Manufacturer { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<string> TheftMark { get; private set; }
+        public ConfigurableFieldModel<string> SerialNumber { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<string> BarCode { get; private set; }
+        public ConfigurableFieldModel<string> TheftMark { get; set; }
 
-        public ConfigurableFieldModel<DateTime?> PurchaseDate { get; private set; }
+        [NotNull]
+        public ConfigurableFieldModel<string> BarCode { get; set; }
 
-        public ConfigurableFieldModel<string> ComputerName { get; private set; }
+        public ConfigurableFieldModel<DateTime?> PurchaseDate { get; set; }
 
-        public ConfigurableFieldModel<string> Info { get; private set; }
+        public ConfigurableFieldModel<string> ComputerName { get; set; }
+
+        public ConfigurableFieldModel<string> Info { get; set; }
     }
 }

@@ -6,6 +6,10 @@
 
     public class InventoryViewModel
     {
+        public InventoryViewModel()
+        {
+        }
+
         public InventoryViewModel(int inventoryTypeId, DefaultFieldsViewModel defaultFieldsViewModel)
         {
             this.InventoryTypeId = inventoryTypeId;
