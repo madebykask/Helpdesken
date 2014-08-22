@@ -21,12 +21,13 @@
             var caption = Translation.Get(field.ToString(), Enums.TranslationSource.CaseTranslation, customerId);
             var setting = settings.getCaseSettingsValue(field.ToString());
             var description = settingsEx.getFieldHelp(field.ToString());
+            var url = new UrlHelper(html.ViewContext.RequestContext);
 
             var result = new StringBuilder();
             var tag = new TagBuilder("span");
             if (!string.IsNullOrEmpty(description))
             {
-                tag.MergeAttribute("title", description);                
+                tag.MergeAttribute("title", description);
             }
 
             tag.SetInnerText(caption);
@@ -37,6 +38,15 @@
                 tag = new TagBuilder("span");
                 tag.MergeAttribute("class", "mandatorystar");
                 tag.SetInnerText(" * ");
+                result.Append(tag);
+            }
+
+            if (!string.IsNullOrEmpty(description))
+            {
+                tag = new TagBuilder("img");
+                tag.MergeAttribute("src", url.Content("~/Content/icons/info.png"));
+                tag.MergeAttribute("class", "cursor-pointer ml05");
+                tag.MergeAttribute("title", description);
                 result.Append(tag);
             }
 
