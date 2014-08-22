@@ -158,7 +158,6 @@
                     //userIdentity.EmployeeNumber = "31000000";
                     SessionFacade.UserHasAccess = true;
 
-
                     if(SessionFacade.CurrentCustomer != null)
                     {
                         var section = (ConfigurationManager.GetSection("employeeCustomerSettings") as System.Collections.Hashtable)
