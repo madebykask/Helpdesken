@@ -239,7 +239,43 @@
                 switch (parameters.SortField.SortBy)
                 {
                     case SortBy.Ascending:
-                        if (parameters.SortField.Name == OtherField.Id)
+                        if (parameters.SortField.Name == GeneralField.Priority)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.Prioritisation);
+                        }
+                        else if (parameters.SortField.Name == GeneralField.Title)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.ChangeTitle);
+                        }
+                        else if (parameters.SortField.Name == GeneralField.Status)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.ChangeStatus.ChangeStatus);
+                        }
+                        else if (parameters.SortField.Name == GeneralField.System)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.System.SystemName);
+                        }
+                        else if (parameters.SortField.Name == GeneralField.Object)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.ChangeObject.ChangeObject);
+                        }
+                        else if (parameters.SortField.Name == GeneralField.Inventory)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.InventoryNumber);
+                        }
+                        else if (parameters.SortField.Name == GeneralField.WorkingGroup)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.WorkingGroup.WorkingGroupName);
+                        }
+                        else if (parameters.SortField.Name == GeneralField.FinishingDate)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.PlannedReadyDate);
+                        }
+                        else if (parameters.SortField.Name == GeneralField.Rss)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.RSS);
+                        }
+                        else if (parameters.SortField.Name == OtherField.Id)
                         {
                             searchRequest = searchRequest.OrderBy(c => c.Id);
                         }
@@ -267,10 +303,174 @@
                         {
                             searchRequest = searchRequest.OrderBy(c => c.OrdererDepartment.DepartmentName);
                         }
+                        else if (parameters.SortField.Name == RegistrationField.Owner)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.ChangeGroup.ChangeGroup);
+                        }
+                        else if (parameters.SortField.Name == RegistrationField.Description)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.ChangeDescription);
+                        }
+                        else if (parameters.SortField.Name == RegistrationField.BusinessBenefits)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.ChangeBenefits);
+                        }
+                        else if (parameters.SortField.Name == RegistrationField.Consequence)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.ChangeConsequence);
+                        }
+                        else if (parameters.SortField.Name == RegistrationField.Impact)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.ChangeImpact);
+                        }
+                        else if (parameters.SortField.Name == RegistrationField.DesiredDate)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.DesiredDate);
+                        }
+                        else if (parameters.SortField.Name == RegistrationField.Verified)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.Verified);
+                        }
+                        else if (parameters.SortField.Name == RegistrationField.Approval)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.Approval);
+                        }
+                        else if (parameters.SortField.Name == RegistrationField.RejectExplanation)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.ChangeExplanation);
+                        }
+                        else if (parameters.SortField.Name == AnalyzeField.Category)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.ChangeCategory.Name);
+                        }
+                        else if (parameters.SortField.Name == AnalyzeField.Priority)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.ChangePriority.ChangePriority);
+                        }
+                        else if (parameters.SortField.Name == AnalyzeField.Responsible)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.ResponsibleUser.SurName);
+                        }
+                        else if (parameters.SortField.Name == AnalyzeField.Solution)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.ChangeSolution);
+                        }
+                        else if (parameters.SortField.Name == AnalyzeField.Cost)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.TotalCost);
+                        }
+                        else if (parameters.SortField.Name == AnalyzeField.YearlyCost)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.YearlyCost);
+                        }
+                        else if (parameters.SortField.Name == AnalyzeField.EstimatedTimeInHours)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.TimeEstimatesHours);
+                        }
+                        else if (parameters.SortField.Name == AnalyzeField.Risk)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.ChangeRisk);
+                        }
+                        else if (parameters.SortField.Name == AnalyzeField.StartDate)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.ScheduledStartTime);
+                        }
+                        else if (parameters.SortField.Name == AnalyzeField.FinishDate)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.ScheduledEndTime);
+                        }
+                        else if (parameters.SortField.Name == AnalyzeField.HasImplementationPlan)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.ImplementationPlan);
+                        }
+                        else if (parameters.SortField.Name == AnalyzeField.HasRecoveryPlan)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.RecoveryPlan);
+                        }
+                        else if (parameters.SortField.Name == AnalyzeField.Approval)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.AnalysisApproval);
+                        }
+                        else if (parameters.SortField.Name == AnalyzeField.RejectExplanation)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.ChangeRecommendation);
+                        }
+                        else if (parameters.SortField.Name == ImplementationField.Status)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.ImplementationStatus.ImplementationStatus);
+                        }
+                        else if (parameters.SortField.Name == ImplementationField.RealStartDate)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.RealStartDate);
+                        }
+                        else if (parameters.SortField.Name == ImplementationField.BuildImplemented)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.BuildImplemented);
+                        }
+                        else if (parameters.SortField.Name == ImplementationField.ImplementationPlanUsed)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.ImplementationPlanUsed);
+                        }
+                        else if (parameters.SortField.Name == ImplementationField.Deviation)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.ChangeDeviation);
+                        }
+                        else if (parameters.SortField.Name == ImplementationField.RecoveryPlanUsed)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.RecoveryPlanUsed);
+                        }
+                        else if (parameters.SortField.Name == ImplementationField.FinishingDate)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.FinishingDate);
+                        }
+                        else if (parameters.SortField.Name == ImplementationField.ImplementationReady)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.ImplementationReady);
+                        }
+                        else if (parameters.SortField.Name == EvaluationField.ChangeEvaluation)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.ChangeEvaluation);
+                        }
 
                         break;
                     case SortBy.Descending:
-                        if (parameters.SortField.Name == OtherField.Id)
+                        if (parameters.SortField.Name == GeneralField.Priority)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.Prioritisation);
+                        }
+                        else if (parameters.SortField.Name == GeneralField.Title)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.ChangeTitle);
+                        }
+                        else if (parameters.SortField.Name == GeneralField.Status)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.ChangeStatus.ChangeStatus);
+                        }
+                        else if (parameters.SortField.Name == GeneralField.System)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.System.SystemName);
+                        }
+                        else if (parameters.SortField.Name == GeneralField.Object)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.ChangeObject.ChangeObject);
+                        }
+                        else if (parameters.SortField.Name == GeneralField.Inventory)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.InventoryNumber);
+                        }
+                        else if (parameters.SortField.Name == GeneralField.WorkingGroup)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.WorkingGroup.WorkingGroupName);
+                        }
+                        else if (parameters.SortField.Name == GeneralField.FinishingDate)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.PlannedReadyDate);
+                        }
+                        else if (parameters.SortField.Name == GeneralField.Rss)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.RSS);
+                        }
+                        else if (parameters.SortField.Name == OtherField.Id)
                         {
                             searchRequest = searchRequest.OrderByDescending(c => c.Id);
                         }
@@ -297,6 +497,134 @@
                         else if (parameters.SortField.Name == OrdererField.Department)
                         {
                             searchRequest = searchRequest.OrderByDescending(c => c.OrdererDepartment.DepartmentName);
+                        }
+                        else if (parameters.SortField.Name == RegistrationField.Owner)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.ChangeGroup.ChangeGroup);
+                        }
+                        else if (parameters.SortField.Name == RegistrationField.Description)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.ChangeDescription);
+                        }
+                        else if (parameters.SortField.Name == RegistrationField.BusinessBenefits)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.ChangeBenefits);
+                        }
+                        else if (parameters.SortField.Name == RegistrationField.Consequence)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.ChangeConsequence);
+                        }
+                        else if (parameters.SortField.Name == RegistrationField.Impact)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.ChangeImpact);
+                        }
+                        else if (parameters.SortField.Name == RegistrationField.DesiredDate)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.DesiredDate);
+                        }
+                        else if (parameters.SortField.Name == RegistrationField.Verified)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.Verified);
+                        }
+                        else if (parameters.SortField.Name == RegistrationField.Approval)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.Approval);
+                        }
+                        else if (parameters.SortField.Name == RegistrationField.RejectExplanation)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.ChangeExplanation);
+                        }
+                        else if (parameters.SortField.Name == AnalyzeField.Category)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.ChangeCategory.Name);
+                        }
+                        else if (parameters.SortField.Name == AnalyzeField.Priority)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.ChangePriority.ChangePriority);
+                        }
+                        else if (parameters.SortField.Name == AnalyzeField.Responsible)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.ResponsibleUser.SurName);
+                        }
+                        else if (parameters.SortField.Name == AnalyzeField.Solution)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.ChangeSolution);
+                        }
+                        else if (parameters.SortField.Name == AnalyzeField.Cost)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.TotalCost);
+                        }
+                        else if (parameters.SortField.Name == AnalyzeField.YearlyCost)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.YearlyCost);
+                        }
+                        else if (parameters.SortField.Name == AnalyzeField.EstimatedTimeInHours)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.TimeEstimatesHours);
+                        }
+                        else if (parameters.SortField.Name == AnalyzeField.Risk)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.ChangeRisk);
+                        }
+                        else if (parameters.SortField.Name == AnalyzeField.StartDate)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.ScheduledStartTime);
+                        }
+                        else if (parameters.SortField.Name == AnalyzeField.FinishDate)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.ScheduledEndTime);
+                        }
+                        else if (parameters.SortField.Name == AnalyzeField.HasImplementationPlan)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.ImplementationPlan);
+                        }
+                        else if (parameters.SortField.Name == AnalyzeField.HasRecoveryPlan)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.RecoveryPlan);
+                        }
+                        else if (parameters.SortField.Name == AnalyzeField.Approval)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.AnalysisApproval);
+                        }
+                        else if (parameters.SortField.Name == AnalyzeField.RejectExplanation)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.ChangeRecommendation);
+                        }
+                        else if (parameters.SortField.Name == ImplementationField.Status)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.ImplementationStatus.ImplementationStatus);
+                        }
+                        else if (parameters.SortField.Name == ImplementationField.RealStartDate)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.RealStartDate);
+                        }
+                        else if (parameters.SortField.Name == ImplementationField.BuildImplemented)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.BuildImplemented);
+                        }
+                        else if (parameters.SortField.Name == ImplementationField.ImplementationPlanUsed)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.ImplementationPlanUsed);
+                        }
+                        else if (parameters.SortField.Name == ImplementationField.Deviation)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.ChangeDeviation);
+                        }
+                        else if (parameters.SortField.Name == ImplementationField.RecoveryPlanUsed)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.RecoveryPlanUsed);
+                        }
+                        else if (parameters.SortField.Name == ImplementationField.FinishingDate)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.FinishingDate);
+                        }
+                        else if (parameters.SortField.Name == ImplementationField.ImplementationReady)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.ImplementationReady);
+                        }
+                        else if (parameters.SortField.Name == EvaluationField.ChangeEvaluation)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.ChangeEvaluation);
                         }
 
                         break;
