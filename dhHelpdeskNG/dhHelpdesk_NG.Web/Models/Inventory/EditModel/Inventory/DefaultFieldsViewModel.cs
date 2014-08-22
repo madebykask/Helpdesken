@@ -6,12 +6,16 @@
 
     public class DefaultFieldsViewModel
     {
+        public DefaultFieldsViewModel()
+        {
+        }
+
         public DefaultFieldsViewModel(
             DefaultFieldsModel defaultFieldsModel,
-            ConfigurableFieldModel<SelectList> departments,
+            SelectList departments,
             SelectList buildings,
             SelectList floors,
-            ConfigurableFieldModel<SelectList> rooms)
+            SelectList rooms)
         {
             this.DefaultFieldsModel = defaultFieldsModel;
             this.Departments = departments;
@@ -24,7 +28,7 @@
         public DefaultFieldsModel DefaultFieldsModel { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> Departments { get; set; }
+        public SelectList Departments { get; set; }
 
         [NotNull]
         public SelectList Buildings { get; set; }
@@ -33,6 +37,6 @@
         public SelectList Floors { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> Rooms { get; set; }
+        public SelectList Rooms { get; set; }
     }
 }

@@ -20,50 +20,6 @@
                        : new ConfigurableFieldModel<string>(setting.Caption, value);
         }
 
-        public static SelectList CreateSelectList(
-            InventoryFieldSettingForModelEdit setting,
-            List<ItemOverview> items,
-            string selectedValue)
-        {
-            if (!setting.ShowInDetails)
-            {
-                return new SelectList(Enumerable.Empty<SelectListItem>());
-            }
-
-            var list = new SelectList(items, "Value", "Name", selectedValue);
-            return list;
-        }
-
-        public static ConfigurableFieldModel<SelectList> CreateSelectListField(
-            InventoryFieldSettingForModelEdit setting,
-            List<ItemOverview> items,
-            string selectedValue)
-        {
-            if (!setting.ShowInDetails)
-            {
-                return ConfigurableFieldModel<SelectList>.CreateUnshowable();
-            }
-
-            var list = new SelectList(items, "Value", "Name", selectedValue);
-            return new ConfigurableFieldModel<SelectList>(setting.Caption, list);
-        }
-
-        public static ConfigurableFieldModel<DateTime?> CreateNullableDateTimeField(
-            InventoryFieldSettingForModelEdit setting,
-            DateTime? value)
-        {
-            return !setting.ShowInDetails
-                       ? ConfigurableFieldModel<DateTime?>.CreateUnshowable()
-                       : new ConfigurableFieldModel<DateTime?>(setting.Caption, value);
-        }
-
-        public static ConfigurableFieldModel<DateTime> CreateDateTimeField(InventoryFieldSettingForModelEdit setting, DateTime value)
-        {
-            return !setting.ShowInDetails
-                       ? ConfigurableFieldModel<DateTime>.CreateUnshowable()
-                       : new ConfigurableFieldModel<DateTime>(setting.Caption, value);
-        }
-
         public InventoryViewModel BuildViewModel(
             Inventory model,
             InventoryEditOptions options,
@@ -77,10 +33,15 @@
             var serial = CreateStringField(settings.DefaultSettings.SerialNumberFieldSetting, model.SerialNumber);
             var theftMark = CreateStringField(settings.DefaultSettings.TheftMarkFieldSetting, model.TheftMark);
             var barCode = CreateStringField(settings.DefaultSettings.BarCodeFieldSetting, model.BarCode);
-            var purchaseDate = CreateNullableDateTimeField(settings.DefaultSettings.PurchaseDateFieldSetting, model.PurchaseDate);
-            var workstation = CreateStringField(settings.DefaultSettings.WorkstationFieldSetting, string.Join(Delimeter, model.Workstations));
+            var purchaseDate = CreateNullableDateTimeField(
+                settings.DefaultSettings.PurchaseDateFieldSetting,
+                model.PurchaseDate);
+            var workstation = CreateStringField(
+                settings.DefaultSettings.WorkstationFieldSetting,
+                string.Join(Delimeter, model.Workstations));
             var info = CreateStringField(settings.DefaultSettings.InfoFieldSetting, model.Info);
 
+            var roomId = CreateNullableIntegerField(settings.DefaultSettings.PlaceFieldSetting, model.RoomId);
             var buildings = CreateSelectList(
                 settings.DefaultSettings.PlaceFieldSetting,
                 options.Buildings,
@@ -89,22 +50,24 @@
                 settings.DefaultSettings.PlaceFieldSetting,
                 options.Floors,
                 model.FloorId.ToString());
-            var rooms =
-                CreateSelectListField(
-                    settings.DefaultSettings.PlaceFieldSetting,
-                    options.Rooms,
-                    model.RoomId.ToString());
+            var rooms = CreateSelectList(
+                settings.DefaultSettings.PlaceFieldSetting,
+                options.Rooms,
+                model.RoomId.ToString());
 
-            var departments = CreateSelectListField(
+            var departmentId = CreateNullableIntegerField(
+                settings.DefaultSettings.DepartmentFieldSetting,
+                model.DepartmentId);
+            var departments = CreateSelectList(
                 settings.DefaultSettings.DepartmentFieldSetting,
                 options.Departments,
                 model.DepartmentId.ToString());
 
             var defaultFieldsModel = new DefaultFieldsModel(
-                model.DepartmentId,
+                departmentId,
                 model.BuildingId,
                 model.FloorId,
-                model.RoomId,
+                roomId,
                 model.ChangeByUserId,
                 name,
                 inventoryModel,
@@ -148,30 +111,22 @@
             var workstation = CreateStringField(settings.DefaultSettings.WorkstationFieldSetting, null);
             var info = CreateStringField(settings.DefaultSettings.InfoFieldSetting, null);
 
-            var buildings = CreateSelectList(
-                settings.DefaultSettings.PlaceFieldSetting,
-                options.Buildings,
-                null);
-            var floors = CreateSelectList(
-                settings.DefaultSettings.PlaceFieldSetting,
-                options.Floors,
-                null);
-            var rooms =
-                CreateSelectListField(
-                    settings.DefaultSettings.PlaceFieldSetting,
-                    options.Rooms,
-                    null);
+            var roomId = CreateNullableIntegerField(settings.DefaultSettings.PlaceFieldSetting, null);
+            var buildings = CreateSelectList(settings.DefaultSettings.PlaceFieldSetting, options.Buildings, null);
+            var floors = CreateSelectList(settings.DefaultSettings.PlaceFieldSetting, options.Floors, null);
+            var rooms = CreateSelectList(settings.DefaultSettings.PlaceFieldSetting, options.Rooms, null);
 
-            var departments = CreateSelectListField(
+            var departmentId = CreateNullableIntegerField(settings.DefaultSettings.DepartmentFieldSetting, null);
+            var departments = CreateSelectList(
                 settings.DefaultSettings.DepartmentFieldSetting,
                 options.Departments,
                 null);
 
             var defaultFieldsModel = new DefaultFieldsModel(
+                departmentId,
                 null,
                 null,
-                null,
-                null,
+                roomId,
                 null,
                 name,
                 inventoryModel,
@@ -191,6 +146,36 @@
                 rooms);
 
             return new InventoryViewModel(inventoryTypeId, defaultFieldsViewModel);
+        }
+
+        private static SelectList CreateSelectList(
+            InventoryFieldSettingForModelEdit setting,
+            List<ItemOverview> items,
+            string selectedValue)
+        {
+            if (!setting.ShowInDetails)
+            {
+                return new SelectList(Enumerable.Empty<SelectListItem>());
+            }
+
+            var list = new SelectList(items, "Value", "Name", selectedValue);
+            return list;
+        }
+
+        private static ConfigurableFieldModel<DateTime?> CreateNullableDateTimeField(
+            InventoryFieldSettingForModelEdit setting,
+            DateTime? value)
+        {
+            return !setting.ShowInDetails
+                       ? ConfigurableFieldModel<DateTime?>.CreateUnshowable()
+                       : new ConfigurableFieldModel<DateTime?>(setting.Caption, value);
+        }
+
+        private static ConfigurableFieldModel<int?> CreateNullableIntegerField(InventoryFieldSettingForModelEdit setting, int? value)
+        {
+            return !setting.ShowInDetails
+                       ? ConfigurableFieldModel<int?>.CreateUnshowable()
+                       : new ConfigurableFieldModel<int?>(setting.Caption, value);
         }
     }
 }

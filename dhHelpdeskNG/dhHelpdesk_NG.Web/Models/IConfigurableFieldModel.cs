@@ -6,6 +6,6 @@
 
         bool IsRequired { get; }
 
-        bool Show { get; }    
+        bool Show { get; }
     }
 }

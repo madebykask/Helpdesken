@@ -11,10 +11,10 @@
         }
 
         public DefaultFieldsModel(
-            int? departmentId,
+            ConfigurableFieldModel<int?> departmentId,
             int? buildingId,
             int? floorId,
-            int? roomId,
+            ConfigurableFieldModel<int?> roomId,
             int? changeByUserId,
             ConfigurableFieldModel<string> name,
             ConfigurableFieldModel<string> model,
@@ -42,8 +42,7 @@
             this.Info = info;
         }
 
-        [IsId]
-        public int? DepartmentId { get; private set; }
+        public ConfigurableFieldModel<int?> DepartmentId { get; private set; }
 
         [IsId]
         public int? BuildingId { get; set; }
@@ -51,8 +50,7 @@
         [IsId]
         public int? FloorId { get; set; }
 
-        [IsId]
-        public int? RoomId { get; set; }
+        public ConfigurableFieldModel<int?> RoomId { get; set; }
 
         [IsId]
         public int? ChangeByUserId { get; private set; }

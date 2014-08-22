@@ -2,7 +2,7 @@
 @using DH.Helpdesk.Web.Models.Inventory.EditModel.Inventory
 @model InventoryEditViewModel
 <table class="tableform">
-    @if (Model.InventoryViewModel.DefaultFieldsViewModel.Departments.Show
+    @if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.DepartmentId.Show
          || Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Name.Show
          || Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Model.Show
          || Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Manufacturer.Show
@@ -13,72 +13,14 @@
             <th colspan="2" class="header">@Translation.Get("Allmänt")</th>
         </tr>
     }
-    @if (Model.InventoryViewModel.DefaultFieldsViewModel.Departments.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.InventoryViewModel.DefaultFieldsViewModel.Departments.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.DropDownListFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.DepartmentId, Model.InventoryViewModel.DefaultFieldsViewModel.Departments.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Name.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Name.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Name.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Model.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Model.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Model.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Manufacturer.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Manufacturer.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Manufacturer.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.SerialNumber.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.SerialNumber.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.SerialNumber.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.TheftMark.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.TheftMark.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.TheftMark.Value)
-            </td>
-        </tr>
-    }
+    @Html.EditorFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.DepartmentId, "CustomTypesFields/List", new { Source = Model.InventoryViewModel.DefaultFieldsViewModel.Departments })
+    @Html.EditorFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Name, "CustomTypesFields/Text")
+    @Html.EditorFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Model, "CustomTypesFields/Text")
+    @Html.EditorFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Manufacturer, "CustomTypesFields/Text")
+    @Html.EditorFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.SerialNumber, "CustomTypesFields/Text")
+    @Html.EditorFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.TheftMark, "CustomTypesFields/Text")
+
+
     @if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.BarCode.Show
          || Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.PurchaseDate.Show)
     {
@@ -86,57 +28,11 @@
             <th colspan="2" class="header">@Translation.Get("Inventering")</th>
         </tr>
     }
-    @if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.BarCode.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.BarCode.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.BarCode.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.PurchaseDate.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.PurchaseDate.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.EditorFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.PurchaseDate.Value, "DatePicker", new { id = "inventory_edit_purchasedate_date_datepicker" })
-            </td>
-        </tr>
-    }
-    @if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Info.Show)
-    {
-        <tr>
-            <th colspan="2" class="header">@Translation.Get("Övrigt")</th>
-        </tr>
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Info.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.TextAreaFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Info.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.ComputerName.Show)
-    {
-        <tr>
-            <th colspan="2" class="header">@Translation.Get("Tillbehör till")</th>
-        </tr>
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.ComputerName.Caption)</label>
-            </td>
-            <td class="span9">
-                @Html.DisplayFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.ComputerName.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.InventoryViewModel.DefaultFieldsViewModel.Rooms.Show)
+    @Html.EditorFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.BarCode, "CustomTypesFields/Text")
+    @Html.EditorFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.PurchaseDate, "CustomTypesFields/Date", new { id = "inventory_edit_purchasedate_date_datepicker" })
+    @Html.EditorFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Info, "CustomTypesFields/WideText")
+
+    @if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.RoomId.Show)
     {
         <tr>
             <th colspan="2" class="header">@Translation.Get("Placering")</th>
@@ -159,10 +55,10 @@
         </tr>
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.InventoryViewModel.DefaultFieldsViewModel.Rooms.Caption)</label>
+                <label>@Translation.Get(Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.RoomId.Caption)</label>
             </td>
             <td class="span9">
-                @Html.DropDownListFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.RoomId, Model.InventoryViewModel.DefaultFieldsViewModel.Rooms.Value);
+                @Html.DropDownListFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.RoomId, Model.InventoryViewModel.DefaultFieldsViewModel.Rooms);
             </td>
         </tr>
     }
@@ -179,62 +75,43 @@
                 continue;
             }
 
-            <tr>
-                <th colspan="2" class="header">@Html.DisplayFor(m => group.Name)</th>
-            </tr>
+        <tr>
+            <th colspan="2" class="header">@Html.DisplayFor(m => group.Name)</th>
+        </tr>
 
             foreach (var item in itemsInGroup)
             {
                 // todo
-                <tr>
-                    <td class="span3">
-                        <label>@Html.DisplayFor(m => item.Caption)</label>
-                    </td>
-                    <td class="span9">
-                        @switch (item.FieldTypes)
-                        {
-                            case FieldTypes.Bool:
-                                var boolValue = !string.IsNullOrWhiteSpace(item.Value) && item.Value == DynamicFieldModel.True;
-                                @Html.CheckBoxFor(m => boolValue)
-                                break;
-                            case FieldTypes.Date:
-                                var dateValue = !string.IsNullOrWhiteSpace(item.Value) ? (DateTime?)DateTime.Parse(item.Value) : null;
-                                @Html.EditorFor(m => dateValue, "DatePicker", new { id = "general_finishing_date_datepicker" })
-                                break;
-                            case FieldTypes.Text:
-                                var textValue = new DynamicFieldStringValue(item.Value, item.MaxSize);
-                                @Html.EditorFor(m => textValue)
-                                break;
-                            case FieldTypes.Numeric:
-                                var intValue = !string.IsNullOrWhiteSpace(item.Value) ? (int?)int.Parse(item.Value) : null;
-                                @Html.EditorFor(m => intValue)
-                                break;
-                            default:
-                                @Html.EditorFor(m => item.Value)
-                                break;
-                        }
-                    </td>
-                </tr>
+        <tr>
+            <td class="span3">
+                <label>@Html.DisplayFor(m => item.Caption)</label>
+            </td>
+            <td class="span9">
+                @switch (item.FieldTypes)
+                {
+                    case FieldTypes.Bool:
+                        var boolValue = !string.IsNullOrWhiteSpace(item.Value) && item.Value == DynamicFieldModel.True;
+                    @Html.CheckBoxFor(m => boolValue)
+                        break;
+                    case FieldTypes.Date:
+                        var dateValue = !string.IsNullOrWhiteSpace(item.Value) ? (DateTime?)DateTime.Parse(item.Value) : null;
+                    @Html.EditorFor(m => dateValue, "DatePicker", new { id = "general_finishing_date_datepicker" })
+                        break;
+                    case FieldTypes.Text:
+                        var textValue = new DynamicFieldStringValue(item.Value, item.MaxSize);
+                    @Html.EditorFor(m => textValue)
+                        break;
+                    case FieldTypes.Numeric:
+                        var intValue = !string.IsNullOrWhiteSpace(item.Value) ? (int?)int.Parse(item.Value) : null;
+                    @Html.EditorFor(m => intValue)
+                        break;
+                    default:
+                    @Html.EditorFor(m => item.Value)
+                        break;
+                }
+            </td>
+        </tr>
             }
         }
     }
-    <tr>
-        <th colspan="2" class="header">@Translation.Get("Status")</th>
-    </tr>
-    <tr>
-        <td class="span3">
-            <label>@Translation.Get("Skapad datum")</label>
-        </td>
-        <td class="span9">
-            @Html.DisplayFor(m => m.InventoryViewModel.ChangeDate, "Date")
-        </td>
-    </tr>
-    <tr>
-        <td class="span3">
-            <label>@Translation.Get("Senast ändrad datum")</label>
-        </td>
-        <td class="span9">
-            @Html.DisplayFor(m => m.InventoryViewModel.CreatedDate, "Date")
-        </td>
-    </tr>
 </table>
