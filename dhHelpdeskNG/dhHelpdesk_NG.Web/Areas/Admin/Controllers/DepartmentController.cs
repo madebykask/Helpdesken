@@ -5,13 +5,10 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
-    using DH.Helpdesk.Web.Infrastructure;
 
-    [CustomAuthorize(Roles = "4")]
-    public class DepartmentController : BaseController
+    public class DepartmentController : BaseAdminController
     {
         private readonly ICountryService _countryService;
         private readonly IDepartmentService _departmentService;

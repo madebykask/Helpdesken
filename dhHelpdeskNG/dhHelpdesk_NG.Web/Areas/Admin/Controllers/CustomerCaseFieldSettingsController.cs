@@ -11,7 +11,7 @@
     using DH.Helpdesk.Web.Areas.Admin.Models;
     using DH.Helpdesk.Web.Infrastructure;
 
-    public class CustomerCaseFieldSettingsController : BaseController
+    public class CustomerCaseFieldSettingsController : BaseAdminController
     {
         private readonly ICaseFieldSettingService _caseFieldSettingService;
         private readonly ICaseSettingsService _caseSettingsService;

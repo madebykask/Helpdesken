@@ -2,14 +2,10 @@
 {
     using System.Web.Mvc;
 
-    using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Computers;
-    using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Web.Infrastructure;
 
-    [CustomAuthorize(Roles = "4")]
-    public class ComputerUsersBlackListController : BaseController
+    public class ComputerUsersBlackListController : BaseAdminController
     {
         private readonly IComputerService _computerService;
 

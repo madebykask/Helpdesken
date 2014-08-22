@@ -6,12 +6,11 @@
     using System.Web.UI;
 
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
     using DH.Helpdesk.Web.Infrastructure;
 
-    public class InfoTextController : BaseController
+    public class InfoTextController : BaseAdminController
     {
         private readonly IInfoService _infoService;
         private readonly ICustomerService _customerService;

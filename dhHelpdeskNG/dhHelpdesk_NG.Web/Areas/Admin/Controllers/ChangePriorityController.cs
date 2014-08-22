@@ -5,13 +5,11 @@
 
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Changes;
-    using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
     using DH.Helpdesk.Web.Infrastructure;
 
-    [CustomAuthorize(Roles = "4")]
-    public class ChangePriorityController : BaseController
+    public class ChangePriorityController : BaseAdminController
     {
         private readonly IChangePriorityService _changePriorityService;
         private readonly ICustomerService _customerService;

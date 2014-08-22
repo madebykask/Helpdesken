@@ -11,15 +11,13 @@
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
     using DH.Helpdesk.Web.Infrastructure.Tools;
 
-    [CustomAuthorize(Roles = "4")]
-    public class PriorityController : BaseController
+    public class PriorityController : BaseAdminController
     {
         private readonly IMailTemplateService _mailTemplateService;
         private readonly IPriorityService _priorityService;

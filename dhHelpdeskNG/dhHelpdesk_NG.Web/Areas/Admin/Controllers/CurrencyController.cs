@@ -3,12 +3,9 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Web.Infrastructure;
 
-    [CustomAuthorize(Roles = "4")]
-    public class CurrencyController : BaseController
+    public class CurrencyController : BaseAdminController
     {
         private readonly ICurrencyService _currencyService;
 

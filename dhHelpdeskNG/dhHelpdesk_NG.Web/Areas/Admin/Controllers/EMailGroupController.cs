@@ -4,12 +4,10 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
-    using DH.Helpdesk.Web.Infrastructure;
 
-    public class EMailGroupController : BaseController
+    public class EMailGroupController : BaseAdminController
     {
         private readonly IEmailGroupService _emailGroupService;
         private readonly ICustomerService _customerService;

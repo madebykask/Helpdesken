@@ -5,13 +5,11 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
     using DH.Helpdesk.Web.Infrastructure;
 
-    [CustomAuthorize(Roles = "4")]
-    public class OrderTypeController : BaseController
+    public class OrderTypeController : BaseAdminController
     {
         private readonly ICaseTypeService _caseTypeService;
         private readonly IDocumentService _documentService;

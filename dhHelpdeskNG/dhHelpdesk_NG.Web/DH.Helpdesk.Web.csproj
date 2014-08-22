@@ -196,6 +196,7 @@
     <Compile Include="App_Start\RegisterClientValidationExtensions.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\AccountActivityController.cs" />
+    <Compile Include="Areas\Admin\Controllers\BaseAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\BuildingController.cs" />
     <Compile Include="Areas\Admin\Controllers\CaseTypeController.cs" />
     <Compile Include="Areas\Admin\Controllers\CategoryController.cs" />

@@ -4,12 +4,10 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
-    using DH.Helpdesk.Web.Infrastructure;
 
-    public class DailyReportSubjectController : BaseController
+    public class DailyReportSubjectController : BaseAdminController
     {
         private readonly IDailyReportService _dailyReportService;
         private readonly ICustomerService _customerService;

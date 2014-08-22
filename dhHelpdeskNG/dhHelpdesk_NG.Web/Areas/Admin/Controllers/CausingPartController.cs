@@ -14,12 +14,11 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models.CausingPart;
-    using DH.Helpdesk.Web.Infrastructure;
 
     /// <summary>
     /// The causing part controller.
     /// </summary>
-    public class CausingPartController : BaseController
+    public class CausingPartController : BaseAdminController
     {
         /// <summary>
         /// The customer service.

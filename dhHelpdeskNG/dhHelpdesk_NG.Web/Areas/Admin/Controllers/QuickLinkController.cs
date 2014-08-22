@@ -5,12 +5,10 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
-    using DH.Helpdesk.Web.Infrastructure;
 
-    public class QuickLinkController : BaseController
+    public class QuickLinkController : BaseAdminController
     {
         private readonly IDocumentService _documentService;
         private readonly ILinkService _linkService;

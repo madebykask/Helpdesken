@@ -3,12 +3,10 @@
     using System.Linq;
     using System.Web.Mvc;
 
-    using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
 
-    [CustomAuthorize(Roles = "4")]
-    public class ChecklistServiceController : BaseController
+    public class ChecklistServiceController : BaseAdminController
     {
         private readonly IChecklistServiceService _checklistServiceService;
 

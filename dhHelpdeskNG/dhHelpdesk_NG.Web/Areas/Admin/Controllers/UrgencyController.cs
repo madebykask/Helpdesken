@@ -5,13 +5,11 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
-    using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
 
-    public class UrgencyController : BaseController
+    public class UrgencyController : BaseAdminController
     {
         private readonly IImpactService _impactService;
         private readonly IPriorityService _priorityService;

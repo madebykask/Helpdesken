@@ -7,12 +7,11 @@
 
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.MailTemplates;
-    using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
     using DH.Helpdesk.Web.Infrastructure;
 
-    public class MailTemplateController : BaseController
+    public class MailTemplateController : BaseAdminController
     {
         private readonly IAccountActivityService _accountActivityService;
         private readonly IMailTemplateService _mailTemplateService;

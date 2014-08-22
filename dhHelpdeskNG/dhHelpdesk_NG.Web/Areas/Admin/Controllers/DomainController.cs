@@ -4,12 +4,10 @@
     using System.Collections.Generic;
     using System.Web.Configuration;
     using System.Web.Mvc;
-    using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
-    using DH.Helpdesk.Web.Infrastructure;
 
-    public class DomainController : BaseController
+    public class DomainController : BaseAdminController
     {
         private readonly IDomainService _domainService;
         private readonly ISystemService _systemService;

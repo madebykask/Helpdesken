@@ -5,13 +5,10 @@
 
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Changes;
-    using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
-    using DH.Helpdesk.Web.Infrastructure;
 
-    [CustomAuthorize(Roles = "4")]
-    public class ChangeStatusController : BaseController
+    public class ChangeStatusController : BaseAdminController
     {
         private readonly IChangeStatusService _changeStatusService;
         private readonly ICustomerService _customerService;

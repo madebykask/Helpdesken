@@ -12,7 +12,7 @@
     using DH.Helpdesk.Web.Areas.Admin.Models;
     using DH.Helpdesk.Web.Infrastructure;
 
-    public class CustomerSettingsController : BaseController
+    public class CustomerSettingsController : BaseAdminController
     {
          private readonly ICustomerService _customerService;
          private readonly ISettingService _settingService;
