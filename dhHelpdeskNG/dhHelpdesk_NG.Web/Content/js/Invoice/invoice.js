@@ -587,7 +587,7 @@ $(function () {
                     if (this.IsInvoiced) {
                         return "<tr data-id='" + this.Id + "'>" +
                                 "<td colspan='6'>" + (this.Name != null ? this.Name : "") + "</td>" +
-                                "<td><i class='icon-thumbs-up icon-green'></i></td>" +
+                                "<td><i class='icon-flag icon-green'></i></td>" +
                                 "</tr>";
                     }
                     return "<tr data-id='" + this.Id + "'>" +
@@ -606,7 +606,7 @@ $(function () {
                             "<td>" + this.GetUnitName() + "</td>" +
                             "<td>" + this.GetPpu() + "</td>" +
                             "<td>" + this.GetTotal() + "</td>" +
-                            "<td><i class='icon-thumbs-up icon-green'></i></td>" +
+                            "<td><i class='icon-flag icon-green'></i></td>" +
                             "</tr>";
                 }
 
