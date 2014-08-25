@@ -3,7 +3,30 @@
     ViewBag.Title = "Index";
 }
 
-<h4 style="color:blue"> ErrorCode: @Model.ErrorCode </h4>
 
-<h4 style="color:red"> @Model.ErrorMessage </h4>
+<div class="container-fluid dh-container">
+    <ul class="nav nav-tabs">
+        <li class="active" ><a href="#home" data-toggle="tab">@Translation.Get("Error Code", Enums.TranslationSource.TextTranslation) @Model.ErrorCode</a></li>       
+    </ul>
+    <div class="content">
+        <div class="tab-pane active" id="home">
+            <div class="container-fluid dh-container">
+                <div class="row">
+                    <div class="col-md-5">
+                            <div class="alert alert-info">
+                                <p style="color:red"> @Model.ErrorMessage </p>
+                            </div>
+                            <div class="alert alert-grey">
+                                <p> ErrorCode: @Model.ErrorCode </p>
+                            </div>           
+                    </div>
+                    <div class="col-md-3">                  
+                        <img src="@Url.Content("~/Content/img-profile/ikea-error-web.png")"  style="margin:30px 30px 0 30px;" />
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </div>
+</div>
+
  

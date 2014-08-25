@@ -630,6 +630,13 @@ input[type=text], select, textarea {
     opacity:1.0;
 }
 
+/*****ALERT GREY********/
+.alert-grey {
+  color: #999;
+  background-color: #f1f1f1;
+  border-color: #e1e1e1;
+}
+
 
 
 
