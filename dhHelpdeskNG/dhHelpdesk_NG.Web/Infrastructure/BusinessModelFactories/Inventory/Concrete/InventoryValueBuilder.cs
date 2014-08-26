@@ -12,7 +12,7 @@
         {
             var businessModels =
                 models.Select(
-                    model => new InventoryValueForWrite(inventoryId, model.InventoryTypePropertyId, model.Value))
+                    model => new InventoryValueForWrite(inventoryId, model.InventoryTypePropertyId, model.Value.ToString()))
                     .ToList();
 
             return businessModels;

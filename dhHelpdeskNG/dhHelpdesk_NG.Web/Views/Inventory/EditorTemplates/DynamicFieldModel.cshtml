@@ -11,31 +11,27 @@
             switch (Model.FieldTypes)
             {
                 case FieldTypes.Bool:
-                    var boolValue = !string.IsNullOrWhiteSpace(Model.Value) && Model.Value == DynamicFieldModel.True;
-                    @Html.CheckBoxFor(m => boolValue)
+                    @Html.EditorFor(m => m.Value)
                     break;
                 case FieldTypes.Date:
-                    var dateValue = !string.IsNullOrWhiteSpace(Model.Value) ? (DateTime?)DateTime.Parse(Model.Value) : null;
-                    @Html.EditorFor(m => dateValue, "DatePicker", new { id = "general_finishing_date_datepicker" + ViewData["Id"] })
+                    @Html.EditorFor(m => m.Value, "DatePicker", new { id = "general_finishing_date_datepicker" + ViewData["Id"] })
                     break;
                 case FieldTypes.Text:
                     @Html.TextBoxFor(m => m.Value, new Dictionary<string, object> { { "data-dh-is-use-maxlength", Model.IsUseMaxSize }, { "data-dh-maxlength", Model.MaxSize } })
                     @Html.ValidationMessageFor(m => m.Value)
                     @Html.HiddenFor(m => m.IsUseMaxSize)
                     @Html.HiddenFor(m => m.MaxSize)
-                    @Html.HiddenFor(m => m.FieldTypes)
                     break;
                 case FieldTypes.Numeric:
-                    @Html.EditorFor(m => m.Value, "DynamicFields/Number")
-@*                var intValue = !string.IsNullOrWhiteSpace(Model.Value) ? (int?)int.Parse(Model.Value) : null;*@
-@*            @Html.EditorFor(m => intValue)*@
+                    @Html.TextBoxFor(m => Model.Value)
                     break;
                 default:
-                    @Html.EditorFor(m => Model.Value)
+                    @Html.TextBoxFor(m => Model.Value)
                     break;
             }
         }
         @Html.HiddenFor(m => m.InventoryTypePropertyId)
+        @Html.HiddenFor(m => m.FieldTypes)
     </td>
 </tr>
 
