@@ -99,7 +99,7 @@
     <Compile Include="Enums\Notifiers\OrganizationField.cs" />
     <Compile Include="Enums\Notifiers\StateField.cs" />
     <Compile Include="Enums\Users\Module.cs" />
-    <Compile Include="Interfaces\IHierarchyItem.cs" />
+    <Compile Include="Models\Interfaces\IHierarchyItem.cs" />
     <Compile Include="Models\ActionSetting\ActionSetting.cs" />
     <Compile Include="Models\BulletinBoard\Output\BulletinBoardOverview.cs" />
     <Compile Include="Models\Calendar\Output\CalendarOverview.cs" />
