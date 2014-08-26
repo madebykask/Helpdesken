@@ -1,0 +1,5 @@
+﻿@model string
+@{
+    var value = !string.IsNullOrWhiteSpace(Model) ? (int?)int.Parse(Model) : null;
+    @Html.EditorFor(m => value)
+}

@@ -62,7 +62,7 @@ namespace DH.Helpdesk.Web.Infrastructure.LocalizedAttributes
                 this.dependencyMaxSizePropertyName);
 
 
-            if (((string)value).Length > maxSize)
+            if (value != null && ((string)value).Length > maxSize)
             {
                 return new ValidationResult("Max size was exceeded");
             }

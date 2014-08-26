@@ -2,19 +2,14 @@
 {
     using System;
 
-    using DH.Helpdesk.BusinessData.Attributes;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class Inventory : BusinessModel
+    public abstract class Inventory : INewBusinessModel
     {
-        private Inventory(
-            ModelStates businessModelState,
-            int inventoryTypeId,
+        protected Inventory(
             int? departmentId,
-            int? buildingId,
-            int? floorId,
             int? roomId,
-            int? changeByUserId,
             string name,
             string model,
             string manufacturer,
@@ -22,16 +17,10 @@
             string theftMark,
             string barCode,
             DateTime? purchaseDate,
-            string info,
-            DateTime? syncChangeDate)
-            : base(businessModelState)
+            string info)
         {
-            this.FloorId = floorId;
-            this.BuildingId = buildingId;
-            this.InventoryTypeId = inventoryTypeId;
             this.DepartmentId = departmentId;
             this.RoomId = roomId;
-            this.ChangeByUserId = changeByUserId;
             this.Name = name;
             this.Model = model;
             this.Manufacturer = manufacturer;
@@ -40,189 +29,30 @@
             this.BarCode = barCode;
             this.PurchaseDate = purchaseDate;
             this.Info = info;
-            this.SyncChangeDate = syncChangeDate;
         }
 
-        [IsId]
-        public int InventoryTypeId { get; private set; }
-
-        [NotNullAndEmpty]
-        public string InventoryTypeName { get; private set; }
+        public int Id { get; set; }
 
         [IsId]
         public int? DepartmentId { get; private set; }
 
         [IsId]
-        public int? BuildingId { get; private set; }
-
-        [IsId]
-        public int? FloorId { get; private set; }
-
-        [IsId]
         public int? RoomId { get; private set; }
 
-        [IsId]
-        public int? ChangeByUserId { get; private set; }
-
-        [NotNull]
         public string Name { get; private set; }
 
         public string Model { get; private set; }
 
-        [NotNull]
         public string Manufacturer { get; private set; }
 
-        [NotNull]
         public string SerialNumber { get; private set; }
 
-        [NotNull]
         public string TheftMark { get; private set; }
 
-        [NotNull]
         public string BarCode { get; private set; }
 
         public DateTime? PurchaseDate { get; private set; }
 
-        [AllowRead(ModelStates.ForEdit)]
-        public string[] Workstations { get; private set; }
-
         public string Info { get; private set; }
-
-        [AllowRead(ModelStates.Created | ModelStates.ForEdit)]
-        public DateTime CreatedDate { get; private set; }
-
-        [AllowRead(ModelStates.Updated | ModelStates.ForEdit)]
-        public DateTime ChangeDate { get; private set; }
-
-        public DateTime? SyncChangeDate { get; private set; }
-
-        public static Inventory CreateNew(
-            int inventoryTypeId,
-            int? departmentId,
-            int? buildingId,
-            int? floorId,
-            int? roomId,
-            int? changeByUserId,
-            string name,
-            string model,
-            string manufacturer,
-            string serialNumber,
-            string theftMark,
-            string barCode,
-            DateTime? purchaseDate,
-            string info,
-            DateTime? syncChangeDate,
-            DateTime createdDate)
-        {
-            var businessModel = new Inventory(
-                ModelStates.Created,
-                inventoryTypeId,
-                departmentId,
-                buildingId,
-                floorId,
-                roomId,
-                changeByUserId,
-                name,
-                model,
-                manufacturer,
-                serialNumber,
-                theftMark,
-                barCode,
-                purchaseDate,
-                info,
-                syncChangeDate) { CreatedDate = createdDate };
-
-            return businessModel;
-        }
-
-        public static Inventory CreateUpdated(
-            int inventoryTypeId,
-            int id,
-            int? departmentId,
-            int? buildingId,
-            int? floorId,
-            int? roomId,
-            int? changeByUserId,
-            string name,
-            string model,
-            string manufacturer,
-            string serialNumber,
-            string theftMark,
-            string barCode,
-            DateTime? purchaseDate,
-            string info,
-            DateTime? syncChangeDate,
-            DateTime changedDate)
-        {
-            var businessModel = new Inventory(
-                ModelStates.Updated,
-                inventoryTypeId,
-                departmentId,
-                buildingId,
-                floorId,
-                roomId,
-                changeByUserId,
-                name,
-                model,
-                manufacturer,
-                serialNumber,
-                theftMark,
-                barCode,
-                purchaseDate,
-                info,
-                syncChangeDate) { Id = id, ChangeDate = changedDate };
-
-            return businessModel;
-        }
-
-        public static Inventory CreateForEdit(
-            int inventoryTypeId,
-            string inventoryTypeName,
-            int id,
-            int? departmentId,
-            int? buildingId,
-            int? floorId,
-            int? roomId,
-            int? changeByUserId,
-            string name,
-            string model,
-            string manufacturer,
-            string serialNumber,
-            string theftMark,
-            string barCode,
-            DateTime? purchaseDate,
-            string[] worstations,
-            string info,
-            DateTime? syncChangeDate,
-            DateTime createdDate,
-            DateTime changedDate)
-        {
-            var businessModel = new Inventory(
-                ModelStates.ForEdit,
-                inventoryTypeId,
-                departmentId,
-                buildingId,
-                floorId,
-                roomId,
-                changeByUserId,
-                name,
-                model,
-                manufacturer,
-                serialNumber,
-                theftMark,
-                barCode,
-                purchaseDate,
-                info,
-                syncChangeDate)
-                                    {
-                                        Id = id,
-                                        InventoryTypeName = inventoryTypeName,
-                                        CreatedDate = createdDate,
-                                        ChangeDate = changedDate,
-                                        Workstations = worstations
-                                    };
-
-            return businessModel;
-        }
     }
 }

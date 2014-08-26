@@ -11,6 +11,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.InventorySettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.InventoryFieldSettings;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ProcessingSetttings.InventorySettings;
     using DH.Helpdesk.Common.Collections;
     using DH.Helpdesk.Common.Extensions.Boolean;
     using DH.Helpdesk.Common.Extensions.Integer;
@@ -18,6 +19,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
     using DH.Helpdesk.Dal.Enums.Inventory.Inventory;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.MapperData.Inventory;
+
+    using InventoryFieldSettingsForModelEdit = DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.InventorySettings.InventoryFieldSettingsForModelEdit;
 
     public class InventoryFieldSettingsRepository : Repository<Domain.Inventory.InventoryTypeProperty>, IInventoryFieldSettingsRepository
     {
@@ -163,6 +166,61 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             var settingAgregate =
                 new InventoryFieldSettingsForModelEdit(
                     new BusinessData.Models.Inventory.Output.Settings.ModelEdit.InventorySettings.DefaultFieldSettings(
+                        department,
+                        name,
+                        model,
+                        manufacturer,
+                        serialNumber,
+                        theftMark,
+                        barCode,
+                        purchaseDate,
+                        place,
+                        workstation,
+                        info));
+
+            return settingAgregate;
+        }
+
+        public InventoryFieldSettingsProcessing GetFieldSettingsForProcessing(int inventoryTypeId)
+        {
+            var settings = this.GetSettings(inventoryTypeId);
+
+            var anonymus =
+                settings.Select(
+                    s =>
+                    new
+                    {
+                        FieldName = s.PropertyType,
+                        s.Show,
+                    }).ToList();
+
+            var mapperData =
+                anonymus.Select(
+                    s =>
+                    new InventoryFieldSettingMapperDataForProcessing
+                        {
+                            FieldName =
+                                s.FieldName.ToString(
+                                    CultureInfo.InvariantCulture),
+                            Show = s.Show,
+                        }).ToList();
+
+            var settingCollection = new NamedObjectCollection<InventoryFieldSettingMapperDataForProcessing>(mapperData);
+            var department = CreateFieldSettingForProcessing(settingCollection.FindByName(InventoryFields.Department.ToString(CultureInfo.InvariantCulture)));
+            var name = CreateFieldSettingForProcessing(settingCollection.FindByName(InventoryFields.Name.ToString(CultureInfo.InvariantCulture)));
+            var model = CreateFieldSettingForProcessing(settingCollection.FindByName(InventoryFields.Model.ToString(CultureInfo.InvariantCulture)));
+            var manufacturer = CreateFieldSettingForProcessing(settingCollection.FindByName(InventoryFields.Manufacturer.ToString(CultureInfo.InvariantCulture)));
+            var serialNumber = CreateFieldSettingForProcessing(settingCollection.FindByName(InventoryFields.SerialNumber.ToString(CultureInfo.InvariantCulture)));
+            var theftMark = CreateFieldSettingForProcessing(settingCollection.FindByName(InventoryFields.TheftMark.ToString(CultureInfo.InvariantCulture)));
+            var barCode = CreateFieldSettingForProcessing(settingCollection.FindByName(InventoryFields.BarCode.ToString(CultureInfo.InvariantCulture)));
+            var purchaseDate = CreateFieldSettingForProcessing(settingCollection.FindByName(InventoryFields.PurchaseDate.ToString(CultureInfo.InvariantCulture)));
+            var place = CreateFieldSettingForProcessing(settingCollection.FindByName(InventoryFields.Place.ToString(CultureInfo.InvariantCulture)));
+            var workstation = CreateFieldSettingForProcessing(settingCollection.FindByName(InventoryFields.Workstation.ToString(CultureInfo.InvariantCulture)));
+            var info = CreateFieldSettingForProcessing(settingCollection.FindByName(InventoryFields.Info.ToString(CultureInfo.InvariantCulture)));
+
+            var settingAgregate =
+                new InventoryFieldSettingsProcessing(
+                    new BusinessData.Models.Inventory.Output.Settings.ProcessingSetttings.InventorySettings.DefaultFieldSettings(
                         department,
                         name,
                         model,
@@ -341,6 +399,12 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                 fieldSetting.Caption,
                 fieldSetting.PropertySize,
                 fieldSetting.Show.ToBool());
+        }
+
+        private static InventoryFieldSettingForProcessing CreateFieldSettingForProcessing(
+            InventoryFieldSettingMapperDataForProcessing fieldSetting)
+        {
+            return new InventoryFieldSettingForProcessing(fieldSetting.Show.ToBool());
         }
 
         private static InventoryFieldSetting CreateFieldSetting(InventoryFieldSettingMapperData fieldSetting)

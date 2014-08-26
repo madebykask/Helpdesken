@@ -95,6 +95,12 @@
 
         #region DynamicType
 
+        void AddInventory(InventoryForInsert businessModel, List<InventoryValueForWrite> dynamicBusinessModels);
+
+        void UpdateInventory(InventoryForUpdate businessModel, List<InventoryValueForWrite> dynamicBusinessModels, int inventoryTypeId);
+
+        void DeleteInventory(int id);
+
         InventoryOverviewResponse GetInventory(int id);
 
         InventoriesOverviewResponse GetInventories(InventoriesFilter filter);

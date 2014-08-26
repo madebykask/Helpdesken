@@ -16,6 +16,45 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
         {
         }
 
+        public void Add(InventoryValueForWrite businessModel)
+        {
+            var entity = new Domain.Inventory.InventoryTypePropertyValue
+                             {
+                                 Inventory_Id = businessModel.InventoryId,
+                                 InventoryTypeProperty_Id = businessModel.InventoryTypePropertyId,
+                                 Value = businessModel.Value
+                             };
+
+            this.DbSet.Add(entity);
+        }
+
+        public void Add(List<InventoryValueForWrite> businessModels)
+        {
+            foreach (var businessModel in businessModels)
+            {
+                this.Add(businessModel);
+            }
+        }
+
+        public void Update(InventoryValueForWrite businessModel)
+        {
+            var entity =
+                this.DbSet.Single(
+                    x =>
+                    x.InventoryTypeProperty_Id == businessModel.InventoryTypePropertyId
+                    && x.Inventory_Id == businessModel.InventoryId);
+
+            entity.Value = businessModel.Value;
+        }
+
+        public void Update(List<InventoryValueForWrite> businessModels)
+        {
+            foreach (var businessModel in businessModels)
+            {
+                this.Update(businessModel);
+            }
+        }
+
         public List<InventoryValue> GetData(int id)
         {
             var entities =
@@ -63,6 +102,12 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
         public void DeleteByInventoryTypeId(int inventoryTypeId)
         {
             var models = this.DbSet.Where(x => x.Inventory.InventoryType_Id == inventoryTypeId).ToList();
+            models.ForEach(x => this.DbSet.Remove(x));
+        }
+
+        public void DeleteByInventoryId(int inventoryId)
+        {
+            var models = this.DbSet.Where(x => x.Inventory_Id == inventoryId).ToList();
             models.ForEach(x => this.DbSet.Remove(x));
         }
     }

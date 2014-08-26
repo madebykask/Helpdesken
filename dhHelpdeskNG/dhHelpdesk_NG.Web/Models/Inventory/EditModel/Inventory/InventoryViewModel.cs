@@ -26,7 +26,7 @@
         public DateTime ChangeDate { get; set; }
 
         [IsId]
-        public int InventoryTypeId { get; private set; }
+        public int InventoryTypeId { get; set; }
 
         [NotNull]
         public DefaultFieldsViewModel DefaultFieldsViewModel { get; set; }

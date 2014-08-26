@@ -5,6 +5,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Inventory;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Common.Types;
@@ -20,50 +21,31 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
         {
         }
 
-        public void Add(Inventory businessModel)
+        public void Add(InventoryForInsert businessModel)
         {
-            var entity = new Domain.Inventory.Inventory
-            {
-                Department_Id = businessModel.DepartmentId,
-                InventoryType_Id = businessModel.InventoryTypeId,
-                Room_Id = businessModel.RoomId,
-                ChangedByUser_Id = businessModel.ChangeByUserId,
-                InventoryName = businessModel.Name,
-                InventoryModel = businessModel.Model,
-                Manufacturer = businessModel.Manufacturer,
-                SerialNumber = businessModel.SerialNumber,
-                TheftMark = businessModel.TheftMark,
-                BarCode = businessModel.BarCode,
-                PurchaseDate = businessModel.PurchaseDate,
-                Info = businessModel.Info,
-                SyncChangedDate = businessModel.SyncChangeDate,
-                CreatedDate = businessModel.CreatedDate
-            };
+            var entity = new Domain.Inventory.Inventory();
+            this.Map(businessModel, entity);
+
+            entity.InventoryType_Id = businessModel.InventoryTypeId;
+            entity.CreatedDate = businessModel.CreatedDate;
+            entity.ChangedByUser_Id = businessModel.ChangeByUserId;
+
+            entity.ChangedDate = businessModel.CreatedDate; // todo
 
             this.DbSet.Add(entity);
             this.InitializeAfterCommit(businessModel, entity);
         }
 
-        public void Update(Inventory businessModel)
+        public void Update(InventoryForUpdate businessModel)
         {
             var entity = this.DbSet.Find(businessModel.Id);
-            entity.Department_Id = businessModel.DepartmentId;
-            entity.InventoryType_Id = businessModel.InventoryTypeId;
-            entity.Room_Id = businessModel.RoomId;
+            this.Map(businessModel, entity);
+
+            entity.ChangedDate = businessModel.ChangeDate;
             entity.ChangedByUser_Id = businessModel.ChangeByUserId;
-            entity.InventoryName = businessModel.Name;
-            entity.InventoryModel = businessModel.Model;
-            entity.Manufacturer = businessModel.Manufacturer;
-            entity.SerialNumber = businessModel.SerialNumber;
-            entity.TheftMark = businessModel.TheftMark;
-            entity.BarCode = businessModel.BarCode;
-            entity.PurchaseDate = businessModel.PurchaseDate;
-            entity.Info = businessModel.Info;
-            entity.SyncChangedDate = businessModel.SyncChangeDate;
-            entity.ChangedDate = entity.ChangedDate;
         }
 
-        public Inventory FindById(int id)
+        public InventoryForRead FindById(int id)
         {
             var anonymus = (from i in this.DbSet.Where(x => x.Id == id)
                             join ci in DbContext.ComputerInventories on i.Id equals ci.Inventory_Id into res
@@ -82,15 +64,10 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             var businessModel =
                 anonymus.Select(
                     x =>
-                    Inventory.CreateForEdit(
-                        x.Key.Entity.InventoryType_Id,
-                        x.Key.InventoryTypeName,
+                    new InventoryForRead(
                         x.Key.Entity.Id,
                         x.Key.Entity.Department_Id,
-                        x.Key.BuildingId,
-                        x.Key.FloorId,
                         x.Key.Entity.Room_Id,
-                        x.Key.Entity.ChangedByUser_Id,
                         x.Key.Entity.InventoryName,
                         x.Key.Entity.InventoryModel,
                         x.Key.Entity.Manufacturer,
@@ -98,11 +75,15 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                         x.Key.Entity.TheftMark,
                         x.Key.Entity.BarCode,
                         x.Key.Entity.PurchaseDate,
-                        x.Select(w => w.Workstation).ToArray(),
                         x.Key.Entity.Info,
-                        x.Key.Entity.SyncChangedDate,
                         x.Key.Entity.CreatedDate,
-                        x.Key.Entity.ChangedDate)).Single();
+                        x.Key.Entity.ChangedDate,
+                        x.Select(w => w.Workstation).ToArray(),
+                        x.Key.Entity.InventoryType_Id,
+                        x.Key.InventoryTypeName,
+                        x.Key.BuildingId,
+                        x.Key.FloorId,
+                        x.Key.Entity.SyncChangedDate)).Single();
 
             return businessModel;
         }
@@ -323,6 +304,20 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
         {
             var models = this.DbSet.Where(x => x.InventoryType_Id == inventoryTypeId).ToList();
             models.ForEach(x => this.DbSet.Remove(x));
+        }
+
+        private void Map(Inventory businessModel, Domain.Inventory.Inventory entity)
+        {
+            entity.Department_Id = businessModel.DepartmentId;
+            entity.Room_Id = businessModel.RoomId;
+            entity.InventoryName = businessModel.Name;
+            entity.InventoryModel = businessModel.Model;
+            entity.Manufacturer = businessModel.Manufacturer;
+            entity.SerialNumber = businessModel.SerialNumber;
+            entity.TheftMark = businessModel.TheftMark;
+            entity.BarCode = businessModel.BarCode;
+            entity.PurchaseDate = businessModel.PurchaseDate;
+            entity.Info = businessModel.Info;
         }
     }
 }

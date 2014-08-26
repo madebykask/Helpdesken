@@ -91,6 +91,10 @@
 
         private readonly IPrinterValidator printerValidator;
 
+        private readonly IInventoryValidator inventoryValidator;
+
+        private readonly IInventoryRestorer inventoryRestorer;
+
         public InventoryService(
             IInventoryTypeRepository inventoryTypeRepository,
             IComputerRepository computerRepository,
@@ -120,7 +124,9 @@
             IServerSoftwareRepository serverSoftwareRepository,
             IPrinterFieldSettingsRepository printerFieldSettingsRepository,
             IPrinterRestorer printerRestorer,
-            IPrinterValidator printerValidator)
+            IPrinterValidator printerValidator,
+            IInventoryValidator inventoryValidator,
+            IInventoryRestorer inventoryRestorer)
         {
             this.inventoryTypeRepository = inventoryTypeRepository;
             this.computerRepository = computerRepository;
@@ -151,6 +157,8 @@
             this.printerFieldSettingsRepository = printerFieldSettingsRepository;
             this.printerRestorer = printerRestorer;
             this.printerValidator = printerValidator;
+            this.inventoryValidator = inventoryValidator;
+            this.inventoryRestorer = inventoryRestorer;
         }
 
         public List<ComputerUserOverview> GetComputerUsers(int customerId, string searchFor)
@@ -524,6 +532,42 @@
         #endregion
 
         #region DynamicData
+
+        public void AddInventory(InventoryForInsert businessModel, List<InventoryValueForWrite> dynamicBusinessModels)
+        {
+            var settings = this.inventoryFieldSettingsRepository.GetFieldSettingsForProcessing(businessModel.InventoryTypeId);
+            this.inventoryValidator.Validate(businessModel, settings);
+
+            this.inventoryRepository.Add(businessModel);
+            this.inventoryRepository.Commit();
+            this.inventoryTypePropertyValueRepository.Add(dynamicBusinessModels);
+            this.inventoryTypePropertyValueRepository.Commit();
+        }
+
+        public void UpdateInventory(InventoryForUpdate businessModel, List<InventoryValueForWrite> dynamicBusinessModels, int inventoryTypeId)
+        {
+            var existingBusinessModel = this.inventoryRepository.FindById(businessModel.Id);
+            var settings = this.inventoryFieldSettingsRepository.GetFieldSettingsForProcessing(inventoryTypeId);
+            this.inventoryRestorer.Restore(businessModel, existingBusinessModel, settings);
+            this.inventoryValidator.Validate(businessModel, existingBusinessModel, settings);
+
+            this.inventoryRepository.Update(businessModel);
+            this.inventoryRepository.Commit();
+            this.inventoryTypePropertyValueRepository.Update(dynamicBusinessModels);
+            this.inventoryTypePropertyValueRepository.Commit();
+        }
+
+        public void DeleteInventory(int id)
+        {
+            this.computerInventoryRepository.DeleteByInventoryId(id);
+            this.computerInventoryRepository.Commit();
+
+            this.inventoryTypePropertyValueRepository.DeleteByInventoryId(id);
+            this.inventoryTypePropertyValueRepository.Commit();
+
+            this.inventoryRepository.DeleteById(id);
+            this.inventoryRepository.Commit();
+        }
 
         public InventoryOverviewResponse GetInventory(int id)
         {

@@ -70,12 +70,16 @@
     <Compile Include="BusinessLogic\BusinessModelExport\IExportFileNameFormatter.cs" />
     <Compile Include="BusinessLogic\BusinessModelRestorers\Inventory\Concrete\ComputerRestorer.cs" />
     <Compile Include="BusinessLogic\BusinessModelRestorers\Inventory\IComputerRestorer.cs" />
+    <Compile Include="BusinessLogic\BusinessModelRestorers\Inventory\IInventoryRestorer.cs" />
+    <Compile Include="BusinessLogic\BusinessModelRestorers\Inventory\Concrete\InventoryRestorer.cs" />
     <Compile Include="BusinessLogic\BusinessModelRestorers\Inventory\IPrinterRestorer.cs" />
     <Compile Include="BusinessLogic\BusinessModelRestorers\Inventory\IServerRestorer.cs" />
     <Compile Include="BusinessLogic\BusinessModelRestorers\Inventory\Concrete\ServerRestorer.cs" />
     <Compile Include="BusinessLogic\BusinessModelRestorers\Inventory\Concrete\PrinterRestorer.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Inventory\Concrete\ComputerValidator.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Inventory\IComputerValidator.cs" />
+    <Compile Include="BusinessLogic\BusinessModelValidators\Inventory\IInventoryValidator.cs" />
+    <Compile Include="BusinessLogic\BusinessModelValidators\Inventory\Concrete\InventoryValidator.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Inventory\IPrinterValidator.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Inventory\IServerValidator.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Inventory\Concrete\ServerValidator.cs" />

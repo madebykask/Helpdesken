@@ -55,6 +55,10 @@
 
         private readonly IPrinterBuilder printerBuilder;
 
+        private readonly IInventoryModelBuilder inventoryModelBuilder;
+
+        private readonly IInventoryValueBuilder inventoryValueBuilder;
+
         public InventoryController(
             IMasterDataService masterDataService,
             IInventoryService inventoryService,
@@ -69,7 +73,9 @@
             IDynamicsFieldsModelBuilder dynamicsFieldsModelBuilder,
             IComputerBuilder computerBuilder,
             IServerBuilder serverBuilder,
-            IPrinterBuilder printerBuilder)
+            IPrinterBuilder printerBuilder,
+            IInventoryModelBuilder inventoryModelBuilder,
+            IInventoryValueBuilder inventoryValueBuilder)
             : base(masterDataService)
         {
             this.inventoryService = inventoryService;
@@ -85,6 +91,8 @@
             this.computerBuilder = computerBuilder;
             this.serverBuilder = serverBuilder;
             this.printerBuilder = printerBuilder;
+            this.inventoryModelBuilder = inventoryModelBuilder;
+            this.inventoryValueBuilder = inventoryValueBuilder;
         }
 
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")] // todo
@@ -92,9 +100,12 @@
         {
             var activeTab = SessionFacade.FindActiveTab(PageName.InventoryIndex) ?? TabName.Inventories;
 
-            var currentModeFilter = SessionFacade.FindPageFilters<InventoriesModeFilter>(TabName.Inventories) ?? InventoriesModeFilter.GetDefault();
-            var reportTypeFilter = SessionFacade.FindPageFilters<ReportFilter>(TabName.Reports) ?? ReportFilter.GetDefault();
-            var moduleTypeFilter = SessionFacade.FindPageFilters<ComputerModuleModeFilter>(TabName.MasterData) ?? ComputerModuleModeFilter.GetDefault();
+            var currentModeFilter = SessionFacade.FindPageFilters<InventoriesModeFilter>(TabName.Inventories)
+                                    ?? InventoriesModeFilter.GetDefault();
+            var reportTypeFilter = SessionFacade.FindPageFilters<ReportFilter>(TabName.Reports)
+                                   ?? ReportFilter.GetDefault();
+            var moduleTypeFilter = SessionFacade.FindPageFilters<ComputerModuleModeFilter>(TabName.MasterData)
+                                   ?? ComputerModuleModeFilter.GetDefault();
 
             var inventoryTypes = this.inventoryService.GetInventoryTypes(SessionFacade.CurrentCustomer.Id);
 
@@ -141,9 +152,10 @@
             var departments = this.organizationService.GetDepartments(
                 SessionFacade.CurrentCustomer.Id,
                 currentFilter.RegionId);
-            var settings = this.inventorySettingsService.GetWorkstationFieldSettingsOverviewForFilter(
-                SessionFacade.CurrentCustomer.Id,
-                SessionFacade.CurrentLanguageId);
+            var settings =
+                this.inventorySettingsService.GetWorkstationFieldSettingsOverviewForFilter(
+                    SessionFacade.CurrentCustomer.Id,
+                    SessionFacade.CurrentLanguageId);
 
             var viewModel = WorkstationSearchViewModel.BuildViewModel(
                 currentFilter,
@@ -177,9 +189,10 @@
                 ?? PrinterSearchFilter.CreateDefault();
 
             var departments = this.organizationService.GetDepartments(SessionFacade.CurrentCustomer.Id);
-            var settings = this.inventorySettingsService.GetPrinterFieldSettingsOverviewForFilter(
-                SessionFacade.CurrentCustomer.Id,
-                SessionFacade.CurrentLanguageId);
+            var settings =
+                this.inventorySettingsService.GetPrinterFieldSettingsOverviewForFilter(
+                    SessionFacade.CurrentCustomer.Id,
+                    SessionFacade.CurrentLanguageId);
 
             var viewModel = PrinterSearchViewModel.BuildViewModel(currentFilter, departments, settings);
 
@@ -198,7 +211,11 @@
             var departments = this.organizationService.GetDepartments(SessionFacade.CurrentCustomer.Id);
             var settings = this.inventorySettingsService.GetInventoryFieldSettingsOverviewForFilter(inventoryTypeId);
 
-            var viewModel = InventorySearchViewModel.BuildViewModel(currentFilter, departments, settings, inventoryTypeId);
+            var viewModel = InventorySearchViewModel.BuildViewModel(
+                currentFilter,
+                departments,
+                settings,
+                inventoryTypeId);
 
             return this.PartialView("Inventories", viewModel);
         }
@@ -210,9 +227,10 @@
                 this.CreateFilterId(TabName.Inventories, InventoryFilterMode.Workstation.ToString()),
                 filter);
 
-            var settings = this.inventorySettingsService.GetWorkstationFieldSettingsOverview(
-                SessionFacade.CurrentCustomer.Id,
-                SessionFacade.CurrentLanguageId);
+            var settings =
+                this.inventorySettingsService.GetWorkstationFieldSettingsOverview(
+                    SessionFacade.CurrentCustomer.Id,
+                    SessionFacade.CurrentLanguageId);
             var models = this.inventoryService.GetWorkstations(filter.CreateRequest(SessionFacade.CurrentCustomer.Id));
 
             var viewModel = InventoryGridModel.BuildModel(models, settings);
@@ -244,9 +262,10 @@
                 this.CreateFilterId(TabName.Inventories, InventoryFilterMode.Printer.ToString()),
                 filter);
 
-            var settings = this.inventorySettingsService.GetPrinterFieldSettingsOverview(
-                SessionFacade.CurrentCustomer.Id,
-                SessionFacade.CurrentLanguageId);
+            var settings =
+                this.inventorySettingsService.GetPrinterFieldSettingsOverview(
+                    SessionFacade.CurrentCustomer.Id,
+                    SessionFacade.CurrentLanguageId);
             var models = this.inventoryService.GetPrinters(filter.CreateRequest(SessionFacade.CurrentCustomer.Id));
 
             var viewModel = InventoryGridModel.BuildModel(models, settings);
@@ -284,9 +303,7 @@
                     return this.RedirectToAction("EditPrinter", new { id });
 
                 default:
-                    return this.RedirectToAction(
-                        "EditInventory",
-                        new { id, inventoryTypeId = currentMode });
+                    return this.RedirectToAction("EditInventory", new { id, inventoryTypeId = currentMode });
             }
         }
 
@@ -316,20 +333,16 @@
 
             var model = this.inventoryService.GetWorkstation(id);
             var options = this.GetWorkstationEditOptions(SessionFacade.CurrentCustomer.Id);
-            var settings = this.inventorySettingsService.GetWorkstationFieldSettingsForModelEdit(
-                SessionFacade.CurrentCustomer.Id,
-                SessionFacade.CurrentLanguageId);
+            var settings =
+                this.inventorySettingsService.GetWorkstationFieldSettingsForModelEdit(
+                    SessionFacade.CurrentCustomer.Id,
+                    SessionFacade.CurrentLanguageId);
             var softwares = this.computerModulesService.GetComputerSoftware(id);
             var drives = this.computerModulesService.GetComputerLogicalDrive(id);
             var logs = this.inventoryService.GetWorkstationLogOverviews(id);
             var computerEditModel = this.computerViewModelBuilder.BuildViewModel(model, options, settings);
 
-            var viewModel = new ComputerEditViewModel(
-                computerEditModel,
-                softwares,
-                drives,
-                logs,
-                activeTab);
+            var viewModel = new ComputerEditViewModel(computerEditModel, softwares, drives, logs, activeTab);
 
             return this.View("EditWorkstation", viewModel);
         }
@@ -347,9 +360,7 @@
             // todo
             var selected = inventoryTypes.Min(x => x.Value.ToNullableInt32());
             var inventories = selected.HasValue
-                                  ? this.inventoryService.GetNotConnectedInventory(
-                                      selected.Value,
-                                      computerId)
+                                  ? this.inventoryService.GetNotConnectedInventory(selected.Value, computerId)
                                   : new List<ItemOverview>();
 
             var viewModel = AccesoriesViewModel.BuildViewModel(
@@ -377,9 +388,10 @@
         {
             var model = this.inventoryService.GetServer(id);
             var options = this.GetServerEditOptions(SessionFacade.CurrentCustomer.Id);
-            var settings = this.inventorySettingsService.GetServerFieldSettingsForModelEdit(
-                SessionFacade.CurrentCustomer.Id,
-                SessionFacade.CurrentLanguageId);
+            var settings =
+                this.inventorySettingsService.GetServerFieldSettingsForModelEdit(
+                    SessionFacade.CurrentCustomer.Id,
+                    SessionFacade.CurrentLanguageId);
 
             var softwares = this.computerModulesService.GetServerSoftware(id);
             var drives = this.computerModulesService.GetServerLogicalDrive(id);
@@ -387,11 +399,7 @@
 
             var serverEditModel = this.serverViewModelBuilder.BuildViewModel(model, options, settings);
 
-            var viewModel = new ServerEditViewModel(
-                serverEditModel,
-                softwares,
-                drives,
-                logs);
+            var viewModel = new ServerEditViewModel(serverEditModel, softwares, drives, logs);
 
             return this.View("EditServer", viewModel);
         }
@@ -411,9 +419,10 @@
         {
             var model = this.inventoryService.GetPrinter(id);
             var options = this.GetPrinterEditOptions(SessionFacade.CurrentCustomer.Id);
-            var settings = this.inventorySettingsService.GetPrinterFieldSettingsForModelEdit(
-                SessionFacade.CurrentCustomer.Id,
-                SessionFacade.CurrentLanguageId);
+            var settings =
+                this.inventorySettingsService.GetPrinterFieldSettingsForModelEdit(
+                    SessionFacade.CurrentCustomer.Id,
+                    SessionFacade.CurrentLanguageId);
 
             var printerEditModel = this.printerViewModelBuilder.BuildViewModel(model, options, settings);
 
@@ -455,9 +464,20 @@
 
         [HttpPost]
         [BadRequestOnNotValid]
-        public ViewResult EditInventory(InventoryViewModel inventoryViewModel, List<DynamicFieldModel> dynamicFieldModels)
+        public RedirectToRouteResult EditInventory(
+            InventoryViewModel inventoryViewModel,
+            List<DynamicFieldModel> dynamicFieldModels)
         {
-            return this.View("EditInventory");
+            var businessModel = this.inventoryModelBuilder.BuildForUpdate(inventoryViewModel, OperationContext);
+            var dynamicBusinessModels = this.inventoryValueBuilder.BuildForWrite(
+                inventoryViewModel.Id,
+                dynamicFieldModels);
+            this.inventoryService.UpdateInventory(
+                businessModel,
+                dynamicBusinessModels,
+                inventoryViewModel.InventoryTypeId);
+
+            return this.RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -485,18 +505,21 @@
         }
 
         [HttpGet]
-        public ViewResult DeleteInventory(int id)
+        public RedirectToRouteResult DeleteInventory(int id)
         {
-            throw new NotImplementedException();
+            this.inventoryService.DeleteInventory(id);
+
+            return this.RedirectToAction("Index");
         }
 
         [HttpGet]
         public ViewResult NewWorkstation()
         {
             var options = this.GetWorkstationEditOptions(SessionFacade.CurrentCustomer.Id);
-            var settings = this.inventorySettingsService.GetWorkstationFieldSettingsForModelEdit(
-                SessionFacade.CurrentCustomer.Id,
-                SessionFacade.CurrentLanguageId);
+            var settings =
+                this.inventorySettingsService.GetWorkstationFieldSettingsForModelEdit(
+                    SessionFacade.CurrentCustomer.Id,
+                    SessionFacade.CurrentLanguageId);
 
             var viewModel = this.computerViewModelBuilder.BuildViewModel(
                 options,
@@ -520,9 +543,10 @@
         public ViewResult NewServer()
         {
             var options = this.GetServerEditOptions(SessionFacade.CurrentCustomer.Id);
-            var settings = this.inventorySettingsService.GetServerFieldSettingsForModelEdit(
-                SessionFacade.CurrentCustomer.Id,
-                SessionFacade.CurrentLanguageId);
+            var settings =
+                this.inventorySettingsService.GetServerFieldSettingsForModelEdit(
+                    SessionFacade.CurrentCustomer.Id,
+                    SessionFacade.CurrentLanguageId);
 
             var viewModel = this.serverViewModelBuilder.BuildViewModel(
                 options,
@@ -546,9 +570,10 @@
         public ViewResult NewPrinter()
         {
             var options = this.GetPrinterEditOptions(SessionFacade.CurrentCustomer.Id);
-            var settings = this.inventorySettingsService.GetPrinterFieldSettingsForModelEdit(
-                SessionFacade.CurrentCustomer.Id,
-                SessionFacade.CurrentLanguageId);
+            var settings =
+                this.inventorySettingsService.GetPrinterFieldSettingsForModelEdit(
+                    SessionFacade.CurrentCustomer.Id,
+                    SessionFacade.CurrentLanguageId);
 
             var printerEditModel = this.printerViewModelBuilder.BuildViewModel(
                 options,
@@ -592,9 +617,17 @@
 
         [HttpPost]
         [BadRequestOnNotValid]
-        public ViewResult NewInventory(InventoryEditViewModel inventoryEditViewModel)
+        public RedirectToRouteResult NewInventory(
+            InventoryViewModel inventoryViewModel,
+            List<DynamicFieldModel> dynamicFieldModels)
         {
-            throw new NotImplementedException();
+            var businessModel = this.inventoryModelBuilder.BuildForAdd(inventoryViewModel, OperationContext);
+            var dynamicBusinessModels = this.inventoryValueBuilder.BuildForWrite(
+                inventoryViewModel.Id,
+                dynamicFieldModels);
+            this.inventoryService.AddInventory(businessModel, dynamicBusinessModels);
+
+            return this.RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -836,9 +869,7 @@
 
             var departments = this.organizationService.GetDepartments(SessionFacade.CurrentCustomer.Id);
 
-            var viewModel = InstaledProgramsReportSearchViewModel.BuildViewModel(
-                currentFilter,
-                departments);
+            var viewModel = InstaledProgramsReportSearchViewModel.BuildViewModel(currentFilter, departments);
 
             return this.PartialView("InstaledProgramsReport", viewModel);
         }
@@ -870,10 +901,7 @@
 
             var departments = this.organizationService.GetDepartments(SessionFacade.CurrentCustomer.Id);
 
-            var viewModel = CustomTypeReportSearchViewModel.BuildViewModel(
-                currentFilter,
-                departments,
-                inventoryTypeId);
+            var viewModel = CustomTypeReportSearchViewModel.BuildViewModel(currentFilter, departments, inventoryTypeId);
 
             return this.PartialView("CustomTypeReport", viewModel);
         }
@@ -889,9 +917,7 @@
 
             var departments = this.organizationService.GetDepartments(SessionFacade.CurrentCustomer.Id);
 
-            var viewModel = InventoryReportSearchViewModel.BuildViewModel(
-                currentFilter,
-                departments);
+            var viewModel = InventoryReportSearchViewModel.BuildViewModel(currentFilter, departments);
 
             return this.PartialView("InventoryReport", viewModel);
         }
@@ -978,9 +1004,10 @@
         public PartialViewResult SearchComputerShortInfo(int computerId)
         {
             var model = this.inventoryService.GetWorkstationShortInfo(computerId);
-            var settings = this.inventorySettingsService.GetWorkstationFieldSettingsForShortInfo(
-                SessionFacade.CurrentCustomer.Id,
-                SessionFacade.CurrentLanguageId);
+            var settings =
+                this.inventorySettingsService.GetWorkstationFieldSettingsForShortInfo(
+                    SessionFacade.CurrentCustomer.Id,
+                    SessionFacade.CurrentLanguageId);
             var softwares = this.computerModulesService.GetComputerSoftware(computerId);
             var drives = this.computerModulesService.GetComputerLogicalDrive(computerId);
             var logs = this.inventoryService.GetWorkstationLogOverviews(computerId);
@@ -1032,7 +1059,10 @@
                     wrapModels = this.CreateServerReportModelWrappers(reportType, searchFor);
                     break;
                 case ReportDataTypes.All:
-                    var computerSoftware = this.CreateWorkstationReportModelWrappers(reportType, departmentId, searchFor);
+                    var computerSoftware = this.CreateWorkstationReportModelWrappers(
+                        reportType,
+                        departmentId,
+                        searchFor);
                     var serverSoftware = this.CreateServerReportModelWrappers(reportType, searchFor);
                     wrapModels = computerSoftware.Union(serverSoftware).ToList();
                     break;
@@ -1043,7 +1073,10 @@
             return viewModel;
         }
 
-        private List<ReportModelWrapper> CreateWorkstationReportModelWrappers(int reportType, int? departmentId, string searchFor)
+        private List<ReportModelWrapper> CreateWorkstationReportModelWrappers(
+            int reportType,
+            int? departmentId,
+            string searchFor)
         {
             var computerModels = this.GetComputerReportModels(reportType, departmentId, searchFor);
             var wrapModels = ReportModelWrapper.Wrap(computerModels, ReportModelWrapper.ReportOwnerTypes.Workstation);
@@ -1106,11 +1139,10 @@
                             searchFor);
                     break;
                 case ReportTypes.InstaledPrograms:
-                    models =
-                        this.computerModulesService.GetComputersInstaledSoftware(
-                            SessionFacade.CurrentCustomer.Id,
-                            departmentId,
-                            searchFor);
+                    models = this.computerModulesService.GetComputersInstaledSoftware(
+                        SessionFacade.CurrentCustomer.Id,
+                        departmentId,
+                        searchFor);
                     break;
             }
 
@@ -1160,10 +1192,9 @@
                             searchFor);
                     break;
                 case ReportTypes.InstaledPrograms:
-                    models =
-                        this.computerModulesService.GetServersInstaledSoftware(
-                            SessionFacade.CurrentCustomer.Id,
-                            searchFor);
+                    models = this.computerModulesService.GetServersInstaledSoftware(
+                        SessionFacade.CurrentCustomer.Id,
+                        searchFor);
                     break;
             }
 
@@ -1212,14 +1243,7 @@
             var floors = this.placeService.GetFloors(customerId);
             var rooms = this.placeService.GetRooms(customerId);
 
-            return new ServerEditOptions(
-                operatingSystems,
-                processors,
-                rams,
-                netAdapters,
-                buildings,
-                floors,
-                rooms);
+            return new ServerEditOptions(operatingSystems, processors, rams, netAdapters, buildings, floors, rooms);
         }
 
         private PrinterEditOptions GetPrinterEditOptions(int customerId)

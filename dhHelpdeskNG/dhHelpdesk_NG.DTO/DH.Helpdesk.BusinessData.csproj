@@ -160,12 +160,16 @@
     <Compile Include="Models\Inventory\Edit\Computer\ComputerForRead.cs" />
     <Compile Include="Models\Inventory\Edit\Computer\ComputerForInsert.cs" />
     <Compile Include="Models\Inventory\Edit\Computer\ComputerForUpdate.cs" />
+    <Compile Include="Models\Inventory\Edit\Inventory\InventoryForInsert.cs" />
+    <Compile Include="Models\Inventory\Edit\Inventory\InventoryForRead.cs" />
+    <Compile Include="Models\Inventory\Edit\Inventory\InventoryForUpdate.cs" />
     <Compile Include="Models\Inventory\Edit\Printer\PrinterForInsert.cs" />
     <Compile Include="Models\Inventory\Edit\Printer\PrinterForRead.cs" />
     <Compile Include="Models\Inventory\Edit\Printer\PrinterForUpdate.cs" />
     <Compile Include="Models\Inventory\Edit\Server\ServerForInsert.cs" />
     <Compile Include="Models\Inventory\Edit\Server\ServerForRead.cs" />
     <Compile Include="Models\Inventory\Edit\Server\ServerForUpdate.cs" />
+    <Compile Include="Models\Inventory\InventoryValueForWrite.cs" />
     <Compile Include="Models\Inventory\Output\ComputerUserOverview.cs" />
     <Compile Include="Models\Inventory\Edit\Inventory\TypeGroupModel.cs" />
     <Compile Include="Models\Inventory\Edit\Settings\ComputerSettings\ChassisFieldsSettings.cs" />
@@ -202,6 +206,9 @@
     <Compile Include="Models\Inventory\Output\Settings\ProcessingSetttings\ComputerSettings\SoundFieldsSettings.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ProcessingSetttings\ComputerSettings\StateFieldsSettings.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ProcessingSetttings\ComputerSettings\WorkstationFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ProcessingSetttings\InventorySettings\DefaultFieldSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ProcessingSetttings\InventorySettings\InventoryFieldSettingForProcessing.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ProcessingSetttings\InventorySettings\InventoryFieldSettingsProcessing.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ProcessingSetttings\PrinterSettings\GeneralFieldsSettings.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ProcessingSetttings\PrinterSettings\OrganizationFieldsSettings.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ProcessingSetttings\PrinterSettings\OtherFieldsSettings.cs" />

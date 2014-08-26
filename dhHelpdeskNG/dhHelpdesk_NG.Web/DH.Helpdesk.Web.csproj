@@ -367,11 +367,15 @@
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\ComputerFieldsSettingsBuilder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\FieldSettingBuilder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\IComputerBuilder.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Inventory\IInventoryModelBuilder.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Inventory\IInventoryValueBuilder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\INewComputerBuilder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\IInventoryFieldsSettingsBuilder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\InventoryFieldsSettingsBuilder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\IComputerFieldsSettingsBuilder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\IFieldSettingBuilder.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\InventoryModelBuilder.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Inventory\Concrete\InventoryValueBuilder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\IPrinterBuilder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\IPrinterFieldsSettingsBuilder.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Inventory\IServerBuilder.cs" />
@@ -1584,6 +1588,8 @@
     <Content Include="Views\Inventory\EditorTemplates\CustomTypesFields\List.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\CustomTypesFields\Text.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\CustomTypesFields\WideText.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\DynamicFields\Number.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\DynamicFields\Text.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

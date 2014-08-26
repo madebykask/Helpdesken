@@ -7,7 +7,7 @@
     public interface IInventoryViewModelBuilder
     {
         InventoryViewModel BuildViewModel(
-            BusinessData.Models.Inventory.Edit.Inventory.Inventory model,
+            BusinessData.Models.Inventory.Edit.Inventory.InventoryForRead model,
             InventoryEditOptions options,
             InventoryFieldSettingsForModelEdit settings);
 

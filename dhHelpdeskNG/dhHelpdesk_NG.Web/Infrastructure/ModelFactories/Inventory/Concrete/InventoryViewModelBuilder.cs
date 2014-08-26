@@ -21,7 +21,7 @@
         }
 
         public InventoryViewModel BuildViewModel(
-            Inventory model,
+            InventoryForRead model,
             InventoryEditOptions options,
             InventoryFieldSettingsForModelEdit settings)
         {
@@ -68,7 +68,6 @@
                 model.BuildingId,
                 model.FloorId,
                 roomId,
-                model.ChangeByUserId,
                 name,
                 inventoryModel,
                 manufacturer,
@@ -127,7 +126,6 @@
                 null,
                 null,
                 roomId,
-                null,
                 name,
                 inventoryModel,
                 manufacturer,

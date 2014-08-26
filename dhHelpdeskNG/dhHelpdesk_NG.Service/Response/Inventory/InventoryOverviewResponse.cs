@@ -6,13 +6,13 @@
 
     public class InventoryOverviewResponse
     {
-        public InventoryOverviewResponse(BusinessData.Models.Inventory.Edit.Inventory.Inventory model, List<InventoryValue> dynamicData)
+        public InventoryOverviewResponse(BusinessData.Models.Inventory.Edit.Inventory.InventoryForRead model, List<InventoryValue> dynamicData)
         {
             this.Inventory = model;
             this.DynamicData = dynamicData;
         }
 
-        public BusinessData.Models.Inventory.Edit.Inventory.Inventory Inventory { get; private set; }
+        public BusinessData.Models.Inventory.Edit.Inventory.InventoryForRead Inventory { get; private set; }
 
         public List<InventoryValue> DynamicData { get; private set; }
     }

@@ -5,6 +5,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.InventorySettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.InventorySettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.InventoryFieldSettings;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ProcessingSetttings.InventorySettings;
     using DH.Helpdesk.Dal.Dal;
 
     public interface IInventoryFieldSettingsRepository : INewRepository
@@ -24,5 +25,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
         InventoryFieldSettingsOverview GetFieldSettingsOverview(int inventoryTypeId);
 
         InventoryFieldsSettingsOverviewForFilter GetFieldSettingsOverviewForFilter(int inventoryTypeId);
+
+        InventoryFieldSettingsProcessing GetFieldSettingsForProcessing(int inventoryTypeId);
     }
 }

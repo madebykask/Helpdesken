@@ -69,26 +69,44 @@
         </tr>
     }
     @{
-        var groups = Model.TypeGroupModels.OrderBy(x => x.SortOrder);
+@*        var groups = Model.TypeGroupModels.OrderBy(x => x.SortOrder);*@
+@**@
+@*        foreach (var group in groups)*@
+@*        {*@
+@*            int id = group.Id;*@
+@*            var dynamicFieldModels = Model.DynamicFieldModels.Where(x => x.GroupId == id).OrderBy(x => x.Position).ToList();*@
+@**@
+@*            if (!dynamicFieldModels.Any())*@
+@*            {*@
+@*                continue;*@
+@*            }*@
+@**@
+@*            <tr>*@
+@*                <th colspan="2" class="header">@Html.DisplayFor(m => group.Name)</th>*@
+@*            </tr>*@
+@**@
+@*            for (int i = 0; i < dynamicFieldModels.Count; i++)*@
+@*            {*@
+@*                @Html.EditorFor(m => dynamicFieldModels[i], "DynamicFieldModel", new { Id = i })*@
+@*            }*@
+@*        }*@
 
-        foreach (var group in groups)
+        var dynamicFieldModels = Model.DynamicFieldModels.OrderBy(x => x.GroupId).ThenBy(x => x.Position).ToList();
+        int previusGroupId = 0;
+        for (int i = 0; i < dynamicFieldModels.Count; i++)
         {
-            int id = group.Id;
-            var dynamicFieldModels = Model.DynamicFieldModels.Where(x => x.GroupId == id).OrderBy(x => x.Position).ToList();
+            var currentGroupId = dynamicFieldModels[i].GroupId;
 
-            if (!dynamicFieldModels.Any())
+            if (currentGroupId != previusGroupId)
             {
-                continue;
+                var name = Model.TypeGroupModels.Where(x => x.Id == currentGroupId).Select(x => x.Name);
+                <tr>
+                    <th colspan="2" class="header">@Html.DisplayFor(m => name)</th>
+                </tr>
             }
 
-            <tr>
-                <th colspan="2" class="header">@Html.DisplayFor(m => group.Name)</th>
-            </tr>
-
-            for (int i = 0; i < dynamicFieldModels.Count; i++)
-            {
-                @Html.EditorFor(m => dynamicFieldModels[i], "DynamicFieldModel", new { Id = i })
-            }
+            @Html.EditorFor(m => dynamicFieldModels[i], "DynamicFieldModel", new { Id = i })
+            previusGroupId = currentGroupId;
         }
     }
 </table>

@@ -10,13 +10,13 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
 
     public interface IInventoryRepository : INewRepository
     {
-        void Add(Inventory businessModel);
+        void Add(InventoryForInsert businessModel);
 
         void DeleteById(int id);
 
-        void Update(Inventory businessModel);
+        void Update(InventoryForUpdate businessModel);
 
-        Inventory FindById(int id);
+        InventoryForRead FindById(int id);
 
         List<InventoryOverviewWithType> FindConnectedToComputerInventories(int computerId);
 

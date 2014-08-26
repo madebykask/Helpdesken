@@ -84,6 +84,12 @@
 
             this.Bind<IPrinterRestorer>().To<PrinterRestorer>().InSingletonScope();
             this.Bind<IPrinterValidator>().To<PrinterValidator>().InSingletonScope();
+
+            this.Bind<IInventoryModelBuilder>().To<InventoryModelBuilder>();
+            this.Bind<IInventoryValueBuilder>().To<InventoryValueBuilder>();
+
+            this.Bind<IInventoryRestorer>().To<InventoryRestorer>();
+            this.Bind<IInventoryValidator>().To<InventoryValidator>();
         }
     }
 }

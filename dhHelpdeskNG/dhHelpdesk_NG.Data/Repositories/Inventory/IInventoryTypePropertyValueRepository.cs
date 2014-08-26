@@ -7,6 +7,14 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
 
     public interface IInventoryTypePropertyValueRepository : INewRepository
     {
+        void Add(InventoryValueForWrite businessModel);
+
+        void Add(List<InventoryValueForWrite> businessModels);
+
+        void Update(InventoryValueForWrite businessModel);
+
+        void Update(List<InventoryValueForWrite> businessModels);
+
         List<InventoryValue> GetData(int id);
 
         List<InventoryValue> GetData(List<int> ids);
@@ -14,5 +22,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
         void DeleteByInventoryTypePropertyId(int inventoryTypePropertyId);
 
         void DeleteByInventoryTypeId(int inventoryTypeId);
+
+        void DeleteByInventoryId(int inventoryId);
     }
 }

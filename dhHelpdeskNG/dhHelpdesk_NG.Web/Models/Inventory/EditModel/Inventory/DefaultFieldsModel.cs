@@ -15,7 +15,6 @@
             int? buildingId,
             int? floorId,
             ConfigurableFieldModel<int?> roomId,
-            int? changeByUserId,
             ConfigurableFieldModel<string> name,
             ConfigurableFieldModel<string> model,
             ConfigurableFieldModel<string> manufacturer,
@@ -30,7 +29,6 @@
             this.BuildingId = buildingId;
             this.FloorId = floorId;
             this.RoomId = roomId;
-            this.ChangeByUserId = changeByUserId;
             this.Name = name;
             this.Model = model;
             this.Manufacturer = manufacturer;
@@ -51,9 +49,6 @@
         public int? FloorId { get; set; }
 
         public ConfigurableFieldModel<int?> RoomId { get; set; }
-
-        [IsId]
-        public int? ChangeByUserId { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<string> Name { get; set; }
