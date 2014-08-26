@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<predefined>
-  <name>CostCentre</name>
-  <dependent>
-    <selected>Accounting SO</selected>
-    <show>6231, 6230, 6610</show>
-  </dependent>
-</predefined>
