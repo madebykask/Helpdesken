@@ -6,8 +6,8 @@
     {
         public static string ActionAbsolute(
                                 this UrlHelper url,
-                                string actionName, 
-                                string controllerName, 
+                                string actionName,
+                                string controllerName,
                                 object routeValues = null)
         {
             string scheme = url.RequestContext.HttpContext.Request.Url.Scheme;

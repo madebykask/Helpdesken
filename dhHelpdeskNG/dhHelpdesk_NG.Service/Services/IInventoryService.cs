@@ -95,7 +95,9 @@
 
         #region DynamicType
 
-        void AddInventory(InventoryForInsert businessModel, List<InventoryValueForWrite> dynamicBusinessModels);
+        void AddInventory(InventoryForInsert businessModel);
+
+        void AddDynamicFieldsValuesInventory(List<InventoryValueForWrite> dynamicBusinessModels);
 
         void UpdateInventory(InventoryForUpdate businessModel, List<InventoryValueForWrite> dynamicBusinessModels, int inventoryTypeId);
 

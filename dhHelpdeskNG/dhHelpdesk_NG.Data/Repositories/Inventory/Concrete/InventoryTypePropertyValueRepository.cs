@@ -39,12 +39,19 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
         public void Update(InventoryValueForWrite businessModel)
         {
             var entity =
-                this.DbSet.Single(
+                this.DbSet.SingleOrDefault(
                     x =>
                     x.InventoryTypeProperty_Id == businessModel.InventoryTypePropertyId
                     && x.Inventory_Id == businessModel.InventoryId);
 
-            entity.Value = businessModel.Value;
+            if (entity == null)
+            {
+                this.Add(businessModel);
+            }
+            else
+            {
+                entity.Value = businessModel.Value;
+            }
         }
 
         public void Update(List<InventoryValueForWrite> businessModels)

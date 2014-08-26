@@ -612,7 +612,7 @@
 
             var viewModel = new InventoryEditViewModel(inventoryViewModel, dynamicFieldsModel, typeGroupModels);
 
-            return this.View("EditInventory", viewModel);
+            return this.View("NewInventory", viewModel);
         }
 
         [HttpPost]
@@ -622,10 +622,11 @@
             List<DynamicFieldModel> dynamicFieldModels)
         {
             var businessModel = this.inventoryModelBuilder.BuildForAdd(inventoryViewModel, OperationContext);
+            this.inventoryService.AddInventory(businessModel);
             var dynamicBusinessModels = this.inventoryValueBuilder.BuildForWrite(
-                inventoryViewModel.Id,
+                businessModel.Id,
                 dynamicFieldModels);
-            this.inventoryService.AddInventory(businessModel, dynamicBusinessModels);
+            this.inventoryService.AddDynamicFieldsValuesInventory(dynamicBusinessModels);
 
             return this.RedirectToAction("Index");
         }

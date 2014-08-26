@@ -27,6 +27,7 @@
             var roomId = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.RoomId);
 
             var businessModel = new InventoryForUpdate(
+                model.Id,
                 departmentId,
                 roomId,
                 name,

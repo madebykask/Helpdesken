@@ -40,7 +40,7 @@
 
             this.Property(x => x.CreatedDate).IsRequired();
             this.Property(x => x.ChangedDate).IsRequired();
-            this.Property(x => x.SyncChangedDate).IsRequired();
+            this.Property(x => x.SyncChangedDate).IsOptional();
 
             this.ToTable("tblInventory");
         }

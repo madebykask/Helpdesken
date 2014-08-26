@@ -533,13 +533,17 @@
 
         #region DynamicData
 
-        public void AddInventory(InventoryForInsert businessModel, List<InventoryValueForWrite> dynamicBusinessModels)
+        public void AddInventory(InventoryForInsert businessModel)
         {
             var settings = this.inventoryFieldSettingsRepository.GetFieldSettingsForProcessing(businessModel.InventoryTypeId);
             this.inventoryValidator.Validate(businessModel, settings);
 
             this.inventoryRepository.Add(businessModel);
             this.inventoryRepository.Commit();
+        }
+
+        public void AddDynamicFieldsValuesInventory(List<InventoryValueForWrite> dynamicBusinessModels)
+        {
             this.inventoryTypePropertyValueRepository.Add(dynamicBusinessModels);
             this.inventoryTypePropertyValueRepository.Commit();
         }

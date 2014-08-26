@@ -1,7 +1,5 @@
-﻿
-@using System.Threading
+﻿@using System.Threading
 @model DateTime?
-
 @{
     var controlId = ViewData["id"];
     if (controlId == null)
@@ -34,10 +32,18 @@
     {
         formattedDate = Model.Value.ToString(dateFormat);
     }
+
+    var controlName = string.Empty;
+    var name = ViewData["Name"] as string;
+    if (!string.IsNullOrWhiteSpace(name))
+    {
+        controlName = name;
+        htmlAttributes.Add("Name", controlName);
+    }
 }
 
 <script type="text/javascript">
-    $(function() {
+    $(function () {
         $('#@controlId').datepicker({
             format: '@Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern.ToLower()',
             autoclose: true
@@ -47,7 +53,16 @@
 
 <input type="text" style="display: none;" />
 <div id="@controlId" class="input-append date dateie">
-    @Html.TextBox(string.Empty, formattedDate, htmlAttributes)
+
+    @if (!string.IsNullOrWhiteSpace(controlName))
+    {
+        // todo
+        @Html.TextBoxFor(m => formattedDate, htmlAttributes)
+    }
+    else
+    {
+        @Html.TextBox(controlName, formattedDate, htmlAttributes)
+    }
     <span class="add-on">
         <i class="icon-calendar"></i>
     </span>

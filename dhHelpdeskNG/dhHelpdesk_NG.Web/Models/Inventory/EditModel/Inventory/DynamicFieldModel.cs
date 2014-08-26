@@ -19,7 +19,7 @@
             int position,
             int maxSize,
             FieldTypes fieldTypes,
-            object value)
+            string value)
         {
             this.InventoryTypePropertyId = inventoryTypePropertyId;
             this.GroupId = groupId;
@@ -53,6 +53,6 @@
         public FieldTypes FieldTypes { get; set; }
 
         [LocalizedMaxSizeFromAttribute("IsUseMaxSize", "MaxSize")]
-        public object Value { get; set; }
+        public string Value { get; set; }
     }
 }

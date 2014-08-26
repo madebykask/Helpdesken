@@ -7,6 +7,7 @@
     public class InventoryForUpdate : Inventory
     {
         public InventoryForUpdate(
+            int id,
             int? departmentId,
             int? roomId,
             string name,
@@ -22,6 +23,7 @@
             : base(departmentId, roomId, name, model, manufacturer, serialNumber, theftMark, barCode, purchaseDate, info
                 )
         {
+            this.Id = id;
             this.ChangeDate = changeDate;
             this.ChangeByUserId = changeByUserId;
         }

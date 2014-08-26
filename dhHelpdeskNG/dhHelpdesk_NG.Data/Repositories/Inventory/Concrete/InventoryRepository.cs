@@ -31,6 +31,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             entity.ChangedByUser_Id = businessModel.ChangeByUserId;
 
             entity.ChangedDate = businessModel.CreatedDate; // todo
+            entity.SyncChangedDate = null; // todo
 
             this.DbSet.Add(entity);
             this.InitializeAfterCommit(businessModel, entity);
@@ -310,14 +311,14 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
         {
             entity.Department_Id = businessModel.DepartmentId;
             entity.Room_Id = businessModel.RoomId;
-            entity.InventoryName = businessModel.Name;
-            entity.InventoryModel = businessModel.Model;
-            entity.Manufacturer = businessModel.Manufacturer;
-            entity.SerialNumber = businessModel.SerialNumber;
-            entity.TheftMark = businessModel.TheftMark;
-            entity.BarCode = businessModel.BarCode;
+            entity.InventoryName = businessModel.Name ?? string.Empty;
+            entity.InventoryModel = businessModel.Model ?? string.Empty;
+            entity.Manufacturer = businessModel.Manufacturer ?? string.Empty;
+            entity.SerialNumber = businessModel.SerialNumber ?? string.Empty;
+            entity.TheftMark = businessModel.TheftMark ?? string.Empty;
+            entity.BarCode = businessModel.BarCode ?? string.Empty;
             entity.PurchaseDate = businessModel.PurchaseDate;
-            entity.Info = businessModel.Info;
+            entity.Info = businessModel.Info ?? string.Empty;
         }
     }
 }
