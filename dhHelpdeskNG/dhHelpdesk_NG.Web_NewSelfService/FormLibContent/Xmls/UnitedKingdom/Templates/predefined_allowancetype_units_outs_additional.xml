@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <predefined>
-  <name>Allowancetypes</name>
+  <name>AllowancetypesUnits</name>
   <dependent>
     <selected>Advanced</selected>
     <show>0.35</show>
@@ -26,12 +26,8 @@
     <show></show>
   </dependent>
   <dependent>
-    <selected>First Aid Allowance - Hourly</selected>
-    <show></show>
-  </dependent>
-  <dependent>
-    <selected>First Aid Allowance - Salaried</selected>
-    <show></show>
+    <selected>First Aid Allowance</selected>
+    <show>0.17</show>
   </dependent>
   <dependent>
     <selected>Fork Lift Truck Allowance</selected>
@@ -62,23 +58,15 @@
     <show>1,48</show>
   </dependent>
   <dependent>
-    <selected>Kitchen Skills - Hourly</selected>
+    <selected>Kitchen Skills</selected>
     <show>1.48</show>
-  </dependent>
-  <dependent>
-    <selected>Kitchen Skills - Salaried</selected>
-    <show></show>
   </dependent>
   <dependent>
     <selected>Loaders</selected>
     <show></show>
   </dependent>
   <dependent>
-    <selected>Location Allowance - Hourly</selected>
-    <show></show>
-  </dependent>
-  <dependent>
-    <selected>Location Allowance - Salaried</selected>
+    <selected>Location Allowance</selected>
     <show></show>
   </dependent>
   <dependent>
@@ -122,12 +110,8 @@
     <show></show>
   </dependent>
   <dependent>
-    <selected>Responsibility Allowance - Hourly</selected>
-    <show></show>
-  </dependent>
-  <dependent>
-    <selected>Responsibility Allowance - Salaried</selected>
-    <show></show>
+    <selected>Responsibility Allowance</selected>
+    <show>1.40</show>
   </dependent>
   <dependent>
     <selected>Salary Day Ann Allow</selected>

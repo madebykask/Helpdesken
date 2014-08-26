@@ -1,0 +1,202 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane active" id="servicerequestdetails">
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Details")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Translate("Initiator")</td>
+                    <td>
+                        <input type="text" value="@Model.Contract.Initiator" readonly="readonly"/></td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NewToIKEA")</td>
+                    <td>@Model.Element("NewToIKEA")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ContractStartDate")</td>
+                    <td>@Model.Element("ContractStartDate")
+
+                        <div id="notice_HiringDate" style="display:none;" class="notice">
+                            @Model.Translate("The date you've entered is in the past. Are you sure you want to backdate Hiring date?")
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("InductionDate")</td>
+                    <td>@Model.Element("InductionDate")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("InductionStartTime")</td>
+                    <td>@Model.Element("InductionStartTime")</td>
+                </tr>
+                                <tr>
+                    <td class="tdstrong">@Model.Label("InductionEndTime")</td>
+                    <td>@Model.Element("InductionEndTime")</td>
+                </tr>
+                                <tr>
+                    <td class="tdstrong">@Model.Label("InductionStartTime2")</td>
+                    <td>@Model.Element("InductionStartTime2")</td>
+                </tr>
+                                <tr>
+                    <td class="tdstrong">@Model.Label("InductionEndTime2")</td>
+                    <td>@Model.Element("InductionEndTime2")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("LengthOfInductionInDays")</td>
+                    <td>@Model.Element("LengthOfInductionInDays")</td>
+                </tr>
+
+                <tr>
+                    <td class="tdstrong">@Model.Label("PreviousContractStartDate")</td>
+                    <td>@Model.Element("PreviousContractStartDate")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ServiceRequestPriority")</td>
+                    <td>@Model.Element("ServiceRequestPriority")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Translate("SLA")</td>
+                    <td>
+                        @if (Model.Contract.CaseNumber != null)
+                        {
+                            @Model.Contract.PriorityName;
+                        }
+                        else if (Model.Form != null){ 
+                            @Model.Form.PriorityName;
+                        }
+                    </td>
+                </tr>  
+                <tr>
+                    <td class="tdstrong">@Model.Label("Co-WorkerID")</td>
+                    <td>@Model.Element("Co-WorkerID" , false)</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("GlobalHRID")</td>
+                    <td>@Model.Element("GlobalHRID")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Title")</td>
+                    <td>@Model.Element("Title")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FirstName")</td>
+                    <td>@Model.Element("FirstName" , false)</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("LastName")</td>
+                    <td>@Model.Element("LastName" , false)</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DateOfBirth")</td>
+                    <td>@Model.Element("DateOfBirth")</td>
+                </tr>
+                <tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="span6">
+        
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Permanent Address")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentAddressLine1")</td>
+                    <td>@Model.Element("PermanentAddressLine1")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentAddressLine2")</td>
+                    <td>@Model.Element("PermanentAddressLine2")</td>
+                </tr>
+                 <tr>
+                    <td class="tdstrong">@Model.Label("PermanentAddressLine3")</td>
+                    <td>@Model.Element("PermanentAddressLine3")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentPostalCode")</td>
+                    <td>@Model.Element("PermanentPostalCode")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentCity")</td>
+                    <td>@Model.Element("PermanentCity")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentCountry")</td>
+                    <td>@Model.Element("PermanentCountry")</td>
+                    
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <input type="hidden" id="CustomerId" value="@Model.CustomerId" />
+    <input type="hidden" id="formGuid" value="@Model.FormGuid" />
+</div>
+<script>
+
+
+
+
+    var dateHiringDate = $('#date_ContractStartDate');
+    if (dateHiringDate.length > 0) {
+
+        dateHiringDate.not(".disabled").datepicker()
+            .on('changeDate', function (e) {
+                if (document.getElementById('InductionDate')) {
+                    $('#InductionDate').val($('#ContractStartDate').val());
+                }
+            });
+    }
+
+
+
+
+    document.getElementById('NewToIKEA').onchange = selectIndexChangeNewToIKEA;
+
+    function selectIndexChangeNewToIKEA() {
+        if (this.options[this.selectedIndex].value == 'New Hire') {
+            document.getElementById('GlobalHRID').disabled = true;
+        }
+        else {
+            document.getElementById('GlobalHRID').disabled = false;
+        }
+
+
+
+    }
+    if (document.getElementById('NewToIKEA').value == 'New Hire') {
+        document.getElementById('GlobalHRID').disabled = true;
+    }
+
+    var noticeHiringDate = $('#notice_HiringDate');
+    var noticeHiringDateWrong = $('#notice_HiringDateWrong');
+
+    $('#ContractStartDate').change(function () {
+
+        $('#InductionDate').val($('#ContractStartDate').val());
+
+        var startDate = $('#ContractStartDate').val();
+
+        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+        var dstartDate = APIGlobal.DateTime.parseDate(startDate, format);
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+        noticeHiringDate.hide();
+        noticeHiringDateWrong.hide();
+
+        if (dstartDate.valueOf() < now.valueOf())
+            noticeHiringDate.show();
+    });
+
+</script>

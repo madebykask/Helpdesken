@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <predefined>
-  <name>CostCentre</name>
+  <name>DepartmentTecApprover</name>
   <dependent>
     <selected>Activities Dublin Store</selected>
     <show></show>

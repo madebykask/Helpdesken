@@ -59,10 +59,93 @@
         if (document.getElementById('CompleteTerminationType'))
         {
             document.getElementById('CompleteTerminationType').value = document.getElementById('BasicTerminationType').value;
+
+
+            path = '';
+            var path = window.location.protocol + '//';
+            path = path + window.location.host + '/';
+
+
+            //path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_linemanager_jobtitle_outs.xml'
+            path = site.baseUrl + '/FormLibContent/Xmls/UnitedKingdom/Templates/predefined_TerminationReason.xml'
+
+            $.ajax({
+                type: "GET",
+                url: path,
+                dataType: "xml",
+                success: setTerminationReason,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
+                    alert(textStatus);
+                    alert(errorThrown);
+                }
+
+            });
+
+
+
         }
     }
 
+    function setTerminationReason(xml) {
+
+
+        var show = ''
+
+        var dep = '';
+        if (document.getElementById('CompleteTerminationType')) {
+            dep = document.getElementById('CompleteTerminationType').value;
+        }
+        var temp = '';
+
+        $(xml).find('dependent').each(function () {
+
+
+            var $sel = $(this);
+
+            show = '';
+
+
+            var department = $sel.find('selected').text();
+
+            show = $sel.find('show').text();
+
+            if (department.toString().trim() == dep.toString().trim()) {
+
+                if (show != '') {
+
+                    var optionsarray = show.split(',');
+                    var seloption = "";
+
+                    $('#TerminationReason')
+                        .find('option')
+                        .remove();
+
+
+
+                    seloption = '<option value="' + temp + '">' + temp + '</option>';
+
+                    $.each(optionsarray, function (i) {
+                        seloption += '<option value="' + optionsarray[i] + '">' + optionsarray[i] + '</option>';
+                    });
+                    $('#TerminationReason').append(seloption);
+
+
+
+
+                    return;
+                }
+
+
+            }
+        });
+
+    }
+
+
+
     document.getElementById('BasicTerminationType').onchange = selectIndexChangeTerminationType;
+
 
     var noticeHiringDate = $('#notice_HiringDate');
     var noticeHiringDateWrong = $('#notice_HiringDateWrong');

@@ -63,9 +63,11 @@
                     <td class="tdstrong">@Model.Label("ServiceRequestPriority")</td>
                     <td>@Model.Element("ServiceRequestPriority")</td>
                 </tr>
+                @if (!FormLibUtils.IsSelfService()){
                 <tr>
                     <td class="tdstrong">@Model.Translate("SLA")</td>
                     <td>
+                        
                         @if (Model.Contract.CaseNumber != null)
                         {
                             @Model.Contract.PriorityName;
@@ -73,8 +75,10 @@
                         else if (Model.Form != null){ 
                             @Model.Form.PriorityName;
                         }
+                        
                     </td>
                 </tr>
+                }
                 <tr>
                     <td class="tdstrong">@Model.Label("Co-WorkerID")</td>
                     <td>@Model.Element("Co-WorkerID")</td>
@@ -144,6 +148,8 @@
 </div>
 <script>
 
+    setPreviousContractStartDate();
+
     var dateHiringDate = $('#date_ContractStartDate');
     if (dateHiringDate.length > 0) {
 
@@ -158,12 +164,40 @@
 
     document.getElementById('NewToIKEA').onchange = selectIndexChangeNewToIKEA;
 
+    function setPreviousContractStartDate() {
+        if (document.getElementById('NewToIKEA').options[document.getElementById('NewToIKEA').selectedIndex].value != 'International Transfer') {
+            $('#date_PreviousContractStartDate').datepicker("destroy");
+            $('#date_PreviousContractStartDate').addClass("disabled");
+            $('#PreviousContractStartDate').prop('disabled', true);
+            $('#PreviousContractStartDate').val("");
+        }
+        else {
+            $('#date_PreviousContractStartDate').datepicker();
+            $('#PreviousContractStartDate').prop('disabled', false);
+            $("#PreviousContractStartDate").removeClass("disabled");
+        }
+    }
+
     function selectIndexChangeNewToIKEA() {
         if (this.options[this.selectedIndex].value == 'New Hire') {
             document.getElementById('GlobalHRID').disabled = true;
+            document.getElementById('Co-WorkerID').disabled = true;
         }
         else {
             document.getElementById('GlobalHRID').disabled = false;
+            document.getElementById('Co-WorkerID').disabled = false;
+        }
+
+        if (this.options[this.selectedIndex].value != 'International Transfer') {
+            $('#date_PreviousContractStartDate').datepicker("destroy");
+            $('#date_PreviousContractStartDate').addClass("disabled");
+            $('#PreviousContractStartDate').prop('disabled', true);
+            $('#PreviousContractStartDate').val("");
+        }
+        else {
+            $('#date_PreviousContractStartDate').datepicker();
+            $('#PreviousContractStartDate').prop('disabled', false);
+            $("#PreviousContractStartDate").removeClass("disabled");
         }
 
     }
@@ -175,6 +209,9 @@
     var noticeHiringDateWrong = $('#notice_HiringDateWrong');
 
     $('#ContractStartDate').change(function () {
+
+        $('#InductionDate').val($('#ContractStartDate').val());
+
         var startDate = $('#ContractStartDate').val();
         
         var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');

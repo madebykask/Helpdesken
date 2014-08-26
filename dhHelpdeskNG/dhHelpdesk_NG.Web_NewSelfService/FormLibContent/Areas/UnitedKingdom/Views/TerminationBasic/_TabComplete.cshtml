@@ -80,7 +80,7 @@
 
 
 
-                  @for (int i = 2; i <= 4; i++)
+                  @for (int i = 2; i <= 5; i++)
                   {
                       <tr class="terminationpayments@(i.ToString())" id="terminationpayments@(i.ToString())">
                           <td class="tdstrong" colspan="2">
@@ -197,7 +197,7 @@
                 <tr id="addDeductionTrr">
                     <td colspan="2">
                         @Model.Element("Deductions")
-                        <a id="addDeduction" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another termination payment")</a></td>
+                        <a id="addDeduction" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another deduction from Termination Payment")</a></td>
                 </tr>
 
             <tr>
@@ -243,11 +243,11 @@
                     @Model.Element("PositionRemovedOMStructure")</td>
             </tr>
 
-                                            <tr>
+@*                                            <tr>
                 <td class="tdstrong">@Model.Label("PensionMember")</td>
                 <td>
                     @Model.Element("PensionMember")</td>
-            </tr>
+            </tr>*@
 
             </tbody>
         </table>

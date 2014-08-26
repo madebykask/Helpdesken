@@ -1937,6 +1937,8 @@
           <option value="Activity Leader">Activity Leader</option>
           <option value="Administration &amp; Routines Specialist">Administration &amp; Routines Specialist</option>
           <option value="Administrator">Administrator</option>
+          <option value="Administrator">Administrator</option>
+          <option value="Administrator">Administrator</option>
           <option value="Apprentice">Apprentice</option>
           <option value="Back-Office Co-worker">Back-Office Co-worker</option>
           <option value="Backpacker">Backpacker</option>
@@ -1945,6 +1947,9 @@
           <option value="Business Creator">Business Creator</option>
           <option value="Business Information Analyst">Business Information Analyst</option>
           <option value="Business Navigation Manager">Business Navigation Manager</option>
+          <option value="Business Navigator">Business Navigator</option>
+          <option value="Business Navigator">Business Navigator</option>
+          <option value="Business Navigator">Business Navigator</option>
           <option value="Business Navigator">Business Navigator</option>
           <option value="Call Center Representative">Call Center Representative</option>
           <option value="Call Center Representative I">Call Center Representative I</option>
@@ -1958,6 +1963,7 @@
           <option value="Communication &amp; Interior Design Manager">Communication &amp; Interior Design Manager</option>
           <option value="Communication Responsible">Communication Responsible</option>
           <option value="Communications Specialist - Senior">Communications Specialist - Senior</option>
+          <option value="Competence Development Specialist">Competence Development Specialist</option>
           <option value="Competence Development Specialist">Competence Development Specialist</option>
           <option value="Construction Project Manager">Construction Project Manager</option>
           <option value="Contact Center Manager">Contact Center Manager</option>
@@ -1995,6 +2001,7 @@
           <option value="eCommerce Shopkeeper">eCommerce Shopkeeper</option>
           <option value="External Communication Co-worker">External Communication Co-worker</option>
           <option value="Finance &amp; Administration Manager">Finance &amp; Administration Manager</option>
+          <option value="Finance &amp; Administration Manager">Finance &amp; Administration Manager</option>
           <option value="Food Safety Specialist">Food Safety Specialist</option>
           <option value="Frontliner">Frontliner</option>
           <option value="Furniture Builder">Furniture Builder</option>
@@ -2005,6 +2012,7 @@
           <option value="Graphic Communication Co-worker">Graphic Communication Co-worker</option>
           <option value="Graphic Communication Leader">Graphic Communication Leader</option>
           <option value="Graphic Communication Leader Expansion">Graphic Communication Leader Expansion</option>
+          <option value="HR Generalist">HR Generalist</option>
           <option value="HR Generalist">HR Generalist</option>
           <option value="HR Manager">HR Manager</option>
           <option value="HR Manager">HR Manager</option>
@@ -2028,6 +2036,7 @@
           <option value="Interior Design Leader Expansion">Interior Design Leader Expansion</option>
           <option value="Interior Design Manager">Interior Design Manager</option>
           <option value="Internal Information Coordinator">Internal Information Coordinator</option>
+          <option value="Internal Information Coordinator">Internal Information Coordinator</option>
           <option value="Internet Coordinator">Internet Coordinator</option>
           <option value="IT Manager">IT Manager</option>
           <option value="IT Support">IT Support</option>
@@ -2041,6 +2050,7 @@
           <option value="Logistics Team Leader">Logistics Team Leader</option>
           <option value="Maintenance Co-worker">Maintenance Co-worker</option>
           <option value="Maintenance Manager">Maintenance Manager</option>
+          <option value="Maintenance Manager">Maintenance Manager</option>
           <option value="Market Intelligence Manager">Market Intelligence Manager</option>
           <option value="Marketing Relationship Manager">Marketing Relationship Manager</option>
           <option value="Marketing Specialist">Marketing Specialist</option>
@@ -2052,6 +2062,8 @@
           <option value="Product Req &amp; Compliance Specialist">Product Req &amp; Compliance Specialist</option>
           <option value="Project Co-worker">Project Co-worker</option>
           <option value="Project Manager">Project Manager</option>
+          <option value="Project Manager">Project Manager</option>
+          <option value="Project Manager">Project Manager</option>
           <option value="Property Manager">Property Manager</option>
           <option value="Purchaser">Purchaser</option>
           <option value="Q-Store Quality Manager">Q-Store Quality Manager</option>
@@ -2059,6 +2071,7 @@
           <option value="Quality Co-worker">Quality Co-worker</option>
           <option value="Quality Specialist">Quality Specialist</option>
           <option value="Receive Payment Leader">Receive Payment Leader</option>
+          <option value="Receptionist">Receptionist</option>
           <option value="Receptionist">Receptionist</option>
           <option value="Recovery Co-worker">Recovery Co-worker</option>
           <option value="Recovery Team Leader">Recovery Team Leader</option>
@@ -2068,9 +2081,12 @@
           <option value="Retail Logistics Manager">Retail Logistics Manager</option>
           <option value="Retail Preparation Manager">Retail Preparation Manager</option>
           <option value="Retail Project Mnager">Retail Project Mnager</option>
+          <option value="Retail Project Mnager">Retail Project Mnager</option>
+          <option value="Retail Project Mnager">Retail Project Mnager</option>
           <option value="Retail Support Integration Manager">Retail Support Integration Manager</option>
           <option value="Retail Sustainability Manager">Retail Sustainability Manager</option>
           <option value="Risk Specialist">Risk Specialist</option>
+          <option value="Safety &amp; Security Co-worker">Safety &amp; Security Co-worker</option>
           <option value="Safety &amp; Security Co-worker">Safety &amp; Security Co-worker</option>
           <option value="Sales &amp; Supply Support Co-worker">Sales &amp; Supply Support Co-worker</option>
           <option value="Sales &amp; Supply Support Manager">Sales &amp; Supply Support Manager</option>
@@ -2079,6 +2095,7 @@
           <option value="Sales Co-worker II">Sales Co-worker II</option>
           <option value="Sales Leader">Sales Leader</option>
           <option value="Sales Leader II">Sales Leader II</option>
+          <option value="Sales Manager">Sales Manager</option>
           <option value="Sales Manager">Sales Manager</option>
           <option value="Sales Navigator">Sales Navigator</option>
           <option value="Sales Planner">Sales Planner</option>
@@ -2089,6 +2106,7 @@
           <option value="Shopping Experience Manager">Shopping Experience Manager</option>
           <option value="Site Facility Manager">Site Facility Manager</option>
           <option value="Software Specialist">Software Specialist</option>
+          <option value="Staff Scheduler">Staff Scheduler</option>
           <option value="Staff Scheduler">Staff Scheduler</option>
           <option value="Store Manager">Store Manager</option>
           <option value="Supply Support Specialist">Supply Support Specialist</option>
@@ -2102,11 +2120,11 @@
           <option value="Temporary Staff">Temporary Staff</option>
           <option value="Translator">Translator</option>
           <option value="User Support I">User Support I</option>
-          <option value="Web Editor">Web Editor</option>
           <option value="Visual Merchandise Leader">Visual Merchandise Leader</option>
           <option value="Visual Merchandise Leader Expansion">Visual Merchandise Leader Expansion</option>
           <option value="Visual Merchandise/Activity Co-worker">Visual Merchandise/Activity Co-worker</option>
           <option value="Visual Merchandise/Activity Manager">Visual Merchandise/Activity Manager</option>
+          <option value="Web Editor">Web Editor</option>
 
         </options>
       </element>
@@ -2127,9 +2145,11 @@
           <option value="Business Navigation Manager">Business Navigation Manager</option>
           <option value="Business Navigation Manager NL">Business Navigation Manager NL</option>
           <option value="Business Navigator">Business Navigator</option>
+          <option value="Business Navigator">Business Navigator</option>
           <option value="Carpenter Co-worker">Carpenter Co-worker</option>
           <option value="Com&amp;In Learning &amp; Development Leader">Com&amp;In Learning &amp; Development Leader</option>
           <option value="Comm Coworker External Communication">Comm Coworker External Communication</option>
+          <option value="Comm Coworker Internal Communication">Comm Coworker Internal Communication</option>
           <option value="Commercial Activity Leader">Commercial Activity Leader</option>
           <option value="Communication &amp; Interior Design Manager">Communication &amp; Interior Design Manager</option>
           <option value="Communication Coworker Internet">Communication Coworker Internet</option>
@@ -2155,6 +2175,9 @@
           <option value="Country Web &amp; Digital Manager">Country Web &amp; Digital Manager</option>
           <option value="Customer Delivery Specialist">Customer Delivery Specialist</option>
           <option value="Customer Relations Co-worker">Customer Relations Co-worker</option>
+          <option value="Customer Relations Co-worker">Customer Relations Co-worker</option>
+          <option value="Customer Relations Co-worker">Customer Relations Co-worker</option>
+          <option value="Customer Relations Co-worker">Customer Relations Co-worker</option>
           <option value="Customer Relations Manager">Customer Relations Manager</option>
           <option value="Data Resource Analist">Data Resource Analist</option>
           <option value="Data Resource Specialist">Data Resource Specialist</option>
@@ -2164,9 +2187,11 @@
           <option value="Deputy Logistics Manager">Deputy Logistics Manager</option>
           <option value="Deputy Marketing Manager">Deputy Marketing Manager</option>
           <option value="Deputy Sales Manager">Deputy Sales Manager</option>
+          <option value="Deputy Store Manager">Deputy Store Manager</option>
           <option value="Deputy Teammanager Sales">Deputy Teammanager Sales</option>
           <option value="Easy Buying Specialist">Easy Buying Specialist</option>
           <option value="E-commerce Merchandiser">E-commerce Merchandiser</option>
+          <option value="Facility Manager">Facility Manager</option>
           <option value="Facility Manager">Facility Manager</option>
           <option value="Finance Manager">Finance Manager</option>
           <option value="Food Administrator">Food Administrator</option>
@@ -2175,6 +2200,7 @@
           <option value="Furniture Builder">Furniture Builder</option>
           <option value="General Accounting Coworker">General Accounting Coworker</option>
           <option value="Global Commercial Review Manager">Global Commercial Review Manager</option>
+          <option value="Goods Flow Co-worker">Goods Flow Co-worker</option>
           <option value="Goods Flow Co-worker">Goods Flow Co-worker</option>
           <option value="Goods Flow Team Leader">Goods Flow Team Leader</option>
           <option value="Graphic Communication Co-worker">Graphic Communication Co-worker</option>
@@ -2191,6 +2217,9 @@
           <option value="HRSC Specialist">HRSC Specialist</option>
           <option value="IF Specialist">IF Specialist</option>
           <option value="IKEA Business Co-worker">IKEA Business Co-worker</option>
+          <option value="IKEA Food co-worker">IKEA Food co-worker</option>
+          <option value="IKEA Food Co-worker">IKEA Food Co-worker</option>
+          <option value="IKEA Food Co-worker">IKEA Food Co-worker</option>
           <option value="IKEA Food Co-worker">IKEA Food Co-worker</option>
           <option value="IKEA Food Co-worker">IKEA Food Co-worker</option>
           <option value="IKEA Food manager">IKEA Food manager</option>
@@ -2230,6 +2259,7 @@
           <option value="Medewerker Solutions">Medewerker Solutions</option>
           <option value="Medewerker Traffic">Medewerker Traffic</option>
           <option value="Operations Manager">Operations Manager</option>
+          <option value="Operations Manager">Operations Manager</option>
           <option value="People Development Manager">People Development Manager</option>
           <option value="People Relations Manager">People Relations Manager</option>
           <option value="PR&amp;C Manager">PR&amp;C Manager</option>
@@ -2255,10 +2285,13 @@
           <option value="Risk Management Specialist">Risk Management Specialist</option>
           <option value="Risk Manager">Risk Manager</option>
           <option value="Safety &amp; Security Co-worker">Safety &amp; Security Co-worker</option>
+          <option value="Safety &amp; Security Co-worker">Safety &amp; Security Co-worker</option>
           <option value="Sales &amp; Supply Support Manager">Sales &amp; Supply Support Manager</option>
           <option value="Sales &amp; Supply Support Specialist">Sales &amp; Supply Support Specialist</option>
           <option value="Sales Co-worker">Sales Co-worker</option>
+          <option value="Sales Co-worker">Sales Co-worker</option>
           <option value="Sales Leader">Sales Leader</option>
+          <option value="Sales Manager">Sales Manager</option>
           <option value="Sales Manager">Sales Manager</option>
           <option value="Sales Navigator">Sales Navigator</option>
           <option value="Sales Planner">Sales Planner</option>
@@ -2267,6 +2300,7 @@
           <option value="Sales Support Specialist">Sales Support Specialist</option>
           <option value="Senior Sales Leader">Senior Sales Leader</option>
           <option value="Services Specialist">Services Specialist</option>
+          <option value="Shopkeeper">Shopkeeper</option>
           <option value="Shopkeeper">Shopkeeper</option>
           <option value="Shopping Experience Manager">Shopping Experience Manager</option>
           <option value="Specialist External Communication">Specialist External Communication</option>
@@ -2282,16 +2316,17 @@
           <option value="Teammanager Business Controlling">Teammanager Business Controlling</option>
           <option value="Teammanager CCCN">Teammanager CCCN</option>
           <option value="Teammanager Customer Relations">Teammanager Customer Relations</option>
+          <option value="Teammanager Goodsflow">Teammanager Goodsflow</option>
           <option value="Teammanager IKEA Food">Teammanager IKEA Food</option>
           <option value="Teammanager Maintenance">Teammanager Maintenance</option>
           <option value="Teammanager Recovery">Teammanager Recovery</option>
           <option value="Vakantiekracht">Vakantiekracht</option>
-          <option value="Web editor">Web editor</option>
-          <option value="Web Specialist">Web Specialist</option>
           <option value="Visual Merchandise Leader">Visual Merchandise Leader</option>
           <option value="Visual Merchandise Leader Expansion">Visual Merchandise Leader Expansion</option>
           <option value="Visual Merchandise/Activity Co-worker">Visual Merchandise/Activity Co-worker</option>
           <option value="Visual Merchandise/Activity Manager">Visual Merchandise/Activity Manager</option>
+          <option value="Web editor">Web editor</option>
+          <option value="Web Specialist">Web Specialist</option>
 
         </options>
       </element>

@@ -160,13 +160,10 @@
 
                     if(SessionFacade.CurrentCustomer != null)
                     {
-                        var section = (ConfigurationManager.GetSection("employeeCustomerSettings") as System.Collections.Hashtable)
-                                        .Cast<System.Collections.DictionaryEntry>()
-                                        .ToDictionary(n => n.Key.ToString(), n => n.Value.ToString());
+                        var config = (ECT.FormLib.Configurable.AccessManagment)System.Configuration.ConfigurationManager.GetSection("formLibConfigurable/accessManagment");
+                        var country = config.Countries.Where(x => x.HelpdeskCustomerId == SessionFacade.CurrentCustomer.Id.ToString()).FirstOrDefault();
 
-                        var prefix = section.Where(x => x.Key == SessionFacade.CurrentCustomer.Id.ToString()).FirstOrDefault();
-
-                        if(!userIdentity.EmployeeNumber.StartsWith(prefix.Value))
+                        if(!userIdentity.EmployeeNumber.StartsWith(country.EmployeePrefix))
                         {
                             SessionFacade.UserHasAccess = false;
                             SessionFacade.CurrentCoWorkers = new List<SubordinateResponseItem>();

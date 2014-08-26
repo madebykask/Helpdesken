@@ -64,12 +64,16 @@
                 <tr>
                 <td class="tdstrong">@Model.Label("TerminationPaymentDate")</td>
                 <td>
-                    @Model.Element("TerminationPaymentDate")</td>
+                    @Model.Element("TerminationPaymentDate")
+                    <div id="notice_TerminationPaymentDate" style="display:none;" class="notice">
+                            @Model.Translate("The date you've entered is in the past. Are you sure you want to backdate Termination Payment Date?")
+                        </div>
+                </td>
             </tr>
 
 
 
-                     @for (int i = 2; i <= 3; i++)
+                     @for (int i = 2; i <= 5; i++)
                   {
                       <tr class="terminationpayments@(i.ToString())" id="terminationpayments@(i.ToString())">
                           <td class="tdstrong" colspan="2">
@@ -124,7 +128,11 @@
                 <tr>
                 <td class="tdstrong">@Model.Label("DeductionDate")</td>
                 <td>
-                    @Model.Element("DeductionDate")</td>
+                    @Model.Element("DeductionDate")
+                                        <div id="notice_DeductionDate" style="display:none;" class="notice">
+                            @Model.Translate("The date you've entered is in the past. Are you sure you want to backdate Deduction Date?")
+                        </div>
+                </td>
             </tr>
 
 
@@ -161,7 +169,7 @@
                 <tr id="addDeductionTrr">
                     <td colspan="2">
                         @Model.Element("Deductions")
-                        <a id="addDeduction" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another termination payment")</a></td>
+                        <a id="addDeduction" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another deduction from Termination Payment")</a></td>
                 </tr>
 
                  <tr>
@@ -208,11 +216,11 @@
                     @Model.Element("PositionRemovedOMStructure")</td>
             </tr>
 
-                                            <tr>
+@*                                            <tr>
                 <td class="tdstrong">@Model.Label("PensionMember")</td>
                 <td>
                     @Model.Element("PensionMember")</td>
-            </tr>
+            </tr>*@
 
             </tbody>
         </table>
@@ -220,6 +228,67 @@
 </div>
 
 <script>
+
+    
+
+    $('#TerminationPaymentDate').change(function () {
+        TerminationPaymentDateNotices();
+        
+
+    });
+
+    var TerminationPaymentDate = $('#date_TerminationPaymentDate');
+    TerminationPaymentDate.not(".disabled").datepicker()
+            .on('changeDate', function (e) {
+
+                TerminationPaymentDateNotices();
+            });
+
+    function TerminationPaymentDateNotices() {
+        var noticeTerminationPaymentDate = $('#notice_TerminationPaymentDate');
+        var startDate = $('#TerminationPaymentDate').val();
+        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+        var dstartDate = APIGlobal.DateTime.parseDate(startDate, format);
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+        noticeTerminationPaymentDate.hide();
+        
+        if (dstartDate.valueOf() < now.valueOf())
+            noticeTerminationPaymentDate.show();
+    }
+
+
+
+    $('#DeductionDate').change(function () {
+        TerminationPaymentDateNotices();
+
+
+    });
+
+    var TerminationDeductionDate = $('#date_DeductionDate');
+    TerminationDeductionDate.not(".disabled").datepicker()
+            .on('changeDate', function (e) {
+
+                TerminationDeductionDateNotices();
+            });
+
+    function TerminationDeductionDateNotices() {
+        var noticeTerminationDeductionDate = $('#notice_DeductionDate');
+        var startDate = $('#DeductionDate').val();
+        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+        var dstartDate = APIGlobal.DateTime.parseDate(startDate, format);
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+        noticeTerminationDeductionDate.hide();
+
+        if (dstartDate.valueOf() < now.valueOf())
+            noticeTerminationDeductionDate.show();
+    }
+
+
+
+
+
 
     $('#OneIKEABonusDue').on('change', function () {
 

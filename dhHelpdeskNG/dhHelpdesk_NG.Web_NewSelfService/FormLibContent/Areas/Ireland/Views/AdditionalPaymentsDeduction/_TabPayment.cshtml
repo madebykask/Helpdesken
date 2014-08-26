@@ -234,7 +234,10 @@
         '#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3').val($('#ChangeValidFrom').val());
     }).data('datepicker');
     
-
+    $('#ChangeValidFrom').change(function () {
+        $('#AllowancesValidFrom,#AllowancesValidFrom2,#AllowancesValidFrom3,' +
+       '#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3').val($('#ChangeValidFrom').val());
+    });
 
     function setDefaultDate(id) {
         var input = $('#' + id);

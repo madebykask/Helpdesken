@@ -21,7 +21,7 @@
                 <regex inherit="email" message="" pattern=""></regex>
             </element>
             <element name="IKEANetworkID" type="text"  label="IKEA Network ID" mandatory="1">
-                <regex inherit="unsignednum" message="" pattern=""></regex>
+                
             </element>
           <element name="Company" type="text" label="Company"></element>
             <element name="BusinessUnit" type="text" label="Business Unit"></element>
@@ -655,10 +655,10 @@
             <regex inherit="unsignednum" pattern="" message=""></regex>
             <mandatoryIfNotEmpty name="TerminationPaymentType"></mandatoryIfNotEmpty>
           </element>
-          <!--<element name="TerminationPaymentDate" type="date" format="dd.MM.yyyy" label="Payment Date:">
+          <element name="TerminationPaymentDate" type="date" format="dd.MM.yyyy" label="Payment Date:">
             <regex inherit="date" pattern="" message=""></regex>
             <mandatoryIfNotEmpty name="TerminationPaymentType"></mandatoryIfNotEmpty>
-          </element>-->
+          </element>
 
           <element name="TerminationPaymentType2" type="text" label="Payment Type" >
 
@@ -682,6 +682,20 @@
             <regex inherit="date" pattern="" message=""></regex>
             <mandatoryIfNotEmpty name="TerminationPaymentType3"></mandatoryIfNotEmpty>
           </element>-->
+
+          <element name="TerminationPaymentType4" type="text" label="Payment Type">
+
+          </element>
+          <element name="TerminationAmountUnits4" type="text" label="Amount/Units">
+            <mandatoryIfNotEmpty name="TerminationPaymentType4"></mandatoryIfNotEmpty>
+          </element>
+
+          <element name="TerminationPaymentType5" type="text" label="Payment Type">
+
+          </element>
+          <element name="TerminationAmountUnits5" type="text" label="Amount/Units">
+            <mandatoryIfNotEmpty name="TerminationPaymentType5"></mandatoryIfNotEmpty>
+          </element>
 
           <element name="Deductions" type="hidden" default="1"></element>
           <element name="DeductionType" type="select" label="Deduction Type">
@@ -751,7 +765,6 @@
           </element>
           <element name="DeductionAmountUnits4" type="text" label="Amount/Units">
             <mandatoryIfNotEmpty name="DeductionType4"></mandatoryIfNotEmpty>
-            
           </element>
           <element name="DeductionDate4" type="date" format="dd.MM.yyyy" label="Deduction date:">
             <regex inherit="date" pattern="" message=""></regex>
@@ -850,13 +863,13 @@
               <option value="No">No</option>
             </options>
           </element>
-          <element name="PensionMember" type="select" label="Pension member?" mandatory="1">
+          <!--<element name="PensionMember" type="select" label="Pension member?" mandatory="1">
             <options>
               <option value=""></option>
               <option value="Yes">Yes</option>
               <option value="No">No</option>
             </options>
-          </element>
+          </element>-->
         </tab>
     </fields>
 </form>

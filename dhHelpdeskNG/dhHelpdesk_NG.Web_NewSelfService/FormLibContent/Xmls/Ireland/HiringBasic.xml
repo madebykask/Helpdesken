@@ -92,7 +92,7 @@
       <element type="text" name="PermanentAddressLine1" label="Address line 1" mandatory="1"></element>
       <element type="text" name="PermanentAddressLine2" label="Address line 2"></element>
       <element type="text" name="PermanentAddressLine3" label="Address line 3"></element>
-      <element type="select" name="PermanentPostalCode" label="Postal code" mandatory="1">
+      <element type="select" name="PermanentPostalCode" label="Postal code">
         <options>
           <option value=""></option>
           <option value="﻿Cork">﻿Cork</option>
@@ -775,18 +775,18 @@
       <element type="select" name="EmployeeDocumentType" label="Document Type">
         <options>
           <option value=""></option>
+          <option value="﻿Passport">﻿Passport</option>
+          <option value="Work permit">Work permit</option>
+          <option value="Resident Permit">Resident Permit</option>
           <option value="Visa">Visa</option>
-          <option value="Passport">Passport</option>
-          <option value="Resident permit">Resident permit</option>
-          <option value="Work Permit">Work Permit</option>
-          <option value="Tax registration">Tax registration</option>
-          <option value="Insurance and social security">Insurance and social security</option>
-          <option value="Co-worker’s Medical Form">Co-worker’s Medical Form</option>
-          <option value="Co-worker’s Dental Form">Co-worker’s Dental Form</option>
-          <option value="Acc Child Medical Form">Acc Child Medical Form</option>
-          <option value="Acc Child Dental Form">Acc Child Dental Form</option>
-          <option value="Acc Partner Medical Form">Acc Partner Medical Form</option>
-          <option value="Acc Partner Dental Form">Acc Partner Dental Form</option>
+          <option value="Tax Registration">Tax Registration</option>
+          <option value="Social security registration">Social security registration</option>
+          <option value="Co-worker&apos;s Medical Form">Co-worker&apos;s Medical Form</option>
+          <option value="Co-worker&apos;s Dental Form">Co-worker&apos;s Dental Form</option>
+          <option value="Acc.Partner Medical Form">Acc.Partner Medical Form</option>
+          <option value="Acc.Partner Dental Form">Acc.Partner Dental Form</option>
+          <option value="Acc.Child Medical Form">Acc.Child Medical Form</option>
+          <option value="Acc.Child Dental Form">Acc.Child Dental Form</option>
         </options>
       </element>
       <element type="search-select" source="1" name="EmployeeDocumentCountry" label="Country" default="Ireland">
@@ -1310,18 +1310,18 @@
       <element type="select" name="EmployeeDocumentType2" label="Document Type">
         <options>
           <option value=""></option>
+          <option value="﻿Passport">﻿Passport</option>
+          <option value="Work permit">Work permit</option>
+          <option value="Resident Permit">Resident Permit</option>
           <option value="Visa">Visa</option>
-          <option value="Passport">Passport</option>
-          <option value="Resident permit">Resident permit</option>
-          <option value="Work Permit">Work Permit</option>
-          <option value="Tax registration">Tax registration</option>
-          <option value="Insurance and social security">Insurance and social security</option>
-          <option value="Co-worker’s Medical Form">Co-worker’s Medical Form</option>
-          <option value="Co-worker’s Dental Form">Co-worker’s Dental Form</option>
-          <option value="Acc Child Medical Form">Acc Child Medical Form</option>
-          <option value="Acc Child Dental Form">Acc Child Dental Form</option>
-          <option value="Acc Partner Medical Form">Acc Partner Medical Form</option>
-          <option value="Acc Partner Dental Form">Acc Partner Dental Form</option>
+          <option value="Tax Registration">Tax Registration</option>
+          <option value="Social security registration">Social security registration</option>
+          <option value="Co-worker&apos;s Medical Form">Co-worker&apos;s Medical Form</option>
+          <option value="Co-worker&apos;s Dental Form">Co-worker&apos;s Dental Form</option>
+          <option value="Acc.Partner Medical Form">Acc.Partner Medical Form</option>
+          <option value="Acc.Partner Dental Form">Acc.Partner Dental Form</option>
+          <option value="Acc.Child Medical Form">Acc.Child Medical Form</option>
+          <option value="Acc.Child Dental Form">Acc.Child Dental Form</option>
         </options>
       </element>
       <element type="search-select" source="1" name="EmployeeDocumentCountry2" label="Country" default="Ireland">
@@ -1845,18 +1845,18 @@
       <element type="select" name="EmployeeDocumentType3" label="Document Type">
         <options>
           <option value=""></option>
+          <option value="﻿Passport">﻿Passport</option>
+          <option value="Work permit">Work permit</option>
+          <option value="Resident Permit">Resident Permit</option>
           <option value="Visa">Visa</option>
-          <option value="Passport">Passport</option>
-          <option value="Resident permit">Resident permit</option>
-          <option value="Work Permit">Work Permit</option>
-          <option value="Tax registration">Tax registration</option>
-          <option value="Insurance and social security">Insurance and social security</option>
-          <option value="Co-worker’s Medical Form">Co-worker’s Medical Form</option>
-          <option value="Co-worker’s Dental Form">Co-worker’s Dental Form</option>
-          <option value="Acc Child Medical Form">Acc Child Medical Form</option>
-          <option value="Acc Child Dental Form">Acc Child Dental Form</option>
-          <option value="Acc Partner Medical Form">Acc Partner Medical Form</option>
-          <option value="Acc Partner Dental Form">Acc Partner Dental Form</option>
+          <option value="Tax Registration">Tax Registration</option>
+          <option value="Social security registration">Social security registration</option>
+          <option value="Co-worker&apos;s Medical Form">Co-worker&apos;s Medical Form</option>
+          <option value="Co-worker&apos;s Dental Form">Co-worker&apos;s Dental Form</option>
+          <option value="Acc.Partner Medical Form">Acc.Partner Medical Form</option>
+          <option value="Acc.Partner Dental Form">Acc.Partner Dental Form</option>
+          <option value="Acc.Child Medical Form">Acc.Child Medical Form</option>
+          <option value="Acc.Child Dental Form">Acc.Child Dental Form</option>
         </options>
       </element>
       <element type="search-select" source="1" name="EmployeeDocumentCountry3" label="Country" default="Ireland">

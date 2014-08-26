@@ -367,6 +367,11 @@
         '#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3').val($('#ChangeValidFrom').val());
     }).data('datepicker');
 
+    $('#ChangeValidFrom').change(function () {
+        $('#AllowancesValidFrom,#AllowancesValidFrom2,#AllowancesValidFrom3,' +
+       '#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3').val($('#ChangeValidFrom').val());
+    });
+
 
     // Show notice if allowancestype comp.serv.allowance
     function selectIndexChangeAllowancesType() {
@@ -472,6 +477,49 @@
                 deductionsValidTo.value = '31.12.9999';
         }
     });
+
+
+    $('#AllowancesType').change(function () {
+
+        GetXML('predefined_allowancetype_units_outs.xml', setAllowanceUnits);
+
+
+    });
+
+    $('#DeductionsType').change(function () {
+
+        GetXML('predefined_deduction_units_outs.xml', setDeductionUnits);
+
+
+    });
+    $('#DeductionsType').change(function () {
+
+        GetXML('predefined_deduction_units_outs.xml', setDeductionUnits);
+
+
+    });
+    $('#DeductionsType').change(function () {
+
+        GetXML('predefined_deduction_units_outs.xml', setDeductionUnits);
+
+
+    });
+
+
+    $('#AllowancesType2').change(function () {
+
+        GetXML('predefined_allowancetype_units_outs.xml', setAllowanceUnits2);
+
+
+    });
+    $('#AllowancesType3').change(function () {
+
+        GetXML('predefined_allowancetype_units_outs.xml', setAllowanceUnits3);
+
+
+    });
+
+
     $('#DeductionsPaymentType').change();
 
     $('#DeductionsPaymentType2').change(function () {
@@ -510,6 +558,10 @@
                 deductionsValidTo3.value = '31.12.9999';
         }
     });
+
+
+    
+
     $('#DeductionsPaymentType3').change();
 
 

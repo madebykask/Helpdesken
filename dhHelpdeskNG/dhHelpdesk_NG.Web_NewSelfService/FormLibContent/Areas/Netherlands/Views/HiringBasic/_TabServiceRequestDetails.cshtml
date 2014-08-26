@@ -35,6 +35,7 @@
                     <td class="tdstrong">@Model.Label("ServiceRequestPriority")</td>
                     <td>@Model.Element("ServiceRequestPriority")</td>
                 </tr>
+                @if (!FormLibUtils.IsSelfService()){
                 <tr>
                     <td class="tdstrong">@Model.Translate("SLA")</td>
                     <td>
@@ -47,6 +48,7 @@
                         }
                     </td>
                 </tr>
+                }
                 <tr>
                     <td class="tdstrong">@Model.Label("Co-WorkerID")</td>
                     <td>@Model.Element("Co-WorkerID")</td>

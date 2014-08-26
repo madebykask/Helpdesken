@@ -88,8 +88,13 @@
         </element>
         <element type="text" name="FirstName" label="First Name" mandatory="1"></element>
         <element type="text" name="LastName" label="Last Name" mandatory="1"></element>
-        <element type="date" name="DateOfBirth" label="Date of birth" mandatory="1" format="dd.MM.yyyy">
+        <!--<element type="date" name="DateOfBirth" label="Date of birth" mandatory="1" format="dd.MM.yyyy">
           <agecheck name="ContractStartDate" age="16" message="Employee under 16, you are unable to proceed with this service request"></agecheck>
+          <regex inherit="date" pattern="" message=""></regex>
+        </element>-->
+        <element type="date" name="DateOfBirth" label="Date of birth" mandatory="1" format="dd.MM.yyyy">
+          <agecheck name="ContractStartDate" validateFor="IKEA Properties Investments Ltd,IKEA Limited" age="16" message="Employee under 16, you are unable to proceed with this service request"></agecheck>
+          <agecheck name="ContractStartDate" validateFor="IKEA Distribution Services Limited" age="18" message="Employee under 18, you are unable to proceed with this service request"></agecheck>
           <regex inherit="date" pattern="" message=""></regex>
         </element>
         <element type="text" name="PermanentAddressLine1" label="Address line 1" mandatory="1"></element>
@@ -984,18 +989,18 @@
         <element type="select" name="EmployeeDocumentType" label="Document Type">
           <options>
             <option value=""></option>
+            <option value="﻿Passport">﻿Passport</option>
+            <option value="Work permit">Work permit</option>
+            <option value="Resident Permit">Resident Permit</option>
             <option value="Visa">Visa</option>
-            <option value="Passport">Passport</option>
-            <option value="Resident permit">Resident permit</option>
-            <option value="Work Permit">Work Permit</option>
-            <option value="Tax registration">Tax registration</option>
-            <option value="Insurance and social security">Insurance and social security</option>
-            <option value="Co-worker’s Medical Form">Co-worker’s Medical Form</option>
-            <option value="Co-worker’s Dental Form">Co-worker’s Dental Form</option>
-            <option value="Acc Child Medical Form">Acc Child Medical Form</option>
-            <option value="Acc Child Dental Form">Acc Child Dental Form</option>
-            <option value="Acc Partner Medical Form">Acc Partner Medical Form</option>
-            <option value="Acc Partner Dental Form">Acc Partner Dental Form</option>
+            <option value="Tax Registration">Tax Registration</option>
+            <option value="Social security registration">Social security registration</option>
+            <option value="Co-worker&apos;s Medical Form">Co-worker&apos;s Medical Form</option>
+            <option value="Co-worker&apos;s Dental Form">Co-worker&apos;s Dental Form</option>
+            <option value="Acc.Partner Medical Form">Acc.Partner Medical Form</option>
+            <option value="Acc.Partner Dental Form">Acc.Partner Dental Form</option>
+            <option value="Acc.Child Medical Form">Acc.Child Medical Form</option>
+            <option value="Acc.Child Dental Form">Acc.Child Dental Form</option>
           </options>
         </element>
         <element type="search-select" name="EmployeeDocumentCountry" label="Country" default="United Kingdom">
@@ -1519,18 +1524,18 @@
         <element type="select" name="EmployeeDocumentType2" label="Document Type">
           <options>
             <option value=""></option>
+            <option value="﻿Passport">﻿Passport</option>
+            <option value="Work permit">Work permit</option>
+            <option value="Resident Permit">Resident Permit</option>
             <option value="Visa">Visa</option>
-            <option value="Passport">Passport</option>
-            <option value="Resident permit">Resident permit</option>
-            <option value="Work Permit">Work Permit</option>
-            <option value="Tax registration">Tax registration</option>
-            <option value="Insurance and social security">Insurance and social security</option>
-            <option value="Co-worker’s Medical Form">Co-worker’s Medical Form</option>
-            <option value="Co-worker’s Dental Form">Co-worker’s Dental Form</option>
-            <option value="Acc Child Medical Form">Acc Child Medical Form</option>
-            <option value="Acc Child Dental Form">Acc Child Dental Form</option>
-            <option value="Acc Partner Medical Form">Acc Partner Medical Form</option>
-            <option value="Acc Partner Dental Form">Acc Partner Dental Form</option>
+            <option value="Tax Registration">Tax Registration</option>
+            <option value="Social security registration">Social security registration</option>
+            <option value="Co-worker&apos;s Medical Form">Co-worker&apos;s Medical Form</option>
+            <option value="Co-worker&apos;s Dental Form">Co-worker&apos;s Dental Form</option>
+            <option value="Acc.Partner Medical Form">Acc.Partner Medical Form</option>
+            <option value="Acc.Partner Dental Form">Acc.Partner Dental Form</option>
+            <option value="Acc.Child Medical Form">Acc.Child Medical Form</option>
+            <option value="Acc.Child Dental Form">Acc.Child Dental Form</option>
           </options>
         </element>
         <element type="search-select" name="EmployeeDocumentCountry2" label="Country" default="United Kingdom">
@@ -2054,18 +2059,18 @@
         <element type="select" name="EmployeeDocumentType3" label="Document Type">
           <options>
             <option value=""></option>
+            <option value="﻿Passport">﻿Passport</option>
+            <option value="Work permit">Work permit</option>
+            <option value="Resident Permit">Resident Permit</option>
             <option value="Visa">Visa</option>
-            <option value="Passport">Passport</option>
-            <option value="Resident permit">Resident permit</option>
-            <option value="Work Permit">Work Permit</option>
-            <option value="Tax registration">Tax registration</option>
-            <option value="Insurance and social security">Insurance and social security</option>
-            <option value="Co-worker’s Medical Form">Co-worker’s Medical Form</option>
-            <option value="Co-worker’s Dental Form">Co-worker’s Dental Form</option>
-            <option value="Acc Child Medical Form">Acc Child Medical Form</option>
-            <option value="Acc Child Dental Form">Acc Child Dental Form</option>
-            <option value="Acc Partner Medical Form">Acc Partner Medical Form</option>
-            <option value="Acc Partner Dental Form">Acc Partner Dental Form</option>
+            <option value="Tax Registration">Tax Registration</option>
+            <option value="Social security registration">Social security registration</option>
+            <option value="Co-worker&apos;s Medical Form">Co-worker&apos;s Medical Form</option>
+            <option value="Co-worker&apos;s Dental Form">Co-worker&apos;s Dental Form</option>
+            <option value="Acc.Partner Medical Form">Acc.Partner Medical Form</option>
+            <option value="Acc.Partner Dental Form">Acc.Partner Dental Form</option>
+            <option value="Acc.Child Medical Form">Acc.Child Medical Form</option>
+            <option value="Acc.Child Dental Form">Acc.Child Dental Form</option>
           </options>
         </element>
         <element type="search-select" name="EmployeeDocumentCountry3" label="Country" default="United Kingdom">

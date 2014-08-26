@@ -62,9 +62,7 @@
                         <td class="tdstrong">@Model.Label("DeductionsType" + i.ToString())</td>
                         <td>
                             @Model.Element("DeductionsType" + i.ToString())
-                            <div id="notice_DeductionsType@(i.ToString())" style="display: none;" class="notice">
-                                @Model.Translate("The BHV allowance is calculated according to CLA article 28")
-                            </div>
+
                         </td>
                     </tr>@*
                     <tr class="deduction@(i.ToString())">
@@ -143,6 +141,11 @@
 
         $('#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3').val($('#ChangeValidFrom').val());
     }).data('datepicker');
+
+
+    $('#ChangeValidFrom').change(function () {
+        $('#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3').val($('#ChangeValidFrom').val());
+    });
     
 
     function setDefaultDate(id) {

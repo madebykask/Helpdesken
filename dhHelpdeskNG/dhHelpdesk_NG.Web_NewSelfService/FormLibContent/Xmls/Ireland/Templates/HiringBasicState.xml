@@ -46,7 +46,7 @@
     <!-- SSC -->
     <status value="60">
         <visibleTabs>#servicerequestdetails,#personal,#globalview,#SSCUseOnly,#attachments</visibleTabs>
-        <readOnlyTabs>#servicerequestdetails,#personal</readOnlyTabs>
+        <readOnlyTabs>#servicerequestdetails,#personal,#SSCUseOnly</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
         </actions>

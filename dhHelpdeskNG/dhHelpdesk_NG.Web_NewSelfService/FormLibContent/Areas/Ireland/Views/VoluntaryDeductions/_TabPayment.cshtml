@@ -159,8 +159,13 @@
 
         setPaymentDatePickersBehavior();
 
-        $('#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3').val($('#ChangeValidFrom').val());
+        
     }).data('datepicker');
+
+
+    $('#ChangeValidFrom').change(function () {
+        $('#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3').val($('#ChangeValidFrom').val());
+    });
     
 
     function setDefaultDate(id) {

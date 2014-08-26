@@ -157,7 +157,7 @@ var globalTypeAheadOptions = {
         return $.ajax({
             url: site.baseUrl + '/search/globalview',
             type: 'post',
-            data: { query: query, customerId: $('#CustomerId').val() },
+            data: { query: query, customerId: $('#CustomerId').val(), allCoWorkers : $('#AllCoWorker').length > 0 },
             dataType: 'json',
             success: function (result) {
                 var resultList = jQuery.map(result, function (item) {
@@ -176,6 +176,7 @@ var globalTypeAheadOptions = {
                         , caseNumber: item.CaseNumber
                         , regTime: item.RegTime
                         , email: item.Email
+                        , iKEANetworkID: item.IKEANetworkID
                     };
                     return JSON.stringify(aItem);
                 });
@@ -294,9 +295,9 @@ var globalTypeAheadOptions = {
         $('#emOLD_IKEAEmailAddress').text(item.email);
         $('#OLD_IKEAEmailAddress').val(item.email);
 
-        $('input[name="IKEANetworkID"]').val(item.num);
-        $('#emOLD_IKEANetworkID').text(item.num);
-        $('#OLD_IKEANetworkID').val(item.num);
+        $('input[name="IKEANetworkID"]').val(item.iKEANetworkID);
+        $('#emOLD_IKEANetworkID').text(item.iKEANetworkID);
+        $('#OLD_IKEANetworkID').val(item.iKEANetworkID);
 
         return item.num;
     }
@@ -329,6 +330,7 @@ var globalEmailTypeAheadOptions = {
                         , caseNumber: item.CaseNumber
                         , regTime: item.RegTime
                         , email: item.Email
+                        , iKEANetworkID: item.IKEANetworkID
                     };
                     return JSON.stringify(aItem);
                 });
@@ -441,9 +443,9 @@ var globalEmailTypeAheadOptions = {
         $('#emOLD_IKEAEmailAddress').text(item.email);
         $('#OLD_IKEAEmailAddress').val(item.email);
 
-        $('input[name="IKEANetworkID"]').val(item.num);
-        $('#emOLD_IKEANetworkID').text(item.num);
-        $('#OLD_IKEANetworkID').val(item.num);
+        $('input[name="IKEANetworkID"]').val(item.iKEANetworkID);
+        $('#emOLD_IKEANetworkID').text(item.iKEANetworkID);
+        $('#OLD_IKEANetworkID').val(item.iKEANetworkID);
 
         return item.email;
     }
@@ -480,6 +482,7 @@ var globalNameTypeAheadOptions = {
                         , caseNumber: item.CaseNumber
                         , regTime: item.RegTime
                         , email: item.Email
+                        , iKEANetworkID: item.IKEANetworkID
                     };
                     return JSON.stringify(aItem);
                 });
@@ -593,9 +596,9 @@ var globalNameTypeAheadOptions = {
         $('#emOLD_IKEAEmailAddress').text(item.email);
         $('#OLD_IKEAEmailAddress').val(item.email);
 
-        $('input[name="IKEANetworkID"]').val(item.num);
-        $('#emOLD_IKEANetworkID').text(item.num);
-        $('#OLD_IKEANetworkID').val(item.num);
+        $('input[name="IKEANetworkID"]').val(item.iKEANetworkID);
+        $('#emOLD_IKEANetworkID').text(item.iKEANetworkID);
+        $('#OLD_IKEANetworkID').val(item.iKEANetworkID);
 
 
         return item.firstname;
@@ -633,6 +636,7 @@ var globalLastNameTypeAheadOptions = {
                         , caseNumber: item.CaseNumber
                         , regTime: item.RegTime
                         , email: item.Email
+                        , iKEANetworkID: item.IKEANetworkID
                     };
                     return JSON.stringify(aItem);
                 });
@@ -746,9 +750,9 @@ var globalLastNameTypeAheadOptions = {
         $('#emOLD_IKEAEmailAddress').text(item.email);
         $('#OLD_IKEAEmailAddress').val(item.email);
 
-        $('input[name="IKEANetworkID"]').val(item.num);
-        $('#emOLD_IKEANetworkID').text(item.num);
-        $('#OLD_IKEANetworkID').val(item.num);
+        $('input[name="IKEANetworkID"]').val(item.iKEANetworkID);
+        $('#emOLD_IKEANetworkID').text(item.iKEANetworkID);
+        $('#OLD_IKEANetworkID').val(item.iKEANetworkID);
 
 
         return item.lastname;
@@ -1357,6 +1361,11 @@ var deductions = function () {
 
     var max = 5;
 
+    //Hide button if we already show all available
+    if (counter >= max) {
+        $('#addDeduction').hide();
+    }
+
     var elements = $('[class^=deduction]').find(':text, :radio, :checkbox, select');
 
     var enabled = elements.eq(0).is(':enabled');
@@ -1386,6 +1395,11 @@ var deductions = function () {
         if (counter <= max)
             $('[class=deduction' + counter + ']').show();
         $('#addDeductionTr').hide();
+
+        //Hide button if we already show all available
+        if (counter >= max) {
+            $('#addDeduction').hide();
+        }
     });
 };
 
@@ -1654,7 +1668,12 @@ var terminationpayments = function () {
     $('.terminationpayments').show();
     var counter = parseInt($('#TerminationPayments').val());
 
-    var max = 3;
+    var max = 5;
+
+    //Hide button if we already show all available
+    if (counter >= max) {
+        $('#addTerminationPayment').hide();
+    }
 
     var elements = $('[class^=terminationpayments]').find(':text, :radio, :checkbox, select');
 
@@ -1681,9 +1700,15 @@ var terminationpayments = function () {
         e.preventDefault();
         counter++;
         $('#TerminationPayments').val(counter);
+
         if (counter <= max)
             $('[class=terminationpayments' + counter + ']').show();
         $('#addTerminationPaymentsTr').hide();
+
+        //Hide button if we already show all available
+        if (counter >= max) {
+            $('#addTerminationPayment').hide();
+        }
     });
 };
 
@@ -1704,6 +1729,11 @@ var UnreturnedItem = function () {
     var counter = parseInt($('#UnreturnedItemsMulti').val());
 
     var max = 5;
+
+    //Hide button if we already show all available
+    if (counter >= max) {
+        $('#addUnreturnedItem').hide();
+    }
 
     var elements = $('[class^=UnreturnedItem]').find(':text, :radio, :checkbox, select');
 
@@ -1733,6 +1763,11 @@ var UnreturnedItem = function () {
         if (counter <= max)
             $('[class=UnreturnedItem' + counter + ']').show();
         $('#addUnreturnedItemTr').hide();
+
+        //Hide button if we already show all available
+        if (counter >= max) {
+            $('#addUnreturnedItem').hide();
+        }
     });
 };
 
@@ -2369,7 +2404,7 @@ $(document).on('submit', 'form', function (e) {
         });
     }*/   
 
-    var elem = $('#navigation').find(':button, select').addClass("disabled").attr('readonly', 'readonly');
+    var elem = $('#navigation').find(':button, select').addClass("disabled").attr('readonly', 'readonly').attr('disabled', 'disabled');
 
     if ($('#filelist').length > 0 && uploader != undefined) {
         if (uploader.files.length > 0) {

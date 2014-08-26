@@ -17,10 +17,10 @@
     <!-- LM -->
     <status value="10">
         <userGroup name="Line Manager">
-            <visibleTabs>#ServiceRequestDetails,#Basic</visibleTabs>
+            <visibleTabs>#ServiceRequestDetails,#Basic,#Complete</visibleTabs>
             <readOnlyTabs></readOnlyTabs>
         </userGroup>
-        <visibleTabs>#ServiceRequestDetails,#Basic</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Basic,#Complete</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
       <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>
@@ -33,8 +33,8 @@
     <!-- HRU -->
     <status value="20">
         <userGroup name="Line Manager">
-            <visibleTabs>#ServiceRequestDetails,#Basic</visibleTabs>
-            <readOnlyTabs>#ServiceRequestDetails,#Basic</readOnlyTabs>
+            <visibleTabs>#ServiceRequestDetails,#Basic,#Complete</visibleTabs>
+            <readOnlyTabs>#ServiceRequestDetails,#Basic,#Complete</readOnlyTabs>
         </userGroup>
         <visibleTabs>#ServiceRequestDetails,#Basic,#Complete,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>

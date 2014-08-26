@@ -1,0 +1,313 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane" id="Complete">
+    <div class="span12">
+        <table class="table">
+            <tbody>       
+            <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Termination Details")</h4>
+                    </td>
+                </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("CompleteTerminationType")</td>
+                <td>
+                    @Model.Element("CompleteTerminationType")
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("TerminationReason")</td>
+                <td>
+                    @Model.Element("TerminationReason")
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("HomeCountry")</td>
+                <td>
+                    @Model.Element("HomeCountry")</td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("TerminationPaymentMethod")</td>
+                <td>
+                    @Model.Element("TerminationPaymentMethod")</td>
+            </tr>
+
+
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Termination Payments")</h4>
+                    </td>
+                </tr>
+
+                            <tr>
+                <td class="tdstrong">@Model.Label("TerminationPaymentType")</td>
+                <td>
+                    @Model.Element("TerminationPaymentType")</td>
+            </tr>
+                            <tr>
+                <td class="tdstrong">@Model.Label("TerminationAmountUnits")</td>
+                <td>
+                    @Model.Element("TerminationAmountUnits")</td>
+            </tr>
+@*             <tr>
+                <td class="tdstrong">@Model.Label("TerminationNetGross")</td>
+                <td>
+                    @Model.Element("TerminationNetGross")</td>
+            </tr>*@
+             <tr>
+                <td class="tdstrong">@Model.Label("OneIKEABonusDue")</td>
+                <td>
+                    @Model.Element("OneIKEABonusDue")
+                      <div id="notice_OneIKEABonusDue" style="display:none;" class="notice">
+                            @Model.Translate("Check with SO Business Navigator")
+                        </div>
+                </td>
+            </tr>
+                <tr>
+                <td class="tdstrong">@Model.Label("TerminationPaymentDate")</td>
+                <td>
+                    @Model.Element("TerminationPaymentDate")
+
+                                                                <div id="notice_TerminationPaymentDate" style="display:none;" class="notice">
+                            @Model.Translate("The date you've entered is in the past.")
+                                <br />
+                             @Model.Translate("Are you sure you want to backdate Payment Date?")
+                        </div>
+                </td>
+            </tr>
+
+
+
+                  @for (int i = 2; i <= 4; i++)
+                  {
+                      <tr class="terminationpayments@(i.ToString())" id="terminationpayments@(i.ToString())">
+                          <td class="tdstrong" colspan="2">
+                              <h4>@Model.Translate("Termination Payments") @i.ToString()</h4>
+                          </td>
+                      </tr>
+                      <tr class="terminationpayments@(i.ToString())">
+                          <td class="tdstrong">@Model.Label("TerminationPaymentType" + i.ToString())</td>
+                          <td>
+                              @Model.Element("TerminationPaymentType" + i.ToString())</td>
+                      </tr>
+                      <tr class="terminationpayments@(i.ToString())">
+                          <td class="tdstrong">@Model.Label("TerminationAmountUnits" + i.ToString())</td>
+                          <td>
+                              @Model.Element("TerminationAmountUnits" + i.ToString())</td>
+                      </tr>
+                      @*<tr class="terminationpayments@(i.ToString())">
+                          <td class="tdstrong">@Model.Label("TerminationNetGross" + i.ToString())</td>
+                          <td>
+                              @Model.Element("TerminationNetGross" + i.ToString())</td>
+                      </tr>*@@*
+                      <tr class="terminationpayments@(i.ToString())">
+                          <td class="tdstrong">@Model.Label("OneIKEABonusDue" + i.ToString())</td>
+                          <td>
+                              @Model.Element("OneIKEABonusDue" + i.ToString())
+                              <div id="notice_OneIKEABonusDue@(i.ToString())" style="display:none;" class="notice">
+                            @Model.Translate("Check with SO Business Navigator")
+                        </div>
+                          </td>
+                      </tr>
+                      <tr class="terminationpayments@(i.ToString())">
+                          <td class="tdstrong">@Model.Label("TerminationPaymentDate" + i.ToString())</td>
+                          <td>
+                              @Model.Element("TerminationPaymentDate" + i.ToString())
+
+                              <div id="notice_TerminationPaymentDate@(i.ToString())" style="display:none;" class="notice">
+                            @Model.Translate("The date you've entered is in the past.")
+                                <br />
+                             @Model.Translate("Are you sure you want to backdate Payment Date?")
+                        </div>
+                          </td>
+                      </tr>*@
+                  }
+                
+                <tr id="addTerminationPaymentsTrr">
+                    <td colspan="2">
+                        @Model.Element("TerminationPayments")
+                        <a id="addTerminationPayment" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another termination payment")</a></td>
+                </tr>
+
+
+
+
+
+
+
+                                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Deductions from Termination Payment")</h4>
+                    </td>
+                </tr>
+                            <tr>
+                <td class="tdstrong">@Model.Label("DeductionType")</td>
+                <td>
+                    @Model.Element("DeductionType")</td>
+            </tr>
+@*                            <tr>
+                <td class="tdstrong">@Model.Label("OtherDeduction")</td>
+                <td>
+                    @Model.Element("OtherDeduction")</td>
+            </tr>*@
+             <tr>
+                <td class="tdstrong">@Model.Label("DeductionAmountUnits")</td>
+                <td>
+                    @Model.Element("DeductionAmountUnits")</td>
+            </tr>
+                <tr>
+                <td class="tdstrong">@Model.Label("DeductionDate")</td>
+                <td>
+                    @Model.Element("DeductionDate")</td>
+            </tr>
+
+
+                  @for (int i = 2; i <= 5; i++)
+                  {
+                      <tr class="deduction@(i.ToString())" id="deduction@(i.ToString())">
+                          <td class="tdstrong" colspan="2">
+                              <h4>@Model.Translate("Deductions from Termination Payment") @i.ToString()</h4>
+                          </td>
+                      </tr>
+                      <tr class="deduction@(i.ToString())">
+                          <td class="tdstrong">@Model.Label("DeductionType" + i.ToString())</td>
+                          <td>
+                              @Model.Element("DeductionType" + i.ToString())</td>
+                      </tr>@*
+                      <tr class="deduction@(i.ToString())">
+                          <td class="tdstrong">@Model.Label("OtherDeduction" + i.ToString())</td>
+                          <td>
+                              @Model.Element("OtherDeduction" + i.ToString())</td>
+                      </tr>*@
+                      <tr class="deduction@(i.ToString())">
+                          <td class="tdstrong">@Model.Label("DeductionAmountUnits" + i.ToString())</td>
+                          <td>
+                              @Model.Element("DeductionAmountUnits" + i.ToString())</td>
+                      </tr>
+
+                      <tr class="deduction@(i.ToString())">
+                          <td class="tdstrong">@Model.Label("DeductionDate" + i.ToString())</td>
+                          <td>
+                              @Model.Element("DeductionDate" + i.ToString())</td>
+                      </tr>
+                  }
+                
+                <tr id="addDeductionTrr">
+                    <td colspan="2">
+                        @Model.Element("Deductions")
+                        <a id="addDeduction" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another termination payment")</a></td>
+                </tr>
+
+            <tr>
+                <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Returned IKEA property")</h4>
+                    </td>
+                </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("UnreturnedItems")</td>
+                <td>
+                    @Model.Element("UnreturnedItems")</td>
+            </tr>
+                 @for (int i = 2; i <= 5; i++)
+                 {
+                      <tr class="UnreturnedItem@(i.ToString())" id="UnreturnedItem@(i.ToString())">
+                          <td class="tdstrong" colspan="2">
+                              <h4>@Model.Translate("Returned IKEA property") @i.ToString()</h4>
+                          </td>
+                      </tr>
+                      <tr class="UnreturnedItem@(i.ToString())">
+                          <td class="tdstrong">@Model.Label("UnreturnedItems" + i.ToString())</td>
+                          <td>
+                              @Model.Element("UnreturnedItems" + i.ToString())</td>
+                      </tr>
+                 }
+                 <tr id="addUnreturnedItemTrr">
+                    <td colspan="2">
+                        @Model.Element("UnreturnedItemsMulti")
+                        <a id="addUnreturnedItem" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another unreturned item")</a></td>
+                </tr>
+
+
+                <tr>
+
+                <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Country Specifics")</h4>
+                    </td>
+                </tr>
+            <tr>
+                            <tr>
+                <td class="tdstrong">@Model.Label("PositionRemovedOMStructure")</td>
+                <td>
+                    @Model.Element("PositionRemovedOMStructure")</td>
+            </tr>
+
+                                            <tr>
+                <td class="tdstrong">@Model.Label("PensionMember")</td>
+                <td>
+                    @Model.Element("PensionMember")</td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+
+    $('#OneIKEABonusDue').on('change', function () {
+        
+        $('#notice_OneIKEABonusDue').show();
+    });
+
+    //$('#OneIKEABonusDue2').on('change', function () {
+
+    //    $('#notice_OneIKEABonusDue2').show();
+    //});
+
+    //$('#OneIKEABonusDue3').on('change', function () {
+
+    //    $('#notice_OneIKEABonusDue3').show();
+    //});
+    
+
+
+
+    $('#TerminationPaymentDate').change(function () {
+
+        var startDate = $('#TerminationPaymentDate').val();
+        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+        var dstartDate = APIGlobal.DateTime.parseDate(startDate, format);
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+
+        if (dstartDate.valueOf() < now.valueOf()) {
+            $('#notice_TerminationPaymentDate').show();
+        }
+    });
+
+
+    var TerminationPaymentDate = $('#notice_TerminationPaymentDate');
+    var dateDatePicker = $('#date_TerminationPaymentDate');
+    if (TerminationPaymentDate.length > 0) {
+        var startDate = new Date();
+        startDate.setHours(0, 0, 0, 0);
+
+        dateDatePicker.not(".disabled").datepicker()
+            .on('changeDate', function (e) {
+                if (e.date.valueOf() < startDate.valueOf()) {
+
+                    TerminationPaymentDate.show();
+                } else {
+
+                    TerminationPaymentDate.hide();
+                }
+            });
+    }
+
+
+    
+
+
+</script>

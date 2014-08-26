@@ -106,7 +106,7 @@
         var startDate = new Date();
         startDate.setHours(0, 0, 0, 0);
 
-        datePaymentDate.datepicker()
+        datePaymentDate.not(".disabled").datepicker()
             .on('changeDate', function (e) {
                 
                 var paymentDate = $('#PaymentDate').val();

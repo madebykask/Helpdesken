@@ -2,57 +2,24 @@
 <predefined>
     <name>TerminationReason</name>
     <dependent>
-        <selected>Casual Termination</selected>
-        <show>
-            Casual Termination
-        </show>
-    </dependent>
-    <dependent>
         <selected>Expiry of Contract</selected>
-        <show>
-          Expiry of Contract,
-          International transfer begins,
-          International transfer ends,
-          End of Backpacker Journey
-        </show>
+        <show>Expiry of Contract,International transfer begins,International transfer ends,End of Backpacker Journey</show>
     </dependent>
     <dependent>
         <selected>Dismissal</selected>
-        <show>
-          Dismissal with notice,
-          Dismissal without notice
-        </show>
+        <show>Dismissal with notice,Dismissal without notice</show>
     </dependent>
     <dependent>
         <selected>Retirement</selected>
-        <show>
-          Retirement
-        </show>
+        <show>Retirement</show>
     </dependent>
   <dependent>
         <selected>Resignation</selected>
-        <show>
-          Resignation,
-          Lack of opportunities,
-          Salary,
-          Unhappy with management,
-          Domestic,
-          Hours of work,
-          Days of work,
-          Health,
-          Maternity rights,
-          Moving away,
-          Return to FT education,
-          Exams pending,
-          Leaving IKEA/New job,
-          Other
-        </show>
+        <show>Resignation,Lack of opportunities,Salary,Unhappy with management,Domestic,Hours of work,Days of work,Health,Maternity rights,Moving away,Return to FT education,Exams pending,Leaving IKEA/New job,Other</show>
   </dependent>
   <dependent>
         <selected>Redundancy</selected>
-        <show>
-          Redundancy
-        </show>
+        <show>Redundancy</show>
   </dependent>
   <dependent>
         <selected>Other</selected>

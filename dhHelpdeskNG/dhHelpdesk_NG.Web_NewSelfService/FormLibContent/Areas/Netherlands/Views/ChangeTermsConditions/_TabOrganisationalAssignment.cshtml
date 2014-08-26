@@ -300,166 +300,512 @@
             $('#EmploymentCategory').find("option[value*='Temporary']").prop("disabled", false);
         }
 
-    ////////////////////////////////////////////////////////////
+        $('#NewBusinessUnit').change(function () {
+            var value = $(this).val();
+            if ($('#NewBusinessUnit')[0].selectize) {
+                var selectedText = $('#NewBusinessUnit')[0].selectize.getItem(value).text();
 
-    //    $('#NewDepartment').change(function () {
-
+                if ($('#PrimarySite')[0].selectize) {
+                    $('#PrimarySite')[0].selectize.setValue(selectedText);
+                }
+                else {
+                    $('#PrimarySite').val(selectedText);
+                }
+            }
+            else {
+                var selectedText = $('#NewBusinessUnit').find('option:selected').text();
+                if ($('#PrimarySite')[0].selectize) {
+                    $('#PrimarySite')[0].selectize.setValue(selectedText);
+                }
+                else {
+                    var selectedText = $('#NewBusinessUnit').find('option:selected').text();
+                    $('#PrimarySite').val(selectedText);
+                }
+            }
             
-    //        var path = window.location.protocol + '//';
-    //        path = path + window.location.host + '/';
+            GetXML('predefined_businessunit_linemanager_Change_outs.xml', setLineManager);
+        });
 
-    //        var n = path.indexOf("localhost")
-    //        if (n == -1) {
-    //            path = path + 'ect/FormLibContent/Xmls/Netherlands/Templates/Predifened_CostCentre.xml'
-    //        }
-    //        else {
-    //            path = path + 'FormLibContent/Xmls/Netherlands/Templates/Predifened_CostCentre.xml'
-    //        }
+        $('#ReportsToLineManager').change(function () {
+            var value = $(this).val();
+            if ($('#ReportsToLineManager')[0].selectize) {
+                var selectedText = $('#ReportsToLineManager')[0].selectize.getItem(value).text();
 
-    //        $.ajax({
-    //            type: "GET",
-    //            url: path,
-    //            dataType: "xml",
-    //            success: setCostCentre,
-    //            error: function (jqXHR, textStatus, errorThrown) {
-    //                alert(jqXHR.responseText);
-    //                alert(textStatus);
-    //                alert(errorThrown);
-    //            }
+                if ($('#TECApprover')[0].selectize) {
+                    $('#TECApprover')[0].selectize.setValue(selectedText);
+                }
+                else {
+                    $('#TECApprover').val(selectedText);
+                }
+            }
+            else {
+                var selectedText = $('#ReportsToLineManager').find('option:selected').text();
+                if ($('#TECApprover')[0].selectize) {
+                    $('#TECApprover')[0].selectize.setValue(selectedText);
+                }
+                else {
+                    var selectedText = $('#ReportsToLineManager').find('option:selected').text();
+                    $('#TECApprover').val(selectedText);
+                }
+            }
+        });
+        $('#NewDepartment').change(function () {
 
-    //        });
+            GetXML('Predifened_CostCentre_Change.xml', setCostCentre);
 
+        });
 
+        $('#JobTitle').change(function () {
 
+            GetXML('predefined_jobtitle_localjobtitle_Change_outs.xml', setLocalJobTitle);
+            GetXML('predefined_jobtitle_payscale_Change_outs.xml', setPayScale);
 
-    //    });
+        });
 
-    //    function setReportToLineManager(xml) {
+        
+        function GetXML(xmlFile, url) {
+            //////////
+            //Gets XML File
+            //////////
 
-    //        var show = ''
-    //        var dep = $("#NewBusinessUnit option:selected").text();
+            var path = window.location.protocol + '//';
+            path = path + window.location.host + '/';
 
+            path = site.baseUrl + '/FormLibContent/Xmls/Netherlands/Templates/' + xmlFile
 
+            $.ajax({
+                type: "GET",
+                url: path,
+                dataType: "xml",
+                success: url,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
+                    alert(textStatus);
+                    alert(errorThrown);
+                }
 
-
-    //        $(xml).find('dependent').each(function () {
-
-    //            var $book = $(this);
-    //            show = '';
-
-    //            var department = $book.find('selected').text();
-
-    //            show = $book.find('show').text();
-
-    //            if (department == dep) {
-
-
-    //                if (show != '') {
-
-
-    //                    //           $('#ReportsToLineManager')
-    //                    //.append($("<option></option>")
-    //                    //.attr("value", show)
-    //                    //.text(show));
-
-
-    //                    return;
-    //                }
-    //            }
-
-
-    //        });
+            });
 
 
-
-    //    }
-
-    //    function setCostCentre(xml) {
-    //        var show = ''
-    //        var dep = $("#NewDepartment option:selected").text();
-    //        $(xml).find('dependent').each(function () {
-
-    //            var $book = $(this);
-    //            show = '';
-
-    //            var department = $book.find('selected').text();
-
-    //            show = $book.find('show').text();
-
-    //            if (department == dep) {
-
-    //                if (show != '') {
-    //                    var n = show.indexOf(",");
-
-    //                    if (n == -1) {
-
-    //                        $('#HomeCostCentre')[0].selectize.setValue(show);
-    //                        $('#CrossChargeCostCentre')[0].selectize.setValue(show);
-
-    //                    }
-    //                    else {
-    //                        var res = show.substring(0, n);
-
-    //                        $('#HomeCostCentre')[0].selectize.setValue(res);
-    //                        $('#CrossChargeCostCentre')[0].selectize.setValue(res);
-    //                    }
-    //                    return;
-    //                }
-    //            }
-    //        });
+        }
 
 
-
-    //    }
-
-
-
-    //    $('#ReportsToLineManager').change(function () {
-    //        var value = $(this).val();
-    //        if ($('#ReportsToLineManager')[0].selectize) {
-    //            var selectedText = $('#ReportsToLineManager')[0].selectize.getItem(value).text();
-
-    //            if ($('#TECApprover')[0].selectize) {
-    //                $('#TECApprover')[0].selectize.setValue(selectedText);
-    //            }
-    //            else {
-    //                $('#TECApprover').val(selectedText);
-    //            }
-    //        }
-    //        else {
-    //            var selectedText = $('#ReportsToLineManager').find('option:selected').text();
-    //            if ($('#TECApprover')[0].selectize) {
-    //                $('#TECApprover')[0].selectize.setValue(selectedText);
-    //            }
-    //            else {
-    //                var selectedText = $('#ReportsToLineManager').find('option:selected').text();
-    //                $('#TECApprover').val(selectedText);
-    //            }
-    //        }
-    //    });
+        function setLineManager(xml) {
+            //////////
+            //setLineManagerJobTitle:
+            //Adds Jobtitles on selected Function
+            //////////
 
 
-    //    $('#NewBusinessUnit').change(function () {
-    //        var value = $(this).val();
-    //        if ($('#NewBusinessUnit')[0].selectize) {
-    //            var selectedText = $('#NewBusinessUnit')[0].selectize.getItem(value).text();
+            var show = ''
 
-    //            if ($('#PrimarySite')[0].selectize) {
-    //                $('#PrimarySite')[0].selectize.setValue(selectedText);
-    //            }
-    //            else {
-    //                $('#PrimarySite').val(selectedText);
-    //            }
-    //        }
-    //        else {
-    //            var selectedText = $('#NewBusinessUnit').find('option:selected').text();
-    //            if ($('#PrimarySite')[0].selectize) {
-    //                $('#PrimarySite')[0].selectize.setValue(selectedText);
-    //            }
-    //            else {
-    //                var selectedText = $('#NewBusinessUnit').find('option:selected').text();
-    //                $('#PrimarySite').val(selectedText);
-    //            }
-    //        }
-    //    });
+            var dep = '';
+
+            if (document.getElementById('NewBusinessUnit')) {
+                dep = $("#NewBusinessUnit option:selected").text();
+            }
+            
+            var selectize_tags = $("#ReportsToLineManager")[0].selectize
+            selectize_tags.clearOptions();
+
+
+            $(xml).find('dependent').each(function () {
+
+
+                var $sel = $(this);
+                show = '';
+
+                var department = $sel.find('selected').text();
+
+                show = $sel.find('show').text();
+
+
+                if (department == dep) {
+
+                    if (show != '') {
+
+
+                        //show = ' ,' + show;
+                        var optionsarray = show.split(',');
+                        optionsarray.unshift('');
+
+
+
+                        $.each(optionsarray, function (i) {
+                            selectize_tags.addOption({
+                                text: optionsarray[i],
+                                value: optionsarray[i]
+                            });
+                            selectize_tags.addItem(optionsarray[i])
+
+                        });
+
+                        $('#ReportsToLineManager')[0].selectize.setValue('');
+
+                        return;
+
+                    }
+                }
+            });
+
+        }
+        function setPayScale(xml) 
+        {
+            var show = ''
+
+            var dep = document.getElementById('JobTitle').value;
+
+            $(xml).find('dependent').each(function () {
+
+                var $book = $(this);
+                show = '';
+
+                var department = $book.find('selected').text();
+
+                show = $book.find('show').text();
+
+
+                if (department == dep) {
+
+                    if (show != '') {
+                        var n = show.indexOf(",");
+
+                        if (n == -1) {
+
+                            document.getElementById('PayScaleLevel').value = show;
+
+                        }
+                        else {
+                            var res = show.substring(0, n);
+                            document.getElementById('PayScaleLevel').value = res;
+
+
+                        }
+                        return;
+                    }
+                    else {
+                        document.getElementById('PayScaleLevel').value = '';
+                    }
+                }
+            });
+        }
+
+        function setLocalJobTitle(xml) 
+        {
+            var show = ''
+            //var dep = $("#JobTitle option:selected").text();
+            //alert(dep);
+            var dep = document.getElementById('JobTitle').value;
+           
+            $(xml).find('dependent').each(function () {
+
+                var $book = $(this);
+                show = '';
+
+                var department = $book.find('selected').text();
+
+                show = $book.find('show').text();
+
+
+                if (department == dep) {
+                    
+                    if (show != '') {
+                        var n = show.indexOf(",");
+
+                        if (n == -1) {
+
+                            $('#LocalJobTitle')[0].selectize.setValue(show);
+
+
+                        }
+                        else {
+                            var res = show.substring(0, n);
+                            
+                            $('#LocalJobTitle')[0].selectize.setValue(res);
+
+                        }
+                        return;
+                    }
+                }
+            });
+        }
+
+        function setCostCentre(xml)
+        {
+            var show = ''
+            var dep = $("#NewDepartment option:selected").text();
+            $(xml).find('dependent').each(function () {
+
+                var $book = $(this);
+                show = '';
+
+                var department = $book.find('selected').text();
+
+                show = $book.find('show').text();
+
+                if (department == dep) {
+
+                    if (show != '') {
+                        var n = show.indexOf(",");
+
+                        if (n == -1) {
+
+                            $('#HomeCostCentre')[0].selectize.setValue(show);
+                            $('#CrossChargeCostCentre')[0].selectize.setValue(show);
+
+                        }
+                        else {
+                            var res = show.substring(0, n);
+
+                            $('#HomeCostCentre')[0].selectize.setValue(res);
+                            $('#CrossChargeCostCentre')[0].selectize.setValue(res);
+                        }
+                        return;
+                    }
+                }
+            });
+        }
+
+        function setDeductionUnits(xml) {
+            var show = ''
+
+            var dep = document.getElementById('DeductionsType').value;
+
+            $(xml).find('dependent').each(function () {
+
+                var $book = $(this);
+                show = '';
+
+                var department = $book.find('selected').text();
+
+                show = $book.find('show').text();
+
+                if (department == dep) {
+
+
+                    if (show != '') {
+                        var n = show.indexOf(",");
+
+                        if (n == -1) {
+
+                            document.getElementById('DeductionsNetGross').value = show;
+
+                        }
+                        else {
+                            var res = show.substring(0, n);
+                            document.getElementById('DeductionsNetGross').value = res;
+
+
+                        }
+                        return;
+                    }
+                    else {
+                        document.getElementById('DeductionsNetGross ').value = '';
+                    }
+                }
+            });
+        }
+
+
+        function setDeductionUnits2(xml) {
+            var show = ''
+
+            var dep = document.getElementById('DeductionsType2').value;
+
+            $(xml).find('dependent').each(function () {
+
+                var $book = $(this);
+                show = '';
+
+                var department = $book.find('selected').text();
+
+                show = $book.find('show').text();
+
+                if (department == dep) {
+
+
+                    if (show != '') {
+                        var n = show.indexOf(",");
+
+                        if (n == -1) {
+
+                            document.getElementById('DeductionsNetGross2').value = show;
+
+                        }
+                        else {
+                            var res = show.substring(0, n);
+                            document.getElementById('DeductionsNetGross2').value = res;
+
+
+                        }
+                        return;
+                    }
+                    else {
+                        document.getElementById('DeductionsNetGross2').value = '';
+                    }
+                }
+            });
+        }
+
+        function setDeductionUnits3(xml) {
+            var show = ''
+
+            var dep = document.getElementById('DeductionsType3').value;
+
+            $(xml).find('dependent').each(function () {
+
+                var $book = $(this);
+                show = '';
+
+                var department = $book.find('selected').text();
+
+                show = $book.find('show').text();
+
+                if (department == dep) {
+
+
+                    if (show != '') {
+                        var n = show.indexOf(",");
+
+                        if (n == -1) {
+
+                            document.getElementById('DeductionsNetGross3').value = show;
+
+                        }
+                        else {
+                            var res = show.substring(0, n);
+                            document.getElementById('DeductionsNetGross3').value = res;
+
+
+                        }
+                        return;
+                    }
+                    else {
+                        document.getElementById('DeductionsNetGross3').value = '';
+                    }
+                }
+            });
+        }
+
+        function setAllowanceUnits3(xml) {
+            var show = ''
+
+            var dep = document.getElementById('AllowancesType3').value;
+
+            $(xml).find('dependent').each(function () {
+
+                var $book = $(this);
+                show = '';
+
+                var department = $book.find('selected').text();
+
+                show = $book.find('show').text();
+
+                if (department == dep) {
+
+
+                    if (show != '') {
+                        var n = show.indexOf(",");
+
+                        if (n == -1) {
+
+                            document.getElementById('AllowancesNetGross3').value = show;
+
+                        }
+                        else {
+                            var res = show.substring(0, n);
+                            document.getElementById('AllowancesNetGross3').value = res;
+
+
+                        }
+                        return;
+                    }
+                    else {
+                        document.getElementById('AllowancesNetGross3').value = '';
+                    }
+                }
+            });
+        }
+
+
+        function setAllowanceUnits2(xml) {
+            var show = ''
+
+            var dep = document.getElementById('AllowancesType2').value;
+
+            $(xml).find('dependent').each(function () {
+
+                var $book = $(this);
+                show = '';
+
+                var department = $book.find('selected').text();
+
+                show = $book.find('show').text();
+
+                if (department == dep) {
+
+
+                    if (show != '') {
+                        var n = show.indexOf(",");
+
+                        if (n == -1) {
+
+                            document.getElementById('AllowancesNetGross2').value = show;
+
+                        }
+                        else {
+                            var res = show.substring(0, n);
+                            document.getElementById('AllowancesNetGross2').value = res;
+
+
+                        }
+                        return;
+                    }
+                    else {
+                        document.getElementById('AllowancesNetGross2').value = '';
+                    }
+                }
+            });
+        }
+
+        function setAllowanceUnits(xml) {
+            var show = ''
+
+            var dep = document.getElementById('AllowancesType').value;
+            
+            $(xml).find('dependent').each(function () {
+
+                var $book = $(this);
+                show = '';
+
+                var department = $book.find('selected').text();
+
+                show = $book.find('show').text();
+
+                if (department == dep) {
+
+
+                    if (show != '') {
+                        var n = show.indexOf(",");
+
+                        if (n == -1) {
+
+                            document.getElementById('AllowancesNetGross').value = show;
+
+                        }
+                        else {
+                            var res = show.substring(0, n);
+                            document.getElementById('AllowancesNetGross').value = res;
+
+
+                        }
+                        return;
+                    }
+                    else {
+                        document.getElementById('AllowancesNetGross').value = '';
+                    }
+                }
+            });
+        }
+
 </script>

@@ -62,6 +62,7 @@
                     <td class="tdstrong">@Model.Label("ServiceRequestPriority")</td>
                     <td>@Model.Element("ServiceRequestPriority")</td>
                 </tr>
+                @if (!FormLibUtils.IsSelfService()){
                 <tr>
                     <td class="tdstrong">@Model.Translate("SLA")</td>
                     <td>
@@ -74,6 +75,7 @@
                         }
                     </td>
                 </tr>  
+                }
                 <tr>
                     <td class="tdstrong">@Model.Label("Co-WorkerID")</td>
                     <td>@Model.Element("Co-WorkerID" , false)</td>
@@ -145,8 +147,7 @@
 </div>
 <script>
 
-  
-
+    setPreviousContractStartDate();
 
     var dateHiringDate = $('#date_ContractStartDate');
     if (dateHiringDate.length > 0) {
@@ -159,10 +160,21 @@
             });
     }
 
-
-
-
     document.getElementById('NewToIKEA').onchange = selectIndexChangeNewToIKEA;
+
+    function setPreviousContractStartDate() {
+        if (document.getElementById('NewToIKEA').options[document.getElementById('NewToIKEA').selectedIndex].value != 'International Transfer') {
+            $('#date_PreviousContractStartDate').datepicker("destroy");
+            $('#date_PreviousContractStartDate').addClass("disabled");
+            $('#PreviousContractStartDate').prop('disabled', true);
+            $('#PreviousContractStartDate').val("");
+        }
+        else {
+            $('#date_PreviousContractStartDate').datepicker();
+            $('#PreviousContractStartDate').prop('disabled', false);
+            $("#PreviousContractStartDate").removeClass("disabled");
+        }
+    }
 
     function selectIndexChangeNewToIKEA() {
         if (this.options[this.selectedIndex].value == 'New Hire') {
@@ -171,7 +183,20 @@
         }
         else {
             document.getElementById('GlobalHRID').disabled = false;
-            document.getElementById('Co-WorkerID').disabled = true;
+            document.getElementById('Co-WorkerID').disabled = false;
+        }
+
+
+        if (this.options[this.selectedIndex].value != 'International Transfer') {
+                $('#date_PreviousContractStartDate').datepicker("destroy");
+                $('#date_PreviousContractStartDate').addClass("disabled");
+                $('#PreviousContractStartDate').prop('disabled', true);
+                $('#PreviousContractStartDate').val("");
+        }
+        else {
+                $('#date_PreviousContractStartDate').datepicker();
+                $('#PreviousContractStartDate').prop('disabled', false);
+                $("#PreviousContractStartDate").removeClass("disabled");
         }
 
 
@@ -201,5 +226,12 @@
         if (dstartDate.valueOf() < now.valueOf())
             noticeHiringDate.show();
     });
+
+    function Payee() {
+        document.getElementById('Payee').value = (document.getElementById('FirstName').value + " " + document.getElementById('LastName').value);
+    }
+
+    $('#FirstName').change(function () { Payee(); });
+    $('#LastName').change(function () { Payee(); });
 
 </script>

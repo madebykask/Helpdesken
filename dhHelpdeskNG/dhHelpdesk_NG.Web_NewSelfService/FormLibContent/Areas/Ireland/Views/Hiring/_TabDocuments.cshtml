@@ -8,7 +8,7 @@
     {
         
         //Temporary_FixedTerm
-        if (Model.GetDocumentAnswer("EmploymentCategory").ToLower() == "Temporary".ToLower() | Model.GetDocumentAnswer("EmploymentCategory").ToLower() == "Fixed Term".ToLower())
+        if (Model.GetDocumentAnswer("ContractType").ToLower() == "Temporary".ToLower() | Model.GetDocumentAnswer("ContractType").ToLower() == "Fixed Term".ToLower())
         {
             return "Temporary_FixedTerm";
         }

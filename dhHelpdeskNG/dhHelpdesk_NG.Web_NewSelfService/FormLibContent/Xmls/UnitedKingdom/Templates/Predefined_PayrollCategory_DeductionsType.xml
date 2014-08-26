@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <predefined>
-  <name>DeductionsType</name>
+  <name>PayrollDeduction</name>
   <dependent>
     <selected>Hourly</selected>
     <show>Badge Charge,Uniform Deduction,ID Card,TEC Expenses Deduction,Travel Allowance,PHI-Private Health Ins,Rent Deduction</show>

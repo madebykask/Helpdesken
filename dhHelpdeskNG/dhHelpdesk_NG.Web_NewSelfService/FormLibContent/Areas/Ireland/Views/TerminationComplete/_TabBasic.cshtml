@@ -24,7 +24,11 @@
             <tr>
                 <td class="tdstrong">@Model.Label("LastDayWorked")</td>
                 <td>
-                    @Model.Element("LastDayWorked")</td>
+                    @Model.Element("LastDayWorked")
+                    <div id="notice_LastDayWorked" style="display:none;" class="notice">
+                            @Model.Translate("The date you've entered is in the past. Are you sure you want to backdate Last Day Worked?")
+                        </div>
+                </td>
             </tr>         
 
             <tr>
@@ -47,59 +51,55 @@
 <script>
     
 
-    function addTecProviders() {
-        //////////
-        //Add deduction types on selected payroll category
-        //////////
+    function selectIndexChangeTerminationType() {
+        if (document.getElementById('CompleteTerminationType')) {
+            document.getElementById('CompleteTerminationType').value = document.getElementById('BasicTerminationType').value;
 
 
-        var path = window.location.protocol + '//';
-        path = path + window.location.host + '/';
-
-        //var n = path.indexOf("localhost")
-        //if (n == -1) {
-        //    path = path + 'ect/FormLibContent/Xmls/UnitedKingdom/Templates/predefined_terminationtype_reason_outs.xml'
-        //}
-        //else {
-        //    path = path + 'FormLibContent/Xmls/UnitedKingdom/Templates/predefined_terminationtype_reason_outs.xml'
-        //}
-
-        path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_terminationtype_reason_outs.xml'
-
-        $.ajax({
-            type: "GET",
-            url: path,
-            dataType: "xml",
-            success: addTecProvidersXML,
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(jqXHR.responseText);
-                alert(textStatus);
-                alert(errorThrown);
-            }
-
-        });
+            path = '';
+            var path = window.location.protocol + '//';
+            path = path + window.location.host + '/';
 
 
+            //path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_linemanager_jobtitle_outs.xml'
+            path = site.baseUrl + '/FormLibContent/Xmls/UnitedKingdom/Templates/predefined_TerminationReason.xml'
+
+            $.ajax({
+                type: "GET",
+                url: path,
+                dataType: "xml",
+                success: setTerminationReason,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
+                    alert(textStatus);
+                    alert(errorThrown);
+                }
+
+            });
+
+
+
+        }
     }
 
-    function addTecProvidersXML(xml) {
+    function setTerminationReason(xml) {
+
 
         var show = ''
 
-
         var dep = '';
-        if (document.getElementById('AllowancesNetGross')) {
-            dep = $("#BusinessUnit option:selected").text();
+        if (document.getElementById('CompleteTerminationType')) {
+            dep = document.getElementById('CompleteTerminationType').value;
         }
-
-
         var temp = '';
 
         $(xml).find('dependent').each(function () {
 
+
             var $sel = $(this);
 
             show = '';
+
 
             var department = $sel.find('selected').text();
 
@@ -112,9 +112,10 @@
                     var optionsarray = show.split(',');
                     var seloption = "";
 
-                    $('#TECApprover')
+                    $('#TerminationReason')
                         .find('option')
                         .remove();
+
 
 
                     seloption = '<option value="' + temp + '">' + temp + '</option>';
@@ -122,9 +123,9 @@
                     $.each(optionsarray, function (i) {
                         seloption += '<option value="' + optionsarray[i] + '">' + optionsarray[i] + '</option>';
                     });
+                    $('#TerminationReason').append(seloption);
 
 
-                    $('#TECApprover').append(seloption);
 
 
                     return;
@@ -136,47 +137,84 @@
 
     }
 
-
-    function selectIndexChangeTerminationType() {
-        if (document.getElementById('CompleteTerminationType'))
-        {
-            document.getElementById('CompleteTerminationType').value = document.getElementById('BasicTerminationType').value;
-        }
-    }
-
     document.getElementById('BasicTerminationType').onchange = selectIndexChangeTerminationType;
+    document.getElementById('LastDayWorked').onchange = LastDayWorkedNotices;
+    
 
-    var noticeHiringDate = $('#notice_HiringDate');
-    var noticeHiringDateWrong = $('#notice_HiringDateWrong');
+
+    
+    
 
     $('#LastDayOfEmployment').change(function () {
-      
-        var startDate = $('#LastDayOfEmployment').val();
+        LastDayOfEmploymentNotices();
+        LastDayWorkedNotices();
+        if (document.getElementById('TerminationPaymentDate')) {
+            TerminationPaymentDateNotices();
+        }
+        
+    });
+
+
+    function LastDayOfEmploymentNotices()
+    {
+        var noticeHiringDate = $('#notice_HiringDate');
+        var endDate = $('#LastDayOfEmployment').val();
         var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
-        var dstartDate = APIGlobal.DateTime.parseDate(startDate, format);
+        var dendDate = APIGlobal.DateTime.parseDate(endDate, format);
         var nowTemp = new Date();
         var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
         noticeHiringDate.hide();
-        noticeHiringDateWrong.hide();
-        if (!(dstartDate.getDate() === 1 || dstartDate.getDate() === 15))
-            noticeHiringDateWrong.show();
+        
 
-        if (dstartDate.valueOf() < now.valueOf())
+
+        if (dendDate.valueOf() < now.valueOf())
             noticeHiringDate.show();
-                
-        $('#LastDayWorked').val() = startDate;
-    });
+        $('#LastDayWorked').val(endDate);
 
+        if (document.getElementById('TerminationPaymentDate')) {
+            TerminationPaymentDateNotices();
+        }
+
+        if (document.getElementById('DeductionDate'))
+        {
+            $('#DeductionDate').val(endDate);
+        }
+     
+    }
+
+    function LastDayWorkedNotices()
+    {
+        var noticeLastDayWorked = $('#notice_LastDayWorked');
+
+        if (document.getElementById('LastDayWorked')) {
+            var startDate = $('#LastDayWorked').val();
+            var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+            var dstartDate = APIGlobal.DateTime.parseDate(startDate, format);
+            var nowTemp = new Date();
+            var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+            noticeLastDayWorked.hide();
+
+            if (dstartDate.valueOf() < now.valueOf())
+                noticeLastDayWorked.show();
+        }
+    }
 
 
     var LastDayOfEmployment = $('#date_LastDayOfEmployment');
     LastDayOfEmployment.not(".disabled").datepicker()
             .on('changeDate', function (e) {
-                var LastDate = $('#LastDayOfEmployment').val();
-                document.getElementById('LastDayWorked').value = LastDate;
+                
+                LastDayOfEmploymentNotices();
+                LastDayWorkedNotices();
+
             });
 
+    var LastDayWorked = $('#date_LastDayWorked');
+    LastDayWorked.not(".disabled").datepicker()
+            .on('changeDate', function (e) {
 
+                LastDayWorkedNotices();
+            });
 
     
 

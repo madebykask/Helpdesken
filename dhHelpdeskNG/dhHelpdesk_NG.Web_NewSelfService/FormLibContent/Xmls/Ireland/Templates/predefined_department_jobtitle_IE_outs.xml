@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <predefined>
-  <name>CostCentre</name>
+  <name>DepartmentJobTitle</name>
   <dependent>
     <selected>Logistics Dublin Store</selected>
     <show>Logistics Manager</show>

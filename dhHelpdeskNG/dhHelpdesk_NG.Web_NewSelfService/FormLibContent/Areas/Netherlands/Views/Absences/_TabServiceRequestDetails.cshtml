@@ -75,6 +75,7 @@
                     <td>
                         @Model.Element("ServiceRequestPriority")</td>
                 </tr>
+                @if (!FormLibUtils.IsSelfService()){
                 <tr>
                     <td class="tdstrong">@Model.Translate("SLA")</td>
                     <td>
@@ -86,7 +87,8 @@
                             @Model.Form.PriorityName;
                         }
                     </td>
-                </tr>         
+                </tr>   
+                }      
             </tbody>
         </table>
     </div>

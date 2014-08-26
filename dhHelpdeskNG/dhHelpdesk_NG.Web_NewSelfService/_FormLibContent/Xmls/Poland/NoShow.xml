@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE form [
+    <!ENTITY languages SYSTEM "Templates/Languages.xml">
+    <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
+    <!ENTITY state SYSTEM "Templates/NoShowState.xml">
+    <!ENTITY pre_company_unit SYSTEM "Templates/Predefined_Company_Unit.xml">
+]>
+
+<form id="24" guid="684B54B9-43D0-4514-8E96-C76A46E8AA01" customerId="26">
+    &languages;
+    &regexs;
+    &state;
+    <fields>
+        <tab name="#noshow">
+            <element name="EmployeeNumber" type="typeahead" label="Employee no" mandatory="1">
+                <regex inherit="employeeno" pattern="" message=""></regex>
+            </element>
+            <element name="EmployeeFirstName" type="text" label="First name" mandatory="1"></element>
+            <element name="EmployeeLastName" type="text" label="Last name" mandatory="1"></element>
+            <element name="Company" type="select" label="Company" mandatory="1">
+                &pre_company_unit;
+            </element>
+            <element name="Unit" type="select" label="Store/Unit" mandatory="1"></element>
+            <element name="EffectiveDate" type="date" format="dd.MM.yyyy" mandatory="1" label="Agreed Start Date">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element name="SpecialRemarks" type="textarea" label="Special Remarks"></element>
+            <element name="FileBase" type="file" label="Attach files"></element>
+        </tab>
+        <tab name="lognote">
+            <element type="textarea" name="InternalLogNote" label="Internal log note"></element>
+        </tab>
+    </fields>
+</form>

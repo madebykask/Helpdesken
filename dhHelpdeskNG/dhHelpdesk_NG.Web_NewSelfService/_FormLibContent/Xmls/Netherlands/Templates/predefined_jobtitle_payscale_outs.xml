@@ -1,0 +1,748 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<predefined>
+  <name>CostCentre</name>
+  <dependent>
+    <selected>Accounting Co-worker</selected>
+    <show>9</show>
+  </dependent>
+  <dependent>
+    <selected>Accounting Co-worker Senior</selected>
+    <show>11</show>
+  </dependent>
+  <dependent>
+    <selected>Accounting Manager</selected>
+    <show>14</show>
+  </dependent>
+  <dependent>
+    <selected>Accounting Team Manager</selected>
+    <show>10</show>
+  </dependent>
+  <dependent>
+    <selected>Accounts Payable Co-worker</selected>
+    <show>7</show>
+  </dependent>
+  <dependent>
+    <selected>Activity Leader</selected>
+    <show>13</show>
+  </dependent>
+  <dependent>
+    <selected>Administration &amp; Routines Specialist</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Administrator</selected>
+    <show>7,7</show>
+  </dependent>
+  <dependent>
+    <selected>Apprentice</selected>
+    <show>0</show>
+  </dependent>
+  <dependent>
+    <selected>Back-Office Co-worker</selected>
+    <show>7</show>
+  </dependent>
+  <dependent>
+    <selected>Backpacker</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Build Up Service Specialist</selected>
+    <show>12</show>
+  </dependent>
+  <dependent>
+    <selected>Business Analyst</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Business Creator</selected>
+    <show> </show>
+  </dependent>
+  <dependent>
+    <selected>Business Information Analyst</selected>
+    <show> </show>
+  </dependent>
+  <dependent>
+    <selected>Business Navigation Manager</selected>
+    <show>15</show>
+  </dependent>
+  <dependent>
+    <selected>Business Navigator</selected>
+    <show>13,13,14</show>
+  </dependent>
+  <dependent>
+    <selected>Call Center Representative</selected>
+    <show>6</show>
+  </dependent>
+  <dependent>
+    <selected>Call Center Representative I</selected>
+    <show>7</show>
+  </dependent>
+  <dependent>
+    <selected>Carpenter Co-worker</selected>
+    <show>6</show>
+  </dependent>
+  <dependent>
+    <selected>Carts Co-worker</selected>
+    <show>3</show>
+  </dependent>
+  <dependent>
+    <selected>Cash Line Co-worker</selected>
+    <show>6</show>
+  </dependent>
+  <dependent>
+    <selected>Checkout Coworker IKEA FOOD</selected>
+    <show>5</show>
+  </dependent>
+  <dependent>
+    <selected>Com &amp; In Co-worker</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Com&amp;In Learning &amp; Development Leader</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Commercial Activity Leader</selected>
+    <show>10</show>
+  </dependent>
+  <dependent>
+    <selected>Communication &amp; Interior Design Manager</selected>
+    <show>13</show>
+  </dependent>
+  <dependent>
+    <selected>Communication Responsible</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Communications Specialist - Senior</selected>
+    <show>12</show>
+  </dependent>
+  <dependent>
+    <selected>Competence Development Specialist</selected>
+    <show>14,14</show>
+  </dependent>
+  <dependent>
+    <selected>Construction Project Manager</selected>
+    <show>13</show>
+  </dependent>
+  <dependent>
+    <selected>Contact Center Manager</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Country Com&amp;In Manager</selected>
+    <show>18</show>
+  </dependent>
+  <dependent>
+    <selected>Country Communication Manager</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Country Customer Relations Manager</selected>
+    <show>17</show>
+  </dependent>
+  <dependent>
+    <selected>Country Facility Manager</selected>
+    <show>12</show>
+  </dependent>
+  <dependent>
+    <selected>Country Food Specialist</selected>
+    <show>13</show>
+  </dependent>
+  <dependent>
+    <selected>Country Graphic Communication Leader</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Country HR Manager</selected>
+    <show>18</show>
+  </dependent>
+  <dependent>
+    <selected>Country IKEA Food Manager</selected>
+    <show>17</show>
+  </dependent>
+  <dependent>
+    <selected>Country In-Store Logistics Manager</selected>
+    <show>14</show>
+  </dependent>
+  <dependent>
+    <selected>Country Marketing Manager</selected>
+    <show>18</show>
+  </dependent>
+  <dependent>
+    <selected>Country Retail Manager</selected>
+    <show>20</show>
+  </dependent>
+  <dependent>
+    <selected>Country Risk Manager</selected>
+    <show>14</show>
+  </dependent>
+  <dependent>
+    <selected>Country Sales Manager</selected>
+    <show>18</show>
+  </dependent>
+  <dependent>
+    <selected>Country Web &amp; Digital Manager</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Co-worker Relations Manager</selected>
+    <show>15</show>
+  </dependent>
+  <dependent>
+    <selected>Customer Delivery Coordinator</selected>
+    <show>12</show>
+  </dependent>
+  <dependent>
+    <selected>Customer Service Specialist</selected>
+    <show>12</show>
+  </dependent>
+  <dependent>
+    <selected>Customer Services Manager</selected>
+    <show>13</show>
+  </dependent>
+  <dependent>
+    <selected>Customer Services Team Assistant</selected>
+    <show>9</show>
+  </dependent>
+  <dependent>
+    <selected>Customer Services Team Manager</selected>
+    <show>10</show>
+  </dependent>
+  <dependent>
+    <selected>Deputy Com &amp; In Manager</selected>
+    <show>12</show>
+  </dependent>
+  <dependent>
+    <selected>Deputy Logistics Manager</selected>
+    <show>13</show>
+  </dependent>
+  <dependent>
+    <selected>Deputy Marketing Manager</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Deputy Retail Manager</selected>
+    <show>18</show>
+  </dependent>
+  <dependent>
+    <selected>Deputy Sales Manager</selected>
+    <show>13</show>
+  </dependent>
+  <dependent>
+    <selected>Deputy Shopkeeper</selected>
+    <show>9</show>
+  </dependent>
+  <dependent>
+    <selected>Deputy Store Manager</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Dishwasher / Attendant</selected>
+    <show>2</show>
+  </dependent>
+  <dependent>
+    <selected>Easy Buying Specialist</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>eCommerce BN Operations Manager</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>eCommerce Merchandiser</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>eCommerce Shopkeeper</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>External Communication Co-worker</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Finance &amp; Administration Manager</selected>
+    <show>18,18</show>
+  </dependent>
+  <dependent>
+    <selected>Food Safety Specialist</selected>
+    <show>13</show>
+  </dependent>
+  <dependent>
+    <selected>Frontliner</selected>
+    <show>7</show>
+  </dependent>
+  <dependent>
+    <selected>Furniture Builder</selected>
+    <show>5</show>
+  </dependent>
+  <dependent>
+    <selected>Global Commercial Review Manager</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Goods Flow Co-worker</selected>
+    <show>3</show>
+  </dependent>
+  <dependent>
+    <selected>Goods Flow Co-worker I</selected>
+    <show>5</show>
+  </dependent>
+  <dependent>
+    <selected>Goods Flow Team Leader</selected>
+    <show>10</show>
+  </dependent>
+  <dependent>
+    <selected>Graphic Communication Co-worker</selected>
+    <show>7</show>
+  </dependent>
+  <dependent>
+    <selected>Graphic Communication Leader</selected>
+    <show>9</show>
+  </dependent>
+  <dependent>
+    <selected>Graphic Communication Leader Expansion</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>HR Generalist</selected>
+    <show>10,10</show>
+  </dependent>
+  <dependent>
+    <selected>HR Manager</selected>
+    <show>13,13</show>
+  </dependent>
+  <dependent>
+    <selected>HR Operations Manager</selected>
+    <show>12</show>
+  </dependent>
+  <dependent>
+    <selected>HR Service Center Co-worker</selected>
+    <show>7</show>
+  </dependent>
+  <dependent>
+    <selected>HR Service Center Manager</selected>
+    <show>13</show>
+  </dependent>
+  <dependent>
+    <selected>HR Specialist</selected>
+    <show>12</show>
+  </dependent>
+  <dependent>
+    <selected>HRSC Payroll Specialist II</selected>
+    <show>9</show>
+  </dependent>
+  <dependent>
+    <selected>IF Bistro &amp; Sweden Shop Co-worker</selected>
+    <show>5</show>
+  </dependent>
+  <dependent>
+    <selected>IF Specialist</selected>
+    <show>10</show>
+  </dependent>
+  <dependent>
+    <selected>IF Team Leader</selected>
+    <show>10</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Business Specialist</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Food Co-worker</selected>
+    <show>6</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA FOOD Co-worker I</selected>
+    <show>5</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Food Manager</selected>
+    <show>12</show>
+  </dependent>
+  <dependent>
+    <selected>Info &amp; Smaland Co-worker</selected>
+    <show>4</show>
+  </dependent>
+  <dependent>
+    <selected>Information &amp; Communication Coordinator</selected>
+    <show>9</show>
+  </dependent>
+  <dependent>
+    <selected>In-store Logistics Specialist</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Interior Design Co-worker</selected>
+    <show>7</show>
+  </dependent>
+  <dependent>
+    <selected>Interior Design Leader</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Interior Design Leader Expansion</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Interior Design Manager</selected>
+    <show>10</show>
+  </dependent>
+  <dependent>
+    <selected>Internal Information Coordinator</selected>
+    <show>10</show>
+  </dependent>
+  <dependent>
+    <selected>Internet Coordinator</selected>
+    <show>9</show>
+  </dependent>
+  <dependent>
+    <selected>IT Manager</selected>
+    <show>14</show>
+  </dependent>
+  <dependent>
+    <selected>IT Support</selected>
+    <show>8</show>
+  </dependent>
+  <dependent>
+    <selected>Kitchen Production Specialist</selected>
+    <show>7</show>
+  </dependent>
+  <dependent>
+    <selected>Leadership Development Manager</selected>
+    <show>15</show>
+  </dependent>
+  <dependent>
+    <selected>Learning &amp; Development Specialist</selected>
+    <show>10</show>
+  </dependent>
+  <dependent>
+    <selected>Local Marketing Co-worker</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Local Marketing Specialist</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Logistics Administration Co-worker</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Logistics Manager</selected>
+    <show>13</show>
+  </dependent>
+  <dependent>
+    <selected>Logistics Team Leader</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Maintenance Co-worker</selected>
+    <show>6</show>
+  </dependent>
+  <dependent>
+    <selected>Maintenance Manager</selected>
+    <show>9,10</show>
+  </dependent>
+  <dependent>
+    <selected>Market Intelligence Manager</selected>
+    <show>11</show>
+  </dependent>
+  <dependent>
+    <selected>Marketing Relationship Manager</selected>
+    <show>15</show>
+  </dependent>
+  <dependent>
+    <selected>Marketing Specialist</selected>
+    <show>11</show>
+  </dependent>
+  <dependent>
+    <selected>Marketing Web Specialist</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Operations Manager</selected>
+    <show>12,12</show>
+  </dependent>
+  <dependent>
+    <selected>PR Co-worker</selected>
+    <show>9</show>
+  </dependent>
+  <dependent>
+    <selected>Press officer</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Product Req &amp; Compliance Specialist</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Project Co-worker</selected>
+    <show>9</show>
+  </dependent>
+  <dependent>
+    <selected>Project Manager</selected>
+    <show>13,11</show>
+  </dependent>
+  <dependent>
+    <selected>Property Manager</selected>
+    <show>17</show>
+  </dependent>
+  <dependent>
+    <selected>Purchaser</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Q-Store Quality Manager</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Quality Assurance Analyst</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Quality Co-worker</selected>
+    <show>0</show>
+  </dependent>
+  <dependent>
+    <selected>Quality Specialist</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Receive Payment Leader</selected>
+    <show>9</show>
+  </dependent>
+  <dependent>
+    <selected>Receptionist</selected>
+    <show>6,6</show>
+  </dependent>
+  <dependent>
+    <selected>Recovery Co-worker</selected>
+    <show>5</show>
+  </dependent>
+  <dependent>
+    <selected>Recovery Team Leader</selected>
+    <show>10</show>
+  </dependent>
+  <dependent>
+    <selected>Recruitment Manager</selected>
+    <show>14</show>
+  </dependent>
+  <dependent>
+    <selected>Recruitment Specialist</selected>
+    <show>10</show>
+  </dependent>
+  <dependent>
+    <selected>Retail Logistics Capacity &amp; Flow Planner</selected>
+    <show>11</show>
+  </dependent>
+  <dependent>
+    <selected>Retail Logistics Manager</selected>
+    <show>18</show>
+  </dependent>
+  <dependent>
+    <selected>Retail Preparation Manager</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Retail Project Mnager</selected>
+    <show>13,13,13</show>
+  </dependent>
+  <dependent>
+    <selected>Retail Support Integration Manager</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Retail Sustainability Manager</selected>
+    <show>13</show>
+  </dependent>
+  <dependent>
+    <selected>Risk Specialist</selected>
+    <show>11</show>
+  </dependent>
+  <dependent>
+    <selected>Safety &amp; Security Co-worker</selected>
+    <show>7,7</show>
+  </dependent>
+  <dependent>
+    <selected>Sales &amp; Supply Support Co-worker</selected>
+    <show>6</show>
+  </dependent>
+  <dependent>
+    <selected>Sales &amp; Supply Support Manager</selected>
+    <show>10</show>
+  </dependent>
+  <dependent>
+    <selected>Sales &amp; Supply Support Specialist</selected>
+    <show>9</show>
+  </dependent>
+  <dependent>
+    <selected>Sales Co-worker</selected>
+    <show>5</show>
+  </dependent>
+  <dependent>
+    <selected>Sales Co-worker II</selected>
+    <show>6</show>
+  </dependent>
+  <dependent>
+    <selected>Sales Leader</selected>
+    <show>13</show>
+  </dependent>
+  <dependent>
+    <selected>Sales Leader II</selected>
+    <show>15</show>
+  </dependent>
+  <dependent>
+    <selected>Sales Manager</selected>
+    <show>13,13</show>
+  </dependent>
+  <dependent>
+    <selected>Sales Navigator</selected>
+    <show>14</show>
+  </dependent>
+  <dependent>
+    <selected>Sales Planner</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Sales Space Specialist</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Sales Support Co-worker</selected>
+    <show>9</show>
+  </dependent>
+  <dependent>
+    <selected>Sales Support Specialist</selected>
+    <show>10</show>
+  </dependent>
+  <dependent>
+    <selected>Sales Team Leader</selected>
+    <show>10</show>
+  </dependent>
+  <dependent>
+    <selected>Shopping Experience Manager</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Site Facility Manager</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Software Specialist</selected>
+    <show>10</show>
+  </dependent>
+  <dependent>
+    <selected>Staff Scheduler</selected>
+    <show>8</show>
+  </dependent>
+  <dependent>
+    <selected>Store Manager</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Supply Support Specialist</selected>
+    <show>10</show>
+  </dependent>
+  <dependent>
+    <selected>Support Analyst</selected>
+    <show>8</show>
+  </dependent>
+  <dependent>
+    <selected>System Developer</selected>
+    <show>11</show>
+  </dependent>
+  <dependent>
+    <selected>System Specialist</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Team Leader</selected>
+    <show>10</show>
+  </dependent>
+  <dependent>
+    <selected>Team Manager</selected>
+    <show>10</show>
+  </dependent>
+  <dependent>
+    <selected>Team Manager I</selected>
+    <show>10</show>
+  </dependent>
+  <dependent>
+    <selected>Technical Specialist</selected>
+    <show>13</show>
+  </dependent>
+  <dependent>
+    <selected>Temporary Staff</selected>
+    <show>3</show>
+  </dependent>
+  <dependent>
+    <selected>Translator</selected>
+    <show>7</show>
+  </dependent>
+  <dependent>
+    <selected>User Support I</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Visual Merchandise Leader</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Visual Merchandise Leader Expansion</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Visual Merchandise/Activity Co-worker</selected>
+    <show>7</show>
+  </dependent>
+  <dependent>
+    <selected>Visual Merchandise/Activity Manager</selected>
+    <show>10</show>
+  </dependent>
+  <dependent>
+    <selected>Web Editor</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Store Amersfoort 415</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Store Amsterdam 088</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Store Rotterdam Barendrecht 274</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Store Breda 403</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Store Arnhem Duiven 272</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Store Eindhoven 087</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Store Groningen 404</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Store Amsterdam Haarlem 378</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Store Heerlen 089</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Store Hengelo 312</selected>
+    <show></show>
+  </dependent>
+</predefined>

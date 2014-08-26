@@ -68,6 +68,7 @@
                 <td>
                     @Model.Element("ServiceRequestPriority")</td>
             </tr>
+            @if (!FormLibUtils.IsSelfService()){
             <tr>
                 <td class="tdstrong">@Model.Translate("SLA")</td>
                 <td>
@@ -80,9 +81,8 @@
                     }
                 </td>
             </tr>        
-            
-            
-             </tbody>
+            }
+            </tbody>
         </table>
     </div>
     <div class="span6">

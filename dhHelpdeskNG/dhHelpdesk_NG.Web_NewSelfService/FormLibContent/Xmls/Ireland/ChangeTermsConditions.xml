@@ -931,17 +931,12 @@
         <options>
           <option value=""></option>
           <option value="Accounting Assistant">Accounting Assistant</option>
-          <option value="Accounting Assistant Reconciliation">Accounting Assistant Reconciliation</option>
-          <option value="Activities Specialist">Activities Specialist</option>
           <option value="Activity Manager">Activity Manager</option>
           <option value="Activity Specialist">Activity Specialist</option>
           <option value="After Sales Team Leader">After Sales Team Leader</option>
-          <option value="ASM">ASM</option>
-          <option value="Bathshop Team Leader">Bathshop Team Leader</option>
+          <option value="Assistant Store Manager">Assistant Store Manager</option>
+          <option value="Shopkeeper">Shopkeeper</option>
           <option value="Business Navigation &amp; Operations Manager">Business Navigation &amp; Operations Manager</option>
-          <option value="Business Navigator Trainee">Business Navigator Trainee</option>
-          <option value="Buying Process Manager">Buying Process Manager</option>
-          <option value="Carpenter">Carpenter</option>
           <option value="Carpenter Co-worker">Carpenter Co-worker</option>
           <option value="Checkout Services Co-worker">Checkout Services Co-worker</option>
           <option value="Checkout Services Manager">Checkout Services Manager</option>
@@ -949,20 +944,16 @@
           <option value="Com &amp; In Manager">Com &amp; In Manager</option>
           <option value="Commercial Activity Leader">Commercial Activity Leader</option>
           <option value="Commercial Restaurant Manager">Commercial Restaurant Manager</option>
-          <option value="Commercial Restaurant Team Leader">Commercial Restaurant Team Leader</option>
           <option value="Commercial SFM &amp; Bistro Manager">Commercial SFM &amp; Bistro Manager</option>
-          <option value="Commercial SFM &amp; Bistro Team Leader">Commercial SFM &amp; Bistro Team Leader</option>
-          <option value="Country Commercial Activity Leader">Country Commercial Activity Leader</option>
-          <option value="Customer Order Delivery Specialist">Customer Order Delivery Specialist</option>
           <option value="Customer Relations Manager">Customer Relations Manager</option>
           <option value="Customer Relations Team Leader">Customer Relations Team Leader</option>
           <option value="Customer Service Co-worker">Customer Service Co-worker</option>
           <option value="Customer Services Manager">Customer Services Manager</option>
-          <option value="Customer Services Spec">Customer Services Spec</option>
+          <option value="After Sales Team Leader">After Sales Team Leader</option>
           <option value="Deputy Sales Manager">Deputy Sales Manager</option>
-          <option value="Deputy Store Navigation and Operations Manager">Deputy Store Navigation and Operations Manager</option>
-          <option value="Facility Manager">Facility Manager</option>
-          <option value="Facility Specialist">Facility Specialist</option>
+          <option value="Deputy Business Navigation and Operation">Deputy Business Navigation and Operation</option>
+          <option value="Site Facility Manager">Site Facility Manager</option>
+          <option value="Local Facility Management Specialist">Local Facility Management Specialist</option>
           <option value="Food Production Specialist">Food Production Specialist</option>
           <option value="Furniture Builder">Furniture Builder</option>
           <option value="Goods Flow Co-worker">Goods Flow Co-worker</option>
@@ -970,88 +961,71 @@
           <option value="Goods Flow Specialist">Goods Flow Specialist</option>
           <option value="Goods Flow Team Leader">Goods Flow Team Leader</option>
           <option value="Goods Flow Team Manager">Goods Flow Team Manager</option>
-          <option value="Graduate Student">Graduate Student</option>
-          <option value="Graphic Communication Co-Worker">Graphic Communication Co-Worker</option>
+          <option value="Graphic Communication Co-worker">Graphic Communication Co-worker</option>
           <option value="Graphic Communication Leader">Graphic Communication Leader</option>
           <option value="HR Administrator">HR Administrator</option>
           <option value="HR Generalist">HR Generalist</option>
           <option value="HR Manager">HR Manager</option>
-          <option value="IF Chef">IF Chef</option>
           <option value="IKEA Food Co-worker">IKEA Food Co-worker</option>
-          <option value="IKEA FOOD Manager">IKEA FOOD Manager</option>
+          <option value="IKEA Food Manager">IKEA Food Manager</option>
           <option value="IKEA Food Team Leader">IKEA Food Team Leader</option>
-          <option value="Info &amp; Smaland Team Leader">Info &amp; Smaland Team Leader</option>
           <option value="Interior Design Co-worker">Interior Design Co-worker</option>
           <option value="Interior Design Manager">Interior Design Manager</option>
-          <option value="ISL Manager">ISL Manager</option>
-          <option value="IT Support">IT Support</option>
-          <option value="Kitchen Installation Specialist">Kitchen Installation Specialist</option>
-          <option value="Kitchen Production Manager">Kitchen Production Manager</option>
-          <option value="Kitchen Production Specialist">Kitchen Production Specialist</option>
-          <option value="Kitchen Production Team Leader">Kitchen Production Team Leader</option>
-          <option value="Learning &amp; Development Specialist">Learning &amp; Development Specialist</option>
-          <option value="Local Facility Management Specialist">Local Facility Management Specialist</option>
-          <option value="Local Marketing Leader">Local Marketing Leader</option>
-          <option value="Local Marketing Leader   Comms">Local Marketing Leader   Comms</option>
-          <option value="Local Marketing Leader (Store)">Local Marketing Leader (Store)</option>
-          <option value="Local Marketing Manager">Local Marketing Manager</option>
-          <option value="Local Marketing Specialist">Local Marketing Specialist</option>
-          <option value="Local Marketing Specialist   IKEA FAMILY">Local Marketing Specialist   IKEA FAMILY</option>
-          <option value="Local Marketing Specialist   Local Comms">Local Marketing Specialist   Local Comms</option>
-          <option value="Local Marketing Specialist (Web Channel)">Local Marketing Specialist (Web Channel)</option>
           <option value="Logistics Manager">Logistics Manager</option>
+          <option value="IT Support">IT Support</option>
+          <option value="Services Function Support">Services Function Support</option>
+          <option value="Kitchen Production Manager">Kitchen Production Manager</option>
+          <option value="Learning &amp; Development Specialist">Learning &amp; Development Specialist</option>
+          <option value="Local Marketing Leader">Local Marketing Leader</option>
+          <option value="Local Marketing Leader">Local Marketing Leader</option>
           <option value="Marketing Manager">Marketing Manager</option>
-          <option value="Project Manager">Project Manager</option>
-          <option value="Project Manager Picking and Delivery">Project Manager Picking and Delivery</option>
-          <option value="Q Store Product Quality Technician">Q Store Product Quality Technician</option>
-          <option value="Q Store Quality Manager">Q Store Quality Manager</option>
+          <option value="Local Marketing Specialist">Local Marketing Specialist</option>
+          <option value="Local Marketing Specialist">Local Marketing Specialist</option>
+          <option value="Local Marketing Specialist">Local Marketing Specialist</option>
+          <option value="Local Marketing Specialist">Local Marketing Specialist</option>
+          <option value="Local Marketing Specialist">Local Marketing Specialist</option>
+          <option value="Project Leader">Project Leader</option>
           <option value="Q-Store Product Quality Technician">Q-Store Product Quality Technician</option>
           <option value="Q-Store Quality Manager">Q-Store Quality Manager</option>
-          <option value="Quality Co-worker">Quality Co-worker</option>
-          <option value="Range Specialist">Range Specialist</option>
+          <option value="Range Support">Range Support</option>
           <option value="Range Support">Range Support</option>
           <option value="Recovery Co-worker">Recovery Co-worker</option>
           <option value="Recovery Manager">Recovery Manager</option>
           <option value="Recovery Team Leader">Recovery Team Leader</option>
-          <option value="Risk Supervisor">Risk Supervisor</option>
-          <option value="Risk/Health &amp;Safety CW">Risk/Health &amp;Safety CW</option>
+          <option value="Safety &amp; Security Team Leader">Safety &amp; Security Team Leader</option>
           <option value="Safety &amp; Security Co-worker">Safety &amp; Security Co-worker</option>
           <option value="Safety &amp; Security Manager">Safety &amp; Security Manager</option>
-          <option value="Safety &amp; Security Team Leader">Safety &amp; Security Team Leader</option>
-          <option value="Safety and Security Function Support (Specialist)">Safety and Security Function Support (Specialist)</option>
-          <option value="Sales &amp; Supply Support Co-worker">Sales &amp; Supply Support Co-worker</option>
+          <option value="Safety &amp; Security Co-worker">Safety &amp; Security Co-worker</option>
           <option value="Sales &amp; Supply Support Manager">Sales &amp; Supply Support Manager</option>
           <option value="Sales &amp; Supply Support Specialist">Sales &amp; Supply Support Specialist</option>
           <option value="Sales Co-worker">Sales Co-worker</option>
-          <option value="Sales External Co worker">Sales External Co worker</option>
+          <option value="Sales External Co-worker">Sales External Co-worker</option>
           <option value="Sales Manager">Sales Manager</option>
-          <option value="Sales Specialist   Training">Sales Specialist   Training</option>
+          <option value="Sales Specialist">Sales Specialist</option>
           <option value="Sales Team Leader">Sales Team Leader</option>
-          <option value="Season &amp; Activities Team leader">Season &amp; Activities Team leader</option>
-          <option value="Self Serve Team Leader">Self Serve Team Leader</option>
-          <option value="Services Function Support">Services Function Support</option>
+          <option value="Sales Co-worker">Sales Co-worker</option>
+          <option value="Sales Team Leader">Sales Team Leader</option>
           <option value="Shopkeeper">Shopkeeper</option>
-          <option value="Shopkeeper Sales HFB 18 &amp; 19 (Home Organisation)">Shopkeeper Sales HFB 18 &amp; 19 (Home Organisation)</option>
-          <option value="Shopkeeper Sales HFB1 &amp; 2 (Livingroom)">Shopkeeper Sales HFB1 &amp; 2 (Livingroom)</option>
-          <option value="Shopkeeper Sales HFB10 (Lighting)">Shopkeeper Sales HFB10 (Lighting)</option>
-          <option value="Shopkeeper Sales HFB11, 12 &amp; 13 (Textiles)">Shopkeeper Sales HFB11, 12 &amp; 13 (Textiles)</option>
-          <option value="Shopkeeper Sales HFB14 &amp; 15 (Cooking Eating)">Shopkeeper Sales HFB14 &amp; 15 (Cooking Eating)</option>
-          <option value="Shopkeeper Sales HFB16 &amp; 17 (Home Decoration)">Shopkeeper Sales HFB16 &amp; 17 (Home Decoration)</option>
-          <option value="Shopkeeper Sales HFB3 (Work IKEA)">Shopkeeper Sales HFB3 (Work IKEA)</option>
-          <option value="Shopkeeper Sales HFB4 &amp; 5 (Bedrooms)">Shopkeeper Sales HFB4 &amp; 5 (Bedrooms)</option>
-          <option value="Shopkeeper Sales HFB6 (Bathshop)">Shopkeeper Sales HFB6 (Bathshop)</option>
-          <option value="Shopkeeper Sales HFB7 &amp; 8 (Kitchen Dining)">Shopkeeper Sales HFB7 &amp; 8 (Kitchen Dining)</option>
-          <option value="Shopkeeper Sales HFB9 (Childrens)">Shopkeeper Sales HFB9 (Childrens)</option>
-          <option value="Shopkeeper Sales IKEA Business">Shopkeeper Sales IKEA Business</option>
-          <option value="Shopkeeper Sales Self Serve (Self Serve)">Shopkeeper Sales Self Serve (Self Serve)</option>
+          <option value="Shopkeeper">Shopkeeper</option>
+          <option value="Shopkeeper">Shopkeeper</option>
+          <option value="Shopkeeper">Shopkeeper</option>
+          <option value="Shopkeeper">Shopkeeper</option>
+          <option value="Shopkeeper">Shopkeeper</option>
+          <option value="Shopkeeper">Shopkeeper</option>
+          <option value="Shopkeeper">Shopkeeper</option>
+          <option value="Shopkeeper">Shopkeeper</option>
+          <option value="Shopkeeper">Shopkeeper</option>
+          <option value="Shopkeeper">Shopkeeper</option>
+          <option value="Shopkeeper">Shopkeeper</option>
+          <option value="Shopkeeper">Shopkeeper</option>
           <option value="Site Facility Management Co-worker">Site Facility Management Co-worker</option>
           <option value="Site Facility Manager">Site Facility Manager</option>
-          <option value="Staff Planner">Staff Planner</option>
           <option value="Staff Scheduler">Staff Scheduler</option>
           <option value="Store Manager">Store Manager</option>
           <option value="Sustainability Responsible">Sustainability Responsible</option>
-          <option value="Visual Merchandise/Activity Co-worker">Visual Merchandise/Activity Co-worker</option>
           <option value="Visual Merchandise/Activity Manager">Visual Merchandise/Activity Manager</option>
+          <option value="Visual Merchandise/Activity Co-worker">Visual Merchandise/Activity Co-worker</option>
+
         </options>
       </element>
 
@@ -1108,41 +1082,41 @@
 
       <element type="search-select" source="1" name="ReportsToLineManager" label="Reports to Line Manager">
         <options>
-          <option value=""></option>
-          <option value="﻿Peter Wagner">﻿Peter Wagner</option>
-          <option value="Jamie Foers">Jamie Foers</option>
-          <option value="Tom Woolverton">Tom Woolverton</option>
-          <option value="Paul Moore">Paul Moore</option>
-          <option value="Gillian Reilly">Gillian Reilly</option>
-          <option value="Tina McDonald-Sisk">Tina McDonald-Sisk</option>
-          <option value="Lisa O&apos;Brien">Lisa O&apos;Brien</option>
-          <option value="Stephen Ellis">Stephen Ellis</option>
+          <option value=""></option>          
           <option value="Andrea Smith">Andrea Smith</option>
-          <option value="Melissa Rodrigues">Melissa Rodrigues</option>
+          <option value="Andrias O&amp;apos;Shaughnessy">Andrias O&amp;apos;Shaughnessy</option>
+          <option value="Brenda Massyn">Brenda Massyn</option>
+          <option value="Chris Kelly">Chris Kelly</option>
+          <option value="Daniel Byrne">Daniel Byrne</option>
+          <option value="David Blazquez">David Blazquez</option>
+          <option value="David Looker">David Looker</option>
           <option value="Desmond Shelley">Desmond Shelley</option>
+          <option value="Garry Ward">Garry Ward</option>
+          <option value="Gerard Doyle">Gerard Doyle</option>
+          <option value="Gillian Reilly">Gillian Reilly</option>
+          <option value="Hazel Dunne">Hazel Dunne</option>
+          <option value="Jamie Foers">Jamie Foers</option>
+          <option value="Karen Maritz">Karen Maritz</option>
+          <option value="Keevagh Heverin">Keevagh Heverin</option>
+          <option value="Kieran Clancy">Kieran Clancy</option>
+          <option value="Laragh King">Laragh King</option>
+          <option value="Leandro Godoy">Leandro Godoy</option>
+          <option value="Lisa Bodkin">Lisa Bodkin</option>
+          <option value="Lisa O&amp;apos;Brien">Lisa O&amp;apos;Brien</option>
+          <option value="Mark Dempsey">Mark Dempsey</option>
+          <option value="Melissa Rodrigues">Melissa Rodrigues</option>
+          <option value="Neal Corbett">Neal Corbett</option>
+          <option value="Paul Moore">Paul Moore</option>
+          <option value="Paul Ringwood">Paul Ringwood</option>
+          <option value="Peter Wagner">Peter Wagner</option>
+          <option value="Rachel Faulkner">Rachel Faulkner</option>
           <option value="Raymond Cole">Raymond Cole</option>
           <option value="Robin Dixon">Robin Dixon</option>
-          <option value="Karen Maritz">Karen Maritz</option>
-          <option value="Gerard Doyle">Gerard Doyle</option>
-          <option value="Neal Corbett">Neal Corbett</option>
+          <option value="Stephen Ellis">Stephen Ellis</option>
           <option value="Tihomir Damjanovic">Tihomir Damjanovic</option>
-          <option value="Leandro Godoy">Leandro Godoy</option>
-          <option value="Daniel Byrne">Daniel Byrne</option>
+          <option value="Tina McDonald-Sisk">Tina McDonald-Sisk</option>
+          <option value="Tom Woolverton">Tom Woolverton</option>
           <option value="Tracey Finnegan">Tracey Finnegan</option>
-          <option value="Laragh King">Laragh King</option>
-          <option value="Chris Kelly">Chris Kelly</option>
-          <option value="Paul Ringwood">Paul Ringwood</option>
-          <option value="Rachel Faulkner">Rachel Faulkner</option>
-          <option value="Brenda Massyn">Brenda Massyn</option>
-          <option value="Hazel Dunne">Hazel Dunne</option>
-          <option value="Garry Ward">Garry Ward</option>
-          <option value="David Blazquez">David Blazquez</option>
-          <option value="Mark Dempsey">Mark Dempsey</option>
-          <option value="Lisa Bodkin">Lisa Bodkin</option>
-          <option value="Andrias O&apos;Shaughnessy">Andrias O&apos;Shaughnessy</option>
-          <option value="Keevagh Heverin">Keevagh Heverin</option>
-          <option value="David Looker">David Looker</option>
-          <option value="Kieran Clancy">Kieran Clancy</option>
 
           <!--<option value="Andrea Smith">Andrea Smith</option>
           <option value="Andrias O&apos;Shaughnessy">Andrias O&apos;Shaughnessy</option>
@@ -1238,13 +1212,12 @@
       <element name="EmploymentCategory" type="select" label="Employment Category">
         <options>
           <option value=""></option>
-          <option value="Permanent">Permanent</option>
-          <option value="Temporary">Temporary</option>
-          <option value="Fixed Term">Fixed Term</option>
-          <option value="Pensioners">Pensioners</option>
-          <option value="Non Active">Non Active</option>
+          <option value="Full time">Full time</option>
+          <option value="Part time">Part time</option>
           <option value="Expats">Expats</option>
-        </options>
+      </options>
+      </element>
+      <element type="date" name="ContractEndDate" label="Contract End Date" format="dd.MM.yyyy">
       </element>
       <!--Mandatory-->
       <element type="text" name="ContractedHours" label="Contracted Hours">
@@ -1268,12 +1241,13 @@
       <element name="ContractType" type="select" label="Contract Type">
         <options>
           <option value=""></option>
-          <option value="Part Time">Part Time</option>
-          <option value="Full Time">Full Time</option>
+          <option value="Permanent">Permanent</option>
+          <option value="Temporary">Temporary</option>
+          <option value="Fixed Term">Fixed Term</option>
         </options>
       </element>
       <!--Mandatory-->
-      <element name="ProbationPeriod" type="select" label="Probation period" default="Yes">
+      <!--<element name="ProbationPeriod" type="select" label="Probation period" default="Yes">
         <options>
           <option value=""></option>
           <option value="Yes">Yes</option>
@@ -1281,9 +1255,9 @@
         </options>
       </element>
       <element name="ProbationEndDate" type="date" label="Probation end date" format="dd.MM.yyyy">
-        <!--<mandatoryIf name="ProbationPeriod">Yes</mandatoryIf>-->
+        --><!--<mandatoryIf name="ProbationPeriod">Yes</mandatoryIf>--><!--
         <regex inherit="date" pattern="" message=""></regex>
-      </element>
+      </element>-->
 
       <!--CDS-->
       <!--Mandatory-->
@@ -1341,45 +1315,42 @@
 
       <element name="TECApprover" type="search-select" source="1" label="TEC Approver">
         <options>
+          <option value=""></option>
           <option value="Andrea Smith">Andrea Smith</option>
+          <option value="Andrias O&amp;apos;Shaughnessy">Andrias O&amp;apos;Shaughnessy</option>
+          <option value="Business Navigation &amp; Operations Manager">Business Navigation &amp; Operations Manager</option>          
           <option value="Brenda Massyn">Brenda Massyn</option>
-          <option value="Claire Rodgers">Claire Rodgers</option>
-          <option value="Clare Harper">Clare Harper</option>
+          <option value="Chris Kelly">Chris Kelly</option>
+          <option value="Daniel Byrne">Daniel Byrne</option>
           <option value="David Blazquez">David Blazquez</option>
           <option value="David Looker">David Looker</option>
           <option value="Desmond Shelley">Desmond Shelley</option>
-          <option value="Dimitri Hirsch">Dimitri Hirsch</option>
-          <option value="Eithne Lavin">Eithne Lavin</option>
-          <option value="Ema Mckay">Ema Mckay</option>
-          <option value="Fintan Walsh">Fintan Walsh</option>
           <option value="Garry Ward">Garry Ward</option>
+          <option value="Gerard Doyle">Gerard Doyle</option>
           <option value="Gillian Reilly">Gillian Reilly</option>
-          <option value="Grainne Breen">Grainne Breen</option>
+          <option value="Hazel Dunne">Hazel Dunne</option>
           <option value="Jamie Foers">Jamie Foers</option>
-          <option value="Joseramon De Blas">Joseramon De Blas</option>
           <option value="Karen Maritz">Karen Maritz</option>
           <option value="Keevagh Heverin">Keevagh Heverin</option>
           <option value="Kieran Clancy">Kieran Clancy</option>
-          <option value="Kirsten Zens">Kirsten Zens</option>
-          <option value="Klaus Prag">Klaus Prag</option>
-          <option value="Lisa Obrien">Lisa Obrien</option>
-          <option value="Miranda Lyons">Miranda Lyons</option>
+          <option value="Laragh King">Laragh King</option>
+          <option value="Leandro Godoy">Leandro Godoy</option>
+          <option value="Lisa Bodkin">Lisa Bodkin</option>
+          <option value="Lisa O&amp;apos;Brien">Lisa O&amp;apos;Brien</option>
+          <option value="Mark Dempsey">Mark Dempsey</option>
+          <option value="Melissa Rodrigues">Melissa Rodrigues</option>
           <option value="Neal Corbett">Neal Corbett</option>
           <option value="Paul Moore">Paul Moore</option>
-          <option value="Paul Reid">Paul Reid</option>
           <option value="Paul Ringwood">Paul Ringwood</option>
-          <option value="Pauline Fowler">Pauline Fowler</option>
-          <option value="Peter Steenberg">Peter Steenberg</option>
           <option value="Peter Wagner">Peter Wagner</option>
           <option value="Rachel Faulkner">Rachel Faulkner</option>
           <option value="Raymond Cole">Raymond Cole</option>
           <option value="Robin Dixon">Robin Dixon</option>
-          <option value="Sharon White">Sharon White</option>
           <option value="Stephen Ellis">Stephen Ellis</option>
-          <option value="Steven James">Steven James</option>
-          <option value="Tina Mcdonald">Tina Mcdonald</option>
+          <option value="Tihomir Damjanovic">Tihomir Damjanovic</option>
+          <option value="Tina McDonald-Sisk">Tina McDonald-Sisk</option>
           <option value="Tom Woolverton">Tom Woolverton</option>
-          <option value="Victoria Chambers">Victoria Chambers</option>
+          <option value="Tracey Finnegan">Tracey Finnegan</option>
         </options>
       </element>
       <!--Mandatory-->
@@ -1457,7 +1428,7 @@
         <!--<mandatoryIf name="ChangeType">Basic Pay Changes</mandatoryIf>-->
       </element>
       <!--Mandatory-->
-      <element type="select" name="BasicPayChangeReason" label="Basic Pay Change Reason">
+      <element type="select" name="BasicPayChangeReason" label="Basic Pay Change Reason" default="Change of Basic Pay">
         <options>
           <option value=""></option>
           <option value="Collective agreement increase">Collective agreement increase</option>
@@ -1487,7 +1458,7 @@
           <option value="IKEA2 Skills">IKEA2 Skills</option>
           <option value="Kitchen Skills">Kitchen Skills</option>
           <option value="Mortgage Subsidy">Mortgage Subsidy</option>
-          <option value="Night Shift">Night Shift</option>
+          <!--<option value="Night Shift">Night Shift</option>-->
           <option value="NTG Double Housing">NTG Double Housing</option>
           <option value="NTG Housing Costs">NTG Housing Costs</option>
           <option value="NTG Relocation Allow">NTG Relocation Allow</option>
@@ -1500,25 +1471,6 @@
           <option value="Salary Advanced">Salary Advanced</option>
           <option value="Secondment">Secondment</option>
           <option value="Stand By Allowance">Stand By Allowance</option>
-
-          <!--<option value="Advanced Hrly">Advanced Hrly</option>
-          <option value="High Performer 11">High Performer 11</option>
-          <option value="High Performer 12">High Performer 12</option>
-          <option value="High Performer 13">High Performer 13</option>
-          <option value="High Performer 14">High Performer 14</option>
-          <option value="Power Stacker">Power Stacker</option>
-          <option value="Fork Lift Truck">Fork Lift Truck</option>
-          <option value="Night Shift Hrly">Night Shift Hrly</option>
-          <option value="340T Stand By Allowance">340T Stand By Allowance</option>
-          <option value="360A Bonus">360A Bonus</option>
-          <option value="500A Redundancy">500A Redundancy</option>
-          <option value="350A Adj-Monthly Salary">350A Adj-Monthly Salary</option>
-          <option value="100C Responsibility Allowance">100C Responsibility Allowance</option>
-          <option value="100D Salary Advanced">100D Salary Advanced</option>
-          <option value="100F Salary FLT Skills">100F Salary FLT Skills</option>
-          <option value="100G Salary Kitchen Skills">100G Salary Kitchen Skills</option>
-          <option value="100H Salary Work IKEA1 Skills">100H Salary Work IKEA1 Skills</option>
-          <option value="100I Salary Work IKEA2 Skills">100I Salary Work IKEA2 Skills</option>-->
         </options>
       </element>
       <!--<element type="select" name="AllowancesPaymentType" label="Payment Type">
@@ -1564,7 +1516,7 @@
           <option value="IKEA2 Skills">IKEA2 Skills</option>
           <option value="Kitchen Skills">Kitchen Skills</option>
           <option value="Mortgage Subsidy">Mortgage Subsidy</option>
-          <option value="Night Shift">Night Shift</option>
+          <!--<option value="Night Shift">Night Shift</option>-->
           <option value="NTG Double Housing">NTG Double Housing</option>
           <option value="NTG Housing Costs">NTG Housing Costs</option>
           <option value="NTG Relocation Allow">NTG Relocation Allow</option>
@@ -1624,7 +1576,7 @@
           <option value="IKEA2 Skills">IKEA2 Skills</option>
           <option value="Kitchen Skills">Kitchen Skills</option>
           <option value="Mortgage Subsidy">Mortgage Subsidy</option>
-          <option value="Night Shift">Night Shift</option>
+          <!--<option value="Night Shift">Night Shift</option>-->
           <option value="NTG Double Housing">NTG Double Housing</option>
           <option value="NTG Housing Costs">NTG Housing Costs</option>
           <option value="NTG Relocation Allow">NTG Relocation Allow</option>
@@ -1790,14 +1742,13 @@
         </options>
       </element>
 
-      <element type="text" name="DateOfNextSalaryReview" label="Date of next salary review">
-        <regex inherit="amount" pattern="" message=""></regex>
+      <element type="date" name="DateOfNextSalaryReview" label="Date of next salary review" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="select" name="BenefitLevel" label="Benefit Level">
         <options>
           <option value=""></option>
           <option value="Co-worker">Co-worker</option>
-          <option value="Level 1">Level 1</option>
           <option value="Level 1">Level 1</option>
           <option value="Level 2">Level 2</option>
           <option value="Level 3">Level 3</option>

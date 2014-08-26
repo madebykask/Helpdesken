@@ -104,7 +104,7 @@
             <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment</readOnlyTabs>
         </userGroup>
         <visibleTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#documents,#globalview,#SSCUseOnly,#attachments</visibleTabs>
-        <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#attachments</readOnlyTabs>
+        <readOnlyTabs>#servicerequestdetails,#OrganisationalAssignment,#payment,#personal,#SSCUseOnly,#attachments</readOnlyTabs>
         <readOnlyFields></readOnlyFields>
         <actions>
         </actions>

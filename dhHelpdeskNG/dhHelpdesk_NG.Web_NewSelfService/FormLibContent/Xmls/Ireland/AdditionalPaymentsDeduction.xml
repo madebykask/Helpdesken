@@ -29,7 +29,7 @@
         <regex inherit="email" message="" pattern=""></regex>
       </element>
       <element name="IKEANetworkID" type="text" label="IKEA Network ID" mandatory="1">
-        <regex inherit="unsignednum" message="" pattern=""></regex>
+        
       </element>
       <element name="Company" type="text" label="Company"></element>
       <element name="BusinessUnit" type="text" label="Business Unit"></element>
@@ -331,7 +331,7 @@
           <option value="IKEA2 Skills">IKEA2 Skills</option>
           <option value="Kitchen Skills">Kitchen Skills</option>
           <option value="Mortgage Subsidy">Mortgage Subsidy</option>
-          <option value="Night Shift">Night Shift</option>
+          <!--<option value="Night Shift">Night Shift</option>-->
           <option value="NTG Double Housing">NTG Double Housing</option>
           <option value="NTG Housing Costs">NTG Housing Costs</option>
           <option value="NTG Relocation Allow">NTG Relocation Allow</option>
@@ -391,7 +391,7 @@
           <option value="IKEA2 Skills">IKEA2 Skills</option>
           <option value="Kitchen Skills">Kitchen Skills</option>
           <option value="Mortgage Subsidy">Mortgage Subsidy</option>
-          <option value="Night Shift">Night Shift</option>
+          <!--<option value="Night Shift">Night Shift</option>-->
           <option value="NTG Double Housing">NTG Double Housing</option>
           <option value="NTG Housing Costs">NTG Housing Costs</option>
           <option value="NTG Relocation Allow">NTG Relocation Allow</option>
@@ -451,7 +451,7 @@
           <option value="IKEA2 Skills">IKEA2 Skills</option>
           <option value="Kitchen Skills">Kitchen Skills</option>
           <option value="Mortgage Subsidy">Mortgage Subsidy</option>
-          <option value="Night Shift">Night Shift</option>
+          <!--<option value="Night Shift">Night Shift</option>-->
           <option value="NTG Double Housing">NTG Double Housing</option>
           <option value="NTG Housing Costs">NTG Housing Costs</option>
           <option value="NTG Relocation Allow">NTG Relocation Allow</option>

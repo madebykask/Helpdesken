@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <predefined>
-  <name>CostCentre</name>
+  <name>PayrollCategory</name>
   <dependent>
     <selected>Accounting Assistant - Reconciliation</selected>
     <show1>44</show1>
@@ -60,8 +60,8 @@
   <dependent>
     <selected>Checkout Services Co-worker</selected>
     <show1></show1>
-    <show2></show2>
-    <show3></show3>
+    <show2>Level 1</show2>
+    <show3>Co-worker</show3>
     <show4>Hourly</show4>
   </dependent>
   <dependent>
@@ -123,8 +123,8 @@
   <dependent>
     <selected>Customer Service Co-worker</selected>
     <show1></show1>
-    <show2></show2>
-    <show3></show3>
+    <show2>Level 1</show2>
+    <show3>Co-worker</show3>
     <show4>Hourly</show4>
   </dependent>
   <dependent>
@@ -186,8 +186,8 @@
   <dependent>
     <selected>Goods Flow Co-worker</selected>
     <show1></show1>
-    <show2></show2>
-    <show3></show3>
+    <show2>Level 1</show2>
+    <show3>Co-worker</show3>
     <show4>Hourly</show4>
   </dependent>
   <dependent>
@@ -256,8 +256,8 @@
   <dependent>
     <selected>IKEA Food Co-worker</selected>
     <show1></show1>
-    <show2></show2>
-    <show3></show3>
+    <show2>Level 1</show2>
+    <show3>Co-worker</show3>
     <show4>Hourly</show4>
   </dependent>
   <dependent>
@@ -417,8 +417,8 @@
   <dependent>
     <selected>Recovery Co-worker</selected>
     <show1></show1>
-    <show2></show2>
-    <show3></show3>
+    <show2>Level 1</show2>
+    <show3>Co-worker</show3>
     <show4>Hourly</show4>
   </dependent>
   <dependent>
@@ -480,8 +480,8 @@
   <dependent>
     <selected>Sales Co-worker</selected>
     <show1></show1>
-    <show2></show2>
-    <show3></show3>
+    <show2>Level 1</show2>
+    <show3>Co-worker</show3>
     <show4>Hourly</show4>
   </dependent>
   <dependent>
@@ -653,7 +653,7 @@
     <show4>Salaried</show4>
   </dependent>
   <dependent>
-    <selected>Visual Merchandise / Activity Manager</selected>
+    <selected>Visual Merchandise/Activity Manager</selected>
     <show1>51</show1>
     <show2>Level 1</show2>
     <show3>Level 1</show3>
@@ -664,13 +664,6 @@
     <show1>46</show1>
     <show2>Level 1</show2>
     <show3>Co-worker</show3>
-    <show4>Salaried</show4>
-  </dependent>
-  <dependent>
-    <selected>Visual Merchandsie / Activity Co-worker</selected>
-    <show1>46</show1>
-    <show2>Co-worker</show2>
-    <show3>Level 1</show3>
     <show4>Salaried</show4>
   </dependent>
 </predefined>

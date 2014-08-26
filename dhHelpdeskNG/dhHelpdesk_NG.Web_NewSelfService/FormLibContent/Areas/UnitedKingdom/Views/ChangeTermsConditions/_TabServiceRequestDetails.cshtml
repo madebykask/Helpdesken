@@ -118,6 +118,7 @@
                     <td>
                         @Model.Element("ServiceRequestPriority")</td>
                 </tr>
+                @if (!FormLibUtils.IsSelfService()){
                 <tr>
                     <td class="tdstrong">@Model.Translate("SLA")</td>
                     <td>
@@ -130,6 +131,7 @@
                         }
                     </td>
                 </tr>
+                }
                 @*<tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Permanent Address")</h4>
@@ -206,6 +208,7 @@
         </table>
     </div>
     <input type="hidden" id="CustomerId" value="@Model.CustomerId" />
+    <input type="hidden" id="AllCoWorker" value="1" />
     <input type="hidden" id="formGuid" value="@Model.FormGuid" />
 </div>
 

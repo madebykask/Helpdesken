@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <predefined>
-  <name>CostCentre</name>
+  <name>PayrollCategory</name>
   <dependent>
     <selected>Accounting Assistant</selected>
     <show1>44</show1>

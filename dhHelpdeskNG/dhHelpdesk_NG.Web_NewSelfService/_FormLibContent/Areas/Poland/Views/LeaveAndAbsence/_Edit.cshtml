@@ -1,0 +1,20 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+@using(Html.BeginForm("edit", "leaveandabsence", FormMethod.Post, new { area = "poland", enctype = "multipart/form-data" }))
+{
+    @Html.Partial("_Navigation", Model)
+    <div class="container containeralignright">
+        @Html.Partial("_CurrentUser")
+        @Html.Partial("_ErrorMessage", Model)
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#leaveandabsence">@Model.Translate("Leave and absence")</a></li>
+        </ul>
+        <div class="content">
+            <div class="tab-content">
+                @Html.Partial("_TabLeaveAndAbsence", Model)
+            </div>
+        </div>
+    </div>
+}

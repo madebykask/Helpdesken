@@ -21,7 +21,7 @@
         <regex inherit="email" message="" pattern=""></regex>
       </element>
       <element name="IKEANetworkID" type="text" label="IKEA Network ID" mandatory="1">
-        <regex inherit="unsignednum" message="" pattern=""></regex>
+        
       </element>
       <element name="Company" type="text" label="Company"></element>
       <element name="BusinessUnit" type="text" label="Business Unit"></element>
@@ -86,8 +86,8 @@
       <element type="select" name="DeductionsType2" label="Deduction Type" >
         <options>
           <option value=""></option>
-          <option value="760A - Charity Deduction">760A - Charity Deduction</option>
-          <option value="770E - USDAW Union Deduction">770E - USDAW Union Deduction</option>
+          <!--<option value="760A - Charity Deduction">760A - Charity Deduction</option>
+          <option value="770E - USDAW Union Deduction">770E - USDAW Union Deduction</option>-->
           <option value="Pension">Pension</option>
         </options>
       </element>
@@ -125,8 +125,8 @@
       <element type="select" name="DeductionsType3" label="Deduction Type" >
         <options>
           <option value=""></option>
-          <option value="760A - Charity Deduction">760A - Charity Deduction</option>
-          <option value="770E - USDAW Union Deduction">770E - USDAW Union Deduction</option>
+          <!--<option value="760A - Charity Deduction">760A - Charity Deduction</option>
+          <option value="770E - USDAW Union Deduction">770E - USDAW Union Deduction</option>-->
           <option value="Pension">Pension</option>
         </options>
       </element>

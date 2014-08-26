@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE form [
+  <!ENTITY languages SYSTEM "Templates/Languages.xml">
+  <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
+  <!ENTITY state SYSTEM "Templates/ChangeTermsConditionsState.xml">
+]>
+
+<form id="45" guid="2F8F6175-337B-4552-B854-8CED49BE9796" customerId="28">
+  &languages;
+  &regexs;
+  &state;
+  
+  <fields>
+
+    <!--Tab ServiceRequestDetails-->
+    <tab name="#ServiceRequestDetails" label="Service Request Details">
+      <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" mandatory="1"></element>
+      <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1"></element>     
+      <element name="LastName" type="text" label="Co-Worker Last Name" mandatory="1"></element>
+      <element name="IKEAEmailAddress" type="text" label="IKEA Email Address" mandatory="1"></element>
+      <element name="IKEANetworkID" type="text" label="IKEA Network ID" mandatory="1"></element>
+      <element name="BusinessUnit" type="text" label="Business Unit"></element>
+      <element name="Department" type="text" label="Department"></element>
+      <element name="ChangeType" type="select" label="Change Type?" mandatory="1">
+        <options>
+          <option value=""></option>
+          <option value="Change Type 1">Change Type 1</option>
+          <option value="Change Type 2">Change Type 2</option>
+        </options>
+      </element>
+      <element name="ChangeValidFrom" type="date" label="Change Valid from:" mandatory="1" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="ChangeValidTo" type="date" label="Change Valid to:" mandatory="1" default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1">
+        <options>
+          <option value=""></option>
+          <option value="Urgent">Urgent</option>
+          <option value="Standard">Standard</option>
+        </options>
+      </element>
+          
+    <!--Permanent Address-->
+    <element type="text" name="PermanentAddressLine1" label="Address line 1" mandatory="1"></element>
+      <element type="text" name="PermanentAddressLine2" label="Address line 2"></element>
+      <element type="text" name="PermanentPostalCode" label="Postal code" mandatory="1"></element>
+      <element type="text" name="PermanentCity" label="City" mandatory="1"></element>
+      <element type="text" name="PermanentCountry" label="Country" mandatory="1"></element>
+    </tab>
+    
+    <!--Tab OrganisationalAssignment-->
+    <tab name="#OrganisationalAssignment" label="Organisational Assignment">
+      <!--Organisation Assignment-->
+      <element name="Country" type="select" label="Country" mandatory="1">
+        <options>
+          <option value=""></option>
+          <option value="Country 1">Country 1</option>
+          <option value="Country 2">Country 2</option>
+        </options>
+      </element>
+      <element name="Company" type="select" label="Company" mandatory="1">
+        <options>
+          <option value=""></option>
+          <option value="Company 1">Company 1</option>
+          <option value="Company 2">Company 2</option>
+        </options>
+      </element>
+      <element name="NewBusinessUnit" type="select" label="Business Unit" mandatory="1">
+        <options>
+          <option value=""></option>
+          <option value="BusinessUnit 1">BusinessUnit 1</option>
+          <option value="BusinessUnit 2">BusinessUnit 2</option>
+        </options>
+      </element>
+      <element name="NewDepartment" type="select" label="Department" mandatory="1">
+        <options>
+          <option value=""></option>
+          <option value="Department 1">Department 1</option>
+          <option value="Department 2">Department 2</option>
+        </options>
+      </element>
+      <element name="HomeCostCenter" type="select" label="Home Cost Center" mandatory="1">
+        <options>
+          <option value=""></option>
+          <option value="Home Cost Center 1">Home Cost Center 1</option>
+          <option value="Home Cost Center 2">Home Cost Center 2</option>
+        </options>
+      </element>
+      <element name="CostAllocation" type="text" label="Cost Allocation" default="100%"></element>
+      <element name="CrossChargeCostCentre" type="text" label="Cross Charge Cost Centre" ></element>
+    
+      <!--Job-->
+      <element name="JobTitle" type="select" label="Job Title" mandatory="1">
+        <options>
+          <option value=""></option>
+          <option value="Job Title 1">Job Title 1</option>
+          <option value="Job Title 2">Job Title 2</option>
+        </options>
+      </element>
+      <element name="LocalJobTitle" type="text" label="Local Job Title" >
+        
+      </element>
+      <element name="NewPosition" type="select" label="New Position?" mandatory="1">
+        <options>
+          <option value=""></option>
+          <option value="New Position">New Position</option>
+          <option value="Fill Vacant Position">Fill Vacant Position</option>
+        </options>
+      </element>
+      <element name="ReportsToLineManager" type="select" label="Reports to Line Manager" mandatory="1">
+        <options>
+          <option value=""></option>
+          <option value="Line Manager 1">Line Manager 1</option>
+          <option value="Line Manager 2">Line Manager 2</option>
+        </options>
+      </element>
+    
+    <!--Employment Conditions-->
+    <element name="EmploymentCategory" type="select" label="Employment Category" mandatory="1">
+      <options>
+        <option value=""></option>
+        <option value="Employment Category 1">Employment Category 1</option>
+        <option value="Employment Category 2">Employment Category 2</option>
+      </options>
+    </element>
+    <element name="ContractedHours" type="text" label="Contracted Hours" mandatory="1"></element>
+    <element name="ContractType" type="select" label="Contract Type" mandatory="1">
+      <options>
+        <option value=""></option>
+        <option value="Contract Type 1">Contract Type 1</option>
+        <option value="Contract Type 2">Contract Type 2</option>
+      </options>
+    </element>
+    <element name="ProbationPeriod" type="select" label="Probation period" mandatory="1">
+      <options>
+        <option value=""></option>
+        <option value="Not Applicable">Not Applicable</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+      </options>
+    </element>
+    <element name="ProbationEndDate" type="date" label="Probation end date" format="dd.MM.yyyy">
+      <mandatoryIf name="ProbationPeriod">Yes</mandatoryIf>
+      <regex inherit="date" pattern="" message=""></regex>
+    </element>
+    
+      <!--CDS-->
+      <element name="PrimarySite" type="select" label="Primary Site">
+        <options>
+          <option value=""></option>
+          <option value="Primary Site 1">Primary Site 1</option>
+          <option value="Primary Site 2">Primary Site 2</option>
+        </options>
+      </element>
+      <element name="TECApprover" type="select" label="TEC Approver">
+        <options>
+          <option value=""></option>
+          <option value="TECApprover 1">TECApprover 1</option>
+          <option value="TECApprover 2">TECApprover 2</option>
+        </options>
+      </element>
+      <element name="HelpDesk" type="select" label="Help Desk">
+        <options>
+          <option value=""></option>
+          <option value="Help Desk 1">Help Desk 1</option>
+          <option value="Help Desk 2">Help Desk 2</option>
+        </options>
+      </element>
+    </tab>
+    
+ <!--Tab: Payment Information-->
+    <tab name="#Payment" label="Payment Information">
+      <element type="text" name="PayrollCategory" label="Payroll Category" mandatory="1"></element>
+      <element type="text" name="BasicPayAmount" label="Basic Pay Amount" mandatory="1"></element>
+      <element type="select" name="BasicPayChangeReason" label="Basic Pay Change Reason" mandatory="1">
+        <options>
+          <option value=""></option>
+          <option value="Promotion">Promotion</option>
+          <option value="Collective Increase">Collective Increase</option>
+          <option value="Individual Increase">Individual Increase</option>
+          <option value="Seniority">Seniority</option>
+          <option value="Collective Agreement Increase">Collective Agreement Increase</option>
+          <option value="Reclassification">Reclassification</option>
+        </options>
+      </element>
+      <element type="hidden" name="Allowances" default="1"></element>
+      <element type="select" name="AllowancesType" label="Allowance Type">
+        <options>
+          <option value=""></option>
+          <option value="Allowance Type 1">Allowance Type 1</option>
+          <option value="Allowance Type 2">Allowance Type 2</option>
+          <option value="Allowance Type 3">Allowance Type 3</option>
+        </options>
+      </element>
+      <element type="text" name="AllowancesAmountUnits" label="Amount/Units"></element>
+      <element type="text" name="AllowancesNetGross" label="Net/Gross"></element>
+      <element type="date" name="AllowancesValidFrom" label="Valid from:" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="AllowancesValidTo" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      
+      <element type="select" name="AllowancesType2" label="Allowance Type" >
+        <options>
+        <option value=""></option>
+        <option value="Allowance Type 1">Allowance Type 1</option>
+        <option value="Allowance Type 2">Allowance Type 2</option>
+        <option value="Allowance Type 3">Allowance Type 3</option>
+        </options>
+      </element>
+      <element type="text" name="AllowancesAmountUnits2" label="Amount/Units" ></element>
+      <element type="text" name="AllowancesNetGross2" label="Net/Gross" ></element>
+      <element type="date" name="AllowancesValidFrom2" label="Valid from:" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="AllowancesValidTo2" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+      <element type="select" name="AllowancesType3" label="Allowance Type" >
+        <options>
+          <option value=""></option>
+          <option value="Allowance Type 1">Allowance Type 1</option>
+          <option value="Allowance Type 2">Allowance Type 2</option>
+          <option value="Allowance Type 3">Allowance Type 3</option>
+        </options>
+      </element>
+      <element type="text" name="AllowancesAmountUnits3" label="Amount/Units" ></element>
+      <element type="text" name="AllowancesNetGross3" label="Net/Gross" ></element>
+      <element type="date" name="AllowancesValidFrom3" label="Valid from:"  format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="AllowancesValidTo3" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+      <element type="hidden" name="Deductions" default="1"></element>
+      <element type="select" name="DeductionsType" label="Deduction Type" >
+        <options>
+          <option value=""></option>
+          <option value="Deductions Type 1">Deductions Type 1</option>
+          <option value="Deductions Type 2">Deductions Type 2</option>
+          <option value="Deductions Type 3">Deductions Type 3</option>
+        </options>
+      </element>
+      <element type="text" name="DeductionsAmountUnits" label="Amount/Units" ></element>
+      <element type="text" name="DeductionsNetGross" label="Net/Gross" ></element>
+      <element type="date" name="DeductionsValidFrom" label="Valid from:" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="DeductionsValidTo" label="Valid to:" default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+      <element type="select" name="DeductionsType2" label="Deduction Type" >
+        <options>
+          <option value=""></option>
+          <option value="Deductions Type 1">Deductions Type 1</option>
+          <option value="Deductions Type 2">Deductions Type 2</option>
+          <option value="Deductions Type 3">Deductions Type 3</option>
+        </options>
+      </element>
+      <element type="text" name="DeductionsAmountUnits2" label="Amount/Units" ></element>
+      <element type="text" name="DeductionsNetGross2" label="Net/Gross" ></element>
+      <element type="date" name="DeductionsValidFrom2" label="Valid from:"  format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="DeductionsValidTo2" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      
+      <element type="select" name="DeductionsType3" label="Deduction Type" >
+        <options>
+          <option value=""></option>
+          <option value="Deductions Type 1">Deductions Type 1</option>
+          <option value="Deductions Type 2">Deductions Type 2</option>
+          <option value="Deductions Type 3">Deductions Type 3</option>
+        </options>
+      </element>
+      <element type="text" name="DeductionsAmountUnits3" label="Amount/Units" ></element>
+      <element type="text" name="DeductionsNetGross3" label="Net/Gross" ></element>
+      <element type="date" name="DeductionsValidFrom3" label="Valid from:"  format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="DeductionsValidTo3" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="select" name="OneIKEABonusLevel" label="One IKEA Bonus Level">
+        <options>
+          <option value=""></option>
+          <option value="Level 1">Level 1</option>
+          <option value="Level 2">Level 2</option>
+          <option value="Level 3">Level 3</option>
+        </options>
+      </element>
+    </tab>
+
+  </fields>
+</form>

@@ -111,7 +111,7 @@
     var nowTemp = new Date();
     var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
 
-    var start = $('#date_AbsenceStartFrom').datepicker({
+    var start = $('#date_AbsenceStartFrom').not(".disabled").datepicker({
         onRender: function (date) {
             return '';
         }
@@ -132,7 +132,7 @@
         start.hide();
     }).data('datepicker');
 
-    var end = $('#date_AbsenceEndsOn').datepicker({
+    var end = $('#date_AbsenceEndsOn').not(".disabled").datepicker({
         onRender: function (date) {
             return date.valueOf() <= start.date.valueOf() ? 'disabled' : '';
         }
@@ -142,7 +142,7 @@
     }).data('datepicker');
     
     // Absence 2 
-    var start2 = $('#date_AbsenceStartFrom2').datepicker({
+    var start2 = $('#date_AbsenceStartFrom2').not(".disabled").datepicker({
         onRender: function (date) {
             return '';
         }
@@ -163,7 +163,7 @@
         start.hide();
     }).data('datepicker');
 
-    var end2 = $('#date_AbsenceEndsOn2').datepicker({
+    var end2 = $('#date_AbsenceEndsOn2').not(".disabled").datepicker({
         onRender: function (date) {
             return date.valueOf() <= start2.date.valueOf() ? 'disabled' : '';
         }
@@ -174,7 +174,7 @@
     
 
     // Absence 3 
-    var start3 = $('#date_AbsenceStartFrom3').datepicker({
+    var start3 = $('#date_AbsenceStartFrom3').not(".disabled").datepicker({
         onRender: function (date) {
             return '';
         }
@@ -195,7 +195,7 @@
         start.hide();
     }).data('datepicker');
 
-    var end3 = $('#date_AbsenceEndsOn3').datepicker({
+    var end3 = $('#date_AbsenceEndsOn3').not(".disabled").datepicker({
         onRender: function (date) {
             return date.valueOf() <= start3.date.valueOf() ? 'disabled' : '';
         }

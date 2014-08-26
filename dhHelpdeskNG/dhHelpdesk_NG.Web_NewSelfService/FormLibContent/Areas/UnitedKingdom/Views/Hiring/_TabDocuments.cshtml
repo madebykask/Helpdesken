@@ -7,7 +7,7 @@
     public string GetContract()
     {
 
-        if (string.IsNullOrEmpty(Model.GetAnswer("EmploymentCategory")))
+        if (string.IsNullOrEmpty(Model.GetAnswer("ContractType")))
         {
             return "";
         }
@@ -19,17 +19,17 @@
         }
 
         //<Business Unit/OA3> different than U.K & IE Contact Centre or Distribution Services Ltd or Distribution Service Office
-        if (Model.GetDocumentAnswer("BusinessUnit").ToLower() != "Peterborough Contact Centre".ToLower() && Model.GetDocumentAnswer("BusinessUnit").ToLower() != "Distribution Centre Peterborough 012".ToLower() && Model.GetDocumentAnswer("BusinessUnit").ToLower() != "Distribution Service Office".ToLower())
+        if (Model.GetDocumentAnswer("BusinessUnit").ToLower() != "Peterborough Contact Centre".ToLower() && Model.GetDocumentAnswer("BusinessUnit").ToLower() != "Distribution Centre Peterborough 012".ToLower() && Model.GetDocumentAnswer("BusinessUnit").ToLower() != "Distribution Service Office".ToLower() && Model.GetDocumentAnswer("BusinessUnit").ToLower() != "Distribution Centre Doncaster".ToLower())
         {
 
             //IF <Employment Category/OA12> = Temporary or Fixed Term AND <Business Unit/OA3> different than U.K & IE Contact Centre or Distribution Services Ltd or Distribution Service Office   
-            if (Model.GetAnswer("EmploymentCategory").ToLower() == "Temporary".ToLower() | Model.GetAnswer("EmploymentCategory").ToLower() == "Fixed Term".ToLower())
+            if (Model.GetAnswer("ContractType").ToLower() == "Temporary".ToLower() | Model.GetAnswer("ContractType").ToLower() == "Fixed Term".ToLower())
             {
                 return "TemporaryFixedTerm";
             }
 
             //IF <Employment Category/OA12> = Permanent AND <Business Unit/OA3> different than U.K & IE Contact Centre or Distribution Services Ltd or Distribution Service Office
-            if (Model.GetAnswer("EmploymentCategory").ToLower() == "Permanent".ToLower())
+            if (Model.GetAnswer("ContractType").ToLower() == "Permanent".ToLower())
             {
                 return "Permanent";
             }
@@ -37,7 +37,7 @@
         }
         //This template should be applicable for Permanent type and unit Contact Centre only which means both conditions must be met:
         //IF <Employment Category/OA12> = Permanent AND <Business Unit/OA3> = U.K & IE Contact Centre
-        else if (Model.GetAnswer("EmploymentCategory").ToLower() == "Permanent".ToLower() && Model.GetDocumentAnswer("BusinessUnit").ToLower() == "Peterborough Contact Centre".ToLower())
+        else if (Model.GetAnswer("ContractType").ToLower() == "Permanent".ToLower() && Model.GetDocumentAnswer("BusinessUnit").ToLower() == "Peterborough Contact Centre".ToLower())
         {
             return "ContactCentre";
         }

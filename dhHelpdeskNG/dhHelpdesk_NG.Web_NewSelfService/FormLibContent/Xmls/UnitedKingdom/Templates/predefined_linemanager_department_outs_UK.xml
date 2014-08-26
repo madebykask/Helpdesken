@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <predefined>
-  <name>CostCentre</name>
+  <name>LinemanagerDepartment</name>
   <dependent>
     <selected>Comm-In Service Office</selected>
     <show>GEMMA ARRANZ</show>

@@ -39,7 +39,7 @@
         </actions>
     </status>
     <status value="60">
-        <visibleTabs>#ServiceRequestDetails,#Complete,#globalviewv</visibleTabs>
+        <visibleTabs>#ServiceRequestDetails,#Complete,#globalview</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Complete</readOnlyTabs>
       <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
         <actions>

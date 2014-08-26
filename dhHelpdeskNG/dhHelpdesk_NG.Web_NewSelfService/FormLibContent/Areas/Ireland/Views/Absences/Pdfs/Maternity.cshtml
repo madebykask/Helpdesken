@@ -61,7 +61,7 @@
             <br />
             <strong>Maternity Pay</strong><br />
 
-            @if (Model.GetDocumentAnswer("Seniority").ToLower() == "Under 26 weeks".ToLower() | Model.GetDocumentAnswer("Seniority").ToLower() == "26 weeks - 1 year".ToLower())
+            @if (Model.GetDocumentAnswer("Seniority").ToLower() == "Under 1 year".ToLower())
             {
                 <text>As you have less than one year’s service at your 4<span style="font-size: 8px"><sup>th</sup></span> week before your expected week of childbirth you are not entitled to any payment from IKEA however, you may be entitled to Social Welfare.</text>
                 <text><br />
