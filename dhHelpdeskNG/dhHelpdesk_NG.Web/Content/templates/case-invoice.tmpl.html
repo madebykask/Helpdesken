@@ -1,0 +1,51 @@
+﻿<div>
+    <table class='articles-params'>
+        <thead>
+            <tr>
+                <th>{{:SelectItemHeader}}</th>
+                <th>{{:UnitsHeader}}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <select class='multiselect articles-params-article'>
+                    </select>
+                </td>
+                <td>
+                    <input type='text' class='articles-params-units input-small-important' value='{{:DefaultAmount}}' />
+                </td>
+                <td>
+                    <input type='button' class='articles-params-add btn' value='{{:AddButtonLabel}}' />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table>
+        <tr>
+            <td class='width100'>
+                <table class='width100 table table-striped table-bordered table-hover'>
+                    <tr>
+                        <th>{{:ArtNoHeader}}</th>
+                        <th>{{:DescriptionHeader}}</th>
+                        <th>{{:UnitsHeader}}</th>
+                        <th>{{:TypeHeader}}</th>
+                        <th>{{:PpuHeader}}</th>
+                        <th>{{:TotalHeader}}</th>
+                        <th></th>
+                    </tr>
+                    <tbody class='articles-rows'>
+                        {{for Articles tmpl="caseInvoiceArticle" /}}                        
+                    </tbody>
+                </table>
+            </td>
+            <td style='vertical-align: top;'>
+                <input type='button' onclick='dhHelpdesk.CaseArticles.AddBlankArticle(); return false;' value='+' />
+            </td>
+        </tr>
+    </table>
+    <div class='width100 textbold' style='text-align: right;'>
+        {{:TotalLabel}}: <span class='articles-total'>{{:Total}}</span>
+    </div>      
+</div>

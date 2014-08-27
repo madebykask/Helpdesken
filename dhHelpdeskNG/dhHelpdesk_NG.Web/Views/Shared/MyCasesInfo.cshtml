@@ -1,4 +1,5 @@
-﻿@model DH.Helpdesk.Web.Models.Case.MyCasesModel
+﻿@using DH.Helpdesk.Common.Extensions.DateTime
+@model DH.Helpdesk.Web.Models.Case.MyCasesModel
 
 @if (Model != null && Model.Cases != null && Model.Cases.Any())
 {
@@ -11,32 +12,48 @@
     <div class="box-body portlet-content">
         <div class="box-post">
             <table class="table table-striped table-bordered table-hover">
-                <tbody>
-                @foreach (var myCase in Model.Cases)
-                {     
+                <thead>
                     <tr>
-                        <td>
-                            <a href="@Url.Action("Edit", "Cases", new { id = myCase.Id })">
-                                @Html.DisplayFor(m => myCase.Id)
-                            </a>
-                        </td>
-                        <td>
-                            <a href="@Url.Action("Edit", "Cases", new { id = myCase.Id })">
-                                @Html.DisplayFor(m => myCase.RegistrationDate)
-                            </a>
-                        </td>
-                        <td>
-                            <a href="@Url.Action("Edit", "Cases", new { id = myCase.Id })">
-                                @Html.DisplayFor(m => myCase.Subject)
-                            </a>
-                        </td>
-                        <td>
-                            <a href="@Url.Action("Edit", "Cases", new { id = myCase.Id })">
-                                @Html.DisplayFor(m => myCase.InitiatorName)
-                            </a>
-                        </td>
+                        <th>
+                            @Translation.Get("Ärende")
+                        </th>                        
+                        <th>
+                            @Translation.Get("Datum")
+                        </th>                        
+                        <th>
+                            @Translation.Get("Ämne")
+                        </th>                        
+                        <th>
+                            @Translation.Get("Initiator")
+                        </th>                        
                     </tr>
-                }
+                </thead>
+                <tbody>
+                    @foreach (var myCase in Model.Cases)
+                    {     
+                        <tr>
+                            <td>
+                                <a href="@Url.Action("Edit", "Cases", new { id = myCase.Id })">
+                                    @Html.DisplayFor(m => myCase.Id)
+                                </a>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("Edit", "Cases", new { id = myCase.Id })">
+                                    @myCase.RegistrationDate.ToFormattedDateTime()
+                                </a>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("Edit", "Cases", new { id = myCase.Id })">
+                                    @Html.DisplayFor(m => myCase.Subject)
+                                </a>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("Edit", "Cases", new { id = myCase.Id })">
+                                    @Html.DisplayFor(m => myCase.InitiatorName)
+                                </a>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
