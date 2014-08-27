@@ -9,6 +9,7 @@
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Enums.Inventory;
+    using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
 
     public class IndexViewModel
@@ -83,7 +84,7 @@
                                   new
                                   {
                                       Value = Convert.ToInt32(d).ToString(CultureInfo.InvariantCulture),
-                                      Name = d.ToString()
+                                      Name = Translation.Get(d.ToString())
                                   };
             var reportTypeList = reportTypes.Union(propertyTypes.Select(x => new { x.Value, x.Name }));
             var reportTypeSelectList = new SelectList(reportTypeList, "Value", "Name");

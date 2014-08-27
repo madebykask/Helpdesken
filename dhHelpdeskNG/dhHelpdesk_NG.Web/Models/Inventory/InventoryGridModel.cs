@@ -27,11 +27,13 @@
         public InventoryGridModel(
             List<GridColumnHeaderModel> headers,
             List<InventoryOverviewModel> inventories,
-            int currentMode)
+            int currentMode,
+            SortFieldModel sortField)
         {
             this.Headers = headers;
             this.Inventories = inventories;
             this.CurrentMode = currentMode;
+            this.SortField = sortField;
         }
 
         [NotNull]
@@ -44,12 +46,14 @@
 
         public string CurrentModeName { get; set; }
 
-        public static InventoryGridModel BuildModel(List<ComputerOverview> modelList, ComputerFieldsSettingsOverview settings)
+        public SortFieldModel SortField { get; set; }
+
+        public static InventoryGridModel BuildModel(List<ComputerOverview> modelList, ComputerFieldsSettingsOverview settings, SortFieldModel sortField)
         {
             var overviews = modelList.Select(c => CreateComputerOverview(c, settings)).ToList();
             var headers = GetComputerHeaders(settings);
 
-            return new InventoryGridModel(headers, overviews, (int)CurrentModes.Workstations);
+            return new InventoryGridModel(headers, overviews, (int)CurrentModes.Workstations, sortField);
         }
 
         public static InventoryGridModel BuildModel(List<ServerOverview> modelList, ServerFieldsSettingsOverview settings)
@@ -57,7 +61,7 @@
             var overviews = modelList.Select(c => CreateServerOverview(c, settings)).ToList();
             var headers = GetServerHeaders(settings);
 
-            return new InventoryGridModel(headers, overviews, (int)CurrentModes.Servers);
+            return new InventoryGridModel(headers, overviews, (int)CurrentModes.Servers, null);
         }
 
         public static InventoryGridModel BuildModel(List<PrinterOverview> modelList, PrinterFieldsSettingsOverview settings)
@@ -65,7 +69,7 @@
             var overviews = modelList.Select(c => CreatePrinterOverview(c, settings)).ToList();
             var headers = GetPrinterHeaders(settings);
 
-            return new InventoryGridModel(headers, overviews, (int)CurrentModes.Printers);
+            return new InventoryGridModel(headers, overviews, (int)CurrentModes.Printers, null);
         }
 
         public static InventoryGridModel BuildModel(InventoriesOverviewResponse response, InventoryFieldSettingsOverviewResponse settings, int inventoryTypeId)
@@ -74,7 +78,7 @@
                 response.Overviews.Select(c => CreateInventoryOverview(c, response.DynamicData, settings.InventoryFieldSettingsOverview, settings.InventoryDynamicFieldSettingOverviews)).ToList();
             var headers = GetInventoryHeaders(settings.InventoryFieldSettingsOverview, settings.InventoryDynamicFieldSettingOverviews);
 
-            return new InventoryGridModel(headers, overviews, inventoryTypeId);
+            return new InventoryGridModel(headers, overviews, inventoryTypeId, null);
         }
 
         public static List<InventoryGridModel> BuildModels(InventoryOverviewResponseWithType response, InventoriesFieldSettingsOverviewResponse settings)
@@ -98,7 +102,7 @@
                     setting.InventoryFieldSettingsOverview,
                     dynamicSettings.InventoryDynamicFieldSettingOverviews);
 
-                var inventoryGridModel = new InventoryGridModel(headers, overviews, item.InventoryTypeId)
+                var inventoryGridModel = new InventoryGridModel(headers, overviews, item.InventoryTypeId, null)
                                              {
                                                  CurrentModeName
                                                      =

@@ -1,6 +1,8 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 {
+    using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -19,16 +21,22 @@
             InventoryFieldSettingsForEditResponse response,
             List<TypeGroupModel> groupModels)
         {
-            var department = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.DepartmentFieldSetting);
+            var department =
+                MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.DepartmentFieldSetting);
             var name = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.NameFieldSetting);
             var model = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.ModelFieldSetting);
-            var manufacturer = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.ManufacturerFieldSetting);
-            var serial = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.SerialNumberFieldSetting);
-            var theftMark = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.TheftMarkFieldSetting);
+            var manufacturer =
+                MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.ManufacturerFieldSetting);
+            var serial =
+                MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.SerialNumberFieldSetting);
+            var theftMark =
+                MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.TheftMarkFieldSetting);
             var barCode = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.BarCodeFieldSetting);
-            var purchaseDate = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.PurchaseDateFieldSetting);
+            var purchaseDate =
+                MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.PurchaseDateFieldSetting);
             var place = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.PlaceFieldSetting);
-            var workstation = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.WorkstationFieldSetting);
+            var workstation =
+                MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.WorkstationFieldSetting);
             var info = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.InfoFieldSetting);
 
             var defaultFieldSettingsModel = new DefaultFieldSettingsModel(
@@ -46,20 +54,23 @@
 
             var inventoryDynamicFieldSettings =
                 response.InventoryDynamicFieldSettings.Select(
-                    dynamicSetting => MapInventoryDynamicFieldSetting(dynamicSetting, groupModels, inventoryType.Id)).ToList();
+                    dynamicSetting => MapInventoryDynamicFieldSetting(dynamicSetting, groupModels, inventoryType.Id))
+                    .ToList();
 
             var inventoryTypeModel = new InventoryTypeModel(inventoryType.Id, inventoryType.Name);
             var newDynamicFieldSettingViewModel = CreateNewInventoryDynamicFieldSettingViewModel(groupModels);
 
             var viewModel = new InventoryFieldSettingsEditViewModel(
                 inventoryTypeModel,
-                new InventoryFieldSettingsViewModel(newDynamicFieldSettingViewModel, defaultFieldSettingsModel, inventoryDynamicFieldSettings));
+                new InventoryFieldSettingsViewModel(
+                    newDynamicFieldSettingViewModel,
+                    defaultFieldSettingsModel,
+                    inventoryDynamicFieldSettings));
 
             return viewModel;
         }
 
-        public InventoryFieldSettingsEditViewModel BuildDefaultViewModel(
-            List<TypeGroupModel> groupModels)
+        public InventoryFieldSettingsEditViewModel BuildDefaultViewModel(List<TypeGroupModel> groupModels)
         {
             var department = InventoryFieldSettingModel.GetDefault(null, InventoryFieldNames.Department);
             var name = InventoryFieldSettingModel.GetDefault(50, InventoryFieldNames.Name);
@@ -99,12 +110,17 @@
             return viewModel;
         }
 
-        private static NewInventoryDynamicFieldSettingViewModel CreateNewInventoryDynamicFieldSettingViewModel(List<TypeGroupModel> groupModels)
+        private static NewInventoryDynamicFieldSettingViewModel CreateNewInventoryDynamicFieldSettingViewModel(
+            List<TypeGroupModel> groupModels)
         {
+            var fieldTypesSelectList = CreateFieldTypesSelectList(null);
+
             var newDynamicFieldSettingModel = new NewInventoryDynamicFieldSettingModel { PropertySize = 50 };
-            var newDynamicFieldSettingViewModel = new NewInventoryDynamicFieldSettingViewModel(
-                newDynamicFieldSettingModel,
-                new SelectList(groupModels, "Id", "Name"));
+            var newDynamicFieldSettingViewModel =
+                new NewInventoryDynamicFieldSettingViewModel(
+                    newDynamicFieldSettingModel,
+                    new SelectList(groupModels, "Id", "Name"),
+                    fieldTypesSelectList);
             return newDynamicFieldSettingViewModel;
         }
 
@@ -137,9 +153,28 @@
                 setting.ShowInDetails,
                 setting.ShowInList);
 
-            var settingsViewModel = new InventoryDynamicFieldSettingViewModel(settingModel, groupSelectList);
+            var fieldTypesSelectList =
+                CreateFieldTypesSelectList(((int)setting.FieldType).ToString(CultureInfo.InvariantCulture));
+
+            var settingsViewModel = new InventoryDynamicFieldSettingViewModel(
+                settingModel,
+                groupSelectList,
+                fieldTypesSelectList);
 
             return settingsViewModel;
+        }
+
+        private static SelectList CreateFieldTypesSelectList(string selectedValue)
+        {
+            var fieldTypes = from Enum d in Enum.GetValues(typeof(FieldTypes))
+                             select
+                                 new
+                                     {
+                                         Value = Convert.ToInt32(d).ToString(CultureInfo.InvariantCulture),
+                                         Name = Translation.Get(d.ToString())
+                                     };
+            var fieldTypesSelectList = new SelectList(fieldTypes, "Value", "Name", selectedValue);
+            return fieldTypesSelectList;
         }
     }
 }

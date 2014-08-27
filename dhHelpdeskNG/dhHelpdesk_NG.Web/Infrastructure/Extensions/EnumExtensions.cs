@@ -12,9 +12,8 @@
     {
         public static SelectList ToSelectList(this Enum enumeration)
         {
-            var list =
-                (from Enum d in Enum.GetValues(enumeration.GetType())
-                 select new { ID = Convert.ToInt32(d), Name = d.ToString() }).ToList();
+            var list = (from Enum d in Enum.GetValues(enumeration.GetType())
+                        select new { ID = Convert.ToInt32(d), Name = Translation.Get(d.ToString()) }).ToList();
             return new SelectList(list, "ID", "Name");
         }
 
@@ -22,7 +21,7 @@
         {
             var list =
                 (from Enum d in Enum.GetValues(enumeration.GetType())
-                 select new { ID = Convert.ToInt32(d), Name = d.ToString() }).ToList();
+                 select new { ID = Convert.ToInt32(d), Name = Translation.Get(d.ToString()) }).ToList();
             return new SelectList(list, "ID", "Name", selected);
         }
 

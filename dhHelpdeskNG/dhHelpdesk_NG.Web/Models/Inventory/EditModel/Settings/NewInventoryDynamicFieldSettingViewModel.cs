@@ -13,10 +13,12 @@ namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings
 
         public NewInventoryDynamicFieldSettingViewModel(
             NewInventoryDynamicFieldSettingModel inventoryDynamicFieldSettingModel,
-            SelectList inventoryTypeGroups)
+            SelectList inventoryTypeGroups,
+            SelectList fieldTypes)
         {
             this.InventoryDynamicFieldSettingModel = inventoryDynamicFieldSettingModel;
             this.InventoryTypeGroups = inventoryTypeGroups;
+            this.FieldTypes = fieldTypes;
         }
 
         [NotNull]
@@ -24,5 +26,8 @@ namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings
 
         [NotNull]
         public SelectList InventoryTypeGroups { get; set; }
+
+        [NotNull]
+        public SelectList FieldTypes { get; set; }
     }
 }

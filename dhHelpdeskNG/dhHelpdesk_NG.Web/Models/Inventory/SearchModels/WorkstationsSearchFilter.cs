@@ -3,6 +3,7 @@
     using DataAnnotationsExtensions;
 
     using DH.Helpdesk.BusinessData.Models.Inventory;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Services.Requests.Inventory;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
@@ -14,32 +15,6 @@
         {
         }
 
-        public WorkstationsSearchFilter(
-            int? regionId,
-            int? departmentId,
-            int? computerTypeId,
-            ContractStatuses? contractStatusId,
-            DateRange contractStartDate,
-            DateRange contractEndDate,
-            DateRange scanDate,
-            DateRange scrapDate,
-            string searchFor,
-            int recordsOnPage,
-            bool isShowScrapped)
-        {
-            this.RegionId = regionId;
-            this.DepartmentId = departmentId;
-            this.ComputerTypeId = computerTypeId;
-            this.ContractStatusId = contractStatusId;
-            this.ContractStartDate = contractStartDate;
-            this.ContractEndDate = contractEndDate;
-            this.ScanDate = scanDate;
-            this.ScrapDate = scrapDate;
-            this.SearchFor = searchFor;
-            this.RecordsOnPage = recordsOnPage;
-            this.IsShowScrapped = isShowScrapped;
-        }
-
         private WorkstationsSearchFilter(int recordsOnPage)
         {
             this.RecordsOnPage = recordsOnPage;
@@ -47,6 +22,8 @@
             this.ContractEndDate = new DateRange();
             this.ScanDate = new DateRange();
             this.ScrapDate = new DateRange();
+
+            this.SortField = new SortFieldModel();
         }
 
         [IsId]
@@ -82,6 +59,8 @@
         [LocalizedDisplay("Visa även skrotade datorer")]
         public bool IsShowScrapped { get; set; }
 
+        public SortFieldModel SortField { get; set; }
+
         public static WorkstationsSearchFilter CreateDefault()
         {
             return new WorkstationsSearchFilter(500);
@@ -89,6 +68,13 @@
 
         public ComputersFilter CreateRequest(int customerId)
         {
+            SortField sortField = null;
+
+            if (!string.IsNullOrEmpty(this.SortField.Name))
+            {
+                sortField = new SortField(this.SortField.Name, this.SortField.SortBy.Value);
+            }
+
             return new ComputersFilter(
                 customerId,
                 this.RegionId,

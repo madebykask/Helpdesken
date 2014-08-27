@@ -10,6 +10,8 @@
     using DH.Helpdesk.BusinessData.Models.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Input;
     using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.Services.DisplayValues;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Concrete;
     using DH.Helpdesk.Web.Enums.Inventory;
@@ -233,7 +235,25 @@
                     SessionFacade.CurrentLanguageId);
             var models = this.inventoryService.GetWorkstations(filter.CreateRequest(SessionFacade.CurrentCustomer.Id));
 
-            var viewModel = InventoryGridModel.BuildModel(models, settings);
+            var viewModel = InventoryGridModel.BuildModel(models, settings, filter.SortField);
+
+            if (filter.SortField.SortBy.HasValue)
+            {
+                var displayValueComparer = new DisplayValueComparer(filter.SortField.Name);
+
+                switch (filter.SortField.SortBy)
+                {
+                    case SortBy.Ascending:
+                        viewModel.Inventories =
+                            viewModel.Inventories.OrderBy(x => x, displayValueComparer).ToList();
+                        break;
+                    case SortBy.Descending:
+                        viewModel.Inventories =
+                            viewModel.Inventories.OrderByDescending(x => x, displayValueComparer)
+                                .ToList();
+                        break;
+                }
+            }
 
             return this.PartialView("InventoryGrid", viewModel);
         }
@@ -623,9 +643,7 @@
         {
             var businessModel = this.inventoryModelBuilder.BuildForAdd(inventoryViewModel, OperationContext);
             this.inventoryService.AddInventory(businessModel);
-            var dynamicBusinessModels = this.inventoryValueBuilder.BuildForWrite(
-                businessModel.Id,
-                dynamicFieldModels);
+            var dynamicBusinessModels = this.inventoryValueBuilder.BuildForWrite(businessModel.Id, dynamicFieldModels);
             this.inventoryService.AddDynamicFieldsValuesInventory(dynamicBusinessModels);
 
             return this.RedirectToAction("Index");
@@ -1273,5 +1291,103 @@
         }
 
         #endregion
+
+        private class DisplayValueComparer : IComparer<InventoryOverviewModel>
+        {
+            private readonly string fieldName;
+
+            public DisplayValueComparer(string fieldName)
+            {
+                this.fieldName = fieldName;
+            }
+
+            public int Compare(InventoryOverviewModel x, InventoryOverviewModel y)
+            {
+                var displayValueX = x.FieldValues.Single(m => m.FieldName.Equals(this.fieldName)).Value;
+                var displayValueY = y.FieldValues.Single(m => m.FieldName.Equals(this.fieldName)).Value;
+
+                var displayValueStringX = displayValueX as DisplayValue<string>;
+                if (displayValueStringX != null)
+                {
+                    var displayValueStringY = displayValueY as DisplayValue<string>;
+
+                    if (displayValueStringY != null)
+                    {
+                        return string.Compare(
+                            displayValueStringX.Value,
+                            displayValueStringY.Value,
+                            StringComparison.InvariantCultureIgnoreCase);
+                    }
+                }
+
+                var displayValueIntX = displayValueX as DisplayValue<int?>;
+                if (displayValueIntX != null)
+                {
+                    var displayValueIntY = displayValueY as DisplayValue<int?>;
+
+                    if (displayValueIntY != null)
+                    {
+                        if (!displayValueIntX.Value.HasValue && !displayValueIntY.Value.HasValue)
+                        {
+                            return 0;
+                        }
+
+                        if (displayValueIntX.Value.HasValue && !displayValueIntY.Value.HasValue)
+                        {
+                            return 1;
+                        }
+
+                        if (!displayValueIntX.Value.HasValue)
+                        {
+                            return -1;
+                        }
+
+                        return displayValueIntX.Value.Value.CompareTo(displayValueIntY.Value.Value);
+                    }
+                }
+
+                var displayValueDateX = displayValueX as DisplayValue<DateTime?>;
+                if (displayValueDateX != null)
+                {
+                    var displayValueDateY = displayValueY as DisplayValue<DateTime?>;
+
+                    if (displayValueDateY != null)
+                    {
+                        if (!displayValueDateX.Value.HasValue && !displayValueDateY.Value.HasValue)
+                        {
+                            return 0;
+                        }
+
+                        if (displayValueDateX.Value.HasValue && !displayValueDateY.Value.HasValue)
+                        {
+                            return 1;
+                        }
+
+                        if (!displayValueDateX.Value.HasValue)
+                        {
+                            return -1;
+                        }
+
+                        return displayValueDateX.Value.Value.CompareTo(displayValueDateY.Value.Value);
+                    }
+                }
+
+                var displayValueBoolX = displayValueX as DisplayValue<bool>;
+                if (displayValueBoolX != null)
+                {
+                    var displayValueBoolY = displayValueY as DisplayValue<bool>;
+
+                    if (displayValueBoolY != null)
+                    {
+                        return displayValueBoolX.Value.CompareTo(displayValueBoolY.Value);
+                    }
+                }
+
+                return string.Compare(
+                    displayValueX.GetDisplayValue(),
+                    displayValueY.GetDisplayValue(),
+                    StringComparison.InvariantCultureIgnoreCase);
+            }
+        }
     }
 }
