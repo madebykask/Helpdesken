@@ -3,7 +3,6 @@
     using DataAnnotationsExtensions;
 
     using DH.Helpdesk.BusinessData.Models.Inventory;
-    using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Services.Requests.Inventory;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
@@ -68,13 +67,6 @@
 
         public ComputersFilter CreateRequest(int customerId)
         {
-            SortField sortField = null;
-
-            if (!string.IsNullOrEmpty(this.SortField.Name))
-            {
-                sortField = new SortField(this.SortField.Name, this.SortField.SortBy.Value);
-            }
-
             return new ComputersFilter(
                 customerId,
                 this.RegionId,

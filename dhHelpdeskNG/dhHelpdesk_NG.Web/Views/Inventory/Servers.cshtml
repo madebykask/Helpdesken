@@ -1,6 +1,9 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.SearchModels.ServerSearchFilter
-@using (Ajax.BeginForm("ServersGrid", "Inventory", null, new AjaxOptions { UpdateTargetId = "grid_container" }))
+@using (Ajax.BeginForm("ServersGrid", "Inventory", null, new AjaxOptions { UpdateTargetId = "grid_container" }, new { id = "search_form" }))
 {
+    @Html.HiddenFor(m => m.SortField.Name, new { id = "sortFieldName" })
+    @Html.HiddenFor(m => m.SortField.SortBy, new { id = "sortFieldBy" })
+
     <table class="tableform">
         <tr>
             <td class="span3">

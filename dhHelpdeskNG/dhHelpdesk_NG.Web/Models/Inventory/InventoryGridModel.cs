@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory
 {
+    using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
@@ -15,6 +16,7 @@
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.InventoryFieldSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.PrinterFieldSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ServerFieldSettings;
+    using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Services.DisplayValues;
     using DH.Helpdesk.Services.DisplayValues.Inventory;
@@ -48,40 +50,71 @@
 
         public SortFieldModel SortField { get; set; }
 
-        public static InventoryGridModel BuildModel(List<ComputerOverview> modelList, ComputerFieldsSettingsOverview settings, SortFieldModel sortField)
+        public static InventoryGridModel BuildModel(
+            List<ComputerOverview> modelList,
+            ComputerFieldsSettingsOverview settings,
+            SortFieldModel sortField)
         {
-            var overviews = modelList.Select(c => CreateComputerOverview(c, settings)).ToList();
+            List<InventoryOverviewModel> overviews = modelList.Select(c => CreateComputerOverview(c, settings)).ToList();
+            List<InventoryOverviewModel> sortedOverviews = SortGrid(sortField, overviews);
+
             var headers = GetComputerHeaders(settings);
 
-            return new InventoryGridModel(headers, overviews, (int)CurrentModes.Workstations, sortField);
+            return new InventoryGridModel(headers, sortedOverviews, (int)CurrentModes.Workstations, sortField);
         }
 
-        public static InventoryGridModel BuildModel(List<ServerOverview> modelList, ServerFieldsSettingsOverview settings)
+        public static InventoryGridModel BuildModel(
+            List<ServerOverview> modelList,
+            ServerFieldsSettingsOverview settings,
+            SortFieldModel sortField)
         {
-            var overviews = modelList.Select(c => CreateServerOverview(c, settings)).ToList();
+            List<InventoryOverviewModel> overviews = modelList.Select(c => CreateServerOverview(c, settings)).ToList();
+            List<InventoryOverviewModel> sortedOverviews = SortGrid(sortField, overviews);
+
             var headers = GetServerHeaders(settings);
 
-            return new InventoryGridModel(headers, overviews, (int)CurrentModes.Servers, null);
+            return new InventoryGridModel(headers, sortedOverviews, (int)CurrentModes.Servers, sortField);
         }
 
-        public static InventoryGridModel BuildModel(List<PrinterOverview> modelList, PrinterFieldsSettingsOverview settings)
+        public static InventoryGridModel BuildModel(
+            List<PrinterOverview> modelList,
+            PrinterFieldsSettingsOverview settings,
+            SortFieldModel sortField)
         {
-            var overviews = modelList.Select(c => CreatePrinterOverview(c, settings)).ToList();
+            List<InventoryOverviewModel> overviews = modelList.Select(c => CreatePrinterOverview(c, settings)).ToList();
+            List<InventoryOverviewModel> sortedOverviews = SortGrid(sortField, overviews);
+
             var headers = GetPrinterHeaders(settings);
 
-            return new InventoryGridModel(headers, overviews, (int)CurrentModes.Printers, null);
+            return new InventoryGridModel(headers, sortedOverviews, (int)CurrentModes.Printers, sortField);
         }
 
-        public static InventoryGridModel BuildModel(InventoriesOverviewResponse response, InventoryFieldSettingsOverviewResponse settings, int inventoryTypeId)
+        public static InventoryGridModel BuildModel(
+            InventoriesOverviewResponse response,
+            InventoryFieldSettingsOverviewResponse settings,
+            int inventoryTypeId,
+            SortFieldModel sortField)
         {
-            var overviews =
-                response.Overviews.Select(c => CreateInventoryOverview(c, response.DynamicData, settings.InventoryFieldSettingsOverview, settings.InventoryDynamicFieldSettingOverviews)).ToList();
-            var headers = GetInventoryHeaders(settings.InventoryFieldSettingsOverview, settings.InventoryDynamicFieldSettingOverviews);
+            List<InventoryOverviewModel> overviews =
+                response.Overviews.Select(
+                    c =>
+                    CreateInventoryOverview(
+                        c,
+                        response.DynamicData,
+                        settings.InventoryFieldSettingsOverview,
+                        settings.InventoryDynamicFieldSettingOverviews)).ToList();
+            List<InventoryOverviewModel> sortedOverviews = SortGrid(sortField, overviews);
 
-            return new InventoryGridModel(headers, overviews, inventoryTypeId, null);
+            var headers = GetInventoryHeaders(
+                settings.InventoryFieldSettingsOverview,
+                settings.InventoryDynamicFieldSettingOverviews);
+
+            return new InventoryGridModel(headers, sortedOverviews, inventoryTypeId, sortField);
         }
 
-        public static List<InventoryGridModel> BuildModels(InventoryOverviewResponseWithType response, InventoriesFieldSettingsOverviewResponse settings)
+        public static List<InventoryGridModel> BuildModels(
+            InventoryOverviewResponseWithType response,
+            InventoriesFieldSettingsOverviewResponse settings)
         {
             var inventoryGridModels = new List<InventoryGridModel>();
 
@@ -96,8 +129,12 @@
 
                 var overviews =
                     item.InventoryOverviews.Select(
-                        c => CreateInventoryOverview(c, response.DynamicData, setting.InventoryFieldSettingsOverview, dynamicSettings.InventoryDynamicFieldSettingOverviews))
-                        .ToList();
+                        c =>
+                        CreateInventoryOverview(
+                            c,
+                            response.DynamicData,
+                            setting.InventoryFieldSettingsOverview,
+                            dynamicSettings.InventoryDynamicFieldSettingOverviews)).ToList();
                 var headers = GetInventoryHeaders(
                     setting.InventoryFieldSettingsOverview,
                     dynamicSettings.InventoryDynamicFieldSettingOverviews);
@@ -117,8 +154,8 @@
         }
 
         private static InventoryOverviewModel CreateComputerOverview(
-                        ComputerOverview overview,
-                        ComputerFieldsSettingsOverview settings)
+            ComputerOverview overview,
+            ComputerFieldsSettingsOverview settings)
         {
             var values = new List<NewGridRowCellValueModel>();
 
@@ -715,8 +752,8 @@
         }
 
         private static InventoryOverviewModel CreateServerOverview(
-                ServerOverview overview,
-                ServerFieldsSettingsOverview settings)
+            ServerOverview overview,
+            ServerFieldsSettingsOverview settings)
         {
             var values = new List<NewGridRowCellValueModel>();
 
@@ -1014,8 +1051,8 @@
         }
 
         private static InventoryOverviewModel CreatePrinterOverview(
-        PrinterOverview overview,
-        PrinterFieldsSettingsOverview settings)
+            PrinterOverview overview,
+            PrinterFieldsSettingsOverview settings)
         {
             var values = new List<NewGridRowCellValueModel>();
 
@@ -1376,6 +1413,147 @@
 
             var fieldValue = new NewGridRowCellValueModel(fieldName, value);
             values.Add(fieldValue);
+        }
+
+        private static List<InventoryOverviewModel> SortGrid(
+            SortFieldModel sortFieldModel,
+            List<InventoryOverviewModel> models)
+        {
+            if (sortFieldModel.SortBy.HasValue)
+            {
+                var displayValueComparer = new InventoryOverviewModelComparer(sortFieldModel.Name);
+                var sortedModels = new List<InventoryOverviewModel>();
+
+                switch (sortFieldModel.SortBy)
+                {
+                    case SortBy.Ascending:
+                        sortedModels = models.OrderBy(x => x, displayValueComparer).ToList();
+                        break;
+                    case SortBy.Descending:
+                        sortedModels = models.OrderByDescending(x => x, displayValueComparer).ToList();
+                        break;
+                }
+
+                return sortedModels;
+            }
+
+            return models;
+        }
+
+        private class InventoryOverviewModelComparer : IComparer<InventoryOverviewModel>
+        {
+            private readonly string fieldName;
+
+            public InventoryOverviewModelComparer(string fieldName)
+            {
+                this.fieldName = fieldName;
+            }
+
+            public int Compare(InventoryOverviewModel x, InventoryOverviewModel y)
+            {
+                NewGridRowCellValueModel valueX = x.FieldValues.SingleOrDefault(m => m.FieldName.Equals(this.fieldName));
+                NewGridRowCellValueModel valueY = y.FieldValues.SingleOrDefault(m => m.FieldName.Equals(this.fieldName));
+
+                if (valueX == null && valueY == null)
+                {
+                    return 0;
+                }
+
+                if (valueX != null && valueY == null)
+                {
+                    return 1;
+                }
+
+                if (valueX == null)
+                {
+                    return -1;
+                }
+
+                DisplayValue displayValueX = valueX.Value;
+                DisplayValue displayValueY = valueY.Value;
+
+                var displayValueStringX = displayValueX as DisplayValue<string>;
+                if (displayValueStringX != null)
+                {
+                    var displayValueStringY = displayValueY as DisplayValue<string>;
+
+                    if (displayValueStringY != null)
+                    {
+                        return string.Compare(
+                            displayValueStringX.Value,
+                            displayValueStringY.Value,
+                            StringComparison.InvariantCultureIgnoreCase);
+                    }
+                }
+
+                var displayValueIntX = displayValueX as DisplayValue<int?>;
+                if (displayValueIntX != null)
+                {
+                    var displayValueIntY = displayValueY as DisplayValue<int?>;
+
+                    if (displayValueIntY != null)
+                    {
+                        if (!displayValueIntX.Value.HasValue && !displayValueIntY.Value.HasValue)
+                        {
+                            return 0;
+                        }
+
+                        if (displayValueIntX.Value.HasValue && !displayValueIntY.Value.HasValue)
+                        {
+                            return 1;
+                        }
+
+                        if (!displayValueIntX.Value.HasValue)
+                        {
+                            return -1;
+                        }
+
+                        return displayValueIntX.Value.Value.CompareTo(displayValueIntY.Value.Value);
+                    }
+                }
+
+                var displayValueDateX = displayValueX as DisplayValue<DateTime?>;
+                if (displayValueDateX != null)
+                {
+                    var displayValueDateY = displayValueY as DisplayValue<DateTime?>;
+
+                    if (displayValueDateY != null)
+                    {
+                        if (!displayValueDateX.Value.HasValue && !displayValueDateY.Value.HasValue)
+                        {
+                            return 0;
+                        }
+
+                        if (displayValueDateX.Value.HasValue && !displayValueDateY.Value.HasValue)
+                        {
+                            return 1;
+                        }
+
+                        if (!displayValueDateX.Value.HasValue)
+                        {
+                            return -1;
+                        }
+
+                        return displayValueDateX.Value.Value.CompareTo(displayValueDateY.Value.Value);
+                    }
+                }
+
+                var displayValueBoolX = displayValueX as DisplayValue<bool>;
+                if (displayValueBoolX != null)
+                {
+                    var displayValueBoolY = displayValueY as DisplayValue<bool>;
+
+                    if (displayValueBoolY != null)
+                    {
+                        return displayValueBoolX.Value.CompareTo(displayValueBoolY.Value);
+                    }
+                }
+
+                return string.Compare(
+                    displayValueX.GetDisplayValue(),
+                    displayValueY.GetDisplayValue(),
+                    StringComparison.InvariantCultureIgnoreCase);
+            }
         }
     }
 }

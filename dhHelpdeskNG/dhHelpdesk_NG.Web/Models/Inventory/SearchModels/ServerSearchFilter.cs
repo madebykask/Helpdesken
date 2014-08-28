@@ -2,24 +2,18 @@
 {
     using DH.Helpdesk.Services.Requests.Inventory;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Web.Models.Shared;
 
     public class ServerSearchFilter
     {
-        public ServerSearchFilter()
-        {
-        }
-
-        public ServerSearchFilter(string searchFor)
-        {
-            this.SearchFor = searchFor;
-        }
-
         [LocalizedDisplay("Sök")]
         public string SearchFor { get; set; }
 
+        public SortFieldModel SortField { get; set; }
+
         public static ServerSearchFilter CreateDefault()
         {
-            return new ServerSearchFilter();
+            return new ServerSearchFilter { SortField = new SortFieldModel() };
         }
 
         public ServersFilter CreateRequest(int customerId)

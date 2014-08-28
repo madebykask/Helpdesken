@@ -5,6 +5,7 @@
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Services.Requests.Inventory;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Web.Models.Shared;
 
     public class InventorySearchFilter
     {
@@ -12,16 +13,11 @@
         {
         }
 
-        public InventorySearchFilter(int? departmentId, string searchFor, int recordsOnPage)
-        {
-            this.DepartmentId = departmentId;
-            this.SearchFor = searchFor;
-            this.RecordsOnPage = recordsOnPage;
-        }
-
         private InventorySearchFilter(int recordsOnPage)
         {
             this.RecordsOnPage = recordsOnPage;
+
+            this.SortField = new SortFieldModel();
         }
 
         [IsId]
@@ -33,6 +29,8 @@
         [Min(0)]
         [LocalizedDisplay("Poster per sida")]
         public int RecordsOnPage { get; set; }
+
+        public SortFieldModel SortField { get; set; }
 
         public static InventorySearchFilter CreateDefault(int inventoryTypeId)
         {

@@ -3,20 +3,10 @@
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Services.Requests.Inventory;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Web.Models.Shared;
 
     public class PrinterSearchFilter
     {
-        public PrinterSearchFilter()
-        {
-        }
-
-        public PrinterSearchFilter(int customerId, int? departmentId, string searchFor)
-        {
-            this.CustomerId = customerId;
-            this.DepartmentId = departmentId;
-            this.SearchFor = searchFor;
-        }
-
         [IsId]
         public int CustomerId { get; set; }
 
@@ -26,9 +16,11 @@
         [LocalizedDisplay("Sök")]
         public string SearchFor { get; set; }
 
+        public SortFieldModel SortField { get; set; }
+
         public static PrinterSearchFilter CreateDefault()
         {
-            return new PrinterSearchFilter();
+            return new PrinterSearchFilter { SortField = new SortFieldModel() };
         }
 
         public PrintersFilter CreateRequest(int customerId)
