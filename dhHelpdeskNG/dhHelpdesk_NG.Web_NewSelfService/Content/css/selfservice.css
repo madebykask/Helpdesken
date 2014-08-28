@@ -14,6 +14,13 @@ h4 {
     padding:5px;
 }
 
+h5 {
+    font-size: 16px;
+            line-height:16px;
+            font-weight: normal;
+            margin-bottom:4px;
+}
+
 .max {
     width: 50px !important;
 }
@@ -635,6 +642,20 @@ input[type=text], select, textarea {
   color: #999;
   background-color: #f1f1f1;
   border-color: #e1e1e1;
+}
+
+/******BACKGROUND COLORS**********/
+.bg-blue {
+    background: #006eab;
+}
+.bg-orange {
+    background: #d96326;
+}
+.bg-purple {
+    background: #53378a !important;
+}
+.bg-green {
+    background: #008283;
 }
 
 

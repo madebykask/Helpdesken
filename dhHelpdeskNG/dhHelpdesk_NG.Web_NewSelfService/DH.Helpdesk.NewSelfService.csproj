@@ -355,10 +355,14 @@
     <Content Include="Content\img\ico-cancel.png" />
     <Content Include="Content\img\ico-chat.png" />
     <Content Include="Content\img\ico-coworkers.png" />
+    <Content Include="Content\img\ico-customerservice.png" />
+    <Content Include="Content\img\ico-dhhelpdesk.png" />
+    <Content Include="Content\img\ico-dhsolutions.png" />
     <Content Include="Content\img\ico-documents.png" />
     <Content Include="Content\img\ico-finished.png" />
     <Content Include="Content\img\ico-help.png" />
     <Content Include="Content\img\ico-home.png" />
+    <Content Include="Content\img\ico-license.png" />
     <Content Include="Content\img\ico-new.png" />
     <Content Include="Content\img\ico-ongoing.png" />
     <Content Include="Content\img\ico-save.png" />
