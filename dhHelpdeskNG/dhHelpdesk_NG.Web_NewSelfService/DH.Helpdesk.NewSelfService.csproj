@@ -347,6 +347,7 @@
     <Content Include="Content\img-profile\ikea-people.png" />
     <Content Include="Content\img-profile\ikea-peoplestart.png" />
     <Content Include="Content\img-profile\IKEA.png" />
+    <Content Include="Content\img\about.jpg" />
     <Content Include="Content\img\close.gif" />
     <Content Include="Content\img\dhhelpdesk-login.png" />
     <Content Include="Content\img\dhhelpdesk-menuend.png" />
