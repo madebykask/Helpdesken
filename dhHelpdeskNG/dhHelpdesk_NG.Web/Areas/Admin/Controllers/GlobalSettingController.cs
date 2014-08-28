@@ -219,7 +219,7 @@
 
         public ActionResult NewTranslation()
         {
-            var model = this.SaveTextTranslationViewModel(new Text { ChangedDate = DateTime.Now, CreatedDate = DateTime.Now });
+            var model = this.SaveTextTranslationViewModel(new Text {});
 
             SessionFacade.ActiveTab = "#tab4";
 

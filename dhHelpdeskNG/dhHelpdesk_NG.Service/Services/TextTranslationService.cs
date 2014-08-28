@@ -120,6 +120,7 @@
             text.ChangedDate = DateTime.Now;
             text.CreatedDate = DateTime.Now;
             text.Id = this._textRepository.GetNextId() + 1;
+            text.Type = 1;
 
             if (string.IsNullOrEmpty(text.TextToTranslate))
                 errors.Add("text.TextToTranslate", "Du måste ange ett ord att översätta");
@@ -128,17 +129,14 @@
             {
                 this._textRepository.AddText(text);
 
-                foreach (var tt in text.TextTranslations)
+                foreach (var t in TTs)
                 {
-                    foreach (var change in TTs.Where(x => x.Text_Id == tt.Text_Id && x.Language_Id == tt.Language_Id))
-                    {
-                        tt.TextTranslated = change.TranslationName;
-                        tt.Language_Id = change.Language_Id;
-                        tt.Text_Id = change.Text_Id;
+                    var newTT = new TextTranslation { TextTranslated = t.TranslationName, Language_Id = t.Language_Id, Text_Id = text.Id };
 
-                        this._textTranslationRepository.Add(tt);
-                    }
+                    this._textTranslationRepository.Add(newTT);
+
                 }
+             
             }
 
             if (errors.Count == 0)

@@ -126,6 +126,7 @@ namespace DH.Helpdesk.Dal.Repositories
                         group l by new { l.Name, l.Id, } into g
                         select new TextTranslationList
                         {
+                            Language_Id = g.Key.Id,
                             LanguageName = g.Key.Name
                         };
 

@@ -10,7 +10,7 @@
     {
         internal TextConfiguration()
         {
-            this.HasKey(x => x.Id);
+            this.HasKey(x => x.Id).Property(p => p.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
             this.HasMany(o => o.TextTranslations)
                 .WithRequired(o => o.Text)
@@ -20,7 +20,7 @@
             this.Property(x => x.Type).IsRequired().HasColumnName("TextType");
             this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-            this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            //this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             this.ToTable("tbltext");
         }
