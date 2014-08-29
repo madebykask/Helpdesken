@@ -4,14 +4,14 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelExport.ExcelExport
 
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class BusinessItem
+    public sealed class BusinessItem : IRow<BusinessItemField>
     {
-        public BusinessItem(List<BusinessItemField> fields)
+        public BusinessItem(IEnumerable<BusinessItemField> fields)
         {
             this.Fields = fields;
         }
 
         [NotNull]
-        public List<BusinessItemField> Fields { get; private set; }
+        public IEnumerable<BusinessItemField> Fields { get; private set; }
     }
 }

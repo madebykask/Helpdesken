@@ -1,8 +1,9 @@
 ﻿namespace DH.Helpdesk.Web.Models.Shared
 {
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport.ExcelExport;
 
-    public sealed class GridColumnHeaderModel
+    public sealed class GridColumnHeaderModel : ITableHeader
     {
         public GridColumnHeaderModel(string fieldName, string caption)
         {

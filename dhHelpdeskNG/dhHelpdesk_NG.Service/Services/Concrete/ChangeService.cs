@@ -203,8 +203,8 @@
 
             var affectedProcesses = this.changeGroupRepository.FindOverviews(context.CustomerId);
             overviewSettings.Registration.AffectedProcessesOverviews = affectedProcesses;
-            var headers = this.changeOverviewSettingsToExcelHeadersMapper.Map(overviewSettings);
-            var businessItems = changes.Changes.Select(
+            List<ExcelTableHeader> headers = this.changeOverviewSettingsToExcelHeadersMapper.Map(overviewSettings);
+            List<BusinessItem> businessItems = changes.Changes.Select(
                                 c =>
                                 {
                                     c.Registration.AffectedProcessesOverviews = affectedProcesses;

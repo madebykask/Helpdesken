@@ -32,7 +32,7 @@
 
         public SortFieldModel SortField { get; set; }
 
-        public static InventorySearchFilter CreateDefault(int inventoryTypeId)
+        public static InventorySearchFilter CreateDefault(int inventoryTypeId) // todo wtf?
         {
             return new InventorySearchFilter(500);
         }

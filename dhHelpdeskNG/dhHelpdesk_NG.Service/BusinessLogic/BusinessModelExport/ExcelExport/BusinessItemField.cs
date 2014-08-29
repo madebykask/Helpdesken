@@ -3,7 +3,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelExport.ExcelExport
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Services.DisplayValues;
 
-    public sealed class BusinessItemField
+    public sealed class BusinessItemField : ICell
     {
         public BusinessItemField(string fieldName, DisplayValue value)
         {

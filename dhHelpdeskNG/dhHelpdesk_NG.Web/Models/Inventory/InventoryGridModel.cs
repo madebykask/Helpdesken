@@ -1451,8 +1451,8 @@
 
             public int Compare(InventoryOverviewModel x, InventoryOverviewModel y)
             {
-                NewGridRowCellValueModel valueX = x.FieldValues.SingleOrDefault(m => m.FieldName.Equals(this.fieldName));
-                NewGridRowCellValueModel valueY = y.FieldValues.SingleOrDefault(m => m.FieldName.Equals(this.fieldName));
+                NewGridRowCellValueModel valueX = x.Fields.SingleOrDefault(m => m.FieldName.Equals(this.fieldName));
+                NewGridRowCellValueModel valueY = y.Fields.SingleOrDefault(m => m.FieldName.Equals(this.fieldName));
 
                 if (valueX == null && valueY == null)
                 {

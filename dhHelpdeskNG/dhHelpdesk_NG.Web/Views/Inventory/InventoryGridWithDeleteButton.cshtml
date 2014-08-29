@@ -17,12 +17,15 @@
         @foreach (var inventory in Model.InventoryGridModel.Inventories)
         {
             <tr onclick=" window.location.href = '@Url.Action("RedirectToEditInventory", new { id = inventory.Id, currentMode = Model.InventoryGridModel.CurrentMode })' ">
-                @for (var i = 0; i < inventory.FieldValues.Count; i++)
-                {
-                    var inventoryField = Model.InventoryGridModel.Headers[i];
-                    var inventoryFieldValue = inventory.FieldValues.Single(v => v.FieldName == inventoryField.FieldName);
+                @{
+                    var fields = inventory.Fields.ToList();
+                    for (var i = 0; i < fields.Count; i++)
+                    {
+                        var inventoryField = Model.InventoryGridModel.Headers[i];
+                        var inventoryFieldValue = fields.Single(v => v.FieldName == inventoryField.FieldName);
 
-                    <td class="tdpointer">@inventoryFieldValue.Value.GetDisplayValue()</td>
+                        <td class="tdpointer">@inventoryFieldValue.Value.GetDisplayValue()</td>
+                    }
                 }
                 <td>
                     @Html.ActionLink(Translation.Get("Ta bort"), "DeleteInventoryFromComputer", new { computerId = Model.ParentId, inventoryId = inventory.Id }, new { @class = "btn" })

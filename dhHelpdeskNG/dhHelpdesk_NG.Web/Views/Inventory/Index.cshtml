@@ -18,9 +18,12 @@
 
             $.get('@Url.Action("RenderContent")', { currentMode: selectedValue }, function (tabMarkup) {
                 $('#type_data_container').html(tabMarkup);
-                var url = '@Url.Action("RedirectToNewInventory", "Inventory")';
-                url += '?currentMode=' + selectedValue;
-                $('#new_inventory_button').attr('href', url);
+                var urlToNew = '@Url.Action("RedirectToNewInventory", "Inventory")';
+                var urlToExcel = '@Url.Action("ExportChangesGridToExcelFile", "Inventory")';
+                urlToNew += '?currentMode=' + selectedValue;
+                urlToExcel += '?currentMode=' + selectedValue;
+                $('#new_inventory_button').attr('href', urlToNew);
+                $('#excel_report_inventory_button').attr('href', urlToExcel);
             });
         });
 
@@ -54,25 +57,25 @@
             $.post('@Url.Action("RememberTab", "Service")', { topic: '@PageName.InventoryIndex', tab: '@TabName.Inventories' });
             $('#new_master_data_button').hide();
             $('#new_custom_inventory_type_button').hide();
-            $('#new_inventory_button').show();
+            $('.inventory_buttons').show();
         });
 
         $('#settings_tab').click(function () {
             $.post('@Url.Action("RememberTab", "Service")', { topic: '@PageName.InventoryIndex', tab: '@TabName.Settings' });
             $('#new_master_data_button').hide();
-            $('#new_inventory_button').hide();
+            $('.inventory_buttons').hide();
             $('#new_custom_inventory_type_button').show();
         });
 
         $('#reports_tab').click(function () {
             $('#new_master_data_button').hide();
             $('#new_custom_inventory_type_button').hide();
-            $('#new_inventory_button').hide();
+            $('.inventory_buttons').hide();
         });
 
         $('#master_data_tab').click(function () {
             $.post('@Url.Action("RememberTab", "Service")', { topic: '@PageName.InventoryIndex', tab: '@TabName.MasterData' });
-            $('#new_inventory_button').hide();
+            $('.inventory_buttons').hide();
             $('#new_custom_inventory_type_button').hide();
             $('#new_master_data_button').show();
         });
@@ -98,7 +101,8 @@
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
-            <li>@Html.ActionLink(Translation.Get("Nytt"), "RedirectToNewInventory", new { currentMode = Model.CurrentMode }, new { @class = "btn", id = "new_inventory_button", style = inventoryButtonStyle })</li>
+            <li>@Html.ActionLink(Translation.Get("Nytt"), "RedirectToNewInventory", new { currentMode = Model.CurrentMode }, new { @class = "btn inventory_buttons", id = "new_inventory_button", style = inventoryButtonStyle })</li>
+            <li>@Html.ActionLink(Translation.Get("Excel"), "ExportChangesGridToExcelFile", new { currentMode = Model.CurrentMode }, new { @class = "btn inventory_buttons", id = "excel_report_inventory_button", style = inventoryButtonStyle })</li>
             <li>@Html.ActionLink(Translation.Get("Nytt"), "NewCustomInventoryType", "InventorySettings", new { }, new { @class = "btn", id = "new_custom_inventory_type_button", style = settingsButtonStyle })</li>
             <li>@Html.ActionLink(Translation.Get(string.Format("Nytt {0} ", ((ModuleTypes)Model.ModuleType))), "NewComputerModule", new { moduleType = Model.ModuleType }, new { @class = "btn", id = "new_master_data_button", style = masterDataButtonStyle })</li>
         </ul>

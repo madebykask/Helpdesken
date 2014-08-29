@@ -10,12 +10,15 @@
     {
         #region Public Methods and Operators
 
-        public byte[] Compose(List<ExcelTableHeader> headers, List<BusinessItem> items, string worksheetName)
+        public byte[] Compose(IEnumerable<ITableHeader> headers, IEnumerable<IRow<ICell>> items, string worksheetName)
         {
-            var outputMatrix = CreateMatrix(headers, items);
+            var tempHeaders = headers.ToList();
+            var tempItems = items.ToList();
+
+            var outputMatrix = CreateMatrix(tempHeaders, tempItems);
             var excelPackage = FlushMatrixToExcelPackage(outputMatrix, worksheetName);
 
-            AutoFitColumnsWidth(excelPackage, worksheetName, headers.Count);
+            AutoFitColumnsWidth(excelPackage, worksheetName, tempHeaders.Count);
 
             return excelPackage.GetAsByteArray();
         }
@@ -34,7 +37,7 @@
             }
         }
 
-        private static string[,] CreateMatrix(List<ExcelTableHeader> headers, List<BusinessItem> items)
+        private static string[,] CreateMatrix(List<ITableHeader> headers, List<IRow<ICell>> items)
         {
             var outputMatrix = new string[items.Count + 1, headers.Count];
 

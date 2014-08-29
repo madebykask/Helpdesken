@@ -1,9 +1,10 @@
 ﻿namespace DH.Helpdesk.Web.Models.Shared
 {
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport.ExcelExport;
     using DH.Helpdesk.Services.DisplayValues;
 
-    public sealed class NewGridRowCellValueModel
+    public sealed class NewGridRowCellValueModel : ICell
     {
         public NewGridRowCellValueModel(string fieldName, DisplayValue value)
         {
