@@ -1,4 +1,4 @@
-﻿<div class="case-invoice-order" data-id='{{:Id}}'>
+﻿<div id="case-invoice-order{{:Id}}" class="case-invoice-order" data-id='{{:Id}}'>
     <table>
         <tr>
             <td class='width100'>
@@ -18,11 +18,32 @@
                 </table>
             </td>
             <td style='vertical-align: top;'>
-                <i class="icon-plus-sign" onclick="dhHelpdesk.CaseArticles.AddBlankArticle('{{:Id}}'); return false;"></i>
+                <i class="icon-plus-sign" style="cursor: pointer;" onclick="dhHelpdesk.CaseArticles.AddBlankArticle('{{:Id}}'); return false;"></i>
             </td>
         </tr>
     </table>
     <div class='width100 textbold' style='text-align: right;'>
         {{:TotalLabel}}: <span class='articles-total'>{{:Total}}</span>
-    </div>   
+    </div>  
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    {{:DeliveryPeriodTitle}}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <div id="delivery-period{{:Id}}" class="input-append date dateie delivery-period">
+                        <input type="text" />
+                        <span class="add-on">
+                            <i class="icon-calendar"></i>
+                        </span>
+                    </div>                                
+                </td>
+            </tr>
+        </tbody>
+    </table>        
 </div>   

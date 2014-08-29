@@ -169,6 +169,29 @@ $(function () {
             });
         },
 
+        CreateBlankOrder: function() {
+            var blankOrder = new dhHelpdesk.CaseArticles.CaseInvoiceOrder();
+            blankOrder.Id = dhHelpdesk.CaseArticles.GenerateId();
+            return blankOrder;
+        },
+
+        AddOrder: function(invoiceId) {
+            var invoice = this.GetInvoice(invoiceId);
+            if (invoice != null) {
+                invoice.AddOrder(this.CreateBlankOrder());
+            }
+        },
+
+        DeleteCurrentOrder: function(invoiceId) {
+            var invoice = this.GetInvoice(invoiceId);
+            if (invoice != null) {
+                var currentOrder = this.GetCurrentOrder();
+                if (currentOrder != null) {
+                    invoice.DeleteOrder(currentOrder.Id);
+                }
+            }
+        },
+
         CreateBlankArticle: function() {
             var blank = new dhHelpdesk.CaseArticles.InvoiceArticle();
             blank.Id = dhHelpdesk.CaseArticles.GenerateId();
@@ -442,13 +465,32 @@ $(function () {
                 order.Initialize();
                 var container = this.Container.find(".orders-container");
                 container.append(order.Container);
+
+                var tabs = this.Container.find("#case-invoice-orders-tabs");
+                var newTab = $("<li><a href='#case-invoice-order" + order.Id + "'>Order " + (order.Number + 1) + "</a><li>");
+                tabs.find("ul").append(newTab);
+                tabs.tabs("refresh");
+                newTab.find("a").click();
+
+                this.Container.find(".delivery-period").datepicker({
+                    autoclose: true
+                });
             },
 
-            this.DeleteOrder = function(id) {
+            this.DeleteOrder = function (id) {
+                if (this._orders.length <= 1) {
+                    return;
+                }
+
                 for (var i = 0; i < this._orders.length; i++) {
                     var order = this._orders[i];
                     if (order.Id == id) {
                         this._orders.splice(i, 1);
+                        var tabs = this.Container.find("#case-invoice-orders-tabs");
+                        tabs.find("[href='#case-invoice-order" + order.Id + "']").parent().remove();
+                        order.Container.remove();
+                        tabs.tabs("refresh");
+                        this.UpdateTotal();
                         return;
                     }
                 }
@@ -506,10 +548,26 @@ $(function () {
 
             this.Initialize = function () {
                 this.Container = $(dhHelpdesk.CaseArticles.CaseInvoiceTemplate.render(this.GetViewModel()));
+
+                var tabs = this.Container.find("#case-invoice-orders-tabs");
+                tabs.tabs();
             },
 
             this.GetSortedOrders = function() {
                 return this._orders.sort(function (a1, a2) { return a1.Number - a2.Number; });
+            },
+
+            this.GetArticlesTotal = function () {
+                var total = 0;
+                var orders = this.GetOrders();
+                for (var i = 0; i < orders.length; i++) {
+                    total += orders[i].GetArticlesTotal();
+                }
+                return total;
+            },
+
+            this.UpdateTotal = function() {
+                this.Container.find("#case-invoice-order-summary-total").text(this.GetArticlesTotal());
             }
         },
 
@@ -647,6 +705,7 @@ $(function () {
             
             this.UpdateTotal = function() {
                 this.Container.find(".articles-total").text(this.GetArticlesTotal());
+                this.Invoice.UpdateTotal();
             },
 
             this._deleteFromContainer = function(id) {
@@ -814,6 +873,9 @@ $(function () {
             this.UnitsHeader = "Units";
             this.DefaultAmount = dhHelpdesk.CaseArticles.DefaultAmount;
             this.AddButtonLabel = "Add";
+            this.OrderTitle = "Order";
+            this.SummaryTitle = "Summary";
+            this.TotalLabel = "Total";
             this.Orders = [];
 
             this.AddOrder = function(order) {
@@ -830,6 +892,7 @@ $(function () {
             this.PpuHeader = "PPU";
             this.TotalHeader = "Total";
             this.TotalLabel = "Total";
+            this.DeliveryPeriodTitle = "Delivery period";
             this.Total = null;
             this.Articles = [];
 
@@ -872,8 +935,7 @@ $(function () {
                         dhHelpdesk.CaseArticles.AddInvoice(blankInvoice);
                         dhHelpdesk.CaseArticles.Initialize($this);
                         blankInvoice.CaseId = dhHelpdesk.CaseArticles.CaseId;
-                        var blankOrder = new dhHelpdesk.CaseArticles.CaseInvoiceOrder();
-                        blankOrder.Id = dhHelpdesk.CaseArticles.GenerateId();
+                        var blankOrder = new dhHelpdesk.CaseArticles.CreateBlankOrder();
                         blankInvoice.AddOrder(blankOrder);
                         dhHelpdesk.CaseArticles.ApplyChanges();
                         return;
