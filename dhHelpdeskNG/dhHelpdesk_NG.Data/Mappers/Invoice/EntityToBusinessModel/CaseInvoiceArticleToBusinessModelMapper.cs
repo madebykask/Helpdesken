@@ -1,22 +1,20 @@
 ﻿namespace DH.Helpdesk.Dal.Mappers.Invoice.EntityToBusinessModel
 {
-    using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.BusinessData.Models.Invoice;
-    using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Invoice;
 
     public sealed class CaseInvoiceArticleToBusinessModelMapper : IEntityToBusinessModelMapper<CaseInvoiceArticleEntity, CaseInvoiceArticle>
     {
-        private readonly IEntityToBusinessModelMapper<Case, CaseOverview> caseMapper;
+        private readonly IEntityToBusinessModelMapper<CaseInvoiceOrderEntity, CaseInvoiceOrder> invoiceOrderMapper;
 
         private readonly IEntityToBusinessModelMapper<InvoiceArticleEntity, InvoiceArticle> articleMapper;
 
         public CaseInvoiceArticleToBusinessModelMapper(
-            IEntityToBusinessModelMapper<Case, CaseOverview> caseMapper, 
-            IEntityToBusinessModelMapper<InvoiceArticleEntity, InvoiceArticle> articleMapper)
+            IEntityToBusinessModelMapper<InvoiceArticleEntity, InvoiceArticle> articleMapper, 
+            IEntityToBusinessModelMapper<CaseInvoiceOrderEntity, CaseInvoiceOrder> invoiceOrderMapper)
         {
-            this.caseMapper = caseMapper;
             this.articleMapper = articleMapper;
+            this.invoiceOrderMapper = invoiceOrderMapper;
         }
 
         public CaseInvoiceArticle Map(CaseInvoiceArticleEntity entity)
@@ -28,8 +26,8 @@
 
             return new CaseInvoiceArticle(
                         entity.Id,
-                        entity.CaseId,
-                        this.caseMapper.Map(entity.Case),
+                        entity.OrderId,
+                        this.invoiceOrderMapper.Map(entity.Order),
                         entity.ArticleId,
                         this.articleMapper.Map(entity.Article),
                         entity.Name,

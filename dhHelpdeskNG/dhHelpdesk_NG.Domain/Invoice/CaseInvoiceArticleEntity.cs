@@ -2,9 +2,9 @@
 {
     public class CaseInvoiceArticleEntity : Entity
     {
-        public int CaseId { get; set; }
+        public int OrderId { get; set; }
 
-        public virtual Case Case { get; set; }
+        public virtual CaseInvoiceOrderEntity Order { get; set; }
 
         public int? ArticleId { get; set; }
 

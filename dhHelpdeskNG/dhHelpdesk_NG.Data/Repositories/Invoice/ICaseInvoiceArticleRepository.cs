@@ -1,13 +1,15 @@
 ﻿namespace DH.Helpdesk.Dal.Repositories.Invoice
 {
+    using System.Collections.Generic;
+
     using DH.Helpdesk.BusinessData.Models.Invoice;
 
     public interface ICaseInvoiceArticleRepository
     {
-        CaseInvoiceArticle[] GetCaseArticles(int caseId);
+        CaseInvoice[] GetCaseInvoices(int caseId);
 
-        void SaveCaseArticles(int caseId, CaseInvoiceArticle[] articles);
+        void SaveCaseInvoices(IEnumerable<CaseInvoice> invoices);
 
-        void DeleteCaseArticles(int caseId);
+        void DeleteCaseInvoices(int caseId);
     }
 }

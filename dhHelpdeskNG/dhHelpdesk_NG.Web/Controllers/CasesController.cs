@@ -10,6 +10,7 @@
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.FinishingCause;
+    using DH.Helpdesk.BusinessData.Models.Invoice;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
@@ -521,8 +522,8 @@
                     m.ParantPath_ProductArea = ParentPathDefaultValue;
                 }
 
-                var caseInvoiceArticles = this.invoiceArticleService.GetCaseArticles(id);
-                m.InvoiceArticles = this.invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoiceArticles);
+                var caseInvoices = this.invoiceArticleService.GetCaseInvoices(id);
+                m.InvoiceArticles = this.invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoices);
                 m.CustomerSettings = this.workContext.Customer.Settings;
             }
 
@@ -1229,9 +1230,11 @@
                     }
             }
 
-            var articles = !string.IsNullOrEmpty(caseInvoiceArticles)
-                               ? InvoiceHelper.ToCaseInvoiceArticles(caseInvoiceArticles)
-                               : null;
+//            var invoices = !string.IsNullOrEmpty(caseInvoiceArticles)
+//                               ? InvoiceHelper.ToCaseInvoices(caseInvoiceArticles)
+//                               : null;
+
+            CaseInvoice[] invoices = null;
 
             // save case and case history
             int caseHistoryId = this._caseService.SaveCase(
@@ -1241,7 +1244,7 @@
                         SessionFacade.CurrentUser.Id, 
                         this.User.Identity.Name, 
                         out errors,
-                        articles);
+                        invoices);
 
             if (updateNotifierInformation.HasValue && updateNotifierInformation.Value)
             {

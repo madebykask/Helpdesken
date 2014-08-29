@@ -43,7 +43,7 @@
             int userId, 
             string adUser,           
             out IDictionary<string, string> errors,
-            CaseInvoiceArticle[] articles = null);
+            CaseInvoice[] invoices = null);
 
         int SaveCaseHistory(Case c, int userId, string adUser, out IDictionary<string, string> errors, string defaultUser = "");
         void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null);
@@ -266,7 +266,7 @@
                 this._caseFileRepository.Commit(); 
             }
 
-            this.invoiceArticleService.DeleteCaseArticles(id);
+            this.invoiceArticleService.DeleteCaseInvoices(id);
 
             var c = this._caseRepository.GetById(id);
             ret = c.CaseGUID; 
@@ -485,7 +485,7 @@
                 int userId, 
                 string adUser, 
                 out IDictionary<string, string> errors,
-                CaseInvoiceArticle[] articles = null)
+                CaseInvoice[] invoices = null)
         {
             int ret = 0;
 
@@ -525,9 +525,9 @@
             else            
                 ret = this.SaveCaseHistory(c, userId, adUser, out errors);
 
-            if (articles != null)
+            if (invoices != null)
             {
-                this.invoiceArticleService.SaveCaseArticles(c.Id, articles);                
+                this.invoiceArticleService.SaveCaseInvoices(invoices);                
             }
             
             return ret;

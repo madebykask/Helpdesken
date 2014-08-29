@@ -1,0 +1,28 @@
+﻿<div class="case-invoice-order" data-id='{{:Id}}'>
+    <table>
+        <tr>
+            <td class='width100'>
+                <table class='width100 table table-striped table-bordered table-hover'>
+                    <tr>
+                        <th>{{:ArtNoHeader}}</th>
+                        <th>{{:DescriptionHeader}}</th>
+                        <th>{{:UnitsHeader}}</th>
+                        <th>{{:TypeHeader}}</th>
+                        <th>{{:PpuHeader}}</th>
+                        <th>{{:TotalHeader}}</th>
+                        <th></th>
+                    </tr>
+                    <tbody class='articles-rows'>
+                        {{for Articles tmpl="caseInvoiceArticle" /}}                        
+                    </tbody>
+                </table>
+            </td>
+            <td style='vertical-align: top;'>
+                <i class="icon-plus-sign" onclick="dhHelpdesk.CaseArticles.AddBlankArticle('{{:Id}}'); return false;"></i>
+            </td>
+        </tr>
+    </table>
+    <div class='width100 textbold' style='text-align: right;'>
+        {{:TotalLabel}}: <span class='articles-total'>{{:Total}}</span>
+    </div>   
+</div>   

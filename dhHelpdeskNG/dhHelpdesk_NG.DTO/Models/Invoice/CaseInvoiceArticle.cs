@@ -1,23 +1,13 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Invoice
 {
-    using System.Web.Script.Serialization;
-
-    using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class CaseInvoiceArticle
     {
-        public CaseInvoiceArticle(int? articleId, InvoiceArticle article, decimal? ppu)
-        {
-            this.Ppu = ppu;
-            this.Article = article;
-            this.ArticleId = articleId;
-        }
-
         public CaseInvoiceArticle(
-                int id, 
-                int caseId, 
-                CaseOverview @case, 
+                int id,      
+                int orderId,
+                CaseInvoiceOrder order,
                 int? articleId, 
                 InvoiceArticle article,
                 string name, 
@@ -26,6 +16,8 @@
                 short position,
                 bool isInvoiced)
         {
+            this.OrderId = orderId;
+            this.Order = order;
             this.Ppu = ppu;
             this.Article = article;
             this.ArticleId = articleId;
@@ -33,17 +25,18 @@
             this.Amount = amount;
             this.IsInvoiced = isInvoiced;
             this.Name = name;
-            this.Case = @case;
-            this.CaseId = caseId;
             this.Id = id;
+        }
+
+        public CaseInvoiceArticle()
+        {           
         }
 
         public int Id { get; private set; }
 
-        public int CaseId { get; private set; }
+        public int OrderId { get; private set; }
 
-        [ScriptIgnore]
-        public CaseOverview Case { get; private set; }
+        public CaseInvoiceOrder Order { get; private set; }
 
         public int? ArticleId { get; private set; }
 

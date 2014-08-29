@@ -122,6 +122,8 @@
     <Compile Include="Interfaces\IUserEntity.cs" />
     <Compile Include="Interfaces\IWorkingGroupEntity.cs" />
     <Compile Include="Invoice\CaseInvoiceArticleEntity.cs" />
+    <Compile Include="Invoice\CaseInvoiceEntity.cs" />
+    <Compile Include="Invoice\CaseInvoiceOrderEntity.cs" />
     <Compile Include="Invoice\InvoiceArticleEntity.cs" />
     <Compile Include="Invoice\InvoiceArticleUnitEntity.cs" />
     <Compile Include="LinkGroup.cs" />

@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.Services.Services.Concrete
 {
+    using System.Collections.Generic;
+
     using DH.Helpdesk.BusinessData.Models.Invoice;
     using DH.Helpdesk.Dal.Repositories.Invoice;
 
@@ -31,19 +33,19 @@
             return this.invoiceArticleRepository.GetArticles(customerId, productAreaId);
         }
 
-        public CaseInvoiceArticle[] GetCaseArticles(int caseId)
+        public CaseInvoice[] GetCaseInvoices(int caseId)
         {
-            return this.caseInvoiceArticleRepository.GetCaseArticles(caseId);
+            return this.caseInvoiceArticleRepository.GetCaseInvoices(caseId);
         }
 
-        public void SaveCaseArticles(int caseId,  CaseInvoiceArticle[] articles)
+        public void SaveCaseInvoices(IEnumerable<CaseInvoice> invoices)
         {
-            this.caseInvoiceArticleRepository.SaveCaseArticles(caseId, articles);
+            this.caseInvoiceArticleRepository.SaveCaseInvoices(invoices);
         }
 
-        public void DeleteCaseArticles(int caseId)
+        public void DeleteCaseInvoices(int caseId)
         {
-            this.caseInvoiceArticleRepository.DeleteCaseArticles(caseId);
+            this.caseInvoiceArticleRepository.DeleteCaseInvoices(caseId);
         }
     }
 }

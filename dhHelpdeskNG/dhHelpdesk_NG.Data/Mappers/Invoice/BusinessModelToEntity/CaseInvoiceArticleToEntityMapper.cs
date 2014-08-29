@@ -7,7 +7,7 @@
     {
         public void Map(CaseInvoiceArticle businessModel, CaseInvoiceArticleEntity entity)
         {
-            entity.CaseId = businessModel.CaseId;
+            entity.OrderId = businessModel.OrderId;
             entity.IsInvoiced = businessModel.IsInvoiced;
             entity.ArticleId = businessModel.ArticleId;
             entity.Name = businessModel.Name;

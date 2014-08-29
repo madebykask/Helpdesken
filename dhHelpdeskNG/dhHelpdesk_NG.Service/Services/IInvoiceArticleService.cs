@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.Services.Services
 {
+    using System.Collections.Generic;
+
     using DH.Helpdesk.BusinessData.Models.Invoice;
 
     public interface IInvoiceArticleService
@@ -8,10 +10,10 @@
 
         InvoiceArticle[] GetArticles(int customerId, int productAreaId);
 
-        CaseInvoiceArticle[] GetCaseArticles(int caseId);
+        CaseInvoice[] GetCaseInvoices(int caseId);
 
-        void SaveCaseArticles(int caseId, CaseInvoiceArticle[] articles);
+        void SaveCaseInvoices(IEnumerable<CaseInvoice> invoices);
 
-        void DeleteCaseArticles(int caseId);
+        void DeleteCaseInvoices(int caseId);
     }
 }
