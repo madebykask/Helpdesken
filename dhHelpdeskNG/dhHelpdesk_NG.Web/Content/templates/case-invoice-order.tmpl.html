@@ -26,15 +26,11 @@
         {{:TotalLabel}}: <span class='articles-total'>{{:Total}}</span>
     </div>  
     <table>
-        <thead>
-            <tr>
-                <th>
-                    {{:DeliveryPeriodTitle}}
-                </th>
-            </tr>
-        </thead>
         <tbody>
             <tr>
+                <td>
+                    {{:DeliveryPeriodTitle}}
+                </td>
                 <td>
                     <div id="delivery-period{{:Id}}" class="input-append date dateie delivery-period">
                         <input type="text" />
@@ -42,6 +38,14 @@
                             <i class="icon-calendar"></i>
                         </span>
                     </div>                                
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {{:ReferenceTitle}}
+                </td>
+                <td>
+                    <input type="text" maxlength="40" autocomplete="Off" class="reference" />
                 </td>
             </tr>
         </tbody>

@@ -15,7 +15,8 @@
                         CaseInvoiceArticlesModel caseArticles,
                         string productAreaSelector,
                         int caseId,
-                        string caseInvoiceArticlesSelector)
+                        string caseInvoiceArticlesSelector,
+                        int customerId)
         {
             var result = new StringBuilder();
             var tag = new TagBuilder("input");
@@ -30,6 +31,7 @@
             tag.MergeAttribute("data-invoice-case-id", caseId.ToString(CultureInfo.InvariantCulture));
             tag.MergeAttribute("data-invoice-articles-for-save", caseInvoiceArticlesSelector);
             tag.MergeAttribute("data-invoice-date-format", Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern.ToLower());
+            tag.MergeAttribute("data-invoice-customerId", customerId.ToString(CultureInfo.InvariantCulture));
             result.Append(tag);
             return MvcHtmlString.Create(result.ToString());            
         }

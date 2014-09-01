@@ -28,6 +28,10 @@ $(function () {
 
         CaseInvoiceArticleTemplate: null,
 
+        CaseId: null,
+
+        CustomerId: null,
+
         AddInvoiceArticle: function (article) {
             this._invoiceArticles.push(article);
         },
@@ -231,6 +235,79 @@ $(function () {
             return this.GetOrder(orderId);
         },
 
+        GetUserSearchOptions: function() {
+                var options = {
+                items: 20,
+                minLength: 2,
+
+                source: function (query, process) {
+                    return $.ajax({
+                        url: '/cases/search_user',
+                        type: 'post',
+                        data: { query: query, customerId: $('#case__Customer_Id').val() },
+                        dataType: 'json',
+                        success: function (result) {
+                            var resultList = jQuery.map(result, function (item) {
+                                var aItem = {
+                                    id: item.Id
+                                            , num: item.UserId
+                                            , name: item.SurName + ' ' + item.FirstName
+                                            , email: item.Email
+                                            , place: item.Location
+                                            , phone: item.Phone
+                                            , usercode: item.UserCode
+                                            , cellphone: item.CellPhone
+                                            , regionid: item.Region_Id
+                                            , departmentid: item.Department_Id
+                                            , ouid: item.OU_Id
+                                };
+                                return JSON.stringify(aItem);
+                            });
+
+                            return process(resultList);
+                        }
+                    });
+                },
+
+                matcher: function (obj) {
+                    var item = JSON.parse(obj);
+                    return ~item.name.toLowerCase().indexOf(this.query.toLowerCase())
+                        || ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
+                        || ~item.phone.toLowerCase().indexOf(this.query.toLowerCase())
+                        || ~item.email.toLowerCase().indexOf(this.query.toLowerCase());
+                },
+
+                sorter: function (items) {
+                    var beginswith = [], caseSensitive = [], caseInsensitive = [], aItem;
+                    while (aItem = items.shift()) {
+                        var item = JSON.parse(aItem);
+                        if (!item.num.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
+                        else if (~item.num.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
+                        else caseInsensitive.push(JSON.stringify(item));
+                    }
+
+                    return beginswith.concat(caseSensitive, caseInsensitive);
+                },
+
+                highlighter: function (obj) {
+                    var item = JSON.parse(obj);
+                    var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
+                    var result = item.name + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email;
+
+                    return result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+                        return '<strong>' + match + '</strong>';
+                    });
+                },
+
+                updater: function (obj) {
+                    var item = JSON.parse(obj);
+                    return item.name;
+                }
+            };
+
+            return options;
+        },
+
         CreateContainer: function () {
             var th = this;
             var invoice = th.GetInvoice();
@@ -275,6 +352,7 @@ $(function () {
             var th = this;
             th.ProductAreaElement = $(document).find("." + e.attr("data-invoice-product-area"));
             th.CaseId = e.attr("data-invoice-case-id");
+            th.CustomerId = e.attr("data-invoice-customerId");
             th.CaseInvoicesElement = $(document).find("." + e.attr("data-invoice-articles-for-save"));
             th.DateFormat = e.attr("data-invoice-date-format");
 
@@ -484,6 +562,8 @@ $(function () {
                     format: dhHelpdesk.CaseArticles.DateFormat,
                     autoclose: true
                 });
+
+                this.Container.find(".reference").typeahead(dhHelpdesk.CaseArticles.GetUserSearchOptions());
             },
 
             this.DeleteOrder = function (id) {
@@ -902,6 +982,7 @@ $(function () {
             this.TotalHeader = "Total";
             this.TotalLabel = "Total";
             this.DeliveryPeriodTitle = "Delivery period";
+            this.ReferenceTitle = "Other reference";
             this.Total = null;
             this.Articles = [];
 
