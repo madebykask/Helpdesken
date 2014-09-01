@@ -163,7 +163,7 @@
                         var config = (ECT.FormLib.Configurable.AccessManagment)System.Configuration.ConfigurationManager.GetSection("formLibConfigurable/accessManagment");
                         var country = config.Countries.Where(x => x.HelpdeskCustomerId == SessionFacade.CurrentCustomer.Id.ToString()).FirstOrDefault();
 
-                        if(!userIdentity.EmployeeNumber.StartsWith(country.EmployeePrefix))
+                        if(country != null && !userIdentity.EmployeeNumber.StartsWith(country.EmployeePrefix))
                         {
                             SessionFacade.UserHasAccess = false;
                             SessionFacade.CurrentCoWorkers = new List<SubordinateResponseItem>();
@@ -183,6 +183,7 @@
                             var _amAPIService = new AMAPIService();
                             var employee = AsyncHelpers.RunSync<APIEmployee>(() => _amAPIService.GetEmployeeFor(userIdentity.EmployeeNumber));
 
+                            
                             if(employee.IsManager)
                             {
                                 SessionFacade.CurrentCoWorkers = employee.Subordinates;
