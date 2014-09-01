@@ -8,6 +8,8 @@ $(function () {
 
         DefaultPpu: 0,
 
+        DateFormat: null,
+
         _invoices: [],
 
         _invoicesBackup: [],
@@ -274,12 +276,12 @@ $(function () {
             th.ProductAreaElement = $(document).find("." + e.attr("data-invoice-product-area"));
             th.CaseId = e.attr("data-invoice-case-id");
             th.CaseInvoicesElement = $(document).find("." + e.attr("data-invoice-articles-for-save"));
+            th.DateFormat = e.attr("data-invoice-date-format");
 
             th.CreateContainer();
 
             var unitsEl = th._container.find(".articles-params-units");
             var addEl = th._container.find(".articles-params-add");
-            var articlesEl = th._container.find(".articles-params-article");
 
             addEl.click(function () {
                 var units = unitsEl.val();
@@ -287,6 +289,7 @@ $(function () {
                     units = dhHelpdesk.CaseArticles.DefaultAmount;
                     unitsEl.val(units);
                 }
+                var articlesEl = th._container.find(".articles-params-article");
                 var articleId = articlesEl.val();
                 var article = th.GetInvoiceArticle(articleId);
                 if (article != null) {
@@ -312,6 +315,11 @@ $(function () {
                 .addClass("btn");
             button.click(function () {
                 var addArticleEl = th._container.find(".articles-params");
+                var articlesSelectContainer = addArticleEl.find(".articles-select-container");
+                articlesSelectContainer.empty();
+                var articlesEl = $("<select class='multiselect articles-params-article'></select>");
+                articlesSelectContainer.append(articlesEl);
+
                 $.getJSON("/invoice/articles?productAreaId=" + th.ProductAreaElement.val(), function (data) {
                     th.ClearInvoiceArticles();
                     if (data == null || data.length == 0) {
@@ -473,6 +481,7 @@ $(function () {
                 newTab.find("a").click();
 
                 this.Container.find(".delivery-period").datepicker({
+                    format: dhHelpdesk.CaseArticles.DateFormat,
                     autoclose: true
                 });
             },

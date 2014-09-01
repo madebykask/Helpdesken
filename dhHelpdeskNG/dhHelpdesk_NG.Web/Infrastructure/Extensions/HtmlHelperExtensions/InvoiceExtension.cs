@@ -2,6 +2,7 @@
 {
     using System.Globalization;
     using System.Text;
+    using System.Threading;
     using System.Web.Mvc;
     using System.Web.Script.Serialization;
 
@@ -28,6 +29,7 @@
             tag.MergeAttribute("data-invoice-product-area", productAreaSelector);
             tag.MergeAttribute("data-invoice-case-id", caseId.ToString(CultureInfo.InvariantCulture));
             tag.MergeAttribute("data-invoice-articles-for-save", caseInvoiceArticlesSelector);
+            tag.MergeAttribute("data-invoice-date-format", Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern.ToLower());
             result.Append(tag);
             return MvcHtmlString.Create(result.ToString());            
         }
