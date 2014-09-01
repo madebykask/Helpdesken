@@ -228,7 +228,9 @@
     <Compile Include="Models\Inventory\Output\Settings\ProcessingSetttings\SharedSettings\PlaceFieldsSettings.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ProcessingSetttings\SharedSettings\ProcessorFieldsSettings.cs" />
     <Compile Include="Models\Inventory\ReportModelWrapper.cs" />
+    <Compile Include="Models\Invoice\CaseInvoice.cs" />
     <Compile Include="Models\Invoice\CaseInvoiceArticle.cs" />
+    <Compile Include="Models\Invoice\CaseInvoiceOrder.cs" />
     <Compile Include="Models\Invoice\InvoiceArticle.cs" />
     <Compile Include="Models\Invoice\InvoiceArticleUnit.cs" />
     <Compile Include="Models\Operation\OperationObject.cs" />

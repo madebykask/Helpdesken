@@ -3,20 +3,21 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport.ExcelExport;
     using DH.Helpdesk.Web.Models.Shared;
 
-    public sealed class InventoryOverviewModel
+    public sealed class InventoryOverviewModel : IRow<NewGridRowCellValueModel>
     {
-        public InventoryOverviewModel(int id, List<NewGridRowCellValueModel> fieldValues)
+        public InventoryOverviewModel(int id, IEnumerable<NewGridRowCellValueModel> fields)
         {
             this.Id = id;
-            this.FieldValues = fieldValues;
+            this.Fields = fields;
         }
 
         [IsId]
         public int Id { get; set; }
 
         [NotNull]
-        public List<NewGridRowCellValueModel> FieldValues { get; set; }
+        public IEnumerable<NewGridRowCellValueModel> Fields { get; set; }
     }
 }

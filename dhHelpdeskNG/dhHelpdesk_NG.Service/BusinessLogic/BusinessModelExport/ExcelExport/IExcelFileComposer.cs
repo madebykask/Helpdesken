@@ -4,6 +4,6 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelExport.ExcelExport
 
     public interface IExcelFileComposer
     {
-        byte[] Compose(List<ExcelTableHeader> headers, List<BusinessItem> items, string worksheetName);
+        byte[] Compose(IEnumerable<ITableHeader> headers, IEnumerable<IRow<ICell>> items, string worksheetName);
     }
 }

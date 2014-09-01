@@ -34,8 +34,24 @@
                 .To<CaseInvoiceArticleToBusinessModelMapper>()
                 .InSingletonScope();
 
+            this.Bind<IEntityToBusinessModelMapper<CaseInvoiceOrderEntity, CaseInvoiceOrder>>()
+                .To<CaseInvoiceOrderToBusinessModelMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<CaseInvoiceEntity, CaseInvoice>>()
+                .To<CaseInvoiceToBusinessModelMapper>()
+                .InSingletonScope();
+
             this.Bind<IBusinessModelToEntityMapper<CaseInvoiceArticle, CaseInvoiceArticleEntity>>()
                 .To<CaseInvoiceArticleToEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<CaseInvoice, CaseInvoiceEntity>>()
+                .To<CaseInvoiceToEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<CaseInvoiceOrder, CaseInvoiceOrderEntity>>()
+                .To<CaseInvoiceOrderToEntityMapper>()
                 .InSingletonScope();
 
             this.Bind<IInvoiceArticlesModelFactory>()

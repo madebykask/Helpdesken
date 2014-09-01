@@ -5,9 +5,9 @@
 
     public sealed class InvoiceArticlesModelFactory : IInvoiceArticlesModelFactory
     {
-        public CaseInvoiceArticlesModel CreateCaseInvoiceArticlesModel(CaseInvoiceArticle[] caseArticles)
+        public CaseInvoiceArticlesModel CreateCaseInvoiceArticlesModel(CaseInvoice[] caseInvoices)
         {
-            return new CaseInvoiceArticlesModel(caseArticles);
+            return new CaseInvoiceArticlesModel(caseInvoices);
         }
     }
 }

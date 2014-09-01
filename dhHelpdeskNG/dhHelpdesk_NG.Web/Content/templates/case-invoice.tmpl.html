@@ -1,4 +1,4 @@
-﻿<div>
+﻿<div data-id='{{:Id}}'>
     <table class='articles-params'>
         <thead>
             <tr>
@@ -9,7 +9,7 @@
         </thead>
         <tbody>
             <tr>
-                <td>
+                <td class="articles-select-container">
                     <select class='multiselect articles-params-article'>
                     </select>
                 </td>
@@ -22,30 +22,21 @@
             </tr>
         </tbody>
     </table>
-    <table>
-        <tr>
-            <td class='width100'>
-                <table class='width100 table table-striped table-bordered table-hover'>
-                    <tr>
-                        <th>{{:ArtNoHeader}}</th>
-                        <th>{{:DescriptionHeader}}</th>
-                        <th>{{:UnitsHeader}}</th>
-                        <th>{{:TypeHeader}}</th>
-                        <th>{{:PpuHeader}}</th>
-                        <th>{{:TotalHeader}}</th>
-                        <th></th>
-                    </tr>
-                    <tbody class='articles-rows'>
-                        {{for Articles tmpl="caseInvoiceArticle" /}}                        
-                    </tbody>
-                </table>
-            </td>
-            <td style='vertical-align: top;'>
-                <input type='button' onclick='dhHelpdesk.CaseArticles.AddBlankArticle(); return false;' value='+' />
-            </td>
-        </tr>
-    </table>
-    <div class='width100 textbold' style='text-align: right;'>
-        {{:TotalLabel}}: <span class='articles-total'>{{:Total}}</span>
-    </div>      
+    <div id="case-invoice-orders-tabs">
+        <ul>
+            <li>
+                <i class="icon-plus-sign" style="cursor: pointer;" onclick="dhHelpdesk.CaseArticles.AddOrder('{{:Id}}'); return false;"></i>
+                <i class="icon-minus-sign" style="cursor: pointer;" onclick="dhHelpdesk.CaseArticles.DeleteCurrentOrder('{{:Id}}'); return false;"></i>
+            </li> 
+            <li><a href="#case-invoice-order-summary{{:Id}}">{{:SummaryTitle}}</a></li>          
+        </ul>
+        <div class="orders-container">
+            {{for Orders tmpl="caseInvoiceOrder" /}} 
+            <div id="case-invoice-order-summary{{:Id}}">
+                <div  class='textbold' style='text-align: left;'>
+                    {{:TotalLabel}}: <span id='case-invoice-order-summary-total'>{{:Total}}</span>
+                </div>                              
+            </div>
+        </div>
+    </div>
 </div>

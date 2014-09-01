@@ -11,10 +11,10 @@
         {
             this.HasKey(a => a.Id);
             this.Property(a => a.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            this.Property(a => a.CaseId).IsRequired();
-            this.HasRequired(a => a.Case)
+            this.Property(a => a.OrderId).IsRequired();
+            this.HasRequired(a => a.Order)
                 .WithMany()
-                .HasForeignKey(a => a.CaseId)
+                .HasForeignKey(a => a.OrderId)
                 .WillCascadeOnDelete(false);
             this.Property(a => a.ArticleId).IsOptional();
             this.HasRequired(a => a.Article)

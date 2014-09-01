@@ -5,6 +5,6 @@
 
     public interface IInvoiceArticlesModelFactory
     {
-        CaseInvoiceArticlesModel CreateCaseInvoiceArticlesModel(CaseInvoiceArticle[] caseArticles);
+        CaseInvoiceArticlesModel CreateCaseInvoiceArticlesModel(CaseInvoice[] caseInvoices);
     }
 }

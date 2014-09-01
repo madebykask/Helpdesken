@@ -40,12 +40,12 @@
         }
 
         [HttpPost]
-        public void SaveArticles(int caseId, string articles)
+        public void SaveArticles(int caseId, string invoices)
         {
-            var caseArticles = !string.IsNullOrEmpty(articles)
-                   ? InvoiceHelper.ToCaseInvoiceArticles(articles)
+            var toSave = !string.IsNullOrEmpty(invoices)
+                   ? InvoiceHelper.ToCaseInvoices(invoices)
                    : null;
-            this.invoiceArticleService.SaveCaseArticles(caseId, caseArticles);
+            this.invoiceArticleService.SaveCaseInvoices(toSave);
         }
 
         [HttpGet]

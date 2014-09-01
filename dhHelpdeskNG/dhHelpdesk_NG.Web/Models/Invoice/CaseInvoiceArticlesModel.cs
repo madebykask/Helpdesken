@@ -5,13 +5,12 @@
 
     public sealed class CaseInvoiceArticlesModel
     {
-        public CaseInvoiceArticlesModel(
-            CaseInvoiceArticle[] caseArticles)
+        public CaseInvoiceArticlesModel(CaseInvoice[] invoices)
         {
-            this.CaseArticles = caseArticles;
+            this.Invoices = invoices;
         }
 
         [NotNull]
-        public CaseInvoiceArticle[] CaseArticles { get; private set; }
+        public CaseInvoice[] Invoices { get; private set; }
     }
 }

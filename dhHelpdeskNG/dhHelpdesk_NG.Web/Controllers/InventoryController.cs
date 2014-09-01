@@ -9,9 +9,19 @@
 
     using DH.Helpdesk.BusinessData.Models.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Input;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Printer;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Server;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ComputerFieldSettings;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.PrinterFieldSettings;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ServerFieldSettings;
     using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport.ExcelExport;
+    using DH.Helpdesk.Services.Response.Inventory;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Concrete;
+    using DH.Helpdesk.Web.Enums;
     using DH.Helpdesk.Web.Enums.Inventory;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
@@ -26,6 +36,8 @@
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Server;
     using DH.Helpdesk.Web.Models.Inventory.OptionsAggregates;
     using DH.Helpdesk.Web.Models.Inventory.SearchModels;
+
+    using PageName = DH.Helpdesk.Web.Enums.Inventory.PageName;
 
     public class InventoryController : UserInteractionController
     {
@@ -59,6 +71,10 @@
 
         private readonly IInventoryValueBuilder inventoryValueBuilder;
 
+        private readonly IExcelFileComposer excelFileComposer;
+
+        private readonly IExportFileNameFormatter exportFileNameFormatter;
+
         public InventoryController(
             IMasterDataService masterDataService,
             IInventoryService inventoryService,
@@ -75,7 +91,9 @@
             IServerBuilder serverBuilder,
             IPrinterBuilder printerBuilder,
             IInventoryModelBuilder inventoryModelBuilder,
-            IInventoryValueBuilder inventoryValueBuilder)
+            IInventoryValueBuilder inventoryValueBuilder,
+            IExcelFileComposer excelFileComposer,
+            IExportFileNameFormatter exportFileNameFormatter)
             : base(masterDataService)
         {
             this.inventoryService = inventoryService;
@@ -93,6 +111,8 @@
             this.printerBuilder = printerBuilder;
             this.inventoryModelBuilder = inventoryModelBuilder;
             this.inventoryValueBuilder = inventoryValueBuilder;
+            this.excelFileComposer = excelFileComposer;
+            this.exportFileNameFormatter = exportFileNameFormatter;
         }
 
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")] // todo
@@ -227,13 +247,7 @@
                 this.CreateFilterId(TabName.Inventories, InventoryFilterMode.Workstation.ToString()),
                 filter);
 
-            var settings =
-                this.inventorySettingsService.GetWorkstationFieldSettingsOverview(
-                    SessionFacade.CurrentCustomer.Id,
-                    SessionFacade.CurrentLanguageId);
-            var models = this.inventoryService.GetWorkstations(filter.CreateRequest(SessionFacade.CurrentCustomer.Id));
-
-            var viewModel = InventoryGridModel.BuildModel(models, settings, filter.SortField);
+            var viewModel = this.CreateInventoryGridModel(filter);
 
             return this.PartialView("InventoryGrid", viewModel);
         }
@@ -245,12 +259,7 @@
                 this.CreateFilterId(TabName.Inventories, InventoryFilterMode.Server.ToString()),
                 filter);
 
-            var settings = this.inventorySettingsService.GetServerFieldSettingsOverview(
-                SessionFacade.CurrentCustomer.Id,
-                SessionFacade.CurrentLanguageId);
-            var models = this.inventoryService.GetServers(filter.CreateRequest(SessionFacade.CurrentCustomer.Id));
-
-            var viewModel = InventoryGridModel.BuildModel(models, settings, filter.SortField);
+            var viewModel = this.CreateInventoryGridModel(filter);
 
             return this.PartialView("InventoryGrid", viewModel);
         }
@@ -262,13 +271,7 @@
                 this.CreateFilterId(TabName.Inventories, InventoryFilterMode.Printer.ToString()),
                 filter);
 
-            var settings =
-                this.inventorySettingsService.GetPrinterFieldSettingsOverview(
-                    SessionFacade.CurrentCustomer.Id,
-                    SessionFacade.CurrentLanguageId);
-            var models = this.inventoryService.GetPrinters(filter.CreateRequest(SessionFacade.CurrentCustomer.Id));
-
-            var viewModel = InventoryGridModel.BuildModel(models, settings, filter.SortField);
+            var viewModel = this.CreateInventoryGridModel(filter);
 
             return this.PartialView("InventoryGrid", viewModel);
         }
@@ -280,10 +283,7 @@
                 this.CreateFilterId(TabName.Inventories, InventoryFilterMode.CustomType.ToString()),
                 filter);
 
-            var settings = this.inventorySettingsService.GetInventoryFieldSettingsOverview(inventoryTypeId);
-            var models = this.inventoryService.GetInventories(filter.CreateRequest(inventoryTypeId));
-
-            var viewModel = InventoryGridModel.BuildModel(models, settings, inventoryTypeId, filter.SortField);
+            var viewModel = this.CreateInventoryGridModel(filter, inventoryTypeId);
 
             return this.PartialView("InventoryGrid", viewModel);
         }
@@ -1038,6 +1038,56 @@
             this.inventoryService.UpdateWorkstationInfo(id, info);
         }
 
+        [HttpGet]
+        public FileContentResult ExportChangesGridToExcelFile(int currentMode)
+        {
+            InventoryGridModel gridModel;
+            string workSheetName;
+
+            switch ((CurrentModes)currentMode)
+            {
+                case CurrentModes.Workstations:
+                    var workstationFilter =
+                        SessionFacade.FindPageFilters<WorkstationsSearchFilter>(
+                            this.CreateFilterId(TabName.Inventories, InventoryFilterMode.Workstation.ToString()))
+                        ?? WorkstationsSearchFilter.CreateDefault();
+                    gridModel = this.CreateInventoryGridModel(workstationFilter);
+                    workSheetName = CurrentModes.Workstations.ToString();
+                    break;
+                case CurrentModes.Servers:
+                    var serverFilter =
+                        SessionFacade.FindPageFilters<ServerSearchFilter>(
+                            this.CreateFilterId(TabName.Inventories, InventoryFilterMode.Server.ToString()))
+                        ?? ServerSearchFilter.CreateDefault();
+                    gridModel = this.CreateInventoryGridModel(serverFilter);
+                    workSheetName = CurrentModes.Servers.ToString();
+                    break;
+                case CurrentModes.Printers:
+                    var printerFilter =
+                        SessionFacade.FindPageFilters<PrinterSearchFilter>(
+                            this.CreateFilterId(TabName.Inventories, InventoryFilterMode.Printer.ToString()))
+                        ?? PrinterSearchFilter.CreateDefault();
+                    gridModel = this.CreateInventoryGridModel(printerFilter);
+                    workSheetName = CurrentModes.Printers.ToString();
+                    break;
+                default:
+                    var inventoryFilter =
+                        SessionFacade.FindPageFilters<InventorySearchFilter>(
+                            this.CreateFilterId(TabName.Inventories, InventoryFilterMode.CustomType.ToString()))
+                        ?? InventorySearchFilter.CreateDefault(currentMode);
+                    gridModel = this.CreateInventoryGridModel(inventoryFilter, currentMode);
+
+                    // todo move into invetory overview query
+                    var inventoryType = this.inventoryService.GetInventoryType(currentMode);
+                    workSheetName = inventoryType.Name;
+                    break;
+            }
+
+            var file = this.CreateExcelReport(workSheetName, gridModel.Headers, gridModel.Inventories);
+
+            return file;
+        }
+
         #region Private
 
         private ReportViewModel BuildViewModel(
@@ -1268,6 +1318,63 @@
         private string CreateFilterId(string tabName, string id)
         {
             return string.Format("{0}{1}", tabName, id);
+        }
+
+        private InventoryGridModel CreateInventoryGridModel(WorkstationsSearchFilter filter)
+        {
+            ComputerFieldsSettingsOverview settings =
+                this.inventorySettingsService.GetWorkstationFieldSettingsOverview(
+                    SessionFacade.CurrentCustomer.Id,
+                    SessionFacade.CurrentLanguageId);
+            List<ComputerOverview> models =
+                this.inventoryService.GetWorkstations(filter.CreateRequest(SessionFacade.CurrentCustomer.Id));
+
+            InventoryGridModel viewModel = InventoryGridModel.BuildModel(models, settings, filter.SortField);
+            return viewModel;
+        }
+
+        private InventoryGridModel CreateInventoryGridModel(ServerSearchFilter filter)
+        {
+            ServerFieldsSettingsOverview settings = this.inventorySettingsService.GetServerFieldSettingsOverview(
+                SessionFacade.CurrentCustomer.Id,
+                SessionFacade.CurrentLanguageId);
+            List<ServerOverview> models = this.inventoryService.GetServers(filter.CreateRequest(SessionFacade.CurrentCustomer.Id));
+
+            InventoryGridModel viewModel = InventoryGridModel.BuildModel(models, settings, filter.SortField);
+            return viewModel;
+        }
+
+        private InventoryGridModel CreateInventoryGridModel(PrinterSearchFilter filter)
+        {
+            PrinterFieldsSettingsOverview settings = this.inventorySettingsService.GetPrinterFieldSettingsOverview(
+                SessionFacade.CurrentCustomer.Id,
+                SessionFacade.CurrentLanguageId);
+            List<PrinterOverview> models = this.inventoryService.GetPrinters(filter.CreateRequest(SessionFacade.CurrentCustomer.Id));
+
+            InventoryGridModel viewModel = InventoryGridModel.BuildModel(models, settings, filter.SortField);
+            return viewModel;
+        }
+
+        private InventoryGridModel CreateInventoryGridModel(InventorySearchFilter filter, int inventoryTypeId)
+        {
+            InventoryFieldSettingsOverviewResponse settings = this.inventorySettingsService.GetInventoryFieldSettingsOverview(inventoryTypeId);
+            InventoriesOverviewResponse models = this.inventoryService.GetInventories(filter.CreateRequest(inventoryTypeId));
+
+            InventoryGridModel viewModel = InventoryGridModel.BuildModel(models, settings, inventoryTypeId, filter.SortField);
+            return viewModel;
+        }
+
+        private FileContentResult CreateExcelReport(
+            string worksheetName,
+            IEnumerable<ITableHeader> headers,
+            IEnumerable<IRow<ICell>> rows)
+        {
+            const string Name = "Inventory"; 
+
+            var content = this.excelFileComposer.Compose(headers, rows, worksheetName);
+
+            var fileName = this.exportFileNameFormatter.Format(Name, "xlsx");
+            return this.File(content, MimeType.ExcelFile, fileName);
         }
 
         #endregion

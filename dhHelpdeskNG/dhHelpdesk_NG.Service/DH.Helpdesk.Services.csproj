@@ -62,6 +62,9 @@
   <ItemGroup>
     <Compile Include="BusinessLogic\BusinessModelAuditors\Changes\InvitationToCabAudit.cs" />
     <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\ExcelFileComposer.cs" />
+    <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\ICell.cs" />
+    <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\IRow.cs" />
+    <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\ITableHeader.cs" />
     <Compile Include="BusinessLogic\BusinessModelMappers\ChangeDetailedOverviewToBusinessItemMapper.cs" />
     <Compile Include="BusinessLogic\BusinessModelMappers\UpdateChangeRequestToHistoryMapper.cs" />
     <Compile Include="BusinessLogic\BusinessModelMappers\IBusinessModelsMapper.cs" />
