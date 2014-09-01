@@ -9,7 +9,7 @@
                 int invoiceId,
                 CaseInvoice invoice, 
                 short number, 
-                DateTime deliveryPeriod, 
+                DateTime? deliveryPeriod, 
                 CaseInvoiceArticle[] articles)
         {
             this.Articles = articles;
@@ -20,8 +20,14 @@
             this.Id = id;
         }
 
-        public CaseInvoiceOrder()
-        {            
+        public CaseInvoiceOrder(
+                int id, 
+                int invoiceId,
+                short number, 
+                DateTime? deliveryPeriod, 
+                CaseInvoiceArticle[] articles) :
+                this(id, invoiceId, null, number, deliveryPeriod, articles)
+        {
         }
 
         public int Id { get; private set; }
@@ -32,7 +38,7 @@
 
         public short Number { get; private set; }
 
-        public DateTime DeliveryPeriod { get; private set; }
+        public DateTime? DeliveryPeriod { get; private set; }
 
         public CaseInvoiceArticle[] Articles { get; private set; } 
     }

@@ -11,7 +11,7 @@
 
         public short Number { get; set; }
 
-        public DateTime DeliveryPeriod { get; set; }
+        public DateTime? DeliveryPeriod { get; set; }
 
         public virtual ICollection<CaseInvoiceArticleEntity> Articles { get; set; } 
     }

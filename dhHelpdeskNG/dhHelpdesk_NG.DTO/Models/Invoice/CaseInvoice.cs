@@ -18,8 +18,12 @@
             this.Id = id;
         }
 
-        public CaseInvoice()
-        {            
+        public CaseInvoice(
+                int id,
+                int caseId,
+                CaseInvoiceOrder[] orders) : 
+                this(id, caseId, null, orders)
+        {
         }
 
         public int Id { get; private set; }

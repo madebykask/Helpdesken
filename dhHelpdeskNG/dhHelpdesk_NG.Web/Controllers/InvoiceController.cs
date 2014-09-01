@@ -42,10 +42,7 @@
         [HttpPost]
         public void SaveArticles(int caseId, string invoices)
         {
-            var toSave = !string.IsNullOrEmpty(invoices)
-                   ? InvoiceHelper.ToCaseInvoices(invoices)
-                   : null;
-            this.invoiceArticleService.SaveCaseInvoices(toSave);
+            this.invoiceArticleService.SaveCaseInvoices(InvoiceHelper.ToCaseInvoices(invoices));
         }
 
         [HttpGet]

@@ -321,7 +321,7 @@ $(function () {
                 },
                 buttons: [
                     {
-                        text: "Ok",
+                        text: "Save",
                         click: function () {
                             th.ApplyChanges();
                             th._container.dialog("close");
@@ -721,7 +721,7 @@ $(function () {
 
                 return '{' +
                         '"Id":"' + (this.Id >= 0 ? this.Id : 0) + '", ' +
-                        '"InvoiceId":"' + (this.Invoice != null ? this.Invoice.Id : '') + '", ' +
+                        '"InvoiceId":"' + (this.Invoice.Id > 0 ? this.Invoice.Id : 0) + '", ' +
                         '"Number":"' + this.Number + '", ' +
                         '"DeliveryPeriod":"' + (this.DeliveryPeriod != null ? this.DeliveryPeriod : '') + '", ' +
                         '"Articles": [' + articlesResult + ']' +
@@ -815,7 +815,7 @@ $(function () {
             this.ToJson = function() {
                 return '{' +
                         '"Id":"' + (this.Id >= 0 ? this.Id : 0) + '", ' +
-                        '"OrderId":"' + (this.Order != null ? this.Order.Id : '') + '", ' +
+                        '"OrderId":"' + (this.Order.Id > 0 ? this.Order.Id : 0) + '", ' +
                         '"ArticleId":"' + (this.Article != null && this.Article.Id > 0 ? this.Article.Id : '') + '", ' +
                         '"Number":"' + this.GetNumber() + '", ' +
                         '"Name":"' + (this.Name != null ? this.Name : '') + '", ' +
@@ -1034,6 +1034,7 @@ $(function () {
                     var inv = data.Invoices[0];
                     var invoice = new dhHelpdesk.CaseArticles.CaseInvoice();
                     invoice.Initialize();
+                    dhHelpdesk.CaseArticles.AddInvoice(invoice);
                     dhHelpdesk.CaseArticles.Initialize($this);
                     invoice.Id = inv.Id;
                     invoice.CaseId = inv.CaseId;

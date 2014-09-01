@@ -28,7 +28,16 @@
             this.Id = id;
         }
 
-        public CaseInvoiceArticle()
+        public CaseInvoiceArticle(
+                int id,
+                int orderId,
+                int? articleId,
+                string name,
+                int? amount,
+                decimal? ppu,
+                short position,
+                bool isInvoiced) :
+                this(id, orderId, null, articleId, null, name, amount, ppu, position, isInvoiced)
         {           
         }
 

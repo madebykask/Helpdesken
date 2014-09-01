@@ -1230,12 +1230,6 @@
                     }
             }
 
-//            var invoices = !string.IsNullOrEmpty(caseInvoiceArticles)
-//                               ? InvoiceHelper.ToCaseInvoices(caseInvoiceArticles)
-//                               : null;
-
-            CaseInvoice[] invoices = null;
-
             // save case and case history
             int caseHistoryId = this._caseService.SaveCase(
                         case_, 
@@ -1244,7 +1238,7 @@
                         SessionFacade.CurrentUser.Id, 
                         this.User.Identity.Name, 
                         out errors,
-                        invoices);
+                        InvoiceHelper.ToCaseInvoices(caseInvoiceArticles));
 
             if (updateNotifierInformation.HasValue && updateNotifierInformation.Value)
             {
