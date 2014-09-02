@@ -210,6 +210,7 @@
             this.Bind<ISystemRepository>().To<SystemRepository>();
             this.Bind<ITextTranslationRepository>().To<TextTranslationRepository>();
             this.Bind<ITextRepository>().To<TextRepository>();
+            this.Bind<ITextTypeRepository>().To<TextTypeRepository>();
             this.Bind<ITimeRegistrationRepository>().To<TimeRegistrationRepository>();
             this.Bind<ITimeTypeRepository>().To<TimeTypeRepository>();
             this.Bind<IUrgencyLanguageRepository>().To<UrgencyLanguageRepository>();

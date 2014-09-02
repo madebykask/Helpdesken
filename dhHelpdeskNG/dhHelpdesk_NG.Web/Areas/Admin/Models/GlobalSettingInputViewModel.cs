@@ -16,6 +16,13 @@
         public IList<Holiday> Holidays { get; set; }
         public IList<Text> Texts { get; set; }
         public IList<WatchDateCalendarValue> WatchDateCalendarValues { get; set; }
+        public IList<SelectListItem> Languages { get; set; }
+
+        public Language Language { get; set; }
+
+        public IList<SelectListItem> TextTypes { get; set; }
+        public TextType TextType { get; set; }
+
     }
 
     public class GlobalSettingInputViewModel : BaseTabInputViewModel
@@ -54,9 +61,18 @@
     {
         public Text Text { get; set; }
 
+        public string TextTranslation { get; set; }
+
         public IEnumerable<TextTranslation> TextTranslations { get; set; }
         public IEnumerable<TextTranslationList> ListForNew { get; set; }
 
         public IList<TextTranslationLanguageList> ListForEdit { get; set; }
+
+        public IList<SelectListItem> Languages { get; set; }
+        public Language Language { get; set; }
+
+        public IList<SelectListItem> TextTypes { get; set; }
+        public TextType TextType { get; set; }
+        
     }
 }

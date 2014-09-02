@@ -25,4 +25,17 @@
             this.ToTable("tbltext");
         }
     }
+
+    public class TextTypeConfiguration : EntityTypeConfiguration<TextType>
+    {
+        internal TextTypeConfiguration()
+        {
+            this.HasKey(x => x.Id);
+
+            this.Property(x => x.Name).IsRequired().HasColumnName("TextType");
+            this.Property(x => x.IsActive).IsRequired().HasColumnName("Status");
+
+            this.ToTable("tbltexttype");
+        }
+    }
 }

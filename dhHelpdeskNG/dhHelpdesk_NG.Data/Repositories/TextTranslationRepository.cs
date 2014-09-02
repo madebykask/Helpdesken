@@ -38,14 +38,39 @@ namespace DH.Helpdesk.Dal.Repositories
 
     #endregion
 
+    #region TEXTTYPE
+
+    public interface ITextTypeRepository : IRepository<TextType>
+    {
+        TextType GetTextTypeById(int id);  
+    }
+
+    public class TextTypeRepository : RepositoryBase<TextType>, ITextTypeRepository
+    {
+        public TextTypeRepository(IDatabaseFactory databaseFactory)
+            : base(databaseFactory)
+        {
+        }
+
+        public TextType GetTextTypeById(int id)
+        {
+           
+            return this.DataContext.TextTypes.Where(x => x.Id == id).FirstOrDefault();
+           
+        }
+    }
+
+    #endregion
+
     #region TEXTTRANSLATION
 
     public interface ITextTranslationRepository : IRepository<TextTranslation>
     {
         List<Translation2> FindTranslations();
         IEnumerable<TextTranslationLanguageList> ReturnTTsListForEdit(int textId);
-        IEnumerable<TextTranslationLanguageList> ReturnTTsListForIndex();
+        IEnumerable<TextTranslationLanguageList> ReturnTTsListForIndex(int languageId);
         IEnumerable<TextTranslationList> ReturnTTsListForNew();
+        string GetTTByLanguageId(int textid, int languageId);
     }
 
     public class TextTranslationRepository : RepositoryBase<TextTranslation>, ITextTranslationRepository
@@ -53,6 +78,13 @@ namespace DH.Helpdesk.Dal.Repositories
         public TextTranslationRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
+        }
+
+        public string GetTTByLanguageId(int textid, int languageId)
+        {
+            return this.DataContext.TextTranslations.Where(tt => tt.Text_Id == textid && tt.Language_Id == languageId).Select(tt => tt.TextTranslated).SingleOrDefault();
+           
+
         }
 
         public List<Translation2> FindTranslations()
@@ -101,11 +133,11 @@ namespace DH.Helpdesk.Dal.Repositories
             return query.OrderBy(x => x.Text_Id);
         }
 
-        public IEnumerable<TextTranslationLanguageList> ReturnTTsListForIndex()
+        public IEnumerable<TextTranslationLanguageList> ReturnTTsListForIndex(int languageId)
         {
             var query = from l in this.DataContext.Languages
                         join tt in this.DataContext.TextTranslations on l.Id equals tt.Language_Id
-                        where l.IsActive == 1 && tt.Text_Id > 4999
+                        where l.IsActive == 1 && tt.Text_Id > 4999 && tt.Language_Id == languageId
                         group l by new { l.Id, l.Name, tt.TextTranslated, tt.Text_Id } into g
                         select new TextTranslationLanguageList
                         {

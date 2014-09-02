@@ -438,6 +438,8 @@
 
         public DbSet<Text> Texts { get; set; }
 
+        public DbSet<TextType> TextTypes { get; set; }
+
         public DbSet<TimeRegistration> TimeRegistrations { get; set; }
 
         public DbSet<TimeType> TimeTypes { get; set; }
@@ -694,6 +696,7 @@
             modelBuilder.Configurations.Add(new InvoiceArticleConfiguration());
             modelBuilder.Configurations.Add(new CaseInvoiceArticleConfiguration());
             modelBuilder.Configurations.Add(new CaseInvoiceOrderConfiguration());
+            modelBuilder.Configurations.Add(new TextTypeConfiguration());
             modelBuilder.Configurations.Add(new CaseInvoiceConfiguration());
 
             #endregion

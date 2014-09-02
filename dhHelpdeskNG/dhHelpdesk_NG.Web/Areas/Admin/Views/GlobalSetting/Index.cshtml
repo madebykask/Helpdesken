@@ -127,18 +127,37 @@
                 </table>
             </div>
             <div class="tab-pane tab-pane-border" id="fragment-4">
+                <div class="container">
+                    <div class="row">
+                        <div class="span8">
+                            <table class="tableform" id="tblText">
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Typ", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                         @Html.DropDownListFor(model => model.TextType.Id, Model.TextTypes, new { style = "width: auto;", id = "TextTypeId", onchange = "changeTextType(this.options[this.selectedIndex].value);" })
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
                 <table class="table table-striped table-bordered table-hover" id="tblTextTranslation">
                     <thead>
                         <tr>
                             <th>
                                 @Translation.Get("Text", Enums.TranslationSource.TextTranslation)
                             </th>
-                            @foreach (var item in Model.LanguagesToTranslateInto)
+                            @*<th>
+                                @Html.DropDownListFor(model => model.Language.Id, Model.Languages, new { style = "width: auto;", id = "LanguageId", onchange = "changeLabelList(this.options[this.selectedIndex].value);" })
+                            </th>*@
+                           @* @foreach (var item in Model.LanguagesToTranslateInto)
                             {
                                 <th>
                                     @Html.DisplayFor(modelItem => item.Name)
                                 </th>
-                            }
+                            }*@
                         </tr>
                     </thead>
                     <tbody>
@@ -146,14 +165,14 @@
                         {                    
                             <tr>
                                 <td>
-                                    <a href="@Url.Action("edittranslation", "globalsetting", new { id = item.Id })">@Html.DisplayFor(modelItem => item.TextToTranslate)</a>
+                                    <a href="@Url.Action("edittranslation", "globalsetting", new { id = item.Id, languageId = SessionFacade.CurrentCustomer.Language_Id })">@Html.DisplayFor(modelItem => item.TextToTranslate)</a>
                                 </td>
-                                @foreach (var lang in Model.ListForIndex.Where(a => a.Text_Id == item.Id))
+                                @*@foreach (var lang in Model.ListForIndex.Where(a => a.Text_Id == item.Id))
                                 {
                                     <td>
                                         @Html.DisplayFor(modelItem => lang.TranslationName)
                                     </td>  
-                                }
+                                }*@
                             </tr>
                         }
                     </tbody>

@@ -17,24 +17,59 @@
                     <div class="row">
                         <div class="span8">
                             <table class="tableform" id="tblText">
-                                <tr>
+                                @*<tr>
                                     <td>
-                                        @Translation.Get("Ny text att översätta", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Text", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Html.TextBoxFor(model => model.Text.TextToTranslate, new { maxlength = "50", style = "width: 200px;" })
+                                        @Html.DisplayFor(model => model.Text.TextToTranslate)
+                                    </td>
+                                </tr>*@
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Språk", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                         @Html.DropDownListFor(model => model.Language.Id, Model.Languages, new { style = "width: auto;", id = "LanguageId", onchange = "changeLabelList(this.options[this.selectedIndex].value);" })
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Språk att översätta till", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Typ", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                         @Html.DropDownListFor(model => model.TextType.Id, Model.TextTypes, new { style = "width: auto;", id = "TextTypeId", onchange = "changeTextType(this.options[this.selectedIndex].value);" })
                                     </td>
                                 </tr>
                             </table>
-</div></div></div>
+                        </div>
+                    </div>
+                </div>
                 <div class="container">
                             <table class="table table-bordered table-hover">
-                                @{ var i = 0; }
+                                <tr>
+                                    <td style="width:200px">
+                                        @if (Model.Text.TextToTranslate != null)
+                                        {
+                                            @Html.DisplayFor(model => model.Text.TextToTranslate)
+                                        }
+                                        else
+                                        {
+                                            <input type="text" name="textToTranslate", value="" />
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (Model.TextTranslation != "")
+                                        {
+                                            <input type="text" name="texttranslation", value="@Model.TextTranslation" />
+                                        }
+                                        else
+                                        {
+                                            <input type="text" name="texttranslation", value="" />
+                                        }
+                                    </td>
+                                </tr>
+                                @*@{ var i = 0; }
                                 <tr>
                                     @if (Model.Text.Id > 4999)
                                     {
@@ -64,8 +99,10 @@
                                             i++;
                                         }
                                     }
-                                </tr>
+                                </tr>*@
                             </table>
+                        <input type="hidden" id="LanguageId" name="LanguageId" value="@Model.Language.Id" />
+                    @*<input type="hidden" id="TextTypeId" name="TextTypeId" value="@Model.TextType.Id" />*@
                         </div>
                     </div>
                 </div>

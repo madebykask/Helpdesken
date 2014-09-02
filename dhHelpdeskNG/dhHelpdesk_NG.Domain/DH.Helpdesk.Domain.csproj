@@ -112,6 +112,7 @@
     <Compile Include="Computers\ComputerLog.cs" />
     <Compile Include="Computers\ComputerModel.cs" />
     <Compile Include="Computers\ComputerType.cs" />
+    <Compile Include="TextType.cs" />
     <Compile Include="DocumentSearch.cs" />
     <Compile Include="Faq\FaqCategoryEntity.cs" />
     <Compile Include="Faq\FaqCategoryLanguageEntity.cs" />
