@@ -11,10 +11,14 @@
     {
         private readonly IEntityToBusinessModelMapper<Case, CaseOverview> caseMapper;
 
+        private readonly IEntityToBusinessModelMapper<InvoiceArticleEntity, InvoiceArticle> articleMapper;
+
         public CaseInvoiceToBusinessModelMapper(
-            IEntityToBusinessModelMapper<Case, CaseOverview> caseMapper)
+            IEntityToBusinessModelMapper<Case, CaseOverview> caseMapper, 
+            IEntityToBusinessModelMapper<InvoiceArticleEntity, InvoiceArticle> articleMapper)
         {
             this.caseMapper = caseMapper;
+            this.articleMapper = articleMapper;
         }
 
         public CaseInvoice Map(CaseInvoiceEntity entity)
@@ -28,7 +32,25 @@
                     entity.Id,
                     entity.CaseId,
                     this.caseMapper.Map(entity.Case),
-                    entity.Orders.Select(o => new CaseInvoiceOrder(o.Id, o.InvoiceId, null, o.Number, o.DeliveryPeriod, null)).OrderBy(o => o.Number).ToArray());
+                    entity.Orders
+                        .Select(o => new CaseInvoiceOrder(
+                                o.Id, 
+                                o.InvoiceId, 
+                                null, 
+                                o.Number, 
+                                o.DeliveryPeriod, 
+                                o.Articles.Select(a => new CaseInvoiceArticle(
+                                                    a.Id,
+                                                    a.OrderId,
+                                                    null,
+                                                    a.ArticleId,
+                                                    this.articleMapper.Map(a.Article),
+                                                    a.Name,
+                                                    a.Amount,
+                                                    a.Ppu,
+                                                    a.Position,
+                                                    a.IsInvoiced)).ToArray()))
+                                .OrderBy(o => o.Number).ToArray());
         }
     }
 }

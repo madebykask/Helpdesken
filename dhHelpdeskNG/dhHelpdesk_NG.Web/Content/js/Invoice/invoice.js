@@ -456,6 +456,10 @@ $(function () {
             return Math.floor(Math.random() * (max - min + 1)) + min;
         },   
 
+        ParseDate: function(date) {
+            return new Date(parseInt(date.replace(/\/Date\((\d+)\)\//g, "$1")));
+        },
+
         GenerateId: function() {
             return -this.GetRandomInt(1, 10000);
         },
@@ -553,17 +557,14 @@ $(function () {
                 container.append(order.Container);
 
                 var tabs = this.Container.find("#case-invoice-orders-tabs");
-                var newTab = $("<li><a href='#case-invoice-order" + order.Id + "'>Order " + (order.Number + 1) + "</a><li>");
-                tabs.find("ul").append(newTab);
+                var newTab = $("<li class='case-invoice-order-tab'><a href='#case-invoice-order" + order.Id + "'>Order " + (order.Number + 1) + "</a><li>");
+                if (this._orders.length == 1) {
+                    tabs.find("ul").prepend(newTab);
+                } else {
+                    tabs.find("li.case-invoice-order-tab:last").after(newTab);
+                }
                 tabs.tabs("refresh");
                 newTab.find("a").click();
-
-                this.Container.find(".delivery-period").datepicker({
-                    format: dhHelpdesk.CaseArticles.DateFormat,
-                    autoclose: true
-                });
-
-                this.Container.find(".reference").typeahead(dhHelpdesk.CaseArticles.GetUserSearchOptions());
             },
 
             this.DeleteOrder = function (id) {
@@ -774,6 +775,10 @@ $(function () {
             },
 
             this.Initialize = function () {
+                if (this.Container != null) {
+                    return;
+                }
+
                 this.Container = $(dhHelpdesk.CaseArticles.CaseInvoiceOrderTemplate.render(this.GetViewModel()));
 
                 var rows = this.Container.find(".articles-rows");
@@ -790,9 +795,25 @@ $(function () {
                         });
                     }
                 });
+
+                var deliveryPeriod = this.Container.find(".delivery-period");
+                deliveryPeriod.datepicker({
+                    format: dhHelpdesk.CaseArticles.DateFormat,
+                    autoclose: true
+                })
+                .on('changeDate', function () {
+                    var date = $(this).find("input").val();
+                    th.DeliveryPeriod = date;
+                });
+
+                if (this.DeliveryPeriod != null) {
+                    deliveryPeriod.datepicker("setDate", dhHelpdesk.CaseArticles.ParseDate(this.DeliveryPeriod));
+                }
+
+                this.Container.find(".reference").typeahead(dhHelpdesk.CaseArticles.GetUserSearchOptions());
             },
             
-            this.UpdateTotal = function() {
+            this.UpdateTotal = function () {
                 this.Container.find(".articles-total").text(this.GetArticlesTotal());
                 this.Invoice.UpdateTotal();
             },
@@ -1033,11 +1054,11 @@ $(function () {
 
                     var inv = data.Invoices[0];
                     var invoice = new dhHelpdesk.CaseArticles.CaseInvoice();
+                    invoice.Id = inv.Id;
+                    invoice.CaseId = inv.CaseId;
                     invoice.Initialize();
                     dhHelpdesk.CaseArticles.AddInvoice(invoice);
                     dhHelpdesk.CaseArticles.Initialize($this);
-                    invoice.Id = inv.Id;
-                    invoice.CaseId = inv.CaseId;
                     if (inv.Orders != null) {
                         for (var j = 0; j < inv.Orders.length; j++) {
                             var ord = inv.Orders[j];
@@ -1045,6 +1066,7 @@ $(function () {
                             order.Id = ord.Id;
                             order.Number = ord.Number;
                             order.DeliveryPeriod = ord.DeliveryPeriod;
+                            invoice.AddOrder(order);
                             if (ord.Articles != null) {
                                 for (var k = 0; k < ord.Articles.length; k++) {
                                     var article = ord.Articles[k];
@@ -1076,10 +1098,8 @@ $(function () {
                                     order.AddArticle(caseArticle);
                                 }
                             }
-                            invoice.AddOrder(order);
                         }
                     }
-                    dhHelpdesk.CaseArticles.AddInvoice(invoice);
                     dhHelpdesk.CaseArticles.ApplyChanges();
                 });
             });        

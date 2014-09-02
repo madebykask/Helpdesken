@@ -1,27 +1,4 @@
-﻿<div data-id='{{:Id}}'>
-    <table class='articles-params'>
-        <thead>
-            <tr>
-                <th>{{:SelectItemHeader}}</th>
-                <th>{{:UnitsHeader}}</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="articles-select-container">
-                    <select class='multiselect articles-params-article'>
-                    </select>
-                </td>
-                <td>
-                    <input type='text' class='articles-params-units input-small-important' value='{{:DefaultAmount}}' />
-                </td>
-                <td>
-                    <input type='button' class='articles-params-add btn' value='{{:AddButtonLabel}}' />
-                </td>
-            </tr>
-        </tbody>
-    </table>
+﻿<div data-id='{{:Id}}' class="case-invoice-container">
     <div id="case-invoice-orders-tabs">
         <ul>
             <li>
@@ -30,6 +7,31 @@
             </li> 
             <li><a href="#case-invoice-order-summary{{:Id}}">{{:SummaryTitle}}</a></li>          
         </ul>
+        <div class="ml15 mt20">
+            <table class='articles-params'>
+                <thead>
+                    <tr>
+                        <th>{{:SelectItemHeader}}</th>
+                        <th>{{:UnitsHeader}}</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="articles-select-container">
+                            <select class='multiselect articles-params-article'>
+                            </select>
+                        </td>
+                        <td>
+                            <input type='text' class='articles-params-units input-small-important' value='{{:DefaultAmount}}' />
+                        </td>
+                        <td>
+                            <input type='button' class='articles-params-add btn' value='{{:AddButtonLabel}}' />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>            
+        </div>
         <div class="orders-container">
             {{for Orders tmpl="caseInvoiceOrder" /}} 
             <div id="case-invoice-order-summary{{:Id}}">

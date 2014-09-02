@@ -2574,6 +2574,9 @@ body.login {
 .ml05 {
     margin-left: 0.5em;
 }
+.ml15 {
+    margin-left: 1.5em;
+}
 .overflow-visible {
     overflow: visible;
 }
@@ -2599,4 +2602,9 @@ body.login {
     padding: 10px; 
     background: #ffa;
     text-align: center;
+}
+.case-invoice-container {
+    font-size: 14px;
+    color: #333333;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
