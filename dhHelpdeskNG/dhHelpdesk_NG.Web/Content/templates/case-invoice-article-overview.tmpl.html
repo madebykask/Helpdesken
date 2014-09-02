@@ -1,0 +1,24 @@
+﻿{{if IsBlank }}    
+    <tr>
+        <td colspan='6'>{{:Name}}</td>
+        <td>
+            {{if IsInvoiced }}
+                <i class='icon-flag icon-green'></i>
+            {{/if}}   
+        <td>                 
+    </tr>
+{{else}}    
+    <tr data-id='{{:Id}}'>
+        <td>{{:Number}}</td>
+        <td>{{:Name}}</td>
+        <td>{{:Amount}}</td>
+        <td>{{:UnitName}}</td>
+        <td>{{:Ppu}}</td>
+        <td>{{:Total}}</td>
+        <td>
+            {{if IsInvoiced }}
+                <i class='icon-flag icon-green'></i>
+            {{/if}}
+        </td>
+    </tr>              
+{{/if}}  

@@ -28,6 +28,10 @@ $(function () {
 
         CaseInvoiceArticleTemplate: null,
 
+        CaseInvoiceOverviewTemplate: null,
+
+        CaseInvoiceArticleOverviewTemplate: null,
+
         CaseId: null,
 
         CustomerId: null,
@@ -522,7 +526,10 @@ $(function () {
             this.CaseId = null;
             this._orders = [];
 
-            this.GetOrders = function() {
+            this.GetOrders = function () {
+                if (this._orders.length == 1) {
+                    return dhHelpdesk.CaseArticles._invoices[0]._orders;
+                }
                 return this._orders;  
             },
 
@@ -632,6 +639,7 @@ $(function () {
                 for (var i = 0; i < orders.length; i++) {
                     model.AddOrder(orders[i].GetViewModel());
                 }
+                model.Total = this.GetArticlesTotal();
 
                 return model;
             },
@@ -640,11 +648,23 @@ $(function () {
                 this.Container = $(dhHelpdesk.CaseArticles.CaseInvoiceTemplate.render(this.GetViewModel()));
 
                 var tabs = this.Container.find("#case-invoice-orders-tabs");
-                tabs.tabs();
+                var th = this;
+                tabs.tabs({
+                    activate: function(event, ui) {
+                        var isSummaryTab = ui.newTab.hasClass("case-invoice-order-summary");
+                        if (isSummaryTab) {
+                            th.Container.find(".articles-params").hide();
+                            th.Container.find(".case-invoice-order-summary-container")
+                                .html(dhHelpdesk.CaseArticles.CaseInvoiceOverviewTemplate.render(th.GetViewModel()));
+                        } else {
+                            th.Container.find(".articles-params").show();
+                        }
+                    }
+                });
             },
 
             this.GetSortedOrders = function() {
-                return this._orders.sort(function (a1, a2) { return a1.Number - a2.Number; });
+                return this.GetOrders().sort(function (a1, a2) { return a1.Number - a2.Number; });
             },
 
             this.GetArticlesTotal = function () {
@@ -657,7 +677,7 @@ $(function () {
             },
 
             this.UpdateTotal = function() {
-                this.Container.find("#case-invoice-order-summary-total").text(this.GetArticlesTotal());
+//                this.Container.find("#case-invoice-order-summary-total").text(this.GetArticlesTotal());
             }
         },
 
@@ -765,7 +785,10 @@ $(function () {
             this.GetViewModel = function () {
                 var model = new dhHelpdesk.CaseArticles.CaseInvoiceOrderViewModel();
                 model.Id = this.Id != null ? this.Id : dhHelpdesk.CaseArticles.GenerateId();
+                model.Number = this.Number + 1;
                 model.Total = this.GetArticlesTotal();
+                model.DeliveryPeriod = this.DeliveryPeriod != null ? this.DeliveryPeriod : "";
+                model.Reference = this.Reference;
                 var articles = this.GetSortedArticles();
                 for (var i = 0; i < articles.length; i++) {
                     model.AddArticle(articles[i].GetViewModel());
@@ -810,7 +833,11 @@ $(function () {
                     deliveryPeriod.datepicker("setDate", dhHelpdesk.CaseArticles.ParseDate(this.DeliveryPeriod));
                 }
 
-                this.Container.find(".reference").typeahead(dhHelpdesk.CaseArticles.GetUserSearchOptions());
+                var reference = this.Container.find(".reference");
+                reference.typeahead(dhHelpdesk.CaseArticles.GetUserSearchOptions());
+                reference.blur(function() {
+                    th.Reference = $(this).val();
+                });
             },
             
             this.UpdateTotal = function () {
@@ -986,6 +1013,7 @@ $(function () {
             this.OrderTitle = "Order";
             this.SummaryTitle = "Summary";
             this.TotalLabel = "Total";
+            this.Total = null;
             this.Orders = [];
 
             this.AddOrder = function(order) {
@@ -1006,6 +1034,8 @@ $(function () {
             this.ReferenceTitle = "Other reference";
             this.Total = null;
             this.Articles = [];
+            this.DeliveryPeriod = "";
+            this.Reference = "";
 
             this.AddArticle = function(article) {
                 this.Articles.push(article);
@@ -1035,72 +1065,80 @@ $(function () {
             $.get("/content/templates/case-invoice-article.tmpl.html", function (caseInvoiceArticleTemplate) {
                 dhHelpdesk.CaseArticles.CaseInvoiceArticleTemplate = $.templates("caseInvoiceArticle", caseInvoiceArticleTemplate);
 
-                $("[data-invoice]").each(function () {
-                    var $this = $(this);
-                    var data = $.parseJSON($this.attr("data-invoice-case-articles"));
+                $.get("/content/templates/case-invoice-overview.tmpl.html", function(caseInvoiceOverviewTemplate) {
+                    dhHelpdesk.CaseArticles.CaseInvoiceOverviewTemplate = $.templates("caseInvoiceOverview", caseInvoiceOverviewTemplate);
 
-                    if (data == null || data.Invoices.length == 0) {
-                        var blankInvoice = new dhHelpdesk.CaseArticles.CaseInvoice();
-                        blankInvoice.Id = dhHelpdesk.CaseArticles.GenerateId();
-                        blankInvoice.Initialize();
-                        dhHelpdesk.CaseArticles.AddInvoice(blankInvoice);
-                        dhHelpdesk.CaseArticles.Initialize($this);
-                        blankInvoice.CaseId = dhHelpdesk.CaseArticles.CaseId;
-                        var blankOrder = new dhHelpdesk.CaseArticles.CreateBlankOrder();
-                        blankInvoice.AddOrder(blankOrder);
-                        dhHelpdesk.CaseArticles.ApplyChanges();
-                        return;
-                    }
+                    $.get("/content/templates/case-invoice-article-overview.tmpl.html", function (caseInvoiceArticleOverviewTemplate) {
+                        dhHelpdesk.CaseArticles.CaseInvoiceArticleOverviewTemplate = $.templates("caseInvoiceArticleOverview", caseInvoiceArticleOverviewTemplate);
 
-                    var inv = data.Invoices[0];
-                    var invoice = new dhHelpdesk.CaseArticles.CaseInvoice();
-                    invoice.Id = inv.Id;
-                    invoice.CaseId = inv.CaseId;
-                    invoice.Initialize();
-                    dhHelpdesk.CaseArticles.AddInvoice(invoice);
-                    dhHelpdesk.CaseArticles.Initialize($this);
-                    if (inv.Orders != null) {
-                        for (var j = 0; j < inv.Orders.length; j++) {
-                            var ord = inv.Orders[j];
-                            var order = new dhHelpdesk.CaseArticles.CaseInvoiceOrder();
-                            order.Id = ord.Id;
-                            order.Number = ord.Number;
-                            order.DeliveryPeriod = ord.DeliveryPeriod;
-                            invoice.AddOrder(order);
-                            if (ord.Articles != null) {
-                                for (var k = 0; k < ord.Articles.length; k++) {
-                                    var article = ord.Articles[k];
-                                    var caseArticle = new dhHelpdesk.CaseArticles.CaseInvoiceArticle();
-                                    caseArticle.Id = article.Id;
-                                    if (article.Article != null) {
-                                        caseArticle.Article = new dhHelpdesk.CaseArticles.InvoiceArticle();
-                                        caseArticle.Article.Id = article.Article.Id;
-                                        caseArticle.Article.ParentId = article.Article.ParentId;
-                                        caseArticle.Article.Number = article.Article.Number;
-                                        caseArticle.Article.UnitId = article.Article.UnitId;
-                                        if (article.Article.Unit != null) {
-                                            var unit = new dhHelpdesk.CaseArticles.InvoiceArticleUnit();
-                                            unit.Id = article.Article.Unit.Id;
-                                            unit.Name = article.Article.Unit.Name;
-                                            unit.CustomerId = article.Article.Unit.CustomerId;
-                                            caseArticle.Article.Unit = unit;
+                        $("[data-invoice]").each(function () {
+                            var $this = $(this);
+                            var data = $.parseJSON($this.attr("data-invoice-case-articles"));
+
+                            if (data == null || data.Invoices.length == 0) {
+                                var blankInvoice = new dhHelpdesk.CaseArticles.CaseInvoice();
+                                blankInvoice.Id = dhHelpdesk.CaseArticles.GenerateId();
+                                blankInvoice.Initialize();
+                                dhHelpdesk.CaseArticles.AddInvoice(blankInvoice);
+                                dhHelpdesk.CaseArticles.Initialize($this);
+                                blankInvoice.CaseId = dhHelpdesk.CaseArticles.CaseId;
+                                var blankOrder = new dhHelpdesk.CaseArticles.CreateBlankOrder();
+                                blankInvoice.AddOrder(blankOrder);
+                                dhHelpdesk.CaseArticles.ApplyChanges();
+                                return;
+                            }
+
+                            var inv = data.Invoices[0];
+                            var invoice = new dhHelpdesk.CaseArticles.CaseInvoice();
+                            invoice.Id = inv.Id;
+                            invoice.CaseId = inv.CaseId;
+                            invoice.Initialize();
+                            dhHelpdesk.CaseArticles.AddInvoice(invoice);
+                            dhHelpdesk.CaseArticles.Initialize($this);
+                            if (inv.Orders != null) {
+                                for (var j = 0; j < inv.Orders.length; j++) {
+                                    var ord = inv.Orders[j];
+                                    var order = new dhHelpdesk.CaseArticles.CaseInvoiceOrder();
+                                    order.Id = ord.Id;
+                                    order.Number = ord.Number;
+                                    order.DeliveryPeriod = ord.DeliveryPeriod;
+                                    invoice.AddOrder(order);
+                                    if (ord.Articles != null) {
+                                        for (var k = 0; k < ord.Articles.length; k++) {
+                                            var article = ord.Articles[k];
+                                            var caseArticle = new dhHelpdesk.CaseArticles.CaseInvoiceArticle();
+                                            caseArticle.Id = article.Id;
+                                            if (article.Article != null) {
+                                                caseArticle.Article = new dhHelpdesk.CaseArticles.InvoiceArticle();
+                                                caseArticle.Article.Id = article.Article.Id;
+                                                caseArticle.Article.ParentId = article.Article.ParentId;
+                                                caseArticle.Article.Number = article.Article.Number;
+                                                caseArticle.Article.UnitId = article.Article.UnitId;
+                                                if (article.Article.Unit != null) {
+                                                    var unit = new dhHelpdesk.CaseArticles.InvoiceArticleUnit();
+                                                    unit.Id = article.Article.Unit.Id;
+                                                    unit.Name = article.Article.Unit.Name;
+                                                    unit.CustomerId = article.Article.Unit.CustomerId;
+                                                    caseArticle.Article.Unit = unit;
+                                                }
+                                                caseArticle.Article.Ppu = article.Article.Ppu;
+                                                caseArticle.Article.ProductAreaId = article.Article.ProductAreaId;
+                                                caseArticle.Article.CustomerId = article.Article.CustomerId;
+                                            }
+                                            caseArticle.Name = article.Name;
+                                            caseArticle.Amount = article.Amount;
+                                            caseArticle.Ppu = article.Ppu;
+                                            caseArticle.UnitId = article.UnitId;
+                                            caseArticle.Position = article.Position;
+                                            caseArticle.IsInvoiced = article.IsInvoiced;
+                                            order.AddArticle(caseArticle);
                                         }
-                                        caseArticle.Article.Ppu = article.Article.Ppu;
-                                        caseArticle.Article.ProductAreaId = article.Article.ProductAreaId;
-                                        caseArticle.Article.CustomerId = article.Article.CustomerId;
                                     }
-                                    caseArticle.Name = article.Name;
-                                    caseArticle.Amount = article.Amount;
-                                    caseArticle.Ppu = article.Ppu;
-                                    caseArticle.UnitId = article.UnitId;
-                                    caseArticle.Position = article.Position;
-                                    caseArticle.IsInvoiced = article.IsInvoiced;
-                                    order.AddArticle(caseArticle);
                                 }
                             }
-                        }
-                    }
-                    dhHelpdesk.CaseArticles.ApplyChanges();
+                            dhHelpdesk.CaseArticles.ApplyChanges();
+                        });
+                    });
                 });
             });        
         });

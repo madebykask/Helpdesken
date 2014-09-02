@@ -1084,8 +1084,10 @@
     <Content Include="Content\js\ui\dh.ui.hierarchylist.js" />
     <Content Include="Content\js\Users\modules.js" />
     <Content Include="Content\PIE.htc" />
+    <Content Include="Content\templates\case-invoice-article-overview.tmpl.html" />
     <Content Include="Content\templates\case-invoice-article.tmpl.html" />
     <Content Include="Content\templates\case-invoice-order.tmpl.html" />
+    <Content Include="Content\templates\case-invoice-overview.tmpl.html" />
     <Content Include="Content\templates\case-invoice.tmpl.html" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />

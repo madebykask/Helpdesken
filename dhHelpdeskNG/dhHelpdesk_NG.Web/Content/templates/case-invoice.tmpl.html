@@ -5,7 +5,7 @@
                 <i class="icon-plus-sign" style="cursor: pointer;" onclick="dhHelpdesk.CaseArticles.AddOrder('{{:Id}}'); return false;"></i>
                 <i style="display: none;" class="icon-minus-sign" style="cursor: pointer;" onclick="dhHelpdesk.CaseArticles.DeleteCurrentOrder('{{:Id}}'); return false;"></i>
             </li> 
-            <li><a href="#case-invoice-order-summary{{:Id}}">{{:SummaryTitle}}</a></li>          
+            <li class="case-invoice-order-summary"><a href="#case-invoice-order-summary{{:Id}}">{{:SummaryTitle}}</a></li>          
         </ul>
         <div class="ml15 mt20">
             <table class='articles-params'>
@@ -34,10 +34,7 @@
         </div>
         <div class="orders-container">
             {{for Orders tmpl="caseInvoiceOrder" /}} 
-            <div id="case-invoice-order-summary{{:Id}}">
-                <div  class='textbold' style='text-align: left;'>
-                    {{:TotalLabel}}: <span id='case-invoice-order-summary-total'>{{:Total}}</span>
-                </div>                              
+            <div id="case-invoice-order-summary{{:Id}}" class="case-invoice-order-summary-container">                                          
             </div>
         </div>
     </div>
