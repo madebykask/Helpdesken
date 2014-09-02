@@ -22,6 +22,7 @@
     using DH.Helpdesk.Dal.EntityConfigurations.WorkstationModules;
     using DH.Helpdesk.Dal.EntityConfigurations.SSO;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Cases;
     using DH.Helpdesk.Domain.Changes;
     using DH.Helpdesk.Domain.Computers;
     using DH.Helpdesk.Domain.Faq;
@@ -105,6 +106,8 @@
         public DbSet<CaseType> CaseTypes { get; set; }
 
         public DbSet<Case> Cases { get; set; }
+
+        public DbSet<CaseSolutionSetting> CaseSolutionSettings { get; set; }
 
         public DbSet<Category> Categories { get; set; }
 
@@ -544,6 +547,7 @@
             modelBuilder.Configurations.Add(new CaseSolutionConfiguration());
             modelBuilder.Configurations.Add(new CaseSolutionScheduleConfiguration());
             modelBuilder.Configurations.Add(new CaseTypeConfiguration());
+            modelBuilder.Configurations.Add(new CaseSolutionSettingConfiguration());
             modelBuilder.Configurations.Add(new CategoryConfiguration());
             modelBuilder.Configurations.Add(new ChangeConfiguration());
             modelBuilder.Configurations.Add(new ChangeCategoryConfiguration());

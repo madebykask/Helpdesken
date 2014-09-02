@@ -76,6 +76,7 @@
     <Compile Include="Attributes\Inventory\CreateMissingComputerSettingsAttribute.cs" />
     <Compile Include="Dal\INewRepository.cs" />
     <Compile Include="EntityConfigurations\ActionSetting\ActionSettingConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Cases\CaseSolutionSettingConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CausingPartConfiguration.cs" />
     <Compile Include="EntityConfigurations\Changes\ChangeCouncilConfiguration.cs" />
     <Compile Include="EntityConfigurations\DailyReport\DailyReportConfiguration.cs" />
@@ -285,7 +286,9 @@
     <Compile Include="Repositories\ActionSetting\Concrete\ActionSettingRepository.cs" />
     <Compile Include="Repositories\ActionSetting\IActionSettingRepository.cs" />
     <Compile Include="Repositories\CaseHistoryRepository.cs" />
+    <Compile Include="Repositories\Cases\CaseSolutionSettingRepository.cs" />
     <Compile Include="Repositories\Cases\Concrete\CausingPartRepository.cs" />
+    <Compile Include="Repositories\Cases\ICaseSolutionSettingRepository.cs" />
     <Compile Include="Repositories\Cases\ICausingPartRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeChangeGroupRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeChangeRepository.cs" />
