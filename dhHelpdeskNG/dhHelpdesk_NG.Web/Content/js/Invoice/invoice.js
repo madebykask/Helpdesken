@@ -341,6 +341,8 @@ $(function () {
                 autoOpen: false
             });
 
+            th._container.parent().addClass("overflow-visible");
+
             if (!th.IsNewCase()) {
                 var invoiceBtn = $("<button>Invoice</button>");
                 invoiceBtn.click(function () {
