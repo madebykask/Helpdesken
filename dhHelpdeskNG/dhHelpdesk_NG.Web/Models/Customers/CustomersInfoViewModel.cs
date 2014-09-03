@@ -20,6 +20,10 @@
             this.Calculator = calculator;
         }
 
+        public CustomersInfoViewModel()
+        {
+        }
+
         [NotNull]
         public ICasesCalculator Calculator { get; private set; }
 

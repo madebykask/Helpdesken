@@ -42,6 +42,8 @@
 
         private MyCasesModel myCases = new MyCasesModel();
 
+        private CustomersInfoViewModel customersInfo = new CustomersInfoViewModel();
+
         public IEnumerable<CustomerUser> CustomerUsers { get; set; }
 
         public IEnumerable<CustomerUserList> ForStartCaseCustomerUsers { get; set; }
@@ -54,7 +56,18 @@
 
         public IList<SelectListItem> Customers { get; set; }
 
-        public CustomersInfoViewModel CustomersInfo { get; set; }
+        public CustomersInfoViewModel CustomersInfo
+        {
+            get
+            {
+                return this.customersInfo;
+            }
+
+            set 
+            { 
+                this.customersInfo = value;
+            }
+        }
 
         public CustomerChangesModel CustomerChanges
         {
