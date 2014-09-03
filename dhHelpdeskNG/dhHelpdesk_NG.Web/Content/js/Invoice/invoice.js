@@ -318,8 +318,8 @@ $(function () {
             th._container = invoice.Container;
             th._container.dialog({
                 title: "Articles to be invoiced",
-                width: 800,
-                height: 600,
+                width: 1000,
+                height: 800,
                 close: function () {
                     th._container.dialog("destroy");
                 },
@@ -328,11 +328,10 @@ $(function () {
                         text: "Save",
                         click: function () {
                             th.ApplyChanges();
-                            th._container.dialog("close");
                         }
                     },
                     {
-                        text: "Cancel",
+                        text: "Close",
                         click: function () {
                             th.CancelChanges();
                             th._container.dialog("close");
@@ -444,7 +443,7 @@ $(function () {
                 })
                 .always(function () {
                     articlesEl.multiselect();
-                    th.Restore();
+                    articlesSelectContainer.find("button.multiselect").addClass("min-width-500 max-width-500");
                     th.CreateContainer();
                     th._container.dialog("open");
                 });

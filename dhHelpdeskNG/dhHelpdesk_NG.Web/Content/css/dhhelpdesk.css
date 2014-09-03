@@ -2611,3 +2611,9 @@ body.login {
     color: #333333;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+.min-width-500 {
+    min-width: 500px!important;
+}
+.max-width-500 {
+    max-width: 500px!important;
+}
