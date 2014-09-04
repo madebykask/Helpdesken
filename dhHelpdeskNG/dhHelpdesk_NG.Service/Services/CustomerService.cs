@@ -492,7 +492,7 @@
 
             #region ReportCustomers
 
-            if (customer.ReportCustomers != null)
+            if (customer.ReportCustomers != null && ReportCustomers != null)
             {
                 //TODO ALF: precis samma problem som finns på casefieldsettings finns här! fixar du det?
                 if (customer.ReportCustomers.Count == 0)
