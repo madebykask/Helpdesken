@@ -492,29 +492,32 @@
 
             #region ReportCustomers
 
-            //TODO ALF: precis samma problem som finns på casefieldsettings finns här! fixar du det?
-            if(customer.ReportCustomers.Count == 0)
+            if (customer.ReportCustomers != null)
             {
-                foreach(var r in ReportCustomers)
+                //TODO ALF: precis samma problem som finns på casefieldsettings finns här! fixar du det?
+                if (customer.ReportCustomers.Count == 0)
                 {
-                    if(r.ShowOnPage == 1)
+                    foreach (var r in ReportCustomers)
                     {
-                        this._reportCustomerRepository.Add(r);
+                        if (r.ShowOnPage == 1)
+                        {
+                            this._reportCustomerRepository.Add(r);
+                        }
                     }
                 }
-            }
 
-            foreach(var rc in customer.ReportCustomers)
-            {
-                foreach(var change in ReportCustomers.Where(x => x.Customer_Id == rc.Customer_Id && x.Report_Id == rc.Report_Id))
+                foreach (var rc in customer.ReportCustomers)
                 {
-                    if(change.ShowOnPage != rc.ShowOnPage)
+                    foreach (var change in ReportCustomers.Where(x => x.Customer_Id == rc.Customer_Id && x.Report_Id == rc.Report_Id))
                     {
-                        rc.ShowOnPage = change.ShowOnPage;
-                        this._reportCustomerRepository.Update(rc);
+                        if (change.ShowOnPage != rc.ShowOnPage)
+                        {
+                            rc.ShowOnPage = change.ShowOnPage;
+                            this._reportCustomerRepository.Update(rc);
+                        }
                     }
-                }
-            }
+                }                
+            }            
 
             #endregion
             customer.NDSPath = customer.NDSPath ?? string.Empty;
