@@ -1,4 +1,4 @@
-@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
+﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
 @using DH.Helpdesk.BusinessData.OldComponents
 @using DH.Helpdesk.Web.Infrastructure
 
@@ -22,10 +22,10 @@
         <div class="pull-left">
             <ul class="secnav">
                 <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
-                <li>@Html.ActionLink(Translation.Get("Spara och st�ng", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "NewCaseAndClose();return false;", @class = "btn" })</li>
-                <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt �rende", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "NewCaseAndAddCase();return false;", @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "NewCaseAndClose();return false;", @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "NewCaseAndAddCase();return false;", @class = "btn" })</li>
                 <li class="secspace"></li>
-                <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn" })</li>
             </ul>
         </div>
     </div>

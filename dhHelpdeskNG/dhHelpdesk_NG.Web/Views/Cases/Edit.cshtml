@@ -1,4 +1,4 @@
-@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
+ï»¿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
 @using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.BusinessData.OldComponents
 
@@ -24,23 +24,23 @@
                 @if (Model.EditMode == Enums.AccessMode.FullAccess)
                 {
                     <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
-                    <li>@Html.ActionLink(Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation), null, null, new { onclick = "EditCaseAndClose();return false;", @class = "btn" })</li>
-                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), null, null, new { onclick = "EditCaseAndAddCase();return false;", @class = "btn" })</li>
+                    <li>@Html.ActionLink(Translation.Get("Spara och stÃ¤ng", Enums.TranslationSource.TextTranslation), null, null, new { onclick = "EditCaseAndClose();return false;", @class = "btn" })</li>
+                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt Ã¤rende", Enums.TranslationSource.TextTranslation), null, null, new { onclick = "EditCaseAndAddCase();return false;", @class = "btn" })</li>
                     <li class="secspace"></li>
                     if (SessionFacade.CurrentUser.DeleteCasePermission == 1)
                     {                            
-                        <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteCase", new { caseId = @Model.case_.Id, customerId = @Model.case_.Customer_Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuellt ärende och tillhörande loggposter", Enums.TranslationSource.TextTranslation) })</li>
+                        <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteCase", new { caseId = @Model.case_.Id, customerId = @Model.case_.Customer_Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Ã¤r du sÃ¤ker pÐµ att du vill ta bort aktuellt Ã¤rende", Enums.TranslationSource.TextTranslation) })</li>
                     }
                 }
-                <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.Get("StÃ¤ng", Enums.TranslationSource.TextTranslation), "Index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn" })</li>
                 <li>
                     <div id="divActionMenu" class="btn-group">
-                        <button class="btn">@Translation.Get("Åtgärder", Enums.TranslationSource.TextTranslation)</button>
+                        <button class="btn">@Translation.Get("Ã…tgÃ¤rder", Enums.TranslationSource.TextTranslation)</button>
                         <button class="btn dropdown-toggle" data-toggle="dropdown">
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
-                        <li><a href="/cases/markasunread/@Model.case_.Id?customerId=@Model.case_.Customer_Id">@Translation.Get("Markera ärendet som oläst", Enums.TranslationSource.TextTranslation)</a></li> 
+                        <li><a href="/cases/markasunread/@Model.case_.Id?customerId=@Model.case_.Customer_Id">@Translation.Get("Markera Ã¤rendet som olÃ¤st", Enums.TranslationSource.TextTranslation)</a></li> 
                         @if (SessionFacade.CurrentUser.ActivateCasePermission == 1 && Model.case_.FinishingDate.HasValue)
                         {                                
                             <li><a href="/cases/activate/@Model.case_.Id">@Translation.Get("Aktivera", Enums.TranslationSource.TextTranslation)</a></li>
@@ -50,8 +50,8 @@
                             if (SessionFacade.CurrentUser.MoveCasePermission == 1)
                             {                                
                                 <li><a data-toggle="modal" href="#divMoveCase" >@Translation.Get("Flytta", Enums.TranslationSource.TextTranslation)</a></li>
-                                <!-- TODO special jönköpings kommun
-                                <li><a href="#" >@Translation.Get("Flytta ärende till annan site", Enums.TranslationSource.TextTranslation)</a></li>
+                                <!-- TODO special jÑ†nkÑ†pings kommun
+                                <li><a href="#" >@Translation.Get("Flytta Ã¤rende till annan site", Enums.TranslationSource.TextTranslation)</a></li>
                                 -->
                             }
                             if (SessionFacade.CurrentUser.CopyCasePermission == 1)
@@ -62,24 +62,24 @@
                             {
                                 if (Model.case_.FollowUpDate.HasValue)
                                 {
-                                    <li><a href="/cases/followupRemove/@Model.case_.Id" >@Translation.Get("Ta bort uppföljning", Enums.TranslationSource.TextTranslation)</a></li>
+                                    <li><a href="/cases/followupRemove/@Model.case_.Id" >@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</a></li>
                                 }
                                 else
                                 {
-                                    <li><a href="/cases/followup/@Model.case_.Id" >@Translation.Get("Följ upp", Enums.TranslationSource.TextTranslation)</a></li>
+                                    <li><a href="/cases/followup/@Model.case_.Id" >@Translation.Get("Follow up", Enums.TranslationSource.TextTranslation)</a></li>
                                 }
                             }
                             
                             @*
                             if (Html.MasterModel().CustomerSetting.ModuleChangeManagement == 1 && Model.case_.Change_Id == null)
                             {
-                                <!--TODO kontroll av behörighet -->
-                                <li><a href="#">@Translation.Get("Skapa ändring", Enums.TranslationSource.TextTranslation)</a></li>
+                                <!--TODO kontroll av behÑ†righet -->
+                                <li><a href="#">@Translation.Get("Skapa Ð´ndring", Enums.TranslationSource.TextTranslation)</a></li>
                             }
                             if (Html.MasterModel().CustomerSetting.ModuleOrder == 1 && ((SessionFacade.CurrentUser.OrderPermission > 0 || SessionFacade.CurrentUser.UserGroupId > 2)))
                             {
                                 <!--TODO kontroll att order inte finns -->
-                                <li><a href="#" >@Translation.Get("Skapa beställning", Enums.TranslationSource.TextTranslation)</a></li>
+                                <li><a href="#" >@Translation.Get("Skapa bestÐ´llning", Enums.TranslationSource.TextTranslation)</a></li>
                             }
                             *@
 
@@ -102,12 +102,12 @@
                     {
                         if (Model.RelatedCases.Count > 0)
                         {
-                            <li><a data-toggle="modal" href="#divRelatedCases" title="@Translation.Get("Relaterade ärenden", Enums.TranslationSource.TextTranslation)" class="btn"><i class="icon-list"></i></a></li>
+                            <li><a data-toggle="modal" href="#divRelatedCases" title="@Translation.Get("Relaterade Ã¤renden", Enums.TranslationSource.TextTranslation)" class="btn"><i class="icon-list"></i></a></li>
                         }
                     }                                            
                 }
-                <li><a href="@Model.case_.Id.GetUrlForNavigationBetweenCases()" title="@Translation.Get("Föregående ärende", Enums.TranslationSource.TextTranslation)" class="btn"><i class="icon-chevron-left"></i></a></li>
-                <li><a href="@Model.case_.Id.GetUrlForNavigationBetweenCases(true)"  title="@Translation.Get("Nästa ärende", Enums.TranslationSource.TextTranslation)" class="btn"><i class="icon-chevron-right"></i></a></li>
+                <li><a href="@Model.case_.Id.GetUrlForNavigationBetweenCases()" title="@Translation.Get("FÑ†regÐµende Ã¤rende", Enums.TranslationSource.TextTranslation)" class="btn"><i class="icon-chevron-left"></i></a></li>
+                <li><a href="@Model.case_.Id.GetUrlForNavigationBetweenCases(true)"  title="@Translation.Get("NÐ´sta Ã¤rende", Enums.TranslationSource.TextTranslation)" class="btn"><i class="icon-chevron-right"></i></a></li>
             </ul>
         </div>
     </div>
