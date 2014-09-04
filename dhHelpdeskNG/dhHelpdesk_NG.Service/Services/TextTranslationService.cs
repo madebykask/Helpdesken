@@ -11,23 +11,29 @@
 
     public interface ITextTranslationService
     {
-        IEnumerable<Text> GetAllTexts();
+        IEnumerable<Text> GetAllTexts(int texttypeId);
 
         IList<TextTranslation> GetAllTextTranslations();
         IList<TextTranslationLanguageList> GetEditListToTextTranslations(int textid);
         IList<TextTranslationLanguageList> GetIndexListToTextTranslations(int languageId);
         IList<TextTranslationList> GetNewListToTextTranslations();
+  
 
         Text GetText(int id);
         TextTranslation GetTextTranslation(int id);
+        TextTranslation GetTextTranslationByIdAndLanguage(int id, int languageid);
+        TextTranslation GetTextTranslationById(int id);
         string GetTextTranslationByLanguage(int id, int langaugeid);
 
         IList<TextType> GetTextTypes();
         TextType GetTextType(int id);
 
         void SaveEditText(Text text, List<TextTranslationLanguageList> TTs, out IDictionary<string, string> errors);
+        void SaveEditText(Text text, TextTranslation texttranslation, bool update, out IDictionary<string, string> errors);
         void SaveNewText(Text text, List<TextTranslationLanguageList> TTs, out IDictionary<string, string> errors);
         void SaveNewText(Text text, out IDictionary<string, string> errors);
+        void DeleteTextTranslation(TextTranslation texttranslation, out IDictionary<string, string> errors);
+        void DeleteText(Text text, out IDictionary<string, string> errors);
         void Commit();
     }
 
@@ -50,9 +56,9 @@
             this._textTypeRepository = textTypeRepository;
         }
 
-        public IEnumerable<Text> GetAllTexts()
+        public IEnumerable<Text> GetAllTexts(int texttypeId)
         {
-            return this._textRepository.GetAll().Where(x => x.Id > 4999 && x.Type == 1);
+            return this._textRepository.GetAll().Where(x => x.Id > 4999 && x.Type == texttypeId);
         }
 
         public IList<TextTranslation> GetAllTextTranslations()
@@ -100,7 +106,47 @@
             return this._textTranslationRepository.GetTTByLanguageId(id, languageid);
         }
 
+        public TextTranslation GetTextTranslationByIdAndLanguage(int id, int languageId)
+        {
+            return this._textTranslationRepository.GetTTByIdAndLanguageId(id, languageId);
+        }
 
+        public TextTranslation GetTextTranslationById(int id)
+        {
+            return this._textTranslationRepository.GetTTById(id);
+        }
+
+        public void SaveEditText(Text text, TextTranslation textranslation, bool update, out IDictionary<string, string> errors)
+        {
+            if (text == null)
+                throw new ArgumentNullException("text");
+
+            text.ChangedDate = DateTime.Now;
+
+            errors = new Dictionary<string, string>();
+
+            if (string.IsNullOrEmpty(text.TextToTranslate))
+                errors.Add("text.TextToTranslate", "Du måste ange ett ord att översätta");
+
+
+            //if (textranslation != null)
+            //{
+            //    this._textTranslationRepository.Add(textranslation);
+            //}
+
+            if (!update)
+            {
+                this._textTranslationRepository.Add(textranslation);
+            }
+            else
+            {
+                this._textTranslationRepository.Update(textranslation);
+
+            }
+           
+            if (errors.Count == 0)
+                this.Commit();
+        }
 
         public void SaveEditText(Text text, List<TextTranslationLanguageList> TTs, out IDictionary<string, string> errors)
         {
@@ -114,14 +160,34 @@
             if (string.IsNullOrEmpty(text.TextToTranslate))
                 errors.Add("text.TextToTranslate", "Du måste ange ett ord att översätta");
 
-            foreach (var tt in text.TextTranslations)
+
+            if (text.TextTranslations.Count == 0)
             {
-                foreach (var change in TTs.Where(x => x.Text_Id == tt.Text_Id && x.Language_Id == tt.Language_Id))
+                foreach (var t in TTs)
                 {
-                    if (change.TranslationName != tt.TextTranslated)
+                    if (t.TranslationName == null)
+                        t.TranslationName = "";
+
+                    var newTT = new TextTranslation { TextTranslated = t.TranslationName, Language_Id = t.Language_Id, Text_Id = text.Id };
+
+                    this._textTranslationRepository.Add(newTT);
+                }
+            }
+            else
+            {
+                foreach (var tt in text.TextTranslations)
+                {
+
+                    foreach (var change in TTs.Where(x => x.Text_Id == tt.Text_Id && x.Language_Id == tt.Language_Id))
                     {
-                        tt.TextTranslated = change.TranslationName;
-                        this._textTranslationRepository.Update(tt);
+                        if (change.TranslationName == null)
+                            change.TranslationName = "";
+
+                        if (change.TranslationName != tt.TextTranslated)
+                        {
+                            tt.TextTranslated = change.TranslationName;
+                            this._textTranslationRepository.Update(tt);
+                        }
                     }
                 }
             }
@@ -144,28 +210,13 @@
 
             text.ChangedDate = DateTime.Now;
             text.CreatedDate = DateTime.Now;
-            //text.Id = this._textRepository.GetNextId() + 1;
-            text.Type = 1;
-
+            text.Id = this._textRepository.GetNextId() + 1;
+            
             if (string.IsNullOrEmpty(text.TextToTranslate))
                 errors.Add("text.TextToTranslate", "Du måste ange ett ord att översätta");
 
 
-            this._textRepository.AddText(text);
-
-            //if (text != null)
-            //{
-            //    this._textRepository.AddText(text);
-
-            //    foreach (var t in TTs)
-            //    {
-            //        var newTT = new TextTranslation { TextTranslated = t.TranslationName, Language_Id = t.Language_Id, Text_Id = text.Id };
-
-            //        this._textTranslationRepository.Add(newTT);
-
-            //    }
-
-            //}
+            this._textRepository.Add(text);
 
             if (errors.Count == 0)
                 this.Commit();
@@ -181,8 +232,7 @@
             text.ChangedDate = DateTime.Now;
             text.CreatedDate = DateTime.Now;
             text.Id = this._textRepository.GetNextId() + 1;
-            text.Type = 1;
-
+            
             if (string.IsNullOrEmpty(text.TextToTranslate))
                 errors.Add("text.TextToTranslate", "Du måste ange ett ord att översätta");
 
@@ -199,6 +249,31 @@
                 }
              
             }
+
+            if (errors.Count == 0)
+                this.Commit();
+        }
+
+        public void DeleteTextTranslation(TextTranslation texttranslation, out IDictionary<string, string> errors)
+        {
+
+            errors = new Dictionary<string, string>();
+
+
+            if (texttranslation.Language_Id != 0 && texttranslation.Text_Id != 0)
+                this._textTranslationRepository.Delete(texttranslation);
+
+            if (errors.Count == 0)
+                this.Commit();
+        }
+
+        public void DeleteText(Text text, out IDictionary<string, string> errors)
+        {
+
+            errors = new Dictionary<string, string>();
+
+            if (text != null)
+                this._textRepository.Delete(text);
 
             if (errors.Count == 0)
                 this.Commit();

@@ -71,6 +71,10 @@ namespace DH.Helpdesk.Dal.Repositories
         IEnumerable<TextTranslationLanguageList> ReturnTTsListForIndex(int languageId);
         IEnumerable<TextTranslationList> ReturnTTsListForNew();
         string GetTTByLanguageId(int textid, int languageId);
+
+        TextTranslation GetTTByIdAndLanguageId(int textid, int langaugeId);
+        TextTranslation GetTTById(int textid);
+        List<TextTranslationLanguageList> GetTextTranslationByTextId(int textId);
     }
 
     public class TextTranslationRepository : RepositoryBase<TextTranslation>, ITextTranslationRepository
@@ -85,6 +89,28 @@ namespace DH.Helpdesk.Dal.Repositories
             return this.DataContext.TextTranslations.Where(tt => tt.Text_Id == textid && tt.Language_Id == languageId).Select(tt => tt.TextTranslated).SingleOrDefault();
            
 
+        }
+
+        public TextTranslation GetTTByIdAndLanguageId(int textid, int languageId)
+        {
+
+            TextTranslation tt = (from t in this.DataContext.Set<TextTranslation>()
+                                  where t.Text_Id == textid && t.Language_Id == languageId
+                           select t).FirstOrDefault();
+
+
+            return tt;
+        }
+
+        public TextTranslation GetTTById(int textid)
+        {
+
+            TextTranslation tt = (from t in this.DataContext.Set<TextTranslation>()
+                                  where t.Text_Id == textid
+                                  select t).FirstOrDefault();
+
+
+            return tt;
         }
 
         public List<Translation2> FindTranslations()
@@ -131,6 +157,21 @@ namespace DH.Helpdesk.Dal.Repositories
                         };
 
             return query.OrderBy(x => x.Text_Id);
+        }
+
+        public List<TextTranslationLanguageList> GetTextTranslationByTextId(int textId)
+        {
+            var query = from tt in this.DataContext.TextTranslations
+                        where tt.Text_Id == textId
+                        group tt by new { tt.TextTranslation_Id, tt.TextTranslated, tt.Text_Id } into g
+                        select new TextTranslationLanguageList
+                        {
+                            Text_Id = g.Key.Text_Id,
+                            TextTranslation_Id = g.Key.TextTranslation_Id,
+                            TranslationName = g.Key.TextTranslated,
+                        };
+
+            return query.ToList();
         }
 
         public IEnumerable<TextTranslationLanguageList> ReturnTTsListForIndex(int languageId)

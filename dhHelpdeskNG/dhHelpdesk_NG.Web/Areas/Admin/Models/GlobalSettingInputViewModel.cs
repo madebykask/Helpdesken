@@ -61,7 +61,7 @@
     {
         public Text Text { get; set; }
 
-        public string TextTranslation { get; set; }
+        public TextTranslation TextTranslation { get; set; }
 
         public IEnumerable<TextTranslation> TextTranslations { get; set; }
         public IEnumerable<TextTranslationList> ListForNew { get; set; }
