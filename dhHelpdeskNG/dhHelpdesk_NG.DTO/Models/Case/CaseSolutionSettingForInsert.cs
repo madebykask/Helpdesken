@@ -2,17 +2,16 @@
 {
     using System;
 
-    using DH.Helpdesk.Domain.Cases.Settings;
+    using DH.Helpdesk.Common.Enums.Settings;
 
     public class CaseSolutionSettingForInsert : CaseSolutionSetting
     {
         public CaseSolutionSettingForInsert(
             int caseSolutionId,
             CaseSolutionFields caseSolutionField,
-            bool isReadonly,
-            bool isShow,
+            CaseSolutionModes caseSolutionMode,
             DateTime createdDate)
-            : base(caseSolutionField, isReadonly, isShow)
+            : base(caseSolutionField, caseSolutionMode)
         {
             this.CaseSolutionId = caseSolutionId;
             this.CreatedDate = createdDate;

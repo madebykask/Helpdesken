@@ -1,12 +1,11 @@
 ﻿namespace DH.Helpdesk.Dal.Repositories.Cases
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.Common.Extensions.Boolean;
-    using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
 
@@ -24,10 +23,13 @@
             this.Map(entity, businessModel);
 
             entity.CaseSolution_Id = businessModel.CaseSolutionId;
+            entity.ChangedDate = DateTime.Now; // todo
             entity.CreatedDate = businessModel.CreatedDate;
+
+            this.DbSet.Add(entity);
         }
 
-        public void Add(ReadOnlyCollection<CaseSolutionSettingForInsert> businessModels)
+        public void Add(IEnumerable<CaseSolutionSettingForInsert> businessModels)
         {
             foreach (CaseSolutionSettingForInsert businessModel in businessModels)
             {
@@ -37,13 +39,13 @@
 
         public void Update(CaseSolutionSettingForUpdate businessModel)
         {
-            var entity = this.DbSet.Find(businessModel.Id);
+            Domain.Cases.CaseSolutionSetting entity = this.DbSet.Find(businessModel.Id);
             this.Map(entity, businessModel);
 
             entity.ChangedDate = businessModel.ChangedDate;
         }
 
-        public void Update(ReadOnlyCollection<CaseSolutionSettingForUpdate> businessModels)
+        public void Update(IEnumerable<CaseSolutionSettingForUpdate> businessModels)
         {
             foreach (CaseSolutionSettingForUpdate businessModel in businessModels)
             {
@@ -55,13 +57,13 @@
         {
             var anonymus =
                 this.DbSet.Where(x => x.CaseSolution_Id == caseSolutionId)
-                    .Select(x => new { x.Id, x.CaseSolutionField, x.Readonly, x.Show })
+                    .Select(x => new { x.Id, x.CaseSolutionField, x.CaseSolutionMode })
                     .ToList();
 
-            var businessModels =
+            List<CaseSolutionSettingOverview> businessModels =
                 anonymus.Select(
                     x =>
-                    new CaseSolutionSettingOverview(x.Id, x.CaseSolutionField, x.Readonly.ToBool(), x.Show.ToBool()))
+                    new CaseSolutionSettingOverview(x.Id, x.CaseSolutionField, x.CaseSolutionMode))
                     .ToList();
 
             return new ReadOnlyCollection<CaseSolutionSettingOverview>(businessModels);
@@ -76,8 +78,7 @@
         private void Map(Domain.Cases.CaseSolutionSetting entity, CaseSolutionSetting businessModel)
         {
             entity.CaseSolutionField = businessModel.CaseSolutionField;
-            entity.Readonly = businessModel.IsReadonly.ToInt();
-            entity.Show = businessModel.IsShow.ToInt();
+            entity.CaseSolutionMode = businessModel.CaseSolutionMode;
         }
     }
 }

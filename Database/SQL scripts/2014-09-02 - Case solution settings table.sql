@@ -12,8 +12,7 @@ CREATE TABLE [dbo].[tblCaseSolutionFieldSettings](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[CaseSolution_Id] [int] NOT NULL,
 	[FieldName_Id] [int] NOT NULL,
-	[Readonly] [int] NOT NULL,
-	[Show] [int] NOT NULL,
+	[Mode] [int] NOT NULL,
 	[CreatedDate] [datetime] NOT NULL,
 	[ChangedDate] [datetime] NOT NULL,
  CONSTRAINT [PK_tblCaseSolutionFieldSettings] PRIMARY KEY CLUSTERED 
@@ -24,10 +23,7 @@ CREATE TABLE [dbo].[tblCaseSolutionFieldSettings](
 
 GO
 
-ALTER TABLE [dbo].[tblCaseSolutionFieldSettings] ADD  CONSTRAINT [DF_tblCaseSolutionFieldSettings_Readonly]  DEFAULT ((0)) FOR [Readonly]
-GO
-
-ALTER TABLE [dbo].[tblCaseSolutionFieldSettings] ADD  CONSTRAINT [DF_tblCaseSolutionFieldSettings_Show]  DEFAULT ((0)) FOR [Show]
+ALTER TABLE [dbo].[tblCaseSolutionFieldSettings] ADD  CONSTRAINT [DF_tblCaseSolutionFieldSettings_Mode]  DEFAULT ((0)) FOR [Mode]
 GO
 
 ALTER TABLE [dbo].[tblCaseSolutionFieldSettings] ADD  CONSTRAINT [DF_tblCaseSolutionFieldSettings_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
@@ -45,4 +41,8 @@ GO
 
 ALTER TABLE [dbo].[tblCaseSolutionFieldSettings]
 ADD CONSTRAINT [DF_tblCaseSolutionFieldSettings_UNIQUE] UNIQUE (CaseSolution_Id, FieldName_Id)
+GO
+
+ALTER TABLE [dbo].[tblCaseSolutionFieldSettings]
+ADD CONSTRAINT [DF_tblCaseSolutionFieldSettings_Mode_Check] CHECK (Mode >= 1 AND Mode <= 3)
 GO

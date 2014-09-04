@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Dal.Repositories.Cases
 {
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
 
     using DH.Helpdesk.BusinessData.Models.Case;
@@ -7,9 +8,9 @@
 
     public interface ICaseSolutionSettingRepository : INewRepository
     {
-        void Add(ReadOnlyCollection<CaseSolutionSettingForInsert> businessModels);
+        void Add(IEnumerable<CaseSolutionSettingForInsert> businessModels);
 
-        void Update(ReadOnlyCollection<CaseSolutionSettingForUpdate> businessModels);
+        void Update(IEnumerable<CaseSolutionSettingForUpdate> businessModels);
 
         ReadOnlyCollection<CaseSolutionSettingOverview> Find(int caseSolutionId);
 

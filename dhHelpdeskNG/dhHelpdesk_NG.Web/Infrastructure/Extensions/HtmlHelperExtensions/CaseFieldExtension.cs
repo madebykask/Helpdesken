@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 {
     using System.Collections.Generic;
+    using System.Security.Cryptography.X509Certificates;
     using System.Text;
     using System.Web.Mvc;
 
@@ -50,7 +51,7 @@
                 result.Append(tag);
             }
 
-            return MvcHtmlString.Create(result.ToString());            
+            return MvcHtmlString.Create(result.ToString());
         }
     }
 }

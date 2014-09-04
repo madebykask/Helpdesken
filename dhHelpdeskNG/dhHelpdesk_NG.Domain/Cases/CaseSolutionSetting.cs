@@ -2,7 +2,7 @@
 {
     using global::System;
 
-    using DH.Helpdesk.Domain.Cases.Settings;
+    using DH.Helpdesk.Common.Enums.Settings;
 
     public class CaseSolutionSetting : Entity
     {
@@ -10,9 +10,7 @@
 
         public CaseSolutionFields CaseSolutionField { get; set; }
 
-        public int Readonly { get; set; }
-
-        public int Show { get; set; }
+        public CaseSolutionModes CaseSolutionMode { get; set; }
 
         public DateTime CreatedDate { get; set; }
 

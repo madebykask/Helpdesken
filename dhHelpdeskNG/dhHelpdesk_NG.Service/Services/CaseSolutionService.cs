@@ -8,9 +8,8 @@ namespace DH.Helpdesk.Services.Services
 
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Dal.Repositories.Cases;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.BusinessData;
-
 
     public interface ICaseSolutionService
     {
@@ -38,17 +37,22 @@ namespace DH.Helpdesk.Services.Services
         private readonly ICaseSolutionRepository _caseSolutionRepository;
         private readonly ICaseSolutionCategoryRepository _caseSolutionCategoryRepository;
         private readonly ICaseSolutionScheduleRepository _caseSolutionScheduleRepository;
+
+        private readonly ICaseSolutionSettingRepository caseSolutionSettingRepository;
+
         private readonly IUnitOfWork _unitOfWork;
 
         public CaseSolutionService(
             ICaseSolutionRepository caseSolutionRepository,
             ICaseSolutionCategoryRepository caseSolutionCategoryRepository,
             ICaseSolutionScheduleRepository caseSolutionScheduleRepository,
+            ICaseSolutionSettingRepository caseSolutionSettingRepository,
             IUnitOfWork unitOfWork)
         {
             this._caseSolutionRepository = caseSolutionRepository;
             this._caseSolutionCategoryRepository = caseSolutionCategoryRepository;
             this._caseSolutionScheduleRepository = caseSolutionScheduleRepository;
+            this.caseSolutionSettingRepository = caseSolutionSettingRepository;
             this._unitOfWork = unitOfWork;
         }
 
@@ -61,13 +65,13 @@ namespace DH.Helpdesk.Services.Services
         {
             List<CaseTemplateCategoryNode> ret1 = new List<CaseTemplateCategoryNode>();
 
-            List<CaseTemplateCategoryNode> ret2 = new List<CaseTemplateCategoryNode>();            
-            
+            List<CaseTemplateCategoryNode> ret2 = new List<CaseTemplateCategoryNode>();
+
             var noneCatCaseSolutions = _caseSolutionRepository.GetMany(s => s.Customer_Id == customerId && s.CaseSolutionCategory_Id == null &&
                                                                         (s.WorkingGroup.UserWorkingGroups.Select(
                                                                          x => x.User_Id).Contains(userId) ||
-                                                                         s.WorkingGroup_Id == null)).OrderBy(cs=> cs.Name);                        
-                
+                                                                         s.WorkingGroup_Id == null)).OrderBy(cs => cs.Name);
+
             foreach (var casetemplate in noneCatCaseSolutions)
             {
                 CaseTemplateCategoryNode noneCategory = new CaseTemplateCategoryNode();
@@ -77,7 +81,7 @@ namespace DH.Helpdesk.Services.Services
                 ret1.Add(noneCategory);
             }
 
-            
+
 
 
             var allCategory =
@@ -121,7 +125,7 @@ namespace DH.Helpdesk.Services.Services
                 if (curLen > maxLen)
                     maxLen = curLen;
             }
-            
+
             foreach (var node in ret2)
             {
                 curLen = node.CategoryName.Length;
@@ -134,7 +138,7 @@ namespace DH.Helpdesk.Services.Services
             {
                 CaseTemplateCategoryNode separateLine = new CaseTemplateCategoryNode();
                 separateLine.CategoryId = 0;
-                separateLine.CategoryName = line.PadLeft(maxLen+5, '_');
+                separateLine.CategoryName = line.PadLeft(maxLen + 5, '_');
                 separateLine.IsRootTemplate = false;
                 ret1.Add(separateLine);
             }
@@ -170,25 +174,25 @@ namespace DH.Helpdesk.Services.Services
                                       || x.Text_Internal.ToLower().Contains(SearchCaseSolutions.SearchCss)
                                    );
             }
-                                    //|| x.ReportedBy.Contains(SearchCaseSolutions.SearchCss) 
+            //|| x.ReportedBy.Contains(SearchCaseSolutions.SearchCss) 
 
             if (!string.IsNullOrEmpty(SearchCaseSolutions.SortBy) && (SearchCaseSolutions.SortBy != "undefined"))
             {
                 switch (SearchCaseSolutions.SortBy)
                 {
-                        // For fields which are from other Entities 
-                    case "CaseType":                        
+                    // For fields which are from other Entities 
+                    case "CaseType":
                         if (SearchCaseSolutions.Ascending)
-                            query = query.OrderBy(l => (l.CaseType != null ? l.CaseType.Name: string.Empty));
+                            query = query.OrderBy(l => (l.CaseType != null ? l.CaseType.Name : string.Empty));
                         else
-                            query = query.OrderByDescending(l => (l.CaseType != null ? l.CaseType.Name : string.Empty));                                                    
+                            query = query.OrderByDescending(l => (l.CaseType != null ? l.CaseType.Name : string.Empty));
                         break;
 
-                    case "PerformerUser":                       
+                    case "PerformerUser":
                         if (SearchCaseSolutions.Ascending)
                             query = query.OrderBy(l => (l.PerformerUser != null ? l.PerformerUser.FirstName : string.Empty));
                         else
-                            query = query.OrderByDescending(l => (l.PerformerUser != null ? l.PerformerUser.FirstName : string.Empty));                                                    
+                            query = query.OrderByDescending(l => (l.PerformerUser != null ? l.PerformerUser.FirstName : string.Empty));
                         break;
 
                     case "Priority":
@@ -216,7 +220,7 @@ namespace DH.Helpdesk.Services.Services
                         if (SearchCaseSolutions.Ascending)
                             query = query.OrderBy(x => x.GetType().GetProperty(SearchCaseSolutions.SortBy).GetValue(x, null));
                         else
-                            query = query.OrderByDescending(x => x.GetType().GetProperty(SearchCaseSolutions.SortBy).GetValue(x, null));                        
+                            query = query.OrderByDescending(x => x.GetType().GetProperty(SearchCaseSolutions.SortBy).GetValue(x, null));
                         break;
                 }
             }
@@ -307,7 +311,7 @@ namespace DH.Helpdesk.Services.Services
             caseSolution.ReportedBy = caseSolution.ReportedBy ?? string.Empty;
             caseSolution.Text_External = caseSolution.Text_External ?? string.Empty;
             caseSolution.Text_Internal = caseSolution.Text_Internal ?? string.Empty;
-            
+
             //this.CheckRequiredFields(caseSolution, CaseFieldSetting, out errors);
 
             if (caseSolution.Id == 0)
@@ -368,7 +372,7 @@ namespace DH.Helpdesk.Services.Services
                 if (string.IsNullOrEmpty(caseSolution.Priority_Id.ToString()) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "Priority_Id").First().Required)))
                     errors.Add("Priority", "Priority_Id");
             }
-                           
+
         }
 
 
@@ -381,12 +385,12 @@ namespace DH.Helpdesk.Services.Services
 
             if (string.IsNullOrEmpty(caseSolutionCategory.Name))
                 errors.Add("CaseSolutionCategory.Name", "Du måste ange en ärendemallskategori");
-            
+
             if (caseSolutionCategory.Id == 0)
                 this._caseSolutionCategoryRepository.Add(caseSolutionCategory);
-            else            
+            else
                 this._caseSolutionCategoryRepository.Update(caseSolutionCategory);
-            
+
 
             if (caseSolutionCategory.IsDefault == 1)
                 this._caseSolutionCategoryRepository.ResetDefault(caseSolutionCategory.Id);

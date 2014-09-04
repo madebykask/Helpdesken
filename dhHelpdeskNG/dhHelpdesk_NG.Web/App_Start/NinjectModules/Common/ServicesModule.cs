@@ -103,6 +103,7 @@
             this.Bind<IPlaceService>().To<PlaceService>();
             this.Bind<IOrganizationService>().To<OrganizationService>();
             this.Bind<IInvoiceArticleService>().To<InvoiceArticleService>();
+            this.Bind<ICaseSolutionSettingService>().To<CaseSolutionSettingService>();
         }
 
         #endregion

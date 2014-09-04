@@ -1,18 +1,22 @@
 ﻿
 namespace DH.Helpdesk.Web.Controllers
 {
+    using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
     using System.Web.Mvc;
 
+    using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+    using DH.Helpdesk.Common.Enums.Settings;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Requests.Cases;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Models;
 
-    public class CaseSolutionController : BaseController
+    public class CaseSolutionController : UserInteractionController
     {
         private readonly ICaseFieldSettingService _caseFieldSettingService;
         private readonly ICaseSolutionService _caseSolutionService;
@@ -26,6 +30,8 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IWorkingGroupService _workingGroupService;
         private readonly IDepartmentService _departmentService;
 
+        private readonly ICaseSolutionSettingService caseSolutionSettingService;
+
         public CaseSolutionController(
             ICaseFieldSettingService caseFieldSettingService,
             ICaseSolutionService caseSolutionService,
@@ -38,7 +44,8 @@ namespace DH.Helpdesk.Web.Controllers
             IUserService userService,
             IWorkingGroupService workingGroupService,
             IDepartmentService departmentService,
-            IMasterDataService masterDataService)
+            IMasterDataService masterDataService,
+            ICaseSolutionSettingService caseSolutionSettingService)
             : base(masterDataService)
         {
             this._caseFieldSettingService = caseFieldSettingService;
@@ -52,6 +59,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._userService = userService;
             this._workingGroupService = workingGroupService;
             this._departmentService = departmentService;
+            this.caseSolutionSettingService = caseSolutionSettingService;
         }
 
         [HttpPost]
@@ -61,11 +69,11 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         public ActionResult Index()
-        {            
+        {
             var model = this.IndexInputViewModel();
             CaseSolutionSearch CS = new CaseSolutionSearch();
             if (SessionFacade.CurrentCaseSolutionSearch != null)
-            {                
+            {
                 CS = SessionFacade.CurrentCaseSolutionSearch;
                 model.CaseSolutions = this._caseSolutionService.SearchAndGenerateCaseSolutions(SessionFacade.CurrentCustomer.Id, CS);
                 model.SearchCss = CS.SearchCss;
@@ -77,10 +85,10 @@ namespace DH.Helpdesk.Web.Controllers
                 CS.Ascending = true;
                 SessionFacade.CurrentCaseSolutionSearch = CS;
             }
-            
+
 
             if (string.IsNullOrEmpty(SessionFacade.FindActiveTab("CaseSolution")))
-                SessionFacade.SaveActiveTab("CaseSolution", "CaseTemplate");           
+                SessionFacade.SaveActiveTab("CaseSolution", "CaseTemplate");
 
             return this.View(model);
         }
@@ -115,37 +123,40 @@ namespace DH.Helpdesk.Web.Controllers
                 CS = SessionFacade.CurrentCaseSolutionSearch;
             CS.Ascending = !CS.Ascending;
             CS.SortBy = fieldName;
-            SessionFacade.CurrentCaseSolutionSearch = CS;            
+            SessionFacade.CurrentCaseSolutionSearch = CS;
         }
 
         public ActionResult New(int? backToPageId)
-        {            
+        {
             var caseSolution = new CaseSolution { Customer_Id = SessionFacade.CurrentCustomer.Id };
 
             if (backToPageId == null)
                 ViewBag.PageId = 0;
             else
                 ViewBag.PageId = backToPageId;
-            
+
             if (caseSolution == null)
                 return new HttpNotFoundResult("No case solution found...");
 
             var model = this.CreateInputViewModel(caseSolution);
-            
+
             return this.View(model);
         }
 
 
         [HttpPost]
-        public ActionResult New(CaseSolution caseSolution, CaseSolutionInputViewModel caseSolutionInputViewModel, int PageId)
+        public ActionResult New(CaseSolution caseSolution, CaseSolutionInputViewModel caseSolutionInputViewModel, CaseSolutionSettingModel[] caseSolutionSettingModels, int PageId)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
             IList<CaseFieldSetting> CheckMandatory = null;//_caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id);
             this.TempData["RequiredFields"] = null;
 
             var caseSolutionSchedule = this.CreateCaseSolutionSchedule(caseSolutionInputViewModel);
-                       
+
             this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
+
+            CaseSettingsSolutionAggregate settingsSolutionAggregate = this.CreateCaseSettingsSolutionAggregateForInsert(caseSolutionInputViewModel.CaseSolution.Id, caseSolutionSettingModels);
+            this.caseSolutionSettingService.AddCaseSolutionSettings(settingsSolutionAggregate);
 
             if (errors.Count == 0)
             {
@@ -164,18 +175,18 @@ namespace DH.Helpdesk.Web.Controllers
             this.TempData["RequiredFields"] = errors;
 
             var model = this.CreateInputViewModel(caseSolution);
-            
+
             return this.View(model);
         }
 
         public ActionResult NewCategory()
-        {                        
+        {
             return this.View(new CaseSolutionCategory() { Customer_Id = SessionFacade.CurrentCustomer.Id });
         }
 
         [HttpPost]
         public ActionResult NewCategory(CaseSolutionCategory caseSolutionCategory)
-        {            
+        {
             IDictionary<string, string> errors = new Dictionary<string, string>();
             this._caseSolutionService.SaveCaseSolutionCategory(caseSolutionCategory, out errors);
 
@@ -188,7 +199,7 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult Edit(int id, int? backToPageId)
         {
             var caseSolution = this._caseSolutionService.GetCaseSolution(id);
-            
+
             if (caseSolution == null)
                 return new HttpNotFoundResult("No case solution found...");
 
@@ -203,7 +214,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(CaseSolutionInputViewModel caseSolutionInputViewModel, int PageId)
+        public ActionResult Edit(CaseSolutionInputViewModel caseSolutionInputViewModel, CaseSolutionSettingModel[] caseSolutionSettingModels, int PageId)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
             IList<CaseFieldSetting> CheckMandatory = null; //_caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id); 
@@ -212,20 +223,26 @@ namespace DH.Helpdesk.Web.Controllers
             var caseSolutionSchedule = this.CreateCaseSolutionSchedule(caseSolutionInputViewModel);
             this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
 
+            CaseSettingsSolutionAggregate settingsSolutionAggregate =
+                this.CreateCaseSettingsSolutionAggregateForUpdate(
+                    caseSolutionInputViewModel.CaseSolution.Id,
+                    caseSolutionSettingModels);
+            this.caseSolutionSettingService.UpdateCaseSolutionSettings(settingsSolutionAggregate);
+
             if (errors.Count == 0)
             {
                 switch (PageId) // back to refrence page
-                {                    
+                {
                     case 1:
                         return this.RedirectToAction("index", "Cases");
                         break;
 
                     default:
                         return this.RedirectToAction("index", "casesolution");
-                    
+
                 }
-            }                
-            
+            }
+
             this.TempData["RequiredFields"] = errors;
             var model = this.CreateInputViewModel(caseSolutionInputViewModel.CaseSolution);
 
@@ -233,7 +250,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         public ActionResult EditCategory(int id)
-        {            
+        {
             var caseSolutionCategory = this._caseSolutionService.GetCaseSolutionCategory(id);
 
             if (caseSolutionCategory == null)
@@ -273,7 +290,7 @@ namespace DH.Helpdesk.Web.Controllers
             else
             {
                 this.TempData.Add("Error", "");
-                return this.RedirectToAction("edit", "casesolution", new {id = id});
+                return this.RedirectToAction("edit", "casesolution", new { id = id });
             }
         }
 
@@ -291,8 +308,8 @@ namespace DH.Helpdesk.Web.Controllers
 
         private CaseSolutionIndexViewModel IndexInputViewModel()
         {
-            var activeTab =  SessionFacade.FindActiveTab("CaseSolution");
-            activeTab = (activeTab == null)?"CaseTemplate":activeTab;
+            var activeTab = SessionFacade.FindActiveTab("CaseSolution");
+            activeTab = (activeTab == null) ? "CaseTemplate" : activeTab;
             var model = new CaseSolutionIndexViewModel(activeTab)
             {
                 CaseSolutions = this._caseSolutionService.GetCaseSolutions(SessionFacade.CurrentCustomer.Id),
@@ -315,7 +332,7 @@ namespace DH.Helpdesk.Web.Controllers
                 }).ToList(),
 
                 CaseTypes = this._caseTypeService.GetCaseTypes(SessionFacade.CurrentCustomer.Id),
-                
+
                 CaseWorkingGroups = this._workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.WorkingGroupName,
@@ -328,7 +345,7 @@ namespace DH.Helpdesk.Web.Controllers
                     Value = x.Id.ToString()
                 }).ToList(),
                 FinishingCauses = this._finishingCauseService.GetFinishingCauses(SessionFacade.CurrentCustomer.Id),
-                
+
                 PerformerUsers = this._userService.GetUsers().Select(x => new SelectListItem
                 {
                     Text = x.SurName + " " + x.FirstName,
@@ -360,7 +377,7 @@ namespace DH.Helpdesk.Web.Controllers
                     Text = x.DepartmentName,
                     Value = x.Id.ToString()
                 }).ToList()
-                               
+
             };
 
             if (model.CaseSolution.Id == 0)
@@ -434,11 +451,82 @@ namespace DH.Helpdesk.Web.Controllers
                 }
             }
 
+            model.CaseSolutionSettingModels = this.CreateSolutionSettingModels(caseSolution.Id);
+
             return model;
         }
 
+        private List<CaseSolutionSettingModel> CreateSolutionSettingModels(int caseSolutionId)
+        {
+            List<CaseSolutionSettingModel> model;
+            if (caseSolutionId == 0)
+            {
+                List<CaseSolutionSettingModel> settings = this.CreateDefaultCaseSolutionSettingModels();
+
+                model = settings;
+            }
+            else
+            {
+                ReadOnlyCollection<CaseSolutionSettingOverview> settingOverviews = this.caseSolutionSettingService.GetCaseSolutionSettingOverviews(caseSolutionId);
+
+                if (settingOverviews.Any() == false)
+                {
+                    List<CaseSolutionSettingModel> settings = this.CreateDefaultCaseSolutionSettingModels();
+
+                    model = settings;
+                }
+                else
+                {
+                    model =
+                        settingOverviews.Select(
+                            x => new CaseSolutionSettingModel(x.CaseSolutionField, x.CaseSolutionMode) { Id = x.Id })
+                            .ToList();
+                }
+            }
+
+            return model;
+        }
+
+        private List<CaseSolutionSettingModel> CreateDefaultCaseSolutionSettingModels()
+        {
+            List<CaseSolutionSettingModel> settings = (from caseSolutionFields in (CaseSolutionFields[])Enum.GetValues(typeof(CaseSolutionFields))
+                            select new CaseSolutionSettingModel(caseSolutionFields, CaseSolutionModes.FieldAppearance))
+                .ToList();
+            return settings;
+        }
+
+        private CaseSettingsSolutionAggregate CreateCaseSettingsSolutionAggregateForUpdate(
+            int caseSolutionId,
+            IEnumerable<CaseSolutionSettingModel> caseSolutionSettingModels)
+        {
+            List<CaseSolutionSettingForWrite> businessModels =
+                caseSolutionSettingModels.Select(
+                    x => new CaseSolutionSettingForWrite(x.CaseSolutionField, x.CaseSolutionMode) { Id = x.Id })
+                    .ToList();
+
+            return this.CreateCaseSettingsSolutionAggregate(caseSolutionId, businessModels);
+        }
+
+        private CaseSettingsSolutionAggregate CreateCaseSettingsSolutionAggregateForInsert(
+        int caseSolutionId,
+        IEnumerable<CaseSolutionSettingModel> caseSolutionSettingModels)
+        {
+            List<CaseSolutionSettingForWrite> businessModels =
+                caseSolutionSettingModels.Select(
+                    x => new CaseSolutionSettingForWrite(x.CaseSolutionField, x.CaseSolutionMode))
+                    .ToList();
+
+            return this.CreateCaseSettingsSolutionAggregate(caseSolutionId, businessModels);
+        }
+
+        private CaseSettingsSolutionAggregate CreateCaseSettingsSolutionAggregate(int caseSolutionId, List<CaseSolutionSettingForWrite> businessModels)
+        {
+            var req = new CaseSettingsSolutionAggregate(caseSolutionId, businessModels, this.OperationContext);
+            return req;
+        }
+
         private CaseSolutionSchedule CreateCaseSolutionSchedule(CaseSolutionInputViewModel caseSolutionInputViewModel)
-        {            
+        {
             int caseSolutionId = caseSolutionInputViewModel.CaseSolution.Id;
             int scheduleMonthly = caseSolutionInputViewModel.ScheduleMonthly;
             int scheduleType = caseSolutionInputViewModel.ScheduleType;
@@ -483,8 +571,8 @@ namespace DH.Helpdesk.Web.Controllers
             }
             else
                 caseSolutionSchedule = null;
-            
-                      
+
+
             return caseSolutionSchedule;
         }
     }

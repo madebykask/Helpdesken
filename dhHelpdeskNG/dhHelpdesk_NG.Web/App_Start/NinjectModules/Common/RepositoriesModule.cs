@@ -254,6 +254,8 @@
             this.Bind<ICaseInvoiceArticleRepository>().To<CaseInvoiceArticleRepository>();
 
             this.Bind<IOperationLogEMailLogRepository>().To<OperationLogEMailLogRepository>();
+
+            this.Bind<ICaseSolutionSettingRepository>().To<CaseSolutionSettingRepository>();
         }
 
         #endregion

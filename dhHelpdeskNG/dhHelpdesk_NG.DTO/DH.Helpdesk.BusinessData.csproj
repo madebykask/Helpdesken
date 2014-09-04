@@ -102,6 +102,7 @@
     <Compile Include="Models\Case\CaseSolutionSetting.cs" />
     <Compile Include="Models\Case\CaseSolutionSettingForInsert.cs" />
     <Compile Include="Models\Case\CaseSolutionSettingForUpdate.cs" />
+    <Compile Include="Models\Case\CaseSolutionSettingForWrite.cs" />
     <Compile Include="Models\Case\CaseSolutionSettingOverview.cs" />
     <Compile Include="Models\Interfaces\IHierarchyItem.cs" />
     <Compile Include="Models\ActionSetting\ActionSetting.cs" />

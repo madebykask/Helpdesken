@@ -1,11 +1,11 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Case
 {
-    using DH.Helpdesk.Domain.Cases.Settings;
+    using DH.Helpdesk.Common.Enums.Settings;
 
     public class CaseSolutionSettingOverview : CaseSolutionSetting
     {
-        public CaseSolutionSettingOverview(int id, CaseSolutionFields caseSolutionField, bool isReadonly, bool isShow)
-            : base(caseSolutionField, isReadonly, isShow)
+        public CaseSolutionSettingOverview(int id, CaseSolutionFields caseSolutionField, CaseSolutionModes caseSolutionMode)
+            : base(caseSolutionField, caseSolutionMode)
         {
             this.Id = id;
         }

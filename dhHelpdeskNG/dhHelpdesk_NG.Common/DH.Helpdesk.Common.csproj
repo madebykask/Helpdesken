@@ -58,6 +58,8 @@
     <Compile Include="Enums\CircularStateId.cs" />
     <Compile Include="Enums\ActionObject.cs" />
     <Compile Include="Enums\LanquageNameId.cs" />
+    <Compile Include="Enums\Settings\CaseSolutionFields.cs" />
+    <Compile Include="Enums\Settings\CaseSolutionModes.cs" />
     <Compile Include="Enums\SortBy.cs" />
     <Compile Include="Exceptions\PropertyNotFoundException.cs" />
     <Compile Include="Extensions\Boolean\BoolExtensions.cs" />

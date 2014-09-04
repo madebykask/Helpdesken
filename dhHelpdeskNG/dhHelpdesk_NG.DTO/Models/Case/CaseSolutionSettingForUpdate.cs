@@ -2,17 +2,16 @@
 {
     using System;
 
-    using DH.Helpdesk.Domain.Cases.Settings;
+    using DH.Helpdesk.Common.Enums.Settings;
 
     public class CaseSolutionSettingForUpdate : CaseSolutionSetting
     {
         public CaseSolutionSettingForUpdate(
             int id,
             CaseSolutionFields caseSolutionField,
-            bool isReadonly,
-            bool isShow,
+            CaseSolutionModes caseSolutionMode,
             DateTime changedDate)
-            : base(caseSolutionField, isReadonly, isShow)
+            : base(caseSolutionField, caseSolutionMode)
         {
             this.Id = id;
             this.ChangedDate = changedDate;

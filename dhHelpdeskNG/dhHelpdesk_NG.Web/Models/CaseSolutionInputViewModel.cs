@@ -3,6 +3,9 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
 
+    using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.Common.Enums.Settings;
+    using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Domain;
 
     public class CaseSolutionIndexViewModel
@@ -47,6 +50,7 @@
         public CaseSolution CaseSolution { get; set; }
         public UserSearch Users { get; set; }
 
+        public IList<CaseSolutionSettingModel> CaseSolutionSettingModels { get; set; }
         public IList<CaseFieldSetting> CaseFieldSettings { get; set; }
         public IList<SelectListItem> CsCategories { get; set; }
         public IList<CaseType> CaseTypes { get; set; }
@@ -59,5 +63,24 @@
         public IList<ProductArea> ProductAreas { get; set; }
         public IList<SelectListItem> Projects { get; set; }
         public IList<SelectListItem> WorkingGroups { get; set; }
+    }
+
+    public class CaseSolutionSettingModel
+    {
+        public CaseSolutionSettingModel()
+        {
+        }
+
+        public CaseSolutionSettingModel(CaseSolutionFields caseSolutionField, CaseSolutionModes caseSolutionMode)
+        {
+            this.CaseSolutionField = caseSolutionField;
+            this.CaseSolutionMode = caseSolutionMode;
+        }
+
+        public int Id { get; set; }
+
+        public CaseSolutionFields CaseSolutionField { get; set; }
+
+        public CaseSolutionModes CaseSolutionMode { get; set; }
     }
 }

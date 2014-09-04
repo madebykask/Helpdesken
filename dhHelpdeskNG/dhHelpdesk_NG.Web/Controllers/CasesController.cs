@@ -88,6 +88,8 @@
 
         private readonly IConfiguration configuration;
 
+        private readonly ICaseSolutionSettingService caseSolutionSettingService;
+
         #endregion
 
         #region Constructor
@@ -138,7 +140,8 @@
             INotifierService notifierService, 
             IInvoiceArticleService invoiceArticleService, 
             IInvoiceArticlesModelFactory invoiceArticlesModelFactory, 
-            IConfiguration configuration)
+            IConfiguration configuration,
+            ICaseSolutionSettingService caseSolutionSettingService)
             : base(masterDataService)
         {
             this._caseService = caseService;
@@ -186,6 +189,7 @@
             this.invoiceArticleService = invoiceArticleService;
             this.invoiceArticlesModelFactory = invoiceArticlesModelFactory;
             this.configuration = configuration;
+            this.caseSolutionSettingService = caseSolutionSettingService;
         }
 
         #endregion
@@ -1579,6 +1583,8 @@
                 if (templateId != null && m.case_.Id == 0)
                 {
                     var caseTemplate = this._caseSolutionService.GetCaseSolution(templateId.Value);
+                    var caseTemplateSettings =
+                        this.caseSolutionSettingService.GetCaseSolutionSettingOverviews(templateId.Value);
                     if (caseTemplate != null)
                     {
                         if (caseTemplate.CaseType_Id != null)

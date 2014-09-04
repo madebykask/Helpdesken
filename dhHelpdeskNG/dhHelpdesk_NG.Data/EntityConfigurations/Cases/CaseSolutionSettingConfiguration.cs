@@ -15,8 +15,7 @@
                 .HasForeignKey(x => x.CaseSolution_Id)
                 .WillCascadeOnDelete(false);
 
-            this.Property(c => c.Readonly).IsRequired();
-            this.Property(c => c.Show).IsRequired();
+            this.Property(c => c.CaseSolutionMode).IsRequired().HasColumnName("Mode");
             this.Property(c => c.CaseSolutionField).IsRequired().HasColumnName("FieldName_Id");
 
             this.Property(x => x.CreatedDate).IsRequired();
