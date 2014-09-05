@@ -3,8 +3,6 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
 
-    using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.Common.Enums.Settings;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Domain;
 
@@ -31,6 +29,11 @@
 
     public class CaseSolutionInputViewModel
     {
+        public CaseSolutionInputViewModel()
+        {
+            this.CaseSolutionSettingModels = CaseSolutionSettingModel.CreateDefaultModel();
+        }
+
         public int Schedule { get; set; }
         public int ScheduleMonthly { get; set; }
         public int ScheduleMonthlyDay { get; set; }
@@ -63,24 +66,5 @@
         public IList<ProductArea> ProductAreas { get; set; }
         public IList<SelectListItem> Projects { get; set; }
         public IList<SelectListItem> WorkingGroups { get; set; }
-    }
-
-    public class CaseSolutionSettingModel
-    {
-        public CaseSolutionSettingModel()
-        {
-        }
-
-        public CaseSolutionSettingModel(CaseSolutionFields caseSolutionField, CaseSolutionModes caseSolutionMode)
-        {
-            this.CaseSolutionField = caseSolutionField;
-            this.CaseSolutionMode = caseSolutionMode;
-        }
-
-        public int Id { get; set; }
-
-        public CaseSolutionFields CaseSolutionField { get; set; }
-
-        public CaseSolutionModes CaseSolutionMode { get; set; }
     }
 }

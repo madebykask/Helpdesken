@@ -16,6 +16,11 @@
 
     public class CaseInputViewModel
     {
+        public CaseInputViewModel()
+        {
+            this.CaseSolutionSettingModels = CaseSolutionSettingModel.CreateDefaultModel();
+        }
+
         public string CaseKey { get; set; }
         public string LogKey { get; set; }
         public string ParantPath_CaseType { get; set; }
@@ -38,7 +43,8 @@
         public IList<CaseFieldSetting> caseFieldSettings { get; set; }
 
         public IEnumerable<CaseFieldSettingsWithLanguage> CaseFieldSettingWithLangauges { get; set; }
-        
+        public IList<CaseSolutionSettingModel> CaseSolutionSettingModels { get; set; }
+
         public IList<CaseType> caseTypes { get; set; }
         public IList<StandardText> standardTexts { get; set; }
         public IList<Category> categories { get; set; }

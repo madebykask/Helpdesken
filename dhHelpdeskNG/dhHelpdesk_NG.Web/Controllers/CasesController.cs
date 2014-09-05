@@ -14,6 +14,7 @@
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+    using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Infrastructure.Context;
@@ -1585,6 +1586,9 @@
                     var caseTemplate = this._caseSolutionService.GetCaseSolution(templateId.Value);
                     var caseTemplateSettings =
                         this.caseSolutionSettingService.GetCaseSolutionSettingOverviews(templateId.Value);
+
+                    m.CaseSolutionSettingModels = CaseSolutionSettingModel.CreateModel(caseTemplateSettings);
+
                     if (caseTemplate != null)
                     {
                         if (caseTemplate.CaseType_Id != null)
@@ -1597,11 +1601,18 @@
                             m.case_.Performer_User_Id = caseTemplate.PerformerUser_Id.Value;
                         }
 
+                        if (caseTemplate.PerformerUser_Id != null)
+                        {
+                            m.case_.Category_Id = caseTemplate.Category_Id.Value;
+                        }
+
                         m.case_.ReportedBy = caseTemplate.ReportedBy;
                         m.case_.Department_Id = caseTemplate.Department_Id;
+                        m.CaseMailSetting.DontSendMailToNotifier = caseTemplate.NoMailToNotifier.ToBool();
                         m.case_.ProductArea_Id = caseTemplate.ProductArea_Id;
                         m.case_.Caption = caseTemplate.Caption;
                         m.case_.Description = caseTemplate.Description;
+                        m.case_.Miscellaneous = caseTemplate.Miscellaneous;
                         m.case_.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
                         m.case_.Priority_Id = caseTemplate.Priority_Id;
                         m.case_.Project_Id = caseTemplate.Project_Id;

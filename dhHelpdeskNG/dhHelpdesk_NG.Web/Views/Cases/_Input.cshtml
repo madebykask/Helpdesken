@@ -1,5 +1,6 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel 
 @using DH.Helpdesk.BusinessData.OldComponents
+@using DH.Helpdesk.Common.Enums.Settings
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 
@@ -66,13 +67,20 @@
                                 <div class="row">
                                     <div class="span12">
                                         <table class="tableform">
-                                            <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ReportedBy.ToString())">
+                                            <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber)">
                                                 <td class="span3">
                                                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ReportedBy)
                                                 </td>
                                                 <td class="span4">
-                                                    @Html.Hidden("ShowReportedBy", Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ReportedBy.ToString()).ShowOnStartPage)  
-                                                    @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off" })
+                                                    @Html.Hidden("ShowReportedBy", Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ReportedBy.ToString()).ShowOnStartPage)
+                                                    @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber))
+                                                    {
+                                                        @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off" })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off", @readonly = true })
+                                                    }  
                                                 </td>
                                                 <td class="span5">
                                                     <a href="#" id="AddNotifier" class="btn">@Translation.Get("Lägg till")</a> 
@@ -270,25 +278,29 @@
                                             <td class="span5"></td>
                                         </tr>                                        
                                     }
-                                    <tr>
+                                    <tr @Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.CaseType_Id, CaseSolutionFields.CaseType)>
                                         <td class="span3">
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.CaseType_Id)
                                         </td>
                                         <td colspan="2">
                                             <div id="divCaseType" class="btn-group">
-                                                <div class="btn" id="divBreadcrumbs_CaseType">@Model.ParantPath_CaseType</div>
-                                                <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                                @{
+                                                    string disabled = Model.IsReadOnly(GlobalEnums.TranslationCaseFields.CaseType_Id, CaseSolutionFields.CaseType) ? "disabled" : string.Empty;
+                                                }
+                                                <div class="btn @disabled" id="divBreadcrumbs_CaseType">@Model.ParantPath_CaseType</div>
+                                                <button class="btn dropdown-toggle" data-toggle="dropdown" @disabled>
                                                     <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu">
                                                     <li><a href="#">@Translation.Get("--")</a></li>
                                                     @Html.CaseTypeDropdownButtonString(Model.caseTypes)
-                                                </ul>                                                
+                                                </ul>
+                                                
                                                 <input type="hidden" id="case__CaseType_Id" name="case_.CaseType_Id" value="@Model.case_.CaseType_Id.supressZero()" />
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString())">
+                                    <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ProductArea_Id, CaseSolutionFields.ProductArea)">
                                         <td>
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ProductArea_Id)
                                         </td>
@@ -432,46 +444,60 @@
                                             @Html.TextBoxFor(model => model.case_.ReferenceNumber, new { maxlength = "200" })
                                         </td>
                                     </tr>
-                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Caption.ToString())">
-                                        <td>
-                                            @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Caption)
-                                        </td>
-                                        <td colspan="2">
-                                            @if (Model.customerUserSetting.CaptionPermission == 1 || Model.case_.Id == 0)
-                                            {                                                
-                                                @Html.TextBoxFor(model => model.case_.Caption, new { maxlength = "60", @class="width90" })
-                                            }
-                                            else
-                                            {                                            
-                                                @Html.TextBoxFor(model => model.case_.Caption, new { maxlength = "60", @readonly = "readonly", @class = "width90" })
-                                            }         
-                                        </td>
-                                    </tr>
-                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Description.ToString())">
+                                        <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Caption, CaseSolutionFields.Caption)">
+                                            <td>
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Caption)
+                                            </td>
+                                            <td colspan="2">
+                                                @if ((Model.customerUserSetting.CaptionPermission == 1 || Model.case_.Id == 0) && !Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Caption, CaseSolutionFields.Caption))
+                                                {                                                
+                                                    @Html.TextBoxFor(model => model.case_.Caption, new { maxlength = "60", @class = "width90" })
+                                                }
+                                                else
+                                                {                                            
+                                                    @Html.TextBoxFor(model => model.case_.Caption, new { maxlength = "60", @readonly = "readonly", @class = "width90" })
+                                                }         
+                                            </td>
+                                        </tr>
+                                        <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Description, CaseSolutionFields.Description)">
                                         <td>
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Description)
                                         </td>
                                         <td colspan="2">
                                             @{
-                                            var descriptionSize = Model.caseFieldSettings.getFieldSize(GlobalEnums.TranslationCaseFields.Description.ToString());
-                                            if (descriptionSize == 0)
+                                                var descriptionSize = Model.caseFieldSettings.getFieldSize(GlobalEnums.TranslationCaseFields.Description.ToString());
+                                                if (descriptionSize == 0)
+                                                {
+                                                    descriptionSize = 5;
+                                                }
+                                            }
+                                            @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Description, CaseSolutionFields.Description))
                                             {
-                                                descriptionSize = 5;
+                                                @Html.TextAreaFor(model => model.case_.Description, new { rows = descriptionSize, @class = "case-description width90" })
                                             }
+                                            else
+                                            {
+                                                @Html.TextAreaFor(model => model.case_.Description, new { rows = descriptionSize, @class = "case-description width90", @readonly = true })
                                             }
-                                            @Html.TextAreaFor(model => model.case_.Description, new { rows = descriptionSize, @class = "case-description width90" })                                                                                        
                                             <img id="caseDescriptionPreview" 
                                                  src="@Url.Content("~/Content/icons/magnifier.png")" 
                                                  class="cursor-pointer" 
                                                  title="@Translation.Get("Förhandsgranska")" />
                                         </td>
                                     </tr>
-                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString())">
+                                    <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Miscellaneous, CaseSolutionFields.Miscellaneous)">
                                         <td>
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Miscellaneous)
                                         </td>
                                         <td colspan="2">
-                                            @Html.TextAreaFor(model => model.case_.Miscellaneous)
+                                            @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Miscellaneous, CaseSolutionFields.Miscellaneous))
+                                            {
+                                                @Html.TextAreaFor(model => model.case_.Miscellaneous)
+                                            }
+                                            else
+                                            {
+                                                @Html.TextAreaFor(model => model.case_.Miscellaneous, new { @readonly = true })
+                                            }
                                         </td>
                                     </tr>
                                     <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString())">
@@ -879,7 +905,7 @@
                     Model.CaseFieldSettingWithLangauges,
                     field,
                     Model.case_.Customer_Id);
-    }    
+    }
 
 }
 

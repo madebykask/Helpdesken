@@ -155,7 +155,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
 
-            CaseSettingsSolutionAggregate settingsSolutionAggregate = this.CreateCaseSettingsSolutionAggregateForInsert(caseSolutionInputViewModel.CaseSolution.Id, caseSolutionSettingModels);
+            CaseSettingsSolutionAggregate settingsSolutionAggregate = this.CreateCaseSettingsSolutionAggregate(caseSolutionInputViewModel.CaseSolution.Id, caseSolutionSettingModels);
             this.caseSolutionSettingService.AddCaseSolutionSettings(settingsSolutionAggregate);
 
             if (errors.Count == 0)
@@ -224,7 +224,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
 
             CaseSettingsSolutionAggregate settingsSolutionAggregate =
-                this.CreateCaseSettingsSolutionAggregateForUpdate(
+                this.CreateCaseSettingsSolutionAggregate(
                     caseSolutionInputViewModel.CaseSolution.Id,
                     caseSolutionSettingModels);
             this.caseSolutionSettingService.UpdateCaseSolutionSettings(settingsSolutionAggregate);
@@ -451,70 +451,32 @@ namespace DH.Helpdesk.Web.Controllers
                 }
             }
 
-            model.CaseSolutionSettingModels = this.CreateSolutionSettingModels(caseSolution.Id);
+            ReadOnlyCollection<CaseSolutionSettingOverview> settingOverviews =
+                    this.caseSolutionSettingService.GetCaseSolutionSettingOverviews(model.CaseSolution.Id);
 
-            return model;
-        }
-
-        private List<CaseSolutionSettingModel> CreateSolutionSettingModels(int caseSolutionId)
-        {
-            List<CaseSolutionSettingModel> model;
-            if (caseSolutionId == 0)
+            if (settingOverviews.Any())
             {
-                List<CaseSolutionSettingModel> settings = this.CreateDefaultCaseSolutionSettingModels();
-
-                model = settings;
-            }
-            else
-            {
-                ReadOnlyCollection<CaseSolutionSettingOverview> settingOverviews = this.caseSolutionSettingService.GetCaseSolutionSettingOverviews(caseSolutionId);
-
-                if (settingOverviews.Any() == false)
-                {
-                    List<CaseSolutionSettingModel> settings = this.CreateDefaultCaseSolutionSettingModels();
-
-                    model = settings;
-                }
-                else
-                {
-                    model =
-                        settingOverviews.Select(
-                            x => new CaseSolutionSettingModel(x.CaseSolutionField, x.CaseSolutionMode) { Id = x.Id })
-                            .ToList();
-                }
+                model.CaseSolutionSettingModels = CaseSolutionSettingModel.CreateModel(settingOverviews);
             }
 
             return model;
         }
 
-        private List<CaseSolutionSettingModel> CreateDefaultCaseSolutionSettingModels()
-        {
-            List<CaseSolutionSettingModel> settings = (from caseSolutionFields in (CaseSolutionFields[])Enum.GetValues(typeof(CaseSolutionFields))
-                            select new CaseSolutionSettingModel(caseSolutionFields, CaseSolutionModes.FieldAppearance))
-                .ToList();
-            return settings;
-        }
-
-        private CaseSettingsSolutionAggregate CreateCaseSettingsSolutionAggregateForUpdate(
+        private CaseSettingsSolutionAggregate CreateCaseSettingsSolutionAggregate(
             int caseSolutionId,
             IEnumerable<CaseSolutionSettingModel> caseSolutionSettingModels)
         {
-            List<CaseSolutionSettingForWrite> businessModels =
-                caseSolutionSettingModels.Select(
-                    x => new CaseSolutionSettingForWrite(x.CaseSolutionField, x.CaseSolutionMode) { Id = x.Id })
-                    .ToList();
+            var businessModels = new List<CaseSolutionSettingForWrite>();
+            foreach (CaseSolutionSettingModel x in caseSolutionSettingModels)
+            {
+                var businessModel = new CaseSolutionSettingForWrite(x.CaseSolutionField, x.CaseSolutionMode);
+                if (x.Id != 0)
+                {
+                    businessModel.Id = x.Id;
+                }
 
-            return this.CreateCaseSettingsSolutionAggregate(caseSolutionId, businessModels);
-        }
-
-        private CaseSettingsSolutionAggregate CreateCaseSettingsSolutionAggregateForInsert(
-        int caseSolutionId,
-        IEnumerable<CaseSolutionSettingModel> caseSolutionSettingModels)
-        {
-            List<CaseSolutionSettingForWrite> businessModels =
-                caseSolutionSettingModels.Select(
-                    x => new CaseSolutionSettingForWrite(x.CaseSolutionField, x.CaseSolutionMode))
-                    .ToList();
+                businessModels.Add(businessModel);
+            }
 
             return this.CreateCaseSettingsSolutionAggregate(caseSolutionId, businessModels);
         }

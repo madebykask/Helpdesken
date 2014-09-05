@@ -1,10 +1,14 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models.User.Input;
+    using DH.Helpdesk.BusinessData.OldComponents;
+    using DH.Helpdesk.Common.Enums.Settings;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Web.Models.Case;
 
     public static class GeneralExtensions
     {
@@ -60,6 +64,33 @@
                 return string.Empty;
             else
                 return "|||||||||||";
+        }
+
+        public static string GetFieldStyle(this CaseInputViewModel model, GlobalEnums.TranslationCaseFields caseFieldName, CaseSolutionFields caseTemplateFieldName)
+        {
+            bool isGlobalVisibility = model.caseFieldSettings.IsFieldVisible(caseFieldName);
+            bool isLocalVisibility = model.CaseSolutionSettingModels.Single(x => x.CaseSolutionField == caseTemplateFieldName).CaseSolutionMode != CaseSolutionModes.Hide;
+
+            if (!isGlobalVisibility || !isLocalVisibility)
+            {
+                return "display:none";
+            }
+
+            return string.Empty;
+        }
+
+        public static bool IsReadOnly(this CaseInputViewModel model, GlobalEnums.TranslationCaseFields caseFieldName, CaseSolutionFields caseTemplateFieldName)
+        {
+            bool isGlobalVisibility = model.caseFieldSettings.IsFieldVisible(caseFieldName);
+            bool isLocalVisibility = model.CaseSolutionSettingModels.Single(x => x.CaseSolutionField == caseTemplateFieldName).CaseSolutionMode != CaseSolutionModes.Hide;
+            bool isReadOnly = model.CaseSolutionSettingModels.Single(x => x.CaseSolutionField == caseTemplateFieldName).CaseSolutionMode == CaseSolutionModes.ReadOnly;
+
+            if (!isGlobalVisibility || !isLocalVisibility)
+            {
+                return false;
+            }
+
+            return isReadOnly;
         }
     }
 }

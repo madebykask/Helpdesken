@@ -111,7 +111,7 @@
         /// </returns>
         public static bool IsFieldVisible(this IList<CaseFieldSetting> fields, GlobalEnums.TranslationCaseFields field)
         {
-            return fields.getCaseSettingsValue(field.ToString()).ShowOnStartPage == 1;
+            return fields.getCaseSettingsValue(field.ToString()).ShowOnStartPage != 0;
         }
 
         public static CaseFieldSetting getCaseSettingsValue(this IList<CaseFieldSetting> cfs, string valueToFind)

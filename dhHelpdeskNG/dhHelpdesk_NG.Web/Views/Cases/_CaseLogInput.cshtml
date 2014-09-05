@@ -1,5 +1,6 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel 
 @using DH.Helpdesk.BusinessData.OldComponents
+@using DH.Helpdesk.Common.Enums.Settings
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 
@@ -74,7 +75,14 @@
                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Text_External) 
                 </td>
                 <td class="span3">
-                    @Html.TextAreaFor(model => model.CaseLog.TextExternal, new { style="height:105px;"})
+                    @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Description, CaseSolutionFields.Description))
+                    {
+                        @Html.TextAreaFor(model => model.CaseLog.TextExternal, new { style = "height:105px;" })
+                    }
+                    else
+                    {
+                        @Html.TextAreaFor(model => model.CaseLog.TextExternal, new { style = "height:105px;", @readonly = true })
+                    }
                 </td>
                 <td>
                     @Html.HiddenFor(model => model.CaseLog.RegUser)  
@@ -91,7 +99,14 @@
                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal) 
                 </td>
                 <td>
-                    @Html.TextAreaFor(model => model.CaseLog.TextInternal, new { style="height:105px;"})
+                    @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Description, CaseSolutionFields.Description))
+                    {
+                        @Html.TextAreaFor(model => model.CaseLog.TextInternal, new { style = "height:105px;" })
+                    }
+                    else
+                    {
+                        @Html.TextAreaFor(model => model.CaseLog.TextInternal, new { style = "height:105px;", @readonly = true })
+                    }
                 </td>
                 <td>
                     <div class="checkbox">
