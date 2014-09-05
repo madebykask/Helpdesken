@@ -1587,7 +1587,10 @@
                     var caseTemplateSettings =
                         this.caseSolutionSettingService.GetCaseSolutionSettingOverviews(templateId.Value);
 
-                    m.CaseSolutionSettingModels = CaseSolutionSettingModel.CreateModel(caseTemplateSettings);
+                    if (caseTemplateSettings.Any())
+                    {
+                        m.CaseSolutionSettingModels = CaseSolutionSettingModel.CreateModel(caseTemplateSettings);
+                    }
 
                     if (caseTemplate != null)
                     {
