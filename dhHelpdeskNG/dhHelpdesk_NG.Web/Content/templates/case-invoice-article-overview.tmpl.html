@@ -1,6 +1,6 @@
 ﻿{{if IsBlank }}    
-    <tr>
-        <td colspan='6'>{{:Name}}</td>
+    <tr data-id='{{:Id}}' title='{{:Description}}'>
+        <td colspan='7'>{{:Name}}</td>
         <td>
             {{if IsInvoiced }}
                 <i class='icon-flag icon-green'></i>
@@ -8,9 +8,10 @@
         <td>                 
     </tr>
 {{else}}    
-    <tr data-id='{{:Id}}'>
+    <tr data-id='{{:Id}}' title='{{:Description}}'>
         <td>{{:Number}}</td>
         <td>{{:Name}}</td>
+        <td>{{:NameEng}}</td>
         <td>{{:Amount}}</td>
         <td>{{:UnitName}}</td>
         <td>{{:Ppu}}</td>

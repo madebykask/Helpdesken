@@ -18,6 +18,8 @@
                 .WillCascadeOnDelete(false);
             this.Property(a => a.Number).IsRequired();
             this.Property(a => a.Name).IsRequired().HasMaxLength(100);
+            this.Property(a => a.NameEng).IsRequired().HasMaxLength(100);
+            this.Property(a => a.Description).IsOptional().HasMaxLength(200);
             this.Property(a => a.UnitId).IsOptional();
             this.HasOptional(a => a.Unit)
                 .WithMany()

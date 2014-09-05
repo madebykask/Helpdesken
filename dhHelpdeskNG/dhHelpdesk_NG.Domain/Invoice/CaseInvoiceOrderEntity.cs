@@ -1,6 +1,5 @@
 ﻿namespace DH.Helpdesk.Domain.Invoice
 {
-    using global::System;
     using global::System.Collections.Generic;
 
     public class CaseInvoiceOrderEntity : Entity
@@ -11,7 +10,9 @@
 
         public short Number { get; set; }
 
-        public DateTime? DeliveryPeriod { get; set; }
+        public string DeliveryPeriod { get; set; }
+
+        public string Reference { get; set; }
 
         public virtual ICollection<CaseInvoiceArticleEntity> Articles { get; set; } 
     }

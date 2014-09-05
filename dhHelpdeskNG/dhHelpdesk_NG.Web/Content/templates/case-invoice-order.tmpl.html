@@ -5,7 +5,8 @@
                 <table class='width100 table table-striped table-bordered table-hover'>
                     <tr>
                         <th>{{:ArtNoHeader}}</th>
-                        <th>{{:DescriptionHeader}}</th>
+                        <th>{{:NameHeader}}</th>
+                        <th>{{:NameEngHeader}}</th>
                         <th>{{:UnitsHeader}}</th>
                         <th>{{:TypeHeader}}</th>
                         <th>{{:PpuHeader}}</th>
@@ -32,12 +33,7 @@
                     {{:DeliveryPeriodTitle}}
                 </td>
                 <td>
-                    <div id="delivery-period{{:Id}}" class="input-append date dateie delivery-period" style="margin-bottom: -7px;">
-                        <input type="text" />
-                        <span class="add-on">
-                            <i class="icon-calendar"></i>
-                        </span>
-                    </div>                                
+                    <input type="text" class="delivery-period" style="margin-bottom: -2px;" value="{{:DeliveryPeriod}}" />                                
                 </td>
             </tr>
             <tr>
@@ -50,7 +46,7 @@
                     {{:ReferenceTitle}}
                 </td>
                 <td>
-                    <input type="text" maxlength="40" autocomplete="Off" class="reference" style="margin-bottom: -2px;" />
+                    <input type="text" maxlength="40" autocomplete="Off" class="reference" style="margin-bottom: -2px;" value="{{:Reference}}" />
                 </td>
             </tr>
         </tbody>

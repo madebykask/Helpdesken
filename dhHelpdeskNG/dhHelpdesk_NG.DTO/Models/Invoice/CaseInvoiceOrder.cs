@@ -1,7 +1,5 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Invoice
 {
-    using System;
-
     public sealed class CaseInvoiceOrder
     {
         public CaseInvoiceOrder(
@@ -9,9 +7,11 @@
                 int invoiceId,
                 CaseInvoice invoice, 
                 short number, 
-                DateTime? deliveryPeriod, 
+                string deliveryPeriod, 
+                string reference,
                 CaseInvoiceArticle[] articles)
         {
+            this.Reference = reference;
             this.Articles = articles;
             this.InvoiceId = invoiceId;
             this.DeliveryPeriod = deliveryPeriod;
@@ -24,9 +24,10 @@
                 int id, 
                 int invoiceId,
                 short number, 
-                DateTime? deliveryPeriod, 
+                string deliveryPeriod, 
+                string reference,
                 CaseInvoiceArticle[] articles) :
-                this(id, invoiceId, null, number, deliveryPeriod, articles)
+                this(id, invoiceId, null, number, deliveryPeriod, reference, articles)
         {
         }
 
@@ -38,7 +39,9 @@
 
         public short Number { get; private set; }
 
-        public DateTime? DeliveryPeriod { get; private set; }
+        public string DeliveryPeriod { get; private set; }
+
+        public string Reference { get; private set; }
 
         public CaseInvoiceArticle[] Articles { get; private set; } 
     }

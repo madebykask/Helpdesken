@@ -418,6 +418,8 @@ $(function () {
                         article.ParentId = a.ParentId;
                         article.Number = a.Number;
                         article.Name = a.Name;
+                        article.NameEng = a.NameEng;
+                        article.Description = a.Description;
                         article.UnitId = a.UnitId;
                         if (a.Unit != null) {
                             article.Unit = new dhHelpdesk.CaseArticles.InvoiceArticleUnit();
@@ -474,6 +476,8 @@ $(function () {
             this.ParentId = null;
             this.Number = null;
             this.Name = null;
+            this.NameEng = null;
+            this.Description = null;
             this.UnitId = null;
             this.Unit = null;
             this.Ppu = null;
@@ -687,6 +691,7 @@ $(function () {
             this.Invoice = null;
             this.Number = null;
             this.DeliveryPeriod = null;
+            this.Reference = null;
             this._articles = [];
             this.Container = null;
 
@@ -746,6 +751,7 @@ $(function () {
                         '"InvoiceId":"' + (this.Invoice.Id > 0 ? this.Invoice.Id : 0) + '", ' +
                         '"Number":"' + this.Number + '", ' +
                         '"DeliveryPeriod":"' + (this.DeliveryPeriod != null ? this.DeliveryPeriod : '') + '", ' +
+                        '"Reference":"' + (this.Reference != null ? this.Reference : '') + '", ' +
                         '"Articles": [' + articlesResult + ']' +
                         '}';
             },
@@ -776,6 +782,7 @@ $(function () {
                 clone.Invoice = this.Invoice;
                 clone.Number = this.Number;
                 clone.DeliveryPeriod = this.DeliveryPeriod;
+                clone.Reference = this.Reference;
                 var articles = this.GetArticles();
                 for (var i = 0; i < articles.length; i++) {
                     clone.AddArticle(articles[i].Clone());
@@ -789,7 +796,7 @@ $(function () {
                 model.Number = this.Number + 1;
                 model.Total = this.GetArticlesTotal();
                 model.DeliveryPeriod = this.DeliveryPeriod != null ? this.DeliveryPeriod : "";
-                model.Reference = this.Reference;
+                model.Reference = this.Reference != null ? this.Reference : "";
                 var articles = this.GetSortedArticles();
                 for (var i = 0; i < articles.length; i++) {
                     model.AddArticle(articles[i].GetViewModel());
@@ -821,18 +828,9 @@ $(function () {
                 });
 
                 var deliveryPeriod = this.Container.find(".delivery-period");
-                deliveryPeriod.datepicker({
-                    format: dhHelpdesk.CaseArticles.DateFormat,
-                    autoclose: true
-                })
-                .on('changeDate', function () {
-                    var date = $(this).find("input").val();
-                    th.DeliveryPeriod = date;
+                deliveryPeriod.blur(function () {
+                    th.DeliveryPeriod = $(this).val();
                 });
-
-                if (this.DeliveryPeriod != null) {
-                    deliveryPeriod.datepicker("setDate", dhHelpdesk.CaseArticles.ParseDate(this.DeliveryPeriod));
-                }
 
                 var reference = this.Container.find(".reference");
                 reference.typeahead(dhHelpdesk.CaseArticles.GetUserSearchOptions());
@@ -938,6 +936,8 @@ $(function () {
                 model.IsBlank = this.IsBlank();
                 model.IsInvoiced = this.IsInvoiced;
                 model.Name = this.Name != null ? this.Name : "";
+                model.NameEng = this.Article != null && this.Article.NameEng != null ? this.Article.NameEng : "";
+                model.Description = this.Article != null && this.Article.Description != null ? this.Article.Description : "";
                 model.Id = this.Id;
                 model.Number = this.GetNumber();
                 model.Amount = this.Amount;
@@ -1025,7 +1025,8 @@ $(function () {
         CaseInvoiceOrderViewModel: function () {
             this.Id = null;
             this.ArtNoHeader = "Art no";
-            this.DescriptionHeader = "Description";
+            this.NameHeader = "Description";
+            this.NameEngHeader = "Description(eng)";
             this.UnitsHeader = "Units";
             this.TypeHeader = "Type";
             this.PpuHeader = "PPU";
@@ -1048,6 +1049,8 @@ $(function () {
             this.IsInvoiced = null;
             this.Id = null;
             this.Name = null;
+            this.NameEng = null;
+            this.Description = null;
             this.Number = null;
             this.Amount = null;
             this.UnitName = null;
@@ -1103,6 +1106,7 @@ $(function () {
                                     order.Id = ord.Id;
                                     order.Number = ord.Number;
                                     order.DeliveryPeriod = ord.DeliveryPeriod;
+                                    order.Reference = ord.Reference;
                                     invoice.AddOrder(order);
                                     if (ord.Articles != null) {
                                         for (var k = 0; k < ord.Articles.length; k++) {
@@ -1114,6 +1118,9 @@ $(function () {
                                                 caseArticle.Article.Id = article.Article.Id;
                                                 caseArticle.Article.ParentId = article.Article.ParentId;
                                                 caseArticle.Article.Number = article.Article.Number;
+                                                caseArticle.Article.Name = article.Article.Name;
+                                                caseArticle.Article.NameEng = article.Article.NameEng;
+                                                caseArticle.Article.Description = article.Article.Description;
                                                 caseArticle.Article.UnitId = article.Article.UnitId;
                                                 if (article.Article.Unit != null) {
                                                     var unit = new dhHelpdesk.CaseArticles.InvoiceArticleUnit();

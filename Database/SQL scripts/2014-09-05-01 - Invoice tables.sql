@@ -48,6 +48,8 @@ CREATE TABLE [dbo].[tblInvoiceArticle]
 	[ParentId] INT NULL,
 	[Number] INT NOT NULL,
 	[Name] NVARCHAR(100) NOT NULL,
+	[NameEng] NVARCHAR(100) NOT NULL,
+	[Description] NVARCHAR(200) NULL,
 	[UnitId] INT NULL,
 	[Ppu] DECIMAL NULL,
 	[ProductAreaId] INT NOT NULL,
@@ -116,7 +118,8 @@ CREATE TABLE [dbo].[tblCaseInvoiceOrder]
 	[Id] INT IDENTITY(1,1) NOT NULL,
 	[InvoiceId] INT NOT NULL,
 	[Number] SMALLINT NOT NULL DEFAULT(0),
-	[DeliveryPeriod] DATETIME NULL
+	[DeliveryPeriod] NVARCHAR(200) NULL,
+	[Reference] NVARCHAR(100) NULL
 	CONSTRAINT [PK_tblCaseInvoiceOrder] PRIMARY KEY CLUSTERED 
 	(
 		[Id] ASC

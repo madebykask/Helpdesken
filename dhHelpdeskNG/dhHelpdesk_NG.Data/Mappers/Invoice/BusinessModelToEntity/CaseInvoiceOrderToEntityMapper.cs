@@ -21,6 +21,7 @@
             entity.InvoiceId = businessModel.InvoiceId;
             entity.Number = businessModel.Number;
             entity.DeliveryPeriod = businessModel.DeliveryPeriod;
+            entity.Reference = businessModel.Reference;
             var articles = new List<CaseInvoiceArticleEntity>();
             foreach (var article in businessModel.Articles)
             {

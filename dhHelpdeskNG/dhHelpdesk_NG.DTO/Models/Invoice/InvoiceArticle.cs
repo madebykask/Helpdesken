@@ -12,6 +12,8 @@
                     InvoiceArticle parent, 
                     int number, 
                     string name, 
+                    string nameEng,
+                    string description,
                     int? unitId, 
                     InvoiceArticleUnit unit, 
                     decimal? ppu, 
@@ -20,6 +22,8 @@
                     int customerId, 
                     CustomerOverview customer)
         {
+            this.Description = description;
+            this.NameEng = nameEng;
             this.Customer = customer;
             this.CustomerId = customerId;
             this.ProductArea = productArea;
@@ -45,6 +49,11 @@
 
         [NotNull]
         public string Name { get; private set; }
+
+        [NotNull]
+        public string NameEng { get; private set; }
+
+        public string Description { get; private set; }
 
         public int? UnitId { get; private set; }
 

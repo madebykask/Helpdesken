@@ -37,6 +37,8 @@
                         entity.Parent != null ? this.Map(entity.Parent) : null,
                         entity.Number,
                         entity.Name,
+                        entity.NameEng,
+                        entity.Description,
                         entity.UnitId,
                         this.unitMapper.Map(entity.Unit),
                         entity.Ppu,

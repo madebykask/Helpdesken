@@ -1,6 +1,5 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.Tools
 {
-    using System;
     using System.Linq;
     using System.Web.Script.Serialization;
 
@@ -26,6 +25,7 @@
                                     o.InvoiceId,
                                     o.Number,
                                     o.DeliveryPeriod,
+                                    o.Reference,
                                     o.Articles
                                     .Select(a => new CaseInvoiceArticle(
                                             a.Id,
@@ -65,7 +65,9 @@
 
             public short Number { get; set; }
 
-            public DateTime? DeliveryPeriod { get; set; }
+            public string DeliveryPeriod { get; set; }
+
+            public string Reference { get; set; }
 
             public CaseInvoiceArticleData[] Articles { get; set; }
         }

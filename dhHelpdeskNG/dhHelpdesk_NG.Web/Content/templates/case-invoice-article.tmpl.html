@@ -1,12 +1,12 @@
 ﻿{{if IsBlank }}
     {{if IsInvoiced }}
-        <tr data-id='{{:Id}}'>
-            <td colspan='6'>{{:Name}}</td>
+        <tr data-id='{{:Id}}' title='{{:Description}}'>
+            <td colspan='7'>{{:Name}}</td>
             <td><i class='icon-flag icon-green'></i></td>
         </tr>
     {{else}}
-        <tr data-id='{{:Id}}'>
-            <td colspan='6'>
+        <tr data-id='{{:Id}}' title='{{:Description}}'>
+            <td colspan='7'>
                 <input onchange='dhHelpdesk.CaseArticles.UpdateArticle($(this).parent().parent())' type='text' class='width80 article-name' maxlength='100' value='{{:Name}}' />
             </td>
             <td>
@@ -16,9 +16,10 @@
     {{/if}}                    
 {{else}}
     {{if IsInvoiced }}
-        <tr data-id='{{:Id}}'>
+        <tr data-id='{{:Id}}' title='{{:Description}}'>
             <td>{{:Number}}</td>
             <td>{{:Name}}</td>
+            <td>{{:NameEng}}</td>
             <td>{{:Amount}}</td>
             <td>{{:UnitName}}</td>
             <td>{{:Ppu}}</td>
@@ -26,9 +27,10 @@
             <td><i class='icon-flag icon-green'></i></td>
         </tr>
     {{else}}
-        <tr data-id='{{:Id}}'>
+        <tr data-id='{{:Id}}' title='{{:Description}}'>
             <td>{{:Number}}</td>
             <td>{{:Name}}</td>
+            <td>{{:NameEng}}</td>
             <td>
                 <input onchange='dhHelpdesk.CaseArticles.UpdateArticle($(this).parent().parent())' type='text' maxlength='5' class='article-amount input-small-important' value='{{:Amount}}' />
             </td>
