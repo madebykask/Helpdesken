@@ -92,6 +92,10 @@ namespace DH.Helpdesk.NewSelfService.NinjectModules.Modules
             this.Bind<IBusinessModelToEntityMapper<CaseInvoice, CaseInvoiceEntity>>()
                 .To<CaseInvoiceToEntityMapper>()
                 .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<CaseInvoiceOrder, CaseInvoiceOrderEntity>>()
+                .To<CaseInvoiceOrderToEntityMapper>()
+                .InSingletonScope();
         }
     }
 }

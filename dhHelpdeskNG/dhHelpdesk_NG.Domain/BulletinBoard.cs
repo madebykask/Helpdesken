@@ -6,7 +6,7 @@ namespace DH.Helpdesk.Domain
     using global::System.Collections.Generic;
     using global::System.ComponentModel.DataAnnotations;
 
-    public class BulletinBoard : Entity, IWorkingGroupEntity
+    public class BulletinBoard : Entity//, IWorkingGroupEntity
     {
         public int Customer_Id { get; set; }
         public int PublicInformation { get; set; }

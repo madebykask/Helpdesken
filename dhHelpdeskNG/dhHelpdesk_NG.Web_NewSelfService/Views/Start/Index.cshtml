@@ -1,4 +1,6 @@
-﻿@{
+﻿@model DH.Helpdesk.NewSelfService.Models.Start.StartPageModel
+
+@{
     ViewBag.Title = "Index";
 }
 
@@ -30,10 +32,20 @@
             <div class="panel panel-default">
                 <div class="panel-heading"><span class="glyphicon glyphicon-star"></span>@Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation) </div>
                 <div class="panel-body">
-                    <p></p>
+                    @*<p></p>
                     <!--<p><strong>Please submit all service requests relevant for September payroll by cut off day which is 17th September 3.00pm</strong></p>-->
                     <p></p>
-                    <hr />
+                    <hr />*@
+
+                    @foreach (var b in Model.BulletinBoard)
+                    {                       
+                      if (DateTime.Now >= b.ShowDate && DateTime.Now <= b.ShowUntilDate )
+                      {
+                        <p> <strong> @Html.DisplayFor(m=> b.ShowDate , "Date")  </strong> <br /> &nbsp;&nbsp; @b.Text </p>
+                      }
+                    }
+                    
+                    
                     <img src="@Url.Content("~/Content/img-profile/ikea-peoplestart.png")" />
                 </div>
             </div>
