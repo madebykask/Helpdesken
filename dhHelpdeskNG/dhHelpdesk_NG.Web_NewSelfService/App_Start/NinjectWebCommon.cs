@@ -50,6 +50,7 @@ namespace DH.Helpdesk.NewSelfService
     using DH.Helpdesk.Dal.Repositories.Invoice;
     using DH.Helpdesk.Dal.Repositories.Invoice.Concrete;
     using DH.Helpdesk.NewSelfService.WebServices;
+    using DH.Helpdesk.Dal.Repositories.Cases;
     
     public static class NinjectWebCommon 
     {
@@ -174,7 +175,8 @@ namespace DH.Helpdesk.NewSelfService
             kernel.Bind<IInvoiceArticleRepository>().To<InvoiceArticleRepository>();
             kernel.Bind<ICaseInvoiceArticleRepository>().To<CaseInvoiceArticleRepository>();
             kernel.Bind<ISSORepository>().To<SSORepository>();
-            kernel.Bind<IBulletinBoardRepository>().To<BulletinBoardRepository>();            
+            kernel.Bind<IBulletinBoardRepository>().To<BulletinBoardRepository>();
+            kernel.Bind<ICaseSolutionSettingRepository>().To<CaseSolutionSettingRepository>();            
                                        
             // Service             
             kernel.Bind<IMasterDataService>().To<MasterDataService>();            
@@ -217,7 +219,8 @@ namespace DH.Helpdesk.NewSelfService
             kernel.Bind<IInvoiceArticleService>().To<InvoiceArticleService>();
             kernel.Bind<ISSOService>().To<SSOService>();
             kernel.Bind<IAMAPIService>().To<AMAPIService>();
-            kernel.Bind<IBulletinBoardService>().To<BulletinBoardService>();            
+            kernel.Bind<IBulletinBoardService>().To<BulletinBoardService>();
+            kernel.Bind<ICaseSolutionSettingService>().To<CaseSolutionSettingService>();            
             
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();
