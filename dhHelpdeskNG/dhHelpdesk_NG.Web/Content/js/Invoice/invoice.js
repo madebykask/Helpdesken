@@ -396,21 +396,41 @@ $(function () {
                 .attr("value", "Invoice articles")
                 .attr("title", "Articles to be invoiced")
                 .addClass("btn");
-            button.click(function () {
+            button.click(function() {
                 var addArticleEl = th._container.find(".articles-params");
                 var articlesSelectContainer = addArticleEl.find(".articles-select-container");
                 articlesSelectContainer.empty();
                 var articlesEl = $("<select class='multiselect articles-params-article'></select>");
                 articlesSelectContainer.append(articlesEl);
 
+                var articles = th.GetInvoiceArticles();
+                if (articles == null || articles.length == 0) {
+                    addArticleEl.hide();
+                    return;
+                } else {
+                    addArticleEl.show();
+                }
+
+                for (var i = 0; i < articles.length; i++) {
+                    var article = articles[i];
+                    articlesEl.append("<option value='" + article.Id + "'>" + article.GetFullName() + "</option>");
+                }
+
+                articlesEl.multiselect();
+                articlesSelectContainer.find("button.multiselect").addClass("min-width-500 max-width-500");
+                th.CreateContainer();
+                th._container.dialog("open");
+            });
+            e.after(button);
+
+            var onChangeProductArea = function () {
+                button.hide();
                 $.getJSON("/invoice/articles?productAreaId=" + th.ProductAreaElement.val(), function (data) {
                     th.ClearInvoiceArticles();
                     if (data == null || data.length == 0) {
-                        addArticleEl.hide();
                         return;
-                    } else {
-                        addArticleEl.show();
                     }
+                    button.show();
                     for (var i = 0; i < data.length; i++) {
                         var a = data[i];
                         var article = new dhHelpdesk.CaseArticles.InvoiceArticle();
@@ -431,7 +451,6 @@ $(function () {
                         article.ProductAreaId = a.ProductAreaId;
                         article.CustomerId = a.CustomerId;
                         th.AddInvoiceArticle(article);
-                        articlesEl.append("<option value='" + article.Id + "'>" + article.GetFullName() + "</option>");
                     }
 
                     var articles = th.GetInvoiceArticles();
@@ -444,15 +463,14 @@ $(function () {
                             }
                         }
                     }
-                })
-                .always(function () {
-                    articlesEl.multiselect();
-                    articlesSelectContainer.find("button.multiselect").addClass("min-width-500 max-width-500");
-                    th.CreateContainer();
-                    th._container.dialog("open");
                 });
+            };
+
+            th.ProductAreaElement.change(function () {
+                onChangeProductArea();
             });
-            e.after(button);
+
+            onChangeProductArea();
         },
 
         IsInteger: function(str) {
