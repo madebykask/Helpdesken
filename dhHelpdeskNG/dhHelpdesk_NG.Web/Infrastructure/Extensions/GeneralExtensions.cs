@@ -79,18 +79,40 @@
             return string.Empty;
         }
 
+        public static string GetFieldStyle(this CaseInputViewModel model, CaseSolutionFields caseTemplateFieldName)
+        {
+            bool isLocalVisibility = model.CaseSolutionSettingModels.Single(x => x.CaseSolutionField == caseTemplateFieldName).CaseSolutionMode != CaseSolutionModes.Hide;
+
+            return !isLocalVisibility ? "display:none" : string.Empty;
+        }
+
         public static bool IsReadOnly(this CaseInputViewModel model, GlobalEnums.TranslationCaseFields caseFieldName, CaseSolutionFields caseTemplateFieldName)
         {
             bool isGlobalVisibility = model.caseFieldSettings.IsFieldVisible(caseFieldName);
             bool isLocalVisibility = model.CaseSolutionSettingModels.Single(x => x.CaseSolutionField == caseTemplateFieldName).CaseSolutionMode != CaseSolutionModes.Hide;
-            bool isReadOnly = model.CaseSolutionSettingModels.Single(x => x.CaseSolutionField == caseTemplateFieldName).CaseSolutionMode == CaseSolutionModes.ReadOnly;
 
             if (!isGlobalVisibility || !isLocalVisibility)
             {
                 return false;
             }
 
+            bool isReadOnly = model.CaseSolutionSettingModels.Single(x => x.CaseSolutionField == caseTemplateFieldName).CaseSolutionMode == CaseSolutionModes.ReadOnly;
+
             return isReadOnly;
+        }
+
+        public static bool IsRequired(this CaseInputViewModel model, GlobalEnums.TranslationCaseFields caseFieldName, CaseSolutionFields caseTemplateFieldName)
+        {
+            bool isGlobalVisibility = model.caseFieldSettings.IsFieldVisible(caseFieldName);
+            bool isLocalVisibility = model.CaseSolutionSettingModels.Single(x => x.CaseSolutionField == caseTemplateFieldName).CaseSolutionMode != CaseSolutionModes.Hide;
+
+            if (!isGlobalVisibility || !isLocalVisibility)
+            {
+                return false;
+            }
+
+            bool isRequired = model.caseFieldSettings.CaseFieldSettingRequiredCheck(caseFieldName.ToString()) == 1;
+            return isRequired;
         }
     }
 }

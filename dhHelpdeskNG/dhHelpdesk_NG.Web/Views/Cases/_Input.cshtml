@@ -93,7 +93,7 @@
                                                 <td class="span4">
                                                     @Html.TextBoxFor(model => model.case_.PersonsName, new { maxlength = "50" })
                                                 </td>
-                                                <td class="span5">
+                                                <td class="span5" style="@Model.GetFieldStyle(CaseSolutionFields.Email)">
                                                     <label class="checkbox">
                                                         @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier) @Translation.Get("Do not send case notifications to user")
                                                     </label>                                                    
@@ -140,7 +140,7 @@
                                                     </select>
                                                 </td>
                                             </tr>
-                                            <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Department_Id.ToString())">
+                                            <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Department_Id, CaseSolutionFields.Department)">
                                                 <td>
                                                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Department_Id)
                                                 </td>
@@ -278,7 +278,7 @@
                                             <td class="span5"></td>
                                         </tr>                                        
                                     }
-                                    <tr @Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.CaseType_Id, CaseSolutionFields.CaseType)>
+                                    <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.CaseType_Id, CaseSolutionFields.CaseType)">
                                         <td class="span3">
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.CaseType_Id)
                                         </td>
@@ -379,7 +379,7 @@
                                             </select>
                                         </td>
                                     </tr>
-                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Category_Id.ToString())">
+                                    <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Category_Id, CaseSolutionFields.Category)">
                                         <td>
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Category_Id)
                                         </td>
@@ -596,7 +596,7 @@
                         <div class="row">
                             <div class="span12">
                                 <table class="tableform">
-                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString())">
+                                    <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, CaseSolutionFields.WorkingGroup)">
                                         <td class="span3">
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.WorkingGroup_Id)
                                         </td>
@@ -630,7 +630,7 @@
                                             </select>
                                         </td>
                                     </tr>
-                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString())">
+                                    <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Performer_User_Id, CaseSolutionFields.Administrator)">
                                         <td>
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Performer_User_Id)
                                         </td>
@@ -647,9 +647,9 @@
                                             </select>
                                         </td>
                                     </tr>
-                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Priority_Id.ToString())">
+                                    <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Priority_Id, CaseSolutionFields.Priority)">
                                         <td>
-                                            @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Priority_Id)
+                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Priority_Id)
                                         </td>
                                         <td>
                                             <select id="case__Priority_Id" @Model.case_.Id.HtmlReadOnlyFlag(Model.customerUserSetting.PriorityPermission) name="case_.Priority_Id">
@@ -702,7 +702,7 @@
                                     {
                                         if (Model.projects.Any())
                                         {                                                                                        
-                                            <tr>
+                                            <tr style="@Model.GetFieldStyle(CaseSolutionFields.Project)">
                                                 <td>
                                                     @Translation.Get("Projekt")
                                                 </td>
@@ -916,7 +916,7 @@
         ignore: "",
         rules: {
             "case_.ReportedBy": {
-                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.ReportedBy.ToString())")
+                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber))  
             },
             "case_.PersonsName": {
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Persons_Name.ToString())")
@@ -934,7 +934,7 @@
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Region_Id.ToString())")
             },
             "case_.Department_Id": {
-                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Department_Id.ToString())")
+                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Department_Id, CaseSolutionFields.Department))  
             },
             "case_.OU_Id": {
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.OU_Id.ToString())")
@@ -955,10 +955,10 @@
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString())")
             },
             "case_.ProductArea_Id": {
-                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString())")
+                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.ProductArea_Id, CaseSolutionFields.ProductArea))  
             },
             "case_.CaseType_Id": {
-                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString())")
+                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.CaseType_Id, CaseSolutionFields.CaseType))  
             },
             "case_.System_Id": {
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.System_Id.ToString())")
@@ -970,7 +970,7 @@
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Impact_Id.ToString())")
             },
             "case_.Category_Id": {
-                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Category_Id.ToString())")
+                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Category_Id, CaseSolutionFields.Category))  
             },
             "case_.Supplier_Id": {
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString())")
@@ -982,13 +982,13 @@
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString())")
             },
             "case_.Caption": {
-                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Caption.ToString())")
+                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Caption, CaseSolutionFields.Caption))  
             },
             "case_.Description": {
-                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Description.ToString())")
+                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Description, CaseSolutionFields.Description))  
             },
             "case_.Miscellaneous": {
-                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString())")
+                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Miscellaneous, CaseSolutionFields.Miscellaneous))  
             },
             "case_.AgreedDate": {
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.AgreedDate.ToString())")
@@ -997,16 +997,16 @@
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Available.ToString())")
             },
             "case_.WorkingGroup_Id": {
-                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString())")
+                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, CaseSolutionFields.WorkingGroup))  
             },
             "case_.Performer_User_Id": {
-                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString())")
+                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Performer_User_Id, CaseSolutionFields.Administrator))  
             },
             "case_.CaseResponsible_User_Id": {
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString())")
             },
             "case_.Priority_Id": {
-                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Priority_Id.ToString())")
+                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Priority_Id, CaseSolutionFields.Priority))  
             },
             "case_.Status_Id": {
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Status_Id.ToString())")
@@ -1019,6 +1019,9 @@
             },
             "case_.WatchDate": {
                 required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.WatchDate.ToString())")
+            },
+            "CaseLog.FinishingType": {
+                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause))  
             },
             "CaseLog.TextExternal": {
                 maxlength: 3000
@@ -1132,6 +1135,9 @@
             },
             "case_.WatchDate": {
                 required: "@Translation.Get(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
+            },
+            "CaseLog.FinishingType": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ClosingReason.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
             }
         },
         //errorPlacement: function (error, element) {
