@@ -461,6 +461,8 @@ namespace DH.Helpdesk.Dal.Repositories
         bool FileExists(int caseId, string fileName);
         void DeleteByCaseIdAndFileName(int caseId, string fileName);
         int GetCaseNumberForUploadedFile(int caseId);
+
+        CaseFileModel[] GetCaseFiles(int caseId);
     }
 
     public class CaseFileRepository : RepositoryBase<CaseFile>, ICaseFileRepository
@@ -521,6 +523,31 @@ namespace DH.Helpdesk.Dal.Repositories
             else
                 return caseId;
 
+        }
+
+        public CaseFileModel[] GetCaseFiles(int caseId)
+        {
+            var entities = (from f in this.DataContext.CaseFiles
+                            join u in this.DataContext.Users on f.UserId equals u.Id into uj
+                            from user in uj.DefaultIfEmpty()
+                            where f.Case_Id == caseId
+                            select new
+                                       {
+                                           f.Id,
+                                           CaseId = f.Case_Id,
+                                           f.FileName,
+                                           f.CreatedDate,
+                                           UserName = user != null ? (user.FirstName + " " + user.SurName) : null
+                                       })
+                            .ToList();
+
+            return entities.Select(f => new CaseFileModel(
+                                        f.Id,
+                                        f.CaseId,
+                                        f.FileName,
+                                        f.CreatedDate,
+                                        f.UserName))
+                                        .ToArray();
         }
     }
 

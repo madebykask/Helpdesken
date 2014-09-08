@@ -17,6 +17,8 @@
         void AddFiles(List<CaseFileDto> caseFileDtos);
         bool FileExists(int caseId, string fileName);
         void DeleteByCaseIdAndFileName(int caseId, string fileName);
+
+        CaseFileModel[] GetCaseFiles(int caseId);
     }
 
     public class CaseFileService : ICaseFileService
@@ -57,6 +59,7 @@
                 CreatedDate = caseFileDto.CreatedDate,
                 Case_Id = caseFileDto.ReferenceId,
                 FileName = caseFileDto.FileName,
+                UserId = caseFileDto.UserId
             };
             this._caseFileRepository.Add(caseFile);
             this._caseFileRepository.Commit();
@@ -68,6 +71,11 @@
         public void DeleteByCaseIdAndFileName(int caseId, string fileName)
         {
             this._caseFileRepository.DeleteByCaseIdAndFileName(caseId, fileName);  
+        }
+
+        public CaseFileModel[] GetCaseFiles(int caseId)
+        {
+            return this._caseFileRepository.GetCaseFiles(caseId);
         }
 
         public List<string> FindFileNamesByCaseId(int caseId)

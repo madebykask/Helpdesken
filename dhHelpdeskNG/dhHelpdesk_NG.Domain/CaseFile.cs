@@ -9,5 +9,7 @@
         public DateTime CreatedDate { get; set; }
 
         public virtual Case Case { get; set; }
+
+        public int? UserId { get; set; }
     }
 }

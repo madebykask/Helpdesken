@@ -78,7 +78,8 @@
         //public IList<CaseHistory> caseHistories { get; set; }
         public CaseHistory EmptyCaseHistory { get; set; }
         public FilesModel LogFilesModel { get; set; }
-        public FilesModel CaseFilesModel { get; set; }
+
+        public CaseFilesModel CaseFilesModel { get; set; }
 
         /// <summary>
         /// Gets or sets the case owner default working group.

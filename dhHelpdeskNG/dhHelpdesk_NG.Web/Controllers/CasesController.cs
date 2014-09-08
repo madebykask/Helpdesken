@@ -821,11 +821,9 @@
         [HttpGet]
         public ActionResult Files(string id)
         {
-            var files = GuidHelper.IsGuid(id)
-                                ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Cases)
-                                : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
+            var files = this._caseFileService.GetCaseFiles(int.Parse(id));
 
-            var model = new FilesModel(id, files);
+            var model = new CaseFilesModel(id, files);
             return this.PartialView("_CaseFiles", model);
         }
 
@@ -868,7 +866,12 @@
                     throw new HttpException((int)HttpStatusCode.Conflict, null);
                 }
 
-                var caseFileDto = new CaseFileDto(uploadedData, name, DateTime.Now, int.Parse(id));
+                var caseFileDto = new CaseFileDto(
+                                uploadedData, 
+                                name, 
+                                DateTime.Now, 
+                                int.Parse(id),
+                                this.workContext.User.UserId);
                 this._caseFileService.AddFile(caseFileDto);
             }
         }
@@ -1284,12 +1287,12 @@
             if (!edit)
             {
                 var temporaryFiles = this.userTemporaryFilesStorage.FindFiles(case_.CaseGUID.ToString(), ModuleName.Cases);
-                var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, case_.Id)).ToList();
+                var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, case_.Id, this.workContext.User.UserId)).ToList();
                 this._caseFileService.AddFiles(newCaseFiles);
             }            
 
             // save log files
-            var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, caseLog.Id)).ToList();
+            var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, caseLog.Id, this.workContext.User.UserId)).ToList();
             this._logFileService.AddFiles(newLogFiles);
 
             caseMailSetting.CustomeMailFromAddress = mailSenders;
@@ -1412,7 +1415,7 @@
                 m.ParantPath_CaseType = ParentPathDefaultValue;
                 m.ParantPath_ProductArea = ParentPathDefaultValue;
                 m.MinWorkingTime = cs.MinRegWorkingTime != 0 ? cs.MinRegWorkingTime : 30;
-                m.CaseFilesModel = new FilesModel();
+                m.CaseFilesModel = new CaseFilesModel();
                 m.LogFilesModel = new FilesModel();
 
                 if (caseId == 0)
@@ -1449,7 +1452,7 @@
                 else
                 {
                     m.Logs = this._logService.GetCaseLogOverviews(caseId);
-                    m.CaseFilesModel = new FilesModel(caseId.ToString(global::System.Globalization.CultureInfo.InvariantCulture), this._caseFileService.FindFileNamesByCaseId(caseId));
+                    m.CaseFilesModel = new CaseFilesModel(caseId.ToString(global::System.Globalization.CultureInfo.InvariantCulture), this._caseFileService.GetCaseFiles(caseId));
                     m.RegByUser = this._userService.GetUser(m.case_.User_Id);
                     if (m.Logs != null)
                     {

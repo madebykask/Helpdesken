@@ -99,6 +99,7 @@
     <Compile Include="Enums\Notifiers\OrganizationField.cs" />
     <Compile Include="Enums\Notifiers\StateField.cs" />
     <Compile Include="Enums\Users\Module.cs" />
+    <Compile Include="Models\Case\CaseFileModel.cs" />
     <Compile Include="Models\Case\CaseSolutionSetting.cs" />
     <Compile Include="Models\Case\CaseSolutionSettingForInsert.cs" />
     <Compile Include="Models\Case\CaseSolutionSettingForUpdate.cs" />

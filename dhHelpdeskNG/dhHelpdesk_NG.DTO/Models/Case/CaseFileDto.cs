@@ -4,32 +4,56 @@
 
     public class CaseFileDto
     {
-        public CaseFileDto(byte[] content, string filename, DateTime createdDate, int referenceId)
+        public CaseFileDto(
+            byte[] content, 
+            string filename, 
+            DateTime createdDate, 
+            int referenceId)
+            : this(content, filename, createdDate, referenceId, null)
+        {
+        }
+
+        public CaseFileDto(
+            byte[] content, 
+            string filename, 
+            DateTime createdDate, 
+            int referenceId,
+            int? userId)
         {
             if (content == null || content.Length == 0)
             {
-                throw new ArgumentNullException("Content", "Value cannot be null or empty.");
+                throw new ArgumentNullException("content", "Value cannot be null or empty.");
             }
+
             if (string.IsNullOrEmpty(filename))
             {
-                throw new ArgumentNullException("Name", "Value cannot be null or empty.");
+                throw new ArgumentNullException("filename", "Value cannot be null or empty.");
             }
+
             if (referenceId <= 0)
             {
-                throw new ArgumentOutOfRangeException("Id", "Must be more than zero.");
+                throw new ArgumentOutOfRangeException("referenceId", "Must be more than zero.");
             }
 
             this.Content = content;
             this.FileName = filename;
             this.CreatedDate = createdDate;
             this.ReferenceId = referenceId;
+            this.UserId = userId;
         }
 
         public int Id { get; set; }
+
         public byte[] Content { get; private set; }
+
         public string FileName { get; private set; }
-        public string TemporaryFilePath { get; private set; }
+
+        public string TemporaryFilePath { get; set; }
+
         public int ReferenceId { get; private set; }
+
         public DateTime CreatedDate { get; private set; }
+
+        public int? UserId { get; private set; }
     }
 }
