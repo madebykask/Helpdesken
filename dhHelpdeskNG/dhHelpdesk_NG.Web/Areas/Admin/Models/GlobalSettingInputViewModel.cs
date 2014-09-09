@@ -9,6 +9,7 @@
 
     public class GlobalSettingIndexViewModel : BaseTabInputViewModel
     {
+
         public IEnumerable<GlobalSetting> GlobalSettings { get; set; }
         public IEnumerable<Language> LanguagesToTranslateInto { get; set; }
         public IEnumerable<TextTranslationLanguageList> ListForIndex { get; set; }
@@ -22,6 +23,8 @@
 
         public IList<SelectListItem> TextTypes { get; set; }
         public TextType TextType { get; set; }
+
+       
 
     }
 

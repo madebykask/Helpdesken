@@ -37,11 +37,11 @@
             this._watchDateCalendarService = watchDateCalendarService;
         }
 
-        public ActionResult Index(FormCollection coll)
+        public ActionResult Index()
         {
             var model = this.GetGSIndexViewModel(1, SessionFacade.CurrentCustomer.Language_Id);
 
-            model.Tabposition = coll["activeTab"];
+            
             return this.View(model);
         }
 
@@ -54,7 +54,7 @@
 
             var model = this.SaveGsInputViewModel(gsetting);
 
-            SessionFacade.ActiveTab = "#tab1";
+            SessionFacade.ActiveTab = "#fragment-1";
 
             return this.View(model);
         }
@@ -84,7 +84,7 @@
         {
             var model = this.SaveHolidayViewModel(new Holiday { HolidayDate = DateTime.Now, CreatedDate = DateTime.Now });
 
-            SessionFacade.ActiveTab = "#tab1";
+            SessionFacade.ActiveTab = "#fragment-2";
 
             return this.View(model);
         }
@@ -119,7 +119,7 @@
             var model = this.SaveHolidayViewModel(holiday);
 
             model.ChangedHeaderName = holiday.HolidayHeader.Name;
-            SessionFacade.ActiveTab = "#tab2";
+            SessionFacade.ActiveTab = "#fragment-2";
 
             return this.View(model);
         }
@@ -154,7 +154,7 @@
         {
             var model = this.SaveWatchDateViewModel(new WatchDateCalendarValue { CreatedDate = DateTime.Now, WatchDate = DateTime.Now });
 
-            SessionFacade.ActiveTab = "#tab3";
+            SessionFacade.ActiveTab = "#fragment-3";
 
             return this.View(model);
         }
@@ -187,7 +187,7 @@
 
             var model = this.SaveWatchDateViewModel(wdValue);
 
-            SessionFacade.ActiveTab = "#tab3";
+            SessionFacade.ActiveTab = "#fragment-3";
 
             model.ChangedWatchDateName = wdValue.WatchDateCalendar.Name;
 
@@ -222,7 +222,7 @@
         {
             var model = this.SaveTextTranslationViewModel(new Text { }, SessionFacade.CurrentCustomer.Language_Id);
 
-            SessionFacade.ActiveTab = "#tab4";
+            SessionFacade.ActiveTab = "#fragment-4";
 
             return this.View(model);
         }
@@ -249,26 +249,7 @@
 
             return this.View(model);
         }
-        //public ActionResult NewTranslation(Text text, List<TextTranslationLanguageList> TTs, GlobalSettingTextTranslationViewModel vmodel, FormCollection coll)
-        //{
-        //    IDictionary<string, string> errors = new Dictionary<string, string>();
-
-        //    if (text == null)
-        //        text = new Text() { };
-
-           
-        //    this._textTranslationService.SaveNewText(text, TTs, out errors);
-
-        //    if (errors.Count == 0)
-        //        return this.RedirectToAction("index", "globalsetting");
-
-        //    var model = this.SaveTextTranslationViewModel(text, 0);
-
-        //    SessionFacade.ActiveTab = coll["activeTab"];
-
-        //    return this.View(model);
-        //}
-
+       
         public ActionResult EditTranslation(int id)
         {
             var text = this._textTranslationService.GetText(id);
@@ -278,7 +259,7 @@
 
             var model = this.SaveTextTranslationViewModel(text, language.Id);
 
-            SessionFacade.ActiveTab = "#tab4";
+            SessionFacade.ActiveTab = "#fragment-4";
 
             return this.View(model);
         }
@@ -306,54 +287,8 @@
             return this.View(model);
         }
 
-        //public ActionResult EditTranslation(int id, TextTranslation tt, GlobalSettingTextTranslationViewModel vmodel, FormCollection coll, int languageId)
-        //{
-        //    var textToSave = this._textTranslationService.GetText(id);
-        //    var texttranslationToSave = this._textTranslationService.GetTextTranslationByIdAndLanguage(textToSave.Id, vmodel.Language.Id);
-
-        //    if (textToSave == null)
-        //        throw new Exception("No text found...");
-
-        //    var b = this.TryUpdateModel(textToSave, "text");
-
-        //    var update = true;
-
-        //    IDictionary<string, string> errors = new Dictionary<string, string>();
-
-        //    if (texttranslationToSave == null)
-        //    {
-        //        texttranslationToSave = new TextTranslation
-        //        {
-        //            TextTranslated = vmodel.TextTranslation.TextTranslated,
-        //            Language_Id = vmodel.Language.Id,
-        //            Text_Id = textToSave.Id
-        //        };
-
-        //        update = false;
-        //    }
-        //    else
-        //    {
-        //        texttranslationToSave.TextTranslated = vmodel.TextTranslation.TextTranslated;
-        //        texttranslationToSave.Language_Id = vmodel.Language.Id;
-        //        texttranslationToSave.Text_Id = textToSave.Id;
-
-        //    }
-
-        //    this._textTranslationService.SaveEditText(textToSave, texttranslationToSave, update, out errors);
-        //    //this._textTranslationService.SaveEditText(textToSave, TTs, out errors);
-
-        //    if (errors.Count == 0)
-        //        return this.RedirectToAction("index", "globalsetting");
-
-        //    var model = this.SaveTextTranslationViewModel(textToSave, vmodel.Language.Id);
-
-        //    model.Tabposition = coll["activeTab"];
-
-        //    return this.View(model);
-        //}
-
         [HttpPost]
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int id, FormCollection coll)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
             var text = this._textTranslationService.GetText(id);
@@ -372,6 +307,7 @@
 
             this._textTranslationService.DeleteText(text, out errors);
 
+            SessionFacade.ActiveTab = coll["activeTab"];
             return this.RedirectToAction("index", "globalsetting");
         }
 
@@ -598,8 +534,10 @@
 
             var model = this.GetGSIndexViewModel(id, SessionFacade.CurrentCustomer.Language_Id);
 
-            var view = "~/areas/admin/views/GlobalSetting/Index.cshtml";
+            var view = "~/areas/admin/views/GlobalSetting/_TranslationsList.cshtml";
+            
             return this.RenderRazorViewToString(view, model);
+            
         }
     }
 }

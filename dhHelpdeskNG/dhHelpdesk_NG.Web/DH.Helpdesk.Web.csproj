@@ -1177,6 +1177,7 @@
     <Content Include="Areas\Admin\Views\Customer\_CopyCustomer.cshtml" />
     <Content Include="log4net.config" />
     <Content Include="Content\js\jsrender.min.js.map" />
+    <Content Include="Areas\Admin\Views\GlobalSetting\_TranslationsList.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />

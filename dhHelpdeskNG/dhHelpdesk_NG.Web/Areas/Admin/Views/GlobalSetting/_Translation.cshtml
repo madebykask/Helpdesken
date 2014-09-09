@@ -12,10 +12,10 @@
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
-            <li class="active"><a href="#fragment-1">@Translation.Get("Översättningar", Enums.TranslationSource.TextTranslation)</a></li>
+            <li class="active"><a href="#fragment-4">@Translation.Get("Översättningar", Enums.TranslationSource.TextTranslation)</a></li>
         </ul>
         <div class="tab-content">
-            <div class="tab-pane tab-pane-border active" id="fragment1">
+            <div class="tab-pane tab-pane-border active" id="fragment-4">
                 <div class="container">
                     <div class="row">
                         <div class="span8">
@@ -31,17 +31,6 @@
                                         </td>
                                     </tr>
                                 }
-                                @*@if (newtext != "1")
-                                {
-                                    <tr>
-                                        <td style="width:200px">
-                                            @Translation.Get("Språk", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td>
-                                             @Html.DropDownListFor(model => model.Language.Id, Model.Languages, new { style = "width: auto;", id = "LanguageId", onchange = "changeLabelList(this.options[this.selectedIndex].value);" })
-                                        </td>
-                                    </tr>
-                                }*@
                                 @if (newtext != null)
                                 {
                                     <tr>
