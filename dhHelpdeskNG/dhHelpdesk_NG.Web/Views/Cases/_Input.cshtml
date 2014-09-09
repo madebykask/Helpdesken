@@ -95,7 +95,15 @@
                                                 </td>
                                                 <td class="span5" style="@Model.GetFieldStyle(CaseSolutionFields.Email)">
                                                     <label class="checkbox">
-                                                        @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier) @Translation.Get("Do not send case notifications to user")
+                                                        @if (!Model.IsReadOnly(CaseSolutionFields.Email))
+                                                        {
+                                                            @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier) 
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new { @readonly = true, @disabled = "disabled" }) 
+                                                        }
+                                                        @Translation.Get("Do not send case notifications to user")
                                                     </label>                                                    
                                                 </td>
                                             </tr>
@@ -285,10 +293,10 @@
                                         <td colspan="2">
                                             <div id="divCaseType" class="btn-group">
                                                 @{
-                                                    string disabled = Model.IsReadOnly(GlobalEnums.TranslationCaseFields.CaseType_Id, CaseSolutionFields.CaseType) ? "disabled" : string.Empty;
+                                                    string disabledCaseType = Model.GetDisabledString(GlobalEnums.TranslationCaseFields.CaseType_Id, CaseSolutionFields.CaseType);
                                                 }
-                                                <div class="btn @disabled" id="divBreadcrumbs_CaseType">@Model.ParantPath_CaseType</div>
-                                                <button class="btn dropdown-toggle" data-toggle="dropdown" @disabled>
+                                                <div class="btn @disabledCaseType" id="divBreadcrumbs_CaseType">@Model.ParantPath_CaseType</div>
+                                                <button class="btn dropdown-toggle" data-toggle="dropdown" @disabledCaseType>
                                                     <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu">
@@ -306,8 +314,11 @@
                                         </td>
                                         <td colspan="2">
                                             <div id="divProductArea" class="btn-group">
-                                                <div class="btn" id="divBreadcrumbs_ProductArea">@Model.ParantPath_ProductArea</div>
-                                                <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                                @{
+                                                    string disabledProductArea = Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ProductArea_Id, CaseSolutionFields.ProductArea);
+                                                }
+                                                <div class="btn @disabledProductArea" id="divBreadcrumbs_ProductArea">@Model.ParantPath_ProductArea</div>
+                                                <button class="btn dropdown-toggle" data-toggle="dropdown" @disabledProductArea>
                                                     <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu">
@@ -319,11 +330,11 @@
                                             @if (Model.CustomerSettings.ModuleCaseInvoice)
                                             {
                                                 @Html.CaseInvoiceArticles(
-                                                                Model.InvoiceArticles,
-                                                                "product-area-id",
-                                                                Model.case_.Id,
-                                                                "case-invoice-articles",
-                                                                Model.case_.Customer_Id)
+                                                    Model.InvoiceArticles,
+                                                    "product-area-id",
+                                                    Model.case_.Id,
+                                                    "case-invoice-articles",
+                                                    Model.case_.Customer_Id)
                                                 @Html.HiddenFor(m => m.CaseInvoiceArticles, new { @class = "case-invoice-articles" })                                                                                            
                                             }
                                         </td>

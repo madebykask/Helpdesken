@@ -101,6 +101,20 @@
             return isReadOnly;
         }
 
+        public static bool IsReadOnly(this CaseInputViewModel model, CaseSolutionFields caseTemplateFieldName)
+        {
+            bool isLocalVisibility = model.CaseSolutionSettingModels.Single(x => x.CaseSolutionField == caseTemplateFieldName).CaseSolutionMode != CaseSolutionModes.Hide;
+
+            if (!isLocalVisibility)
+            {
+                return false;
+            }
+
+            bool isReadOnly = model.CaseSolutionSettingModels.Single(x => x.CaseSolutionField == caseTemplateFieldName).CaseSolutionMode == CaseSolutionModes.ReadOnly;
+
+            return isReadOnly;
+        }
+
         public static bool IsRequired(this CaseInputViewModel model, GlobalEnums.TranslationCaseFields caseFieldName, CaseSolutionFields caseTemplateFieldName)
         {
             bool isGlobalVisibility = model.caseFieldSettings.IsFieldVisible(caseFieldName);
@@ -113,6 +127,14 @@
 
             bool isRequired = model.caseFieldSettings.CaseFieldSettingRequiredCheck(caseFieldName.ToString()) == 1;
             return isRequired;
+        }
+
+        public static string GetDisabledString(
+            this CaseInputViewModel model,
+            GlobalEnums.TranslationCaseFields caseFieldName,
+            CaseSolutionFields caseTemplateFieldName)
+        {
+            return model.IsReadOnly(caseFieldName, caseTemplateFieldName) ? "disabled" : string.Empty;
         }
     }
 }
