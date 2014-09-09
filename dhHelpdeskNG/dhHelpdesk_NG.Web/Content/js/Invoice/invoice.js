@@ -351,22 +351,10 @@ $(function () {
                 });
                 th._container.parent().find(".ui-dialog-buttonset").prepend(invoiceBtn);
             }
-        },
 
-        Initialize: function (e) {
-            var th = this;
-            th.ProductAreaElement = $(document).find("." + e.attr("data-invoice-product-area"));
-            th.CaseId = e.attr("data-invoice-case-id");
-            th.CustomerId = e.attr("data-invoice-customerId");
-            th.CaseInvoicesElement = $(document).find("." + e.attr("data-invoice-articles-for-save"));
-            th.DateFormat = e.attr("data-invoice-date-format");
-
-            th.CreateContainer();
-
-            var unitsEl = th._container.find(".articles-params-units");
             var addEl = th._container.find(".articles-params-add");
-
             addEl.click(function () {
+                var unitsEl = th._container.find(".articles-params-units");
                 var units = unitsEl.val();
                 if (!th.IsInteger(units) || units <= 0) {
                     units = dhHelpdesk.CaseArticles.DefaultAmount;
@@ -390,13 +378,23 @@ $(function () {
                     }
                 }
             });
+        },
+
+        Initialize: function (e) {
+            var th = this;
+            th.ProductAreaElement = $(document).find("." + e.attr("data-invoice-product-area"));
+            th.CaseId = e.attr("data-invoice-case-id");
+            th.CustomerId = e.attr("data-invoice-customerId");
+            th.CaseInvoicesElement = $(document).find("." + e.attr("data-invoice-articles-for-save"));
+            th.DateFormat = e.attr("data-invoice-date-format");
 
             var button = $(document.createElement("input"))
                 .attr("type", "button")
                 .attr("value", "Invoice articles")
                 .attr("title", "Articles to be invoiced")
                 .addClass("btn");
-            button.click(function() {
+            button.click(function () {
+                th.CreateContainer();
                 var addArticleEl = th._container.find(".articles-params");
                 var articlesSelectContainer = addArticleEl.find(".articles-select-container");
                 articlesSelectContainer.empty();
@@ -418,7 +416,6 @@ $(function () {
 
                 articlesEl.multiselect();
                 articlesSelectContainer.find("button.multiselect").addClass("min-width-500 max-width-500");
-                th.CreateContainer();
                 th._container.dialog("open");
             });
             e.after(button);
@@ -550,9 +547,6 @@ $(function () {
             this._orders = [];
 
             this.GetOrders = function () {
-                if (this._orders.length == 1) {
-                    return dhHelpdesk.CaseArticles._invoices[0]._orders;
-                }
                 return this._orders;  
             },
 
@@ -641,18 +635,15 @@ $(function () {
             },
 
             this.Clone = function () {
-                var clone = {};
-                jQuery.extend(true, clone, this);
-                return clone;
-
-                /*var clone = new dhHelpdesk.CaseArticles.CaseInvoice();
+                var clone = new dhHelpdesk.CaseArticles.CaseInvoice();
                 clone.Id = this.Id;
                 clone.CaseId = this.CaseId;
+                clone.Initialize();
                 var orders = this.GetOrders();
                 for (var i = 0; i < orders.length; i++) {
                     clone.AddOrder(orders[i].Clone());
                 }
-                return clone;*/
+                return clone;
             },
 
             this.GetViewModel = function () {
@@ -731,7 +722,9 @@ $(function () {
             this.AddArticle = function(article) {
                 this._articles.push(article);
                 article.Order = this;
-                article.Position = this._articles.length - 1;
+                if (article.Position == null) {
+                    article.Position = this._articles.length - 1;
+                }
                 article.Initialize();
                 var rows = this.Container.find(".articles-rows");
                 rows.append(article.Container);
@@ -797,10 +790,10 @@ $(function () {
             this.Clone = function() {
                 var clone = new dhHelpdesk.CaseArticles.CaseInvoiceOrder();
                 clone.Id = this.Id;
-                clone.Invoice = this.Invoice;
                 clone.Number = this.Number;
                 clone.DeliveryPeriod = this.DeliveryPeriod;
                 clone.Reference = this.Reference;
+                clone.Initialize();
                 var articles = this.GetArticles();
                 for (var i = 0; i < articles.length; i++) {
                     clone.AddArticle(articles[i].Clone());
@@ -859,7 +852,9 @@ $(function () {
             
             this.UpdateTotal = function () {
                 this.Container.find(".articles-total").text(this.GetArticlesTotal());
-                this.Invoice.UpdateTotal();
+                if (this.Invoice != null) {
+                    this.Invoice.UpdateTotal();
+                }
             },
 
             this._deleteFromContainer = function(id) {
@@ -876,6 +871,7 @@ $(function () {
             this.Position = null;
             this.IsInvoiced = null;
             this.Ppu = null;
+            this.Container = null;
 
             this.ToJson = function() {
                 return '{' +
@@ -894,7 +890,6 @@ $(function () {
             this.Clone = function() {
                 var clone = new dhHelpdesk.CaseArticles.CaseInvoiceArticle();
                 clone.Id = this.Id;
-                clone.Order = this.Order;
                 clone.Article = this.Article;
                 clone.Name = this.Name;
                 clone.Amount = this.Amount;
@@ -903,8 +898,6 @@ $(function () {
                 clone.Ppu = this.Ppu;
                 return clone;
             };
-
-            this.Container = null;
 
             this.IsNew = function() {
                 return this.Id <= 0;
