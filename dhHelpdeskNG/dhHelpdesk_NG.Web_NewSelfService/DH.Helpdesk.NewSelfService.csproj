@@ -341,6 +341,7 @@
     <Content Include="Content\icons\case_close_notapproved.png" />
     <Content Include="Content\icons\case_log_urgent.png" />
     <Content Include="Content\img-profile\dh_solutions_slogan.png" />
+    <Content Include="Content\img-profile\ikea-error-web.png" />
     <Content Include="Content\img-profile\ikea-error.png" />
     <Content Include="Content\img-profile\ikea-image.png" />
     <Content Include="Content\img-profile\ikea-map.png" />
