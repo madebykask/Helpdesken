@@ -1,7 +1,6 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel 
 @using DH.Helpdesk.BusinessData.OldComponents
 @using DH.Helpdesk.Common.Enums.Settings
-@using DH.Helpdesk.Domain
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 
@@ -708,9 +707,12 @@
                                             }
                                             else
                                             {
-                                                User performer = Model.performers.SingleOrDefault(x => x.Id == Model.case_.Performer_User_Id);
-                                                var performerName = string.Format("{0} {1}", performer.SurName, performer.FirstName);
-                                                @Html.TextBoxFor(m => performerName, new { @readonly = true })
+                                                var performer = Model.performers.SingleOrDefault(x => x.Id == Model.case_.Performer_User_Id);
+                                                if (performer != null)
+                                                {
+                                                    var performerName = string.Format("{0} {1}", performer.SurName, performer.FirstName);
+                                                    @Html.TextBoxFor(m => performerName, new { @readonly = true })
+                                                }
                                                 @Html.HiddenFor(x => x.case_.WorkingGroup_Id)
                                             }
                                         </td>
@@ -720,16 +722,31 @@
                                              @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Priority_Id)
                                         </td>
                                         <td>
-                                            <select id="case__Priority_Id" @Model.case_.Id.HtmlReadOnlyFlag(Model.customerUserSetting.PriorityPermission) name="case_.Priority_Id">
-                                                <option value="">&nbsp;</option>
-                                                @if (Model.priorities != null)
-                                                {
-                                                    foreach (var e in Model.priorities.Where(e => e.IsActive == 1 || Model.case_.Priority_Id == e.Id))
+                                            @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, CaseSolutionFields.WorkingGroup))
+                                            {
+                                                <select id="case__Priority_Id" @Model.case_.Id.HtmlReadOnlyFlag(Model.customerUserSetting.PriorityPermission) name="case_.Priority_Id">
+                                                    <option value="">&nbsp;</option>
+                                                    @if (Model.priorities != null)
                                                     {
-                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Priority_Id.ToString()) >@Translation.Get(e.Name)</option>
+                                                        foreach (var e in Model.priorities.Where(e => e.IsActive == 1 || Model.case_.Priority_Id == e.Id))
+                                                        {
+                                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Priority_Id.ToString()) >@Translation.Get(e.Name)</option>
+                                                        }
                                                     }
+                                                </select>
+                                            }
+                                            else
+                                            {
+                                                if (!Model.case_.Priority_Id.HasValue)
+                                                {
+                                                    @Html.TextBoxFor(m => m.case_.Priority_Id, new { @readonly = true })
                                                 }
-                                            </select>
+                                                else
+                                                {
+                                                    @Html.TextBoxFor(m => m.priorities.SingleOrDefault(x => x.Id == Model.case_.Priority_Id).Name, new { @readonly = true })
+                                                    @Html.HiddenFor(x => x.case_.Priority_Id)
+                                                }
+                                            }
                                         </td>
                                     </tr>
                                     <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Status_Id.ToString())">
@@ -775,16 +792,31 @@
                                                     @Translation.Get("Projekt")
                                                 </td>
                                                 <td>
-                                                    <select id="case__Project_Id" name="case_.Project_Id">
-                                                        <option value="">&nbsp;</option>
-                                                        @if (Model.projects != null)
-                                                        {
-                                                            foreach (var e in Model.projects.Where(e => e.IsActive == 1 || Model.case_.Project_Id == e.Id))
+                                                    @if (!Model.IsReadOnly(CaseSolutionFields.Project))
+                                                    {
+                                                        <select id="case__Project_Id" name="case_.Project_Id">
+                                                            <option value="">&nbsp;</option>
+                                                            @if (Model.projects != null)
                                                             {
-                                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Project_Id.ToString()) >@e.Name</option>
+                                                                foreach (var e in Model.projects.Where(e => e.IsActive == 1 || Model.case_.Project_Id == e.Id))
+                                                                {
+                                                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Project_Id.ToString()) >@e.Name</option>
+                                                                }
                                                             }
+                                                        </select>
+                                                    }
+                                                    else
+                                                    {
+                                                        if (!Model.case_.Project_Id.HasValue)
+                                                        {
+                                                            @Html.TextBoxFor(m => m.case_.Project_Id, new { @readonly = true })
                                                         }
-                                                    </select>
+                                                        else
+                                                        {
+                                                            @Html.TextBoxFor(m => m.projects.SingleOrDefault(x => x.Id == Model.case_.Project_Id).Name, new { @readonly = true })
+                                                            @Html.HiddenFor(x => x.case_.Project_Id)
+                                                        }
+                                                    }
                                                 </td>
                                             </tr>
                                         }

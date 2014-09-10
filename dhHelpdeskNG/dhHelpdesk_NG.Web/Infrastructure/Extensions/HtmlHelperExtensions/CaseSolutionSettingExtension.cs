@@ -62,7 +62,8 @@
                     MvcHtmlString hidden = htmlHelper.Hidden(hiddenName, model.Id);
 
                     SelectList selectList;
-                    if (caseFieldSettings.CaseFieldSettingRequiredCheck(caseFields.ToString()) == 1)
+                    if (caseFieldSettings.CaseFieldSettingRequiredCheck(caseFields.ToString()) == 1
+                        || caseSolutionField == CaseSolutionFields.Department)
                     {
                         if (model.CaseSolutionMode != CaseSolutionModes.ReadOnly)
                         {
