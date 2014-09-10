@@ -1,0 +1,13 @@
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Infrastructure.ModelFactories
+{
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services.BusinessLogic.Invoice;
+    using DH.Helpdesk.Web.Areas.Admin.Models.Invoice;
+
+    public interface ICaseInvoiceFactory
+    {
+        CaseInvoiceSettingsModel GetSettingsModel(Customer customer);
+
+        IInvoiceImporter GetImporter();
+    }
+}

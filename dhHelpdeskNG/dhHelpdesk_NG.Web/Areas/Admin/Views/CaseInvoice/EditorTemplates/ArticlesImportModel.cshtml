@@ -1,0 +1,21 @@
+﻿@model DH.Helpdesk.Web.Areas.Admin.Models.Invoice.ArticlesImportModel
+
+@using (Ajax.BeginForm("ArticlesImport", "CaseInvoice", null,
+    new AjaxOptions { HttpMethod = "POST" }, 
+    new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.TextBoxFor(m => m.File, new { type = "file" })
+    <input type="submit" value="@Translation.Get("Import")" />
+}
+<div id="case_articles_import_status"></div>
+
+<script type="text/javascript">
+$(function() {
+    $('form').ajaxForm({
+        complete: function(xhr) {
+            $('#case_articles_import_status').html(xhr.responseText);
+        }
+    }); 
+});       
+</script>
