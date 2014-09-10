@@ -1607,7 +1607,7 @@
                             m.case_.Performer_User_Id = caseTemplate.PerformerUser_Id.Value;
                         }
 
-                        if (caseTemplate.PerformerUser_Id != null)
+                        if (caseTemplate.Category_Id != null)
                         {
                             m.case_.Category_Id = caseTemplate.Category_Id.Value;
                         }
