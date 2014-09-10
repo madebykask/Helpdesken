@@ -298,6 +298,7 @@
     <Compile Include="Models\Common\GridRowCellValueModel.cs" />
     <Compile Include="Models\Common\SortFieldModel.cs" />
     <Compile Include="Models\CoWorkers\CoWorkersModel.cs" />
+    <Compile Include="Models\Documents\DocumentsModel.cs" />
     <Compile Include="Models\Error\ErrorModel.cs" />
     <Compile Include="Models\ISearchModel.cs" />
     <Compile Include="Models\MasterPageViewModel.cs" />

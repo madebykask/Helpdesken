@@ -14,6 +14,7 @@ namespace DH.Helpdesk.Dal.Infrastructure.Security
 
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Domain.Interfaces;
+    using System.Configuration;
 
     /// <summary>
     /// The entity access.
@@ -37,6 +38,12 @@ namespace DH.Helpdesk.Dal.Infrastructure.Security
         /// </returns>
         public static IEnumerable<TEntity> CheckAccess<TEntity>(this IEnumerable<TEntity> entities, IWorkContext context)
         {
+            var app = ConfigurationManager.AppSettings["CurrentApplication"];
+            if (app != null)
+            {
+                return entities;
+            }
+
             if (context == null)
             {
                 return entities;
@@ -59,8 +66,11 @@ namespace DH.Helpdesk.Dal.Infrastructure.Security
                             return true;
                         }
 
+                        
                         return workingGroups.Any(g => g != null  &&
                             context.User.UserWorkingGroups.Select(u => u.WorkingGroup_Id).Contains(g.Id));
+            
+
                     });
             }
 
