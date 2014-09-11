@@ -30,6 +30,8 @@ namespace DH.Helpdesk.Dal.Repositories
         /// The <see cref="IEnumerable"/>.
         /// </returns>
         IEnumerable<HolidayOverview> GetHolidays();
+
+        IList<Holiday> GetHolidaysByHeaderId(int id);
     }
 
     /// <summary>
@@ -76,6 +78,13 @@ namespace DH.Helpdesk.Dal.Repositories
                                                          }
                                  })
                 .OrderBy(h => h.HolidayDate);
+        }
+
+        public IList<Holiday> GetHolidaysByHeaderId(int id)
+        {
+            return (from h in this.DataContext.Holidays
+                    where h.HolidayHeader_Id == id
+                    select h).ToList();  
         }
     }
 

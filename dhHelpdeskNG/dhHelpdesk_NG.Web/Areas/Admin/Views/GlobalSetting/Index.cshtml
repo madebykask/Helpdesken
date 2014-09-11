@@ -5,7 +5,7 @@
 }
 <div class="secnavs fixed">
     <div class="pull-left">
-        <ul class="secnav">
+        <ul class="secnav" id="myButton">
             <li id="menu1" style="display: block">
                 @Html.ActionLink(Translation.Get("Ändra", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("inställningar", Enums.TranslationSource.TextTranslation), "change", null, new { @class = "btn" })
             </li>
@@ -75,36 +75,43 @@
                     <thead>
                         <tr>
                             <th>
-                                @Translation.Get("Helgdag", Enums.TranslationSource.TextTranslation)
-                            </th>
-                            <th>
-                                @Translation.Get("Datum", Enums.TranslationSource.TextTranslation)
-                            </th>
-                            <th>
-                                @Translation.Get("Arbetstid", Enums.TranslationSource.TextTranslation)
+                                @Translation.Get("Kalender", Enums.TranslationSource.TextTranslation)
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model.Holidays)
+                        @foreach (var item in Model.HolidayHeaders)
                         { 
                             <tr>
                                 <td>
-                                    <a href="@Url.Action("editholiday", "globalsetting", new { id = item.Id })">@Html.DisplayFor(modelItem => item.HolidayHeader.Name)</a>
-                                </td>
-                                <td>
-                                    @item.HolidayDate.ToShortDateString()
-                                </td>
-                                <td>
-                                    @if (item.TimeFrom != 0 && item.TimeUntil != 0)
-                                    {
-                                        @Html.DisplayFor(modelItem => item.TimeFrom) @Translation.Get("-", Enums.TranslationSource.TextTranslation) @Html.DisplayFor(modelItem => item.TimeUntil)
-                                    }
+                                    <a href="@Url.Action("editholiday", "globalsetting", new { id = item.Value })">@item.Text</a>
                                 </td>
                             </tr>
                         }
                     </tbody>
                 </table>
+                @*<div class="container">
+                    <div class="row">
+                        <div class="span8">
+                            <table class="tableform" id="tblHoliday">
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Kalender", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.HolidayHeader.Id, Model.HolidayHeaders, new { style = "width: auto;", id = "HolidayHeaderId", onchange = "changeHoliday(this.options[this.selectedIndex].value);" })
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+               <div class="container" id="holidays">
+                   
+                        @Html.Partial("_Holidays", Model)
+                
+                </div>*@
+                
             </div>
             <div class="tab-pane tab-pane-border" id="fragment-3">
                 <table class="table table-striped table-bordered table-hover" id="tblWatchDateCalendarValue">
@@ -130,7 +137,6 @@
 
             <div class="tab-pane tab-pane-border" id="fragment-4">
                 <div class="container">
-
                     <div class="row">
                         <div class="span8">
                             <table class="tableform" id="tblText">
@@ -145,7 +151,6 @@
                             </table>
                         </div>
                     </div>
-
                 </div>
                 <div class="container" id="translationList">
                    
@@ -163,11 +168,27 @@
 @section Scripts {
     <script type="text/javascript">
 
+        var activeTab = $('#activeTab').val();
+        if(activeTab)
+            $('#myTab a[href="' + activeTab + '"]').click();//.tab('show')
+
+       
+
         function changeTextType(id) {
             var list = $('#translationList');
             list.html('');
             if (id != '') {
                 $.get('/GlobalSetting/ChangeTextType/' + id, function (result) {
+                    list.html(result);
+                });
+            }
+        }
+
+        function changeHoliday(id) {
+            var list = $('#holidays');
+            list.html('');
+            if (id != '') {
+                $.get('/GlobalSetting/ChangeHoliday/' + id, function (result) {
                     list.html(result);
                 });
             }

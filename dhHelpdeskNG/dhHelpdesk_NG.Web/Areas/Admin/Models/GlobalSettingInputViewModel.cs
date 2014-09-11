@@ -23,6 +23,8 @@
 
         public IList<SelectListItem> TextTypes { get; set; }
         public TextType TextType { get; set; }
+        public IList<SelectListItem> HolidayHeaders { get; set; }
+        public HolidayHeader HolidayHeader { get; set; }
 
        
 
@@ -40,6 +42,7 @@
         public bool HalfDay { get; set; }
         public int TimeFrom { get; set; }
         public int TimeTil { get; set; }
+        public int Year { get; set; }
         public string ChangedHeaderName { get; set; }
 
         public Holiday Holiday { get; set; }
@@ -48,6 +51,9 @@
         public IList<SelectListItem> HolidayHeaders { get; set; }
         public IList<SelectListItem> TimeFromList { get; set; }
         public IList<SelectListItem> TimeTilList { get; set; }
+        public IList<SelectListItem> YearList { get; set; }
+
+        public IList<Holiday> Holidays { get; set; }
     }
 
     public class GlobalSettingWatchDateViewModel : BaseTabInputViewModel

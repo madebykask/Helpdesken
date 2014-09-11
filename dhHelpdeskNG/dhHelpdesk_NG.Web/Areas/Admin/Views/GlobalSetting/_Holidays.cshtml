@@ -1,0 +1,148 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Admin.Models.GlobalSettingHolidayViewModel
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-error">@Translation.Get("Helgdag", Enums.TranslationSource.TextTranslation)
+        @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+    </div>    
+}          
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-2">@Translation.Get("Helgdagar", Enums.TranslationSource.TextTranslation)</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment1">
+                <div class="container">
+                    <div class="row">
+                        <div class="span8">
+                            <table class="table table-striped table-bordered table-hover" id="tblHoliday">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            @Translation.Get("Kalender", Enums.TranslationSource.TextTranslation)
+                                        </th>
+                                    </tr>
+                                </thead>
+                                
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td colspan="2">
+                                        @Html.DropDownListFor(model => model.HolidayHeader.Id, Model.HolidayHeaders, "", new { style = "width: auto;", onchange = "changeHolidayHeader(this.options[this.selectedIndex].value);" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("År", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td colspan="2">
+                                        @Html.DropDownListFor(model => model.Year, Model.YearList, "", new { style = "width: auto;" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Helgdag", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td colspan="2">
+                                        @Html.EditorFor(model => model.Holiday.HolidayDate, "DatePicker", new { id = "holidaydate" }) 
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Halv helgdag", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td colspan="2">
+                                        <input type="checkbox" id="chkHalfDay" @(Model.HalfDay ? "checked='checked'" : "") name="halfDay" value="1" />
+                                    </td>
+                                </tr>
+                                <tr  id="halfDayOptions" style="@(Model.HalfDay ? "display:block" : "display:none")">
+                                    <td></td>
+                                    <td colspan="2">
+                                       
+                                        @Html.DropDownListFor(model => model.TimeFrom, Model.TimeFromList, "", new { style = "width: auto;" })
+                                        &nbsp; &nbsp;
+                                          
+                                        @Html.DropDownListFor(model => model.TimeTil, Model.TimeTilList, "", new { style = "width: auto;" })
+                                        &nbsp; &nbsp;
+                                        
+                                    </td>
+                                </tr>
+                                 <tr>
+                                     <td></td>
+                                     <td></td>
+                                    <td>
+                                        <input class="btn btn-success" type="button" value="@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)" id="AddRow" 
+                                            onclick="addCaseSettingRow()" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
+                                            <input type="hidden" id="" value="" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                @foreach (var item in Model.Holidays)
+                                {                    
+                                    <tr>
+                                        <td>
+                                            <a href="@Url.Action("editholiday", "globalsetting", new { area = "admin", id = item.Id })">@Html.DisplayFor(modelItem => item.HolidayDate)</a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("editholiday", "globalsetting", new { area = "admin", id = item.Id })">@Html.DisplayFor(modelItem => item.TimeFrom) - @Html.DisplayFor(modelItem => item.TimeUntil)</a>
+                                        </td>
+                                        <td>
+                                            <input class="btn btn-danger" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)"
+                                                onclick="deleteCaseSettingRow(@item.Id)" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
+                                                    <input type="hidden" id="deleteHolidayId" value="" />
+                                        </td>
+                                    </tr>
+                                }
+                               
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $("input:text:visible:first").focus();
+    $("#Holiday_HolidayDate").datepicker();
+
+    $(function () {
+        //$("#tblHolidayHeader").fixheadertable();
+        $("#chkHalfDay").click(function () {
+            $("#halfDayOptions").toggle();
+        });
+        holidayList($('#Holiday_HolidayHeader_Id').val());
+    });
+
+    function submitForm() {
+        $("#target").submit();
+    }
+
+    function holidayList(id) {
+        var c = $("#tblHolidayHeader");
+        $.get('/globalsetting/ChangeHolidayList/' + id, function (result) {
+            c.html(result);
+        });
+    }
+
+    function changeHolidayHeader(id) {
+        if (id != undefined) {
+            if (id != "") {
+                var headerName = $("#ChangedHeaderName");
+                $.get('/GlobalSetting/ChangeHolidayHeader/' + id, function (result) {
+                    headerName.val(result);
+                });
+                holidayList(id);
+            }
+        }
+    }
+
+</script>

@@ -1184,6 +1184,7 @@
     <Content Include="log4net.config" />
     <Content Include="Content\js\jsrender.min.js.map" />
     <Content Include="Areas\Admin\Views\GlobalSetting\_TranslationsList.cshtml" />
+    <Content Include="Areas\Admin\Views\GlobalSetting\_Holidays.cshtml" />
     <Content Include="Areas\Admin\Views\CaseInvoice\CaseInvoiceSettings.cshtml" />
     <Content Include="Areas\Admin\Views\CaseInvoice\EditorTemplates\ArticlesImportModel.cshtml" />
     <Content Include="Areas\Admin\Views\CaseInvoice\EditorTemplates\InvoiceExportSettingsModel.cshtml" />

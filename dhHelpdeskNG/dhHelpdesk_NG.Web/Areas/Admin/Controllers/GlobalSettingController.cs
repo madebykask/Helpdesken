@@ -39,7 +39,7 @@
 
         public ActionResult Index()
         {
-            var model = this.GetGSIndexViewModel(1, SessionFacade.CurrentCustomer.Language_Id);
+            var model = this.GetGSIndexViewModel(1, 1, SessionFacade.CurrentCustomer.Language_Id);
 
             
             return this.View(model);
@@ -111,16 +111,18 @@
 
         public ActionResult EditHoliday(int id)
         {
-            var holiday = this._holidayService.GetHoliday(id);
+            //var holiday = this._holidayService.GetHoliday(id);
+            var holidayheader = this._holidayService.GetHolidayHeader(id);
 
-            if (holiday == null)
+            if (holidayheader == null)
                 return new HttpNotFoundResult("No holiday found...");
 
-            var model = this.SaveHolidayViewModel(holiday);
+            var model = this.SaveHolidayViewModel(holidayheader);
 
-            model.ChangedHeaderName = holiday.HolidayHeader.Name;
+            
+            //model.ChangedHeaderName = holiday.HolidayHeader.Name;
             SessionFacade.ActiveTab = "#fragment-2";
-
+            
             return this.View(model);
         }
 
@@ -311,24 +313,30 @@
             return this.RedirectToAction("index", "globalsetting");
         }
 
-        private GlobalSettingIndexViewModel GetGSIndexViewModel(int texttypeid, int languageId)
+        private GlobalSettingIndexViewModel GetGSIndexViewModel(int texttypeid, int holidayheaderid, int languageId)
         {
             var start = this._globalSettingService.GetGlobalSettings().FirstOrDefault();
 
             var model = new GlobalSettingIndexViewModel
             {
                 GlobalSettings = this._globalSettingService.GetGlobalSettings(),
-                Holidays = this._holidayService.GetAll().ToList(),
+                Holidays = this._holidayService.GetHolidaysByHeaderId(holidayheaderid),
                 LanguagesToTranslateInto = this._languageService.GetLanguagesForGlobalSettings(),
                 Texts = this._textTranslationService.GetAllTexts(texttypeid).ToList(),
                 ListForIndex = this._textTranslationService.GetIndexListToTextTranslations(languageId),
                 WatchDateCalendarValues = this._watchDateCalendarService.GetAllWatchDateCalendarValues().ToList(),
                 TextType = this._textTranslationService.GetTextType(1),
+                HolidayHeader = this._holidayService.GetHolidayHeader(1),
                 Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
                 {
                     Text = Translation.Get(x.Name),
                     Value = x.Id.ToString()
-                }).ToList()
+                }).ToList(),
+                HolidayHeaders = this._holidayService.GetHolidayHeaders().Select(x => new SelectListItem
+                {
+                    Text = Translation.Get(x.Name),
+                    Value = x.Id.ToString()
+                }).ToList(),
             };
 
             model.TextTypes = new List<SelectListItem>();
@@ -353,6 +361,76 @@
                     Value = x.Id.ToString()
                 }).ToList()
             };
+
+            return model;
+        }
+
+        private GlobalSettingHolidayViewModel SaveHolidayViewModel(HolidayHeader holidayheader)
+        {
+            #region SelectListItems
+
+            List<SelectListItem> li = new List<SelectListItem>();
+            for (int i = 00; i < 24; i++)
+            {
+                li.Add(new SelectListItem
+                {
+                    Text = i.ToString(),
+                    Value = i.ToString()
+                });
+            }
+            List<SelectListItem> lis = new List<SelectListItem>();
+            for (int i = 00; i < 24; i++)
+            {
+                lis.Add(new SelectListItem
+                {
+                    Text = i.ToString(),
+                    Value = i.ToString()
+                });
+            }
+
+            List<SelectListItem> yearlist = new List<SelectListItem>();
+            for (int j = 2000; j < 2015; j++)
+            {
+                yearlist.Add(new SelectListItem
+                {
+                    Text = j.ToString(),
+                    Value = j.ToString()
+                });
+            }
+            #endregion
+
+            var model = new GlobalSettingHolidayViewModel
+            {
+                Holiday = null,
+                Holidays = this._holidayService.GetHolidaysByHeaderId(holidayheader.Id),
+                HolidayHeader = holidayheader,
+                HolidayHeaders = this._holidayService.GetHolidayHeaders().Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList(),
+                TimeFromList = li,
+                TimeTilList = lis,
+                YearList = yearlist
+            };
+
+            #region SetInts
+
+            //if (holiday.TimeFrom == 0)
+            //{
+            //    model.HalfDay = false;
+            //    model.TimeFrom = 0;
+            //    model.TimeTil = 0;
+            //}
+            //else
+            //{
+            //    model.HalfDay = true;
+            //    model.TimeFrom = holiday.TimeFrom;
+            //    model.TimeTil = holiday.TimeUntil;
+            //}
+
+            model.Year = 2014;
+            #endregion
 
             return model;
         }
@@ -532,12 +610,25 @@
         public string ChangeTextType(int id)
         {
 
-            var model = this.GetGSIndexViewModel(id, SessionFacade.CurrentCustomer.Language_Id);
+            var model = this.GetGSIndexViewModel(id, 1, SessionFacade.CurrentCustomer.Language_Id);
 
             var view = "~/areas/admin/views/GlobalSetting/_TranslationsList.cshtml";
             
             return this.RenderRazorViewToString(view, model);
             
+        }
+
+        [CustomAuthorize(Roles = "3,4")]
+        [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
+        public string ChangeHoliday(int id)
+        {
+
+            var model = this.GetGSIndexViewModel(1, id, SessionFacade.CurrentCustomer.Language_Id);
+
+            var view = "~/areas/admin/views/GlobalSetting/_Holidays.cshtml";
+
+            return this.RenderRazorViewToString(view, model);
+
         }
     }
 }

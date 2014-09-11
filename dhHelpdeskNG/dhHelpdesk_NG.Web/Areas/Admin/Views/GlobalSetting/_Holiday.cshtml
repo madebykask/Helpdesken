@@ -11,7 +11,7 @@
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
-            <li class="active"><a href="#fragment-1">@Translation.Get("Helgdagar", Enums.TranslationSource.TextTranslation)</a></li>
+            <li class="active"><a href="#fragment-2">@Translation.Get("Helgdagar", Enums.TranslationSource.TextTranslation)</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment1">
@@ -19,66 +19,66 @@
                     <div class="row">
                         <div class="span8">
                             <table class="tableform" id="tblHoliday">
-                <tr>
-                    <td>
-                        @Translation.Get("Kalendernamn", Enums.TranslationSource.TextTranslation)
-                    </td>
-                    <td>
-                        @Html.DropDownListFor(model => model.Holiday.HolidayHeader_Id, Model.HolidayHeaders, "", new { style = "width: auto;", onchange = "changeHolidayHeader(this.options[this.selectedIndex].value);" })
-                    </td>
-                </tr>
-                <tr>
-                    @if (Model.Holiday.Id > 0)
-                    {                  
-                        <td>
-                            @Translation.Get("Byt kalendernamn", Enums.TranslationSource.TextTranslation)
-                        </td>
-                        <td>
-                            @Html.TextBoxFor(model => model.ChangedHeaderName, new { maxlength = "50", style = "width: 200px;" })
-                            @Html.HiddenFor(model => model.Holiday.HolidayHeader.Id)
-                        </td>
-                    }
-                    else
-                    {
-                        <td>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Kalendernamn", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.Holiday.HolidayHeader_Id, Model.HolidayHeaders, "", new { style = "width: auto;", onchange = "changeHolidayHeader(this.options[this.selectedIndex].value);" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    @if (Model.Holiday.Id > 0)
+                                    {                  
+                                        <td>
+                                            @Translation.Get("Byt kalendernamn", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(model => model.ChangedHeaderName, new { maxlength = "50", style = "width: 200px;" })
+                                            @Html.HiddenFor(model => model.Holiday.HolidayHeader.Id)
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
 
-                            @Translation.Get("Nytt kalendernamn", Enums.TranslationSource.TextTranslation)
-                        </td>
-                        <td>
-                            @Html.TextBoxFor(model => model.ChangedHeaderName, new { maxlength = "50", style = "width: 200px;" })
-                            @Html.HiddenFor(model => model.Holiday.HolidayHeader.Id)
-                        </td>
-                    }
-                </tr>
-                <tr>
-                    <td>
-                        @Translation.Get("Helgdag", Enums.TranslationSource.TextTranslation)
-                    </td>
-                    <td>
-                        @Html.EditorFor(model => model.Holiday.HolidayDate)
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        @Translation.Get("Halv helgdag", Enums.TranslationSource.TextTranslation)
-                    </td>
-                    <td>
-                        <input type="checkbox" id="chkHalfDay" @(Model.HalfDay ? "checked='checked'" : "") name="halfDay" value="1" />
-                    </td>
-                </tr>
-                <tr id="halfDayOptions" style="@(Model.HalfDay ? "display:block" : "display:none")">
-                    <td></td>
-                    <td>
-                        @Translation.Get("Från", Enums.TranslationSource.TextTranslation)
-                        @Html.DropDownListFor(model => model.TimeFrom, Model.TimeFromList, "", new { style = "width: auto;" })
-                        &nbsp; &nbsp;
-                            @Translation.Get("Till", Enums.TranslationSource.TextTranslation)
-                        @Html.DropDownListFor(model => model.TimeTil, Model.TimeTilList, "", new { style = "width: auto;" })
-                    </td>
-                </tr>
-            </table>
-            @Html.HiddenFor(model => model.Tabposition)
-        </div>
+                                            @Translation.Get("Nytt kalendernamn", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(model => model.ChangedHeaderName, new { maxlength = "50", style = "width: 200px;" })
+                                            @Html.HiddenFor(model => model.Holiday.HolidayHeader.Id)
+                                        </td>
+                                    }
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Helgdag", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(model => model.Holiday.HolidayDate)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Halv helgdag", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" id="chkHalfDay" @(Model.HalfDay ? "checked='checked'" : "") name="halfDay" value="1" />
+                                    </td>
+                                </tr>
+                                <tr id="halfDayOptions" style="@(Model.HalfDay ? "display:block" : "display:none")">
+                                    <td></td>
+                                    <td>
+                                        @Translation.Get("Från", Enums.TranslationSource.TextTranslation)
+                                        @Html.DropDownListFor(model => model.TimeFrom, Model.TimeFromList, "", new { style = "width: auto;" })
+                                        &nbsp; &nbsp;
+                                            @Translation.Get("Till", Enums.TranslationSource.TextTranslation)
+                                        @Html.DropDownListFor(model => model.TimeTil, Model.TimeTilList, "", new { style = "width: auto;" })
+                                    </td>
+                                </tr>
+                            </table>
+                            @Html.HiddenFor(model => model.Tabposition)
+                        </div>
                     </div>
                 </div>
             </div>

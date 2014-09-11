@@ -14,6 +14,8 @@
         IEnumerable<Holiday> GetAll();
         IEnumerable<HolidayHeader> GetHolidayHeaders();
 
+        IList<Holiday> GetHolidaysByHeaderId(int id);
+
         Holiday GetHoliday(int id);
         HolidayHeader GetHolidayHeader(int id);
 
@@ -58,6 +60,11 @@
         public Holiday GetHoliday(int id)
         {
             return this._holidayRepository.GetById(id);
+        }
+
+        public IList<Holiday> GetHolidaysByHeaderId(int id)
+        {
+            return this._holidayRepository.GetHolidaysByHeaderId(id);
         }
 
         public HolidayHeader GetHolidayHeader(int id)
