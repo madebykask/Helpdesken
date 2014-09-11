@@ -347,12 +347,18 @@
                     ret = dr.SafeGetString("PriorityName");
                     translateField = true;
                     break;
-                case "casetype_id": case "status_id":
+                case "casetype_id": 
                     ret = GetCaseTypeFullPath(
                                 caseTypes.ToArray(),
                                 int.Parse(dr[col].ToString()));
                     translateField = true;
                     break;
+
+                case "status_id":
+                    ret = dr[col].ToString();
+                    translateField = true;
+                    break;
+
                 case "plandate":
                     if (customerSetting.PlanDateFormat == 0)
                     {
@@ -460,6 +466,7 @@
                     ", coalesce(tblUsers4.Surname, '') + ' ' + coalesce(tblUsers4.Firstname, '') as tblProblem_ResponsibleUser_Id");
             }
             //sb.Append(", tblUsers.UserId as UserId");
+            //sb.Append(", tblStatus.Id as Status_Id");
             sb.Append(", tblStatus.StatusName as Status_Id");
             //sb.Append(", tblStatus.Id as Status_Id_Value");
             sb.Append(", tblSupplier.Supplier as Supplier_Id");
