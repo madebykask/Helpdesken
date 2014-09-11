@@ -2,8 +2,13 @@
 {
     using System.Web;
 
+    using DH.Helpdesk.Common.ValidationAttributes;
+
     public sealed class ArticlesImportModel
     {
-       public HttpPostedFileBase File { get; set; }
+        [NotNull]
+        public int CustomerId { get; set; }
+
+        public HttpPostedFileBase File { get; set; }
     }
 }

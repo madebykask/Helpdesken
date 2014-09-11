@@ -4,6 +4,7 @@
     new AjaxOptions { HttpMethod = "POST" }, 
     new { enctype = "multipart/form-data" }))
 {
+    @Html.HiddenFor(m => m.CustomerId)
     @Html.AntiForgeryToken()
     @Html.TextBoxFor(m => m.File, new { type = "file" })
     <input type="submit" value="@Translation.Get("Import")" />

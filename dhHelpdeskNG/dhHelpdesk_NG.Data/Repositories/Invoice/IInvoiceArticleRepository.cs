@@ -5,5 +5,7 @@
     public interface IInvoiceArticleRepository
     {
         InvoiceArticle[] GetArticles(int customerId, int productAreaId);
+
+        void SaveArticle(InvoiceArticle article);
     }
 }

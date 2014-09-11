@@ -47,5 +47,15 @@
         {
             this.caseInvoiceArticleRepository.DeleteCaseInvoices(caseId);
         }
+
+        public void SaveArticle(InvoiceArticle article)
+        {
+            this.invoiceArticleRepository.SaveArticle(article);
+        }
+
+        public void SaveUnit(InvoiceArticleUnit unit)
+        {
+            this.invoiceArticleUnitRepository.SaveUnit(unit);
+        }
     }
 }

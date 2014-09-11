@@ -15,5 +15,9 @@
         void SaveCaseInvoices(IEnumerable<CaseInvoice> invoices);
 
         void DeleteCaseInvoices(int caseId);
+
+        void SaveArticle(InvoiceArticle article);
+
+        void SaveUnit(InvoiceArticleUnit unit);
     }
 }

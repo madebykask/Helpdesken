@@ -26,6 +26,6 @@
         public string Name { get; private set; }
 
         [IsId]
-        public int CustomerId { get; private set; }
+        public int CustomerId { get; set; }
     }
 }

@@ -7,11 +7,24 @@
     using DH.Helpdesk.BusinessData.Models.Invoice;
     using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
     using DH.Helpdesk.Common.Extensions.String;
+    using DH.Helpdesk.Services.Services;
 
     using OfficeOpenXml;
 
     public sealed class IkeaExcelImporter : IInvoiceImporter
     {
+        private readonly IProductAreaService productAreaService;
+
+        private readonly IInvoiceArticleService invoiceArticleService;
+
+        public IkeaExcelImporter(
+                IProductAreaService productAreaService, 
+                IInvoiceArticleService invoiceArticleService)
+        {
+            this.productAreaService = productAreaService;
+            this.invoiceArticleService = invoiceArticleService;
+        }
+
         public ArticlesImportData ImportArticles(Stream stream)
         {
             using (var excelPackage = new ExcelPackage(stream))
@@ -133,6 +146,12 @@
                                     articles.ToArray(),
                                     units.ToArray());
             }
+        }
+
+        public void SaveImportedArticles(ArticlesImportData data, int customerId)
+        {
+            var units = this.invoiceArticleService.GetUnits(customerId);
+            var productAreas = this.productAreaService.GetProductAreaOverviews(customerId);
         }
     }
 }

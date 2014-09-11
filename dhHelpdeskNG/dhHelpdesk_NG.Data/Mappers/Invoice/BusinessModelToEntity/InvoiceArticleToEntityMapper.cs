@@ -8,11 +8,14 @@
         public void Map(InvoiceArticle businessModel, InvoiceArticleEntity entity)
         {
             entity.Name = businessModel.Name;
+            entity.NameEng = businessModel.Name;
+            entity.Description = businessModel.Description;
             entity.Number = businessModel.Number;
             entity.ParentId = businessModel.ParentId;
             entity.Ppu = businessModel.Ppu;
             entity.ProductAreaId = businessModel.ProductAreaId;
             entity.UnitId = businessModel.UnitId;
+            entity.CustomerId = businessModel.CustomerId;
         }
     }
 }

@@ -45,6 +45,7 @@
 
             var importer = this.caseInvoiceFactory.GetImporter();
             var result = importer.ImportArticles(model.ArticlesImport.File.InputStream);
+            importer.SaveImportedArticles(result, model.ArticlesImport.CustomerId);
             return "Import completed successfully!";
         }
     }
