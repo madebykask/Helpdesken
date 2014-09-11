@@ -2,10 +2,8 @@
 {
     using System.IO;
 
-    using DH.Helpdesk.BusinessData.Models.Invoice;
-
     public interface IInvoiceImporter
     {
-        InvoiceArticle[] ImportArticles(Stream stream);
+        ArticlesImportData ImportArticles(Stream stream);
     }
 }

@@ -36,7 +36,8 @@
         [ValidateAntiForgeryToken]
         public string ArticlesImport(CaseInvoiceSettingsModel model)
         {
-            if (model.ArticlesImport.File == null || 
+            if (model.ArticlesImport == null ||
+                model.ArticlesImport.File == null || 
                 model.ArticlesImport.File.ContentLength == 0)
             {
                 return "File is empty!";

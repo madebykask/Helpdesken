@@ -14,6 +14,11 @@
             this.Id = id;
         }
 
+        public InvoiceArticleUnit(string name)
+        {
+            this.Name = name;
+        }
+
         [IsId]
         public int Id { get; private set; }
 

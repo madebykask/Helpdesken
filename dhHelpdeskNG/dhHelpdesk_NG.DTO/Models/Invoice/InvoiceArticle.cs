@@ -38,6 +38,34 @@
             this.Id = id;
         }
 
+        public InvoiceArticle(
+                    InvoiceArticle parent, 
+                    int number, 
+                    string name, 
+                    string nameEng,
+                    string description,
+                    ProductAreaOverview productArea,
+                    InvoiceArticleUnit unit,
+                    decimal? ppu)
+        {
+            this.Parent = parent;
+            this.Number = number;
+            this.Name = name;
+            this.NameEng = nameEng;
+            this.Description = description;
+            this.ProductArea = productArea;
+            this.Unit = unit;
+            this.Ppu = ppu;
+        }
+
+        public InvoiceArticle(
+                    int number, 
+                    string name)
+        {
+            this.Number = number;
+            this.Name = name;            
+        }
+
         [IsId]
         public int Id { get; private set; }
 

@@ -9,6 +9,8 @@
 
 namespace DH.Helpdesk.BusinessData.Models.ProductArea.Output
 {
+    using System.Collections.Generic;
+
     using DH.Helpdesk.BusinessData.Interfaces;
 
     /// <summary>
@@ -16,6 +18,8 @@ namespace DH.Helpdesk.BusinessData.Models.ProductArea.Output
     /// </summary>
     public sealed class ProductAreaOverview : IHierarchyItem
     {
+        private readonly List<ProductAreaOverview> children = new List<ProductAreaOverview>(); 
+
         /// <summary>
         /// Gets or sets the id.
         /// </summary>
@@ -35,5 +39,15 @@ namespace DH.Helpdesk.BusinessData.Models.ProductArea.Output
         /// Gets or sets the description.
         /// </summary>
         public string Description { get; set; }
+
+        public int CustomerId { get; set; }
+
+        public List<ProductAreaOverview> Children
+        {
+            get
+            {
+                return this.children;
+            }
+        }
     }
 }
