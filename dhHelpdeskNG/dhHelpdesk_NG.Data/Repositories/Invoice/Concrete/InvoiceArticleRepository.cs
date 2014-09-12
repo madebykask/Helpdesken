@@ -41,7 +41,7 @@
                     .ToArray();
         }
 
-        public void SaveArticle(InvoiceArticle article)
+        public int SaveArticle(InvoiceArticle article)
         {
             InvoiceArticleEntity entity;
             if (article.Id > 0)
@@ -57,6 +57,7 @@
             }
 
             this.Commit();
+            return entity.Id;
         }
 
         private IEnumerable<int> GetProductAreaChildren(int parentId)

@@ -6,6 +6,6 @@
     {
         InvoiceArticle[] GetArticles(int customerId, int productAreaId);
 
-        void SaveArticle(InvoiceArticle article);
+        int SaveArticle(InvoiceArticle article);
     }
 }

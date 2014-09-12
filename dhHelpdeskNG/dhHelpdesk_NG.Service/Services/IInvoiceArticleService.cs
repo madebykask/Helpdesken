@@ -16,8 +16,8 @@
 
         void DeleteCaseInvoices(int caseId);
 
-        void SaveArticle(InvoiceArticle article);
+        int SaveArticle(InvoiceArticle article);
 
-        void SaveUnit(InvoiceArticleUnit unit);
+        int SaveUnit(InvoiceArticleUnit unit);
     }
 }

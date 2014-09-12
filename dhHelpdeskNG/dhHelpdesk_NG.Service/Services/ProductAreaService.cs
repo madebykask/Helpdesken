@@ -74,7 +74,7 @@
         /// </returns>
         IEnumerable<ProductAreaOverview> GetProductAreaOverviews(int customerId);
 
-        void SaveProductArea(ProductAreaOverview productArea);
+        int SaveProductArea(ProductAreaOverview productArea);
     }
 
     public class ProductAreaService : IProductAreaService
@@ -228,9 +228,9 @@
             return this.productAreaRepository.GetProductAreaOverviews(customerId);
         }
 
-        public void SaveProductArea(ProductAreaOverview productArea)
+        public int SaveProductArea(ProductAreaOverview productArea)
         {
-            this.productAreaRepository.SaveProductArea(productArea);
+            return this.productAreaRepository.SaveProductArea(productArea);
         }
 
         private string loopProdcuctAreas(IList<ProductArea> pal, string separator, string valueToReturn)

@@ -6,6 +6,6 @@
     {
         InvoiceArticleUnit[] GetUnits(int customerId);
 
-        void SaveUnit(InvoiceArticleUnit unit);
+        int SaveUnit(InvoiceArticleUnit unit);
     }
 }

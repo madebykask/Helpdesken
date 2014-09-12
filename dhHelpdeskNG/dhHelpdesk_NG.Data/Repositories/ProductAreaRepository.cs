@@ -66,7 +66,7 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         IEnumerable<ProductAreaOverview> GetProductAreaOverviews(int customerId);
 
-        void SaveProductArea(ProductAreaOverview productArea);
+        int SaveProductArea(ProductAreaOverview productArea);
     }
 
     /// <summary>
@@ -189,7 +189,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 .Select(this.productAreaEntityToBusinessModelMapper.Map);
         }
 
-        public void SaveProductArea(ProductAreaOverview productArea)
+        public int SaveProductArea(ProductAreaOverview productArea)
         {
             ProductArea entity;
             if (productArea.Id > 0)
@@ -205,6 +205,7 @@ namespace DH.Helpdesk.Dal.Repositories
             }
 
             this.Commit();
+            return entity.Id;
         }
     }
 

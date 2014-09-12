@@ -20,7 +20,7 @@
         }
 
         [IsId]
-        public int Id { get; private set; }
+        public int Id { get; set; }
 
         [NotNull]
         public string Name { get; private set; }

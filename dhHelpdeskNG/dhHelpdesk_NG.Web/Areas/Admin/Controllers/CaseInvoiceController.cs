@@ -13,14 +13,22 @@
 
         private readonly ICaseInvoiceFactory caseInvoiceFactory;
 
+        private readonly IProductAreaService productAreaService;
+
+        private readonly IInvoiceArticleService invoiceArticleService;
+
         public CaseInvoiceController(
                 IMasterDataService masterDataService, 
                 ICustomerService customerService, 
-                ICaseInvoiceFactory caseInvoiceFactory)
+                ICaseInvoiceFactory caseInvoiceFactory, 
+                IProductAreaService productAreaService, 
+                IInvoiceArticleService invoiceArticleService)
             : base(masterDataService)
         {
             this.customerService = customerService;
             this.caseInvoiceFactory = caseInvoiceFactory;
+            this.productAreaService = productAreaService;
+            this.invoiceArticleService = invoiceArticleService;
         }
 
         [HttpGet]
@@ -43,7 +51,7 @@
                 return "File is empty!";
             }
 
-            var importer = this.caseInvoiceFactory.GetImporter();
+            var importer = this.caseInvoiceFactory.GetImporter(this.productAreaService, this.invoiceArticleService);
             var result = importer.ImportArticles(model.ArticlesImport.File.InputStream);
             importer.SaveImportedArticles(result, model.ArticlesImport.CustomerId);
             return "Import completed successfully!";

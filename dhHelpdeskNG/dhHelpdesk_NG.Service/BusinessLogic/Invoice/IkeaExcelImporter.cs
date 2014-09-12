@@ -114,7 +114,8 @@
                     {
                         package = new InvoiceArticle(
                                     an,
-                                    packageName);
+                                    packageName,
+                                    childArea);
                         articles.Add(package);
                     }
 
@@ -150,8 +151,86 @@
 
         public void SaveImportedArticles(ArticlesImportData data, int customerId)
         {
+            if (data == null)
+            {
+                return;
+            }
+
             var units = this.invoiceArticleService.GetUnits(customerId);
+            foreach (var unit in data.Units)
+            {
+                unit.CustomerId = customerId;
+                var savedUnit = units.FirstOrDefault(u => u.Name.EqualWith(unit.Name));
+                if (savedUnit != null)
+                {
+                    unit.Id = savedUnit.Id;
+                }
+                else
+                {
+                    unit.Id = this.invoiceArticleService.SaveUnit(unit);
+                }
+
+                var articlesWithUnit = data.Articles.Where(a => a.Unit != null && a.Unit.Name.EqualWith(unit.Name));
+                foreach (var articleWithUnit in articlesWithUnit)
+                {
+                    articleWithUnit.UnitId = unit.Id;
+                }
+            }
+
             var productAreas = this.productAreaService.GetProductAreaOverviews(customerId);
+            foreach (var productArea in data.ProductAreas)
+            {
+                productArea.CustomerId = customerId;
+                var savedProductArea = productAreas.FirstOrDefault(a => a.Name.EqualWith(productArea.Name));
+                if (savedProductArea != null)
+                {
+                    productArea.Id = savedProductArea.Id;
+                }
+                else
+                {
+                    var parentProductArea = data.ProductAreas.FirstOrDefault(a => a.Children.Any(c => c.Name.EqualWith(productArea.Name)));
+                    if (parentProductArea != null)
+                    {
+                        parentProductArea.CustomerId = customerId;
+                        var savedParentProductArea = productAreas.FirstOrDefault(a => a.Name.EqualWith(parentProductArea.Name));
+                        if (savedParentProductArea != null)
+                        {
+                            parentProductArea.Id = savedParentProductArea.Id;
+                        }
+                        else
+                        {
+                            parentProductArea.Id = this.productAreaService.SaveProductArea(parentProductArea);
+                        }
+
+                        productArea.ParentId = parentProductArea.Id;
+                    }
+
+                    productArea.Id = this.productAreaService.SaveProductArea(productArea);
+                }
+
+                var articlesWithProductArea = data.Articles.Where(a => a.ProductArea != null && a.ProductArea.Name.EqualWith(productArea.Name));
+                foreach (var articleWithProductArea in articlesWithProductArea)
+                {
+                    articleWithProductArea.ProductAreaId = productArea.Id;
+                }
+            }
+
+            foreach (var article in data.Articles)
+            {
+                if (article.Id > 0)
+                {
+                    continue;
+                }
+
+                article.CustomerId = customerId;
+                if (article.Parent != null)
+                {
+                    article.Parent.Id = this.invoiceArticleService.SaveArticle(article.Parent);
+                    article.ParentId = article.Parent.Id;
+                }
+
+                article.Id = this.invoiceArticleService.SaveArticle(article);
+            }
         }
     }
 }

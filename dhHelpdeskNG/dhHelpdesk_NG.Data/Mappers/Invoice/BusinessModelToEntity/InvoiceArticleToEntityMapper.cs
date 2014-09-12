@@ -8,7 +8,7 @@
         public void Map(InvoiceArticle businessModel, InvoiceArticleEntity entity)
         {
             entity.Name = businessModel.Name;
-            entity.NameEng = businessModel.Name;
+            entity.NameEng = businessModel.NameEng;
             entity.Description = businessModel.Description;
             entity.Number = businessModel.Number;
             entity.ParentId = businessModel.ParentId;

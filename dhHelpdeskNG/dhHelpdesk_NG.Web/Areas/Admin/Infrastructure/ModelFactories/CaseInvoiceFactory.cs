@@ -7,18 +7,6 @@
 
     public sealed class CaseInvoiceFactory : ICaseInvoiceFactory
     {
-        private readonly IProductAreaService productAreaService;
-
-        private readonly IInvoiceArticleService invoiceArticleService;
-
-        public CaseInvoiceFactory(
-                IProductAreaService productAreaService,
-                IInvoiceArticleService invoiceArticleService)
-        {
-            this.productAreaService = productAreaService;
-            this.invoiceArticleService = invoiceArticleService;            
-        }
-
         public CaseInvoiceSettingsModel GetSettingsModel(Customer customer)
         {
             var instance = new CaseInvoiceSettingsModel
@@ -33,9 +21,11 @@
             return instance;
         }
 
-        public IInvoiceImporter GetImporter()
+        public IInvoiceImporter GetImporter(
+                IProductAreaService productAreaService,
+                IInvoiceArticleService invoiceArticleService)
         {
-            return new IkeaExcelImporter(this.productAreaService, this.invoiceArticleService);
+            return new IkeaExcelImporter(productAreaService, invoiceArticleService);
         }
     }
 }

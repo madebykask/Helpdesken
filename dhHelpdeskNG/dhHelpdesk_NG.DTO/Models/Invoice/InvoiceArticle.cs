@@ -60,16 +60,19 @@
 
         public InvoiceArticle(
                     int number, 
-                    string name)
+                    string name,
+                    ProductAreaOverview productArea)
         {
             this.Number = number;
-            this.Name = name;            
+            this.Name = name;
+            this.NameEng = string.Empty;
+            this.ProductArea = productArea;
         }
 
         [IsId]
-        public int Id { get; private set; }
+        public int Id { get; set; }
 
-        public int? ParentId { get; private set; }
+        public int? ParentId { get; set; }
 
         public InvoiceArticle Parent { get; private set; }
 
@@ -83,20 +86,20 @@
 
         public string Description { get; private set; }
 
-        public int? UnitId { get; private set; }
+        public int? UnitId { get; set; }
 
         public InvoiceArticleUnit Unit { get; private set; }
 
         public decimal? Ppu { get; private set; }
 
         [IsId]
-        public int ProductAreaId { get; private set; }
+        public int ProductAreaId { get; set; }
 
         [NotNull]
         public ProductAreaOverview ProductArea { get; private set; }
 
         [IsId]
-        public int CustomerId { get; private set; }
+        public int CustomerId { get; set; }
 
         [NotNull]
         public CustomerOverview Customer { get; private set; }

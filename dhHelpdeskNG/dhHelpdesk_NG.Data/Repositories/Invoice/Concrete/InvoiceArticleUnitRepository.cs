@@ -35,7 +35,7 @@
                     .ToArray();
         }
 
-        public void SaveUnit(InvoiceArticleUnit unit)
+        public int SaveUnit(InvoiceArticleUnit unit)
         {
             InvoiceArticleUnitEntity entity;
             if (unit.Id > 0)
@@ -50,7 +50,8 @@
                 this.DbContext.InvoiceArticleUnits.Add(entity);
             }
 
-            this.Commit();            
+            this.Commit();
+            return entity.Id;
         }
     }
 }

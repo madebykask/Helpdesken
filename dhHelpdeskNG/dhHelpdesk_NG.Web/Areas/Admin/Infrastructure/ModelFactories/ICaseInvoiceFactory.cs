@@ -2,12 +2,15 @@
 {
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.BusinessLogic.Invoice;
+    using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models.Invoice;
 
     public interface ICaseInvoiceFactory
     {
         CaseInvoiceSettingsModel GetSettingsModel(Customer customer);
 
-        IInvoiceImporter GetImporter();
+        IInvoiceImporter GetImporter(
+                IProductAreaService productAreaService,
+                IInvoiceArticleService invoiceArticleService);
     }
 }
