@@ -15,5 +15,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelExport.ExcelExport
         public string FieldName { get; private set; }
 
         public DisplayValue Value { get; private set; }
+
+        public bool IsBold { get; set; }
     }
 }

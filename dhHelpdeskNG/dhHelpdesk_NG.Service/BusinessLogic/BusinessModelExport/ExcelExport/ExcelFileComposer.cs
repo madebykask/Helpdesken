@@ -12,11 +12,10 @@
 
         public byte[] Compose(IEnumerable<ITableHeader> headers, IEnumerable<IRow<ICell>> items, string worksheetName)
         {
-            var tempHeaders = headers.ToList();
-            var tempItems = items.ToList();
+            List<ITableHeader> tempHeaders = headers.ToList();
+            List<IRow<ICell>> tempItems = items.ToList();
 
-            var outputMatrix = CreateMatrix(tempHeaders, tempItems);
-            var excelPackage = FlushMatrixToExcelPackage(outputMatrix, worksheetName);
+            ExcelPackage excelPackage = CreateExcelPackage(tempHeaders, tempItems, worksheetName);
 
             AutoFitColumnsWidth(excelPackage, worksheetName, tempHeaders.Count);
 
@@ -29,7 +28,7 @@
 
         private static void AutoFitColumnsWidth(ExcelPackage excelPackage, string worksheetName, int columnCount)
         {
-            var worksheet = excelPackage.Workbook.Worksheets[worksheetName];
+            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets[worksheetName];
 
             for (var i = 1; i < columnCount + 1; i++)
             {
@@ -37,27 +36,31 @@
             }
         }
 
-        private static string[,] CreateMatrix(List<ITableHeader> headers, List<IRow<ICell>> items)
+        private static ExcelPackage CreateExcelPackage(List<ITableHeader> headers, List<IRow<ICell>> items, string worksheetName)
         {
-            var outputMatrix = new string[items.Count + 1, headers.Count];
+            var memoryStream = new MemoryStream();
+            var excelPackage = new ExcelPackage(memoryStream);
+            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add(worksheetName);
 
             for (var i = 0; i < headers.Count; i++)
             {
-                outputMatrix[0, i] = headers[i].Caption;
+                worksheet.SetValue(1, i + 1, headers[i].Caption);
+
             }
 
-            var rowIndex = 1;
+            int rowIndex = 1;
 
-            foreach (var item in items)
+            foreach (IRow<ICell> item in items)
             {
-                var columnIndex = 0;
+                int columnIndex = 0;
 
-                foreach (var header in headers)
+                foreach (ITableHeader header in headers)
                 {
-                    var field = item.Fields.SingleOrDefault(f => f.FieldName == header.FieldName);
+                    ICell field = item.Fields.SingleOrDefault(f => f.FieldName == header.FieldName);
                     if (field != null)
                     {
-                        outputMatrix[rowIndex, columnIndex] = field.Value.GetDisplayValue();
+                        worksheet.SetValue(rowIndex + 1, columnIndex + 1, field.Value.GetDisplayValue());
+                        SetStyle(field, worksheet, rowIndex, columnIndex);
                     }
 
                     columnIndex++;
@@ -66,24 +69,12 @@
                 rowIndex++;
             }
 
-            return outputMatrix;
+            return excelPackage;
         }
 
-        private static ExcelPackage FlushMatrixToExcelPackage(string[,] outputMatrix, string worksheetName)
+        private static void SetStyle(ICell field, ExcelWorksheet worksheet, int rowIndex, int columnIndex)
         {
-            var memoryStream = new MemoryStream();
-            var excelPackage = new ExcelPackage(memoryStream);
-            var worksheet = excelPackage.Workbook.Worksheets.Add(worksheetName);
-
-            for (var i = 0; i < outputMatrix.GetLength(0); i++)
-            {
-                for (var j = 0; j < outputMatrix.GetLength(1); j++)
-                {
-                    worksheet.SetValue(i + 1, j + 1, outputMatrix[i, j]);
-                }
-            }
-
-            return excelPackage;
+            worksheet.Cells[rowIndex + 1, columnIndex + 1].Style.Font.Bold = field.IsBold;
         }
 
         #endregion
