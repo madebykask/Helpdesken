@@ -33,6 +33,11 @@
             return this.invoiceArticleRepository.GetArticles(customerId, productAreaId);
         }
 
+        public InvoiceArticle[] GetArticles(int customerId)
+        {
+            return this.invoiceArticleRepository.GetArticles(customerId);
+        }
+
         public CaseInvoice[] GetCaseInvoices(int caseId)
         {
             return this.caseInvoiceArticleRepository.GetCaseInvoices(caseId);

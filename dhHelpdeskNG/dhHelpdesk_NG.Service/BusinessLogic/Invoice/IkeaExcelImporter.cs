@@ -215,6 +215,7 @@
                 }
             }
 
+            var articles = this.invoiceArticleService.GetArticles(customerId);
             foreach (var article in data.Articles)
             {
                 if (article.Id > 0)
@@ -225,11 +226,33 @@
                 article.CustomerId = customerId;
                 if (article.Parent != null)
                 {
-                    article.Parent.Id = this.invoiceArticleService.SaveArticle(article.Parent);
+                    article.Parent.CustomerId = customerId;
+                    var savedParentArticle = articles.FirstOrDefault(a => a.Number == article.Parent.Number &&
+                                                                        a.Name.EqualWith(article.Parent.Name) &&
+                                                                        a.NameEng.EqualWith(article.Parent.NameEng));
+                    if (savedParentArticle != null)
+                    {
+                        article.Parent.Id = savedParentArticle.Id;
+                    }
+                    else
+                    {
+                        article.Parent.Id = this.invoiceArticleService.SaveArticle(article.Parent);
+                    }
+
                     article.ParentId = article.Parent.Id;
                 }
 
-                article.Id = this.invoiceArticleService.SaveArticle(article);
+                var savedArticle = articles.FirstOrDefault(a => a.Number == article.Number &&
+                                                    a.Name.EqualWith(article.Name) &&
+                                                    a.NameEng.EqualWith(article.NameEng));
+                if (savedArticle != null)
+                {
+                    article.Id = savedArticle.Id;
+                }
+                else
+                {
+                    article.Id = this.invoiceArticleService.SaveArticle(article);
+                }
             }
         }
     }

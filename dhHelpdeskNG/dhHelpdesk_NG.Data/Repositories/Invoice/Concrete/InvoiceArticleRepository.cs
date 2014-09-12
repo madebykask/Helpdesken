@@ -41,6 +41,18 @@
                     .ToArray();
         }
 
+        public InvoiceArticle[] GetArticles(int customerId)
+        {
+            var entities = this.DbContext.InvoiceArticles
+                        .Where(a => a.CustomerId == customerId)
+                        .OrderBy(a => a.Number)
+                        .ToList();
+
+            return entities
+                    .Select(a => this.articleMapper.Map(a))
+                    .ToArray();
+        }
+
         public int SaveArticle(InvoiceArticle article)
         {
             InvoiceArticleEntity entity;

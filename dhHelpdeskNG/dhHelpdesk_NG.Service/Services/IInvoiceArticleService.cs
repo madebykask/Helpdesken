@@ -10,6 +10,8 @@
 
         InvoiceArticle[] GetArticles(int customerId, int productAreaId);
 
+        InvoiceArticle[] GetArticles(int customerId);
+
         CaseInvoice[] GetCaseInvoices(int caseId);
 
         void SaveCaseInvoices(IEnumerable<CaseInvoice> invoices);

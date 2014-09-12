@@ -515,12 +515,20 @@ $(function () {
                 return this.Children.length > 0;
             };
 
+            this.GetName = function() {
+                if (this.Name != null && this.Name != "") {
+                    return this.Name;
+                }
+
+                return this.NameEng;
+            };
+
             this.GetFullName = function () {
                 var fullName;
                 if (this.Number != null) {
-                    fullName = this.Number + " - " + this.Name;
+                    fullName = this.Number + " - " + this.GetName();
                 } else {
-                    fullName = this.Name;
+                    fullName = this.GetName();
                 }
 
                 if (this.Unit != null) {
