@@ -16,6 +16,8 @@
 
             var serializer = new JavaScriptSerializer();
             var invoiceData = serializer.Deserialize<CaseInvoiceData>(invoices);
+            if (invoiceData.Id == 0)
+                return null;
             var invoice = new CaseInvoice(
                         invoiceData.Id,
                         invoiceData.CaseId,
