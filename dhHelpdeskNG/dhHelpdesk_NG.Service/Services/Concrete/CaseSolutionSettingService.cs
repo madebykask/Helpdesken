@@ -86,7 +86,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         private CaseSolutionSettingForWrite CreateCaseSolutionSettingForWrite(CaseSolutionFields field)
         {
-            return new CaseSolutionSettingForWrite(field, CaseSolutionModes.FieldAppearance);
+            return new CaseSolutionSettingForWrite(field, CaseSolutionModes.DisplayField);
         }
     }
 }
