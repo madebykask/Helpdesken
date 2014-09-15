@@ -10,7 +10,6 @@
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.FinishingCause;
-    using DH.Helpdesk.BusinessData.Models.Invoice;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
@@ -91,6 +90,8 @@
 
         private readonly ICaseSolutionSettingService caseSolutionSettingService;
 
+        private readonly IInvoiceHelper invoiceHelper;
+
         #endregion
 
         #region Constructor
@@ -142,7 +143,8 @@
             IInvoiceArticleService invoiceArticleService, 
             IInvoiceArticlesModelFactory invoiceArticlesModelFactory, 
             IConfiguration configuration,
-            ICaseSolutionSettingService caseSolutionSettingService)
+            ICaseSolutionSettingService caseSolutionSettingService, 
+            IInvoiceHelper invoiceHelper)
             : base(masterDataService)
         {
             this._caseService = caseService;
@@ -191,6 +193,7 @@
             this.invoiceArticlesModelFactory = invoiceArticlesModelFactory;
             this.configuration = configuration;
             this.caseSolutionSettingService = caseSolutionSettingService;
+            this.invoiceHelper = invoiceHelper;
         }
 
         #endregion
@@ -1246,7 +1249,7 @@
                         SessionFacade.CurrentUser.Id, 
                         this.User.Identity.Name, 
                         out errors,
-                        InvoiceHelper.ToCaseInvoices(caseInvoiceArticles));
+                        this.invoiceHelper.ToCaseInvoices(caseInvoiceArticles));
 
             if (updateNotifierInformation.HasValue && updateNotifierInformation.Value)
             {

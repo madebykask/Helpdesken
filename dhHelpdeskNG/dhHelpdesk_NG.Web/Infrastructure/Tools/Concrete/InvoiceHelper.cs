@@ -1,13 +1,16 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Tools
+﻿namespace DH.Helpdesk.Web.Infrastructure.Tools.Concrete
 {
+    using System.IO;
     using System.Linq;
     using System.Web.Script.Serialization;
+    using System.Xml;
+    using System.Xml.Serialization;
 
     using DH.Helpdesk.BusinessData.Models.Invoice;
 
-    public static class InvoiceHelper
+    public sealed class InvoiceHelper : IInvoiceHelper
     {
-        public static CaseInvoice[] ToCaseInvoices(string invoices)
+        public CaseInvoice[] ToCaseInvoices(string invoices)
         {
             if (string.IsNullOrEmpty(invoices))
             {
@@ -16,8 +19,11 @@
 
             var serializer = new JavaScriptSerializer();
             var invoiceData = serializer.Deserialize<CaseInvoiceData>(invoices);
-            if (invoiceData.Id == 0)
+            if (invoiceData.CaseId == 0)
+            {
                 return null;
+            }
+
             var invoice = new CaseInvoice(
                         invoiceData.Id,
                         invoiceData.CaseId,
@@ -40,6 +46,24 @@
                                             a.IsInvoiced)).ToArray())).ToArray());
 
             return new[] { invoice };
+        }
+
+        public XmlDocument ToOutputXml(CaseInvoice[] invoices)
+        {
+            if (invoices == null)
+            {
+                return null;
+            }
+
+            using (var ms = new MemoryStream())
+            {
+                var serializer = new XmlSerializer(typeof(CaseInvoice));
+                serializer.Serialize(ms, invoices);
+                ms.Seek(0, SeekOrigin.Begin);
+                var document = new XmlDocument();
+                document.Load(ms);
+                return document;
+            }
         }
 
         private class CaseInvoiceData

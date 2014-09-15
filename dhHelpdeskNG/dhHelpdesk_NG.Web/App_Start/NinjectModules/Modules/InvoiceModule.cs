@@ -8,6 +8,8 @@
     using DH.Helpdesk.Web.Areas.Admin.Infrastructure.ModelFactories;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Invoice;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Invoice.Concrete;
+    using DH.Helpdesk.Web.Infrastructure.Tools;
+    using DH.Helpdesk.Web.Infrastructure.Tools.Concrete;
 
     using Ninject.Modules;
 
@@ -61,6 +63,10 @@
 
             this.Bind<ICaseInvoiceFactory>()
                 .To<CaseInvoiceFactory>()
+                .InSingletonScope();
+
+            this.Bind<IInvoiceHelper>()
+                .To<InvoiceHelper>()
                 .InSingletonScope();
         }
     }

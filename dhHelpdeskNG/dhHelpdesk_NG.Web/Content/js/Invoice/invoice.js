@@ -149,28 +149,36 @@ $(function () {
                 this._invoicesBackup.push(invoice.Clone());
             }
             this.SaveInvoices();
-            /*var th = this;
-            $.post("/invoice/SaveArticles", {
-                caseId: this.CaseId,
+            var th = this;
+            $.post("/Invoice/DoInvoice", {
                 invoices: this.ToJson()
             },
             function() {
                 th.ShowMessage('Articles invoiced.');
-            });*/
-
-            this.ShowMessage('Articles invoiced.');
+            })
+            .fail(function(result) {
+                th.ShowErrorMessage(result.statusText);
+            });
         },
 
         ToJson: function () {
             return this.GetInvoice().ToJson();
         },
 
-        ShowMessage: function(message) {
+        ShowSuccessMessage: function(message) {
+            this.ShowMessage(message, 'success');
+        },
+
+        ShowErrorMessage: function(message) {
+            this.ShowMessage(message, 'error');
+        },
+
+        ShowMessage: function(message, type) {
             $().toastmessage('showToast', {
                 text: message,
                 sticky: false,
                 position: 'top-center',
-                type: 'success',
+                type: type,
                 closeText: '',
                 stayTime: 3000,
                 inEffectDuration: 1000,
