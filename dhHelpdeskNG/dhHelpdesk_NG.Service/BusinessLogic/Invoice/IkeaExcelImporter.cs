@@ -47,9 +47,10 @@
 
                 for (var i = 2; i <= worksheet.Dimension.End.Row; i++)
                 {
+                    var articleNumber = worksheet.Cells[i, 1].Value.ToTrimString();
                     var productAreaParent = worksheet.Cells[i, 3].Value.ToTrimString();
                     var productAreaChild = worksheet.Cells[i, 4].Value.ToTrimString();
-                    var articleNumber = worksheet.Cells[i, 5].Value.ToTrimString();
+                    var packageNumber = worksheet.Cells[i, 5].Value.ToTrimString();
                     var packageName = worksheet.Cells[i, 6].Value.ToTrimString();
                     var articleName = worksheet.Cells[i, 7].Value.ToTrimString();
                     var articleNameEng = worksheet.Cells[i, 8].Value.ToTrimString();
@@ -67,14 +68,10 @@
                         articleNameEng = string.Empty;
                     }
 
-                    if (string.IsNullOrEmpty(productAreaParent) || 
+                    if (string.IsNullOrEmpty(articleNumber) ||
+                        string.IsNullOrEmpty(packageNumber) ||
+                        string.IsNullOrEmpty(productAreaParent) || 
                         string.IsNullOrEmpty(productAreaChild))
-                    {
-                        continue;
-                    }
-
-                    int an;
-                    if (!int.TryParse(articleNumber, out an))
                     {
                         continue;
                     }
@@ -113,7 +110,7 @@
                         !string.IsNullOrEmpty(packageName))
                     {
                         package = new InvoiceArticle(
-                                    an,
+                                    packageNumber,
                                     packageName,
                                     childArea);
                         articles.Add(package);
@@ -131,7 +128,7 @@
 
                         article = new InvoiceArticle(
                                     package,
-                                    an,
+                                    articleNumber,
                                     articleName,
                                     articleNameEng,
                                     articleDescription,

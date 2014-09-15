@@ -10,7 +10,7 @@
                     int id, 
                     int? parentId, 
                     InvoiceArticle parent, 
-                    int number, 
+                    string number, 
                     string name, 
                     string nameEng,
                     string description,
@@ -40,7 +40,7 @@
 
         public InvoiceArticle(
                     InvoiceArticle parent, 
-                    int number, 
+                    string number, 
                     string name, 
                     string nameEng,
                     string description,
@@ -59,7 +59,7 @@
         }
 
         public InvoiceArticle(
-                    int number, 
+                    string number, 
                     string name,
                     ProductAreaOverview productArea)
         {
@@ -76,7 +76,7 @@
 
         public InvoiceArticle Parent { get; private set; }
 
-        public int Number { get; private set; }
+        public string Number { get; private set; }
 
         [NotNull]
         public string Name { get; private set; }

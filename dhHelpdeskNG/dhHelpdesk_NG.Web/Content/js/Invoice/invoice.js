@@ -353,7 +353,9 @@ $(function () {
             }
 
             var addEl = th._container.find(".articles-params-add");
-            addEl.click(function () {
+            addEl
+                .unbind('click')
+                .click(function () {
                 var unitsEl = th._container.find(".articles-params-units");
                 var units = unitsEl.val();
                 if (!th.IsInteger(units) || units <= 0) {

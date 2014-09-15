@@ -6,7 +6,7 @@
 
         public virtual InvoiceArticleEntity Parent { get; set; }
 
-        public int Number { get; set; }
+        public string Number { get; set; }
 
         public string Name { get; set; }
 

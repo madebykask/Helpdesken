@@ -46,7 +46,7 @@ CREATE TABLE [dbo].[tblInvoiceArticle]
 (
 	[Id] INT IDENTITY(1,1) NOT NULL,
 	[ParentId] INT NULL,
-	[Number] INT NOT NULL,
+	[Number] NVARCHAR(15) NOT NULL,
 	[Name] NVARCHAR(100) NOT NULL,
 	[NameEng] NVARCHAR(100) NOT NULL,
 	[Description] NVARCHAR(200) NULL,

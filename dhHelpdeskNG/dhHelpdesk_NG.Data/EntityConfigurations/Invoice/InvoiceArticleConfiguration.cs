@@ -16,7 +16,7 @@
                 .WithMany()
                 .HasForeignKey(a => a.ParentId)
                 .WillCascadeOnDelete(false);
-            this.Property(a => a.Number).IsRequired();
+            this.Property(a => a.Number).IsRequired().HasMaxLength(15);
             this.Property(a => a.Name).IsRequired().HasMaxLength(100);
             this.Property(a => a.NameEng).IsRequired().HasMaxLength(100);
             this.Property(a => a.Description).IsOptional().HasMaxLength(200);
