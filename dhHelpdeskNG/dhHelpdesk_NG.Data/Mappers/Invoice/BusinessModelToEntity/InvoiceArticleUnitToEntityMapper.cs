@@ -8,6 +8,7 @@
         public void Map(InvoiceArticleUnit businessModel, InvoiceArticleUnitEntity entity)
         {
             entity.Name = businessModel.Name;
+            entity.CustomerId = businessModel.CustomerId;
         }
     }
 }

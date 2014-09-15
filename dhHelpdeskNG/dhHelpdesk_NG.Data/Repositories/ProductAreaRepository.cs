@@ -65,6 +65,8 @@ namespace DH.Helpdesk.Dal.Repositories
         /// The <see cref="IEnumerable"/>.
         /// </returns>
         IEnumerable<ProductAreaOverview> GetProductAreaOverviews(int customerId);
+
+        int SaveProductArea(ProductAreaOverview productArea);
     }
 
     /// <summary>
@@ -77,6 +79,8 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </summary>
         private readonly IEntityToBusinessModelMapper<ProductArea, ProductAreaOverview> productAreaEntityToBusinessModelMapper;
 
+        private readonly IBusinessModelToEntityMapper<ProductAreaOverview, ProductArea> toEntityMapper;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductAreaRepository"/> class.
         /// </summary>
@@ -88,10 +92,12 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </param>
         public ProductAreaRepository(
             IDatabaseFactory databaseFactory, 
-            IEntityToBusinessModelMapper<ProductArea, ProductAreaOverview> productAreaEntityToBusinessModelMapper)
+            IEntityToBusinessModelMapper<ProductArea, ProductAreaOverview> productAreaEntityToBusinessModelMapper, 
+            IBusinessModelToEntityMapper<ProductAreaOverview, ProductArea> toEntityMapper)
             : base(databaseFactory)
         {
             this.productAreaEntityToBusinessModelMapper = productAreaEntityToBusinessModelMapper;
+            this.toEntityMapper = toEntityMapper;
         }
 
         /// <summary>
@@ -181,6 +187,25 @@ namespace DH.Helpdesk.Dal.Repositories
 
             return entities
                 .Select(this.productAreaEntityToBusinessModelMapper.Map);
+        }
+
+        public int SaveProductArea(ProductAreaOverview productArea)
+        {
+            ProductArea entity;
+            if (productArea.Id > 0)
+            {
+                entity = this.DataContext.ProductAreas.Find(productArea.Id);
+                this.toEntityMapper.Map(productArea, entity);
+            }
+            else
+            {
+                entity = new ProductArea();
+                this.toEntityMapper.Map(productArea, entity);
+                this.DataContext.ProductAreas.Add(entity);
+            }
+
+            this.Commit();
+            return entity.Id;
         }
     }
 

@@ -22,19 +22,3 @@
             </span>
     </div>
 }
-@section Scripts {
-    <script type="text/javascript">
-
-        function changeLabelList(id) {
-            var list = $('#labelList');
-            list.html('');
-            if (id != '') {
-                $.get('/GlobalSetting/ChangeLabel/' + id + '?textId=' + $("#textId").val(), function (result) {
-                    list.html(result);
-                });
-            }
-        }
-</script>
-
-
-}

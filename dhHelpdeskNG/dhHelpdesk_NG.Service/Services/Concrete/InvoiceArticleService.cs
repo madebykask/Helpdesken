@@ -33,6 +33,11 @@
             return this.invoiceArticleRepository.GetArticles(customerId, productAreaId);
         }
 
+        public InvoiceArticle[] GetArticles(int customerId)
+        {
+            return this.invoiceArticleRepository.GetArticles(customerId);
+        }
+
         public CaseInvoice[] GetCaseInvoices(int caseId)
         {
             return this.caseInvoiceArticleRepository.GetCaseInvoices(caseId);
@@ -46,6 +51,16 @@
         public void DeleteCaseInvoices(int caseId)
         {
             this.caseInvoiceArticleRepository.DeleteCaseInvoices(caseId);
+        }
+
+        public int SaveArticle(InvoiceArticle article)
+        {
+            return this.invoiceArticleRepository.SaveArticle(article);
+        }
+
+        public int SaveUnit(InvoiceArticleUnit unit)
+        {
+            return this.invoiceArticleUnitRepository.SaveUnit(unit);
         }
     }
 }

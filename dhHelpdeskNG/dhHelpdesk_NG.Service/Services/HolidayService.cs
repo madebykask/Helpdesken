@@ -14,8 +14,12 @@
         IEnumerable<Holiday> GetAll();
         IEnumerable<HolidayHeader> GetHolidayHeaders();
 
+        IList<Holiday> GetHolidaysByHeaderId(int id);
+
         Holiday GetHoliday(int id);
         HolidayHeader GetHolidayHeader(int id);
+
+        DeleteMessage DeleteHoliday(int id);
 
         void SaveHoliday(Holiday holiday, out IDictionary<string, string> errors);
         void Commit();
@@ -60,6 +64,11 @@
             return this._holidayRepository.GetById(id);
         }
 
+        public IList<Holiday> GetHolidaysByHeaderId(int id)
+        {
+            return this._holidayRepository.GetHolidaysByHeaderId(id);
+        }
+
         public HolidayHeader GetHolidayHeader(int id)
         {
             return this._holidayHeaderRepository.Get(x => x.Id == id);
@@ -84,6 +93,28 @@
 
             if (errors.Count == 0)
                 this.Commit();
+        }
+
+        public DeleteMessage DeleteHoliday(int id)
+        {
+            var holiday = this._holidayRepository.GetById(id);
+
+            if (holiday != null)
+            {
+                try
+                {
+                    this._holidayRepository.Delete(holiday);
+                    this.Commit();
+
+                    return DeleteMessage.Success;
+                }
+                catch
+                {
+                    return DeleteMessage.UnExpectedError;
+                }
+            }
+
+            return DeleteMessage.Error;
         }
 
         public void Commit()

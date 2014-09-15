@@ -14,13 +14,18 @@
             this.Id = id;
         }
 
+        public InvoiceArticleUnit(string name)
+        {
+            this.Name = name;
+        }
+
         [IsId]
-        public int Id { get; private set; }
+        public int Id { get; set; }
 
         [NotNull]
         public string Name { get; private set; }
 
         [IsId]
-        public int CustomerId { get; private set; }
+        public int CustomerId { get; set; }
     }
 }

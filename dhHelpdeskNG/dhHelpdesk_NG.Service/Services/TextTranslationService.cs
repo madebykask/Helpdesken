@@ -58,7 +58,7 @@
 
         public IEnumerable<Text> GetAllTexts(int texttypeId)
         {
-            return this._textRepository.GetAll().Where(x => x.Id > 4999 && x.Type == texttypeId);
+            return this._textRepository.GetAll().Where(x => x.Id > 4999 && x.Type == texttypeId).OrderBy(x => x.TextToTranslate);
         }
 
         public IList<TextTranslation> GetAllTextTranslations()

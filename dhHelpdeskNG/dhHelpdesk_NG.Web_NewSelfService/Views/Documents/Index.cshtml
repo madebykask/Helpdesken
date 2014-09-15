@@ -1,4 +1,5 @@
-﻿@{
+﻿@model DH.Helpdesk.NewSelfService.Models.Documents.DocumentsModel
+@{    
     ViewBag.Title = "Documents";
 }
 
@@ -15,21 +16,29 @@
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th>Name
+                                    <th>
+                                        Name
                                     </th>
-                                    <th>Description
+                                    <th>
+                                        Description
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td><a href="@Url.Content("~/Content/img-profile/Pay query form.xlsm")" target="_blank" class="btn btn-dhblue btn-xs"><span class="glyphicon glyphicon-file"></span></a>
-                                    </td>
-                                    <td>Pay Query
-                                    </td>
-                                    <td>Pay Query Form
-                                    </td>
-                                </tr>
+                                @foreach (var doc in Model.Documents)
+                                {
+                                    <tr>
+                                        <td style="width:20px">
+                                            <a href="@Url.Content("~/Content/img-profile/Pay query form.xlsm")" target="_blank" class="btn btn-dhblue btn-xs"><span class="glyphicon glyphicon-file"></span></a>
+                                        </td>
+                                        <td>
+                                            @doc.Name
+                                        </td>
+                                        <td>
+                                            @doc.Description
+                                        </td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>

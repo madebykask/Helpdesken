@@ -38,7 +38,7 @@ namespace DH.Helpdesk.Web.Models
         {
             List<CaseSolutionSettingModel> settings =
                 (from caseSolutionFields in (CaseSolutionFields[])Enum.GetValues(typeof(CaseSolutionFields))
-                 select new CaseSolutionSettingModel(caseSolutionFields, CaseSolutionModes.FieldAppearance)).ToList();
+                 select new CaseSolutionSettingModel(caseSolutionFields, CaseSolutionModes.DisplayField)).ToList();
             return settings;
         }
     }

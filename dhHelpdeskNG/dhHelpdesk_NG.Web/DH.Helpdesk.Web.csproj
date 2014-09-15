@@ -198,6 +198,7 @@
     <Compile Include="Areas\Admin\Controllers\AccountActivityController.cs" />
     <Compile Include="Areas\Admin\Controllers\BaseAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\BuildingController.cs" />
+    <Compile Include="Areas\Admin\Controllers\CaseInvoiceController.cs" />
     <Compile Include="Areas\Admin\Controllers\CaseTypeController.cs" />
     <Compile Include="Areas\Admin\Controllers\CategoryController.cs" />
     <Compile Include="Areas\Admin\Controllers\CausingPartController.cs" />
@@ -246,6 +247,8 @@
     <Compile Include="Areas\Admin\Controllers\SystemController.cs" />
     <Compile Include="Areas\Admin\Controllers\UrgencyController.cs" />
     <Compile Include="Areas\Admin\Controllers\WorkingGroupController.cs" />
+    <Compile Include="Areas\Admin\Infrastructure\ModelFactories\CaseInvoiceFactory.cs" />
+    <Compile Include="Areas\Admin\Infrastructure\ModelFactories\ICaseInvoiceFactory.cs" />
     <Compile Include="Areas\Admin\Models\AccountActivityInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\CaseTypeInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\CategoryViewModels.cs" />
@@ -265,6 +268,8 @@
     <Compile Include="Areas\Admin\Models\AccountActivityIndexViewModel.cs" />
     <Compile Include="Areas\Admin\Models\BuildingViewModels.cs" />
     <Compile Include="Areas\Admin\Models\InfoTextViewModels.cs" />
+    <Compile Include="Areas\Admin\Models\Invoice\CaseInvoiceSettingsModel.cs" />
+    <Compile Include="Areas\Admin\Models\Invoice\InvoiceExportSettingsModel.cs" />
     <Compile Include="Areas\Admin\Models\StandardTextViewModels.cs" />
     <Compile Include="Areas\Admin\Models\ProgramIndexViewModel.cs" />
     <Compile Include="Areas\Admin\Models\QuickLinkIndexViewModel.cs" />
@@ -312,6 +317,7 @@
     <Compile Include="Areas\Admin\Models\SystemInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\UrgencyInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\WorkingGroupInputViewModel.cs" />
+    <Content Include="Content\icons\ajax-loader.gif" />
     <Content Include="Content\js\Changes\inventoryDialog.js" />
     <Compile Include="Controllers\AboutController.cs" />
     <Compile Include="Controllers\AjaxController.cs" />
@@ -496,7 +502,8 @@
     <Compile Include="Infrastructure\Print\PrintPdfView.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\ReportFile.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\ReportsHelper.cs" />
-    <Compile Include="Infrastructure\Tools\InvoiceHelper.cs" />
+    <Compile Include="Infrastructure\Tools\Concrete\InvoiceHelper.cs" />
+    <Compile Include="Infrastructure\Tools\IInvoiceHelper.cs" />
     <Compile Include="Infrastructure\Tools\IReportsHelper.cs" />
     <Compile Include="Infrastructure\Tools\MimeHelper.cs" />
     <Compile Include="Infrastructure\Translate\Translator.cs" />
@@ -689,7 +696,7 @@
     <Compile Include="Models\Inventory\SearchModels\InventoryReportSearchViewModel.cs" />
     <Compile Include="Models\Inventory\SearchModels\ReportsSearchFilter.cs" />
     <Compile Include="Models\Inventory\SearchModels\ReportsSearchViewModel.cs" />
-    <Compile Include="Models\Invoice\ArticlesImportModel.cs" />
+    <Compile Include="Areas\Admin\Models\Invoice\ArticlesImportModel.cs" />
     <Compile Include="Models\Invoice\CaseInvoiceArticlesModel.cs" />
     <Compile Include="Models\Reports\AverageSolutionTimeOptions.cs" />
     <Compile Include="Models\Reports\AverageSolutionTimeReport.cs" />
@@ -1060,6 +1067,7 @@
     <Content Include="Content\js\Inventory\reports.js" />
     <Content Include="Content\js\Inventory\settings.js" />
     <Content Include="Content\js\Invoice\invoice.js" />
+    <Content Include="Content\js\jquery.form.min.js" />
     <Content Include="Content\js\jquery.plupload.queue\css\jquery.plupload.queue.css" />
     <Content Include="Content\js\jquery.plupload.queue\img\backgrounds.gif" />
     <Content Include="Content\js\jquery.plupload.queue\img\buttons-disabled.png" />
@@ -1177,6 +1185,11 @@
     <Content Include="Areas\Admin\Views\Customer\_CopyCustomer.cshtml" />
     <Content Include="log4net.config" />
     <Content Include="Content\js\jsrender.min.js.map" />
+    <Content Include="Areas\Admin\Views\GlobalSetting\_TranslationsList.cshtml" />
+    <Content Include="Areas\Admin\Views\GlobalSetting\_Holidays.cshtml" />
+    <Content Include="Areas\Admin\Views\CaseInvoice\CaseInvoiceSettings.cshtml" />
+    <Content Include="Areas\Admin\Views\CaseInvoice\EditorTemplates\ArticlesImportModel.cshtml" />
+    <Content Include="Areas\Admin\Views\CaseInvoice\EditorTemplates\InvoiceExportSettingsModel.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />
@@ -1571,8 +1584,6 @@
     <Content Include="Views\Inventory\UserSelectDialog.cshtml" />
     <Content Include="Views\Reports\AverageSolutionTimePrint.cshtml" />
     <Content Include="Views\Reports\AverageSolutionTimeView.cshtml" />
-    <Content Include="Views\Invoice\EditorTemplates\ArticlesImportModel.cshtml" />
-    <Content Include="Views\Invoice\IkeaArticlesImport.cshtml" />
     <Content Include="Views\Inventory\_SendToDialog.cshtml" />
     <Content Include="Views\Inventory\UserHistoryDialog.cshtml" />
     <Content Include="Views\Inventory\ComputerShortInfoDialog.cshtml" />

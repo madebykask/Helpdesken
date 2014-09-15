@@ -10,7 +10,7 @@
                     int id, 
                     int? parentId, 
                     InvoiceArticle parent, 
-                    int number, 
+                    string number, 
                     string name, 
                     string nameEng,
                     string description,
@@ -38,14 +38,45 @@
             this.Id = id;
         }
 
-        [IsId]
-        public int Id { get; private set; }
+        public InvoiceArticle(
+                    InvoiceArticle parent, 
+                    string number, 
+                    string name, 
+                    string nameEng,
+                    string description,
+                    ProductAreaOverview productArea,
+                    InvoiceArticleUnit unit,
+                    decimal? ppu)
+        {
+            this.Parent = parent;
+            this.Number = number;
+            this.Name = name;
+            this.NameEng = nameEng;
+            this.Description = description;
+            this.ProductArea = productArea;
+            this.Unit = unit;
+            this.Ppu = ppu;
+        }
 
-        public int? ParentId { get; private set; }
+        public InvoiceArticle(
+                    string number, 
+                    string name,
+                    ProductAreaOverview productArea)
+        {
+            this.Number = number;
+            this.Name = name;
+            this.NameEng = string.Empty;
+            this.ProductArea = productArea;
+        }
+
+        [IsId]
+        public int Id { get; set; }
+
+        public int? ParentId { get; set; }
 
         public InvoiceArticle Parent { get; private set; }
 
-        public int Number { get; private set; }
+        public string Number { get; private set; }
 
         [NotNull]
         public string Name { get; private set; }
@@ -55,20 +86,20 @@
 
         public string Description { get; private set; }
 
-        public int? UnitId { get; private set; }
+        public int? UnitId { get; set; }
 
         public InvoiceArticleUnit Unit { get; private set; }
 
         public decimal? Ppu { get; private set; }
 
         [IsId]
-        public int ProductAreaId { get; private set; }
+        public int ProductAreaId { get; set; }
 
         [NotNull]
         public ProductAreaOverview ProductArea { get; private set; }
 
         [IsId]
-        public int CustomerId { get; private set; }
+        public int CustomerId { get; set; }
 
         [NotNull]
         public CustomerOverview Customer { get; private set; }

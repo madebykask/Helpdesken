@@ -18,6 +18,7 @@
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport.ExcelExport;
+    using DH.Helpdesk.Services.DisplayValues;
     using DH.Helpdesk.Services.Response.Inventory;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Concrete;
@@ -933,7 +934,7 @@
                 return null;
             }
 
-            var viewModel = this.BuildViewModel(
+            ReportViewModel viewModel = this.BuildViewModel(
                 filter.ReportDataType,
                 (int)ReportTypes.InstaledPrograms,
                 filter.DepartmentId,
@@ -950,7 +951,7 @@
                 this.CreateFilterId(TabName.Reports, ReportFilterMode.DefaultReport.ToString()),
                 filter);
 
-            var viewModel = this.BuildViewModel(
+            ReportViewModel viewModel = this.BuildViewModel(
                 filter.ReportDataType,
                 inventoryTypeId,
                 filter.DepartmentId,
@@ -967,16 +968,17 @@
                 this.CreateFilterId(TabName.Reports, ReportFilterMode.CustomType.ToString()),
                 filter);
 
-            var models = this.inventoryService.GetAllConnectedInventory(
+            ReportModelWithInventoryType models = this.inventoryService.GetAllConnectedInventory(
                 inventoryTypeId,
                 filter.DepartmentId,
                 filter.SearchFor);
 
-            var wrapReportModels = ReportModelWrapper.Wrap(
+            List<ReportModelWrapper> wrapReportModels = ReportModelWrapper.Wrap(
                 models.ReportModel,
                 ReportModelWrapper.ReportOwnerTypes.Workstation);
 
             var viewModel = new ReportViewModel(wrapReportModels, models.InventoryName, filter.IsShowParentInventory);
+
             return this.PartialView("CustomTypeReportGrid", viewModel);
         }
 
@@ -987,7 +989,7 @@
                 this.CreateFilterId(TabName.Reports, ReportFilterMode.Inventory.ToString()),
                 filter);
 
-            var models = this.inventoryService.GetInventoryCounts(SessionFacade.CurrentCustomer.Id, filter.DepartmentId);
+            List<InventoryReportModel> models = this.inventoryService.GetInventoryCounts(SessionFacade.CurrentCustomer.Id, filter.DepartmentId);
 
             return this.PartialView("InventoryReportGrid", models);
         }
@@ -1039,7 +1041,28 @@
         }
 
         [HttpGet]
-        public FileContentResult ExportChangesGridToExcelFile(int currentMode)
+        public FileContentResult ExportReportToExcelFile(int reportType)
+        {
+            switch ((ReportTypes)reportType)
+            {
+                case ReportTypes.OperatingSystem:
+                case ReportTypes.ServicePack:
+                case ReportTypes.Processor:
+                case ReportTypes.Ram:
+                case ReportTypes.NetworkAdapter:
+                case ReportTypes.Location:
+                    return this.CreateModuleReport(reportType);
+                case ReportTypes.InstaledPrograms:
+                    return this.CreateInstaledProgramReport();
+                case ReportTypes.Inventory:
+                    return this.CreateInventoryReport();
+                default:
+                    return this.CreateCustomTypeReport(reportType);
+            }
+        }
+
+        [HttpGet]
+        public FileContentResult ExportGridToExcelFile(int currentMode)
         {
             InventoryGridModel gridModel;
             string workSheetName;
@@ -1089,6 +1112,193 @@
         }
 
         #region Private
+
+        private FileContentResult CreateInstaledProgramReport()
+        {
+            InstaledProgramsReportSearchFilter filter =
+                SessionFacade.FindPageFilters<InstaledProgramsReportSearchFilter>(
+                    this.CreateFilterId(TabName.Reports, ReportFilterMode.InstaledPrograms.ToString()))
+                ?? InstaledProgramsReportSearchFilter.CreateDefault();
+
+            if (filter.IsShowMissingParentInventory)
+            {
+                return null;
+            }
+
+            ReportViewModel viewModel = this.BuildViewModel(
+                filter.ReportDataType,
+                (int)ReportTypes.InstaledPrograms,
+                filter.DepartmentId,
+                filter.SearchFor,
+                filter.IsShowParentInventory);
+
+            return this.CreateReportGridReport(viewModel);
+        }
+
+        private FileContentResult CreateModuleReport(int inventoryTypeId)
+        {
+            ReportsSearchFilter filter =
+                SessionFacade.FindPageFilters<ReportsSearchFilter>(
+                    this.CreateFilterId(TabName.Reports, ReportFilterMode.DefaultReport.ToString()))
+                ?? ReportsSearchFilter.CreateDefault();
+
+            ReportViewModel viewModel = this.BuildViewModel(
+                filter.ReportDataType,
+                inventoryTypeId,
+                filter.DepartmentId,
+                filter.SearchFor,
+                filter.IsShowParentInventory);
+
+            return this.CreateReportGridReport(viewModel);
+        }
+
+        private FileContentResult CreateCustomTypeReport(int inventoryTypeId)
+        {
+            CustomTypeReportsSearchFilter filter =
+                SessionFacade.FindPageFilters<CustomTypeReportsSearchFilter>(
+                    this.CreateFilterId(TabName.Reports, ReportFilterMode.CustomType.ToString()))
+                ?? CustomTypeReportsSearchFilter.CreateDefault();
+
+            ReportModelWithInventoryType models = this.inventoryService.GetAllConnectedInventory(
+                inventoryTypeId,
+                filter.DepartmentId,
+                filter.SearchFor);
+
+            return this.CreateCustomTypeReport(models, filter.IsShowParentInventory);
+        }
+
+        private FileContentResult CreateInventoryReport()
+        {
+            var filter =
+                SessionFacade.FindPageFilters<InventoryReportSearchFilter>(
+                    this.CreateFilterId(TabName.Reports, ReportFilterMode.Inventory.ToString()))
+                ?? InventoryReportSearchFilter.CreateDefault();
+
+            List<InventoryReportModel> models =
+                this.inventoryService.GetInventoryCounts(SessionFacade.CurrentCustomer.Id, filter.DepartmentId);
+
+            return this.CreateInventoryReport(models);
+        }
+
+        private FileContentResult CreateReportGridReport(ReportViewModel viewModel)
+        {
+            const string NameCellFieldName = "Name";
+            const string CountCellFieldName = "Count";
+
+            var headers = new List<ExcelTableHeader>
+                              {
+                                  new ExcelTableHeader(viewModel.Header, NameCellFieldName),
+                                  new ExcelTableHeader(Translation.Get("Antal"), CountCellFieldName)
+                              };
+
+            var source = new List<BusinessItem>();
+
+            IEnumerable<IGrouping<string, ReportModelWrapper>> items =
+                viewModel.ReportModel.OrderBy(x => x.ReportModel.Item)
+                    .ThenBy(x => x.ReportModel.Owner)
+                    .GroupBy(x => x.ReportModel.Item);
+
+            foreach (var item in items)
+            {
+                var nameCell = new BusinessItemField(NameCellFieldName, new StringDisplayValue(item.Key))
+                {
+                    IsBold =
+                        viewModel
+                        .IsGrouped
+                };
+                var countCell = new BusinessItemField(CountCellFieldName, new IntegerDisplayValue(item.Count()))
+                {
+                    IsBold =
+                        viewModel
+                        .IsGrouped
+                };
+
+                var cells = new List<BusinessItemField> { nameCell, countCell };
+                var businessItem = new BusinessItem(cells);
+                source.Add(businessItem);
+
+                if (viewModel.IsGrouped)
+                {
+                    source.AddRange(
+                        from owner in item.Where(x => x.ReportModel.Owner != null)
+                        select new BusinessItemField(NameCellFieldName, new StringDisplayValue(owner.ReportModel.Owner))
+                            into ownerCell
+                            select new List<BusinessItemField> { ownerCell }
+                                into ownerCells
+                                select new BusinessItem(ownerCells));
+                }
+            }
+
+            var file = this.CreateExcelReport(viewModel.Header, headers, source);
+
+            return file;
+        }
+
+        private FileContentResult CreateCustomTypeReport(ReportModelWithInventoryType viewModel, bool isGrouped)
+        {
+            const string NameCellFieldName = "Name";
+
+            var headers = new List<ExcelTableHeader>
+                              {
+                                  new ExcelTableHeader(viewModel.InventoryName, NameCellFieldName)
+                              };
+
+            var source = new List<BusinessItem>();
+
+            IEnumerable<IGrouping<string, ReportModel>> items =
+                viewModel.ReportModel.OrderBy(x => x.Item).ThenBy(x => x.Owner).GroupBy(x => x.Item);
+
+            foreach (var item in items)
+            {
+                var nameCell = new BusinessItemField(NameCellFieldName, new StringDisplayValue(item.Key))
+                                   {
+                                       IsBold =
+                                           isGrouped
+                                   };
+
+                var cells = new List<BusinessItemField> { nameCell };
+                var businessItem = new BusinessItem(cells);
+                source.Add(businessItem);
+
+                if (isGrouped)
+                {
+                    source.AddRange(
+                        from owner in item.Where(x => x.Owner != null)
+                        select new BusinessItemField(NameCellFieldName, new StringDisplayValue(owner.Owner))
+                            into ownerCell
+                            select new List<BusinessItemField> { ownerCell }
+                                into ownerCells
+                                select new BusinessItem(ownerCells));
+                }
+            }
+
+            var file = this.CreateExcelReport(viewModel.InventoryName, headers, source);
+
+            return file;
+        }
+
+        private FileContentResult CreateInventoryReport(List<InventoryReportModel> models)
+        {
+            const string NameCellFieldName = "Name";
+            const string CountCellFieldName = "Count";
+
+            var headers = new List<ExcelTableHeader>
+                              {
+                                  new ExcelTableHeader(Translation.Get("Inventarie"), NameCellFieldName),
+                                  new ExcelTableHeader(Translation.Get("Antal"), CountCellFieldName)
+                              };
+
+            var source = (from model in models
+                          let nameCell = new BusinessItemField(NameCellFieldName, new StringDisplayValue(model.InventoryName))
+                          let countCell = new BusinessItemField(CountCellFieldName, new IntegerDisplayValue(model.Count))
+                          select new List<BusinessItemField> { nameCell, countCell }
+                              into cells
+                              select new BusinessItem(cells)).ToList();
+
+            var file = this.CreateExcelReport(Translation.Get("Inventarie"), headers, source);
+
+            return file;
+        }
 
         private ReportViewModel BuildViewModel(
             ReportDataTypes reportDataType,
@@ -1369,7 +1579,7 @@
             IEnumerable<ITableHeader> headers,
             IEnumerable<IRow<ICell>> rows)
         {
-            const string Name = "Inventory"; 
+            const string Name = "Inventory";
 
             var content = this.excelFileComposer.Compose(headers, rows, worksheetName);
 

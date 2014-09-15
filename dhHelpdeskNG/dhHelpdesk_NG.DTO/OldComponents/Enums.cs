@@ -39,6 +39,7 @@
 
         public enum TranslationCaseFields
         {
+            None = -1,
             AgreedDate = 0,
             Available = 1,
             Caption = 2,

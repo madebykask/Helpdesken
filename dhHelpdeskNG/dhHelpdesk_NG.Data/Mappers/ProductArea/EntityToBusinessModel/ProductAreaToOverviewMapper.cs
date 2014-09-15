@@ -28,6 +28,11 @@ namespace DH.Helpdesk.Dal.Mappers.ProductArea.EntityToBusinessModel
         /// </returns>
         public ProductAreaOverview Map(ProductArea entity)
         {
+            if (entity == null)
+            {
+                return null;
+            }
+
             return new ProductAreaOverview()
                        {
                            Id = entity.Id,

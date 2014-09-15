@@ -60,5 +60,21 @@ namespace DH.Helpdesk.Common.Extensions.String
 
             return string.Compare(str.Trim(), forCompare.Trim(), ignoreCase) == 0;
         }
+
+        public static string ToTrimString(this object obj)
+        {
+            if (obj == null)
+            {
+                return null;
+            }
+
+            var str = obj.ToString();
+            if (string.IsNullOrEmpty(str))
+            {
+                return str;
+            }
+
+            return str.Trim();
+        }
     }
 }

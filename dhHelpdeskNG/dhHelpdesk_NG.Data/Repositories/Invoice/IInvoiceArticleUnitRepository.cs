@@ -5,5 +5,7 @@
     public interface IInvoiceArticleUnitRepository
     {
         InvoiceArticleUnit[] GetUnits(int customerId);
+
+        int SaveUnit(InvoiceArticleUnit unit);
     }
 }

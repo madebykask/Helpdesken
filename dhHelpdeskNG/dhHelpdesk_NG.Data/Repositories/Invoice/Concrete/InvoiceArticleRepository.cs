@@ -13,12 +13,16 @@
     {
         private readonly IEntityToBusinessModelMapper<InvoiceArticleEntity, InvoiceArticle> articleMapper;
 
+        private readonly IBusinessModelToEntityMapper<InvoiceArticle, InvoiceArticleEntity> toEntityMapper;
+
         public InvoiceArticleRepository(
                 IDatabaseFactory databaseFactory, 
-                IEntityToBusinessModelMapper<InvoiceArticleEntity, InvoiceArticle> articleMapper)
+                IEntityToBusinessModelMapper<InvoiceArticleEntity, InvoiceArticle> articleMapper, 
+                IBusinessModelToEntityMapper<InvoiceArticle, InvoiceArticleEntity> toEntityMapper)
             : base(databaseFactory)
         {
             this.articleMapper = articleMapper;
+            this.toEntityMapper = toEntityMapper;
         }
 
         public InvoiceArticle[] GetArticles(int customerId, int productAreaId)
@@ -35,6 +39,37 @@
             return entities
                     .Select(a => this.articleMapper.Map(a))
                     .ToArray();
+        }
+
+        public InvoiceArticle[] GetArticles(int customerId)
+        {
+            var entities = this.DbContext.InvoiceArticles
+                        .Where(a => a.CustomerId == customerId)
+                        .OrderBy(a => a.Number)
+                        .ToList();
+
+            return entities
+                    .Select(a => this.articleMapper.Map(a))
+                    .ToArray();
+        }
+
+        public int SaveArticle(InvoiceArticle article)
+        {
+            InvoiceArticleEntity entity;
+            if (article.Id > 0)
+            {
+                entity = this.DbContext.InvoiceArticles.Find(article.Id);
+                this.toEntityMapper.Map(article, entity);
+            }
+            else
+            {
+                entity = new InvoiceArticleEntity();
+                this.toEntityMapper.Map(article, entity);
+                this.DbContext.InvoiceArticles.Add(entity);
+            }
+
+            this.Commit();
+            return entity.Id;
         }
 
         private IEnumerable<int> GetProductAreaChildren(int parentId)

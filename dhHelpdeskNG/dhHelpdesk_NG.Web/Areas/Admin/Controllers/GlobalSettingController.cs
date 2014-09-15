@@ -37,11 +37,11 @@
             this._watchDateCalendarService = watchDateCalendarService;
         }
 
-        public ActionResult Index(FormCollection coll)
+        public ActionResult Index()
         {
-            var model = this.GetGSIndexViewModel(1, SessionFacade.CurrentCustomer.Language_Id);
+            var model = this.GetGSIndexViewModel(1, 1, SessionFacade.CurrentCustomer.Language_Id);
 
-            model.Tabposition = coll["activeTab"];
+            
             return this.View(model);
         }
 
@@ -54,7 +54,7 @@
 
             var model = this.SaveGsInputViewModel(gsetting);
 
-            SessionFacade.ActiveTab = "#tab1";
+            SessionFacade.ActiveTab = "#fragment-1";
 
             return this.View(model);
         }
@@ -84,7 +84,7 @@
         {
             var model = this.SaveHolidayViewModel(new Holiday { HolidayDate = DateTime.Now, CreatedDate = DateTime.Now });
 
-            SessionFacade.ActiveTab = "#tab1";
+            SessionFacade.ActiveTab = "#fragment-2";
 
             return this.View(model);
         }
@@ -111,16 +111,18 @@
 
         public ActionResult EditHoliday(int id)
         {
-            var holiday = this._holidayService.GetHoliday(id);
+            //var holiday = this._holidayService.GetHoliday(id);
+            var holidayheader = this._holidayService.GetHolidayHeader(id);
 
-            if (holiday == null)
+            if (holidayheader == null)
                 return new HttpNotFoundResult("No holiday found...");
 
-            var model = this.SaveHolidayViewModel(holiday);
+            var model = this.SaveHolidayViewModel(holidayheader);
 
-            model.ChangedHeaderName = holiday.HolidayHeader.Name;
-            SessionFacade.ActiveTab = "#tab2";
-
+            
+            //model.ChangedHeaderName = holiday.HolidayHeader.Name;
+            SessionFacade.ActiveTab = "#fragment-2";
+            
             return this.View(model);
         }
 
@@ -154,7 +156,7 @@
         {
             var model = this.SaveWatchDateViewModel(new WatchDateCalendarValue { CreatedDate = DateTime.Now, WatchDate = DateTime.Now });
 
-            SessionFacade.ActiveTab = "#tab3";
+            SessionFacade.ActiveTab = "#fragment-3";
 
             return this.View(model);
         }
@@ -187,7 +189,7 @@
 
             var model = this.SaveWatchDateViewModel(wdValue);
 
-            SessionFacade.ActiveTab = "#tab3";
+            SessionFacade.ActiveTab = "#fragment-3";
 
             model.ChangedWatchDateName = wdValue.WatchDateCalendar.Name;
 
@@ -222,7 +224,7 @@
         {
             var model = this.SaveTextTranslationViewModel(new Text { }, SessionFacade.CurrentCustomer.Language_Id);
 
-            SessionFacade.ActiveTab = "#tab4";
+            SessionFacade.ActiveTab = "#fragment-4";
 
             return this.View(model);
         }
@@ -249,26 +251,7 @@
 
             return this.View(model);
         }
-        //public ActionResult NewTranslation(Text text, List<TextTranslationLanguageList> TTs, GlobalSettingTextTranslationViewModel vmodel, FormCollection coll)
-        //{
-        //    IDictionary<string, string> errors = new Dictionary<string, string>();
-
-        //    if (text == null)
-        //        text = new Text() { };
-
-           
-        //    this._textTranslationService.SaveNewText(text, TTs, out errors);
-
-        //    if (errors.Count == 0)
-        //        return this.RedirectToAction("index", "globalsetting");
-
-        //    var model = this.SaveTextTranslationViewModel(text, 0);
-
-        //    SessionFacade.ActiveTab = coll["activeTab"];
-
-        //    return this.View(model);
-        //}
-
+       
         public ActionResult EditTranslation(int id)
         {
             var text = this._textTranslationService.GetText(id);
@@ -278,7 +261,7 @@
 
             var model = this.SaveTextTranslationViewModel(text, language.Id);
 
-            SessionFacade.ActiveTab = "#tab4";
+            SessionFacade.ActiveTab = "#fragment-4";
 
             return this.View(model);
         }
@@ -306,54 +289,8 @@
             return this.View(model);
         }
 
-        //public ActionResult EditTranslation(int id, TextTranslation tt, GlobalSettingTextTranslationViewModel vmodel, FormCollection coll, int languageId)
-        //{
-        //    var textToSave = this._textTranslationService.GetText(id);
-        //    var texttranslationToSave = this._textTranslationService.GetTextTranslationByIdAndLanguage(textToSave.Id, vmodel.Language.Id);
-
-        //    if (textToSave == null)
-        //        throw new Exception("No text found...");
-
-        //    var b = this.TryUpdateModel(textToSave, "text");
-
-        //    var update = true;
-
-        //    IDictionary<string, string> errors = new Dictionary<string, string>();
-
-        //    if (texttranslationToSave == null)
-        //    {
-        //        texttranslationToSave = new TextTranslation
-        //        {
-        //            TextTranslated = vmodel.TextTranslation.TextTranslated,
-        //            Language_Id = vmodel.Language.Id,
-        //            Text_Id = textToSave.Id
-        //        };
-
-        //        update = false;
-        //    }
-        //    else
-        //    {
-        //        texttranslationToSave.TextTranslated = vmodel.TextTranslation.TextTranslated;
-        //        texttranslationToSave.Language_Id = vmodel.Language.Id;
-        //        texttranslationToSave.Text_Id = textToSave.Id;
-
-        //    }
-
-        //    this._textTranslationService.SaveEditText(textToSave, texttranslationToSave, update, out errors);
-        //    //this._textTranslationService.SaveEditText(textToSave, TTs, out errors);
-
-        //    if (errors.Count == 0)
-        //        return this.RedirectToAction("index", "globalsetting");
-
-        //    var model = this.SaveTextTranslationViewModel(textToSave, vmodel.Language.Id);
-
-        //    model.Tabposition = coll["activeTab"];
-
-        //    return this.View(model);
-        //}
-
         [HttpPost]
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int id, FormCollection coll)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
             var text = this._textTranslationService.GetText(id);
@@ -372,27 +309,35 @@
 
             this._textTranslationService.DeleteText(text, out errors);
 
+            SessionFacade.ActiveTab = coll["activeTab"];
             return this.RedirectToAction("index", "globalsetting");
         }
 
-        private GlobalSettingIndexViewModel GetGSIndexViewModel(int texttypeid, int languageId)
+        
+        private GlobalSettingIndexViewModel GetGSIndexViewModel(int texttypeid, int holidayheaderid, int languageId)
         {
             var start = this._globalSettingService.GetGlobalSettings().FirstOrDefault();
 
             var model = new GlobalSettingIndexViewModel
             {
                 GlobalSettings = this._globalSettingService.GetGlobalSettings(),
-                Holidays = this._holidayService.GetAll().ToList(),
+                Holidays = this._holidayService.GetHolidaysByHeaderId(holidayheaderid),
                 LanguagesToTranslateInto = this._languageService.GetLanguagesForGlobalSettings(),
                 Texts = this._textTranslationService.GetAllTexts(texttypeid).ToList(),
                 ListForIndex = this._textTranslationService.GetIndexListToTextTranslations(languageId),
                 WatchDateCalendarValues = this._watchDateCalendarService.GetAllWatchDateCalendarValues().ToList(),
                 TextType = this._textTranslationService.GetTextType(1),
+                HolidayHeader = this._holidayService.GetHolidayHeader(1),
                 Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
                 {
                     Text = Translation.Get(x.Name),
                     Value = x.Id.ToString()
-                }).ToList()
+                }).ToList(),
+                HolidayHeaders = this._holidayService.GetHolidayHeaders().Select(x => new SelectListItem
+                {
+                    Text = Translation.Get(x.Name),
+                    Value = x.Id.ToString()
+                }).ToList(),
             };
 
             model.TextTypes = new List<SelectListItem>();
@@ -417,6 +362,76 @@
                     Value = x.Id.ToString()
                 }).ToList()
             };
+
+            return model;
+        }
+
+        private GlobalSettingHolidayViewModel SaveHolidayViewModel(HolidayHeader holidayheader)
+        {
+            #region SelectListItems
+
+            List<SelectListItem> li = new List<SelectListItem>();
+            for (int i = 00; i < 24; i++)
+            {
+                li.Add(new SelectListItem
+                {
+                    Text = i.ToString(),
+                    Value = i.ToString()
+                });
+            }
+            List<SelectListItem> lis = new List<SelectListItem>();
+            for (int i = 00; i < 24; i++)
+            {
+                lis.Add(new SelectListItem
+                {
+                    Text = i.ToString(),
+                    Value = i.ToString()
+                });
+            }
+
+            List<SelectListItem> yearlist = new List<SelectListItem>();
+            for (int j = 2000; j < 2015; j++)
+            {
+                yearlist.Add(new SelectListItem
+                {
+                    Text = j.ToString(),
+                    Value = j.ToString()
+                });
+            }
+            #endregion
+
+            var model = new GlobalSettingHolidayViewModel
+            {
+                Holiday = null,
+                Holidays = this._holidayService.GetHolidaysByHeaderId(holidayheader.Id),
+                HolidayHeader = holidayheader,
+                HolidayHeaders = this._holidayService.GetHolidayHeaders().Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList(),
+                TimeFromList = li,
+                TimeTilList = lis,
+                YearList = yearlist
+            };
+
+            #region SetInts
+
+            //if (holiday.TimeFrom == 0)
+            //{
+            //    model.HalfDay = false;
+            //    model.TimeFrom = 0;
+            //    model.TimeTil = 0;
+            //}
+            //else
+            //{
+            //    model.HalfDay = true;
+            //    model.TimeFrom = holiday.TimeFrom;
+            //    model.TimeTil = holiday.TimeUntil;
+            //}
+
+            model.Year = 2014;
+            #endregion
 
             return model;
         }
@@ -596,10 +611,71 @@
         public string ChangeTextType(int id)
         {
 
-            var model = this.GetGSIndexViewModel(id, SessionFacade.CurrentCustomer.Language_Id);
+            var model = this.GetGSIndexViewModel(id, 1, SessionFacade.CurrentCustomer.Language_Id);
 
-            var view = "~/areas/admin/views/GlobalSetting/Index.cshtml";
+            var view = "~/areas/admin/views/GlobalSetting/_TranslationsList.cshtml";
+            
             return this.RenderRazorViewToString(view, model);
+            
         }
+
+        [CustomAuthorize(Roles = "3,4")]
+        [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
+        public string ChangeHoliday(int id)
+        {
+
+            var model = this.GetGSIndexViewModel(1, id, SessionFacade.CurrentCustomer.Language_Id);
+
+            var view = "~/areas/admin/views/GlobalSetting/_Holidays.cshtml";
+
+            return this.RenderRazorViewToString(view, model);
+
+        }
+
+        //[CustomAuthorize(Roles = "3,4")]
+        [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
+        public string DeleteHoliday(int id)
+        {
+
+            var holiday = this._holidayService.GetHoliday(id);
+            var holidayheader = this._holidayService.GetHolidayHeader(holiday.HolidayHeader_Id);
+            //var holidays = this._holidayService.GetHolidaysByHeaderId(holiday.HolidayHeader_Id);
+
+            if (this._holidayService.DeleteHoliday(id) == DeleteMessage.Success)
+                return this.UpdateHolidayList(holidayheader);
+            else
+            {
+                this.TempData.Add("Error", "");
+                return this.UpdateHolidayList(holidayheader);
+            }
+
+            //var model = this.GetGSIndexViewModel(1, id, SessionFacade.CurrentCustomer.Language_Id);
+
+            //var view = "~/areas/admin/views/GlobalSetting/_Holidays.cshtml";
+
+            //return this.RenderRazorViewToString(view, model);
+
+        }
+
+        //[CustomAuthorize(Roles = "3,4")]
+        [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")] //TODO: Is duration time (10 seconds) too short? well, 60 seconds is too much anyway.. 
+        public string UpdateHolidayList(HolidayHeader holidayheader)
+        {
+            
+            var model = this.SaveHolidayViewModel(holidayheader);
+
+            
+            //model.ChangedHeaderName = holiday.HolidayHeader.Name;
+            SessionFacade.ActiveTab = "#fragment-2";
+            
+            this.UpdateModel(model, "holidayheader");
+
+            //return View(model);
+            var view = "~/areas/admin/views/GlobalSetting/_Holidays.cshtml";
+            return this.RenderRazorViewToString(view, model);
+        
+            //return this.View(model);
+        }
+            
     }
 }

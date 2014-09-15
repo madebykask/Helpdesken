@@ -156,8 +156,11 @@
                 </td>
                 <td>
                     <div id="divFinishingType" class="btn-group">
-                        <div class="btn" id="divBreadcrumbs_FinishingType">@Translation.Get("--")</div>
-                        <button class="btn dropdown-toggle" data-toggle="dropdown">
+                        @{
+                            string disabled = Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause);
+                        }
+                        <div class="btn @disabled" id="divBreadcrumbs_FinishingType">@Translation.Get("--")</div>
+                        <button class="btn dropdown-toggle" data-toggle="dropdown" @disabled>
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu dropup">

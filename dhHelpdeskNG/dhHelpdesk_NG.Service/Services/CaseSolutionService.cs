@@ -256,6 +256,9 @@ namespace DH.Helpdesk.Services.Services
             {
                 try
                 {
+                    this.caseSolutionSettingRepository.DeleteByCaseSolutionId(id);
+                    this.caseSolutionSettingRepository.Commit();
+
                     var caseSolutionSchedule = this._caseSolutionScheduleRepository.GetById(id);
 
                     if (caseSolutionSchedule != null)
