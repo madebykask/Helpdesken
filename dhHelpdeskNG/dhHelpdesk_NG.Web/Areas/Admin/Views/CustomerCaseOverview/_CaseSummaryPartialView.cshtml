@@ -121,7 +121,7 @@
            });
     }
 
-    function deleteCaseSeingRow(id) {
+    function deleteCaseSettingRow(id) {
         var list = $("#userGroupList");
         $.post('/customercaseoverview/DeleteRowFromCaseSettings/' + id + '?usergroupId=' + $("#usergroupId").val() + '&customerId=' + $("#customerId").val(), function(result) {
             list.html(result);

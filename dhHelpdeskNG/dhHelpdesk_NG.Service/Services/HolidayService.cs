@@ -19,6 +19,8 @@
         Holiday GetHoliday(int id);
         HolidayHeader GetHolidayHeader(int id);
 
+        DeleteMessage DeleteHoliday(int id);
+
         void SaveHoliday(Holiday holiday, out IDictionary<string, string> errors);
         void Commit();
 
@@ -91,6 +93,28 @@
 
             if (errors.Count == 0)
                 this.Commit();
+        }
+
+        public DeleteMessage DeleteHoliday(int id)
+        {
+            var holiday = this._holidayRepository.GetById(id);
+
+            if (holiday != null)
+            {
+                try
+                {
+                    this._holidayRepository.Delete(holiday);
+                    this.Commit();
+
+                    return DeleteMessage.Success;
+                }
+                catch
+                {
+                    return DeleteMessage.UnExpectedError;
+                }
+            }
+
+            return DeleteMessage.Error;
         }
 
         public void Commit()

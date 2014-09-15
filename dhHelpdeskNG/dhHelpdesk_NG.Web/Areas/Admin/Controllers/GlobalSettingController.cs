@@ -313,6 +313,7 @@
             return this.RedirectToAction("index", "globalsetting");
         }
 
+        
         private GlobalSettingIndexViewModel GetGSIndexViewModel(int texttypeid, int holidayheaderid, int languageId)
         {
             var start = this._globalSettingService.GetGlobalSettings().FirstOrDefault();
@@ -630,5 +631,51 @@
             return this.RenderRazorViewToString(view, model);
 
         }
+
+        //[CustomAuthorize(Roles = "3,4")]
+        [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
+        public string DeleteHoliday(int id)
+        {
+
+            var holiday = this._holidayService.GetHoliday(id);
+            var holidayheader = this._holidayService.GetHolidayHeader(holiday.HolidayHeader_Id);
+            //var holidays = this._holidayService.GetHolidaysByHeaderId(holiday.HolidayHeader_Id);
+
+            if (this._holidayService.DeleteHoliday(id) == DeleteMessage.Success)
+                return this.UpdateHolidayList(holidayheader);
+            else
+            {
+                this.TempData.Add("Error", "");
+                return this.UpdateHolidayList(holidayheader);
+            }
+
+            //var model = this.GetGSIndexViewModel(1, id, SessionFacade.CurrentCustomer.Language_Id);
+
+            //var view = "~/areas/admin/views/GlobalSetting/_Holidays.cshtml";
+
+            //return this.RenderRazorViewToString(view, model);
+
+        }
+
+        //[CustomAuthorize(Roles = "3,4")]
+        [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")] //TODO: Is duration time (10 seconds) too short? well, 60 seconds is too much anyway.. 
+        public string UpdateHolidayList(HolidayHeader holidayheader)
+        {
+            
+            var model = this.SaveHolidayViewModel(holidayheader);
+
+            
+            //model.ChangedHeaderName = holiday.HolidayHeader.Name;
+            SessionFacade.ActiveTab = "#fragment-2";
+            
+            this.UpdateModel(model, "holidayheader");
+
+            //return View(model);
+            var view = "~/areas/admin/views/GlobalSetting/_Holidays.cshtml";
+            return this.RenderRazorViewToString(view, model);
+        
+            //return this.View(model);
+        }
+            
     }
 }

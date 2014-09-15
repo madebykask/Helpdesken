@@ -10,7 +10,7 @@
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
-            <li class="active"><a href="#fragment-2">@Translation.Get("Helgdagar", Enums.TranslationSource.TextTranslation)</a></li>
+            <li class="active"><a href="#fragment-2">@Translation.Get("Helgdag", Enums.TranslationSource.TextTranslation)</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment1">
@@ -32,6 +32,7 @@
                                     </td>
                                     <td colspan="2">
                                         @Html.DropDownListFor(model => model.HolidayHeader.Id, Model.HolidayHeaders, "", new { style = "width: auto;", onchange = "changeHolidayHeader(this.options[this.selectedIndex].value);" })
+                                        <input type="hidden" id="holidayheaderId" value="@Model.HolidayHeader.Id" />
                                     </td>
                                 </tr>
                                 <tr>
@@ -54,13 +55,14 @@
                                     <td>
                                         @Translation.Get("Halv helgdag", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td colspan="2">
+                                    <td>
                                         <input type="checkbox" id="chkHalfDay" @(Model.HalfDay ? "checked='checked'" : "") name="halfDay" value="1" />
                                     </td>
+                                    <td></td>
                                 </tr>
                                 <tr  id="halfDayOptions" style="@(Model.HalfDay ? "display:block" : "display:none")">
                                     <td></td>
-                                    <td colspan="2">
+                                    <td>
                                        
                                         @Html.DropDownListFor(model => model.TimeFrom, Model.TimeFromList, "", new { style = "width: auto;" })
                                         &nbsp; &nbsp;
@@ -69,13 +71,14 @@
                                         &nbsp; &nbsp;
                                         
                                     </td>
+                                    <td></td>
                                 </tr>
                                  <tr>
                                      <td></td>
                                      <td></td>
                                     <td>
                                         <input class="btn btn-success" type="button" value="@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)" id="AddRow" 
-                                            onclick="addCaseSettingRow()" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
+                                            onclick="addHolidayRow()" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
                                             <input type="hidden" id="" value="" />
                                     </td>
                                 </tr>
@@ -84,6 +87,16 @@
                                         &nbsp;
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Helgdag", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Translation.Get("Arbetstid", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <span id="holidayList">
                                 @foreach (var item in Model.Holidays)
                                 {                    
                                     <tr>
@@ -91,16 +104,19 @@
                                             <a href="@Url.Action("editholiday", "globalsetting", new { area = "admin", id = item.Id })">@Html.DisplayFor(modelItem => item.HolidayDate)</a>
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("editholiday", "globalsetting", new { area = "admin", id = item.Id })">@Html.DisplayFor(modelItem => item.TimeFrom) - @Html.DisplayFor(modelItem => item.TimeUntil)</a>
+                                            @if (item.TimeFrom > 0)
+                                            {
+                                                <a href="@Url.Action("editholiday", "globalsetting", new { area = "admin", id = item.Id })">@Html.DisplayFor(modelItem => item.TimeFrom) - @Html.DisplayFor(modelItem => item.TimeUntil)</a>
+                                            }
                                         </td>
                                         <td>
                                             <input class="btn btn-danger" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)"
-                                                onclick="deleteCaseSettingRow(@item.Id)" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
+                                                onclick="deleteHolidayRow(@item.Id)" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
                                                     <input type="hidden" id="deleteHolidayId" value="" />
                                         </td>
                                     </tr>
                                 }
-                               
+                               </span>
                             </table>
                         </div>
                     </div>
@@ -145,4 +161,20 @@
         }
     }
 
+    function addHolidayRow() {
+        var list = $("#userGroupList");
+        $.post('/globalsetting/AddRowToHolidays/' + '?holidayheaderId=' + $("#holidayheaderId").val()
+           + '&labellist=' + $("#labellist").val() + '&linelist=' + $("#linelist").val()
+           + '&minWidthValue=' + $("#minWidthValue").val() + '&colOrderValue=' + $("#colOrderValue").val(), function (result) {
+               list.html(result);
+           });
+    }
+
+    function deleteHolidayRow(id) {
+        alert(id);
+        var list = $("#holidayList");
+        $.post('/globalsetting/DeleteHoliday/' + id + '&holidayheaderId=' + $("#holidayheaderId").val(), function(result) {
+            list.html(result);
+        });
+    }
 </script>
