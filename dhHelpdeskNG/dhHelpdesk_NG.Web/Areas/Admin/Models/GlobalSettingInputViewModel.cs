@@ -14,7 +14,7 @@
         public IEnumerable<Language> LanguagesToTranslateInto { get; set; }
         public IEnumerable<TextTranslationLanguageList> ListForIndex { get; set; }
 
-        public IList<Holiday> Holidays { get; set; }
+        public IEnumerable<Holiday> Holidays { get; set; }
         public IList<Text> Texts { get; set; }
         public IList<WatchDateCalendarValue> WatchDateCalendarValues { get; set; }
         public IList<SelectListItem> Languages { get; set; }
@@ -53,7 +53,7 @@
         public IList<SelectListItem> TimeTilList { get; set; }
         public IList<SelectListItem> YearList { get; set; }
 
-        public IList<Holiday> Holidays { get; set; }
+        public IEnumerable<Holiday> Holidays { get; set; }
     }
 
     public class GlobalSettingWatchDateViewModel : BaseTabInputViewModel

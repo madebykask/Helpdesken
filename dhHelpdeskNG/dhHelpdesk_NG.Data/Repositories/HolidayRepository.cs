@@ -31,7 +31,7 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         IEnumerable<HolidayOverview> GetHolidays();
 
-        IList<Holiday> GetHolidaysByHeaderId(int id);
+        IEnumerable<Holiday> GetHolidaysByHeaderId(int id);
     }
 
     /// <summary>
@@ -80,7 +80,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 .OrderBy(h => h.HolidayDate);
         }
 
-        public IList<Holiday> GetHolidaysByHeaderId(int id)
+        public IEnumerable<Holiday> GetHolidaysByHeaderId(int id)
         {
             return (from h in this.DataContext.Holidays
                     where h.HolidayHeader_Id == id

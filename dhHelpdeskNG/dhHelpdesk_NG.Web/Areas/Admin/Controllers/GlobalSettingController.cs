@@ -371,23 +371,310 @@
             #region SelectListItems
 
             List<SelectListItem> li = new List<SelectListItem>();
-            for (int i = 00; i < 24; i++)
+            li.Add(new SelectListItem()
             {
-                li.Add(new SelectListItem
-                {
-                    Text = i.ToString(),
-                    Value = i.ToString()
-                });
-            }
+                Text = Translation.Get("00:00", Enums.TranslationSource.TextTranslation),
+                Value = "0",
+                Selected = false
+            });
+            li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("01:00", Enums.TranslationSource.TextTranslation),
+                Value = "1",
+                Selected = false
+            });
+            li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("02:00", Enums.TranslationSource.TextTranslation),
+                Value = "2",
+                Selected = false
+            });
+            li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("03:00", Enums.TranslationSource.TextTranslation),
+                Value = "3",
+                Selected = false
+            });
+            li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("04:00", Enums.TranslationSource.TextTranslation),
+                Value = "4",
+                Selected = false
+            });
+            li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("05:00", Enums.TranslationSource.TextTranslation),
+                Value = "5",
+                Selected = false
+            });
+            li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("06:00", Enums.TranslationSource.TextTranslation),
+                Value = "6",
+                Selected = false
+            });
+            li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("07:00", Enums.TranslationSource.TextTranslation),
+                Value = "7",
+                Selected = false
+            });
+            li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("08:00", Enums.TranslationSource.TextTranslation),
+                Value = "8",
+                Selected = false
+            });
+            li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("09:00", Enums.TranslationSource.TextTranslation),
+                Value = "9",
+                Selected = false
+            });
+            li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("10:00", Enums.TranslationSource.TextTranslation),
+                Value = "10",
+                Selected = false
+            });
+            li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("11:00", Enums.TranslationSource.TextTranslation),
+                Value = "11",
+                Selected = false
+            }); li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("12:00", Enums.TranslationSource.TextTranslation),
+                Value = "12",
+                Selected = false
+            }); li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("13:00", Enums.TranslationSource.TextTranslation),
+                Value = "13",
+                Selected = false
+            }); li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("14:00", Enums.TranslationSource.TextTranslation),
+                Value = "14",
+                Selected = false
+            }); li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("15:00", Enums.TranslationSource.TextTranslation),
+                Value = "15",
+                Selected = false
+            }); li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("16:00", Enums.TranslationSource.TextTranslation),
+                Value = "16",
+                Selected = false
+            }); li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("17:00", Enums.TranslationSource.TextTranslation),
+                Value = "17",
+                Selected = false
+            }); li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("18:00", Enums.TranslationSource.TextTranslation),
+                Value = "18",
+                Selected = false
+            }); li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("19:00", Enums.TranslationSource.TextTranslation),
+                Value = "19",
+                Selected = false
+            }); li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("20:00", Enums.TranslationSource.TextTranslation),
+                Value = "20",
+                Selected = false
+            }); li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("21:00", Enums.TranslationSource.TextTranslation),
+                Value = "21",
+                Selected = false
+            }); li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("22:00", Enums.TranslationSource.TextTranslation),
+                Value = "22",
+                Selected = false
+            }); li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("23:00", Enums.TranslationSource.TextTranslation),
+                Value = "23",
+                Selected = false
+            }); li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("24:00", Enums.TranslationSource.TextTranslation),
+                Value = "24",
+                Selected = false
+            });
+            //for (int i = 00; i < 24; i++)
+            //{
+            //    li.Add(new SelectListItem
+            //    {
+            //        Text = i.ToString(),
+            //        Value = i.ToString()
+            //    });
+            //}
             List<SelectListItem> lis = new List<SelectListItem>();
-            for (int i = 00; i < 24; i++)
+            lis.Add(new SelectListItem()
             {
-                lis.Add(new SelectListItem
-                {
-                    Text = i.ToString(),
-                    Value = i.ToString()
-                });
-            }
+                Text = Translation.Get("00:00", Enums.TranslationSource.TextTranslation),
+                Value = "0",
+                Selected = false
+            });
+            lis.Add(new SelectListItem()
+            {
+                Text = Translation.Get("01:00", Enums.TranslationSource.TextTranslation),
+                Value = "1",
+                Selected = false
+            });
+            lis.Add(new SelectListItem()
+            {
+                Text = Translation.Get("02:00", Enums.TranslationSource.TextTranslation),
+                Value = "2",
+                Selected = false
+            });
+            lis.Add(new SelectListItem()
+            {
+                Text = Translation.Get("03:00", Enums.TranslationSource.TextTranslation),
+                Value = "3",
+                Selected = false
+            });
+            lis.Add(new SelectListItem()
+            {
+                Text = Translation.Get("04:00", Enums.TranslationSource.TextTranslation),
+                Value = "4",
+                Selected = false
+            });
+            lis.Add(new SelectListItem()
+            {
+                Text = Translation.Get("05:00", Enums.TranslationSource.TextTranslation),
+                Value = "5",
+                Selected = false
+            });
+            lis.Add(new SelectListItem()
+            {
+                Text = Translation.Get("06:00", Enums.TranslationSource.TextTranslation),
+                Value = "6",
+                Selected = false
+            });
+            lis.Add(new SelectListItem()
+            {
+                Text = Translation.Get("07:00", Enums.TranslationSource.TextTranslation),
+                Value = "7",
+                Selected = false
+            });
+            lis.Add(new SelectListItem()
+            {
+                Text = Translation.Get("08:00", Enums.TranslationSource.TextTranslation),
+                Value = "8",
+                Selected = false
+            });
+            lis.Add(new SelectListItem()
+            {
+                Text = Translation.Get("09:00", Enums.TranslationSource.TextTranslation),
+                Value = "9",
+                Selected = false
+            });
+            lis.Add(new SelectListItem()
+            {
+                Text = Translation.Get("10:00", Enums.TranslationSource.TextTranslation),
+                Value = "10",
+                Selected = false
+            });
+            lis.Add(new SelectListItem()
+            {
+                Text = Translation.Get("11:00", Enums.TranslationSource.TextTranslation),
+                Value = "11",
+                Selected = false
+            }); 
+            lis.Add(new SelectListItem()
+            {
+                Text = Translation.Get("12:00", Enums.TranslationSource.TextTranslation),
+                Value = "12",
+                Selected = false
+            }); 
+            lis.Add(new SelectListItem()
+            {
+                Text = Translation.Get("13:00", Enums.TranslationSource.TextTranslation),
+                Value = "13",
+                Selected = false
+            }); 
+            lis.Add(new SelectListItem()
+            {
+                Text = Translation.Get("14:00", Enums.TranslationSource.TextTranslation),
+                Value = "14",
+                Selected = false
+            }); 
+            lis.Add(new SelectListItem()
+            {
+                Text = Translation.Get("15:00", Enums.TranslationSource.TextTranslation),
+                Value = "15",
+                Selected = false
+            }); 
+            lis.Add(new SelectListItem()
+            {
+                Text = Translation.Get("16:00", Enums.TranslationSource.TextTranslation),
+                Value = "16",
+                Selected = false
+            }); 
+            lis.Add(new SelectListItem()
+            {
+                Text = Translation.Get("17:00", Enums.TranslationSource.TextTranslation),
+                Value = "17",
+                Selected = false
+            }); 
+            lis.Add(new SelectListItem()
+            {
+                Text = Translation.Get("18:00", Enums.TranslationSource.TextTranslation),
+                Value = "18",
+                Selected = false
+            }); 
+            lis.Add(new SelectListItem()
+            {
+                Text = Translation.Get("19:00", Enums.TranslationSource.TextTranslation),
+                Value = "19",
+                Selected = false
+            }); 
+            lis.Add(new SelectListItem()
+            {
+                Text = Translation.Get("20:00", Enums.TranslationSource.TextTranslation),
+                Value = "20",
+                Selected = false
+            }); 
+            lis.Add(new SelectListItem()
+            {
+                Text = Translation.Get("21:00", Enums.TranslationSource.TextTranslation),
+                Value = "21",
+                Selected = false
+            }); 
+            lis.Add(new SelectListItem()
+            {
+                Text = Translation.Get("22:00", Enums.TranslationSource.TextTranslation),
+                Value = "22",
+                Selected = false
+            }); 
+            lis.Add(new SelectListItem()
+            {
+                Text = Translation.Get("23:00", Enums.TranslationSource.TextTranslation),
+                Value = "23",
+                Selected = false
+            }); 
+            lis.Add(new SelectListItem()
+            {
+                Text = Translation.Get("24:00", Enums.TranslationSource.TextTranslation),
+                Value = "24",
+                Selected = false
+            });
+            //for (int i = 00; i < 24; i++)
+            //{
+            //    lis.Add(new SelectListItem
+            //    {
+            //        Text = i.ToString(),
+            //        Value = i.ToString()
+            //    });
+            //}
 
             List<SelectListItem> yearlist = new List<SelectListItem>();
             for (int j = 2000; j < 2015; j++)
@@ -633,11 +920,11 @@
         }
 
 
-        public string AddRowToHolidays(int id, DateTime holidayDate, int timefrom, int timeUntil)
+        public string AddRowToHolidays(int holidayheaderid, DateTime holidaydate, int timefrom, int timeUntil)
         {
             var holiday = new Holiday();
 
-            var holidayheader = this._holidayService.GetHolidayHeader(id);
+            var holidayheader = this._holidayService.GetHolidayHeader(holidayheaderid);
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
@@ -645,8 +932,8 @@
 
             if (this.ModelState.IsValid)
             {
-                holiday.HolidayHeader_Id = id;
-                holiday.HolidayDate = holidayDate;
+                holiday.HolidayHeader_Id = holidayheaderid;
+                holiday.HolidayDate = holidaydate;
                 holiday.TimeFrom = timefrom;
                 holiday.TimeUntil = timeUntil;
                 holiday.CreatedDate = DateTime.UtcNow;
@@ -689,7 +976,7 @@
             //model.ChangedHeaderName = holiday.HolidayHeader.Name;
             SessionFacade.ActiveTab = "#fragment-2";
             
-            this.UpdateModel(model, "holidayheader");
+            this.UpdateModel(model, "holiday");
 
             //return View(model);
             var view = "~/areas/admin/views/GlobalSetting/_Holidays.cshtml";

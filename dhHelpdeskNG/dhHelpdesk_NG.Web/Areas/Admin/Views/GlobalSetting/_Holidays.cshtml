@@ -1,4 +1,4 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
+﻿
 @model DH.Helpdesk.Web.Areas.Admin.Models.GlobalSettingHolidayViewModel
 
 @if (TempData["Error"] != null)
@@ -7,7 +7,7 @@
         @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
     </div>    
 }          
-<div class="content">
+<div class="content" id="holiday">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
             <li class="active"><a href="#fragment-2">@Translation.Get("Helgdag", Enums.TranslationSource.TextTranslation)</a></li>
@@ -31,7 +31,8 @@
                                         @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td colspan="2">
-                                        @Html.DropDownListFor(model => model.HolidayHeader.Id, Model.HolidayHeaders, "", new { style = "width: auto;", onchange = "changeHolidayHeader(this.options[this.selectedIndex].value);" })
+                                        @Html.LabelFor(model => model.HolidayHeader.Id, Model.HolidayHeader.Name)
+                                        @*@Html.DropDownListFor(model => model.HolidayHeader.Id, Model.HolidayHeaders, "", new { style = "width: auto;", onchange = "changeHolidayHeader(this.options[this.selectedIndex].value);" })*@
                                         <input type="hidden" id="holidayheaderId" value="@Model.HolidayHeader.Id" />
                                     </td>
                                 </tr>
@@ -57,34 +58,35 @@
                                         @Translation.Get("Halv helgdag", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        <input type="checkbox" id="chkHalfDay" @(Model.HalfDay ? "checked='checked'" : "") name="halfDay" value="1" />
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr  id="halfDayOptions" style="@(Model.HalfDay ? "display:block" : "display:none")">
-                                    <td></td>
-                                    <td>
-                                       
-                                        @Html.DropDownListFor(model => model.TimeFrom, Model.TimeFromList, "", new { style = "width: auto;" })
-                                        <input type="hidden" id="timefrom" value="" />
+                                        <input type="checkbox" id="chkHalfDay" @(Model.HalfDay ? "checked='checked'" : "") name="halfDay" value="1" />&nbsp; &nbsp;
+                                        
+                                        @Html.DropDownListFor(model => model.TimeFrom, Model.TimeFromList, "", new { style = "width: auto;", disabled = "disabled"})
                                         &nbsp; &nbsp;
                                           
-                                        @Html.DropDownListFor(model => model.TimeTil, Model.TimeTilList, "", new { style = "width: auto;" })
-                                        <input type="hidden" id="timeuntil" value="" />
+                                        @Html.DropDownListFor(model => model.TimeTil, Model.TimeTilList, "", new { style = "width: auto;", disabled = "disabled" })
                                         &nbsp; &nbsp;
                                         
                                     </td>
-                                    <td></td>
-                                </tr>
-                                 <tr>
-                                     <td></td>
-                                     <td></td>
                                     <td>
                                         <input class="btn btn-success" type="button" value="@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)" id="AddRow" 
                                             onclick="addHolidayRow()" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
                                             <input type="hidden" id="" value="" />
                                     </td>
                                 </tr>
+                                @*<tr  id="halfDayOptions" style="@(Model.HalfDay ? "display:block" : "display:none")">
+                                    <td></td>
+                                    <td>
+                                      
+                                    </td>
+                                    <td></td>
+                                </tr>*@
+                                 @*<tr>
+                                     <td></td>
+                                     <td></td>
+                                    <td>
+                                        
+                                    </td>
+                                </tr>*@
                                 <tr>
                                     <td colspan="3">
                                         &nbsp;
@@ -99,7 +101,6 @@
                                     </td>
                                     <td></td>
                                 </tr>
-                                <span id="holidayList">
                                 @foreach (var item in Model.Holidays)
                                 {                    
                                     <tr>
@@ -119,7 +120,6 @@
                                         </td>
                                     </tr>
                                 }
-                               </span>
                             </table>
                         </div>
                     </div>
@@ -130,14 +130,18 @@
 </div>
 <script type="text/javascript">
 
-    $("input:text:visible:first").focus();
-    $("#Holiday_HolidayDate").datepicker();
-
+    //$("input:text:visible:first").focus();
+    
     $(function () {
-        //$("#tblHolidayHeader").fixheadertable();
-        $("#chkHalfDay").click(function () {
-            $("#halfDayOptions").toggle();
+        $("input:checkbox").change(function () {
+            if ($("#chkHalfDay").is(":checked")) {
+                $("select").removeAttr("disabled");
+            }
+            else {
+                $("select").attr("disabled", "disabled");
+            }
         });
+        
         holidayList($('#Holiday_HolidayHeader_Id').val());
     });
 
@@ -165,20 +169,20 @@
     }
 
     function addHolidayRow() {
-        var d = $('#holidaydate').datepicker('getDate');
-        $.datepicker.formatDate('yyyy-mm-dd', d);
-        alert(d);
-        var list = $("#holidayList");
-        $.post('/globalsetting/AddRowToHolidays/' + '?holidayheaderId=' + $("#holidayheaderId").val() + '&holidaydate=' + $("#holidaydate").val() + '&timefrom=' + $("#timefrom").val() + '&timeuntil=' + $("#timeuntil").val(), function (result) {
-               list.html(result);
-           });
+        var list = $("#holiday");
+        $.post('/globalsetting/AddRowToHolidays/' + '?holidayheaderId=' + $("#holidayheaderId").val() + '&holidaydate=' + $("#Holiday_HolidayDate").val() + '&timefrom=' + $("#TimeFrom").val() + '&timeuntil=' + $("#TimeTil").val(), function (result) {
+               
+            location.reload();
+        });
+
+        return false;
     }
 
     function deleteHolidayRow(id) {
-        alert(id);
-        var list = $("#holidayList");
-        $.post('/GlobalSetting/DeleteHoliday/' + id + '&holidayheaderId=' + $("#holidayheaderId").val(), function(result) {
-            list.html(result);
+        var list = $("#holiday");
+        $.post('/globalsetting/DeleteHoliday/' + id, function(result) {
+            //list.html(result);
+            location.reload();
         });
     }
 </script>
