@@ -39,7 +39,7 @@
             var query = from cfsl in this.DataContext.CaseFieldSettingLanguages
                             join cfs in this.DataContext.CaseFieldSettings on cfsl.CaseFieldSettings_Id equals cfs.Id
                             //join cs in this.DataContext.CaseSettings on cfs.Name equals cs.Name
-                        where cfs.Customer_Id == customerId && cfsl.Language_Id == languageId
+                        where cfs.Customer_Id == customerId && cfsl.Language_Id == languageId && cfs.ShowOnStartPage == 1
                         group cfsl by new { cfsl.CaseFieldSettings_Id, cfsl.Label, cfsl.Language_Id, cfsl.FieldHelp, cfs.Name } into grouped
                         select new CaseFieldSettingsWithLanguage
                         {

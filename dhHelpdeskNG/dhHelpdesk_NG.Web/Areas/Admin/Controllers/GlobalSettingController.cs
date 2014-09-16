@@ -632,14 +632,41 @@
 
         }
 
-        //[CustomAuthorize(Roles = "3,4")]
+
+        public string AddRowToHolidays(int id, DateTime holidayDate, int timefrom, int timeUntil)
+        {
+            var holiday = new Holiday();
+
+            var holidayheader = this._holidayService.GetHolidayHeader(id);
+
+            IDictionary<string, string> errors = new Dictionary<string, string>();
+
+            var model = this.SaveHolidayViewModel(holidayheader);
+
+            if (this.ModelState.IsValid)
+            {
+                holiday.HolidayHeader_Id = id;
+                holiday.HolidayDate = holidayDate;
+                holiday.TimeFrom = timefrom;
+                holiday.TimeUntil = timeUntil;
+                holiday.CreatedDate = DateTime.UtcNow;
+
+            }
+
+            model.Holiday = holiday;
+            
+            this._holidayService.SaveHoliday(holiday, out errors);
+            return this.UpdateHolidayList(holidayheader);
+        }
+
+        [CustomAuthorize(Roles = "3,4")]
         [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
         public string DeleteHoliday(int id)
         {
 
             var holiday = this._holidayService.GetHoliday(id);
+            
             var holidayheader = this._holidayService.GetHolidayHeader(holiday.HolidayHeader_Id);
-            //var holidays = this._holidayService.GetHolidaysByHeaderId(holiday.HolidayHeader_Id);
 
             if (this._holidayService.DeleteHoliday(id) == DeleteMessage.Success)
                 return this.UpdateHolidayList(holidayheader);
@@ -649,16 +676,10 @@
                 return this.UpdateHolidayList(holidayheader);
             }
 
-            //var model = this.GetGSIndexViewModel(1, id, SessionFacade.CurrentCustomer.Language_Id);
-
-            //var view = "~/areas/admin/views/GlobalSetting/_Holidays.cshtml";
-
-            //return this.RenderRazorViewToString(view, model);
-
         }
 
-        //[CustomAuthorize(Roles = "3,4")]
-        [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")] //TODO: Is duration time (10 seconds) too short? well, 60 seconds is too much anyway.. 
+        [CustomAuthorize(Roles = "3,4")]
+        [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")] 
         public string UpdateHolidayList(HolidayHeader holidayheader)
         {
             

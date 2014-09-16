@@ -140,7 +140,7 @@
                 SetPriorityPermission = 1,
                 ShowNotAssignedWorkingGroups = 1,
                 StartPage = 1,
-                Customer_Id = filter.CustomerId,
+                Customer_Id = 0,
                 UserGroup_Id = 4
             });
 

@@ -49,6 +49,7 @@
                                     </td>
                                     <td colspan="2">
                                         @Html.EditorFor(model => model.Holiday.HolidayDate, "DatePicker", new { id = "holidaydate" }) 
+                                        <input type="hidden" id="holidaydate" value="" />
                                     </td>
                                 </tr>
                                 <tr>
@@ -65,9 +66,11 @@
                                     <td>
                                        
                                         @Html.DropDownListFor(model => model.TimeFrom, Model.TimeFromList, "", new { style = "width: auto;" })
+                                        <input type="hidden" id="timefrom" value="" />
                                         &nbsp; &nbsp;
                                           
                                         @Html.DropDownListFor(model => model.TimeTil, Model.TimeTilList, "", new { style = "width: auto;" })
+                                        <input type="hidden" id="timeuntil" value="" />
                                         &nbsp; &nbsp;
                                         
                                     </td>
@@ -112,7 +115,7 @@
                                         <td>
                                             <input class="btn btn-danger" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)"
                                                 onclick="deleteHolidayRow(@item.Id)" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
-                                                    <input type="hidden" id="deleteHolidayId" value="" />
+                                                    <input type="hidden" id="deleteHolidayId" value="@item.Id" />
                                         </td>
                                     </tr>
                                 }
@@ -162,10 +165,11 @@
     }
 
     function addHolidayRow() {
-        var list = $("#userGroupList");
-        $.post('/globalsetting/AddRowToHolidays/' + '?holidayheaderId=' + $("#holidayheaderId").val()
-           + '&labellist=' + $("#labellist").val() + '&linelist=' + $("#linelist").val()
-           + '&minWidthValue=' + $("#minWidthValue").val() + '&colOrderValue=' + $("#colOrderValue").val(), function (result) {
+        var d = $('#holidaydate').datepicker('getDate');
+        $.datepicker.formatDate('yyyy-mm-dd', d);
+        alert(d);
+        var list = $("#holidayList");
+        $.post('/globalsetting/AddRowToHolidays/' + '?holidayheaderId=' + $("#holidayheaderId").val() + '&holidaydate=' + $("#holidaydate").val() + '&timefrom=' + $("#timefrom").val() + '&timeuntil=' + $("#timeuntil").val(), function (result) {
                list.html(result);
            });
     }
@@ -173,7 +177,7 @@
     function deleteHolidayRow(id) {
         alert(id);
         var list = $("#holidayList");
-        $.post('/globalsetting/DeleteHoliday/' + id + '&holidayheaderId=' + $("#holidayheaderId").val(), function(result) {
+        $.post('/GlobalSetting/DeleteHoliday/' + id + '&holidayheaderId=' + $("#holidayheaderId").val(), function(result) {
             list.html(result);
         });
     }
