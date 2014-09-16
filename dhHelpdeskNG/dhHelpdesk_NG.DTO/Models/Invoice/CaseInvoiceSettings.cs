@@ -1,7 +1,5 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Invoice
 {
-    using System.ComponentModel.DataAnnotations;
-
     public sealed class CaseInvoiceSettings
     {
         public CaseInvoiceSettings(
@@ -19,11 +17,14 @@
             this.CustomerId = customerId;
         }
 
-        public int Id { get; private set; } 
+        public CaseInvoiceSettings()
+        {            
+        }
 
-        public int CustomerId { get; private set; }
+        public int Id { get; set; } 
 
-        [Required]
-        public string ExportPath { get; private set; }
+        public int CustomerId { get; set; }
+
+        public string ExportPath { get; set; }
     }
 }

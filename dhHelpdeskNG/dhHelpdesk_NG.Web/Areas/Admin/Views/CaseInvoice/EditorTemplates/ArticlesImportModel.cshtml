@@ -2,7 +2,7 @@
 
 @using (Ajax.BeginForm("ArticlesImport", "CaseInvoice", null,
     new AjaxOptions { HttpMethod = "POST" }, 
-    new { enctype = "multipart/form-data" }))
+    new { id="case_articles_import_form", enctype = "multipart/form-data" }))
 {
     @Html.HiddenFor(m => m.CustomerId)
     @Html.AntiForgeryToken()
@@ -18,7 +18,7 @@ $(function() {
     var loading = $("#case_articles_import_loading");
     var status = $("#case_articles_import_status");
 
-    $('form').ajaxForm({
+    $('#case_articles_import_form').ajaxForm({
         beforeSend: function () {
             status.empty();
             importButton.attr("disabled", true);

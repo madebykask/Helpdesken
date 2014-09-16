@@ -70,10 +70,10 @@
 
         [HttpPost]
         [BadRequestOnNotValid]
-        public ViewResult SaveSettings(CaseInvoiceSettingsModel model)
+        public ActionResult SaveSettings(CaseInvoiceSettingsModel model)
         {
             this.caseInvoiceSettingsService.SaveSettings(model.Settings);
-            return this.View("Index", model);
+            return this.RedirectToAction("Index", new { customerId = model.Settings.CustomerId });
         }
     }
 }
