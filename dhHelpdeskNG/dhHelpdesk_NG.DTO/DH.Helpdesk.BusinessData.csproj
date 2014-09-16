@@ -238,6 +238,7 @@
     <Compile Include="Models\Invoice\CaseInvoice.cs" />
     <Compile Include="Models\Invoice\CaseInvoiceArticle.cs" />
     <Compile Include="Models\Invoice\CaseInvoiceOrder.cs" />
+    <Compile Include="Models\Invoice\CaseInvoiceSettings.cs" />
     <Compile Include="Models\Invoice\InvoiceArticle.cs" />
     <Compile Include="Models\Invoice\InvoiceArticleUnit.cs" />
     <Compile Include="Models\Operation\OperationObject.cs" />

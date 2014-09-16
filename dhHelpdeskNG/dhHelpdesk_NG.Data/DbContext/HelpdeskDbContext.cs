@@ -481,6 +481,8 @@
  
         public DbSet<CaseInvoiceEntity> CaseInvoices { get; set; } 
 
+        public DbSet<CaseInvoiceSettingsEntity> CaseInvoiceSettings { get; set; } 
+
         #endregion
 
         #region Public Methods and Operators
@@ -702,6 +704,7 @@
             modelBuilder.Configurations.Add(new CaseInvoiceOrderConfiguration());
             modelBuilder.Configurations.Add(new TextTypeConfiguration());
             modelBuilder.Configurations.Add(new CaseInvoiceConfiguration());
+            modelBuilder.Configurations.Add(new CaseInvoiceSettingsConfiguration());
 
             #endregion
 

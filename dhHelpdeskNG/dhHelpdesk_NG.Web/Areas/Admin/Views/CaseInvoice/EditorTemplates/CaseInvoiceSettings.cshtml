@@ -1,0 +1,30 @@
+﻿@model DH.Helpdesk.BusinessData.Models.Invoice.CaseInvoiceSettings
+
+@using (Html.BeginForm("SaveSettings", "CaseInvoice", FormMethod.Post, new { id = "case_invoice_settings_form" }))
+{
+    @Html.HiddenFor(m => m.CustomerId)
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                <table class="tableform">
+                    <tr>
+                        <td class="span3">
+                            @Translation.Get("Export path")
+                        </td>
+                        <td class="span9">
+                               @Html.TextBoxFor(m => m.ExportPath, new { maxlength = "200" })
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>        
+    </div>
+}
+<script type="text/javascript">
+    $(function() {
+        $("#save_case_invoice_settings").click(function() {
+            $("#case_invoice_settings_form").submit();
+            return false;
+        });
+    });
+</script>

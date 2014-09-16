@@ -18,6 +18,10 @@ IF OBJECT_ID (N'tblInvoiceArticleUnit', N'U') IS NOT NULL
 	DROP TABLE [dbo].[tblInvoiceArticleUnit]
 GO
 
+IF OBJECT_ID (N'tblCaseInvoiceSettings', N'U') IS NOT NULL 
+	DROP TABLE [dbo].[tblCaseInvoiceSettings]
+GO
+
 CREATE TABLE [dbo].[tblInvoiceArticleUnit]
 (
 	[Id] INT IDENTITY(1,1) NOT NULL,
@@ -187,3 +191,27 @@ BEGIN
 	ALTER TABLE [dbo].[tblSettings]
 	ADD [ModuleCaseInvoice] INT NOT NULL DEFAULT(0)
 END
+
+CREATE TABLE [dbo].[tblCaseInvoiceSettings]
+(
+	[Id] INT IDENTITY(1,1) NOT NULL,
+	[CustomerId] INT NOT NULL,
+	[ExportPath] NVARCHAR(200) NULL,
+	CONSTRAINT [PK_tblCaseInvoiceSettings] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	) 
+	WITH (
+		PAD_INDEX = OFF, 
+		STATISTICS_NORECOMPUTE = OFF, 
+		IGNORE_DUP_KEY = OFF, 
+		ALLOW_ROW_LOCKS = ON, 
+		ALLOW_PAGE_LOCKS = ON, 
+		FILLFACTOR = 90) ON [PRIMARY]
+)
+ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[tblCaseInvoiceSettings] WITH CHECK ADD CONSTRAINT [FK_tblCaseInvoiceSettings_tblCustomer] FOREIGN KEY([CustomerId])
+REFERENCES [dbo].[tblCustomer] ([Id])
+GO

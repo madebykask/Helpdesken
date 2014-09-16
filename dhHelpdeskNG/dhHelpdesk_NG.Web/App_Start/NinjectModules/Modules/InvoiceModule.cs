@@ -68,6 +68,14 @@
             this.Bind<IInvoiceHelper>()
                 .To<InvoiceHelper>()
                 .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<CaseInvoiceSettingsEntity, CaseInvoiceSettings>>()
+                .To<CaseInvoiceSettingsToBusinessModelMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<CaseInvoiceSettings, CaseInvoiceSettingsEntity>>()
+                .To<CaseInvoiceSettingsToEntityMapper>()
+                .InSingletonScope();
         }
     }
 }

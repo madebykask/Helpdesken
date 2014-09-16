@@ -104,6 +104,7 @@
             this.Bind<IOrganizationService>().To<OrganizationService>();
             this.Bind<IInvoiceArticleService>().To<InvoiceArticleService>();
             this.Bind<ICaseSolutionSettingService>().To<CaseSolutionSettingService>();
+            this.Bind<ICaseInvoiceSettingsService>().To<CaseInvoiceSettingsService>();
         }
 
         #endregion

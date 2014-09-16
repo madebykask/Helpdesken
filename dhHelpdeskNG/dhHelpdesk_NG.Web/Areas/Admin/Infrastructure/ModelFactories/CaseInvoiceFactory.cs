@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Admin.Infrastructure.ModelFactories
 {
+    using DH.Helpdesk.BusinessData.Models.Invoice;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.BusinessLogic.Invoice;
     using DH.Helpdesk.Services.Services;
@@ -7,7 +8,9 @@
 
     public sealed class CaseInvoiceFactory : ICaseInvoiceFactory
     {
-        public CaseInvoiceSettingsModel GetSettingsModel(Customer customer)
+        public CaseInvoiceSettingsModel GetSettingsModel(
+                Customer customer, 
+                CaseInvoiceSettings settings)
         {
             var instance = new CaseInvoiceSettingsModel
                                {
@@ -15,7 +18,8 @@
                                    ArticlesImport = new ArticlesImportModel
                                                     {
                                                         CustomerId = customer.Id
-                                                    }
+                                                    },
+                                   Settings = settings
                                };
 
             return instance;

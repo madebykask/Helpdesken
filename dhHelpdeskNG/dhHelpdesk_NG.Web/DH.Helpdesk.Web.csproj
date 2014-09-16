@@ -269,7 +269,6 @@
     <Compile Include="Areas\Admin\Models\BuildingViewModels.cs" />
     <Compile Include="Areas\Admin\Models\InfoTextViewModels.cs" />
     <Compile Include="Areas\Admin\Models\Invoice\CaseInvoiceSettingsModel.cs" />
-    <Compile Include="Areas\Admin\Models\Invoice\InvoiceExportSettingsModel.cs" />
     <Compile Include="Areas\Admin\Models\StandardTextViewModels.cs" />
     <Compile Include="Areas\Admin\Models\ProgramIndexViewModel.cs" />
     <Compile Include="Areas\Admin\Models\QuickLinkIndexViewModel.cs" />
@@ -1187,9 +1186,9 @@
     <Content Include="Content\js\jsrender.min.js.map" />
     <Content Include="Areas\Admin\Views\GlobalSetting\_TranslationsList.cshtml" />
     <Content Include="Areas\Admin\Views\GlobalSetting\_Holidays.cshtml" />
-    <Content Include="Areas\Admin\Views\CaseInvoice\CaseInvoiceSettings.cshtml" />
+    <Content Include="Areas\Admin\Views\CaseInvoice\Index.cshtml" />
     <Content Include="Areas\Admin\Views\CaseInvoice\EditorTemplates\ArticlesImportModel.cshtml" />
-    <Content Include="Areas\Admin\Views\CaseInvoice\EditorTemplates\InvoiceExportSettingsModel.cshtml" />
+    <Content Include="Areas\Admin\Views\CaseInvoice\EditorTemplates\CaseInvoiceSettings.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />

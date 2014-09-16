@@ -2,6 +2,7 @@
 {
     using System.Web.Mvc;
 
+    using DH.Helpdesk.BusinessData.Models.Invoice;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Infrastructure.ModelFactories;
     using DH.Helpdesk.Web.Areas.Admin.Models.Invoice;
@@ -17,25 +18,35 @@
 
         private readonly IInvoiceArticleService invoiceArticleService;
 
+        private readonly ICaseInvoiceSettingsService caseInvoiceSettingsService;
+
         public CaseInvoiceController(
                 IMasterDataService masterDataService, 
                 ICustomerService customerService, 
                 ICaseInvoiceFactory caseInvoiceFactory, 
                 IProductAreaService productAreaService, 
-                IInvoiceArticleService invoiceArticleService)
+                IInvoiceArticleService invoiceArticleService, 
+                ICaseInvoiceSettingsService caseInvoiceSettingsService)
             : base(masterDataService)
         {
             this.customerService = customerService;
             this.caseInvoiceFactory = caseInvoiceFactory;
             this.productAreaService = productAreaService;
             this.invoiceArticleService = invoiceArticleService;
+            this.caseInvoiceSettingsService = caseInvoiceSettingsService;
         }
 
         [HttpGet]
-        public ActionResult CaseInvoiceSettings(int customerId)
+        public ActionResult Index(int customerId)
         {
             var customer = this.customerService.GetCustomer(customerId);
-            var model = this.caseInvoiceFactory.GetSettingsModel(customer);
+            var settings = this.caseInvoiceSettingsService.GetSettings(customerId);
+            if (settings == null)
+            {
+                settings = new CaseInvoiceSettings(customerId);
+            }
+
+            var model = this.caseInvoiceFactory.GetSettingsModel(customer, settings);
             return this.View(model);
         }
 
@@ -55,6 +66,14 @@
             var result = importer.ImportArticles(model.ArticlesImport.File.InputStream);
             importer.SaveImportedArticles(result, model.ArticlesImport.CustomerId);
             return "Import completed successfully!";
+        }
+
+        [HttpPost]
+        [BadRequestOnNotValid]
+        public ViewResult SaveSettings(CaseInvoiceSettingsModel model)
+        {
+            this.caseInvoiceSettingsService.SaveSettings(model.Settings);
+            return this.View("Index", model);
         }
     }
 }

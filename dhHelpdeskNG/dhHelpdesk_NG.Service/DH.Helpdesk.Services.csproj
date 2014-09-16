@@ -167,6 +167,7 @@
     <Compile Include="Services\CaseService.cs" />
     <Compile Include="Services\CaseSettingsService.cs" />
     <Compile Include="Services\CaseSolutionService.cs" />
+    <Compile Include="Services\Concrete\CaseInvoiceSettingsService.cs" />
     <Compile Include="Services\Concrete\CaseSolutionSettingService.cs" />
     <Compile Include="Services\CaseTypeService.cs" />
     <Compile Include="Services\CategoryService.cs" />
@@ -191,6 +192,7 @@
     <Compile Include="Services\Concrete\IPlaceService.cs" />
     <Compile Include="Services\Concrete\OrganizationService.cs" />
     <Compile Include="Services\Concrete\PlaceService.cs" />
+    <Compile Include="Services\ICaseInvoiceSettingsService.cs" />
     <Compile Include="Services\ICaseSolutionSettingService.cs" />
     <Compile Include="Services\ISSOService.cs" />
     <Compile Include="Services\IActionSettingService.cs" />

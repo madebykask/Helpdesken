@@ -252,6 +252,7 @@
             this.Bind<IInvoiceArticleUnitRepository>().To<InvoiceArticleUnitRepository>();
             this.Bind<IInvoiceArticleRepository>().To<InvoiceArticleRepository>();
             this.Bind<ICaseInvoiceArticleRepository>().To<CaseInvoiceArticleRepository>();
+            this.Bind<ICaseInvoiceSettingsRepository>().To<CaseInvoiceSettingsRepository>();
 
             this.Bind<IOperationLogEMailLogRepository>().To<OperationLogEMailLogRepository>();
 
