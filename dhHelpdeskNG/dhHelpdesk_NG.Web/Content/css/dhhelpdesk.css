@@ -2589,11 +2589,11 @@ body.login {
 .mb20 {
     margin-bottom: 20px;
 }
-.ml05 {
+.container {
     margin-left: 0.5em;
 }
 .ml15 {
-    margin-left: 1.5em;
+    margin-left: 1.5em !important;
 }
 .cursor-pointer {
     cursor: pointer;

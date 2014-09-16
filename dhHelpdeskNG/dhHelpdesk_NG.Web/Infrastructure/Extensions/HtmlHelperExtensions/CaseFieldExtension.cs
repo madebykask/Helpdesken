@@ -44,9 +44,12 @@
 
             if (!string.IsNullOrEmpty(description))
             {
-                tag = new TagBuilder("img");
-                tag.MergeAttribute("src", url.Content("~/Content/icons/info.png"));
-                tag.MergeAttribute("class", "cursor-pointer ml05");
+                //tag = new TagBuilder("img");
+                //tag.MergeAttribute("src", url.Content("~/Content/icons/info.png"));
+                //tag.MergeAttribute("class", "cursor-pointer ml05");
+                tag = new TagBuilder("span");
+                tag.MergeAttribute("class", "icon-info-sign ml15");
+                tag.MergeAttribute("rel", "tooltip");
                 tag.MergeAttribute("title", description);
                 result.Append(tag);
             }

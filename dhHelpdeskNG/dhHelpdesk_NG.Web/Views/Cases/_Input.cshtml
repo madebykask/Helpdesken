@@ -521,10 +521,10 @@
                                             {
                                                 @Html.TextAreaFor(model => model.case_.Description, new { rows = descriptionSize, @class = "case-description width90", @readonly = true })
                                             }
-                                            <img id="caseDescriptionPreview" 
-                                                 src="@Url.Content("~/Content/icons/magnifier.png")" 
-                                                 class="cursor-pointer" 
-                                                 title="@Translation.Get("Förhandsgranska")" />
+                                            <span id="caseDescriptionPreview" rel="tooltip" 
+                                                  
+                                                 class="icon-circle-arrow-up cursor-pointer" 
+                                                 title="@Translation.Get("Förhandsgranska")"></span>
                                         </td>
                                     </tr>
                                     <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Miscellaneous, CaseSolutionFields.Miscellaneous)">

@@ -911,7 +911,6 @@
     <Content Include="Content\css\bootstrap.css" />
     <Content Include="Content\css\dhhelpdesk.css" />
     <Content Include="Content\css\jquery.toastmessage.css" />
-    <Content Include="Content\css\profile.css" />
     <Content Include="Content\dialog.css" />
     <Content Include="Content\highlighter\codehighlighter.js" />
     <Content Include="Content\highlighter\html.js" />
@@ -1026,11 +1025,6 @@
     <Content Include="Content\images_old\white-grad.png" />
     <Content Include="Content\images_old\winzip.gif" />
     <Content Include="Content\images_old\word.gif" />
-    <Content Include="Content\img-profile\CHS-logo-H31px_140227.png" />
-    <Content Include="Content\img-profile\CHS-logo-W300_140227.png" />
-    <Content Include="Content\img-profile\ikea-logo-login.png" />
-    <Content Include="Content\img-profile\ikea-logo.png" />
-    <Content Include="Content\img-profile\ikea-quality-text.png" />
     <Content Include="Content\img\Circular.png" />
     <Content Include="Content\img\close.gif" />
     <Content Include="Content\img\dhhelpdesk-login.png" />
@@ -1182,6 +1176,13 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="Areas\Admin\Views\Customer\_CopyCustomer.cshtml" />
+    <Content Include="img-profile\CHS-logo-H31px_140227.png" />
+    <Content Include="img-profile\CHS-logo-W300_140227.png" />
+    <Content Include="img-profile\ikea-logo-login.png" />
+    <Content Include="img-profile\ikea-logo.png" />
+    <Content Include="img-profile\ikea-quality-text.png" />
+    <Content Include="img-profile\print-logo.png" />
+    <Content Include="img-profile\profile.css" />
     <Content Include="log4net.config" />
     <Content Include="Content\js\jsrender.min.js.map" />
     <Content Include="Areas\Admin\Views\GlobalSetting\_TranslationsList.cshtml" />
