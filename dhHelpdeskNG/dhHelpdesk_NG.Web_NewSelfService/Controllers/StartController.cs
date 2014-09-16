@@ -45,12 +45,13 @@ namespace DH.Helpdesk.NewSelfService.Controllers
         {
             var model = new StartPageModel();
             var bb = _bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id);
-            var s = new BulletinBoard();
-            
-            //var bb = _bulletinBoardService.GetBulletinBoardOverviews(SessionFacade.CurrentCustomer.Id);
+
             model.BulletinBoard = bb.ToList();
             return this.View(model);            
-        }
-        
+
+            //var s = new BulletinBoard();
+            
+            //var bb = _bulletinBoardService.GetBulletinBoardOverviews(SessionFacade.CurrentCustomer.Id);
+         }        
     }
 }

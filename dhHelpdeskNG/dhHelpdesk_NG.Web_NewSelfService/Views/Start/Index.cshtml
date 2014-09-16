@@ -36,13 +36,15 @@
                     <!--<p><strong>Please submit all service requests relevant for September payroll by cut off day which is 17th September 3.00pm</strong></p>-->
                     <p></p>
                     <hr />*@
-
-                    @foreach (var b in Model.BulletinBoard)
-                    {                       
-                      if (DateTime.Now >= b.ShowDate && DateTime.Now <= b.ShowUntilDate )
-                      {
-                        <p> <strong> @Html.DisplayFor(m=> b.ShowDate , "Date")  </strong> <br /> &nbsp;&nbsp; @b.Text </p>
-                      }
+                    @if (Model.BulletinBoard != null)
+                    {
+                        foreach (var b in Model.BulletinBoard)
+                        {                       
+                          if (DateTime.Now >= b.ShowDate && DateTime.Now <= b.ShowUntilDate )
+                          {
+                            <p> <strong> @Html.DisplayFor(m=> b.ShowDate , "Date")  </strong> <br /> &nbsp;&nbsp; @b.Text </p>
+                          }
+                        }
                     }
                     
                     
