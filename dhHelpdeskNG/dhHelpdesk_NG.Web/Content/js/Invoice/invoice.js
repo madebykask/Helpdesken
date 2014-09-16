@@ -151,6 +151,8 @@ $(function () {
             this.SaveInvoices();
             var th = this;
             $.post("/Invoice/DoInvoice", {
+                customerId: this.CustomerId,
+                caseId: this.CaseId,
                 invoices: this.ToJson()
             },
             function() {
@@ -719,6 +721,7 @@ $(function () {
             this.Number = null;
             this.DeliveryPeriod = null;
             this.Reference = null;
+            this.Date = null;
             this._articles = [];
             this.Container = null;
 
@@ -781,6 +784,7 @@ $(function () {
                         '"Number":"' + this.Number + '", ' +
                         '"DeliveryPeriod":"' + (this.DeliveryPeriod != null ? this.DeliveryPeriod : '') + '", ' +
                         '"Reference":"' + (this.Reference != null ? this.Reference : '') + '", ' +
+                        '"Date":"' + (this.Date != null ? this.Date : '') + '", ' +
                         '"Articles": [' + articlesResult + ']' +
                         '}';
             },
@@ -1136,6 +1140,7 @@ $(function () {
                                     order.Number = ord.Number;
                                     order.DeliveryPeriod = ord.DeliveryPeriod;
                                     order.Reference = ord.Reference;
+                                    order.Date = ord.Date;
                                     invoice.AddOrder(order);
                                     if (ord.Articles != null) {
                                         for (var k = 0; k < ord.Articles.length; k++) {

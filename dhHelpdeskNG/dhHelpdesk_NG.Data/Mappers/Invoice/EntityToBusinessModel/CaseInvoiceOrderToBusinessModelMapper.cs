@@ -33,6 +33,7 @@
                         entity.Number,
                         entity.DeliveryPeriod,
                         entity.Reference,
+                        entity.Date,
                         entity.Articles.Select(a => this.caseArticleMapper.Map(a)).OrderBy(a => a.Position).ToArray());
         }
     }

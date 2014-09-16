@@ -1249,7 +1249,7 @@
                         SessionFacade.CurrentUser.Id, 
                         this.User.Identity.Name, 
                         out errors,
-                        this.invoiceHelper.ToCaseInvoices(caseInvoiceArticles));
+                        this.invoiceHelper.ToCaseInvoices(caseInvoiceArticles, null, null));
 
             if (updateNotifierInformation.HasValue && updateNotifierInformation.Value)
             {

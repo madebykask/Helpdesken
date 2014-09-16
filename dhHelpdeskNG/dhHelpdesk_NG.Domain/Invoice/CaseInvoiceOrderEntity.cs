@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Domain.Invoice
 {
+    using global::System;
     using global::System.Collections.Generic;
 
     public class CaseInvoiceOrderEntity : Entity
@@ -13,6 +14,8 @@
         public string DeliveryPeriod { get; set; }
 
         public string Reference { get; set; }
+
+        public DateTime Date { get; set; }
 
         public virtual ICollection<CaseInvoiceArticleEntity> Articles { get; set; } 
     }

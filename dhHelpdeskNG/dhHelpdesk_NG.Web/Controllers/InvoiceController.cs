@@ -8,7 +8,6 @@
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.Tools;
-    using DH.Helpdesk.Web.Infrastructure.Tools.Concrete;
 
     public class InvoiceController : BaseController
     {
@@ -18,16 +17,20 @@
 
         private readonly IInvoiceHelper invoiceHelper;
 
+        private readonly ICaseService caseService;
+
         public InvoiceController(
             IMasterDataService masterDataService, 
             IInvoiceArticleService invoiceArticleService, 
             IWorkContext workContext, 
-            IInvoiceHelper invoiceHelper)
+            IInvoiceHelper invoiceHelper, 
+            ICaseService caseService)
             : base(masterDataService)
         {
             this.invoiceArticleService = invoiceArticleService;
             this.workContext = workContext;
             this.invoiceHelper = invoiceHelper;
+            this.caseService = caseService;
         }
 
         [HttpGet]
@@ -45,16 +48,17 @@
         [HttpPost]
         public void SaveArticles(int caseId, string invoices)
         {
-            this.invoiceArticleService.SaveCaseInvoices(this.invoiceHelper.ToCaseInvoices(invoices));
+            this.invoiceArticleService.SaveCaseInvoices(this.invoiceHelper.ToCaseInvoices(invoices, null, null));
         }
 
         [HttpPost]
-        public ActionResult DoInvoice(string invoices)
+        public ActionResult DoInvoice(int customerId, int caseId, string invoices)
         {
-            return null;
             try
             {
-                var data = this.invoiceHelper.ToCaseInvoices(invoices);
+                var caseOverview = this.caseService.GetCaseOverview(caseId);
+                var articles = this.invoiceArticleService.GetArticles(customerId);
+                var data = this.invoiceHelper.ToCaseInvoices(invoices, caseOverview, articles);
                 var output = this.invoiceHelper.ToOutputXml(data);
                 return null;
             }

@@ -1,8 +1,16 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Invoice
 {
+    using System;
+    using System.Globalization;
+    using System.Xml;
+    using System.Xml.Schema;
+    using System.Xml.Serialization;
+
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class CaseInvoiceArticle
+    [Serializable]
+    [XmlRoot("SalesLine")]
+    public sealed class CaseInvoiceArticle : IXmlSerializable
     {
         public CaseInvoiceArticle(
                 int id,      
@@ -26,19 +34,10 @@
             this.IsInvoiced = isInvoiced;
             this.Name = name;
             this.Id = id;
-        }
+        }        
 
-        public CaseInvoiceArticle(
-                int id,
-                int orderId,
-                int? articleId,
-                string name,
-                int? amount,
-                decimal? ppu,
-                short position,
-                bool isInvoiced) :
-                this(id, orderId, null, articleId, null, name, amount, ppu, position, isInvoiced)
-        {           
+        public CaseInvoiceArticle()
+        {            
         }
 
         public int Id { get; private set; }
@@ -70,6 +69,44 @@
         public void MakeInvoiced()
         {
             this.IsInvoiced = true;
+        }
+
+        public XmlSchema GetSchema()
+        {
+            return null;
+        }
+
+        public void ReadXml(XmlReader reader)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void WriteXml(XmlWriter writer)
+        {
+            if (this.Article == null)
+            {
+                writer.WriteElementString("Description", this.Name);
+            }
+
+            if (this.Article != null)
+            {
+                writer.WriteElementString("ItemNo", this.Article.Number);
+                if (this.Article.Unit != null)
+                {
+                    writer.WriteElementString("UnitOfMeasureCode", this.Article.Unit.Name);                    
+                }
+
+                var ppu = this.Ppu.HasValue ? this.Ppu.Value : (this.Article.Ppu.HasValue ? this.Article.Ppu.Value : (decimal?)null);
+                if (ppu.HasValue)
+                {
+                    writer.WriteElementString("UnitPrice", ppu.Value.ToString(CultureInfo.InvariantCulture));                    
+                }
+            }
+
+            if (this.Amount.HasValue)
+            {
+                writer.WriteElementString("Quantity", this.Amount.Value.ToString(CultureInfo.InvariantCulture));
+            }
         }
     }
 }

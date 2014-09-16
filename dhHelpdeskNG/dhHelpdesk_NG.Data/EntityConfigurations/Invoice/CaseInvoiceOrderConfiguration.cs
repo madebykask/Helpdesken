@@ -18,6 +18,7 @@
                 .WillCascadeOnDelete(false);
             this.Property(o => o.DeliveryPeriod).IsOptional();
             this.Property(o => o.Reference).IsOptional();
+            this.Property(o => o.Date).IsRequired();
             this.HasMany(o => o.Articles)
                 .WithRequired(a => a.Order)
                 .HasForeignKey(a => a.OrderId)

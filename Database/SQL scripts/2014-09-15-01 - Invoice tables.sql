@@ -119,7 +119,8 @@ CREATE TABLE [dbo].[tblCaseInvoiceOrder]
 	[InvoiceId] INT NOT NULL,
 	[Number] SMALLINT NOT NULL DEFAULT(0),
 	[DeliveryPeriod] NVARCHAR(200) NULL,
-	[Reference] NVARCHAR(100) NULL
+	[Reference] NVARCHAR(100) NULL,
+	[Date] DATETIME NOT NULL
 	CONSTRAINT [PK_tblCaseInvoiceOrder] PRIMARY KEY CLUSTERED 
 	(
 		[Id] ASC
@@ -139,6 +140,8 @@ ALTER TABLE [dbo].[tblCaseInvoiceOrder] WITH CHECK ADD CONSTRAINT [FK_tblCaseInv
 REFERENCES [dbo].[tblCaseInvoice] ([Id])
 GO
 
+ALTER TABLE [dbo].[tblCaseInvoiceOrder] ADD CONSTRAINT [DF_tblCaseInvoiceOrder_Date] DEFAULT (GETDATE()) FOR [Date]
+GO
 
 CREATE TABLE [dbo].[tblCaseInvoiceArticle]
 (

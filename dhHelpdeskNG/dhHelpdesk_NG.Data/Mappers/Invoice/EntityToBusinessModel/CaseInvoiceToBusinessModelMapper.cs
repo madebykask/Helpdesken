@@ -40,6 +40,7 @@
                                 o.Number, 
                                 o.DeliveryPeriod, 
                                 o.Reference,
+                                o.Date,
                                 o.Articles.Select(a => new CaseInvoiceArticle(
                                                     a.Id,
                                                     a.OrderId,
