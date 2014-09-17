@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Controllers
 {
     using System;
+    using System.IO;
     using System.Net;
     using System.Web.Mvc;
 
@@ -19,18 +20,22 @@
 
         private readonly ICaseService caseService;
 
+        private readonly ICaseInvoiceSettingsService caseInvoiceSettingsService;
+
         public InvoiceController(
             IMasterDataService masterDataService, 
             IInvoiceArticleService invoiceArticleService, 
             IWorkContext workContext, 
             IInvoiceHelper invoiceHelper, 
-            ICaseService caseService)
+            ICaseService caseService, 
+            ICaseInvoiceSettingsService caseInvoiceSettingsService)
             : base(masterDataService)
         {
             this.invoiceArticleService = invoiceArticleService;
             this.workContext = workContext;
             this.invoiceHelper = invoiceHelper;
             this.caseService = caseService;
+            this.caseInvoiceSettingsService = caseInvoiceSettingsService;
         }
 
         [HttpGet]
@@ -60,7 +65,26 @@
                 var articles = this.invoiceArticleService.GetArticles(customerId);
                 var data = this.invoiceHelper.ToCaseInvoices(invoices, caseOverview, articles);
                 var output = this.invoiceHelper.ToOutputXml(data);
-                return null;
+                if (output == null)
+                {
+                    return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError, "Articles invoice failed.");
+                }
+
+                var settings = this.caseInvoiceSettingsService.GetSettings(customerId);
+                if (settings == null)
+                {
+                    return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError, "Articles invoice failed.");
+                }
+
+                if (!Directory.Exists(settings.ExportPath))
+                {
+                    Directory.CreateDirectory(settings.ExportPath);
+                }
+
+                var path = Path.Combine(settings.ExportPath, this.invoiceHelper.GetExportFileName());
+                output.Save(path);
+
+                return new HttpStatusCodeResult((int)HttpStatusCode.OK, "Articles invoiced."); 
             }
             catch (Exception ex)
             {

@@ -82,6 +82,11 @@
             }
         }
 
+        public string GetExportFileName()
+        {
+            return string.Format("{0}_{1}.xml", DateTime.Now.ToShortDateString(), Guid.NewGuid());
+        }
+
         private class CaseInvoiceData
         {
             public CaseInvoiceData()

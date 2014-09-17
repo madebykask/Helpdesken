@@ -10,5 +10,7 @@
         CaseInvoice[] ToCaseInvoices(string invoices, CaseOverview caseOverview, InvoiceArticle[] articles);
 
         XmlDocument ToOutputXml(CaseInvoice[] invoices);
+
+        string GetExportFileName();
     }
 }
