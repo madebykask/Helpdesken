@@ -2,9 +2,9 @@
 {
     using System;
 
-    public class Disposable : IDisposable
+    public abstract class Disposable : IDisposable
     {
-        private bool _isDisposed;
+        private bool isDisposed;
 
         ~Disposable()
         {
@@ -17,19 +17,16 @@
             GC.SuppressFinalize(this);
         }
 
+        protected abstract void DisposeCore();
+
         private void Dispose(bool disposing)
         {
-            if(!this._isDisposed && disposing)
+            if (!this.isDisposed && disposing)
             {
                 this.DisposeCore();
             }
 
-            this._isDisposed = true;
-        }
-
-        protected virtual void DisposeCore()
-        {
-
+            this.isDisposed = true;
         }
     }
 }

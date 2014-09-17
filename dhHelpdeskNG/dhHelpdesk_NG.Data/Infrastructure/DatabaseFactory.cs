@@ -1,42 +1,48 @@
-﻿
-namespace DH.Helpdesk.Dal.Infrastructure
+﻿namespace DH.Helpdesk.Dal.Infrastructure
 {
     using DH.Helpdesk.Dal.DbContext;
 
     public class DatabaseFactory : Disposable, IDatabaseFactory
     {
-        private HelpdeskDbContext _dataContext;
+        private HelpdeskDbContext dataContext;
 
         public HelpdeskDbContext Get()
         {
             // TODO: Göra detta snyggare... 
+            this.dataContext = this.dataContext ?? new HelpdeskSqlServerDbContext();
 
-            this._dataContext = this._dataContext ?? new HelpdeskSqlServerDbContext();
-
-            if(this._dataContext is HelpdeskOracleDbContext)
+            if (!(this.dataContext is HelpdeskOracleDbContext))
             {
-                Devart.Data.Oracle.Entity.Configuration.OracleEntityProviderConfig config = Devart.Data.Oracle.Entity.Configuration.OracleEntityProviderConfig.Instance;
-                config.Workarounds.IgnoreSchemaName = true;
-                config.Workarounds.DisableQuoting = true;
+                return this.dataContext;
             }
 
-            return this._dataContext;
+            Devart.Data.Oracle.Entity.Configuration.OracleEntityProviderConfig config =
+                Devart.Data.Oracle.Entity.Configuration.OracleEntityProviderConfig.Instance;
+            config.Workarounds.IgnoreSchemaName = true;
+            config.Workarounds.DisableQuoting = true;
+
+            return this.dataContext;
         }
 
         public void Run()
         {
-            if(this._dataContext is HelpdeskOracleDbContext)
+            if (!(this.dataContext is HelpdeskOracleDbContext))
             {
-                Devart.Data.Oracle.Entity.Configuration.OracleEntityProviderConfig config = Devart.Data.Oracle.Entity.Configuration.OracleEntityProviderConfig.Instance;
-                config.Workarounds.IgnoreSchemaName = true;
-                config.Workarounds.DisableQuoting = true;
+                return;
             }
+
+            Devart.Data.Oracle.Entity.Configuration.OracleEntityProviderConfig config =
+                Devart.Data.Oracle.Entity.Configuration.OracleEntityProviderConfig.Instance;
+            config.Workarounds.IgnoreSchemaName = true;
+            config.Workarounds.DisableQuoting = true;
         }
 
         protected override void DisposeCore()
         {
-            if(this._dataContext != null)
-                this._dataContext.Dispose();
+            if (this.dataContext != null)
+            {
+                this.dataContext.Dispose();
+            }
         }
     }
 }
