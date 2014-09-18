@@ -784,7 +784,6 @@ $(function () {
                         '"Number":"' + this.Number + '", ' +
                         '"DeliveryPeriod":"' + (this.DeliveryPeriod != null ? this.DeliveryPeriod : '') + '", ' +
                         '"Reference":"' + (this.Reference != null ? this.Reference : '') + '", ' +
-                        '"Date":"' + (this.Date != null ? this.Date : '') + '", ' +
                         '"Articles": [' + articlesResult + ']' +
                         '}';
             },
