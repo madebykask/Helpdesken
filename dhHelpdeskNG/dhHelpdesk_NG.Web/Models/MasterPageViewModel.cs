@@ -98,8 +98,8 @@
 
         public bool IsModulesVisible()
         {
-            return this.IsCaseVisible() ||
-                this.IsReportVisible() ||
+            return this.IsCaseVisible() &&
+                (this.IsReportVisible() ||
                 this.IsFaqVisible() ||
                 this.IsCalendarVisible() ||
                 this.IsOrderVisible() ||
@@ -107,7 +107,7 @@
                 this.IsCheckListVisuble() ||
                 this.IsDailyReportVisible() ||
                 this.IsOperationLogVisible() ||
-                this.IsInventoryVisible();
+                this.IsInventoryVisible());
         }
 
         public bool IsBulletinBoardVisible()
