@@ -39,7 +39,7 @@
                                         @Translation.Get("År", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td colspan="2">
-                                        @Html.DropDownListFor(model => model.Year, Model.YearList, "", new { style = "width: auto;" })
+                                        @Html.DropDownListFor(model => model.Year, Model.YearList, "", new { style = "width: auto;", year = "year", onchange = "changeYear(this.options[this.selectedIndex].value);" })
                                     </td>
                                 </tr>
                                 <tr>
@@ -103,6 +103,17 @@
 
     function submitForm() {
         $("#target").submit();
+    }
+
+    function changeYear(year) {
+        var watchdatecalendarId = $("#watchdatecalendarId").val();
+        var list = $("#watchdate");
+        list.html('');
+        if (year != '') {
+            $.get('/globalsetting/ChangeYearWatchDate/' + '?year=' + year + '&watchdatecalendarId=' + watchdatecalendarId, function (result) {
+                list.html(result);
+            });
+        }
     }
 
     //function watchDateList(id) {

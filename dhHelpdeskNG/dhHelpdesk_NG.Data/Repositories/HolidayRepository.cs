@@ -32,6 +32,7 @@ namespace DH.Helpdesk.Dal.Repositories
         IEnumerable<HolidayOverview> GetHolidays();
 
         IEnumerable<Holiday> GetHolidaysByHeaderId(int id);
+        IEnumerable<Holiday> GetHolidaysByHeaderIdAndYear(int year, int id);
     }
 
     /// <summary>
@@ -85,6 +86,13 @@ namespace DH.Helpdesk.Dal.Repositories
             return (from h in this.DataContext.Holidays
                     where h.HolidayHeader_Id == id
                     select h).ToList();  
+        }
+
+        public IEnumerable<Holiday> GetHolidaysByHeaderIdAndYear(int year, int id)
+        {
+            return (from h in this.DataContext.Holidays
+                    where h.HolidayHeader_Id == id && h.HolidayDate.Year == year
+                    select h).ToList();
         }
     }
 

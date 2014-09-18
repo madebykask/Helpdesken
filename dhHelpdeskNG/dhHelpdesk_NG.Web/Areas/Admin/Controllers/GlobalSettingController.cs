@@ -82,7 +82,8 @@
 
         public ActionResult NewHoliday()
         {
-            var model = this.SaveHolidayViewModel(new HolidayHeader { });
+            var year = DateTime.Today.Year;
+            var model = this.SaveHolidayViewModel(new HolidayHeader { }, year);
 
             SessionFacade.ActiveTab = "#fragment-2";
 
@@ -102,7 +103,7 @@
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "globalsetting");
 
-            var model = this.SaveHolidayViewModel(holidayheader);
+            var model = this.SaveHolidayViewModel(holidayheader, viewModel.Year);
 
             SessionFacade.ActiveTab = coll["activeTab"];
 
@@ -130,7 +131,9 @@
             if (holidayheader == null)
                 return new HttpNotFoundResult("No holiday found...");
 
-            var model = this.SaveHolidayViewModel(holidayheader);
+            var year = DateTime.Today.Year;
+
+            var model = this.SaveHolidayViewModel(holidayheader, year);
 
             
             //model.ChangedHeaderName = holiday.HolidayHeader.Name;
@@ -167,7 +170,8 @@
 
         public ActionResult NewWatchDate()
         {
-            var model = this.SaveWatchDateViewModel(new WatchDateCalendar { });
+            var year = DateTime.Today.Year;
+            var model = this.SaveWatchDateViewModel(new WatchDateCalendar { }, year);
 
             SessionFacade.ActiveTab = "#fragment-3";
 
@@ -187,7 +191,7 @@
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "globalsetting");
 
-            var model = this.SaveWatchDateViewModel(watchdatecalendar);
+            var model = this.SaveWatchDateViewModel(watchdatecalendar,viewModel.Year);
 
             SessionFacade.ActiveTab = coll["activeTab"];
 
@@ -211,12 +215,13 @@
         public ActionResult EditWatchDate(int id)
         {
             var wdCalendar = this._watchDateCalendarService.GetWatchDateCalendar(id);
+            var year = DateTime.Today.Year;
             //var wdValue = this._watchDateCalendarService.GetWatchDateCalendarValue(id);
 
             if (wdCalendar == null)
                 return new HttpNotFoundResult("No watch date value found...");
 
-            var model = this.SaveWatchDateViewModel(wdCalendar);
+            var model = this.SaveWatchDateViewModel(wdCalendar, year);
 
             SessionFacade.ActiveTab = "#fragment-3";
 
@@ -355,7 +360,7 @@
                 Texts = this._textTranslationService.GetAllTexts(texttypeid).ToList(),
                 ListForIndex = this._textTranslationService.GetIndexListToTextTranslations(languageId),
                 WatchDateCalendarValues = this._watchDateCalendarService.GetAllWatchDateCalendarValues().ToList(),
-                TextType = this._textTranslationService.GetTextType(1),
+                TextType = this._textTranslationService.GetTextType(texttypeid),
                 HolidayHeader = this._holidayService.GetHolidayHeader(1),
                 Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
                 {
@@ -400,8 +405,9 @@
             return model;
         }
 
-        private GlobalSettingHolidayViewModel SaveHolidayViewModel(HolidayHeader holidayheader)
+        private GlobalSettingHolidayViewModel SaveHolidayViewModel(HolidayHeader holidayheader, int year)
         {
+            
             #region SelectListItems
 
             List<SelectListItem> li = new List<SelectListItem>();
@@ -724,7 +730,7 @@
             var model = new GlobalSettingHolidayViewModel
             {
                 Holiday = null,
-                Holidays = this._holidayService.GetHolidaysByHeaderId(holidayheader.Id),
+                Holidays = this._holidayService.GetHolidaysByHeaderIdAndYear(year, holidayheader.Id),
                 HolidayHeader = holidayheader,
                 HolidayHeaders = this._holidayService.GetHolidayHeaders().Select(x => new SelectListItem
                 {
@@ -751,7 +757,7 @@
             //    model.TimeTil = holiday.TimeUntil;
             //}
 
-            model.Year = 2014;
+            model.Year = year;
             #endregion
 
             return model;
@@ -814,7 +820,7 @@
             return model;
         }
 
-        private GlobalSettingWatchDateViewModel SaveWatchDateViewModel(WatchDateCalendar watchdatecalendar)
+        private GlobalSettingWatchDateViewModel SaveWatchDateViewModel(WatchDateCalendar watchdatecalendar, int year)
         {
             List<SelectListItem> yearlist = new List<SelectListItem>();
             for (int j = 2000; j < 2015; j++)
@@ -829,11 +835,11 @@
             var model = new GlobalSettingWatchDateViewModel
             {
                 WatchDateCalendarValue = null,
-                WatchDateCalendarValues = this._watchDateCalendarService.GetWDCalendarValuesByWDCId(watchdatecalendar.Id),
+                WatchDateCalendarValues = this._watchDateCalendarService.GetWDCalendarValuesByWDCIdAndYear(watchdatecalendar.Id, year),
                 WatchDateCalendar = watchdatecalendar,
                 YearList = yearlist
             };
-            model.Year = 2014;
+            model.Year = year;
             return model;
         }
 
@@ -991,12 +997,13 @@
         public string AddRowToHolidays(int holidayheaderid, DateTime holidaydate, int timefrom, int timeUntil)
         {
             var holiday = new Holiday();
+            var year = DateTime.Today.Year;
 
             var holidayheader = this._holidayService.GetHolidayHeader(holidayheaderid);
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
-            var model = this.SaveHolidayViewModel(holidayheader);
+            var model = this.SaveHolidayViewModel(holidayheader, year);
 
             if (this.ModelState.IsValid)
             {
@@ -1037,8 +1044,9 @@
         [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")] 
         public string UpdateHolidayList(HolidayHeader holidayheader)
         {
-            
-            var model = this.SaveHolidayViewModel(holidayheader);
+            var year = DateTime.Today.Year;
+
+            var model = this.SaveHolidayViewModel(holidayheader, year);
 
             
             //model.ChangedHeaderName = holiday.HolidayHeader.Name;
@@ -1056,12 +1064,12 @@
         public string AddRowToWatchDateCalendarValue(int watchdatecalendarid, DateTime watchdate)
         {
             var wdcv = new WatchDateCalendarValue();
-
+            var year = DateTime.Today.Year;
             var wdc = this._watchDateCalendarService.GetWatchDateCalendar(watchdatecalendarid);
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
-            var model = this.SaveWatchDateViewModel(wdc);
+            var model = this.SaveWatchDateViewModel(wdc, year);
 
             if (this.ModelState.IsValid)
             {
@@ -1100,12 +1108,12 @@
         [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
         public string UpdateWatchDateList(WatchDateCalendar wdc)
         {
-
-            var model = this.SaveWatchDateViewModel(wdc);
+            var year = DateTime.Today.Year;
+            var model = this.SaveWatchDateViewModel(wdc, year);
 
 
             //model.ChangedHeaderName = holiday.HolidayHeader.Name;
-            SessionFacade.ActiveTab = "#fragment-2";
+            SessionFacade.ActiveTab = "#fragment-3";
 
             this.UpdateModel(model, "watchdatecalendarvalue");
 
@@ -1114,6 +1122,41 @@
             return this.RenderRazorViewToString(view, model);
 
             //return this.View(model);
+        }
+
+        [CustomAuthorize(Roles = "3,4")]
+        [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
+        public string ChangeYearHoliday(int year, int holidayheaderId)
+        {
+            var holidayheader = this._holidayService.GetHolidayHeader(holidayheaderId);
+
+            var model = this.SaveHolidayViewModel(holidayheader, year);
+            
+            SessionFacade.ActiveTab = "#fragment-2";
+
+            this.UpdateModel(model, "holiday");
+
+            var view = "~/areas/admin/views/GlobalSetting/_Holidays.cshtml";
+            return this.RenderRazorViewToString(view, model);
+
+        }
+
+        [CustomAuthorize(Roles = "3,4")]
+        [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
+        public string ChangeYearWatchDate(int year, int watchdatecalendarId)
+        {
+            var watchdatecalendar = this._watchDateCalendarService.GetWatchDateCalendar(watchdatecalendarId);
+
+            var model = this.SaveWatchDateViewModel(watchdatecalendar, year);
+           
+
+            SessionFacade.ActiveTab = "#fragment-3";
+
+            this.UpdateModel(model, "watchdatecalendarvalue");
+
+            var view = "~/areas/admin/views/GlobalSetting/_WatchDate.cshtml";
+            return this.RenderRazorViewToString(view, model);
+
         }
     }
 }

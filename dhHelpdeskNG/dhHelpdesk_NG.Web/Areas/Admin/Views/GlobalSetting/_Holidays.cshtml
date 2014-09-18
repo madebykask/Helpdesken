@@ -41,7 +41,8 @@
                                         @Translation.Get("År", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td colspan="2">
-                                        @Html.DropDownListFor(model => model.Year, Model.YearList, "", new { style = "width: auto;" })
+                                        @Html.DropDownListFor(model => model.Year, Model.YearList, "", new { style = "width: auto;", year = "year", onchange = "changeYear(this.options[this.selectedIndex].value);" })
+                                        <input type="hidden" id="holidayyear" value="" />
                                     </td>
                                 </tr>
                                 <tr>
@@ -142,31 +143,43 @@
             }
         });
         
-        holidayList($('#Holiday_HolidayHeader_Id').val());
+        //holidayList($('#Holiday_HolidayHeader_Id').val());
     });
 
     function submitForm() {
         $("#target").submit();
     }
 
-    function holidayList(id) {
-        var c = $("#tblHolidayHeader");
-        $.get('/globalsetting/ChangeHolidayList/' + id, function (result) {
-            c.html(result);
-        });
-    }
-
-    function changeHolidayHeader(id) {
-        if (id != undefined) {
-            if (id != "") {
-                var headerName = $("#ChangedHeaderName");
-                $.get('/GlobalSetting/ChangeHolidayHeader/' + id, function (result) {
-                    headerName.val(result);
-                });
-                holidayList(id);
-            }
+    function changeYear(year) {
+        var holidayheaderId = $("#holidayheaderId").val();
+        var list = $("#holiday");
+        list.html('');
+        if (year != '') {
+            $.get('/globalsetting/ChangeYearHoliday/' + '?year=' + year + '&holidayheaderId=' + holidayheaderId, function (result) {
+                list.html(result);
+            });
         }
     }
+
+
+    //function holidayList(id) {
+    //    var c = $("#tblHolidayHeader");
+    //    $.get('/globalsetting/ChangeHolidayList/' + id, function (result) {
+    //        c.html(result);
+    //    });
+    //}
+
+    //function changeHolidayHeader(id) {
+    //    if (id != undefined) {
+    //        if (id != "") {
+    //            var headerName = $("#ChangedHeaderName");
+    //            $.get('/GlobalSetting/ChangeHolidayHeader/' + id, function (result) {
+    //                headerName.val(result);
+    //            });
+    //            holidayList(id);
+    //        }
+    //    }
+    //}
 
     function addHolidayRow() {
         var list = $("#holiday");

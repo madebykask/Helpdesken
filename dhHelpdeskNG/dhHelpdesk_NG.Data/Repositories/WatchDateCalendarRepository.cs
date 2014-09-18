@@ -30,6 +30,7 @@
     public interface IWatchDateCalendarValueRepository : IRepository<WatchDateCalendarValue>
     {
         IEnumerable<WatchDateCalendarValue> GetWDCalendarValuesByWDCId(int id);
+        IEnumerable<WatchDateCalendarValue> GetWDCalendarValuesByWDCIdAndYear(int id, int year);
     }
 
     public class WatchDateCalendarValueRepository : RepositoryBase<WatchDateCalendarValue>, IWatchDateCalendarValueRepository
@@ -43,6 +44,13 @@
         {
             return (from wd in this.DataContext.WatchDateCalendarValues
                     where wd.WatchDateCalendar_Id == id
+                    select wd).ToList();
+        }
+
+        public IEnumerable<WatchDateCalendarValue> GetWDCalendarValuesByWDCIdAndYear(int id, int year)
+        {
+            return (from wd in this.DataContext.WatchDateCalendarValues
+                    where wd.WatchDateCalendar_Id == id && wd.WatchDate.Year == year
                     select wd).ToList();
         }
     }
