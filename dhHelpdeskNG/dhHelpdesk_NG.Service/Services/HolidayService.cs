@@ -22,6 +22,7 @@
         DeleteMessage DeleteHoliday(int id);
 
         void SaveHoliday(Holiday holiday, out IDictionary<string, string> errors);
+        void SaveHolidayHeader(HolidayHeader holidayheader, out IDictionary<string, string> errors);
         void Commit();
 
         /// <summary>
@@ -90,6 +91,22 @@
                 this._holidayHeaderRepository.Add(holiday.HolidayHeader);
             else
                 this._holidayHeaderRepository.Update(holiday.HolidayHeader);
+
+            if (errors.Count == 0)
+                this.Commit();
+        }
+
+        public void SaveHolidayHeader(HolidayHeader holidayheader, out IDictionary<string, string> errors)
+        {
+            if (holidayheader == null)
+                throw new ArgumentNullException("holidayheader");
+
+            errors = new Dictionary<string, string>();
+
+            if (holidayheader.Id == 0)
+                this._holidayHeaderRepository.Add(holidayheader);
+            else
+                this._holidayHeaderRepository.Update(holidayheader);
 
             if (errors.Count == 0)
                 this.Commit();

@@ -12,10 +12,13 @@
     {
         IEnumerable<WatchDateCalendar> GetAllWatchDateCalendars();
         IEnumerable<WatchDateCalendarValue> GetAllWatchDateCalendarValues();
-
+        IEnumerable<WatchDateCalendarValue> GetWDCalendarValuesByWDCId(int id);
         WatchDateCalendar GetWatchDateCalendar(int id);
         WatchDateCalendarValue GetWatchDateCalendarValue(int id);
 
+        DeleteMessage DeleteWDCV(int id);
+
+        void SaveWatchDateCalendar(WatchDateCalendar watchDateCalendar, out IDictionary<string, string> errors);
         void SaveWatchDateCalendarValue(WatchDateCalendarValue watchDateCalendarValue, out IDictionary<string, string> errors);
         void Commit();
     }
@@ -46,6 +49,11 @@
             return this._watchDateCalendarValueRepository.GetAll().OrderByDescending(x => x.WatchDate);
         }
 
+        public IEnumerable<WatchDateCalendarValue> GetWDCalendarValuesByWDCId(int id)
+        {
+            return this._watchDateCalendarValueRepository.GetWDCalendarValuesByWDCId(id).OrderBy(x => x.WatchDate);
+        }
+
         public WatchDateCalendar GetWatchDateCalendar(int id)
         {
             return this._watchDateCalendarRepository.GetById(id);
@@ -54,6 +62,23 @@
         public WatchDateCalendarValue GetWatchDateCalendarValue(int id)
         {
             return this._watchDateCalendarValueRepository.GetById(id);
+        }
+
+        public void SaveWatchDateCalendar(WatchDateCalendar watchDateCalendar, out IDictionary<string, string> errors)
+        {
+            if (watchDateCalendar == null)
+                throw new ArgumentNullException("watchDateCalendar");
+
+            errors = new Dictionary<string, string>();
+
+            if (watchDateCalendar.Id == 0)
+                this._watchDateCalendarRepository.Add(watchDateCalendar);
+            else
+                this._watchDateCalendarRepository.Update(watchDateCalendar);
+
+
+            if (errors.Count == 0)
+                this.Commit();
         }
 
         public void SaveWatchDateCalendarValue(WatchDateCalendarValue watchDateCalendarValue, out IDictionary<string, string> errors)
@@ -80,6 +105,28 @@
                 this.Commit();
         }
 
+
+        public DeleteMessage DeleteWDCV(int id)
+        {
+            var wdcv = this._watchDateCalendarValueRepository.GetById(id);
+
+            if (wdcv != null)
+            {
+                try
+                {
+                    this._watchDateCalendarValueRepository.Delete(wdcv);
+                    this.Commit();
+
+                    return DeleteMessage.Success;
+                }
+                catch
+                {
+                    return DeleteMessage.UnExpectedError;
+                }
+            }
+
+            return DeleteMessage.Error;
+        }
         public void Commit()
         {
             this._unitOfWork.Commit();

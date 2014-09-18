@@ -1146,6 +1146,7 @@
     <Content Include="Areas\Admin\Views\CaseInvoice\Index.cshtml" />
     <Content Include="Areas\Admin\Views\CaseInvoice\EditorTemplates\ArticlesImportModel.cshtml" />
     <Content Include="Areas\Admin\Views\CaseInvoice\EditorTemplates\CaseInvoiceSettings.cshtml" />
+    <Content Include="Areas\Admin\Views\GlobalSetting\_WatchDateCalendar.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />

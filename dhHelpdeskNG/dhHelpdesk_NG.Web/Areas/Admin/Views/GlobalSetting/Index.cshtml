@@ -118,16 +118,16 @@
                     <thead>
                         <tr>
                             <th>
-                                @Translation.Get("Bevakningsdatum", Enums.TranslationSource.TextTranslation)
+                                @Translation.Get("Kalender bevakningsdatum", Enums.TranslationSource.TextTranslation)
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model.WatchDateCalendarValues)
+                        @foreach (var item in Model.WatchDateCalendars)
                         { 
                             <tr>
                                 <td>
-                                    <a href="@Url.Action("editwatchdate", "globalsetting", new { id = item.Id })">@item.WatchDate.ToShortDateString()</a>
+                                    <a href="@Url.Action("editwatchdate", "globalsetting", new { id = item.Value})">@item.Text</a>
                                 </td>
                             </tr>
                         }

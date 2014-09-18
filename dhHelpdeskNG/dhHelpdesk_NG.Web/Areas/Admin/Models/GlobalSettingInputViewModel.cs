@@ -24,6 +24,7 @@
         public IList<SelectListItem> TextTypes { get; set; }
         public TextType TextType { get; set; }
         public IList<SelectListItem> HolidayHeaders { get; set; }
+        public IList<SelectListItem> WatchDateCalendars { get; set; }
         public HolidayHeader HolidayHeader { get; set; }
 
        
@@ -59,11 +60,13 @@
     public class GlobalSettingWatchDateViewModel : BaseTabInputViewModel
     {
         public string ChangedWatchDateName { get; set; }
-
+        public int Year { get; set; }
         public WatchDateCalendarValue WatchDateCalendarValue { get; set; }
         public WatchDateCalendar WatchDateCalendar { get; set; }
-
+        public IList<SelectListItem> YearList { get; set; }
         public IList<SelectListItem> WatchDateCalendars { get; set; }
+
+        public IEnumerable<WatchDateCalendarValue> WatchDateCalendarValues { get; set; }
     }
 
     public class GlobalSettingTextTranslationViewModel : BaseTabInputViewModel

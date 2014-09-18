@@ -1,4 +1,4 @@
-﻿
+﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Admin.Models.GlobalSettingHolidayViewModel
 
 @if (TempData["Error"] != null)
@@ -105,7 +105,7 @@
                                 {                    
                                     <tr>
                                         <td>
-                                            <a href="@Url.Action("editholiday", "globalsetting", new { area = "admin", id = item.Id })">@Html.DisplayFor(modelItem => item.HolidayDate)</a>
+                                            @item.HolidayDate.ToShortDateString()
                                         </td>
                                         <td>
                                             @if (item.TimeFrom > 0)

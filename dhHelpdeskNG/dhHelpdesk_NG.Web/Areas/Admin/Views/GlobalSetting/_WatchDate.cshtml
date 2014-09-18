@@ -6,56 +6,83 @@
         @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
     </div>    
 }
-<div class="content">
+<div class="content" id="watchdate">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
-            <li class="active"><a href="#fragment-1">@Translation.Get("Bevakningsdatum", Enums.TranslationSource.TextTranslation)</a></li>
+            <li class="active"><a href="#fragment-3">@Translation.Get("bevakningsdatum", Enums.TranslationSource.TextTranslation)</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment1">
                 <div class="container">
                     <div class="row">
                         <div class="span8">
-                            <table class="tableform" id="tblWatchDateCalendarValue">
+                            <table class="table table-striped table-bordered table-hover" id="tblWatchDate">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            @Translation.Get("Kalender", Enums.TranslationSource.TextTranslation)
+                                        </th>
+                                    </tr>
+                                </thead>
+                                
                                 <tr>
                                     <td>
-                                        @Translation.Get("Kalendernamn", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td>
-                                        @Html.DropDownListFor(model => model.WatchDateCalendarValue.WatchDateCalendar.Id, Model.WatchDateCalendars, "", new { style = "width: auto;", onchange = "changeWatchDate(this.options[this.selectedIndex].value);" })
+                                    <td colspan="2">
+                                        @Html.LabelFor(model => model.WatchDateCalendar.Id, Model.WatchDateCalendar.Name)
+                                        <input type="hidden" id="watchdatecalendarId" value="@Model.WatchDateCalendar.Id" />
                                     </td>
                                 </tr>
                                 <tr>
-                                    @if (Model.WatchDateCalendarValue.Id > 0)
-                                    {                  
-                                        <td>
-                                            @Translation.Get("Byt kalendernamn", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td>
-                                            @Html.TextBoxFor(model => model.ChangedWatchDateName, new { maxlength = "50", style = "width: 200px;" })
-                                            @Html.HiddenFor(model => model.WatchDateCalendarValue.WatchDateCalendar.Id)
-                                        </td>
-                                    }
-                                    else
-                                    {
-                                        <td>
-
-                                            @Translation.Get("Nytt kalendernamn", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td>
-                                            @Html.TextBoxFor(model => model.ChangedWatchDateName, new { maxlength = "50", style = "width: 200px;" })
-                                            @Html.HiddenFor(model => model.WatchDateCalendarValue.WatchDateCalendar.Id)
-                                        </td>
-                                    }
+                                    <td>
+                                        @Translation.Get("År", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td colspan="2">
+                                        @Html.DropDownListFor(model => model.Year, Model.YearList, "", new { style = "width: auto;" })
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>
                                         @Translation.Get("Bevakningsdag", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Html.EditorFor(model => model.WatchDateCalendarValue.WatchDate)
+                                        @Html.EditorFor(model => model.WatchDateCalendarValue.WatchDate, "DatePicker", new { id = "watchdatedate" }) 
+                                        <input type="hidden" id="watchdatedate" value="" />
+                                    </td>
+                                    <td>
+                                        <input class="btn btn-success" type="button" value="@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)" id="AddRow" 
+                                            onclick="addWDCVRow()" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
+                                            <input type="hidden" id="" value="" />
                                     </td>
                                 </tr>
+                  
+                                <tr>
+                                    <td colspan="3">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Bevakningsdag", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                @foreach (var item in Model.WatchDateCalendarValues)
+                                {                    
+                                    <tr>
+                                        <td>
+                                            @item.WatchDate.ToShortDateString()
+                                        </td>
+                                        <td>
+                                            <input class="btn btn-danger" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)"
+                                                onclick="deleteWDCVRow(@item.Id)" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
+                                                    <input type="hidden" id="deleteHolidayId" value="@item.Id" />
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                }
                             </table>
                         </div>
                     </div>
@@ -66,35 +93,52 @@
 </div>
 <script type="text/javascript">
 
-    $("input:text:visible:first").focus();
-    $("#WatchDateCalendarValue_WatchDate").datepicker();
+    //$("input:text:visible:first").focus();
+    //$("#WatchDateCalendarValue_WatchDate").datepicker();
 
     $(function () {
         //$("#tblWatchDateCalendar").fixheadertable();
-        watchDateList($('#WatchDateCalendarValue_WatchDateCalendar_Id').val());
+        //watchDateList($('#WatchDateCalendarValue_WatchDateCalendar_Id').val());
     });
 
     function submitForm() {
         $("#target").submit();
     }
 
-    function watchDateList(id) {
-        var c = $("#tblWatchDateCalendar");
-        $.get('/globalsetting/ChangeWatchDateList/' + id, function (result) {
-            c.html(result);
+    //function watchDateList(id) {
+    //    var c = $("#tblWatchDateCalendar");
+    //    $.get('/globalsetting/ChangeWatchDateList/' + id, function (result) {
+    //        c.html(result);
+    //    });
+    //}
+
+    //function changeWatchDate(id) {
+    //    if (id != undefined) {
+    //        if (id != "") {
+    //            var changedateName = $("#ChangedWatchDateName");
+    //            $.get('/GlobalSetting/ChangeWatchDate/' + id, function (result) {
+    //                changedateName.val(result);
+    //            });
+    //            watchDateList(id);
+    //        }
+    //    }
+    //}
+
+    function addWDCVRow() {
+        var list = $("#watchdate");
+        $.post('/globalsetting/AddRowToWatchDateCalendarValue/' + '?watchdatecalendarId=' + $("#watchdatecalendarId").val() + '&watchdate=' + $("#WatchDateCalendarValue_WatchDate").val(), function (result) {
+            
+            location.reload();
+        });
+
+        return false;
+    }
+
+    function deleteWDCVRow(id) {
+        var list = $("#watchdate");
+        $.post('/globalsetting/DeleteWatchDateCalendarValue/' + id, function(result) {
+            //list.html(result);
+            location.reload();
         });
     }
-
-    function changeWatchDate(id) {
-        if (id != undefined) {
-            if (id != "") {
-                var changedateName = $("#ChangedWatchDateName");
-                $.get('/GlobalSetting/ChangeWatchDate/' + id, function (result) {
-                    changedateName.val(result);
-                });
-                watchDateList(id);
-            }
-        }
-    }
-
 </script>
