@@ -26,14 +26,17 @@
                                         <td>@Translation.Get("Show", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td>
-                                            @Translation.Get("Active", Enums.TranslationSource.TextTranslation)
-                                            @Html.RadioButtonFor(x => x.Filter.State, 1, new { @checked = Model.Filter.State == Enums.Show.Active })
-
-                                            @Translation.Get("Finished", Enums.TranslationSource.TextTranslation)
-                                            @Html.RadioButtonFor(x => x.Filter.State, 0, new { @checked = Model.Filter.State == Enums.Show.Inactive })
-
-                                            @Translation.Get("All", Enums.TranslationSource.TextTranslation)
-                                            @Html.RadioButtonFor(x => x.Filter.State, 2, new { @checked = Model.Filter.State == Enums.Show.All })
+                                            <label class="radio inline">
+                                            @Html.RadioButtonFor(x => x.Filter.State, 1, new { @checked = Model.Filter.State == Enums.Show.Active }) @Translation.Get("Active", Enums.TranslationSource.TextTranslation)
+                                            </label>
+                                            <label class="radio inline">
+                                            @Html.RadioButtonFor(x => x.Filter.State, 0, new { @checked = Model.Filter.State == Enums.Show.Inactive }) @Translation.Get("Finished", Enums.TranslationSource.TextTranslation)
+                                            
+                                            </label>
+                                            <label class="radio inline">
+                                            @Html.RadioButtonFor(x => x.Filter.State, 2, new { @checked = Model.Filter.State == Enums.Show.All }) @Translation.Get("All", Enums.TranslationSource.TextTranslation)
+                                            
+                                            </label>
                                         </td>
                                     </tr>
                                     <tr>
@@ -47,10 +50,10 @@
                                         <td>@Translation.Get("Search", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td>
-                                            @Html.EditorFor(x => x.Filter.ProjectNameLikeString)
+                                            @Html.EditorFor(x => x.Filter.ProjectNameLikeString) <input type ="submit" value="@Translation.Get("Search", Enums.TranslationSource.TextTranslation)" name="btnSearch" class="btn"/>
                                         </td>
                                         <td>
-                                            <input type ="submit" value="@Translation.Get("Search", Enums.TranslationSource.TextTranslation)" name="btnSearch" class="btn"/>
+                                            
                                         </td>
                                     </tr>
                                 </table>
