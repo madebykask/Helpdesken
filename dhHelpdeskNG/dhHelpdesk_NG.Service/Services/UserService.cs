@@ -223,7 +223,7 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<User> SearchSortAndGenerateUsers(UserSearch searchUsers)
         {
-            return this._userRepository.GetUsersForUserSettingList(searchUsers);
+            return this._userRepository.GetUsersForUserSettingList(searchUsers).OrderBy(x => x.FirstName).ToList();
 
         }
 

@@ -227,7 +227,8 @@ namespace DH.Helpdesk.Dal.Repositories
                     || x.UserGroup.Name.ToLower().Contains(s));
             }
 
-            return query.OrderBy(x => x.UserID).Distinct().ToList();
+            return query.OrderBy(x => x.SurName).ThenBy(x => x.FirstName).Distinct().ToList();
+            //return query.OrderBy(x => x.UserID).Distinct().ToList();
         }
 
 

@@ -115,35 +115,39 @@
     $("#addCs").click(function () {
  
         if (document.getElementById("CsAvailable").length != 0 && document.getElementById("CsAvailable").selectedIndex != -1) {
-            // Lägg till bild
+            // Add to selected
             document.getElementById("CsSelected").options[document.getElementById("CsSelected").length] = new Option(document.getElementById("CsAvailable")[document.getElementById("CsAvailable").selectedIndex].text, document.getElementById("CsAvailable")[document.getElementById("CsAvailable").selectedIndex].value, false, false)
 
-            // Ta bort bild
+            //Add to Default customer
+            document.getElementById("User_Customer_Id").options[document.getElementById("User_Customer_Id").length] = new Option(document.getElementById("CsAvailable")[document.getElementById("CsAvailable").selectedIndex].text, document.getElementById("CsAvailable")[document.getElementById("CsAvailable").selectedIndex].value, false, false)
+
+            // Remove
             document.getElementById("CsAvailable").options[document.getElementById("CsAvailable").selectedIndex] = null
+            
         }
 
-
-
-        //$("#CsAvailable option:selected").remove().appendTo("#CsSelected");
-        //$("#CsAvailable").get(0).selectedIndex = -1;
-        //$("#CsSelected").get(0).selectedIndex = -1;
         return false;
     });
 
     $("#removeCs").click(function () {
 
         if (document.getElementById("CsSelected").length != 0 && document.getElementById("CsSelected").selectedIndex != -1) {
-            // Lägg till bild
+            var customerid = document.getElementById("CsSelected")[document.getElementById("CsSelected").selectedIndex].value;
+            
+            // Remove
             document.getElementById("CsAvailable").options[document.getElementById("CsAvailable").length] = new Option(document.getElementById("CsSelected")[document.getElementById("CsSelected").selectedIndex].text, document.getElementById("CsSelected")[document.getElementById("CsSelected").selectedIndex].value, false, false)
 
-            // Ta bort bild
-            document.getElementById("CsSelected").options[document.getElementById("CsSelected").selectedIndex] = null
+            for (var i = 0; i < document.getElementById("User_Customer_Id").length; i++) {
+                if (document.getElementById("User_Customer_Id").options[i].value == customerid) {
+                    document.getElementById("User_Customer_Id").options[i] = null;
+                    break;
+                }
+                
+            }
+            // Remove
+            document.getElementById("CsSelected").options[document.getElementById("CsSelected").selectedIndex] = null;
         }
 
-
-        //$("#CsSelected option:selected").remove().appendTo("#CsAvailable");
-        //$("#CsAvailable").get(0).selectedIndex = -1;
-        //$("#CsAvailable").get(0).selectedIndex = -1;
         return false;
     });
 

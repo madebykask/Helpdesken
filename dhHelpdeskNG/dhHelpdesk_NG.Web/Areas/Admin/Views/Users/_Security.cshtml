@@ -38,8 +38,8 @@
             </td>
             <td>
                
-                 @Html.DropDownListFor(model => model.User.Customer_Id, Model.Customers, "", new {})
-            
+                 @*@Html.DropDownListFor(model => model.User.Customer_Id, Model.Customers, "", new {})*@
+                @Html.DropDownListFor(model => model.User.Customer_Id, Model.CsSelected, "", new {})
             </td>
         </tr>
         <tr>
