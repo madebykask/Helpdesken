@@ -10,10 +10,10 @@
                 @Html.ActionLink(Translation.Get("Ändra", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("inställningar", Enums.TranslationSource.TextTranslation), "change", null, new { @class = "btn" })
             </li>
             <li id="menu2" style="display: none">
-                @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Kalender helgdagar", Enums.TranslationSource.TextTranslation), "newholiday", null, new { @class = "btn" })
+                @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Kalender helgdagar", Enums.TranslationSource.TextTranslation), "newholiday", new { newholiday = 1 }, new { @class = "btn" })
             </li>
             <li id="menu3" style="display: none">
-                @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Kalender bevakningsdatum", Enums.TranslationSource.TextTranslation), "newwatchdate", null, new { @class = "btn" })
+                @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Kalender bevakningsdatum", Enums.TranslationSource.TextTranslation), "newwatchdate", new { newwdc = 1 }, new { @class = "btn" })
             </li>
             <li id="menu4" style="display: none">
                 @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Översättningar", Enums.TranslationSource.TextTranslation), "newtranslation", new { newtext = 1 }, new { @class = "btn" })

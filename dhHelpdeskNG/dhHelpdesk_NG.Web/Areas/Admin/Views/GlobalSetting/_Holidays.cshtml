@@ -30,10 +30,15 @@
                                     <td>
                                         @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td colspan="2">
+                                    <td>
                                         @Html.LabelFor(model => model.HolidayHeader.Id, Model.HolidayHeader.Name)
-                                        @*@Html.DropDownListFor(model => model.HolidayHeader.Id, Model.HolidayHeaders, "", new { style = "width: auto;", onchange = "changeHolidayHeader(this.options[this.selectedIndex].value);" })*@
                                         <input type="hidden" id="holidayheaderId" value="@Model.HolidayHeader.Id" />
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("EditHolidayHeader", new { id = Model.HolidayHeader.Id })" class="btn btn-success">@Translation.Get("Ändra", Enums.TranslationSource.TextTranslation)</a>
+                                        @*<input class="btn btn-success" type="button" value="@Translation.Get("Ändra", Enums.TranslationSource.TextTranslation)" id="editHolidayHeaderId" 
+                                            onclick="editHolidayHeader(@Model.HolidayHeader.Id);" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
+                                            <input type="hidden" id="" value="" />*@
                                     </td>
                                 </tr>
                                 <tr>
@@ -160,7 +165,6 @@
             });
         }
     }
-
 
     //function holidayList(id) {
     //    var c = $("#tblHolidayHeader");

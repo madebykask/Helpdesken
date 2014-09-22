@@ -29,9 +29,12 @@
                                     <td>
                                         @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td colspan="2">
+                                    <td >
                                         @Html.LabelFor(model => model.WatchDateCalendar.Id, Model.WatchDateCalendar.Name)
                                         <input type="hidden" id="watchdatecalendarId" value="@Model.WatchDateCalendar.Id" />
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("EditWatchDateCalendar", new { id = Model.WatchDateCalendar.Id })" class="btn btn-success">@Translation.Get("Ändra", Enums.TranslationSource.TextTranslation)</a>
                                     </td>
                                 </tr>
                                 <tr>
@@ -76,11 +79,13 @@
                                             @item.WatchDate.ToShortDateString()
                                         </td>
                                         <td>
+                                            
+                                        </td>
+                                        <td>
                                             <input class="btn btn-danger" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)"
                                                 onclick="deleteWDCVRow(@item.Id)" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
                                                     <input type="hidden" id="deleteHolidayId" value="@item.Id" />
                                         </td>
-                                        <td></td>
                                     </tr>
                                 }
                             </table>
