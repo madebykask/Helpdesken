@@ -44,7 +44,7 @@
 
                     for (var i = 0; i < window.alreadyExistFileIds.length; i++) {
                         var fileId = window.alreadyExistFileIds[i];
-                        $('#NewCasefile_uploader ul[class="plupload_filelist"] li[id="' + fileId + '"] div[class="plupload_file_action"] a').prop('title', '@Translation.Get("File already exists.", Enums.TranslationSource.TextTranslation)');
+                        $('#NewCasefile_uploader ul[class="plupload_filelist"] li[id="' + fileId + '"] div[class="plupload_file_action"] a').prop('title', '@Translation.Get("File already exists", Enums.TranslationSource.TextTranslation)');
                     }
 
                     window.alreadyExistFileIds.length = 0;
@@ -114,7 +114,7 @@
                     <a href="#" class="btn btn-default">Cancel request</a>
                 </li>
                 <li>                    
-                    @Html.ActionLink(Translation.Get("Spara och skicka", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "$('#NewCaseForm').submit();return false;" , @class="btn btn-default" })
+                    @Html.ActionLink(Translation.Get("Save and Send", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "$('#NewCaseForm').submit();return false;" , @class="btn btn-default" })
                 </li>
                 
             </ul>
@@ -167,7 +167,7 @@
     
                     if (Model.CaseFieldGroups.Contains("UserInformation"))
                     {
-                        <h4>@Translation.Get("Användarinformation", Enums.TranslationSource.TextTranslation)</h4>
+                        <h4>@Translation.Get("User Information", Enums.TranslationSource.TextTranslation)</h4>
                         <div class="row">
                             <div class="col-md-3 dh-col">
                                 <div class="container form-horizontal">
@@ -380,7 +380,7 @@
 
                     if (Model.CaseFieldGroups.Contains("ComputerInformation"))
                     {
-                        <h4>@Translation.Get("Datorinformation", Enums.TranslationSource.TextTranslation)</h4>
+                        <h4>@Translation.Get("Computer Information", Enums.TranslationSource.TextTranslation)</h4>
                         <div class="row">
                             <div class="col-md-3 dh-col">
                                 <div class="container form-horizontal">
@@ -449,7 +449,7 @@
                     
                     if (Model.CaseFieldGroups.Contains("CaseInfo"))
                     {
-                        <h4>@Translation.Get("Ärendeinformation", Enums.TranslationSource.TextTranslation) </h4>
+                        <h4>@Translation.Get("Case Info", Enums.TranslationSource.TextTranslation) </h4>
                         <div class="row">
                             <div class="col-md-3 dh-col">
                                 <div class="container form-horizontal">
@@ -724,7 +724,7 @@
                                             </label>
                                             <div class="col-md-10">
                                                 <input type="checkbox" name="NewCase.SMS" @(Model.NewCase.SMS == 1 ? "checked=checked" : "") value="1"/>
-                                                @Translation.Get("Skicka SMS när ärendet avslutas", Enums.TranslationSource.TextTranslation)
+                                                @Translation.Get("Send SMS when Case become finish", Enums.TranslationSource.TextTranslation)
                                                 <input type="hidden" name="NewCase.SMS" value="0" />
                                             </div>
                                         </div>
@@ -761,13 +761,13 @@
                                             <div class="col-md-10">
                                                 <table>
                                                     <tr>
-                                                        <td>@Translation.Get("Artikelkostnad", Enums.TranslationSource.TextTranslation)<br />
+                                                        <td>@Translation.Get("Item Cost", Enums.TranslationSource.TextTranslation)<br />
                                                             @Html.TextBoxFor(model => model.NewCase.Cost, new { maxlength = "7", Class = "inputw50" })
                                                         </td>
-                                                        <td>@Translation.Get("Övrig kostnad", Enums.TranslationSource.TextTranslation)<br />
+                                                        <td>@Translation.Get("Additional Cost", Enums.TranslationSource.TextTranslation)<br />
                                                             @Html.TextBoxFor(model => model.NewCase.OtherCost, new { maxlength = "7", Class = "inputw50" })
                                                         </td>
-                                                        <td>@Translation.Get("Valuta", Enums.TranslationSource.TextTranslation)<br />
+                                                        <td>@Translation.Get("Currency", Enums.TranslationSource.TextTranslation)<br />
                                                             <select id="NewCase_Currency" name="NewCase.Currency" class="inputw100">
                                                                 <option value="">&nbsp;</option>
                                                                 @if (Model.Currencies != null)
@@ -792,7 +792,7 @@
                                                 @Model.FieldSettings.Where(f => f.Name == "Filename").Select(f => f.LabelToChange).SingleOrDefault():
                                             </label>
                                             <div class="col-md-5">                                                
-                                                <a href="#NewCase_upload_files_popup" role="button" class="btn btn-default" data-toggle="modal">@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)</a>
+                                                <a href="#NewCase_upload_files_popup" role="button" class="btn btn-default" data-toggle="modal">@Translation.Get("Add", Enums.TranslationSource.TextTranslation)</a>
                                                 <div id="NewCase_upload_files_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabel" aria-hidden="true">                                                    
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">                                                
@@ -804,7 +804,7 @@
                                                                 <div id="NewCasefile_uploader"></div>
                                                             </div>
                                                             <div class="modal-footer">
-                                                                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">@Translation.Get("Stäng", Enums.TranslationSource.TextTranslation)</button>
+                                                                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close", Enums.TranslationSource.TextTranslation)</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1171,109 +1171,109 @@
             },
             messages: {
                 "NewCase.ReportedBy": {
-                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.PersonsName": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.PersonsEmail": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.PersonsCellPhone": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.PersonsPhone": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.Region_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.Department_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.OU_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.Place": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Place.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Place.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.UserCode": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.UserCode.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.UserCode.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.InventoryNumber": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.InventoryLocation": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.InventoryType": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.ProductArea_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.CaseType_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.System_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.System_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.System_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.Urgency_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.Impact_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Impact_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Impact_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.Category_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.Supplier_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.InvoiceNumber": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.ReferenceNumber": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.Caption": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.Description": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.Miscellaneous": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.AgreedDate": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.Available": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Available.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Available.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.WorkingGroup_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.Performer_User_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.CaseResponsible_User_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.Priority_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.Status_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.StateSecondary_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.PlanDate": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.PlanDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.PlanDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
             "NewCase.WatchDate": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("Must be specified", Enums.TranslationSource.TextTranslation)"
             },
         },
             //errorPlacement: function (error, element) {

@@ -10,14 +10,14 @@
     <image url="@Context.Server.MapPath("~/Content/img-profile/CHS-logo-H31px_140227.png")" />
     <paragraph>
         <chunk style="font-weight:bold;">
-            @Translation.Get("Ärende")
+            @Translation.Get("Case")
             @Model.Case.CaseNumber
         </chunk>
     </paragraph>
     <table width="100.0%" cellpadding="2.0" cellspacing="2.0" borderwidth="0.5" columns="2" left="true" right="true" top="true" bottom="true">
         <row>
             <cell colspan="2" bottom="true" backgroundcolor="silver">
-                <chunk>@Translation.Get("Användarinformation")</chunk>
+                <chunk>@Translation.Get("Case Information")</chunk>
             </cell>
         </row>                                
         @if (Model.IsReportedByVisible)
@@ -137,7 +137,7 @@
         <table width="100.0%" cellpadding="2.0" cellspacing="2.0" borderwidth="0.5" columns="2" left="true" right="true" top="true" bottom="true">
             <row>
                 <cell colspan="2" bottom="true">
-                    <chunk>@Translation.Get("Datorinformation")</chunk>
+                    <chunk>@Translation.Get("Computer Information")</chunk>
                 </cell>
             </row>                                
             @if (Model.IsInventoryNumberVisible)
@@ -180,7 +180,7 @@
     <table width="100.0%" cellpadding="2.0" cellspacing="2.0" borderwidth="0.5" columns="2" left="true" right="true" top="true" bottom="true">
         <row>
             <cell colspan="2" bottom="true" backgroundcolor="silver">
-                <chunk>@Translation.Get("Ärendeinformation")</chunk>
+                <chunk>@Translation.Get("Case Information")</chunk>
             </cell>
         </row>                                
         @if (Model.IsCaseNumberVisible)
@@ -196,7 +196,7 @@
         }                
         <row>
             <cell>
-                <chunk>@Translation.Get("Registreringsdatum")</chunk>
+                <chunk>@Translation.Get("Registration Date")</chunk>
             </cell>
             <cell>
                 <chunk>@Html.DisplayFor(m => m.Case.RegistrationDate , "DateAndTime")</chunk>
@@ -401,9 +401,9 @@
                     <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.Cost.ToString(), Model.CustomerId)</chunk>
                 </cell>
                 <cell>
-                    <paragraph>@Translation.Get("Artikelkostnad") @Model.Case.Cost</paragraph>
-                    <paragraph>@Translation.Get("Övrig kostnad") @Model.Case.OtherCost</paragraph>
-                    <paragraph>@Translation.Get("Valuta") @Model.Case.Currency</paragraph>
+                    <paragraph>@Translation.Get("Item Cost") @Model.Case.Cost</paragraph>
+                    <paragraph>@Translation.Get("Additional Cost") @Model.Case.OtherCost</paragraph>
+                    <paragraph>@Translation.Get("Currency") @Model.Case.Currency</paragraph>
                 </cell>
             </row>                        
         }                        
@@ -430,7 +430,7 @@
     <table width="100.0%" cellpadding="2.0" cellspacing="2.0" borderwidth="0.5" columns="2" left="true" right="true" top="true" bottom="true">
         <row>
             <cell colspan="2" bottom="true" backgroundcolor="silver">
-                <chunk>@Translation.Get("Ärendehantering")</chunk>
+                <chunk>@Translation.Get("Case Management")</chunk>
             </cell>
         </row>     
         @if (Model.IsWorkingGroupVisible)
@@ -503,7 +503,7 @@
         }                                                           
         <row>
             <cell>
-                <chunk>@Translation.Get("Projekt")</chunk>
+                <chunk>@Translation.Get("Project")</chunk>
             </cell>
             <cell>
                 <chunk>@(Model.Case.Project != null ? Model.Case.Project.Name : null)</chunk>
@@ -519,7 +519,7 @@
         </row>                        
         <row>
             <cell>
-                <chunk>@Translation.Get("Ändring")</chunk>
+                <chunk>@Translation.Get("Change")</chunk>
             </cell>
             <cell>
                 <chunk>@(Model.Case.Change != null ? Model.Case.Change.ChangeTitle : null)</chunk>
@@ -576,15 +576,15 @@
         <table width="100.0%" cellpadding="2.0" cellspacing="2.0" borderwidth="0.5" columns="6" left="true" right="true" top="true" bottom="true">
             <row>
                 <cell colspan="6" bottom="true" backgroundcolor="silver">
-                    <chunk>@Translation.Get("Ärendelogg")</chunk>
+                    <chunk>@Translation.Get("Case Log")</chunk>
                 </cell>
             </row>     
             <row>
                 <cell right="true" bottom="true" horizontalalign="Center" verticalalign="Center">
-                    <chunk>@Translation.Get("Datum")</chunk>
+                    <chunk>@Translation.Get("Date")</chunk>
                 </cell>
                 <cell right="true" bottom="true" horizontalalign="Center" verticalalign="Center">
-                    <chunk>@Translation.Get("Registrerad av")</chunk>
+                    <chunk>@Translation.Get("Registered by")</chunk>
                 </cell>
                 <cell right="true" bottom="true" horizontalalign="Center" verticalalign="Center">
                     <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), Model.CustomerId)</chunk>
@@ -593,10 +593,10 @@
                     <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), Model.Case.CustomerId)</chunk>
                 </cell>
                 <cell right="true" bottom="true" horizontalalign="Center" verticalalign="Center">
-                    <chunk>@Translation.Get("E-post")</chunk>
+                    <chunk>@Translation.Get("Email")</chunk>
                 </cell>
                 <cell right="true" bottom="true" horizontalalign="Center" verticalalign="Center">
-                    <chunk>@Translation.Get("Filer")</chunk>
+                    <chunk>@Translation.Get("Files")</chunk>
                 </cell>
             </row>     
             @foreach (var log in Model.Case.Logs)
@@ -648,21 +648,21 @@
         <table width="100.0%" cellpadding="2.0" cellspacing="2.0" borderwidth="0.5" columns="4" left="true" right="true" top="true" bottom="true">
             <row>
                 <cell colspan="4" bottom="true" backgroundcolor="silver">
-                    <chunk>@Translation.Get("Historik")</chunk>
+                    <chunk>@Translation.Get("History")</chunk>
                 </cell>
             </row>     
             <row>
                 <cell right="true" bottom="true" horizontalalign="Center" verticalalign="Center">
-                    <chunk>@Translation.Get("Datum")</chunk>
+                    <chunk>@Translation.Get("Date")</chunk>
                 </cell>
                 <cell right="true" bottom="true" horizontalalign="Center" verticalalign="Center">
-                    <chunk>@Translation.Get("Registrerad av")</chunk>
+                    <chunk>@Translation.Get("Registered by")</chunk>
                 </cell>
                 <cell right="true" bottom="true" horizontalalign="Center" verticalalign="Center">
-                    <chunk>@Translation.Get("Historik")</chunk>
+                    <chunk>@Translation.Get("History")</chunk>
                 </cell>
                 <cell right="true" bottom="true" horizontalalign="Center" verticalalign="Center">
-                    <chunk>@Translation.Get("E-post")</chunk>
+                    <chunk>@Translation.Get("Email")</chunk>
                 </cell>
             </row>   
             @{

@@ -9,7 +9,7 @@
             
     <ul class="nav nav-tabs" id="NewCaseTab">
         <li id="CasePreviewTab" class="active">                             
-            <a href="#fragment-1">@Translation.Get("Ärende", Enums.TranslationSource.TextTranslation): @Model.CasePreview.CaseNumber</a>                                         
+            <a href="#fragment-1">@Translation.Get("Case", Enums.TranslationSource.TextTranslation): @Model.CasePreview.CaseNumber</a>                                         
         </li>
     </ul>
 
@@ -23,7 +23,7 @@
                     {
                         <div class="alert alert-success">
                         <span class="glyphicon glyphicon-thumbs-up"></span>
-                        @Translation.Get("Ärendet avslutat", Enums.TranslationSource.TextTranslation)
+                        @Translation.Get("Finished Case", Enums.TranslationSource.TextTranslation)
                         @Translation.Get(": ", Enums.TranslationSource.TextTranslation)
                         @Html.DisplayFor(m => Model.CasePreview.FinishingDate, "DateAndTime")
                         </div>

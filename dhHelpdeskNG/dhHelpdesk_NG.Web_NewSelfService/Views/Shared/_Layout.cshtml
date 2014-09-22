@@ -77,8 +77,8 @@
                                                     <p class="alert alert-info infop">\Infotext kommer här, ta ej bort</p>\
                                                 </div>\
                                                 <div class="modal-footer">\
-                                                    <button type="button" class="btn btn-ok">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</button>\
-                                                    <button type="button" class="btn btn-cancel">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</button>\
+                                                    <button type="button" class="btn btn-ok">@Translation.Get("Delete", Enums.TranslationSource.TextTranslation)</button>\
+                                                    <button type="button" class="btn btn-cancel">@Translation.Get("Cancel", Enums.TranslationSource.TextTranslation)</button>\
                                                 </div>\
                                             </form>\
                                         </div>\
@@ -188,6 +188,7 @@
             pCaseLogs = helper.GetCaseLogs(currentCaseId);
         }
          
+        
     }
     @*<div style="position: fixed; top: 30%; right: -2px; background: #fff; padding: 20px 20px 5px 20px; border: 1px solid #ccc;">
         <ul class="nav nav-pills nav-stacked">
@@ -209,11 +210,11 @@
             <div class="mapButton">
                  @if ((pCaseLogs != null) && (pCaseLogs.CaseLogs != null) && (pCaseLogs.CaseLogs.Count > 0) && (string.IsNullOrEmpty(pCaseLogs.CaseLogs[0].RegUser))) 
                  {
-                    <div class="mapText" title="Communicate"><span class="glyphicon glyphicon-comment"></span><span class="glyphicon glyphicon-certificate newcom"></span></div>
+                    <div class="mapText" title="@Translation.Get("Communicate", Enums.TranslationSource.TextTranslation)"><span class="glyphicon glyphicon-comment"></span><span class="glyphicon glyphicon-certificate newcom"></span></div>
                  }
                  else
                  {
-                    <div class="mapText" title="Communicate"><span class="glyphicon glyphicon-comment"></span></div>
+                    <div class="mapText" title="@Translation.Get("Communicate", Enums.TranslationSource.TextTranslation)"><span class="glyphicon glyphicon-comment"></span></div>
                  }                
             </div>
             <div class="theMap">
@@ -226,7 +227,7 @@
                             <div>
                                 <textarea id="myNote"  style="width:450px; height:100px;"></textarea>
                             </div>
-                            <button  class="btn btn-success" onclick=" SaveExternalMessage() ">Send</button>
+                            <button  class="btn btn-success" onclick=" SaveExternalMessage() ">@Translation.Get("Send", Enums.TranslationSource.TextTranslation)</button>
                             <hr />
                         </div>
                         @*<div class="form-group row">
@@ -247,7 +248,7 @@
                             <div class="@(!string.IsNullOrEmpty(logItem.RegUser)?"com-list-hd":"com-list-com")" >
                                 <div class="list-arrow"></div>
                                 <p> 
-                                    @(logItem.User_Id==null? (logItem.RegUser==SessionFacade.CurrentSystemUser? "Me":logItem.RegUser):logItem.User.FirstName + " " + logItem.User.SurName) 
+                                    @(logItem.User_Id==null? (logItem.RegUser==SessionFacade.CurrentSystemUser? Translation.Get("Me", Enums.TranslationSource.TextTranslation):logItem.RegUser):logItem.User.FirstName + " " + logItem.User.SurName) 
                                     | 
                                     @Html.DisplayFor(l => logItem.RegTime , "DateAndTime") 
                                 </p>
@@ -269,24 +270,23 @@
              <a href="@Url.Action("Index", "Start", new { customerId = pCustomerId, area = "" })">
                 <div class="pull-left toplogo"></div>
              </a>
-            <div class="pull-right small toplogout">
-            
-                
-                    @*<div class="dropdown"> 
+            <div class="pull-right small toplogout">            
+                <span class="toplogout-space"> | </span>               
+                    <div class="dropdown"> 
                       <a href="#" type="button" class="dropdown-toggle" data-toggle="dropdown">
                         @Translation.Get("Select language", Enums.TranslationSource.TextTranslation)<span class="caret"></span>
                       </a>
                       <ul class="dropdown-menu" role="menu">
-                         <li><a href="#" onclick="ChangeLang(8)">Dutch</a></li>
+                         <li><a href="#" onclick="ChangeLang(3)">Dutch</a></li>
                          <li><a href="#" onclick="ChangeLang(2)">English</a></ li>
-                         <li><a href="#" onclick="ChangeLang(1)">Swedish</a></li>
-                         <li><a href="#" onclick="ChangeLang(12)">Chinese</a></li>
+                         @*<li><a href="#" onclick="ChangeLang(1)">Swedish</a></li>
+                         <li><a href="#" onclick="ChangeLang(12)">Chinese</a></li>*@
                       </ul>
-                    </div>*@
+                    </div>
                 @if (!hideMenu)
                 {
                     @*<span class="toplogout-space"> | </span>*@
-                    <a href="#" > User: @SessionFacade.CurrentSystemUser</a> 
+                    <a href="#" >  @Translation.Get("User", Enums.TranslationSource.TextTranslation): @SessionFacade.CurrentSystemUser</a> 
                      @*<span class="toplogout-space"> | </span>*@
                     
                      @*<a href="@System.Configuration.ConfigurationManager.AppSettings["LogoutUrl"].ToString()">@Translation.Get("Logga ut", Enums.TranslationSource.TextTranslation)</a>*@
@@ -532,8 +532,8 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li><a href="@Url.Action("FindYourWay", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("Find Your Way", Enums.TranslationSource.TextTranslation)</a></li>
-                                    <li><a href="@Url.Action("Index", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("Hjälp", Enums.TranslationSource.TextTranslation)</a></li>
-                                    <li><a href="@Url.Action("About", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("Om", Enums.TranslationSource.TextTranslation)</a></li>
+                                    <li><a href="@Url.Action("Index", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("Help", Enums.TranslationSource.TextTranslation)</a></li>
+                                    <li><a href="@Url.Action("About", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("About", Enums.TranslationSource.TextTranslation)</a></li>
                                 </ul>
                             </li>
                             }
@@ -546,8 +546,8 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a href="@Url.Action("FindYourWay", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("Find Your Way", Enums.TranslationSource.TextTranslation)</a></li>
-                                <li><a href="@Url.Action("Index", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("Hjälp", Enums.TranslationSource.TextTranslation)</a></li>
-                                <li><a href="@Url.Action("About", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("Om", Enums.TranslationSource.TextTranslation)</a></li>
+                                <li><a href="@Url.Action("Index", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("Help", Enums.TranslationSource.TextTranslation)</a></li>
+                                <li><a href="@Url.Action("About", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("About", Enums.TranslationSource.TextTranslation)</a></li>
                             </ul>
                         </li>
                         }
@@ -685,6 +685,7 @@
        });        
     }
 
+
     function SaveExternalMessage() {        
         if ('@currentCaseId' == null || '@currentCaseId' == "")
             return;
@@ -700,16 +701,13 @@
                 type: "POST",
                 url: '@Url.Action("SaveExternalMessage", "Case", new { area= ""})', 
                 contentType: "application/json; charset=utf-8",
-                data: "{ caseId: '@currentCaseId', extraNote:'" +note +"'}",
+                data: "{ caseId: '@currentCaseId', extraNote:'" + note + "', backUrlAddresss:'" + currentPath + "'}",
                 dataType: "html",
                 success: function (result) {
-                    window.location.href = currentPath;
-                    //location.reload();
-                    // Or if you are returning something
-                    //alert('I returned... ' + result.WhateverIsReturning);
+                    location.reload();                    
                 },
                 error: function (result) {
-                    alert('Error to save message');
+                    location.reload();                                       
                 }
             });
         }

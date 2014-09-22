@@ -443,7 +443,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
         }
 
         [HttpPost]
-        public RedirectToRouteResult SaveExternalMessage(int caseId, string extraNote) // , string curGUID)
+        public JsonResult SaveExternalMessage(int caseId, string extraNote, string backUrlAddresss) 
         {
             IDictionary<string, string> errors;
 
@@ -532,7 +532,9 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
             this._caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, newLogFiles);
 
-            return RedirectToAction("Index", new { id = caseId });
+            ViewBag["ShowLogMessage"] = "yes";
+            return Json(new { url = backUrlAddresss });
+            //return null; // RedirectToAction("Index", new { id = caseId });
         }
 
         [HttpPost]

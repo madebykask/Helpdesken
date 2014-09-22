@@ -118,7 +118,7 @@
     function addCaseSettingRow() {                       
         $.post('/cases/AddCaseSettingColumn/' + '?customerId=' + @Model.CustomerId.ToString() + '&userId=' + @Model.UserId.ToString() + 
             '&labellist=' + $("#labellist").val() + '&linelist=' + $("#linelist").val() +
-            '&minWidthValue=' + $("#minWidthValue").val() + '&colOrderValue=' + $("#colOrderValue").val() + '&userGroup=' + $("#userGroup").val(), function (result) {
+            '&minWidthValue=' + $("#minWidthValue").val() + '&colOrderValue=' + $("#colOrderValue").val() + '&userGroup= 4 ' , function (result) {
                 $("#colsetting_result").html(result);
            });
     }

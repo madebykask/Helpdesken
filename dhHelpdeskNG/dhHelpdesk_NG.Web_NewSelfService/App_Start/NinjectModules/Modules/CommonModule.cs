@@ -22,6 +22,7 @@ namespace DH.Helpdesk.NewSelfService.NinjectModules.Modules
     using DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel;
     using DH.Helpdesk.Dal.Mappers.Invoice.BusinessModelToEntity;
     using DH.Helpdesk.Dal.Mappers.Invoice.EntityToBusinessModel;
+    using DH.Helpdesk.Dal.Mappers.ProductArea.BusinessModelToEntity;
     using DH.Helpdesk.Dal.Mappers.ProductArea.EntityToBusinessModel;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Computers;
@@ -41,6 +42,10 @@ namespace DH.Helpdesk.NewSelfService.NinjectModules.Modules
         {
             this.Bind<IEntityToBusinessModelMapper<ProductArea, ProductAreaOverview>>()
                 .To<ProductAreaToOverviewMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<ProductAreaOverview, ProductArea>>()
+                .To<ProductAreaToEntityMapper>()
                 .InSingletonScope();
 
             this.Bind<IEntityToBusinessModelMapper<Setting, CustomerSettings>>()
