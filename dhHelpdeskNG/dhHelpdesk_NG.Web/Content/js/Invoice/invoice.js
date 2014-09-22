@@ -592,6 +592,13 @@ $(function () {
                 return null;
             },
 
+            this._refreshTabs = function() {
+                var tabs = this.Container.find("#case-invoice-orders-tabs");
+                tabs.tabs("refresh");
+                tabs.find("ul").removeClass("ui-widget-header");
+                tabs.find("li").removeClass("ui-state-default");
+            },
+
             this.AddOrder = function(order) {
                 this._orders.push(order);
                 order.Invoice = this;
@@ -601,13 +608,13 @@ $(function () {
                 container.append(order.Container);
 
                 var tabs = this.Container.find("#case-invoice-orders-tabs");
-                var newTab = $("<li class='case-invoice-order-tab'><a href='#case-invoice-order" + order.Id + "'>Order " + (order.Number + 1) + "</a><li>");
+                var newTab = $("<li class='case-invoice-order-tab active'><a href='#case-invoice-order" + order.Id + "'>Order " + (order.Number + 1) + "</a><li>");
                 if (this._orders.length == 1) {
                     tabs.find("ul").prepend(newTab);
                 } else {
                     tabs.find("li.case-invoice-order-tab:last").after(newTab);
                 }
-                tabs.tabs("refresh");
+                this._refreshTabs();
                 newTab.find("a").click();
             },
 
@@ -623,7 +630,7 @@ $(function () {
                         var tabs = this.Container.find("#case-invoice-orders-tabs");
                         tabs.find("[href='#case-invoice-order" + order.Id + "']").parent().remove();
                         order.Container.remove();
-                        tabs.tabs("refresh");
+                        this._refreshTabs();
                         this.UpdateTotal();
                         return;
                     }
@@ -684,7 +691,10 @@ $(function () {
                 var tabs = this.Container.find("#case-invoice-orders-tabs");
                 var th = this;
                 tabs.tabs({
-                    activate: function(event, ui) {
+                    activate: function (event, ui) {
+                        tabs.find(".case-invoice-order-tab").removeClass("active");
+                        tabs.find(".case-invoice-order-summary").removeClass("active");
+                        ui.newTab.addClass("active");
                         var isSummaryTab = ui.newTab.hasClass("case-invoice-order-summary");
                         if (isSummaryTab) {
                             th.Container.find(".articles-params").hide();

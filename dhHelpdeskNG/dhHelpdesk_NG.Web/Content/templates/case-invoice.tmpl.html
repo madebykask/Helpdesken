@@ -1,6 +1,6 @@
 ﻿<div data-id='{{:Id}}' class="case-invoice-container overflow-visible">
     <div id="case-invoice-orders-tabs">
-        <ul>
+        <ul class="nav nav-tabs">
             <li>
                 <i class="icon-plus-sign" style="cursor: pointer;" onclick="dhHelpdesk.CaseArticles.AddOrder('{{:Id}}'); return false;"></i>
                 <i style="display: none;" class="icon-minus-sign" style="cursor: pointer;" onclick="dhHelpdesk.CaseArticles.DeleteCurrentOrder('{{:Id}}'); return false;"></i>
@@ -32,7 +32,7 @@
                 </tbody>
             </table>            
         </div>
-        <div class="orders-container">
+        <div class="orders-container tab-content">
             {{for Orders tmpl="caseInvoiceOrder" /}} 
             <div id="case-invoice-order-summary{{:Id}}" class="case-invoice-order-summary-container">                                          
             </div>
