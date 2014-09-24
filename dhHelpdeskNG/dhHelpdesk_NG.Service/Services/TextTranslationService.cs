@@ -211,6 +211,15 @@
             text.ChangedDate = DateTime.Now;
             text.CreatedDate = DateTime.Now;
             text.Id = this._textRepository.GetNextId() + 1;
+
+            if (text.Id < 5000)
+            {
+                text.Id = 5000;
+            }
+            else
+            {
+                text.Id = text.Id + 1;
+            }
             
             if (string.IsNullOrEmpty(text.TextToTranslate))
                 errors.Add("text.TextToTranslate", "Du måste ange ett ord att översätta");

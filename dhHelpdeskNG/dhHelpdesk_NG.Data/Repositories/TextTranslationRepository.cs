@@ -194,8 +194,8 @@ namespace DH.Helpdesk.Dal.Repositories
         public IEnumerable<TextTranslationList> ReturnTTsListForNew()
         {
             var query = from l in this.DataContext.Languages
-                        join tt in this.DataContext.TextTranslations on l.Id equals tt.Language_Id
-                        where l.IsActive == 1 && tt.Text_Id > 4999
+                        //join tt in this.DataContext.TextTranslations on l.Id equals tt.Language_Id
+                        where l.IsActive == 1 //&& tt.Text_Id > 4999
                         group l by new { l.Name, l.Id, } into g
                         select new TextTranslationList
                         {
