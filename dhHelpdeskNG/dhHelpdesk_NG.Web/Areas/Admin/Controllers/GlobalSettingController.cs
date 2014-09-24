@@ -940,13 +940,13 @@
             return headerNameToChange.Name;
         }
 
-        public string ChangeHolidayList(int id)
-        {
-            var list = this._holidayService.GetAll().Where(x => x.HolidayHeader_Id == id);
-            var str = this.RenderRazorViewToString("_HolidayList", list.ToList());
+        //public string ChangeHolidayList(int id)
+        //{
+        //    var list = this._holidayService.GetAll().Where(x => x.HolidayHeader_Id == id);
+        //    var str = this.RenderRazorViewToString("_HolidayList", list.ToList());
 
-            return str;
-        }
+        //    return str;
+        //}
 
         public string ChangeWatchDate(int id)
         {
