@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Globalization;
+    using System.Linq;
     using System.Linq.Expressions;
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
@@ -67,20 +68,22 @@
                     {
                         if (model.CaseSolutionMode != CaseSolutionModes.ReadOnly)
                         {
-                            selectList =
-                                new CaseSolutionModesForRequired().ToSelectList(
-                                    ((int)model.CaseSolutionMode).ToString(CultureInfo.InvariantCulture));
+                            selectList = ToSelectList(
+                                new CaseSolutionModes(),
+                                ((int)model.CaseSolutionMode).ToString(CultureInfo.InvariantCulture),
+                                true);
                         }
                         else
                         {
-                            selectList = new CaseSolutionModesForRequired().ToSelectList();
+                            selectList = ToSelectList(new CaseSolutionModes(), true);
                         }
                     }
                     else
                     {
-                        selectList =
-                            model.CaseSolutionMode.ToSelectList(
-                                ((int)model.CaseSolutionMode).ToString(CultureInfo.InvariantCulture));
+                        selectList = ToSelectList(
+                            model.CaseSolutionMode,
+                            ((int)model.CaseSolutionMode).ToString(CultureInfo.InvariantCulture),
+                            false);
                     }
 
                     MvcHtmlString dropDown = htmlHelper.DropDownList(dropDownName, selectList);
@@ -98,6 +101,46 @@
         {
             var inputName = string.Format("{0}[{1}].{2}", name, i, idPropertyName);
             return inputName;
+        }
+
+        private static SelectList ToSelectList(CaseSolutionModes enumeration, bool isRequired)
+        {
+            var list = CreateList(enumeration, isRequired);
+
+            return new SelectList(list, "ID", "Name");
+        }
+
+        private static SelectList ToSelectList(CaseSolutionModes enumeration, string selected, bool isRequired)
+        {
+            var list = CreateList(enumeration, isRequired);
+
+            return new SelectList(list, "ID", "Name", selected);
+        }
+
+        private static IEnumerable<dynamic> CreateList(CaseSolutionModes enumeration, bool isRequired)
+        {
+            IEnumerable<CaseSolutionModes> query = from CaseSolutionModes d in Enum.GetValues(enumeration.GetType())
+                                                   select d;
+            if (isRequired)
+            {
+                query = query.Where(x => x != CaseSolutionModes.ReadOnly);
+            }
+
+            var list = query.Select(x => new { ID = Convert.ToInt32(x), Name = CreateName(x) }).ToList();
+            return list;
+        }
+
+        private static string CreateName(CaseSolutionModes enumeration)
+        {
+            switch (enumeration)
+            {
+                case CaseSolutionModes.DisplayField:
+                    return Translation.Get("Display Field");
+                case CaseSolutionModes.ReadOnly:
+                    return Translation.Get("Read Only");
+                default:
+                    return Translation.Get(enumeration.ToString());
+            }
         }
     }
 }
