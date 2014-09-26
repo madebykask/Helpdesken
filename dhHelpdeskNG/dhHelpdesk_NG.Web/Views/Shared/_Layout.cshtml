@@ -252,7 +252,7 @@
                                             foreach (var customer in model.Customers)
                                             {
                                                 <li>
-                                                    @if (customer.Name == SessionFacade.CurrentCustomer.Name)
+                                                    @if (customer.Id == SessionFacade.CurrentCustomer.Id)
                                                     {
                                                     <a href="@Url.Action("Index", "cases", new { customerId = customer.Id })">@customer.Name <i class="icon-ok"></i> </a>
                                                     }
