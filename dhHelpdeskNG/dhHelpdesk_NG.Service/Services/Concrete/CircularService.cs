@@ -75,24 +75,67 @@ namespace DH.Helpdesk.Services.Services.Concrete
             this._circularRepository.Commit();
         }
 
-        public List<CircularPart> GetCases(int customerId,
+        public List<CircularPart> GetCases(
+            int customerId,
             int[] selectedDepartments,
             int[] selectedCaseTypes,
             int[] selectedProductArea,
             int[] selectedWorkingGroups,
             int procent,
             DateTime? finishingDateFrom,
-            DateTime? finishingDateTo
-            )
-
+            DateTime? finishingDateTo)
         {
+            const int MinEmailLength = 3;
+            const int IsDeleted = 0;
 
-            var cases = _caseRepository.GetAll()
-                .Where(
-                    c =>
-                        c.Customer_Id == customerId && c.Deleted == 0 && c.FinishingDate != null &&
-                        c.PersonsEmail.Length > 3)
-                .ToList();
+            IEnumerable<Case> query =
+                this._caseRepository.GetAll()
+                    .Where(
+                        c =>
+                        c.Customer_Id == customerId && c.Deleted == IsDeleted && c.FinishingDate != null
+                        && c.PersonsEmail.Length > MinEmailLength);
+
+            if (selectedDepartments != null && selectedDepartments.Count() > 0)
+            {
+                query =
+                    query.Where(
+                        c => c.Department_Id != null && selectedDepartments.ToList().Contains(c.Department_Id.Value));
+            }
+
+            if (selectedCaseTypes != null && selectedCaseTypes.Count() > 0)
+            {
+                query = query.Where(c => selectedCaseTypes.ToList().Contains(c.CaseType_Id));
+            }
+
+            if (selectedProductArea != null && selectedProductArea.Count() > 0)
+            {
+                query =
+                    query.Where(
+                        c => c.ProductArea_Id != null && selectedProductArea.ToList().Contains(c.ProductArea_Id.Value));
+            }
+
+            //if (selectedWorkingGroups != null && selectedWorkingGroups.Count() > 0)
+            //{
+            //    var users =
+            //        _userService.GetUsers(customerId)
+            //            .Where(
+            //                u =>
+            //                u.Default_WorkingGroup_Id != null
+            //                && selectedWorkingGroups.ToList().Contains(u.Default_WorkingGroup_Id.Value))
+            //            .Select(u => u.Id)
+            //            .ToList();
+
+            //    cases = cases.Where(c => users.ToList().Contains(c.Performer_User_Id)).ToList();
+            //}
+
+
+            var cases =
+                this._caseRepository.GetAll()
+                    .Where(
+                        c =>
+                        c.Customer_Id == customerId && c.Deleted == 0 && c.FinishingDate != null
+                        && c.PersonsEmail.Length > 3)
+                    .ToList();
 
             //.Select(c => new { Case_Id = c.Id, CaseNumber = c.CaseNumber, Caption = c.Caption, Email = c.PersonsEmail})                                                  
 
@@ -103,7 +146,9 @@ namespace DH.Helpdesk.Services.Services.Concrete
                         .ToList();
 
             if (selectedCaseTypes != null && selectedCaseTypes.Count() > 0)
+            {
                 cases = cases.Where(c => selectedCaseTypes.ToList().Contains(c.CaseType_Id)).ToList();
+            }
 
             if (selectedProductArea != null && selectedProductArea.Count() > 0)
                 cases =
@@ -114,23 +159,19 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
             if (selectedWorkingGroups != null && selectedWorkingGroups.Count() > 0)
             {
-                var users = _userService.GetUsers(customerId)
-                    .Where(
-                        u =>
-                            u.Default_WorkingGroup_Id != null &&
-                            selectedWorkingGroups.ToList().Contains(u.Default_WorkingGroup_Id.Value))
-                    .Select(u => u.Id)
-                    .ToList();
+                var users =
+                    _userService.GetUsers(customerId)
+                        .Where(
+                            u =>
+                            u.Default_WorkingGroup_Id != null
+                            && selectedWorkingGroups.ToList().Contains(u.Default_WorkingGroup_Id.Value))
+                        .Select(u => u.Id)
+                        .ToList();
 
                 cases = cases.Where(c => users.ToList().Contains(c.Performer_User_Id)).ToList();
             }
 
-            var ret = new List<CircularPart>();
-            foreach (var c in cases)
-                ret.Add(new CircularPart(c.Id, (int) c.CaseNumber, c.Caption, c.PersonsEmail));
-
-            return ret;
-
+            return cases.Select(c => new CircularPart(c.Id, (int)c.CaseNumber, c.Caption, c.PersonsEmail)).ToList();
         }
 
         #endregion

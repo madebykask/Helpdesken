@@ -132,7 +132,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             _questionnaireService.UpdateQuestionnaire(editQuestionniare);
             return RedirectToAction("EditQuestionnaire",
-                new {questionnaireId = questionnaireModel.Id, languageId = questionnaireModel.LanguageId});
+                new { questionnaireId = questionnaireModel.Id, languageId = questionnaireModel.LanguageId });
         }
 
         [HttpGet]
@@ -171,7 +171,7 @@ namespace DH.Helpdesk.Web.Controllers
             _questionnaireService.AddQuestionnaire(newQuestionniare);
 
             return RedirectToAction("EditQuestionnaire",
-                new {questionnaireId = newQuestionniare.Id, languageId = LanguageId.Swedish});
+                new { questionnaireId = newQuestionniare.Id, languageId = LanguageId.Swedish });
         }
 
         [HttpPost]
@@ -188,7 +188,7 @@ namespace DH.Helpdesk.Web.Controllers
             _questionnaireQuestionService.AddQuestionnaireQuestion(newQuestionniareQuestion);
 
             return RedirectToAction("EditQuestionnaire",
-                new {questionnaireId = newQuestionniareQuestion.QuestionnaireId, languageId = LanguageId.Swedish});
+                new { questionnaireId = newQuestionniareQuestion.QuestionnaireId, languageId = LanguageId.Swedish });
         }
 
         [HttpGet]
@@ -271,7 +271,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
-        public RedirectToRouteResult EditQuestionnaireQuestion(EditQuestionnaireQuestionModel questionnaireQuestionModel,List<QuestionnaireQuesOptionModel>  Options)
+        public RedirectToRouteResult EditQuestionnaireQuestion(EditQuestionnaireQuestionModel questionnaireQuestionModel, List<QuestionnaireQuesOptionModel> Options)
         {
             var editQuestionniareQuestion = new EditQuestionnaireQuestion(
                 questionnaireQuestionModel.Id,
@@ -341,8 +341,8 @@ namespace DH.Helpdesk.Web.Controllers
 
         [HttpPost]
         public RedirectToRouteResult DeleteQuestionOption(int questionnaireId, int questionnaireQuestionId, int languageId, int optionId)
-        {            
-            _questionnaireQuestionOptionService.DeleteQuestionnaireQuestionOptionById(optionId,languageId);
+        {
+            _questionnaireQuestionOptionService.DeleteQuestionnaireQuestionOptionById(optionId, languageId);
 
             return RedirectToAction("EditQuestionnaireQuestion",
                 new
@@ -361,7 +361,7 @@ namespace DH.Helpdesk.Web.Controllers
             return RedirectToAction("EditQuestionnaire",
                 new
                 {
-                    questionnaireId = questionnaireId,                    
+                    questionnaireId = questionnaireId,
                     languageId = languageId
                 });
         }
@@ -413,7 +413,7 @@ namespace DH.Helpdesk.Web.Controllers
                       question.Question,
                       question.ShowNote.ToBool(),
                       question.NoteText,
-                      options.OrderBy(o=> o.OptionPos).ToList()
+                      options.OrderBy(o => o.OptionPos).ToList()
                     );
                 questions.Add(ques);
             }
@@ -426,10 +426,10 @@ namespace DH.Helpdesk.Web.Controllers
                   languageId,
                   questionnaire.Name,
                   questionnaire.Description,
-                  questions.OrderBy(q=> q.QuestionNumber).ToList(),
+                  questions.OrderBy(q => q.QuestionNumber).ToList(),
                   languageList
                 );
-            
+
             return View(model);
         }
 
@@ -438,16 +438,16 @@ namespace DH.Helpdesk.Web.Controllers
         {
             IEnumerable<CircularOverview> circulars = null;
             if (state == CircularStateId.All)
-               circulars = _circularService.FindCircularOverviews(questionnaireId);
-            else            
-               circulars = _circularService.FindCircularOverviews(questionnaireId).Where(c=> c.State == state);
-            
+                circulars = _circularService.FindCircularOverviews(questionnaireId);
+            else
+                circulars = _circularService.FindCircularOverviews(questionnaireId).Where(c => c.State == state);
 
-           List<CircularOverviewModel> model = null;            
-           model = circulars.Select(c => new CircularOverviewModel(
-                                                c.Id, c.CircularName, c.Date, 
-                                                c.State == CircularStateId.ReadyToSend? "Ready To Send" : "Sent"))
-                                 .ToList();
+
+            List<CircularOverviewModel> model = null;
+            model = circulars.Select(c => new CircularOverviewModel(
+                                                 c.Id, c.CircularName, c.Date,
+                                                 c.State == CircularStateId.ReadyToSend ? "Ready To Send" : "Sent"))
+                                  .ToList();
 
             ViewBag.qId = questionnaireId;
             ViewBag.curState = state;
@@ -456,10 +456,8 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpGet]
-        public ViewResult NewCircular(int questionnaireId, NewCircularModel curModel)
+        public ViewResult NewCircular(int questionnaireId)
         {
-            
-
             var departmentsOrginal = _departmentService.GetDepartments(SessionFacade.CurrentCustomer.Id);
             var availableDp =
                 departmentsOrginal.Select(x => new SelectListItem
@@ -523,173 +521,20 @@ namespace DH.Helpdesk.Web.Controllers
                 );
 
             var lst = new List<SelectListItem>();
-            lst.Add(new SelectListItem {Text = "5", Value = "1"});
-            lst.Add(new SelectListItem {Text = "10", Value = "2"});
-            lst.Add(new SelectListItem {Text = "20", Value = "3"});
-            lst.Add(new SelectListItem {Text = "25", Value = "4"});
-            lst.Add(new SelectListItem {Text = "50", Value = "5"});
-            lst.Add(new SelectListItem {Text = "100", Value = "6"});
+            lst.Add(new SelectListItem { Text = "5", Value = "1" });
+            lst.Add(new SelectListItem { Text = "10", Value = "2" });
+            lst.Add(new SelectListItem { Text = "20", Value = "3" });
+            lst.Add(new SelectListItem { Text = "25", Value = "4" });
+            lst.Add(new SelectListItem { Text = "50", Value = "5" });
+            lst.Add(new SelectListItem { Text = "100", Value = "6" });
             model.Procent = lst;
 
             model.ModelMode = 0;
 
             model.FinishingDateFrom = null;
             model.FinishingDateTo = null;
-            
+
             return View(model);
-
-        }
-
-
-        [HttpPost]
-        public ActionResult NewCircular(NewCircularModel newCircular, 
-                                        int[] selectedDepartments,
-                                        int[] selectedCaseTypes,
-                                        int[] selectedProductArea,
-                                        int[] selectedWorkingGroups                                        
-                                       )
-        {
-            if (newCircular.ModelMode == 1)
-            {
-
-                if (selectedDepartments == null)
-                    selectedDepartments = new int[0];
-
-                if (selectedCaseTypes == null)
-                    selectedCaseTypes = new int[0];
-
-                if (selectedProductArea == null)
-                    selectedProductArea = new int[0];
-
-                if (selectedWorkingGroups == null)
-                    selectedWorkingGroups = new int[0];
-
-                var departmentsOrginal = _departmentService.GetDepartments(SessionFacade.CurrentCustomer.Id);
-                var availableDp =
-                    departmentsOrginal.Select(x => new SelectListItem
-                    {
-                        Text = x.DepartmentName,
-                        Value = x.Id.ToString()
-                    }).ToList().Where(d=> !selectedDepartments.Contains(Int16.Parse(d.Value)));
-
-                var selectedDpOrginal = 
-                        departmentsOrginal.Select(x => new SelectListItem
-                        {
-                            Text = x.DepartmentName,
-                            Value = x.Id.ToString()
-                        }).ToList().Where(d => selectedDepartments.Contains(Int16.Parse(d.Value))).ToList();
-                
-                newCircular.AvailableDepartments = availableDp.ToList();
-                newCircular.SelectedDepartments = selectedDpOrginal.ToList();
-                //-----------------------------------------------------------------------------------------------------
-
-                var caseTypesOrginal = _caseTypeService.GetCaseTypes(SessionFacade.CurrentCustomer.Id);
-                var availableCt =
-                    caseTypesOrginal.Select(x => new SelectListItem
-                    {
-                        Text = x.Name,
-                        Value = x.Id.ToString()
-                    }).ToList().Where(d => !selectedCaseTypes.Contains(Int16.Parse(d.Value)));
-
-                var selectedCtOrginal = 
-                    caseTypesOrginal.Select(x => new SelectListItem
-                    {
-                        Text = x.Name,
-                        Value = x.Id.ToString()
-                    }).ToList().Where(d => selectedCaseTypes.Contains(Int16.Parse(d.Value))).ToList();
-
-                newCircular.AvailableCaseTypes = availableCt.ToList();
-                newCircular.SelectedCaseTypes = selectedCtOrginal.ToList();
-                //-----------------------------------------------------------------------------------------------------
-
-                var productAreaOrginal = _productAreaService.GetProductAreas(SessionFacade.CurrentCustomer.Id);
-                var availablePa =
-                    productAreaOrginal.Select(x => new SelectListItem
-                    {
-                        Text = x.Name,
-                        Value = x.Id.ToString()
-                    }).ToList().Where(d => !selectedProductArea.Contains(Int16.Parse(d.Value)));
-
-                var selectedPaOrginal = 
-                    productAreaOrginal.Select(x => new SelectListItem
-                    {
-                        Text = x.Name,
-                        Value = x.Id.ToString()
-                    }).ToList().Where(d => selectedProductArea.Contains(Int16.Parse(d.Value))).ToList();
-
-                newCircular.AvailableProductArea = availablePa.ToList();
-                newCircular.SelectedProductArea = selectedPaOrginal.ToList();
-                //-----------------------------------------------------------------------------------------------------
-
-                var workingGroupsOrginal = _workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id);
-                var availableWg =
-                    workingGroupsOrginal.Select(x => new SelectListItem
-                    {
-                        Text = x.WorkingGroupName,
-                        Value = x.Id.ToString()
-                    }).ToList().Where(d => !selectedWorkingGroups.Contains(Int16.Parse(d.Value)));
-
-
-                var selectedWgOrginal = 
-                    workingGroupsOrginal.Select(x => new SelectListItem
-                    {
-                        Text = x.WorkingGroupName,
-                        Value = x.Id.ToString()
-                    }).ToList().Where(d => selectedWorkingGroups.Contains(Int16.Parse(d.Value))).ToList();
-
-                newCircular.AvailableWorkingGroups= availableWg.ToList();
-                newCircular.SelectedWorkingGroups = selectedWgOrginal.ToList();
-                //-----------------------------------------------------------------------------------------------------
-
-                newCircular.CircularParts = new List<CircularPartOverview>();
-                 var cases = _circularService.GetCases(SessionFacade.CurrentCustomer.Id,
-                                                       selectedDepartments,
-                                                       selectedCaseTypes,
-                                                       selectedProductArea,
-                                                       selectedWorkingGroups,100 ,null,null);
-                foreach (var c in cases)
-                {
-                    CircularPartOverview caseRow = new CircularPartOverview(c.CaseId, c.CaseNumber, c.Caption, c.Email);
-                    newCircular.CircularParts.Add(caseRow);    
-                }
-               
-                var lst = new List<SelectListItem>();
-                lst.Add(new SelectListItem { Text = "5", Value = "1" });
-                lst.Add(new SelectListItem { Text = "10", Value = "2" });
-                lst.Add(new SelectListItem { Text = "20", Value = "3" });
-                lst.Add(new SelectListItem { Text = "25", Value = "4" });
-                lst.Add(new SelectListItem { Text = "50", Value = "5" });
-                lst.Add(new SelectListItem { Text = "100", Value = "6" });
-                newCircular.Procent = lst;
-                
-                newCircular.ModelMode = 0;
-                return View(newCircular);
-                
-                //return RedirectToAction("NewCircular",
-                //    new
-                //    {
-                //        questionnaireId = newCircular.QuestionnaireId,
-                //        curModel = newCircular
-                //    });
-            }
-
-            var circular = new NewCircular
-                (
-                newCircular.QuestionnaireId,
-                newCircular.CircularName,
-                CircularStateId.ReadyToSend,
-                DateTime.Now
-                );
-
-            _circularService.AddCircular(circular);
-
-            return RedirectToAction("CircularOverview",
-                new
-                {
-                    questionnaireId = newCircular.QuestionnaireId,
-                    state = CircularStateId.All
-                });
-
         }
 
         [HttpGet]
@@ -701,21 +546,21 @@ namespace DH.Helpdesk.Web.Controllers
                 (
                     circular.Id,
                     questionnaireId,
-                    circular.CircularName,                    
-                    circular.ChangedDate                    
+                    circular.CircularName,
+                    circular.ChangedDate
                 );
 
             model.State = stateId;
 
             switch (circular.Status)
-            {                
+            {
                 case CircularStateId.ReadyToSend:
                     model.StateText = "Ready To Send";
                     break;
-                    
+
                 case CircularStateId.Sent:
                     model.StateText = "Sent";
-                    break;                
+                    break;
             }
 
             return View(model);
@@ -729,18 +574,18 @@ namespace DH.Helpdesk.Web.Controllers
                 (
                    editedCircular.Id,
                    editedCircular.CircularName,
-                   editedCircular.State, 
+                   editedCircular.State,
                    DateTime.Now
                 );
 
             _circularService.UpdateCircular(circular);
-            
+
             return RedirectToAction("CircularOverview",
                  new
                  {
                      questionnaireId = editedCircular.QuestionnaireId,
                      state = editedCircular.State
-                 });  
+                 });
         }
 
         [HttpPost]
@@ -751,10 +596,52 @@ namespace DH.Helpdesk.Web.Controllers
             return RedirectToAction("CircularOverview",
                      new
                      {
-                        questionnaireId = questionnaireId,
-                        state = stateId
-                     });  
-   
+                         questionnaireId = questionnaireId,
+                         state = stateId
+                     });
+        }
+
+        [HttpPost]
+        public ActionResult NewCircular(NewCircularModel newCircular, List<CircularPartOverview> cases)
+        {
+            var circular = new NewCircular(
+                newCircular.QuestionnaireId,
+                newCircular.CircularName,
+                CircularStateId.ReadyToSend,
+                DateTime.Now);
+
+            this._circularService.AddCircular(circular);
+
+            return this.RedirectToAction(
+                "CircularOverview",
+                new { questionnaireId = newCircular.QuestionnaireId, state = CircularStateId.All });
+        }
+
+        [HttpPost]
+        public PartialViewResult CaseRowGrid(
+            NewCircularModel newCircular,
+            int[] selectedDepartments,
+            int[] selectedCaseTypes,
+            int[] selectedProductArea,
+            int[] selectedWorkingGroups,
+            int procent,
+            DateTime? finishingDateFrom,
+            DateTime? finishingDateTo)
+        {
+            List<CircularPart> cases = this._circularService.GetCases(
+                SessionFacade.CurrentCustomer.Id,
+                selectedDepartments,
+                selectedCaseTypes,
+                selectedProductArea,
+                selectedWorkingGroups,
+                procent,
+                finishingDateFrom,
+                finishingDateTo);
+
+            var models =
+                cases.Select(c => new CircularPartOverview(c.CaseId, c.CaseNumber, c.Caption, c.Email)).ToList();
+
+            return this.PartialView("_CircularPartOverview", models);
         }
     }
 }

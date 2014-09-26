@@ -15,7 +15,7 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
     {
         public CircularPartOverview()
         {
-            
+
         }
 
         public CircularPartOverview(int caseId, int caseNumber, string caption, string email)
@@ -33,25 +33,25 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
         public string Caption { get; set; }
 
         public string Email { get; set; }
-    } 
+    }
 
     public class NewCircularModel
     {
         public NewCircularModel()
         {
-            
+
         }
 
-        public NewCircularModel(int questionnaireId, 
-                                IList<SelectListItem> availableDepartments, 
-                                IList<SelectListItem> selectedDepartments, 
+        public NewCircularModel(int questionnaireId,
+                                IList<SelectListItem> availableDepartments,
+                                IList<SelectListItem> selectedDepartments,
                                 IList<SelectListItem> availableCaseTypes,
                                 IList<SelectListItem> selectedCaseTypes,
                                 IList<SelectListItem> availableProductArea,
                                 IList<SelectListItem> selectedProductArea,
                                 IList<SelectListItem> availableWorkingGroups,
                                 IList<SelectListItem> selectedWorkingGroups,
-                                List<CircularPartOverview> circularParts 
+                                List<CircularPartOverview> circularParts
             )
         {
             this.QuestionnaireId = questionnaireId;
@@ -71,11 +71,12 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
 
         [LocalizedDisplay("QuestionnaireId")]
         public int QuestionnaireId { get; set; }
-        
-        [StringLength(100)]
+
+        [LocalizedRequired]
+        [LocalizedStringLength(100)]
         [LocalizedDisplay("CircularName")]
         public string CircularName { get; set; }
-        
+
         [LocalizedDisplay("Status")]
         public string Status { get; set; }
 

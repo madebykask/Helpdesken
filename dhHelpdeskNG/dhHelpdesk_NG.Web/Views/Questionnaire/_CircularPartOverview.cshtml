@@ -4,36 +4,40 @@
         <div class="span100">
             <table id="tblCircular" class="table table-striped table-bordered table-hover">
                 <thead>
-                <tr>
-                    <th sort-data="Case"  style="cursor: pointer; cursor: hand; width: 10%">
-                        @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)                                               
-                    </th>
-                    <th sort-data="Caption"  style="cursor: pointer; cursor: hand;width:25%">
-                        @Translation.Get("Rubrik", Enums.TranslationSource.TextTranslation)                                                       
-                    </th>
-                    <th sort-data="Email" onclick="submit();" style="cursor: pointer; cursor: hand; width: 20%">
-                        @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)                                                 
-                    </th>
-                    <th sort-data="Status" onclick="submit();" style="cursor: pointer; cursor: hand; width: 65%">
-                        @Translation.Get("Status", Enums.TranslationSource.TextTranslation)                                                        
-                    </th>                                                        
-                </tr> 
-                </thead>                          
-                @foreach (var item in Model)
-                {
                     <tr>
-                        <td>                                                                                     
-                            @Html.DisplayFor(modelItem => item.CaseNumber)                                                                                                                                          
-                        </td>
-                        <td>                
-                            @Html.DisplayFor(modelItem => item.Caption)                
-                        </td>
-                        <td>                
-                            @Html.DisplayFor(modelItem => item.Email)                
-                        </td>            
+                        <th>
+                            @Translation.Get("Ärende")
+                        </th>
+                        <th>
+                            @Translation.Get("Rubrik")
+                        </th>
+                        <th>
+                            @Translation.Get("E-post")
+                        </th>
+                        <th>
+                            @Translation.Get("Status")
+                        </th>
                     </tr>
+                </thead>
+                @{
+                    var cases = Model;
+                    for (int i = 0; i < cases.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => cases[i].CaseNumber)
+                                @Html.HiddenFor(m => cases[i].CaseId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => cases[i].Caption)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => cases[i].Email)
+                            </td>
+                        </tr>
+                    }
                 }
-            </table>  
+            </table>
         </div>
     </div>
 </div>

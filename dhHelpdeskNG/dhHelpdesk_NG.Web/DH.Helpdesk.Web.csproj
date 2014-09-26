@@ -1567,6 +1567,7 @@
     <Content Include="Views\Inventory\EditorTemplates\CustomTypesFields\List.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\CustomTypesFields\Text.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\CustomTypesFields\WideText.cshtml" />
+    <Content Include="Views\Questionnaire\_InputCircular.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
