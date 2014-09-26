@@ -1718,9 +1718,18 @@ td .btn-group {
 .column {
     min-height: 300px;
 }
+.ui-sortable .portlet-placeholder {
+    border:2px dashed #ccc;
+    /*border: 1px dotted black !important;*/
+    background:#e9eff6;
+    visibility: visible !important;
+    min-height: 200px;
+}
 
 
-
+.ui-sortable .portlet-placeholder * {
+    visibility: hidden;
+}
 	
 
 
