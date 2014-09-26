@@ -824,11 +824,16 @@
         [HttpGet]
         public ActionResult Files(string id)
         {
-            var files = this._caseFileService.GetCaseFiles(int.Parse(id));
+            //var files = this._caseFileService.GetCaseFiles(int.Parse(id));
+            var files = GuidHelper.IsGuid(id)
+                                ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Cases)
+                                : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
 
-            var model = new CaseFilesModel(id, files);
+            var cfs = MakeCaseFileModel(files);
+
+            var model = new CaseFilesModel(id, cfs.ToArray());
             return this.PartialView("_CaseFiles", model);
-        }
+        }        
 
         public RedirectToRouteResult MarkAsUnread(int id, int customerId)
         {
@@ -858,15 +863,16 @@
             {
                 if (this.userTemporaryFilesStorage.FileExists(name, id, ModuleName.Cases))
                 {
-                    throw new HttpException((int)HttpStatusCode.Conflict, null);
+
+                    throw new HttpException(409 , "Already file exist!");
                 }
-                this.userTemporaryFilesStorage.AddFile(uploadedData, name, id, ModuleName.Cases);
+                this.userTemporaryFilesStorage.AddFile(uploadedData, name, id, ModuleName.Cases);                               
             }
             else
             {
                 if (this._caseFileService.FileExists(int.Parse(id), name))
                 {
-                    throw new HttpException((int)HttpStatusCode.Conflict, null);
+                    throw new HttpException(409, "Already file exist!");                    
                 }
 
                 var caseFileDto = new CaseFileDto(
@@ -875,7 +881,9 @@
                                 DateTime.Now, 
                                 int.Parse(id),
                                 this.workContext.User.UserId);
-                this._caseFileService.AddFile(caseFileDto);
+                this._caseFileService.AddFile(caseFileDto);   
+
+
             }
         }
 
@@ -1180,6 +1188,14 @@
             model = GetCaseColumnSettingModel(customerId, userId);
 
             return PartialView("_ColumnCaseSetting", model);
+        }
+
+        [HttpGet]
+        public RedirectToRouteResult ChangeCurrentLanguage(int languageId)        
+        {
+            SessionFacade.CurrentLanguageId = languageId;
+            SessionFacade.CurrentUser.LanguageId = languageId;
+            return this.RedirectToAction("index", "cases");            
         }
 
         #endregion
@@ -2051,6 +2067,20 @@
             return string.Join(",", cases.Select(c => c.Id));
         }
 
+        private List<CaseFileModel> MakeCaseFileModel(List<string> files)
+        {
+            var res = new List<CaseFileModel>();
+            int i = 0;
+
+            foreach (var f in files)
+            {
+                i++;
+                var cf = new CaseFileModel(i, i, f, DateTime.Now, SessionFacade.CurrentUser.FirstName + " " + SessionFacade.CurrentUser.SurName);
+                res.Add(cf);
+            }
+
+            return res;
+        }
         #endregion
 
     }

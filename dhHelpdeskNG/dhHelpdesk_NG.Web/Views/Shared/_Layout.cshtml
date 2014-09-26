@@ -66,9 +66,11 @@
                                             <img src="@Url.Content("~/Content/icons/case.png")" alt="cases" />
                                             @Translation.Get("Ärendeöversikt")</a>
                                     </li>
-                                    <li><a href="@Url.Action("index", "cases", new { area = "" })">
+                                    
+                                    @*<li><a href="@Url.Action("index", "cases", new { area = "" })">
                                             <img src="@Url.Content("~/Content/icons/casesearch.png")" alt="search" />
-                                            @Translation.Get("Sök ärende")</a></li>                                    
+                                            @Translation.Get("Sök ärende")</a></li> *@                                                                                                            
+                                    
                                     if (model.IsProblemVisible())
                                     {                                                
                                         <li><a href="@Url.Action("Index", "Problems", new { area = "" })">
@@ -265,6 +267,32 @@
                                         </a>
                                     </li>
                                 }
+
+                                @if (model.Languages != null && model.Languages.Count > 1)
+                                {                                    
+                                    <li class="dropdown-submenu">
+                                        <a href="#">
+                                            <i class="icon-refresh"></i>
+                                            @Translation.Get("Språk")
+                                        </a>
+                                        <ul class="dropdown-menu">                                            
+                                            @foreach (var lang in model.Languages)
+                                            {
+                                                <li>
+                                                    @if (lang.Id == SessionFacade.CurrentUser.LanguageId)
+                                                    {
+                                                      <a href="@Url.Action("ChangeCurrentLanguage", "cases", new { languageId = lang.Id })" >  @lang.Name <i class="icon-refresh"></i> </a>
+                                                    }
+                                                    else
+                                                    {
+                                                      <a href="@Url.Action("ChangeCurrentLanguage", "cases", new { languageId = lang.Id })"> @lang.Name </a>
+                                                    }
+                                                </li>
+                                            }                                                                              
+                                        </ul>
+                                    </li>                                    
+                                }
+
                                 <li>
                                     <a href="@Url.Action("edit", "profile", new { id = SessionFacade.CurrentUser.Id })">
                                         <i class="icon-user"></i>
