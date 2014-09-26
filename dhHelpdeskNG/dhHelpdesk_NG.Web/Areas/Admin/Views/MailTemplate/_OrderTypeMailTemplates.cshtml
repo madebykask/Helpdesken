@@ -8,19 +8,19 @@
             {
                 if (item.Parent_OrderType_Id == null)
                 {
-                    <tr><td>@Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation): <a href="@Url.Action("edit", "mailtemplate", new { area = "admin", id = 40, customerId = Model.Customer.Id, languageId = 2, ordertypeId = item.Id })">@Html.DisplayFor(modelItem => item.Name)</a>
+                    <tr><td><a href="@Url.Action("edit", "mailtemplate", new { area = "admin", id = 40, customerId = Model.Customer.Id, languageId = 2, ordertypeId = item.Id })"><strong>@Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation):</strong> @Html.DisplayFor(modelItem => item.Name)</a>
                     </td></tr>
                 }
                 else if (item.ParentOrderType.Parent_OrderType_Id != null)
                 {
-                    <tr><td>@Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation): <a href="@Url.Action("edit", "mailtemplate", new { area = "admin", id = 40, customerId = Model.Customer.Id, languageId = 2, ordertypeId = item.Id })">@Html.DisplayFor(modelItem => item.ParentOrderType.Name) - @Html.DisplayFor(modelItem => item.Name)</a>
+                    <tr><td><a href="@Url.Action("edit", "mailtemplate", new { area = "admin", id = 40, customerId = Model.Customer.Id, languageId = 2, ordertypeId = item.Id })"><strong>@Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation):</strong> @Html.DisplayFor(modelItem => item.ParentOrderType.Name) - @Html.DisplayFor(modelItem => item.Name)</a>
                     </td></tr>
                 }
             }
     }
     else
     {
-        <tr><td>@Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation): <a href="@Url.Action("edit", "mailtemplate", new { area = "admin", id = 8, customerId = Model.Customer.Id, languageId = 2 })">@Translation.Get("Beställning", Enums.TranslationSource.TextTranslation)</a>
+        <tr><td><a href="@Url.Action("edit", "mailtemplate", new { area = "admin", id = 8, customerId = Model.Customer.Id, languageId = 2 })"><strong>@Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation):</strong> @Translation.Get("Beställning", Enums.TranslationSource.TextTranslation)</a>
                 </td></tr>
     }
 </table>

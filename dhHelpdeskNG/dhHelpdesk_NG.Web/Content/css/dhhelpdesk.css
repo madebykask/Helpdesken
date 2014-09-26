@@ -944,6 +944,10 @@ input[type="text"] {
         color:#cccccc;
     }
 
+.secnavmarg {
+    margin-top: -10px;
+    margin-bottom: 20px;
+}
 /***************************************ERRORS**********************************************/
 label.error
 {

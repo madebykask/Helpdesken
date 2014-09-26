@@ -126,7 +126,7 @@
                                         @Translation.Get("Kontakt", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td class="span9">
-                                        @Html.RadioButton("optContact", 1, true, new { onclick = "changeContactView()"})  @Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation)&nbsp;&nbsp; @Html.RadioButton("optContact", 2, new { onclick = "changeContactView()"}) @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation)
+                                        <label class="radio inline">@Html.RadioButton("optContact", 1, true, new { onclick = "changeContactView()"})  @Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation) </label> <label class="radio inline">@Html.RadioButton("optContact", 2, new { onclick = "changeContactView()"}) @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation)</label>
                                     </td>
                                 </tr>
                                 <tr>
