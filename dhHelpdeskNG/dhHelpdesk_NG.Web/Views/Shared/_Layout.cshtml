@@ -252,7 +252,14 @@
                                             foreach (var customer in model.Customers)
                                             {
                                                 <li>
-                                                    <a href="@Url.Action("Index", "cases", new { customerId = customer.Id })">@customer.Name</a>
+                                                    @if (customer.Name == SessionFacade.CurrentCustomer.Name)
+                                                    {
+                                                    <a href="@Url.Action("Index", "cases", new { customerId = customer.Id })">@customer.Name <i class="icon-ok"></i> </a>
+                                                    }
+                                                    else
+                                                    {
+                                                      <a href="@Url.Action("Index", "cases", new { customerId = customer.Id })">@customer.Name</a>
+                                                    }
                                                 </li>
                                             }
                                         }                                    
@@ -272,7 +279,7 @@
                                 {                                    
                                     <li class="dropdown-submenu">
                                         <a href="#">
-                                            <i class="icon-refresh"></i>
+                                            <i class="icon-globe"></i>
                                             @Translation.Get("Språk")
                                         </a>
                                         <ul class="dropdown-menu">                                            
@@ -281,7 +288,7 @@
                                                 <li>
                                                     @if (lang.Id == SessionFacade.CurrentUser.LanguageId)
                                                     {
-                                                      <a href="@Url.Action("ChangeCurrentLanguage", "cases", new { languageId = lang.Id })" >  @lang.Name <i class="icon-refresh"></i> </a>
+                                                      <a href="@Url.Action("ChangeCurrentLanguage", "cases", new { languageId = lang.Id })" >  @lang.Name <i class="icon-ok"></i> </a>
                                                     }
                                                     else
                                                     {

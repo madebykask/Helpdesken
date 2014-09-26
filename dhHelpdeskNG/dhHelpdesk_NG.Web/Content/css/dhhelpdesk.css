@@ -1715,6 +1715,10 @@ td .btn-group {
         background: #62a8d1;
     }
 
+.column {
+    min-height: 300px;
+}
+
 
 
 	
