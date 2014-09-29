@@ -2,6 +2,8 @@
 {
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Infrastructure.Concrete;
+    using DH.Helpdesk.Dal.NewInfrastructure;
+    using DH.Helpdesk.Dal.NewInfrastructure.Concrete;
     using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.BusinessLogic;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport;
@@ -20,6 +22,9 @@
 
     using Ninject.Modules;
     using Ninject.Web.Common;
+
+    using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
+    using UnitOfWork = DH.Helpdesk.Dal.Infrastructure.UnitOfWork;
 
     public sealed class ToolsModule : NinjectModule
     {
@@ -40,6 +45,9 @@
             this.Bind<IUnitOfWork>().To<UnitOfWork>();
             this.Bind<IEditorStateCacheFactory>().To<EditorStateCacheFactory>().InSingletonScope();
             this.Bind<ITemporaryFilesCacheFactory>().To<TemporaryFilesCacheFactory>().InSingletonScope();
+
+            this.Bind<ISessionFactory>().To<HelpdeskSessionFactory>().InRequestScope();
+            this.Bind<IUnitOfWorkFactory>().To<UnitOfWorkFactory>().InRequestScope();
         }
 
         #endregion

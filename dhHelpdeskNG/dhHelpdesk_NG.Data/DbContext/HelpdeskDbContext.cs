@@ -21,6 +21,7 @@
     using DH.Helpdesk.Dal.EntityConfigurations.Users;
     using DH.Helpdesk.Dal.EntityConfigurations.WorkstationModules;
     using DH.Helpdesk.Dal.EntityConfigurations.SSO;
+    using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Cases;
     using DH.Helpdesk.Domain.Changes;
@@ -40,7 +41,7 @@
 
     using OperatingSystemConfiguration = DH.Helpdesk.Dal.EntityConfigurations.OperatingSystemConfiguration;
 
-    public class HelpdeskDbContext : DbContext
+    public class HelpdeskDbContext : DbContext, IDbContext
     {
         #region Constructors and Destructors
 

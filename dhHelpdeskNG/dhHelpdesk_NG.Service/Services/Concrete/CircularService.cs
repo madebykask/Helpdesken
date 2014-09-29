@@ -1,45 +1,32 @@
-﻿using System;
-using DH.Helpdesk.Domain;
-
-namespace DH.Helpdesk.Services.Services.Concrete
+﻿namespace DH.Helpdesk.Services.Services.Concrete
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Input;
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Output;
-    using DH.Helpdesk.Common.Enums;
-    using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories.Questionnaire;
-    using System.Globalization;
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications;
 
     public class CircularService : ICircularService
     {
-        #region Fields        
+        #region Fields
 
-        private readonly IQuestionnaireRepository _questionnaireRepository;
+        private readonly ICircularRepository circularRepository;
 
-        private readonly ICircularRepository _circularRepository;
-
-        private readonly ICaseRepository _caseRepository;
-
-        private readonly IUserService _userService;
+        private readonly IUnitOfWorkFactory unitOfWorkFactory;
 
         #endregion
 
         #region Constructors and Destructors
 
-        public CircularService(
-            IQuestionnaireRepository questionnaireRepository,
-            ICircularRepository circularRepository,
-            ICaseRepository caseRepository,
-            IUserService userService
-            )
+        public CircularService(ICircularRepository circularRepository, IUnitOfWorkFactory unitOfWorkFactory)
         {
-            this._questionnaireRepository = questionnaireRepository;
-            this._circularRepository = circularRepository;
-            this._caseRepository = caseRepository;
-            this._userService = userService;
+            this.circularRepository = circularRepository;
+            this.unitOfWorkFactory = unitOfWorkFactory;
         }
 
         #endregion
@@ -49,30 +36,30 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         public List<CircularOverview> FindCircularOverviews(int questionnaireId)
         {
-            return this._circularRepository.FindCircularOverviews(questionnaireId);
+            return this.circularRepository.FindCircularOverviews(questionnaireId);
         }
 
         public void AddCircular(NewCircular newCircular)
         {
-            _circularRepository.AddCircular(newCircular);
-            this._circularRepository.Commit();
+            this.circularRepository.AddCircular(newCircular);
+            this.circularRepository.Commit();
         }
 
         public EditCircular GetCircularById(int circularId)
         {
-            return _circularRepository.GetCircularById(circularId);
+            return this.circularRepository.GetCircularById(circularId);
         }
 
         public void UpdateCircular(EditCircular editedCircular)
         {
-            _circularRepository.UpdateCircular(editedCircular);
-            this._circularRepository.Commit();
+            this.circularRepository.UpdateCircular(editedCircular);
+            this.circularRepository.Commit();
         }
 
         public void DeleteCircularById(int deletedCircularId)
         {
-            _circularRepository.DeleteCircularById(deletedCircularId);
-            this._circularRepository.Commit();
+            this.circularRepository.DeleteCircularById(deletedCircularId);
+            this.circularRepository.Commit();
         }
 
         public List<CircularPart> GetCases(
@@ -88,92 +75,74 @@ namespace DH.Helpdesk.Services.Services.Concrete
             const int MinEmailLength = 3;
             const int IsDeleted = 0;
 
-            IEnumerable<Case> query =
-                this._caseRepository.GetAll()
-                    .Where(
-                        c =>
-                        c.Customer_Id == customerId && c.Deleted == IsDeleted && c.FinishingDate != null
-                        && c.PersonsEmail.Length > MinEmailLength);
-
-            if (selectedDepartments != null && selectedDepartments.Count() > 0)
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
-                query =
-                    query.Where(
-                        c => c.Department_Id != null && selectedDepartments.ToList().Contains(c.Department_Id.Value));
-            }
+                var caseRepo = uof.GetRepository<Case>();
+                var userRepo = uof.GetRepository<User>();
 
-            if (selectedCaseTypes != null && selectedCaseTypes.Count() > 0)
-            {
-                query = query.Where(c => selectedCaseTypes.ToList().Contains(c.CaseType_Id));
-            }
-
-            if (selectedProductArea != null && selectedProductArea.Count() > 0)
-            {
-                query =
-                    query.Where(
-                        c => c.ProductArea_Id != null && selectedProductArea.ToList().Contains(c.ProductArea_Id.Value));
-            }
-
-            //if (selectedWorkingGroups != null && selectedWorkingGroups.Count() > 0)
-            //{
-            //    var users =
-            //        _userService.GetUsers(customerId)
-            //            .Where(
-            //                u =>
-            //                u.Default_WorkingGroup_Id != null
-            //                && selectedWorkingGroups.ToList().Contains(u.Default_WorkingGroup_Id.Value))
-            //            .Select(u => u.Id)
-            //            .ToList();
-
-            //    cases = cases.Where(c => users.ToList().Contains(c.Performer_User_Id)).ToList();
-            //}
-
-
-            var cases =
-                this._caseRepository.GetAll()
-                    .Where(
-                        c =>
-                        c.Customer_Id == customerId && c.Deleted == 0 && c.FinishingDate != null
-                        && c.PersonsEmail.Length > 3)
-                    .ToList();
-
-            //.Select(c => new { Case_Id = c.Id, CaseNumber = c.CaseNumber, Caption = c.Caption, Email = c.PersonsEmail})                                                  
-
-            if (selectedDepartments != null && selectedDepartments.Count() > 0)
-                cases =
-                    cases.Where(
-                        c => c.Department_Id != null && selectedDepartments.ToList().Contains(c.Department_Id.Value))
-                        .ToList();
-
-            if (selectedCaseTypes != null && selectedCaseTypes.Count() > 0)
-            {
-                cases = cases.Where(c => selectedCaseTypes.ToList().Contains(c.CaseType_Id)).ToList();
-            }
-
-            if (selectedProductArea != null && selectedProductArea.Count() > 0)
-                cases =
-                    cases.Where(
-                        c => c.ProductArea_Id != null && selectedProductArea.ToList().Contains(c.ProductArea_Id.Value))
-                        .ToList();
-
-
-            if (selectedWorkingGroups != null && selectedWorkingGroups.Count() > 0)
-            {
-                var users =
-                    _userService.GetUsers(customerId)
+                IQueryable<Case> query =
+                    caseRepo.GetAll()
+                        .GetUsersByCustomer(customerId)
                         .Where(
-                            u =>
-                            u.Default_WorkingGroup_Id != null
-                            && selectedWorkingGroups.ToList().Contains(u.Default_WorkingGroup_Id.Value))
-                        .Select(u => u.Id)
-                        .ToList();
+                            c =>
+                            c.Deleted == IsDeleted && c.FinishingDate != null && c.PersonsEmail.Length > MinEmailLength);
 
-                cases = cases.Where(c => users.ToList().Contains(c.Performer_User_Id)).ToList();
+                if (selectedDepartments != null && selectedDepartments.Any())
+                {
+                    query =
+                        query.Where(
+                            c => c.Department_Id != null && selectedDepartments.ToList().Contains(c.Department_Id.Value));
+                }
+
+                if (selectedCaseTypes != null && selectedCaseTypes.Any())
+                {
+                    query = query.Where(c => selectedCaseTypes.ToList().Contains(c.CaseType_Id));
+                }
+
+                if (selectedProductArea != null && selectedProductArea.Any())
+                {
+                    query =
+                        query.Where(
+                            c =>
+                            c.ProductArea_Id != null && selectedProductArea.ToList().Contains(c.ProductArea_Id.Value));
+                }
+
+                if (selectedWorkingGroups != null && selectedWorkingGroups.Any())
+                {
+                    IQueryable<int> userIds =
+                        userRepo.GetAll()
+                            .GetUsersByCustomer(customerId)
+                            .Where(
+                                u =>
+                                u.Default_WorkingGroup_Id != null
+                                && selectedWorkingGroups.ToList().Contains(u.Default_WorkingGroup_Id.Value))
+                            .Select(u => u.Id);
+
+                    query = query.Where(c => userIds.ToList().Contains(c.Performer_User_Id));
+                }
+
+                if (finishingDateFrom.HasValue)
+                {
+                    query = query.Where(x => x.FinishingDate >= finishingDateFrom);
+                }
+
+                if (finishingDateTo.HasValue)
+                {
+                    query = query.Where(x => x.FinishingDate <= finishingDateTo);
+                }
+
+                int percentageOfCases = caseRepo.GetAll().Count() / procent;
+
+                query = query.Take(percentageOfCases);
+
+                var anonymus = query.Select(x => new { x.Id, x.CaseNumber, x.Caption, x.PersonsEmail }).ToList();
+
+                List<CircularPart> businessModels =
+                    anonymus.Select(c => new CircularPart(c.Id, (int)c.CaseNumber, c.Caption, c.PersonsEmail)).ToList();
+
+                return businessModels;
             }
-
-            return cases.Select(c => new CircularPart(c.Id, (int)c.CaseNumber, c.Caption, c.PersonsEmail)).ToList();
         }
-
         #endregion
     }
 }

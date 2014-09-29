@@ -308,4 +308,4 @@ namespace DH.Helpdesk.Dal.Infrastructure
             return entities.CheckAccess(this.WorkContext);
         }
     }
-}
+} 

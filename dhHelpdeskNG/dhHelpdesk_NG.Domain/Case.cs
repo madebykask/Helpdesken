@@ -1,12 +1,13 @@
 ﻿namespace DH.Helpdesk.Domain
 {
     using DH.Helpdesk.Domain.Cases;
+    using DH.Helpdesk.Domain.Interfaces;
     using DH.Helpdesk.Domain.Problems;
 
     using global::System;
     using global::System.Collections.Generic;
 
-    public class Case : Entity
+    public class Case : Entity, ICustomerEntity
     {
         public Guid CaseGUID { get; set; }
         public String ReportedBy { get; set; }

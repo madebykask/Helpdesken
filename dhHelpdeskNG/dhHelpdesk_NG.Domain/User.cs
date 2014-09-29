@@ -1,9 +1,11 @@
 ﻿namespace DH.Helpdesk.Domain
 {
+    using DH.Helpdesk.Domain.Interfaces;
+
     using global::System;
     using global::System.Collections.Generic;
 
-    public class User : Entity
+    public class User : Entity, ICustomerEntity
     {
         public int AccountType { get; set; }
         public int ActivateCasePermission { get; set; }
