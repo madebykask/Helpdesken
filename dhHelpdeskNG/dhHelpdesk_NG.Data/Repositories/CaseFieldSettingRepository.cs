@@ -15,6 +15,7 @@
         IEnumerable<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguages(int? customerId, int? languageId);
         IEnumerable<CaseFieldSettingsForTranslation> GetCaseFieldSettingsForTranslation(int userId);
         IEnumerable<CaseFieldSettingsForTranslation> GetCaseFieldSettingsForTranslation();
+        IEnumerable<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguagesForDefaultCust(int? customerId, int? languageId);
     }
 
     public class CaseFieldSettingLanguageRepository : RepositoryBase<CaseFieldSettingLanguage>, ICaseFieldSettingLanguageRepository
@@ -49,6 +50,26 @@
                             FieldHelp = grouped.Key.FieldHelp,
                             Name = grouped.Key.Name
                         };
+
+            return query.OrderBy(x => x.Id);
+        }
+
+        public IEnumerable<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguagesForDefaultCust(int? customerId, int? languageId)
+        {
+            
+            var query = from cfsl in this.DataContext.CaseFieldSettingLanguages
+                            join cfs in this.DataContext.CaseFieldSettings on cfsl.CaseFieldSettings_Id equals cfs.Id
+                        where  (cfs.Customer_Id.GetValueOrDefault(-1) == -1) && (cfsl.Language_Id == languageId) && (cfs.ShowOnStartPage == 1)
+                        group cfsl by new { cfsl.CaseFieldSettings_Id, cfsl.Label, cfsl.Language_Id, cfsl.FieldHelp, cfs.Name } into grouped
+                        select new CaseFieldSettingsWithLanguage
+                        {                            
+                            Id = grouped.Key.CaseFieldSettings_Id,
+                            Label = grouped.Key.Label,
+                            Language_Id = grouped.Key.Language_Id,
+                            FieldHelp = grouped.Key.FieldHelp,
+                            Name = grouped.Key.Name
+                        };
+
 
             return query.OrderBy(x => x.Id);
         }
@@ -103,6 +124,8 @@
         IEnumerable<CaseListToCase> GetListToCustomerCase(int customerId, int languageId);
         IEnumerable<ListCases> GetListCasesToCaseSummary(int? customerId, int? languageId, int? userGroupId);
         IEnumerable<ListCases> GetCaseFieldSettingsListToCustomerCaseSummary(int? customerId, int? languageId, int? userGroupId);
+
+        IEnumerable<CaseFieldSetting> GetCaseFieldSettingsForDefaultCust();
     }
 
     public class CaseFieldSettingRepository : RepositoryBase<CaseFieldSetting>, ICaseFieldSettingRepository
@@ -179,6 +202,31 @@
 
                 query = q;
             }
+
+            return query;
+        }
+
+        public IEnumerable<CaseFieldSetting> GetCaseFieldSettingsForDefaultCust()
+        {
+
+
+            //var result = from cfs in this.DataContext.CaseFieldSettings
+            //             where cfs.Customer_Id == null
+            //             select cfs;
+
+            //return result;
+
+
+            var query = from cfs in this.DataContext.CaseFieldSettings
+                        where cfs.Customer_Id == null
+                        group cfs by new { cfs.Name, cfs.Required, cfs.ShowExternal, cfs.ShowOnStartPage } into g
+                        select new CaseFieldSetting
+                        {
+                            Name = g.Key.Name,
+                            Required = g.Key.Required,
+                            ShowOnStartPage = g.Key.ShowOnStartPage,
+                            ShowExternal = g.Key.ShowExternal
+                        };
 
             return query;
         }

@@ -32,4 +32,14 @@
         public virtual CaseFieldSetting CaseFieldSetting { get; set; }
         public virtual Language Language { get; set; }
     }
+
+    public class CaseFieldSettingsList
+    {
+        public int CaseFieldSettings_Id { get; set; }
+        public int? Customer_Id { get; set; }
+        public string Name { get; set; }
+        public int ShowOnStartPage { get; set; }
+        public int ShowExternal { get; set; }
+        public int Required { get; set; }
+    }
 }

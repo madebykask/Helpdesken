@@ -117,6 +117,61 @@
             IDictionary<string, string> errors = new Dictionary<string, string>();
             this._customerService.SaveNewCustomerToGetId(customer, out errors);
 
+
+
+            //Get values from "default" customer
+            var caseFieldSettingsToCopy = this._caseFieldSettingService.GetCaseFieldSettingsForDefaultCust();
+
+
+            foreach (var cfs in caseFieldSettingsToCopy)
+            {
+                var newCustomerCaseFieldSettings = new CaseFieldSetting() { };
+
+                newCustomerCaseFieldSettings.Customer_Id = customer.Id;
+                newCustomerCaseFieldSettings.Name = cfs.Name;
+                newCustomerCaseFieldSettings.ShowOnStartPage = cfs.ShowOnStartPage;
+                newCustomerCaseFieldSettings.Required = cfs.Required;
+                newCustomerCaseFieldSettings.ShowExternal = cfs.ShowExternal;
+              
+
+                this._customerService.SaveCaseFieldSettingsForCustomerCopy(customer.Id, customer.Language_Id, newCustomerCaseFieldSettings, out errors);
+            }
+
+            //Get CaseFieldSettingLang for "Default customer"
+            var language = this._languageService.GetLanguages();
+
+            foreach (var l in language)
+            {
+                //var caseFieldSettingsLangToCopy = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(null, l.Id);
+                var caseFieldSettingsLangToCopy = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguagesForDefaultCust(null, l.Id);
+                var caseFieldSettingsForNewCustomer = this._caseFieldSettingService.GetCaseFieldSettings(customer.Id);
+
+                foreach (var cfsl in caseFieldSettingsLangToCopy)
+                {
+
+                    foreach (var cfs in caseFieldSettingsForNewCustomer)
+                    {
+                        if (cfsl.Name == cfs.Name)
+                        {
+                            var newCustomerCaseFieldSettingsLang = new CaseFieldSettingLanguage() { };
+
+                            newCustomerCaseFieldSettingsLang.CaseFieldSettings_Id = cfs.Id;
+                            newCustomerCaseFieldSettingsLang.Label = cfsl.Label;
+                            newCustomerCaseFieldSettingsLang.Language_Id = cfsl.Language_Id;
+                            newCustomerCaseFieldSettingsLang.FieldHelp = cfsl.FieldHelp;
+
+
+                            this._customerService.SaveCaseFieldSettingsLangForCustomerCopy(newCustomerCaseFieldSettingsLang, out errors);
+
+                            break;
+                        }
+
+                    }
+
+                }
+            }
+
+
             return this.RedirectToAction("edit", "customer", new { customer.Id });
         }
 

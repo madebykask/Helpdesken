@@ -14,9 +14,12 @@
         IList<CaseFieldSetting> GetAllCaseFieldSettings();
         IList<CaseFieldSetting> GetCaseFieldSettings(int customerId);
         IList<CaseFieldSettingLanguage> GetCaseFieldSettingLanguages();
-        IList<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguages(int customerId, int languageId);
+        IList<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguages(int? customerId, int languageId);
         IList<ListCases> ListToShowOnCaseSummaryPage(int? customerId, int? languageId, int? UserGroupId);
         IList<ListCases> ListToShowOnCustomerSettingSummaryPage(int? customerId, int? languageId, int? UserGroupId);
+
+        IList<CaseFieldSetting> GetCaseFieldSettingsForDefaultCust();
+        IList<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguagesForDefaultCust(int? customerId, int languageId);
 
         CaseFieldSettingLanguage GetCaseFieldSettingLanguage(int id, int languageId);
     }
@@ -52,14 +55,27 @@
             return this._caseFieldSettingRepository.GetMany(x => x.Customer_Id == customerId).ToList();
         }
 
+        public IList<CaseFieldSetting> GetCaseFieldSettingsForDefaultCust()
+        {
+            var list = this._caseFieldSettingRepository.GetAll().Where(x => x.Customer_Id == null).ToList();
+
+            return list;
+        
+        }
+
         public IList<CaseFieldSettingLanguage> GetCaseFieldSettingLanguages()
         {
             return this._caseFieldSettingLanguageRepository.GetAll().ToList();
         }
 
-        public IList<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguages(int customerId, int languageId)
+        public IList<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguages(int? customerId, int languageId)
         {
             return this._caseFieldSettingLanguageRepository.GetCaseFieldSettingsWithLanguages(customerId, languageId).ToList();
+        }
+
+        public IList<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguagesForDefaultCust(int? customerId, int languageId)
+        {
+            return this._caseFieldSettingLanguageRepository.GetCaseFieldSettingsWithLanguagesForDefaultCust(customerId, languageId).ToList();
         }
 
         public CaseFieldSettingLanguage GetCaseFieldSettingLanguage(int id, int languageId)
