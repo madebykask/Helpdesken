@@ -10,16 +10,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
     <link href="@Url.Content("~/Content/css/bootstrap.css")" rel="stylesheet">
     <link href="@Url.Content("~/Content/css/dhhelpdesk.css")" rel="stylesheet">
-    <link href="@Url.Content("~/Content/css/profile.css")" rel="stylesheet">
+    <link rel="stylesheet" href="@Url.Content("~/img-profile/profile.css")" />
 
     <script src="@Url.Content("~/Content/js/jquery-1.8.3.min.js")"></script>
     <script src="@Url.Content("~/Content/js/bootstrap.js")"></script>
     <title>@ViewBag.Title</title>
 </head>
 <body class="login">
-    <div class="container">
-
-        <form id="frmLogin" name="frmLogin" method="post" action="" class="form-signin">
+    
+<div class="form-signin">
+        <form id="frmLogin" name="frmLogin" method="post" action="">
             <div class="form-signin-heading">&nbsp;</div>
             @if (TempData["LoginFailed"] != null)
             {
@@ -29,6 +29,7 @@
             }
             Username:<br />
             <input type="text" maxlength="50" name="txtUid" id="txtUid" class="input-block-level" placeholder="Username" />
+            <br />
             Password:<br />
             <input type="password" maxlength="50" name="txtPwd" id="txtPwd" class="input-block-level" placeholder="Password" />
             <!--

@@ -2296,7 +2296,7 @@ body.login {
       }
 .form-signin {
         max-width: 300px;
-        padding: 19px 60px 29px;
+        padding: 19px 60px 29px 60px;
         margin: 0 auto 0;
         background-color: #fff;
         border: 1px solid #fff;
