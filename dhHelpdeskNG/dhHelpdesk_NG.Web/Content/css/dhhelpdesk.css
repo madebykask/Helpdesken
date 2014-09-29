@@ -1717,6 +1717,10 @@ td .btn-group {
 
 .column {
     min-height: 300px;
+    background: url(../img/dhhelpdesk-login.png);
+	background-position:0 5px;
+	background-repeat:no-repeat;
+	text-shadow: none;
 }
 .ui-sortable .portlet-placeholder {
     border:2px dashed #ccc;
