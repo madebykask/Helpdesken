@@ -6,6 +6,7 @@
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
+    using System;
 
     # region CASEFIELDSETTINGLANGUAGE
 
@@ -55,23 +56,24 @@
         }
 
         public IEnumerable<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguagesForDefaultCust(int? customerId, int? languageId)
-        {
-            
+        {            
             var query = from cfsl in this.DataContext.CaseFieldSettingLanguages
                             join cfs in this.DataContext.CaseFieldSettings on cfsl.CaseFieldSettings_Id equals cfs.Id
-                        where  (cfs.Customer_Id.GetValueOrDefault(-1) == -1) && (cfsl.Language_Id == languageId) && (cfs.ShowOnStartPage == 1)
-                        group cfsl by new { cfsl.CaseFieldSettings_Id, cfsl.Label, cfsl.Language_Id, cfsl.FieldHelp, cfs.Name } into grouped
-                        select new CaseFieldSettingsWithLanguage
-                        {                            
+                        where (cfsl.Language_Id == languageId) && (cfs.ShowOnStartPage == 1)
+                        group cfsl by new {cfs.Customer_Id, cfsl.CaseFieldSettings_Id, cfsl.Label, cfsl.Language_Id, cfsl.FieldHelp, cfs.Name } into grouped
+                        select new CustomCaseFieldSettingsWithLanguage
+                        {
+                            CustomerId = grouped.Key.Customer_Id == null ? null : grouped.Key.Customer_Id,
                             Id = grouped.Key.CaseFieldSettings_Id,
                             Label = grouped.Key.Label,
                             Language_Id = grouped.Key.Language_Id,
                             FieldHelp = grouped.Key.FieldHelp,
                             Name = grouped.Key.Name
                         };
+            var res1 = query.Select(q => new { q.Id, q.Label, q.Language_Id, q.FieldHelp, q.Name, q.CustomerId }).ToList();
+            var res2 = query.Select(q => new { q.Id, q.Label, q.Language_Id, q.FieldHelp, q.Name, q.CustomerId }).Where(q => q.CustomerId.Value == 0 ).ToList();
 
-
-            return query.OrderBy(x => x.Id);
+            return (IEnumerable<CaseFieldSettingsWithLanguage>) res2.OrderBy(x => x.Id);
         }
 
         public IEnumerable<CaseFieldSettingsForTranslation> GetCaseFieldSettingsForTranslation(int userId)

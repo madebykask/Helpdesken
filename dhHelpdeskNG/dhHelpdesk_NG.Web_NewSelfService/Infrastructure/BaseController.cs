@@ -20,9 +20,9 @@
     using System.Threading.Tasks;
     using DH.Helpdesk.NewSelfService.WebServices.Common;
     using System.Collections.Generic;
-    using DH.Helpdesk.Common.Classes.ServiceAPI.AMAPI.Output;
-
-
+    using DH.Helpdesk.Common.Classes.ServiceAPI.AMAPI.Output;    
+    using DH.Helpdesk.BusinessData.Models.Language.Output;        
+    
 
     public class BaseController : Controller
     {
@@ -63,6 +63,11 @@
 
                 // Customer changed clear sessions
                 SessionFacade.CurrentCoWorkers = null;
+            }
+
+            if (SessionFacade.AllLanguages == null)
+            {
+                SessionFacade.AllLanguages = GetActiveLanguages();
             }
 
             if(SessionFacade.CurrentCustomer == null)
@@ -160,7 +165,7 @@
 
                     if(SessionFacade.CurrentCustomer != null)
                     {
-                        var config = (ECT.FormLib.Configurable.AccessManagment)System.Configuration.ConfigurationManager.GetSection("formLibConfigurable/accessManagment");
+                        var config = (ECT.FormLib.Configurable.AccessManagment) System.Configuration.ConfigurationManager.GetSection("formLibConfigurable/accessManagment");
                         var country = config.Countries.Where(x => x.HelpdeskCustomerId == SessionFacade.CurrentCustomer.Id.ToString()).FirstOrDefault();
 
                         if(country != null && !userIdentity.EmployeeNumber.StartsWith(country.EmployeePrefix))
@@ -204,12 +209,38 @@
             this.SetTextTranslation(filterContext);
 
         }
-
-        //[HttpPost]
-        public ActionResult ChangeLanguage(int languageId)
+                
+        public ActionResult ChangeLanguage(string language, string currentUrl, string lastParams)
         {
-            SessionFacade.CurrentLanguageId = languageId;
-            return this.Json(languageId, JsonRequestBehavior.AllowGet);
+            if (SessionFacade.AllLanguages != null)
+            {
+                List<LanguageOverview> allLang = SessionFacade.AllLanguages.ToList();
+                var lId = allLang.Where(a => a.LanguageId == language).Select(a => a.Id).SingleOrDefault();
+                SessionFacade.CurrentLanguageId = lId;
+            }
+
+            
+            
+            currentUrl += "?language=" + language;
+
+            var allParam = lastParams.Split('&');
+            foreach (var param in allParam)
+            {
+                if ((!string.IsNullOrEmpty(param)) &&  (!param.ToLower().Contains("language=")) )
+                    currentUrl += "&" + param;
+            }
+
+            return Redirect(currentUrl);            
+        }
+
+        private List<LanguageOverview> GetActiveLanguages()
+        {
+            var activeLangs = _masterDataService.GetLanguages()
+                                        .Where(l => l.IsActive == 1)
+                                        .Select(la => new LanguageOverview { Id = la.Id, IsActive = la.IsActive.convertIntToBool(), LanguageId = la.LanguageID, Name = la.Name })
+                                        .OrderBy(l => l.Name)
+                                        .ToList();
+            return activeLangs;
         }
 
         protected override void OnActionExecuted(ActionExecutedContext filterContext) //called after a controller action is executed, that is after ~/UserController/index 

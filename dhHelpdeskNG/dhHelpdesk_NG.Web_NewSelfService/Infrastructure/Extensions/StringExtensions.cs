@@ -223,7 +223,11 @@
                 if (SessionFacade.CurrentSystemUser != null) strUrl = strUrl.Replace("[userid]", SessionFacade.CurrentSystemUser);
 
             if (strUrl.IndexOf("[language]") > 0)
-                if (SessionFacade.CurrentLanguageId > 0) strUrl = strUrl.Replace("[language]", SessionFacade.CurrentLanguageId.ToString());
+                if (SessionFacade.CurrentLanguageId > 0)
+                {                    
+                    var langId = SessionFacade.AllLanguages.Where(a => a.Id == SessionFacade.CurrentLanguageId).Select(a => a.LanguageId).SingleOrDefault();                                        
+                    strUrl = strUrl.Replace("[language]", langId);
+                }
 
             if (strUrl.IndexOf("[customerid]") > 0)
                 if (SessionFacade.CurrentCustomer != null) strUrl = strUrl.Replace("[customerid]", SessionFacade.CurrentCustomer.Id.ToString());                                    

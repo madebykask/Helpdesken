@@ -12,6 +12,7 @@
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.BusinessData.Models.CoWorkers;
     using DH.Helpdesk.Common.Classes.ServiceAPI.AMAPI.Output;
+    using DH.Helpdesk.BusinessData.Models.Language.Output;    
     
     public static class SessionFacade
     {
@@ -38,6 +39,7 @@
         private const string _CURRENT_USER_IDENTITY = "CURRENT_USER_IDENTITY";
         private const string _CURRENT_COWORKERS = "CURRENT_COWORKERS";
         private const string _USER_HAS_ACCESS = "USER_HAS_ACCESS";
+        private const string _ALL_LANGUAGES = "ALL_LANGUAGES";
 
         public static int CurrentCustomerID
         {
@@ -121,6 +123,23 @@
                     HttpContext.Current.Session.Add(_CURRENT_COWORKERS, value);
                 else
                     HttpContext.Current.Session[_CURRENT_COWORKERS] = value;
+            }
+        }
+
+        public static List<LanguageOverview> AllLanguages
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_ALL_LANGUAGES] == null)
+                    return null;
+                return (List<LanguageOverview>)HttpContext.Current.Session[_ALL_LANGUAGES];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_ALL_LANGUAGES] == null)
+                    HttpContext.Current.Session.Add(_ALL_LANGUAGES, value);
+                else
+                    HttpContext.Current.Session[_ALL_LANGUAGES] = value;
             }
         }
 
