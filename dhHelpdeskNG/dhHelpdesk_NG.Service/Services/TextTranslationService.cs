@@ -59,7 +59,7 @@
         public IEnumerable<Text> GetAllTexts(int texttypeId)
         {
             return this._textRepository.GetAll().Where(x => x.Id > 4999 && x.Type == texttypeId).OrderBy(x => x.TextToTranslate);
-        }
+        }       
 
         public IList<TextTranslation> GetAllTextTranslations()
         {
@@ -210,6 +210,7 @@
 
             text.ChangedDate = DateTime.Now;
             text.CreatedDate = DateTime.Now;
+            
             text.Id = this._textRepository.GetNextId() + 1;
 
             if (text.Id < 5000)

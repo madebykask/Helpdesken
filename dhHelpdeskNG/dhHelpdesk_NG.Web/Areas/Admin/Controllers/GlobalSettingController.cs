@@ -287,6 +287,7 @@
                 text = new Text() { };
 
             text.Type = vmodel.TextType.Id;
+            text.ChangedByUser_Id = SessionFacade.CurrentUser.Id;
 
             this._textTranslationService.SaveNewText(text, out errors);
 

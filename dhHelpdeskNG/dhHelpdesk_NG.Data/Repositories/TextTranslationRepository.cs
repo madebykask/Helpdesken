@@ -34,6 +34,7 @@ namespace DH.Helpdesk.Dal.Repositories
         {
             return this.DataContext.Texts.Include("TextTranslations");
         }
+
     }
 
     #endregion

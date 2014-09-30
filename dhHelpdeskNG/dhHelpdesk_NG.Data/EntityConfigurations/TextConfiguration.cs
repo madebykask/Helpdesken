@@ -20,6 +20,7 @@
             this.Property(x => x.Type).IsRequired().HasColumnName("TextType");
             this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+            this.Property(x => x.ChangedByUser_Id).IsOptional();
             //this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             this.ToTable("tbltext");

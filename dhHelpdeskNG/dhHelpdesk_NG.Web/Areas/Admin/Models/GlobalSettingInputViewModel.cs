@@ -27,8 +27,6 @@
         public IList<SelectListItem> WatchDateCalendars { get; set; }
         public HolidayHeader HolidayHeader { get; set; }
 
-       
-
     }
 
     public class GlobalSettingInputViewModel : BaseTabInputViewModel

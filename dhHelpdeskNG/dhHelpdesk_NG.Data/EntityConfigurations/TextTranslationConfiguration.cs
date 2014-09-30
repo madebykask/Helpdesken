@@ -16,6 +16,9 @@
             this.Property(x => x.Language_Id).IsRequired();
             this.Property(x => x.Text_Id).IsRequired();
             this.Property(x => x.TextTranslation_Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity).HasColumnName("Id");
+            this.Property(x => x.ChangedByUser_Id).IsOptional();
+            this.Property(x => x.ChangedDate).IsOptional();
+            this.Property(x => x.CreatedDate).IsOptional();
 
             this.ToTable("tbltexttranslation");
         }
