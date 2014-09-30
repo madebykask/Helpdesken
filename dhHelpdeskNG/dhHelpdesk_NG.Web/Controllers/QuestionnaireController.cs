@@ -521,12 +521,12 @@ namespace DH.Helpdesk.Web.Controllers
                 );
 
             var lst = new List<SelectListItem>();
-            lst.Add(new SelectListItem { Text = "5", Value = "1" });
-            lst.Add(new SelectListItem { Text = "10", Value = "2" });
-            lst.Add(new SelectListItem { Text = "20", Value = "3" });
-            lst.Add(new SelectListItem { Text = "25", Value = "4" });
-            lst.Add(new SelectListItem { Text = "50", Value = "5" });
-            lst.Add(new SelectListItem { Text = "100", Value = "6" });
+            lst.Add(new SelectListItem { Text = "5", Value = "5" });
+            lst.Add(new SelectListItem { Text = "10", Value = "10" });
+            lst.Add(new SelectListItem { Text = "20", Value = "20" });
+            lst.Add(new SelectListItem { Text = "25", Value = "25" });
+            lst.Add(new SelectListItem { Text = "50", Value = "50" });
+            lst.Add(new SelectListItem { Text = "100", Value = "100" });
             model.Procent = lst;
 
             model.ModelMode = 0;

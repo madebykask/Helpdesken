@@ -142,7 +142,8 @@
                     query = query.Where(x => x.FinishingDate <= finishingDateTo);
                 }
 
-                int percentageOfCases = caseRepository.GetAll().GetAvaliableCustomerCases(customerId).Count() / procent;
+                int count = caseRepository.GetAll().GetAvaliableCustomerCases(customerId).Count();
+                int percentageOfCases = (count * procent) / 100;
 
                 query = query.Take(percentageOfCases);
 
