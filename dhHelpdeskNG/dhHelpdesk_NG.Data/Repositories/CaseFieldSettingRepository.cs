@@ -70,10 +70,19 @@
                             FieldHelp = grouped.Key.FieldHelp,
                             Name = grouped.Key.Name
                         };
-            var res1 = query.Select(q => new { q.Id, q.Label, q.Language_Id, q.FieldHelp, q.Name, q.CustomerId }).ToList();
-            var res2 = query.Select(q => new { q.Id, q.Label, q.Language_Id, q.FieldHelp, q.Name, q.CustomerId }).Where(q => q.CustomerId.Value == 0 ).ToList();
 
-            return (IEnumerable<CaseFieldSettingsWithLanguage>) res2.OrderBy(x => x.Id);
+            var res1 = query.Select(q => new { q.Id, q.Label, q.Language_Id, q.FieldHelp, q.Name, q.CustomerId }).ToList();
+            var res2 = res1.Where(q => (int?)q.CustomerId == null)
+                           .Select(q => new CaseFieldSettingsWithLanguage 
+                              { Id = q.Id, 
+                                Label = q.Label, 
+                                Language_Id = q.Language_Id, 
+                                FieldHelp = q.FieldHelp, 
+                                Name = q.Name
+                              })
+                           .OrderBy(x => x.Id)
+                           .ToList();
+            return res2;
         }
 
         public IEnumerable<CaseFieldSettingsForTranslation> GetCaseFieldSettingsForTranslation(int userId)
