@@ -94,6 +94,7 @@
     <Compile Include="BusinessLogic\MailTools\EmailMarkValues.cs" />
     <Compile Include="BusinessLogic\OtherTools\ITemporaryIdProvider.cs" />
     <Compile Include="BusinessLogic\Specifications\GlobalSpecifications.cs" />
+    <Compile Include="BusinessLogic\Specifications\Questionnaire\CircularSpecifications.cs" />
     <Compile Include="DisplayValues\Changes\ContactsListDisplayValue.cs" />
     <Compile Include="DisplayValues\Changes\ItemOverviewListDisplayValue.cs" />
     <Compile Include="DisplayValues\Changes\StepStatusDisplayValue.cs" />
@@ -130,6 +131,7 @@
     <Compile Include="Localization\CultureTranslations.cs" />
     <Compile Include="Infrastructure\ManualDependencyResolver.cs" />
     <Compile Include="Localization\Translator.cs" />
+    <Compile Include="BusinessLogic\Mappers\Questionnaire\CircularMappers.cs" />
     <Compile Include="Requests\Cases\CaseSettingsSolutionAggregate.cs" />
     <Compile Include="Requests\Changes\NewChangeRequest.cs" />
     <Compile Include="Requests\Changes\UpdateChangeRequest.cs" />

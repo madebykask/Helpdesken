@@ -10,6 +10,8 @@
 
         void Update(TEntity entity);
 
+        void DeleteById(int id);
+
         TEntity GetById(long id);
 
         IQueryable<TEntity> GetAll();

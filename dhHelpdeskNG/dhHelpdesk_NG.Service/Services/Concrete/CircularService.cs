@@ -9,7 +9,10 @@
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories.Questionnaire;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Questionnaire;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Questionnaire;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
 
     public class CircularService : ICircularService
     {
@@ -33,21 +36,33 @@
 
         #region Public Methods and Operators
 
+        public EditCircular GetCircularById(int circularId)
+        {
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var questionnaireRepository = uof.GetRepository<QuestionnaireCircularEntity>();
+
+                EditCircular entity = questionnaireRepository.GetAll().MapToEditModelById(circularId);
+                return entity;
+            }
+        }
 
         public List<CircularOverview> FindCircularOverviews(int questionnaireId)
         {
-            return this.circularRepository.FindCircularOverviews(questionnaireId);
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var questionnaireRepository = uof.GetRepository<QuestionnaireCircularEntity>();
+                List<CircularOverview> overviews =
+                    questionnaireRepository.GetAll().MapToOverviewsByQuestionnaireId(questionnaireId);
+
+                return overviews;
+            }
         }
 
         public void AddCircular(NewCircular newCircular)
         {
             this.circularRepository.AddCircular(newCircular);
             this.circularRepository.Commit();
-        }
-
-        public EditCircular GetCircularById(int circularId)
-        {
-            return this.circularRepository.GetCircularById(circularId);
         }
 
         public void UpdateCircular(EditCircular editedCircular)
@@ -58,8 +73,12 @@
 
         public void DeleteCircularById(int deletedCircularId)
         {
-            this.circularRepository.DeleteCircularById(deletedCircularId);
-            this.circularRepository.Commit();
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var questionnaireRepository = uof.GetRepository<QuestionnaireCircularEntity>();
+                questionnaireRepository.DeleteById(deletedCircularId);
+                uof.Save();
+            }
         }
 
         public List<CircularPart> GetCases(
@@ -72,20 +91,12 @@
             DateTime? finishingDateFrom,
             DateTime? finishingDateTo)
         {
-            const int MinEmailLength = 3;
-            const int IsDeleted = 0;
-
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
-                var caseRepo = uof.GetRepository<Case>();
-                var userRepo = uof.GetRepository<User>();
+                var caseRepository = uof.GetRepository<Case>();
+                var userRepository = uof.GetRepository<User>();
 
-                IQueryable<Case> query =
-                    caseRepo.GetAll()
-                        .GetUsersByCustomer(customerId)
-                        .Where(
-                            c =>
-                            c.Deleted == IsDeleted && c.FinishingDate != null && c.PersonsEmail.Length > MinEmailLength);
+                IQueryable<Case> query = caseRepository.GetAll().GetAvaliableCustomerCases(customerId);
 
                 if (selectedDepartments != null && selectedDepartments.Any())
                 {
@@ -110,7 +121,7 @@
                 if (selectedWorkingGroups != null && selectedWorkingGroups.Any())
                 {
                     IQueryable<int> userIds =
-                        userRepo.GetAll()
+                        userRepository.GetAll()
                             .GetUsersByCustomer(customerId)
                             .Where(
                                 u =>
@@ -131,7 +142,7 @@
                     query = query.Where(x => x.FinishingDate <= finishingDateTo);
                 }
 
-                int percentageOfCases = caseRepo.GetAll().Count() / procent;
+                int percentageOfCases = caseRepository.GetAll().GetAvaliableCustomerCases(customerId).Count() / procent;
 
                 query = query.Take(percentageOfCases);
 
@@ -143,6 +154,7 @@
                 return businessModels;
             }
         }
+
         #endregion
     }
 }

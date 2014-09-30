@@ -16,7 +16,7 @@
             this.dbset = context.Set<TEntity>();
         }
 
-        public void Add(TEntity entity)
+        public virtual void Add(TEntity entity)
         {
             this.dbset.Add(entity);
         }
@@ -26,6 +26,12 @@
             var entry = this.context.Entry(entity);
             this.dbset.Attach(entity);
             entry.State = EntityState.Modified;
+        }
+
+        public virtual void DeleteById(int id)
+        {
+            var entity = this.dbset.Find(id);
+            this.dbset.Remove(entity);
         }
 
         public IQueryable<TEntity> GetAll()
