@@ -88,6 +88,7 @@
     <Compile Include="BusinessLogic\BusinessModelValidators\Inventory\IServerValidator.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Inventory\Concrete\ServerValidator.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Inventory\Concrete\PrinterValidator.cs" />
+    <Compile Include="BusinessLogic\Case\CaseSpecifications.cs" />
     <Compile Include="BusinessLogic\Invoice\ArticlesImportData.cs" />
     <Compile Include="BusinessLogic\Invoice\IInvoiceImporter.cs" />
     <Compile Include="BusinessLogic\Invoice\IkeaExcelImporter.cs" />
