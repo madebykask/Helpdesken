@@ -1,0 +1,9 @@
+﻿namespace DH.Helpdesk.Web.Areas.Licenses.Infrastructure.ModelFactories
+{
+    using DH.Helpdesk.Web.Areas.Licenses.Models.Products;
+
+    public interface IProductsModelFactory
+    {
+        ProductsIndexModel GetIndexModel(); 
+    }
+}
