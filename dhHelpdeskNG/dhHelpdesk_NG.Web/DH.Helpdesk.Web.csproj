@@ -318,6 +318,12 @@
     <Compile Include="Areas\Admin\Models\WorkingGroupInputViewModel.cs" />
     <Content Include="Content\icons\ajax-loader.gif" />
     <Content Include="Content\js\Changes\inventoryDialog.js" />
+    <Compile Include="Areas\Licenses\Controllers\ApplicationsController.cs" />
+    <Compile Include="Areas\Licenses\Controllers\LicensesController.cs" />
+    <Compile Include="Areas\Licenses\Controllers\ManufacturersController.cs" />
+    <Compile Include="Areas\Licenses\Controllers\VendorsController.cs" />
+    <Compile Include="Areas\Licenses\LicensesAreaRegistration.cs" />
+    <Compile Include="Areas\Licenses\Models\Products\ProductsIndexModel.cs" />
     <Compile Include="Controllers\AboutController.cs" />
     <Compile Include="Controllers\AjaxController.cs" />
     <Compile Include="Controllers\BulletinBoardController.cs" />
@@ -331,6 +337,7 @@
     <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\InventorySettingsController.cs" />
     <Compile Include="Controllers\InvoiceController.cs" />
+    <Compile Include="Areas\Licenses\Controllers\ProductsController.cs" />
     <Compile Include="Controllers\NotifiersController.cs" />
     <Compile Include="Controllers\OperationLogController.cs" />
     <Compile Include="Areas\Admin\Controllers\CustomerController.cs" />
@@ -1147,6 +1154,9 @@
     <Content Include="Areas\Admin\Views\CaseInvoice\EditorTemplates\ArticlesImportModel.cshtml" />
     <Content Include="Areas\Admin\Views\CaseInvoice\EditorTemplates\CaseInvoiceSettings.cshtml" />
     <Content Include="Areas\Admin\Views\GlobalSetting\_WatchDateCalendar.cshtml" />
+    <Content Include="Areas\Licenses\Views\Web.config" />
+    <Content Include="Areas\Licenses\Views\Products\Index.cshtml" />
+    <Content Include="Areas\Licenses\Views\_ViewStart.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />
@@ -2285,6 +2295,7 @@
     <Content Include="Areas\Admin\Views\Users\_Appearance.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Areas\Licenses\Views\Shared\" />
     <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
   </ItemGroup>
   <ItemGroup>

@@ -241,6 +241,11 @@
     <Compile Include="Models\Invoice\CaseInvoiceSettings.cs" />
     <Compile Include="Models\Invoice\InvoiceArticle.cs" />
     <Compile Include="Models\Invoice\InvoiceArticleUnit.cs" />
+    <Compile Include="Models\Licenses\ApplicationOverview.cs" />
+    <Compile Include="Models\Licenses\LicenseOverview.cs" />
+    <Compile Include="Models\Licenses\ManufacturerOverview.cs" />
+    <Compile Include="Models\Licenses\ProductOverview.cs" />
+    <Compile Include="Models\Licenses\VendorOverview.cs" />
     <Compile Include="Models\Operation\OperationObject.cs" />
     <Compile Include="Models\Operation\OperationObjectForInsert.cs" />
     <Compile Include="Models\Operation\OperationObjectForUpdate.cs" />

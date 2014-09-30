@@ -187,6 +187,11 @@
     <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\BusinessItem.cs" />
     <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\ExcelTableHeader.cs" />
     <Compile Include="Services\Concrete\ActionSettingService.cs" />
+    <Compile Include="Services\Concrete\Licenses\ApplicationsService.cs" />
+    <Compile Include="Services\Concrete\Licenses\LicensesService.cs" />
+    <Compile Include="Services\Concrete\Licenses\ManufacturersService.cs" />
+    <Compile Include="Services\Concrete\Licenses\ProductsService.cs" />
+    <Compile Include="Services\Concrete\Licenses\VendorsService.cs" />
     <Compile Include="Services\Concrete\SSOService.cs" />
     <Compile Include="Services\Concrete\InvoiceArticleService.cs" />
     <Compile Include="Services\Concrete\IOrganizationService.cs" />
@@ -233,6 +238,11 @@
     <Compile Include="Services\IQestionnaireService.cs" />
     <Compile Include="Services\IReportsService.cs" />
     <Compile Include="Services\IStatisticsService.cs" />
+    <Compile Include="Services\Licenses\IApplicationsService.cs" />
+    <Compile Include="Services\Licenses\ILicensesService.cs" />
+    <Compile Include="Services\Licenses\IManufacturersService.cs" />
+    <Compile Include="Services\Licenses\IProductsService.cs" />
+    <Compile Include="Services\Licenses\IVendorsService.cs" />
     <Compile Include="Services\LogFileService.cs" />
     <Compile Include="Services\OperationLogService.cs" />
     <Compile Include="Services\CountryService.cs" />

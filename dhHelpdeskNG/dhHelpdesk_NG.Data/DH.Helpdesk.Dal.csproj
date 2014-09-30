@@ -86,6 +86,11 @@
     <Compile Include="EntityConfigurations\Invoice\CaseInvoiceSettingsConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\InvoiceArticleConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\InvoiceArticleUnitConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Licenses\ApplicationConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Licenses\LicenseConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Licenses\ManufacturerConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Licenses\ProductConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Licenses\VendorConfiguration.cs" />
     <Compile Include="EntityConfigurations\MailTemplates\MailTemplateLanguageConfiguration.cs" />
     <Compile Include="EntityConfigurations\OperationLogEmailLogConfiguration.cs" />
     <Compile Include="EntityConfigurations\SSO\SSOLogConfiguration.cs" />
@@ -413,7 +418,6 @@
     <Compile Include="Infrastructure\UnitOfWork.cs" />
     <Compile Include="EntityConfigurations\AccountActivityConfiguration.cs" />
     <Compile Include="EntityConfigurations\AccountConfiguration.cs" />
-    <Compile Include="EntityConfigurations\ApplicationConfiguration.cs" />
     <Compile Include="EntityConfigurations\BuildingConfiguration.cs" />
     <Compile Include="EntityConfigurations\BulletinBoardConfiguration.cs" />
     <Compile Include="EntityConfigurations\CalendarConfiguration.cs" />

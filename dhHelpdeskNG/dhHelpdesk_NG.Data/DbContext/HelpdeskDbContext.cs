@@ -12,6 +12,7 @@
     using DH.Helpdesk.Dal.EntityConfigurations.Faq;
     using DH.Helpdesk.Dal.EntityConfigurations.Inventory;
     using DH.Helpdesk.Dal.EntityConfigurations.Invoice;
+    using DH.Helpdesk.Dal.EntityConfigurations.Licenses;
     using DH.Helpdesk.Dal.EntityConfigurations.MailTemplates;
     using DH.Helpdesk.Dal.EntityConfigurations.Printers;
     using DH.Helpdesk.Dal.EntityConfigurations.Problems;
@@ -532,7 +533,6 @@
             modelBuilder.Configurations.Add(new AccountActivityGroupConfiguration());
             modelBuilder.Configurations.Add(new AccountFieldSettingsConfiguration());
             modelBuilder.Configurations.Add(new ActionSettingConfiguration());
-            modelBuilder.Configurations.Add(new ApplicationConfiguration());
             modelBuilder.Configurations.Add(new BuildingConfiguration());
             modelBuilder.Configurations.Add(new BulletinBoardConfiguration());
             modelBuilder.Configurations.Add(new CalendarConfiguration());
@@ -706,6 +706,13 @@
             modelBuilder.Configurations.Add(new TextTypeConfiguration());
             modelBuilder.Configurations.Add(new CaseInvoiceConfiguration());
             modelBuilder.Configurations.Add(new CaseInvoiceSettingsConfiguration());
+
+            // Licenses module configurations
+            modelBuilder.Configurations.Add(new ProductConfiguration());
+            modelBuilder.Configurations.Add(new LicenseConfiguration());
+            modelBuilder.Configurations.Add(new VendorConfiguration());
+            modelBuilder.Configurations.Add(new ManufacturerConfiguration());
+            modelBuilder.Configurations.Add(new DH.Helpdesk.Dal.EntityConfigurations.Licenses.ApplicationConfiguration());
 
             #endregion
 
