@@ -26,6 +26,8 @@ namespace DH.Helpdesk.BusinessData.Models.Questionnaire.Input
         public string Caption { get; set; }
 
         public string Email { get; set; }
+
+        public bool IsSent { get; set; }
     } 
 
     public sealed class NewCircular:INewBusinessModel
