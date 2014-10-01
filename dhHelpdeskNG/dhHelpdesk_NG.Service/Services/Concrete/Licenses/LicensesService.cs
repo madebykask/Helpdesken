@@ -2,6 +2,9 @@
 {
     using DH.Helpdesk.BusinessData.Models.Licenses;
     using DH.Helpdesk.Dal.NewInfrastructure;
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Licenses;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications.Licenses;
     using DH.Helpdesk.Services.Services.Licenses;
 
     public class LicensesService : ILicensesService
@@ -15,7 +18,16 @@
 
         public LicenseOverview[] GetLicenses(int customerId)
         {
-            throw new System.NotImplementedException();
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var licenseRepository = uow.GetRepository<License>();
+
+                var overviews = licenseRepository.GetAll()
+                                .GetCustomerLicenses(customerId)
+                                .MapToOverviews();
+
+                return overviews;
+            }
         }
     }
 }

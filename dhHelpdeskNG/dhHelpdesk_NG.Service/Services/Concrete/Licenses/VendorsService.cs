@@ -2,6 +2,9 @@
 {
     using DH.Helpdesk.BusinessData.Models.Licenses;
     using DH.Helpdesk.Dal.NewInfrastructure;
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Licenses;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications;
     using DH.Helpdesk.Services.Services.Licenses;
 
     public class VendorsService : IVendorsService
@@ -15,7 +18,16 @@
 
         public VendorOverview[] GetVendors(int customerId)
         {
-            throw new System.NotImplementedException();
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var vendorRepository = uow.GetRepository<Vendor>();
+
+                var overviews = vendorRepository.GetAll()
+                                .GetUsersByCustomer(customerId)
+                                .MapToOverviews();
+
+                return overviews;
+            }
         }
     }
 }

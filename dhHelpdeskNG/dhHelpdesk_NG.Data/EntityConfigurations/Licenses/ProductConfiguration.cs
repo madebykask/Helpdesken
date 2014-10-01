@@ -23,6 +23,18 @@
                 .WithMany()
                 .HasForeignKey(p => p.Manufacturer_Id);
 
+            this.HasMany(p => p.Licenses)
+                .WithRequired(l => l.Product);
+
+            this.HasMany(p => p.Applications)
+                .WithMany(a => a.Products)
+                .Map(m =>
+                        {
+                            m.MapLeftKey("Product_Id");
+                            m.MapRightKey("Application_Id");
+                            m.ToTable("tblProduct_tblApplication");
+                        });
+
             this.ToTable("tblProduct");       
         }
     }

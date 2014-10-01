@@ -2,6 +2,9 @@
 {
     using DH.Helpdesk.BusinessData.Models.Licenses;
     using DH.Helpdesk.Dal.NewInfrastructure;
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Licenses;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications.Licenses;
     using DH.Helpdesk.Services.Services.Licenses;
 
     public class ApplicationsService : IApplicationsService
@@ -15,7 +18,16 @@
 
         public ApplicationOverview[] GetApplications(int customerId, bool onlyConnected)
         {
-            throw new System.NotImplementedException();
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var applicationRepository = uow.GetRepository<Application>();
+
+                var overviews = applicationRepository.GetAll()
+                                .GetOnlyConnectedCustomerApplications(customerId, onlyConnected)
+                                .MapToOverviews();
+
+                return overviews;
+            }
         }
     }
 }

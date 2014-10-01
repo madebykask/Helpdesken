@@ -88,6 +88,11 @@
     <Compile Include="BusinessLogic\BusinessModelValidators\Inventory\IServerValidator.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Inventory\Concrete\ServerValidator.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Inventory\Concrete\PrinterValidator.cs" />
+    <Compile Include="BusinessLogic\Mappers\Licenses\ApplicationMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Licenses\LicenseMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Licenses\ManufacturerMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Licenses\ProductMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Licenses\VendorMapper.cs" />
     <Compile Include="BusinessLogic\Specifications\Case\CaseSpecifications.cs" />
     <Compile Include="BusinessLogic\Invoice\ArticlesImportData.cs" />
     <Compile Include="BusinessLogic\Invoice\IInvoiceImporter.cs" />
@@ -95,6 +100,9 @@
     <Compile Include="BusinessLogic\MailTools\EmailMarkValues.cs" />
     <Compile Include="BusinessLogic\OtherTools\ITemporaryIdProvider.cs" />
     <Compile Include="BusinessLogic\Specifications\GlobalSpecifications.cs" />
+    <Compile Include="BusinessLogic\Specifications\Licenses\ApplicationSpecifications.cs" />
+    <Compile Include="BusinessLogic\Specifications\Licenses\LicenseSpecifications.cs" />
+    <Compile Include="BusinessLogic\Specifications\Licenses\ProductSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Questionnaire\CircularSpecifications.cs" />
     <Compile Include="DisplayValues\Changes\ContactsListDisplayValue.cs" />
     <Compile Include="DisplayValues\Changes\ItemOverviewListDisplayValue.cs" />

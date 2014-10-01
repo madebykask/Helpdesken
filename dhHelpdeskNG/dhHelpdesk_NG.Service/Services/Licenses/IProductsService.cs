@@ -6,7 +6,7 @@
     {
         ProductOverview[] GetProducts(
                                 int customerId,
-                                int? regionId,
-                                int? departmentId);
+                                int[] regions,
+                                int[] departments);
     }
 }
