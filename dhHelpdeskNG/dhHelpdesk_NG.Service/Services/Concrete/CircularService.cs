@@ -122,14 +122,14 @@
                 {
                     IQueryable<int> userIds =
                         userRepository.GetAll()
-                            .GetUsersByCustomer(customerId)
+                            .GetByCustomer(customerId)
                             .Where(
                                 u =>
                                 u.Default_WorkingGroup_Id != null
                                 && selectedWorkingGroups.ToList().Contains(u.Default_WorkingGroup_Id.Value))
                             .Select(u => u.Id);
 
-                    query = query.Where(c => userIds.ToList().Contains(c.Performer_User_Id));
+                    query = query.Where(c => userIds.Contains(c.Performer_User_Id));
                 }
 
                 if (finishingDateFrom.HasValue)

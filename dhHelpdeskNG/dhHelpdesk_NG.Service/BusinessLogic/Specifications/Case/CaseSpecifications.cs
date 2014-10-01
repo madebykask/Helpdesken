@@ -20,7 +20,7 @@
 
         public static IQueryable<Case> GetAvaliableCustomerCases(this IQueryable<Case> query, int customerId)
         {
-            query = query.GetUsersByCustomer(customerId).GetAvaliableCases();
+            query = query.GetByCustomer(customerId).GetAvaliableCases();
 
             return query;
         }

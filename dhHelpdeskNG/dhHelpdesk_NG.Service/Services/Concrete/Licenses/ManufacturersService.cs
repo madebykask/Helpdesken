@@ -23,7 +23,7 @@
                 var manufacturerRepository = uow.GetRepository<Manufacturer>();
 
                 var overviews = manufacturerRepository.GetAll()
-                                .GetUsersByCustomer(customerId)
+                                .GetByCustomer(customerId)
                                 .MapToOverviews();
 
                 return overviews;

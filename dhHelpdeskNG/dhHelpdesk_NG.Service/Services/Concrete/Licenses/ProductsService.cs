@@ -24,7 +24,7 @@
                 var productsRepository = uow.GetRepository<Product>();
 
                 var overviews = productsRepository.GetAll()
-                                .GetUsersByCustomer(customerId)
+                                .GetByCustomer(customerId)
                                 .GetRegionsProducts(regions)
                                 .GetDepartmentsProducts(departments)
                                 .MapToOverviews();

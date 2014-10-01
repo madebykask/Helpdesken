@@ -23,7 +23,7 @@
                 var vendorRepository = uow.GetRepository<Vendor>();
 
                 var overviews = vendorRepository.GetAll()
-                                .GetUsersByCustomer(customerId)
+                                .GetByCustomer(customerId)
                                 .MapToOverviews();
 
                 return overviews;

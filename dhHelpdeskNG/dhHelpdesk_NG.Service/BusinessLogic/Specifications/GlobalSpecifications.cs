@@ -6,7 +6,7 @@
 
     public static class GlobalSpecifications
     {
-        public static IQueryable<T> GetUsersByCustomer<T>(this IQueryable<T> query, int customerId)
+        public static IQueryable<T> GetByCustomer<T>(this IQueryable<T> query, int customerId)
             where T : class, ICustomerEntity
         {
             query = query.Where(x => x.Customer_Id == customerId);

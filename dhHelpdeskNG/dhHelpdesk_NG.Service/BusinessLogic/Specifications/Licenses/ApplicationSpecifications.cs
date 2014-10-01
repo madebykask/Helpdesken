@@ -24,7 +24,7 @@
                                         bool onlyConnected)
         {
             query = query
-                .GetUsersByCustomer(customerId)
+                .GetByCustomer(customerId)
                 .GetOnlyConnectedApplications(onlyConnected);
 
             return query;
