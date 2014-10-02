@@ -143,7 +143,7 @@
             foreach (var l in language)
             {
                 //var caseFieldSettingsLangToCopy = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(null, l.Id);
-                var caseFieldSettingsLangToCopy = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguagesForDefaultCust(null, l.Id);
+                var caseFieldSettingsLangToCopy = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguagesForDefaultCust(l.Id);
                 var caseFieldSettingsForNewCustomer = this._caseFieldSettingService.GetCaseFieldSettings(customer.Id);
 
                 foreach (var cfsl in caseFieldSettingsLangToCopy)
@@ -171,6 +171,85 @@
                 }
             }
 
+            // Get ComputerUserFieldSettings
+            var computerUserFieldSettingsToCopy = this._computerService.GetComputerUserFieldSettingsForDefaultCust();
+
+            foreach (var cufs in computerUserFieldSettingsToCopy)
+            {
+                var newCustomerComputerUserFS = new ComputerUserFieldSettings() { };
+
+                newCustomerComputerUserFS.Customer_Id = customer.Id;
+                newCustomerComputerUserFS.ComputerUserField = cufs.ComputerUserField;
+                newCustomerComputerUserFS.Show = cufs.Show;
+                newCustomerComputerUserFS.Required = cufs.Required;
+                newCustomerComputerUserFS.MinLength = cufs.MinLength;
+                newCustomerComputerUserFS.ShowInList = cufs.ShowInList;
+                newCustomerComputerUserFS.LDAPAttribute = cufs.LDAPAttribute;
+
+                this._computerService.SaveComputerUserFieldSettingForCustomerCopy(newCustomerComputerUserFS, out errors);
+            }
+
+            //ComputerUserFieldSettingsLanguage
+
+            foreach (var l in language)
+            {
+                //var computerUserFieldSettingsLangToCopy = this._computerService.GetComputerUserFieldSettingsWithLanguages(customerToCopy.Id, l.Id);
+                var computerUserFieldSettingsLangToCopy = this._computerService.GetComputerUserFieldSettingsWithLanguagesForDefaultCust(l.Id);
+                var computerUserFieldSettingsForNewCustomer = this._computerService.GetComputerUserFieldSettings(customer.Id);
+
+                if (computerUserFieldSettingsLangToCopy != null)
+                {
+
+                    foreach (var cfsl in computerUserFieldSettingsLangToCopy)
+                    {
+
+                        foreach (var cfs in computerUserFieldSettingsForNewCustomer)
+                        {
+                            if (cfsl.Label == cfs.ComputerUserField)
+                            {
+                                var newComputerUserFSL = new ComputerUserFieldSettingsLanguage
+                                {
+                                    ComputerUserFieldSettings_Id = cfs.Id,
+                                    Language_Id = cfsl.Language_Id,
+                                    Label = cfsl.Label,
+                                    FieldHelp = cfsl.FieldHelp,
+                                };
+
+                                this._computerService.SaveComputerUserFieldSettingLangForCustomerCopy(newComputerUserFSL, out errors);
+
+                                break;
+                            }
+
+                        }
+
+                    }
+
+
+
+
+
+
+                    //foreach (var cfsltc in computerUserFieldSettingsLangToCopy)
+                    //{
+
+                    //    foreach (var cfsln in computerUserFieldSettingsForNewCustomer)
+                    //    {
+
+                    //        var newComputerUserFSL = new ComputerUserFieldSettingsLanguage
+                    //        {
+                    //            ComputerUserFieldSettings_Id = cfsln.Id,
+                    //            Language_Id = cfsltc.Language_Id,
+                    //            Label = cfsltc.Label,
+                    //            FieldHelp = cfsltc.FieldHelp,
+                    //        };
+
+                    //        this._computerService.SaveComputerUserFieldSettingLangForCustomerCopy(newComputerUserFSL, out errors);
+                    //    }
+
+                    //}
+                }
+
+            }
 
             return this.RedirectToAction("edit", "customer", new { customer.Id });
         }

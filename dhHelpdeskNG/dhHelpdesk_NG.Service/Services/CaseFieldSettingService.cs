@@ -19,7 +19,7 @@
         IList<ListCases> ListToShowOnCustomerSettingSummaryPage(int? customerId, int? languageId, int? UserGroupId);
 
         IList<CaseFieldSetting> GetCaseFieldSettingsForDefaultCust();
-        IList<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguagesForDefaultCust(int? customerId, int languageId);
+        IList<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguagesForDefaultCust(int languageId);
 
         CaseFieldSettingLanguage GetCaseFieldSettingLanguage(int id, int languageId);
     }
@@ -73,9 +73,9 @@
             return this._caseFieldSettingLanguageRepository.GetCaseFieldSettingsWithLanguages(customerId, languageId).ToList();
         }
 
-        public IList<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguagesForDefaultCust(int? customerId, int languageId)
+        public IList<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguagesForDefaultCust(int languageId)
         {
-            return this._caseFieldSettingLanguageRepository.GetCaseFieldSettingsWithLanguagesForDefaultCust(customerId, languageId).ToList();
+            return this._caseFieldSettingLanguageRepository.GetCaseFieldSettingsWithLanguagesForDefaultCust(languageId).ToList();
         }
 
         public CaseFieldSettingLanguage GetCaseFieldSettingLanguage(int id, int languageId)

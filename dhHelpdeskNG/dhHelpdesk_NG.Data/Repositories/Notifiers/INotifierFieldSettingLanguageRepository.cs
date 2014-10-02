@@ -11,6 +11,9 @@
     {
         List<Caption> FindByCustomerIdAndLanguageId(int customerId, int languageId);
         IEnumerable<ComputerUserFieldSettingsLanguage> GetComputerUserFieldSettingsLanguage(int? customerId, int? languageId);
-        
+
+        IEnumerable<ComputerUserFieldSettingsLanguage> GetComputerUserFieldSettingsWithLanguagesForDefaultCust(int languageId);
     }
+
+    
 }

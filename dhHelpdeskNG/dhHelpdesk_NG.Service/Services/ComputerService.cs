@@ -20,9 +20,12 @@
         IList<ComputerUser> SearchSortAndGenerateComputerUsers(int customerId, IComputerUserSearch searchComputerUsers);
         IList<UserSearchResults> SearchComputerUsers(int customerId, string searchFor);
         IList<ComputerUserFieldSettings> GetComputerUserFieldSettings(int customerId);
+        IList<ComputerUserFieldSettings> GetComputerUserFieldSettingsForDefaultCust();
         IList<ComputerUserGroup> GetComputerUserGroups(int customerId);
         IList<ComputerUsersBlackList> GetComputerUsersBlackLists();
         IList<ComputerUserFieldSettingsLanguage> GetComputerUserFieldSettingsWithLanguages(int customerId, int languageId);
+        IList<ComputerUserFieldSettingsLanguage> GetComputerUserFieldSettingsWithLanguagesForDefaultCust(int languageId);
+                                                 
 
         IList<ComputerResults> SearchComputer(int customerId, string searchFor);
         ComputerUser GetComputerUser(int id);
@@ -95,6 +98,11 @@
             return this._computerUserFieldSettingLanguageRepository.GetComputerUserFieldSettingsLanguage(customerId, languageId).ToList();
         }
 
+        public IList<ComputerUserFieldSettingsLanguage> GetComputerUserFieldSettingsWithLanguagesForDefaultCust(int languageId)
+        {
+            return this._computerUserFieldSettingLanguageRepository.GetComputerUserFieldSettingsWithLanguagesForDefaultCust(languageId).ToList();
+        }
+
         public IList<ComputerUser> SearchSortAndGenerateComputerUsers(int customerId, IComputerUserSearch searchComputerUsers)
         {
             var query = (from cu in this._computerUserRepository.GetAll().Where(x => x.Customer_Id == customerId && x.Updated != 2)
@@ -149,6 +157,13 @@
         public IList<ComputerUserFieldSettings> GetComputerUserFieldSettings(int customerId)
         {
             return this._computerUserFieldSettingsRepository.GetMany(x => x.Customer_Id == customerId).ToList();
+        }
+
+        public IList<ComputerUserFieldSettings> GetComputerUserFieldSettingsForDefaultCust()
+        {
+            var list = this._computerUserFieldSettingsRepository.GetAll().Where(x => x.Customer_Id == null).ToList();
+
+            return list;
         }
 
         public IList<ComputerUserGroup> GetComputerUserGroups(int customerId)
@@ -335,15 +350,35 @@
 
         public void SaveComputerUserFieldSettingLangForCustomerCopy(ComputerUserFieldSettingsLanguage computerUserFieldSettingsLanguage, out IDictionary<string, string> errors)
         {
+
             errors = new Dictionary<string, string>();
 
-            if (computerUserFieldSettingsLanguage.ComputerUserFieldSettings_Id == 0)
-                _computerUserFieldSettingLanguageRepository.Add(computerUserFieldSettingsLanguage);
-            else
-                _computerUserFieldSettingLanguageRepository.Update(computerUserFieldSettingsLanguage);
+            var upd = new ComputerUserFieldSettingsLanguage
+            {
+                ComputerUserFieldSettings_Id = computerUserFieldSettingsLanguage.ComputerUserFieldSettings_Id,
+                Language_Id = computerUserFieldSettingsLanguage.Language_Id,
+                Label = computerUserFieldSettingsLanguage.Label,
+                FieldHelp = computerUserFieldSettingsLanguage.FieldHelp
+            };
+
+            _computerUserFieldSettingLanguageRepository.Add(upd);
 
 
-            _computerUserFieldSettingsRepository.Commit();
+            _computerUserFieldSettingLanguageRepository.Commit();
+
+
+
+
+
+            //errors = new Dictionary<string, string>();
+
+            //if (computerUserFieldSettingsLanguage.ComputerUserFieldSettings_Id == 0)
+            //    _computerUserFieldSettingLanguageRepository.Add(computerUserFieldSettingsLanguage);
+            //else
+            //    _computerUserFieldSettingLanguageRepository.Update(computerUserFieldSettingsLanguage);
+
+
+            //_computerUserFieldSettingsRepository.Commit();
 
         }
 
