@@ -9,6 +9,8 @@ $('.nav-tabs a').click(function (e) {
     //activeTab.val($(this).attr('href'));
 });
 
+$(".nav-tabs-actions a").unbind("click");
+
 $(".content input:text, .content textarea").eq(0).focus()
 
 //Hämtar vald text från droptodwn button

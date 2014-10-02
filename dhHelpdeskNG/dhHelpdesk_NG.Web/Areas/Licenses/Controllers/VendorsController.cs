@@ -31,7 +31,7 @@
         public ViewResult Index()
         {
             var model = this.vendorsModelFactory.GetIndexModel();
-            return this.View();
+            return this.View(model);
         }
     }
 }

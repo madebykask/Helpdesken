@@ -1,7 +1,15 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Licenses.Models.Applications
 {
-    public sealed class ApplicationsIndexModel
+    using DH.Helpdesk.Web.Areas.Licenses.Models.Common;
+
+    public sealed class ApplicationsIndexModel : BaseIndexModel
     {
-         
+        public override IndexModelType Type
+        {
+            get
+            {
+                return IndexModelType.Applications;
+            }
+        }
     }
 }

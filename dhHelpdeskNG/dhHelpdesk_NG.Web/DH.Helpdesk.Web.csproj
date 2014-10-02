@@ -335,6 +335,8 @@
     <Compile Include="Areas\Licenses\Infrastructure\ModelFactories\Concrete\VendorsModelFactory.cs" />
     <Compile Include="Areas\Licenses\LicensesAreaRegistration.cs" />
     <Compile Include="Areas\Licenses\Models\Applications\ApplicationsIndexModel.cs" />
+    <Compile Include="Areas\Licenses\Models\Common\BaseIndexModel.cs" />
+    <Compile Include="Areas\Licenses\Models\Common\IndexModelType.cs" />
     <Compile Include="Areas\Licenses\Models\Licenses\LicensesIndexModel.cs" />
     <Compile Include="Areas\Licenses\Models\Manufacturers\ManufacturersIndexModel.cs" />
     <Compile Include="Areas\Licenses\Models\Products\ProductsIndexModel.cs" />
@@ -1176,6 +1178,7 @@
     <Content Include="Areas\Licenses\Views\Licenses\Index.cshtml" />
     <Content Include="Areas\Licenses\Views\Manufacturers\Index.cshtml" />
     <Content Include="Areas\Licenses\Views\Vendors\Index.cshtml" />
+    <Content Include="Areas\Licenses\Views\Shared\_IndexLayout.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />
@@ -2314,7 +2317,6 @@
     <Content Include="Areas\Admin\Views\Users\_Appearance.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\Licenses\Views\Shared\" />
     <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
   </ItemGroup>
   <ItemGroup>
