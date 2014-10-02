@@ -32,31 +32,34 @@
                         
         }
 
-        public IEnumerable<ComputerUserFieldSettingsLanguage> GetComputerUserFieldSettingsWithLanguagesForDefaultCust(int languageId)
+        public IEnumerable<ComputerUserFieldSettingsLanguageModel> GetComputerUserFieldSettingsWithLanguagesForDefaultCust(int languageId)
         {
             var query = from cfsl in this.DataContext.ComputerUserFieldSettingsLanguages
                         join cfs in this.DataContext.ComputerUserFieldSettings on cfsl.ComputerUserFieldSettings_Id equals cfs.Id
                         where (cfsl.Language_Id == languageId) && (cfs.Show == 1)
-                        group cfsl by new { cfs.Customer_Id, cfsl.ComputerUserFieldSettings_Id, cfsl.Label, cfsl.Language_Id, cfsl.FieldHelp } into grouped
+                        group cfsl by new { cfs.Customer_Id, cfsl.ComputerUserFieldSettings_Id, cfsl.Label, cfsl.Language_Id, cfsl.FieldHelp, cfs.ComputerUserField } into grouped
                         select new CustomComputerUserFieldSettingsLanguage
                         {
                             CustomerId = grouped.Key.Customer_Id == null ? null : grouped.Key.Customer_Id,
                             Id = grouped.Key.ComputerUserFieldSettings_Id,
                             Label = grouped.Key.Label,
                             Language_Id = grouped.Key.Language_Id,
-                            FieldHelp = grouped.Key.FieldHelp
+                            FieldHelp = grouped.Key.FieldHelp,
+                            Name = grouped.Key.ComputerUserField
                         };
 
-            var res1 = query.Select(q => new { q.Id, q.Label, q.Language_Id, q.FieldHelp, q.CustomerId}).ToList();
+            var res1 = query.Select(q => new { q.Id, q.Label, q.Language_Id, q.FieldHelp, q.CustomerId, q.Name}).ToList();
             var res2 = res1.Where(q => (int?)q.CustomerId == null)
-                           .Select(q => new ComputerUserFieldSettingsLanguage
+                           .Select(q => new ComputerUserFieldSettingsLanguageModel
                            {
-                               ComputerUserFieldSettings_Id = q.Id,
+                               Id = q.Id,
                                Label = q.Label,
                                Language_Id = q.Language_Id,
-                               FieldHelp = q.FieldHelp
+                               FieldHelp = q.FieldHelp,
+                               Name = q.Name
+                               
                            })
-                           .OrderBy(x => x.ComputerUserFieldSettings_Id)
+                           .OrderBy(x => x.Id)
                            .ToList();
             return res2;
         }

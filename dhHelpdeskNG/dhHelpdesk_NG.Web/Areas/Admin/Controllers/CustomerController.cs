@@ -205,7 +205,7 @@
 
                         foreach (var cfs in computerUserFieldSettingsForNewCustomer)
                         {
-                            if (cfsl.Label == cfs.ComputerUserField)
+                            if (cfsl.Name == cfs.ComputerUserField)
                             {
                                 var newComputerUserFSL = new ComputerUserFieldSettingsLanguage
                                 {
@@ -224,29 +224,6 @@
 
                     }
 
-
-
-
-
-
-                    //foreach (var cfsltc in computerUserFieldSettingsLangToCopy)
-                    //{
-
-                    //    foreach (var cfsln in computerUserFieldSettingsForNewCustomer)
-                    //    {
-
-                    //        var newComputerUserFSL = new ComputerUserFieldSettingsLanguage
-                    //        {
-                    //            ComputerUserFieldSettings_Id = cfsln.Id,
-                    //            Language_Id = cfsltc.Language_Id,
-                    //            Label = cfsltc.Label,
-                    //            FieldHelp = cfsltc.FieldHelp,
-                    //        };
-
-                    //        this._computerService.SaveComputerUserFieldSettingLangForCustomerCopy(newComputerUserFSL, out errors);
-                    //    }
-
-                    //}
                 }
 
             }

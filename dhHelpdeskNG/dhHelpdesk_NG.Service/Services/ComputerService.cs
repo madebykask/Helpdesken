@@ -24,7 +24,7 @@
         IList<ComputerUserGroup> GetComputerUserGroups(int customerId);
         IList<ComputerUsersBlackList> GetComputerUsersBlackLists();
         IList<ComputerUserFieldSettingsLanguage> GetComputerUserFieldSettingsWithLanguages(int customerId, int languageId);
-        IList<ComputerUserFieldSettingsLanguage> GetComputerUserFieldSettingsWithLanguagesForDefaultCust(int languageId);
+        IList<ComputerUserFieldSettingsLanguageModel> GetComputerUserFieldSettingsWithLanguagesForDefaultCust(int languageId);
                                                  
 
         IList<ComputerResults> SearchComputer(int customerId, string searchFor);
@@ -98,7 +98,7 @@
             return this._computerUserFieldSettingLanguageRepository.GetComputerUserFieldSettingsLanguage(customerId, languageId).ToList();
         }
 
-        public IList<ComputerUserFieldSettingsLanguage> GetComputerUserFieldSettingsWithLanguagesForDefaultCust(int languageId)
+        public IList<ComputerUserFieldSettingsLanguageModel> GetComputerUserFieldSettingsWithLanguagesForDefaultCust(int languageId)
         {
             return this._computerUserFieldSettingLanguageRepository.GetComputerUserFieldSettingsWithLanguagesForDefaultCust(languageId).ToList();
         }
