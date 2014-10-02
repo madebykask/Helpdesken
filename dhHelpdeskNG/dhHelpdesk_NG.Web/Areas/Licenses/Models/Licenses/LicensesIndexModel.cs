@@ -11,5 +11,10 @@
                 return IndexModelType.Licenses;
             }
         }
+
+        public LicensesFilterModel GetFilter()
+        {
+            return new LicensesFilterModel();
+        }
     }
 }

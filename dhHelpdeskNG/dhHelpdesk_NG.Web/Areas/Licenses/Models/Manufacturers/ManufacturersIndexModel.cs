@@ -11,5 +11,10 @@
                 return IndexModelType.Manufacturers;
             }
         }
+
+        public ManufacturersFilterModel GetFilter()
+        {
+            return new ManufacturersFilterModel();
+        }
     }
 }

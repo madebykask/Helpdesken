@@ -19,7 +19,7 @@
                 .WithMany()
                 .HasForeignKey(m => m.Customer_Id);
 
-            this.ToTable("tblManufcturer");       
+            this.ToTable("tblManufacturer");       
         }
     }
 }

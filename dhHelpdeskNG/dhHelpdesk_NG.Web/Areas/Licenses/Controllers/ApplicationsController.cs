@@ -6,7 +6,10 @@
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Licenses;
     using DH.Helpdesk.Web.Areas.Licenses.Infrastructure.ModelFactories;
+    using DH.Helpdesk.Web.Areas.Licenses.Models.Applications;
+    using DH.Helpdesk.Web.Enums;
     using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.ActionFilters;
 
     public class ApplicationsController : BaseController
     {
@@ -31,8 +34,33 @@
         [HttpGet]
         public ViewResult Index()
         {
-            var model = this.applicationsModelFactory.GetIndexModel();
+            var filters = SessionFacade.FindPageFilters<ApplicationsFilterModel>(PageName.LicensesApplications);
+            if (filters == null)
+            {
+                filters = ApplicationsFilterModel.CreateDefault();
+                SessionFacade.SavePageFilters(PageName.LicensesApplications, filters);
+            }
+
+            var model = this.applicationsModelFactory.GetIndexModel(filters);
             return this.View(model);
+        }
+
+        [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+        [BadRequestOnNotValid]
+        public PartialViewResult Applications(ApplicationsIndexModel model)
+        {
+            var filters = model != null
+                        ? model.GetFilter()
+                        : SessionFacade.FindPageFilters<ApplicationsFilterModel>(PageName.LicensesApplications);
+
+            SessionFacade.SavePageFilters(PageName.LicensesApplications, filters);
+
+            var applications = this.applicationsService.GetApplications(
+                                    this.workContext.Customer.CustomerId,
+                                    filters.OnlyConnected);
+
+            var contentModel = this.applicationsModelFactory.GetContentModel(applications);
+            return this.PartialView(contentModel);
         }
     }
 }

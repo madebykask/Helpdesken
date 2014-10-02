@@ -11,5 +11,12 @@
                 return IndexModelType.Applications;
             }
         }
+
+        public bool OnlyConnected { get; set; }
+
+        public ApplicationsFilterModel GetFilter()
+        {
+            return new ApplicationsFilterModel(this.OnlyConnected);
+        }
     }
 }

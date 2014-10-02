@@ -2,3 +2,13 @@
 @{
     Layout = "~/Areas/Licenses/Views/Shared/_IndexLayout.cshtml";
 }
+
+@using (Ajax.BeginForm("Licenses", "Licenses", null, 
+    new AjaxOptions { UpdateTargetId = "LicensesLicensesTableContainer" },
+    new { id ="LicensesSearchForm" } ))
+{
+    
+}
+<div id="LicensesLicensesTableContainer">
+    @Html.Action("Licenses", "Licenses")
+</div>

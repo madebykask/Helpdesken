@@ -13,10 +13,8 @@
                                                   {
                                                       ApplicationId = a.Id,
                                                       ApplicationName = a.Name,
-                                                      InstallationsNumber = a.Products.Count(),
-
-                                                      // TODO Fix it
-                                                      ProductName = a.Products.First().Name
+                                                      InstallationsNumber = a.Products.Count()/*,
+                                                      ProductName = a.Products.First().Name*/
                                                   }).ToArray();
 
             return overviews;

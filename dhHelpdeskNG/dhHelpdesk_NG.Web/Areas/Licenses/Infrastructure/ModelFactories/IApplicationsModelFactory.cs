@@ -1,9 +1,12 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Licenses.Infrastructure.ModelFactories
 {
+    using DH.Helpdesk.BusinessData.Models.Licenses;
     using DH.Helpdesk.Web.Areas.Licenses.Models.Applications;
 
     public interface IApplicationsModelFactory
     {
-        ApplicationsIndexModel GetIndexModel();
+        ApplicationsIndexModel GetIndexModel(ApplicationsFilterModel filter);
+
+        ApplicationsContentModel GetContentModel(ApplicationOverview[] applications);
     }
 }

@@ -11,5 +11,10 @@
                 return IndexModelType.Vendors;
             }
         }
+
+        public VendorsFilterModel GetFilter()
+        {
+            return new VendorsFilterModel();
+        }
     }
 }
