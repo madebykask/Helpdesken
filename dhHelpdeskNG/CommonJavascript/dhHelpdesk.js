@@ -261,6 +261,11 @@ function CaseInitForm() {
         });
     };
 
+    //var GetCurrentFiles() {
+    //   //
+        
+    //};
+
     var getLogFiles = function () {
         $.get('/Cases/LogFiles', { id: $('#LogKey').val(), now: Date.now() }, function (data) {
             $('#divCaseLogFiles').html(data);
@@ -285,6 +290,7 @@ function CaseInitForm() {
         }
     });
 
+    var newFileName = "";
     $('#upload_files_popup').on('show', function () {
         _plupload = $('#file_uploader').pluploadQueue({
             runtimes: 'html5,html4',
@@ -299,8 +305,34 @@ function CaseInitForm() {
                     //log('[Init]', 'Info:', info, 'Features:', up.features);
                 },
 
+                
                 UploadFile: function (up, file) {
+
+                    //var newFileName = file.name;
+                    //$.get('/Cases/GetCurrentFiles', { id: $('#CaseKey').val(), now: Date.now() }, function (data) {
+                    //    var   = $.parseJSON(data);
+                    //    for (var i = 0;i<ttt.length; i++)
+                    //    {
+                    //        if (newFileName == ttt[i]) {
+                    //            if (up.state == plupload.STARTED && file.status == plupload.UPLOADING) {
+                    //                alert('File Already exist!');
+                    //                up.removeFile(file);
+                    //                up.stop();
+                    //                up.refresh();
+                                    
+                                    
+                    //                //up.start();
+                    //            }
+                    //        }
+                    //            //alert('Alredy Exist!!!');
+                    //    }
+                    //});
+
+                    ////var fs = GetCurrentFiles();
+                    //var res = fs.(",");
+
                     //log('[UploadFile]', file);
+
                 },
 
                 UploadComplete: function (up, file) {

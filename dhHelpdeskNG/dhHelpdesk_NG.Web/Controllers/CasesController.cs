@@ -6,6 +6,7 @@
     using System.Net;
     using System.Web;
     using System.Web.Mvc;
+    using System.Web.Helpers;    
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
@@ -30,6 +31,7 @@
     using DH.Helpdesk.Web.Models;
     using DH.Helpdesk.Web.Models.Case;
     using DH.Helpdesk.Web.Models.Shared;
+    using System.Web.Script.Serialization;
 
     public class CasesController : BaseController
     {
@@ -833,8 +835,21 @@
 
             var model = new CaseFilesModel(id, cfs.ToArray());
             return this.PartialView("_CaseFiles", model);
-        }        
+        }
 
+        [HttpGet]
+        public string GetCurrentFiles(string id)
+        {
+            //var files = this._caseFileService.GetCaseFiles(int.Parse(id));
+            var files = GuidHelper.IsGuid(id)
+                                ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Cases)
+                                : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
+
+            JavaScriptSerializer  serializer = new JavaScriptSerializer();  
+            string jsonString = serializer.Serialize(files);
+            return jsonString;
+        }       
+ 
         public RedirectToRouteResult MarkAsUnread(int id, int customerId)
         {
             this._caseService.MarkAsUnread(id);   
@@ -863,8 +878,9 @@
             {
                 if (this.userTemporaryFilesStorage.FileExists(name, id, ModuleName.Cases))
                 {
-
-                    throw new HttpException(409 , "Already file exist!");
+                    //return;
+                    //throw new HttpException(409 , "Already file exist!"); because it take a long time.
+                    this.userTemporaryFilesStorage.DeleteFile(name, id, ModuleName.Cases);                               
                 }
                 this.userTemporaryFilesStorage.AddFile(uploadedData, name, id, ModuleName.Cases);                               
             }
@@ -872,7 +888,9 @@
             {
                 if (this._caseFileService.FileExists(int.Parse(id), name))
                 {
-                    throw new HttpException(409, "Already file exist!");                    
+                    //return;
+                    //throw new HttpException(409, "Already file exist!");    because it take a long time.
+                    this._caseFileService.DeleteByCaseIdAndFileName(int.Parse(id), name);   
                 }
 
                 var caseFileDto = new CaseFileDto(
@@ -898,7 +916,8 @@
             {
                 if (this.userTemporaryFilesStorage.FileExists(name, id, ModuleName.Log))
                 {
-                    throw new HttpException((int)HttpStatusCode.Conflict, null);
+                    return;
+                    //throw new HttpException((int)HttpStatusCode.Conflict, null); because it take a long time.
                 }
                 this.userTemporaryFilesStorage.AddFile(uploadedData, name, id, ModuleName.Log);
             }
