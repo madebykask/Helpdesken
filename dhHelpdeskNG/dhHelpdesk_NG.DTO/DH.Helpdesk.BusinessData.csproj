@@ -246,6 +246,7 @@
     <Compile Include="Models\Licenses\LicenseOverview.cs" />
     <Compile Include="Models\Licenses\ManufacturerOverview.cs" />
     <Compile Include="Models\Licenses\ProductOverview.cs" />
+    <Compile Include="Models\Licenses\ProductsFilterData.cs" />
     <Compile Include="Models\Licenses\VendorOverview.cs" />
     <Compile Include="Models\Operation\OperationObject.cs" />
     <Compile Include="Models\Operation\OperationObjectForInsert.cs" />

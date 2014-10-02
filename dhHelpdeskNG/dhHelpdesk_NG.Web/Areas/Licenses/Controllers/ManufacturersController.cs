@@ -28,6 +28,7 @@
             this.manufacturersModelFactory = manufacturersModelFactory;
         }
 
+        [HttpGet]
         public ViewResult Index()
         {
             var model = this.manufacturersModelFactory.GetIndexModel();

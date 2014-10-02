@@ -16,6 +16,8 @@
 
         public static readonly string Reports = "Reports";
 
+        public static readonly string LicensesProducts = "LicensesProducts";
+
         #endregion
     }
 }

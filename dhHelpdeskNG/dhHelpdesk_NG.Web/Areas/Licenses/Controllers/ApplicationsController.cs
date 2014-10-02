@@ -28,6 +28,7 @@
             this.applicationsModelFactory = applicationsModelFactory;
         }
 
+        [HttpGet]
         public ViewResult Index()
         {
             var model = this.applicationsModelFactory.GetIndexModel();

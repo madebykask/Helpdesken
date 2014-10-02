@@ -28,6 +28,7 @@
             this.licensesModelFactory = licensesModelFactory;
         }
 
+        [HttpGet]
         public ViewResult Index()
         {
             var model = this.licensesModelFactory.GetIndexModel();

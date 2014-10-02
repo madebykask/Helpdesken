@@ -8,5 +8,7 @@
                                 int customerId,
                                 int[] regions,
                                 int[] departments);
+
+        ProductsFilterData GetProductsFilterData(int customerId);
     }
 }

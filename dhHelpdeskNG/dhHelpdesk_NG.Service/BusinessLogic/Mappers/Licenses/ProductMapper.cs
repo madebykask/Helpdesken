@@ -13,9 +13,9 @@
             var overviews = query.Select(p => new ProductOverview
                                                   {
                                                       ProductId = p.Id,
-                                                      ProductName = p.Name,
+                                                      ProductName = p.Name/*,
                                                       LicencesNumber = p.Licenses.Count(),
-                                                      UsedLicencesNumber = p.Licenses.AsQueryable().GetUsedLicenses().Count()
+                                                      UsedLicencesNumber = p.Licenses.AsQueryable().GetUsedLicenses().Count()*/
                                                   }).ToArray();
 
             return overviews;

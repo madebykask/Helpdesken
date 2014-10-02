@@ -12,10 +12,19 @@
     {
         private readonly IUnitOfWorkFactory unitOfWorkFactory;
 
-        public ProductsService(IUnitOfWorkFactory unitOfWorkFactory)
+        private readonly IRegionService regionService;
+
+        private readonly IDepartmentService departmentService;
+
+        public ProductsService(
+                IUnitOfWorkFactory unitOfWorkFactory, 
+                IRegionService regionService, 
+                IDepartmentService departmentService)
         {
             this.unitOfWorkFactory = unitOfWorkFactory;
-        }   
+            this.regionService = regionService;
+            this.departmentService = departmentService;
+        }
 
         public ProductOverview[] GetProducts(int customerId, int[] regions, int[] departments)
         {
@@ -31,6 +40,14 @@
 
                 return overviews;
             }
+        }
+
+        public ProductsFilterData GetProductsFilterData(int customerId)
+        {
+            var regions = this.regionService.FindByCustomerId(customerId);
+            var departments = this.departmentService.FindActiveOverviews(customerId);
+
+            return new ProductsFilterData(regions.ToArray(), departments.ToArray());
         }
     }
 }

@@ -339,6 +339,8 @@
     <Compile Include="Areas\Licenses\Models\Common\IndexModelType.cs" />
     <Compile Include="Areas\Licenses\Models\Licenses\LicensesIndexModel.cs" />
     <Compile Include="Areas\Licenses\Models\Manufacturers\ManufacturersIndexModel.cs" />
+    <Compile Include="Areas\Licenses\Models\Products\ProductsContentModel.cs" />
+    <Compile Include="Areas\Licenses\Models\Products\ProductsFilterModel.cs" />
     <Compile Include="Areas\Licenses\Models\Products\ProductsIndexModel.cs" />
     <Compile Include="Areas\Licenses\Models\Vendors\VendorsIndexModel.cs" />
     <Compile Include="Controllers\AboutController.cs" />
@@ -529,6 +531,7 @@
     <Compile Include="Infrastructure\Tools\IInvoiceHelper.cs" />
     <Compile Include="Infrastructure\Tools\IReportsHelper.cs" />
     <Compile Include="Infrastructure\Tools\MimeHelper.cs" />
+    <Compile Include="Infrastructure\Tools\WebMvcHelper.cs" />
     <Compile Include="Infrastructure\Translate\Translator.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\CacheContext.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\CustomerContext.cs" />
@@ -1179,6 +1182,7 @@
     <Content Include="Areas\Licenses\Views\Manufacturers\Index.cshtml" />
     <Content Include="Areas\Licenses\Views\Vendors\Index.cshtml" />
     <Content Include="Areas\Licenses\Views\Shared\_IndexLayout.cshtml" />
+    <Content Include="Areas\Licenses\Views\Products\Products.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />

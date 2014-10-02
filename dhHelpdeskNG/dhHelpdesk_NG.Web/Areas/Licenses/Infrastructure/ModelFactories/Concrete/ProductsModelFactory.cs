@@ -1,12 +1,22 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Licenses.Infrastructure.ModelFactories.Concrete
 {
+    using DH.Helpdesk.BusinessData.Models.Licenses;
     using DH.Helpdesk.Web.Areas.Licenses.Models.Products;
+    using DH.Helpdesk.Web.Infrastructure.Tools;
 
     public sealed class ProductsModelFactory : IProductsModelFactory
     {
-        public ProductsIndexModel GetIndexModel()
+        public ProductsIndexModel GetIndexModel(ProductsFilterData data, ProductsFilterModel filter)
         {
-            return new ProductsIndexModel();
+            var regions = WebMvcHelper.CreateMultiSelectField(data.Regions, filter.RegionIds);
+            var departments = WebMvcHelper.CreateMultiSelectField(data.Departments, filter.RegionIds);
+
+            return new ProductsIndexModel(regions, departments);
+        }
+
+        public ProductsContentModel GetContentModel(ProductOverview[] products)
+        {
+            return new ProductsContentModel(products);
         }
     }
 }
