@@ -252,9 +252,9 @@
     <Compile Include="Models\Operation\OperationObjectForInsert.cs" />
     <Compile Include="Models\Operation\OperationObjectForUpdate.cs" />
     <Compile Include="Models\Operation\OperationObjectForRead.cs" />
-    <Compile Include="Models\Questionnaire\Input\Circular.cs" />
-    <Compile Include="Models\Questionnaire\Input\CircularForUpdate.cs" />
-    <Compile Include="Models\Questionnaire\Input\CircularPart.cs" />
+    <Compile Include="Models\Questionnaire\Circular.cs" />
+    <Compile Include="Models\Questionnaire\Write\CircularForUpdate.cs" />
+    <Compile Include="Models\Questionnaire\Read\CircularPart.cs" />
     <Compile Include="Models\Reports\Output\AverageSolutionTimeOptionsResponse.cs" />
     <Compile Include="Models\Reports\Output\AverageSolutionTimeReportResponse.cs" />
     <Compile Include="Models\Reports\Output\RegistratedCasesCaseTypeItem.cs" />
@@ -366,8 +366,8 @@
     <Compile Include="Models\OperationLog\Output\OperationLogOverview.cs" />
     <Compile Include="Models\Problem\Output\ProblemInfoOverview.cs" />
     <Compile Include="Models\ProductArea\Output\ProductAreaOverview.cs" />
-    <Compile Include="Models\Questionnaire\Input\CircularForEdit.cs" />
-    <Compile Include="Models\Questionnaire\Input\CircularForInsert.cs" />
+    <Compile Include="Models\Questionnaire\Read\CircularForEdit.cs" />
+    <Compile Include="Models\Questionnaire\Write\CircularForInsert.cs" />
     <Compile Include="Models\Questionnaire\Input\QuestionnaireQuesOption.cs" />
     <Compile Include="Models\Questionnaire\Input\EditQuestionnaireQuestion.cs" />
     <Compile Include="Models\Questionnaire\Input\NewQuestionnaireQuestion.cs" />

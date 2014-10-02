@@ -5,6 +5,8 @@
 
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Input;
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Output;
+    using DH.Helpdesk.BusinessData.Models.Questionnaire.Read;
+    using DH.Helpdesk.BusinessData.Models.Questionnaire.Write;
 
     public interface ICircularService
     {

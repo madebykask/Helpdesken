@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Questionnaire.Input
+﻿namespace DH.Helpdesk.BusinessData.Models.Questionnaire.Write
 {
     using System;
 
