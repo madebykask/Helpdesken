@@ -4,4 +4,9 @@
     {
         int Id { get; set; }
     }
+
+    public abstract class BusinessModel
+    {
+        public int Id { get; protected set; }
+    }
 }

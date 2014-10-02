@@ -61,6 +61,8 @@
                             }
                             @using (Ajax.BeginForm("CaseRowGrid", null, new AjaxOptions { UpdateTargetId = "case_grid_container" }, new { id = "circular_case_filter_form" }))
                             {
+                                @Html.HiddenFor(m => m.QuestionnaireId)
+
                                 <div>
                                     <table class="tableform">
                                         <tr>

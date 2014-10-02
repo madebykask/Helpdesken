@@ -9,6 +9,7 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
     using System;
     using System.ComponentModel.DataAnnotations;
 
+    using DH.Helpdesk.Services.DisplayValues;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public class CircularPartOverview
@@ -18,12 +19,13 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
 
         }
 
-        public CircularPartOverview(int caseId, int caseNumber, string caption, string email)
+        public CircularPartOverview(int caseId, int caseNumber, string caption, string email, bool isSent)
         {
             this.CaseId = caseId;
             this.CaseNumber = caseNumber;
             this.Caption = caption;
             this.Email = email;
+            this.IsSent = (BooleanDisplayValue)isSent;
         }
 
         public int CaseId { get; set; }
@@ -33,6 +35,16 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
         public string Caption { get; set; }
 
         public string Email { get; set; }
+
+        public BooleanDisplayValue IsSent { get; set; }
+
+        public string DisplaySent
+        {
+            get
+            {
+                return IsSent.GetDisplayValue();
+            }
+        }
     }
 
     public class NewCircularModel

@@ -1,32 +1,32 @@
-﻿using System;
-
-namespace DH.Helpdesk.Services.Services
+﻿namespace DH.Helpdesk.Services.Services
 {
+    using System;
     using System.Collections.Generic;
-    
+
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Input;
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Output;
 
     public interface ICircularService
     {
-        List<CircularOverview> FindCircularOverviews(int questionnaireId);
+        List<CircularOverview> GetCircularOverviewsByQuestionnaireId(int questionnaireId);
 
-        void AddCircular(NewCircular newCircular);
+        void AddCircular(CircularForInsert businessModel);
 
-        void UpdateCircular(EditCircular editedCircular);
+        void UpdateCircular(CircularForUpdate businessModel);
 
-        EditCircular GetCircularById(int circularId);
+        CircularForEdit GetById(int id);
 
-        void DeleteCircularById(int deletedCircularId);
+        void DeleteById(int id);
 
-        List<CircularPart> GetCases(int customerId,                                                              
-                                    int[] selectedDepartments,                                     
-                                    int[] selectedCaseTypes,                                    
-                                    int[] selectedProductArea,                                    
-                                    int[] selectedWorkingGroups,
-                                    int procent,
-                                    DateTime? finishingDateFrom,
-                                    DateTime? finishingDateTo
-                                   );
+        List<CircularPart> GetCases(
+            int customerId,
+            int questionnaireId,
+            int[] selectedDepartments,
+            int[] selectedCaseTypes,
+            int[] selectedProductArea,
+            int[] selectedWorkingGroups,
+            int procent,
+            DateTime? finishingDateFrom,
+            DateTime? finishingDateTo);
     }
 }

@@ -29,18 +29,24 @@
             return overviews;
         }
 
-        public static EditCircular MapToEditModelById(this IQueryable<QuestionnaireCircularEntity> query, int id)
+        public static CircularForEdit MapToEditModelById(this IQueryable<QuestionnaireCircularEntity> query, int id)
         {
-            EditCircular businessModel = null;
+            CircularForEdit businessModel = null;
 
             var anonymus =
                 query.GetById(id)
-                    .Select(c => new { c.Id, circularName = c.CircularName, date = c.ChangedDate, state = c.Status })
+                    .Select(
+                        c => new { c.Id, circularName = c.CircularName, c.ChangedDate, c.CreatedDate, state = c.Status })
                     .SingleOrDefault();
 
             if (anonymus != null)
             {
-                businessModel = new EditCircular(anonymus.Id, anonymus.circularName, anonymus.state, anonymus.date);
+                businessModel = new CircularForEdit(
+                    anonymus.Id,
+                    anonymus.circularName,
+                    anonymus.state,
+                    anonymus.CreatedDate,
+                    anonymus.ChangedDate);
             }
 
             return businessModel;

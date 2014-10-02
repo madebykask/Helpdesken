@@ -438,9 +438,9 @@ namespace DH.Helpdesk.Web.Controllers
         {
             IEnumerable<CircularOverview> circulars = null;
             if (state == CircularStateId.All)
-                circulars = _circularService.FindCircularOverviews(questionnaireId);
+                circulars = _circularService.GetCircularOverviewsByQuestionnaireId(questionnaireId);
             else
-                circulars = _circularService.FindCircularOverviews(questionnaireId).Where(c => c.State == state);
+                circulars = _circularService.GetCircularOverviewsByQuestionnaireId(questionnaireId).Where(c => c.State == state);
 
 
             List<CircularOverviewModel> model = null;
@@ -540,7 +540,7 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public ViewResult EditCircular(int questionnaireId, int circularId, int stateId)
         {
-            var circular = _circularService.GetCircularById(circularId);
+            var circular = _circularService.GetById(circularId);
 
             var model = new EditCircularModel
                 (
@@ -570,13 +570,7 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         public RedirectToRouteResult EditCircular(EditCircularModel editedCircular)
         {
-            var circular = new EditCircular
-                (
-                   editedCircular.Id,
-                   editedCircular.CircularName,
-                   editedCircular.State,
-                   DateTime.Now
-                );
+            var circular = new CircularForUpdate(editedCircular.Id, editedCircular.CircularName, DateTime.Now);
 
             _circularService.UpdateCircular(circular);
 
@@ -591,7 +585,7 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         public RedirectToRouteResult DeleteCircular(int questionnaireId, int stateId, int circularId)
         {
-            _circularService.DeleteCircularById(circularId);
+            _circularService.DeleteById(circularId);
 
             return RedirectToAction("CircularOverview",
                      new
@@ -604,11 +598,14 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         public ActionResult NewCircular(NewCircularModel newCircular, List<CircularPartOverview> cases)
         {
-            var circular = new NewCircular(
-                newCircular.QuestionnaireId,
+            var caseIds = cases.Select(x => x.CaseId).ToList();
+
+            var circular = new CircularForInsert(
                 newCircular.CircularName,
+                newCircular.QuestionnaireId,
                 CircularStateId.ReadyToSend,
-                DateTime.Now);
+                DateTime.Now,
+                caseIds);
 
             this._circularService.AddCircular(circular);
 
@@ -619,7 +616,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         [HttpPost]
         public PartialViewResult CaseRowGrid(
-            NewCircularModel newCircular,
+            int questionnaireId,
             int[] selectedDepartments,
             int[] selectedCaseTypes,
             int[] selectedProductArea,
@@ -630,6 +627,7 @@ namespace DH.Helpdesk.Web.Controllers
         {
             List<CircularPart> cases = this._circularService.GetCases(
                 SessionFacade.CurrentCustomer.Id,
+                questionnaireId,
                 selectedDepartments,
                 selectedCaseTypes,
                 selectedProductArea,
@@ -639,7 +637,7 @@ namespace DH.Helpdesk.Web.Controllers
                 finishingDateTo);
 
             var models =
-                cases.Select(c => new CircularPartOverview(c.CaseId, c.CaseNumber, c.Caption, c.Email)).ToList();
+                cases.Select(c => new CircularPartOverview(c.CaseId, c.CaseNumber, c.Caption, c.Email, c.IsSent)).ToList();
 
             return this.PartialView("_CircularPartOverview", models);
         }

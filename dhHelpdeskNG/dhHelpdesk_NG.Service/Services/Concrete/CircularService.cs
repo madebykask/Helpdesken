@@ -7,18 +7,16 @@
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Input;
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Output;
     using DH.Helpdesk.Dal.NewInfrastructure;
-    using DH.Helpdesk.Dal.Repositories.Questionnaire;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Questionnaire;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Questionnaire;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications.Questionnaire;
 
     public class CircularService : ICircularService
     {
         #region Fields
-
-        private readonly ICircularRepository circularRepository;
 
         private readonly IUnitOfWorkFactory unitOfWorkFactory;
 
@@ -26,9 +24,8 @@
 
         #region Constructors and Destructors
 
-        public CircularService(ICircularRepository circularRepository, IUnitOfWorkFactory unitOfWorkFactory)
+        public CircularService(IUnitOfWorkFactory unitOfWorkFactory)
         {
-            this.circularRepository = circularRepository;
             this.unitOfWorkFactory = unitOfWorkFactory;
         }
 
@@ -36,18 +33,18 @@
 
         #region Public Methods and Operators
 
-        public EditCircular GetCircularById(int circularId)
+        public CircularForEdit GetById(int circularId)
         {
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
                 var questionnaireRepository = uof.GetRepository<QuestionnaireCircularEntity>();
 
-                EditCircular entity = questionnaireRepository.GetAll().MapToEditModelById(circularId);
+                CircularForEdit entity = questionnaireRepository.GetAll().MapToEditModelById(circularId);
                 return entity;
             }
         }
 
-        public List<CircularOverview> FindCircularOverviews(int questionnaireId)
+        public List<CircularOverview> GetCircularOverviewsByQuestionnaireId(int questionnaireId)
         {
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
@@ -59,30 +56,64 @@
             }
         }
 
-        public void AddCircular(NewCircular newCircular)
+        public void AddCircular(CircularForInsert businessModel)
         {
-            this.circularRepository.AddCircular(newCircular);
-            this.circularRepository.Commit();
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var circularRepository = uof.GetRepository<QuestionnaireCircularEntity>();
+
+                var entity = new QuestionnaireCircularEntity();
+
+                Map(businessModel, entity);
+                entity.Id = businessModel.Id;
+                entity.Questionnaire_Id = businessModel.QuestionnaireId;
+                entity.Status = businessModel.Status;
+                entity.ChangedDate = businessModel.CreatedDate;
+                entity.CreatedDate = businessModel.CreatedDate;
+                entity.CircularName = businessModel.CircularName;
+
+                foreach (var id in businessModel.RelatedCaseIds)
+                {
+                    entity.QuestionnaireCircularPartEntities.Add(
+                        new QuestionnaireCircularPartEntity { CreatedDate = businessModel.CreatedDate, Case_Id = id });
+                }
+
+                circularRepository.Add(entity);
+
+                uof.Save();
+            }
         }
 
-        public void UpdateCircular(EditCircular editedCircular)
+        public void UpdateCircular(CircularForUpdate businessModel)
         {
-            this.circularRepository.UpdateCircular(editedCircular);
-            this.circularRepository.Commit();
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var circularRepository = uof.GetRepository<QuestionnaireCircularEntity>();
+
+                var entity = circularRepository.GetById(businessModel.Id);
+
+                Map(businessModel, entity);
+                entity.ChangedDate = businessModel.ChangedDate;
+
+                circularRepository.Update(entity);
+
+                uof.Save();
+            }
         }
 
-        public void DeleteCircularById(int deletedCircularId)
+        public void DeleteById(int id)
         {
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
                 var questionnaireRepository = uof.GetRepository<QuestionnaireCircularEntity>();
-                questionnaireRepository.DeleteById(deletedCircularId);
+                questionnaireRepository.DeleteById(id);
                 uof.Save();
             }
         }
 
         public List<CircularPart> GetCases(
             int customerId,
+            int questionnaireId,
             int[] selectedDepartments,
             int[] selectedCaseTypes,
             int[] selectedProductArea,
@@ -95,6 +126,7 @@
             {
                 var caseRepository = uof.GetRepository<Case>();
                 var userRepository = uof.GetRepository<User>();
+                var questionnaireCircularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
 
                 IQueryable<Case> query = caseRepository.GetAll().GetAvaliableCustomerCases(customerId);
 
@@ -147,13 +179,39 @@
 
                 query = query.Take(percentageOfCases);
 
-                var anonymus = query.Select(x => new { x.Id, x.CaseNumber, x.Caption, x.PersonsEmail }).ToList();
+                var questionnaireCirculars =
+                    questionnaireCircularPartRepository.GetAll().GetByQuestionnaireId(questionnaireId);
+
+                var anonymus = (from @case in query
+                                join questionnaireCircular in questionnaireCirculars on @case.Id equals
+                                    questionnaireCircular.Case_Id into splits
+                                from split in splits.DefaultIfEmpty()
+                                select
+                                    new
+                                        {
+                                            @case.Id,
+                                            @case.CaseNumber,
+                                            @case.Caption,
+                                            @case.PersonsEmail,
+                                            split.SendDate
+                                        }).ToList();
 
                 List<CircularPart> businessModels =
-                    anonymus.Select(c => new CircularPart(c.Id, (int)c.CaseNumber, c.Caption, c.PersonsEmail)).ToList();
+                    anonymus.Select(
+                        c => new CircularPart(c.Id, (int)c.CaseNumber, c.Caption, c.PersonsEmail, c.SendDate != null))
+                        .ToList();
 
                 return businessModels;
             }
+        }
+
+        #endregion
+
+        #region PRIVATE
+
+        private static void Map(Circular businessModel, QuestionnaireCircularEntity entity)
+        {
+            entity.CircularName = businessModel.CircularName;
         }
 
         #endregion

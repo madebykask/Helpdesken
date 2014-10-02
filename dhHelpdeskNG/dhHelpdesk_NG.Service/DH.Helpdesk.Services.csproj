@@ -103,6 +103,7 @@
     <Compile Include="BusinessLogic\Specifications\Licenses\ApplicationSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Licenses\LicenseSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Licenses\ProductSpecifications.cs" />
+    <Compile Include="BusinessLogic\Specifications\Questionnaire\CircularPartSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Questionnaire\CircularSpecifications.cs" />
     <Compile Include="DisplayValues\Changes\ContactsListDisplayValue.cs" />
     <Compile Include="DisplayValues\Changes\ItemOverviewListDisplayValue.cs" />
