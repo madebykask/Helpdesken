@@ -916,7 +916,8 @@
             {
                 if (this.userTemporaryFilesStorage.FileExists(name, id, ModuleName.Log))
                 {
-                    return;
+                    //return;
+                    this.userTemporaryFilesStorage.DeleteFile(name, id, ModuleName.Log); 
                     //throw new HttpException((int)HttpStatusCode.Conflict, null); because it take a long time.
                 }
                 this.userTemporaryFilesStorage.AddFile(uploadedData, name, id, ModuleName.Log);
