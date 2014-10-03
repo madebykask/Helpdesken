@@ -376,13 +376,13 @@
             List<SelectListItem> cn = new List<SelectListItem>();
             cn.Add(new SelectListItem()
             {
-                Text = Translation.Get("Skicka inte", Enums.TranslationSource.TextTranslation),
+                Text = Translation.Get("Nej", Enums.TranslationSource.TextTranslation),
                 Value = "0",
                 Selected = false
             });
             cn.Add(new SelectListItem()
             {
-                Text = Translation.Get("Skicka E-post", Enums.TranslationSource.TextTranslation),
+                Text = Translation.Get("Ja", Enums.TranslationSource.TextTranslation),
                 Value = "1",
                 Selected = false
             });
