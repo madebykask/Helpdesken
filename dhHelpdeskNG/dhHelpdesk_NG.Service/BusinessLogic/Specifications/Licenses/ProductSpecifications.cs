@@ -13,8 +13,6 @@
                 return query;
             }
 
-            query = query.Where(p => p.Licenses.AsQueryable().HasRegions(regions));
-
             return query;
         }
 
@@ -24,8 +22,6 @@
             {
                 return query;
             }
-
-            query = query.Where(p => p.Licenses.AsQueryable().HasDepartments(departments));
 
             return query;
         } 

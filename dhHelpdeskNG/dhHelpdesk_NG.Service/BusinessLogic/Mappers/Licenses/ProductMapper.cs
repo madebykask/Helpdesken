@@ -2,21 +2,26 @@
 {
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models.Licenses;
+    using DH.Helpdesk.BusinessData.Models.Licenses.Products;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Services.BusinessLogic.Specifications.Licenses;
 
     public static class ProductMapper
     {
         public static ProductOverview[] MapToOverviews(this IQueryable<Product> query)
         {
-            var overviews = query.Select(p => new ProductOverview
-                                                  {
-                                                      ProductId = p.Id,
-                                                      ProductName = p.Name/*,
-                                                      LicencesNumber = p.Licenses.Count(),
-                                                      UsedLicencesNumber = p.Licenses.AsQueryable().GetUsedLicenses().Count()*/
-                                                  }).ToArray();
+            var entities = query.Select(p => new 
+                                                {
+                                                    ProductId = p.Id,
+                                                    ProductName = p.Name,
+                                                    LicencesNumber = 0,
+                                                    UsedLicencesNumber = 0
+                                                }).ToArray();
+
+            var overviews = entities.Select(p => new ProductOverview(
+                                                    p.ProductId,
+                                                    p.ProductName,
+                                                    p.LicencesNumber,
+                                                    p.UsedLicencesNumber)).ToArray();
 
             return overviews;
         }

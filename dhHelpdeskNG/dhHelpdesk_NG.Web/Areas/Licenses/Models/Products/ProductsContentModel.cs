@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Licenses.Models.Products
 {
-    using DH.Helpdesk.BusinessData.Models.Licenses;
+    using DH.Helpdesk.BusinessData.Models.Licenses.Products;
 
     public sealed class ProductsContentModel
     {

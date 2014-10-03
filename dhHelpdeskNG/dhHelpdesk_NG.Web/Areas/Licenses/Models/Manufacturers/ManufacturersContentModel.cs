@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Licenses.Models.Manufacturers
 {
     using DH.Helpdesk.BusinessData.Models.Licenses;
+    using DH.Helpdesk.BusinessData.Models.Licenses.Manufacturers;
 
     public sealed class ManufacturersContentModel
     {
