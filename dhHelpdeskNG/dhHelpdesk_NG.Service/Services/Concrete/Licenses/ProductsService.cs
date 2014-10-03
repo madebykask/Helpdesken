@@ -1,6 +1,5 @@
 ﻿namespace DH.Helpdesk.Services.Services.Concrete.Licenses
 {
-    using DH.Helpdesk.BusinessData.Models.Licenses;
     using DH.Helpdesk.BusinessData.Models.Licenses.Products;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;

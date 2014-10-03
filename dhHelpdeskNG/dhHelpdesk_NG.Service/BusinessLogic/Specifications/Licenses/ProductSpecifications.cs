@@ -13,6 +13,8 @@
                 return query;
             }
 
+            query = query.Where(p => p.Licenses.Any(l => regions.Contains(l.Region_Id)));
+
             return query;
         }
 
@@ -22,6 +24,8 @@
             {
                 return query;
             }
+
+            query = query.Where(p => p.Licenses.Any(l => departments.Contains(l.Department_Id)));
 
             return query;
         } 
