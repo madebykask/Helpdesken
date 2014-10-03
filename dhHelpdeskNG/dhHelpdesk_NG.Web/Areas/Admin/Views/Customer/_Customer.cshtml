@@ -206,7 +206,7 @@
                     @Translation.Get("Informera anmälaren om åtgärden", Enums.TranslationSource.TextTranslation) -  @Translation.Get("Extern notering", Enums.TranslationSource.TextTranslation)
                 </td>
                 <td>
-                    
+                    @Html.DropDownListFor(model => model.Customer.CommunicateWithNotifier, Model.CWNSelect, "", new {})
                 </td>
             </tr>
             <tr>

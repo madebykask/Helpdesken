@@ -269,6 +269,7 @@
             customerToSave.ShowBulletinBoardOnExtPage = vmodel.Customer.ShowBulletinBoardOnExtPage;
             customerToSave.ShowDashboardOnExternalPage = vmodel.Customer.ShowDashboardOnExternalPage;
             customerToSave.ShowFAQOnExternalPage = vmodel.Customer.ShowFAQOnExternalPage;
+            customerToSave.CommunicateWithNotifier = vmodel.Customer.CommunicateWithNotifier;
 
             var b = this.TryUpdateModel(customerToSave, "customer");
             var setting = this._settingService.GetCustomerSetting(id);
@@ -331,6 +332,7 @@
             if (customer.Id == 0)
             {
                 customer.Language_Id = SessionFacade.CurrentLanguageId;
+                customer.CommunicateWithNotifier = 1;
             }
 
             #region Generals
@@ -370,6 +372,20 @@
                     Value = i.ToString()
                 });
             }
+
+            List<SelectListItem> cn = new List<SelectListItem>();
+            cn.Add(new SelectListItem()
+            {
+                Text = Translation.Get("Skicka inte", Enums.TranslationSource.TextTranslation),
+                Value = "0",
+                Selected = false
+            });
+            cn.Add(new SelectListItem()
+            {
+                Text = Translation.Get("Skicka E-post", Enums.TranslationSource.TextTranslation),
+                Value = "1",
+                Selected = false
+            });
 
             #endregion
 
@@ -446,6 +462,7 @@
                 //ListCustomerReports = reportList,
                 MinimumPasswordLength = sl,
                 PasswordHistory = sli,
+                CWNSelect = cn,
                 Regions = this._regionService.GetRegions(customer.Id),
                 Setting = this._settingService.GetCustomerSetting(customer.Id) ?? new Setting(),
                 Customers = this._customerService.GetAllCustomers().Select(x => new SelectListItem
@@ -489,6 +506,7 @@
                 model.OrderPermission = 1;
             }
 
+           
             #endregion
 
             return model;
@@ -514,7 +532,8 @@
             {
                 CaseSettings = this._caseSettingsService.GetCaseSettings(SessionFacade.CurrentCustomer.Id),
                 CSetting = caseSetting,
-                CaseFieldSettingLanguages = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId),
+                CaseFieldSettingLanguages = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguagesForDefaultCust(SessionFacade.CurrentLanguageId),
+                //CaseFieldSettingLanguages = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId),
                 LineList = li,
             };
 
@@ -849,6 +868,43 @@
 
                 this._computerService.SaveComputerUserFieldSettingForCustomerCopy(newCustomerComputerUserFS, out errors);
             }
+
+
+            //foreach (var l in language)
+            //{
+            //    var computerUserFieldSettingsLangToCopy = this._computerService.GetComputerUserFieldSettingsWithLanguages(customerToCopy.Id, l.Id);
+            //    var computerUserFieldSettingsForNewCustomer = this._computerService.GetComputerUserFieldSettings(newCustomerToSave.Id);
+
+            //    if (computerUserFieldSettingsLangToCopy != null)
+            //    {
+
+            //        foreach (var cfsl in computerUserFieldSettingsLangToCopy)
+            //        {
+
+            //            foreach (var cfs in computerUserFieldSettingsForNewCustomer)
+            //            {
+            //                if (cfsl.Name == cfs.ComputerUserField)
+            //                {
+            //                    var newComputerUserFSL = new ComputerUserFieldSettingsLanguage
+            //                    {
+            //                        ComputerUserFieldSettings_Id = cfs.Id,
+            //                        Language_Id = cfsl.Language_Id,
+            //                        Label = cfsl.Label,
+            //                        FieldHelp = cfsl.FieldHelp,
+            //                    };
+
+            //                    this._computerService.SaveComputerUserFieldSettingLangForCustomerCopy(newComputerUserFSL, out errors);
+
+            //                    break;
+            //                }
+
+            //            }
+
+            //        }
+
+            //    }
+
+            //}
 
             //ComputerUserFieldSettingsLanguage
 
