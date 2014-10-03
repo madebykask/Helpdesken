@@ -519,7 +519,8 @@ namespace DH.Helpdesk.Web.Controllers
                 selectedPa,
                 availableWg,
                 selectedWg,
-                circularParts
+                circularParts,
+                false
                 );
 
             var lst = new List<SelectListItem>();
@@ -625,7 +626,8 @@ namespace DH.Helpdesk.Web.Controllers
             int[] selectedWorkingGroups,
             int procent,
             DateTime? finishingDateFrom,
-            DateTime? finishingDateTo)
+            DateTime? finishingDateTo,
+            bool isUniqueEmail)
         {
             List<CircularPart> cases = this._circularService.GetCases(
                 SessionFacade.CurrentCustomer.Id,
@@ -636,7 +638,8 @@ namespace DH.Helpdesk.Web.Controllers
                 selectedWorkingGroups,
                 procent,
                 finishingDateFrom,
-                finishingDateTo);
+                finishingDateTo,
+                isUniqueEmail);
 
             var models =
                 cases.Select(c => new CircularPartOverview(c.CaseId, c.CaseNumber, c.Caption, c.Email, c.IsSent)).ToList();

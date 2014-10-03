@@ -63,7 +63,8 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
                                 IList<SelectListItem> selectedProductArea,
                                 IList<SelectListItem> availableWorkingGroups,
                                 IList<SelectListItem> selectedWorkingGroups,
-                                List<CircularPartOverview> circularParts
+                                List<CircularPartOverview> circularParts,
+                                bool isUniqueEmail
             )
         {
             this.QuestionnaireId = questionnaireId;
@@ -76,6 +77,7 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
             this.AvailableWorkingGroups = availableWorkingGroups;
             this.SelectedWorkingGroups = selectedWorkingGroups;
             this.CircularParts = circularParts;
+            this.IsUniqueEmail = isUniqueEmail;
         }
 
         [IsId]
@@ -103,6 +105,8 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
 
         [DataType(DataType.Date)]
         public DateTime? FinishingDateTo { get; set; }
+
+        public bool IsUniqueEmail { get; set; }
 
 
         public IList<SelectListItem> AvailableDepartments { get; set; }

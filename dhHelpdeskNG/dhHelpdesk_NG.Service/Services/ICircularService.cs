@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
 
-    using DH.Helpdesk.BusinessData.Models.Questionnaire.Input;
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Output;
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Read;
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Write;
@@ -29,6 +28,7 @@
             int[] selectedWorkingGroups,
             int procent,
             DateTime? finishingDateFrom,
-            DateTime? finishingDateTo);
+            DateTime? finishingDateTo,
+            bool isUniqueEmail);
     }
 }

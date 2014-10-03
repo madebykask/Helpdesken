@@ -5,7 +5,6 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Questionnaire;
-    using DH.Helpdesk.BusinessData.Models.Questionnaire.Input;
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Output;
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Read;
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Write;
@@ -123,7 +122,8 @@
             int[] selectedWorkingGroups,
             int procent,
             DateTime? finishingDateFrom,
-            DateTime? finishingDateTo)
+            DateTime? finishingDateTo,
+            bool isUniqueEmail)
         {
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
@@ -183,25 +183,39 @@
                 query = query.Take(percentageOfCases);
 
                 var questionnaireCirculars =
-                    questionnaireCircularPartRepository.GetAll().GetByQuestionnaireId(questionnaireId);
+                    questionnaireCircularPartRepository.GetAll()
+                        .GetByQuestionnaireId(questionnaireId)
+                        .Select(x => new { x.Case_Id, x.SendDate })
+                        .GroupBy(x => x.Case_Id)
+                        .Select(x => new { Case_Id = x.Key, SendDate = x.Max(c => c.SendDate) });
 
-                var anonymus = (from @case in query
-                                join questionnaireCircular in questionnaireCirculars on @case.Id equals
-                                    questionnaireCircular.Case_Id into splits
-                                from split in splits.DefaultIfEmpty()
-                                select
-                                    new
-                                        {
-                                            @case.Id,
-                                            @case.CaseNumber,
-                                            @case.Caption,
-                                            @case.PersonsEmail,
-                                            split.SendDate
-                                        }).ToList();
+                var anonymus = from @case in query
+                               join questionnaireCircular in questionnaireCirculars on @case.Id equals
+                                   questionnaireCircular.Case_Id into splits
+                               from split in splits.DefaultIfEmpty()
+                               select
+                                   new
+                                       {
+                                           @case.Id,
+                                           @case.CaseNumber,
+                                           @case.Caption,
+                                           @case.PersonsEmail,
+                                           split.SendDate
+                                       };
+
+                if (isUniqueEmail)
+                {
+                    anonymus = from element in anonymus
+                               group element by element.PersonsEmail
+                               into groups
+                               select groups.OrderBy(p => p.CaseNumber).FirstOrDefault();
+                }
 
                 List<CircularPart> businessModels =
-                    anonymus.Select(
-                        c => new CircularPart(c.Id, (int)c.CaseNumber, c.Caption, c.PersonsEmail, c.SendDate != null))
+                    anonymus.ToList()
+                        .Select(
+                            c =>
+                            new CircularPart(c.Id, (int)c.CaseNumber, c.Caption, c.PersonsEmail, c.SendDate != null))
                         .ToList();
 
                 return businessModels;
