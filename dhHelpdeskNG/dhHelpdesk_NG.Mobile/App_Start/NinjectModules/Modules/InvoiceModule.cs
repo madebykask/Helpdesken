@@ -5,7 +5,7 @@
     using DH.Helpdesk.Dal.Mappers.Invoice.BusinessModelToEntity;
     using DH.Helpdesk.Dal.Mappers.Invoice.EntityToBusinessModel;
     using DH.Helpdesk.Domain.Invoice;
-    using DH.Helpdesk.Mobile.Areas.Admin.Infrastructure.ModelFactories;
+    //using DH.Helpdesk.Mobile.Areas.Admin.Infrastructure.ModelFactories;
     using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Invoice;
     using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Invoice.Concrete;
     using DH.Helpdesk.Mobile.Infrastructure.Tools;
@@ -61,9 +61,9 @@
                 .To<InvoiceArticlesModelFactory>()
                 .InSingletonScope();
 
-            this.Bind<ICaseInvoiceFactory>()
-                .To<CaseInvoiceFactory>()
-                .InSingletonScope();
+            //this.Bind<ICaseInvoiceFactory>()
+            //    .To<CaseInvoiceFactory>()
+            //    .InSingletonScope();
 
             this.Bind<IInvoiceHelper>()
                 .To<InvoiceHelper>()
