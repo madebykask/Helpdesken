@@ -575,27 +575,19 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var circular = new CircularForUpdate(editedCircular.Id, editedCircular.CircularName, DateTime.Now);
 
-            _circularService.UpdateCircular(circular);
+            this._circularService.UpdateCircular(circular);
 
-            return RedirectToAction("CircularOverview",
-                 new
-                 {
-                     questionnaireId = editedCircular.QuestionnaireId,
-                     state = editedCircular.State
-                 });
+            return this.RedirectToAction(
+                "CircularOverview",
+                new { questionnaireId = editedCircular.QuestionnaireId, state = editedCircular.State });
         }
 
         [HttpPost]
         public RedirectToRouteResult DeleteCircular(int questionnaireId, int stateId, int circularId)
         {
-            _circularService.DeleteById(circularId);
+            this._circularService.DeleteById(circularId);
 
-            return RedirectToAction("CircularOverview",
-                     new
-                     {
-                         questionnaireId = questionnaireId,
-                         state = stateId
-                     });
+            return this.RedirectToAction("CircularOverview", new { questionnaireId, state = stateId });
         }
 
         [HttpPost]
@@ -645,6 +637,12 @@ namespace DH.Helpdesk.Web.Controllers
                 cases.Select(c => new CircularPartOverview(c.CaseId, c.CaseNumber, c.Caption, c.Email, c.IsSent)).ToList();
 
             return this.PartialView("_CircularPartOverview", models);
+        }
+
+        [HttpGet]
+        public ViewResult DeleteConnectedCase(int circularpartId, int circularId)
+        {
+            return null;
         }
     }
 }

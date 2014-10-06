@@ -737,6 +737,8 @@
     <Compile Include="Models\Inventory\SearchModels\ReportsSearchViewModel.cs" />
     <Compile Include="Areas\Admin\Models\Invoice\ArticlesImportModel.cs" />
     <Compile Include="Models\Invoice\CaseInvoiceArticlesModel.cs" />
+    <Compile Include="Models\Questionnaire\Input\CircularPartOverview.cs" />
+    <Compile Include="Models\Questionnaire\Input\ConnectedToCircularOverview.cs" />
     <Compile Include="Models\Reports\AverageSolutionTimeOptions.cs" />
     <Compile Include="Models\Reports\AverageSolutionTimeReport.cs" />
     <Compile Include="Models\Reports\IndexModel.cs" />
@@ -1626,6 +1628,7 @@
     <Content Include="Views\Inventory\EditorTemplates\CustomTypesFields\Text.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\CustomTypesFields\WideText.cshtml" />
     <Content Include="Views\Questionnaire\_InputCircular.cshtml" />
+    <Content Include="Views\Questionnaire\_CircularPartOverviewWithDelete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

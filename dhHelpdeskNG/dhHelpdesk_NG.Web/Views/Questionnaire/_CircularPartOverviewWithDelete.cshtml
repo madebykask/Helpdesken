@@ -1,0 +1,53 @@
+﻿@using DH.Helpdesk.Web.Models.Questionnaire.Input
+@model List<ConnectedToCircularOverview>
+<div class="container">
+    <div class="row">
+        <div class="span100">
+            <table id="tblCircular" class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            @Translation.Get("Ärende")
+                        </th>
+                        <th>
+                            @Translation.Get("Rubrik")
+                        </th>
+                        <th>
+                            @Translation.Get("E-post")
+                        </th>
+                        <th>
+                            @Translation.Get("Status")
+                        </th>
+                        <th>
+                            @Translation.Get("Ta bort")
+                        </th>
+                    </tr>
+                </thead>
+                @{
+                    var cases = Model;
+                    foreach (ConnectedToCircularOverview @case in cases)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => @case.CaseNumber)
+                                @Html.HiddenFor(m => @case.CaseId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => @case.Caption)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => @case.Email)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => @case.DisplaySent)
+                            </td>
+                            <td>
+                                @Html.ActionLink(Translation.Get("Ta bort"), "DeleteConnectedCase", new { circularPartId = @case.Id, circularId = @case.CircularId }, new { @class = "btn" })
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
+        </div>
+    </div>
+</div>
