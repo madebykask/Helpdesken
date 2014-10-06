@@ -14,5 +14,10 @@
         {
             return new ApplicationsContentModel(applications);
         }
+
+        public ApplicationEditModel GetEditModel(ApplicationData data)
+        {
+            return new ApplicationEditModel(data);
+        }
     }
 }

@@ -49,5 +49,10 @@
 
             return new ProductsFilterData(regions.ToArray(), departments.ToArray());
         }
+
+        public ProductData GetProductData(int? productId)
+        {
+            throw new global::System.NotImplementedException();
+        }
     }
 }

@@ -5,5 +5,7 @@
     public interface ILicensesService
     {
         LicenseOverview[] GetLicenses(int customerId);
+
+        LicenseData GetLicenseData(int? licenseId);
     }
 }

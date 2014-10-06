@@ -5,5 +5,7 @@
     public interface IApplicationsService
     {
         ApplicationOverview[] GetApplications(int customerId, bool onlyConnected);
+
+        ApplicationData GetApplicationData(int? applicationId);
     }
 }

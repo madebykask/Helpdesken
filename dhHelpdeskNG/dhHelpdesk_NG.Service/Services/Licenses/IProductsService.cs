@@ -1,6 +1,5 @@
 ﻿namespace DH.Helpdesk.Services.Services.Licenses
 {
-    using DH.Helpdesk.BusinessData.Models.Licenses;
     using DH.Helpdesk.BusinessData.Models.Licenses.Products;
 
     public interface IProductsService
@@ -11,5 +10,7 @@
                                 int[] departments);
 
         ProductsFilterData GetProductsFilterData(int customerId);
+
+        ProductData GetProductData(int? productId);
     }
 }

@@ -29,5 +29,10 @@
                 return overviews;
             }
         }
+
+        public ManufacturerData GetManufacturerData(int? manufacturerId)
+        {
+            throw new global::System.NotImplementedException();
+        }
     }
 }

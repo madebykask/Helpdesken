@@ -8,5 +8,7 @@
         ManufacturersIndexModel GetIndexModel(ManufacturersFilterModel filter);
 
         ManufacturersContentModel GetContentModel(ManufacturerOverview[] manufacturers);
+
+        ManufacturerEditModel GetEditModel(ManufacturerData data);
     }
 }

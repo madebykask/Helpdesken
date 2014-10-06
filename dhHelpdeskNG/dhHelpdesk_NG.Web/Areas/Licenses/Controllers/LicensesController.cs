@@ -60,5 +60,13 @@
             var contentModel = this.licensesModelFactory.GetContentModel(licenses);
             return this.PartialView(contentModel);
         }
+
+        [HttpGet]
+        public ViewResult License(int? licenseId)
+        {
+            var data = this.licensesService.GetLicenseData(licenseId);
+            var model = this.licensesModelFactory.GetEditModel(data);
+            return this.View(model);
+        }        
     }
 }

@@ -29,5 +29,10 @@
                 return overviews;
             }
         }
+
+        public VendorData GetVendorData(int? vendorId)
+        {
+            throw new global::System.NotImplementedException();
+        }
     }
 }

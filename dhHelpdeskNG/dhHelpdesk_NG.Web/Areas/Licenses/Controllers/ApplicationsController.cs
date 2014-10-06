@@ -62,5 +62,13 @@
             var contentModel = this.applicationsModelFactory.GetContentModel(applications);
             return this.PartialView(contentModel);
         }
+
+        [HttpGet]
+        public ViewResult Application(int? applicationId)
+        {
+            var data = this.applicationsService.GetApplicationData(applicationId);
+            var model = this.applicationsModelFactory.GetEditModel(data);
+            return this.View(model);
+        }
     }
 }

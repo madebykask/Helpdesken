@@ -30,5 +30,21 @@
                 return overviews;
             }
         }
+
+        public ApplicationData GetApplicationData(int? applicationId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var applicationRepository = uow.GetRepository<Application>();
+ 
+                ApplicationModel application = null;
+                if (applicationId.HasValue)
+                {
+                    
+                }
+
+                return new ApplicationData(application);                
+            }
+        }
     }
 }

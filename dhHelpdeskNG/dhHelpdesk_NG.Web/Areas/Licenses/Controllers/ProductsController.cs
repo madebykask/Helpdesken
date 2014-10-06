@@ -65,5 +65,13 @@
             var contentModel = this.productsModelFactory.GetContentModel(products);
             return this.PartialView(contentModel);
         }
+
+        [HttpGet]
+        public ViewResult Product(int? productId)
+        {
+            var data = this.productsService.GetProductData(productId);
+            var model = this.productsModelFactory.GetEditModel(data);
+            return this.View(model);
+        }
     }
 }

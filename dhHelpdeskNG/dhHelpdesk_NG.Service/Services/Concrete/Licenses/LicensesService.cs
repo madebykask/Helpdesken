@@ -31,5 +31,10 @@
                 return overviews;
             }
         }
+
+        public LicenseData GetLicenseData(int? licenseId)
+        {
+            throw new global::System.NotImplementedException();
+        }
     }
 }

@@ -60,5 +60,13 @@
             var contentModel = this.vendorsModelFactory.GetContentModel(vendors);
             return this.PartialView(contentModel);
         }
+
+        [HttpGet]
+        public ViewResult Vendor(int? vendorId)
+        {
+            var data = this.vendorsService.GetVendorData(vendorId);
+            var model = this.vendorsModelFactory.GetEditModel(data);
+            return this.View(model);
+        }
     }
 }

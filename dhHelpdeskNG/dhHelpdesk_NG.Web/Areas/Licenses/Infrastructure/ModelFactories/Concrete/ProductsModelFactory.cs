@@ -20,5 +20,10 @@
         {
             return new ProductsContentModel(products);
         }
+
+        public ProductEditModel GetEditModel(ProductData data)
+        {
+            return new ProductEditModel(data);
+        }
     }
 }

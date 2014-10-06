@@ -14,5 +14,10 @@
         {
             return new VendorsContentModel(vendors);
         }
+
+        public VendorEditModel GetEditModel(VendorData data)
+        {
+            return new VendorEditModel(data);
+        }
     }
 }

@@ -8,5 +8,7 @@
         ApplicationsIndexModel GetIndexModel(ApplicationsFilterModel filter);
 
         ApplicationsContentModel GetContentModel(ApplicationOverview[] applications);
+
+        ApplicationEditModel GetEditModel(ApplicationData data);
     }
 }

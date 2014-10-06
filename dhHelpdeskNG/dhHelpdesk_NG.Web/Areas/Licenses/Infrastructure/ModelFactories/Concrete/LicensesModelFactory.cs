@@ -14,5 +14,10 @@
         {
             return new LicensesContentModel(licenses);
         }
+
+        public LicenseEditModel GetEditModel(LicenseData data)
+        {
+            return new LicenseEditModel(data);
+        }
     }
 }

@@ -14,5 +14,10 @@
         {
             return new ManufacturersContentModel(manufacturers);
         }
+
+        public ManufacturerEditModel GetEditModel(ManufacturerData data)
+        {
+            return new ManufacturerEditModel(data);
+        }
     }
 }

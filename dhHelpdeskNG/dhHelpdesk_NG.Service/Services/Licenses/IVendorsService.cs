@@ -5,5 +5,7 @@
     public interface IVendorsService
     {
         VendorOverview[] GetVendors(int customerId);
+
+        VendorData GetVendorData(int? vendorId);
     }
 }

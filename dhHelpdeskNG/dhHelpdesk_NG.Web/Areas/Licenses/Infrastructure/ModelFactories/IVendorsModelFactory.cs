@@ -8,5 +8,7 @@
         VendorsIndexModel GetIndexModel(VendorsFilterModel filter);
 
         VendorsContentModel GetContentModel(VendorOverview[] vendors);
+
+        VendorEditModel GetEditModel(VendorData data);
     }
 }

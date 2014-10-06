@@ -5,6 +5,13 @@
     Layout = "~/Areas/Licenses/Views/Shared/_IndexLayout.cshtml";
 }
 
+@section Actions {
+    <ul class="secnav">               
+        <li>
+        </li>
+    </ul>
+}
+
 @using (Ajax.BeginForm("Products", "Products", null, 
     new AjaxOptions { UpdateTargetId = "LicensesProductsTableContainer" },
     new { id ="ProductsSearchForm" } ))

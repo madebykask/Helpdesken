@@ -60,5 +60,13 @@
             var contentModel = this.manufacturersModelFactory.GetContentModel(manufacturers);
             return this.PartialView(contentModel);
         }
+
+        [HttpGet]
+        public ViewResult Manufacturer(int? manufacturerId)
+        {
+            var data = this.manufacturersService.GetManufacturerData(manufacturerId);
+            var model = this.manufacturersModelFactory.GetEditModel(data);
+            return this.View(model);
+        }
     }
 }

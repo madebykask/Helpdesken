@@ -8,5 +8,7 @@
         LicensesIndexModel GetIndexModel(LicensesFilterModel filter);
 
         LicensesContentModel GetContentModel(LicenseOverview[] licenses);
+
+        LicenseEditModel GetEditModel(LicenseData data);
     }
 }
