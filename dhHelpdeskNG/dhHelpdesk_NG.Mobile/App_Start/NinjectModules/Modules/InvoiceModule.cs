@@ -1,15 +1,15 @@
-﻿namespace DH.Helpdesk.Web.NinjectModules.Modules
+﻿namespace DH.Helpdesk.Mobile.NinjectModules.Modules
 {
     using DH.Helpdesk.BusinessData.Models.Invoice;
     using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Dal.Mappers.Invoice.BusinessModelToEntity;
     using DH.Helpdesk.Dal.Mappers.Invoice.EntityToBusinessModel;
     using DH.Helpdesk.Domain.Invoice;
-    using DH.Helpdesk.Web.Areas.Admin.Infrastructure.ModelFactories;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Invoice;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Invoice.Concrete;
-    using DH.Helpdesk.Web.Infrastructure.Tools;
-    using DH.Helpdesk.Web.Infrastructure.Tools.Concrete;
+    using DH.Helpdesk.Mobile.Areas.Admin.Infrastructure.ModelFactories;
+    using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Invoice;
+    using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Invoice.Concrete;
+    using DH.Helpdesk.Mobile.Infrastructure.Tools;
+    using DH.Helpdesk.Mobile.Infrastructure.Tools.Concrete;
 
     using Ninject.Modules;
 

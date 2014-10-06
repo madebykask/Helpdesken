@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Inventory
+﻿namespace DH.Helpdesk.Mobile.Models.Inventory
 {
     using System;
     using System.Collections.Generic;
@@ -21,8 +21,8 @@
     using DH.Helpdesk.Services.DisplayValues;
     using DH.Helpdesk.Services.DisplayValues.Inventory;
     using DH.Helpdesk.Services.Response.Inventory;
-    using DH.Helpdesk.Web.Enums.Inventory;
-    using DH.Helpdesk.Web.Models.Shared;
+    using DH.Helpdesk.Mobile.Enums.Inventory;
+    using DH.Helpdesk.Mobile.Models.Shared;
 
     public sealed class InventoryGridModel
     {

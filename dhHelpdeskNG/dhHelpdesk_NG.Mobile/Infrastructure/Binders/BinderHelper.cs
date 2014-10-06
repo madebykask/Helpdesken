@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace DH.Helpdesk.Web.Infrastructure.Binders
+namespace DH.Helpdesk.Mobile.Infrastructure.Binders
 {
     using System;
     using System.Globalization;

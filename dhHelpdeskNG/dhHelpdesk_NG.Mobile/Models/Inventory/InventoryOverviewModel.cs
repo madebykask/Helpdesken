@@ -1,10 +1,10 @@
-﻿namespace DH.Helpdesk.Web.Models.Inventory
+﻿namespace DH.Helpdesk.Mobile.Models.Inventory
 {
     using System.Collections.Generic;
 
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport.ExcelExport;
-    using DH.Helpdesk.Web.Models.Shared;
+    using DH.Helpdesk.Mobile.Models.Shared;
 
     public sealed class InventoryOverviewModel : IRow<NewGridRowCellValueModel>
     {

@@ -1,12 +1,12 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Changes
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.BusinessModelFactories.Changes
 {
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Web.Infrastructure.Tools;
-    using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
+    using DH.Helpdesk.Mobile.Infrastructure.Tools;
+    using DH.Helpdesk.Mobile.Models.Changes.ChangeEdit;
 
     public interface INewChangeRequestFactory
     {

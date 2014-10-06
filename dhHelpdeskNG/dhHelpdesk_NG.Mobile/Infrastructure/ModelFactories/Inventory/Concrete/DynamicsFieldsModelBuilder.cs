@@ -1,11 +1,11 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Inventory.Concrete
 {
     using System.Collections.Generic;
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.InventorySettings;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Inventory;
+    using DH.Helpdesk.Mobile.Models.Inventory.EditModel.Inventory;
 
     public class DynamicsFieldsModelBuilder : IDynamicsFieldsModelBuilder
     {

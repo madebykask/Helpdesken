@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace DH.Helpdesk.Web.Areas.Licenses
+namespace DH.Helpdesk.Mobile.Areas.Licenses
 {
     public class LicensesAreaRegistration : AreaRegistration
     {

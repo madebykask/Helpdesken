@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace DH.Helpdesk.Web.Models.Faq.Output
+namespace DH.Helpdesk.Mobile.Models.Faq.Output
 {
     using System;
 

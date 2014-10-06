@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Controllers
+﻿namespace DH.Helpdesk.Mobile.Controllers
 {
     using System.Linq;
     using System.Web.Mvc;
@@ -8,11 +8,11 @@
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Services.Infrastructure.Cases;
     using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Web.Infrastructure;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Case;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Link;
-    using DH.Helpdesk.Web.Models;
+    using DH.Helpdesk.Mobile.Infrastructure;
+    using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Case;
+    using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Common;
+    using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Link;
+    using DH.Helpdesk.Mobile.Models;
 
     public class HomeController : BaseController
     {

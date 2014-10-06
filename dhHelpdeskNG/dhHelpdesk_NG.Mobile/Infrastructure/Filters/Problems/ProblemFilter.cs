@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Filters.Problems
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.Filters.Problems
 {
     using DH.Helpdesk.Dal.Enums;
 

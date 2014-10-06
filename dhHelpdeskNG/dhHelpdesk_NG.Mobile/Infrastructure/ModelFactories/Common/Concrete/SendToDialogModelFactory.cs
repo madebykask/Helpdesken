@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Common.Concrete
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Common.Concrete
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -6,7 +6,7 @@
 
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.Models.Shared.Output;
-    using DH.Helpdesk.Web.Models.Shared;
+    using DH.Helpdesk.Mobile.Models.Shared;
 
     public sealed class SendToDialogModelFactory : ISendToDialogModelFactory
     {

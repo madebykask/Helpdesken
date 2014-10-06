@@ -1,9 +1,9 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Reports
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Reports
 {
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Reports;
-    using DH.Helpdesk.Web.Infrastructure.Filters.Reports;
-    using DH.Helpdesk.Web.Models.Reports;
+    using DH.Helpdesk.Mobile.Infrastructure.Filters.Reports;
+    using DH.Helpdesk.Mobile.Models.Reports;
 
     public interface IReportsModelFactory
     {

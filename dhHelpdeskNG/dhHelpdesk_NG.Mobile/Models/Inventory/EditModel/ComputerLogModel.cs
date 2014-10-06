@@ -1,11 +1,11 @@
-﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel
+﻿namespace DH.Helpdesk.Mobile.Models.Inventory.EditModel
 {
     using System;
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Infrastructure;
-    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Mobile.Infrastructure;
+    using DH.Helpdesk.Mobile.Infrastructure.LocalizedAttributes;
 
     public class ComputerLogModel
     {

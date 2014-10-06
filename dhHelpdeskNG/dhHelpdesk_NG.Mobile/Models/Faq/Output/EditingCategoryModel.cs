@@ -1,6 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Models.Faq.Output
+﻿namespace DH.Helpdesk.Mobile.Models.Faq.Output
 {
-    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Mobile.Infrastructure.LocalizedAttributes;
 
     public sealed class EditingCategoryModel
     {

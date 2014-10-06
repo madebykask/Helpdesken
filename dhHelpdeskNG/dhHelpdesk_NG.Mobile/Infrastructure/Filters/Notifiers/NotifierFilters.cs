@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Filters.Notifiers
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.Filters.Notifiers
 {
     using DH.Helpdesk.BusinessData.Enums.Notifiers;
     using DH.Helpdesk.Common.Enums;

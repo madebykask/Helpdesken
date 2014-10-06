@@ -1,8 +1,8 @@
-﻿namespace DH.Helpdesk.Web.Areas.Licenses.Infrastructure.ModelFactories.Concrete
+﻿namespace DH.Helpdesk.Mobile.Areas.Licenses.Infrastructure.ModelFactories.Concrete
 {
     using DH.Helpdesk.BusinessData.Models.Licenses;
     using DH.Helpdesk.BusinessData.Models.Licenses.Licenses;
-    using DH.Helpdesk.Web.Areas.Licenses.Models.Licenses;
+    using DH.Helpdesk.Mobile.Areas.Licenses.Models.Licenses;
 
     public sealed class LicensesModelFactory : ILicensesModelFactory
     {

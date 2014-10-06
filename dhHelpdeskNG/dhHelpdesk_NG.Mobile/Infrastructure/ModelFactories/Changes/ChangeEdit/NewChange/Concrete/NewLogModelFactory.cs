@@ -1,8 +1,8 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.NewChange.Concrete
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Changes.ChangeEdit.NewChange.Concrete
 {
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
-    using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
+    using DH.Helpdesk.Mobile.Models.Changes.ChangeEdit;
 
     public sealed class NewLogModelFactory : INewLogModelFactory
     {

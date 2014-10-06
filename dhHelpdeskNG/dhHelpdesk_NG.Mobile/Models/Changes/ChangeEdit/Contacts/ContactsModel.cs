@@ -1,10 +1,10 @@
-﻿namespace DH.Helpdesk.Web.Models.Changes.ChangeEdit.Contacts
+﻿namespace DH.Helpdesk.Mobile.Models.Changes.ChangeEdit.Contacts
 {
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Mobile.Infrastructure.LocalizedAttributes;
 
     public sealed class ContactsModel
     {

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using DH.Helpdesk.BusinessData.Models.Link.Output;
-using DH.Helpdesk.Web.Models.Link;
+using DH.Helpdesk.Mobile.Models.Link;
 
-namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Link
+namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Link
 {
     public interface ILinkModelFactory
     {

@@ -1,10 +1,10 @@
-namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concrete
+namespace DH.Helpdesk.Mobile.Infrastructure.BusinessModelFactories.Inventory.Concrete
 {
     using System;
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.PrinterSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.SharedSettings;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Printer;
+    using DH.Helpdesk.Mobile.Models.Inventory.EditModel.Settings.Printer;
 
     public class PrinterFieldsSettingsBuilder : IPrinterFieldsSettingsBuilder
     {

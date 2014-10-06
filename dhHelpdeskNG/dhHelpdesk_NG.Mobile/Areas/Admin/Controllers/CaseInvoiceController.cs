@@ -1,12 +1,12 @@
-﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Mobile.Areas.Admin.Controllers
 {
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models.Invoice;
     using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Web.Areas.Admin.Infrastructure.ModelFactories;
-    using DH.Helpdesk.Web.Areas.Admin.Models.Invoice;
-    using DH.Helpdesk.Web.Infrastructure.ActionFilters;
+    using DH.Helpdesk.Mobile.Areas.Admin.Infrastructure.ModelFactories;
+    using DH.Helpdesk.Mobile.Areas.Admin.Models.Invoice;
+    using DH.Helpdesk.Mobile.Infrastructure.ActionFilters;
 
     public class CaseInvoiceController : BaseAdminController
     {

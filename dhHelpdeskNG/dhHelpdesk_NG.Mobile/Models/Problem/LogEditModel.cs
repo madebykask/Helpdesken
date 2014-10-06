@@ -1,10 +1,10 @@
-﻿namespace DH.Helpdesk.Web.Models.Problem
+﻿namespace DH.Helpdesk.Mobile.Models.Problem
 {
     using System;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
-    using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
+    using DH.Helpdesk.Mobile.Infrastructure.Extensions.HtmlHelperExtensions.Content;
 
     public class LogEditModel
     {

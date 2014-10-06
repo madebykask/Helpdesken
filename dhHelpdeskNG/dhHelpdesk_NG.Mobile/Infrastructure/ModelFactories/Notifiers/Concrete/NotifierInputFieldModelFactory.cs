@@ -1,11 +1,11 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Notifiers.Concrete
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Notifiers.Concrete
 {
     using System.Collections.Generic;
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.NotifierOverview;
-    using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
-    using DH.Helpdesk.Web.Models.Notifiers.ConfigurableFields;
+    using DH.Helpdesk.Mobile.Infrastructure.Extensions.HtmlHelperExtensions.Content;
+    using DH.Helpdesk.Mobile.Models.Notifiers.ConfigurableFields;
 
     public sealed class NotifierInputFieldModelFactory : INotifierInputFieldModelFactory
     {

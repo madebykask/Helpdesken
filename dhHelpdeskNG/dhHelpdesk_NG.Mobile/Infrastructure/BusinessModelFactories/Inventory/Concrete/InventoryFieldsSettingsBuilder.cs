@@ -1,11 +1,11 @@
-namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concrete
+namespace DH.Helpdesk.Mobile.Infrastructure.BusinessModelFactories.Inventory.Concrete
 {
     using System;
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.InventorySettings;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Settings;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Inventory;
+    using DH.Helpdesk.Mobile.Models.Inventory.EditModel.Settings;
+    using DH.Helpdesk.Mobile.Models.Inventory.EditModel.Settings.Inventory;
 
     public class InventoryFieldsSettingsBuilder : IInventoryFieldsSettingsBuilder
     {

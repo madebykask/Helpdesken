@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.Extensions.HtmlHelperExtensions
 {
     using System.Collections.Generic;
     using System.Security.Cryptography.X509Certificates;

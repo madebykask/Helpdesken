@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Notifiers.Concrete
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Notifiers.Concrete
 {
     using System.Collections.Generic;
     using System.Globalization;
@@ -8,8 +8,8 @@
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.SettingsEdit;
     using DH.Helpdesk.Common.Extensions.DateTime;
-    using DH.Helpdesk.Web.Models.Notifiers;
-    using DH.Helpdesk.Web.Models.Shared;
+    using DH.Helpdesk.Mobile.Models.Notifiers;
+    using DH.Helpdesk.Mobile.Models.Shared;
 
     public sealed class NotifiersGridModelFactory : INotifiersGridModelFactory
     {

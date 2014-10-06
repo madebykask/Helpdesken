@@ -1,5 +1,5 @@
 ﻿
-namespace DH.Helpdesk.Web.Infrastructure
+namespace DH.Helpdesk.Mobile.Infrastructure
 {
     public static class Constants
     {

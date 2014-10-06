@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure
+﻿namespace DH.Helpdesk.Mobile.Infrastructure
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -8,8 +8,8 @@
     using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Computers;
-    using DH.Helpdesk.Web.Infrastructure.Session;
-    using DH.Helpdesk.Web.Models;
+    using DH.Helpdesk.Mobile.Infrastructure.Session;
+    using DH.Helpdesk.Mobile.Models;
 
     public static class SessionFacade
     {

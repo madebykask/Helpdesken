@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Attributes
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.Attributes
 {
     using System;
 

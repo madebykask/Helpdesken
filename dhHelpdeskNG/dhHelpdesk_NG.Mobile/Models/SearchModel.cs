@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models
+﻿namespace DH.Helpdesk.Mobile.Models
 {
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.Domain;

@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.Extensions.HtmlHelperExtensions
 {
     using System;
     using System.Collections.Generic;
@@ -12,7 +12,7 @@
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.Common.Enums.Settings;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Web.Models;
+    using DH.Helpdesk.Mobile.Models;
 
     public static class CaseSolutionSettingExtension
     {

@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Attributes
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.Attributes
 {
     using System.Web;
     using System.Web.Mvc;
@@ -6,9 +6,9 @@
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Services.Exceptions;
     using DH.Helpdesk.Services.Infrastructure;
-    using DH.Helpdesk.Web.Infrastructure.Logger;
+    using DH.Helpdesk.Mobile.Infrastructure.Logger;
 
-    using LogManager = DH.Helpdesk.Web.Infrastructure.Logger.LogManager;
+    using LogManager = DH.Helpdesk.Mobile.Infrastructure.Logger.LogManager;
 
     public class CustomHandleErrorAttribute : HandleErrorAttribute
     {

@@ -1,7 +1,7 @@
-﻿namespace DH.Helpdesk.Web.Models.Changes.SettingsEdit
+﻿namespace DH.Helpdesk.Mobile.Models.Changes.SettingsEdit
 {
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Mobile.Infrastructure.LocalizedAttributes;
 
     public sealed class AnalyzeSettingsModel
     {

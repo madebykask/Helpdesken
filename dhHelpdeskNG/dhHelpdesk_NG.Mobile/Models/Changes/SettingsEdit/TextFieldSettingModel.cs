@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Changes.SettingsEdit
+﻿namespace DH.Helpdesk.Mobile.Models.Changes.SettingsEdit
 {
     public sealed class TextFieldSettingModel : FieldSettingModel
     {

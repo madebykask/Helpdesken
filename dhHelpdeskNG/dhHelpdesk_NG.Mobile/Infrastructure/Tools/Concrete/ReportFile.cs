@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Tools.Concrete
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.Tools.Concrete
 {
     public sealed class ReportFile
     {

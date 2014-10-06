@@ -1,9 +1,9 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Notifiers.Concrete
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.BusinessModelFactories.Notifiers.Concrete
 {
     using System;
 
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.SettingsEdit;
-    using DH.Helpdesk.Web.Models.Notifiers;
+    using DH.Helpdesk.Mobile.Models.Notifiers;
 
     public sealed class UpdatedSettingsFactory : IUpdatedSettingsFactory
     {

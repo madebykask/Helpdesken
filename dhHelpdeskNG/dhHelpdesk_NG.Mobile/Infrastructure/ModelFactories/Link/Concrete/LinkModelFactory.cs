@@ -9,13 +9,13 @@
 
 
 
-namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Link.Concrete
+namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Link.Concrete
 {
     using System.Collections.Generic;
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Link.Output;
-    using DH.Helpdesk.Web.Models.Link;
+    using DH.Helpdesk.Mobile.Models.Link;
 
     /// <summary>
     /// The link model factory.

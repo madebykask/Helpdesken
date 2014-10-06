@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.Extensions
 {
     using System;
     using System.Web;

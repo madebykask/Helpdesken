@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.NinjectModules.Modules
+﻿namespace DH.Helpdesk.Mobile.NinjectModules.Modules
 {
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.PrinterSettings;
@@ -22,10 +22,10 @@
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Inventory.Concrete;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Inventory;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Inventory.Concrete;
-    using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory;
-    using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concrete;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete;
+    using DH.Helpdesk.Mobile.Infrastructure.BusinessModelFactories.Inventory;
+    using DH.Helpdesk.Mobile.Infrastructure.BusinessModelFactories.Inventory.Concrete;
+    using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Inventory;
+    using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Inventory.Concrete;
 
     using Ninject.Modules;
 

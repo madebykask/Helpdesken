@@ -1,10 +1,10 @@
-﻿namespace DH.Helpdesk.Web.Models.Changes
+﻿namespace DH.Helpdesk.Mobile.Models.Changes
 {
     using System;
 
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Mobile.Infrastructure.LocalizedAttributes;
 
     public sealed class LogModel
     {

@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Server
+﻿namespace DH.Helpdesk.Mobile.Models.Inventory.EditModel.Server
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 

@@ -1,10 +1,10 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Case.Concrete
 {
     using System.Collections.Generic;
 
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.Infrastructure.Cases;
-    using DH.Helpdesk.Web.Models.Customers;
+    using DH.Helpdesk.Mobile.Models.Customers;
 
     internal sealed class CaseModelFactory : ICaseModelFactory
     {

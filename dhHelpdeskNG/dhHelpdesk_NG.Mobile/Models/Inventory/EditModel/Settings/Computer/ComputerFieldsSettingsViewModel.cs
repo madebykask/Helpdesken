@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Computer
+﻿namespace DH.Helpdesk.Mobile.Models.Inventory.EditModel.Settings.Computer
 {
     using System.Web.Mvc;
 

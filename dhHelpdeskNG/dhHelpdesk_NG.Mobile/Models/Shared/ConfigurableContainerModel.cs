@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Shared
+﻿namespace DH.Helpdesk.Mobile.Models.Shared
 {
     public sealed class ConfigurableContainerModel<TContainer>
     {

@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.BusinessModelFactories.Inventory
 {
     public interface INewComputerBuilder
     {

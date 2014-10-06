@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.NinjectModules.Modules
+﻿namespace DH.Helpdesk.Mobile.NinjectModules.Modules
 {
     using DH.Helpdesk.BusinessData.Models.Notifiers;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.NotifierProcessing;
@@ -8,10 +8,10 @@
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Notifiers;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Notifiers;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Notifiers.Concrete;
-    using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Notifiers;
-    using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Notifiers.Concrete;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Notifiers;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Notifiers.Concrete;
+    using DH.Helpdesk.Mobile.Infrastructure.BusinessModelFactories.Notifiers;
+    using DH.Helpdesk.Mobile.Infrastructure.BusinessModelFactories.Notifiers.Concrete;
+    using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Notifiers;
+    using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Notifiers.Concrete;
 
     using Ninject.Modules;
 

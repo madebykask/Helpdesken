@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Configuration
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.Configuration
 {
     using System.Globalization;
 

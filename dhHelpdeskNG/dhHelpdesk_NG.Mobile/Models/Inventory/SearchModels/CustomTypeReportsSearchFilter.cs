@@ -1,6 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Models.Inventory.SearchModels
+﻿namespace DH.Helpdesk.Mobile.Models.Inventory.SearchModels
 {
-    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Mobile.Infrastructure.LocalizedAttributes;
 
     public class CustomTypeReportsSearchFilter
     {

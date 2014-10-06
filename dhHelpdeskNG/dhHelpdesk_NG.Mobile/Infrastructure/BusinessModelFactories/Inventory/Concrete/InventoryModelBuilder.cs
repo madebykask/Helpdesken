@@ -1,10 +1,10 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concrete
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.BusinessModelFactories.Inventory.Concrete
 {
     using System;
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Inventory;
+    using DH.Helpdesk.Mobile.Models.Inventory.EditModel.Inventory;
 
     public class InventoryModelBuilder : IInventoryModelBuilder
     {

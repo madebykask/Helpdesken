@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Inventory.Concrete
 {
     using System;
     using System.Collections.Generic;
@@ -8,8 +8,8 @@
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.InventorySettings;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Inventory;
-    using DH.Helpdesk.Web.Models.Inventory.OptionsAggregates;
+    using DH.Helpdesk.Mobile.Models.Inventory.EditModel.Inventory;
+    using DH.Helpdesk.Mobile.Models.Inventory.OptionsAggregates;
 
     public class InventoryViewModelBuilder : IInventoryViewModelBuilder
     {

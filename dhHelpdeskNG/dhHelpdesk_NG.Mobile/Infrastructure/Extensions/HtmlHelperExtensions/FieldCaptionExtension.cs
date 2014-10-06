@@ -1,9 +1,9 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.Extensions.HtmlHelperExtensions
 {
     using System.Text;
     using System.Web.Mvc;
 
-    using DH.Helpdesk.Web.Models;
+    using DH.Helpdesk.Mobile.Models;
 
     public static class FieldCaptionExtension
     {

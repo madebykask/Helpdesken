@@ -1,7 +1,7 @@
-﻿namespace DH.Helpdesk.Web.NinjectModules.Common
+﻿namespace DH.Helpdesk.Mobile.NinjectModules.Common
 {
-    using DH.Helpdesk.Web.Infrastructure.Configuration;
-    using DH.Helpdesk.Web.Infrastructure.Configuration.Concrete;
+    using DH.Helpdesk.Mobile.Infrastructure.Configuration;
+    using DH.Helpdesk.Mobile.Infrastructure.Configuration.Concrete;
 
     using Ninject.Modules;
 

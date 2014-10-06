@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace DH.Helpdesk.Web.Areas.Admin.Models.CausingPart
+namespace DH.Helpdesk.Mobile.Areas.Admin.Models.CausingPart
 {
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.Domain;

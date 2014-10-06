@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.NinjectModules.Modules
+﻿namespace DH.Helpdesk.Mobile.NinjectModules.Modules
 {
     using DH.Helpdesk.BusinessData.Models.Case.Input;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
@@ -9,8 +9,8 @@
     using DH.Helpdesk.Domain.Computers;
     using DH.Helpdesk.Services.Infrastructure.Cases;
     using DH.Helpdesk.Services.Infrastructure.Cases.Concrete;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Case;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete;
+    using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Case;
+    using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Case.Concrete;
 
     using Ninject.Modules;
     using Ninject.Web.Common;

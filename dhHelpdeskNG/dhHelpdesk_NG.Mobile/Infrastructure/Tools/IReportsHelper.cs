@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Tools
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.Tools
 {
     using System;
     using System.Collections.Generic;
@@ -6,7 +6,7 @@
     using DH.Helpdesk.BusinessData.Models.Reports.Output;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Web.Infrastructure.Tools.Concrete;
+    using DH.Helpdesk.Mobile.Infrastructure.Tools.Concrete;
 
     public interface IReportsHelper
     {

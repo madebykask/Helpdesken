@@ -1,9 +1,9 @@
-﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Server
+﻿namespace DH.Helpdesk.Mobile.Models.Inventory.EditModel.Server
 {
     using System;
 
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Shared;
+    using DH.Helpdesk.Mobile.Models.Inventory.EditModel.Shared;
 
     public class ServerViewModel
     {

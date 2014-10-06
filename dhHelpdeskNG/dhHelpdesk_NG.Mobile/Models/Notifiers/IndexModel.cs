@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Notifiers
+﻿namespace DH.Helpdesk.Mobile.Models.Notifiers
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 

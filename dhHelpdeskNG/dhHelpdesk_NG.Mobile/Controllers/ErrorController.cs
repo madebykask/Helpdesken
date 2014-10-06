@@ -1,9 +1,9 @@
-﻿namespace DH.Helpdesk.Web.Controllers
+﻿namespace DH.Helpdesk.Mobile.Controllers
 {
     using System.Web.Mvc;
 
     using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Mobile.Infrastructure;
 
     public class ErrorController : BaseController
     {

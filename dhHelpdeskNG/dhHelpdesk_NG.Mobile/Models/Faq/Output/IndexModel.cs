@@ -1,9 +1,9 @@
-﻿namespace DH.Helpdesk.Web.Models.Faq.Output
+﻿namespace DH.Helpdesk.Mobile.Models.Faq.Output
 {
     using System;
     using System.Collections.Generic;
 
-    using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
+    using DH.Helpdesk.Mobile.Infrastructure.Extensions.HtmlHelperExtensions.Content;
 
     public sealed class IndexModel
     {

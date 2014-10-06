@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Invoice
+﻿namespace DH.Helpdesk.Mobile.Models.Invoice
 {
     using DH.Helpdesk.BusinessData.Models.Invoice;
     using DH.Helpdesk.Common.ValidationAttributes;

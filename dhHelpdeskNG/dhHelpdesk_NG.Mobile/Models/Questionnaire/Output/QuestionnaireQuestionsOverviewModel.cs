@@ -1,8 +1,8 @@
-﻿namespace DH.Helpdesk.Web.Models.Questionnaire.Output
+﻿namespace DH.Helpdesk.Mobile.Models.Questionnaire.Output
 {
    
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Mobile.Infrastructure.LocalizedAttributes;
 
     public sealed class QuestionnaireQuestionsOverviewModel
     {

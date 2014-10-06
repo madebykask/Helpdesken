@@ -1,11 +1,11 @@
-namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concrete
+namespace DH.Helpdesk.Mobile.Infrastructure.BusinessModelFactories.Inventory.Concrete
 {
     using System;
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Computer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Shared;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Computer;
+    using DH.Helpdesk.Mobile.Models.Inventory.EditModel.Computer;
 
     using PlaceFields = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Computer.PlaceFields;
 

@@ -7,10 +7,10 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace DH.Helpdesk.Web.NinjectModules.Common
+namespace DH.Helpdesk.Mobile.NinjectModules.Common
 {
     using DH.Helpdesk.Dal.Infrastructure.Context;
-    using DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete;
+    using DH.Helpdesk.Mobile.Infrastructure.WorkContext.Concrete;
 
     using Ninject.Modules;
     using Ninject.Web.Common;

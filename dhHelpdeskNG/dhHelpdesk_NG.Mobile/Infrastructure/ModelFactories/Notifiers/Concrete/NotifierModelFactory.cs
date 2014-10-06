@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Notifiers.Concrete
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Notifiers.Concrete
 {
     using System.Collections.Generic;
     using System.Globalization;
@@ -8,8 +8,8 @@
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.NotifierOverview;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.Models.Shared.Output;
-    using DH.Helpdesk.Web.Models.Notifiers;
-    using DH.Helpdesk.Web.Models.Notifiers.ConfigurableFields;
+    using DH.Helpdesk.Mobile.Models.Notifiers;
+    using DH.Helpdesk.Mobile.Models.Notifiers.ConfigurableFields;
 
     public sealed class NotifierModelFactory : INotifierModelFactory
     {

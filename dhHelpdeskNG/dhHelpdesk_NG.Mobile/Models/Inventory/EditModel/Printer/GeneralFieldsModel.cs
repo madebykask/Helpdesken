@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Printer
+﻿namespace DH.Helpdesk.Mobile.Models.Inventory.EditModel.Printer
 {
     public class GeneralFieldsModel
     {

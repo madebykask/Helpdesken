@@ -1,8 +1,8 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.BusinessModelFactories.Inventory
 {
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Server;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Server;
+    using DH.Helpdesk.Mobile.Models.Inventory.EditModel.Server;
 
     public interface IServerBuilder
     {

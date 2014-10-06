@@ -1,6 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Licenses.Models.Manufacturers
+﻿namespace DH.Helpdesk.Mobile.Areas.Licenses.Models.Manufacturers
 {
-    using DH.Helpdesk.Web.Areas.Licenses.Models.Common;
+    using DH.Helpdesk.Mobile.Areas.Licenses.Models.Common;
 
     public sealed class ManufacturersIndexModel : BaseIndexModel
     {

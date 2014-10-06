@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Tools
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.Tools
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 

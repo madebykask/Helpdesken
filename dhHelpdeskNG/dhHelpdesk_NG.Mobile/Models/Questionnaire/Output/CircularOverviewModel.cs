@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DH.Helpdesk.Web.Models.Questionnaire.Output
+namespace DH.Helpdesk.Mobile.Models.Questionnaire.Output
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 

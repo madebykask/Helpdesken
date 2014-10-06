@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Inventory.SearchModels
+﻿namespace DH.Helpdesk.Mobile.Models.Inventory.SearchModels
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 

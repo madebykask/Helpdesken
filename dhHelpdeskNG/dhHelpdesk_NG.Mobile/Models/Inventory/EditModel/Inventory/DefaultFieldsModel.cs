@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Inventory
+﻿namespace DH.Helpdesk.Mobile.Models.Inventory.EditModel.Inventory
 {
     using System;
 

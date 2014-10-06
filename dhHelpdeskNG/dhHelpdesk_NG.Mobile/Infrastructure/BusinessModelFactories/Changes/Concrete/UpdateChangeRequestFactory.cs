@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Changes.Concrete
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.BusinessModelFactories.Changes.Concrete
 {
     using System;
     using System.Collections.Generic;
@@ -13,10 +13,10 @@
     using DH.Helpdesk.Common.Extensions.String;
     using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Web.Infrastructure.Tools;
-    using DH.Helpdesk.Web.Models.Changes;
-    using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
-    using DH.Helpdesk.Web.Models.Changes.ChangeEdit.Contacts;
+    using DH.Helpdesk.Mobile.Infrastructure.Tools;
+    using DH.Helpdesk.Mobile.Models.Changes;
+    using DH.Helpdesk.Mobile.Models.Changes.ChangeEdit;
+    using DH.Helpdesk.Mobile.Models.Changes.ChangeEdit.Contacts;
 
     public sealed class UpdateChangeRequestFactory : IUpdateChangeRequestFactory
     {

@@ -6,7 +6,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace DH.Helpdesk.Web.Infrastructure.Print
+namespace DH.Helpdesk.Mobile.Infrastructure.Print
 {
     using System.Web.Mvc;
 

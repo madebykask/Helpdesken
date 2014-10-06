@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure
+﻿namespace DH.Helpdesk.Mobile.Infrastructure
 {
     using System.Linq;
 

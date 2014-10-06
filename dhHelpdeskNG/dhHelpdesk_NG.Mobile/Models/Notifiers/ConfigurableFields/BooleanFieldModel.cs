@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Notifiers.ConfigurableFields
+﻿namespace DH.Helpdesk.Mobile.Models.Notifiers.ConfigurableFields
 {
     public sealed class BooleanFieldModel : ConfigurableFieldModel<bool>
     {

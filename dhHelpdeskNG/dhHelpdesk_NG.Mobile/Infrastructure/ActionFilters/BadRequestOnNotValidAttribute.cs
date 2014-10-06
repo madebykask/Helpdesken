@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ActionFilters
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.ActionFilters
 {
     using System;
     using System.Linq;
@@ -7,7 +7,7 @@
     using System.Web;
     using System.Web.Mvc;
 
-    using DH.Helpdesk.Web.Infrastructure.Extensions;
+    using DH.Helpdesk.Mobile.Infrastructure.Extensions;
 
     [AttributeUsage(AttributeTargets.Method)]
     public sealed class BadRequestOnNotValidAttribute : ActionFilterAttribute

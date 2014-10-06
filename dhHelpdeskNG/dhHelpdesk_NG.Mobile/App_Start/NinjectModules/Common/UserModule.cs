@@ -3,7 +3,7 @@ using DH.Helpdesk.Dal.Mappers.Users.BusinessModelToEntity;
 using DH.Helpdesk.Domain.Users;
 using Ninject.Modules;
 
-namespace DH.Helpdesk.Web.NinjectModules.Common
+namespace DH.Helpdesk.Mobile.NinjectModules.Common
 {
     public sealed class UserModule : NinjectModule
     {

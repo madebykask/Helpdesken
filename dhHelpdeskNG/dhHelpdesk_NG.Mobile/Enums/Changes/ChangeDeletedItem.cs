@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Enums.Changes
+﻿namespace DH.Helpdesk.Mobile.Enums.Changes
 {
     public static class ChangeDeletedItem
     {

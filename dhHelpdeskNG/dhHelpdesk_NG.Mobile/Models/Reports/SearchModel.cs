@@ -1,9 +1,9 @@
-﻿namespace DH.Helpdesk.Web.Models.Reports
+﻿namespace DH.Helpdesk.Mobile.Models.Reports
 {
     using System.Web.Mvc;
 
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Infrastructure.Filters.Reports;
+    using DH.Helpdesk.Mobile.Infrastructure.Filters.Reports;
 
     public sealed class SearchModel : ISearchModel<ReportsFilter>
     {

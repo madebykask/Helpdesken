@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Translate
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.Translate
 {
     using DH.Helpdesk.Dal.Infrastructure.Translate;
 

@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Configuration
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.Configuration
 {
     public interface IConfiguration
     {

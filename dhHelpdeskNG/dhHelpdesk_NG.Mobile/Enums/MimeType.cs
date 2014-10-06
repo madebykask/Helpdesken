@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Enums
+﻿namespace DH.Helpdesk.Mobile.Enums
 {
     public static class MimeType
     {

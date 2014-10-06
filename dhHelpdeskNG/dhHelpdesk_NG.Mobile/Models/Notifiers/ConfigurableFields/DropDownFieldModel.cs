@@ -1,6 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Models.Notifiers.ConfigurableFields
+﻿namespace DH.Helpdesk.Mobile.Models.Notifiers.ConfigurableFields
 {
-    using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
+    using DH.Helpdesk.Mobile.Infrastructure.Extensions.HtmlHelperExtensions.Content;
 
     public sealed class DropDownFieldModel : ConfigurableFieldModel<DropDownContent>
     {

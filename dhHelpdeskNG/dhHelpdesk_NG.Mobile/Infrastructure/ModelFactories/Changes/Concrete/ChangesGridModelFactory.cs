@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.Concrete
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Changes.Concrete
 {
     using System;
     using System.Collections.Generic;
@@ -14,8 +14,8 @@
     using DH.Helpdesk.Services.DisplayValues;
     using DH.Helpdesk.Services.DisplayValues.Changes;
     using DH.Helpdesk.Services.Response.Changes;
-    using DH.Helpdesk.Web.Models.Changes.ChangesGrid;
-    using DH.Helpdesk.Web.Models.Shared;
+    using DH.Helpdesk.Mobile.Models.Changes.ChangesGrid;
+    using DH.Helpdesk.Mobile.Models.Shared;
 
     public sealed class ChangesGridModelFactory : IChangesGridModelFactory
     {

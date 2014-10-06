@@ -1,8 +1,8 @@
-﻿namespace DH.Helpdesk.Web.Models.Projects
+﻿namespace DH.Helpdesk.Mobile.Models.Projects
 {
     using System.ComponentModel.DataAnnotations;
 
-    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Mobile.Infrastructure.LocalizedAttributes;
 
     public class ProjectScheduleEditModel
     {

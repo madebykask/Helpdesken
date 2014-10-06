@@ -195,128 +195,6 @@
     <Compile Include="App_Start\NinjectModules\Modules\ReportsModule.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RegisterClientValidationExtensions.cs" />
-    <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
-    <Compile Include="Areas\Admin\Controllers\AccountActivityController.cs" />
-    <Compile Include="Areas\Admin\Controllers\BaseAdminController.cs" />
-    <Compile Include="Areas\Admin\Controllers\BuildingController.cs" />
-    <Compile Include="Areas\Admin\Controllers\CaseInvoiceController.cs" />
-    <Compile Include="Areas\Admin\Controllers\CaseTypeController.cs" />
-    <Compile Include="Areas\Admin\Controllers\CategoryController.cs" />
-    <Compile Include="Areas\Admin\Controllers\CausingPartController.cs" />
-    <Compile Include="Areas\Admin\Controllers\ChangeCategoryController.cs" />
-    <Compile Include="Areas\Admin\Controllers\ChangeGroupController.cs" />
-    <Compile Include="Areas\Admin\Controllers\ChangeImplementationStatusController.cs" />
-    <Compile Include="Areas\Admin\Controllers\ChangeObjectController.cs" />
-    <Compile Include="Areas\Admin\Controllers\ChangePriorityController.cs" />
-    <Compile Include="Areas\Admin\Controllers\ChangeStatusController.cs" />
-    <Compile Include="Areas\Admin\Controllers\ChecklistActionController.cs" />
-    <Compile Include="Areas\Admin\Controllers\ChecklistServiceController.cs" />
-    <Compile Include="Areas\Admin\Controllers\ComputerUserGroupController.cs" />
-    <Compile Include="Areas\Admin\Controllers\ComputerUsersBlackListController.cs" />
-    <Compile Include="Areas\Admin\Controllers\ContractCategoryController.cs" />
-    <Compile Include="Areas\Admin\Controllers\CustomerCaseOverviewController.cs" />
-    <Compile Include="Areas\Admin\Controllers\CustomerCaseFieldSettingsController.cs" />
-    <Compile Include="Areas\Admin\Controllers\CustomerSettingsController.cs" />
-    <Compile Include="Areas\Admin\Controllers\CurrencyController.cs" />
-    <Compile Include="Areas\Admin\Controllers\DailyReportSubjectController.cs" />
-    <Compile Include="Areas\Admin\Controllers\DepartmentController.cs" />
-    <Compile Include="Areas\Admin\Controllers\DomainController.cs" />
-    <Compile Include="Areas\Admin\Controllers\EMailGroupController.cs" />
-    <Compile Include="Areas\Admin\Controllers\FinishingCauseCategoryController.cs" />
-    <Compile Include="Areas\Admin\Controllers\FinishingCauseController.cs" />
-    <Compile Include="Areas\Admin\Controllers\FloorController.cs" />
-    <Compile Include="Areas\Admin\Controllers\ImpactController.cs" />
-    <Compile Include="Areas\Admin\Controllers\InfoTextController.cs" />
-    <Compile Include="Areas\Admin\Controllers\MailTemplateController.cs" />
-    <Compile Include="Areas\Admin\Controllers\OperationLogCategoryController.cs" />
-    <Compile Include="Areas\Admin\Controllers\OperationObjectController.cs" />
-    <Compile Include="Areas\Admin\Controllers\OrderStateController.cs" />
-    <Compile Include="Areas\Admin\Controllers\OrderTypeController.cs" />
-    <Compile Include="Areas\Admin\Controllers\OUController.cs" />
-    <Compile Include="Areas\Admin\Controllers\PriorityController.cs" />
-    <Compile Include="Areas\Admin\Controllers\ProductAreaController.cs" />
-    <Compile Include="Areas\Admin\Controllers\ProgramController.cs" />
-    <Compile Include="Areas\Admin\Controllers\QuickLinkController.cs" />
-    <Compile Include="Areas\Admin\Controllers\RegionController.cs" />
-    <Compile Include="Areas\Admin\Controllers\RoomController.cs" />
-    <Compile Include="Areas\Admin\Controllers\SettingsController.cs" />
-    <Compile Include="Areas\Admin\Controllers\StandardTextController.cs" />
-    <Compile Include="Areas\Admin\Controllers\StartController.cs" />
-    <Compile Include="Areas\Admin\Controllers\StateSecondaryController.cs" />
-    <Compile Include="Areas\Admin\Controllers\StatusController.cs" />
-    <Compile Include="Areas\Admin\Controllers\SupplierController.cs" />
-    <Compile Include="Areas\Admin\Controllers\SystemController.cs" />
-    <Compile Include="Areas\Admin\Controllers\UrgencyController.cs" />
-    <Compile Include="Areas\Admin\Controllers\WorkingGroupController.cs" />
-    <Compile Include="Areas\Admin\Infrastructure\ModelFactories\CaseInvoiceFactory.cs" />
-    <Compile Include="Areas\Admin\Infrastructure\ModelFactories\ICaseInvoiceFactory.cs" />
-    <Compile Include="Areas\Admin\Models\AccountActivityInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\CaseTypeInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\CategoryViewModels.cs" />
-    <Compile Include="Areas\Admin\Models\CausingPart\CausingPartsViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\CausingPart\CausingPartViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\ChecklistActionInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\ComputerUserGroupInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\ContractCategoryInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\CaseTypeIndexViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\ChangeStatusViewModels.cs" />
-    <Compile Include="Areas\Admin\Models\ChangePriorityViewModels.cs" />
-    <Compile Include="Areas\Admin\Models\ChangeObjectViewModels.cs" />
-    <Compile Include="Areas\Admin\Models\ChangeGroupViewModels.cs" />
-    <Compile Include="Areas\Admin\Models\ChangeCategoryViewModels.cs" />
-    <Compile Include="Areas\Admin\Models\ChangeImplementationStatusViewModels.cs" />
-    <Compile Include="Areas\Admin\Models\ContractCategoryIndexViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\AccountActivityIndexViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\BuildingViewModels.cs" />
-    <Compile Include="Areas\Admin\Models\InfoTextViewModels.cs" />
-    <Compile Include="Areas\Admin\Models\Invoice\CaseInvoiceSettingsModel.cs" />
-    <Compile Include="Areas\Admin\Models\StandardTextViewModels.cs" />
-    <Compile Include="Areas\Admin\Models\ProgramIndexViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\QuickLinkIndexViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\EmailGroupViewModels.cs" />
-    <Compile Include="Areas\Admin\Models\DomainViewModels.cs" />
-    <Compile Include="Areas\Admin\Models\FloorIndexViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\OperationLogCategoryViewModels.cs" />
-    <Compile Include="Areas\Admin\Models\OperationObjectIndexViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\DailyReportSubjectIndexViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\OrderTypeIndexViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\OrderStateViewModels.cs" />
-    <Compile Include="Areas\Admin\Models\FinishingCauseIndexViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\FinishingCauseCategoryIndexViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\FinishingCauseCategoryInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\StateSecondaryIndexViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\StatusIndexViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\StatusInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\ImpactIndexViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\ImpactInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\OUIndexViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\DepartmentIndexViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\RegionIndexViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\UrgencyIndexViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\ProductAreaIndexViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\PriorityIndexViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\WorkingGroupIndexViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\SystemIndexViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\SupplierIndexViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\DailyReportSubjectInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\DepartmentInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\FinishingCauseInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\FloorInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\MailTemplateInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\OperationObjectInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\OrderTypeInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\OUInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\PriorityInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\ProductAreaInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\ProgramInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\QuickLinkInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\RegionInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\RoomInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\StateSecondaryInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\SupplierInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\SystemInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\UrgencyInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\WorkingGroupInputViewModel.cs" />
     <Content Include="Content\icons\ajax-loader.gif" />
     <Content Include="Content\js\Changes\inventoryDialog.js" />
     <Compile Include="Areas\Licenses\Controllers\ApplicationsController.cs" />
@@ -354,11 +232,8 @@
     <Compile Include="Controllers\CasesController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Areas\Licenses\Controllers\ProductsController.cs" />
-    <Compile Include="Areas\Admin\Controllers\CustomerController.cs" />
-    <Compile Include="Areas\Admin\Controllers\GlobalSettingController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
-    <Compile Include="Areas\Admin\Controllers\UsersController.cs" />
     <Compile Include="Enums\Changes\ChangeDeletedItem.cs" />
     <Compile Include="Enums\Changes\ClickedButton.cs" />
     <Compile Include="Enums\Changes\TabName.cs" />
@@ -705,7 +580,6 @@
     <Compile Include="Models\Inventory\SearchModels\InventoryReportSearchViewModel.cs" />
     <Compile Include="Models\Inventory\SearchModels\ReportsSearchFilter.cs" />
     <Compile Include="Models\Inventory\SearchModels\ReportsSearchViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\Invoice\ArticlesImportModel.cs" />
     <Compile Include="Models\Invoice\CaseInvoiceArticlesModel.cs" />
     <Compile Include="Models\Reports\AverageSolutionTimeOptions.cs" />
     <Compile Include="Models\Reports\AverageSolutionTimeReport.cs" />
@@ -862,9 +736,7 @@
     <Compile Include="Models\Notifiers\SettingModel.cs" />
     <Compile Include="Models\Notifiers\SettingsModel.cs" />
     <Compile Include="Models\OperationLogInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\CustomerInputViewModel.cs" />
     <Compile Include="Models\DocumentInputViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\GlobalSettingInputViewModel.cs" />
     <Compile Include="Models\HomeIndexViewModel.cs" />
     <Compile Include="Models\MasterPageViewModel.cs" />
     <Compile Include="Models\Print\Case\CasePrintModel.cs" />
@@ -901,7 +773,6 @@
     <Compile Include="Models\Questionnaire\Output\QuestionnaireQuestionsOverviewModel.cs" />
     <Compile Include="Models\Questionnaire\Output\QuestionnaireOverviewModel.cs" />
     <Compile Include="Models\SearchModel.cs" />
-    <Compile Include="Areas\Admin\Models\UserViewModel.cs" />
     <Compile Include="Models\Shared\SendToDialogModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -1134,14 +1005,6 @@
     <Content Include="Content\themes\flick\images\ui-icons_ffffff_256x240.png" />
     <Content Include="Content\themes\flick\jquery-ui-1.8.4.custom.css" />
     <Content Include="Global.asax" />
-    <Content Include="Areas\Admin\Views\CausingPart\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\CausingPart\_Input.cshtml" />
-    <Content Include="Areas\Admin\Views\CausingPart\New.cshtml" />
-    <Content Include="Areas\Admin\Views\CausingPart\Edit.cshtml" />
-    <Content Include="Areas\Admin\Views\Domain\_ChangePassWord.cshtml">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Areas\Admin\Views\Customer\_CopyCustomer.cshtml" />
     <Content Include="img-profile\CHS-logo-H31px_140227.png" />
     <Content Include="img-profile\CHS-logo-W300_140227.png" />
     <Content Include="img-profile\ikea-logo-login.png" />
@@ -1151,12 +1014,6 @@
     <Content Include="img-profile\profile.css" />
     <Content Include="log4net.config" />
     <Content Include="Content\js\jsrender.min.js.map" />
-    <Content Include="Areas\Admin\Views\GlobalSetting\_TranslationsList.cshtml" />
-    <Content Include="Areas\Admin\Views\GlobalSetting\_Holidays.cshtml" />
-    <Content Include="Areas\Admin\Views\CaseInvoice\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\CaseInvoice\EditorTemplates\ArticlesImportModel.cshtml" />
-    <Content Include="Areas\Admin\Views\CaseInvoice\EditorTemplates\CaseInvoiceSettings.cshtml" />
-    <Content Include="Areas\Admin\Views\GlobalSetting\_WatchDateCalendar.cshtml" />
     <Content Include="Areas\Licenses\Views\Web.config" />
     <Content Include="Areas\Licenses\Views\Products\Index.cshtml" />
     <Content Include="Areas\Licenses\Views\_ViewStart.cshtml" />
@@ -1233,15 +1090,9 @@
     <Content Include="Content\js\jquery-1.8.3.min.js" />
     <Content Include="Content\js\jquery-ui-1.9.2.min.js" />
     <Content Include="Content\js\jquery.toastmessage.js" />
-    <Content Include="Areas\Admin\Views\CustomerCaseFieldSettings\_Input.cshtml" />
-    <Content Include="Areas\Admin\Views\CustomerCaseFieldSettings\Edit.cshtml" />
     <Content Include="Content\js\Notifiers\index.js" />
     <Content Include="Content\js\Notifiers\notifier.js" />
     <Content Include="Content\js\Notifiers\notifiers.js" />
-    <Content Include="Areas\Admin\Views\CustomerCaseOverview\_Input.cshtml" />
-    <Content Include="Areas\Admin\Views\CustomerCaseOverview\Edit.cshtml" />
-    <Content Include="Areas\Admin\Views\CustomerCaseOverview\_CaseSummaryPartialView.cshtml" />
-    <Content Include="Areas\Admin\Views\InfoText\_InfoTextPartialView.cshtml" />
     <Content Include="Content\js\jquery.typing-0.2.0.min.js" />
     <Content Include="Content\js\jquery.validate.js" />
     <Content Include="Content\js\plupload\i18n\cs.js" />
@@ -1292,9 +1143,6 @@
     <Content Include="Content\js\plupload\plupload.js" />
     <Content Include="Content\js\plupload\plupload.silverlight.js" />
     <Content Include="Content\js\plupload\plupload.silverlight.xap" />
-    <Content Include="Areas\Admin\Views\Users\_ChangePassword.cshtml">
-      <SubType>Code</SubType>
-    </Content>
     <Content Include="Views\Shared\BulletinBoardInfo.cshtml">
       <SubType>Code</SubType>
     </Content>
@@ -1360,9 +1208,6 @@
     <Content Include="Views\Shared\MyCasesInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Admin\Views\Web.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">
       <Project>{90DEFCB6-E297-4F99-A532-DA1E0522AA49}</Project>
       <Name>DH.Helpdesk.Common</Name>
@@ -1385,593 +1230,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Admin\Views\Users\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Users\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Users\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Cases\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Status\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Status\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Status\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Status\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Category\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Category\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Category\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Category\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Region\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Region\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Region\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Region\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Department\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Department\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Department\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Department\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Currency\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Currency\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Currency\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Currency\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Building\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Building\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Building\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Building\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Shared\_MasterDataPanel.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Floor\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Floor\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Floor\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Floor\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Impact\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Impact\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Impact\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Impact\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\FinishingCauseCategory\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\FinishingCauseCategory\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\FinishingCauseCategory\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\FinishingCauseCategory\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChangeGroup\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChangeGroup\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChangeGroup\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChangeGroup\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChangeObject\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChangeObject\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChangeObject\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChangeObject\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChangeCategory\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChangeCategory\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChangeCategory\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChangeCategory\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChangePriority\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChangePriority\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChangePriority\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChangePriority\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChangeImplementationStatus\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChangeImplementationStatus\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChangeImplementationStatus\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChangeImplementationStatus\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChecklistService\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChecklistService\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChecklistService\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChecklistService\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChecklistAction\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChecklistAction\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChecklistAction\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChecklistAction\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\OperationLogCategory\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\OperationLogCategory\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\OperationLogCategory\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\OperationLogCategory\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\CaseType\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\CaseType\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\CaseType\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\CaseType\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Urgency\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\StateSecondary\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Room\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Room\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Room\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Room\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\OU\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\OU\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\OU\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\OU\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\StandardText\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\StandardText\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\StandardText\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\StandardText\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Urgency\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Urgency\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Urgency\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\StateSecondary\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\StateSecondary\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\StateSecondary\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Supplier\Edit.cshtml" />
-    <Content Include="Areas\Admin\Views\Supplier\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\Supplier\New.cshtml" />
-    <Content Include="Areas\Admin\Views\Supplier\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Priority\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Priority\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Priority\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Priority\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\FinishingCause\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\FinishingCause\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\FinishingCause\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\FinishingCause\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\OrderState\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\OrderType\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\OrderType\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\OrderType\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\OrderState\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\OrderState\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\OrderState\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\OrderType\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\WorkingGroup\Edit.cshtml" />
-    <Content Include="Areas\Admin\Views\WorkingGroup\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\WorkingGroup\New.cshtml" />
-    <Content Include="Areas\Admin\Views\WorkingGroup\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\EMailGroup\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\EMailGroup\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\EMailGroup\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\EMailGroup\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\DailyReportSubject\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\DailyReportSubject\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\DailyReportSubject\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\DailyReportSubject\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\AccountActivity\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\AccountActivity\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\AccountActivity\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\AccountActivity\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\System\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\System\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\System\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\System\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\OperationObject\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\OperationObject\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\OperationObject\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\OperationObject\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ComputerUserGroup\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ComputerUserGroup\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ComputerUserGroup\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ComputerUserGroup\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\QuickLink\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\QuickLink\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\QuickLink\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\QuickLink\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ComputerUsersBlackList\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ComputerUsersBlackList\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ComputerUsersBlackList\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ComputerUsersBlackList\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Program\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Program\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Program\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Program\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Domain\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Domain\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Domain\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Domain\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\MailTemplate\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\MailTemplate\_OrderTypeMailTemplates.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\MailTemplate\_SpecialMailTemplates.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\MailTemplate\_AccountActivityMailTemplates.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\MailTemplate\_RegularCaseMailTemplates.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\MailTemplate\_CaseSMSMailTemplates.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\MailTemplate\_ChangesMailTemplates.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\MailTemplate\_OperationLogsMailTemplates.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\MailTemplate\_SurveyMailTemplates.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\MailTemplate\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\MailTemplate\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\MailTemplate\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\MailTemplate\_IdentifierMailTemplates.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\InfoText\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChangeStatus\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChangeStatus\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChangeStatus\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ChangeStatus\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ContractCategory\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ContractCategory\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ContractCategory\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ContractCategory\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\ProductArea\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\ProductArea\New.cshtml" />
-    <Content Include="Areas\Admin\Views\ProductArea\Edit.cshtml" />
-    <Content Include="Areas\Admin\Views\ProductArea\_Input.cshtml" />
-    <Content Include="Areas\Admin\Views\InfoText\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\GlobalSetting\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Users\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Customer\_Case.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Customer\_CaseSummary.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Customer\_CaseSummaryPartialView.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Customer\_Customer.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Customer\_Email.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Customer\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Customer\_Order.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Customer\_Syncronization.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Customer\_User.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Customer\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Customer\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Customer\New.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
@@ -1988,31 +1247,7 @@
     <Content Include="Views\Shared\_NoHits.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Admin\Views\Users\_General.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Users\_Security.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Users\_Message.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Users\_Other.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Users\_Customer.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Users\_Department.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Users\_WorkingGroups.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Cases\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Users\_Appearance.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
@@ -2024,56 +1259,10 @@
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Admin\Views\GlobalSetting\EditHoliday.cshtml" />
-    <Content Include="Areas\Admin\Views\GlobalSetting\EditTranslation.cshtml" />
-    <Content Include="Areas\Admin\Views\GlobalSetting\EditWatchDate.cshtml" />
-    <Content Include="Areas\Admin\Views\GlobalSetting\NewHoliday.cshtml" />
-    <Content Include="Areas\Admin\Views\GlobalSetting\NewTranslation.cshtml" />
-    <Content Include="Areas\Admin\Views\GlobalSetting\NewWatchDate.cshtml" />
-    <Content Include="Areas\Admin\Views\GlobalSetting\_Holiday.cshtml" />
-    <Content Include="Areas\Admin\Views\GlobalSetting\_HolidayList.cshtml" />
-    <Content Include="Areas\Admin\Views\GlobalSetting\_Translation.cshtml" />
-    <Content Include="Areas\Admin\Views\GlobalSetting\_WatchDate.cshtml" />
-    <Content Include="Areas\Admin\Views\GlobalSetting\_WatchDateList.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\GlobalSetting\Change.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Customer\_ChangePassword.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Shared\_CaseRows.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Admin\Views\Settings\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Shared\_MasterDataPanelContent.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Shared\_LayoutAdmin.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Cases\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\Start\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\CustomerSettings\_Input.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\CustomerSettings\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\CustomerSettings\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\CustomerSettings\New.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Admin\Views\CustomerSettings\_ChangePassword.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

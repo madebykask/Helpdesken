@@ -1,10 +1,10 @@
-﻿namespace DH.Helpdesk.Web.Models.Projects
+﻿namespace DH.Helpdesk.Mobile.Models.Projects
 {
     using System.Collections.Generic;
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models.Projects.Output;
-    using DH.Helpdesk.Web.Infrastructure.Filters.Projects;
+    using DH.Helpdesk.Mobile.Infrastructure.Filters.Projects;
 
     public class IndexProjectViewModel
     {

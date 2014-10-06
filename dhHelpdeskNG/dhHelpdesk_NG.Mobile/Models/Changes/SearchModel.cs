@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Changes
+﻿namespace DH.Helpdesk.Mobile.Models.Changes
 {
     using System.Collections.Generic;
     using System.Web.Mvc;
@@ -6,9 +6,9 @@
     using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Infrastructure.Filters.Changes;
-    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
-    using DH.Helpdesk.Web.Models.Shared;
+    using DH.Helpdesk.Mobile.Infrastructure.Filters.Changes;
+    using DH.Helpdesk.Mobile.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Mobile.Models.Shared;
 
     public sealed class SearchModel : ISearchModel<ChangesFilter>
     {

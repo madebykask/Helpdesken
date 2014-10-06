@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.Extensions.HtmlHelperExtensions
 {
     using System.Globalization;
     using System.Text;
@@ -6,7 +6,7 @@
     using System.Web.Mvc;
     using System.Web.Script.Serialization;
 
-    using DH.Helpdesk.Web.Models.Invoice;
+    using DH.Helpdesk.Mobile.Models.Invoice;
 
     public static class InvoiceExtension
     {

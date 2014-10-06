@@ -1,9 +1,9 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Notifiers
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.BusinessModelFactories.Notifiers
 {
     using System;
 
     using DH.Helpdesk.BusinessData.Models.Notifiers;
-    using DH.Helpdesk.Web.Models.Notifiers;
+    using DH.Helpdesk.Mobile.Models.Notifiers;
 
     public interface INewNotifierFactory
     {

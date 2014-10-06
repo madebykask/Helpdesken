@@ -1,9 +1,9 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.Extensions.HtmlHelperExtensions
 {
     using System.Text;
     using System.Web.Mvc;
 
-    using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
+    using DH.Helpdesk.Mobile.Infrastructure.Extensions.HtmlHelperExtensions.Content;
 
     public static class DropDownExtension
     {

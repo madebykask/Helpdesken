@@ -1,7 +1,7 @@
 ﻿using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Domain;
 
-namespace DH.Helpdesk.Web.Infrastructure.Extensions
+namespace DH.Helpdesk.Mobile.Infrastructure.Extensions
 {
     using System;
 

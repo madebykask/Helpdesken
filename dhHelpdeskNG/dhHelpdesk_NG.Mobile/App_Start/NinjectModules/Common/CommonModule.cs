@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace DH.Helpdesk.Web.NinjectModules.Common
+namespace DH.Helpdesk.Mobile.NinjectModules.Common
 {
     using DH.Helpdesk.BusinessData.Models.Calendar.Output;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
@@ -27,9 +27,9 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
     using DH.Helpdesk.Dal.Mappers.ProductArea.EntityToBusinessModel;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Cases;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common.Concrete;
-    using DH.Helpdesk.Web.Infrastructure.Translate;
+    using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Common;
+    using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Common.Concrete;
+    using DH.Helpdesk.Mobile.Infrastructure.Translate;
 
     using Ninject.Modules;
 

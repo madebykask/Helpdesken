@@ -1,7 +1,7 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Invoice.Concrete
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Invoice.Concrete
 {
     using DH.Helpdesk.BusinessData.Models.Invoice;
-    using DH.Helpdesk.Web.Models.Invoice;
+    using DH.Helpdesk.Mobile.Models.Invoice;
 
     public sealed class InvoiceArticlesModelFactory : IInvoiceArticlesModelFactory
     {

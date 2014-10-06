@@ -1,6 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Models.Inventory
+﻿namespace DH.Helpdesk.Mobile.Models.Inventory
 {
-    using DH.Helpdesk.Web.Enums.Inventory;
+    using DH.Helpdesk.Mobile.Enums.Inventory;
 
     public class InventoriesModeFilter
     {

@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Mobile.Areas.Admin.Controllers
 {
     using System.Linq;
     using System.Web.Mvc;
@@ -6,8 +6,8 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Changes;
     using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Web.Areas.Admin.Models;
-    using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Mobile.Areas.Admin.Models;
+    using DH.Helpdesk.Mobile.Infrastructure;
 
     public class ChangeObjectController : BaseAdminController
     {

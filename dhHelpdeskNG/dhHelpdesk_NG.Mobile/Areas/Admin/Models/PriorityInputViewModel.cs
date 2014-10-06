@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Areas.Admin.Models
+﻿namespace DH.Helpdesk.Mobile.Areas.Admin.Models
 {
     using System.Collections.Generic;
     using System.Web.Mvc;

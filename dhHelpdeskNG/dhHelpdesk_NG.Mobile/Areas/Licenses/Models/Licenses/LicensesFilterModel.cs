@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Areas.Licenses.Models.Licenses
+﻿namespace DH.Helpdesk.Mobile.Areas.Licenses.Models.Licenses
 {
     public sealed class LicensesFilterModel
     {

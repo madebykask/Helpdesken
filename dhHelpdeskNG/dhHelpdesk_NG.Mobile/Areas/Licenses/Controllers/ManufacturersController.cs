@@ -1,15 +1,15 @@
-﻿namespace DH.Helpdesk.Web.Areas.Licenses.Controllers
+﻿namespace DH.Helpdesk.Mobile.Areas.Licenses.Controllers
 {
     using System.Web.Mvc;
 
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Licenses;
-    using DH.Helpdesk.Web.Areas.Licenses.Infrastructure.ModelFactories;
-    using DH.Helpdesk.Web.Areas.Licenses.Models.Manufacturers;
-    using DH.Helpdesk.Web.Enums;
-    using DH.Helpdesk.Web.Infrastructure;
-    using DH.Helpdesk.Web.Infrastructure.ActionFilters;
+    using DH.Helpdesk.Mobile.Areas.Licenses.Infrastructure.ModelFactories;
+    using DH.Helpdesk.Mobile.Areas.Licenses.Models.Manufacturers;
+    using DH.Helpdesk.Mobile.Enums;
+    using DH.Helpdesk.Mobile.Infrastructure;
+    using DH.Helpdesk.Mobile.Infrastructure.ActionFilters;
 
     public class ManufacturersController : BaseController
     {

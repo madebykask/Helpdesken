@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Reports
+﻿namespace DH.Helpdesk.Mobile.Models.Reports
 {
     public sealed class IndexModel
     {

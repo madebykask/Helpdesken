@@ -1,9 +1,9 @@
-﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Printer
+﻿namespace DH.Helpdesk.Mobile.Models.Inventory.EditModel.Printer
 {
     using System;
 
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Shared;
+    using DH.Helpdesk.Mobile.Models.Inventory.EditModel.Shared;
 
     public class PrinterViewModel
     {

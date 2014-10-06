@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Configuration.Concrete
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.Configuration.Concrete
 {
     internal sealed class Configuration : IConfiguration
     {

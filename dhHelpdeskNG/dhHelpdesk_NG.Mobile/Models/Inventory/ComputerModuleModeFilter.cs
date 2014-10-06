@@ -1,6 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Models.Inventory
+﻿namespace DH.Helpdesk.Mobile.Models.Inventory
 {
-    using DH.Helpdesk.Web.Models.Inventory.EditModel;
+    using DH.Helpdesk.Mobile.Models.Inventory.EditModel;
 
     public class ComputerModuleModeFilter
     {

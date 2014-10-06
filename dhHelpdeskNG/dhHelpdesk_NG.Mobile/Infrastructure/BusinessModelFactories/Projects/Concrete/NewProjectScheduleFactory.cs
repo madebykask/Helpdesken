@@ -1,9 +1,9 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Projects.Concrete
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.BusinessModelFactories.Projects.Concrete
 {
     using System;
 
     using DH.Helpdesk.BusinessData.Models.Projects.Input;
-    using DH.Helpdesk.Web.Models.Projects;
+    using DH.Helpdesk.Mobile.Models.Projects;
 
     public class NewProjectScheduleFactory : INewProjectScheduleFactory
     {

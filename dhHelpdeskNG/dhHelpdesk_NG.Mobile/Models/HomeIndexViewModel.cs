@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models
+﻿namespace DH.Helpdesk.Mobile.Models
 {
     using System.Collections.Generic;
     using System.Web.Mvc;
@@ -13,10 +13,10 @@
     using DH.Helpdesk.BusinessData.Models.Statistics.Output;
     using DH.Helpdesk.BusinessData.Models.Users.Output;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Web.Models.Case;
-    using DH.Helpdesk.Web.Models.Changes;
-    using DH.Helpdesk.Web.Models.Customers;
-    using DH.Helpdesk.Web.Models.Link;
+    using DH.Helpdesk.Mobile.Models.Case;
+    using DH.Helpdesk.Mobile.Models.Changes;
+    using DH.Helpdesk.Mobile.Models.Customers;
+    using DH.Helpdesk.Mobile.Models.Link;
 
     public class HomeIndexViewModel
     {

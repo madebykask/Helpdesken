@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Reports
+﻿namespace DH.Helpdesk.Mobile.Models.Reports
 {
     using System;
     using System.Collections.Generic;
@@ -6,7 +6,7 @@
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Web.Infrastructure.Tools.Concrete;
+    using DH.Helpdesk.Mobile.Infrastructure.Tools.Concrete;
 
     public sealed class RegistratedCasesCaseTypeReport
     {

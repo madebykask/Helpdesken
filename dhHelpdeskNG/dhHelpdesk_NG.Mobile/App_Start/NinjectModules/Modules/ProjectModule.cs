@@ -1,14 +1,14 @@
-﻿namespace DH.Helpdesk.Web.NinjectModules.Modules
+﻿namespace DH.Helpdesk.Mobile.NinjectModules.Modules
 {
     using DH.Helpdesk.BusinessData.Models.Projects.Input;
     using DH.Helpdesk.BusinessData.Models.Projects.Output;
     using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Dal.Mappers.Projects;
     using DH.Helpdesk.Domain.Projects;
-    using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Projects;
-    using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Projects.Concrete;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Projects;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Projects.Concrete;
+    using DH.Helpdesk.Mobile.Infrastructure.BusinessModelFactories.Projects;
+    using DH.Helpdesk.Mobile.Infrastructure.BusinessModelFactories.Projects.Concrete;
+    using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Projects;
+    using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Projects.Concrete;
 
     using Ninject.Modules;
 

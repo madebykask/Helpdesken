@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Areas.Admin
+﻿namespace DH.Helpdesk.Mobile.Areas.Admin
 {
     using System.Web.Mvc;
 

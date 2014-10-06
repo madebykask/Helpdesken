@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Case.Concrete
 {
     using DH.Helpdesk.BusinessData.Models.Case.Input;
 

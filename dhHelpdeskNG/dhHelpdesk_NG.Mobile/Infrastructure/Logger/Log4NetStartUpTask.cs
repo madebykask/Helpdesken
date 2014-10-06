@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Logger
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.Logger
 {
     using System.Web;
 

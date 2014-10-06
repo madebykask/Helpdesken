@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using DH.Helpdesk.BusinessData.Models.Link.Output;
 
-namespace DH.Helpdesk.Web.Models.Link
+namespace DH.Helpdesk.Mobile.Models.Link
 {
     public sealed class LinkCategoryGroupViewModel
     {

@@ -1,6 +1,6 @@
-﻿using DH.Helpdesk.Web.Models.Questionnaire.Output;
+﻿using DH.Helpdesk.Mobile.Models.Questionnaire.Output;
 
-namespace DH.Helpdesk.Web.Models.Questionnaire.Input
+namespace DH.Helpdesk.Mobile.Models.Questionnaire.Input
 {
     using System;
     using System.Collections.Generic;
@@ -9,7 +9,7 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
 
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Mobile.Infrastructure.LocalizedAttributes;
 
     public class EditQuestionnaireModel
     {

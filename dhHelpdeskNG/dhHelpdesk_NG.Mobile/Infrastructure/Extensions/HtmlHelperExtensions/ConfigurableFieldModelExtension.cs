@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.Extensions.HtmlHelperExtensions
 {
     using System;
     using System.Collections.Generic;
@@ -7,7 +7,7 @@
     using System.Web.Mvc.Html;
     using System.Web.Routing;
 
-    using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
+    using DH.Helpdesk.Mobile.Models.Changes.ChangeEdit;
 
     public static class ConfigurableFieldModelExtension
     {

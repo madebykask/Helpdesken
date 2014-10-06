@@ -1,4 +1,4 @@
-namespace DH.Helpdesk.Web.Models.Inventory.OptionsAggregates
+namespace DH.Helpdesk.Mobile.Models.Inventory.OptionsAggregates
 {
     using System.Collections.Generic;
 

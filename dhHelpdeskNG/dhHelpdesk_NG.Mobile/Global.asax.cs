@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web
+﻿namespace DH.Helpdesk.Mobile
 {
     using System;
     using System.Threading;
@@ -11,12 +11,12 @@
     using DH.Helpdesk.Services.Exceptions;
     using DH.Helpdesk.Services.Infrastructure;
     using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Web.Controllers;
-    using DH.Helpdesk.Web.Infrastructure.Attributes;
-    using DH.Helpdesk.Web.Infrastructure.Binders;
-    using DH.Helpdesk.Web.Infrastructure.Configuration;
-    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
-    using DH.Helpdesk.Web.Infrastructure.Logger;
+    using DH.Helpdesk.Mobile.Controllers;
+    using DH.Helpdesk.Mobile.Infrastructure.Attributes;
+    using DH.Helpdesk.Mobile.Infrastructure.Binders;
+    using DH.Helpdesk.Mobile.Infrastructure.Configuration;
+    using DH.Helpdesk.Mobile.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Mobile.Infrastructure.Logger;
 
     using Microsoft.Practices.ServiceLocation;
 

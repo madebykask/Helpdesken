@@ -1,8 +1,8 @@
-﻿namespace DH.Helpdesk.Web.Areas.Licenses.Infrastructure.ModelFactories
+﻿namespace DH.Helpdesk.Mobile.Areas.Licenses.Infrastructure.ModelFactories
 {
     using DH.Helpdesk.BusinessData.Models.Licenses;
     using DH.Helpdesk.BusinessData.Models.Licenses.Vendors;
-    using DH.Helpdesk.Web.Areas.Licenses.Models.Vendors;
+    using DH.Helpdesk.Mobile.Areas.Licenses.Models.Vendors;
 
     public interface IVendorsModelFactory
     {

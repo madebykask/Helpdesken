@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Controllers
+﻿namespace DH.Helpdesk.Mobile.Controllers
 {
     using System;
     using System.Web;
@@ -7,7 +7,7 @@
 
     using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Mobile.Infrastructure;
 
     public class LoginController : Controller
     {

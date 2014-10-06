@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Customers
+﻿namespace DH.Helpdesk.Mobile.Models.Customers
 {
     using System.Collections.Generic;
 

@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure
+﻿namespace DH.Helpdesk.Mobile.Infrastructure
 {
     using System;
     using System.IO;
@@ -6,8 +6,8 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Web.Infrastructure.Extensions;
-    using DH.Helpdesk.Web.Models;
+    using DH.Helpdesk.Mobile.Infrastructure.Extensions;
+    using DH.Helpdesk.Mobile.Models;
 
     [CustomAuthorize]
     public class BaseController : Controller

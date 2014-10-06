@@ -1,9 +1,9 @@
-﻿namespace DH.Helpdesk.Web.Areas.Licenses.Models.Products
+﻿namespace DH.Helpdesk.Mobile.Areas.Licenses.Models.Products
 {
     using System.Web.Mvc;
 
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Areas.Licenses.Models.Common;
+    using DH.Helpdesk.Mobile.Areas.Licenses.Models.Common;
 
     public sealed class ProductsIndexModel : BaseIndexModel
     {

@@ -2,7 +2,7 @@
 using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.Domain;
 
-namespace DH.Helpdesk.Web.Models.Case
+namespace DH.Helpdesk.Mobile.Models.Case
 {
     using System;
     using System.Collections.Generic;

@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.NinjectModules.Modules
+﻿namespace DH.Helpdesk.Mobile.NinjectModules.Modules
 {
     using DH.Helpdesk.BusinessData.Models.Problem.Input;
     using DH.Helpdesk.BusinessData.Models.Problem.Output;

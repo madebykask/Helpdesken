@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.NinjectModules.Common
+﻿namespace DH.Helpdesk.Mobile.NinjectModules.Common
 {
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Cases;

@@ -1,10 +1,10 @@
-﻿namespace DH.Helpdesk.Web.Models
+﻿namespace DH.Helpdesk.Mobile.Models
 {
     using System.Collections.Generic;
 
     using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Mobile.Infrastructure;
 
     public class MasterPageViewModel
     {

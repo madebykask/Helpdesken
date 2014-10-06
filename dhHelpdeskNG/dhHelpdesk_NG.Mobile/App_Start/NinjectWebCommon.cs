@@ -1,9 +1,9 @@
-using DH.Helpdesk.Web;
+using DH.Helpdesk.Mobile;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(NinjectWebCommon), "Stop")]
 
-namespace DH.Helpdesk.Web
+namespace DH.Helpdesk.Mobile
 {
     using System;
     using System.Web;
@@ -11,8 +11,8 @@ namespace DH.Helpdesk.Web
     using CommonServiceLocator.NinjectAdapter.Unofficial;
 
     using DH.Helpdesk.Services.Infrastructure;
-    using DH.Helpdesk.Web.NinjectModules.Common;
-    using DH.Helpdesk.Web.NinjectModules.Modules;
+    using DH.Helpdesk.Mobile.NinjectModules.Common;
+    using DH.Helpdesk.Mobile.NinjectModules.Modules;
 
     using Microsoft.Practices.ServiceLocation;
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;

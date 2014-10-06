@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Filters.Reports
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.Filters.Reports
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 

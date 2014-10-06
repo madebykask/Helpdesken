@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.LocalizedAttributes
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.LocalizedAttributes
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;

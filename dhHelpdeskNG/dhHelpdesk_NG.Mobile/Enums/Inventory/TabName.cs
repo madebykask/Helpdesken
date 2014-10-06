@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Enums.Inventory
+﻿namespace DH.Helpdesk.Mobile.Enums.Inventory
 {
     public class TabName
     {

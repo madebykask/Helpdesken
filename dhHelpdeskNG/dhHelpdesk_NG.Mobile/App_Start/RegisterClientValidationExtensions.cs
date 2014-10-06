@@ -1,8 +1,8 @@
-using DH.Helpdesk.Web;
+using DH.Helpdesk.Mobile;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(RegisterClientValidationExtensions), "Start")]
 
-namespace DH.Helpdesk.Web
+namespace DH.Helpdesk.Mobile
 {
     using DataAnnotationsExtensions.ClientValidation;
 

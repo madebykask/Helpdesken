@@ -1,9 +1,9 @@
-﻿namespace DH.Helpdesk.Web.Models.Notifiers
+﻿namespace DH.Helpdesk.Mobile.Models.Notifiers
 {
     using System.Collections.Generic;
 
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Models.Shared;
+    using DH.Helpdesk.Mobile.Models.Shared;
 
     public sealed class NotifiersGridModel
     {

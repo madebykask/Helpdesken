@@ -1,8 +1,8 @@
-﻿namespace DH.Helpdesk.Web.Models.Notifiers
+﻿namespace DH.Helpdesk.Mobile.Models.Notifiers
 {
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
-    using DH.Helpdesk.Web.Models.Notifiers.ConfigurableFields;
+    using DH.Helpdesk.Mobile.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Mobile.Models.Notifiers.ConfigurableFields;
 
     public sealed class InputModel
     {

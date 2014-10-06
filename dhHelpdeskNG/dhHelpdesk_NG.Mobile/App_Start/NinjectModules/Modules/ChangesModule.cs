@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.NinjectModules.Modules
+﻿namespace DH.Helpdesk.Mobile.NinjectModules.Modules
 {
     using System.Collections.Generic;
 
@@ -29,15 +29,15 @@
     using DH.Helpdesk.Services.BusinessLogic.Changes.Concrete;
     using DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters;
     using DH.Helpdesk.Services.Requests.Changes;
-    using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Changes;
-    using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Changes.Concrete;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.ExistingChange;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.ExistingChange.Concrete;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.NewChange;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.NewChange.Concrete;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.Concrete;
+    using DH.Helpdesk.Mobile.Infrastructure.BusinessModelFactories.Changes;
+    using DH.Helpdesk.Mobile.Infrastructure.BusinessModelFactories.Changes.Concrete;
+    using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Changes;
+    using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Changes.ChangeEdit;
+    using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Changes.ChangeEdit.ExistingChange;
+    using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Changes.ChangeEdit.ExistingChange.Concrete;
+    using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Changes.ChangeEdit.NewChange;
+    using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Changes.ChangeEdit.NewChange.Concrete;
+    using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Changes.Concrete;
 
     using Ninject.Modules;
 

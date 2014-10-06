@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Areas.Admin.Models.Invoice
+﻿namespace DH.Helpdesk.Mobile.Areas.Admin.Models.Invoice
 {
     using System.Web;
 

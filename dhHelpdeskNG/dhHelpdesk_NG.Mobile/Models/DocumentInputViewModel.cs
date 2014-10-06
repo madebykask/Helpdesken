@@ -1,6 +1,6 @@
-﻿using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
+﻿using DH.Helpdesk.Mobile.Infrastructure.Extensions.HtmlHelperExtensions.Content;
 
-namespace DH.Helpdesk.Web.Models
+namespace DH.Helpdesk.Mobile.Models
 {
     using System;
     using System.Collections.Generic;

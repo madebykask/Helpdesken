@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Shared
+﻿namespace DH.Helpdesk.Mobile.Models.Inventory.EditModel.Shared
 {
     using System;
 

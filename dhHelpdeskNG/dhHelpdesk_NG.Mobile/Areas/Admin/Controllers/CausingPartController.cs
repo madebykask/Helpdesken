@@ -7,13 +7,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace DH.Helpdesk.Web.Areas.Admin.Controllers
+namespace DH.Helpdesk.Mobile.Areas.Admin.Controllers
 {
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Web.Areas.Admin.Models.CausingPart;
+    using DH.Helpdesk.Mobile.Areas.Admin.Models.CausingPart;
 
     /// <summary>
     /// The causing part controller.

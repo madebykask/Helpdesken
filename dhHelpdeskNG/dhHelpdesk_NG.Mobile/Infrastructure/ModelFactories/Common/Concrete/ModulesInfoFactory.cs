@@ -1,12 +1,12 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Common.Concrete
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Common.Concrete
 {
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Web.Models.Case;
-    using DH.Helpdesk.Web.Models.Changes;
+    using DH.Helpdesk.Mobile.Models.Case;
+    using DH.Helpdesk.Mobile.Models.Changes;
 
     internal class ModulesInfoFactory : IModulesInfoFactory
     {

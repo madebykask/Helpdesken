@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace DH.Helpdesk.Web.Models.Print.Case
+namespace DH.Helpdesk.Mobile.Models.Print.Case
 {
     using System.Collections.Generic;
 

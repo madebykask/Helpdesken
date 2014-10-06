@@ -1,6 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Licenses.Models.Applications
+﻿namespace DH.Helpdesk.Mobile.Areas.Licenses.Models.Applications
 {
-    using DH.Helpdesk.Web.Areas.Licenses.Models.Common;
+    using DH.Helpdesk.Mobile.Areas.Licenses.Models.Common;
 
     public sealed class ApplicationsIndexModel : BaseIndexModel
     {

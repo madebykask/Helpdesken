@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.Extensions
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -8,7 +8,7 @@
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.Common.Enums.Settings;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Web.Models.Case;
+    using DH.Helpdesk.Mobile.Models.Case;
 
     public static class GeneralExtensions
     {

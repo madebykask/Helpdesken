@@ -1,7 +1,7 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Changes
 {
     using DH.Helpdesk.Services.Response.Changes;
-    using DH.Helpdesk.Web.Models.Changes.SettingsEdit;
+    using DH.Helpdesk.Mobile.Models.Changes.SettingsEdit;
 
     public interface ISettingsModelFactory
     {

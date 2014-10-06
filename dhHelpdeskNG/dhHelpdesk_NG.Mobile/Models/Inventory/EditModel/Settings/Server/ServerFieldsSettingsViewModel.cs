@@ -1,9 +1,9 @@
-﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Server
+﻿namespace DH.Helpdesk.Mobile.Models.Inventory.EditModel.Settings.Server
 {
     using System.Web.Mvc;
 
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Shared;
+    using DH.Helpdesk.Mobile.Models.Inventory.EditModel.Settings.Shared;
 
     public class ServerFieldsSettingsViewModel
     {

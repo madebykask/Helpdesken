@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Projects.Concrete
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Projects.Concrete
 {
     using System.Collections.Generic;
     using System.Globalization;
@@ -7,8 +7,8 @@
 
     using DH.Helpdesk.BusinessData.Models.Projects.Output;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Web.Infrastructure.Filters.Projects;
-    using DH.Helpdesk.Web.Models.Projects;
+    using DH.Helpdesk.Mobile.Infrastructure.Filters.Projects;
+    using DH.Helpdesk.Mobile.Models.Projects;
 
     public class IndexProjectViewModelFactory : IIndexProjectViewModelFactory
     {

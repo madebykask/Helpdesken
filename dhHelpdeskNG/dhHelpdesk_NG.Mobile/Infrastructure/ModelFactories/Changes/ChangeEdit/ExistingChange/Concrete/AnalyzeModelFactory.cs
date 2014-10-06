@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.ExistingChange.Concrete
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Changes.ChangeEdit.ExistingChange.Concrete
 {
     using System.Collections.Generic;
     using System.Globalization;
@@ -8,9 +8,9 @@
     using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
     using DH.Helpdesk.Services.Response.Changes;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
-    using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
-    using DH.Helpdesk.Web.Models.Shared;
+    using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Common;
+    using DH.Helpdesk.Mobile.Models.Changes.ChangeEdit;
+    using DH.Helpdesk.Mobile.Models.Shared;
 
     public sealed class AnalyzeModelFactory : IAnalyzeModelFactory
     {

@@ -1,6 +1,6 @@
 ﻿using DH.Helpdesk.BusinessData.Models.CaseSolution;
 
-namespace DH.Helpdesk.Web.Infrastructure.Extensions
+namespace DH.Helpdesk.Mobile.Infrastructure.Extensions
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -11,7 +11,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Web.Models;
+    using DH.Helpdesk.Mobile.Models;
 
     public static class HtmlHelperExtension
     {

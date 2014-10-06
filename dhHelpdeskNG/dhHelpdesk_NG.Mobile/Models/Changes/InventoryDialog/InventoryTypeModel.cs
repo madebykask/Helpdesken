@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Changes.InventoryDialog
+﻿namespace DH.Helpdesk.Mobile.Models.Changes.InventoryDialog
 {
     using System.Collections.Generic;
     using System.Web.Mvc;

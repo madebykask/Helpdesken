@@ -1,4 +1,4 @@
-namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
+namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Inventory.Concrete
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -6,8 +6,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.PrinterSettings;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Printer;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Shared;
+    using DH.Helpdesk.Mobile.Models.Inventory.EditModel.Settings.Printer;
+    using DH.Helpdesk.Mobile.Models.Inventory.EditModel.Settings.Shared;
 
     public class PrinterFieldsSettingsViewModelBuilder : IPrinterFieldsSettingsViewModelBuilder
     {

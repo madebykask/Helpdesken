@@ -1,8 +1,8 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Changes.Concrete
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.BusinessModelFactories.Changes.Concrete
 {
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Changes.Settings.SettingsEdit;
-    using DH.Helpdesk.Web.Models.Changes.SettingsEdit;
+    using DH.Helpdesk.Mobile.Models.Changes.SettingsEdit;
 
     public sealed class UpdatedSettingsFactory : IUpdatedSettingsFactory
     {

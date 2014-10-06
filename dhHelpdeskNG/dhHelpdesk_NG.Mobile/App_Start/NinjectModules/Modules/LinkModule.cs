@@ -1,8 +1,8 @@
-﻿using DH.Helpdesk.Web.Infrastructure.ModelFactories.Link;
-using DH.Helpdesk.Web.Infrastructure.ModelFactories.Link.Concrete;
+﻿using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Link;
+using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Link.Concrete;
 using Ninject.Modules;
 
-namespace DH.Helpdesk.Web.NinjectModules.Modules
+namespace DH.Helpdesk.Mobile.NinjectModules.Modules
 {
     public sealed class LinkModule : NinjectModule
     {

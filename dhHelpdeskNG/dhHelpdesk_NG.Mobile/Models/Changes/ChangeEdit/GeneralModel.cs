@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Changes.ChangeEdit
+﻿namespace DH.Helpdesk.Mobile.Models.Changes.ChangeEdit
 {
     using System;
     using System.Web.Mvc;
@@ -6,8 +6,8 @@
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Services.DisplayValues;
-    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
-    using DH.Helpdesk.Web.Models.Changes.InventoryDialog;
+    using DH.Helpdesk.Mobile.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Mobile.Models.Changes.InventoryDialog;
 
     public sealed class GeneralModel
     {

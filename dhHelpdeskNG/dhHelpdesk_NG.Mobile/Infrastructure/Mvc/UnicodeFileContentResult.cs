@@ -1,11 +1,11 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Mvc
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.Mvc
 {
     using System;
     using System.Text;
     using System.Web;
     using System.Web.Mvc;
 
-    using DH.Helpdesk.Web.Infrastructure.Tools;
+    using DH.Helpdesk.Mobile.Infrastructure.Tools;
 
     public sealed class UnicodeFileContentResult : ActionResult
     {

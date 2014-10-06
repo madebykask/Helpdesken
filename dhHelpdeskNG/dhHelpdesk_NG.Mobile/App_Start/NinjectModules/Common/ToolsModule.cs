@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.NinjectModules.Common
+﻿namespace DH.Helpdesk.Mobile.NinjectModules.Common
 {
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Infrastructure.Concrete;
@@ -15,10 +15,10 @@
     using DH.Helpdesk.Services.Infrastructure;
     using DH.Helpdesk.Services.Infrastructure.Concrete;
     using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common.Concrete;
-    using DH.Helpdesk.Web.Infrastructure.Tools;
-    using DH.Helpdesk.Web.Infrastructure.Tools.Concrete;
+    using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Common;
+    using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Common.Concrete;
+    using DH.Helpdesk.Mobile.Infrastructure.Tools;
+    using DH.Helpdesk.Mobile.Infrastructure.Tools.Concrete;
 
     using Ninject.Modules;
     using Ninject.Web.Common;

@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace DH.Helpdesk.Web.Areas.Admin.Models.CausingPart
+namespace DH.Helpdesk.Mobile.Areas.Admin.Models.CausingPart
 {
     using System.Collections.Generic;
 

@@ -1,7 +1,7 @@
 ﻿using DH.Helpdesk.BusinessData.Models.Users.Input;
 using DH.Helpdesk.BusinessData.Models.Users.Output;
 
-namespace DH.Helpdesk.Web.Models.Profile
+namespace DH.Helpdesk.Mobile.Models.Profile
 {
     using System.Collections.Generic;
     using System.Web.Mvc;

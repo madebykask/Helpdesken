@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace DH.Helpdesk.Web.Models.Link
+namespace DH.Helpdesk.Mobile.Models.Link
 {
     public sealed class LinkCustomerGroupViewModel
     {

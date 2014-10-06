@@ -1,7 +1,7 @@
-﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Inventory
+﻿namespace DH.Helpdesk.Mobile.Models.Inventory.EditModel.Settings.Inventory
 {
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Mobile.Infrastructure.LocalizedAttributes;
 
     public class InventoryTypeModel
     {

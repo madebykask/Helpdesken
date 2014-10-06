@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Inventory.Concrete
 {
     using System;
     using System.Collections.Generic;
@@ -7,8 +7,8 @@
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.Web.Infrastructure.Extensions;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel;
+    using DH.Helpdesk.Mobile.Infrastructure.Extensions;
+    using DH.Helpdesk.Mobile.Models.Inventory.EditModel;
 
     public class ConfigurableFieldModelBuilder : IConfigurableFieldModelBuilder
     {

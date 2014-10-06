@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Filters.Changes
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.Filters.Changes
 {
     using System.Collections.Generic;
 

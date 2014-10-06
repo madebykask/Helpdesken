@@ -1,7 +1,7 @@
-﻿namespace DH.Helpdesk.Web.NinjectModules.Modules
+﻿namespace DH.Helpdesk.Mobile.NinjectModules.Modules
 {
-    using DH.Helpdesk.Web.Areas.Licenses.Infrastructure.ModelFactories;
-    using DH.Helpdesk.Web.Areas.Licenses.Infrastructure.ModelFactories.Concrete;
+    using DH.Helpdesk.Mobile.Areas.Licenses.Infrastructure.ModelFactories;
+    using DH.Helpdesk.Mobile.Areas.Licenses.Infrastructure.ModelFactories.Concrete;
 
     using Ninject.Modules;
 

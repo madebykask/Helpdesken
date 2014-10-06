@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Reports.Concrete
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Reports.Concrete
 {
     using System;
     using System.Collections.Generic;
@@ -9,10 +9,10 @@
     using DH.Helpdesk.BusinessData.Models.Reports;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Web.Infrastructure.Filters.Reports;
-    using DH.Helpdesk.Web.Infrastructure.Tools;
-    using DH.Helpdesk.Web.Infrastructure.Tools.Concrete;
-    using DH.Helpdesk.Web.Models.Reports;
+    using DH.Helpdesk.Mobile.Infrastructure.Filters.Reports;
+    using DH.Helpdesk.Mobile.Infrastructure.Tools;
+    using DH.Helpdesk.Mobile.Infrastructure.Tools.Concrete;
+    using DH.Helpdesk.Mobile.Models.Reports;
 
     internal sealed class ReportsModelFactory : IReportsModelFactory
     {

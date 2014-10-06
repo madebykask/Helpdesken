@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using DH.Helpdesk.BusinessData.Models.Users.Output;
 
-namespace DH.Helpdesk.Web.Models.Profile
+namespace DH.Helpdesk.Mobile.Models.Profile
 {
     public sealed class UserModulesViewModel
     {

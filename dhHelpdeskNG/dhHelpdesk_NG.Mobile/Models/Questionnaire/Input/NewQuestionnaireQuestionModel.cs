@@ -1,11 +1,11 @@
 ﻿using DH.Helpdesk.Common.ValidationAttributes;
 
-namespace DH.Helpdesk.Web.Models.Questionnaire.Input
+namespace DH.Helpdesk.Mobile.Models.Questionnaire.Input
 {
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Mobile.Infrastructure.LocalizedAttributes;
 
     public class NewQuestionnaireQuestionModel
     {

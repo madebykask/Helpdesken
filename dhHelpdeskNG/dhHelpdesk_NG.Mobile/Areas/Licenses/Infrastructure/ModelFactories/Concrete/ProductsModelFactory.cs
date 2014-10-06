@@ -1,9 +1,9 @@
-﻿namespace DH.Helpdesk.Web.Areas.Licenses.Infrastructure.ModelFactories.Concrete
+﻿namespace DH.Helpdesk.Mobile.Areas.Licenses.Infrastructure.ModelFactories.Concrete
 {
     using DH.Helpdesk.BusinessData.Models.Licenses;
     using DH.Helpdesk.BusinessData.Models.Licenses.Products;
-    using DH.Helpdesk.Web.Areas.Licenses.Models.Products;
-    using DH.Helpdesk.Web.Infrastructure.Tools;
+    using DH.Helpdesk.Mobile.Areas.Licenses.Models.Products;
+    using DH.Helpdesk.Mobile.Infrastructure.Tools;
 
     public sealed class ProductsModelFactory : IProductsModelFactory
     {

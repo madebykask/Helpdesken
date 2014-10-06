@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Controllers
+﻿namespace DH.Helpdesk.Mobile.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -21,16 +21,16 @@
     using DH.Helpdesk.Dal.Utils;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Web.Infrastructure;
-    using DH.Helpdesk.Web.Infrastructure.Configuration;
-    using DH.Helpdesk.Web.Infrastructure.Extensions;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Case;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Invoice;
-    using DH.Helpdesk.Web.Infrastructure.Mvc;
-    using DH.Helpdesk.Web.Infrastructure.Tools;
-    using DH.Helpdesk.Web.Models;
-    using DH.Helpdesk.Web.Models.Case;
-    using DH.Helpdesk.Web.Models.Shared;
+    using DH.Helpdesk.Mobile.Infrastructure;
+    using DH.Helpdesk.Mobile.Infrastructure.Configuration;
+    using DH.Helpdesk.Mobile.Infrastructure.Extensions;
+    using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Case;
+    using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Invoice;
+    using DH.Helpdesk.Mobile.Infrastructure.Mvc;
+    using DH.Helpdesk.Mobile.Infrastructure.Tools;
+    using DH.Helpdesk.Mobile.Models;
+    using DH.Helpdesk.Mobile.Models.Case;
+    using DH.Helpdesk.Mobile.Models.Shared;
     using System.Web.Script.Serialization;
 
     public class CasesController : BaseController

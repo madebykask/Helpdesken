@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Session
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.Session
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 

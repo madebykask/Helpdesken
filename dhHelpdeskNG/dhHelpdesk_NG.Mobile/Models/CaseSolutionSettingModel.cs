@@ -1,4 +1,4 @@
-namespace DH.Helpdesk.Web.Models
+namespace DH.Helpdesk.Mobile.Models
 {
     using System;
     using System.Collections.Generic;

@@ -1,4 +1,4 @@
-namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
+namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Inventory.Concrete
 {
     using System;
     using System.Collections.Generic;
@@ -9,20 +9,20 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
     using DH.Helpdesk.BusinessData.Models.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ComputerSettings;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.Web.Infrastructure.Extensions;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Computer;
-    using DH.Helpdesk.Web.Models.Inventory.OptionsAggregates;
+    using DH.Helpdesk.Mobile.Infrastructure.Extensions;
+    using DH.Helpdesk.Mobile.Models.Inventory.EditModel.Computer;
+    using DH.Helpdesk.Mobile.Models.Inventory.OptionsAggregates;
 
-    using ChassisFieldsModel = DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.ChassisFieldsModel;
-    using InventoryFieldsModel = DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.InventoryFieldsModel;
-    using MemoryFieldsModel = DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.MemoryFieldsModel;
-    using MemoryFieldsViewModel = DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.MemoryFieldsViewModel;
-    using OperatingSystemFieldsModel = DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.OperatingSystemFieldsModel;
-    using OperatingSystemFieldsViewModel = DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.OperatingSystemFieldsViewModel;
-    using PlaceFieldsModel = DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.PlaceFieldsModel;
-    using PlaceFieldsViewModel = DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.PlaceFieldsViewModel;
-    using ProccesorFieldsModel = DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.ProccesorFieldsModel;
-    using ProccesorFieldsViewModel = DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.ProccesorFieldsViewModel;
+    using ChassisFieldsModel = DH.Helpdesk.Mobile.Models.Inventory.EditModel.Computer.ChassisFieldsModel;
+    using InventoryFieldsModel = DH.Helpdesk.Mobile.Models.Inventory.EditModel.Computer.InventoryFieldsModel;
+    using MemoryFieldsModel = DH.Helpdesk.Mobile.Models.Inventory.EditModel.Computer.MemoryFieldsModel;
+    using MemoryFieldsViewModel = DH.Helpdesk.Mobile.Models.Inventory.EditModel.Computer.MemoryFieldsViewModel;
+    using OperatingSystemFieldsModel = DH.Helpdesk.Mobile.Models.Inventory.EditModel.Computer.OperatingSystemFieldsModel;
+    using OperatingSystemFieldsViewModel = DH.Helpdesk.Mobile.Models.Inventory.EditModel.Computer.OperatingSystemFieldsViewModel;
+    using PlaceFieldsModel = DH.Helpdesk.Mobile.Models.Inventory.EditModel.Computer.PlaceFieldsModel;
+    using PlaceFieldsViewModel = DH.Helpdesk.Mobile.Models.Inventory.EditModel.Computer.PlaceFieldsViewModel;
+    using ProccesorFieldsModel = DH.Helpdesk.Mobile.Models.Inventory.EditModel.Computer.ProccesorFieldsModel;
+    using ProccesorFieldsViewModel = DH.Helpdesk.Mobile.Models.Inventory.EditModel.Computer.ProccesorFieldsViewModel;
 
     public class ComputerViewModelBuilder : IComputerViewModelBuilder
     {

@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.NinjectModules.Common
+﻿namespace DH.Helpdesk.Mobile.NinjectModules.Common
 {
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Concrete;

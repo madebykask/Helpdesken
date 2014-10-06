@@ -1,12 +1,12 @@
-﻿namespace DH.Helpdesk.Web.Models.Inventory.SearchModels
+﻿namespace DH.Helpdesk.Mobile.Models.Inventory.SearchModels
 {
     using DataAnnotationsExtensions;
 
     using DH.Helpdesk.BusinessData.Models.Inventory;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Services.Requests.Inventory;
-    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
-    using DH.Helpdesk.Web.Models.Shared;
+    using DH.Helpdesk.Mobile.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Mobile.Models.Shared;
 
     public class WorkstationsSearchFilter
     {

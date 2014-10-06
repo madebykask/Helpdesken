@@ -1,4 +1,4 @@
-namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Computer
+namespace DH.Helpdesk.Mobile.Models.Inventory.EditModel.Computer
 {
     using System.Collections.Generic;
     using System.Web.Mvc;

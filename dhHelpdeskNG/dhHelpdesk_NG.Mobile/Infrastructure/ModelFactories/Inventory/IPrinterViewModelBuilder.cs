@@ -1,8 +1,8 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Inventory
 {
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.PrinterSettings;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Printer;
-    using DH.Helpdesk.Web.Models.Inventory.OptionsAggregates;
+    using DH.Helpdesk.Mobile.Models.Inventory.EditModel.Printer;
+    using DH.Helpdesk.Mobile.Models.Inventory.OptionsAggregates;
 
     public interface IPrinterViewModelBuilder
     {

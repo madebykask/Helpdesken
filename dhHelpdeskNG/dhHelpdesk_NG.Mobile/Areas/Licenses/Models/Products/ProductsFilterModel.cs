@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Areas.Licenses.Models.Products
+﻿namespace DH.Helpdesk.Mobile.Areas.Licenses.Models.Products
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 

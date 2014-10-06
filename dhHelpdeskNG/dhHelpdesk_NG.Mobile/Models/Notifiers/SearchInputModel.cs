@@ -1,9 +1,9 @@
-﻿namespace DH.Helpdesk.Web.Models.Notifiers
+﻿namespace DH.Helpdesk.Mobile.Models.Notifiers
 {
     using DH.Helpdesk.BusinessData.Enums.Notifiers;
     using DH.Helpdesk.Common.Enums;
-    using DH.Helpdesk.Web.Infrastructure.Filters.Notifiers;
-    using DH.Helpdesk.Web.Models.Shared;
+    using DH.Helpdesk.Mobile.Infrastructure.Filters.Notifiers;
+    using DH.Helpdesk.Mobile.Models.Shared;
 
     public sealed class SearchInputModel : ISearchModel<NotifierFilters>
     {

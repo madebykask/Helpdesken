@@ -1,4 +1,4 @@
-namespace DH.Helpdesk.Web.Models.Inventory
+namespace DH.Helpdesk.Mobile.Models.Inventory
 {
     using System.Collections.Generic;
 

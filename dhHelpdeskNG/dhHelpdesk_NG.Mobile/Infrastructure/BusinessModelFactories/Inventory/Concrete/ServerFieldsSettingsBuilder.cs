@@ -1,10 +1,10 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concrete
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.BusinessModelFactories.Inventory.Concrete
 {
     using System;
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ServerSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.SharedSettings;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Server;
+    using DH.Helpdesk.Mobile.Models.Inventory.EditModel.Settings.Server;
 
     public class ServerFieldsSettingsBuilder : IServerFieldsSettingsBuilder
     {

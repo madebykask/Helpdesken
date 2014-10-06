@@ -1,11 +1,11 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Projects.Concrete
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Projects.Concrete
 {
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
 
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Web.Models.Projects;
+    using DH.Helpdesk.Mobile.Models.Projects;
 
     public class NewProjectViewModelFactory : INewProjectViewModelFactory
     {

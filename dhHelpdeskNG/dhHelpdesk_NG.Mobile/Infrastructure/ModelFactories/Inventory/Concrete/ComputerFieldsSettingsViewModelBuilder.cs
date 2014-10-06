@@ -1,4 +1,4 @@
-namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
+namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Inventory.Concrete
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -6,10 +6,10 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Computer;
+    using DH.Helpdesk.Mobile.Models.Inventory.EditModel.Settings.Computer;
 
-    using FieldSettingModel = DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Computer.FieldSettingModel;
-    using PlaceFieldsSettingsModel = DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Computer.PlaceFieldsSettingsModel;
+    using FieldSettingModel = DH.Helpdesk.Mobile.Models.Inventory.EditModel.Settings.Computer.FieldSettingModel;
+    using PlaceFieldsSettingsModel = DH.Helpdesk.Mobile.Models.Inventory.EditModel.Settings.Computer.PlaceFieldsSettingsModel;
 
     public class ComputerFieldsSettingsViewModelBuilder : IComputerFieldsSettingsViewModelBuilder
     {

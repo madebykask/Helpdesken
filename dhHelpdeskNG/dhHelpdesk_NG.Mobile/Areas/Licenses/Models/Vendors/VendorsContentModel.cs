@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Areas.Licenses.Models.Vendors
+﻿namespace DH.Helpdesk.Mobile.Areas.Licenses.Models.Vendors
 {
     using DH.Helpdesk.BusinessData.Models.Licenses;
     using DH.Helpdesk.BusinessData.Models.Licenses.Vendors;

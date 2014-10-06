@@ -1,10 +1,10 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Projects
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Projects
 {
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Projects.Output;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Web.Models.Projects;
+    using DH.Helpdesk.Mobile.Models.Projects;
 
     public interface IUpdatedProjectViewModelFactory
     {

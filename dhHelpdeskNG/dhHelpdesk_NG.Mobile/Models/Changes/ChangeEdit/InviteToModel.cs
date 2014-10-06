@@ -1,7 +1,7 @@
-﻿namespace DH.Helpdesk.Web.Models.Changes.ChangeEdit
+﻿namespace DH.Helpdesk.Mobile.Models.Changes.ChangeEdit
 {
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Models.Shared;
+    using DH.Helpdesk.Mobile.Models.Shared;
 
     public sealed class InviteToModel
     {

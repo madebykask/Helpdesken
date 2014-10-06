@@ -1,9 +1,9 @@
-﻿namespace DH.Helpdesk.Web.NinjectModules.Modules
+﻿namespace DH.Helpdesk.Mobile.NinjectModules.Modules
 {
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Reports;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Reports.Concrete;
-    using DH.Helpdesk.Web.Infrastructure.Tools;
-    using DH.Helpdesk.Web.Infrastructure.Tools.Concrete;
+    using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Reports;
+    using DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Reports.Concrete;
+    using DH.Helpdesk.Mobile.Infrastructure.Tools;
+    using DH.Helpdesk.Mobile.Infrastructure.Tools.Concrete;
 
     using Ninject.Modules;
     using Ninject.Web.Common;

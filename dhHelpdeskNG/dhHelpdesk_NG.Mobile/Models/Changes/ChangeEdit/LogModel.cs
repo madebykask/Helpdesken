@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Changes.ChangeEdit
+﻿namespace DH.Helpdesk.Mobile.Models.Changes.ChangeEdit
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 

@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Changes
+﻿namespace DH.Helpdesk.Mobile.Models.Changes
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 

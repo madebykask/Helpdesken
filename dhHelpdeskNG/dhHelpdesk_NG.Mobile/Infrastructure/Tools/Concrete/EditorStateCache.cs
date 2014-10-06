@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Tools.Concrete
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.Tools.Concrete
 {
     using System.Collections.Generic;
     using System.Linq;

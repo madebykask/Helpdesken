@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.Concrete
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Changes.Concrete
 {
     using System.Collections.Generic;
     using System.Web.Mvc;
@@ -7,9 +7,9 @@
     using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.Models.Shared.Output;
-    using DH.Helpdesk.Web.Infrastructure.Filters.Changes;
-    using DH.Helpdesk.Web.Models.Changes;
-    using DH.Helpdesk.Web.Models.Shared;
+    using DH.Helpdesk.Mobile.Infrastructure.Filters.Changes;
+    using DH.Helpdesk.Mobile.Models.Changes;
+    using DH.Helpdesk.Mobile.Models.Shared;
 
     public sealed class SearchModelFactory : ISearchModelFactory
     {

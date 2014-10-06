@@ -1,11 +1,11 @@
-﻿namespace DH.Helpdesk.Web.Areas.Admin.Models
+﻿namespace DH.Helpdesk.Mobile.Areas.Admin.Models
 {
     using System.Collections.Generic;
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Mobile.Infrastructure;
 
     public class ChangeUserPasswordModel
     {

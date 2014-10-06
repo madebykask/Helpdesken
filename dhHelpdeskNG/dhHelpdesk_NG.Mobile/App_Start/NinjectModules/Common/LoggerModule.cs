@@ -1,7 +1,7 @@
-﻿namespace DH.Helpdesk.Web.NinjectModules.Common
+﻿namespace DH.Helpdesk.Mobile.NinjectModules.Common
 {
     using DH.Helpdesk.Common.Logger;
-    using DH.Helpdesk.Web.Infrastructure.Logger;
+    using DH.Helpdesk.Mobile.Infrastructure.Logger;
 
     using Ninject.Modules;
 

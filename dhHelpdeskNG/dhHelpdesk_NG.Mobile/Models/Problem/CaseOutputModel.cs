@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Problem
+﻿namespace DH.Helpdesk.Mobile.Models.Problem
 {
     using System;
 

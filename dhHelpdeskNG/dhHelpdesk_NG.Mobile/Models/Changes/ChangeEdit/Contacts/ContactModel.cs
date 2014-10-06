@@ -1,7 +1,7 @@
-﻿namespace DH.Helpdesk.Web.Models.Changes.ChangeEdit.Contacts
+﻿namespace DH.Helpdesk.Mobile.Models.Changes.ChangeEdit.Contacts
 {
     using DH.Helpdesk.BusinessData.Models.Changes;
-    using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
+    using DH.Helpdesk.Mobile.Models.Changes.ChangeEdit;
 
     public sealed class ContactModel
     {

@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
+namespace DH.Helpdesk.Mobile.Infrastructure.WorkContext.Concrete
 {
     using DH.Helpdesk.Dal.Infrastructure.Context;
 

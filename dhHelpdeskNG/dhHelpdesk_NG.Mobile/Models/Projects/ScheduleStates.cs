@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Projects
+﻿namespace DH.Helpdesk.Mobile.Models.Projects
 {
     public enum ScheduleStates
     {

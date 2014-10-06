@@ -1,13 +1,13 @@
-namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concrete
+namespace DH.Helpdesk.Mobile.Infrastructure.BusinessModelFactories.Inventory.Concrete
 {
     using System;
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Server;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Shared;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Server;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Shared;
+    using DH.Helpdesk.Mobile.Models.Inventory.EditModel;
+    using DH.Helpdesk.Mobile.Models.Inventory.EditModel.Server;
+    using DH.Helpdesk.Mobile.Models.Inventory.EditModel.Shared;
 
     public class ServerBuilder : IServerBuilder
     {

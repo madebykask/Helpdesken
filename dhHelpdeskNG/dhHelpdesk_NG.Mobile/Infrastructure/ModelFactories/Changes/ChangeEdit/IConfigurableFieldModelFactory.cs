@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Changes.ChangeEdit
 {
     using System;
     using System.Collections.Generic;
@@ -10,9 +10,9 @@
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.Models.Shared.Output;
-    using DH.Helpdesk.Web.Models.Changes;
-    using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
-    using DH.Helpdesk.Web.Models.Changes.InventoryDialog;
+    using DH.Helpdesk.Mobile.Models.Changes;
+    using DH.Helpdesk.Mobile.Models.Changes.ChangeEdit;
+    using DH.Helpdesk.Mobile.Models.Changes.InventoryDialog;
 
     public interface IConfigurableFieldModelFactory
     {

@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.Concrete
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Changes.Concrete
 {
     using System.Linq;
     using System.Web.Mvc;
@@ -7,7 +7,7 @@
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Services.Response.Changes;
-    using DH.Helpdesk.Web.Models.Changes.SettingsEdit;
+    using DH.Helpdesk.Mobile.Models.Changes.SettingsEdit;
 
     public sealed class SettingsModelFactory : ISettingsModelFactory
     {

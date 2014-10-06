@@ -1,4 +1,4 @@
-namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings
+namespace DH.Helpdesk.Mobile.Models.Inventory.EditModel.Settings
 {
     using System.Web.Mvc;
 

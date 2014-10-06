@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Filters.Projects
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.Filters.Projects
 {
     public class ProjectFilter
     {

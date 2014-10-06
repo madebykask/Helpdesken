@@ -1,8 +1,8 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Changes
 {
     using DH.Helpdesk.BusinessData.Models.Changes;
-    using DH.Helpdesk.Web.Infrastructure.Filters.Changes;
-    using DH.Helpdesk.Web.Models.Changes;
+    using DH.Helpdesk.Mobile.Infrastructure.Filters.Changes;
+    using DH.Helpdesk.Mobile.Models.Changes;
 
     public interface ISearchModelFactory
     {

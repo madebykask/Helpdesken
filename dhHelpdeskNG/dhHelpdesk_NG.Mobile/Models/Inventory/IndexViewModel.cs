@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Inventory
+﻿namespace DH.Helpdesk.Mobile.Models.Inventory
 {
     using System;
     using System.Collections.Generic;
@@ -8,9 +8,9 @@
 
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Enums.Inventory;
-    using DH.Helpdesk.Web.Infrastructure;
-    using DH.Helpdesk.Web.Infrastructure.Extensions;
+    using DH.Helpdesk.Mobile.Enums.Inventory;
+    using DH.Helpdesk.Mobile.Infrastructure;
+    using DH.Helpdesk.Mobile.Infrastructure.Extensions;
 
     public class IndexViewModel
     {

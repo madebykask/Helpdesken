@@ -1,8 +1,8 @@
-﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Inventory
+﻿namespace DH.Helpdesk.Mobile.Models.Inventory.EditModel.Inventory
 {
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings;
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Mobile.Infrastructure.LocalizedAttributes;
 
     public class DynamicFieldModel
     {

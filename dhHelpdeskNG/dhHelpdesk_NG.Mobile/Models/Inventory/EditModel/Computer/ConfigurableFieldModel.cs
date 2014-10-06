@@ -1,7 +1,7 @@
-﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Computer
+﻿namespace DH.Helpdesk.Mobile.Models.Inventory.EditModel.Computer
 {
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Mobile.Infrastructure.LocalizedAttributes;
 
     public class ConfigurableFieldModel<TValue> : IConfigurableFieldModel
     {

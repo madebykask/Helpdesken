@@ -1,9 +1,9 @@
-﻿namespace DH.Helpdesk.Web.Models.Notifiers
+﻿namespace DH.Helpdesk.Mobile.Models.Notifiers
 {
     using System.ComponentModel.DataAnnotations;
 
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
+    using DH.Helpdesk.Mobile.Infrastructure.Extensions.HtmlHelperExtensions.Content;
 
     public sealed class SettingsModel
     {

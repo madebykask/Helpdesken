@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Case
+﻿namespace DH.Helpdesk.Mobile.Models.Case
 {
     using System.Collections.Generic;
 
@@ -11,8 +11,8 @@
     using DH.Helpdesk.BusinessData.Models.Projects.Output;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Changes;
-    using DH.Helpdesk.Web.Models.Invoice;
-    using DH.Helpdesk.Web.Models.Shared;
+    using DH.Helpdesk.Mobile.Models.Invoice;
+    using DH.Helpdesk.Mobile.Models.Shared;
 
     public class CaseInputViewModel
     {

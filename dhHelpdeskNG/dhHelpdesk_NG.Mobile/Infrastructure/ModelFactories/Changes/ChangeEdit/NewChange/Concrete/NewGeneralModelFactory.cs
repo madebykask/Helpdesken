@@ -1,4 +1,4 @@
-namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.NewChange.Concrete
+namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Changes.ChangeEdit.NewChange.Concrete
 {
     using System.Collections.Generic;
     using System.Globalization;
@@ -9,7 +9,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.NewCh
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
     using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Domain.Changes;
-    using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
+    using DH.Helpdesk.Mobile.Models.Changes.ChangeEdit;
 
     public sealed class NewGeneralModelFactory : INewGeneralModelFactory
     {

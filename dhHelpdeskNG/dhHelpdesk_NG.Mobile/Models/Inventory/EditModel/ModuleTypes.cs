@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel
+﻿namespace DH.Helpdesk.Mobile.Models.Inventory.EditModel
 {
     public enum ModuleTypes
     {

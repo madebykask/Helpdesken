@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Areas.Licenses.Models.Common
+﻿namespace DH.Helpdesk.Mobile.Areas.Licenses.Models.Common
 {
     public enum IndexModelType
     {
