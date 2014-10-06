@@ -1,0 +1,84 @@
+﻿
+@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@model DH.Helpdesk.Web.Models.Changes.ChangeEdit.ImplementationModel
+           
+<table class="tableform">
+    @if (Model.ImplementationStatuses.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Html.FieldCaption(Model.ImplementationStatuses)</label>
+            </td>
+            <td class="span9">
+                @Html.DropDownListFor(m => m.ImplementationStatusId, Model.ImplementationStatuses.Value)
+            </td>
+        </tr>
+    }
+    @Html.EditorFor(m => m.RealStartDate, "Fields/Date", new { id = "implementation_real_start_date_datepicker" })
+    @Html.EditorFor(m => m.FinishingDate, "Fields/Date", new { id = "implementation_finishing_date_datepicker" })
+    @Html.EditorFor(m => m.BuildImplemented, "Fields/Flag")
+    @Html.EditorFor(m => m.ImplementationPlanUsed, "Fields/Flag")
+    @Html.EditorFor(m => m.ChangeDeviation, "Fields/WideText")
+    @Html.EditorFor(m => m.RecoveryPlanUsed, "Fields/Flag")
+    @if (Model.AttachedFiles.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Html.FieldCaption(Model.AttachedFiles)</label>
+            </td>    
+            <td class="span9">
+                <a href="#implementation_files_uploader_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Upload")</a>
+                <div id="implementation_files_uploader_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3>&nbsp;</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div id="implementation_files_uploader"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close")</button>
+                    </div>
+                </div>
+            </td>    
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                @Html.Partial("AttachedFiles", Model.AttachedFiles.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.Logs.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Html.FieldCaption(Model.Logs)</label>
+            </td>
+            <td class="span9">
+                <div id="implementation_logs_container">
+                    @Html.Partial("Logs", Model.Logs.Value)
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get("Log Note")</label>
+            </td>
+            <td class="span9">
+                @Html.TextAreaFor(m => m.Logs.Value.Text)
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                @Html.Partial("_SendToDialog", Model.Logs.Value.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "implementation_send_to_dialog" }, { "Callback", "fillImplementationSendLogNoteToEmailsTextArea" } }))
+                @Html.TextAreaFor(m => m.Logs.Value.Emails, new { id = "implementation_send_to_emails_textarea", @readonly = "readonly" })
+                <a id="implementation_send_to_button" class="btn">
+                    @Translation.Get("Send to...")
+                </a>
+            </td>
+        </tr>
+    }
+    @Html.EditorFor(m => m.ImplementationReady, "Fields/Flag")
+</table>

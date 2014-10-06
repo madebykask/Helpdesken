@@ -1,0 +1,177 @@
+﻿@using DH.Helpdesk.Web.Enums.Inventory
+@using DH.Helpdesk.Web.Models.Inventory
+@using DH.Helpdesk.Web.Models.Inventory.EditModel
+@model IndexViewModel
+@{
+    var inventoryTabClass = Model.ActiveTab == TabName.Inventories ? "active" : null;
+    var settingsTabClass = Model.ActiveTab == TabName.Settings ? "active" : null;
+    var masterDataTabClass = Model.ActiveTab == TabName.MasterData ? "active" : null;
+
+    var inventoryButtonStyle = Model.ActiveTab == TabName.Inventories ? "display: inline-block;" : "display: none;";
+    var settingsButtonStyle = Model.ActiveTab == TabName.Settings ? "display: inline-block;" : "display: none;";
+    var masterDataButtonStyle = Model.ActiveTab == TabName.MasterData ? "display: inline-block;" : "display: none;";
+    var reportDataButtonStyle = Model.ActiveTab == TabName.Reports ? "display: inline-block;" : "display: none;";
+}
+<script type="text/javascript">
+    $(function () {
+        $('#type_dropdown').change(function () {
+            var selectedValue = $(this).val();
+
+            $.get('@Url.Action("RenderContent")', { currentMode: selectedValue }, function (tabMarkup) {
+                $('#type_data_container').html(tabMarkup);
+                var urlToNew = '@Url.Action("RedirectToNewInventory", "Inventory")';
+                var urlToExcel = '@Url.Action("ExportGridToExcelFile", "Inventory")';
+                urlToNew += '?currentMode=' + selectedValue;
+                urlToExcel += '?currentMode=' + selectedValue;
+                $('#new_inventory_button').attr('href', urlToNew);
+                $('#excel_report_inventory_button').attr('href', urlToExcel);
+            });
+        });
+
+        $('#reports_dropdown').change(function () {
+            var selectedValue = $(this).val();
+
+            $.get('@Url.Action("RenderReports")', { reportType: selectedValue }, function (tabMarkup) {
+                $('#report_data_container').html(tabMarkup);
+
+                var url = '@Url.Action("ExportReportToExcelFile", "Inventory")';
+                url += '?reportType=' + selectedValue;
+                $('#excel_report_modules_button').attr('href', url);
+            });
+        });
+
+        $('#category_dropdown').change(function () {
+            var selectedValue = $(this).val();
+            var selectedName = $(this).find(":selected").text();
+
+            $.get('@Url.Action("RenderCategoryContent")', { moduleType: selectedValue }, function (tabMarkup) {
+                $('#category_data_container').html(tabMarkup);
+
+                var url = '@Url.Action("NewComputerModule", "Inventory")';
+                url += '?moduleType=' + selectedValue;
+                $('#new_master_data_button').attr('href', url);
+                $('#new_master_data_button').html('Nytt ' + selectedName);
+            });
+        });
+
+        $('select option[value=Separator]').each(function () {
+            $(this).attr("disabled", "disabled");
+        });
+
+        $('#inventory_tab').click(function () {
+            $.post('@Url.Action("RememberTab", "Service")', { topic: '@PageName.InventoryIndex', tab: '@TabName.Inventories' });
+            $('#new_master_data_button').hide();
+            $('#new_custom_inventory_type_button').hide();
+            $('#excel_report_modules_button').hide();
+            $('.inventory_buttons').show();
+        });
+
+        $('#settings_tab').click(function () {
+            $.post('@Url.Action("RememberTab", "Service")', { topic: '@PageName.InventoryIndex', tab: '@TabName.Settings' });
+            $('#new_master_data_button').hide();
+            $('.inventory_buttons').hide();
+            $('#excel_report_modules_button').hide();
+            $('#new_custom_inventory_type_button').show();
+        });
+
+        $('#reports_tab').click(function () {
+            $('#new_master_data_button').hide();
+            $('#new_custom_inventory_type_button').hide();
+            $('.inventory_buttons').hide();
+            $('#excel_report_modules_button').show();
+        });
+
+        $('#master_data_tab').click(function () {
+            $.post('@Url.Action("RememberTab", "Service")', { topic: '@PageName.InventoryIndex', tab: '@TabName.MasterData' });
+            $('.inventory_buttons').hide();
+            $('#new_custom_inventory_type_button').hide();
+            $('#excel_report_modules_button').hide();
+            $('#new_master_data_button').show();
+        });
+
+        window.sortGrid = function (fieldName) {
+            var sortFieldName = $('#sortFieldName').val();
+            if (sortFieldName == null || sortFieldName != fieldName) {
+                $('#sortFieldName').val(fieldName);
+                $('#sortFieldBy').val(sortBy.ASCENDING);
+            } else {
+                if ($('#sortFieldBy').val() == sortBy.ASCENDING) {
+                    $('#sortFieldBy').val(sortBy.DESCENDING);
+                } else {
+                    $('#sortFieldBy').val(sortBy.ASCENDING);
+                }
+            }
+
+            $('#search_form').submit();
+        };
+    });
+</script>
+
+<div class="secnavs fixed">
+    <div class="pull-left">
+        <ul class="secnav">
+            <li>@Html.ActionLink(Translation.Get("Nytt"), "RedirectToNewInventory", new { currentMode = Model.CurrentMode }, new { @class = "btn inventory_buttons", id = "new_inventory_button", style = inventoryButtonStyle })</li>
+            <li>@Html.ActionLink(Translation.Get("Excel"), "ExportGridToExcelFile", new { currentMode = Model.CurrentMode }, new { @class = "btn inventory_buttons", id = "excel_report_inventory_button", style = inventoryButtonStyle })</li>
+            <li>@Html.ActionLink(Translation.Get("Nytt"), "NewCustomInventoryType", "InventorySettings", new { }, new { @class = "btn", id = "new_custom_inventory_type_button", style = settingsButtonStyle })</li>
+            <li>@Html.ActionLink(Translation.Get("Excel"), "ExportReportToExcelFile", new { reportType = Model.ReportType }, new { @class = "btn", id = "excel_report_modules_button", style = reportDataButtonStyle })</li>
+            <li>@Html.ActionLink(Translation.Get(string.Format("Nytt {0} ", ((ModuleTypes)Model.ModuleType))), "NewComputerModule", new { moduleType = Model.ModuleType }, new { @class = "btn", id = "new_master_data_button", style = masterDataButtonStyle })</li>
+        </ul>
+    </div>
+</div>
+
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <li id ="inventory_tab" class="@inventoryTabClass">
+                <a href="#fragment-1">@Translation.Get("Inventarier")</a>
+            </li>
+            <li id="settings_tab" class="@settingsTabClass">
+                <a href="#fragment-2">@Translation.Get("Inventarietyp")</a>
+            </li>
+            <li id="reports_tab">
+                <a href="#fragment-3">@Translation.Get("Rapporter")</a>
+            </li>
+            <li id="master_data_tab" class="@masterDataTabClass">
+                <a href="#fragment-4">@Translation.Get("Grunddata")</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border @inventoryTabClass" id="fragment-1">
+                <table class="tableform">
+                    <tr>
+                        <td class="span3">@Translation.Get("Typ")</td>
+                        <td>@Html.DropDownListFor(x => x.CurrentMode, Model.PropertyTypes, new { id = "type_dropdown" })</td>
+                    </tr>
+                </table>
+                <div id="type_data_container">
+                    @Html.Action("RenderContent", "Inventory", new { area = string.Empty, currentMode = Model.CurrentMode })
+                </div>
+            </div>
+            <div class="tab-pane tab-pane-border @settingsTabClass" id="fragment-2">
+                @Html.Partial("InventoryTypesGrid", Model.PropertyTypeList)
+            </div>
+            <div class="tab-pane tab-pane-border" id="fragment-3">
+                <table class="tableform">
+                    <tr>
+                        <td class="span3">@Translation.Get("Rapport")</td>
+                        <td>@Html.DropDownListFor(m => m.ReportType, Model.ReportTypes, new { id = "reports_dropdown" })</td>
+                    </tr>
+                </table>
+                <div id="report_data_container">
+                    @Html.Action("RenderReports", "Inventory", new { area = string.Empty, reportType = Model.ReportType })
+                </div>
+            </div>
+            <div class="tab-pane tab-pane-border @masterDataTabClass" id="fragment-4">
+                <table class="tableform">
+                    <tr>
+                        <td class="span3">@Translation.Get("Kategorier")</td>
+                        <td>@Html.DropDownListFor(x => x.ModuleType, Model.ModuleTypes, new { id = "category_dropdown" })</td>
+                    </tr>
+                </table>
+                <div id="category_data_container">
+                    @Html.Action("RenderCategoryContent", "Inventory", new { area = string.Empty, moduleType = Model.ModuleType })
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,58 @@
+﻿@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@model DH.Helpdesk.Web.Models.Reports.RegistratedCasesCaseTypeOptions
+
+@using (Html.BeginForm("RegistratedCasesCaseType", "Reports", null, FormMethod.Post, new { id = "report_form" }))
+{
+    @Html.HiddenFor(m => m.IsPrint, new { data_isPrint = ""})
+    <table class="tableform">    
+        <tr>
+            <td class="span3">@Translation.Get("Driftgrupper")</td>
+            <td>@Html.DropDownListFor(m => m.WorkingGroupIds, Model.WorkingGroups, 
+                    new { id = "working_groups_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })
+            </td>
+        </tr>        
+        <tr>
+            <td class="span3">@Translation.Get("Ärendetyp")</td>
+            <td>@Html.DropDownListFor(m => m.CaseTypeIds, Model.CaseTypes,
+                    new { id = "case_types_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })
+            </td>
+        </tr>        
+        <tr>
+            <td class="span3">@Translation.Get("Produktområde")</td>
+            <td>
+                @Html.HiddenFor(m => m.ProductAreaId, new { ModelId = "product-area"})                                              
+                @Html.ProductAreaList(Model.CustomerId, Model.ProductAreaId, "product-area")            
+            </td>
+        </tr>        
+        <tr>
+            <td class="span3">@Translation.Get("Period från")</td>
+            <td>
+                @Html.EditorFor(m => m.PeriodFrom, "YearMonthPicker", new { id = "periodFrom" })
+            </td>
+        </tr>        
+        <tr>
+            <td class="span3">@Translation.Get("Period till")</td>
+            <td>
+                @Html.EditorFor(m => m.PeriodUntil, "YearMonthPicker", new { id = "periodUntil" })
+            </td>
+        </tr>        
+        <tr>
+            <td class="span3">@Translation.Get("Visa detaljerad rapport per ärendetyp")</td>
+            <td>
+                @Html.CheckBoxFor(m => m.ShowDetails)
+            </td>
+        </tr>        
+    </table>        
+}
+<div id="report_container">    
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        $("#working_groups_dropdown").multiselect();
+        $("#case_types_dropdown").multiselect();
+        dhHelpdesk.HierarchyList.InitHierarchyLists();
+    })
+</script>
+
+

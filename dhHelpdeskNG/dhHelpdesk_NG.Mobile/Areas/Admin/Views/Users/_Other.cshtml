@@ -1,0 +1,66 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Admin.Models.UserInputViewModel
+<div class="container">
+    <table class="tableform">
+        <tr>
+            <td class="span3">
+                @Translation.Get("Ärendeöversikt", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                <input type="checkbox" name="User.ShowNotAssignedCases" @(Model.User.ShowNotAssignedCases == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.ShowNotAssignedCases" value="0" />
+                &nbsp; &nbsp;@Translation.Get("Visa alltid ej tilldelade ärenden på ärendeöversikten", Enums.TranslationSource.TextTranslation)
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="checkbox" name="User.ShowNotAssignedWorkingGroups" @(Model.User.ShowNotAssignedWorkingGroups == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.ShowNotAssignedWorkingGroups" value="0" />
+                &nbsp;@Translation.Get("Visa ärenden som saknar driftgrupp på ärendeöversikten", Enums.TranslationSource.TextTranslation)
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                @Html.DropDownListFor(model => model.User.RefreshContent, Model.RefreshInterval, new { style = "width: auto;" })
+                &nbsp;@Translation.Get("Uppdateringsintervall", Enums.TranslationSource.TextTranslation) (min)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Translation.Get("Språk", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.User.Language_Id, Model.Languages, "", new { style = "width: auto;" })
+            </td>
+        </tr>       
+        <tr>
+            <td>
+                @Translation.Get("Startsida", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.User.StartPage, Model.StartPageShowList, "", new { style = "width: auto;" })
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Translation.Get("Timeout session", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.User.SessionTimeout, new { maxlength = "50", style = "width: 60px;" })
+                &nbsp; &nbsp;@Translation.Get("(min)", Enums.TranslationSource.TextTranslation)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Translation.Get("Startsidan", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                <input type="checkbox" name="User.ShowQuickMenuOnStartPage" @(Model.User.ShowQuickMenuOnStartPage == 1 ? "checked='checked'" : "") value="1" />
+                <input type="hidden" name="User.ShowQuickMenuOnStartPage" value="0" />
+                @Translation.Get("Visa snabbmeny på startsidan", Enums.TranslationSource.TextTranslation)
+            </td>
+        </tr>
+    </table>
+</div>

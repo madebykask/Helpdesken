@@ -1,0 +1,15 @@
+﻿@model DH.Helpdesk.Web.Models.Profile.UserModulesViewModel
+
+@if (Model != null && Model.Modules.Any())
+{
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <th style="width: 1%;"></th>
+            <th style="width: 30%;">@Translation.Get("Module", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Number of rows", Enums.TranslationSource.TextTranslation)</th>
+        </thead>        
+        <tbody>    
+            @Html.EditorFor(m => m.Modules)
+        </tbody>
+    </table>            
+}

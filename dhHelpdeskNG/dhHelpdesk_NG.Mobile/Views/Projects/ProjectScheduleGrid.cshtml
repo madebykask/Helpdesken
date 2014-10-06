@@ -1,0 +1,92 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Models.Projects
+@model DH.Helpdesk.Web.Models.Projects.UpdatedProjectScheduleEditModel
+@{
+    var header = new ProjectScheduleEditModel();
+}
+<table id="tblCases" class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>@Html.LabelFor(x => header.Position)
+            </th>
+            <th>@Html.LabelFor(x => header.Name)
+            </th>
+            <th>@Html.LabelFor(x => header.UserId)
+            </th>
+            <th>@Html.LabelFor(x => header.Time)
+            </th>
+            <th>@Html.LabelFor(x => header.State)
+            </th>
+            <th>@Translation.Get("Edit", Enums.TranslationSource.TextTranslation)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.ProjectScheduleEditModels.Count; i++)
+        {
+            <tr>
+                <td>
+                    <i class="icon-plus-sign project-schedule-expand-button" style="cursor: pointer"></i>
+                    @Html.DropDownListFor(x => x.ProjectScheduleEditModels[i].Position, new SelectList(Model.Positions, "Value", "Text", Model.ProjectScheduleEditModels[i].Position))
+                </td>
+                <td>
+                    @Html.EditorFor(x => x.ProjectScheduleEditModels[i].Name)
+                </td>
+                <td>
+                    @Html.DropDownListFor(x => x.ProjectScheduleEditModels[i].UserId, new SelectList(Model.Users, "Value", "Text", Model.ProjectScheduleEditModels[i].UserId), string.Empty)
+                </td>
+                <td>
+                    @Html.EditorFor(x => x.ProjectScheduleEditModels[i].Time)
+                </td>
+                <td>
+                    @Html.DropDownListFor(x => x.ProjectScheduleEditModels[i].State, new SelectList(Enum.GetValues(typeof(ScheduleStates)), Model.ProjectScheduleEditModels[i].State), string.Empty)
+                </td>
+                <td>
+                    @Html.ActionLink(Translation.Get("Delete", Enums.TranslationSource.TextTranslation), "DeleteProjectSchedule", new { projectId = Model.ProjectScheduleEditModels[i].ProjectId, scheduleId = Model.ProjectScheduleEditModels[i].Id }, new { @class = "btn" })
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6" class="expanded-content">
+                    @Html.LabelFor(x => x.ProjectScheduleEditModels[i].Description)
+                    @Html.TextAreaFor(x => x.ProjectScheduleEditModels[i].Description)
+
+                    @Html.LabelFor(x => x.ProjectScheduleEditModels[i].StartDate)
+                    <div class="input-append date dateie" data-date="" id="dt-start">
+                        @Html.EditorFor(x => x.ProjectScheduleEditModels[i].StartDate)<span class="add-on"><i class="icon-calendar"></i></span>
+                    </div>
+
+                    @Html.LabelFor(x => x.ProjectScheduleEditModels[i].FinishDate)
+                    <div class="input-append date dateie" data-date="" id="dt-finish">
+                        @Html.EditorFor(x => x.ProjectScheduleEditModels[i].FinishDate)<span class="add-on"><i class="icon-calendar"></i></span>
+                    </div>
+
+                    @Html.LabelFor(x => x.ProjectScheduleEditModels[i].CaseNumber)
+                    @Html.EditorFor(x => x.ProjectScheduleEditModels[i].CaseNumber)
+                </td>
+            </tr>
+            @Html.HiddenFor(x => x.ProjectScheduleEditModels[i].Id)
+            @Html.HiddenFor(x => x.ProjectScheduleEditModels[i].ProjectId)
+        }
+    </tbody>
+</table>
+
+<script type="text/javascript">
+
+    $('#dt-start, #dt-finish').datepicker({ dateFormat: 'mm/dd/yyyy' }).val();
+
+    $(".expanded-content").hide();
+    $(function () {
+        $(".project-schedule-expand-button").click(function () {
+            event.stopPropagation();
+            var $target = $(event.target);
+            $target.closest("tr").next().find(".expanded-content").toggle();
+
+            if ($target.closest("i").hasClass('icon-minus-sign')) {
+                $target.closest("i").removeClass('icon-minus-sign').addClass('icon-plus-sign');
+            }
+            else {
+                $target.closest("i").removeClass('icon-plus-sign').addClass('icon-minus-sign');
+            }
+        });
+    });
+</script>

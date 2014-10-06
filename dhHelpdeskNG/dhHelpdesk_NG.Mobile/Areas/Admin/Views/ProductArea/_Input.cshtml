@@ -1,0 +1,229 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions
+@model DH.Helpdesk.Web.Areas.Admin.Models.ProductAreaInputViewModel
+
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-1">@Translation.Get("Produktområde", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment1">
+                <div class="container">
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-error">@Translation.Get("Produktområde", Enums.TranslationSource.TextTranslation)
+                            @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+                        </div>    
+                    }
+                    <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Produktområde", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
+                                        @Html.TextBoxFor(model => model.ProductArea.Name, new { maxlength = "50" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Beskrivning", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextAreaFor(model => model.ProductArea.Description, new { style = "width:600px; height:125px;", maxlength = "300" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Translation.Get("Driftgruppen tilldelas ärende med aktuellt produktområde", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.ProductArea.WorkingGroup_Id, Model.WorkingGroups, "")
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td >
+                                        @Translation.Get("Prioritet", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.ProductArea.Priority_Id, Model.Priorities, "")
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <h4>@Translation.Get("Meddelande", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
+                                        @Html.DropDownListFor(model => model.ProductArea.MailID, Model.MailTemplates, "")
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Självservice", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Translation.Get("Visa följande meddelande när aktuellt produktområde väljs", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        @Html.TextAreaFor(model => model.ProductArea.InformUserText, new { style = "width:600px; height:125px;", maxlength = "300" })
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <h4>@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Aktivera", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
+                                        <input type="checkbox" name="productarea.IsActive" @(Model.ProductArea.IsActive == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="productarea.IsActive" value="0" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <h4>@Translation.Get("Säkerhet", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform"> 
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td style="vertical-align:top" class="span9">
+                                        <input type="checkbox" name="chkPermission" id="chkPermission" onchange="showWorkingGroup()" value="0"/> @Translation.Get("Begränsa rättighet att skapa ärenden till", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                            </table>
+                            @Html.HiddenFor(model => model.ProductArea.Customer_Id)
+                            @Html.HiddenFor(model => model.ProductArea.Id)
+                            @Html.HiddenFor(model => model.ProductArea.Parent_ProductArea_Id)
+                        </div>
+                    </div>
+                    <div class="row" id="divWorkingGroup" style="display:none">
+                        <div class="span20">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+
+                                    </td>
+                                    <td class="span15">
+                                        @Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Translation.Get("Valda", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                         
+                                    </td>
+                                    <td>
+                                        @Html.ListBox("WgAvailable", Model.WgAvailable, new { style = "width: 300px; height: 100px" })
+                                        <input type="button" value="&lt;" id="removeWg" />
+                                        <input type="button" value="&gt;" id="addWg" />
+                                    </td>
+                                    <td>
+                                        @Html.ListBox("WgSelected", Model.WgSelected, new { style = "width: 300px; height: 100px" })
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                @if (Model.ProductArea.SubProductAreas != null && Model.ProductArea.SubProductAreas.Any())
+                {
+                    <h4>@Translation.Get("Produktområde", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="container">
+                        <table class="table table-striped table-bordered table-hover" id="tblSubProductAreas">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Translation.Get("Ämnesområde", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @Html.ProductAreaTreeString(Model.ProductArea.SubProductAreas.ToList())
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(function () {
+        //        tableOptions.sortable = false;
+        //        tableOptions.pager = false;
+        //$("#tblSubProductArea").fixheadertable(tableOptions);
+
+        var validator = $("#target").validate({
+            rules: {
+                "ProductArea.Name": {
+                    required: true
+                }
+            },
+            messages: {
+                "ProductArea.Name": {
+                    required: "@Translation.Get("Du måste ange ett ämnesområde", Enums.TranslationSource.TextTranslation)"
+                }
+            },
+            submitHandler: function (form) {
+                form.submit();
+            }
+        });
+    });
+
+    function showWorkingGroup() {
+        if (document.getElementById("chkPermission").checked == true) {
+            document.getElementById("divWorkingGroup").style.display = ""
+        }
+        else {
+            document.getElementById("divWorkingGroup").style.display = "none"
+        }
+    }
+
+    $("#addWg").click(function () {
+        $("#WgAvailable option:selected").remove().appendTo("#WgSelected");
+        $("#WgAvailable").get(0).selectedIndex = -1;
+        $("#WgSelected").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#removeWg").click(function () {
+        $("#WgSelected option:selected").remove().appendTo("#WgAvailable");
+        $("#WgAvailable").get(0).selectedIndex = -1;
+        $("#WgAvailable").get(0).selectedIndex = -1;
+        return false;
+    });
+</script>

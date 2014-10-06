@@ -1,0 +1,14 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.ContactFieldsModel
+<table class="tableform">
+    @if (Model.Name.Show
+        || Model.Phone.Show
+        || Model.Email.Show)
+    {
+        <tr>
+            <th colspan="2" class="header">@Translation.Get("Placering")</th>
+        </tr>
+    }
+    @Html.EditorFor(m => m.Name, "Fields/Text")
+    @Html.EditorFor(m => m.Phone, "Fields/Text")
+    @Html.EditorFor(m => m.Email, "Fields/Text")
+</table>

@@ -1,0 +1,105 @@
+﻿@using System.Globalization
+@using DH.Helpdesk.Web.Models.Projects
+@model UpdatedProjectViewModel
+<div class="secnavs fixed">
+    <div class="pull-left">
+        <ul class="secnav">
+            <li id="menu1">
+                <input type="submit" value="@Translation.Get("Save Project")" class="btn" id="subbut"/>
+            </li>
+            <li id="menu3">@Html.ActionLink(Translation.Get("Delete Project"), "DeleteProject", new { id = Model.ProjectEditModel.Id }, new { @class = "btn" })</li>
+            <li id="menu2">@Html.ActionLink(Translation.Get("Cancel"), "Index", null, new { @class = "btn" })</li>
+        </ul>
+    </div>
+</div>
+
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="project_tab">
+            <li class="active">
+                <a href="#fragment-1">@Translation.Get("Project")</a>
+            </li>
+            <li>
+                <a href="#fragment-2">@Translation.Get("Log")</a>
+            </li>
+            <li>
+                <a href="#fragment-3">@Translation.Get("Cases")</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment-1">
+                @using (Html.BeginForm("EditProject", "Projects", FormMethod.Post, new { id = "project_edit_form" }))
+                {   
+                    @Html.ValidationSummary(true)
+                    @Html.Partial("_InputProject", new ProjectEditViewModel { Users = Model.Users, ProjectEditModel = Model.ProjectEditModel, Guid = Model.Guid.ToString(CultureInfo.InvariantCulture) }) // todo Implement Mappers
+                }
+                <div class="content mt20">
+                    <div class="container">
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#fragment-1">@Translation.Get("Project Schedules")</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane tab-pane-border active">
+                                @using (Html.BeginForm("AddProjectSchedule", "Projects", FormMethod.Post, new { id = "project_schedule_edit_form" }))
+                                {   
+                                    @Html.ValidationSummary(true)
+                                    @Html.Partial("EditorTemplates/NewProjectScheduleEditModel", Model.NewProjectScheduleEditModel)
+                                    <input type="submit" value="@Translation.Get("Add Schedule")" class="btn"/>
+                                }
+                                @using (Html.BeginForm("EditProject", "Projects", FormMethod.Post, new { id = "project_schedules_edit_form" }))
+                                {
+                                    @Html.ValidationSummary(true)
+                                    @Html.Partial("ProjectScheduleGrid", Model.UpdatedProjectScheduleEditModel)
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane tab-pane-border" id="fragment-2">
+                @using (Html.BeginForm("AddProjectLog", "Projects", FormMethod.Post, new { id = "log_edit_form" }))
+                {
+                    @Html.EditorFor(x => x.ProjectLog)
+                    <input type="submit" value="@Translation.Get("Add Log")" class="btn"/>
+                }
+                @Html.Partial("LogGrid", Model.ProjectLogs)
+            </div>
+            <div class="tab-pane tab-pane-border" id="fragment-3">
+                @Html.Partial("CaseGrid", Model.CaseOverviews)
+            </div>
+        </div>
+    </div>
+</div>
+@Html.HiddenFor(x => x.Guid)
+
+<input type="hidden" name="activeTab" id="activeTab" value="@SessionFacade.ActiveTab" />
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#subbut").click(function () {
+
+            if (!$("#project_edit_form").valid() || !$("#project_schedules_edit_form").valid()) {
+                return;
+            }
+
+            //$.post($("#project_edit_form").attr("Projects/EditProject"), $("#project_edit_form").serialize() + $("#project_schedules_edit_form").serialize(),
+            //    function () {  });
+
+            $.each($('#project_schedules_edit_form input, #project_schedules_edit_form select, #project_schedules_edit_form textarea').serializeArray(), function (i, obj) {
+                $('<input type="hidden">').prop(obj).appendTo($('#project_edit_form'));
+            });
+
+            $("#project_edit_form").submit();
+        });
+    });
+
+    $.validator.setDefaults({
+        ignore: ""
+    });
+
+    $('#project_tab a[href="' + $('#activeTab')[0].value + '"]').tab('show');
+
+</script>

@@ -1,0 +1,18 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Printer.OtherFieldsModel
+<table class="tableform">
+    @if (Model.NumberOfTrays.Show
+        || Model.Driver.Show
+        || Model.Info.Show
+        || Model.URL.Show)
+    {
+        <tr>
+            <th colspan="2" class="header">@Translation.Get("Övrigt")</th>
+        </tr>
+    }
+    @Html.EditorFor(m => m.NumberOfTrays, "NotReadonlyFields/Text")
+    @Html.EditorFor(m => m.Driver, "NotReadonlyFields/Text")
+    @Html.EditorFor(m => m.Info, "NotReadonlyFields/Text")
+    @Html.EditorFor(m => m.URL, "NotReadonlyFields/Text")
+</table>
+
+

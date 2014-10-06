@@ -1,0 +1,14 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Server.CommunicationFieldsViewModel
+<table class="tableform">
+    @if (Model.CommunicationFieldsModel.NetworkAdapterId.Show
+        || Model.CommunicationFieldsModel.IPAddress.Show
+        || Model.CommunicationFieldsModel.MacAddress.Show)
+    {
+        <tr>
+            <th colspan="2" class="header">@Translation.Get("Kommunikation")</th>
+        </tr>
+    }
+    @Html.EditorFor(m => m.CommunicationFieldsModel.NetworkAdapterId, "NotReadonlyFields/List", new { Source = Model.NetworkAdapters })
+    @Html.EditorFor(m => m.CommunicationFieldsModel.IPAddress, "NotReadonlyFields/Text")
+    @Html.EditorFor(m => m.CommunicationFieldsModel.MacAddress, "NotReadonlyFields/Text")
+</table>

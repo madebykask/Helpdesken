@@ -1,0 +1,11 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.InventoryFieldsModel
+<table class="tableform">
+    @if (Model.BarCode.Show)
+    {
+        <tr>
+            <th colspan="2" class="header">@Translation.Get("Inventering")</th>
+        </tr>
+    }
+    @Html.EditorFor(m => m.BarCode, "Fields/Text")
+    @Html.EditorFor(m => m.PurchaseDate, "Fields/Date", new { id = "purchasedate_datepicker" })
+</table>

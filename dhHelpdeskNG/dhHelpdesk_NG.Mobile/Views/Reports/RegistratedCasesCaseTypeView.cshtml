@@ -1,0 +1,19 @@
+﻿@model DH.Helpdesk.Web.Models.Reports.RegistratedCasesCaseTypeReport
+
+@{
+    Layout = null;
+
+    if (Model.Files == null || !Model.Files.Any())
+    {
+        @Html.Partial("Empty")
+        return;
+    }
+}
+
+@foreach (var file in Model.Files)
+{
+    <div>
+        <img src="@Url.Action("GetReportImage", "Reports", new { objectId = file.ObjectId, fileName = file.FileName })" />            
+    </div>
+}
+

@@ -1,0 +1,48 @@
+﻿@using DH.Helpdesk.Common.Extensions.DateTime
+@model DH.Helpdesk.Web.Models.Case.CaseFilesModel     
+
+@if (Model != null && Model.Files != null && Model.Files.Any())
+{    
+    <table id="case_files_table" class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    @Translation.Get("Filnamn")
+                </th>
+                <th>
+                    @Translation.Get("Skapad datum")
+                </th>
+                <th>
+                    @Translation.Get("Upplagd av")
+                </th>
+                <th></th>
+            </tr>    
+        </thead>
+        <tbody>            
+        @{
+            var i = 0;
+            foreach (var file in Model.Files) 
+            {
+                <tr>
+                    <td>
+                        <a href="@Url.Action("DownloadFile", new RouteValueDictionary { { "id", Model.ObjectId }, { "fileName", file.FileName } })"><i class="icon-file"></i> @file.FileName</a>
+                    </td>
+                    <td>
+                        @file.CreatedDate.ToFormattedDateTime()
+                    </td>
+                    <td>
+                        @file.UserName
+                    </td>
+                    <td>
+                        @if (SessionFacade.CurrentUser.DeleteAttachedFilePermission == 1)
+                        {
+                            <a id="@string.Format("delete_casefile_button_{0}", i)" class="btn bt-small" title="@Translation.Get("Ta bort")"><i class="icon-remove"></i></a>
+                        }
+                    </td>
+                </tr>
+                i++;
+            }
+        }
+        </tbody>
+    </table> 
+}    

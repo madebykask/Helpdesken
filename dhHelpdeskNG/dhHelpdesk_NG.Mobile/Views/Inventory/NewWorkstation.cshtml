@@ -1,0 +1,57 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.ComputerViewModel
+@using (Html.BeginForm("NewWorkstation", "Inventory", FormMethod.Post, new { id = "workstation_edit_form" }))
+{
+    <div class="secnavs fixed">
+        <div class="pull-left">
+            <ul class="secnav">
+                <li id="menu1">
+                    <input type="submit" value="@Translation.Get("Spara")" class="btn" onclick=" $('#workstation_edit_form').submit(); "/>
+                </li>
+                <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt"), "Index", null, new { @class = "btn" })</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="container">
+            <ul class="nav nav-tabs" id="inventory_tab">
+                <li class="active">
+                    <a href="#fragment-1">@Translation.Get("Arbetsstation")</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane tab-pane-border active" id="fragment-1">
+                    @Html.EditorFor(m => m.WorkstationFieldsViewModel, "Computer/WorkstationFieldsViewModel")
+                    @Html.EditorFor(m => m.ChassisFieldsModel, "Computer/ChassisModel")
+                    @Html.EditorFor(m => m.InventoryFieldsModel, "Computer/InventoryModel")
+                    @Html.EditorFor(m => m.OperatingSystemFieldsViewModel, "Computer/OperatingSystemFieldsViewModel")
+                    @Html.EditorFor(m => m.ProccesorFieldsViewModel, "Computer/ProccesorFieldsViewModel")
+                    @Html.EditorFor(m => m.MemoryFieldsViewModel, "Computer/MemoryFieldsViewModel")
+                    @Html.EditorFor(m => m.CommunicationFieldsViewModel, "Computer/CommunicationFieldsViewModel")
+                    @Html.EditorFor(m => m.GraphicsFieldsModel, "Computer/GraphicsFieldsModel")
+                    @Html.EditorFor(m => m.SoundFieldsModel, "Computer/SoundFieldsModel")
+                    @Html.EditorFor(m => m.ContractFieldsViewModel, "Computer/ContractFieldsViewModel")
+                    @Html.EditorFor(m => m.OtherFieldsModel, "Computer/OtherFieldsModel")
+                    @Html.EditorFor(m => m.ContactInformationFieldsModel, "Computer/ContactInformationFieldsModel")
+                    @Html.EditorFor(m => m.OrganizationFieldsViewModel, "Computer/OrganizationFieldsViewModel")
+                    @Html.EditorFor(m => m.PlaceFieldsViewModel, "Computer/PlaceFieldsViewModel")
+                    @Html.EditorFor(m => m.ContactFieldsModel, "Computer/ContactFieldsModel")
+                    @Html.EditorFor(m => m.StateFieldsViewModel, "Computer/StateFieldsViewModel")
+                    @Html.EditorFor(m => m.DateFieldsModel, "Computer/DateFieldsModel")
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<input type="hidden" name="activeTab" id="activeTab" value="@SessionFacade.ActiveTab" />
+
+<script type="text/javascript">
+
+    $.validator.setDefaults({
+        ignore: ""
+    });
+
+    $('#inventory_tab a[href="' + $('#activeTab')[0].value + '"]').tab('show');
+
+</script>

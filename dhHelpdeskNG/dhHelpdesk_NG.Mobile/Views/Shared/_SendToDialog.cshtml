@@ -1,0 +1,210 @@
+﻿
+@model DH.Helpdesk.Web.Models.Shared.SendToDialogModel
+         
+@{
+    if (!ViewData.ContainsKey("Id"))
+    {
+        throw new ArgumentNullException("Id", "\"Id\" ViewData parameter must be specified.");
+    }
+
+    if (!ViewData.ContainsKey("Callback"))
+    {
+        throw new ArgumentNullException("Callback", "\"Callback\" parameter must be specified (JavaScript function name).");
+    }
+
+    var id = ViewData["Id"];
+    var callback = ViewData["Callback"];
+
+    var emailGroupsDropdownId = id + "_email_groups_dropdown";
+    var workingGroupsDropdownId = id + "_working_groups_dropdown";
+    var administratorsDropdownId = id + "_administrators_dropdown";
+    var customEmailTextboxId = id + "_custom_email_textbox";
+    var addEmailsButtonId = id + "_add_emails_button";
+    var recipientEmailsListboxId = id + "_recipient_emails_listbox";
+    var deleteEmailButtonId = id + "_delete_email_button";
+}
+           
+<script type="text/javascript">
+    $(function() {
+        (function() {
+            var emailGroupSourceEmails = {};
+            var workingGroupSourceEmails = {};
+            var recipientEmails = [];
+            
+            @foreach (var groupEmails in Model.EmailGroupEmails)
+            {
+                @:var emails = [];
+
+                foreach (var email in groupEmails.Emails)
+                {
+                    @:emails.push('@email');
+                }
+
+                @:emailGroupSourceEmails['@groupEmails.GroupId'] = emails;
+            }
+
+            @foreach (var groupEmails in Model.WorkingGroupEmails)
+            {
+                @:var emails = [];
+
+                foreach (var email in groupEmails.Emails)
+                {
+                    @:emails.push('@email');
+                }
+
+                @:workingGroupSourceEmails['@groupEmails.GroupId'] = emails;
+            }
+
+            $('#@id').dialog({
+                autoOpen: false,
+                modal: false,
+                resizable: false,
+                heigth: 300,
+                width: 350,
+
+                buttons: [
+                    {
+                        text: '@Translation.Get("OK", Enums.TranslationSource.TextTranslation)',
+                        click: function() {
+                            saveRecipientEmails();
+                            $(this).dialog("close");
+                            window['@callback'](recipientEmails);
+                        },
+                        'class': 'btn'
+                    },
+                    {
+                        text: '@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)',
+                        click: function() {
+                            $(this).dialog("close");
+                        },
+                        'class': 'btn'
+                    }
+
+                ],
+
+                open: function() {
+                    loadRecipientEmails();
+                }
+            });
+
+            function saveRecipientEmails() {
+                recipientEmails = $('#@recipientEmailsListboxId > option').map(function() {
+                    return $(this).val();
+                });
+            }
+
+            function loadRecipientEmails() {
+                $('#@recipientEmailsListboxId').empty();
+
+                for (var i = 0; i < recipientEmails.length; i++) {
+                    addRecipientEmail(recipientEmails[i]);
+                }
+            }
+
+            function addRecipientEmail(email) {
+                var emailExists = $('#@recipientEmailsListboxId').has('option[value="' + email + '"]').length;
+                if (emailExists) {
+                    return;
+                }
+
+                $('#@recipientEmailsListboxId').append('<option value="' + email + '">' + email + '</option>');
+            }
+
+            $('#@addEmailsButtonId').click(function() {
+                appendEmailGroupEmails();
+                appendWorkingGroupEmails();
+                appendAdministratorEmails();
+                appendCustomEmail();
+            });
+
+            function appendEmailGroupEmails() {
+                var selectedGroupIds = $('#@emailGroupsDropdownId').val() || [];
+
+                for (var i = 0; i < selectedGroupIds.length; i++) {
+                    var groupEmails = emailGroupSourceEmails[selectedGroupIds[i]];
+
+                    for (var j = 0; j < groupEmails.length; j++) {
+                        addRecipientEmail(groupEmails[j]);
+                    }
+                }
+            }
+
+            function appendWorkingGroupEmails() {
+                var selectedGroupIds = $('#@workingGroupsDropdownId').val() || [];
+
+                for (var i = 0; i < selectedGroupIds.length; i++) {
+                    var groupEmails = workingGroupSourceEmails[selectedGroupIds[i]];
+
+                    for (var j = 0; j < groupEmails.length; j++) {
+                        addRecipientEmail(groupEmails[j]);
+                    }
+                }
+            }
+
+            function appendAdministratorEmails() {
+                var selectedAdministratorEmails = $('#@administratorsDropdownId').val() || [];
+
+                for (var i = 0; i < selectedAdministratorEmails.length; i++) {
+                    addRecipientEmail(selectedAdministratorEmails[i]);
+                }
+            }
+
+            function appendCustomEmail() {
+                var customEmail = $('#@customEmailTextboxId').val();
+                if (!customEmail) {
+                    return;
+                }
+
+                addRecipientEmail(customEmail);
+                $('#@customEmailTextboxId').val('');
+            }
+
+            $('#@deleteEmailButtonId').click(deleteSelectedRecipients);
+
+            function deleteSelectedRecipients() {
+                $('#@recipientEmailsListboxId > option:selected').remove();
+            }
+        })();
+    });
+</script>
+
+<div id="@id" title="@Translation.Get("E-post", Enums.TranslationSource.TextTranslation)" class="overflow-visible">
+    
+    @Translation.Get("E-postgrupp", Enums.TranslationSource.TextTranslation)<br />
+    <select id="@emailGroupsDropdownId" class="multiselect multiselect-search" multiple="multiple">
+        @foreach (var emailGroup in Model.EmailGroups)
+        {
+            <option value="@emailGroup.Value">@emailGroup.Text</option>
+        }
+    </select>
+   <br />
+    @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)<br />
+    <select id="@workingGroupsDropdownId" class="multiselect multiselect-search" multiple="multiple">
+        @foreach (var workingGroup in Model.WorkingGroups)
+        {
+            <option value="@workingGroup.Value">@workingGroup.Text</option>
+        }
+    </select>
+    <br />
+    @Translation.Get("Användare", Enums.TranslationSource.TextTranslation)<br />
+    <select id="@administratorsDropdownId" class="multiselect multiselect-search" multiple="multiple">
+        @foreach (var administrator in Model.Administrators)
+        {
+            <option value="@administrator.Value">@administrator.Text</option>
+        }
+    </select>
+    <br />
+    @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)<br />
+    <input type="text" id="@customEmailTextboxId" />
+    
+    <br />
+    <input type="button" id="@addEmailsButtonId" class="btn" value="-->" />
+
+    <br />
+    @Translation.Get("Mottagare", Enums.TranslationSource.TextTranslation)<br />
+    <select id="@recipientEmailsListboxId" multiple="multiple">
+    </select>
+    <br />
+    <input type="button" id="@deleteEmailButtonId" class="btn" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
+
+</div>

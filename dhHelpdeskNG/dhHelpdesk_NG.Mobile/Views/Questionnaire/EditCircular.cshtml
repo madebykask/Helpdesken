@@ -1,0 +1,75 @@
+﻿@model DH.Helpdesk.Web.Models.Questionnaire.Input.EditCircularModel
+
+@{
+    ViewBag.Title = "EditCircular";
+}
+
+@using (Html.BeginForm("EditCircular", "Questionnaire", FormMethod.Post, new { id = "circular_edit_form" }))
+{
+    <div class="secnavs fixed">
+        <div class="pull-left">
+            <ul class="secnav">
+                <li>
+                    <input type="submit" value="@Translation.Get("Save", Enums.TranslationSource.TextTranslation)" class="btn" />
+                </li>
+                <li>
+                    @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteCircular",
+                        new {questionnaireId = Model.QuestionnaireId, stateId = Model.State, circularId = Model.Id},
+                        new { @class = "btn deleteDialog", 
+                            deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post" , 
+                                Enums.TranslationSource.TextTranslation) + "?"}) 
+                </li>
+                <li>
+                    <a href="@Url.Action("CircularOverview","Questionnaire",
+                       new { questionnaireId = Model.QuestionnaireId, state = Model.State})" class="btn">
+                        @Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>           
+
+    @Html.HiddenFor(m=>m.Id)
+    @Html.HiddenFor(m=>m.QuestionnaireId)
+    @Html.HiddenFor(m=>m.State)
+
+    <div class="content">
+        <div class="container">
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a href="#fragment-1">@Translation.Get("utskick", Enums.TranslationSource.TextTranslation)</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane tab-pane-border active" id="fragment-1">
+                    <div class="container">
+                        <h4>@Translation.Get("Urval", Enums.TranslationSource.TextTranslation)</h4>
+                        <div class="row">
+                            <div class="span12">
+                                <table class="tableform">
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.Get("Namn", Enums.TranslationSource.TextTranslation):
+                                        </td>
+                                        <td class="span9">
+                                            @Html.EditorFor(model => model.CircularName)
+                                        </td> 
+                                    </tr>
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.Get("Status", Enums.TranslationSource.TextTranslation):
+                                        </td>
+                                        <td class="span9">
+                                            @Html.DisplayTextFor(m => m.StateText)
+                                        </td> 
+                                    </tr>                                                                        
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+

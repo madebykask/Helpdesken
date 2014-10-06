@@ -1,0 +1,34 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions
+@model DH.Helpdesk.Web.Areas.Admin.Models.MailTemplateIndexViewModel
+<table class="table table-striped table-bordered table-hover">
+    @if (Model.OrderTypes.Count > 0)
+    {
+        foreach (var item in Model.OrderTypes)
+            {
+                if (item.Parent_OrderType_Id == null)
+                {
+                    <tr><td><a href="@Url.Action("edit", "mailtemplate", new { area = "admin", id = 40, customerId = Model.Customer.Id, languageId = 2, ordertypeId = item.Id })"><strong>@Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation):</strong> @Html.DisplayFor(modelItem => item.Name)</a>
+                    </td></tr>
+                }
+                else if (item.ParentOrderType.Parent_OrderType_Id != null)
+                {
+                    <tr><td><a href="@Url.Action("edit", "mailtemplate", new { area = "admin", id = 40, customerId = Model.Customer.Id, languageId = 2, ordertypeId = item.Id })"><strong>@Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation):</strong> @Html.DisplayFor(modelItem => item.ParentOrderType.Name) - @Html.DisplayFor(modelItem => item.Name)</a>
+                    </td></tr>
+                }
+            }
+    }
+    else
+    {
+        <tr><td><a href="@Url.Action("edit", "mailtemplate", new { area = "admin", id = 8, customerId = Model.Customer.Id, languageId = 2 })"><strong>@Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation):</strong> @Translation.Get("Beställning", Enums.TranslationSource.TextTranslation)</a>
+                </td></tr>
+    }
+</table>
+<!--
+<ul>
+    
+    <li>
+        @Html.OrderTypeForMailTemplateTreeString(Model.OrderTypes)</li>
+
+</ul>
+-->

@@ -1,0 +1,19 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.OperatingSystemFieldsViewModel
+<table class="tableform">
+    @if (Model.OperatingSystemFieldsModel.OperatingSystemId.Show
+        || Model.OperatingSystemFieldsModel.Version.Show
+        || Model.OperatingSystemFieldsModel.ServicePack.Show
+        || Model.OperatingSystemFieldsModel.RegistrationCode.Show
+        || Model.OperatingSystemFieldsModel.ProductKey.Show)
+    {
+        <tr>
+            <th colspan="2" class="header">@Translation.Get("Operativsystem")</th>
+        </tr>
+    }
+    @Html.EditorFor(m => m.OperatingSystemFieldsModel.OperatingSystemId, "Fields/List", new { Source = Model.OperatingSystems })
+    @Html.EditorFor(m => m.OperatingSystemFieldsModel.Version, "Fields/Text")
+    @Html.EditorFor(m => m.OperatingSystemFieldsModel.ServicePack, "Fields/Text")
+    @Html.EditorFor(m => m.OperatingSystemFieldsModel.RegistrationCode, "Fields/Text")
+    @Html.EditorFor(m => m.OperatingSystemFieldsModel.ProductKey, "Fields/Text")
+</table>
+

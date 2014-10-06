@@ -1,0 +1,50 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions
+@model DH.Helpdesk.Web.Areas.Admin.Models.CategoryIndexViewModel
+@{
+    ViewBag.Title = "Index";
+}
+<div class="secnavs fixed">
+    <div class="pull-left">
+        <ul class="secnav">
+            <li>@Html.ActionLink(@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + @Translation.Get("Kategori", Enums.TranslationSource.TextTranslation), "New", new { customerId = Model.Customer.Id }, new { @class = "btn" })</li>
+        </ul>
+    </div>
+    @Html.Partial("_MasterDataPanel", Model.Customer)
+</div>
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-1">@Translation.Get("Kategori", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment-1">
+                <table class="table table-striped table-bordered table-hover" id="tblcategory">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Translation.Get("Kategori", Enums.TranslationSource.TextTranslation)
+                            </th>
+                            <th>
+                                @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Categories)
+                        {
+                            <tr>
+                                <td>
+                                    <a href="@Url.Action("edit", "category", new { area = "admin", id = item.Id, customerId = Model.Customer.Id })">@Html.DisplayFor(modelItem => item.Name)</a>
+                                </td>
+                                <td>
+                                    @Translation.Get(item.IsActive.TranslateBit(), Enums.TranslationSource.TextTranslation)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

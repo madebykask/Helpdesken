@@ -1,0 +1,39 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model List<DH.Helpdesk.BusinessData.Models.Projects.Output.ProjectOverview>
+<table id="tblCases" class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>@Translation.Get("Project Number", Enums.TranslationSource.TextTranslation)
+            </th>
+            <th>@Translation.Get("Project Name", Enums.TranslationSource.TextTranslation)
+            </th>
+            <th>@Translation.Get("Project Manager", Enums.TranslationSource.TextTranslation)
+            </th>
+            <th>@Translation.Get("Start Date", Enums.TranslationSource.TextTranslation)
+            </th>
+            <th>@Translation.Get("Finishing Date", Enums.TranslationSource.TextTranslation)
+            </th>
+            <th>@Translation.Get("Description", Enums.TranslationSource.TextTranslation)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr style="cursor: pointer" onclick="window.location.href = '@Url.Action("EditProject", new RouteValueDictionary { { "id", item.Id } })'">
+                <td>@Html.DisplayFor(x => item.Id)
+                </td>
+                <td>@Html.DisplayFor(x => item.Name)
+                </td>
+                <td>@Html.DisplayFor(x => item.ProjectManagerName)
+                </td>
+                <td>@Html.DisplayFor(x => item.StartDate, "Date")
+                </td>
+                <td>@Html.DisplayFor(x => item.EndDate, "Date")
+                </td>
+                <td>@Html.DisplayFor(x => item.Description)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

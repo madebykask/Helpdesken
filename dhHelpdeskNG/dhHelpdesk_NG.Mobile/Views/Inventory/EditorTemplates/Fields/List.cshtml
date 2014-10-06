@@ -1,0 +1,49 @@
+﻿@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.ConfigurableFieldModel<int?>
+@{
+    if (!ViewData.ContainsKey("Source"))
+    {
+        throw new ArgumentNullException("Source", "\"ComputerId\" ViewData parameter must be specified.");
+    }
+
+    var source = (SelectList)ViewData["Source"];
+
+    var attributes = new Dictionary<string, object>();
+
+    if (ViewData.ContainsKey("Id"))
+    {
+        attributes.Add("Id", ViewData["Id"]);
+    }
+
+    attributes.Add("data-dh-is-required", Model.IsRequired);
+}
+
+@if (!Model.Show)
+{
+    return;
+}
+
+<tr>
+    <td class="span3">
+        @Html.FieldCaption(Model)
+    </td>
+    <td class="span9">
+        @if (!Model.IsReadOnly)
+        {
+            @Html.DropDownListFor(m => m.Value, source, string.Empty, attributes)
+            @Html.HiddenFor(m => m.IsRequired)
+            @Html.ValidationMessageFor(m => m.Value)
+        }
+        else
+        {
+            if (!Model.Value.HasValue)
+            {
+                @Html.TextBoxFor(m => m.Value, new { @readonly = true })
+            }
+            else
+            {
+                @Html.TextBoxFor(m => source.SingleOrDefault(x => x.Value == Model.Value.ToString()).Text, new { @readonly = true })
+            }
+        }
+    </td>
+</tr>

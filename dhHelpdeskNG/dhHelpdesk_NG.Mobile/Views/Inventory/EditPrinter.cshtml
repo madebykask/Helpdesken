@@ -1,0 +1,79 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Printer.PrinterViewModel
+@using (Html.BeginForm("EditPrinter", "Inventory", FormMethod.Post, new { id = "printer_edit_form" }))
+{
+    <div class="secnavs fixed">
+        <div class="pull-left">
+            <ul class="secnav">
+                <li id="menu1">
+                    <input type="submit" value="@Translation.Get("Spara")" class="btn" onclick=" $('#printer_edit_form').submit(); "/>
+                </li>
+                <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt"), "Index", null, new { @class = "btn" })</li>
+                <li id="menu3">@Html.ActionLink(Translation.Get("Ta bort"), "DeletePrinter", new { id = Model.Id }, new { @class = "btn" })</li>
+            </ul>
+            `
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="container">
+            <ul class="nav nav-tabs" id="inventory_tab">
+                <li class="active">
+                    <a href="#fragment-1">@Translation.Get("Printer")</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane tab-pane-border active" id="fragment-1">
+                    @Html.HiddenFor(m => m.Id)
+                    @Html.EditorFor(m => m.GeneralFieldsModel, "Printer/GeneralFieldsModel")
+                    @Html.EditorFor(m => m.InventoryFieldsModel, "Shared/InventoryModel")
+                    @Html.EditorFor(m => m.CommunicationFieldsModel, "Printer/CommunicationFieldsModel")
+                    @Html.EditorFor(m => m.OtherFieldsModel, "Printer/OtherFieldsModel")
+                    @Html.EditorFor(m => m.OrganizationFieldsViewModel, "Printer/OrganizationFieldsViewModel")
+                    @Html.EditorFor(m => m.PlaceFieldsViewModel, "Shared/PlaceFieldsViewModel")
+                    <table class="tableform">
+                        @if (Model.CreatedDate.Show || Model.ChangedDate.Show)
+                        {
+                            <tr>
+                                <th colspan="2" class="header">@Translation.Get("Status")</th>
+                            </tr>
+                        }
+                        @if (Model.CreatedDate.Show)
+                        {
+                            <tr>
+                                <td class="span3">
+                                    <label>@Translation.Get(Model.CreatedDate.Caption)</label>
+                                </td>
+                                <td class="span9">
+                                    @Html.DisplayFor(m => m.CreatedDate.Value, "Date")
+                                </td>
+                            </tr>
+                        }
+                        @if (Model.ChangedDate.Show)
+                        {
+                            <tr>
+                                <td class="span3">
+                                    <label>@Translation.Get(Model.ChangedDate.Caption)</label>
+                                </td>
+                                <td class="span9">
+                                    @Html.DisplayFor(m => m.ChangedDate.Value, "Date")
+                                </td>
+                            </tr>
+                            if (Model.StateFieldsModel.ChangedByUserName != null)
+                            {
+                            <tr>
+                                <td class="span3">
+                                    <label>@Translation.Get("Changed by")</label>
+                                </td>
+                                <td class="span9">
+                                    @Html.DisplayFor(m => m.StateFieldsModel.ChangedByUserName.FirstName) @Html.DisplayFor(m => m.StateFieldsModel.ChangedByUserName.LastName)
+                                </td>
+                            </tr>
+                            }
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+

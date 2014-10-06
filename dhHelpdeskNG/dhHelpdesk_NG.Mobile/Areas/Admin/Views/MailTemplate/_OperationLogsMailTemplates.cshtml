@@ -1,0 +1,9 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Admin.Models.MailTemplateIndexViewModel
+<table class="table table-striped table-bordered table-hover">
+    @foreach (var item in Model.OperationLogs)
+    {
+        <tr><td><a href="@Url.Action("edit", "mailtemplate", new { area = "admin", id = item.Value, customerId = Model.Customer.Id, languageId = 2 })"><strong>@Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation):</strong> @Html.DisplayFor(modelItem => item.Text)</a>
+        </td></tr>
+    }
+</table>

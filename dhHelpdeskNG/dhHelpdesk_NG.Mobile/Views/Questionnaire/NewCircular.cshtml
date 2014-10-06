@@ -1,0 +1,323 @@
+﻿@model DH.Helpdesk.Web.Models.Questionnaire.Input.NewCircularModel
+@{
+    ViewBag.Title = "NewCircular";
+}
+
+<div class="secnavs fixed">
+    <div class="pull-left">
+        <ul class="secnav">
+            <li>
+                <input type="submit" value="@Translation.Get("Save")" class="btn" id="subbut" />
+            </li>
+            <li>
+                <input type="submit" value="@Translation.Get("Skapa urval")" class="btn" id="async_subbut" />
+            </li>
+            <li>
+                <a href="@Url.Action("CircularOverview", new { questionnaireId = Model.QuestionnaireId, state = 0 })" class="btn">
+                    @Translation.Get("Avbryt")
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#fragment-1">@Translation.Get("utskick")</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment-1">
+                <div class="container">
+                    <h4>@Translation.Get("Urval")</h4>
+                    <div class="row">
+                        <div class="span12">
+                            @using (Html.BeginForm("NewCircular", "Questionnaire", FormMethod.Post, new { id = "circular_new_form" }))
+                            {
+                                @Html.HiddenFor(m => m.QuestionnaireId)
+                                @Html.HiddenFor(m => m.Status)
+
+                                <table class="tableform">
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.Get("Namn"):
+                                        </td>
+                                        <td class="span9">
+                                            @Html.TextBoxFor(model => model.CircularName)
+                                            @Html.ValidationMessageFor(model => model.CircularName)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.Get("Status"):
+                                        </td>
+                                        <td class="span9">
+                                            @Translation.Get("Under bearbetning")
+                                        </td>
+                                    </tr>
+                                </table>
+                            }
+                            @using (Ajax.BeginForm("CaseRowGrid", null, new AjaxOptions { UpdateTargetId = "case_grid_container" }, new { id = "circular_case_filter_form" }))
+                            {
+                                <div>
+                                    <table class="tableform">
+                                        <tr>
+                                            <td class="span3">
+                                                @Translation.Get("Closing Date"):
+                                            </td>
+                                            <td class="span9">
+                                                @Html.EditorFor(model => model.FinishingDateFrom, "DatePicker", new { id = "finishing_date_from_datepicker" })
+                                                &nbsp; - &nbsp;
+                                                @Html.EditorFor(model => model.FinishingDateTo, "DatePicker", new { id = "finishing_date_to_datepicker" })
+                                            </td>
+                                        </tr>
+
+                                    </table>
+
+                                    <table>
+                                        <tr>
+                                            <td class="span12">
+                                                @Translation.Get("Avdelning"):
+                                            </td>
+                                            <td class="span1">
+                                                @Translation.Get("Tillgängliga")
+                                            </td>
+                                            <td class="span1"></td>
+                                            <td class="span1">
+                                                @Translation.Get("Valda")
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>
+                                                @Html.ListBox("DPsAvailable", Model.AvailableDepartments, new { style = "width: 340px; height: 100px" })
+
+                                            </td>
+                                            <td>
+                                                <div style="text-align: center;">
+                                                    <input type="button" value="&gt;" id="addDPs" class="btn" />
+                                                    <input type="button" value="&lt;" id="removeDPs" class="btn" />
+                                                </div>
+                                            </td>
+                                            <td>
+                                                @Html.ListBox("SelectedDepartments", Model.SelectedDepartments, new { style = "width: 340px; height: 100px" })
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <table>
+                                        <tr>
+                                            <td class="span12">
+                                                @Translation.Get("Ärendetyp"):
+                                            </td>
+                                            <td class="span1">
+                                                @Translation.Get("Tillgängliga")
+                                            </td>
+                                            <td class="span1"></td>
+                                            <td class="span1">
+                                                @Translation.Get("Valda")
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>
+                                                @Html.ListBox("CTsAvailable", Model.AvailableCaseTypes, new { style = "width: 340px; height: 100px" })
+
+                                            </td>
+                                            <td>
+                                                <div style="text-align: center;">
+                                                    <input type="button" value="&gt;" id="addCTs" class="btn" />
+                                                    <input type="button" value="&lt;" id="removeCTs" class="btn" />
+                                                </div>
+                                            </td>
+                                            <td>
+                                                @Html.ListBox("SelectedCaseTypes", Model.SelectedCaseTypes, new { style = "width: 340px; height: 100px" })
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <table>
+                                        <tr>
+                                            <td class="span12">
+                                                @Translation.Get("Produktområde"):
+                                            </td>
+                                            <td class="span1">
+                                                @Translation.Get("Tillgängliga")
+                                            </td>
+                                            <td class="span1"></td>
+                                            <td class="span1">
+                                                @Translation.Get("Valda")
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>
+                                                @Html.ListBox("PAsAvailable", Model.AvailableProductArea, new { style = "width: 340px; height: 100px" })
+                                            </td>
+                                            <td>
+                                                <div style="text-align: center;">
+                                                    <input type="button" value="&gt;" id="addPAs" class="btn" />
+                                                    <input type="button" value="&lt;" id="removePAs" class="btn" />
+                                                </div>
+                                            </td>
+                                            <td>
+                                                @Html.ListBox("SelectedProductArea", Model.SelectedProductArea, new { style = "width: 340px; height: 100px" })
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <table>
+                                        <tr>
+                                            <td class="span12">
+                                                @Translation.Get("Driftgrupp"):
+                                            </td>
+                                            <td class="span1">
+                                                @Translation.Get("Tillgängliga")
+                                            </td>
+                                            <td class="span1"></td>
+                                            <td class="span1">
+                                                @Translation.Get("Valda")
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>
+                                                @Html.ListBox("WGsAvailable", Model.AvailableWorkingGroups, new { style = "width: 340px; height: 100px" })
+                                            </td>
+                                            <td>
+                                                <div style="text-align: center;">
+                                                    <input type="button" value="&gt;" id="addWGs" class="btn" />
+                                                    <input type="button" value="&lt;" id="removeWGs" class="btn" />
+                                                </div>
+                                            </td>
+                                            <td>
+                                                @Html.ListBox("SelectedWorkingGroups", Model.SelectedWorkingGroups, new { style = "width: 340px; height: 100px" })
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <table class="tableform">
+                                        <tr>
+                                            <td class="span3">
+                                                @Translation.Get("Urval"):
+                                            </td>
+                                            <td class="span1">
+                                                @Translation.Get("Selektera ut")
+                                            </td>
+                                            <td class="span2">
+                                                @Html.DropDownList("procent", Model.Procent, new { style = "width: 80px" })
+                                            </td>
+                                            <td class="span12">
+                                                @Translation.Get("procent av tillgängliga ärenden")
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+                @using (Html.BeginForm("NewCircular", "Questionnaire", FormMethod.Post, new { id = "circular_case_grid_form" }))
+                {
+                    <div id="case_grid_container">
+                        @Html.Partial("_CircularPartOverview", Model.CircularParts)
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(function () {
+        $("#subbut").click(function () {
+
+            if (!$("#circular_new_form").valid()) {
+                return;
+            }
+
+            $.each($('#circular_case_grid_form input').serializeArray(), function (i, obj) {
+                $('<input type="hidden">').prop(obj).appendTo($('#circular_new_form'));
+            });
+
+            $("#circular_new_form").submit();
+        });
+
+        $("#async_subbut").click(function () {
+            $("#SelectedDepartments option").attr("selected", "selected");
+            $("#SelectedCaseTypes option").attr("selected", "selected");
+            $("#SelectedProductArea option").attr("selected", "selected");
+            $("#SelectedWorkingGroups option").attr("selected", "selected");
+
+            $("#circular_case_filter_form").submit();
+        });
+    });
+
+    //function submitForm() {
+    //    $("#SelectedDepartments option").attr("selected", "selected");
+    //    $("#SelectedCaseTypes option").attr("selected", "selected");
+    //    $("#SelectedProductArea option").attr("selected", "selected");
+    //    $("#SelectedWorkingGroups option").attr("selected", "selected");
+    //    alert("Hiii");
+    //    document.getElementById('ModelMode').value = 1;
+    //    $("#circular_new_form").submit();
+    //}
+
+    $("#addDPs").click(function () {
+        $("#DPsAvailable option:selected").remove().appendTo("#SelectedDepartments");
+        $("#DPsAvailable").get(0).selectedIndex = -1;
+        $("#SelectedDepartments").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#removeDPs").click(function () {
+        $("#SelectedDepartments option:selected").remove().appendTo("#DPsAvailable");
+        $("#DPsAvailable").get(0).selectedIndex = -1;
+        return false;
+    });
+
+
+    $("#addCTs").click(function () {
+        $("#CTsAvailable option:selected").remove().appendTo("#SelectedCaseTypes");
+        $("#CTsAvailable").get(0).selectedIndex = -1;
+        $("#SelectedCaseTypes").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#removeCTs").click(function () {
+        $("#SelectedCaseTypes option:selected").remove().appendTo("#CTsAvailable");
+        $("#CTsAvailable").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#addPAs").click(function () {
+        $("#PAsAvailable option:selected").remove().appendTo("#SelectedProductArea");
+        $("#PAsAvailable").get(0).selectedIndex = -1;
+        $("#SelectedProductArea").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#removePAs").click(function () {
+        $("#SelectedProductArea option:selected").remove().appendTo("#PAsAvailable");
+        $("#PAsAvailable").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#addWGs").click(function () {
+        $("#WGsAvailable option:selected").remove().appendTo("#SelectedWorkingGroups");
+        $("#WGsAvailable").get(0).selectedIndex = -1;
+        $("#SelectedWorkingGroups").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#removeWGs").click(function () {
+        $("#SelectedWorkingGroups option:selected").remove().appendTo("#WGsAvailable");
+        $("#WGsAvailable").get(0).selectedIndex = -1;
+        return false;
+    });
+
+</script>

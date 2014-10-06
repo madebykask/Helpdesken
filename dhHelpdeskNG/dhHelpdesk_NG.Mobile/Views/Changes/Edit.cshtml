@@ -1,0 +1,60 @@
+﻿
+@using DH.Helpdesk.BusinessData.Enums.Changes
+@using DH.Helpdesk.Web.Enums.Changes
+@model DH.Helpdesk.Web.Models.Changes.ChangeEdit.InputModel
+
+<script type="text/javascript" src="@Url.Content("~/Content/js/Changes/change.js")"></script>
+
+<script type="text/javascript">
+    $(function() {
+        var parameters = {
+            id: '@Model.Id',
+            deleteChangeUrl: '@Url.Action("Delete")',
+            uploadFileUrl: '@Url.Action("UploadFile")',
+            deleteFileUrl: '@Url.Action("DeleteFile")',
+            deleteLogUrl: '@Url.Action("DeleteLog")',
+            registrationSubtopic: '@Subtopic.Registration',
+            analyzeSubtopic: '@Subtopic.Analyze',
+            implementationSubtopic: '@Subtopic.Implementation',
+            evaluationSubtopic: '@Subtopic.Evaluation',
+            registrationRejectValue: '@StepStatus.Rejected',
+            analyzeRejectValue: '@StepStatus.Rejected'
+        };
+
+        applyChangeBehavior(parameters);
+    });
+</script>
+
+@using (Html.BeginForm("Edit", "Changes", FormMethod.Post, new { id = "change_form" }))
+{
+    <div class="secnavs fixed">
+        <div class="pull-left">
+            <ul class="secnav">
+                <li>
+                    <button name="clickedButton" class="btn" value="@ClickedButton.Save">@Translation.Get("Spara")</button>
+                </li>
+                <li>
+                    <button name="clickedButton" class="btn" value="@ClickedButton.SaveAndClose">@Translation.Get("Spara och stäng")</button>
+                </li>
+                <li>
+                    @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "Delete", new { id = Model.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuellt ärende och tillhörande loggposter", Enums.TranslationSource.TextTranslation) })
+                </li>
+                <li>
+                    @Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", "Changes", new { @class = "btn" })
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="content">
+        <div class="container">
+            <ul class="nav nav-tabs" id="myTab">
+                <li class="active"><a href="#fragment-1a">@(Translation.Get("Ändring") + " #" + Model.Id)</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane tab-pane-border active" id="fragment-1a">
+                    @Html.EditorFor(m => m)
+                </div>
+            </div>
+        </div>
+    </div>
+}

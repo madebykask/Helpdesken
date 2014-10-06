@@ -1,0 +1,138 @@
+﻿@model DH.Helpdesk.Web.Models.CalendarInputViewModel
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-error">
+        @Translation.Get("Händelse")
+        @Translation.Get("som används går inte att ta bort")
+    </div>    
+}
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-1">@Translation.Get("Ny händelse")</a></li>            
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment1">
+                <div class="container">
+                    <h4>@Translation.Get("Aktuellt")</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Datum")
+                                    </td>
+                                    <td class="span9">
+                                        @Html.EditorFor(model => model.Calendar.CalendarDate, "DatePicker", new { id = "divCalendar_CalendarDate" }) 
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Visa t.o.m")
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(model => model.Calendar.ShowUntilDate, "DatePicker", new { id = "divCalendar_ShowUntilDate" }) 
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Rubrik")
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.Calendar.Caption, new { maxlength = "50", style = "width: 200px;" })
+                                    </td>
+                                </tr>                                                               
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Text")
+                                    </td>
+                                    <td>
+                                        @Html.TextAreaFor(model => model.Calendar.Text, new { style = "width:600px; height:250px;", maxlength = "2000" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Visa")
+                                    </td>
+                                    <td class="checkbox" style="padding-left: 20px">
+                                        @Html.CheckBoxFor(m => m.Calendar.ShowOnStartPage)                                        
+                                        &nbsp;@Translation.Get("Visa på startsidan")
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td class="checkbox" style="padding-left: 20px">
+                                        @Html.CheckBoxFor(m => m.Calendar.PublicInformation)
+                                        &nbsp;@Translation.Get("Visa på självservice")
+                                    </td>                                
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <h4>@Translation.Get("Säkerhet")</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform" id="säkerhet">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Driftgrupp")
+                                    </td>
+                                    <td>
+                                        @Translation.Get("Tillgängliga")
+                                    </td>
+                                    <td></td>
+                                    <td>
+                                        @Translation.Get("Valda")
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        
+                                    </td>
+                                    <td>
+                                        @Html.ListBox("WGsAvailable", Model.WGsAvailable, new { style = "width: 340px; height: 100px" })
+                                        
+                                    </td>
+                                    <td>
+                                        <input type="button" value="&gt;" id="addWGs" class="btn"/>
+                                        <input type="button" value="&lt;" id="removeWGs" class="btn" />
+                                    </td>
+                                    <td>
+                                        @Html.ListBox("WGsSelected", Model.WGsSelected, new { style = "width: 340px; height: 100px" })
+                                    </td>
+                                </tr>
+                            </table>
+                            @Html.HiddenFor(model => model.Calendar.CustomerId)
+                            @Html.HiddenFor(model => model.Calendar.Id)
+                            @Html.HiddenFor(model => model.Calendar.ChangedByUserId)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    function submitForm() {
+        $("#WGsSelected option").attr("selected", "selected");
+        $("#target").submit();
+    }
+
+    $("#addWGs").click(function () {
+        $("#WGsAvailable option:selected").remove().appendTo("#WGsSelected");
+        $("#WGsAvailable").get(0).selectedIndex = -1;
+        $("#WGsSelected").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#removeWGs").click(function () {
+        $("#WGsSelected option:selected").remove().appendTo("#WGsAvailable");
+        $("#WGsAvailable").get(0).selectedIndex = -1;
+        $("#WGsAvailable").get(0).selectedIndex = -1;
+        return false;
+    });
+
+</script>

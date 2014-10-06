@@ -1,0 +1,93 @@
+﻿@model DH.Helpdesk.Web.Models.Problem.ProblemEditViewModel
+@{
+    ViewBag.Title = @Translation.Get("Problem", Enums.TranslationSource.TextTranslation);
+}
+
+<div class="secnavs fixed">
+    <div class="pull-left">
+        <ul class="secnav">
+            @if (!Model.Problem.IsFinished)
+            {
+                <li id="menu1">
+                    <input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn" onclick=" $('#problem_edit_form').submit(); "/>
+                </li>
+            }
+            else
+            {
+                <li id="menu5">@Html.ActionLink(Translation.Get("Aktivera", Enums.TranslationSource.TextTranslation), "Activate", new { id = Model.Problem.Id }, new { @class = "btn" })</li>
+            }
+            @if (!Model.Problem.IsFinished)
+            {
+                if (!Model.Problem.IsExistConnectedCases)
+                {
+                <li id="menu3">@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "Delete", new { id = Model.Problem.Id }, new { @class = "btn" })</li>
+                }
+                <li id="menu4" style="display: none">@Ajax.ActionLink(Translation.Get("Ny loggpost", Enums.TranslationSource.TextTranslation), "NewLog", "Problems", new { problemId = Model.Problem.Id }, new AjaxOptions { UpdateTargetId = "log_edit", OnSuccess = "updateForm()" }, new { @class = "btn" })</li>
+            }
+            <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", null, new { @class = "btn" })</li>
+        </ul>
+    </div>
+</div>
+
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="problem_tab">
+            <li class="active">
+                <a href="#fragment-1" onclick=" $('#menu4').hide(); ">@Translation.Get("Problem", Enums.TranslationSource.TextTranslation)</a>
+            </li>
+            <li>
+                <a href="#fragment-2" onclick=" $('#menu4').show(); ">@Translation.Get("Logg", Enums.TranslationSource.TextTranslation)</a>
+            </li>
+            <li>
+                <a href="#fragment-3" onclick=" $('#menu4').hide(); ">@Translation.Get("Ärenden", Enums.TranslationSource.TextTranslation)</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment-1">
+                @using (Html.BeginForm("Save", "Problems", FormMethod.Post, new { id = "problem_edit_form" }))
+                {
+                    @Html.Partial("_InputProblem", Model)
+                }
+            </div>
+            <div class="tab-pane tab-pane-border" id="fragment-2">
+                @Html.Partial("LogGrid", Model.Logs)
+                @if (!Model.Problem.IsFinished)
+                {
+                    <div id="log_edit">
+                    </div>
+                }
+            </div>
+            <div class="tab-pane tab-pane-border" id="fragment-3">
+                @Html.Partial("CaseGrid", Model.Cases)
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" name="activeTab" id="activeTab" value="@SessionFacade.ActiveTab" />
+
+<script type="text/javascript">
+
+    $('#problem_tab a[href="' + $('#activeTab')[0].value + '"]').tab('show');
+
+    if ($('#activeTab')[0].value == "#fragment-2") {
+        $('#menu4').show();
+    }
+
+    $(document).ready(function () {
+        $('.foldDownContainer .foldDownHeader').click(function () {
+            $(this).next().slideToggle('slow');
+            return false;
+        }).next().show();
+    });
+
+    $.validator.setDefaults({
+        ignore: ""
+    });
+
+    function updateForm() {
+        $("#log_edit_form").each(function () { $.data($(this)[0], 'validator', false); });
+        $.validator.unobtrusive.parse("#log_edit_form");
+    }
+
+</script>

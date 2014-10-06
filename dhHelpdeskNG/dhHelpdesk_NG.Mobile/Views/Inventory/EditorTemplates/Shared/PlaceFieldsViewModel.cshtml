@@ -1,0 +1,43 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Shared.PlaceFieldsViewModel
+<script type="text/javascript" src="@Url.Content("~/Content/js/Inventory/place-cascading.js")"></script>
+
+<script>
+    $(function () {
+        var parameters = {
+            floorsSearchUrl: '@Url.Action("SearchFloorsByBuildingId")',
+            roomsSearchUrl: '@Url.Action("SearchRoomsByFloorId")'
+        };
+
+        applyCascadingBehivarior(parameters);
+    });
+</script>
+<table class="tableform">
+    @if (Model.PlaceFieldsModel.RoomId.Show
+        || Model.PlaceFieldsModel.Location.Show)
+    {
+        <tr>
+            <th colspan="2" class="header">@Translation.Get("Placering")</th>
+        </tr>
+    }
+    @if (Model.PlaceFieldsModel.RoomId.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get("Byggnad")</label>
+            </td>
+            <td class="span9">
+                @Html.DropDownListFor(m => m.PlaceFieldsModel.BuildingId, Model.Buildings, string.Empty, new { id = "buildings_dropdown" })
+            </td>
+        </tr>
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get("Våning")</label>
+            </td>
+            <td class="span9">
+                @Html.DropDownListFor(m => m.PlaceFieldsModel.FloorId, Model.Floors, string.Empty, new { id = "floors_dropdown" })
+            </td>
+        </tr>
+    }
+    @Html.EditorFor(m => m.PlaceFieldsModel.RoomId, "NotReadonlyFields/List", new { Source = Model.Rooms, id = "rooms_dropdown" })
+    @Html.EditorFor(m => m.PlaceFieldsModel.Location, "NotReadonlyFields/Text")
+</table>

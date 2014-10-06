@@ -1,0 +1,75 @@
+﻿
+@using DH.Helpdesk.Common.Extensions.DateTime
+@using DH.Helpdesk.Web.Infrastructure.Extensions
+@model DH.Helpdesk.Web.Models.Case.CaseSearchResultModel
+
+@if (Model != null)
+{    
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <!--fasta kolumner -->
+                <th></th>
+                <!-- valbara kolumner -->
+                @if (Model.caseSettings != null)
+                {                
+                    foreach (var c in Model.caseSettings)
+                    {                    
+                        if (c.Line == 1)
+                        {
+                            <th onclick="sortCases('@c.Name')" class="thpointer" >
+                                @Translation.Get(c.Name, Enums.TranslationSource.CaseTranslation, c.Customer_Id)<i class="@c.Name.SetCaseSortIcon()"></i>                                
+                            </th>
+                        }
+                    }    
+                }
+            </tr>
+        </thead>        
+        <tbody>
+            @if (Model.cases.Any())
+            {            
+                foreach (var r in Model.cases)
+                {
+                <tr title="@r.Tooltip" class="@r.IsUnread.GetClassForCaseRowTr(@r.IsUrgent)">
+                    <!--fasta kolumner -->
+                    <td>
+                        <img title="@r.CaseIcon.CaseIconTitle()" alt="@r.CaseIcon.CaseIconTitle()" src="@Url.Content("~/Content/icons/" + r.CaseIcon.CaseIconSrc())" />   
+                    </td>
+                    <!-- valbara kolumner -->
+                    @foreach (var c in r.Columns)
+                    {       
+                    <td>
+                        @if (c.FieldType == 1)
+                        {
+                            <!-- date -->
+                            <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@Html.DisplayFor(m => c.DateTimeValue, "Date")</a>
+                        }
+                        else if (c.FieldType == 2)                                                        
+                        {
+                            <!-- dateTime -->
+                            <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@(c.DateTimeValue.HasValue ? c.DateTimeValue.Value.ToLocalTime().ToFormattedDateTime() : string.Empty)</a>
+                        }
+                        else    
+                        {
+                            if (c.TranslateThis)
+                            {
+                                <!-- string -->
+                                <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@Translation.Get(c.StringValue, Enums.TranslationSource.TextTranslation)</a>
+                            }
+                            else    
+                            {
+                                <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@c.StringValue</a>
+                            }
+                        }
+                    </td>
+                    }    
+                </tr>                
+                }
+            }
+            else
+            {
+                @Html.Partial("_NoHits", "")
+            }
+        </tbody>
+    </table>
+}

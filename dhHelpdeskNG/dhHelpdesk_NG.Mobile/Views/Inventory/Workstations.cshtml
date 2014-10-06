@@ -1,0 +1,123 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.SearchModels.WorkstationSearchViewModel
+<script>
+    $(function () {
+        $('#region_dropdown').change(function () {
+
+            var selectedValue = $(this).val();
+            $.get('@Url.Action("SearchDepartmentsByRegionId")', { selected: selectedValue }, function (json) {
+                var sel = $('#department_dropdown');
+                sel.empty();
+                sel.prepend("<option></option>");
+                for (var i = 0; i < json.length; i++) {
+                    var e = json[i];
+                    $('<option>').text(e.Name).val(e.Value).appendTo(sel);
+                }
+            });
+        });
+    });
+</script>
+@using (Ajax.BeginForm("WorkstationsGrid", null, new AjaxOptions { UpdateTargetId = "grid_container" }, new { id = "search_form" }))
+{
+    @Html.HiddenFor(m => m.Filter.SortField.Name, new { id = "sortFieldName" })
+    @Html.HiddenFor(m => m.Filter.SortField.SortBy, new { id = "sortFieldBy" })
+
+    <table class="tableform">
+        @if (Model.Settings.DepartmnetFieldSetting.IsShow)
+        {
+            <tr>
+                <td class="span3">@Translation.Get("Område")</td>
+                <td>@Html.DropDownListFor(m => m.Filter.RegionId, Model.Regions, string.Empty, new { id = "region_dropdown" })</td>
+            </tr>
+            <tr>
+                <td class="span3">@Translation.Get(Model.Settings.DepartmnetFieldSetting.Caption)</td>
+                <td>
+                    @Html.DropDownListFor(m => m.Filter.DepartmentId, Model.Departments, string.Empty, new { id = "department_dropdown" })
+                </td>
+            </tr>
+        }
+        @if (Model.Settings.ComputerTypeFieldSetting.IsShow)
+        {
+            <tr>
+                <td class="span3">@Translation.Get(Model.Settings.ComputerTypeFieldSetting.Caption)</td>
+                <td>@Html.DropDownListFor(m => m.Filter.ComputerTypeId, Model.ComputerTypes, string.Empty)</td>
+            </tr>
+        }
+        @if (Model.Settings.ContractStatusFieldSetting.IsShow)
+        {
+            <tr>
+                <td class="span3">@Translation.Get(Model.Settings.ContractStatusFieldSetting.Caption)</td>
+                <td>@Html.DropDownListFor(m => m.Filter.ContractStatusId, Model.ContractStatuses, string.Empty)</td>
+            </tr>
+        }
+        @if (Model.Settings.ContractStartDateFieldSetting.IsShow)
+        {
+            <tr>
+                <td class="span3">@Translation.Get(Model.Settings.ContractStartDateFieldSetting.Caption)</td>
+                <td>@Html.EditorFor(m => m.Filter.ContractStartDate.DateFrom, "DatePicker", new { id = "contractStartDateFrom_datepicker" })
+                    -
+                    @Html.EditorFor(m => m.Filter.ContractStartDate.DateTo, "DatePicker", new { id = "contractStartDateTo_datepicker" })</td>
+            </tr>
+        }
+        @if (Model.Settings.ContractEndDateFieldSetting.IsShow)
+        {
+            <tr>
+                <td class="span3">@Translation.Get(Model.Settings.ContractEndDateFieldSetting.Caption)</td>
+                <td>@Html.EditorFor(m => m.Filter.ContractEndDate.DateFrom, "DatePicker", new { id = "contractEndDateFrom_datepicker" })
+                    -
+                    @Html.EditorFor(m => m.Filter.ContractEndDate.DateTo, "DatePicker", new { id = "contractEndDateTo_datepicker" })</td>
+            </tr>
+        }
+        @if (Model.Settings.ScanDateFieldSetting.IsShow)
+        {
+            <tr>
+                <td class="span3">@Translation.Get(Model.Settings.ScanDateFieldSetting.Caption)</td>
+                <td>@Html.EditorFor(m => m.Filter.ScanDate.DateFrom, "DatePicker", new { id = "scanDateFrom_datepicker" })
+                    -
+                    @Html.EditorFor(m => m.Filter.ScanDate.DateTo, "DatePicker", new { id = "scanDateTo_datepicker" })</td>
+            </tr>
+        }
+        @if (Model.Settings.ScrapDateFieldSetting.IsShow)
+        {
+            <tr>
+                <td class="span3">@Translation.Get(Model.Settings.ScrapDateFieldSetting.Caption)</td>
+                <td>@Html.EditorFor(m => m.Filter.ScrapDate.DateFrom, "DatePicker", new { id = "scrapDateFrom_datepicker" })
+                    -
+                    @Html.EditorFor(m => m.Filter.ScrapDate.DateTo, "DatePicker", new { id = "scrapDateTo_datepicker" })</td>
+            </tr>
+        }
+        <tr>
+            <td class="span3">
+                @Html.LabelFor(m => m.Filter.IsShowScrapped)
+            </td>
+            <td>
+                @Html.CheckBoxFor(m => m.Filter.IsShowScrapped)
+            </td>
+        </tr>
+        <tr>
+            <td class="span3">
+                @Html.LabelFor(m => m.Filter.SearchFor)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.Filter.SearchFor)
+            </td>
+        </tr>
+        <tr>
+            <td class="span3">
+                @Html.LabelFor(m => m.Filter.RecordsOnPage)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.Filter.RecordsOnPage)
+            </td>
+        </tr>
+        <tr>
+            <td class="span3">&nbsp;
+            </td>
+            <td>
+                <input type="submit" value="@Translation.Get("Sök")" class="btn" />
+            </td>
+        </tr>
+    </table>
+}
+<div id="grid_container">
+    @Html.Action("WorkstationsGrid", "Inventory", new { area = string.Empty, filter = Model.Filter })
+</div>

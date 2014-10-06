@@ -1,0 +1,33 @@
+﻿@using System.Globalization
+@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Models.Faq.Output
+
+@model DH.Helpdesk.Web.Models.Faq.Output.EditFaqModel
+
+@{
+    this.ViewBag.Title = @Translation.Get("Edit FAQ", Enums.TranslationSource.TextTranslation);
+}
+
+<script type="text/javascript">
+    $(function() {
+        $('#delete_button').click(function() {
+            $.post('@this.Url.Action("DeleteFaq")', { id: '@this.Model.Id' }, function() {
+                window.location.href = '@this.Url.Action("Index")';
+            });
+        });
+    });
+</script>
+
+@using (this.Html.BeginForm("EditFaq", "Faq", FormMethod.Post, new { id = "faq_edit_form" }))
+{
+    <div class="secnavs fixed">
+        <div class="pull-left">
+            <ul class="secnav">
+                <li><input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn" /></li>
+                <li><a id="delete_button" class="btn">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</a></li>
+                <li><a href="@this.Url.Action("Index")" class="btn">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</a></li>
+            </ul>
+        </div>
+    </div>
+    @this.Html.Partial("FaqEditing", new EditingFaqModel(this.Model.Id.ToString(CultureInfo.InvariantCulture), this.Model.Category, this.Model.Question, this.Model.Answer, this.Model.InternalAnswer, this.Model.Files, this.Model.UrlOne, this.Model.UrlTwo, this.Model.WorkingGroup, this.Model.InformationIsAvailableForNotifiers, this.Model.ShowOnStartPage))
+}

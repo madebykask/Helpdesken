@@ -1,0 +1,27 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.SearchModels.ServerSearchFilter
+@using (Ajax.BeginForm("ServersGrid", "Inventory", null, new AjaxOptions { UpdateTargetId = "grid_container" }, new { id = "search_form" }))
+{
+    @Html.HiddenFor(m => m.SortField.Name, new { id = "sortFieldName" })
+    @Html.HiddenFor(m => m.SortField.SortBy, new { id = "sortFieldBy" })
+
+    <table class="tableform">
+        <tr>
+            <td class="span3">
+                @Html.LabelFor(m => m.SearchFor)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.SearchFor)
+            </td>
+        </tr>
+        <tr>
+            <td class="span3">&nbsp;
+            </td>
+            <td>
+                <input type="submit" value="@Translation.Get("Sök")" class="btn" />
+            </td>
+        </tr>
+    </table>
+}
+<div id="grid_container">
+    @Html.Action("ServersGrid", "Inventory", new { area = string.Empty, filter = Model })
+</div>

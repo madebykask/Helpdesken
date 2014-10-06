@@ -1,0 +1,17 @@
+﻿@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.ConfigurableFieldModel<bool>
+@if (!Model.Show)
+{
+    return;
+}
+
+<tr>
+    <td class="span3">
+        @Html.FieldCaption(Model)
+    </td>
+    <td class="span9">
+        @(!Model.IsReadOnly
+            ? Html.CheckBoxFor(m => m.Value)
+            : Html.CheckBoxFor(m => m.Value, new { @readonly = true, @disabled = "disabled" }))
+    </td>
+</tr>

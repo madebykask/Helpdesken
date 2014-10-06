@@ -1,0 +1,78 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Admin.Models.ProgramInputViewModel
+
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-1">@Translation.Get("Program", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment1">
+                <div class="container">
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-error">@Translation.Get("Program", Enums.TranslationSource.TextTranslation)
+                            @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+                        </div>    
+                    }
+                    <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Program", Enums.TranslationSource.TextTranslation)<span class="mandatorystar">*</span>
+                                    </td>
+                                    <td class="span9">
+                                        @Html.TextBoxFor(model => model.Program.Name, new { maxlength = "50" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>@Translation.Get("Skicka e-post till följande adresser när aktuellt program beställs", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        @Html.TextAreaFor(model => model.Program.List, new { style = "width:600px; height:125px;", maxlength = "200" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                         @Translation.Get("Visa", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="ShowOrder" @(Model.ShowOrder == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="ShowOrder" value="0" />
+                                        &nbsp;@Translation.Get("Beställning", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                        <label class="checkbox">
+                                        <input type="checkbox" name="ShowAccount" @(Model.ShowAccount == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="ShowAccount" value="0" />
+                                        &nbsp;@Translation.Get("Beställning konto", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="program.IsActive" @(Model.Program.IsActive == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="program.IsActive" value="0" />
+                                        </label>
+                                    </td>
+                                </tr>
+                            </table>
+                            @Html.HiddenFor(model => model.Program.Customer_Id)
+                            @Html.HiddenFor(model => model.Program.Id)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,80 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Admin.Models.CustomerInputViewModel
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-error">@Translation.Get("Kund", Enums.TranslationSource.TextTranslation)
+        @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+    </div>    
+}
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#subfragment-1">@Translation.Get("Kund", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
+            <!--<li><a href="#subfragment-2">@Translation.Get("E-post", Enums.TranslationSource.TextTranslation)</a></li>-->
+            <!--<li><a href="#subfragment-3">@Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)</a></li>-->
+            <!--<li><a href="#subfragment-4">@Translation.Get("Användare", Enums.TranslationSource.TextTranslation)</a></li>-->
+            <!--<li><a href="#subfragment-5">@Translation.Get("Synkronisering", Enums.TranslationSource.TextTranslation)</a></li>-->
+            <!--<li><a href="#subfragment-6">@Translation.Get("Beställning", Enums.TranslationSource.TextTranslation)</a></li>-->
+            <!--<li><a href="#subfragment-7">@Translation.Get("Ärendeöversikt", Enums.TranslationSource.TextTranslation)</a></li>-->
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="subfragment-1">
+                <div class="container">
+                    @Html.Partial("_Customer", Model)
+
+                </div>
+            </div>
+            <!--
+            <div class="tab-pane tab-pane-border" id="subfragment-2">
+                <div class="container">
+                    @Html.Partial("_Email", Model)
+                </div>
+
+            </div>
+             
+            <div class="tab-pane tab-pane-border" id="subfragment-3">
+                <div class="container">
+
+                    @Html.Partial("_Case", Model)
+                </div>
+
+            </div>
+          
+            <div class="tab-pane tab-pane-border" id="subfragment-5">
+                <div class="container">
+
+                    @if (Model.Customer.Id > 0)
+                    {
+                        @Html.Partial("_Syncronization", Model)
+                    }
+                </div>
+
+            </div>
+            <div class="tab-pane tab-pane-border" id="subfragment-6">
+                <div class="container">
+
+                    @if (Model.Customer.Id > 0)
+                    {
+                        @Html.Partial("_Order", Model)
+                    }
+                </div>
+
+            </div>
+              
+            <div class="tab-pane tab-pane-border" id="subfragment-7">
+                <div class="container">
+
+                    @if (Model.Customer.Id > 0)
+                    {
+                        @Html.Partial("_CaseSummary", Model)
+                    }
+                </div>
+
+            </div>
+                  -->
+        </div>
+    </div>
+    @Html.HiddenFor(model => model.Setting.Id)
+    <input type="hidden" name="activeTab" id="activeTab" value="" />
+</div>
+

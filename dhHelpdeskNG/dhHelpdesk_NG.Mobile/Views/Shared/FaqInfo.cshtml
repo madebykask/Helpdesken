@@ -1,0 +1,51 @@
+﻿@using DH.Helpdesk.Common.Extensions.DateTime
+@using DH.Helpdesk.Domain.Faq
+@model IEnumerable<DH.Helpdesk.BusinessData.Models.Faq.Output.FaqInfoOverview>
+
+@if (Model != null && Model.Any())
+{
+    <div class="row-fluid">
+        <div class="box-box span12">
+            <div class="box-header portlet-header">
+                <div class="start-tile-img label blue"><a href="@Url.Action("index", "faq", new {area = ""})"><img src="@Url.Content("~/Content/icons/faq.png")" alt="@Translation.Get("Faq", Enums.TranslationSource.TextTranslation)" /></a></div><h4>@Translation.Get("Faq", Enums.TranslationSource.TextTranslation)</h4>
+            </div>
+            <div class="box-body portlet-content">
+                <div class="box-main">
+                    <div class="accordion" id="faqstart">
+                        @foreach (var faq in Model)
+                        {
+                            <div class="accordion-group accordion-caret">
+                                <div class="accordion-heading">
+                                    <a class="accordion-toggle accordion-caret collapsed" data-toggle="collapse" data-parent="#faqstart" href="#collapse@(faq.Id)">@faq.CreatedDate.ToFormattedDate()<br /><i>@GetCategoryPathString(faq.Category)</i><br />@faq.Text
+                                    </a>
+                                </div>
+                                <div id="collapse@(faq.Id)" class="accordion-body collapse">
+                                    <div class="accordion-inner">
+                                        @faq.Answer
+                                    </div>
+                                </div>
+                            </div>
+                        }    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@functions 
+{
+    public MvcHtmlString GetCategoryPathString(FaqCategoryEntity category)
+    {
+        if (category == null)
+            return null;
+
+        var result = category.Name;        
+        while (category.ParentFAQCategory != null)
+        {
+            result.Insert(0, category.ParentFAQCategory.Name + " - ");
+            category = category.ParentFAQCategory;
+        }
+
+        return new MvcHtmlString(result);       
+    }
+}    

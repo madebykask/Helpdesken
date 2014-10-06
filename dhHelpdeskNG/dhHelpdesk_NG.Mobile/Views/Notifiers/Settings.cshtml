@@ -1,0 +1,19 @@
+﻿
+@model DH.Helpdesk.Web.Models.Notifiers.SettingsModel
+
+<script type="text/javascript" src="@Url.Content("~/Content/js/Notifiers/settings.js")"></script>
+           
+<script type="text/javascript">
+    var settingsViewParameters = { settingsUrl: '@Url.Action("Settings")' };
+
+    $(function() {
+        applySettingsViewBehavior(settingsViewParameters);
+    });
+</script>
+
+<div id="settings_container">
+    @using (Ajax.BeginForm("Settings", null, new AjaxOptions { UpdateTargetId = "fragment-1" }, new { id = "settings_form" }))
+    {
+        @Html.EditorFor(m => m)
+    }
+</div>

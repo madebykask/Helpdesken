@@ -1,0 +1,20 @@
+﻿@model int
+<script type="text/javascript" src="@Url.Content("~/Content/js/Changes/settings.js")"></script>
+
+<div class="secnavs fixed">
+    <div class="pull-left">
+        <ul class="secnav">
+            <li id="menu1">
+                <input type="submit" value="@Translation.Get("Spara")" class="btn" onclick=" $('#settings_form').submit(); "/>
+            </li>
+            <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt"), "Index", "Inventory", null, new { @class = "btn" })</li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="container">
+        <div id="settings_container">
+            @Html.Action("RenderContent", "InventorySettings", new { area = string.Empty, inventoryTypeId = Model })
+        </div>
+    </div>
+</div>

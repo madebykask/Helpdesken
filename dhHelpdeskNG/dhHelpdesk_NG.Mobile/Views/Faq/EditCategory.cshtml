@@ -1,0 +1,48 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Models.Faq.Output
+
+@model DH.Helpdesk.Web.Models.Faq.Output.EditCategoryModel
+
+@{
+    this.ViewBag.Title = Translation.Get("Edit FAQ Category", Enums.TranslationSource.TextTranslation);
+}
+
+<script type="text/javascript">
+    $(function() {
+        $('#delete_button').click(function() {
+            $.post('@this.Url.Action("DeleteCategory")', { id: '@this.Model.Id' }, function() { window.location.href = '@this.Url.Action("Index")'; });
+        });
+    });
+</script>
+
+@using (this.Html.BeginForm("EditCategory", "Faq", FormMethod.Post, new { id = "category_edit_form" }))
+{
+    <input type="hidden" name="Id" value="@this.Model.Id" />
+    <div class="secnavs fixed">
+        <div class="pull-left">
+            <ul class="secnav">
+                <li><input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn" /></li>
+             
+                @if (this.Model.HasFaqs)
+                {
+                    <li>
+                        <div class="well well-small">
+                            <a class="btn">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</a>
+                            @Translation.Get("You can't delete this category, because it has related FAQ's.", Enums.TranslationSource.TextTranslation)
+                        </div>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a id="delete_button" class="btn">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</a>
+                    </li>
+                }
+                
+                <li><a href="@this.Url.Action("Index")" class="btn">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</a></li>
+                <li><a href="@this.Url.Action("NewCategory", new RouteValueDictionary { { "parentCategoryId", this.Model.Id } })" class="btn">@Translation.Get("New Subcategory", Enums.TranslationSource.TextTranslation)</a></li>
+            </ul>
+        </div>
+    </div>
+    @this.Html.Partial("CategoryEditing", new EditingCategoryModel(this.Model.Name))
+}

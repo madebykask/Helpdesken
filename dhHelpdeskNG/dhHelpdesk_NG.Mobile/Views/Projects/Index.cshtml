@@ -1,0 +1,74 @@
+﻿@model DH.Helpdesk.Web.Models.Projects.IndexProjectViewModel
+<div class="secnavs fixed">
+    <div class="pull-left">
+        <ul class="secnav">
+            <li id="menu1">@Html.ActionLink(Translation.Get("New Project", Enums.TranslationSource.TextTranslation), "NewProject", null, new { @class = "btn" })</li>
+        </ul>
+    </div>
+</div>
+
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#fragment-1">@Translation.Get("Projects", Enums.TranslationSource.TextTranslation)</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment-1">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                            @using (Ajax.BeginForm("Search", null, new AjaxOptions { UpdateTargetId = "projects_grid" }, new { id = "search_form" }))
+                            {
+                                <table>
+                                    <tr>
+                                        <td>@Translation.Get("Show", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>
+                                            <label class="radio inline">
+                                            @Html.RadioButtonFor(x => x.Filter.State, 1, new { @checked = Model.Filter.State == Enums.Show.Active }) @Translation.Get("Active", Enums.TranslationSource.TextTranslation)
+                                            </label>
+                                            <label class="radio inline">
+                                            @Html.RadioButtonFor(x => x.Filter.State, 0, new { @checked = Model.Filter.State == Enums.Show.Inactive }) @Translation.Get("Finished", Enums.TranslationSource.TextTranslation)
+                                            
+                                            </label>
+                                            <label class="radio inline">
+                                            @Html.RadioButtonFor(x => x.Filter.State, 2, new { @checked = Model.Filter.State == Enums.Show.All }) @Translation.Get("All", Enums.TranslationSource.TextTranslation)
+                                            
+                                            </label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>@Translation.Get("Project Manager", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>
+                                            @Html.DropDownListFor(x => x.Filter.ProjectManagerId, Model.Users, string.Empty)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>@Translation.Get("Search", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(x => x.Filter.ProjectNameLikeString) <input type ="submit" value="@Translation.Get("Search", Enums.TranslationSource.TextTranslation)" name="btnSearch" class="btn"/>
+                                        </td>
+                                        <td>
+                                            
+                                        </td>
+                                    </tr>
+                                </table>
+                            }
+                        </div>
+                    </div>
+                    <div>
+                    </div>
+                    <div id="projects_grid">
+                        @Html.Partial("ProjectGrid", Model.Projects)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

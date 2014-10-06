@@ -1,0 +1,14 @@
+﻿
+@model DH.Helpdesk.Web.Models.Notifiers.ConfigurableFields.StringFieldModel
+           
+@if (Model.Show)
+{
+    <tr>
+        <td class="span3">
+            @Translation.Get(Model.Caption, Enums.TranslationSource.TextTranslation)
+        </td>
+        <td class="span9">
+            @Model.Value
+        </td>
+    </tr>
+}

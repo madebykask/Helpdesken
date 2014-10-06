@@ -1,0 +1,14 @@
+﻿@model DH.Helpdesk.Web.Areas.Licenses.Models.Applications.ApplicationsIndexModel
+@{
+    Layout = "~/Areas/Licenses/Views/Shared/_IndexLayout.cshtml";
+}
+
+@using (Ajax.BeginForm("Applications", "Applications", null, 
+    new AjaxOptions { UpdateTargetId = "LicensesApplicationsTableContainer" },
+    new { id ="ApplicationsSearchForm" } ))
+{
+    
+}
+<div id="LicensesApplicationsTableContainer">
+    @Html.Action("Applications", "Applications")
+</div>

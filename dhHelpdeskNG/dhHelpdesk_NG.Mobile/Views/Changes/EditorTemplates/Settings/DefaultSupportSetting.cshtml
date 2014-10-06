@@ -1,0 +1,11 @@
+﻿
+@model DH.Helpdesk.Web.Models.Changes.SettingsEdit.TextFieldSettingModel
+
+<td>@Html.LabelFor(m => m)</td>
+<td>@Html.CheckBoxFor(m => m.ShowInDetails)</td>
+<td>@Html.CheckBoxFor(m => m.ShowInChanges)</td>
+<td>@Html.CheckBoxFor(m => m.ShowInSelfService)</td>
+<td>@Html.TextBoxFor(m => m.Caption)</td>
+<td>@Html.CheckBoxFor(m => m.Required)</td>
+<td>@Html.TextBoxFor(m => m.DefaultValue)</td>
+<td>@Html.TextBoxFor(m => m.Bookmark)</td>

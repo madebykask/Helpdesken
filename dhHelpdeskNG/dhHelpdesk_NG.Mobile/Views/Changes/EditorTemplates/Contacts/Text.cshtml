@@ -1,0 +1,13 @@
+﻿
+@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@model DH.Helpdesk.Web.Models.Changes.ChangeEdit.ConfigurableFieldModel<string>
+           
+@if (!Model.Show)
+{
+    return;
+}
+<span class="span3">
+    @Html.FieldCaption(Model)    
+</span>
+@Html.TextBoxFor(m => m.Value)
+@Html.HiddenFor(m => m.IsRequired)

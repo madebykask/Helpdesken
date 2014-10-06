@@ -1,0 +1,34 @@
+namespace DH.Helpdesk.Web.Models.Inventory.SearchModels
+{
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.Common.ValidationAttributes;
+
+    public class InventoryReportSearchViewModel
+    {
+        public InventoryReportSearchViewModel(
+            SelectList departments,
+            InventoryReportSearchFilter filter)
+        {
+            this.Departments = departments;
+            this.Filter = filter;
+        }
+
+        [NotNull]
+        public InventoryReportSearchFilter Filter { get; private set; }
+
+        [NotNull]
+        public SelectList Departments { get; private set; }
+
+        public static InventoryReportSearchViewModel BuildViewModel(
+            InventoryReportSearchFilter currentFilter,
+            List<ItemOverview> departments)
+        {
+            var departmentsSelectList = new SelectList(departments, "Value", "Name");
+
+            return new InventoryReportSearchViewModel(departmentsSelectList, currentFilter);
+        }
+    }
+}

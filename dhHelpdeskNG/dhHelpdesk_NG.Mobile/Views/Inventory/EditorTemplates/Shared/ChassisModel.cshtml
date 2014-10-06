@@ -1,0 +1,11 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Shared.ChassisFieldsModel
+<table class="tableform">
+    @if (Model.Chassis.Show)
+    {
+        <tr>
+            <th colspan="2" class="header">@Translation.Get("Chassis")</th>
+        </tr>
+    }
+    @Html.EditorFor(m => m.Chassis, "NotReadonlyFields/Text")
+</table>
+

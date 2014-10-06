@@ -1,0 +1,103 @@
+﻿
+@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@model DH.Helpdesk.Web.Models.Notifiers.InputModel
+
+<div class="container">
+    <h4>@Translation.Get("Organisation", Enums.TranslationSource.TextTranslation)</h4>
+    <div class="row">
+        <div class="span12">
+            <table class="tableform">
+                @Html.EditorFor(m => m.Title, "TextBox")
+                                    
+                @if (Model.Region.Show)
+                {
+                    <tr>
+                        <td class="span3">
+                            @Translation.Get(Model.Region.Caption, Enums.TranslationSource.TextTranslation)
+                        </td>
+                        <td>
+                            @Html.DropDown("region_dropdown", "RegionId", !Model.Region.Required, Model.Region.Value)
+                        </td>
+                    </tr>
+                }
+
+                @if (Model.Department.Show)
+                {
+                    <tr>
+                        <td class="span3">
+                            @(Translation.Get(Model.Department.Caption, Enums.TranslationSource.TextTranslation) + (Model.Department.Required ? "*" : string.Empty))
+                        </td>
+                        <td>
+                            <div id="department_dropdown_container">
+                                @Html.Partial("DepartmentDropDown", Model.Department.Value, new ViewDataDictionary { { "Required", true } })
+                            </div>
+                        </td>
+                    </tr>
+                }
+
+                @Html.EditorFor(m => m.Unit, "TextBox")
+                                    
+                @if (Model.OrganizationUnit.Show)
+                {
+                    <tr>
+                        <td class="span3">
+                            @(Translation.Get(Model.OrganizationUnit.Caption, Enums.TranslationSource.TextTranslation) + (Model.OrganizationUnit.Required ? "*" : string.Empty))
+                        </td>
+                        <td>
+                            @Html.DropDown("organization_unit_dropdown", "OrganizationUnitId", !Model.OrganizationUnit.Required, Model.OrganizationUnit.Value)
+                        </td>
+                    </tr>
+                }
+
+                @if (Model.Division.Show)
+                {
+                    <tr>
+                        <td class="span3">
+                            @(Translation.Get(Model.Division.Caption, Enums.TranslationSource.TextTranslation) + (Model.Division.Required ? "*" : string.Empty))
+                        </td>
+                        <td>
+                            @Html.DropDown("division_dropdown", "DivisionId", !Model.Division.Required, Model.Division.Value)
+                        </td>
+                    </tr>
+                }
+                                    
+                @if (Model.Managers.Show)
+                {
+                    <tr>
+                        <td class="span3">
+                            @(Translation.Get(Model.Managers.Caption, Enums.TranslationSource.TextTranslation) + (Model.Managers.Required ? "*" : string.Empty))
+                        </td>
+                        <td>
+                            @{
+                                int? selectedManagerId = null;
+                                string selectedManagerDisplayName = null;
+
+                                if (!string.IsNullOrEmpty(Model.Managers.Value.SelectedValue))
+                                {
+                                    selectedManagerId = int.Parse(Model.Managers.Value.SelectedValue);
+                                    selectedManagerDisplayName = Model.Managers.Value.Items.Single(m => m.Value == Model.Managers.Value.SelectedValue).Name;
+                                }
+                            }
+                            <input id="manager_textbox" type="text" value="@selectedManagerDisplayName" />
+                            <input id="manager_id_hidden" type="hidden" name="ManagerId" value="@selectedManagerId" />
+                        </td>
+                    </tr>
+                }
+                
+                @if (Model.Group.Show)
+                {
+                    <tr>
+                        <td class="span3">
+                            @(Translation.Get(Model.Group.Caption, Enums.TranslationSource.TextTranslation) + (Model.Group.Required ? "*" : string.Empty))
+                        </td>
+                        <td>
+                            @Html.DropDown("group_dropdown", "GroupId", !Model.Group.Required, Model.Group.Value)
+                        </td>
+                    </tr>
+                }
+                
+                @Html.EditorFor(m => m.Other, "TextArea")
+            </table>
+        </div>
+    </div>
+</div>

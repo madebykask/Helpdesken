@@ -1,0 +1,24 @@
+﻿
+@model DH.Helpdesk.Web.Models.Notifiers.ConfigurableFields.StringFieldModel
+           
+@if (Model.Show)
+{
+    <tr>
+        <td class="span3">
+            @if (!Model.Required)
+            {
+                @Translation.Get(Model.Caption, Enums.TranslationSource.TextTranslation)
+            }
+            else
+            {
+                @(Translation.Get(Model.Caption, Enums.TranslationSource.TextTranslation) + "*")
+            }
+        </td>
+        <td class="span9">
+            @Html.TextBoxFor(m => m.Value)
+            @Html.ValidationMessageFor(m => m.Value)
+            @Html.HiddenFor(m => m.Required)
+            @Html.HiddenFor(m => m.MaxLength)
+        </td>
+    </tr>
+}

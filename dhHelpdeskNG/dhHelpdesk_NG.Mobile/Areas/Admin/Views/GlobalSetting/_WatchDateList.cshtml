@@ -1,0 +1,19 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model IList<DH.Helpdesk.Domain.WatchDateCalendarValue>
+<thead>
+    <tr>
+        <th>
+            @Translation.Get("Datum för bevakning", Enums.TranslationSource.TextTranslation)
+        </th>
+    </tr>
+</thead>
+<tbody>
+    @foreach (var item in Model)
+    { 
+        <tr>
+            <td>
+                <a href="@Url.Action("editwatchdate", "globalsetting", new { id = item.Id })">@item.WatchDate.ToShortDateString()</a>
+            </td>
+        </tr> 
+    }
+</tbody>

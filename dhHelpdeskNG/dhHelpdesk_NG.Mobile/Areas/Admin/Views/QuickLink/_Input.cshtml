@@ -1,0 +1,176 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Admin.Models.QuickLinkInputViewModel
+
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-1">@Translation.Get("Snabblänk", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment1">
+                <div class="container">
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-error">@Translation.Get("Snabblänk", Enums.TranslationSource.TextTranslation)
+                            @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+                        </div>    
+                    }
+                    <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                       URL @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)<span class="mandatorystar">*</span>
+                                    </td>
+                                    <td class="span9">
+                                        @Html.TextBoxFor(model => model.Link.URLName, new { maxlength = "50" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Grupp", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.Link.LinkGroup_Id, Model.LinkGroups, "" )
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("URL adress", Enums.TranslationSource.TextTranslation)<span class="mandatorystar">*</span>
+                                    </td>
+                                    <td>
+                                        @Html.TextAreaFor(model => model.Link.URLAddress)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Dokument", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.Link.Document_Id, Model.Documents, "")
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Öppna i nytt fönster", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="Link.OpenInNewWindow" @(Model.Link.OpenInNewWindow == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="Link.OpenInNewWindow" value="0" />
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Visa", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="Link.ShowOnStartPage" @(Model.Link.ShowOnStartPage == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="Link.ShowOnStartPage" value="0" />
+                                        &nbsp;@Translation.Get("Visa på startsidan", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Sorteringsordning", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.Link.SortOrder, new { maxlength = "10", style = "width: 20px;" })
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <h4>@Translation.Get("Säkerhet", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                         @Translation.Get("Användare", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
+                                       <label class="checkbox">
+                                        <input type="checkbox" name="link.user" id="link.user" @(Model.UsSelected.Count > 0 ? "checked=checked" : "") value="1" onclick="showUserList()"/>
+                                        &nbsp;@Translation.Get("Begränsa läsrättighet till", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row" id="divUser" @(Model.UsSelected.Count > 0  ? "style=display" : "block") style="display:none;">
+                        <div class="span20">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+
+                                    </td>
+                                    <td class="span15">
+                                        @Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Translation.Get("Valda", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                         
+                                    </td>
+                                    <td>
+                                        @Html.ListBox("UsAvailable", Model.UsAvailable, new { style = "width: 400px; height: 150px" })
+                                        <input type="button" value="&lt;" id="removeUs" />
+                                        <input type="button" value="&gt;" id="addUs" />
+                                    </td>
+                                    <td>
+                                        @Html.ListBox("UsSelected", Model.UsSelected, new { style = "width: 400px; height: 150px" })
+                                    </td>
+                                </tr>
+                            </table>
+                 
+                            @Html.HiddenFor(model => model.Link.Id)
+                            @Html.HiddenFor(model => model.Link.Customer_Id)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function submitForm() {
+        $("#UsSelected option").attr("selected", "selected");
+        $("#target").submit();
+    }
+
+    function showUserList() {
+
+        if (document.getElementById("link.user").checked == true) {
+
+            document.getElementById("divUser").style.display = "";
+            
+        }
+        else {
+            document.getElementById("divUser").style.display = "none";
+            
+        }
+    }
+
+    $("#addUs").click(function () {
+        $("#UsAvailable option:selected").remove().appendTo("#UsSelected");
+        $("#UsAvailable").get(0).selectedIndex = -1;
+        $("#UsSelected").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#removeUs").click(function () {
+        $("#UsSelected option:selected").remove().appendTo("#UsAvailable");
+        $("#UsAvailable").get(0).selectedIndex = -1;
+        $("#UsAvailable").get(0).selectedIndex = -1;
+        return false;
+    });
+</script>
+
+

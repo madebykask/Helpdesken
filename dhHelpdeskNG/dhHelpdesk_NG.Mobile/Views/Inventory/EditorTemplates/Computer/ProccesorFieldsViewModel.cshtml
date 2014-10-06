@@ -1,0 +1,11 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.ProccesorFieldsViewModel
+<table class="tableform">
+    @if (Model.ProccesorFieldsModel.ProccesorId.Show)
+    {
+        <tr>
+            <th colspan="2" class="header">@Translation.Get("Processor")</th>
+        </tr>
+    }
+    @Html.EditorFor(m => m.ProccesorFieldsModel.ProccesorId, "Fields/List", new { Source = Model.Proccessors })
+</table>
+

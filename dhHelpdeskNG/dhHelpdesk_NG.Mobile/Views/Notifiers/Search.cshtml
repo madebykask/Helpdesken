@@ -1,0 +1,68 @@
+﻿
+@using DH.Helpdesk.BusinessData.Enums.Notifiers
+@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@model DH.Helpdesk.Web.Models.Notifiers.SearchModel
+
+@using (Ajax.BeginForm("Search", null, new AjaxOptions { UpdateTargetId = "notifiers_grid" }, new { id = "search_form" }))
+{
+    @Html.HiddenFor(m => m.SortField.Name, new { id = "sortFieldName" })
+    @Html.HiddenFor(m => m.SortField.SortBy, new { id = "sortFieldBy" })
+
+    <div class="span6">
+        <table class="tableform">
+            @if (Model.Domain.Show)
+            {
+                <tr>
+                    <td class="span3">@Translation.Get("Domän", Enums.TranslationSource.TextTranslation)</td>
+                    <td>@Html.DropDown("domain_dropdown", "DomainId", true, Model.Domain.Content)</td>
+                </tr>
+            }
+
+            @if (Model.Department.Show)
+            {
+                <tr>
+                    <td>@Translation.Get("Område", Enums.TranslationSource.TextTranslation)</td>
+                    <td>@Html.DropDown("region_dropdown", "RegionId", true, Model.Region.Content)</td>
+                </tr>
+                <tr>
+                    <td>@Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation)</td>
+                    <td>
+                        <div id="department_dropdown_container">
+                            @Html.Partial("DepartmentDropDown", Model.Department.Content)
+                        </div>
+                    </td>
+                </tr>
+            }
+
+            @if (Model.Division.Show)
+            {
+                <tr>
+                    <td>@Translation.Get("Division", Enums.TranslationSource.TextTranslation)</td>
+                    <td>@Html.DropDown("division_dropdown", "DivisionId", true, Model.Division.Content)</td>
+                </tr>
+            }
+
+            <tr>
+                <td>@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)</td>
+                <td>@Html.TextBoxFor(m => m.Pharse)</td>
+            </tr>
+        </table>
+    </div>
+    <div class="span6">
+        <p>
+            @Html.RadioButton("Status", NotifierStatus.Active, Model.Status == NotifierStatus.Active)
+            @Translation.Get("Aktiva", Enums.TranslationSource.TextTranslation)
+            @Html.RadioButton("Status", NotifierStatus.Inactive, Model.Status == NotifierStatus.Inactive)
+            @Translation.Get("Inaktiva", Enums.TranslationSource.TextTranslation)
+            @Html.RadioButton("Status", NotifierStatus.None, Model.Status == NotifierStatus.None)
+            @Translation.Get("Alla", Enums.TranslationSource.TextTranslation)
+        </p>
+        <p>
+            @Translation.Get("poster per sida", Enums.TranslationSource.TextTranslation)
+            @Html.TextBoxFor(m => m.RecordsOnPage, new { @class = "inputw50" })
+        </p>
+        <p>
+            <input type="submit" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" class="btn" />
+        </p>
+    </div>
+}

@@ -1,0 +1,35 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.SearchModels.PrinterSearchViewModel
+@using (Ajax.BeginForm("PrintersGrid", "Inventory", null, new AjaxOptions { UpdateTargetId = "grid_container" }, new { id = "search_form" }))
+{
+    @Html.HiddenFor(m => m.Filter.SortField.Name, new { id = "sortFieldName" })
+    @Html.HiddenFor(m => m.Filter.SortField.SortBy, new { id = "sortFieldBy" })
+
+    <table class="tableform">
+
+        @if (Model.Settings.DepartmentFieldSetting.IsShow)
+        {
+            <tr>
+                <td class="span3">@Translation.Get(Model.Settings.DepartmentFieldSetting.Caption)</td>
+                <td>@Html.DropDownListFor(m => m.Filter.DepartmentId, Model.Departments, string.Empty)</td>
+            </tr>
+        }
+        <tr>
+            <td class="span3">
+                @Html.LabelFor(m => m.Filter.SearchFor)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.Filter.SearchFor)
+            </td>
+        </tr>
+        <tr>
+            <td class="span3">&nbsp;
+            </td>
+            <td>
+                <input type="submit" value="@Translation.Get("Sök")" class="btn" />
+            </td>
+        </tr>
+    </table>
+}
+<div id="grid_container">
+    @Html.Action("PrintersGrid", "Inventory", new { area = string.Empty, filter = Model.Filter })
+</div>

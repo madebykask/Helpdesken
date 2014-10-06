@@ -1,0 +1,69 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Admin.Models.UserInputViewModel
+@{
+    ViewBag.Title = "Edit";
+    string copy = Request.QueryString["copy"];
+    
+}
+@using (Html.BeginForm("edit", "users", new { id = Model.User.Id }, FormMethod.Post, new { id = "target" }))
+{
+<div class="secnavs fixed">
+    <div class="pull-left">
+        <ul class="secnav">
+            <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { id = Model.User.Id }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
+            @if (Model.User.UserGroup_Id > 2)
+            {
+                <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "delete", new { id = Model.User.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) })</li>
+            }
+            @if (copy !=  "1")
+            {
+                <li>@Html.ActionLink(Translation.Get("Kopiera", Enums.TranslationSource.TextTranslation), "edit", new { id = Model.User.Id, copy = 1 }, new { @class = "btn" })</li>
+            }
+            <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", null, new { @class = "btn" })</li>
+        </ul>
+    </div>
+</div>
+@Html.Partial("_Input", Model)
+
+}
+@section Scripts {
+    <script type="text/javascript">
+
+        $(function () {
+
+            var validator = $("#target").validate({
+                rules: {
+                    "User.UserID": {
+                        required: true
+                    },
+                    "User.FirstName": {
+                        required: true
+                    },
+                    "User.SurName": {
+                        required: true
+                    },
+                    "User.Email": {
+                        required: true
+                    }
+                },
+                messages: {
+                    "User.UserID": {
+                        required: "@Translation.Get("Du måste ange ett Användar ID", Enums.TranslationSource.TextTranslation)"
+                    },
+                    "User.FirstName": {
+                        required: "@Translation.Get("Du måste ange ett namn", Enums.TranslationSource.TextTranslation)"
+                    },
+                    "User.SurName": {
+                        required: "@Translation.Get("Du måste ange ett namn", Enums.TranslationSource.TextTranslation)"
+                    },
+                    "User.Email": {
+                        required: "@Translation.Get("You must specify an e-mail address", Enums.TranslationSource.TextTranslation)"
+                    }
+                },
+                submitHandler: function (form) {
+                    submitForm();
+                    form.submit();
+                }
+            });
+        });
+</script>

@@ -1,0 +1,14 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.OrganizationFieldsViewModel
+<table class="tableform">
+    @if (Model.OrganizationFieldsModel.DepartmentId.Show
+        || Model.OrganizationFieldsModel.DomainId.Show
+        || Model.OrganizationFieldsModel.UnitId.Show)
+    {
+        <tr>
+            <th colspan="2" class="header">@Translation.Get("Organisation")</th>
+        </tr>
+    }
+    @Html.EditorFor(m => m.OrganizationFieldsModel.DepartmentId, "Fields/List", new { Source = Model.Departments })
+    @Html.EditorFor(m => m.OrganizationFieldsModel.DomainId, "Fields/List", new { Source = Model.Domains })
+    @Html.EditorFor(m => m.OrganizationFieldsModel.UnitId, "Fields/List", new { Source = Model.Units })
+</table>

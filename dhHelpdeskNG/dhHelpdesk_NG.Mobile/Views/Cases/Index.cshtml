@@ -1,0 +1,198 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Models.Case.CaseIndexViewModel
+
+@section Scripts {
+
+   <script type="text/javascript">
+
+        $('#divCaseType ul.dropdown-menu li a').click(function (e) {
+            e.preventDefault();
+            var val = $(this).attr('value');
+            $("#divBreadcrumbs_CaseType").text(getBreadcrumbs(this));
+            $("#hidFilterCaseTypeId").val(val);
+        });
+
+        $('#divProductArea ul.dropdown-menu li a').click(function (e) {
+            e.preventDefault();
+            var val = $(this).attr('value');
+            $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(this));
+            $("#hidFilterProductAreaId").val(val);
+        });
+
+
+        $('#divClosingReason ul.dropdown-menu li a').click(function (e) {
+            e.preventDefault();
+            var val = $(this).attr('value');
+            $("#divBreadcrumbs_ClosingReason").text(getBreadcrumbs(this));
+            $("#hidFilterClosingReasonId").val(val);
+        });
+
+        $('#btnSearch').click(function (e) {
+            e.preventDefault();
+            search();
+            setFilterIcon();
+        });
+
+        $('#SettingTab').click(function (e) {
+            $('#btnSaveCaseSetting').show();
+            $('#btnNewCase').hide();
+            $('#btnCaseTemplate').hide();
+        });
+
+        $('#CasesTab').click(function (e) {            
+            $('#btnNewCase').show();
+            $('#btnCaseTemplate').show();
+            $('#btnSaveCaseSetting').hide();
+        });
+
+        function search() {
+            $.post('/Cases/Search/', $("#frmCaseSearch").serialize(), function (result) {
+                $('#search_result').html(result);
+            });
+        }
+
+        function sortCases(sortBy) {
+            var asc = $("#hidSortByAsc").val();
+            var selected = $("#hidSortBy").val();
+
+            if (sortBy == selected) {
+                asc = asc.toLowerCase().match('true') ? 'false' : 'true';
+            }
+            else {
+                asc = 'true';
+            }
+
+            $("#hidSortBy").val(sortBy);
+            $("#hidSortByAsc").val(asc);
+            search();
+        }
+
+        // visa filter ikon på case/ärende sök
+        function setFilterIcon() {
+            $('#icoFilter').hide();
+            var sel = $('.multiselect option:selected').length;
+            var hid = 'undefined';
+
+            if ($('#hidFilterProductAreaId').length != 0) {
+                var hid = hid + $('#hidFilterProductAreaId').val();
+            }
+            if ($('#hidFilterCaseTypeId').length != 0) {
+                var hid = hid + $('#hidFilterCaseTypeId').val();
+            }
+            hid = hid.replace('undefined', '');
+            if (sel > 0 || hid != '') {
+                $('#icoFilter').show();
+            }
+        }
+
+        $(function () {
+            setFilterIcon();
+        });
+
+        window.onload = function () {
+            $('#btnNewCase').show();
+            $('#btnCaseTemplate').show();
+            $('#btnSaveCaseSetting').hide();
+        };
+
+        $('#btnSaveCaseSetting').click(function (e) {
+            e.preventDefault();
+            window.SaveSetting(e);            
+        });
+
+        function SaveSetting(e) {            
+            $.post('/Cases/SaveSetting/', $("#frmCaseSetting").serialize(), function (result) {                                
+            });
+            
+            $.post('/Cases/SaveColSetting/', $("#frmColCaseSetting").serialize(), function (result) {                
+            });
+
+            window.location.href = '@Url.Action("Index")';
+
+//            ShowToastMessage("Settings saved successfully.", 'success');
+        }
+        
+        // msgType : Success,Warning,Notice,Error
+        function ShowToastMessage(message, msgType) {
+            $().toastmessage('showToast', {
+                text: message,
+                sticky: false,
+                position: 'top-center',
+                type: msgType,
+                closeText: '',
+                stayTime: 3000,
+                inEffectDuration: 1000,
+                close: function () {
+                //console.log("toast is closed ...");
+                }
+            });
+        }
+    </script>
+}
+
+@if (Html.MasterModel() != null && SessionFacade.CurrentUser != null && Model != null)
+{    
+<div class="secnavs fixed">
+    <div class="pull-left">
+        <ul class="secnav">
+            @if (SessionFacade.CurrentUser.CreateCasePermission == 1)
+            {                                        
+                <li id="btnNewCase">
+                    @Html.ActionLink(Translation.Get("Skapa ärende"), "new", "cases", new { customerId = Model.caseSearchFilterData.filterCustomerId } , new { @class = "btn" })
+                </li>
+                <li id="btnCaseTemplate">                   
+                    @Html.Partial("_CaseTemplateTree", Model.CaseTemplateTreeButton)
+                </li>                
+            }                    
+            <li id="btnSaveCaseSetting">                   
+                <input type="button" class="btn" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" /> 
+            </li>    
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li id="CasesTab"  class="active"><a href="#fragment-1">@Translation.Get("Ärenden", Enums.TranslationSource.TextTranslation)</a></li>
+
+            @*
+            @if (Html.MasterModel().CustomerSetting.ModuleChangeManagement == 1)
+            {
+                <li><a href="#fragment-2">@Translation.Get("Ändringshantering", Enums.TranslationSource.TextTranslation)</a></li>    
+            }
+            @if (Html.MasterModel().CustomerSetting.ModuleOrder == 1)
+            {
+                <li><a href="#fragment-3">@Translation.Get("Beställningar", Enums.TranslationSource.TextTranslation)</a></li>
+            }
+            *@
+
+            <li id="SettingTab"><a href="#fragment-4">@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment-1">
+                    @Html.Partial("_Search", Model.caseSearchFilterData)
+                <div class="container" id="search_result">
+                    @Html.Partial("_CaseRows", Model.caseSearchResult)
+                </div>
+            </div>
+            <div class="tab-pane tab-pane-border" id="fragment-2">
+                <div class="container">
+                    -
+                </div>
+            </div>
+            <div class="tab-pane tab-pane-border" id="fragment-3">
+                <div class="container">
+                    -
+                </div>
+            </div>
+            <div class="tab-pane tab-pane-border " id="fragment-4">
+                <div id="setting_result" class="container">
+                    @Html.Partial("_CaseSetting", Model.CaseSetting)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+

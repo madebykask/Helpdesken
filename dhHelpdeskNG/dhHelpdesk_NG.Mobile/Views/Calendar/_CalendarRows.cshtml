@@ -1,0 +1,67 @@
+﻿@using DH.Helpdesk.Web.Infrastructure.Extensions
+@model IEnumerable<DH.Helpdesk.BusinessData.Models.Calendar.Output.CalendarOverview>
+
+@{var CurIcon = "";}
+                       
+<table class="table table-striped table-bordered table-hover" id="tblcalendar">    
+    <thead>             
+        <tr>                
+            <th sort-data="CalendarDate">
+                @Translation.Get("Datum")                                  
+                @{CurIcon = "CalendarDate";}
+                <a href="@Url.Action("Sort", "Calendar", new { fieldName = "CalendarDate" })"><i class="@CurIcon.SetCalendarSortIcon()"></i></a>                              
+            </th>           
+            <th sort-data="ShowUntilDate" onclick="submit();"  style="cursor: pointer; cursor: hand">
+                @Translation.Get("Visa t.o.m")                                
+                @{CurIcon = "ShowUntilDate";}
+                <i class="@CurIcon.SetCalendarSortIcon()"></i>                
+            </th>
+            <th sort-data="Caption" onclick="submit();"  style="cursor: pointer; cursor: hand">
+                @Translation.Get("Rubrik")               
+                @{CurIcon = "Caption";}
+                <i class="@CurIcon.SetCalendarSortIcon()"></i>                                
+            </th>
+            <th sort-data="Text" onclick="submit();"  style="cursor: pointer; cursor: hand">
+                @Translation.Get("Text")           
+                @{CurIcon = "Text";}
+                <i class="@CurIcon.SetCalendarSortIcon()"></i>                               
+            </th>
+            <th sort-data="ShowOnStartPage" onclick="submit();"  style="cursor: pointer; cursor: hand">
+                @Translation.Get("Visa på startsidan")                
+                @{CurIcon = "ShowOnStartPage";}
+                <i class="@CurIcon.SetCalendarSortIcon()"></i>                
+            </th>
+            <th sort-data="PublicInformation" onclick="submit();"  style="cursor: pointer; cursor: hand">
+                @Translation.Get("Självservice")                
+                @{CurIcon = "PublicInformation";}
+                <i class="@CurIcon.SetCalendarSortIcon()"></i>                               
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {                               
+            <tr>
+                <td>
+                    <a href="@Url.Action("edit", "calendar", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CalendarDate, "Date")</a>
+                </td>
+                <td>
+                    <a href="@Url.Action("edit", "calendar", new { id = item.Id })">@Html.DisplayFor(modelItem => item.ShowUntilDate , "Date")</a>
+                </td>
+                <td>
+                    <a href="@Url.Action("edit", "calendar", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Caption)</a>
+                </td>
+                <td>
+                    <a href="@Url.Action("edit", "calendar", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Text)</a>
+                </td>
+                <td>
+                    <a href="@Url.Action("edit", "calendar", new { id = item.Id })">@Translation.Get(item.ShowOnStartPage.BoolToYesNo())</a>
+                </td>
+                <td>
+                    <a href="@Url.Action("edit", "calendar", new { id = item.Id })">@Translation.Get(item.PublicInformation.BoolToYesNo())</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+     

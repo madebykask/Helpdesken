@@ -1,0 +1,57 @@
+﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
+@using DH.Helpdesk.BusinessData.OldComponents
+@using DH.Helpdesk.Web.Infrastructure
+
+@section Scripts {
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        CaseInitForm();
+    });
+    
+</script>
+}
+
+@Html.Partial("_Plupload")
+
+@if (Model != null)
+{
+    using (Html.BeginForm("new", "cases", null, FormMethod.Post, new { id = "target" }))
+    {        
+    <div class="secnavs fixed">
+        <div class="pull-left">
+            <ul class="secnav">
+                <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "NewCaseAndClose();return false;", @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "NewCaseAndAddCase();return false;", @class = "btn" })</li>
+                <li class="secspace"></li>
+                <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn" })</li>
+            </ul>
+        </div>
+    </div>
+    <div class="secnavs fixedrow2">
+        <div class="pull-left">
+            <ul class="secnav">
+                @if (Model.Languages != null && Model.Languages.Count() > 1)
+                {
+                    <li>
+                        <select id="case__RegLanguage_Id" name="case_.RegLanguage_Id" class="span2">
+                            @foreach(var e in Model.Languages)
+                            {
+                                <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.RegLanguage_Id.ToString()) >@e.LanguageId</option>
+                            }
+                        </select>
+                    </li>
+                    <li class="secspace"></li>
+                }     
+                else
+                {
+                    <li>@Html.HiddenFor(m => m.case_.RegLanguage_Id)</li>
+                }                                                                         
+            </ul>
+        </div>
+    </div>
+    @Html.Partial("_Input", Model)
+    }
+}
+

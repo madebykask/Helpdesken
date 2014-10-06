@@ -1,0 +1,109 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Admin.Models.ComputerUserGroupInputViewModel
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-error">@Translation.Get("AD-grupp", Enums.TranslationSource.TextTranslation)
+        @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+    </div>    
+}
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-1">@Translation.Get("AD-grupp", Enums.TranslationSource.TextTranslation)</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment1">
+                <div class="container">
+                    <div class="row">
+                        <div class="span8">
+                            <table class="tableform" border="0">
+                                <tr>
+                                    <td>
+                                        @Translation.Get("AD-grupp", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.ComputerUserGroup.Name, new { maxlength = "50", style = "width: 200px;" })
+                                    </td>
+                                    <td>
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("LDAP-sökväg", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.ComputerUserGroup.Path, new { maxlength = "200" })
+                                    </td>
+                                    <td>
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Typ", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(m => m.ComputerUserGroup.Type, Model.TypeChoices, "", new { style = "width: auto;" })
+                                    </td>
+                                    <td>
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Enhet", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Translation.Get("Valda", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        @Html.ListBox("OUsAvailable", Model.OUsAvailable, new { style = "width: 400px; height: 100px" })
+                                        <input type="button" value="&lt;" id="removeOUs" />
+                                        <input type="button" value="&gt;" id="addOUs" />
+                                    </td>
+                                    <td>
+                                        @Html.ListBox("OUsSelected", Model.OUsSelected, new { style = "width: 400px; height: 100px" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Standard", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="computerusergroup.IsDefault" @(Model.ComputerUserGroup.IsDefault == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="computerusergroup.IsDefault" value="0" />
+                                    </td>
+                                    <td>
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Visa", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="computerusergroup.ShowOnStartPage" @(Model.ComputerUserGroup.ShowOnStartPage == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="computerusergroup.ShowOnStartPage" value="0" />
+                                    </td>
+                                    <td>
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                            </table>
+                            @Html.HiddenFor(model => model.ComputerUserGroup.Customer_Id)
+                            @Html.HiddenFor(model => model.ComputerUserGroup.Id)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

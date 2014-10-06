@@ -1,0 +1,43 @@
+﻿@using System.Globalization
+@model DH.Helpdesk.BusinessData.Models.Users.Output.UserModuleOverview
+<tr>
+    <td>
+        @Html.HiddenFor(m => m.Module_Id)
+        @Html.HiddenFor(m => m.User_Id)
+        @Html.HiddenFor(m => m.Position)
+        @Html.CheckBoxFor(m => m.isVisible)
+    </td>
+    <td>
+        @Model.Module.Name
+    </td>
+    <td>
+        @Html.DropDownListFor(m => m.NumberOfRows, 
+                GetNumberOfRowsList(), 
+                new { @style = "width: 5em;"})
+    </td>
+</tr>
+@functions{
+
+    private IEnumerable<SelectListItem> GetNumberOfRowsList()
+    {
+        var list = new List<SelectListItem>();
+        for (int i = 1; i <= 10; i++)
+        {
+            list.Add(new SelectListItem()
+            {
+                Value = i.ToString(CultureInfo.InvariantCulture),
+                Text = i.ToString(CultureInfo.InvariantCulture),
+                Selected = Model.NumberOfRows == i
+            });
+        }
+        list.Add(new SelectListItem()
+        {
+            Value = string.Empty,
+            Text = Translation.Get("All", Enums.TranslationSource.TextTranslation),
+            Selected = !Model.NumberOfRows.HasValue
+        });        
+        return list;
+    }
+
+} 
+

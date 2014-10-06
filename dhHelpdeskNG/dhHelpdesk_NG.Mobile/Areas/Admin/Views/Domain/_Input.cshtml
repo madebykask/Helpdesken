@@ -1,0 +1,163 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Admin.Models.DomainInputViewModel
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-error">@Translation.Get("Domän", Enums.TranslationSource.TextTranslation)
+        @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+    </div>    
+}
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-1">@Translation.Get("Domän", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment1">
+                <div class="container">
+                    <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12"> 
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Domän", Enums.TranslationSource.TextTranslation)<span class="mandatorystar">*</span>
+                                    </td>
+                                    <td class="span9">
+                                        @Html.TextBoxFor(model => model.Domain.Name, new { maxlength = "50" })
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <h4>@Translation.Get("LDAP", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12"> 
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("LDAP Server", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
+                                        @Html.TextBoxFor(model => model.Domain.ServerName, new { maxlength = "100" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("LDAP Base", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.Domain.Base, new { maxlength = "100" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Filter", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.Domain.Filter, new { maxlenght = "50" })
+                                        @Translation.Get("(mail=*@datahalland.se)", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Användar ID", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.Domain.UserName, new { maxlength = "100" })
+                                    </td>
+                                </tr>
+                                @if (Model.Domain.Id == null || Model.Domain.Id == 0)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Translation.Get("Lösenord", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>
+                                            @Html.PasswordFor(model => model.NewPassword, new { maxlength = "20" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @Translation.Get("Bekräfta lösenord", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>
+                                            @Html.PasswordFor(model => model.ConfirmPassword, new { maxlength = "20" })
+                                        </td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td>
+                                            @Translation.Get("Lösenord", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(model => model.Domain.Password, new { maxlength = "20", disabled = "disable" }) <input type="button" value="@Translation.Get("Byt lösenord", Enums.TranslationSource.TextTranslation)" name="changePassword" class="changePassword btn"
+                                                    onclick="ChangePassword()" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                         </div>
+                    </div>
+                    <h4>@Translation.Get("Inventarier", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12"> 
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Folder", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
+                                        @Html.TextBoxFor(model => model.Domain.FileFolder, new { maxlength = "100" })
+                                    </td>
+                                </tr>
+                            </table>
+                            @Html.HiddenFor(model => model.Domain.Customer_Id)
+                            @Html.HiddenFor(model => model.Domain.Id)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="divPasswordDialog" class="modal hide fade">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>@Translation.Get("Byt lösenord", Enums.TranslationSource.TextTranslation)</h3>
+    </div>
+    <div class="modal-body">
+        @Html.Partial("_ChangePassword", Model)
+    </div>
+</div>
+<script type="text/javascript">
+
+    function ChangePassword() {
+
+        var mod = $('#divPasswordDialog').modal('show');
+
+        mod.find("#btnClose").on("click", function (e) {
+            mod.modal('hide');
+        });
+
+        mod.find("#btnSavePassword").on("click", function (e) {
+            if ($('#NewPassword').val() != $('#ConfirmPassword').val()) {
+                alert('@Translation.Get("Det nya lösenordet bekräftades inte korrekt. Kontrollera att nytt lösenord och bekräftat lösenord stämmer överens", Enums.TranslationSource.TextTranslation)');
+            } else {
+                $.post('/domain/EditPassword/', { id: $('#Domain_Id').val(), newPassword: $('#NewPassword').val(), confirmPassword: $('#ConfirmPassword').val() }, function (data) {
+                    alert('@Translation.Get("Lösenordet har ändrats", Enums.TranslationSource.TextTranslation)');
+
+                    $('#NewPassword').val('');
+                    $('#ConfirmPassword').val('');
+                });
+                }
+            mod.modal('hide');
+        });
+
+            mod.on("hide", function () {
+                $("#divPasswordDialog #btnSavePassword").off("click");
+                $("#divPasswordDialog #btnClose").off("click");
+            });
+        }
+</script>

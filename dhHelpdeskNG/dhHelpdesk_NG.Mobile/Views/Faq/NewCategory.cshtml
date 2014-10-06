@@ -1,0 +1,22 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Models.Faq.Output
+
+@model DH.Helpdesk.Web.Models.Faq.Output.NewCategoryModel
+
+@{
+    this.ViewBag.Title = @Translation.Get("New FAQ Category", Enums.TranslationSource.TextTranslation);
+}
+
+@using (this.Html.BeginForm("NewCategory", "Faq", FormMethod.Post, new { id = "category_edit_form" }))
+{
+    <input type="hidden" name="ParentCategoryId" value="@this.Model.ParentCategoryId" />
+    <div class="secnavs fixed">
+        <div class="pull-left">
+            <ul class="secnav">
+                <li><input type="submit" value="@Translation.Get("Save", Enums.TranslationSource.TextTranslation)" class="btn"/></li>
+                <li><a href="@this.Url.Action("Index")" class="btn">@Translation.Get("Cancel", Enums.TranslationSource.TextTranslation)</a></li>
+            </ul>
+        </div>
+    </div>
+    @this.Html.Partial("CategoryEditing", new EditingCategoryModel(string.Empty))
+}

@@ -1,0 +1,65 @@
+﻿@model DH.Helpdesk.Web.Models.CalendarIndexViewModel
+@{
+    ViewBag.Title = "Index";
+}
+<div class="secnavs fixed">
+    <div class="pull-left">
+        <ul class="secnav">
+            <li>@Html.ActionLink(Translation.Get("Ny händelse") , "new", null, new { @class = "btn" })</li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-1">@Translation.Get("Aktuellt")</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment-1">
+                @using (Html.BeginForm("index", "calendar", FormMethod.Post, new { id = "search" }))
+                {
+                    <div class="container">
+                        <table>                                 
+                            <tr>
+                                <td>
+                                    @Html.TextBoxFor(model => model.SearchCs, new { maxlength = "50" })                                   
+                                </td>
+                                <td>
+                                    <input type="button" class="btn" id="searchQueryBtn" value="@Translation.Get("Sök")" onclick="submit();" />                                    
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="container" id="searchResult">
+                        @Html.Partial("_CalendarRows", Model.Calendars)
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    var customerId = $("#currentCustomerId").val();
+   
+    $(function () { 
+        //tableOptions.sortable = false;
+        //tableOptions.pager = false;
+        //$("#tblcalendar").fixheadertable(tableOptions);
+        //$("#containerAdmin").layout();     
+              
+        $("#currentCustomer").change(function () {
+            $("#search").submit();
+        });
+    });
+
+    $(document).on('click', 'th', function (e) {        
+        var sortBy = $(this).attr('sort-data');                
+        $.ajax({
+            url: 'Calendar/Sort/?FieldName=' + sortBy,
+            type: 'POST'           
+        });       
+    });       
+
+</script>

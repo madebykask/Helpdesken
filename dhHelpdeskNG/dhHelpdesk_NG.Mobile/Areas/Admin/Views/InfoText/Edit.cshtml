@@ -1,0 +1,102 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Admin.Models.InfoTextInputViewModel
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-error">@Translation.Get("Informationstext", Enums.TranslationSource.TextTranslation)
+        @Translation.Get(" som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+    </div>    
+}
+@{              
+    ViewBag.Title = "Edit";
+}
+@using (Html.BeginForm("edit", "infotext", new { id = Model.Customer.Id, area = "admin" }, FormMethod.Post, new { id = "target" }))
+{
+    <div class="secnavs fixed">
+        <div class="pull-left">
+            <ul class="secnav">
+                <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", new { customerId = Model.InfoTextShowViewModel.Customer.Id }, new { @class = "btn" })</li>
+            </ul>
+        </div>
+    </div>
+
+<div class="content">
+    <div class="container">
+        <input type="hidden" id="customerId" name="customerId" value="@Model.Customer.Id" />
+        <input type="hidden" id="infoTypeId" name="infoTypeId" value="@Model.InfoTextShowViewModel.InfoText.Type" />
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-1">@Translation.Get("Informationstext", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
+        </ul>
+        <div class="tab-pane tab-pane-border active" id="fragment1">
+                <div class="container">
+        @if (Model.InfoTextShowViewModel.InfoText.Type == 1)
+        {
+            <h4>@Translation.Get("Självservice", Enums.TranslationSource.TextTranslation)</h4>
+        }
+        @if (Model.InfoTextShowViewModel.InfoText.Type == 2)
+        {
+            <h4>@Translation.Get("Ny anmälare", Enums.TranslationSource.TextTranslation)</h4>
+        }
+        @if (Model.InfoTextShowViewModel.InfoText.Type == 4)
+        {
+            <h4>@Translation.Get("Enkät", Enums.TranslationSource.TextTranslation)</h4>
+        }
+        @if (Model.InfoTextShowViewModel.InfoText.Type == 5)
+        {
+            <h4>@Translation.Get("Bekräftelse självservice", Enums.TranslationSource.TextTranslation)</h4>
+        }
+        @if (Model.InfoTextShowViewModel.InfoText.Type == 6)
+        {
+            <h4>@Translation.Get("Information självservice", Enums.TranslationSource.TextTranslation)</h4>
+        }
+        @if (Model.InfoTextShowViewModel.InfoText.Type == 7)
+        {
+            <h4>@Translation.Get("Beställning", Enums.TranslationSource.TextTranslation)</h4>
+        }
+        @Html.DropDownList("LanguageId", Model.Languages, new { id = "LanguageId", onchange = "changeLanguageList(this.options[this.selectedIndex].value);" })
+        <div id="infotextshow_container">
+            <span id="languageList">
+                @if (Model.Customer.Id != null)
+                {
+                    @Html.Partial("_InfoTextPartialView", Model.InfoTextShowViewModel)
+                }
+            </span>
+        </div>
+    </div>
+                        
+            </div>
+        </div>
+    </div>
+}
+@section Scripts {
+    <script type="text/javascript">
+
+        $(function () {
+            var validator = $("#target").validate({
+                rules: {
+                    "InfoText.Name": {
+                        required: true
+                    }
+                },
+                messages: {
+                    "InfoText.Name": {
+                        required: "@Translation.Get("Du måste ange en text", Enums.TranslationSource.TextTranslation)"
+                    }
+                },
+                submitHandler: function (form) {
+                    form.submit();
+                }
+            });
+        });
+
+        function changeLanguageList(id) {
+            var list = $("#languageList");
+            list.html("");
+            if (id != "") {
+                $.get('/InfoText/UpdateLanguageList/' + id + '?customerId=' + $("#customerId").val() + '&infoTypeId=' + $("#infoTypeId").val(), function (result) {
+                    list.html(result);
+                });
+            }
+        }
+    </script>
+}

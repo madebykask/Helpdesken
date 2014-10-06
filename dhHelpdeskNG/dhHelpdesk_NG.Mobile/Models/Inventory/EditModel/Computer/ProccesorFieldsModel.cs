@@ -1,0 +1,19 @@
+﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Computer
+{
+    using DH.Helpdesk.Common.ValidationAttributes;
+
+    public class ProccesorFieldsModel
+    {
+        public ProccesorFieldsModel()
+        {
+        }
+
+        public ProccesorFieldsModel(ConfigurableFieldModel<int?> proccesorId)
+        {
+            this.ProccesorId = proccesorId;
+        }
+
+        [NotNull]
+        public ConfigurableFieldModel<int?> ProccesorId { get; set; }
+    }
+}

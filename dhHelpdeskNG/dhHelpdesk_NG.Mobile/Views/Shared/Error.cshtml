@@ -1,0 +1,21 @@
+﻿@model HandleErrorInfo
+@{
+    ViewBag.Title = "Error (" + Model.Exception.Message + ")";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="content">
+   <div class="container">
+        <h2 style="margin: 10px 0;">
+            Sorry, an error occurred while processing your request.
+        </h2>
+        <p style="margin: 10px 0;">
+            @DateTime.Now
+        </p>
+        <p style="margin: 10px 0;">
+            Error message: @Model.Exception.Message
+        </p>
+        <p id="exception" style="padding: 10px; background: #ffa;">
+            Exception: @Model.Exception.ToString()
+        </p>
+    </div>
+</div>
