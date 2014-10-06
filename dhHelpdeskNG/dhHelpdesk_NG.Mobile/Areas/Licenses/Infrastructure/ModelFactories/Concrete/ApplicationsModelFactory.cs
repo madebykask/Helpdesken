@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Licenses.Infrastructure.ModelFactories.Concrete
 {
     using DH.Helpdesk.BusinessData.Models.Licenses;
+    using DH.Helpdesk.BusinessData.Models.Licenses.Applications;
     using DH.Helpdesk.Web.Areas.Licenses.Models.Applications;
 
     public sealed class ApplicationsModelFactory : IApplicationsModelFactory

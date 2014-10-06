@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Licenses.Infrastructure.ModelFactories.Concrete
 {
     using DH.Helpdesk.BusinessData.Models.Licenses;
+    using DH.Helpdesk.BusinessData.Models.Licenses.Vendors;
     using DH.Helpdesk.Web.Areas.Licenses.Models.Vendors;
 
     public sealed class VendorsModelFactory : IVendorsModelFactory
