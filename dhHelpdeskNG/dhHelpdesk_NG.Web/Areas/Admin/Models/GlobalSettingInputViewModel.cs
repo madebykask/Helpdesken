@@ -43,6 +43,7 @@
         public int TimeTil { get; set; }
         public int Year { get; set; }
         public string ChangedHeaderName { get; set; }
+        public string HolidayName { get; set; }
 
         public Holiday Holiday { get; set; }
         public HolidayHeader HolidayHeader { get; set; }
@@ -63,6 +64,7 @@
         public WatchDateCalendar WatchDateCalendar { get; set; }
         public IList<SelectListItem> YearList { get; set; }
         public IList<SelectListItem> WatchDateCalendars { get; set; }
+        public string WatchDateValueName { get; set; }
 
         public IEnumerable<WatchDateCalendarValue> WatchDateCalendarValues { get; set; }
     }

@@ -8,6 +8,7 @@
         public int WatchDateCalendar_Id { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime WatchDate { get; set; }
+        public string WatchDateValueName { get; set; }
 
         public virtual WatchDateCalendar WatchDateCalendar { get; set; }
     }

@@ -155,6 +155,7 @@
             var holidayToSave = this._holidayService.GetHoliday(id);
             holidayToSave.TimeFrom = vmodel.TimeFrom;
             holidayToSave.TimeUntil = vmodel.TimeTil;
+            holidayToSave.HolidayName = vmodel.HolidayName;
 
             if (holidayToSave.HolidayHeader.Name != vmodel.ChangedHeaderName)
             {
@@ -1010,7 +1011,7 @@
         }
 
 
-        public string AddRowToHolidays(int holidayheaderid, DateTime holidaydate, int timefrom, int timeUntil)
+        public string AddRowToHolidays(int holidayheaderid, DateTime holidaydate, int timefrom, int timeUntil, string holidayname)
         {
             var holiday = new Holiday();
             var year = DateTime.Today.Year;
@@ -1028,6 +1029,7 @@
                 holiday.TimeFrom = timefrom;
                 holiday.TimeUntil = timeUntil;
                 holiday.CreatedDate = DateTime.UtcNow;
+                holiday.HolidayName = holidayname;
 
             }
 
@@ -1077,7 +1079,7 @@
             //return this.View(model);
         }
 
-        public string AddRowToWatchDateCalendarValue(int watchdatecalendarid, DateTime watchdate)
+        public string AddRowToWatchDateCalendarValue(int watchdatecalendarid, DateTime watchdate, string watchdatevaluenname)
         {
             var wdcv = new WatchDateCalendarValue();
             var year = DateTime.Today.Year;
@@ -1092,6 +1094,7 @@
                 wdcv.WatchDate = watchdate;
                 wdcv.WatchDateCalendar_Id = watchdatecalendarid;
                 wdcv.CreatedDate = DateTime.UtcNow;
+                wdcv.WatchDateValueName = watchdatevaluenname;
             }
 
             model.WatchDateCalendarValue = wdcv;

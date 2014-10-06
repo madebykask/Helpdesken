@@ -34,6 +34,7 @@
                                         @Html.LabelFor(model => model.HolidayHeader.Id, Model.HolidayHeader.Name)
                                         <input type="hidden" id="holidayheaderId" value="@Model.HolidayHeader.Id" />
                                     </td>
+                                    <td></td>
                                     <td>
                                         <a href="@Url.Action("EditHolidayHeader", new { id = Model.HolidayHeader.Id })" class="btn btn-success">@Translation.Get("Ändra", Enums.TranslationSource.TextTranslation)</a>
                                         @*<input class="btn btn-success" type="button" value="@Translation.Get("Ändra", Enums.TranslationSource.TextTranslation)" id="editHolidayHeaderId" 
@@ -45,7 +46,7 @@
                                     <td>
                                         @Translation.Get("År", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td colspan="2">
+                                    <td colspan="3">
                                         @Html.DropDownListFor(model => model.Year, Model.YearList, "", new { style = "width: auto;", year = "year", onchange = "changeYear(this.options[this.selectedIndex].value);" })
                                         <input type="hidden" id="holidayyear" value="" />
                                     </td>
@@ -54,9 +55,18 @@
                                     <td>
                                         @Translation.Get("Helgdag", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td colspan="2">
+                                    <td colspan="3">
                                         @Html.EditorFor(model => model.Holiday.HolidayDate, "DatePicker", new { id = "holidaydate" }) 
                                         <input type="hidden" id="holidaydate" value="" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Helgdag", Enums.TranslationSource.TextTranslation) @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td colspan="3">
+                                        @Html.TextBoxFor(model => model.Holiday.HolidayName, new { maxlength = "50", style = "width: 200px;" })
+                                        @Html.HiddenFor(model => model.Holiday.Id)
                                     </td>
                                 </tr>
                                 <tr>
@@ -73,6 +83,7 @@
                                         &nbsp; &nbsp;
                                         
                                     </td>
+                                    <td></td>
                                     <td>
                                         <input class="btn btn-success" type="button" value="@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)" id="AddRow" 
                                             onclick="addHolidayRow()" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
@@ -94,11 +105,14 @@
                                     </td>
                                 </tr>*@
                                 <tr>
-                                    <td colspan="3">
+                                    <td colspan="4">
                                         &nbsp;
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td>
+                                        @Translation.Get("Datum", Enums.TranslationSource.TextTranslation)
+                                    </td>
                                     <td>
                                         @Translation.Get("Helgdag", Enums.TranslationSource.TextTranslation)
                                     </td>
@@ -112,6 +126,9 @@
                                     <tr>
                                         <td>
                                             @item.HolidayDate.ToShortDateString()
+                                        </td>
+                                        <td>
+                                            @item.HolidayName
                                         </td>
                                         <td>
                                             @if (item.TimeFrom > 0)
@@ -169,7 +186,7 @@
 
     function addHolidayRow() {
         var list = $("#holiday");
-        $.post('/globalsetting/AddRowToHolidays/' + '?holidayheaderId=' + $("#holidayheaderId").val() + '&holidaydate=' + $("#Holiday_HolidayDate").val() + '&timefrom=' + $("#TimeFrom").val() + '&timeuntil=' + $("#TimeTil").val(), function (result) {
+        $.post('/globalsetting/AddRowToHolidays/' + '?holidayheaderId=' + $("#holidayheaderId").val() + '&holidaydate=' + $("#Holiday_HolidayDate").val() + '&timefrom=' + $("#TimeFrom").val() + '&timeuntil=' + $("#TimeTil").val() + '&holidayname=' + $("#Holiday_HolidayName").val(), function (result) {
                
             location.reload();
         });

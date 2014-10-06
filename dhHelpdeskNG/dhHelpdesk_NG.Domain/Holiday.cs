@@ -10,6 +10,7 @@
         public int TimeUntil { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime HolidayDate { get; set; }
+        public string HolidayName { get; set; }
 
         public virtual HolidayHeader HolidayHeader { get; set; }
     }

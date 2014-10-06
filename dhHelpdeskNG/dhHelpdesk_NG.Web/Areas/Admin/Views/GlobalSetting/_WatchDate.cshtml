@@ -47,11 +47,23 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Bevakningsdag", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("bevakningsdatum", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
                                         @Html.EditorFor(model => model.WatchDateCalendarValue.WatchDate, "DatePicker", new { id = "watchdatedate" }) 
                                         <input type="hidden" id="watchdatedate" value="" />
+                                    </td>
+                                    <td>
+                                        
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                         @Translation.Get("bevakningsdatum", Enums.TranslationSource.TextTranslation) @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.WatchDateValueName, new { maxlength = "50", style = "width: 200px;" })
+                                        @Html.HiddenFor(model => model.WatchDateCalendar.Id)
                                     </td>
                                     <td>
                                         <input class="btn btn-success" type="button" value="@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)" id="AddRow" 
@@ -59,7 +71,6 @@
                                             <input type="hidden" id="" value="" />
                                     </td>
                                 </tr>
-                  
                                 <tr>
                                     <td colspan="3">
                                         &nbsp;
@@ -67,9 +78,11 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Bevakningsdag", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Datum", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td></td>
+                                    <td>
+                                        @Translation.Get("bevakningsdatum", Enums.TranslationSource.TextTranslation) @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
+                                    </td>
                                     <td></td>
                                 </tr>
                                 @foreach (var item in Model.WatchDateCalendarValues)
@@ -79,7 +92,7 @@
                                             @item.WatchDate.ToShortDateString()
                                         </td>
                                         <td>
-                                            
+                                            @item.WatchDateValueName
                                         </td>
                                         <td>
                                             <input class="btn btn-danger" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)"
@@ -142,7 +155,7 @@
 
     function addWDCVRow() {
         var list = $("#watchdate");
-        $.post('/globalsetting/AddRowToWatchDateCalendarValue/' + '?watchdatecalendarId=' + $("#watchdatecalendarId").val() + '&watchdate=' + $("#WatchDateCalendarValue_WatchDate").val(), function (result) {
+        $.post('/globalsetting/AddRowToWatchDateCalendarValue/' + '?watchdatecalendarId=' + $("#watchdatecalendarId").val() + '&watchdate=' + $("#WatchDateCalendarValue_WatchDate").val() + '&watchdatevaluenname=' + $("#WatchDateValueName").val(), function (result) {
             
             location.reload();
         });
