@@ -1,5 +1,6 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
-@model DH.Helpdesk.Web.Areas.Licenses.Models.Products.ProductsIndexModel
+﻿@using DH.Helpdesk.Web.Areas.Licenses.Models.Products
+@using DH.Helpdesk.Web.Infrastructure
+@model ProductsIndexModel
 @{
     Layout = "~/Areas/Licenses/Views/Shared/_IndexLayout.cshtml";
 }
@@ -27,5 +28,5 @@
     </table>
 }
 <div id="LicensesProductsTableContainer">
-    @Html.Action("Products", "Products", new { model = Model })
+    @Html.Action("Products", "Products", new { model = (ProductsIndexModel)null })
 </div>

@@ -9,14 +9,10 @@
     {
         public ProductsIndexModel(
                 MultiSelectList regions, 
-                MultiSelectList departments,
-                int[] regionIds,
-                int[] departmentIds)
+                MultiSelectList departments)
         {
             this.Departments = departments;
             this.Regions = regions;
-            this.RegionIds = regionIds;
-            this.DepartmentIds = departmentIds;
         }
 
         public ProductsIndexModel()

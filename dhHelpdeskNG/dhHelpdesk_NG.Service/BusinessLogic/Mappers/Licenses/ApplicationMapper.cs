@@ -7,14 +7,16 @@
 
     public static class ApplicationMapper
     {
-        public static ApplicationOverview[] MapToOverviews(this IQueryable<Application> query)
+        public static ApplicationOverview[] MapToOverviews(this IQueryable<Application> query, IQueryable<Product> products)
         {
-            var entities = query.Select(a => new 
+            var entities = query.SelectMany(
+                                        a => products,
+                                        (a, p) => new 
                                                 {
                                                     ApplicationId = a.Id,
                                                     ApplicationName = a.Name,
                                                     InstallationsNumber = a.Products.Count(),
-                                                    ProductName = string.Empty
+                                                    ProductName = p.Name
                                                   }).ToArray();
 
             var overviews = entities.Select(a => new ApplicationOverview(

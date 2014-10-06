@@ -13,9 +13,7 @@
 
             return new ProductsIndexModel(
                                     regions, 
-                                    departments, 
-                                    filter.RegionIds, 
-                                    filter.DepartmentIds);
+                                    departments);
         }
 
         public ProductsContentModel GetContentModel(ProductOverview[] products)

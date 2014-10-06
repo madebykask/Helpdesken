@@ -4,6 +4,15 @@
 
     public sealed class ApplicationsIndexModel : BaseIndexModel
     {
+        public ApplicationsIndexModel(bool onlyConnected)
+        {
+            this.OnlyConnected = onlyConnected;
+        }
+
+        public ApplicationsIndexModel()
+        {            
+        }
+
         public override IndexModelType Type
         {
             get
