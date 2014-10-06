@@ -12,6 +12,8 @@
 
         void DeleteById(int id);
 
+        void DeleteWhere(Expression<Func<TEntity, bool>> predicate);
+
         TEntity GetById(long id);
 
         IQueryable<TEntity> GetAll();

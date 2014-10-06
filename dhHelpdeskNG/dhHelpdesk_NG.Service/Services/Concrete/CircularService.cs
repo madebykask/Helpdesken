@@ -40,9 +40,9 @@
         {
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
-                var questionnaireRepository = uof.GetRepository<QuestionnaireCircularEntity>();
+                var circularRepository = uof.GetRepository<QuestionnaireCircularEntity>();
 
-                CircularForEdit entity = questionnaireRepository.GetAll().MapToEditModelById(circularId);
+                CircularForEdit entity = circularRepository.GetAll().MapToEditModelById(circularId);
                 return entity;
             }
         }
@@ -51,9 +51,10 @@
         {
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
-                var questionnaireRepository = uof.GetRepository<QuestionnaireCircularEntity>();
+                var circularRepository = uof.GetRepository<QuestionnaireCircularEntity>();
+
                 List<CircularOverview> overviews =
-                    questionnaireRepository.GetAll().MapToOverviewsByQuestionnaireId(questionnaireId);
+                    circularRepository.GetAll().MapToOverviewsByQuestionnaireId(questionnaireId);
 
                 return overviews;
             }
@@ -108,8 +109,12 @@
         {
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
-                var questionnaireRepository = uof.GetRepository<QuestionnaireCircularEntity>();
-                questionnaireRepository.DeleteById(id);
+                var circularRepository = uof.GetRepository<QuestionnaireCircularEntity>();
+                var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
+
+                circularPartRepository.DeleteWhere(x => x.QuestionnaireCircular_Id == id);
+                circularRepository.DeleteById(id);
+
                 uof.Save();
             }
         }
@@ -130,7 +135,7 @@
             {
                 var caseRepository = uof.GetRepository<Case>();
                 var userRepository = uof.GetRepository<User>();
-                var questionnaireCircularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
+                var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
 
                 IQueryable<Case> query =
                     caseRepository.GetAll()
@@ -158,7 +163,7 @@
                 query = query.Take(percentageOfCases);
 
                 var questionnaireCirculars =
-                    questionnaireCircularPartRepository.GetAll()
+                    circularPartRepository.GetAll()
                         .GetByQuestionnaireId(questionnaireId)
                         .Select(x => new { x.Case_Id, x.SendDate })
                         .GroupBy(x => x.Case_Id)

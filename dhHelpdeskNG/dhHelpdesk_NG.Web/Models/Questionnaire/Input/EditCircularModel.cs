@@ -1,30 +1,23 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
-using DH.Helpdesk.Common.ValidationAttributes;
-
-namespace DH.Helpdesk.Web.Models.Questionnaire.Input
+﻿namespace DH.Helpdesk.Web.Models.Questionnaire.Input
 {
     using System;
     using System.ComponentModel.DataAnnotations;
 
+    using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public class EditCircularModel
     {
         public EditCircularModel()
         {
-            
         }
 
-        public EditCircularModel(int id,
-                                 int questionnaireId,                                   
-                                 string circularName,                                                                                     
-                                 DateTime changedDate)
+        public EditCircularModel(int id, int questionnaireId, string circularName, DateTime changedDate)
         {
             this.Id = id;
             this.QuestionnaireId = questionnaireId;
-            this.CircularName = circularName;            
-            this.ChangedDate = changedDate;            
+            this.CircularName = circularName;
+            this.ChangedDate = changedDate;
         }
 
         [IsId]
@@ -46,6 +39,5 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
 
         [LocalizedDisplay("ChangedDate")]
         public DateTime ChangedDate { get; set; }        
-
     }
 }

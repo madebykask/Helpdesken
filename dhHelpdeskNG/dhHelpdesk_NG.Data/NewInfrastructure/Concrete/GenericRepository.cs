@@ -2,6 +2,7 @@
 {
     using System;
     using System.Data.Entity;
+    using System.Data.Entity.Infrastructure;
     using System.Linq;
     using System.Linq.Expressions;
 
@@ -23,15 +24,26 @@
 
         public virtual void Update(TEntity entity)
         {
-            var entry = this.context.Entry(entity);
+            DbEntityEntry<TEntity> entry = this.context.Entry(entity);
             this.dbset.Attach(entity);
             entry.State = EntityState.Modified;
         }
 
         public virtual void DeleteById(int id)
         {
-            var entity = this.dbset.Find(id);
+            TEntity entity = this.dbset.Find(id);
             this.dbset.Remove(entity);
+        }
+
+        public virtual void DeleteWhere(Expression<Func<TEntity, bool>> predicate)
+        {
+            IQueryable<TEntity> delList = this.dbset.Where(predicate);
+
+            foreach (var entity in delList)
+            {
+                DbEntityEntry<TEntity> entry = this.context.Entry(entity);
+                entry.State = EntityState.Deleted;
+            }
         }
 
         public IQueryable<TEntity> GetAll()
