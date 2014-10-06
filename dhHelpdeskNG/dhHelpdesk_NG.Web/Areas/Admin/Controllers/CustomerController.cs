@@ -117,7 +117,14 @@
             IDictionary<string, string> errors = new Dictionary<string, string>();
             this._customerService.SaveNewCustomerToGetId(customer, out errors);
 
+            var newCustomerSetting = new Setting()
+            {
+                Customer_Id = customer.Id,
+                ModuleCase = 1
+               
+            };
 
+            this._customerService.SaveCustomerSettings(customer, newCustomerSetting, null, customer.Language_Id, out errors);
 
             //Get values from "default" customer
             var caseFieldSettingsToCopy = this._caseFieldSettingService.GetCaseFieldSettingsForDefaultCust();
