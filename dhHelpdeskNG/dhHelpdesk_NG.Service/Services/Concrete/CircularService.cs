@@ -15,6 +15,7 @@
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Questionnaire;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications.User;
 
     public class CircularService : ICircularService
     {
@@ -131,50 +132,24 @@
                 var userRepository = uof.GetRepository<User>();
                 var questionnaireCircularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
 
-                IQueryable<Case> query = caseRepository.GetAll().GetAvaliableCustomerCases(customerId);
-
-                if (selectedDepartments != null && selectedDepartments.Any())
-                {
-                    query =
-                        query.Where(
-                            c => c.Department_Id != null && selectedDepartments.ToList().Contains(c.Department_Id.Value));
-                }
-
-                if (selectedCaseTypes != null && selectedCaseTypes.Any())
-                {
-                    query = query.Where(c => selectedCaseTypes.ToList().Contains(c.CaseType_Id));
-                }
-
-                if (selectedProductArea != null && selectedProductArea.Any())
-                {
-                    query =
-                        query.Where(
-                            c =>
-                            c.ProductArea_Id != null && selectedProductArea.ToList().Contains(c.ProductArea_Id.Value));
-                }
+                IQueryable<Case> query =
+                    caseRepository.GetAll()
+                        .GetAvaliableCustomerCases(customerId)
+                        .GetDepartmentsCases(selectedDepartments)
+                        .GetCaseTypesCases(selectedCaseTypes)
+                        .GetProductAreasCases(selectedProductArea)
+                        .GetCasesFromFinishingDate(finishingDateFrom)
+                        .GetCasesToFinishingDate(finishingDateTo);
 
                 if (selectedWorkingGroups != null && selectedWorkingGroups.Any())
                 {
                     IQueryable<int> userIds =
                         userRepository.GetAll()
                             .GetByCustomer(customerId)
-                            .Where(
-                                u =>
-                                u.Default_WorkingGroup_Id != null
-                                && selectedWorkingGroups.ToList().Contains(u.Default_WorkingGroup_Id.Value))
+                            .GetWorkingGroupsUsers(selectedWorkingGroups)
                             .Select(u => u.Id);
 
-                    query = query.Where(c => userIds.Contains(c.Performer_User_Id));
-                }
-
-                if (finishingDateFrom.HasValue)
-                {
-                    query = query.Where(x => x.FinishingDate >= finishingDateFrom);
-                }
-
-                if (finishingDateTo.HasValue)
-                {
-                    query = query.Where(x => x.FinishingDate <= finishingDateTo);
+                    query = query.GetUserCases(userIds);
                 }
 
                 int count = caseRepository.GetAll().GetAvaliableCustomerCases(customerId).Count();
@@ -194,14 +169,7 @@
                                    questionnaireCircular.Case_Id into splits
                                from split in splits.DefaultIfEmpty()
                                select
-                                   new
-                                       {
-                                           @case.Id,
-                                           @case.CaseNumber,
-                                           @case.Caption,
-                                           @case.PersonsEmail,
-                                           split.SendDate
-                                       };
+                                   new { @case.Id, @case.CaseNumber, @case.Caption, @case.PersonsEmail, split.SendDate };
 
                 if (isUniqueEmail)
                 {

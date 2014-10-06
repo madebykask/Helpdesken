@@ -105,6 +105,7 @@
     <Compile Include="BusinessLogic\Specifications\Licenses\ProductSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Questionnaire\CircularPartSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Questionnaire\CircularSpecifications.cs" />
+    <Compile Include="BusinessLogic\Specifications\User\UserSpecifications.cs" />
     <Compile Include="DisplayValues\Changes\ContactsListDisplayValue.cs" />
     <Compile Include="DisplayValues\Changes\ItemOverviewListDisplayValue.cs" />
     <Compile Include="DisplayValues\Changes\StepStatusDisplayValue.cs" />
