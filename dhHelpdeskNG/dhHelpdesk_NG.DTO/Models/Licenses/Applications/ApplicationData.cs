@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Licenses.Applications
 {
+    using DH.Helpdesk.Common.ValidationAttributes;
+
     public sealed class ApplicationData
     {
         public ApplicationData(ApplicationModel application)
@@ -7,6 +9,7 @@
             this.Application = application;
         }
 
+        [NotNull]
         public ApplicationModel Application { get; private set; }
     }
 }

@@ -6,7 +6,7 @@
     {
         LicenseOverview[] GetLicenses(int customerId);
 
-        LicenseData GetLicenseData(int? licenseId);
+        LicenseData GetLicenseData(int customerId, int? licenseId);
 
         LicenseModel GetById(int id);
 

@@ -6,7 +6,7 @@
     {
         VendorOverview[] GetVendors(int customerId);
 
-        VendorData GetVendorData(int? vendorId);
+        VendorData GetVendorData(int customerId, int? vendorId);
 
         VendorModel GetById(int id);
 

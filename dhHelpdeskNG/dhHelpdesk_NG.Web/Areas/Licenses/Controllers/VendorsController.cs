@@ -64,7 +64,9 @@
         [HttpGet]
         public ViewResult Vendor(int? vendorId)
         {
-            var data = this.vendorsService.GetVendorData(vendorId);
+            var data = this.vendorsService.GetVendorData(
+                                        this.workContext.Customer.CustomerId,
+                                        vendorId);
             var model = this.vendorsModelFactory.GetEditModel(data);
             return this.View(model);
         }

@@ -6,7 +6,7 @@
     {
         ManufacturerOverview[] GetManufacturers(int customerId);
 
-        ManufacturerData GetManufacturerData(int? manufacturerId);
+        ManufacturerData GetManufacturerData(int customerId, int? manufacturerId);
 
         ManufacturerModel GetById(int id);
 

@@ -32,16 +32,20 @@
             }
         }
 
-        public ManufacturerData GetManufacturerData(int? manufacturerId)
+        public ManufacturerData GetManufacturerData(int customerId, int? manufacturerId)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var manufacturerRepository = uow.GetRepository<Manufacturer>();
 
-                ManufacturerModel manufacturer = null;
+                ManufacturerModel manufacturer;
                 if (manufacturerId.HasValue)
                 {
                     manufacturer = manufacturerRepository.GetAll().MapToBusinessModel(manufacturerId.Value);
+                }
+                else
+                {
+                    manufacturer = ManufacturerModel.CreateDefault(customerId);
                 }
 
                 return new ManufacturerData(manufacturer);

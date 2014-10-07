@@ -33,16 +33,20 @@
             }
         }
 
-        public ApplicationData GetApplicationData(int? applicationId)
+        public ApplicationData GetApplicationData(int customerId, int? applicationId)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var applicationRepository = uow.GetRepository<Application>();
  
-                ApplicationModel application = null;
+                ApplicationModel application;
                 if (applicationId.HasValue)
                 {
                     application = applicationRepository.GetAll().MapToBusinessModel(applicationId.Value);
+                }
+                else
+                {
+                    application = ApplicationModel.CreateDefault(customerId);
                 }
 
                 return new ApplicationData(application);                

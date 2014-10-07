@@ -66,7 +66,9 @@
         [HttpGet]
         public ViewResult Application(int? applicationId)
         {
-            var data = this.applicationsService.GetApplicationData(applicationId);
+            var data = this.applicationsService.GetApplicationData(
+                                                this.workContext.Customer.CustomerId,
+                                                applicationId);
             var model = this.applicationsModelFactory.GetEditModel(data);
             return this.View(model);
         }

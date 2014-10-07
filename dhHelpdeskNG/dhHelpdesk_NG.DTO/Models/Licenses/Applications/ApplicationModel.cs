@@ -27,6 +27,11 @@
             this.CustomerId = customerId;
         }
 
+        public ApplicationModel(int customerId)
+        {
+            this.CustomerId = customerId;
+        }
+
         public int CustomerId { get; private set; }
 
         [NotNullAndEmpty]
@@ -36,5 +41,10 @@
         public DateTime CreatedDate { get; private set; }
 
         public DateTime ChangedDate { get; private set; }
+
+        public static ApplicationModel CreateDefault(int customerId)
+        {
+            return new ApplicationModel(customerId);
+        }
     }
 }

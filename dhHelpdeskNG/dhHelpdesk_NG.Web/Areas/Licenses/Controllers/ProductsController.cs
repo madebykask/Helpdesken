@@ -69,7 +69,9 @@
         [HttpGet]
         public ViewResult Product(int? productId)
         {
-            var data = this.productsService.GetProductData(productId);
+            var data = this.productsService.GetProductData(
+                                            this.workContext.Customer.CustomerId,
+                                            productId);
             var model = this.productsModelFactory.GetEditModel(data);
             return this.View(model);
         }

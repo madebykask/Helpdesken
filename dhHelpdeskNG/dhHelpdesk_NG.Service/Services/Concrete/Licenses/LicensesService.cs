@@ -33,16 +33,20 @@
             }
         }
 
-        public LicenseData GetLicenseData(int? licenseId)
+        public LicenseData GetLicenseData(int customerId, int? licenseId)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var licenseRepository = uow.GetRepository<License>();
 
-                LicenseModel license = null;
+                LicenseModel license;
                 if (licenseId.HasValue)
                 {
                     license = licenseRepository.GetAll().MapToBusinessModel(licenseId.Value);
+                }
+                else
+                {
+                    license = LicenseModel.CreateDefault();
                 }
 
                 return new LicenseData(license);

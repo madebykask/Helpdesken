@@ -67,6 +67,10 @@
             this.LicenseNumber = licenseNumber;
         }
 
+        private LicenseModel()
+        {            
+        }
+
         [NotNullAndEmpty]
         [MaxLength(100)]
         public string LicenseNumber { get; private set; }
@@ -99,5 +103,10 @@
         public DateTime CreatedDate { get; private set; }
 
         public DateTime ChangedDate { get; private set; }
+
+        public static LicenseModel CreateDefault()
+        {
+            return new LicenseModel();
+        }
     }
 }

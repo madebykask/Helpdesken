@@ -32,16 +32,20 @@
             }
         }
 
-        public VendorData GetVendorData(int? vendorId)
+        public VendorData GetVendorData(int customerId, int? vendorId)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var vendorRepository = uow.GetRepository<Vendor>();
 
-                VendorModel vendor = null;
+                VendorModel vendor;
                 if (vendorId.HasValue)
                 {
                     vendor = vendorRepository.GetAll().MapToBusinessModel(vendorId.Value);
+                }
+                else
+                {
+                    vendor = VendorModel.CreateDefault(customerId);
                 }
 
                 return new VendorData(vendor);

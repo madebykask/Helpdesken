@@ -64,7 +64,9 @@
         [HttpGet]
         public ViewResult License(int? licenseId)
         {
-            var data = this.licensesService.GetLicenseData(licenseId);
+            var data = this.licensesService.GetLicenseData(
+                                            this.workContext.Customer.CustomerId,
+                                            licenseId);
             var model = this.licensesModelFactory.GetEditModel(data);
             return this.View(model);
         }

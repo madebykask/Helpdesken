@@ -52,16 +52,20 @@
             return new ProductsFilterData(regions.ToArray(), departments.ToArray());
         }
 
-        public ProductData GetProductData(int? productId)
+        public ProductData GetProductData(int customerId, int? productId)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var productRepository = uow.GetRepository<Product>();
 
-                ProductModel product = null;
+                ProductModel product;
                 if (productId.HasValue)
                 {
                     product = productRepository.GetAll().MapToBusinessModel(productId.Value);
+                }
+                else
+                {
+                    product = ProductModel.CreateDefault(customerId);
                 }
 
                 return new ProductData(product);

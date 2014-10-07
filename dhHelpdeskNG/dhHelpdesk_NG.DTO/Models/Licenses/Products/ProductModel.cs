@@ -31,6 +31,11 @@
             this.ProductName = productName;
         }
 
+        public ProductModel(int customerId)
+        {
+            this.CustomerId = customerId;
+        }
+
         [NotNullAndEmpty]
         [MaxLength(50)]
         public string ProductName { get; private set; }
@@ -42,5 +47,10 @@
         public DateTime CreatedDate { get; private set; }
 
         public DateTime ChangedDate { get; private set; }
+
+        public static ProductModel CreateDefault(int customerId)
+        {
+            return new ProductModel(customerId);
+        }
     }
 }

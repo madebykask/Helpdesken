@@ -55,6 +55,11 @@
             this.VendorName = vendorName;
         }
 
+        public VendorModel(int customerId)
+        {
+            this.CustomerId = customerId;
+        }
+
         [NotNullAndEmpty]
         [MaxLength(50)]
         public string VendorName { get; private set; }
@@ -92,5 +97,10 @@
         public DateTime CreatedDate { get; private set; }
 
         public DateTime ChangedDate { get; private set; }
+
+        public static VendorModel CreateDefault(int customerId)
+        {
+            return new VendorModel(customerId);
+        }
     }
 }

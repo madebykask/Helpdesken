@@ -64,7 +64,9 @@
         [HttpGet]
         public ViewResult Manufacturer(int? manufacturerId)
         {
-            var data = this.manufacturersService.GetManufacturerData(manufacturerId);
+            var data = this.manufacturersService.GetManufacturerData(
+                                                this.workContext.Customer.CustomerId,
+                                                manufacturerId);
             var model = this.manufacturersModelFactory.GetEditModel(data);
             return this.View(model);
         }

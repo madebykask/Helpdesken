@@ -6,7 +6,7 @@
     {
         ApplicationOverview[] GetApplications(int customerId, bool onlyConnected);
 
-        ApplicationData GetApplicationData(int? applicationId);
+        ApplicationData GetApplicationData(int customerId, int? applicationId);
 
         ApplicationModel GetById(int id);
 

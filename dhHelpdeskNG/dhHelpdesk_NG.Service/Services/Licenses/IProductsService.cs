@@ -11,7 +11,7 @@
 
         ProductsFilterData GetProductsFilterData(int customerId);
 
-        ProductData GetProductData(int? productId);
+        ProductData GetProductData(int customerId, int? productId);
 
         ProductModel GetById(int id);
 
