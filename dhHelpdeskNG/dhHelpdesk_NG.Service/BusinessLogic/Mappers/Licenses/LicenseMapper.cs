@@ -4,6 +4,7 @@
 
     using DH.Helpdesk.BusinessData.Models.Licenses.Licenses;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications;
 
     public static class LicenseMapper
     {
@@ -31,6 +32,51 @@
                                                     l.Department)).ToArray();
 
             return overviews;
+        }
+
+        public static LicenseModel MapToBusinessModel(this IQueryable<License> query, int id)
+        {
+            LicenseModel model = null;
+
+            var entity = query.GetById(id)
+                        .Select(l => new
+                            {
+                                l.LicenseNumber,
+                                l.NumberOfLicenses,
+                                l.PurshaseDate,
+                                l.Price,
+                                l.PurshaseInfo,
+                                l.PriceYear,
+                                l.Product_Id,
+                                l.Vendor_Id,
+                                l.Department_Id,
+                                l.UpgradeLicense_Id,
+                                l.ValidDate,
+                                l.Info,
+                                l.CreatedDate,
+                                l.ChangedDate
+                            }).SingleOrDefault();
+
+            if (entity != null)
+            {
+                model = new LicenseModel(
+                                entity.LicenseNumber,
+                                entity.NumberOfLicenses,
+                                entity.PurshaseDate,
+                                entity.Price,
+                                entity.PurshaseInfo,
+                                entity.PriceYear,
+                                entity.Product_Id,
+                                entity.Vendor_Id,
+                                entity.Department_Id,
+                                entity.UpgradeLicense_Id,
+                                entity.ValidDate,
+                                entity.Info,
+                                entity.CreatedDate,
+                                entity.ChangedDate);
+            }
+
+            return model;
         }
     }
 }

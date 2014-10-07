@@ -7,5 +7,9 @@
         LicenseOverview[] GetLicenses(int customerId);
 
         LicenseData GetLicenseData(int? licenseId);
+
+        LicenseModel GetById(int id);
+
+        int AddOrUpdate(LicenseModel license);
     }
 }

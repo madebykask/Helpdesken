@@ -32,6 +32,32 @@
 
         public VendorData GetVendorData(int? vendorId)
         {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var vendorRepository = uow.GetRepository<Vendor>();
+
+                VendorModel vendor = null;
+                if (vendorId.HasValue)
+                {
+                    vendor = vendorRepository.GetAll().MapToBusinessModel(vendorId.Value);
+                }
+
+                return new VendorData(vendor);
+            }
+        }
+
+        public VendorModel GetById(int id)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var vendorRepository = uow.GetRepository<Vendor>();
+
+                return vendorRepository.GetAll().MapToBusinessModel(id);
+            }
+        }
+
+        public int AddOrUpdate(VendorModel vendor)
+        {
             throw new global::System.NotImplementedException();
         }
     }

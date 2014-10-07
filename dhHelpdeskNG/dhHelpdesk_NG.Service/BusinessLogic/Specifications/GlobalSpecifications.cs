@@ -2,6 +2,7 @@
 {
     using System.Linq;
 
+    using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Interfaces;
 
     public static class GlobalSpecifications
@@ -13,5 +14,13 @@
 
             return query;
         }
+
+        public static IQueryable<T> GetById<T>(this IQueryable<T> query, int id)
+            where T : Entity
+        {
+            query = query.Where(x => x.Id == id);
+
+            return query;
+        } 
     }
 }

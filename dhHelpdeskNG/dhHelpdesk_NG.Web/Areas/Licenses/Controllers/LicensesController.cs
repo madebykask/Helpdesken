@@ -67,6 +67,14 @@
             var data = this.licensesService.GetLicenseData(licenseId);
             var model = this.licensesModelFactory.GetEditModel(data);
             return this.View(model);
-        }        
+        }
+
+        [HttpPost]
+        [BadRequestOnNotValid]
+        public RedirectToRouteResult License(LicenseEditModel model)
+        {
+
+            return this.RedirectToAction("License");
+        }
     }
 }

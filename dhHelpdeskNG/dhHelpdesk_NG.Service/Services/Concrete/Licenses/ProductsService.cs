@@ -52,6 +52,32 @@
 
         public ProductData GetProductData(int? productId)
         {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var productRepository = uow.GetRepository<Product>();
+
+                ProductModel product = null;
+                if (productId.HasValue)
+                {
+                    product = productRepository.GetAll().MapToBusinessModel(productId.Value);
+                }
+
+                return new ProductData(product);
+            }
+        }
+
+        public ProductModel GetById(int id)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var productRepository = uow.GetRepository<Product>();
+
+                return productRepository.GetAll().MapToBusinessModel(id);
+            }
+        }
+
+        public int AddOrUpdate(ProductModel product)
+        {
             throw new global::System.NotImplementedException();
         }
     }

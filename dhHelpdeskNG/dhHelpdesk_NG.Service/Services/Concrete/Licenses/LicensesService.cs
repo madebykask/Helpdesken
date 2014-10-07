@@ -34,6 +34,32 @@
 
         public LicenseData GetLicenseData(int? licenseId)
         {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var licenseRepository = uow.GetRepository<License>();
+
+                LicenseModel license = null;
+                if (licenseId.HasValue)
+                {
+                    license = licenseRepository.GetAll().MapToBusinessModel(licenseId.Value);
+                }
+
+                return new LicenseData(license);
+            }
+        }
+
+        public LicenseModel GetById(int id)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var licenseRepository = uow.GetRepository<License>();
+
+                return licenseRepository.GetAll().MapToBusinessModel(id);
+            }
+        }
+
+        public int AddOrUpdate(LicenseModel license)
+        {
             throw new global::System.NotImplementedException();
         }
     }

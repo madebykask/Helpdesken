@@ -7,5 +7,9 @@
         VendorOverview[] GetVendors(int customerId);
 
         VendorData GetVendorData(int? vendorId);
+
+        VendorModel GetById(int id);
+
+        int AddOrUpdate(VendorModel vendor);
     }
 }

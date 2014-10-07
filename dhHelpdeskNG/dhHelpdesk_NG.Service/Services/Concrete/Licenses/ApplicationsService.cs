@@ -40,11 +40,26 @@
                 ApplicationModel application = null;
                 if (applicationId.HasValue)
                 {
-                    
+                    application = applicationRepository.GetAll().MapToBusinessModel(applicationId.Value);
                 }
 
                 return new ApplicationData(application);                
             }
+        }
+
+        public ApplicationModel GetById(int id)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var applicationRepository = uow.GetRepository<Application>();
+
+                return applicationRepository.GetAll().MapToBusinessModel(id);
+            }
+        }
+
+        public int AddOrUpdate(ApplicationModel application)
+        {
+            throw new global::System.NotImplementedException();
         }
     }
 }

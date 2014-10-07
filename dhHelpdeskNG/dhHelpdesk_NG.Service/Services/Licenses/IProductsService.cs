@@ -12,5 +12,9 @@
         ProductsFilterData GetProductsFilterData(int customerId);
 
         ProductData GetProductData(int? productId);
+
+        ProductModel GetById(int id);
+
+        int AddOrUpdate(ProductModel product);
     }
 }

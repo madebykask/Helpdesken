@@ -17,7 +17,7 @@
 
         public ManufacturerEditModel GetEditModel(ManufacturerData data)
         {
-            return new ManufacturerEditModel(data);
+            return new ManufacturerEditModel();
         }
     }
 }

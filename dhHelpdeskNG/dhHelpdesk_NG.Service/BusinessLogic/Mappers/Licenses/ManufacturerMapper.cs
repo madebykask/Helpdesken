@@ -4,6 +4,7 @@
 
     using DH.Helpdesk.BusinessData.Models.Licenses.Manufacturers;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications;
 
     public static class ManufacturerMapper
     {
@@ -20,6 +21,31 @@
                                                     m.ManufcturerName)).ToArray();
 
             return overviews;
+        }
+
+        public static ManufacturerModel MapToBusinessModel(this IQueryable<Manufacturer> query, int id)
+        {
+            ManufacturerModel model = null;
+
+            var entity = query.GetById(id)
+                        .Select(m => new
+                            {
+                                m.Customer_Id,
+                                m.Name,
+                                m.CreatedDate,
+                                m.ChangedDate
+                            }).SingleOrDefault();
+
+            if (entity != null)
+            {
+                model = new ManufacturerModel(
+                                entity.Customer_Id,
+                                entity.Name,
+                                entity.CreatedDate,
+                                entity.ChangedDate);
+            }
+
+            return model;
         }
     }
 }

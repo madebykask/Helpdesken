@@ -7,5 +7,9 @@
         ManufacturerOverview[] GetManufacturers(int customerId);
 
         ManufacturerData GetManufacturerData(int? manufacturerId);
+
+        ManufacturerModel GetById(int id);
+
+        int AddOrUpdate(ManufacturerModel manufacturer);
     }
 }

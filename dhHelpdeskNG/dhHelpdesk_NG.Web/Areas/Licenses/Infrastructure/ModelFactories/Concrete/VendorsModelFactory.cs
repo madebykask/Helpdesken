@@ -17,7 +17,7 @@
 
         public VendorEditModel GetEditModel(VendorData data)
         {
-            return new VendorEditModel(data);
+            return new VendorEditModel();
         }
     }
 }

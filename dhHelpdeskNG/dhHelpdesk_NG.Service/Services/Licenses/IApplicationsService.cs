@@ -7,5 +7,9 @@
         ApplicationOverview[] GetApplications(int customerId, bool onlyConnected);
 
         ApplicationData GetApplicationData(int? applicationId);
+
+        ApplicationModel GetById(int id);
+
+        int AddOrUpdate(ApplicationModel application);
     }
 }

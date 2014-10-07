@@ -17,7 +17,7 @@
 
         public LicenseEditModel GetEditModel(LicenseData data)
         {
-            return new LicenseEditModel(data);
+            return new LicenseEditModel();
         }
     }
 }

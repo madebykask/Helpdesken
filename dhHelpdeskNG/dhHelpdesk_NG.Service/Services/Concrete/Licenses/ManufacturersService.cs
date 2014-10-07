@@ -32,6 +32,32 @@
 
         public ManufacturerData GetManufacturerData(int? manufacturerId)
         {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var manufacturerRepository = uow.GetRepository<Manufacturer>();
+
+                ManufacturerModel manufacturer = null;
+                if (manufacturerId.HasValue)
+                {
+                    manufacturer = manufacturerRepository.GetAll().MapToBusinessModel(manufacturerId.Value);
+                }
+
+                return new ManufacturerData(manufacturer);
+            }
+        }
+
+        public ManufacturerModel GetById(int id)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var manufacturerRepository = uow.GetRepository<Manufacturer>();
+
+                return manufacturerRepository.GetAll().MapToBusinessModel(id);
+            }
+        }
+
+        public int AddOrUpdate(ManufacturerModel manufacturer)
+        {
             throw new global::System.NotImplementedException();
         }
     }

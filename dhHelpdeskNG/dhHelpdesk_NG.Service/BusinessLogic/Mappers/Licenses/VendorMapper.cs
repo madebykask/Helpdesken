@@ -4,6 +4,7 @@
 
     using DH.Helpdesk.BusinessData.Models.Licenses.Vendors;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications;
 
     public static class VendorMapper
     {
@@ -28,6 +29,45 @@
                                                     v.VendorHomePage)).ToArray();
 
             return overviews;
+        }
+
+        public static VendorModel MapToBusinessModel(this IQueryable<Vendor> query, int id)
+        {
+            VendorModel model = null;
+
+            var entity = query.GetById(id)
+                        .Select(v => new
+                            {
+                                v.VendorName,
+                                v.Contact,
+                                v.Address,
+                                v.PostalCode,
+                                v.PostalAddress,
+                                v.Phone,
+                                v.EMail,
+                                v.HomePage,
+                                v.Customer_Id,
+                                v.CreatedDate,
+                                v.ChangedDate
+                            }).SingleOrDefault();
+
+            if (entity != null)
+            {
+                model = new VendorModel(
+                                entity.VendorName,
+                                entity.Contact,
+                                entity.Address,
+                                entity.PostalCode,
+                                entity.PostalAddress,
+                                entity.Phone,
+                                entity.EMail,
+                                entity.HomePage,
+                                entity.Customer_Id,
+                                entity.CreatedDate,
+                                entity.ChangedDate);
+            }
+
+            return model;
         }
     }
 }

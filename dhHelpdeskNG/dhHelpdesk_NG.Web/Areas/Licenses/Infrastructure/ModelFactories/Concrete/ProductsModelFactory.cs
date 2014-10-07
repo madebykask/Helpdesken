@@ -23,7 +23,7 @@
 
         public ProductEditModel GetEditModel(ProductData data)
         {
-            return new ProductEditModel(data);
+            return new ProductEditModel();
         }
     }
 }
