@@ -175,7 +175,7 @@
                     if (t.TranslationName == null)
                         t.TranslationName = "";
 
-                    var newTT = new TextTranslation { TextTranslated = t.TranslationName, Language_Id = t.Language_Id, Text_Id = text.Id };
+                    var newTT = new TextTranslation { TextTranslated = t.TranslationName, Language_Id = t.Language_Id, Text_Id = text.Id, ChangedDate = text.ChangedDate, CreatedDate = text.CreatedDate };
 
                     this._textTranslationRepository.Add(newTT);
                 }

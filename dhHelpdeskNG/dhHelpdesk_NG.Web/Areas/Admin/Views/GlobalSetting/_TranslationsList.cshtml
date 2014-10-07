@@ -30,7 +30,10 @@
                             @item.CreatedDate.ToShortDateString()
                         </td>
                         <td>
-                            @item.ChangedDate.ToShortDateString()
+                            @if (item.ChangedDate != null)
+                            {
+                                @item.ChangedDate.Value.ToShortDateString()
+                            }    
                         </td>
                         <td>
                             @item.FirstName  @item.LastName
