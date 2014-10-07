@@ -1,5 +1,12 @@
 ﻿@using DH.Helpdesk.Web.Models.Questionnaire.Input
 @model List<ConnectedToCircularOverview>
+@{
+    var questionnaireId = ViewData["QuestionnaireId"];
+    if (questionnaireId == null)
+    {
+        throw new ArgumentNullException("QuestionnaireId", "QuestionnaireId must be specified.");
+    }
+}
 <div class="container">
     <div class="row">
         <div class="span100">
@@ -25,24 +32,24 @@
                 </thead>
                 @{
                     var cases = Model;
-                    foreach (ConnectedToCircularOverview @case in cases)
+                    foreach (ConnectedToCircularOverview @connectedCase in cases)
                     {
                         <tr>
                             <td>
-                                @Html.DisplayFor(modelItem => @case.CaseNumber)
-                                @Html.HiddenFor(m => @case.CaseId)
+                                @Html.DisplayFor(modelItem => @connectedCase.CaseNumber)
+                                @Html.HiddenFor(m => @connectedCase.CaseId)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => @case.Caption)
+                                @Html.DisplayFor(modelItem => @connectedCase.Caption)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => @case.Email)
+                                @Html.DisplayFor(modelItem => @connectedCase.Email)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => @case.DisplaySent)
+                                @Html.DisplayFor(modelItem => @connectedCase.DisplaySent)
                             </td>
                             <td>
-                                @Html.ActionLink(Translation.Get("Ta bort"), "DeleteConnectedCase", new { circularPartId = @case.Id, circularId = @case.CircularId }, new { @class = "btn" })
+                                @Html.ActionLink(Translation.Get("Ta bort"), "DeleteConnectedCase", new { questionnaireId, caseId = @connectedCase.CaseId, circularId = @connectedCase.CircularId }, new { @class = "btn" })
                             </td>
                         </tr>
                     }

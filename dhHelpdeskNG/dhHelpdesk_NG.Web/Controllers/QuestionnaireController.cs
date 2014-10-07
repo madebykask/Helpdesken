@@ -541,19 +541,23 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpGet]
-        public ViewResult EditCircular(int questionnaireId, int circularId, int stateId)
+        public ViewResult EditCircular(int questionnaireId, int circularId)
         {
-            var circular = _circularService.GetById(circularId);
+            CircularForEdit circular = this._circularService.GetById(circularId);
 
-            var model = new EditCircularModel
-                (
-                    circular.Id,
-                    questionnaireId,
-                    circular.CircularName,
-                    circular.ChangedDate
-                );
+            List<CircularPart> connectedCases = this._circularService.GetConnectedCases(circularId);
+            var connecteCasesOverviews =
+                connectedCases.Select(
+                    x =>
+                    new ConnectedToCircularOverview(circularId, x.CaseId, x.CaseNumber, x.Caption, x.Email, x.IsSent))
+                    .ToList();
 
-            model.State = stateId;
+            var model = new EditCircularModel(
+                circular.Id,
+                questionnaireId,
+                circular.CircularName,
+                circular.ChangedDate,
+                connecteCasesOverviews) { State = 0 };
 
             switch (circular.Status)
             {
@@ -566,8 +570,7 @@ namespace DH.Helpdesk.Web.Controllers
                     break;
             }
 
-            return View(model);
-
+            return this.View(model);
         }
 
         [HttpPost]
@@ -593,7 +596,7 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         public ActionResult NewCircular(NewCircularModel newCircular, List<CircularPartOverview> cases)
         {
-            var caseIds = cases.Select(x => x.CaseId).ToList();
+            List<int> caseIds = cases.Select(x => x.CaseId).ToList();
 
             var circular = new CircularForInsert(
                 newCircular.CircularName,
@@ -621,7 +624,7 @@ namespace DH.Helpdesk.Web.Controllers
             DateTime? finishingDateTo,
             bool isUniqueEmail)
         {
-            List<CircularPart> cases = this._circularService.GetCases(
+            List<CircularPart> cases = this._circularService.GetAvaliableCases(
                 SessionFacade.CurrentCustomer.Id,
                 questionnaireId,
                 selectedDepartments,
@@ -633,16 +636,18 @@ namespace DH.Helpdesk.Web.Controllers
                 finishingDateTo,
                 isUniqueEmail);
 
-            var models =
+            List<CircularPartOverview> models =
                 cases.Select(c => new CircularPartOverview(c.CaseId, c.CaseNumber, c.Caption, c.Email, c.IsSent)).ToList();
 
             return this.PartialView("_CircularPartOverview", models);
         }
 
         [HttpGet]
-        public ViewResult DeleteConnectedCase(int circularpartId, int circularId)
+        public RedirectToRouteResult DeleteConnectedCase(int questionnaireId, int caseId, int circularId)
         {
-            return null;
+            this._circularService.DeleteConnectedCase(circularId, caseId);
+
+            return this.RedirectToAction("EditCircular", new { questionnaireId, circularId });
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Models.Questionnaire.Input
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     using DH.Helpdesk.Common.ValidationAttributes;
@@ -12,9 +13,15 @@
         {
         }
 
-        public EditCircularModel(int id, int questionnaireId, string circularName, DateTime changedDate)
+        public EditCircularModel(
+            int id,
+            int questionnaireId,
+            string circularName,
+            DateTime changedDate,
+            List<ConnectedToCircularOverview> connectedCases)
         {
             this.Id = id;
+            this.ConnectedCases = connectedCases;
             this.QuestionnaireId = questionnaireId;
             this.CircularName = circularName;
             this.ChangedDate = changedDate;
@@ -38,6 +45,9 @@
         public string StateText { get; set; }
 
         [LocalizedDisplay("ChangedDate")]
-        public DateTime ChangedDate { get; set; }        
+        public DateTime ChangedDate { get; set; }
+        
+        [NotNull]
+        public List<ConnectedToCircularOverview> ConnectedCases { get; set; }
     }
 }

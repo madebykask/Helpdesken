@@ -15,5 +15,15 @@
 
             return entities;
         }
+
+        public static IQueryable<QuestionnaireCircularPartEntity> GetCircularCases(
+            this IQueryable<QuestionnaireCircularPartEntity> query,
+            int circuarId)
+        {
+            IQueryable<QuestionnaireCircularPartEntity> entities =
+                query.Where(x => x.QuestionnaireCircular_Id == circuarId);
+
+            return entities;
+        }
     }
 }

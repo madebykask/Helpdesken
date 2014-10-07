@@ -119,7 +119,19 @@
             }
         }
 
-        public List<CircularPart> GetCases(
+        public void DeleteConnectedCase(int cirularId, int caseId)
+        {
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
+
+                circularPartRepository.DeleteWhere(x => x.QuestionnaireCircular_Id == cirularId && x.Case_Id == caseId);
+
+                uof.Save();
+            }
+        }
+
+        public List<CircularPart> GetAvaliableCases(
             int customerId,
             int questionnaireId,
             int[] selectedDepartments,
@@ -180,9 +192,45 @@
                 {
                     anonymus = from element in anonymus
                                group element by element.PersonsEmail
-                               into groups
-                               select groups.OrderBy(p => p.CaseNumber).FirstOrDefault();
+                                   into groups
+                                   select groups.OrderBy(p => p.CaseNumber).FirstOrDefault();
                 }
+
+                List<CircularPart> businessModels =
+                    anonymus.ToList()
+                        .Select(
+                            c =>
+                            new CircularPart(c.Id, (int)c.CaseNumber, c.Caption, c.PersonsEmail, c.SendDate != null))
+                        .ToList();
+
+                return businessModels;
+            }
+        }
+
+        public List<CircularPart> GetConnectedCases(int circularId)
+        {
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
+                var caseRepository = uof.GetRepository<Case>();
+
+                IQueryable<QuestionnaireCircularPartEntity> query =
+                    circularPartRepository.GetAll().GetCircularCases(circularId);
+
+                IQueryable<Case> cases = caseRepository.GetAll();
+
+                var anonymus = from connectedCase in query
+                               join @case in cases on connectedCase.Case_Id equals @case.Id into splits
+                               from split in splits.DefaultIfEmpty()
+                               select
+                                   new
+                                       {
+                                           split.Id,
+                                           split.CaseNumber,
+                                           split.Caption,
+                                           split.PersonsEmail,
+                                           connectedCase.SendDate
+                                       };
 
                 List<CircularPart> businessModels =
                     anonymus.ToList()

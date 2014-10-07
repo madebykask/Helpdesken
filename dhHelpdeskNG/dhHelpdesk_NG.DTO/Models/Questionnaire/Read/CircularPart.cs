@@ -1,8 +1,6 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Questionnaire.Read
 {
-    using DH.Helpdesk.BusinessData.Models.Shared.Input;
-
-    public sealed class CircularPart : INewBusinessModel
+    public sealed class CircularPart 
     {
         public CircularPart(int caseId, int caseNumber, string caption, string email, bool isSent)
         {
@@ -12,8 +10,6 @@
             this.Email = email;
             this.IsSent = isSent;
         }
-
-        public int Id { get; set; }
 
         public int CaseId { get; set; }
 

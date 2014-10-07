@@ -6,28 +6,23 @@
     {
         public ConnectedToCircularOverview()
         {
-
         }
 
         public ConnectedToCircularOverview(
-            int id,
             int circularId,
             int caseId,
             int caseNumber,
             string caption,
             string email,
-            BooleanDisplayValue isSent)
+            bool isSent)
         {
-            this.Id = id;
             this.CircularId = circularId;
             this.CaseId = caseId;
             this.CaseNumber = caseNumber;
             this.Caption = caption;
             this.Email = email;
-            this.IsSent = isSent;
+            this.IsSent = (BooleanDisplayValue)isSent;
         }
-
-        public int Id { get; set; }
 
         public int CircularId { get; set; }
 

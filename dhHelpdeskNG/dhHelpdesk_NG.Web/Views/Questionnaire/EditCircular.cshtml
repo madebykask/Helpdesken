@@ -1,5 +1,4 @@
 ﻿@model DH.Helpdesk.Web.Models.Questionnaire.Input.EditCircularModel
-
 @{
     ViewBag.Title = "EditCircular";
 }
@@ -13,7 +12,7 @@
                     <input type="submit" value="@Translation.Get("Save")" class="btn" />
                 </li>
                 <li>
-                    @Html.ActionLink(Translation.Get("Ta bort"), "DeleteCircular", new { questionnaireId = Model.QuestionnaireId, stateId = Model.State, circularId = Model.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) + "?" }) 
+                    @Html.ActionLink(Translation.Get("Ta bort"), "DeleteCircular", new { questionnaireId = Model.QuestionnaireId, stateId = Model.State, circularId = Model.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) + "?" })
                 </li>
                 <li>
                     <a href="@Url.Action("CircularOverview", "Questionnaire", new { questionnaireId = Model.QuestionnaireId, state = Model.State })" class="btn">
@@ -48,7 +47,7 @@
                                         </td>
                                         <td class="span9">
                                             @Html.EditorFor(model => model.CircularName)
-                                        </td> 
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td class="span3">
@@ -56,11 +55,14 @@
                                         </td>
                                         <td class="span9">
                                             @Html.DisplayTextFor(m => m.StateText)
-                                        </td> 
-                                    </tr>                                                                        
+                                        </td>
+                                    </tr>
                                 </table>
                             </div>
                         </div>
+                    </div>
+                    <div id="case_grid_container">
+                        @Html.Partial("_CircularPartOverviewWithDelete", Model.ConnectedCases, new ViewDataDictionary { { "QuestionnaireId", Model.QuestionnaireId } })
                     </div>
                 </div>
             </div>

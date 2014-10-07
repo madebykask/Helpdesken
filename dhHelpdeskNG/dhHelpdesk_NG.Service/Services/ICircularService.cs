@@ -19,7 +19,9 @@
 
         void DeleteById(int id);
 
-        List<CircularPart> GetCases(
+        void DeleteConnectedCase(int cirularId, int caseId);
+
+        List<CircularPart> GetAvaliableCases(
             int customerId,
             int questionnaireId,
             int[] selectedDepartments,
@@ -30,5 +32,7 @@
             DateTime? finishingDateFrom,
             DateTime? finishingDateTo,
             bool isUniqueEmail);
+
+        List<CircularPart> GetConnectedCases(int id);
     }
 }
