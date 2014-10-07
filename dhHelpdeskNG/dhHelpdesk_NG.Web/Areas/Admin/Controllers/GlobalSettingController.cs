@@ -378,6 +378,7 @@
                 WatchDateCalendarValues = this._watchDateCalendarService.GetAllWatchDateCalendarValues().ToList(),
                 TextType = this._textTranslationService.GetTextType(texttypeid),
                 HolidayHeader = this._holidayService.GetHolidayHeader(1),
+                TextWithUsers = this._textTranslationService.GetAllTextsWithUsers(texttypeid).ToList(),
                 Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
                 {
                     Text = Translation.Get(x.Name),

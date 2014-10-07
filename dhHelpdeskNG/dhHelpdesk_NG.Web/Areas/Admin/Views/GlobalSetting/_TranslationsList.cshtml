@@ -9,7 +9,10 @@
                         @Translation.Get("Text", Enums.TranslationSource.TextTranslation)
                     </th>
                     <th>
-                        @Translation.Get("Skapad", Enums.TranslationSource.TextTranslation)
+                        @Translation.Get("Skapad datum", Enums.TranslationSource.TextTranslation)
+                    </th>
+                    <th>
+                        @Translation.Get("Senast ändrad datum", Enums.TranslationSource.TextTranslation)
                     </th>
                     <th>
                         @Translation.Get("Skapad av", Enums.TranslationSource.TextTranslation)
@@ -17,17 +20,20 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.Texts)
+                @foreach (var item in Model.TextWithUsers)
                 {                    
                     <tr>
                         <td style="width: 200px">
                             <a href="@Url.Action("edittranslation", "globalsetting", new { area = "admin", id = item.Id })">@Html.DisplayFor(modelItem => item.TextToTranslate)</a>
                         </td>
                         <td>
+                            @item.CreatedDate.ToShortDateString()
+                        </td>
+                        <td>
                             @item.ChangedDate.ToShortDateString()
                         </td>
                         <td>
-                            @*@item.User.SurName*@
+                            @item.FirstName  @item.LastName
                         </td>
                     </tr>
                 }

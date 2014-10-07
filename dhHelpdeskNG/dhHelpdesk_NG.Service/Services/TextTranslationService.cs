@@ -13,6 +13,8 @@
     {
         IEnumerable<Text> GetAllTexts(int texttypeId);
 
+        IEnumerable<TextList> GetAllTextsWithUsers(int texttypeId);
+
         IList<TextTranslation> GetAllTextTranslations();
         IList<TextTranslationLanguageList> GetEditListToTextTranslations(int textid);
         IList<TextTranslationLanguageList> GetIndexListToTextTranslations(int languageId);
@@ -59,7 +61,12 @@
         public IEnumerable<Text> GetAllTexts(int texttypeId)
         {
             return this._textRepository.GetAll().Where(x => x.Id > 4999 && x.Type == texttypeId).OrderBy(x => x.TextToTranslate);
-        }       
+        }
+
+        public IEnumerable<TextList> GetAllTextsWithUsers(int texttypeId)
+        {
+            return this._textRepository.GetAllTextsWithUsers(texttypeId).OrderBy(x => x.TextToTranslate);
+        }
 
         public IList<TextTranslation> GetAllTextTranslations()
         {

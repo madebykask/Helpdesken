@@ -18,6 +18,7 @@
         public IList<Text> Texts { get; set; }
         public IList<WatchDateCalendarValue> WatchDateCalendarValues { get; set; }
         public IList<SelectListItem> Languages { get; set; }
+        public IList<TextList> TextWithUsers { get; set; }
 
         public Language Language { get; set; }
 
@@ -26,6 +27,8 @@
         public IList<SelectListItem> HolidayHeaders { get; set; }
         public IList<SelectListItem> WatchDateCalendars { get; set; }
         public HolidayHeader HolidayHeader { get; set; }
+
+        public User User { get; set; }
 
     }
 

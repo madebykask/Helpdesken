@@ -13,6 +13,7 @@ namespace DH.Helpdesk.Dal.Repositories
     {
         int GetNextId();
         IEnumerable<Text> GetAllWithTranslation();
+        IEnumerable<TextList> GetAllTextsWithUsers(int texttypeId);
     }
 
     public class TextRepository : RepositoryBase<Text>, ITextRepository
@@ -35,6 +36,25 @@ namespace DH.Helpdesk.Dal.Repositories
             return this.DataContext.Texts.Include("TextTranslations");
         }
 
+        public IEnumerable<TextList> GetAllTextsWithUsers(int texttypeId)
+        {
+            var query = from t in this.DataContext.Texts
+                        //join tt in this.DataContext.TextTranslations on t.Id equals tt.Text_Id into t_tt
+                        join u in this.DataContext.Users on t.ChangedByUser_Id equals u.Id
+                        where t.Id> 4999 && t.Type == texttypeId
+                        //from tt in t_tt.DefaultIfEmpty()
+                        group t by new { t.Id, t.TextToTranslate, u.SurName, u.FirstName, t.ChangedDate, t.CreatedDate } into g
+                        select new TextList
+                        {
+                            Id = g.Key.Id,
+                            TextToTranslate = g.Key.TextToTranslate,
+                            FirstName = g.Key.FirstName,
+                            LastName = g.Key.SurName,
+                            ChangedDate = g.Key.ChangedDate,
+                            CreatedDate = g.Key.CreatedDate
+                        };
+            return query;
+        }
     }
 
     #endregion
