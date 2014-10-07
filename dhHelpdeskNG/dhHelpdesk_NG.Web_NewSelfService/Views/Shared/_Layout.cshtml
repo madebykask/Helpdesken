@@ -1,4 +1,4 @@
-﻿@using System.Collections.Generic;
+﻿c@using System.Collections.Generic;
 @using DH.Helpdesk.NewSelfService.Infrastructure
 @using DH.Helpdesk.NewSelfService.Infrastructure.Extensions
 @using DH.Helpdesk.NewSelfService.Infrastructure.Common;
@@ -276,17 +276,20 @@
                       <a href="#" type="button" class="dropdown-toggle" data-toggle="dropdown">
                         @Translation.Get("Select language", Enums.TranslationSource.TextTranslation)<span class="caret"></span>
                       </a>
-                      <ul class="dropdown-menu" role="menu">
-                          @foreach (var lang in SessionFacade.AllLanguages)
-                          {
-                            <li>
-                                <a href="@Url.Action("ChangeLanguage", "start" , new { area= "", language = lang.LanguageId , currentUrl = this.Request.Url.LocalPath, lastParams = HttpContext.Current.Request.QueryString })"> 
-                                   @Translation.Get(lang.Name , Enums.TranslationSource.TextTranslation) @(lang.Id==SessionFacade.CurrentLanguageId? "●" : "")
-                                </a>
+                      @if  (SessionFacade.AllLanguages != null)
+                      {
+                          <ul class="dropdown-menu" role="menu">
+                              @foreach (var lang in SessionFacade.AllLanguages)
+                              {
+                                <li>
+                                    <a href="@Url.Action("ChangeLanguage", "start" , new { area= "", language = lang.LanguageId , currentUrl = this.Request.Url.LocalPath, lastParams = HttpContext.Current.Request.QueryString })"> 
+                                       @Translation.Get(lang.Name , Enums.TranslationSource.TextTranslation) @(lang.Id==SessionFacade.CurrentLanguageId? "●" : "")
+                                    </a>
 
-                            </li>
-                          }                         
-                      </ul>
+                                </li>
+                              }                         
+                          </ul>
+                      }
                     </div>
                 @if (!hideMenu)
                 {
