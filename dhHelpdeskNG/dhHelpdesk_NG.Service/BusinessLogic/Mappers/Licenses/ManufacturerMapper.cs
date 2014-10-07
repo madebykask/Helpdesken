@@ -2,6 +2,7 @@
 {
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.Licenses.Licenses;
     using DH.Helpdesk.BusinessData.Models.Licenses.Manufacturers;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
@@ -46,6 +47,12 @@
             }
 
             return model;
+        }
+
+        public static void MapToEntity(ManufacturerModel model, Manufacturer entity)
+        {
+            entity.Customer_Id = model.CustomerId;
+            entity.Name = model.ManufacturerName;
         }
     }
 }

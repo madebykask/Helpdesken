@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.Services.Services.Concrete.Licenses
 {
+    using System;
+
     using DH.Helpdesk.BusinessData.Models.Licenses.Applications;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
@@ -59,7 +61,41 @@
 
         public int AddOrUpdate(ApplicationModel application)
         {
-            throw new global::System.NotImplementedException();
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var applicationRepository = uow.GetRepository<Application>();
+                Application entity;
+                if (application.IsNew())
+                {
+                    entity = new Application();
+                    ApplicationMapper.MapToEntity(application, entity);
+                    entity.CreatedDate = DateTime.Now;
+                    entity.ChangedDate = DateTime.Now;
+                    applicationRepository.Add(entity);
+                }
+                else
+                {
+                    entity = applicationRepository.GetById(application.Id);
+                    ApplicationMapper.MapToEntity(application, entity);
+                    entity.ChangedDate = DateTime.Now;
+                    applicationRepository.Update(entity);
+                }
+
+                uow.Save();
+                return entity.Id;
+            }
+        }
+
+        public void Delete(int id)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var repository = uow.GetRepository<Application>();
+
+                repository.DeleteById(id);
+
+                uow.Save();
+            }
         }
     }
 }

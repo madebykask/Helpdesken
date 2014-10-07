@@ -53,5 +53,11 @@
 
             return model;
         }
+
+        public static void MapToEntity(ApplicationModel model, Application entity)
+        {
+            entity.Customer_Id = model.CustomerId;
+            entity.Name = model.ApplicationName;
+        }
     }
 }

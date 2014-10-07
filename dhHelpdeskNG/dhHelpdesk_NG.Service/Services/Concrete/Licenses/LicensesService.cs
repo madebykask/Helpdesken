@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.Services.Services.Concrete.Licenses
 {
+    using System;
+
     using DH.Helpdesk.BusinessData.Models.Licenses.Licenses;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
@@ -25,8 +27,7 @@
 
                 var overviews = licenseRepository.GetAll()
                                 .GetCustomerLicenses(customerId)
-                                .MapToOverviews(departmentRepository.GetAll());
-                                
+                                .MapToOverviews(departmentRepository.GetAll());                                
 
                 return overviews;
             }
@@ -60,7 +61,41 @@
 
         public int AddOrUpdate(LicenseModel license)
         {
-            throw new global::System.NotImplementedException();
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var licenseRepository = uow.GetRepository<License>();
+                License entity;
+                if (license.IsNew())
+                {
+                    entity = new License();
+                    LicenseMapper.MapToEntity(license, entity);
+                    entity.CreatedDate = DateTime.Now;
+                    entity.ChangedDate = DateTime.Now;
+                    licenseRepository.Add(entity);
+                }
+                else
+                {
+                    entity = licenseRepository.GetById(license.Id);
+                    LicenseMapper.MapToEntity(license, entity);
+                    entity.ChangedDate = DateTime.Now;
+                    licenseRepository.Update(entity);
+                }
+
+                uow.Save();
+                return entity.Id;
+            }
+        }
+
+        public void Delete(int id)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var repository = uow.GetRepository<License>();
+
+                repository.DeleteById(id);
+
+                uow.Save();
+            }
         }
     }
 }

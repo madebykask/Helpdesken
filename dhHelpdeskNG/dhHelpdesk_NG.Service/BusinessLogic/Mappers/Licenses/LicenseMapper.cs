@@ -78,5 +78,21 @@
 
             return model;
         }
+
+        public static void MapToEntity(LicenseModel model, License entity)
+        {
+            entity.LicenseNumber = model.LicenseNumber;
+            entity.NumberOfLicenses = model.NumberOfLicenses;
+            entity.PurshaseDate = model.PurshaseDate;
+            entity.Price = model.Price;
+            entity.PurshaseInfo = model.PurshaseInfo;
+            entity.PriceYear = model.PriceYear;
+            entity.Product_Id = model.ProductId;
+            entity.Vendor_Id = model.VendorId;
+            entity.Department_Id = model.DepartmentId;
+            entity.UpgradeLicense_Id = model.UpgradeLicenseId;
+            entity.ValidDate = model.ValidDate;
+            entity.Info = model.Info;
+        }
     }
 }

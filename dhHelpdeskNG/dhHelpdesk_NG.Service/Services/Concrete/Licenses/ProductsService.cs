@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.Services.Services.Concrete.Licenses
 {
+    using System;
+
     using DH.Helpdesk.BusinessData.Models.Licenses.Products;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
@@ -78,7 +80,41 @@
 
         public int AddOrUpdate(ProductModel product)
         {
-            throw new global::System.NotImplementedException();
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var productRepository = uow.GetRepository<Product>();
+                Product entity;
+                if (product.IsNew())
+                {
+                    entity = new Product();
+                    ProductMapper.MapToEntity(product, entity);
+                    entity.CreatedDate = DateTime.Now;
+                    entity.ChangedDate = DateTime.Now;
+                    productRepository.Add(entity);
+                }
+                else
+                {
+                    entity = productRepository.GetById(product.Id);
+                    ProductMapper.MapToEntity(product, entity);
+                    entity.ChangedDate = DateTime.Now;
+                    productRepository.Update(entity);
+                }
+
+                uow.Save();
+                return entity.Id;
+            }
+        }
+
+        public void Delete(int id)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var repository = uow.GetRepository<Product>();
+
+                repository.DeleteById(id);
+
+                uow.Save();
+            }
         }
     }
 }

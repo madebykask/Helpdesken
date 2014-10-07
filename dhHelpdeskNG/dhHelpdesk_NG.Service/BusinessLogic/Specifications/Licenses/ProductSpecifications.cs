@@ -13,7 +13,7 @@
                 return query;
             }
 
-            query = query.Where(p => p.Licenses.Any(l => regions.Contains(l.Region_Id)));
+            query = query.Where(p => p.Licenses.Any(l => l.Region_Id.HasValue && regions.Contains(l.Region_Id.Value)));
 
             return query;
         }
@@ -25,7 +25,7 @@
                 return query;
             }
 
-            query = query.Where(p => p.Licenses.Any(l => departments.Contains(l.Department_Id)));
+            query = query.Where(p => p.Licenses.Any(l => l.Department_Id.HasValue && departments.Contains(l.Department_Id.Value)));
 
             return query;
         } 

@@ -11,5 +11,7 @@
         ManufacturerModel GetById(int id);
 
         int AddOrUpdate(ManufacturerModel manufacturer);
+
+        void Delete(int id);
     }
 }

@@ -11,5 +11,7 @@
         VendorModel GetById(int id);
 
         int AddOrUpdate(VendorModel vendor);
+
+        void Delete(int id);
     }
 }

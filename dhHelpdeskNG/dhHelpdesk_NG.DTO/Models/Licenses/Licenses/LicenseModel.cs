@@ -13,7 +13,7 @@
                 DateTime? purshaseDate, 
                 int price, 
                 string purshaseInfo, 
-                int? priceYear, 
+                int priceYear, 
                 int? productId, 
                 int? vendorId, 
                 int? departmentId, 
@@ -45,7 +45,7 @@
                 DateTime? purshaseDate, 
                 int price, 
                 string purshaseInfo, 
-                int? priceYear, 
+                int priceYear, 
                 int? productId, 
                 int? vendorId, 
                 int? departmentId, 
@@ -80,7 +80,7 @@
         [MaxLength(200)]
         public string PurshaseInfo { get; private set; }
 
-        public int? PriceYear { get; private set; }
+        public int PriceYear { get; private set; }
 
         public int? ProductId { get; private set; }
 

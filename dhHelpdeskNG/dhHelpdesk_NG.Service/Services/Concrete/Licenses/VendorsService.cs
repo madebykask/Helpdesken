@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.Services.Services.Concrete.Licenses
 {
+    using System;
+
     using DH.Helpdesk.BusinessData.Models.Licenses.Vendors;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
@@ -58,7 +60,41 @@
 
         public int AddOrUpdate(VendorModel vendor)
         {
-            throw new global::System.NotImplementedException();
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var vendorRepository = uow.GetRepository<Vendor>();
+                Vendor entity;
+                if (vendor.IsNew())
+                {
+                    entity = new Vendor();
+                    VendorMapper.MapToEntity(vendor, entity);
+                    entity.CreatedDate = DateTime.Now;
+                    entity.ChangedDate = DateTime.Now;
+                    vendorRepository.Add(entity);
+                }
+                else
+                {
+                    entity = vendorRepository.GetById(vendor.Id);
+                    VendorMapper.MapToEntity(vendor, entity);
+                    entity.ChangedDate = DateTime.Now;
+                    vendorRepository.Update(entity);
+                }
+
+                uow.Save();
+                return entity.Id;
+            }
+        }
+
+        public void Delete(int id)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var repository = uow.GetRepository<Vendor>();
+
+                repository.DeleteById(id);
+
+                uow.Save();
+            }
         }
     }
 }

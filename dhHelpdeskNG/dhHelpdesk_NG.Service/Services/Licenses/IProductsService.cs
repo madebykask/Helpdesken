@@ -16,5 +16,7 @@
         ProductModel GetById(int id);
 
         int AddOrUpdate(ProductModel product);
+
+        void Delete(int id);
     }
 }

@@ -69,5 +69,18 @@
 
             return model;
         }
+
+        public static void MapToEntity(VendorModel model, Vendor entity)
+        {
+            entity.VendorName = model.VendorName;
+            entity.Contact = model.Contact;
+            entity.Address = model.Address;
+            entity.PostalCode = model.PostalCode;
+            entity.PostalAddress = model.PostalAddress;
+            entity.Phone = model.Phone;
+            entity.EMail = model.Email;
+            entity.HomePage = model.HomePage;
+            entity.Customer_Id = model.CustomerId;
+        }
     }
 }

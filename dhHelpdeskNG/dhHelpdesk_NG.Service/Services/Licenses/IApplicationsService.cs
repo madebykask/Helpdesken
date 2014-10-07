@@ -11,5 +11,7 @@
         ApplicationModel GetById(int id);
 
         int AddOrUpdate(ApplicationModel application);
+
+        void Delete(int id);
     }
 }

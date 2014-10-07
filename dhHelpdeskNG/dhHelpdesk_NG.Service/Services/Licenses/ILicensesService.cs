@@ -11,5 +11,7 @@
         LicenseModel GetById(int id);
 
         int AddOrUpdate(LicenseModel license);
+
+        void Delete(int id);
     }
 }

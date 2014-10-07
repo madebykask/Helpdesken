@@ -53,5 +53,12 @@
 
             return model;
         }
+
+        public static void MapToEntity(ProductModel model, Product entity)
+        {
+            entity.Customer_Id = model.CustomerId;
+            entity.Manufacturer_Id = model.ManufacturerId;
+            entity.Name = model.ProductName;
+        }
     }
 }
