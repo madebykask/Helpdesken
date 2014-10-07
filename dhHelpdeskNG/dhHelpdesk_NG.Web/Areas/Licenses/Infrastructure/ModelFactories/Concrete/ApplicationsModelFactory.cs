@@ -2,6 +2,7 @@
 {
     using DH.Helpdesk.BusinessData.Models.Licenses.Applications;
     using DH.Helpdesk.Web.Areas.Licenses.Models.Applications;
+    using DH.Helpdesk.Web.Infrastructure.Tools;
 
     public sealed class ApplicationsModelFactory : IApplicationsModelFactory
     {
@@ -17,7 +18,9 @@
 
         public ApplicationEditModel GetEditModel(ApplicationData data)
         {
-            return new ApplicationEditModel();
+            var products = WebMvcHelper.CreateListField(data.Products);
+
+            return new ApplicationEditModel(products);
         }
     }
 }

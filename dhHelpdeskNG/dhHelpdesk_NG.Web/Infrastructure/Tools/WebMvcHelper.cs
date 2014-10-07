@@ -7,6 +7,11 @@
 
     public static class WebMvcHelper
     {
+        public static SelectList CreateListField(IEnumerable<ItemOverview> items)
+        {
+            return CreateListField(items, null, false);
+        }
+
         public static SelectList CreateListField(
                     IEnumerable<ItemOverview> items,
                     int selectedValue)
@@ -16,7 +21,7 @@
 
         public static SelectList CreateListField(
             IEnumerable<ItemOverview> items,
-            int selectedValue,
+            int? selectedValue,
             bool needEmpty)
         {
             var list = new List<ItemOverview>();
