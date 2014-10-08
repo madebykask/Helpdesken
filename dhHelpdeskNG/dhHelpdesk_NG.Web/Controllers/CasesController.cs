@@ -92,9 +92,7 @@
 
         private readonly ICaseSolutionSettingService caseSolutionSettingService;
 
-        private readonly IInvoiceHelper invoiceHelper;
-
-        private readonly ITextTranslationService _textTranslationService;
+        private readonly IInvoiceHelper invoiceHelper;        
 
         #endregion
 
@@ -147,12 +145,10 @@
             IInvoiceArticleService invoiceArticleService, 
             IInvoiceArticlesModelFactory invoiceArticlesModelFactory, 
             IConfiguration configuration,
-            ICaseSolutionSettingService caseSolutionSettingService,
-            ITextTranslationService textTranslationService, 
+            ICaseSolutionSettingService caseSolutionSettingService,            
             IInvoiceHelper invoiceHelper)
             : base(masterDataService)
-        {
-            this._textTranslationService = textTranslationService;
+        {            
             this._caseService = caseService;
             this._caseSearchService = caseSearchService;
             this._caseFieldSettingService = caseFieldSettingService;
@@ -207,9 +203,7 @@
         #region Public Methods and Operators
 
         public ActionResult Index(int? customerId, bool? clearFilters = false)
-        {
-            //var sss = _textTranslationService.GetAllTextsWithUsers(SessionFacade.CurrentUser.Id);
-
+        {            
             if (clearFilters == true)
             {
                 SessionFacade.CurrentCaseSearch = null;                
