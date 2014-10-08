@@ -12,10 +12,13 @@
                         @Translation.Get("Skapad datum", Enums.TranslationSource.TextTranslation)
                     </th>
                     <th>
+                        @Translation.Get("Skapad av", Enums.TranslationSource.TextTranslation)
+                    </th>
+                    <th>
                         @Translation.Get("Senast ändrad datum", Enums.TranslationSource.TextTranslation)
                     </th>
                     <th>
-                        @Translation.Get("Skapad av", Enums.TranslationSource.TextTranslation)
+                        @Translation.Get("Ändrad av", Enums.TranslationSource.TextTranslation)
                     </th>
                 </tr>
             </thead>
@@ -30,13 +33,16 @@
                             @item.CreatedDate.ToShortDateString()
                         </td>
                         <td>
+                            @item.CreatedByFirstName  @item.CreatedByLastName
+                        </td>
+                        <td>
                             @if (item.ChangedDate != null)
                             {
                                 @item.ChangedDate.Value.ToShortDateString()
                             }    
                         </td>
                         <td>
-                            @item.FirstName  @item.LastName
+                            @item.ChangedByFirstName  @item.ChangedByLastName
                         </td>
                     </tr>
                 }

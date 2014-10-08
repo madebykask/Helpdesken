@@ -38,6 +38,20 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public IEnumerable<TextList> GetAllTextsWithUsers(int texttypeId)
         {
+
+            //return txt =
+            //   from T in this.DataContext.Texts
+            //   join TT in this.DataContext.TextTranslations on T.Id equals TT.Text_Id into Translate
+            //   from Trans in Translate.DefaultIfEmpty()
+            //   join U1 in this.DataContext.Users on Trans.ChangedByUser_Id equals U1.Id into Users1
+            //   from User1 in Users1.DefaultIfEmpty()
+            //   join U2 in this.DataContext.Users on T.ChangedByUser_Id equals U2.Id into Users2
+            //   from User2 in Users2.DefaultIfEmpty()
+            //   where (T.Type == 1 && T.Id > 4999)
+            //   select new { T.TextToTranslate, T.CreatedDate, User2.FirstName, User2.SurName, T.ChangedDate };
+
+
+
             var q = from t in this.DataContext.Texts
                     join u in this.DataContext.Users on t.ChangedByUser_Id equals u.Id
                     join tt in this.DataContext.TextTranslations on t.Id equals tt.Text_Id into t_tt
@@ -48,8 +62,8 @@ namespace DH.Helpdesk.Dal.Repositories
                     {
                         Id = g.Key.Id,
                         TextToTranslate = g.Key.TextToTranslate,
-                        FirstName = g.Key.FirstName,
-                        LastName = g.Key.SurName,
+                        CreatedByFirstName = g.Key.FirstName,
+                        CreatedByLastName = g.Key.SurName,
                         ChangedDate = g.Key.ChangedDate,
                         CreatedDate = g.Key.CreatedDate
                     };
@@ -57,7 +71,7 @@ namespace DH.Helpdesk.Dal.Repositories
             var list = q.ToList();
 
             return q;
-            
+           
         }
     }
 

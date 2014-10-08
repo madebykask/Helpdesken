@@ -269,6 +269,26 @@
             return this.View(model);
         }
 
+        public ActionResult EditWatchDateCalendarValue(int id)
+        {
+            var wdCalendarValue = this._watchDateCalendarService.GetWatchDateCalendarValue(id);
+
+            var wdCalendar = this._watchDateCalendarService.GetWatchDateCalendar(wdCalendarValue.WatchDateCalendar_Id);
+            var year = DateTime.Today.Year;
+            //var wdValue = this._watchDateCalendarService.GetWatchDateCalendarValue(id);
+
+            if (wdCalendar == null)
+                return new HttpNotFoundResult("No watch date value found...");
+
+            var model = this.SaveWatchDateViewModel(wdCalendar, year);
+
+            SessionFacade.ActiveTab = "#fragment-3";
+
+            //model.ChangedWatchDateName = wdValue.WatchDateCalendar.Name;
+
+            return this.View(model);
+        }
+
         public ActionResult NewTranslation()
         {
             var model = this.SaveTextTranslationViewModel(new Text { }, SessionFacade.CurrentCustomer.Language_Id);

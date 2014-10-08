@@ -92,7 +92,8 @@
                                             @item.WatchDate.ToShortDateString()
                                         </td>
                                         <td>
-                                            @item.WatchDateValueName
+                                            <a href="@Url.Action("editwatchdatecalendarvalue", "globalsetting", new { id = item.Id })">@item.WatchDateValueName</a>
+                                          
                                         </td>
                                         <td>
                                             <input class="btn btn-danger" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)"
