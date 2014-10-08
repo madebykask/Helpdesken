@@ -8,6 +8,16 @@
 
     public sealed class LicenseEditModel
     {
+        public LicenseEditModel(
+                SelectList products, 
+                SelectList departments, 
+                SelectList vendors)
+        {
+            this.Vendors = vendors;
+            this.Departments = departments;
+            this.Products = products;
+        }
+
         [NotNull]
         public SelectList Products { get; private set; }
 
@@ -39,5 +49,23 @@
         [LocalizedInteger]
         [LocalizedDisplay("Inköpspris")]
         public int Price { get; set; }
+
+        [LocalizedStringLength(200)]
+        [LocalizedDisplay("Inköpsunderlag")]
+        public string PurchaseInfo { get; set; }
+
+        [LocalizedDisplay("Giltig t.o.m")]
+        public DateTime? ValidDate { get; set; }
+
+        [NotNull]
+        public SelectList Vendors { get; private set; }
+
+        [LocalizedRequired]
+        [LocalizedInteger]
+        [LocalizedDisplay("Årlig kostnad")]
+        public int PriceYear { get; set; }
+
+        [LocalizedDisplay("Kommentar")]
+        public string Info { get; set; }
     }
 }

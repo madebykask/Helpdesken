@@ -1,6 +1,26 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Licenses.Models.Products
 {
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+
     public sealed class ProductEditModel
     {
+        public ProductEditModel(MultiSelectList applications)
+        {
+            this.Applications = applications;
+        }
+
+        [LocalizedRequired]
+        [LocalizedStringLength(50)]
+        [LocalizedDisplay("Produkt")]
+        public string ProductName { get; set; }
+
+        [NotNull]
+        public MultiSelectList Applications { get; private set; }
+
+        [NotNull]
+        public int[] ApplicationIds { get; set; }
     }
 }

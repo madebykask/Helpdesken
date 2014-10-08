@@ -23,7 +23,9 @@
 
         public ProductEditModel GetEditModel(ProductData data)
         {
-            return new ProductEditModel();
+            var applications = WebMvcHelper.CreateMultiSelectField(data.Applications, null);
+
+            return new ProductEditModel(applications);
         }
     }
 }

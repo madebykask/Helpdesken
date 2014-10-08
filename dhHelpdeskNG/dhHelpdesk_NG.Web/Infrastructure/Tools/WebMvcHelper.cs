@@ -9,14 +9,14 @@
     {
         public static SelectList CreateListField(IEnumerable<ItemOverview> items)
         {
-            return CreateListField(items, null, false);
+            return CreateListField(items, null, true);
         }
 
         public static SelectList CreateListField(
                     IEnumerable<ItemOverview> items,
-                    int selectedValue)
+                    int? selectedValue)
         {
-            return CreateListField(items, selectedValue, false);
+            return CreateListField(items, selectedValue, true);
         }
 
         public static SelectList CreateListField(
