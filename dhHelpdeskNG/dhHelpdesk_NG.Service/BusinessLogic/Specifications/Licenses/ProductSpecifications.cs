@@ -28,6 +28,18 @@
             query = query.Where(p => p.Licenses.Any(l => l.Department_Id.HasValue && departments.Contains(l.Department_Id.Value)));
 
             return query;
+        }
+
+        public static IQueryable<Product> GetApplicationProducts(this IQueryable<Product> query, int? applicationId)
+        {
+            if (!applicationId.HasValue)
+            {
+                return query;
+            }
+
+            query = query.Where(p => p.Applications.Select(a => a.Id).Contains(applicationId.Value));
+
+            return query;
         } 
     }
 }

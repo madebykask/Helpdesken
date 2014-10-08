@@ -2,7 +2,6 @@
 {
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models.Licenses.Licenses;
     using DH.Helpdesk.BusinessData.Models.Licenses.Manufacturers;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
@@ -31,6 +30,7 @@
             var entity = query.GetById(id)
                         .Select(m => new
                             {
+                                m.Id,
                                 m.Customer_Id,
                                 m.Name,
                                 m.CreatedDate,
@@ -40,6 +40,7 @@
             if (entity != null)
             {
                 model = new ManufacturerModel(
+                                entity.Id,
                                 entity.Customer_Id,
                                 entity.Name,
                                 entity.CreatedDate,

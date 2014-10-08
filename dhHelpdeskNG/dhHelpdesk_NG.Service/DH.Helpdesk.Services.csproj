@@ -88,11 +88,14 @@
     <Compile Include="BusinessLogic\BusinessModelValidators\Inventory\IServerValidator.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Inventory\Concrete\ServerValidator.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Inventory\Concrete\PrinterValidator.cs" />
+    <Compile Include="BusinessLogic\Mappers\Department\DepartmentMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Licenses\ApplicationMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Licenses\LicenseFileMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Licenses\LicenseMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Licenses\ManufacturerMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Licenses\ProductMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Licenses\VendorMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Shared\GlobalMappers.cs" />
     <Compile Include="BusinessLogic\Specifications\Case\CaseSpecifications.cs" />
     <Compile Include="BusinessLogic\Invoice\ArticlesImportData.cs" />
     <Compile Include="BusinessLogic\Invoice\IInvoiceImporter.cs" />
@@ -101,6 +104,7 @@
     <Compile Include="BusinessLogic\OtherTools\ITemporaryIdProvider.cs" />
     <Compile Include="BusinessLogic\Specifications\GlobalSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Licenses\ApplicationSpecifications.cs" />
+    <Compile Include="BusinessLogic\Specifications\Licenses\LicenseFileSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Licenses\LicenseSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Licenses\ProductSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Questionnaire\CircularPartSpecifications.cs" />

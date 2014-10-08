@@ -5,6 +5,7 @@
     using DH.Helpdesk.BusinessData.Models.Licenses.Licenses;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications.Licenses;
 
     public static class LicenseMapper
     {
@@ -34,13 +35,17 @@
             return overviews;
         }
 
-        public static LicenseModel MapToBusinessModel(this IQueryable<License> query, int id)
+        public static LicenseModel MapToBusinessModel(
+                                this IQueryable<License> query, 
+                                int id,
+                                IQueryable<LicenseFile> files)
         {
             LicenseModel model = null;
 
             var entity = query.GetById(id)
                         .Select(l => new
                             {
+                                l.Id,
                                 l.LicenseNumber,
                                 l.NumberOfLicenses,
                                 l.PurshaseDate,
@@ -59,7 +64,11 @@
 
             if (entity != null)
             {
+                var licenseFiles = files.GetLicenseFiles(entity.Id)
+                                    .MapToBusinessModels();
+
                 model = new LicenseModel(
+                                entity.Id,
                                 entity.LicenseNumber,
                                 entity.NumberOfLicenses,
                                 entity.PurshaseDate,
@@ -73,7 +82,8 @@
                                 entity.ValidDate,
                                 entity.Info,
                                 entity.CreatedDate,
-                                entity.ChangedDate);
+                                entity.ChangedDate,
+                                licenseFiles);
             }
 
             return model;

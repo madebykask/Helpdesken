@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Domain
 {
     using global::System;
+    using global::System.Collections.Generic;
 
     public class License : Entity
     {
@@ -41,5 +42,7 @@
         public virtual Product Product { get; set; }
 
         public virtual Vendor Vendor { get; set; }
+
+        public virtual ICollection<LicenseFile> Files { get; set; } 
     }
 }

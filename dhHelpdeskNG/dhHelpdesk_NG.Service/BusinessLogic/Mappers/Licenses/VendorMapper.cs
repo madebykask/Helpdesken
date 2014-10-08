@@ -13,7 +13,7 @@
             var entities = query.Select(v => new 
                                                 {
                                                     VendorId = v.Id,
-                                                    v.VendorName,
+                                                    v.Name,
                                                     VendorContact = v.Contact,
                                                     VendorPhone = v.Phone,
                                                     VendorEmail = v.EMail,
@@ -22,7 +22,7 @@
 
             var overviews = entities.Select(v => new VendorOverview(
                                                     v.VendorId,
-                                                    v.VendorName,
+                                                    v.Name,
                                                     v.VendorContact,
                                                     v.VendorPhone,
                                                     v.VendorEmail,
@@ -38,7 +38,8 @@
             var entity = query.GetById(id)
                         .Select(v => new
                             {
-                                v.VendorName,
+                                v.Id,
+                                v.Name,
                                 v.Contact,
                                 v.Address,
                                 v.PostalCode,
@@ -54,7 +55,8 @@
             if (entity != null)
             {
                 model = new VendorModel(
-                                entity.VendorName,
+                                entity.Id,
+                                entity.Name,
                                 entity.Contact,
                                 entity.Address,
                                 entity.PostalCode,
@@ -72,7 +74,7 @@
 
         public static void MapToEntity(VendorModel model, Vendor entity)
         {
-            entity.VendorName = model.VendorName;
+            entity.Name = model.VendorName;
             entity.Contact = model.Contact;
             entity.Address = model.Address;
             entity.PostalCode = model.PostalCode;

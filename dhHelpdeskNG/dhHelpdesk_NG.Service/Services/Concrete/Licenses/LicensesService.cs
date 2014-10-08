@@ -5,7 +5,10 @@
     using DH.Helpdesk.BusinessData.Models.Licenses.Licenses;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Department;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Licenses;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Shared;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Licenses;
     using DH.Helpdesk.Services.Services.Licenses;
 
@@ -38,18 +41,34 @@
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var licenseRepository = uow.GetRepository<License>();
+                var licenseFileRepository = uow.GetRepository<LicenseFile>();
+                var productRepository = uow.GetRepository<Product>();
+                var departmentRepository = uow.GetRepository<Department>();
+                var vendorRepository = uow.GetRepository<Vendor>();
 
                 LicenseModel license;
                 if (licenseId.HasValue)
                 {
-                    license = licenseRepository.GetAll().MapToBusinessModel(licenseId.Value);
+                    license = licenseRepository.GetAll().MapToBusinessModel(licenseId.Value, licenseFileRepository.GetAll());
                 }
                 else
                 {
                     license = LicenseModel.CreateDefault();
                 }
 
-                return new LicenseData(license);
+                var products = productRepository.GetAll()
+                                .GetByCustomer(customerId)
+                                .MapToItemOverviews();
+                
+                var departments = departmentRepository.GetAll()
+                                .GetByCustomer(customerId)
+                                .MapToItemOverviews();
+
+                var vendors = vendorRepository.GetAll()
+                                .GetByCustomer(customerId)
+                                .MapToItemOverviews();
+
+                return new LicenseData(license, products, departments, vendors);
             }
         }
 
@@ -58,8 +77,9 @@
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var licenseRepository = uow.GetRepository<License>();
+                var licenseFileRepository = uow.GetRepository<LicenseFile>();
 
-                return licenseRepository.GetAll().MapToBusinessModel(id);
+                return licenseRepository.GetAll().MapToBusinessModel(id, licenseFileRepository.GetAll());
             }
         }
 

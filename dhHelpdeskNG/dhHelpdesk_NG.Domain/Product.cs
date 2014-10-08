@@ -6,7 +6,7 @@
 
     using DH.Helpdesk.Domain.Interfaces;
 
-    public class Product : Entity, ICustomerEntity
+    public class Product : Entity, ICustomerEntity, INamedEntity
     {
         public int Customer_Id { get; set; }
 

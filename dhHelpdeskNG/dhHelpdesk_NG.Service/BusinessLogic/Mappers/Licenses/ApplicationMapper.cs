@@ -36,6 +36,7 @@
             var entity = query.GetById(id)
                         .Select(a => new
                                 {
+                                    a.Id,
                                     a.Customer_Id,
                                     a.Name,
                                     a.CreatedDate,
@@ -45,6 +46,7 @@
             if (entity != null)
             {
                 model = new ApplicationModel(
+                                    entity.Id,
                                     entity.Customer_Id,
                                     entity.Name,
                                     entity.CreatedDate,

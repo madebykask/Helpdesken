@@ -8,6 +8,7 @@
     public sealed class VendorModel : EntityBusinessModel
     {
         public VendorModel(
+                int id,
                 string vendorName, 
                 string contact, 
                 string address, 
@@ -20,6 +21,7 @@
                 DateTime createdDate, 
                 DateTime changedDate)
         {
+            this.Id = id;
             this.ChangedDate = changedDate;
             this.CreatedDate = createdDate;
             this.CustomerId = customerId;
@@ -34,6 +36,7 @@
         }
 
         public VendorModel(
+                int id,
                 string vendorName, 
                 string contact, 
                 string address, 
@@ -44,6 +47,7 @@
                 string homePage, 
                 int customerId)
         {
+            this.Id = id;
             this.CustomerId = customerId;
             this.HomePage = homePage;
             this.Email = email;
@@ -92,6 +96,7 @@
         [MaxLength(50)]
         public string HomePage { get; private set; }
 
+        [IsId]
         public int CustomerId { get; private set; }
 
         public DateTime CreatedDate { get; private set; }

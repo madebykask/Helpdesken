@@ -34,6 +34,7 @@
             var entity = query.GetById(id)
                         .Select(p => new
                             {
+                                p.Id,
                                 p.Name,
                                 p.Manufacturer_Id,
                                 p.Customer_Id,
@@ -44,6 +45,7 @@
             if (entity != null)
             {
                 model = new ProductModel(
+                                entity.Id,
                                 entity.Name,
                                 entity.Manufacturer_Id,
                                 entity.Customer_Id,

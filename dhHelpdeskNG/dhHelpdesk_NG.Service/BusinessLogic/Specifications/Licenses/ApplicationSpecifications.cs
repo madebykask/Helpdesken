@@ -28,6 +28,18 @@
                 .GetOnlyConnectedApplications(onlyConnected);
 
             return query;
+        }
+
+        public static IQueryable<Application> GetProductApplications(this IQueryable<Application> query, int? productId)
+        {
+            if (!productId.HasValue)
+            {
+                return query;
+            }
+
+            query = query.Where(a => a.Products.Select(p => p.Id).Contains(productId.Value));
+
+            return query;
         } 
     }
 }

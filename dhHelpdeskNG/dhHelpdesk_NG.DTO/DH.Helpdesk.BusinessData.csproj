@@ -107,6 +107,7 @@
     <Compile Include="Models\Case\CaseSolutionSettingForWrite.cs" />
     <Compile Include="Models\Case\CaseSolutionSettingOverview.cs" />
     <Compile Include="Models\ComputerUserFieldSettingsLanguage.cs" />
+    <Compile Include="Models\Licenses\Licenses\LicenseFileModel.cs" />
     <Compile Include="Models\TextList.cs" />
     <Compile Include="Models\Interfaces\IHierarchyItem.cs" />
     <Compile Include="Models\ActionSetting\ActionSetting.cs" />

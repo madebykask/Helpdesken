@@ -4,7 +4,7 @@
 
     using DH.Helpdesk.Domain.Interfaces;
 
-    public class Vendor : Entity, ICustomerEntity
+    public class Vendor : Entity, ICustomerEntity, INamedEntity
     {
         public int Customer_Id { get; set; }
 
@@ -22,7 +22,7 @@
 
         public string PostalCode { get; set; }
 
-        public string VendorName { get; set; }
+        public string Name { get; set; }
 
         public DateTime ChangedDate { get; set; }
 

@@ -6,6 +6,7 @@
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Licenses;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Shared;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Licenses;
     using DH.Helpdesk.Services.Services.Licenses;
@@ -57,6 +58,7 @@
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var productRepository = uow.GetRepository<Product>();
+                var applicationRepository = uow.GetRepository<Application>();
 
                 ProductModel product;
                 if (productId.HasValue)
@@ -68,7 +70,12 @@
                     product = ProductModel.CreateDefault(customerId);
                 }
 
-                return new ProductData(product);
+                var applications = applicationRepository.GetAll()
+                                    .GetByCustomer(customerId)
+                                    .GetProductApplications(productId)
+                                    .MapToItemOverviews();
+
+                return new ProductData(product, applications);
             }
         }
 

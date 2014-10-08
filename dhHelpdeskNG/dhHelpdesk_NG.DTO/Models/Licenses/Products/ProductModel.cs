@@ -8,12 +8,14 @@
     public sealed class ProductModel : EntityBusinessModel
     {
         public ProductModel(
+                int id,
                 string productName, 
                 int? manufacturerId, 
                 int customerId, 
                 DateTime createdDate, 
                 DateTime changedDate)
         {
+            this.Id = id;
             this.ChangedDate = changedDate;
             this.CreatedDate = createdDate;
             this.CustomerId = customerId;
@@ -22,10 +24,12 @@
         }
 
         public ProductModel(
+                int id,
                 string productName, 
                 int? manufacturerId, 
                 int customerId)
         {
+            this.Id = id;
             this.CustomerId = customerId;
             this.ManufacturerId = manufacturerId;
             this.ProductName = productName;
@@ -40,8 +44,10 @@
         [MaxLength(50)]
         public string ProductName { get; private set; }
 
+        [IsId]
         public int? ManufacturerId { get; private set; }
 
+        [IsId]
         public int CustomerId { get; private set; }
 
         public DateTime CreatedDate { get; private set; }

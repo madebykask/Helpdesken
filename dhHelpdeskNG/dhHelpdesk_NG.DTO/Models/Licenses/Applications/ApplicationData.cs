@@ -5,8 +5,11 @@
 
     public sealed class ApplicationData
     {
-        public ApplicationData(ApplicationModel application)
+        public ApplicationData(
+                ApplicationModel application, 
+                ItemOverview[] products)
         {
+            this.Products = products;
             this.Application = application;
         }
 

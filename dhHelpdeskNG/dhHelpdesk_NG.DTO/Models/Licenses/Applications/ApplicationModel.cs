@@ -8,11 +8,13 @@
     public sealed class ApplicationModel : EntityBusinessModel
     {
         public ApplicationModel(
+                int id,
                 int customerId, 
                 string applicationName, 
                 DateTime createdDate, 
                 DateTime changedDate)
         {
+            this.Id = id;
             this.ChangedDate = changedDate;
             this.CreatedDate = createdDate;
             this.ApplicationName = applicationName;
@@ -20,9 +22,11 @@
         }
 
         public ApplicationModel(
+                int id,
                 int customerId, 
                 string applicationName)
         {
+            this.Id = id;
             this.ApplicationName = applicationName;
             this.CustomerId = customerId;
         }
@@ -32,6 +36,7 @@
             this.CustomerId = customerId;
         }
 
+        [IsId]
         public int CustomerId { get; private set; }
 
         [NotNullAndEmpty]

@@ -1,15 +1,32 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Licenses.Licenses
 {
+    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class LicenseData
     {
-        public LicenseData(LicenseModel license)
+        public LicenseData(
+                LicenseModel license, 
+                ItemOverview[] products, 
+                ItemOverview[] departments, 
+                ItemOverview[] vendors)
         {
+            this.Vendors = vendors;
+            this.Departments = departments;
+            this.Products = products;
             this.License = license;
         }
 
         [NotNull]
         public LicenseModel License { get; private set; }
+
+        [NotNull]
+        public ItemOverview[] Products { get; private set; }
+
+        [NotNull]
+        public ItemOverview[] Departments { get; private set; }
+
+        [NotNull]
+        public ItemOverview[] Vendors { get; private set; }
     }
 }

@@ -8,6 +8,7 @@
     public sealed class LicenseModel : EntityBusinessModel
     {
         public LicenseModel(
+                int id,
                 string licenseNumber, 
                 int numberOfLicenses, 
                 DateTime? purshaseDate, 
@@ -21,8 +22,11 @@
                 DateTime? validDate, 
                 string info, 
                 DateTime createdDate, 
-                DateTime changedDate)
+                DateTime changedDate, 
+                LicenseFileModel[] files)
         {
+            this.Id = id;
+            this.Files = files;
             this.ChangedDate = changedDate;
             this.CreatedDate = createdDate;
             this.Info = info;
@@ -40,6 +44,7 @@
         }
 
         public LicenseModel(
+                int id,
                 string licenseNumber, 
                 int numberOfLicenses, 
                 DateTime? purshaseDate, 
@@ -51,8 +56,11 @@
                 int? departmentId, 
                 int? upgradeLicenseId, 
                 DateTime? validDate, 
-                string info)
+                string info, 
+                LicenseFileModel[] files)
         {
+            this.Id = id;
+            this.Files = files;
             this.Info = info;
             this.ValidDate = validDate;
             this.UpgradeLicenseId = upgradeLicenseId;
@@ -68,7 +76,7 @@
         }
 
         private LicenseModel()
-        {            
+        {
         }
 
         [NotNullAndEmpty]
@@ -86,12 +94,16 @@
 
         public int PriceYear { get; private set; }
 
+        [IsId]
         public int? ProductId { get; private set; }
 
+        [IsId]
         public int? VendorId { get; private set; }
 
+        [IsId]
         public int? DepartmentId { get; private set; }
 
+        [IsId]
         public int? UpgradeLicenseId { get; private set; }
 
         public DateTime? ValidDate { get; private set; }
@@ -103,6 +115,8 @@
         public DateTime CreatedDate { get; private set; }
 
         public DateTime ChangedDate { get; private set; }
+
+        public LicenseFileModel[] Files { get; private set; }
 
         public static LicenseModel CreateDefault()
         {

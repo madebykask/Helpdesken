@@ -8,11 +8,13 @@
     public sealed class ManufacturerModel : EntityBusinessModel
     {
         public ManufacturerModel(
+                int id,
                 int customerId, 
                 string manufacturerName, 
                 DateTime createdDate, 
                 DateTime changedDate)
         {
+            this.Id = id;
             this.ChangedDate = changedDate;
             this.CreatedDate = createdDate;
             this.ManufacturerName = manufacturerName;
@@ -20,9 +22,11 @@
         }
 
         public ManufacturerModel(
+                int id,
                 int customerId, 
                 string manufacturerName)
         {
+            this.Id = id;
             this.ManufacturerName = manufacturerName;
             this.CustomerId = customerId;
         }
@@ -32,6 +36,7 @@
             this.CustomerId = customerId;
         }
 
+        [IsId]
         public int CustomerId { get; private set; }
 
         [NotNullAndEmpty]
