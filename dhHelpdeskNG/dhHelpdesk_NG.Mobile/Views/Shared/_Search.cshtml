@@ -6,7 +6,7 @@
 @if (Model != null)
 {<form id="frmCaseSearch" name="frmCaseSearch">
     <div class="container">
-        <div class="row" id="hiddeninfo" style="display:none">
+        <div class="row" id="hiddeninfo" >
             <div class="span12">
                 <table class="tableform">
                     <tr>
@@ -21,21 +21,18 @@
                         </td>
                     </tr>
                     
-                    @if (Model.filterUser != null)
+                    @if (Model.Customers != null)
                     {
                         <tr>
                             <td>
-                                @Translation.Get(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)
+                                @Translation.Get("Kunder")
                             </td>
                             <td>
-                                <select id="lstfilterResponsible" name="lstfilterResponsible" class="multiselect multiselect-search" multiple="multiple">
-                                    @foreach (var e in Model.filterUser)
-                                    {
-                                        if (e.IsActive == 1 && e.Performer == 1)
-                                        {                        
-                                        <option value="@e.Id @e.Id.IdIsSelected(Model.caseSearchFilter.UserResponsible)">@e.SurName @e.FirstName</option>
-                                        }
-                                    }
+                                <select id="lstfilterCustomers" name="lstfilterCustomers">
+                                @foreach (var c in Model.Customers)
+                                {
+                                    <option value="@c.Id" @c.Id.IdIsSelected(Model.caseSearchFilter.CustomerId.ToString()) >@c.Name</option>
+                                }
                                 </select>
                             </td>
                         </tr>                 
@@ -44,10 +41,10 @@
                     {
                         <tr>
                             <td>
-                                @Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)
+                                @Translation.Get("Användare")
                             </td>
                             <td>
-                                <select id="lstfilterPerformer" name="lstfilterPerformer" class="multiselect multiselect-search" multiple="multiple">
+                                <select id="lstfilterPerformer" name="lstfilterPerformer">
                                     @foreach (var e in Model.filterPerformer)
                                     {
                                         if (e.IsActive == 1 && e.Performer == 1)
@@ -58,82 +55,32 @@
                                 </select>
                             </td>
                         </tr>                 
-                    }
-                    
-                    <tr>
-                        <td>                            
-                        </td>
-                        <td>
-                            <button id="btnClearFilter" name="btnClearFilter" class="btn">@Translation.Get("Rensa")</button>                                                        
-                        </td>
-                    </tr>
+                    }                                        
                 </table>
             </div>
-        </div>
-        <div class="row">
-            <div class="span12">
-                <table class="tableform">
-                    <tr>
-                        <td class="span3">
-                            @Translation.Get("Sök")
-                        </td>
-                        <td class="span4">
-                            <input type="text" id="txtFreeTextSearch" value="@Model.caseSearchFilter.FreeTextSearch" name="txtFreeTextSearch" />
-                        </td>
-                        <td>
-                            <select id="lstfilterCaseProgress" name="lstfilterCaseProgress">
-                                @foreach (var e in Model.filterCaseProgress)
-                                {
-                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.CaseProgress)>@e.StringValue</option>
-                                }
-                            </select>
-                        </td>
-                        <td>
-                            <input id="btnSearch" name="btnSearch" type="submit" class="btn" value="@Translation.Get("Go")"/>
-                        </td>
-                        <td class="span5">
-                            <a href="#" id="btnMore">
-                                <i id="icoPlus" class="icon-plus-sign"></i> 
-                                <i id="icoFilter" class="icon-filter"></i>
-                            </a>                           
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
+        </div>          
     </div>
     </form>
 }
 
 <script>
+
+   
     $(function () {
 
-        $("#btnClearFilter").click(function() {
-            window.location.href = '@Url.Action("Index", "Cases", new { customerId = Model.customer != null ? Model.customer.Id : (int?)null, clearFilters = true })';
-            return false;
+       
+        $("#lstfilterPerformer").change(function(){
+            $.post('/Cases/Search/', $("#frmCaseSearch").serialize(), function (result) {
+                $('#search_result').html(result);
+            });
         });
 
-        $("#btnMore").click(function (e) {
-            e.preventDefault();
-            $("#hiddeninfo").toggle();
-            if ($("#icoPlus").hasClass('icon-minus-sign')) {
-                $("#icoPlus").removeClass('icon-minus-sign').addClass('icon-plus-sign');
-            }
-            else {
-                $("#icoPlus").removeClass('icon-plus-sign').addClass('icon-minus-sign');
-            }
+        $("#lstfilterCustomers").change(function () {
+            $.post('/Cases/Search/', $("#frmCaseSearch").serialize(), function (result) {
+                $('#search_result').html(result);
+            });
         });
 
-        $('#txtFreeTextSearch').keydown(function (e) {
-            if (e.keyCode == 13) {
-                $("#btnSearch").click();
-            }
-        });
-
-        if ('@Model.IsClearFilters.ToString().ToLower()' == 'true')
-        {
-            $("#btnMore").click();
-        }
     });
 </script>
 

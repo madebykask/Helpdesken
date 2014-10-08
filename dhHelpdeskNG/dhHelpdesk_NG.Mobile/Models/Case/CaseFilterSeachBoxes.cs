@@ -29,6 +29,8 @@
         public IList<StateSecondary> filterStateSecondary { get; set; }
         public IList<Field> filterCaseProgress { get; set; }
 
+        public List<Customer> Customers { get; set; }
+
         public DateTime? CaseRegistrationDateStartFilter { get; set; }
 
         public DateTime? CaseRegistrationDateEndFilter { get; set; }

@@ -140,13 +140,16 @@
                 <li id="btnNewCase">
                     @Html.ActionLink(Translation.Get("Skapa ärende"), "new", "cases", new { customerId = Model.caseSearchFilterData.filterCustomerId } , new { @class = "btn" })
                 </li>
-                <li id="btnCaseTemplate">                   
+                
+                <li>
+                    @Html.ActionLink(Translation.Get("Ärendeöversikt"), "index", "cases", new { area = "" } , new { @class = "btn" })                    
+                </li>
+                                    
+                @*<li id="btnCaseTemplate">                   
                     @Html.Partial("_CaseTemplateTree", Model.CaseTemplateTreeButton)
                 </li>                
-            }                    
-            <li id="btnSaveCaseSetting">                   
-                <input type="button" class="btn" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" /> 
-            </li>    
+                *@     
+            }                           
         </ul>
     </div>
 </div>
@@ -166,7 +169,7 @@
             }
             *@
 
-            <li id="SettingTab"><a href="#fragment-4">@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</a></li>
+            @*<li id="SettingTab"><a href="#fragment-4">@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</a></li>*@
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
@@ -185,11 +188,11 @@
                     -
                 </div>
             </div>
-            <div class="tab-pane tab-pane-border " id="fragment-4">
+            @*<div class="tab-pane tab-pane-border " id="fragment-4">
                 <div id="setting_result" class="container">
                     @Html.Partial("_CaseSetting", Model.CaseSetting)
                 </div>
-            </div>
+            </div>*@
         </div>
     </div>
 </div>
