@@ -5,9 +5,9 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Questionnaire;
-    using DH.Helpdesk.BusinessData.Models.Questionnaire.Output;
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Read;
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Write;
+    using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Questionnaire;
@@ -47,14 +47,18 @@
             }
         }
 
-        public List<CircularOverview> GetCircularOverviewsByQuestionnaireId(int questionnaireId)
+        public List<CircularOverview> GetCircularOverviews(int questionnaireId, int state)
         {
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
                 var circularRepository = uof.GetRepository<QuestionnaireCircularEntity>();
+                var query = circularRepository.GetAll().GetByQuestionnaireId(questionnaireId);
+                if (state != CircularStateId.All)
+                {
+                    query = query.GetByState(state);
+                }
 
-                List<CircularOverview> overviews =
-                    circularRepository.GetAll().MapToOverviewsByQuestionnaireId(questionnaireId);
+                List<CircularOverview> overviews = query.MapToOverviews();
 
                 return overviews;
             }

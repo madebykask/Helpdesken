@@ -108,6 +108,7 @@
     <Compile Include="Models\Case\CaseSolutionSettingOverview.cs" />
     <Compile Include="Models\ComputerUserFieldSettingsLanguage.cs" />
     <Compile Include="Models\Licenses\Licenses\LicenseFileModel.cs" />
+    <Compile Include="Models\Questionnaire\Read\CircularOverview.cs" />
     <Compile Include="Models\TextList.cs" />
     <Compile Include="Models\Interfaces\IHierarchyItem.cs" />
     <Compile Include="Models\ActionSetting\ActionSetting.cs" />
@@ -495,7 +496,6 @@
     <Compile Include="Models\Inventory\Output\ComputerLogOverview.cs" />
     <Compile Include="Models\Inventory\Output\LogicalDriveOverview.cs" />
     <Compile Include="Models\Inventory\Output\SoftwareOverview.cs" />
-    <Compile Include="Models\Questionnaire\Output\CircularOverview.cs" />
     <Compile Include="Models\Questionnaire\Output\QuestionnaireQuestionsOverview.cs" />
     <Compile Include="Models\Reports\Output\RegistratedCasesCaseTypeOptionsResponse.cs" />
     <Compile Include="Models\Reports\Output\SearchOptions.cs" />

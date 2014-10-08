@@ -3,13 +3,12 @@
     using System;
     using System.Collections.Generic;
 
-    using DH.Helpdesk.BusinessData.Models.Questionnaire.Output;
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Read;
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Write;
 
     public interface ICircularService
     {
-        List<CircularOverview> GetCircularOverviewsByQuestionnaireId(int questionnaireId);
+        List<CircularOverview> GetCircularOverviews(int questionnaireId, int state);
 
         void AddCircular(CircularForInsert businessModel);
 

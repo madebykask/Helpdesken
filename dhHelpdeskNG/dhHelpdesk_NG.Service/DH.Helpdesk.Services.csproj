@@ -119,6 +119,7 @@
     <Compile Include="DisplayValues\IntegerDisplayValue.cs" />
     <Compile Include="DisplayValues\Inventory\ComputerStatusesDisplayValue.cs" />
     <Compile Include="DisplayValues\Inventory\ContractStatusDisplayValue.cs" />
+    <Compile Include="DisplayValues\Questionnaire\CircularStatesDisplayValue.cs" />
     <Compile Include="DisplayValues\StringDisplayValue.cs" />
     <Compile Include="DisplayValues\UserNameDisplayValue.cs" />
     <Compile Include="Exceptions\BusinessLogicException.cs" />
