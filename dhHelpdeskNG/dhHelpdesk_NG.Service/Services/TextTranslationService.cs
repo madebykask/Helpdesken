@@ -160,7 +160,9 @@
             if (text == null)
                 throw new ArgumentNullException("text");
 
-            text.ChangedDate = DateTime.Now;
+            var curNow = DateTime.Now;
+
+            text.ChangedDate = curNow;
 
             errors = new Dictionary<string, string>();
 
@@ -175,7 +177,14 @@
                     if (t.TranslationName == null)
                         t.TranslationName = "";
 
-                    var newTT = new TextTranslation { TextTranslated = t.TranslationName, Language_Id = t.Language_Id, Text_Id = text.Id, ChangedDate = text.ChangedDate, CreatedDate = text.CreatedDate };
+             
+                    var newTT = new TextTranslation { 
+                        TextTranslated = t.TranslationName, 
+                        Language_Id = t.Language_Id, 
+                        Text_Id = text.Id, 
+                        ChangedDate = curNow,
+                        CreatedDate = curNow,
+                        ChangedByUser_Id = t.ChangedByUser_Id };
 
                     this._textTranslationRepository.Add(newTT);
                 }
@@ -190,11 +199,13 @@
                         if (change.TranslationName == null)
                             change.TranslationName = "";
 
+                        tt.ChangedDate = curNow;
+                        tt.ChangedByUser_Id = change.ChangedByUser_Id;
                         if (change.TranslationName != tt.TextTranslated)
                         {
                             tt.TextTranslated = change.TranslationName;
-                            this._textTranslationRepository.Update(tt);
                         }
+                        this._textTranslationRepository.Update(tt);
                     }
                 }
             }

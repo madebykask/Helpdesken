@@ -346,6 +346,11 @@
 
             var b = this.TryUpdateModel(textToSave, "text");
 
+            foreach (var t in TTs)
+            {
+                t.ChangedByUser_Id = SessionFacade.CurrentUser.Id;
+            }
+
             IDictionary<string, string> errors = new Dictionary<string, string>();
             this._textTranslationService.SaveEditText(textToSave, TTs, out errors);
 

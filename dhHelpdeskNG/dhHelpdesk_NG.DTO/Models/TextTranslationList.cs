@@ -8,6 +8,7 @@ namespace DH.Helpdesk.BusinessData.Models
         public int TextTranslation_Id { get; set; }
         public string LanguageName { get; set; }
         public string TranslationName { get; set; }
+        public int ChangedByUser_Id { get; set; }
     }
 
     public class TextTranslationList

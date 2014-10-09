@@ -47,7 +47,7 @@ namespace DH.Helpdesk.Dal.Repositories
                from User1 in Users1.DefaultIfEmpty()
                join U2 in this.DataContext.Users on T.ChangedByUser_Id equals U2.Id into Users2
                from User2 in Users2.DefaultIfEmpty()
-               where (T.Type == 1 && T.Id > 4999)
+               where (T.Type == texttypeId && T.Id > 4999)
                group T by new { T.Id, T.TextToTranslate, User2.SurName, User2.FirstName, Trans.ChangedDate, T.CreatedDate, U1Name = User1.FirstName, U1SurName = User1.SurName } into g
                select new TextList
                     {
