@@ -161,36 +161,61 @@
 
                                 foreach (var c in csl)
                                 {
-                                    var fieldExists = false; 
-
-                                    //kolumner som visas beroende på inställningar
+                                    Field field = null;
                                     for (var i = 0; i < dr.FieldCount; i++)
                                     {
                                         if (string.Compare(dr.GetName(i), GetCaseFieldName(c.Name), true, CultureInfo.InvariantCulture) == 0)
                                         {
                                             if (!dr.IsDBNull(i))
                                             {
-                                                int fieldType = 0;
-                                                DateTime? dateValue = null;
-                                                bool translateField = false;
+                                                int fieldType;
+                                                DateTime? dateValue;
+                                                bool translateField;
                                                 if (c.Line == 1)
                                                 {
-                                                    string value = GetDatareaderValue(dr, i, c.Name, customerSetting, pal, leadTime, caseTypes, out translateField, out dateValue, out fieldType);
-                                                    cols.Add(new Field { StringValue = value, TranslateThis = translateField, DateTimeValue = dateValue, FieldType = fieldType });
-                                                    if (string.Compare(s.SortBy, c.Name, true, CultureInfo.InvariantCulture) == 0)
+                                                    var value = GetDatareaderValue(
+                                                                                    dr,
+                                                                                    i,
+                                                                                    c.Name,
+                                                                                    customerSetting,
+                                                                                    pal,
+                                                                                    leadTime,
+                                                                                    caseTypes,
+                                                                                    out translateField,
+                                                                                    out dateValue,
+                                                                                    out fieldType);
+                                                    field = new Field
+                                                                {
+                                                                    StringValue = value,
+                                                                    TranslateThis = translateField,
+                                                                    DateTimeValue = dateValue,
+                                                                    FieldType = fieldType
+                                                                };
+                                                    if (string.Compare(
+                                                        s.SortBy,
+                                                        c.Name,
+                                                        true,
+                                                        CultureInfo.InvariantCulture) == 0)
+                                                    {
                                                         sortOrder = value;
+                                                    }
                                                 }
                                                 else
+                                                {
                                                     toolTip += GetDatareaderValue(dr, i, c.Name, customerSetting, pal, leadTime, caseTypes, out translateField, out dateValue, out fieldType) + Environment.NewLine;
-
-                                                fieldExists = true;
+                                                }
                                             }
+
                                             break; 
                                         }
                                     }
-                                    // finns inte kolumnen eller den är null så lägg till ett tomt värde
-                                    if (!fieldExists && c.Line == 1)
-                                        cols.Add(new Field { StringValue = string.Empty});
+
+                                    if (field == null)
+                                    {
+                                        field = new Field { StringValue = string.Empty };
+                                    }
+
+                                    cols.Add(field);
                                 }
 
                                 row.SortOrder = sortOrder; 
