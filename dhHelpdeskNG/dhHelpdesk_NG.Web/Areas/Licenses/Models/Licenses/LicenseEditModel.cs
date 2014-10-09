@@ -9,14 +9,42 @@
     public sealed class LicenseEditModel
     {
         public LicenseEditModel(
+                int id,
+                string licenseNumber,
+                int numberOfLicenses,
+                DateTime? purchaseDate,
+                int price,
+                string purchaseInfo,
+                DateTime? validDate,
+                int priceYear,
+                string info,
                 SelectList products, 
                 SelectList departments, 
-                SelectList vendors)
+                SelectList vendors, 
+                SelectList upgradeLicenses)
         {
+            this.UpgradeLicenses = upgradeLicenses;
+            this.Id = id;
             this.Vendors = vendors;
             this.Departments = departments;
             this.Products = products;
+            this.LicenseNumber = licenseNumber;
+            this.NumberOfLicenses = numberOfLicenses;
+            this.PurchaseDate = purchaseDate;
+            this.Price = price;
+            this.PurchaseInfo = purchaseInfo;
+            this.ValidDate = validDate;
+            this.PriceYear = priceYear;
+            this.Info = info;
         }
+
+        public LicenseEditModel()
+        {
+        }
+
+        [IsId]
+        [HiddenInput]
+        public int Id { get; set; }
 
         [NotNull]
         public SelectList Products { get; private set; }
@@ -41,7 +69,7 @@
 
         [IsId]
         [LocalizedDisplay("Avdelning")]
-        public int DepartmentId { get; set; }
+        public int? DepartmentId { get; set; }
 
         [LocalizedDisplay("Inköpsdatum")]
         public DateTime? PurchaseDate { get; set; }
@@ -60,12 +88,24 @@
         [NotNull]
         public SelectList Vendors { get; private set; }
 
+        [IsId]
+        [LocalizedDisplay("Försäljare")]
+        public int? VendorId { get; set; }
+
         [LocalizedRequired]
         [LocalizedInteger]
         [LocalizedDisplay("Årlig kostnad")]
         public int PriceYear { get; set; }
 
+        [LocalizedStringLength(1000)]
         [LocalizedDisplay("Kommentar")]
         public string Info { get; set; }
+
+        [NotNull]
+        public SelectList UpgradeLicenses { get; private set; }
+
+        [IsId]
+        [LocalizedDisplay("Uppgradering av")]
+        public int? UpgradeLicenseId { get; set; }
     }
 }

@@ -10,5 +10,7 @@
         ManufacturersContentModel GetContentModel(ManufacturerOverview[] manufacturers);
 
         ManufacturerEditModel GetEditModel(ManufacturerData data);
+
+        ManufacturerModel GetBusinessModel(ManufacturerEditModel editModel);
     }
 }

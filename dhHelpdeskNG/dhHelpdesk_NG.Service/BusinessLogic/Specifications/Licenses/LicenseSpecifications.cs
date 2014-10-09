@@ -18,6 +18,19 @@
             query = query.Where(l => l.Product.Customer_Id == customerId);
 
             return query;
+        }
+
+        public static IQueryable<License> GetUpgradeLicenses(this IQueryable<License> query, int? licenseId)
+        {
+
+            if (!licenseId.HasValue)
+            {
+                return query;
+            }
+
+            query = query.Where(l => l.Id != licenseId);
+
+            return query;
         } 
     }
 }

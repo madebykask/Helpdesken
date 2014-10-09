@@ -9,8 +9,10 @@
                 LicenseModel license, 
                 ItemOverview[] products, 
                 ItemOverview[] departments, 
-                ItemOverview[] vendors)
+                ItemOverview[] vendors, 
+                ItemOverview[] upgradeLicenses)
         {
+            this.UpgradeLicenses = upgradeLicenses;
             this.Vendors = vendors;
             this.Departments = departments;
             this.Products = products;
@@ -28,5 +30,8 @@
 
         [NotNull]
         public ItemOverview[] Vendors { get; private set; }
+
+        [NotNull]
+        public ItemOverview[] UpgradeLicenses { get; private set; }
     }
 }

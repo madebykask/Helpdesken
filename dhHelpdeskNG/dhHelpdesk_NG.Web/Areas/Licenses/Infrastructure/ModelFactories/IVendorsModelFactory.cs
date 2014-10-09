@@ -10,5 +10,7 @@
         VendorsContentModel GetContentModel(VendorOverview[] vendors);
 
         VendorEditModel GetEditModel(VendorData data);
+
+        VendorModel GetBusinessModel(VendorEditModel editModel);
     }
 }

@@ -1,8 +1,10 @@
 ﻿namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Licenses
 {
+    using System.Globalization;
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Licenses.Licenses;
+    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Licenses;
@@ -104,5 +106,21 @@
             entity.ValidDate = model.ValidDate;
             entity.Info = model.Info;
         }
+
+        public static ItemOverview[] MapToItemOverviews(this IQueryable<License> query)
+        {
+            var entities = query.Select(l => new
+            {
+                l.Id,
+                l.PurshaseDate,
+                ProductName = l.Product.Name
+            }).ToArray();
+
+            var overviews = entities.Select(l => new ItemOverview(
+                                            string.Format("{0}({1})", l.ProductName, l.PurshaseDate),
+                                            l.Id.ToString(CultureInfo.InvariantCulture))).ToArray();
+
+            return overviews;
+        }         
     }
 }

@@ -7,10 +7,29 @@
 
     public sealed class ApplicationEditModel
     {
-        public ApplicationEditModel(SelectList products)
+        public ApplicationEditModel(
+                int id,
+                int customerId,
+                string applicationName,
+                SelectList products)
         {
+            this.Id = id;
+            this.CustomerId = customerId;
+            this.ApplicationName = applicationName;
             this.Products = products;
         }
+
+        public ApplicationEditModel()
+        {            
+        }
+
+        [IsId]
+        [HiddenInput]
+        public int Id { get; set; }
+
+        [IsId]
+        [HiddenInput]
+        public int CustomerId { get; set; }
 
         [LocalizedRequired]
         [LocalizedStringLength(100)]

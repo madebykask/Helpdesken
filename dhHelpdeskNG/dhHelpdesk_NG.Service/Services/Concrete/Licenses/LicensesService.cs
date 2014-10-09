@@ -68,7 +68,16 @@
                                 .GetByCustomer(customerId)
                                 .MapToItemOverviews();
 
-                return new LicenseData(license, products, departments, vendors);
+                var upgradeLicenses = licenseRepository.GetAll()
+                                .GetUpgradeLicenses(licenseId)
+                                .MapToItemOverviews();
+
+                return new LicenseData(
+                                license, 
+                                products, 
+                                departments, 
+                                vendors,
+                                upgradeLicenses);
             }
         }
 

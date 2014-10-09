@@ -25,7 +25,22 @@
         {
             var applications = WebMvcHelper.CreateMultiSelectField(data.Applications, null);
 
-            return new ProductEditModel(applications);
+            return new ProductEditModel(
+                            data.Product.Id,
+                            data.Product.CustomerId,
+                            data.Product.ProductName,
+                            applications);
+        }
+
+        public ProductModel GetBusinessModel(ProductEditModel editModel)
+        {
+            var model = new ProductModel(
+                            editModel.Id,
+                            editModel.ProductName,
+                            null,
+                            editModel.CustomerId);
+
+            return model;
         }
     }
 }

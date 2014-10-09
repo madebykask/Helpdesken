@@ -10,5 +10,7 @@
         ApplicationsContentModel GetContentModel(ApplicationOverview[] applications);
 
         ApplicationEditModel GetEditModel(ApplicationData data);
+
+        ApplicationModel GetBusinessModel(ApplicationEditModel editModel);
     }
 }

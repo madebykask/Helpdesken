@@ -10,5 +10,7 @@
         LicensesContentModel GetContentModel(LicenseOverview[] licenses);
 
         LicenseEditModel GetEditModel(LicenseData data);
+
+        LicenseModel GetBusinessModel(LicenseEditModel editModel);
     }
 }

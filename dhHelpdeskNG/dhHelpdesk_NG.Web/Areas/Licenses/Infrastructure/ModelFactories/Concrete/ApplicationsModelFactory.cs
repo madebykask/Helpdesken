@@ -20,7 +20,21 @@
         {
             var products = WebMvcHelper.CreateListField(data.Products);
 
-            return new ApplicationEditModel(products);
+            return new ApplicationEditModel(
+                                data.Application.Id,
+                                data.Application.CustomerId,
+                                data.Application.ApplicationName,
+                                products);
+        }
+
+        public ApplicationModel GetBusinessModel(ApplicationEditModel editModel)
+        {
+            var model = new ApplicationModel(
+                                editModel.Id,
+                                editModel.CustomerId,
+                                editModel.ApplicationName);
+
+            return model;
         }
     }
 }

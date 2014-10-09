@@ -17,7 +17,20 @@
 
         public ManufacturerEditModel GetEditModel(ManufacturerData data)
         {
-            return new ManufacturerEditModel();
+            return new ManufacturerEditModel(
+                                    data.Manufacturer.Id,
+                                    data.Manufacturer.CustomerId,
+                                    data.Manufacturer.ManufacturerName);
+        }
+
+        public ManufacturerModel GetBusinessModel(ManufacturerEditModel editModel)
+        {
+            var model = new ManufacturerModel(
+                                    editModel.Id,
+                                    editModel.CustomerId,
+                                    editModel.ManufcturerName);
+
+            return model;
         }
     }
 }

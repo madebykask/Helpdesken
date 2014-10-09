@@ -75,7 +75,6 @@
         [BadRequestOnNotValid]
         public RedirectToRouteResult License(LicenseEditModel model)
         {
-
             return this.RedirectToAction("License");
         }
     }

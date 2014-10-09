@@ -10,5 +10,7 @@
         ProductsContentModel GetContentModel(ProductOverview[] products);
 
         ProductEditModel GetEditModel(ProductData data);
+
+        ProductModel GetBusinessModel(ProductEditModel editModel);
     }
 }
