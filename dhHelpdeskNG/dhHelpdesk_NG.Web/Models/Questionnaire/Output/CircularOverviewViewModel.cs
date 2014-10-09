@@ -2,7 +2,6 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Output
 {
     using System.Collections.Generic;
 
-    using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public class CircularOverviewViewModel

@@ -39,14 +39,6 @@
 
         public CircularStatesDisplayValue State { get; set; }
 
-        public string DisplayState
-        {
-            get
-            {
-                return this.State.GetDisplayValue();
-            }
-        }
-
         public int TotalParticipants { get; set; }
 
         public int SentParticipants { get; set; }

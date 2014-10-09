@@ -30,7 +30,7 @@
                 @Html.DisplayFor(modelItem => item.Date)
             </td>
             <td onclick=" window.location.href = '@Url.Action("EditCircular", "Questionnaire", new { circularId = item.Id })' " class="tdpointer">
-                @Html.DisplayFor(modelItem => item.DisplayState)
+                @item.State.GetDisplayValue()
             </td>
             <td onclick=" window.location.href = '@Url.Action("EditCircular", "Questionnaire", new { circularId = item.Id })' " class="tdpointer">
                 @Html.DisplayFor(modelItem => item.TotalParticipants)

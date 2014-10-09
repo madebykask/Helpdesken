@@ -46,7 +46,7 @@
                                 @Html.DisplayFor(modelItem => @connectedCase.Email)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => @connectedCase.DisplaySent)
+                                @connectedCase.IsSent.GetDisplayValue()
                             </td>
                             <td>
                                 @Html.ActionLink(Translation.Get("Ta bort"), "DeleteConnectedCase", new { questionnaireId, caseId = @connectedCase.CaseId, circularId = @connectedCase.CircularId }, new { @class = "btn" })

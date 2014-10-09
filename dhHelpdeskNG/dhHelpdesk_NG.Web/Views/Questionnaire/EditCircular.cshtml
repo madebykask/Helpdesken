@@ -1,4 +1,5 @@
-﻿@model DH.Helpdesk.Web.Models.Questionnaire.Input.EditCircularModel
+﻿@using DH.Helpdesk.Common.Enums
+@model DH.Helpdesk.Web.Models.Questionnaire.Input.EditCircularModel
 @{
     ViewBag.Title = "EditCircular";
 }
@@ -12,12 +13,28 @@
                     <input type="submit" value="@Translation.Get("Save")" class="btn" />
                 </li>
                 <li>
-                    @Html.ActionLink(Translation.Get("Ta bort"), "DeleteCircular", new { questionnaireId = Model.QuestionnaireId, stateId = Model.State, circularId = Model.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) + "?" })
+                    @if (Model.State.Value != CircularStates.Sent)
+                    {
+                        @Html.ActionLink(Translation.Get("Ta bort"), "DeleteCircular", new { questionnaireId = Model.QuestionnaireId, stateId = Model.State, circularId = Model.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) + "?" })
+                    }
                 </li>
                 <li>
                     <a href="@Url.Action("CircularOverview", "Questionnaire", new { questionnaireId = Model.QuestionnaireId, state = Model.State })" class="btn">
                         @Translation.Get("Avbryt")
                     </a>
+                </li>
+                <li>
+                    @{
+                        switch (Model.State.Value)
+                        {
+                            case CircularStates.ReadyToSend:
+                                @Html.ActionLink(Translation.Get("Skicka Enkät"), "DeleteCircular", new { @class = "btn" })
+                                break;
+                            case CircularStates.Sent:
+                                @Html.ActionLink(Translation.Get("Skicka påminnelse"), "DeleteCircular", new { @class = "btn" })
+                                break;
+                        }
+                    }
                 </li>
             </ul>
         </div>
@@ -54,7 +71,7 @@
                                             @Translation.Get("Status"):
                                         </td>
                                         <td class="span9">
-                                            @Html.DisplayTextFor(m => m.StateText)
+                                            @Model.State.GetDisplayValue()
                                         </td>
                                     </tr>
                                 </table>

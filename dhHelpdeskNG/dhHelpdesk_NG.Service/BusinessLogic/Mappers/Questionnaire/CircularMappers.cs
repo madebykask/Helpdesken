@@ -65,7 +65,7 @@
                     anonymus.Id,
                     anonymus.circularName,
                     anonymus.Questionnaire_Id,
-                    anonymus.state,
+                    (CircularStates)anonymus.state,
                     anonymus.CreatedDate,
                     anonymus.ChangedDate);
             }

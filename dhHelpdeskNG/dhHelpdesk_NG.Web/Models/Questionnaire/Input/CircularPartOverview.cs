@@ -27,13 +27,5 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
         public string Email { get; set; }
 
         public BooleanDisplayValue IsSent { get; set; }
-
-        public string DisplaySent
-        {
-            get
-            {
-                return this.IsSent.GetDisplayValue();
-            }
-        }
     }
 }

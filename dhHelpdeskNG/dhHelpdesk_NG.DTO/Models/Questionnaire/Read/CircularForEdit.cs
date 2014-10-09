@@ -2,13 +2,15 @@
 {
     using System;
 
+    using DH.Helpdesk.Common.Enums;
+
     public sealed class CircularForEdit : Circular
     {
         public CircularForEdit(
             int id,
             string circularName,
             int questionnaireId,
-            int status,
+            CircularStates status,
             DateTime createdDate,
             DateTime changedDate)
             : base(circularName)
@@ -22,7 +24,7 @@
 
         public int QuestionnaireId { get; private set; }
 
-        public int Status { get; private set; }
+        public CircularStates Status { get; private set; }
 
         public DateTime CreatedDate { get; private set; }
 

@@ -542,18 +542,8 @@ namespace DH.Helpdesk.Web.Controllers
                 circular.QuestionnaireId,
                 circular.CircularName,
                 circular.ChangedDate,
-                connecteCasesOverviews) { State = 0 };
-
-            switch (circular.Status)
-            {
-                case CircularStateId.ReadyToSend:
-                    model.StateText = "Ready To Send";
-                    break;
-
-                case CircularStateId.Sent:
-                    model.StateText = "Sent";
-                    break;
-            }
+                connecteCasesOverviews,
+                circular.Status);
 
             return this.View(model);
         }
@@ -567,7 +557,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             return this.RedirectToAction(
                 "CircularOverview",
-                new { questionnaireId = editedCircular.QuestionnaireId, state = editedCircular.State });
+                new { questionnaireId = editedCircular.QuestionnaireId });
         }
 
         [HttpPost]

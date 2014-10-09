@@ -1,7 +1,5 @@
 ﻿namespace DH.Helpdesk.Services.DisplayValues.Questionnaire
 {
-    using System;
-
     using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Services.Localization;
 
