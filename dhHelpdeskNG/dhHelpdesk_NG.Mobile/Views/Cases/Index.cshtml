@@ -138,12 +138,8 @@
             @if (SessionFacade.CurrentUser.CreateCasePermission == 1)
             {                                        
                 <li id="btnNewCase">
-                    @Html.ActionLink(Translation.Get("Skapa ärende"), "new", "cases", new { customerId = Model.caseSearchFilterData.filterCustomerId } , new { @class = "btn" })
-                </li>
-                
-                <li>
-                    @Html.ActionLink(Translation.Get("Ärendeöversikt"), "index", "cases", new { area = "" } , new { @class = "btn" })                    
-                </li>
+                    @Html.ActionLink(Translation.Get("Skapa ärende"), "new", "cases", new { customerId = SessionFacade.CurrentCustomer.Id} , new { @class = "btn" })
+                </li>                                
                                     
                 @*<li id="btnCaseTemplate">                   
                     @Html.Partial("_CaseTemplateTree", Model.CaseTemplateTreeButton)

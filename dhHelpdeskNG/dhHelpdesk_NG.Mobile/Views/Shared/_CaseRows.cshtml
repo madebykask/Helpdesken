@@ -9,19 +9,15 @@
         <thead>
             <tr>
                 <!--fasta kolumner -->
-                <th></th>
+                
                 <!-- valbara kolumner -->
                 @if (Model.caseSettings != null)
-                {                
-                    foreach (var c in Model.caseSettings)
-                    {                    
-                        if (c.Line == 1)
-                        {
-                            <th onclick="sortCases('@c.Name')" class="thpointer" >
-                                @Translation.Get(c.Name, Enums.TranslationSource.CaseTranslation, c.Customer_Id)<i class="@c.Name.SetCaseSortIcon()"></i>                                
-                            </th>
-                        }
-                    }    
+                {                                        
+                    <th onclick="sortCases('@Model.caseSettings[0].Name')" class="thpointer" >
+                        @Translation.Get(Model.caseSettings[0].Name, Enums.TranslationSource.CaseTranslation, Model.caseSettings[0].Customer_Id) - 
+                        @Translation.Get(Model.caseSettings[1].Name, Enums.TranslationSource.CaseTranslation, Model.caseSettings[1].Customer_Id)
+                        <i class="@Model.caseSettings[0].Name.SetCaseSortIcon()"></i>                                
+                    </th>                                        
                 }
             </tr>
         </thead>        
@@ -32,37 +28,36 @@
                 {
                 <tr title="@r.Tooltip" class="@r.IsUnread.GetClassForCaseRowTr(@r.IsUrgent)">
                     <!--fasta kolumner -->
-                    <td>
-                        <img title="@r.CaseIcon.CaseIconTitle()" alt="@r.CaseIcon.CaseIconTitle()" src="@Url.Content("~/Content/icons/" + r.CaseIcon.CaseIconSrc())" />   
-                    </td>
+                
                     <!-- valbara kolumner -->
-                    @foreach (var c in r.Columns)
-                    {       
                     <td>
-                        @if (c.FieldType == 1)
+                    @foreach (var c in r.Columns)
+                    {                           
+                        if (c.FieldType == 1)
                         {
                             <!-- date -->
-                            <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@Html.DisplayFor(m => c.DateTimeValue, "Date")</a>
+                            <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@Html.DisplayFor(m => c.DateTimeValue, "Date")&nbsp;&nbsp;</a>
                         }
                         else if (c.FieldType == 2)                                                        
                         {
                             <!-- dateTime -->
-                            <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@(c.DateTimeValue.HasValue ? c.DateTimeValue.Value.ToLocalTime().ToFormattedDateTime() : string.Empty)</a>
+                            <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@(c.DateTimeValue.HasValue ? c.DateTimeValue.Value.ToLocalTime().ToFormattedDateTime() : string.Empty)&nbsp;&nbsp;</a>
                         }
                         else    
                         {
                             if (c.TranslateThis)
                             {
                                 <!-- string -->
-                                <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@Translation.Get(c.StringValue, Enums.TranslationSource.TextTranslation)</a>
+                                <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@Translation.Get(c.StringValue, Enums.TranslationSource.TextTranslation)&nbsp;&nbsp;</a>
                             }
                             else    
                             {
-                                <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@c.StringValue</a>
+                                <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@c.StringValue &nbsp;&nbsp;</a>
                             }
                         }
-                    </td>
+                  
                     }    
+                    </td>
                 </tr>                
                 }
             }

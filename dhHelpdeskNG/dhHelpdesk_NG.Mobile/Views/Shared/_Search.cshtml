@@ -67,9 +67,8 @@
 
    
     $(function () {
-
        
-        $("#lstfilterPerformer").change(function(){
+        $("#lstfilterPerformer").change(function () {            
             $.post('/Cases/Search/', $("#frmCaseSearch").serialize(), function (result) {
                 $('#search_result').html(result);
             });

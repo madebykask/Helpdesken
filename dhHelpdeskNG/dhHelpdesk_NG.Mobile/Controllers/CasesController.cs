@@ -240,63 +240,49 @@
                     
                     //Customers
                     fd.Customers = this._masterDateService.GetCustomers(userId).ToList();
-                    //fd.caseSearchFilter.CustomerId = cusId;
                                         
                     ////utförare
                     fd.filterPerformer = this._userService.GetUsers(cusId);                                                            
-
-                                        
-                    //fd.filterCaseProgress = ObjectExtensions.GetFilterForCases(SessionFacade.CurrentUser.FollowUpPermission, fd.filterPriority, cusId);
-
-                    //fd.CaseRegistrationDateStartFilter = fd.customerUserSetting.CaseRegistrationDateStartFilter;
-                    //fd.CaseRegistrationDateEndFilter = fd.customerUserSetting.CaseRegistrationDateEndFilter;
-                    //fd.CaseWatchDateStartFilter = fd.customerUserSetting.CaseWatchDateStartFilter;
-                    //fd.CaseWatchDateEndFilter = fd.customerUserSetting.CaseWatchDateEndFilter;
-                    //fd.CaseClosingDateStartFilter = fd.customerUserSetting.CaseClosingDateStartFilter;
-                    //fd.CaseClosingDateEndFilter = fd.customerUserSetting.CaseClosingDateEndFilter;
-                    //if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseClosingReasonFilter))
-                    //{
-                    //    fd.ClosingReasons = this._finishingCauseService.GetFinishingCauses(cusId);
-                    //}
-
+                                       
                     var sm = this.GetCaseSearchModel(cusId, userId);
-
-                    // hämta parent path för productArea 
-                    sm.caseSearchFilter.ParantPath_ProductArea = ParentPathDefaultValue;
-                    sm.caseSearchFilter.ParentPathClosingReason = ParentPathDefaultValue;
-                    sm.caseSearchFilter.ParantPath_CaseType = ParentPathDefaultValue;
-                    if (!string.IsNullOrWhiteSpace(sm.caseSearchFilter.ProductArea))
-                    {
-                        if (sm.caseSearchFilter.ProductArea != "0")
-                        {
-                            var p = this._productAreaService.GetProductArea(sm.caseSearchFilter.ProductArea.convertStringToInt());
-                            if (p != null)
-                                sm.caseSearchFilter.ParantPath_ProductArea = p.getProductAreaParentPath();
-                        }
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(sm.caseSearchFilter.CaseClosingReasonFilter))
-                    {
-                        if (sm.caseSearchFilter.CaseClosingReasonFilter != "0")
-                        {
-                            var fc = this._finishingCauseService.GetFinishingCause(sm.caseSearchFilter.CaseClosingReasonFilter.convertStringToInt());
-                            if (fc != null)
-                            {
-                                sm.caseSearchFilter.ParentPathClosingReason = fc.GetFinishingCauseParentPath();
-                            }
-                        }
-                    }
-
-                    // hämta parent path för casetype
-                    if ((sm.caseSearchFilter.CaseType > 0))
-                    {
-                        var c = this._caseTypeService.GetCaseType(sm.caseSearchFilter.CaseType);
-                        if (c != null)
-                            sm.caseSearchFilter.ParantPath_CaseType = c.getCaseTypeParentPath();
-                    }
-
+                    sm.caseSearchFilter.UserPerformer = userId.ToString();
+                                        
                     fd.caseSearchFilter = sm.caseSearchFilter;
-                    srm.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(cusId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
+
+                    var cs1 = new CaseSettings
+                    {
+                        Id = 1,
+                        Customer_Id = cusId,
+                        ColOrder = 1,
+                        Line = 1,
+                        MinWidth = 100,
+                        User_Id = SessionFacade.CurrentUser.Id,
+                        UserGroup = SessionFacade.CurrentUser.UserGroupId,
+                        Name = "CaseNumber",
+                        RegTime = DateTime.Now,
+                        ChangeTime = DateTime.Now
+                    };
+
+                    var cs2 = new CaseSettings
+                    {
+                        Id = 2,
+                        Customer_Id = cusId,
+                        ColOrder = 2,
+                        Line = 1,
+                        MinWidth = 100,
+                        User_Id = SessionFacade.CurrentUser.Id,
+                        UserGroup = SessionFacade.CurrentUser.UserGroupId,
+                        Name = "Caption",
+                        RegTime = DateTime.Now,
+                        ChangeTime = DateTime.Now
+                    };
+
+                    var css = new List<CaseSettings>();
+                    css.Add(cs1);
+                    css.Add(cs2);
+                    srm.caseSettings = css;
+
+                    //srm.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(cusId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
                     srm.cases = this._caseSearchService.Search(
                         sm.caseSearchFilter,
                         srm.caseSettings,
@@ -315,9 +301,9 @@
                     sm.Search.IdsForLastSearch = GetIdsFromSearchResult(srm.cases);
                     SessionFacade.CurrentCaseSearch = sm;
 
-                    var caseTemplateTree = GetCaseTemplateTreeModel(cusId, userId);
-                    m.CaseTemplateTreeButton = caseTemplateTree;
-                    m.CaseSetting = GetCaseSettingModel(cusId, userId);
+                    //var caseTemplateTree = GetCaseTemplateTreeModel(cusId, userId);
+                    //m.CaseTemplateTreeButton = caseTemplateTree;
+                    //m.CaseSetting = GetCaseSettingModel(cusId, userId);
                 }
             }
 
@@ -883,36 +869,49 @@
             {
                 f.CustomerId = frm.ReturnFormValue("lstfilterCustomers").convertStringToInt();//frm.ReturnFormValue("hidFilterCustomerId").convertStringToInt();
                 f.UserId = SessionFacade.CurrentUser.Id;
-                f.UserPerformer = frm.ReturnFormValue("lstFilterPerformer");
-
-                //f.CaseType = frm.ReturnFormValue("hidFilterCaseTypeId").convertStringToInt();
-                //f.ProductArea = frm.ReturnFormValue("hidFilterProductAreaId").ReturnCustomerUserValue();
-                //f.Region = frm.ReturnFormValue("lstFilterRegion");
-                //f.Country = frm.ReturnFormValue("lstFilterCountry");
-                //f.Department = frm.ReturnFormValue("lstFilterDepartment");
-                //f.User = frm.ReturnFormValue("lstFilterUser");
-                //f.Category = frm.ReturnFormValue("lstFilterCategory");
-                //f.WorkingGroup = frm.ReturnFormValue("lstFilterWorkingGroup");                
-                //f.UserResponsible = frm.ReturnFormValue("lstFilterResponsible");
-                //f.Priority = frm.ReturnFormValue("lstFilterPriority");
-                //f.Status = frm.ReturnFormValue("lstFilterStatus");
-                //f.StateSecondary = frm.ReturnFormValue("lstFilterStateSecondary");
-                //f.CaseProgress = frm.ReturnFormValue("lstFilterCaseProgress");
-                //f.FreeTextSearch = frm.ReturnFormValue("txtFreeTextSearch");
-                //f.CaseRegistrationDateStartFilter = frm.GetDate("CaseRegistrationDateStartFilter");
-                //f.CaseRegistrationDateEndFilter = frm.GetDate("CaseRegistrationDateEndFilter");
-                //f.CaseWatchDateStartFilter = frm.GetDate("CaseWatchDateStartFilter");
-                //f.CaseWatchDateEndFilter = frm.GetDate("CaseWatchDateEndFilter");
-                //f.CaseClosingDateStartFilter = frm.GetDate("CaseClosingDateStartFilter");
-                //f.CaseClosingDateEndFilter = frm.GetDate("CaseClosingDateEndFilter");
-                //f.CaseClosingReasonFilter = frm.ReturnFormValue("hidFilterClosingReasonId").ReturnCustomerUserValue();
+                f.UserPerformer = frm.ReturnFormValue("lstFilterPerformer");                
 
                 var sm = this.GetCaseSearchModel(f.CustomerId, f.UserId);
                 sm.caseSearchFilter = f;
                 sm.Search.SortBy = frm.ReturnFormValue("hidSortBy");
                 sm.Search.Ascending = frm.ReturnFormValue("hidSortByAsc").convertStringToBool();
+                
+                var cs1 = new CaseSettings
+                {
+                    Id = 1,
+                    Customer_Id = SessionFacade.CurrentUser.Id,
+                    ColOrder = 1,
+                    Line = 1,
+                    MinWidth = 100,
+                    User_Id = SessionFacade.CurrentUser.Id,
+                    UserGroup = SessionFacade.CurrentUser.UserGroupId,
+                    Name = "CaseNumber",
+                    RegTime = DateTime.Now,
+                    ChangeTime = DateTime.Now
+                };
 
-                m.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(f.CustomerId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
+                var cs2 = new CaseSettings
+                {
+                    Id = 2,
+                    Customer_Id = SessionFacade.CurrentUser.Id,
+                    ColOrder = 2,
+                    Line = 1,
+                    MinWidth = 100,
+                    User_Id = SessionFacade.CurrentUser.Id,
+                    UserGroup = SessionFacade.CurrentUser.UserGroupId,
+                    Name = "Caption",
+                    RegTime = DateTime.Now,
+                    ChangeTime = DateTime.Now
+                };
+                
+
+
+                var css = new List<CaseSettings>();
+                css.Add(cs1);
+                css.Add(cs2);
+                m.caseSettings = css;
+                
+                //m.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(f.CustomerId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
                 m.cases = this._caseSearchService.Search(
                     f,
                     m.caseSettings,
@@ -998,168 +997,168 @@
             return this.RedirectToAction("edit", "cases", new { id = caseId });
         }
 
-        public void SaveSetting(FormCollection frm)
-        {
+        //public void SaveSetting(FormCollection frm)
+        //{
 
-            int customerId = int.Parse(frm["CustomerId"]);
-            int userId = int.Parse(frm["UserId"]);
+        //    int customerId = int.Parse(frm["CustomerId"]);
+        //    int userId = int.Parse(frm["UserId"]);
 
-            bool regionCheck = frm.IsFormValueTrue("RegionCheck");
-            var regions = (regionCheck)
-                ? ((frm.ReturnFormValue("lstRegions") == string.Empty) ? "0" : frm.ReturnFormValue("lstRegions"))
-                : string.Empty;
+        //    bool regionCheck = frm.IsFormValueTrue("RegionCheck");
+        //    var regions = (regionCheck)
+        //        ? ((frm.ReturnFormValue("lstRegions") == string.Empty) ? "0" : frm.ReturnFormValue("lstRegions"))
+        //        : string.Empty;
 
-            bool registerByCheck = frm.IsFormValueTrue("RegisteredByCheck");
-            var registerBy = (registerByCheck)
-                ? ((frm.ReturnFormValue("lstRegisterBy") == string.Empty) ? "0" : frm.ReturnFormValue("lstRegisterBy"))
-                : string.Empty;
+        //    bool registerByCheck = frm.IsFormValueTrue("RegisteredByCheck");
+        //    var registerBy = (registerByCheck)
+        //        ? ((frm.ReturnFormValue("lstRegisterBy") == string.Empty) ? "0" : frm.ReturnFormValue("lstRegisterBy"))
+        //        : string.Empty;
 
-            bool caseTypeCheck = frm.IsFormValueTrue("CaseTypeCheck");
+        //    bool caseTypeCheck = frm.IsFormValueTrue("CaseTypeCheck");
 
-            bool productAreaCheck = frm.IsFormValueTrue("ProductAreaCheck");
-            var productArea = (productAreaCheck)
-                ? ((frm.ReturnFormValue("ProductAreaId") == string.Empty) ? "0" : frm.ReturnFormValue("ProductAreaId"))
-                : string.Empty;
+        //    bool productAreaCheck = frm.IsFormValueTrue("ProductAreaCheck");
+        //    var productArea = (productAreaCheck)
+        //        ? ((frm.ReturnFormValue("ProductAreaId") == string.Empty) ? "0" : frm.ReturnFormValue("ProductAreaId"))
+        //        : string.Empty;
 
-            bool workingGroupCheck = frm.IsFormValueTrue("WorkingGroupCheck");
-            var workingGroup = (workingGroupCheck)
-                ? ((frm.ReturnFormValue("lstWorkingGroup") == string.Empty)
-                    ? "0"
-                    : frm.ReturnFormValue("lstWorkingGroup"))
-                : string.Empty;
+        //    bool workingGroupCheck = frm.IsFormValueTrue("WorkingGroupCheck");
+        //    var workingGroup = (workingGroupCheck)
+        //        ? ((frm.ReturnFormValue("lstWorkingGroup") == string.Empty)
+        //            ? "0"
+        //            : frm.ReturnFormValue("lstWorkingGroup"))
+        //        : string.Empty;
 
-            bool responsibleCheck = frm.IsFormValueTrue("ResponsibleCheck");
+        //    bool responsibleCheck = frm.IsFormValueTrue("ResponsibleCheck");
 
-            //bool administratorCheck = frm["AdministratorCheck"].Contains("true"); it is always true  
-            var administrator = (frm.ReturnFormValue("lstAdministrator") == string.Empty)
-                ? "0"
-                : frm.ReturnFormValue("lstAdministrator");
+        //    //bool administratorCheck = frm["AdministratorCheck"].Contains("true"); it is always true  
+        //    var administrator = (frm.ReturnFormValue("lstAdministrator") == string.Empty)
+        //        ? "0"
+        //        : frm.ReturnFormValue("lstAdministrator");
 
-            bool priorityCheck = frm.IsFormValueTrue("PriorityCheck");
-            var priority = (priorityCheck)
-                ? ((frm.ReturnFormValue("lstPriority") == string.Empty) ? "0" : frm.ReturnFormValue("lstPriority"))
-                : string.Empty;
+        //    bool priorityCheck = frm.IsFormValueTrue("PriorityCheck");
+        //    var priority = (priorityCheck)
+        //        ? ((frm.ReturnFormValue("lstPriority") == string.Empty) ? "0" : frm.ReturnFormValue("lstPriority"))
+        //        : string.Empty;
 
-            var stateCheck = frm.IsFormValueTrue("StateCheck");
+        //    var stateCheck = frm.IsFormValueTrue("StateCheck");
 
-            bool subStateCheck = frm.IsFormValueTrue("SubStateCheck");
-            var subState = (subStateCheck)
-                ? ((frm.ReturnFormValue("lstSubState") == string.Empty) ? "0" : frm.ReturnFormValue("lstSubState"))
-                : string.Empty;
+        //    bool subStateCheck = frm.IsFormValueTrue("SubStateCheck");
+        //    var subState = (subStateCheck)
+        //        ? ((frm.ReturnFormValue("lstSubState") == string.Empty) ? "0" : frm.ReturnFormValue("lstSubState"))
+        //        : string.Empty;
 
-            var closingReasonCheck = frm.IsFormValueTrue("ClosingReasonCheck");
-            var closingReason = closingReasonCheck
-                ? ((frm.ReturnFormValue("ClosingReasonId") == string.Empty) ? "0" : frm.ReturnFormValue("ClosingReasonId"))
-                : string.Empty;
+        //    var closingReasonCheck = frm.IsFormValueTrue("ClosingReasonCheck");
+        //    var closingReason = closingReasonCheck
+        //        ? ((frm.ReturnFormValue("ClosingReasonId") == string.Empty) ? "0" : frm.ReturnFormValue("ClosingReasonId"))
+        //        : string.Empty;
 
-            var newCaseSetting = new UserCaseSetting(
-                            customerId,
-                            userId,
-                            regions,
-                            registerBy,
-                            caseTypeCheck,
-                            productArea,
-                            workingGroup,
-                            responsibleCheck,
-                            administrator,
-                            priority,
-                            stateCheck,
-                            subState,
-                            frm.GetDate("CaseRegistrationDateStartFilter"),
-                            frm.GetDate("CaseRegistrationDateEndFilter"),
-                            frm.GetDate("CaseWatchDateStartFilter"),
-                            frm.GetDate("CaseWatchDateEndFilter"),
-                            frm.GetDate("CaseClosingDateStartFilter"),
-                            frm.GetDate("CaseClosingDateEndFilter"),
-                            frm.IsFormValueTrue("CaseRegistrationDateFilterShow"),
-                            frm.IsFormValueTrue("CaseWatchDateFilterShow"),
-                            frm.IsFormValueTrue("CaseClosingDateFilterShow"),
-                            closingReason);
+        //    var newCaseSetting = new UserCaseSetting(
+        //                    customerId,
+        //                    userId,
+        //                    regions,
+        //                    registerBy,
+        //                    caseTypeCheck,
+        //                    productArea,
+        //                    workingGroup,
+        //                    responsibleCheck,
+        //                    administrator,
+        //                    priority,
+        //                    stateCheck,
+        //                    subState,
+        //                    frm.GetDate("CaseRegistrationDateStartFilter"),
+        //                    frm.GetDate("CaseRegistrationDateEndFilter"),
+        //                    frm.GetDate("CaseWatchDateStartFilter"),
+        //                    frm.GetDate("CaseWatchDateEndFilter"),
+        //                    frm.GetDate("CaseClosingDateStartFilter"),
+        //                    frm.GetDate("CaseClosingDateEndFilter"),
+        //                    frm.IsFormValueTrue("CaseRegistrationDateFilterShow"),
+        //                    frm.IsFormValueTrue("CaseWatchDateFilterShow"),
+        //                    frm.IsFormValueTrue("CaseClosingDateFilterShow"),
+        //                    closingReason);
 
-            this._customerUserService.UpdateUserCaseSetting(newCaseSetting);
-            SessionFacade.CurrentCaseSearch = null;
-        }
+        //    this._customerUserService.UpdateUserCaseSetting(newCaseSetting);
+        //    SessionFacade.CurrentCaseSearch = null;
+        //}
 
-        public void SaveColSetting(FormCollection frm)
-        {
+        //public void SaveColSetting(FormCollection frm)
+        //{
 
-            // Update Rows one by one ordered as a showed 
+        //    // Update Rows one by one ordered as a showed 
 
-            int customerId = int.Parse(frm["CustomerId"]);
-            int userId = int.Parse(frm["UserId"]);
+        //    int customerId = int.Parse(frm["CustomerId"]);
+        //    int userId = int.Parse(frm["UserId"]);
 
-            if (frm["uc.Id"] != null)
-            {
-                var updatedId = frm["uc.Id"].Split(',');
-                var updatedName = frm["uc.Name"].Split(',');
-                var updatedRow = frm.ReturnFormValue("rows").Split(',');
-                var updatedMinWith = frm["uc.MinWidth"].Split(',');
-                var updatedColOrder = frm["uc.ColOrder"].Split(',');
-                var updatedUserGroup = frm["uc.UserGroup"].Split(',');
+        //    if (frm["uc.Id"] != null)
+        //    {
+        //        var updatedId = frm["uc.Id"].Split(',');
+        //        var updatedName = frm["uc.Name"].Split(',');
+        //        var updatedRow = frm.ReturnFormValue("rows").Split(',');
+        //        var updatedMinWith = frm["uc.MinWidth"].Split(',');
+        //        var updatedColOrder = frm["uc.ColOrder"].Split(',');
+        //        var updatedUserGroup = frm["uc.UserGroup"].Split(',');
 
-                IDictionary<string, string> errors = new Dictionary<string, string>();
-                DateTime nowTime = DateTime.Now;
-                var newColSetting = new CaseSettings();
-                for (int ii = 0; ii < updatedId.Length; ii++)
-                {
-                    newColSetting.Id = int.Parse(updatedId[ii]);
-                    newColSetting.Customer_Id = customerId;
-                    newColSetting.User_Id = userId;
-                    newColSetting.Name = updatedName[ii];
-                    newColSetting.Line = int.Parse(updatedRow[ii]);
-                    newColSetting.MinWidth = int.Parse(updatedMinWith[ii]);
-                    newColSetting.ColOrder = int.Parse(updatedColOrder[ii]);
-                    newColSetting.UserGroup = int.Parse(updatedUserGroup[ii]);
-                    newColSetting.ChangeTime = nowTime;
+        //        IDictionary<string, string> errors = new Dictionary<string, string>();
+        //        DateTime nowTime = DateTime.Now;
+        //        var newColSetting = new CaseSettings();
+        //        for (int ii = 0; ii < updatedId.Length; ii++)
+        //        {
+        //            newColSetting.Id = int.Parse(updatedId[ii]);
+        //            newColSetting.Customer_Id = customerId;
+        //            newColSetting.User_Id = userId;
+        //            newColSetting.Name = updatedName[ii];
+        //            newColSetting.Line = int.Parse(updatedRow[ii]);
+        //            newColSetting.MinWidth = int.Parse(updatedMinWith[ii]);
+        //            newColSetting.ColOrder = int.Parse(updatedColOrder[ii]);
+        //            newColSetting.UserGroup = int.Parse(updatedUserGroup[ii]);
+        //            newColSetting.ChangeTime = nowTime;
 
-                    _caseSettingService.UpdateCaseSetting(newColSetting, out errors);
-                }
+        //            _caseSettingService.UpdateCaseSetting(newColSetting, out errors);
+        //        }
 
-            }
-        }
+        //    }
+        //}
 
-        [HttpPost]
-        public ActionResult AddCaseSettingColumn(int customerId, int userId, string labellist, int linelist, int minWidthValue, int colOrderValue, int userGroup)
-        {
+        //[HttpPost]
+        //public ActionResult AddCaseSettingColumn(int customerId, int userId, string labellist, int linelist, int minWidthValue, int colOrderValue, int userGroup)
+        //{
 
-            IDictionary<string, string> errors = new Dictionary<string, string>();
+        //    IDictionary<string, string> errors = new Dictionary<string, string>();
 
-            DateTime nowTime = DateTime.Now;
+        //    DateTime nowTime = DateTime.Now;
 
-            var newCaseSetting = new CaseSettings();
+        //    var newCaseSetting = new CaseSettings();
 
-            newCaseSetting.Id = 0;
-            newCaseSetting.Customer_Id = customerId;
-            newCaseSetting.User_Id = userId;
-            newCaseSetting.Name = labellist;
-            newCaseSetting.Line = linelist;
-            newCaseSetting.MinWidth = minWidthValue;
-            newCaseSetting.ColOrder = colOrderValue;
-            newCaseSetting.UserGroup = userGroup;
-            newCaseSetting.RegTime = nowTime;
-            newCaseSetting.ChangeTime = nowTime;
+        //    newCaseSetting.Id = 0;
+        //    newCaseSetting.Customer_Id = customerId;
+        //    newCaseSetting.User_Id = userId;
+        //    newCaseSetting.Name = labellist;
+        //    newCaseSetting.Line = linelist;
+        //    newCaseSetting.MinWidth = minWidthValue;
+        //    newCaseSetting.ColOrder = colOrderValue;
+        //    newCaseSetting.UserGroup = userGroup;
+        //    newCaseSetting.RegTime = nowTime;
+        //    newCaseSetting.ChangeTime = nowTime;
 
-            _caseSettingService.SaveCaseSetting(newCaseSetting, out errors);
+        //    _caseSettingService.SaveCaseSetting(newCaseSetting, out errors);
 
-            var model = new CaseColumnsSettingsModel();
-            model = GetCaseColumnSettingModel(customerId, userId);
+        //    var model = new CaseColumnsSettingsModel();
+        //    model = GetCaseColumnSettingModel(customerId, userId);
 
-            return PartialView("_ColumnCaseSetting", model);
+        //    return PartialView("_ColumnCaseSetting", model);
 
-        }
+        //}
 
-        [HttpPost]
-        public ActionResult DeleteRowFromCaseSettings(int id, int userId, int customerId)
-        {
-            if (this._caseSettingService.DeleteCaseSetting(id) != DeleteMessage.Success)
-                this.TempData.Add("Error", "");
+        //[HttpPost]
+        //public ActionResult DeleteRowFromCaseSettings(int id, int userId, int customerId)
+        //{
+        //    if (this._caseSettingService.DeleteCaseSetting(id) != DeleteMessage.Success)
+        //        this.TempData.Add("Error", "");
 
-            var model = new CaseColumnsSettingsModel();
+        //    var model = new CaseColumnsSettingsModel();
 
-            model = GetCaseColumnSettingModel(customerId, userId);
+        //    model = GetCaseColumnSettingModel(customerId, userId);
 
-            return PartialView("_ColumnCaseSetting", model);
-        }
+        //    return PartialView("_ColumnCaseSetting", model);
+        //}
 
         [HttpGet]
         public RedirectToRouteResult ChangeCurrentLanguage(int languageId)
@@ -1703,14 +1702,7 @@
 
             return string.Join(" - ", list.Select(c => c.Name).Reverse());
         }
-
-        private CaseTemplateTreeModel GetCaseTemplateTreeModel(int customerId, int userId)
-        {
-            var model = new CaseTemplateTreeModel();
-            model.CustomerId = customerId;
-            model.CaseTemplateCategoryTree = _caseSolutionService.GetCaseSolutionCategoryTree(customerId, userId);
-            return model;
-        }
+        
 
         private SendToDialogModel CreateNewSendToDialogModel(int customerId, IList<User> users)
         {
@@ -1845,172 +1837,172 @@
             return Enums.AccessMode.FullAccess;
         }
 
-        private CaseSettingModel GetCaseSettingModel(int customerId, int userId)
-        {
-            var ret = new CaseSettingModel();
+        //private CaseSettingModel GetCaseSettingModel(int customerId, int userId)
+        //{
+        //    var ret = new CaseSettingModel();
 
-            ret.CustomerId = customerId;
-            ret.UserId = userId;
+        //    ret.CustomerId = customerId;
+        //    ret.UserId = userId;
 
-            var userCaseSettings = _customerUserService.GetUserCaseSettings(customerId, userId);
+        //    var userCaseSettings = _customerUserService.GetUserCaseSettings(customerId, userId);
 
-            var regions = _regionService.GetRegions(customerId);
-            ret.RegionCheck = (userCaseSettings.Region != string.Empty);
-            ret.Regions = regions;
-            ret.SelectedRegion = userCaseSettings.Region;
+        //    var regions = _regionService.GetRegions(customerId);
+        //    ret.RegionCheck = (userCaseSettings.Region != string.Empty);
+        //    ret.Regions = regions;
+        //    ret.SelectedRegion = userCaseSettings.Region;
 
-            var registeredBys = _userService.GetUsers(customerId);
-            ret.RegisteredByCheck = (userCaseSettings.RegisteredBy != string.Empty);
-            ret.RegisteredBy = registeredBys;
-            ret.SelectedRegisteredBy = userCaseSettings.RegisteredBy;
+        //    var registeredBys = _userService.GetUsers(customerId);
+        //    ret.RegisteredByCheck = (userCaseSettings.RegisteredBy != string.Empty);
+        //    ret.RegisteredBy = registeredBys;
+        //    ret.SelectedRegisteredBy = userCaseSettings.RegisteredBy;
 
-            ret.CaseTypeCheck = userCaseSettings.CaseType;
+        //    ret.CaseTypeCheck = userCaseSettings.CaseType;
 
-            ret.ProductAreas = this._productAreaService.GetProductAreas(customerId);
-            ret.ProductAreaPath = "--";
+        //    ret.ProductAreas = this._productAreaService.GetProductAreas(customerId);
+        //    ret.ProductAreaPath = "--";
 
-            int pa;
-            int.TryParse(userCaseSettings.ProductArea, out pa);
-            ret.ProductAreaId = pa;
+        //    int pa;
+        //    int.TryParse(userCaseSettings.ProductArea, out pa);
+        //    ret.ProductAreaId = pa;
 
-            if (pa > 0)
-            {
+        //    if (pa > 0)
+        //    {
 
-                var p = this._productAreaService.GetProductArea(ret.ProductAreaId);
-                if (p != null)
-                    ret.ProductAreaPath = p.getProductAreaParentPath();
-            }
-            ret.ProductAreaCheck = (userCaseSettings.ProductArea != string.Empty);
+        //        var p = this._productAreaService.GetProductArea(ret.ProductAreaId);
+        //        if (p != null)
+        //            ret.ProductAreaPath = p.getProductAreaParentPath();
+        //    }
+        //    ret.ProductAreaCheck = (userCaseSettings.ProductArea != string.Empty);
 
-            var userWorkingGroup =
-                _userService.GetUserWorkingGroups().Where(u => u.User_Id == userId).Select(x => x.WorkingGroup_Id);
-            var workingGroups =
-                _workingGroupService.GetWorkingGroups(customerId).Where(w => userWorkingGroup.Contains(w.Id)).ToList();
-            ret.WorkingGroupCheck = (userCaseSettings.WorkingGroup != string.Empty);
-            ret.WorkingGroups = workingGroups;
-            ret.SelectedWorkingGroup = userCaseSettings.WorkingGroup;
+        //    var userWorkingGroup =
+        //        _userService.GetUserWorkingGroups().Where(u => u.User_Id == userId).Select(x => x.WorkingGroup_Id);
+        //    var workingGroups =
+        //        _workingGroupService.GetWorkingGroups(customerId).Where(w => userWorkingGroup.Contains(w.Id)).ToList();
+        //    ret.WorkingGroupCheck = (userCaseSettings.WorkingGroup != string.Empty);
+        //    ret.WorkingGroups = workingGroups;
+        //    ret.SelectedWorkingGroup = userCaseSettings.WorkingGroup;
 
-            ret.ResponsibleCheck = userCaseSettings.Responsible;
+        //    ret.ResponsibleCheck = userCaseSettings.Responsible;
 
-            var administrators = _userService.GetAdministrators(customerId);
-            ret.AdministratorCheck = true;
-            ret.Administrators = administrators;
-            ret.SelectedAdministrator = userCaseSettings.Administrators;
+        //    var administrators = _userService.GetAdministrators(customerId);
+        //    ret.AdministratorCheck = true;
+        //    ret.Administrators = administrators;
+        //    ret.SelectedAdministrator = userCaseSettings.Administrators;
 
-            var priorities = _priorityService.GetPriorities(customerId).OrderBy(p => p.Code).ToList();
-            ret.PriorityCheck = (userCaseSettings.Priority != string.Empty);
-            ret.Priorities = priorities;
-            ret.SelectedPriority = userCaseSettings.Priority;
+        //    var priorities = _priorityService.GetPriorities(customerId).OrderBy(p => p.Code).ToList();
+        //    ret.PriorityCheck = (userCaseSettings.Priority != string.Empty);
+        //    ret.Priorities = priorities;
+        //    ret.SelectedPriority = userCaseSettings.Priority;
 
-            ret.StateCheck = userCaseSettings.State;
+        //    ret.StateCheck = userCaseSettings.State;
 
-            var subStates = _stateSecondaryService.GetStateSecondaries(customerId).OrderBy(s => s.Name).ToList();
-            ret.SubStateCheck = (userCaseSettings.SubState != string.Empty);
-            ret.SubStates = subStates;
-            ret.SelectedSubState = userCaseSettings.SubState;
+        //    var subStates = _stateSecondaryService.GetStateSecondaries(customerId).OrderBy(s => s.Name).ToList();
+        //    ret.SubStateCheck = (userCaseSettings.SubState != string.Empty);
+        //    ret.SubStates = subStates;
+        //    ret.SelectedSubState = userCaseSettings.SubState;
 
-            ret.CaseRegistrationDateStartFilter = userCaseSettings.CaseRegistrationDateStartFilter;
-            ret.CaseRegistrationDateEndFilter = userCaseSettings.CaseRegistrationDateEndFilter;
-            ret.CaseWatchDateStartFilter = userCaseSettings.CaseWatchDateStartFilter;
-            ret.CaseWatchDateEndFilter = userCaseSettings.CaseWatchDateEndFilter;
-            ret.CaseClosingDateStartFilter = userCaseSettings.CaseClosingDateStartFilter;
-            ret.CaseClosingDateEndFilter = userCaseSettings.CaseClosingDateEndFilter;
-            ret.CaseRegistrationDateFilterShow = userCaseSettings.CaseRegistrationDateFilterShow;
-            ret.CaseWatchDateFilterShow = userCaseSettings.CaseWatchDateFilterShow;
-            ret.CaseClosingDateFilterShow = userCaseSettings.CaseClosingDateFilterShow;
+        //    ret.CaseRegistrationDateStartFilter = userCaseSettings.CaseRegistrationDateStartFilter;
+        //    ret.CaseRegistrationDateEndFilter = userCaseSettings.CaseRegistrationDateEndFilter;
+        //    ret.CaseWatchDateStartFilter = userCaseSettings.CaseWatchDateStartFilter;
+        //    ret.CaseWatchDateEndFilter = userCaseSettings.CaseWatchDateEndFilter;
+        //    ret.CaseClosingDateStartFilter = userCaseSettings.CaseClosingDateStartFilter;
+        //    ret.CaseClosingDateEndFilter = userCaseSettings.CaseClosingDateEndFilter;
+        //    ret.CaseRegistrationDateFilterShow = userCaseSettings.CaseRegistrationDateFilterShow;
+        //    ret.CaseWatchDateFilterShow = userCaseSettings.CaseWatchDateFilterShow;
+        //    ret.CaseClosingDateFilterShow = userCaseSettings.CaseClosingDateFilterShow;
 
-            ret.ClosingReasons = this._finishingCauseService.GetFinishingCauses(customerId);
-            ret.ClosingReasonPath = "--";
-            int closingReason;
-            int.TryParse(userCaseSettings.CaseClosingReasonFilter, out closingReason);
-            ret.ClosingReasonId = closingReason;
-            if (closingReason > 0)
-            {
+        //    ret.ClosingReasons = this._finishingCauseService.GetFinishingCauses(customerId);
+        //    ret.ClosingReasonPath = "--";
+        //    int closingReason;
+        //    int.TryParse(userCaseSettings.CaseClosingReasonFilter, out closingReason);
+        //    ret.ClosingReasonId = closingReason;
+        //    if (closingReason > 0)
+        //    {
 
-                var fc = this._finishingCauseService.GetFinishingCause(ret.ClosingReasonId);
-                if (fc != null)
-                {
-                    ret.ClosingReasonPath = fc.GetFinishingCauseParentPath();
-                }
-            }
+        //        var fc = this._finishingCauseService.GetFinishingCause(ret.ClosingReasonId);
+        //        if (fc != null)
+        //        {
+        //            ret.ClosingReasonPath = fc.GetFinishingCauseParentPath();
+        //        }
+        //    }
 
-            ret.ClosingReasonCheck = userCaseSettings.CaseClosingReasonFilter != string.Empty;
+        //    ret.ClosingReasonCheck = userCaseSettings.CaseClosingReasonFilter != string.Empty;
 
-            ret.ClosingReasonCheck = userCaseSettings.CaseClosingReasonFilter != string.Empty;
-            ret.ClosingReasons = this._finishingCauseService.GetFinishingCauses(customerId);
-            ret.ColumnSettingModel = this.GetCaseColumnSettingModel(customerId, userId);
+        //    ret.ClosingReasonCheck = userCaseSettings.CaseClosingReasonFilter != string.Empty;
+        //    ret.ClosingReasons = this._finishingCauseService.GetFinishingCauses(customerId);
+        //    ret.ColumnSettingModel = this.GetCaseColumnSettingModel(customerId, userId);
 
-            return ret;
-        }
+        //    return ret;
+        //}
 
-        private CaseColumnsSettingsModel GetCaseColumnSettingModel(int customerId, int userId)
-        {
-            CaseColumnsSettingsModel colSettingModel = new CaseColumnsSettingsModel();
+        //private CaseColumnsSettingsModel GetCaseColumnSettingModel(int customerId, int userId)
+        //{
+        //    CaseColumnsSettingsModel colSettingModel = new CaseColumnsSettingsModel();
 
-            colSettingModel.CustomerId = customerId;
-            colSettingModel.UserId = userId;
+        //    colSettingModel.CustomerId = customerId;
+        //    colSettingModel.UserId = userId;
 
-            var showColumns = _caseFieldSettingService.ListToShowOnCasePage(customerId, SessionFacade.CurrentUser.LanguageId)
-                                       .Where(c => c.ShowOnStartPage == 1)
-                                       .Select(s => s.CFS_Id)
-                                       .ToList();
+        //    var showColumns = _caseFieldSettingService.ListToShowOnCasePage(customerId, SessionFacade.CurrentUser.LanguageId)
+        //                               .Where(c => c.ShowOnStartPage == 1)
+        //                               .Select(s => s.CFS_Id)
+        //                               .ToList();
 
-            IList<CaseFieldSettingsWithLanguage> allColumns = new List<CaseFieldSettingsWithLanguage>();
-            allColumns = _caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, SessionFacade.CurrentUser.LanguageId)
-                                                 .Where(c => showColumns.Contains(c.Id))
-                                                 .ToList();
+        //    IList<CaseFieldSettingsWithLanguage> allColumns = new List<CaseFieldSettingsWithLanguage>();
+        //    allColumns = _caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, SessionFacade.CurrentUser.LanguageId)
+        //                                         .Where(c => showColumns.Contains(c.Id))
+        //                                         .ToList();
 
-            //<option value="tblProblem.ResponsibleUser_Id">@Translation.Get("Problem", Enums.TranslationSource.TextTranslation)</option>
+        //    //<option value="tblProblem.ResponsibleUser_Id">@Translation.Get("Problem", Enums.TranslationSource.TextTranslation)</option>
 
-            var fixValue1 = new CaseFieldSettingsWithLanguage
-            {
-                Id = 9998,
-                Label = Translation.Get("Tid kvar", Enums.TranslationSource.TextTranslation),
-                Name = "_temporary_.LeadTime",
-                Language_Id = SessionFacade.CurrentUser.LanguageId
-            };
-            allColumns.Add(fixValue1);
+        //    var fixValue1 = new CaseFieldSettingsWithLanguage
+        //    {
+        //        Id = 9998,
+        //        Label = Translation.Get("Tid kvar", Enums.TranslationSource.TextTranslation),
+        //        Name = "_temporary_.LeadTime",
+        //        Language_Id = SessionFacade.CurrentUser.LanguageId
+        //    };
+        //    allColumns.Add(fixValue1);
 
-            var fixValue2 = new CaseFieldSettingsWithLanguage
-            {
-                Id = 9999,
-                Label = Translation.Get("Problem", Enums.TranslationSource.TextTranslation),
-                Name = "tblProblem.ResponsibleUser_Id",
-                Language_Id = SessionFacade.CurrentUser.LanguageId
-            };
+        //    var fixValue2 = new CaseFieldSettingsWithLanguage
+        //    {
+        //        Id = 9999,
+        //        Label = Translation.Get("Problem", Enums.TranslationSource.TextTranslation),
+        //        Name = "tblProblem.ResponsibleUser_Id",
+        //        Language_Id = SessionFacade.CurrentUser.LanguageId
+        //    };
 
-            allColumns.Add(fixValue2);
-            colSettingModel.CaseFieldSettingLanguages = allColumns;
+        //    allColumns.Add(fixValue2);
+        //    colSettingModel.CaseFieldSettingLanguages = allColumns;
 
 
-            IList<CaseSettings> userColumns = new List<CaseSettings>();
-            userColumns = _caseSettingService.GetCaseSettingsWithUser(customerId, userId, SessionFacade.CurrentUser.UserGroupId);
+        //    IList<CaseSettings> userColumns = new List<CaseSettings>();
+        //    userColumns = _caseSettingService.GetCaseSettingsWithUser(customerId, userId, SessionFacade.CurrentUser.UserGroupId);
 
-            IList<CaseFieldSetting> userCaseFieldSettings = new List<CaseFieldSetting>();
-            userCaseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
+        //    IList<CaseFieldSetting> userCaseFieldSettings = new List<CaseFieldSetting>();
+        //    userCaseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
 
-            colSettingModel.UserColumns = userColumns;
-            colSettingModel.CaseFieldSettings = userCaseFieldSettings;
+        //    colSettingModel.UserColumns = userColumns;
+        //    colSettingModel.CaseFieldSettings = userCaseFieldSettings;
 
-            List<SelectListItem> li = new List<SelectListItem>();
-            li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Info", Enums.TranslationSource.TextTranslation),
-                Value = "1",
-                Selected = false
-            });
-            li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Utökad info", Enums.TranslationSource.TextTranslation),
-                Value = "2",
-                Selected = false
-            });
+        //    List<SelectListItem> li = new List<SelectListItem>();
+        //    li.Add(new SelectListItem()
+        //    {
+        //        Text = Translation.Get("Info", Enums.TranslationSource.TextTranslation),
+        //        Value = "1",
+        //        Selected = false
+        //    });
+        //    li.Add(new SelectListItem()
+        //    {
+        //        Text = Translation.Get("Utökad info", Enums.TranslationSource.TextTranslation),
+        //        Value = "2",
+        //        Selected = false
+        //    });
 
-            colSettingModel.LineList = li;
+        //    colSettingModel.LineList = li;
 
-            return colSettingModel;
+        //    return colSettingModel;
 
-        }
+        //}
 
         private string GetIdsFromSearchResult(IList<CaseSearchResult> cases)
         {
