@@ -589,6 +589,7 @@
     <Content Include="FormLibContent\Assemblies\ECT.FormLib.dll" />
     <Content Include="FormLibContent\Assemblies\ECT.Model.dll" />
     <Content Include="FormLibContent\Assemblies\ECT.Service.dll" />
+    <Content Include="FormLibContent\Assemblies\itextsharp.dll" />
     <Content Include="FormLibContent\Assets\css\bootstrap-responsive.css" />
     <Content Include="FormLibContent\Assets\css\bootstrap.css" />
     <Content Include="FormLibContent\Assets\css\datepicker-new.css" />
