@@ -625,6 +625,18 @@ namespace DH.Helpdesk.Web.Controllers
             return this.RedirectToAction("EditCircular", new { questionnaireId, circularId });
         }
 
+        [HttpPost]
+        public ViewResult Send(int[] connectedCases)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPost]
+        public ViewResult Remind()
+        {
+            throw new NotImplementedException();
+        }
+
         private List<CircularOverviewModel> CreateCircularOverviewModels(int questionnaireId, int state)
         {
             List<CircularOverview> circulars = this._circularService.GetCircularOverviews(questionnaireId, state);
