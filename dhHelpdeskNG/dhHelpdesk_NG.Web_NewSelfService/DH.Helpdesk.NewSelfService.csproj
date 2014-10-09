@@ -222,7 +222,6 @@
     <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\InfoController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
-    <Compile Include="Controllers\PrintController.cs" />
     <Compile Include="Controllers\StartController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -270,9 +269,6 @@
     <Compile Include="Infrastructure\LocalizedAttributes\Rules\ModelClientValidationMaxLengthFromRule.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\Rules\ModelClientValidationRequiredFromRule.cs" />
     <Compile Include="Infrastructure\Permission.cs" />
-    <Compile Include="Infrastructure\Print\PrintPdfEvents.cs" />
-    <Compile Include="Infrastructure\Print\PrintPdfResult.cs" />
-    <Compile Include="Infrastructure\Print\PrintPdfView.cs" />
     <Compile Include="Infrastructure\SessionFacade.cs" />
     <Compile Include="Infrastructure\StringModelBinding.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\DeletedFile.cs" />
@@ -317,7 +313,6 @@
     <Compile Include="Models\Notifiers\SearchModel.cs" />
     <Compile Include="Models\Notifiers\SettingModel.cs" />
     <Compile Include="Models\Notifiers\SettingsModel.cs" />
-    <Compile Include="Models\Print\Case\CasePrintModel.cs" />
     <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Models\SelfService\SelfServiceConfigurationModel.cs" />
     <Compile Include="Models\SelfService\SelfServiceModel.cs" />
