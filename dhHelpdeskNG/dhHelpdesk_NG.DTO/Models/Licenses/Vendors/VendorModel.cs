@@ -68,31 +68,24 @@
         [MaxLength(50)]
         public string VendorName { get; private set; }
 
-        [NotNullAndEmpty]
         [MaxLength(50)]
         public string Contact { get; private set; }
 
-        [NotNullAndEmpty]
         [MaxLength(50)]
         public string Address { get; private set; }
 
-        [NotNullAndEmpty]
         [MaxLength(10)]
         public string PostalCode { get; private set; }
 
-        [NotNullAndEmpty]
         [MaxLength(50)]
         public string PostalAddress { get; private set; }
 
-        [NotNullAndEmpty]
         [MaxLength(50)]
         public string Phone { get; private set; }
 
-        [NotNullAndEmpty]
         [MaxLength(50)]
         public string Email { get; private set; }
 
-        [NotNullAndEmpty]
         [MaxLength(50)]
         public string HomePage { get; private set; }
 

@@ -986,7 +986,7 @@ $(function () {
                 model.UnitName = this.GetUnitName();
                 model.Ppu = this.GetPpu();
                 model.Total = this.GetTotal();
-                model.IsArticlePpuExists = this.Article != null && this.Article.Ppu != null;
+                model.IsArticlePpuExists = this.Article != null && this.Article.Ppu != null && this.Article.Ppu > 0;
                 return model;
             };
 
@@ -1018,7 +1018,7 @@ $(function () {
                     this.Ppu = ppu;
                 }
 
-                this.Container.find(".article-total").text(this.GetTotal() + " " + this.GetUnitName());
+                this.Container.find(".article-total").text(this.GetTotal());
                 this.Order.UpdateTotal();
             },
 
