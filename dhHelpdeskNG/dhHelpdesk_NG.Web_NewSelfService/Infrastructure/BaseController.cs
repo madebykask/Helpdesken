@@ -144,8 +144,6 @@
                 if(ConfigurationManager.AppSettings["SSOLog"].ToString().ToLower() == "true" && string.IsNullOrEmpty(SessionFacade.CurrentSystemUser))
                     _ssoService.SaveSSOLog(ssoLog);
 
-                //SessionFacade.UserHasAccess = true;
-
                 if(string.IsNullOrEmpty(userIdentity.UserId))
                 {
                     SessionFacade.UserHasAccess = false;
@@ -160,10 +158,9 @@
                     if(!string.IsNullOrEmpty(defaultEmployeeNumber))
                         userIdentity.EmployeeNumber = defaultEmployeeNumber;
 
-                    //userIdentity.EmployeeNumber = "31000000";
                     SessionFacade.UserHasAccess = true;
 
-                    if(SessionFacade.CurrentCustomer != null)
+                    if(SessionFacade.CurrentCustomer != null && !string.IsNullOrEmpty(userIdentity.EmployeeNumber))
                     {
                         var config = (ECT.FormLib.Configurable.AccessManagment) System.Configuration.ConfigurationManager.GetSection("formLibConfigurable/accessManagment");
                         var country = config.Countries.Where(x => x.HelpdeskCustomerId == SessionFacade.CurrentCustomer.Id.ToString()).FirstOrDefault();
@@ -204,10 +201,7 @@
                 }
             }
 
-
-            //this.SessionCheck(filterContext);
             this.SetTextTranslation(filterContext);
-
         }
                 
         public ActionResult ChangeLanguage(string language, string currentUrl, string lastParams)
