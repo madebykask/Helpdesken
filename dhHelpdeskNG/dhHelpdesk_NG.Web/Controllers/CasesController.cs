@@ -837,8 +837,27 @@
             return this.PartialView("_CaseFiles", model);
         }
 
+        [HttpPost]
+        public string GetSafeFileName(string id, string name)
+        {                                    
+            if (GuidHelper.IsGuid(id))
+            {
+                if (this.userTemporaryFilesStorage.FileExists(name, id, ModuleName.Cases))                
+                    name = DateTime.Now.ToString() + '_' + name;                
+            }
+            else
+            {
+                if (this._caseFileService.FileExists(int.Parse(id), name))                                 
+                    name = DateTime.Now.ToString() + '_' + name;                                
+            }
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            return serializer.Serialize(name);            
+        } 
+         
+
         [HttpGet]
-        public string GetCurrentFiles(string id)
+        public string GetAllFileName(string id)
         {
             //var files = this._caseFileService.GetCaseFiles(int.Parse(id));
             var files = GuidHelper.IsGuid(id)
@@ -880,8 +899,10 @@
                 {
                     //return;
                     //throw new HttpException(409 , "Already file exist!"); because it take a long time.
-                    this.userTemporaryFilesStorage.DeleteFile(name, id, ModuleName.Cases);                               
-                }
+
+                    //this.userTemporaryFilesStorage.DeleteFile(name, id, ModuleName.Cases);                               
+                    //name = DateTime.Now.ToString() + '_' + name;
+                }                
                 this.userTemporaryFilesStorage.AddFile(uploadedData, name, id, ModuleName.Cases);                               
             }
             else
@@ -890,7 +911,8 @@
                 {
                     //return;
                     //throw new HttpException(409, "Already file exist!");    because it take a long time.
-                    this._caseFileService.DeleteByCaseIdAndFileName(int.Parse(id), name);   
+                    //this._caseFileService.DeleteByCaseIdAndFileName(int.Parse(id), name);   
+                    //name =  DateTime.Now.ToString() + '_' + name;
                 }
 
                 var caseFileDto = new CaseFileDto(
