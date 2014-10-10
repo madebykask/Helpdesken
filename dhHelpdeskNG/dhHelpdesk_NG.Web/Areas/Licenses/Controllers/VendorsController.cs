@@ -70,5 +70,23 @@
             var model = this.vendorsModelFactory.GetEditModel(data);
             return this.View(model);
         }
+
+        [HttpPost]
+        [BadRequestOnNotValid]
+        public RedirectToRouteResult Vendor(VendorEditModel model)
+        {
+            var vendor = this.vendorsModelFactory.GetBusinessModel(model);
+            var vendorId = this.vendorsService.AddOrUpdate(vendor);
+
+            return this.RedirectToAction("Vendor", vendorId);
+        }
+
+        [HttpGet]
+        public RedirectToRouteResult Delete(int vendorId)
+        {
+            this.vendorsService.Delete(vendorId);
+
+            return this.RedirectToAction("Index");
+        }
     }
 }

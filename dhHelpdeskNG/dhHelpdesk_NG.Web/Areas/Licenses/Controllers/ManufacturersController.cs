@@ -70,5 +70,23 @@
             var model = this.manufacturersModelFactory.GetEditModel(data);
             return this.View(model);
         }
+
+        [HttpPost]
+        [BadRequestOnNotValid]
+        public RedirectToRouteResult Manufacturer(ManufacturerEditModel model)
+        {
+            var manufacturer = this.manufacturersModelFactory.GetBusinessModel(model);
+            var manufacturerId = this.manufacturersService.AddOrUpdate(manufacturer);
+
+            return this.RedirectToAction("Manufacturer", manufacturerId);
+        }
+
+        [HttpGet]
+        public RedirectToRouteResult Delete(int manufacturerId)
+        {
+            this.manufacturersService.Delete(manufacturerId);
+
+            return this.RedirectToAction("Index");
+        }
     }
 }

@@ -75,5 +75,23 @@
             var model = this.productsModelFactory.GetEditModel(data);
             return this.View(model);
         }
+
+        [HttpPost]
+        [BadRequestOnNotValid]
+        public RedirectToRouteResult Product(ProductEditModel model)
+        {
+            var product = this.productsModelFactory.GetBusinessModel(model);
+            var productId = this.productsService.AddOrUpdate(product);
+
+            return this.RedirectToAction("Product", productId);
+        }
+
+        [HttpGet]
+        public RedirectToRouteResult Delete(int productId)
+        {
+            this.productsService.Delete(productId);
+
+            return this.RedirectToAction("Index");
+        }
     }
 }

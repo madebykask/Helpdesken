@@ -5,6 +5,14 @@
     Layout = "~/Areas/Licenses/Views/Shared/_IndexLayout.cshtml";
 }
 
+@section Actions {
+    <ul class="secnav">               
+        <li>
+            @Html.ActionLink(Translation.Get("Ny applikation"), "Application", "Applications", new { @class = "btn" })
+        </li>
+    </ul>
+}
+
 @using (Ajax.BeginForm("Applications", "Applications", null, 
     new AjaxOptions { UpdateTargetId = "LicensesApplicationsTableContainer" },
     new { id ="ApplicationsSearchForm" } ))

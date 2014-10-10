@@ -75,7 +75,18 @@
         [BadRequestOnNotValid]
         public RedirectToRouteResult License(LicenseEditModel model)
         {
-            return this.RedirectToAction("License");
+            var license = this.licensesModelFactory.GetBusinessModel(model);
+            var licenseId = this.licensesService.AddOrUpdate(license);
+
+            return this.RedirectToAction("License", licenseId);
+        }
+
+        [HttpGet]
+        public RedirectToRouteResult Delete(int licenseId)
+        {
+            this.licensesService.Delete(licenseId);
+
+            return this.RedirectToAction("Index");
         }
     }
 }

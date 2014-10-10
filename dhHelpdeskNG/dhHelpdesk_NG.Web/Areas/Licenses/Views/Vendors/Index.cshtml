@@ -1,6 +1,15 @@
-﻿@model DH.Helpdesk.Web.Areas.Licenses.Models.Vendors.VendorsIndexModel
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Licenses.Models.Vendors.VendorsIndexModel
 @{
     Layout = "~/Areas/Licenses/Views/Shared/_IndexLayout.cshtml";
+}
+
+@section Actions {
+    <ul class="secnav">               
+        <li>
+            @Html.ActionLink(Translation.Get("Ny försäljare"), "Vendor", "Vendors", new { @class = "btn" })
+        </li>
+    </ul>
 }
 
 @using (Ajax.BeginForm("Vendors", "Vendors", null, 

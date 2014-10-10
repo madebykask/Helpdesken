@@ -35,7 +35,7 @@
         {            
         }
 
-        [IsId]
+        [MinValue(0)]
         [HiddenInput]
         public int Id { get; set; }
 
