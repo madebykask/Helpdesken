@@ -70,6 +70,8 @@
         public string WatchDateValueName { get; set; }
 
         public IEnumerable<WatchDateCalendarValue> WatchDateCalendarValues { get; set; }
+
+        public IList<WatchDateCalendarValue> WatchDateCalendarValuesForList { get; set; }
     }
 
     public class GlobalSettingTextTranslationViewModel : BaseTabInputViewModel

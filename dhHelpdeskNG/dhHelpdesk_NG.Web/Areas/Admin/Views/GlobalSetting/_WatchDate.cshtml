@@ -36,12 +36,13 @@
                                     <td>
                                         <a href="@Url.Action("EditWatchDateCalendar", new { id = Model.WatchDateCalendar.Id })" class="btn btn-success">@Translation.Get("Ändra", Enums.TranslationSource.TextTranslation)</a>
                                     </td>
+                                    <td></td>
                                 </tr>
                                 <tr>
                                     <td>
                                         @Translation.Get("År", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td colspan="2">
+                                    <td colspan="3">
                                         @Html.DropDownListFor(model => model.Year, Model.YearList, "", new { style = "width: auto;", year = "year", onchange = "changeYear(this.options[this.selectedIndex].value);" })
                                     </td>
                                 </tr>
@@ -56,6 +57,7 @@
                                     <td>
                                         
                                     </td>
+                                    <td></td>
                                 </tr>
                                 <tr>
                                     <td>
@@ -70,9 +72,10 @@
                                             onclick="addWDCVRow()" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
                                             <input type="hidden" id="" value="" />
                                     </td>
+                                    <td></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="3">
+                                    <td colspan="4">
                                         &nbsp;
                                     </td>
                                 </tr>
@@ -84,8 +87,43 @@
                                         @Translation.Get("bevakningsdatum", Enums.TranslationSource.TextTranslation) @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td></td>
+                                    <td></td>
                                 </tr>
-                                @foreach (var item in Model.WatchDateCalendarValues)
+
+
+                                @for (var i = 0; i < Model.WatchDateCalendarValuesForList.Count; i++)
+                                        {          
+                                        <tr>
+                                            @if (Model.WatchDateCalendarValuesForList != null)
+                                            {
+                                                <td>
+                                                    @Html.EditorFor(model => model.WatchDateCalendarValuesForList[i].WatchDate, "DatePicker", new { id = "watchdatecalendarforlist_" + i + "_WatchDate"})
+                                                </td>
+                                                <td>
+                                                    @Html.TextBoxFor(model => model.WatchDateCalendarValuesForList[i].WatchDateValueName, new { style = "width: 200px;" })
+                                                </td>
+                                                 <td>
+                                                    <input class="btn btn-success" type="button" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)"
+                                                onclick="saveWDCVRow(@Model.WatchDateCalendarValuesForList[i].Id, @i)" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
+                                                    <input type="hidden" id="saveId" value="@Model.WatchDateCalendarValuesForList[i].Id" />
+                                                </td>
+                                                <td>
+                                                    <input class="btn btn-danger" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)"
+                                                onclick="deleteWDCVRow(@Model.WatchDateCalendarValuesForList[i].Id)" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
+                                                    <input type="hidden" id="deleteId" value="@Model.WatchDateCalendarValuesForList[i].Id" />
+                                                </td>
+                                            }
+                                        </tr>                                           
+                                        }
+
+
+
+
+
+
+
+
+                                @*@foreach (var item in Model.WatchDateCalendarValues)
                                 {                    
                                     <tr>
                                         <td>
@@ -101,7 +139,7 @@
                                                     <input type="hidden" id="deleteHolidayId" value="@item.Id" />
                                         </td>
                                     </tr>
-                                }
+                                }*@
                             </table>
                         </div>
                     </div>
@@ -135,25 +173,6 @@
         }
     }
 
-    //function watchDateList(id) {
-    //    var c = $("#tblWatchDateCalendar");
-    //    $.get('/globalsetting/ChangeWatchDateList/' + id, function (result) {
-    //        c.html(result);
-    //    });
-    //}
-
-    //function changeWatchDate(id) {
-    //    if (id != undefined) {
-    //        if (id != "") {
-    //            var changedateName = $("#ChangedWatchDateName");
-    //            $.get('/GlobalSetting/ChangeWatchDate/' + id, function (result) {
-    //                changedateName.val(result);
-    //            });
-    //            watchDateList(id);
-    //        }
-    //    }
-    //}
-
     function addWDCVRow() {
         var list = $("#watchdate");
         $.post('/globalsetting/AddRowToWatchDateCalendarValue/' + '?watchdatecalendarId=' + $("#watchdatecalendarId").val() + '&watchdate=' + $("#WatchDateCalendarValue_WatchDate").val() + '&watchdatevaluenname=' + $("#WatchDateValueName").val(), function (result) {
@@ -162,6 +181,18 @@
         });
 
         return false;
+    }
+
+    function saveWDCVRow(id, index) {
+        
+        var list = $("#watchdate");
+        
+        $.post('/globalsetting/SaveRowToWatchDateCalendarValue/' + id + '?watchdatecalendarId=' + $("#watchdatecalendarId").val() + '&watchdate=' + $("#WatchDateCalendarValuesForList_" + index + "__WatchDate").val() + '&watchdatevaluenname=' + $("#WatchDateCalendarValuesForList_" + index + "__WatchDateValueName").val(), function (result) {
+            
+            location.reload();
+        });
+
+        //return false;
     }
 
     function deleteWDCVRow(id) {

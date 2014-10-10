@@ -879,6 +879,7 @@
             {
                 WatchDateCalendarValue = null,
                 WatchDateCalendarValues = this._watchDateCalendarService.GetWDCalendarValuesByWDCIdAndYear(watchdatecalendar.Id, year),
+                WatchDateCalendarValuesForList = this._watchDateCalendarService.GetWDCalendarValuesByWDCIdAndYearForList(watchdatecalendar.Id, year),
                 WatchDateCalendar = watchdatecalendar,
                 YearList = yearlist
             };
@@ -1065,6 +1066,7 @@
             return this.UpdateHolidayList(holidayheader);
         }
 
+
         [CustomAuthorize(Roles = "3,4")]
         [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
         public string DeleteHoliday(int id)
@@ -1119,6 +1121,31 @@
             {
                 wdcv.WatchDate = watchdate;
                 wdcv.WatchDateCalendar_Id = watchdatecalendarid;
+                wdcv.CreatedDate = DateTime.UtcNow;
+                wdcv.WatchDateValueName = watchdatevaluenname;
+            }
+
+            model.WatchDateCalendarValue = wdcv;
+
+            this._watchDateCalendarService.SaveWatchDateCalendarValue(wdcv, out errors);
+
+            return this.UpdateWatchDateList(wdc);
+        }
+
+        public string SaveRowToWatchDateCalendarValue(int id, int watchdatecalendarId, DateTime watchdate, string watchdatevaluenname)
+        {
+            var wdcv = this._watchDateCalendarService.GetWatchDateCalendarValue(id);
+            var year = DateTime.Today.Year;
+            var wdc = this._watchDateCalendarService.GetWatchDateCalendar(watchdatecalendarId);
+
+            IDictionary<string, string> errors = new Dictionary<string, string>();
+
+            var model = this.SaveWatchDateViewModel(wdc, year);
+
+            if (this.ModelState.IsValid)
+            {
+                wdcv.WatchDate = watchdate;
+                wdcv.WatchDateCalendar_Id = watchdatecalendarId;
                 wdcv.CreatedDate = DateTime.UtcNow;
                 wdcv.WatchDateValueName = watchdatevaluenname;
             }
