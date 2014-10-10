@@ -79,7 +79,7 @@
         {
         }
 
-        [NotNullAndEmpty]
+        [NotNull]
         [MaxLength(100)]
         public string LicenseNumber { get; private set; }
 
@@ -108,7 +108,7 @@
 
         public DateTime? ValidDate { get; private set; }
 
-        [NotNullAndEmpty]
+        [NotNull]
         [MaxLength(1000)]
         public string Info { get; private set; }
 

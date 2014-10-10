@@ -1,7 +1,7 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Licenses.Models.Products.ProductsContentModel
 
-<table class="table table-striped table-bordered table-hover">
+<table class="table table-striped table-bordered table-hover table-pointer">
     <thead>
         <tr>
             <th>@Translation.Get("Produkt")</th>
@@ -13,7 +13,7 @@
     <tbody>
         @foreach (var product in Model.Products)
         {
-            <tr>
+            <tr onclick="window.location.href='@Url.Action("Product", new RouteValueDictionary { { "productId", product.ProductId } })'">
                 <td>@product.ProductName</td>
                 <td>@product.LicencesNumber</td>
                 <td>@product.UsedLicencesNumber</td>

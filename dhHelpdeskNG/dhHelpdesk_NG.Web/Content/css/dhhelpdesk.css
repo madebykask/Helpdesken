@@ -2658,3 +2658,6 @@ body.login {
 .max-width-500 {
     max-width: 500px!important;
 }
+.table-pointer td {
+    cursor: pointer;
+}
