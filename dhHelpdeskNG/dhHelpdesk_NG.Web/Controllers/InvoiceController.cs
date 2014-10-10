@@ -61,17 +61,17 @@
         {
             try
             {
+                var settings = this.caseInvoiceSettingsService.GetSettings(customerId);
+                if (settings == null)
+                {
+                    return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError, "Articles invoice failed.");
+                }
+
                 var caseOverview = this.caseService.GetCaseOverview(caseId);
                 var articles = this.invoiceArticleService.GetArticles(customerId);
                 var data = this.invoiceHelper.ToCaseInvoices(invoices, caseOverview, articles);
                 var output = this.invoiceHelper.ToOutputXml(data);
                 if (output == null)
-                {
-                    return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError, "Articles invoice failed.");
-                }
-
-                var settings = this.caseInvoiceSettingsService.GetSettings(customerId);
-                if (settings == null)
                 {
                     return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError, "Articles invoice failed.");
                 }
@@ -83,6 +83,8 @@
 
                 var path = Path.Combine(settings.ExportPath, this.invoiceHelper.GetExportFileName());
                 output.Save(path);
+
+                this.invoiceArticleService.SaveCaseInvoices(data, caseId);    
 
                 return new HttpStatusCodeResult((int)HttpStatusCode.OK, "Articles invoiced."); 
             }
