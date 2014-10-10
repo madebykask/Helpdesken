@@ -53,7 +53,7 @@
         [HttpPost]
         public void SaveArticles(int caseId, string invoices)
         {
-            this.invoiceArticleService.SaveCaseInvoices(this.invoiceHelper.ToCaseInvoices(invoices, null, null));
+            this.invoiceArticleService.SaveCaseInvoices(this.invoiceHelper.ToCaseInvoices(invoices, null, null), caseId);
         }
 
         [HttpPost]

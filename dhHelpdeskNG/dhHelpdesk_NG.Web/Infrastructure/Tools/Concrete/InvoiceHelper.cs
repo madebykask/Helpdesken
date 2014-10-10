@@ -24,10 +24,6 @@
 
             var serializer = new JavaScriptSerializer();
             var invoiceData = serializer.Deserialize<CaseInvoiceData>(invoices);
-            if (invoiceData.CaseId == 0)
-            {
-                return null;
-            }
 
             var now = DateTime.Now;
             var invoice = new CaseInvoice(
