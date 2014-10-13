@@ -18,31 +18,37 @@
         }
 
         $('#tab_1').click(function () {
+            if ($(this).hasClass('disabled'))
+                return false;
             $('#add_category_button').hide();
             $('#add_faq_button').show();
         });
 
         $('#tab_2').click(function () {
+            if ($(this).hasClass('disabled'))
+                return false;
             $('#add_category_button').hide();
             $('#add_faq_button').show();
         });
 
-        $('#tab_3').click(function() {
+        $('#tab_3').click(function () {
+            if ($(this).hasClass('disabled'))
+                return false;
             $('#add_faq_button').hide();
             $('#add_category_button').show();
         });
 
-        $('#show_all_answers_within_category').change(function() {
+        $('#show_all_answers_within_category').change(function () {
             if (!window.selectedCategoryId) {
                 return;
             }
 
             if ($(this).is(':checked')) {
-                $.get('@this.Url.Action("FaqsDetailed")', { categoryId: window.selectedCategoryId }, function(faqsWithDescription) {
+                $.get('@this.Url.Action("FaqsDetailed")', { categoryId: window.selectedCategoryId }, function (faqsWithDescription) {
                     refreshFaqTableWithDescription(faqsWithDescription);
                 });
             } else {
-                $.get('@this.Url.Action("Faqs")', { categoryId: window.selectedCategoryId }, function(faqs) {
+                $.get('@this.Url.Action("Faqs")', { categoryId: window.selectedCategoryId }, function (faqs) {
                     refreshFaqTable(faqs);
                 });
             }
@@ -53,33 +59,35 @@
             window.selectedCategoryId = selectedCategoryId;
 
             if ($('#show_all_answers_within_category').is(':checked')) {
-                $.get('@this.Url.Action("FaqsDetailed")', { categoryId: window.selectedCategoryId }, function(faqsWithDescription) {
+                $.get('@this.Url.Action("FaqsDetailed")', { categoryId: window.selectedCategoryId }, function (faqsWithDescription) {
                     refreshFaqTableWithDescription(faqsWithDescription);
                 });
             } else {
-                $.get('@this.Url.Action("Faqs")', { categoryId: selectedCategoryId }, function(faqs) {
+                $.get('@this.Url.Action("Faqs")', { categoryId: selectedCategoryId }, function (faqs) {
                     refreshFaqTable(faqs);
                 });
             }
         });
 
-        $('#add_faq_button').click(function() {
+        $('#add_faq_button').click(function () {
+            if ($(this).find('.btn').hasClass('disabled'))
+                return;
             window.location.href = '@this.Url.Action("NewFaq")?categoryId=' + window.selectedCategoryId;
         });
 
         $('#search_field').typing({
-            stop: function(event, $elem) {
+            stop: function (event, $elem) {
                 if (!$elem.val()) {
                     clearSearchResultsTable();
                     return;
                 }
 
                 if ($('#show_all_answers_within_category_search_checkbox').is(':checked')) {
-                    $.get('@this.Url.Action("SearchDetailed")', { pharse: $elem.val() }, function(faqsWithDescription) {
+                    $.get('@this.Url.Action("SearchDetailed")', { pharse: $elem.val() }, function (faqsWithDescription) {
                         refreshSearchTableWithDescription(faqsWithDescription);
                     });
                 } else {
-                    $.get('@this.Url.Action("Search")', { pharse: $elem.val() }, function(faqs) {
+                    $.get('@this.Url.Action("Search")', { pharse: $elem.val() }, function (faqs) {
                         refreshSearchResultsTable(faqs);
                     });
                 }
@@ -87,23 +95,23 @@
             delay: 300
         });
 
-        $('#show_all_answers_within_category_search_checkbox').change(function() {
+        $('#show_all_answers_within_category_search_checkbox').change(function () {
             if (!$('#search_field').val()) {
                 return;
             }
 
             if ($(this).is(':checked')) {
-                $.get('@this.Url.Action("SearchDetailed")', { pharse: $('#search_field').val() }, function(faqsWithDescription) {
+                $.get('@this.Url.Action("SearchDetailed")', { pharse: $('#search_field').val() }, function (faqsWithDescription) {
                     refreshSearchTableWithDescription(faqsWithDescription);
                 });
             } else {
-                $.get('@this.Url.Action("Search")', { pharse: $('#search_field').val() }, function(faqs) {
+                $.get('@this.Url.Action("Search")', { pharse: $('#search_field').val() }, function (faqs) {
                     refreshSearchResultsTable(faqs);
                 });
             }
         });
 
-        $('#categories_editing_tree a[class="tree-node"]').click(function() {
+        $('#categories_editing_tree a[class="tree-node"]').click(function () {
             var selectedCategoryId = $(this).siblings('input').val();
             window.location.href = '@this.Url.Action("EditCategory")?id=' + selectedCategoryId;
         });
@@ -333,38 +341,26 @@
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
-            @if (this.Model.Categories.Items.Any())
-            {
-                <li id="add_faq_button" style="display: block"><a class="btn">@Translation.Get("Add FAQ", Enums.TranslationSource.TextTranslation)</a></li>
-            }
-            else
-            {
-                <div class="well well-small">
-                    <li style="display: block"><a class="btn">@Translation.Get("Add FAQ", Enums.TranslationSource.TextTranslation)</a>
-                        @Translation.Get("You have no categories.", Enums.TranslationSource.TextTranslation)
-                    </li>
-                </div>
-            }
-
-            <li id="add_category_button" style="display: none"><a href="@this.Url.Action("NewCategory")" class="btn">@Translation.Get("Add Category", Enums.TranslationSource.TextTranslation)</a></li>
+            <li id="add_faq_button" style="@(this.Model.Categories.Items.Any() ? "": "display: none")"><a class="btn">@Translation.Get("Add FAQ", Enums.TranslationSource.TextTranslation)</a></li>    
+            <li id="add_category_button" style="@(this.Model.Categories.Items.Any() ? "display: none" : "")"><a class="btn" href="@this.Url.Action("NewCategory")">@Translation.Get("Add Category", Enums.TranslationSource.TextTranslation)</a></li>
         </ul>
     </div>
 </div>
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs">
-            <li id="tab_1" class="active">
+            <li id="tab_1" class="@(this.Model.Categories.Items.Any() ? "active":"disabled")" >
                 <a href="#fragment-1">@Translation.Get("FAQ", Enums.TranslationSource.TextTranslation)</a>
             </li>
-            <li id="tab_2">
+            <li id="tab_2" class="@(this.Model.Categories.Items.Any() ? "":"disabled")">
                 <a href="#fragment-2">@Translation.Get("Search", Enums.TranslationSource.TextTranslation)</a>
             </li>
-            <li id="tab_3">
+            <li id="tab_3" class="@(this.Model.Categories.Items.Any() ? "" :"active")">
                 <a href="#fragment-3">@Translation.Get("Categories", Enums.TranslationSource.TextTranslation)</a>
             </li>
         </ul>
         <div class="tab-content">
-            <div id="fragment-1" class="tab-pane tab-pane-border active">
+            <div id="fragment-1" class="tab-pane tab-pane-border @(this.Model.Categories.Items.Any() ? "active":"")">
                 <div class="container">
                     <div class="row">
                         <div class="span12">
@@ -463,7 +459,7 @@
                     </table>
                 </div>
             </div>
-            <div class="tab-pane tab-pane-border" id="fragment-3">
+            <div id="fragment-3" class="tab-pane tab-pane-border @(this.Model.Categories.Items.Any() ? "": "active")">
                 <div class="container">
                     <div class="row">
                         <div class="span12">
@@ -473,11 +469,18 @@
                     </div>
                 </div>
                 <div class="container">
-                    <table>
-                        <tbody>
-                            @this.Html.Tree("categories_editing_tree", true, this.Model.Categories)
-                        </tbody>
-                    </table>
+                    @if (this.Model.Categories.Items.Any())
+                    {
+                        <table>
+                            <tbody>
+                                @this.Html.Tree("categories_editing_tree", true, this.Model.Categories)
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        @Translation.Get("You have no categories.", Enums.TranslationSource.TextTranslation)
+                    }
                 </div>
             </div>
         </div>

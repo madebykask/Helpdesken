@@ -3,10 +3,9 @@
 //Start FAQ Acordion
 
 //tabbar
-$('.nav-tabs a').click(function (e) {
+$('.nav-tabs li:not(.disabled) a').click(function (e) {
     e.preventDefault();
     $(this).tab('show');
-    //activeTab.val($(this).attr('href'));
 });
 
 $("input:text:visible:first").focus();
