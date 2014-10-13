@@ -3,9 +3,10 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Areas.Licenses.Models.Common;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
-    public sealed class ApplicationEditModel
+    public sealed class ApplicationEditModel : BaseEditModel
     {
         public ApplicationEditModel(
                 int id,
@@ -23,10 +24,6 @@
         {            
         }
 
-        [MinValue(0)]
-        [HiddenInput]
-        public int Id { get; set; }
-
         [IsId]
         [HiddenInput]
         public int CustomerId { get; set; }
@@ -42,5 +39,13 @@
         [IsId]
         [LocalizedDisplay("Produkt")]
         public int? ProductId { get; set; }
+
+        public override string Title
+        {
+            get
+            {
+                return "Applikation";
+            }
+        }
     }
 }

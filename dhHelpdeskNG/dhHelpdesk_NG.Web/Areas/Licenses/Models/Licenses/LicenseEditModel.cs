@@ -4,9 +4,10 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Areas.Licenses.Models.Common;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
-    public sealed class LicenseEditModel
+    public sealed class LicenseEditModel : BaseEditModel
     {
         public LicenseEditModel(
                 int id,
@@ -41,10 +42,6 @@
         public LicenseEditModel()
         {
         }
-
-        [MinValue(0)]
-        [HiddenInput]
-        public int Id { get; set; }
 
         [NotNull]
         public SelectList Products { get; private set; }
@@ -107,5 +104,13 @@
         [IsId]
         [LocalizedDisplay("Uppgradering av")]
         public int? UpgradeLicenseId { get; set; }
+
+        public override string Title
+        {
+            get
+            {
+                return "Licens";
+            }
+        }
     }
 }

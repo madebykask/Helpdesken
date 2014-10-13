@@ -1069,7 +1069,7 @@ th, td, .table-bordered
 		border-left-color: #DDD;
 	}
 
-th.center, td.center
+th.center, td.center, div.center
 {
 	text-align: center;
 }
@@ -2660,4 +2660,8 @@ body.login {
 }
 .table-pointer td {
     cursor: pointer;
+}
+.multi-select-field {
+    width: 340px;
+    height: 100px;
 }

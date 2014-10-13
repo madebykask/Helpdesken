@@ -338,6 +338,7 @@
     <Compile Include="Areas\Licenses\Models\Applications\ApplicationsContentModel.cs" />
     <Compile Include="Areas\Licenses\Models\Applications\ApplicationsFilterModel.cs" />
     <Compile Include="Areas\Licenses\Models\Applications\ApplicationsIndexModel.cs" />
+    <Compile Include="Areas\Licenses\Models\Common\BaseEditModel.cs" />
     <Compile Include="Areas\Licenses\Models\Common\BaseIndexModel.cs" />
     <Compile Include="Areas\Licenses\Models\Common\IndexModelType.cs" />
     <Compile Include="Areas\Licenses\Models\Licenses\LicenseEditModel.cs" />
@@ -753,6 +754,7 @@
     <Compile Include="Models\Shared\CustomersInfoModel.cs" />
     <Compile Include="Models\Shared\DateAndTimeModel.cs" />
     <Compile Include="Models\Shared\DateRange.cs" />
+    <Compile Include="Models\Shared\MultiSelectListModel.cs" />
     <Compile Include="Models\Shared\NewGridRowCellValueModel.cs" />
     <Compile Include="Models\Shared\SortFieldModel.cs" />
     <Compile Include="Models\ComputerUserInputViewModel.cs" />
@@ -1208,6 +1210,7 @@
     <Content Include="Areas\Licenses\Views\Manufacturers\Manufacturer.cshtml" />
     <Content Include="Areas\Licenses\Views\Products\Product.cshtml" />
     <Content Include="Areas\Licenses\Views\Vendors\Vendor.cshtml" />
+    <Content Include="Areas\Licenses\Views\Shared\_EditLayout.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />
@@ -1631,6 +1634,7 @@
     <Content Include="Views\Questionnaire\_InputCircular.cshtml" />
     <Content Include="Views\Questionnaire\_CircularPartOverviewWithDelete.cshtml" />
     <Content Include="Views\Questionnaire\CircularOverviewGrid.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\MultiSelectListModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

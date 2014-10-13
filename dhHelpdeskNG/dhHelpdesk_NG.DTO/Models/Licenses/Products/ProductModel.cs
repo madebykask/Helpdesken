@@ -13,8 +13,10 @@
                 int? manufacturerId, 
                 int customerId, 
                 DateTime createdDate, 
-                DateTime changedDate)
+                DateTime changedDate, 
+                ItemOverview[] applications)
         {
+            this.Applications = applications;
             this.Id = id;
             this.ChangedDate = changedDate;
             this.CreatedDate = createdDate;
@@ -27,8 +29,10 @@
                 int id,
                 string productName, 
                 int? manufacturerId, 
-                int customerId)
+                int customerId, 
+                ItemOverview[] applications)
         {
+            this.Applications = applications;
             this.Id = id;
             this.CustomerId = customerId;
             this.ManufacturerId = manufacturerId;
@@ -38,6 +42,7 @@
         public ProductModel(int customerId)
         {
             this.CustomerId = customerId;
+            this.Applications = new ItemOverview[0];
         }
 
         [NotNullAndEmpty]
@@ -53,6 +58,8 @@
         public DateTime CreatedDate { get; private set; }
 
         public DateTime ChangedDate { get; private set; }
+
+        public ItemOverview[] Applications { get; private set; }
 
         public static ProductModel CreateDefault(int customerId)
         {

@@ -3,9 +3,10 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Areas.Licenses.Models.Common;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
-    public sealed class VendorEditModel
+    public sealed class VendorEditModel : BaseEditModel
     {
         public VendorEditModel(
                 int id,
@@ -34,10 +35,6 @@
         public VendorEditModel()
         {            
         }
-
-        [MinValue(0)]
-        [HiddenInput]
-        public int Id { get; set; }
 
         [IsId]
         [HiddenInput]
@@ -75,5 +72,13 @@
         [LocalizedStringLength(50)]
         [LocalizedDisplay("Hemsida")]
         public string HomePage { get; set; }
+
+        public override string Title
+        {
+            get
+            {
+                return "Försäljare";
+            }
+        }
     }
 }

@@ -31,7 +31,7 @@
         {
             ProductModel model = null;
 
-            var entity = query.GetById(id)
+            var entity = query.GetById(id) 
                         .Select(p => new
                             {
                                 p.Id,
@@ -40,17 +40,21 @@
                                 p.Customer_Id,
                                 p.CreatedDate,
                                 p.ChangedDate
-                            }).SingleOrDefault();
+                            })
+                            .SingleOrDefault();
 
             if (entity != null)
             {
+//                var applications = query.GetById(id).Single().Applications;
+
                 model = new ProductModel(
                                 entity.Id,
                                 entity.Name,
                                 entity.Manufacturer_Id,
                                 entity.Customer_Id,
                                 entity.CreatedDate,
-                                entity.ChangedDate);
+                                entity.ChangedDate,
+                                ApplicationMapper.MapToOverviews(new Application[0]));
             }
 
             return model;

@@ -3,9 +3,10 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Areas.Licenses.Models.Common;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
-    public sealed class ManufacturerEditModel
+    public sealed class ManufacturerEditModel : BaseEditModel
     {
         public ManufacturerEditModel(
                 int id,
@@ -21,10 +22,6 @@
         {            
         }
 
-        [MinValue(0)]
-        [HiddenInput]
-        public int Id { get; set; }
-
         [IsId]
         [HiddenInput]
         public int CustomerId { get; set; }
@@ -33,5 +30,13 @@
         [LocalizedStringLength(100)]
         [LocalizedDisplay("Tillverkare")]
         public string ManufcturerName { get; set; }
+
+        public override string Title
+        {
+            get
+            {
+                return "Tillverkare";
+            }
+        }
     }
 }

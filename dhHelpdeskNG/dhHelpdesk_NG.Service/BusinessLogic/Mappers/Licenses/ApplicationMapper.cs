@@ -1,8 +1,11 @@
 ﻿namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Licenses
 {
+    using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Licenses.Applications;
+    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
 
@@ -60,6 +63,16 @@
         {
             entity.Customer_Id = model.CustomerId;
             entity.Name = model.ApplicationName;
+        }
+
+        public static ItemOverview[] MapToOverviews(IEnumerable<Application> applications)
+        {
+            if (applications == null)
+            {
+                return null;
+            }
+
+            return applications.Select(a => new ItemOverview(a.Name, a.Id.ToString(CultureInfo.InvariantCulture))).ToArray();
         }
     }
 }

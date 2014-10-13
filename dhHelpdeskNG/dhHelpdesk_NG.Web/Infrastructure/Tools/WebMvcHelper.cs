@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.Tools
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models.Shared;
@@ -40,6 +41,20 @@
             IEnumerable<int> selectedValues)
         {
             return new MultiSelectList(items, "Value", "Name", selectedValues);
-        }         
+        }
+
+        public static SelectListItem[] GetListItems(ItemOverview[] overviews)
+        {
+            return overviews.Select(o => new SelectListItem
+                                             {
+                                                 Value = o.Value,
+                                                 Text = o.Name
+                                             }).ToArray();
+        }
+
+        public static ItemOverview[] GetOverviews(SelectListItem[] items)
+        {
+            return items.Select(i => new ItemOverview(i.Text, i.Value)).ToArray();
+        }
     }
 }

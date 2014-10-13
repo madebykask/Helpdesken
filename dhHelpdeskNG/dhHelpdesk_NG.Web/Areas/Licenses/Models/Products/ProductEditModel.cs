@@ -3,15 +3,17 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Areas.Licenses.Models.Common;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Web.Models.Shared;
 
-    public sealed class ProductEditModel
+    public sealed class ProductEditModel : BaseEditModel
     {
         public ProductEditModel(
                 int id,
                 int customerId,
                 string productName,
-                MultiSelectList applications)
+                MultiSelectListModel applications)
         {
             this.Id = id;
             this.CustomerId = customerId;
@@ -23,10 +25,6 @@
         {            
         }
 
-        [MinValue(0)]
-        [HiddenInput]
-        public int Id { get; set; }
-
         [IsId]
         [HiddenInput]
         public int CustomerId { get; set; }
@@ -37,9 +35,14 @@
         public string ProductName { get; set; }
 
         [NotNull]
-        public MultiSelectList Applications { get; private set; }
+        public MultiSelectListModel Applications { get; private set; }
 
-        [NotNull]
-        public int[] ApplicationIds { get; set; }
+        public override string Title
+        {
+            get
+            {
+                return "Produkt";
+            }
+        }
     }
 }

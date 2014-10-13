@@ -1,0 +1,32 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Licenses.Models.Common.BaseEditModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="secnavs fixed">
+    <div class="pull-left">
+        @RenderSection("Actions", false)        
+    </div>
+</div>
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#mainTab">@Translation.Get(Model.Title)</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="mainTab">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">                
+                            @RenderSection("Content")
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

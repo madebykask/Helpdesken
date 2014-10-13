@@ -72,7 +72,6 @@
 
                 var applications = applicationRepository.GetAll()
                                     .GetByCustomer(customerId)
-                                    .GetProductApplications(productId)
                                     .MapToItemOverviews();
 
                 return new ProductData(product, applications);
