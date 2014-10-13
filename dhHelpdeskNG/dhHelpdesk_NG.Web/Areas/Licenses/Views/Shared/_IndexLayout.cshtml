@@ -1,0 +1,43 @@
+﻿@using DH.Helpdesk.Web.Areas.Licenses.Models.Common
+@using DH.Helpdesk.Web.Infrastructure
+@model BaseIndexModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="secnavs fixed">
+    <div class="pull-left">
+        @RenderSection("Actions", false)        
+    </div>
+</div>
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs nav-tabs-actions">
+            <li class="@GetIsActive(EntityModelType.Products)">
+                @Html.ActionLink(Translation.Get("Produkter"), "Index", "Products")
+            </li>
+            <li class="@GetIsActive(EntityModelType.Licenses)">
+                @Html.ActionLink(Translation.Get("Licenser"), "Index", "Licenses")
+            </li>
+            <li class="@GetIsActive(EntityModelType.Vendors)">
+                @Html.ActionLink(Translation.Get("Försäljare"), "Index", "Vendors")
+            </li>
+            <li class="@GetIsActive(EntityModelType.Manufacturers)">
+                @Html.ActionLink(Translation.Get("Tillverkare"), "Index", "Manufacturers")
+            </li>
+            <li class="@GetIsActive(EntityModelType.Applications)">
+                @Html.ActionLink(Translation.Get("Applikationer"), "Index", "Applications")
+            </li>
+        </ul>
+        <div class="tab-content overflow-visible">
+            <div class="tab-pane tab-pane-border active">                            
+                @RenderBody()   
+            </div>
+        </div>
+    </div>
+</div>
+@functions    {
+    private MvcHtmlString GetIsActive(EntityModelType type)
+    {
+        return MvcHtmlString.Create(Model.Type == type ? "active" : null);
+    }
+}

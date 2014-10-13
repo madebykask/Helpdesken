@@ -1,0 +1,38 @@
+﻿namespace DH.Helpdesk.Mobile.Models.Inventory.EditModel.Settings.Computer
+{
+    using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Mobile.Infrastructure.LocalizedAttributes;
+
+    public class FieldSettingModel
+    {
+        public FieldSettingModel()
+        {
+        }
+
+        public FieldSettingModel(
+            bool showInDetails,
+            bool showInList,
+            string caption,
+            bool isRequired,
+            bool isReadOnly)
+        {
+            this.ShowInDetails = showInDetails;
+            this.ShowInList = showInList;
+            this.Caption = caption;
+            this.IsRequired = isRequired;
+            this.IsReadOnly = isReadOnly;
+        }
+
+        public bool ShowInDetails { get; set; }
+
+        public bool ShowInList { get; set; }
+
+        [NotNull]
+        [LocalizedRequired]
+        public string Caption { get; set; }
+
+        public bool IsRequired { get; set; }
+
+        public bool IsReadOnly { get; set; }
+    }
+}

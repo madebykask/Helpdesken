@@ -1,0 +1,199 @@
+﻿@using DH.Helpdesk.Mobile.Infrastructure
+@model DH.Helpdesk.Mobile.Areas.Admin.Models.WorkingGroupInputViewModel
+
+
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment1">@Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
+            <li><a href="#fragment2">@Translation.Get("Användare", Enums.TranslationSource.TextTranslation)</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment1">
+                <div class="container">
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-error">@Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
+                            @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+                        </div>    
+                    }
+                    <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
+                                        @Html.TextBoxFor(model => model.WorkingGroup.WorkingGroupName, new { maxlength = "50" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Kod", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.WorkingGroup.Code, new { maxlength = "20" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.WorkingGroup.EMail, new { maxlength = "200" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Standardvärde", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                         @Translation.Get("Använd som standard", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="workinggroup.IsDefault" @(Model.WorkingGroup.IsDefault == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="workinggroup.IsDefault" value="0" />
+                                        &nbsp;@Translation.Get("Ärenderegistrering", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="workinggroup.IsDefaultCalendar" @(Model.WorkingGroup.IsDefaultCalendar == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="workinggroup.IsDefaultCalendar" value="0" />
+                                        &nbsp;@Translation.Get("Aktuellt", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="workinggroup.IsDefaultBulletinBoard" @(Model.WorkingGroup.IsDefaultBulletinBoard == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="workinggroup.IsDefaultBulletinBoard" value="0" />
+                                        &nbsp;@Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="workinggroup.IsDefaultOperationLog" @(Model.WorkingGroup.IsDefaultOperationLog == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="workinggroup.IsDefaultOperationLog" value="0" />
+                                        &nbsp;@Translation.Get("Driftlogg ", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="workinggroup.IsActive" @(Model.WorkingGroup.IsActive == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="workinggroup.IsActive" value="0" />
+                                        &nbsp;@Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <h4>@Translation.Get("Meddelande", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9"><label class="checkbox">
+                                        <input type="checkbox" name="workinggroup.AllocateCaseMail" @(Model.WorkingGroup.AllocateCaseMail == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="workinggroup.AllocateCaseMail" value="0" />
+                                        &nbsp;@Translation.Get("Skicka mail om driftgruppen tilldelas ett ärende", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="span3">
+                                        
+                                    </td>
+                                    <td class="span9"><label class="checkbox">
+                                        <input type="checkbox" name="workinggroup.SendExternalEmailToWGUsers" @(Model.WorkingGroup.SendExternalEmailToWGUsers == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="workinggroup.SendExternalEmailToWGUsers" value="0" />
+                                        &nbsp;@Translation.Get("Send external log Email to working group's user ", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <h4>@Translation.Get("Regler", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Understatus", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
+                                        @Translation.Get("Nedanstående värden ändras när aktuell driftgrupp väljs", Enums.TranslationSource.TextTranslation)<br />
+                                        @Html.DropDownListFor(model => model.WorkingGroup.StateSecondary_Id, Model.StateSecondaries, "")
+                                    </td>
+                                </tr>
+                            </table>
+                            @Html.HiddenFor(model => model.WorkingGroup.Customer_Id)
+                            @Html.HiddenFor(model => model.WorkingGroup.Id)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane tab-pane-border" id="fragment2">
+                    <div class="container">
+                        <div class="row">
+                            <div class="span12">
+                                <table class="tableform">
+                                    <tr>
+                                        <td>
+                                            <b>@Translation.Get("Användare", Enums.TranslationSource.TextTranslation)</b>
+                                        </td>
+                                        <td>
+                                            <b>@Translation.Get("Handläggarrättighet", Enums.TranslationSource.TextTranslation)</b>
+                                        </td>
+                                        <td>
+                                            <b>@Translation.Get("Läsrättighet", Enums.TranslationSource.TextTranslation)</b>
+                                        </td>
+                                    </tr>
+                                    @foreach (var item in Model.UsersForWorkingGroup)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.User.FirstName) @Html.DisplayFor(modelItem => item.User.SurName)
+                                            </td>
+                                            <td>
+                                                @if (item.UserRole == 2)
+                                                {
+                                                    @Translation.Get("Ja", Enums.TranslationSource.TextTranslation)
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (item.UserRole == 1)
+                                                {
+                                                    @Translation.Get("Ja", Enums.TranslationSource.TextTranslation)
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+

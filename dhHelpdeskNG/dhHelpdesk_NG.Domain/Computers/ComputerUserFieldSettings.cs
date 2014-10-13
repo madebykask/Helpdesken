@@ -14,7 +14,7 @@
 
         public virtual Customer Customer { get; set; }
 
-        public int Customer_Id { get; set; }
+        public int? Customer_Id { get; set; }
 
         public string LDAPAttribute { get; set; }
 

@@ -42,10 +42,11 @@
             return entities.Select(i => this.invoiceToBusinessModelMapper.Map(i)).ToArray();
         }
 
-        public void SaveCaseInvoices(IEnumerable<CaseInvoice> invoices)
+        public void SaveCaseInvoices(IEnumerable<CaseInvoice> invoices, int caseId)
         {
             foreach (var invoice in invoices)
             {
+                invoice.CaseId = caseId;
                 CaseInvoiceEntity entity;
                 if (invoice.IsNew())
                 {

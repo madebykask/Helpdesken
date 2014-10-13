@@ -6,6 +6,7 @@
     using System.Net;
     using System.Web;
     using System.Web.Mvc;
+    using System.Web.Helpers;    
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
@@ -30,6 +31,7 @@
     using DH.Helpdesk.Web.Models;
     using DH.Helpdesk.Web.Models.Case;
     using DH.Helpdesk.Web.Models.Shared;
+    using System.Web.Script.Serialization;
 
     public class CasesController : BaseController
     {
@@ -90,7 +92,7 @@
 
         private readonly ICaseSolutionSettingService caseSolutionSettingService;
 
-        private readonly IInvoiceHelper invoiceHelper;
+        private readonly IInvoiceHelper invoiceHelper;        
 
         #endregion
 
@@ -143,10 +145,10 @@
             IInvoiceArticleService invoiceArticleService, 
             IInvoiceArticlesModelFactory invoiceArticlesModelFactory, 
             IConfiguration configuration,
-            ICaseSolutionSettingService caseSolutionSettingService, 
+            ICaseSolutionSettingService caseSolutionSettingService,            
             IInvoiceHelper invoiceHelper)
             : base(masterDataService)
-        {
+        {            
             this._caseService = caseService;
             this._caseSearchService = caseSearchService;
             this._caseFieldSettingService = caseFieldSettingService;
@@ -192,7 +194,7 @@
             this.invoiceArticleService = invoiceArticleService;
             this.invoiceArticlesModelFactory = invoiceArticlesModelFactory;
             this.configuration = configuration;
-            this.caseSolutionSettingService = caseSolutionSettingService;
+            this.caseSolutionSettingService = caseSolutionSettingService;            
             this.invoiceHelper = invoiceHelper;
         }
 
@@ -201,7 +203,7 @@
         #region Public Methods and Operators
 
         public ActionResult Index(int? customerId, bool? clearFilters = false)
-        {
+        {            
             if (clearFilters == true)
             {
                 SessionFacade.CurrentCaseSearch = null;                
@@ -833,8 +835,51 @@
 
             var model = new CaseFilesModel(id, cfs.ToArray());
             return this.PartialView("_CaseFiles", model);
-        }        
+        }
 
+        [HttpPost]
+        public string GetSafeFileName(string id, string name)
+        {                                    
+            if (GuidHelper.IsGuid(id))
+            {
+                if (this.userTemporaryFilesStorage.FileExists(name, id, ModuleName.Cases))                
+                    name = DateTime.Now.ToString() + '_' + name;                
+            }
+            else
+            {
+                if (this._caseFileService.FileExists(int.Parse(id), name))                                 
+                    name = DateTime.Now.ToString() + '_' + name;                                
+            }
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            return serializer.Serialize(name);            
+        } 
+         
+
+        [HttpGet]
+        public string GetAllCaseFileName(string id)
+        {            
+            var files = GuidHelper.IsGuid(id)
+                                ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Cases)
+                                : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
+
+            JavaScriptSerializer  serializer = new JavaScriptSerializer();  
+            string jsonString = serializer.Serialize(files);
+            return jsonString;
+        }
+
+        [HttpGet]
+        public string GetAllLogFileName(string id)
+        {            
+            var files = GuidHelper.IsGuid(id)
+                                ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Log)
+                                : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            string jsonString = serializer.Serialize(files);
+            return jsonString;
+        }       
+ 
         public RedirectToRouteResult MarkAsUnread(int id, int customerId)
         {
             this._caseService.MarkAsUnread(id);   
@@ -863,16 +908,22 @@
             {
                 if (this.userTemporaryFilesStorage.FileExists(name, id, ModuleName.Cases))
                 {
+                    //return;
+                    //throw new HttpException(409 , "Already file exist!"); because it take a long time.
 
-                    throw new HttpException(409 , "Already file exist!");
-                }
+                    //this.userTemporaryFilesStorage.DeleteFile(name, id, ModuleName.Cases);                               
+                    //name = DateTime.Now.ToString() + '_' + name;
+                }                
                 this.userTemporaryFilesStorage.AddFile(uploadedData, name, id, ModuleName.Cases);                               
             }
             else
             {
                 if (this._caseFileService.FileExists(int.Parse(id), name))
                 {
-                    throw new HttpException(409, "Already file exist!");                    
+                    //return;
+                    //throw new HttpException(409, "Already file exist!");    because it take a long time.
+                    //this._caseFileService.DeleteByCaseIdAndFileName(int.Parse(id), name);   
+                    //name =  DateTime.Now.ToString() + '_' + name;
                 }
 
                 var caseFileDto = new CaseFileDto(
@@ -898,7 +949,9 @@
             {
                 if (this.userTemporaryFilesStorage.FileExists(name, id, ModuleName.Log))
                 {
-                    throw new HttpException((int)HttpStatusCode.Conflict, null);
+                    //return;
+                    //this.userTemporaryFilesStorage.DeleteFile(name, id, ModuleName.Log); 
+                    //throw new HttpException((int)HttpStatusCode.Conflict, null); because it take a long time.
                 }
                 this.userTemporaryFilesStorage.AddFile(uploadedData, name, id, ModuleName.Log);
             }

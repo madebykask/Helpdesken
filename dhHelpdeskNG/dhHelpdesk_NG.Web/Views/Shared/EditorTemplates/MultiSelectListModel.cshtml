@@ -1,0 +1,64 @@
+﻿@model DH.Helpdesk.Web.Models.Shared.MultiSelectListModel
+
+@{
+    var uniqueId = Guid.NewGuid();
+    var addButtonId = string.Format("btnAdd{0}", uniqueId);
+    var removeButtonId = string.Format("btnRemove{0}", uniqueId);
+    var availableListId = string.Format("lstAvailable{0}", uniqueId);
+    var selectedListId = string.Format("lstSelected{0}", uniqueId);
+}
+<table>
+    <thead>
+        <tr>
+            <td class="span12">
+                @Translation.Get(Model.HeaderText)
+            </td>
+            <td class="span1">
+                @Translation.Get("Tillgängliga")
+            </td>
+            <td class="span1"></td>
+            <td class="span1">
+                @Translation.Get("Valda")
+            </td>
+        </tr>        
+    </thead>
+    <tbody>
+        <tr>
+            <td></td>
+            <td>
+                @Html.ListBoxFor(m => m.AvailableItems, Model.AvailableItems, new { id=@availableListId, @class="multi-select-field" })
+            </td>
+            <td>
+                <div class="center">
+                    <input type="button" value="&gt;" id="@addButtonId" class="btn" />
+                    <input type="button" value="&lt;" id="@removeButtonId" class="btn" />
+                </div>
+            </td>
+            <td>
+                @Html.ListBoxFor(m => m.SelectedItems, Model.SelectedItems, new { id=@selectedListId, @class="multi-select-field" })
+            </td>
+        </tr>        
+    </tbody>
+</table>
+<script type="text/javascript">
+    $(function() {
+
+        var addButton = $("#" + "@addButtonId");
+        var removeButton = $("#" + "@removeButtonId");
+        var availableList = $("#" + "@availableListId");
+        var selectedList = $("#" + "@selectedListId");
+
+        addButton.click(function () {
+            availableList.find("option:selected").remove().appendTo(selectedList);
+            availableList.get(0).selectedIndex = -1;
+            selectedList.get(0).selectedIndex = -1;
+            return false;
+        });
+
+        removeButton.click(function() {
+            selectedList.find("option:selected").remove().appendTo(availableList);
+            availableList.get(0).selectedIndex = -1;
+            return false;
+        });
+    });
+</script>

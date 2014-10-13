@@ -10,6 +10,8 @@ namespace DH.Helpdesk.Web.Controllers
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Input;
+    using DH.Helpdesk.BusinessData.Models.Questionnaire.Read;
+    using DH.Helpdesk.BusinessData.Models.Questionnaire.Write;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Common.Enums;
@@ -434,25 +436,26 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpGet]
-        public ViewResult CircularOverview(int questionnaireId, int state)
+        public ViewResult CircularOverview(int questionnaireId)
         {
-            IEnumerable<CircularOverview> circulars = null;
-            if (state == CircularStateId.All)
-                circulars = _circularService.FindCircularOverviews(questionnaireId);
-            else
-                circulars = _circularService.FindCircularOverviews(questionnaireId).Where(c => c.State == state);
+            List<CircularOverviewModel> circularOverviews = this.CreateCircularOverviewModels(
+                questionnaireId,
+                CircularStateId.All);
 
+            var viewModel = new CircularOverviewViewModel(
+                questionnaireId,
+                circularOverviews,
+                CircularStateId.ReadyToSend);
 
-            List<CircularOverviewModel> model = null;
-            model = circulars.Select(c => new CircularOverviewModel(
-                                                 c.Id, c.CircularName, c.Date,
-                                                 c.State == CircularStateId.ReadyToSend ? "Ready To Send" : "Sent"))
-                                  .ToList();
+            return this.View(viewModel);
+        }
 
-            ViewBag.qId = questionnaireId;
-            ViewBag.curState = state;
+        [HttpPost]
+        public PartialViewResult SearchCirculars(int questionnaireId, int show)
+        {
+            List<CircularOverviewModel> circularOverviews = this.CreateCircularOverviewModels(questionnaireId, show);
 
-            return View(model);
+            return this.PartialView("CircularOverviewGrid", circularOverviews);
         }
 
         [HttpGet]
@@ -460,22 +463,15 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var departmentsOrginal = _departmentService.GetDepartments(SessionFacade.CurrentCustomer.Id);
             var availableDp =
-                departmentsOrginal.Select(x => new SelectListItem
-                {
-                    Text = x.DepartmentName,
-                    Value = x.Id.ToString()
-                }).ToList();
+                departmentsOrginal.Select(x => new SelectListItem { Text = x.DepartmentName, Value = x.Id.ToString() })
+                    .ToList();
 
             var selectedDpOrginal = new List<SelectListItem>();
             var selectedDp = selectedDpOrginal.ToList();
 
             var caseTypesOrginal = _caseTypeService.GetCaseTypes(SessionFacade.CurrentCustomer.Id);
             var availableCt =
-                caseTypesOrginal.Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                }).ToList();
+                caseTypesOrginal.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList();
 
             var selectedCtOrginal = new List<SelectListItem>();
             var selectedCt = selectedCtOrginal.ToList();
@@ -483,11 +479,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var productAreaOrginal = _productAreaService.GetProductAreas(SessionFacade.CurrentCustomer.Id);
             var availablePa =
-                productAreaOrginal.Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                }).ToList();
+                productAreaOrginal.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList();
 
             var selectedPaOrginal = new List<SelectListItem>();
             var selectedPa = selectedPaOrginal.ToList();
@@ -495,19 +487,15 @@ namespace DH.Helpdesk.Web.Controllers
 
             var workingGroupsOrginal = _workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id);
             var availableWg =
-                workingGroupsOrginal.Select(x => new SelectListItem
-                {
-                    Text = x.WorkingGroupName,
-                    Value = x.Id.ToString()
-                }).ToList();
+                workingGroupsOrginal.Select(
+                    x => new SelectListItem { Text = x.WorkingGroupName, Value = x.Id.ToString() }).ToList();
 
             var selectedWgOrginal = new List<SelectListItem>();
             var selectedWg = selectedWgOrginal.ToList();
 
             var circularParts = new List<CircularPartOverview>();
 
-            var model = new NewCircularModel
-                (
+            var model = new NewCircularModel(
                 questionnaireId,
                 availableDp,
                 selectedDp,
@@ -517,8 +505,8 @@ namespace DH.Helpdesk.Web.Controllers
                 selectedPa,
                 availableWg,
                 selectedWg,
-                circularParts
-                );
+                circularParts,
+                false);
 
             var lst = new List<SelectListItem>();
             lst.Add(new SelectListItem { Text = "5", Value = "5" });
@@ -538,77 +526,59 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpGet]
-        public ViewResult EditCircular(int questionnaireId, int circularId, int stateId)
+        public ViewResult EditCircular(int circularId)
         {
-            var circular = _circularService.GetCircularById(circularId);
+            CircularForEdit circular = this._circularService.GetById(circularId);
 
-            var model = new EditCircularModel
-                (
-                    circular.Id,
-                    questionnaireId,
-                    circular.CircularName,
-                    circular.ChangedDate
-                );
+            List<CircularPart> connectedCases = this._circularService.GetConnectedCases(circularId);
+            List<ConnectedToCircularOverview> connecteCasesOverviews =
+                connectedCases.Select(
+                    x =>
+                    new ConnectedToCircularOverview(circularId, x.CaseId, x.CaseNumber, x.Caption, x.Email, x.IsSent))
+                    .ToList();
 
-            model.State = stateId;
+            var model = new EditCircularModel(
+                circular.Id,
+                circular.QuestionnaireId,
+                circular.CircularName,
+                circular.ChangedDate,
+                connecteCasesOverviews,
+                circular.Status);
 
-            switch (circular.Status)
-            {
-                case CircularStateId.ReadyToSend:
-                    model.StateText = "Ready To Send";
-                    break;
-
-                case CircularStateId.Sent:
-                    model.StateText = "Sent";
-                    break;
-            }
-
-            return View(model);
-
+            return this.View(model);
         }
 
         [HttpPost]
         public RedirectToRouteResult EditCircular(EditCircularModel editedCircular)
         {
-            var circular = new EditCircular
-                (
-                   editedCircular.Id,
-                   editedCircular.CircularName,
-                   editedCircular.State,
-                   DateTime.Now
-                );
+            var circular = new CircularForUpdate(editedCircular.Id, editedCircular.CircularName, DateTime.Now);
 
-            _circularService.UpdateCircular(circular);
+            this._circularService.UpdateCircular(circular);
 
-            return RedirectToAction("CircularOverview",
-                 new
-                 {
-                     questionnaireId = editedCircular.QuestionnaireId,
-                     state = editedCircular.State
-                 });
+            return this.RedirectToAction(
+                "CircularOverview",
+                new { questionnaireId = editedCircular.QuestionnaireId });
         }
 
         [HttpPost]
         public RedirectToRouteResult DeleteCircular(int questionnaireId, int stateId, int circularId)
         {
-            _circularService.DeleteCircularById(circularId);
+            this._circularService.DeleteById(circularId);
 
-            return RedirectToAction("CircularOverview",
-                     new
-                     {
-                         questionnaireId = questionnaireId,
-                         state = stateId
-                     });
+            return this.RedirectToAction("CircularOverview", new { questionnaireId, state = stateId });
         }
 
         [HttpPost]
         public ActionResult NewCircular(NewCircularModel newCircular, List<CircularPartOverview> cases)
         {
-            var circular = new NewCircular(
-                newCircular.QuestionnaireId,
+            List<int> caseIds = cases.Select(x => x.CaseId).ToList();
+
+            var circular = new CircularForInsert(
                 newCircular.CircularName,
+                newCircular.QuestionnaireId,
                 CircularStateId.ReadyToSend,
-                DateTime.Now);
+                DateTime.Now,
+                caseIds);
 
             this._circularService.AddCircular(circular);
 
@@ -619,29 +589,64 @@ namespace DH.Helpdesk.Web.Controllers
 
         [HttpPost]
         public PartialViewResult CaseRowGrid(
-            NewCircularModel newCircular,
+            int questionnaireId,
             int[] selectedDepartments,
             int[] selectedCaseTypes,
             int[] selectedProductArea,
             int[] selectedWorkingGroups,
             int procent,
             DateTime? finishingDateFrom,
-            DateTime? finishingDateTo)
+            DateTime? finishingDateTo,
+            bool isUniqueEmail)
         {
-            List<CircularPart> cases = this._circularService.GetCases(
+            List<CircularPart> cases = this._circularService.GetAvaliableCases(
                 SessionFacade.CurrentCustomer.Id,
+                questionnaireId,
                 selectedDepartments,
                 selectedCaseTypes,
                 selectedProductArea,
                 selectedWorkingGroups,
                 procent,
                 finishingDateFrom,
-                finishingDateTo);
+                finishingDateTo,
+                isUniqueEmail);
 
-            var models =
-                cases.Select(c => new CircularPartOverview(c.CaseId, c.CaseNumber, c.Caption, c.Email)).ToList();
+            List<CircularPartOverview> models =
+                cases.Select(c => new CircularPartOverview(c.CaseId, c.CaseNumber, c.Caption, c.Email, c.IsSent)).ToList();
 
             return this.PartialView("_CircularPartOverview", models);
+        }
+
+        [HttpGet]
+        public RedirectToRouteResult DeleteConnectedCase(int questionnaireId, int caseId, int circularId)
+        {
+            this._circularService.DeleteConnectedCase(circularId, caseId);
+
+            return this.RedirectToAction("EditCircular", new { questionnaireId, circularId });
+        }
+
+        [HttpPost]
+        public ViewResult Send(int[] connectedCases)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPost]
+        public ViewResult Remind()
+        {
+            throw new NotImplementedException();
+        }
+
+        private List<CircularOverviewModel> CreateCircularOverviewModels(int questionnaireId, int state)
+        {
+            List<CircularOverview> circulars = this._circularService.GetCircularOverviews(questionnaireId, state);
+
+            List<CircularOverviewModel> circularOverviews =
+                circulars.Select(
+                    c =>
+                    new CircularOverviewModel(c.Id, c.CircularName, c.Date, c.State, c.TotalParticipants, c.SentParticipants))
+                    .ToList();
+            return circularOverviews;
         }
     }
 }

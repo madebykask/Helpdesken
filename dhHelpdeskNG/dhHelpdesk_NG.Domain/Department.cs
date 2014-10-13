@@ -1,9 +1,11 @@
 ﻿namespace DH.Helpdesk.Domain
 {
+    using DH.Helpdesk.Domain.Interfaces;
+
     using global::System;
     using global::System.Collections.Generic;
 
-    public class Department : Entity
+    public class Department : Entity, ICustomerEntity
     {
         public int AccountancyAmount { get; set; }
         public int Charge { get; set; }

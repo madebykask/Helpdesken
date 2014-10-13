@@ -155,6 +155,7 @@
             var holidayToSave = this._holidayService.GetHoliday(id);
             holidayToSave.TimeFrom = vmodel.TimeFrom;
             holidayToSave.TimeUntil = vmodel.TimeTil;
+            holidayToSave.HolidayName = vmodel.HolidayName;
 
             if (holidayToSave.HolidayHeader.Name != vmodel.ChangedHeaderName)
             {
@@ -268,6 +269,26 @@
             return this.View(model);
         }
 
+        public ActionResult EditWatchDateCalendarValue(int id)
+        {
+            var wdCalendarValue = this._watchDateCalendarService.GetWatchDateCalendarValue(id);
+
+            var wdCalendar = this._watchDateCalendarService.GetWatchDateCalendar(wdCalendarValue.WatchDateCalendar_Id);
+            var year = DateTime.Today.Year;
+            //var wdValue = this._watchDateCalendarService.GetWatchDateCalendarValue(id);
+
+            if (wdCalendar == null)
+                return new HttpNotFoundResult("No watch date value found...");
+
+            var model = this.SaveWatchDateViewModel(wdCalendar, year);
+
+            SessionFacade.ActiveTab = "#fragment-3";
+
+            //model.ChangedWatchDateName = wdValue.WatchDateCalendar.Name;
+
+            return this.View(model);
+        }
+
         public ActionResult NewTranslation()
         {
             var model = this.SaveTextTranslationViewModel(new Text { }, SessionFacade.CurrentCustomer.Language_Id);
@@ -325,6 +346,11 @@
 
             var b = this.TryUpdateModel(textToSave, "text");
 
+            foreach (var t in TTs)
+            {
+                t.ChangedByUser_Id = SessionFacade.CurrentUser.Id;
+            }
+
             IDictionary<string, string> errors = new Dictionary<string, string>();
             this._textTranslationService.SaveEditText(textToSave, TTs, out errors);
 
@@ -377,6 +403,7 @@
                 WatchDateCalendarValues = this._watchDateCalendarService.GetAllWatchDateCalendarValues().ToList(),
                 TextType = this._textTranslationService.GetTextType(texttypeid),
                 HolidayHeader = this._holidayService.GetHolidayHeader(1),
+                TextWithUsers = this._textTranslationService.GetAllTextsWithUsers(texttypeid).ToList(),
                 Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
                 {
                     Text = Translation.Get(x.Name),
@@ -426,6 +453,7 @@
             #region SelectListItems
 
             List<SelectListItem> li = new List<SelectListItem>();
+
             li.Add(new SelectListItem()
             {
                 Text = Translation.Get("00:00", Enums.TranslationSource.TextTranslation),
@@ -746,6 +774,7 @@
             {
                 Holiday = null,
                 Holidays = this._holidayService.GetHolidaysByHeaderIdAndYear(year, holidayheader.Id),
+                HolidaysForList = this._holidayService.GetHolidaysByHeaderIdAndYearForList(year, holidayheader.Id),
                 HolidayHeader = holidayheader,
                 HolidayHeaders = this._holidayService.GetHolidayHeaders().Select(x => new SelectListItem
                 {
@@ -757,6 +786,7 @@
                 YearList = yearlist,
                 ChangedHeaderName = holidayheader.Name
             };
+
 
             #region SetInts
 
@@ -852,6 +882,7 @@
             {
                 WatchDateCalendarValue = null,
                 WatchDateCalendarValues = this._watchDateCalendarService.GetWDCalendarValuesByWDCIdAndYear(watchdatecalendar.Id, year),
+                WatchDateCalendarValuesForList = this._watchDateCalendarService.GetWDCalendarValuesByWDCIdAndYearForList(watchdatecalendar.Id, year),
                 WatchDateCalendar = watchdatecalendar,
                 YearList = yearlist
             };
@@ -1010,7 +1041,7 @@
         }
 
 
-        public string AddRowToHolidays(int holidayheaderid, DateTime holidaydate, int timefrom, int timeUntil)
+        public string AddRowToHolidays(int holidayheaderid, DateTime holidaydate, int timefrom, int timeUntil, string holidayname)
         {
             var holiday = new Holiday();
             var year = DateTime.Today.Year;
@@ -1028,11 +1059,40 @@
                 holiday.TimeFrom = timefrom;
                 holiday.TimeUntil = timeUntil;
                 holiday.CreatedDate = DateTime.UtcNow;
+                holiday.HolidayName = holidayname;
 
             }
 
             model.Holiday = holiday;
             
+            this._holidayService.SaveHoliday(holiday, out errors);
+            return this.UpdateHolidayList(holidayheader);
+        }
+
+        public string SaveRowToHolidays(int id, int holidayheaderid, DateTime holidaydate, string holidayname, int timefrom, int timeuntil)
+        {
+            var holiday = this._holidayService.GetHoliday(id);
+            var year = DateTime.Today.Year;
+
+            var holidayheader = this._holidayService.GetHolidayHeader(holidayheaderid);
+
+            IDictionary<string, string> errors = new Dictionary<string, string>();
+
+            var model = this.SaveHolidayViewModel(holidayheader, year);
+
+            if (this.ModelState.IsValid)
+            {
+                holiday.HolidayHeader_Id = holidayheaderid;
+                holiday.HolidayDate = holidaydate;
+                holiday.TimeFrom = timefrom;
+                holiday.TimeUntil = timeuntil;
+                holiday.CreatedDate = DateTime.UtcNow;
+                holiday.HolidayName = holidayname;
+
+            }
+
+            model.Holiday = holiday;
+
             this._holidayService.SaveHoliday(holiday, out errors);
             return this.UpdateHolidayList(holidayheader);
         }
@@ -1077,7 +1137,7 @@
             //return this.View(model);
         }
 
-        public string AddRowToWatchDateCalendarValue(int watchdatecalendarid, DateTime watchdate)
+        public string AddRowToWatchDateCalendarValue(int watchdatecalendarid, DateTime watchdate, string watchdatevaluenname)
         {
             var wdcv = new WatchDateCalendarValue();
             var year = DateTime.Today.Year;
@@ -1092,6 +1152,32 @@
                 wdcv.WatchDate = watchdate;
                 wdcv.WatchDateCalendar_Id = watchdatecalendarid;
                 wdcv.CreatedDate = DateTime.UtcNow;
+                wdcv.WatchDateValueName = watchdatevaluenname;
+            }
+
+            model.WatchDateCalendarValue = wdcv;
+
+            this._watchDateCalendarService.SaveWatchDateCalendarValue(wdcv, out errors);
+
+            return this.UpdateWatchDateList(wdc);
+        }
+
+        public string SaveRowToWatchDateCalendarValue(int id, int watchdatecalendarId, DateTime watchdate, string watchdatevaluenname)
+        {
+            var wdcv = this._watchDateCalendarService.GetWatchDateCalendarValue(id);
+            var year = DateTime.Today.Year;
+            var wdc = this._watchDateCalendarService.GetWatchDateCalendar(watchdatecalendarId);
+
+            IDictionary<string, string> errors = new Dictionary<string, string>();
+
+            var model = this.SaveWatchDateViewModel(wdc, year);
+
+            if (this.ModelState.IsValid)
+            {
+                wdcv.WatchDate = watchdate;
+                wdcv.WatchDateCalendar_Id = watchdatecalendarId;
+                wdcv.CreatedDate = DateTime.UtcNow;
+                wdcv.WatchDateValueName = watchdatevaluenname;
             }
 
             model.WatchDateCalendarValue = wdcv;

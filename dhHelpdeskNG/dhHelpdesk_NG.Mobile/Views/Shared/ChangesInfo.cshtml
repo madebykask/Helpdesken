@@ -1,0 +1,48 @@
+﻿@model DH.Helpdesk.Mobile.Models.Changes.CustomerChangesModel
+@if (Model != null && Model.Customers != null && Model.Customers.Any())
+{
+    <div class="box-header portlet-header">
+        <div class="start-tile-img label orange">
+            <a href="@Url.Action("index", "changes", new {area = ""})"><img src="@Url.Content("~/Content/icons/customer.png")" alt="@Translation.Get("Kund")" /></a>
+        </div>
+        <h4>@Translation.Get("Change Management Summary")</h4>
+    </div>
+    <div class="box-body portlet-content">
+        <div class="box-post">
+            <table class="table table-striped table-bordered table-hover">
+                <tbody>
+                @foreach (var customer in Model.Customers)
+                {     
+                    <tr>
+                        <td>
+                            <a href="@Url.Action("Index", "Changes", new { customerId = customer.Customer_Id })">
+                                @Html.DisplayFor(modelItem => customer.Customer.Name)
+                            </a>
+                            <a href="@Url.Action("Index", "Changes", new { customerId = customer.Customer_Id })" 
+                                    class="start-tile label my" 
+                                    rel="tooltip" 
+                                    data-toggle="tooltip" 
+                                    title="@Translation.Get("Mina ärenden")">
+                                @Model.GetUserCount(customer.Customer_Id)                                           
+                            </a>
+                            <a href="@Url.Action("Index", "Changes", new { customerId = customer.Customer_Id })" 
+                                    rel="tooltip" 
+                                    class="start-tile label closed" 
+                                    title="@Translation.Get("Avslutade ärenden")">
+                                @Model.GetClosedCount(customer.Customer_Id)                                            
+                            </a>
+                            <a href="@Url.Action("Index", "Changes", new { customerId = customer.Customer_Id })" 
+                                    rel="tooltip" 
+                                    class="start-tile label unread" 
+                                    title="@Translation.Get("Pågående ärenden")">
+                                @Model.GetInProgressCount(customer.Customer_Id)
+                            </a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+

@@ -40,6 +40,7 @@
         public int OrderPermission { get; set; }
         public int PasswordHis { get; set; }
         public int CreateCaseFromOrder { get; set; }
+       
 
         public Customer Customer { get; set; }
         public Setting Setting { get; set; }
@@ -65,6 +66,8 @@
         public IList<SelectListItem> UsAvailable { get; set; } 
         public IList<SelectListItem> UsSelected { get; set; }
         public IList<SelectListItem> UserGroups { get; set; }
+
+        public IList<SelectListItem> CWNSelect { get; set; }
 
         public CustomerCaseSummaryViewModel CustomerCaseSummaryViewModel { get; set; }
     }

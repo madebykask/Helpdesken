@@ -15,9 +15,10 @@
                 {     
                     <tr>
                         <td>
-                            <a href="@Url.Action("index", "cases", new { customerId = customer.Customer_Id })">
+                            <a href="@Url.Action("index", "cases", new { customerId = customer.Customer_Id })" class="pull-left">
                                 @Html.DisplayFor(modelItem => customer.Customer.Name)
                             </a>
+                            <div class="pull-right">
                             <a href="@Url.Action("index", "cases", new { customerId = customer.Customer_Id })" 
                                     class="start-tile label my" 
                                     rel="tooltip" 
@@ -43,6 +44,7 @@
                                     title="@Translation.Get("Pågående ärenden")">
                                 @Model.Calculator.CalculateInProgressForCustomer(customer.Customer_Id)
                             </a>
+                            </div>
                         </td>
                     </tr>
                 }

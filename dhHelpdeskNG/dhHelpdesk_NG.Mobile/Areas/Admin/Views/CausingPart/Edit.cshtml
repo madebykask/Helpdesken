@@ -1,0 +1,18 @@
+﻿@model DH.Helpdesk.Mobile.Areas.Admin.Models.CausingPart.CausingPartViewModel
+@{
+    ViewBag.Title = "Edit";
+}
+@using (Html.BeginForm("Edit", "CausingPart", new { id = Model.CausingPart.Id, area = "admin" }, FormMethod.Post, new { id = "target" }))
+{
+    <div class="secnavs fixed">
+        <div class="pull-left">
+            <ul class="secnav">
+                <li>@Html.ActionLink(Translation.Get("Spara"), "Edit", new { id = Model.CausingPart.Id }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.Get("Ta bort"), "Delete", new { id = Model.CausingPart.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post") })</li>
+                <li>@Html.ActionLink(Translation.Get("Avbryt"), "Index", new { customerId = Model.CausingPart.CustomerId }, new { @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.Get("Lägg till") + " " + Translation.Get("Causing Part"), "New", new { parentId = Model.CausingPart.Id, customerId = Model.CausingPart.CustomerId }, new { @class = "btn" })</li>
+            </ul>
+        </div>
+    </div>
+    @Html.Partial("_Input", Model)
+}

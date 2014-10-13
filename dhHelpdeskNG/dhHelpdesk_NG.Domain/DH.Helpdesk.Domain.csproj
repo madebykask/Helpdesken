@@ -114,6 +114,7 @@
     <Compile Include="Computers\ComputerModel.cs" />
     <Compile Include="Computers\ComputerType.cs" />
     <Compile Include="Interfaces\ICustomerEntity.cs" />
+    <Compile Include="Interfaces\INamedEntity.cs" />
     <Compile Include="Invoice\CaseInvoiceSettingsEntity.cs" />
     <Compile Include="TextType.cs" />
     <Compile Include="DocumentSearch.cs" />

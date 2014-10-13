@@ -24,6 +24,8 @@
         [Key, Column(Order = 1)]
         public int Language_Id { get; set; }
 
+        //public string Name { get; set; }
+
         #endregion
     }
 }

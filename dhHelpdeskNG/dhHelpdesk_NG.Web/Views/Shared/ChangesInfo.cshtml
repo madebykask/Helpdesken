@@ -3,7 +3,7 @@
 {
     <div class="box-header portlet-header">
         <div class="start-tile-img label orange">
-            <a href="@Url.Action("index", "changes", new {area = ""})"><img src="@Url.Content("~/Content/icons/customer.png")" alt="@Translation.Get("Kund")" /></a>
+            <a href="@Url.Action("index", "changes", new {area = ""})"><img src="@Url.Content("~/Content/icons/changes.png")" alt="@Translation.Get("Kund")" /></a>
         </div>
         <h4>@Translation.Get("Change Management Summary")</h4>
     </div>
@@ -15,9 +15,10 @@
                 {     
                     <tr>
                         <td>
-                            <a href="@Url.Action("Index", "Changes", new { customerId = customer.Customer_Id })">
+                            <a href="@Url.Action("Index", "Changes", new { customerId = customer.Customer_Id })" class="pull-left">
                                 @Html.DisplayFor(modelItem => customer.Customer.Name)
                             </a>
+                            <div class="pull-right">
                             <a href="@Url.Action("Index", "Changes", new { customerId = customer.Customer_Id })" 
                                     class="start-tile label my" 
                                     rel="tooltip" 
@@ -37,6 +38,7 @@
                                     title="@Translation.Get("Pågående ärenden")">
                                 @Model.GetInProgressCount(customer.Customer_Id)
                             </a>
+                            </div>
                         </td>
                     </tr>
                 }

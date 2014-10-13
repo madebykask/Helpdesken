@@ -13,6 +13,8 @@
     {
         IEnumerable<Text> GetAllTexts(int texttypeId);
 
+        IEnumerable<TextList> GetAllTextsWithUsers(int texttypeId);
+
         IList<TextTranslation> GetAllTextTranslations();
         IList<TextTranslationLanguageList> GetEditListToTextTranslations(int textid);
         IList<TextTranslationLanguageList> GetIndexListToTextTranslations(int languageId);
@@ -59,7 +61,12 @@
         public IEnumerable<Text> GetAllTexts(int texttypeId)
         {
             return this._textRepository.GetAll().Where(x => x.Id > 4999 && x.Type == texttypeId).OrderBy(x => x.TextToTranslate);
-        }       
+        }
+
+        public IEnumerable<TextList> GetAllTextsWithUsers(int texttypeId)
+        {
+            return this._textRepository.GetAllTextsWithUsers(texttypeId).OrderBy(x => x.TextToTranslate);
+        }
 
         public IList<TextTranslation> GetAllTextTranslations()
         {
@@ -153,7 +160,9 @@
             if (text == null)
                 throw new ArgumentNullException("text");
 
-            text.ChangedDate = DateTime.Now;
+            var curNow = DateTime.Now;
+
+            text.ChangedDate = curNow;
 
             errors = new Dictionary<string, string>();
 
@@ -168,7 +177,14 @@
                     if (t.TranslationName == null)
                         t.TranslationName = "";
 
-                    var newTT = new TextTranslation { TextTranslated = t.TranslationName, Language_Id = t.Language_Id, Text_Id = text.Id };
+             
+                    var newTT = new TextTranslation { 
+                        TextTranslated = t.TranslationName, 
+                        Language_Id = t.Language_Id, 
+                        Text_Id = text.Id, 
+                        ChangedDate = curNow,
+                        CreatedDate = curNow,
+                        ChangedByUser_Id = t.ChangedByUser_Id };
 
                     this._textTranslationRepository.Add(newTT);
                 }
@@ -183,11 +199,13 @@
                         if (change.TranslationName == null)
                             change.TranslationName = "";
 
+                        tt.ChangedDate = curNow;
+                        tt.ChangedByUser_Id = change.ChangedByUser_Id;
                         if (change.TranslationName != tt.TextTranslated)
                         {
                             tt.TextTranslated = change.TranslationName;
-                            this._textTranslationRepository.Update(tt);
                         }
+                        this._textTranslationRepository.Update(tt);
                     }
                 }
             }

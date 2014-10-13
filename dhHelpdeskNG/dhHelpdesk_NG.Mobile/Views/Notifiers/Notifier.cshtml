@@ -1,0 +1,26 @@
+﻿
+@model DH.Helpdesk.Web.Models.Notifiers.InputModel
+
+@{
+    ViewBag.Title = @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation);
+}
+
+@using (Html.BeginForm("Notifier", "Notifiers", FormMethod.Post))
+{
+    <div class="secnavs fixed">
+        <div class="pull-left">
+            <ul class="secnav">
+                <li>
+                    <input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn"/>
+                </li>
+                <li>
+                    @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "Delete", new { id = Model.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuellt ärende och tillhörande loggposter", Enums.TranslationSource.TextTranslation) })
+                </li>
+                <li>
+                    @Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", "Notifiers", new { @class = "btn" })
+                </li>
+            </ul>
+        </div>
+    </div>
+    @Html.Partial("_Input", Model)
+}

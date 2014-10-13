@@ -15,6 +15,8 @@
         IEnumerable<WatchDateCalendarValue> GetWDCalendarValuesByWDCId(int id);
         IEnumerable<WatchDateCalendarValue> GetWDCalendarValuesByWDCIdAndYear(int id, int year);
 
+        IList<WatchDateCalendarValue> GetWDCalendarValuesByWDCIdAndYearForList(int id, int year);
+
         WatchDateCalendar GetWatchDateCalendar(int id);
         WatchDateCalendarValue GetWatchDateCalendarValue(int id);
 
@@ -59,6 +61,15 @@
         public IEnumerable<WatchDateCalendarValue> GetWDCalendarValuesByWDCIdAndYear(int id, int year)
         {
             return this._watchDateCalendarValueRepository.GetWDCalendarValuesByWDCIdAndYear(id, year).OrderBy(x => x.WatchDate);
+        }
+
+        public IList<WatchDateCalendarValue> GetWDCalendarValuesByWDCIdAndYearForList(int id, int year)
+        {
+            var query = (from cs in this._watchDateCalendarValueRepository.GetAll().Where(x => x.WatchDateCalendar_Id == id && x.WatchDate.Year == year)
+                         select cs);
+
+            
+            return query.OrderBy(x => x.WatchDate).ToList();
         }
 
         public WatchDateCalendar GetWatchDateCalendar(int id)

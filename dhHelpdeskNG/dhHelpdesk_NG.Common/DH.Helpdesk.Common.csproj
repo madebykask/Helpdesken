@@ -57,6 +57,7 @@
     <Compile Include="Enums\AppSettingsKey.cs" />
     <Compile Include="Enums\CircularStateId.cs" />
     <Compile Include="Enums\ActionObject.cs" />
+    <Compile Include="Enums\CircularStates.cs" />
     <Compile Include="Enums\LanquageNameId.cs" />
     <Compile Include="Enums\Settings\CaseSolutionFields.cs" />
     <Compile Include="Enums\Settings\CaseSolutionModes.cs" />

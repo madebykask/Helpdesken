@@ -1,0 +1,148 @@
+﻿@using DH.Helpdesk.Mobile.Infrastructure
+@model DH.Helpdesk.Mobile.Areas.Admin.Models.StateSecondaryInputViewModel
+
+
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-1">@Translation.Get("Understatus", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment1">
+                <div class="container">
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-error">
+                            @Translation.Get("Understatus", Enums.TranslationSource.TextTranslation) @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+                        </div>
+                    }
+                     <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Understatus", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
+                                        @Html.TextBoxFor(model => model.StateSecondary.Name, new { maxlength = "50" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="StateSecondary.IncludeInCaseStatistics" @(Model.StateSecondary.IncludeInCaseStatistics == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="StateSecondary.IncludeInCaseStatistics" value="0" />
+                                        &nbsp;@Translation.Get("Fortsätt räkna tid om aktuell understatus är vald", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="StateSecondary.NoMailToNotifier" @(Model.StateSecondary.NoMailToNotifier == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="StateSecondary.NoMailToNotifier" value="0" />
+                                        &nbsp;@Translation.Get("Skicka ej mail till anmälaren", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Självservice", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="StateSecondary.ResetOnExternalUpdate" @(Model.StateSecondary.ResetOnExternalUpdate == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="StateSecondary.ResetOnExternalUpdate" value="0" />
+                                        &nbsp;@Translation.Get("Ta bort understatus när anmälaren uppdaterar ärendet", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Standard", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="StateSecondary.IsDefault" @(Model.StateSecondary.IsDefault == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="StateSecondary.IsDefault" value="0" />
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="StateSecondary.IsActive" @(Model.StateSecondary.IsActive == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="StateSecondary.IsActive" value="0" />
+                                        </label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <h4>@Translation.Get("Meddelande", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td>
+                                        @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="StateSecondary.NoMailToNotifier" @(Model.StateSecondary.NoMailToNotifier == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="StateSecondary.NoMailToNotifier" value="0" />
+                                        &nbsp;@Translation.Get("Skicka ej mail till anmälaren", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Påminnelse anmälare", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Translation.Get("Skicka påminnelse efter", Enums.TranslationSource.TextTranslation)
+                                        &nbsp;        
+                                        @Html.DropDownListFor(model => model.StateSecondary.ReminderDays, Model.ReminderDays, new { style = "width: 60px;" })&nbsp;
+                                        &nbsp;
+                                        @Translation.Get("dagar", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
+                                        @Html.DropDownListFor(model => model.StateSecondary.MailTemplate_Id, Model.MailTemplates, "")
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <h4>@Translation.Get("Regler", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
+                                        @Translation.Get("Nedanstående värden ändras när aktuell driftgrupp väljs", Enums.TranslationSource.TextTranslation)<br />
+                                        @Html.DropDownListFor(model => model.StateSecondary.WorkingGroup_Id, Model.WorkingGroups, "")
+                                    </td>
+                                </tr>
+                            </table>
+                            @Html.HiddenFor(model => model.StateSecondary.Customer_Id)
+                            @Html.HiddenFor(model => model.StateSecondary.Id)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

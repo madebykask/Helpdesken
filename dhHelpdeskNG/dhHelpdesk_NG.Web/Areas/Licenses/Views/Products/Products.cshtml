@@ -1,0 +1,24 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Licenses.Models.Products.ProductsContentModel
+
+<table class="table table-striped table-bordered table-hover table-pointer">
+    <thead>
+        <tr>
+            <th>@Translation.Get("Produkt")</th>
+            <th>@Translation.Get("Antal licenser")</th>
+            <th>@Translation.Get("Använda licenser")</th>
+            <th>@Translation.Get("Differens")</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model.Products)
+        {
+            <tr onclick="window.location.href='@Url.Action("Product", new RouteValueDictionary { { "productId", product.ProductId } })'">
+                <td>@product.ProductName</td>
+                <td>@product.LicencesNumber</td>
+                <td>@product.UsedLicencesNumber</td>
+                <td>@product.GetLicensesDifference()</td>
+            </tr>
+        }        
+    </tbody>
+</table>

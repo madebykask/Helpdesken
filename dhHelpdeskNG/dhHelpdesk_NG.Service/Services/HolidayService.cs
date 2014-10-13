@@ -17,6 +17,8 @@
         IEnumerable<Holiday> GetHolidaysByHeaderId(int id);
         IEnumerable<Holiday> GetHolidaysByHeaderIdAndYear(int year, int id);
 
+        IList<Holiday> GetHolidaysByHeaderIdAndYearForList(int year, int id);
+
         Holiday GetHoliday(int id);
         HolidayHeader GetHolidayHeader(int id);
 
@@ -74,6 +76,16 @@
         public IEnumerable<Holiday> GetHolidaysByHeaderIdAndYear(int year, int id)
         {
             return this._holidayRepository.GetHolidaysByHeaderIdAndYear(year, id).OrderBy(x => x.HolidayDate);
+        }
+
+        public IList<Holiday> GetHolidaysByHeaderIdAndYearForList(int year, int id)
+        {
+            //return this._holidayRepository.GetHolidaysByHeaderIdAndYearForList(year, id).OrderBy(x => x.HolidayDate);
+            var query = (from h in this._holidayRepository.GetAll().Where(x => x.HolidayHeader_Id == id && x.HolidayDate.Year == year)
+                         select h);
+
+
+            return query.OrderBy(x => x.HolidayDate).ToList();
         }
 
         public HolidayHeader GetHolidayHeader(int id)

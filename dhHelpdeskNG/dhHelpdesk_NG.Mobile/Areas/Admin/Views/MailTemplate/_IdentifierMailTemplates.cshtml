@@ -1,0 +1,21 @@
+﻿@using DH.Helpdesk.Mobile.Infrastructure
+@model List<SelectListItem> 
+<table>
+    <tr>
+        <th>
+            @Translation.Get("Fält", Enums.TranslationSource.TextTranslation)
+        </th>
+        <th>
+            @Translation.Get("Identifierare", Enums.TranslationSource.TextTranslation)
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Translation.Get(item.Text, Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>@Html.DisplayFor(model => item.Value)
+            </td>
+        </tr>
+    }
+</table>

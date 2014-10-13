@@ -16,7 +16,7 @@
         IEnumerable<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguages(int? customerId, int? languageId);
         IEnumerable<CaseFieldSettingsForTranslation> GetCaseFieldSettingsForTranslation(int userId);
         IEnumerable<CaseFieldSettingsForTranslation> GetCaseFieldSettingsForTranslation();
-        IEnumerable<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguagesForDefaultCust(int? customerId, int? languageId);
+        IEnumerable<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguagesForDefaultCust(int languageId);
     }
 
     public class CaseFieldSettingLanguageRepository : RepositoryBase<CaseFieldSettingLanguage>, ICaseFieldSettingLanguageRepository
@@ -55,7 +55,7 @@
             return query.OrderBy(x => x.Id);
         }
 
-        public IEnumerable<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguagesForDefaultCust(int? customerId, int? languageId)
+        public IEnumerable<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguagesForDefaultCust(int languageId)
         {            
             var query = from cfsl in this.DataContext.CaseFieldSettingLanguages
                             join cfs in this.DataContext.CaseFieldSettings on cfsl.CaseFieldSettings_Id equals cfs.Id

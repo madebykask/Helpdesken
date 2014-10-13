@@ -1,0 +1,62 @@
+﻿@using DH.Helpdesk.Mobile.Infrastructure
+@model DH.Helpdesk.Mobile.Areas.Admin.Models.GlobalSettingHolidayViewModel
+@if (TempData["Error"] != null)
+{
+            <div class="alert alert-error">@Translation.Get("Helgdag", Enums.TranslationSource.TextTranslation)
+                @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+            </div>    
+}
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-2">@Translation.Get("Helgdag", Enums.TranslationSource.TextTranslation)</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment1">
+                <div class="container">
+                    <div class="row">
+                        <div class="span8">
+                            <table class="tableform" id="tblHoliday">
+                               
+                                <tr>
+
+                                    <td>
+
+                                        @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.ChangedHeaderName, new { maxlength = "50", style = "width: 200px;" })
+                                        @Html.HiddenFor(model => model.Holiday.HolidayHeader.Id)
+                                    </td>
+                                  
+                                </tr>
+                               
+                            </table>
+                            @Html.HiddenFor(model => model.Tabposition)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $("input:text:visible:first").focus();
+    $("#Holiday_HolidayDate").datepicker();
+
+    $(function () {
+        //$("#tblHolidayHeader").fixheadertable();
+        //$("#chkHalfDay").click(function () {
+        //    $("#halfDayOptions").toggle();
+        //});
+        //holidayList($('#Holiday_HolidayHeader_Id').val());
+    });
+
+    function submitForm() {
+        $("#target").submit();
+    }
+
+    
+</script>
+

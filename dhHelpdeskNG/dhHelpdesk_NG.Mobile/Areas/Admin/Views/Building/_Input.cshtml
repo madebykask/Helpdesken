@@ -1,0 +1,48 @@
+﻿@using DH.Helpdesk.Mobile.Infrastructure
+@model DH.Helpdesk.Mobile.Areas.Admin.Models.BuildingInputViewModel
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-error">@Translation.Get("Byggnad", Enums.TranslationSource.TextTranslation)
+        @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+    </div>    
+}
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-1">@Translation.Get("Byggnad", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment1">
+                <div class="container">
+                    <div class="row">
+                        <div class="span8">
+                            <table class="tableform">
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Byggnad", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.Building.Name, new { maxlength = "50", style = "width: 200px;" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="building.IsActive" @(Model.Building.IsActive == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="building.IsActive" value="0" />
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                            @Html.HiddenFor(model => model.Building.Customer_Id)
+                            @Html.HiddenFor(model => model.Building.Id)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

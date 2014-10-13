@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
@@ -20,6 +21,8 @@
 
         void SaveRegion(Region region, out IDictionary<string, string> errors);
         void Commit();
+
+        List<ItemOverview> FindByCustomerId(int customerId);
     }
 
     public class RegionService : IRegionService
@@ -102,6 +105,11 @@
         public void Commit()
         {
             this._unitOfWork.Commit();
+        }
+
+        public List<ItemOverview> FindByCustomerId(int customerId)
+        {
+            return this._regionRepository.FindByCustomerId(customerId);
         }
     }
 }

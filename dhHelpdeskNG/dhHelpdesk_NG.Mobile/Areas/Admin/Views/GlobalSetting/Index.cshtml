@@ -1,0 +1,198 @@
+﻿@using DH.Helpdesk.Mobile.Infrastructure
+@model DH.Helpdesk.Mobile.Areas.Admin.Models.GlobalSettingIndexViewModel
+@{
+    ViewBag.Title = "Global Settings";
+}
+<div class="secnavs fixed">
+    <div class="pull-left">
+        <ul class="secnav" id="myButton">
+            <li id="menu1" style="display: block">
+                @Html.ActionLink(Translation.Get("Ändra", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("inställningar", Enums.TranslationSource.TextTranslation), "change", null, new { @class = "btn" })
+            </li>
+            <li id="menu2" style="display: none">
+                @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Kalender helgdagar", Enums.TranslationSource.TextTranslation), "newholiday", new { newholiday = 1 }, new { @class = "btn" })
+            </li>
+            <li id="menu3" style="display: none">
+                @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Kalender bevakningsdatum", Enums.TranslationSource.TextTranslation), "newwatchdate", new { newwdc = 1 }, new { @class = "btn" })
+            </li>
+            <li id="menu4" style="display: none">
+                @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Översättningar", Enums.TranslationSource.TextTranslation), "newtranslation", new { newtext = 1 }, new { @class = "btn" })
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="container">
+
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active" id="tab1" onclick="$('#menu1').show(); $('#menu2').hide(); $('#menu3').hide(); $('#menu4').hide();"><a href="#fragment-1">@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</a></li>
+            <li id="tab2" onclick="$('#menu2').show(); $('#menu1').hide(); $('#menu3').hide(); $('#menu4').hide();"><a href="#fragment-2">@Translation.Get("Kalender helgdagar", Enums.TranslationSource.TextTranslation)</a></li>
+            <li id="tab3" onclick="$('#menu3').show(); $('#menu1').hide(); $('#menu2').hide(); $('#menu4').hide();"><a href="#fragment-3">@Translation.Get("Kalender bevakningsdatum", Enums.TranslationSource.TextTranslation)</a></li>
+            <li id="tab4" onclick="$('#menu4').show(); $('#menu1').hide(); $('#menu2').hide(); $('#menu3').hide();"><a href="#fragment-4">@Translation.Get("Översättningar", Enums.TranslationSource.TextTranslation)</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment-1">
+                <table class="table table-striped table-bordered table-hover" id="tblChange">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Translation.Get("Applikationsnamn", Enums.TranslationSource.TextTranslation)
+                            </th>
+                            <th>
+                                @Translation.Get("Standard", Enums.TranslationSource.TextTranslation) @Translation.Get("Språk", Enums.TranslationSource.TextTranslation)
+                            </th>
+                            <th>
+                                @Translation.Get("Version", Enums.TranslationSource.TextTranslation)
+                            </th>
+                            <th>
+                                @Translation.Get("Tid", Enums.TranslationSource.TextTranslation)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.GlobalSettings)
+                        { 
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ApplicationName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DefaultLanguage.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DBVersion)
+                                </td>
+                                <td>
+                                    @DateTime.Now.ToLongTimeString()
+                                </td>
+                            </tr> 
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane tab-pane-border" id="fragment-2">
+                <table class="table table-striped table-bordered table-hover" id="tblHoliday">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Translation.Get("Kalender", Enums.TranslationSource.TextTranslation)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.HolidayHeaders)
+                        { 
+                            <tr>
+                                <td>
+                                    <a href="@Url.Action("editholiday", "globalsetting", new { id = item.Value })">@item.Text</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                @*<div class="container">
+                    <div class="row">
+                        <div class="span8">
+                            <table class="tableform" id="tblHoliday">
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Kalender", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.HolidayHeader.Id, Model.HolidayHeaders, new { style = "width: auto;", id = "HolidayHeaderId", onchange = "changeHoliday(this.options[this.selectedIndex].value);" })
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+               <div class="container" id="holidays">
+                   
+                        @Html.Partial("_Holidays", Model)
+                
+                </div>*@
+                
+            </div>
+            <div class="tab-pane tab-pane-border" id="fragment-3">
+                <table class="table table-striped table-bordered table-hover" id="tblWatchDateCalendarValue">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Translation.Get("Kalender bevakningsdatum", Enums.TranslationSource.TextTranslation)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.WatchDateCalendars)
+                        { 
+                            <tr>
+                                <td>
+                                    <a href="@Url.Action("editwatchdate", "globalsetting", new { id = item.Value})">@item.Text</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tab-pane tab-pane-border" id="fragment-4">
+                <div class="container">
+                    <div class="row">
+                        <div class="span8">
+                            <table class="tableform" id="tblText">
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Typ", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.TextType.Id, Model.TextTypes, new { style = "width: auto;", id = "TextTypeId", onchange = "changeTextType(this.options[this.selectedIndex].value);" })
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="container" id="translationList">
+                   
+                        @Html.Partial("_TranslationsList", Model)
+                
+                </div>
+            </div>
+           
+            <input type="hidden" name="activeTab" id="activeTab" value="@SessionFacade.ActiveTab" />
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+
+        var activeTab = $('#activeTab').val();
+        if(activeTab)
+            $('#myTab a[href="' + activeTab + '"]').click();//.tab('show')
+
+       
+
+        function changeTextType(id) {
+            var list = $('#translationList');
+            list.html('');
+            if (id != '') {
+                $.get('/GlobalSetting/ChangeTextType/' + id, function (result) {
+                    list.html(result);
+                });
+            }
+        }
+
+        function changeHoliday(id) {
+            var list = $('#holidays');
+            list.html('');
+            if (id != '') {
+                $.get('/GlobalSetting/ChangeHoliday/' + id, function (result) {
+                    list.html(result);
+                });
+            }
+        }
+    </script>
+
+}

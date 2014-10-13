@@ -1,0 +1,31 @@
+﻿@using DH.Helpdesk.Mobile.Infrastructure
+@model DH.Helpdesk.Mobile.Areas.Licenses.Models.Products.ProductsIndexModel
+@{
+    Layout = "~/Areas/Licenses/Views/Shared/_IndexLayout.cshtml";
+}
+
+@using (Ajax.BeginForm("Products", "Products", null, 
+    new AjaxOptions { UpdateTargetId = "LicensesProductsTableContainer" },
+    new { id ="ProductsSearchForm" } ))
+{
+    <table class="tableform">
+        <tr>
+            <td class="span3">@Translation.Get("Område")</td>
+            <td>@Html.DropDownListFor(m => m.RegionIds, Model.Regions, new { id = "objects_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })</td>
+        </tr>                
+        <tr>
+            <td class="span3">@Translation.Get("Avdelning")</td>
+            <td>@Html.DropDownListFor(m => m.DepartmentIds, Model.Departments, new { id = "objects_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })</td>
+        </tr>         
+        <tr>
+            <td class="span3">
+            </td>
+            <td>
+                <input type="submit" value="@Translation.Get("Sök")" class="btn" />
+            </td>
+        </tr>               
+    </table>
+}
+<div id="LicensesProductsTableContainer">
+    @Html.Action("Products", "Products")
+</div>

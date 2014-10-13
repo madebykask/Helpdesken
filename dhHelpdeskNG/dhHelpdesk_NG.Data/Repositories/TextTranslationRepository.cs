@@ -13,6 +13,7 @@ namespace DH.Helpdesk.Dal.Repositories
     {
         int GetNextId();
         IEnumerable<Text> GetAllWithTranslation();
+        IEnumerable<TextList> GetAllTextsWithUsers(int texttypeId);
     }
 
     public class TextRepository : RepositoryBase<Text>, ITextRepository
@@ -35,6 +36,51 @@ namespace DH.Helpdesk.Dal.Repositories
             return this.DataContext.Texts.Include("TextTranslations");
         }
 
+        public IEnumerable<TextList> GetAllTextsWithUsers(int texttypeId)
+        {
+
+            var txt =
+               from T in this.DataContext.Texts
+               join TT in this.DataContext.TextTranslations on T.Id equals TT.Text_Id into Translate
+               from Trans in Translate.DefaultIfEmpty()
+               join U1 in this.DataContext.Users on Trans.ChangedByUser_Id equals U1.Id into Users1
+               from User1 in Users1.DefaultIfEmpty()
+               join U2 in this.DataContext.Users on T.ChangedByUser_Id equals U2.Id into Users2
+               from User2 in Users2.DefaultIfEmpty()
+               where (T.Type == texttypeId && T.Id > 4999)
+               group T by new { T.Id, T.TextToTranslate, User2.SurName, User2.FirstName, Trans.ChangedDate, T.CreatedDate, U1Name = User1.FirstName, U1SurName = User1.SurName } into g
+               select new TextList
+                    {
+                        Id = g.Key.Id,
+                        TextToTranslate = g.Key.TextToTranslate,
+                        CreatedByFirstName = g.Key.FirstName,
+                        CreatedByLastName = g.Key.SurName,
+                        ChangedDate = g.Key.ChangedDate,
+                        CreatedDate = g.Key.CreatedDate,
+                        ChangedByFirstName = g.Key.U1Name,
+                        ChangedByLastName = g.Key.U1SurName
+                    };
+
+            /*var q = from t in this.DataContext.Texts
+                    join u in this.DataContext.Users on t.ChangedByUser_Id equals u.Id
+                    join tt in this.DataContext.TextTranslations on t.Id equals tt.Text_Id into t_tt
+                    from ts in t_tt.DefaultIfEmpty()
+                    where t.Id > 4999 && t.Type == texttypeId
+                    group t by new { t.Id, t.TextToTranslate, u.SurName, u.FirstName, ts.ChangedDate, t.CreatedDate } into g
+                    select new TextList
+                    {
+                        Id = g.Key.Id,
+                        TextToTranslate = g.Key.TextToTranslate,
+                        CreatedByFirstName = g.Key.FirstName,
+                        CreatedByLastName = g.Key.SurName,
+                        ChangedDate = g.Key.ChangedDate,
+                        CreatedDate = g.Key.CreatedDate
+                    };
+            */
+            
+            return txt.ToList();
+           
+        }
     }
 
     #endregion

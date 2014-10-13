@@ -10,8 +10,8 @@
         public int TextTranslation_Id { get; set; }
         public string TextTranslated { get; set; }
         public int? ChangedByUser_Id { get; set; }
-        public DateTime? ChangedDate { get; set; }
-        public DateTime? CreatedDate { get; set; }
+        public DateTime ChangedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
 
         public virtual Language Language { get; set; }
         public virtual Text Text { get; set; }

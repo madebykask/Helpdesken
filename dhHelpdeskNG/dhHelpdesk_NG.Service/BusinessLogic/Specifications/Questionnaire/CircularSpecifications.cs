@@ -23,5 +23,14 @@
 
             return entities;
         }
+
+        public static IQueryable<QuestionnaireCircularEntity> GetByState(
+            this IQueryable<QuestionnaireCircularEntity> query,
+            int state)
+        {
+            IQueryable<QuestionnaireCircularEntity> entities = query.Where(x => x.Status == state);
+
+            return entities;
+        }
     }
 }

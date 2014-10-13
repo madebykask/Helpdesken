@@ -12,6 +12,6 @@
         public int? ChangedByUser_Id { get; set; }
 
         public virtual ICollection<TextTranslation> TextTranslations { get; set; }
-        //public virtual ICollection<User> User { get; set; }
+       
     }
 }

@@ -1,0 +1,24 @@
+﻿@using DH.Helpdesk.Mobile.Infrastructure
+@model DH.Helpdesk.Mobile.Areas.Licenses.Models.Products.ProductsContentModel
+
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>@Translation.Get("Produkt")</th>
+            <th>@Translation.Get("Antal licenser")</th>
+            <th>@Translation.Get("Använda licenser")</th>
+            <th>@Translation.Get("Differens")</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model.Products)
+        {
+            <tr>
+                <td>@product.ProductName</td>
+                <td>@product.LicencesNumber</td>
+                <td>@product.UsedLicencesNumber</td>
+                <td>@product.GetLicensesDifference()</td>
+            </tr>
+        }        
+    </tbody>
+</table>

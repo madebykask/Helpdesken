@@ -1,0 +1,18 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Licenses.Models.Manufacturers.ManufacturersContentModel
+
+<table class="table table-striped table-bordered table-hover table-pointer">
+    <thead>
+        <tr>
+            <th>@Translation.Get("Tillverkare")</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var manufacturer in Model.Manufacturers)
+        {
+            <tr onclick="window.location.href='@Url.Action("Manufacturer", new RouteValueDictionary { { "manufacturerId", manufacturer.ManufacturerId } })'">
+                <td>@manufacturer.ManufcturerName</td>
+            </tr>
+        }        
+    </tbody>
+</table>

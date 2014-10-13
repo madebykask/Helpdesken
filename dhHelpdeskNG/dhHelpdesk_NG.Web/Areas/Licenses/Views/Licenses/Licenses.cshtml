@@ -1,0 +1,26 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Licenses.Models.Licenses.LicensesContentModel
+
+<table class="table table-striped table-bordered table-hover table-pointer">
+    <thead>
+        <tr>
+            <th>@Translation.Get("Produkt")</th>
+            <th>@Translation.Get("Antal licenser")</th>
+            <th>@Translation.Get("Inköpsdatum")</th>
+            <th>@Translation.Get("Avdelning")</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var license in Model.Licenses)
+        {
+            <tr onclick="window.location.href='@Url.Action("License", new RouteValueDictionary { { "licenseId", license.LicenseId } })'">
+                <td>@license.ProductName</td>
+                <td>@license.LicensesNumber</td>
+                <td>@Html.DisplayFor(m => license.PurchaseDate, "Date")</td>
+                <td>@license.Department</td>
+            </tr>
+        }        
+    </tbody>
+</table>
+
+

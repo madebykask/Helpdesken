@@ -334,10 +334,28 @@
     <Compile Include="Areas\Licenses\Infrastructure\ModelFactories\Concrete\ProductsModelFactory.cs" />
     <Compile Include="Areas\Licenses\Infrastructure\ModelFactories\Concrete\VendorsModelFactory.cs" />
     <Compile Include="Areas\Licenses\LicensesAreaRegistration.cs" />
+    <Compile Include="Areas\Licenses\Models\Applications\ApplicationEditModel.cs" />
+    <Compile Include="Areas\Licenses\Models\Applications\ApplicationsContentModel.cs" />
+    <Compile Include="Areas\Licenses\Models\Applications\ApplicationsFilterModel.cs" />
     <Compile Include="Areas\Licenses\Models\Applications\ApplicationsIndexModel.cs" />
+    <Compile Include="Areas\Licenses\Models\Common\BaseEditModel.cs" />
+    <Compile Include="Areas\Licenses\Models\Common\BaseIndexModel.cs" />
+    <Compile Include="Areas\Licenses\Models\Common\EntityModelType.cs" />
+    <Compile Include="Areas\Licenses\Models\Licenses\LicenseEditModel.cs" />
+    <Compile Include="Areas\Licenses\Models\Licenses\LicensesContentModel.cs" />
+    <Compile Include="Areas\Licenses\Models\Licenses\LicensesFilterModel.cs" />
     <Compile Include="Areas\Licenses\Models\Licenses\LicensesIndexModel.cs" />
+    <Compile Include="Areas\Licenses\Models\Manufacturers\ManufacturerEditModel.cs" />
+    <Compile Include="Areas\Licenses\Models\Manufacturers\ManufacturersContentModel.cs" />
+    <Compile Include="Areas\Licenses\Models\Manufacturers\ManufacturersFilterModel.cs" />
     <Compile Include="Areas\Licenses\Models\Manufacturers\ManufacturersIndexModel.cs" />
+    <Compile Include="Areas\Licenses\Models\Products\ProductEditModel.cs" />
+    <Compile Include="Areas\Licenses\Models\Products\ProductsContentModel.cs" />
+    <Compile Include="Areas\Licenses\Models\Products\ProductsFilterModel.cs" />
     <Compile Include="Areas\Licenses\Models\Products\ProductsIndexModel.cs" />
+    <Compile Include="Areas\Licenses\Models\Vendors\VendorEditModel.cs" />
+    <Compile Include="Areas\Licenses\Models\Vendors\VendorsContentModel.cs" />
+    <Compile Include="Areas\Licenses\Models\Vendors\VendorsFilterModel.cs" />
     <Compile Include="Areas\Licenses\Models\Vendors\VendorsIndexModel.cs" />
     <Compile Include="Controllers\AboutController.cs" />
     <Compile Include="Controllers\AjaxController.cs" />
@@ -527,6 +545,7 @@
     <Compile Include="Infrastructure\Tools\IInvoiceHelper.cs" />
     <Compile Include="Infrastructure\Tools\IReportsHelper.cs" />
     <Compile Include="Infrastructure\Tools\MimeHelper.cs" />
+    <Compile Include="Infrastructure\Tools\WebMvcHelper.cs" />
     <Compile Include="Infrastructure\Translate\Translator.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\CacheContext.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\CustomerContext.cs" />
@@ -719,6 +738,9 @@
     <Compile Include="Models\Inventory\SearchModels\ReportsSearchViewModel.cs" />
     <Compile Include="Areas\Admin\Models\Invoice\ArticlesImportModel.cs" />
     <Compile Include="Models\Invoice\CaseInvoiceArticlesModel.cs" />
+    <Compile Include="Models\Questionnaire\Input\CircularPartOverview.cs" />
+    <Compile Include="Models\Questionnaire\Input\ConnectedToCircularOverview.cs" />
+    <Compile Include="Models\Questionnaire\Output\CircularOverviewViewModel.cs" />
     <Compile Include="Models\Reports\AverageSolutionTimeOptions.cs" />
     <Compile Include="Models\Reports\AverageSolutionTimeReport.cs" />
     <Compile Include="Models\Reports\IndexModel.cs" />
@@ -732,6 +754,7 @@
     <Compile Include="Models\Shared\CustomersInfoModel.cs" />
     <Compile Include="Models\Shared\DateAndTimeModel.cs" />
     <Compile Include="Models\Shared\DateRange.cs" />
+    <Compile Include="Models\Shared\MultiSelectListModel.cs" />
     <Compile Include="Models\Shared\NewGridRowCellValueModel.cs" />
     <Compile Include="Models\Shared\SortFieldModel.cs" />
     <Compile Include="Models\ComputerUserInputViewModel.cs" />
@@ -1176,6 +1199,18 @@
     <Content Include="Areas\Licenses\Views\Licenses\Index.cshtml" />
     <Content Include="Areas\Licenses\Views\Manufacturers\Index.cshtml" />
     <Content Include="Areas\Licenses\Views\Vendors\Index.cshtml" />
+    <Content Include="Areas\Licenses\Views\Shared\_IndexLayout.cshtml" />
+    <Content Include="Areas\Licenses\Views\Products\Products.cshtml" />
+    <Content Include="Areas\Licenses\Views\Applications\Applications.cshtml" />
+    <Content Include="Areas\Licenses\Views\Licenses\Licenses.cshtml" />
+    <Content Include="Areas\Licenses\Views\Manufacturers\Manufacturers.cshtml" />
+    <Content Include="Areas\Licenses\Views\Vendors\Vendors.cshtml" />
+    <Content Include="Areas\Licenses\Views\Applications\Application.cshtml" />
+    <Content Include="Areas\Licenses\Views\Licenses\License.cshtml" />
+    <Content Include="Areas\Licenses\Views\Manufacturers\Manufacturer.cshtml" />
+    <Content Include="Areas\Licenses\Views\Products\Product.cshtml" />
+    <Content Include="Areas\Licenses\Views\Vendors\Vendor.cshtml" />
+    <Content Include="Areas\Licenses\Views\Shared\_EditLayout.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />
@@ -1597,6 +1632,9 @@
     <Content Include="Views\Inventory\EditorTemplates\CustomTypesFields\Text.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\CustomTypesFields\WideText.cshtml" />
     <Content Include="Views\Questionnaire\_InputCircular.cshtml" />
+    <Content Include="Views\Questionnaire\_CircularPartOverviewWithDelete.cshtml" />
+    <Content Include="Views\Questionnaire\CircularOverviewGrid.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\MultiSelectListModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
@@ -2314,7 +2352,6 @@
     <Content Include="Areas\Admin\Views\Users\_Appearance.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\Licenses\Views\Shared\" />
     <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
   </ItemGroup>
   <ItemGroup>
@@ -2403,7 +2440,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>55803</DevelopmentServerPort>
+          <DevelopmentServerPort>61056</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

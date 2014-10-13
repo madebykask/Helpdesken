@@ -38,7 +38,7 @@
 
         public int Id { get; private set; }
 
-        public int CaseId { get; private set; }
+        public int CaseId { get; set; }
 
         [ScriptIgnore]
         public CaseOverview Case { get; private set; }

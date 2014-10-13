@@ -88,6 +88,7 @@
     <Compile Include="EntityConfigurations\Invoice\InvoiceArticleUnitConfiguration.cs" />
     <Compile Include="EntityConfigurations\Licenses\ApplicationConfiguration.cs" />
     <Compile Include="EntityConfigurations\Licenses\LicenseConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Licenses\LicenseFileConfiguration.cs" />
     <Compile Include="EntityConfigurations\Licenses\ManufacturerConfiguration.cs" />
     <Compile Include="EntityConfigurations\Licenses\ProductConfiguration.cs" />
     <Compile Include="EntityConfigurations\Licenses\VendorConfiguration.cs" />

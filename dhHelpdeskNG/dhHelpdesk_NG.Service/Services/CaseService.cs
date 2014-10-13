@@ -527,7 +527,7 @@
 
             if (invoices != null)
             {
-                this.invoiceArticleService.SaveCaseInvoices(invoices);                
+                this.invoiceArticleService.SaveCaseInvoices(invoices, cases.Id);                
             }
             
             return ret;

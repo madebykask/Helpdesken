@@ -47,6 +47,7 @@
         public DateTime ChangeTime { get; set; }
         public DateTime RegTime { get; set; }
         public Guid CustomerGUID { get; set; }
+        public int? CommunicateWithNotifier { get; set; }
 
         public virtual Language Language { get; set; }
         public virtual ICollection<Application> Applications { get; set; }

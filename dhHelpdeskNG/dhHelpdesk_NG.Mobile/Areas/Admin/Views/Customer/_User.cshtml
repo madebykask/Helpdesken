@@ -1,0 +1,80 @@
+﻿@using DH.Helpdesk.Mobile.Infrastructure
+@model DH.Helpdesk.Mobile.Areas.Admin.Models.CustomerInputViewModel
+<div class="formContainer">
+    @if (Model.Customer.Id > 0)
+    {
+        <table id="customerUser">
+            <thead>
+                <tr>
+                    <th>
+                        @Translation.Get("Inställningar användare", Enums.TranslationSource.TextTranslation)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        @Translation.Get("Användare", Enums.TranslationSource.TextTranslation)
+                    </td>
+                    <td>
+                        @Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)
+                    </td>
+                    <td>
+                        @Translation.Get("Valda användare har rättighet till kund", Enums.TranslationSource.TextTranslation)
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        @Html.ListBox("UsAvailable", Model.UsAvailable, new { style = "width: 205px; height: 350px" })
+                        <input type="button" value="&lt;" id="removeUs" />
+                        <input type="button" value="&gt;" id="addUs" />
+                    </td>
+                    <td>
+                        @Html.ListBox("UsSelected", Model.UsSelected, new { style = "width: 205px; height: 350px" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Translation.Get("Användaren är förvald som", Enums.TranslationSource.TextTranslation)<br />
+                        @Translation.Get("handläggare på nya externa ärenden", Enums.TranslationSource.TextTranslation)
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Setting.DefaultAdministratorExternal, Model.UsSelected, "", new { style = "width: auto;" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Translation.Get("Användaren är förvald som", Enums.TranslationSource.TextTranslation)<br />
+                        @Translation.Get("handläggare på nya ärenden", Enums.TranslationSource.TextTranslation)
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Setting.DefaultAdministrator, Model.UsSelected, "", new { style = "width: auto;" })
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    }
+</div>
+<script type="text/javascript">
+
+    function submitForm() {
+        $("#UsSelected option").attr("selected", "selected");
+        $("#target").submit();
+    }
+
+    $("#addUs").click(function () {
+        $("#UsAvailable option:selected").remove().appendTo("#UsSelected");
+        $("#UsAvailable").get(0).selectedIndex = -1;
+        $("#UsSelected").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#removeUs").click(function () {
+        $("#UsSelected option:selected").remove().appendTo("#UsAvailable");
+        $("#UsAvailable").get(0).selectedIndex = -1;
+        $("#UsAvailable").get(0).selectedIndex = -1;
+        return false;
+    });
+
+</script>

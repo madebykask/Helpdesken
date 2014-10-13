@@ -1,0 +1,88 @@
+﻿@model DH.Helpdesk.Mobile.Models.Case.CaseInputViewModel 
+@using DH.Helpdesk.BusinessData.Models.Changes.Output
+@using DH.Helpdesk.BusinessData.OldComponents
+@using DH.Helpdesk.Mobile.Infrastructure
+
+@if (Model != null && Model.Logs != null)
+{    
+    <div class="tab-pane tab-pane-border active" id="logtab">
+        <table class="table table-striped table-bordered table-hover">
+            @if (Model.Logs.Any())
+            {            
+                <thead>
+                    <tr>
+                        <th>@Translation.Get("Datum", Enums.TranslationSource.TextTranslation)</th>
+                        <th>@Translation.Get("Registrerad av", Enums.TranslationSource.TextTranslation)</th>
+                        <th>@Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) </th>
+                        <th>@Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) </th>
+                        <th>@Translation.Get("E-post", Enums.TranslationSource.TextTranslation)</th>
+                        <th>@Translation.Get("Filer", Enums.TranslationSource.TextTranslation)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var r in Model.Logs)
+                {
+                    <tr>
+                        <td>
+                            <a href="@GetLogLink(r)">@Html.DisplayFor(m => r.LogDate, "DateAndTime") </a>
+                        </td>
+                        <td>
+                            <a href="@GetLogLink(r)">@(r.User == null ? r.RegUser : r.User.FirstName + " " + r.User.SurName)</a>
+                        </td>
+                        <td>
+                            <a href="@GetLogLink(r)">@r.TextExternal.ForHtmlView()</a>
+                        </td>
+                        <td>
+                            <a href="@GetLogLink(r)">@r.TextInternal.ForHtmlView()</a>
+                        </td>
+                        <td>
+                            @if (r.CaseHistory != null)
+                            {
+                                if (r.CaseHistory.Emaillogs != null)
+                                {                                        
+                                    foreach (var l in r.CaseHistory.Emaillogs)      
+                                    {                                            
+                                    <div>
+                                        <p>
+                                            @l.EmailAddress 
+                                        </p>
+                                    </div>
+                                    }                                    
+                                }                                        
+                            }
+                        </td>
+                        <td>
+                            @if (r.LogFiles != null)
+                            {
+                                foreach (var l in r.LogFiles)      
+                                {                                            
+                                <div>
+                                    <p>
+                                        <a href="@Url.Action("DownloadLogFile", new { id = r.Id, fileName = l.FileName })">@l.FileName</a>
+                                    </p>
+                                </div>
+                                }                                    
+                            }
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            }                
+        </table>
+    </div>
+}
+
+@functions 
+{
+
+    private string GetLogLink(DH.Helpdesk.BusinessData.Models.Logs.Output.LogOverview log)
+    {
+        if (log.ProblemId.HasValue)
+        {
+            return Url.Action("Problem", "Problems", new { id = log.ProblemId.Value });
+        }
+        return Url.Action("editlog", "cases", new { area = "", id = log.Id, customerId = Model.case_.Customer_Id });
+    }
+    
+
+}

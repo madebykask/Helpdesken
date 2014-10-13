@@ -18,6 +18,7 @@
         public IList<Text> Texts { get; set; }
         public IList<WatchDateCalendarValue> WatchDateCalendarValues { get; set; }
         public IList<SelectListItem> Languages { get; set; }
+        public IList<TextList> TextWithUsers { get; set; }
 
         public Language Language { get; set; }
 
@@ -26,6 +27,8 @@
         public IList<SelectListItem> HolidayHeaders { get; set; }
         public IList<SelectListItem> WatchDateCalendars { get; set; }
         public HolidayHeader HolidayHeader { get; set; }
+
+        public User User { get; set; }
 
     }
 
@@ -43,6 +46,7 @@
         public int TimeTil { get; set; }
         public int Year { get; set; }
         public string ChangedHeaderName { get; set; }
+        public string HolidayName { get; set; }
 
         public Holiday Holiday { get; set; }
         public HolidayHeader HolidayHeader { get; set; }
@@ -53,6 +57,7 @@
         public IList<SelectListItem> YearList { get; set; }
 
         public IEnumerable<Holiday> Holidays { get; set; }
+        public IList<Holiday> HolidaysForList { get; set; }
     }
 
     public class GlobalSettingWatchDateViewModel : BaseTabInputViewModel
@@ -63,8 +68,11 @@
         public WatchDateCalendar WatchDateCalendar { get; set; }
         public IList<SelectListItem> YearList { get; set; }
         public IList<SelectListItem> WatchDateCalendars { get; set; }
+        public string WatchDateValueName { get; set; }
 
         public IEnumerable<WatchDateCalendarValue> WatchDateCalendarValues { get; set; }
+
+        public IList<WatchDateCalendarValue> WatchDateCalendarValuesForList { get; set; }
     }
 
     public class GlobalSettingTextTranslationViewModel : BaseTabInputViewModel

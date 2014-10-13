@@ -1,0 +1,34 @@
+﻿@model DH.Helpdesk.Mobile.Areas.Admin.Models.Invoice.ArticlesImportModel
+
+@using (Ajax.BeginForm("ArticlesImport", "CaseInvoice", null,
+    new AjaxOptions { HttpMethod = "POST" }, 
+    new { id="case_articles_import_form", enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(m => m.CustomerId)
+    @Html.AntiForgeryToken()
+    @Html.TextBoxFor(m => m.File, new { type = "file" })
+    <input id="case_articles_import_button" type="submit" value="@Translation.Get("Import")" />
+    <img id="case_articles_import_loading" src="@Url.Content("~/Content/icons/ajax-loader.gif")" style="display: none;" />
+}
+<div id="case_articles_import_status"></div>
+
+<script type="text/javascript">
+$(function() {
+    var importButton = $("#case_articles_import_button");
+    var loading = $("#case_articles_import_loading");
+    var status = $("#case_articles_import_status");
+
+    $('#case_articles_import_form').ajaxForm({
+        beforeSend: function () {
+            status.empty();
+            importButton.attr("disabled", true);
+            loading.show();
+        },
+        complete: function (xhr) {
+            importButton.attr("disabled", false);
+            loading.hide();
+            status.html(xhr.responseText);
+        }
+    }); 
+});       
+</script>

@@ -1,0 +1,41 @@
+﻿<div data-id='{{:Id}}' class="case-invoice-container overflow-visible">
+    <div id="case-invoice-orders-tabs">
+        <ul class="nav nav-tabs">
+            <li>
+                <i class="icon-plus-sign" style="cursor: pointer;" onclick="dhHelpdesk.CaseArticles.AddOrder('{{:Id}}'); return false;"></i>
+                <i style="display: none;" class="icon-minus-sign" style="cursor: pointer;" onclick="dhHelpdesk.CaseArticles.DeleteCurrentOrder('{{:Id}}'); return false;"></i>
+            </li> 
+            <li class="case-invoice-order-summary"><a href="#case-invoice-order-summary{{:Id}}">{{:SummaryTitle}}</a></li>          
+        </ul>
+        <div class="ml15 mt20">
+            <table class='articles-params'>
+                <thead>
+                    <tr>
+                        <th>{{:SelectItemHeader}}</th>
+                        <th>{{:UnitsHeader}}</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="articles-select-container">
+                            <select class='multiselect articles-params-article'>
+                            </select>
+                        </td>
+                        <td>
+                            <input type='text' class='articles-params-units input-small-important' value='{{:DefaultAmount}}' />
+                        </td>
+                        <td>
+                            <input type='button' class='articles-params-add btn' value='{{:AddButtonLabel}}' />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>            
+        </div>
+        <div class="orders-container tab-content">
+            {{for Orders tmpl="caseInvoiceOrder" /}} 
+            <div id="case-invoice-order-summary{{:Id}}" class="case-invoice-order-summary-container">                                          
+            </div>
+        </div>
+    </div>
+</div>

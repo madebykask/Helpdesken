@@ -1,0 +1,22 @@
+﻿namespace DH.Helpdesk.Mobile.Infrastructure.ModelFactories.Notifiers
+{
+    using System.Collections.Generic;
+
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.NotifierOverview;
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.Shared.Output;
+    using DH.Helpdesk.Mobile.Models.Notifiers;
+
+    public interface INewNotifierModelFactory
+    {
+        InputModel Create(
+            NotifierOverviewSettings settings,
+            List<ItemOverview> domains,
+            List<ItemOverview> regions,
+            List<ItemOverview> departments,
+            List<ItemOverview> organizationUnits,
+            List<ItemOverview> divisions,
+            List<ItemOverview> managers,
+            List<ItemOverview> groups);
+    }
+}

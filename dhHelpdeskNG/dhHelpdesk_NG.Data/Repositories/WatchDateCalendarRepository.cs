@@ -53,6 +53,8 @@
                     where wd.WatchDateCalendar_Id == id && wd.WatchDate.Year == year
                     select wd).ToList();
         }
+
+       
     }
 
     #endregion

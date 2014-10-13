@@ -14,7 +14,7 @@
 
         CaseInvoice[] GetCaseInvoices(int caseId);
 
-        void SaveCaseInvoices(IEnumerable<CaseInvoice> invoices);
+        void SaveCaseInvoices(IEnumerable<CaseInvoice> invoices, int caseId);
 
         void DeleteCaseInvoices(int caseId);
 

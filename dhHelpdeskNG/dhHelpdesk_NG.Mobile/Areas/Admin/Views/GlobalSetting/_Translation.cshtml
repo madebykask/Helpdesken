@@ -1,0 +1,120 @@
+﻿@using DH.Helpdesk.Mobile.Infrastructure
+@model DH.Helpdesk.Mobile.Areas.Admin.Models.GlobalSettingTextTranslationViewModel
+@{              
+    string newtext = Request.QueryString["newtext"];
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-error">@Translation.Get("Översättning", Enums.TranslationSource.TextTranslation)
+        @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+    </div>    
+}
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-4">@Translation.Get("Översättningar", Enums.TranslationSource.TextTranslation)</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment-4">
+                <div class="container">
+                    <div class="row">
+                        <div class="span8">
+                            <table class="tableform" id="tblText">
+                                @if (newtext != "1")
+                                {
+                                    <tr>
+                                        <td style="width:200px">
+                                            @Translation.Get("Text", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(model => model.Text.TextToTranslate)
+                                        </td>
+                                    </tr>
+                                }
+                                @if (newtext != null)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Translation.Get("Typ", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>
+                                             @Html.DropDownListFor(model => model.TextType.Id, Model.TextTypes, new { style = "width: auto;", id = "TextTypeId", onchange = "changeTextType(this.options[this.selectedIndex].value);" })
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                            <table class="table table-bordered table-hover">
+                                @if (newtext != null)
+                                {
+                                    <tr>
+                                        <td style="width:200px">
+                                            <input type="text" name="textToTranslate", value="" />
+                                        </td>
+                                    </tr>
+                                }
+                                @{ var i = 0; }
+                                @if (newtext != "1")
+                                {
+                                    if (Model.Text.Id > 4999)
+                                    {
+                                        if (Model.ListForEdit.Count > 0)
+                                        {
+                                            foreach (var item in Model.ListForEdit)
+                                            {
+                                                <tr>
+                                                    <td style="width:200px">
+                                                        @Html.DisplayFor(modelItem => item.LanguageName)
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" name="@string.Format("TTs[{0}].TranslationName", i)", value="@item.TranslationName" />
+                                                        <input type="hidden" name="@string.Format("TTs[{0}].Text_Id", i)" value="@item.Text_Id" />
+                                                        <input type="hidden" name="@string.Format("TTs[{0}].Language_Id", i)" value="@item.Language_Id" />
+                                                        <input type="hidden" name="@string.Format("TTs[{0}].TextTranslation_Id", i)" value="@item.TextTranslation_Id" />
+
+                                                    </td> 
+                                                </tr>                        
+                                                    i++;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            foreach (var item in Model.ListForNew)
+                                            {
+                                                <tr>
+                                                    <td style="width:200px">
+                                                        @Html.DisplayFor(modelItem => item.LanguageName)
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" name="@string.Format("TTs[{0}].TranslationName", i)", value="@item.TranslationName" />
+                                                        <input type="hidden" name="@string.Format("TTs[{0}].Text_Id", i)" value="@item.Text_Id" />
+                                                        <input type="hidden" name="@string.Format("TTs[{0}].Language_Id", i)" value="@item.Language_Id" />
+                                                    </td> 
+                                                </tr>                            
+                                                    i++;
+                                            }
+                                        }
+                                    }
+                                }
+                            </table>
+                        @*<input type="hidden" id="LanguageId" name="LanguageId" value="@Model.TextTranslation.Language_Id" />*@
+                        @*<input type="hidden" id="TextTypeId" name="TextTypeId" value="@Model.TextType.Id" />*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+<script type="text/javascript">
+
+    $("input:text:visible:first").focus();
+
+    function submitForm() {
+        $("#target").submit();
+    }
+
+</script>
+

@@ -11,7 +11,7 @@
         {
             this.HasKey(v => v.Id);
             this.Property(v => v.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            this.Property(v => v.VendorName).IsRequired().HasMaxLength(50);
+            this.Property(v => v.Name).HasColumnName("VendorName").IsRequired().HasMaxLength(50);
             this.Property(v => v.Contact).IsRequired().HasMaxLength(50);
             this.Property(v => v.Address).IsRequired().HasMaxLength(50);
             this.Property(v => v.PostalCode).IsRequired().HasMaxLength(10);

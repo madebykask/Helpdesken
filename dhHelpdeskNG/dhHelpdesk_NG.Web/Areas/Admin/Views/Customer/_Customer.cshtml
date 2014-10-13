@@ -202,6 +202,14 @@
 <div class="formContainer">
     <table class="tableform">
             <tr>
+                <td>
+                    @Translation.Get("Informera anmälaren som standard", Enums.TranslationSource.TextTranslation)?
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.Customer.CommunicateWithNotifier, Model.CWNSelect, "", new {})
+                </td>
+            </tr>
+            <tr>
                 <td class="span3">
                     @Translation.Get("Helpdesk e-post", Enums.TranslationSource.TextTranslation)
                 </td>

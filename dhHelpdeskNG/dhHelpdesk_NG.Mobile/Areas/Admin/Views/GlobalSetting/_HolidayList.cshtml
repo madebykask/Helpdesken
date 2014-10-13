@@ -1,0 +1,36 @@
+﻿@using DH.Helpdesk.Mobile.Infrastructure
+@model IList<DH.Helpdesk.Domain.Holiday>
+
+    <thead>
+        <tr>
+            <th>
+                @Translation.Get("Typ av helgdag", Enums.TranslationSource.TextTranslation)
+            </th>
+            <th>
+                @Translation.Get("Datum för helgdag", Enums.TranslationSource.TextTranslation)
+            </th>
+            <th>
+                @Translation.Get("Arbetstid", Enums.TranslationSource.TextTranslation)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        { 
+            <tr>
+                <td>
+                    <a href="@Url.Action("editholiday", "globalsetting", new { id = item.Id })">@Html.DisplayFor(modelItem => item.HolidayHeader.Name)</a>
+                </td>
+                <td>
+                    @item.HolidayDate.ToShortDateString()
+                </td>
+                <td>
+                    @if (item.TimeFrom != 0 && item.TimeUntil != 0)
+                    {
+                        @Html.DisplayFor(modelItem => item.TimeFrom) @Translation.Get("-", Enums.TranslationSource.TextTranslation) @Html.DisplayFor(modelItem => item.TimeUntil)
+                    }
+                </td>
+            </tr> 
+        }
+    </tbody>
+

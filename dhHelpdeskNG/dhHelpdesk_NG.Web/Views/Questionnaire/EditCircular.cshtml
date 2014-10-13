@@ -1,75 +1,105 @@
-﻿@model DH.Helpdesk.Web.Models.Questionnaire.Input.EditCircularModel
-
+﻿@using DH.Helpdesk.Common.Enums
+@model DH.Helpdesk.Web.Models.Questionnaire.Input.EditCircularModel
 @{
     ViewBag.Title = "EditCircular";
 }
 
-@using (Html.BeginForm("EditCircular", "Questionnaire", FormMethod.Post, new { id = "circular_edit_form" }))
-{
-    <div class="secnavs fixed">
-        <div class="pull-left">
-            <ul class="secnav">
-                <li>
-                    <input type="submit" value="@Translation.Get("Save", Enums.TranslationSource.TextTranslation)" class="btn" />
-                </li>
-                <li>
-                    @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteCircular",
-                        new {questionnaireId = Model.QuestionnaireId, stateId = Model.State, circularId = Model.Id},
-                        new { @class = "btn deleteDialog", 
-                            deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post" , 
-                                Enums.TranslationSource.TextTranslation) + "?"}) 
-                </li>
-                <li>
-                    <a href="@Url.Action("CircularOverview","Questionnaire",
-                       new { questionnaireId = Model.QuestionnaireId, state = Model.State})" class="btn">
-                        @Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>           
+<script>
+    $(function () {
+        $("#save_button").click(function() {
+            $("#circular_edit_form").submit();
+        });
+        $("#send_button").click(function () {
+            $("#circular_case_grid_form").submit();
+        });
+    })
+</script>
 
-    @Html.HiddenFor(m=>m.Id)
-    @Html.HiddenFor(m=>m.QuestionnaireId)
-    @Html.HiddenFor(m=>m.State)
+<div class="secnavs fixed">
+    <div class="pull-left">
+        <ul class="secnav">
+            <li>
+                <input type="submit" value="@Translation.Get("Save")" class="btn" id="save_button" />
+            </li>
+            <li>
+                @if (Model.State.Value != CircularStates.Sent)
+                {
+                    @Html.ActionLink(Translation.Get("Ta bort"), "DeleteCircular", new { questionnaireId = Model.QuestionnaireId, stateId = Model.State, circularId = Model.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) + "?" })
+                }
+            </li>
+            <li>
+                <a href="@Url.Action("CircularOverview", "Questionnaire", new { questionnaireId = Model.QuestionnaireId, state = Model.State })" class="btn">
+                    @Translation.Get("Avbryt")
+                </a>
+            </li>
+            <li>
+                @{
+                    switch (Model.State.Value)
+                    {
+                        case CircularStates.ReadyToSend:
+                            <input type="submit" value="@Translation.Get("Skicka Enkät")" class="btn" id="send_button" />
+                            break;
+                        case CircularStates.Sent:
+                            @Html.ActionLink(Translation.Get("Skicka påminnelse"), "Remind", new { }, new { @class = "btn" })
+                            break;
+                    }
+                }
+            </li>
+        </ul>
+    </div>
+</div>
 
-    <div class="content">
-        <div class="container">
-            <ul class="nav nav-tabs">
-                <li class="active">
-                    <a href="#fragment-1">@Translation.Get("utskick", Enums.TranslationSource.TextTranslation)</a>
-                </li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane tab-pane-border active" id="fragment-1">
-                    <div class="container">
-                        <h4>@Translation.Get("Urval", Enums.TranslationSource.TextTranslation)</h4>
-                        <div class="row">
-                            <div class="span12">
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#fragment-1">@Translation.Get("utskick")</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment-1">
+                <div class="container">
+                    <h4>@Translation.Get("Urval")</h4>
+                    <div class="row">
+                        <div class="span12">
+                            @using (Html.BeginForm("EditCircular", "Questionnaire", FormMethod.Post, new { id = "circular_edit_form" }))
+                            {
                                 <table class="tableform">
                                     <tr>
                                         <td class="span3">
-                                            @Translation.Get("Namn", Enums.TranslationSource.TextTranslation):
+
+                                            @Html.HiddenFor(m => m.Id)
+                                            @Html.HiddenFor(m => m.QuestionnaireId)
+                                            @Html.HiddenFor(m => m.State)
+
+                                            @Translation.Get("Namn"):
+                                      
                                         </td>
                                         <td class="span9">
                                             @Html.EditorFor(model => model.CircularName)
-                                        </td> 
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td class="span3">
-                                            @Translation.Get("Status", Enums.TranslationSource.TextTranslation):
+                                            @Translation.Get("Status"):
                                         </td>
                                         <td class="span9">
-                                            @Html.DisplayTextFor(m => m.StateText)
-                                        </td> 
-                                    </tr>                                                                        
+                                            @Model.State.GetDisplayValue()
+                                        </td>
+                                    </tr>
                                 </table>
-                            </div>
+                            }
                         </div>
                     </div>
+                </div>
+                <div id="case_grid_container">
+                    @using (Html.BeginForm("Send", "Questionnaire", FormMethod.Post, new { id = "circular_case_grid_form" }))
+                    {
+                        @Html.Partial("_CircularPartOverviewWithDelete", Model.ConnectedCases, new ViewDataDictionary { { "QuestionnaireId", Model.QuestionnaireId } })
+                    }
                 </div>
             </div>
         </div>
     </div>
-}
+</div>
 

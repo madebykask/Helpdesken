@@ -1,0 +1,17 @@
+﻿
+@using System.Threading
+@model DateTime?
+
+@{
+    var dateFormat = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern;
+    string formattedDate = null;
+
+    if (Model.HasValue)
+    {
+        formattedDate = Model.Value.ToString(dateFormat);
+    }
+}
+
+<div>
+    @Html.TextBox(string.Empty, formattedDate, new { @readonly = "readonly"})
+</div>

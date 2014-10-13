@@ -43,9 +43,9 @@
             return this.caseInvoiceArticleRepository.GetCaseInvoices(caseId);
         }
 
-        public void SaveCaseInvoices(IEnumerable<CaseInvoice> invoices)
+        public void SaveCaseInvoices(IEnumerable<CaseInvoice> invoices, int caseId)
         {
-            this.caseInvoiceArticleRepository.SaveCaseInvoices(invoices);
+            this.caseInvoiceArticleRepository.SaveCaseInvoices(invoices, caseId);
         }
 
         public void DeleteCaseInvoices(int caseId)

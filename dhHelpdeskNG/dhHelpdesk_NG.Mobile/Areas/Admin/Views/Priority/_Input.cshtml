@@ -1,0 +1,396 @@
+﻿@using DH.Helpdesk.Mobile.Infrastructure
+@model DH.Helpdesk.Mobile.Areas.Admin.Models.PriorityInputViewModel
+
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-1">@Translation.Get("Prioritet", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment1">
+                <div class="container">
+                    <input type="hidden" id="customerId" name="customerId" value="@Model.Customer.Id" />
+                    <input type="hidden" id="priorityId" name="priorityId" value="@Model.Priority.Id" />
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-error">
+                            @Translation.Get("Prioritet", Enums.TranslationSource.TextTranslation) @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+                        </div>    
+                    }
+                    <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Prioritet", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
+                                        @Html.TextBoxFor(model => model.Priority.Code, new { maxlength = "5", style = "width:200px;" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.Priority.Name, new { maxlength = "30", style = "width: 200px;" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Beskrivning", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextAreaFor(model => model.Priority.Description, new { style = "width:600px; height:125px;", maxlength = "200" })
+                                    </td>
+                                </tr>
+                                <!--
+                                @if (string.IsNullOrWhiteSpace(Model.Priority.FileName) || Model.Priority.FileName == null)
+                                {                    
+                                    <tr>                                        
+                                        <td>
+                                            @Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation) 
+                                        </td>
+                                        <td>
+                                            <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)</a>
+                                        </td>
+                                    </tr>        
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td>
+                                            @Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>
+                                            <a href="@this.Url.Action("DownloadFile", new RouteValueDictionary { { "PriorityId", Model.Priority.Id }, { "fileName", Model.Priority.FileName } })">@Model.Priority.FileName</a>
+                                       
+                                            <a id="deleteFileButton" onclick="deleteFile(@Model.Priority.Id)" class="btn">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</a>
+                                        </td>
+                                    </tr>                  
+                                }
+                                 --> 
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Info", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="priority.InformUser" id="priority.InformUser" @(Model.Priority.InformUser == 1 ? "checked=checked" : "") onclick="changeInformUserText()" value="1"/>
+                                        <input type="hidden" name="priority.InformUser" value="0" />
+                                        &nbsp; &nbsp;@Translation.Get("Informera anmälaren när aktuell prioritet väljs", Enums.TranslationSource.TextTranslation) &nbsp;
+                                        
+                                        @Html.DropDownList("LanguageId", Model.Languages, new { style ="width: auto;display: none;", id = "LanguageId", onchange = "changeLanguageList(this.options[this.selectedIndex].value);" })
+                                        <input type="hidden" name="LanguageId" value="0" />
+                                    </td>
+                                </tr>
+                                <tr id="trInformUserText" @if (Model.Priority.InformUser == 0) { <text>style="display:none"</text>}>
+                                    <td class="span3">
+                                       &nbsp;
+                                    </td>
+                                    <td>
+                                        @Html.TextAreaFor(model => model.Priority.InformUserText, new { style = "width:600px; height:125px; ", maxlength = "200" })
+                                    </td>
+                                </tr>
+                                <tr id="trInformUserText2" style="display:none">
+                                    <td class="span3">
+                                       &nbsp;
+                                    </td>
+                                    <td>
+                                        @Html.TextAreaFor(model => model.PriorityLanguage.InformUserText, new { style = "width:600px; height:125px; ", maxlength = "200" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Standard", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="priority.IsEmailDefault" @(Model.Priority.IsEmailDefault == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="priority.IsEmailDefault" value="0" />
+                                        &nbsp; &nbsp;@Translation.Get("Använd prioriteten som standard vid ärenderegistrering via e-post", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <input type="checkbox" name="priority.IsDefault" @(Model.Priority.IsDefault == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="priority.IsDefault" value="0" />
+                                        &nbsp; &nbsp; @Translation.Get("Använd prioriteten som standard vid ärenderegistrering", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <h4>@Translation.Get("Meddelande", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Prioritet", Enums.TranslationSource.TextTranslation) @Translation.Get("(e-post)", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
+                                        <select name="Priority.EMailImportance" style="width: 100px;">
+                                            <option @if (Model.Priority.EMailImportance == 0)
+                                                    { <text>selected="selected"</text>} value="0">
+                                                @Translation.Get("Låg", Enums.TranslationSource.TextTranslation)
+                                            </option>
+                                            <option @if (Model.Priority.EMailImportance == 1)
+                                                    { <text>selected="selected"</text>} value="1">
+                                                @Translation.Get("Normal", Enums.TranslationSource.TextTranslation)
+                                            </option>
+                                            <option @if (Model.Priority.EMailImportance == 2)
+                                                    { <text>selected="selected"</text>} value="2">
+                                                @Translation.Get("Hög", Enums.TranslationSource.TextTranslation)
+                                            </option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Translation.Get("Skicka e-post till följande adresser när aktuell prioritet väljs", Enums.TranslationSource.TextTranslation)
+                                        <br />
+                                        @Html.TextAreaFor(model => model.Priority.EMailList, new { style = "width:600px; height:125px;", maxlength = "500" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Translation.Get("Om e-postmall väljs så skickas meddelande till ovanstående adresser när ärendet ändras", Enums.TranslationSource.TextTranslation)
+                                        <br />
+                                        @Html.DropDownListFor(model => model.Priority.MailID_Change, Model.EmailTemplates, "", new { style = "width: auto;" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("SMS", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="priority.SMSNotification" @(Model.Priority.SMSNotification == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="priority.SMSNotification" value="0" />
+                                        &nbsp; &nbsp;@Translation.Get("Skicka SMS till handläggaren vid tilldelning", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <h4>@Translation.Get("SLA", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Lösningstid", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
+                                        @Translation.Get("Ärenden skall åtgärdas inom", Enums.TranslationSource.TextTranslation)
+                                        @Html.TextBoxFor(model => model.Priority.SolutionTime, new { maxlength = "4", style = "width:30px;" })
+                                        @Translation.Get("timmar", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <h4>@Translation.Get("Ärendelogg", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Ärendelogg", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
+                                        @Translation.Get("När aktuell prioritet väljs infogas nedanstående text som extern notering", Enums.TranslationSource.TextTranslation)
+                                        <br />
+                                        @Html.TextAreaFor(model => model.Priority.LogText, new { style = "width:600px; height:125px;", maxlength = "500" })
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <h4>@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Aktivera", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
+                                        <input type="checkbox" name="priority.IsActive" @(Model.Priority.IsActive == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="priority.IsActive" value="0" />
+                                    </td>
+                                </tr>
+                            </table>
+                            @Html.HiddenFor(model => model.Priority.Customer_Id)
+                            @Html.HiddenFor(model => model.Priority.Id)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="upload_files_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3>&nbsp;</h3>
+    </div>
+    <div class="modal-body">
+        <div id="file_uploader"></div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close", Enums.TranslationSource.TextTranslation)</button>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function changeLanguageList(id) {
+        var list = $("#languageList");
+        list.html("");
+        if (id != "") {
+            $.get('/Priority/UpdateLanguageList/' + id + '?customerId=' + $("#customerId").val() + '&priorityId=' + $("#priorityId").val(), function (result) {
+                list.html(result);
+            });
+        }
+
+        changeLanguage()
+    }
+
+    function changeInformUserText() {
+     
+        if (document.getElementById("priority.InformUser").checked == true){
+           
+            document.getElementById("LanguageId").style.display = "";
+            document.getElementById("LanguageId").value = 1;
+
+            changeLanguage()
+
+        }
+        else {
+            document.getElementById("trInformUserText").style.display = "none";
+            document.getElementById("txtInformUserText_2").style.display = "none";
+            document.getElementById("LanguageId").style.display = "none";
+            
+        }
+    }
+
+    function changeLanguage() {
+       
+        var Language_Id = document.getElementById("LanguageId")[document.getElementById("LanguageId").selectedIndex].value
+        if (Language_Id == 1) {
+            document.getElementById("trInformUserText").style.display = "";
+            document.getElementById("trInformUserText2").style.display = "none";
+        }
+        else {
+            document.getElementById("trInformUserText").style.display = "none";
+            document.getElementById("trInformUserText2").style.display = "";
+           
+        }
+        
+    }
+
+    $(function () {
+
+        $('#file_uploader').pluploadQueue({
+            runtimes: 'html5,html4',
+            url: '/Admin/Priority/UploadPriorityFile',
+            multipart_params: { id: $('#Priority_Id').val() },
+            buttons: { browse: true, start: true, stop: true, cancel: true },
+
+            init: {
+                FileUploaded: function () {
+                    //$.get('/Cases/Files', { id: $('#CaseKey').val() }, function (data) {
+                    //    $('#divCaseFiles').html(data);
+                    //    //bindDeleteCaseFileBehaviorToDeleteButtons();
+                    //});
+                },
+
+                Error: function (uploader, e) {
+                    if (e.status != 409) {
+                        return;
+                    }
+                },
+
+                StateChanged: function (uploader) {
+                    if (uploader.state != plupload.STOPPED) {
+                        return;
+                    }
+                    uploader.refresh();
+                }
+            }
+        });
+
+        var validator = $("#target").validate({
+            rules: {
+                "Priority.Code": {
+                    required: true
+                },
+                "Priority.Name": {
+                    required: true
+                },
+                "Priority.Description": {
+                    required: true
+                },
+                "Priority.EMailList": {
+                    required: true
+                },
+                "Priority.FileName": {
+                    requried: true
+                }
+            },
+            messages: {
+                "Priority.Code": {
+                    required: '@Translation.Get("Du måste ange prioritet", Enums.TranslationSource.TextTranslation)'
+                },
+                "Priority.Name": {
+                    required: '@Translation.Get("Du måste ange ett namn", Enums.TranslationSource.TextTranslation)'
+                },
+                "Priority.Description": {
+                    required: '@Translation.Get("Du måste ange en beskrivning", Enums.TranslationSource.TextTranslation)'
+                },
+                "Priority.EMailList": {
+                    required: '@Translation.Get("Du måste fylla i listan", Enums.TranslationSource.TextTranslation)'
+                },
+                "Priority.FileName": {
+                    requried: '@Translation.Get("Du måste bifoga en fil", Enums.TranslationSource.TextTranslation)'
+                }
+            },
+            submitHandler: function (form) {
+                form.submit();
+            }
+        });
+
+       
+    });
+
+    $('#remove').click(function () {
+        $(this).parent().remove()
+    });
+
+    
+    $(document).ready(function () {
+        if (document.getElementById("priority.InformUser").checked == true) {
+         
+            document.getElementById("LanguageId").style.display = "";
+            document.getElementById("LanguageId").value = 1;
+        }
+
+    });
+
+    function deleteFile(id) {
+        alert(1);
+        if (confirm('@Translation.Get("Vill du verkligen ta bort bifogad fil?", Enums.TranslationSource.TextTranslation)')) {
+            $.post('/Priority/DeleteUploadedFile/' + id, function (result) {
+                window.location.reload()
+            });
+        }
+    }      
+
+   
+</script>

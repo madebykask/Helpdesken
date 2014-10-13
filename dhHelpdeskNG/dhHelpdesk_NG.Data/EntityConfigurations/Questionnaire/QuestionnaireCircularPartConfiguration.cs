@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Dal.EntityConfigurations.Questionnaire
 {
+    using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.ModelConfiguration;
 
     using DH.Helpdesk.Domain.Questionnaire;
@@ -11,7 +12,7 @@
         internal QuestionnaireCircularPartConfiguration()
         {
             this.HasKey(c => c.Id);
-            this.Property(c => c.Guid).IsRequired();
+            this.Property(c => c.Guid).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed).IsRequired();
             this.Property(c => c.QuestionnaireCircular_Id).IsRequired();
             
             this.HasRequired(c => c.QuestionnaireCircular)

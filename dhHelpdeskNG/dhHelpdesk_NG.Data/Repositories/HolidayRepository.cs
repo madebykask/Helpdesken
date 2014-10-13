@@ -33,6 +33,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         IEnumerable<Holiday> GetHolidaysByHeaderId(int id);
         IEnumerable<Holiday> GetHolidaysByHeaderIdAndYear(int year, int id);
+        IList<Holiday> GetHolidaysByHeaderIdAndYearForList(int year, int id);
     }
 
     /// <summary>
@@ -93,6 +94,16 @@ namespace DH.Helpdesk.Dal.Repositories
             return (from h in this.DataContext.Holidays
                     where h.HolidayHeader_Id == id && h.HolidayDate.Year == year
                     select h).ToList();
+        }
+
+        public IList<Holiday> GetHolidaysByHeaderIdAndYearForList(int year, int id)
+        {
+            var query = (from h in this.DataContext.Holidays
+                         where h.HolidayHeader_Id == id && h.HolidayDate.Year == year
+                         select h);
+
+
+            return query.OrderBy(x => x.HolidayDate).ToList();
         }
     }
 

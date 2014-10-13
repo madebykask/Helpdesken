@@ -713,6 +713,7 @@
             modelBuilder.Configurations.Add(new VendorConfiguration());
             modelBuilder.Configurations.Add(new ManufacturerConfiguration());
             modelBuilder.Configurations.Add(new DH.Helpdesk.Dal.EntityConfigurations.Licenses.ApplicationConfiguration());
+            modelBuilder.Configurations.Add(new LicenseFileConfiguration());
 
             #endregion
 

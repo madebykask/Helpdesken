@@ -1,0 +1,63 @@
+﻿@using DH.Helpdesk.Mobile.Infrastructure
+@{
+    ViewBag.Title = "Index";
+}
+<div class="secnavs fixed">
+    <div class="pull-left">
+        <ul class="secnav">
+            <li></li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="container">
+        <div class="row">
+
+            <div class="box-box span4">
+                <div class="box-header orange">
+                    <h3>@Translation.Get("Kunder", Enums.TranslationSource.TextTranslation)</h3>
+                </div>
+                <div class="box-body">
+                    <div class="box-post">
+                        <div style="text-align:center;">
+                            <p><img src="@Url.Content("~/Content/img/img-customers.png")" /></p>
+                            <hr />
+                            <p><a href="@Url.Action("index", "customer", new { area = "admin" })" class="btn btn-large">@Translation.Get("Kunder", Enums.TranslationSource.TextTranslation)</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="box-box span4">
+                <div class="box-header green">
+                    <h3>@Translation.Get("Användare", Enums.TranslationSource.TextTranslation)</h3>
+                </div>
+
+                <div class="box-body">
+                    <div class="box-post">
+                        <div style="text-align:center;">
+                            <p><img src="@Url.Content("~/Content/img/img-users.png")" /></p>
+                            <hr />
+                            <p><a href="@Url.Action("index", "users", new { area = "admin" })" class="btn btn-large">@Translation.Get("Användare", Enums.TranslationSource.TextTranslation)</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="box-box span4">
+                <div class="box-header light-blue">
+                    <h3>@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</h3>
+                </div>
+                <div class="box-body">
+                    <div class="box-post">
+                        <div style="text-align:center;">
+                            <p><img src="@Url.Content("~/Content/img/img-settings.png")" /></p>
+                            <hr />
+                            <p><a href="@Url.Action("index", "globalsetting", new { area = "admin" })" class="btn btn-large">
+                                    @Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

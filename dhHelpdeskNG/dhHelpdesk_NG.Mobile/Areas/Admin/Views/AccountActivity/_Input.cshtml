@@ -1,0 +1,144 @@
+﻿@using DH.Helpdesk.Mobile.Infrastructure
+@model DH.Helpdesk.Mobile.Areas.Admin.Models.AccountActivityInputViewModel
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-error">@Translation.Get("Kontoaktivitet", Enums.TranslationSource.TextTranslation)
+        @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+    </div>    
+}
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-1">@Translation.Get("Kontoaktiviteter", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment1">
+                <div class="container">
+                    <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("ID", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
+                                        @Model.AccountActivity.Id
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Kontoaktivitet", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
+                                        @Html.TextBoxFor(model => model.AccountActivity.Name, new { maxlength = "50" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Beskrivning", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextAreaFor(model => model.AccountActivity.Description, new { style = "width:600px; height:250px;", maxlength = "1000" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("URL", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.AccountActivity.URL, new { maxlength = "100", style = "width: 600px;" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Dokument", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.AccountActivity.Document_Id, Model.Documents, "")
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Grupp", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.AccountActivity.AccountActivityGroup_Id, Model.AccountActivityGroups, "")
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.AccountActivity.EMail, new { maxlength = "100" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Status", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="accountactivity.IsActive" @(Model.AccountActivity.IsActive == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="accountactivity.IsActive" value="0" />
+                                        &nbsp;@Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <h4>@Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Ärendetyp", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
+                                        @Html.DropDownListFor(model => model.AccountActivity.CreateCase_CaseType_Id, Model.Cases, "")
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Avsluta", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="accountactivity.SetAccountFinishingDate" @(Model.AccountActivity.SetAccountFinishingDate == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="accountactivity.SetAccountFinishingDate" value="0" />
+                                        &nbsp;@Translation.Get("Avsluta kontoaktiviteten när kopplade ärenden avslutas", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    @Html.HiddenFor(model => model.AccountActivity.Customer_Id)
+                    @Html.HiddenFor(model => model.AccountActivity.Id)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(function () {
+        var validator = $("#target").validate({
+            rules: {
+                "AccountActivity.Name": {
+                    required: true
+                }
+            },
+            messages: {
+                "AccountActivity.Name": {
+                    required: "@Translation.Get("Du måste ange en kontoaktivitet", Enums.TranslationSource.TextTranslation)"
+                    }
+                },
+                submitHandler: function (form) {
+                    form.submit();
+                }
+            });
+        });
+
+</script>

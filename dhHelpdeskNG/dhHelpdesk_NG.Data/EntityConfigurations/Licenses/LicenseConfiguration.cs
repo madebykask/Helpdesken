@@ -39,6 +39,9 @@
                 .WithMany()
                 .HasForeignKey(l => l.Department_Id);
 
+            this.HasMany(l => l.Files)
+                .WithRequired(f => f.License);
+
             this.ToTable("tblLicense");       
         }
     }

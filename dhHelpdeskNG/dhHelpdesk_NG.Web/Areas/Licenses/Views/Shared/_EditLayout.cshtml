@@ -1,0 +1,116 @@
+﻿@using DH.Helpdesk.Web.Areas.Licenses.Models.Common
+@using DH.Helpdesk.Web.Infrastructure
+@model BaseEditModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="secnavs fixed">
+    <div class="pull-left">
+        <ul class="secnav">               
+            <li>
+                @Html.ActionLink(Translation.Get("Spara"), null, null, new { id="btnSave", @class = "btn" })
+            </li>
+            <li>
+                @Html.ActionLink(Translation.Get("Avbryt"), "Index", null, new { @class = "btn" })
+            </li>
+            @if (!Model.IsNew())
+            {
+                <li>
+                    @Html.ActionLink(Translation.Get("Ta bort"), "Delete", new { id = Model.Id }, new { @class = "btn" })
+                </li>                
+            }
+        </ul>    
+    </div>
+</div>
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#mainTab">@GetTitle()</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="mainTab">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                            @using (Html.BeginForm(GetActionName(), GetControllerName(), FormMethod.Post, new { id = "edit_form" }))
+                            {
+                                @Html.HiddenFor(m => m.Id)
+                                @RenderSection("Content", false)                                
+                            }                
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@functions
+{
+
+    private MvcHtmlString GetTitle()
+    {
+        string result = null;
+        switch (Model.Type)
+        {
+            case EntityModelType.Applications:
+                result = Translation.Get("Applikation");
+                break;
+            case EntityModelType.Licenses:
+                result = Translation.Get("Licens");
+                break;
+            case EntityModelType.Manufacturers:
+                result = Translation.Get("Tillverkare");
+                break;
+            case EntityModelType.Products:
+                result = Translation.Get("Produkt");
+                break;
+            case EntityModelType.Vendors:
+                result = Translation.Get("Försäljare");
+                break;
+        }
+        return MvcHtmlString.Create(result);
+    }
+
+    private string GetActionName()
+    {
+        switch (Model.Type)
+        {
+            case EntityModelType.Applications:
+                return "Application";
+            case EntityModelType.Licenses:
+                return "License";
+            case EntityModelType.Manufacturers:
+                return "Manufacturer";
+            case EntityModelType.Products:
+                return "Product";
+            case EntityModelType.Vendors:
+                return "Vendor";
+        }
+        
+        return null;
+    }
+
+    private string GetControllerName()
+    {
+        switch (Model.Type)
+        {
+            case EntityModelType.Applications:
+                return "Applications";
+            case EntityModelType.Licenses:
+                return "Licenses";
+            case EntityModelType.Manufacturers:
+                return "Manufacturers";
+            case EntityModelType.Products:
+                return "Products";
+            case EntityModelType.Vendors:
+                return "Vendors";
+        }
+        
+        return null;
+    }
+
+}

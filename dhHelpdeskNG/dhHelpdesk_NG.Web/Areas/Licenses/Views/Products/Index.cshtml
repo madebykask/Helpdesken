@@ -1,1 +1,40 @@
-﻿@model DH.Helpdesk.Web.Areas.Licenses.Models.Products.ProductsIndexModel
+﻿@using DH.Helpdesk.Web.Areas.Licenses.Models.Products
+@using DH.Helpdesk.Web.Infrastructure
+@model ProductsIndexModel
+@{
+    Layout = "~/Areas/Licenses/Views/Shared/_IndexLayout.cshtml";
+}
+
+@section Actions {
+    <ul class="secnav">               
+        <li>
+            @Html.ActionLink(Translation.Get("Ny produkt"), "Product", "Products", new { @class = "btn" })
+        </li>
+    </ul>
+}
+
+@using (Ajax.BeginForm("Products", "Products", null, 
+    new AjaxOptions { UpdateTargetId = "LicensesProductsTableContainer" },
+    new { id ="ProductsSearchForm" } ))
+{
+    <table class="tableform">
+        <tr>
+            <td class="span3">@Translation.Get("Område")</td>
+            <td>@Html.DropDownListFor(m => m.RegionIds, Model.Regions, new { id = "regions_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })</td>
+        </tr>                
+        <tr>
+            <td class="span3">@Translation.Get("Avdelning")</td>
+            <td>@Html.DropDownListFor(m => m.DepartmentIds, Model.Departments, new { id = "departments_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })</td>
+        </tr>         
+        <tr>
+            <td class="span3">
+            </td>
+            <td>
+                <input type="submit" value="@Translation.Get("Sök")" class="btn" />
+            </td>
+        </tr>               
+    </table>
+}
+<div id="LicensesProductsTableContainer">
+    @Html.Action("Products", "Products", new { model = (ProductsIndexModel)null })
+</div>

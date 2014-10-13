@@ -95,12 +95,12 @@
                         <div class="container">
                             <div class="form-group">
                                 <label>
-                                    Search
+                                    @Translation.Get("Search Phrase", Enums.TranslationSource.TextTranslation)
                                 </label>
                                 <div>
                                     @*<select><option>All Teams</option><option>Tema One</option><option>Tema One</option></select>*@
                                     <input type="text" name ="searchTxt" id="searchTxt" /> 
-                                    <button type="submit" onclick="DoSearch()" class="btn btn-default">Search</button>
+                                    <button type="submit" onclick="DoSearch()" class="btn btn-default">@Translation.Get("Search", Enums.TranslationSource.TextTranslation)</button>
                                 </div> 
                             </div>
                             

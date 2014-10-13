@@ -1,0 +1,19 @@
+﻿@model DH.Helpdesk.Mobile.Models.Case.CaseTemplateTreeModel
+
+@{
+    ViewBag.Title = "_CaseTemplateTree";
+}
+
+<div id="divCaseTemplate" class="btn-group">
+    @if (Model.CaseTemplateCategoryTree != null && Model.CaseTemplateCategoryTree.Count > 0)
+    {
+        <button class="btn dropdown-toggle" data-toggle="dropdown" >
+             @Translation.Get("Use template")
+            <span class="caret"> </span>
+        </button>
+        <ul class="dropdown-menu">
+            @Html.CaseSolutionDropdownButtonString(Model.CaseTemplateCategoryTree, Model.CustomerId)
+        </ul>    
+    }
+</div>
+

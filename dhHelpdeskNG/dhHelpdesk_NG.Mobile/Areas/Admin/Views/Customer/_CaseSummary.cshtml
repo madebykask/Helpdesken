@@ -1,0 +1,27 @@
+﻿@using DH.Helpdesk.Mobile.Infrastructure
+@model DH.Helpdesk.Mobile.Areas.Admin.Models.CustomerInputViewModel
+<div class="formContainer">
+    @Translation.Get("Inställningar ärendeöversikt", Enums.TranslationSource.TextTranslation)<br />
+    @Html.DropDownList("UserGroupId", Model.UserGroups, "", new { style = "width: auto;", id = "UserGroupId", onchange = "changeUserGroupList(this.options[this.selectedIndex].value);" })
+    <div id="caseSummary_container">
+        <span id="userGroupList">
+            @if (Model.Customer.Id != null)
+            {
+                @Html.Partial("_CaseSummaryPartialView", Model.CustomerCaseSummaryViewModel)
+            }
+        </span>
+    </div>
+</div>
+<script type="text/javascript">
+
+    function changeUserGroupList(id) {
+        var list = $("#userGroupList");
+        list.html("");
+        if (id != "") {
+            $.get('/customer/UpdateUserGroupList/' + id + '?customerId=' + $("#customerId").val(), function (result) {
+                list.html(result);
+            });
+        }
+    }
+
+</script>

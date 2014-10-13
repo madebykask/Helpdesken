@@ -1,0 +1,14 @@
+﻿
+@model DH.Helpdesk.Web.Models.Notifiers.ConfigurableFields.BooleanFieldModel
+           
+@if (Model.Show)
+{
+    <tr>
+        <td class="span3">
+            @Translation.Get(Model.Caption, Enums.TranslationSource.TextTranslation)
+        </td>
+        <td class="span9">
+            @Html.CheckBoxFor(m => m.Value)
+        </td>
+    </tr>
+}

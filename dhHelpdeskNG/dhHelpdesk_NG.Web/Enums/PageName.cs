@@ -16,6 +16,16 @@
 
         public static readonly string Reports = "Reports";
 
+        public static readonly string LicensesProducts = "LicensesProducts";
+
+        public static readonly string LicensesLicenses = "LicensesLicenses";
+
+        public static readonly string LicensesVendors = "LicensesVendors";
+
+        public static readonly string LicensesManufacturers = "LicensesManufacturers";
+
+        public static readonly string LicensesApplications = "LicensesApplications";
+
         #endregion
     }
 }

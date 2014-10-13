@@ -1,0 +1,906 @@
+﻿@model dhHelpdesk_NG.Web.Models.CaseInputViewModel
+<div class="formContainer">
+    @* <table>
+        <tr>
+            <td style="border-left: #c3d4e2 1px solid; border-right: #c3d4e2 1px solid; border-bottom: #c3d4e2 1px solid;">
+                <div class="ContentInnerContainer" style="display: block" id="divMainCase">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                        <tr>
+                            <td class="FormHeader" colspan="4">
+                                <table cellpadding="0" cellspacing="0" width="100%">
+                                    <tr>
+                                        <td class="CellText">
+                                            Användarinformation
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+    </table>*@
+    <table>
+        <tr>
+            <td>
+                @Html.Hidden("CaseId", Model.Id, new { id = "txtCaseId" })
+                @Html.Hidden("CustomerId", Model.Customer_Id, new { id = "txtCustomerId" })
+            </td>
+        </tr>
+        @if (Model.CaseSettings.Where(X => X.Name == "ReportedBy") != null && Model.CaseSettings.Where(X => X.Name == "ReportedBy").FirstOrDefault().ShowOnStartPage != 0)
+        {
+            <tr>
+                <td>
+                    @Translation.Get(@Model.CaseSettings.Where(X => X.Name == "ReportedBy").FirstOrDefault().Name, Enums.TranslationSource.TextTranslation)
+                </td>
+                <td class="CellTextRed" align="right">
+                    @if (SessionFacade.CurrentUser.MarkRequiredFields == 1 && Model.CaseSettings.Where(X => X.Name == "ReportedBy").FirstOrDefault().Required == 1)
+                    {
+                        @Html.Label("*");
+                    }
+                </td>
+                <td>
+                    @Html.TextBox("txtReportedBy", Model.UserName, new { @class = "CellText", maxlength = "40", width = "50px", onkeypress = "return userInfoEnter(event)" })
+                </td>
+                <td>
+                    <a href="#" id="showmore" onclick="opendiv();return false">Visa utökad information</a>
+                    <a href="#" id="showless" style="visibility: hidden" onclick="closediv();return false">
+                        Visa mindre information</a>
+                </td>
+            </tr>
+        }
+    </table>
+    <div id="divUser" style="display: none">
+        <table>
+            @if (Model.CaseSettings.Where(X => X.Name == "Persons_Name") != null && Model.CaseSettings.Where(X => X.Name == "Persons_Name").FirstOrDefault().ShowOnStartPage != 0)
+            {
+                <tr>
+                    <td>
+                        @Translation.Get(@Model.CaseSettings.Where(X => X.Name == "Persons_Name").FirstOrDefault().Name, Enums.TranslationSource.TextTranslation)
+                    </td>
+                    <td class="CellTextRed" align="right">
+                        @if (Model.MarkRequiredFields == 1 && Model.CaseSettings.Where(X => X.Name == "Persons_Name").FirstOrDefault().Required == 1)
+                        {
+                            @Html.Label("*");
+                        }
+                    </td>
+                    <td>
+                        @Html.TextBox("txtPersons_name", Model.PersonsName, new { maxlength = "50", width = "50px", onkeypress = "return userInfoEnter(event)" })
+                    </td>
+                </tr>         
+            }
+            @if (Model.CaseSettings.Where(X => X.Name == "Persons_EMail") != null && Model.CaseSettings.Where(X => X.Name == "Persons_EMail").FirstOrDefault().ShowOnStartPage != 0)
+            {
+                <tr>
+                    <td>
+                        @Translation.Get(@Model.CaseSettings.Where(X => X.Name == "Persons_EMail").FirstOrDefault().Name, Enums.TranslationSource.TextTranslation)
+                    </td>
+                    <td class="CellTextRed" align="right">
+                        @if (Model.MarkRequiredFields == 1 && Model.CaseSettings.Where(X => X.Name == "Persons_EMail").FirstOrDefault().Required == 1)
+                        {
+                            @Html.Label("*");
+                        }
+                    </td>
+                    <td>
+                        @Html.TextBox("txtPersons_EMail", Model.PersonsEmail, new { maxlength = "100", width = "50px", onkeypress = "return userInfoEnter(event)" })
+                    </td>
+                </tr>
+								
+        
+            }
+            @if (Model.CaseSettings.Where(X => X.Name == "Persons_Phone") != null && Model.CaseSettings.Where(X => X.Name == "Persons_Phone").FirstOrDefault().ShowOnStartPage != 0)
+            {
+                <tr>
+                    <td>
+                        @Translation.Get(@Model.CaseSettings.Where(X => X.Name == "Persons_Phone").FirstOrDefault().Name, Enums.TranslationSource.TextTranslation)
+                    </td>
+                    <td class="CellTextRed" align="right">
+                        @if (Model.MarkRequiredFields == 1 && Model.CaseSettings.Where(X => X.Name == "Persons_Phone").FirstOrDefault().Required == 1)
+                        {
+                            @Html.Label("*");
+                        }
+                    </td>
+                    <td>
+                        @Html.TextBox("txtPersons_Phone", Model.PersonsPhone, new { maxlength = "30", width = "50px" })
+                    </td>
+                </tr>
+            }
+            @if (Model.CaseSettings.Where(X => X.Name == "Persons_CellPhone") != null && Model.CaseSettings.Where(X => X.Name == "Persons_CellPhone").FirstOrDefault().ShowOnStartPage != 0)
+            {
+                <tr>
+                    <td>
+                        @Translation.Get(@Model.CaseSettings.Where(X => X.Name == "Persons_CellPhone").FirstOrDefault().Name, Enums.TranslationSource.TextTranslation)
+                    </td>
+                    <td class="CellTextRed" align="right">
+                        @if (Model.MarkRequiredFields == 1 && Model.CaseSettings.Where(X => X.Name == "Persons_CellPhone").FirstOrDefault().Required == 1)
+                        {
+                            @Html.Label("*");
+                        }
+                    </td>
+                    <td>
+                        @Html.TextBox("txtPersons_CellPhone", Model.PersonsCellPhone, new { maxlength = "30", width = "50px" })
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+    <table>
+        @if (Model.CaseSettings.Where(X => X.Name == "Customer_Id") != null && Model.CaseSettings.Where(X => X.Name == "Customer_Id").FirstOrDefault().ShowOnStartPage != 0)
+        {
+            <tr>
+                <td>
+                    @Translation.Get(@Model.CaseSettings.Where(X => X.Name == "Customer_Id").FirstOrDefault().Name, Enums.TranslationSource.TextTranslation)
+                </td>
+                <td class="CellTextRed" align="right">
+                    @if (Model.MarkRequiredFields == 1)
+                    {
+                        @Html.Label("*");
+                    }
+                </td>
+                @if (Model.ShowCustomer == true)
+                {
+                    <td>
+                        @Html.DropDownList("CustomerId", Model.Customers, "", new { @class = "CellText", style = "width: 266px;", id = "ddlCustomers" })
+                    </td>
+                }
+                else
+                {
+                    @Html.Hidden("txtCustomer", Model.Customer_Id)
+                }
+            </tr>
+        }
+        @if (Model.CaseSettings.Where(X => X.Name == "Region_Id") != null && Model.CaseSettings.Where(X => X.Name == "Region_Id").FirstOrDefault().ShowOnStartPage != 0)
+        {
+            <tr>
+                @if (Model.Regions.Count > 0)
+                {
+                    <tr>
+                        <td>
+                            @Translation.Get(@Model.CaseSettings.Where(X => X.Name == "Region_Id").FirstOrDefault().Name, Enums.TranslationSource.TextTranslation)
+                        </td>
+                        <td class="CellTextRed" align="right">
+                            @if (Model.MarkRequiredFields == 1 && Model.CaseSettings.Where(X => X.Name == "Region_Id").FirstOrDefault().Required == 1)
+                            {
+                                @Html.Label("*");
+                            }
+                        </td>
+                        <td>
+                            @Html.DropDownList("RegionId", Model.Regions, "", new { @class = "CellText", style = "width: 266px;", id = "ddlRegions", onChange = "changeRegion()" })
+                        </td>
+                    </tr>
+                }
+            </tr>
+        }
+        @if (Model.CaseSettings.Where(X => X.Name == "Department_Id") != null && Model.CaseSettings.Where(X => X.Name == "Department_Id").FirstOrDefault().ShowOnStartPage != 0)
+        {
+            <tr>
+                <td>
+                    @Translation.Get(@Model.CaseSettings.Where(X => X.Name == "Department_Id").FirstOrDefault().Name, Enums.TranslationSource.TextTranslation)
+                </td>
+                <td class="CellTextRed" align="right">
+                    @if (Model.MarkRequiredFields == 1 && Model.CaseSettings.Where(X => X.Name == "Department_Id").FirstOrDefault().Required == 1)
+                    {
+                        @Html.Label("*");
+                    }
+                </td>
+                <td>
+                    @Html.DropDownList("Department_Id", Model.Departments, "", new { @class = "CellText", style = "width: 266px;", id = "ddlDepartments", onChange = "changeDepartment()" })
+                </td>
+            </tr>
+        }
+        @if (Model.CaseSettings.Where(X => X.Name == "OU_Id") != null && Model.CaseSettings.Where(X => X.Name == "OU_Id").FirstOrDefault().ShowOnStartPage != 0)
+        {
+            <tr>
+                <td>
+                    @Translation.Get(@Model.CaseSettings.Where(X => X.Name == "OU_Id").FirstOrDefault().Name, Enums.TranslationSource.TextTranslation)
+                </td>
+                <td class="CellTextRed" align="right">
+                    @if (Model.MarkRequiredFields == 1 && Model.CaseSettings.Where(X => X.Name == "OU_Id").FirstOrDefault().Required == 1)
+                    {
+                        @Html.Label("*");
+                    }
+                </td>
+                <td>
+                    @Html.DropDownList("OU_Id", Model.OU, "", new { @class = "CellText", style = "width: 266px;", id = "ddlOU" })
+                </td>
+            </tr>
+        }
+        @if (Model.CaseSettings.Where(X => X.Name == "Place") != null && Model.CaseSettings.Where(X => X.Name == "Place").FirstOrDefault().ShowOnStartPage != 0)
+        {
+            <tr>
+                <td>
+                    @Translation.Get(@Model.CaseSettings.Where(X => X.Name == "Place").FirstOrDefault().Name, Enums.TranslationSource.TextTranslation)
+                </td>
+                <td class="CellTextRed" align="right">
+                    @if (Model.MarkRequiredFields == 1 && Model.CaseSettings.Where(X => X.Name == "Place").FirstOrDefault().Required == 1)
+                    {
+                        @Html.Label("*");
+                    }
+                </td>
+                <td>
+                    @Html.TextBox("txtPlace", Model.Place, new { maxlength = "100", width = "50px" })
+                </td>
+            </tr>
+        }
+        @if (Model.CaseSettings.Where(X => X.Name == "UserCode") != null && Model.CaseSettings.Where(X => X.Name == "UserCode").FirstOrDefault().ShowOnStartPage != 0)
+        {
+            <tr>
+                <td>
+                    @Translation.Get(@Model.CaseSettings.Where(X => X.Name == "UserCode").FirstOrDefault().Name, Enums.TranslationSource.TextTranslation)
+                </td>
+                <td class="CellTextRed" align="right">
+                    @if (Model.MarkRequiredFields == 1 && Model.CaseSettings.Where(X => X.Name == "UserCode").FirstOrDefault().Required == 1)
+                    {
+                        @Html.Label("*");
+                    }
+                </td>
+                <td>
+                    @Html.TextBox("txtUserCode", Model.UserCode, new { maxlength = "20", width = "50px" })
+                </td>
+            </tr>
+        }
+        @if (Model.ShowUserInfo == true)
+        {
+@*<tr>	
+									<td Class="FormItemLabel" Colspan="4" align="right" style="BORDER-RIGHT: #c3d4e2 1px solid;">
+										<div Name="divSaveUserInfo" Id="divSaveUserInfo" style="visibility:hidden">
+											<a style="cursor:hand" style="text-decoration: none;" Class="Cap4" onClick="saveUserInfo()" name="cmdSave"><input Type="image" src="../images/pil.gif" width="7" height="7" border="0" alt id="cmdsaveUserInfo">&nbsp;<%=getTextTranslation("Spara användaruppgifter")%></a>
+										</div>
+									</td>
+
+								</tr>
+								<tr>
+									<td Class="FormFooter" colspan="4">&nbsp;</td>
+								</tr>*@
+        
+        }
+        @if (Model.CaseSettings.Where(X => X.Name == "InventoryNumber") != null && Model.CaseSettings.Where(X => X.Name == "InventoryNumber").FirstOrDefault().ShowOnStartPage != 0 | Model.CaseSettings.Where(X => X.Name == "ComputerType_Id") != null && Model.CaseSettings.Where(X => X.Name == "ComputerType_Id").FirstOrDefault().ShowOnStartPage != 0)
+        {
+            <tr>
+                <td>
+                    <table cellpadding="0" cellspacing="0" width="100%">
+                        <tr>
+                            <td class="CellText">
+                                @Translation.Get("Datorinformation", Enums.TranslationSource.TextTranslation)
+                            </td>
+                            <td class="CellTextRed" align="left">
+                                @*<img scr="../images/icoRedFlag.gif" name="icoShowRedFlag" id="icoShowRedFlag" style="visibility:<%If StrComp(iShowRedFlag, "1", 1) = 0 Then%>visible<%Else%>hidden<%End If%>" TITLE="<%=getTextTranslation("Avtal har utgått")%>" width="10" height="10">*@
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        }
+        @if (Model.CaseSettings.Where(X => X.Name == "InventoryNumber") != null && Model.CaseSettings.Where(X => X.Name == "InventoryNumber").FirstOrDefault().ShowOnStartPage != 0)
+        {
+            <tr>
+                <td>
+                    @Translation.Get(@Model.CaseSettings.Where(X => X.Name == "InventoryNumber").FirstOrDefault().Name, Enums.TranslationSource.TextTranslation)
+                </td>
+                <td class="CellTextRed" align="right">
+                    @if (Model.MarkRequiredFields == 1 && Model.CaseSettings.Where(X => X.Name == "InventoryNumber").FirstOrDefault().Required == 1)
+                    {
+                        @Html.Label("*");
+                    }
+                </td>
+                <td>
+                    @Html.TextBox("txtInventoryNumber", Model.InventoryNumber, new { maxlength = "20", width = "50px", onkeypress = "return inventoryInfoEnter(event);" })
+                    @* <%If sCaseOpenByAnotherUser = "" Then%>
+											<a style="cursor:pointer;cursor:hand" style="text-decoration: none;" Class="Cap4" onClick="getInventoryInfo('<%=iCustomer_ID%>')" name="cmdgetInventoryInfo"><img src="../images/pil.gif" width="7" height="7" border="0" alt id="cmdgetInventoryInfo">&nbsp;<%=getTextTranslation("Hämta datorinformation")%></a>&nbsp;&nbsp;
+										<%End If%>*@
+                </td>
+            </tr>
+        }
+        @if (Model.CaseSettings.Where(X => X.Name == "ComputerType_Id") != null && Model.CaseSettings.Where(X => X.Name == "ComputerType_Id").FirstOrDefault().ShowOnStartPage != 0)
+        {
+            <tr>
+                <td>
+                    @Translation.Get(@Model.CaseSettings.Where(X => X.Name == "ComputerType_Id").FirstOrDefault().Name, Enums.TranslationSource.TextTranslation)
+                </td>
+                <td>
+                </td>
+                <td>
+                    @Html.Label("txtInventoryType", Model.InventoryType)
+                </td>
+            </tr>
+        }
+        @if (Model.CaseSettings.Where(X => X.Name == "InventoryLocation") != null && Model.CaseSettings.Where(X => X.Name == "InventoryLocation").FirstOrDefault().ShowOnStartPage != 0)
+        {
+            <tr>
+                <td>
+                    @Translation.Get(@Model.CaseSettings.Where(X => X.Name == "InventoryLocation").FirstOrDefault().Name, Enums.TranslationSource.TextTranslation)
+                </td>
+                <td class="CellTextRed" align="right">
+                    @if (Model.MarkRequiredFields == 1 && Model.CaseSettings.Where(X => X.Name == "InventoryLocation").FirstOrDefault().Required == 1)
+                    {
+                        @Html.Label("*");
+                    }
+                </td>
+                <td>
+                    @Html.TextBox("txtInventoryLocation", Model.InventoryLocation, new { maxlength = "100", width = "50px", onkeypress = "return inventoryInfoEnter(event);" })
+                </td>
+            </tr>
+        }
+        @if (Model.CaseSettings.Where(X => X.Name == "InventoryNumber") != null && Model.CaseSettings.Where(X => X.Name == "InventoryNumber").FirstOrDefault().ShowOnStartPage != 0)
+        {
+            <tr>
+                <td colspan="4">
+                    &nbsp;
+                </td>
+            </tr>
+        }
+        <tr>
+            <td class="FormHeader" colspan="4">
+                @Translation.Get("Ärendeinformation", Enums.TranslationSource.TextTranslation)
+            </td>
+        </tr>
+        @if (Model.Id > 0)
+        {
+
+            if (Model.CaseSettings.Where(X => X.Name == "CaseNumber") != null && Model.CaseSettings.Where(X => X.Name == "CaseNumber").FirstOrDefault().ShowOnStartPage != 0)
+            {
+            <tr>
+                <td>
+                    @Translation.Get(@Model.CaseSettings.Where(X => X.Name == "CaseNumber").FirstOrDefault().Name, Enums.TranslationSource.TextTranslation)
+                </td>
+                <td>
+                    @Html.Label("lblCaseNumber", Model.CaseNumber.ToString())
+                </td>
+            </tr>
+            }                 
+            <tr>
+                <td>
+                    &nbsp;
+                </td>
+                <td colspan="2">
+                    @Translation.Get("Registreringsdatum", Enums.TranslationSource.TextTranslation)
+                </td>
+                <td>
+                    @Html.Label("lblRegTime", Model.RegTime)
+                </td>
+            </tr>                          
+            if (Model.CaseSettings.Where(X => X.Name == "User_Id") != null && Model.CaseSettings.Where(X => X.Name == "User_Id").FirstOrDefault().ShowOnStartPage != 0)
+            {                          
+            <tr>
+                <td colspan="2">
+                    @Translation.Get("User_Id", Enums.TranslationSource.TextTranslation)
+                </td>
+                <td>
+                    @Html.Label("lblUserName", Model.UserName)
+                    @*<%=sUserName%>&nbsp;<%If sRegUser <> "" Then%><%="(" & sRegUser & ")"%>&nbsp;<%End If%><%If sIPAddress <> "" Then%><%="(" & sIPAddress & ")"%><%End If%>*@
+                </td>
+            </tr>			             
+            }
+        }
+        <tr>
+            <td width="200">
+                @Translation.Get(@Model.CaseSettings.Where(X => X.Name == "CaseType_Id").FirstOrDefault().Name, Enums.TranslationSource.TextTranslation)
+            </td>
+            <td class="CellTextRed" align="right">
+                @if (Model.MarkRequiredFields == 1)
+                {
+                    @Html.Label("*");
+                }
+            </td>
+            <td>
+                @Html.DropDownList("CaseTypeId", Model.CaseTypes, "", new { @class = "CellText", style = "width: 266px;", id = "lstType", onChange = "changeCaseType(0)" })
+                @*<select Class="CellText" Id="lstType" Name="lstType" Style="WIDTH:<%=lstCaseType0Width%>px" onChange="changeCaseType(0)">
+											<option Value="0">&nbsp;</option>
+											<%If Not IsEmpty(vCaseType) Then																			 					
+												For i = 0 To UBound(vCaseType, 2)
+													If vCaseType(4, i) = "0" Then
+														If (vCaseType(6, i) = "1" And vCaseType(13, i) = "1") Or StrComp(iCaseTypeLevel0, vCaseType(0, i), 1) = 0 Then%>
+															<option Value="<%=vCaseType(0, i)%>" <%If StrComp(iCaseTypeLevel0, vCaseType(0, i), 1) = 0 Or (iType = "" And vCaseType(7, i) = "1") Then Response.Write " SELECTED"%>><%=vCaseType(1, i)%></option>
+														<%End If
+													End If
+												Next					
+											End If%>					
+										</select>
+										<%' Kontrollera om det finns ärendetyper på nivå 1
+										sVisibility = "hidden"
+										
+										If Not IsEmpty(vCaseType) Then
+											For i = 0 To UBound(vCaseType, 2)
+												If StrComp(vCaseType(3, i), iCaseTypeLevel0, 1) = 0 And vCaseType(4, i) = "1" Then
+													sVisibility = "visible"
+													
+													Exit For
+												End If
+											Next
+										End If
+										%>
+										<select Class="CellText" Id="lstType1" Name="lstType1" Style="WIDTH:<%=lstCaseType1Width%>px;visibility:<%=sVisibility%>" onChange="changeCaseType(1)">
+											<option Value="0">&nbsp;</option>
+											<%If Not IsEmpty(vCaseType) Then																			 					
+												For i = 0 To UBound(vCaseType, 2)
+													If vCaseType(4, i) = "1" Then
+														If StrComp(vCaseType(3, i), iCaseTypeLevel0, 1) = 0  And ((vCaseType(6, i) = "1"  And vCaseType(13, i) = "1") Or StrComp(iCaseTypeLevel1, vCaseType(0, i), 1) = 0) Then%>
+															<option Value="<%=vCaseType(0, i)%>" <%If StrComp(iCaseTypeLevel1, vCaseType(0, i), 1) = 0 Or (iCaseTypeLevel1 = "" And vCaseType(7, i) = "1") Then Response.Write " SELECTED"%>><%=vCaseType(1, i)%></option>
+														<%End If
+													End If
+												Next					
+											End If%>					
+										</select>
+										<%' Kontrollera om det finns ärendetyper på nivå 2
+										sVisibility = "hidden"
+										
+										If Not IsEmpty(vCaseType) Then
+											For i = 0 To UBound(vCaseType, 2)
+												If StrComp(vCaseType(3, i), iCaseTypeLevel1, 1) = 0 And vCaseType(4, i) = "2" Then
+													sVisibility = "visible"
+													
+													Exit For
+												End If
+											Next
+										End If
+										%>
+										<select class="CellText" Id="lstType2" Name="lstType2" Style="WIDTH:<%=lstCaseType2Width%>px;visibility:<%=sVisibility%>" onChange="changeCaseType(2)">
+											<option value="0">&nbsp;</option>
+											<%If Not IsEmpty(vCaseType) Then																			 					
+												For i = 0 To UBound(vCaseType, 2)
+													If vCaseType(4, i) = "2" Then
+														If StrComp(vCaseType(3, i), iCaseTypeLevel1, 1) = 0  And ((vCaseType(6, i) = "1" And vCaseType(13, i) = "1") Or StrComp(iCaseTypeLevel2, vCaseType(0, i), 1) = 0) Then%>
+															<option Value="<%=vCaseType(0, i)%>" <%If StrComp(iCaseTypeLevel2, vCaseType(0, i), 1) = 0 Or (iCaseTypeLevel2 = "" And vCaseType(7, i) = "1") Then Response.Write " SELECTED"%>><%=vCaseType(1, i)%></option>
+														<%End If
+													End If
+												Next					
+											End If%>					
+										</select>
+										<%' Kontrollera om det finns ärendetyper på nivå 3
+										sVisibility = "hidden"
+										
+										If Not IsEmpty(vCaseType) Then
+											For i = 0 To UBound(vCaseType, 2)
+												If StrComp(vCaseType(3, i), iCaseTypeLevel2, 1) = 0 And vCaseType(4, i) = "3" Then
+													sVisibility = "visible"
+													
+													Exit For
+												End If
+											Next
+										End If
+										%>
+										<select Class="CellText" Id="lstType3" Name="lstType3" Style="WIDTH:<%=lstCaseType3Width%>px;visibility:<%=sVisibility%>">
+											<option Value="0">&nbsp;</option>
+											<%If Not IsEmpty(vCaseType) Then																			 					
+												For i = 0 To UBound(vCaseType, 2)
+													If vCaseType(4, i) = "3" Then
+														If StrComp(vCaseType(3, i), iCaseTypeLevel2, 1) = 0  And ((vCaseType(6, i) = "1" And vCaseType(13, i) = "1") Or StrComp(iCaseTypeLevel2, vCaseType(0, i), 1) = 0) Then%>
+															<option Value="<%=vCaseType(0, i)%>" <%If StrComp(iCaseTypeLevel3, vCaseType(0, i), 1) = 0 Or (iCaseTypeLevel2 = "" And vCaseType(7, i) = "1") Then Response.Write " SELECTED"%>><%=vCaseType(1, i)%></option>
+														<%End If
+													End If
+												Next					
+											End If%>					
+										</select><br>*@
+            </td>
+        </tr>
+        @if (Model.CaseSettings.Where(X => X.Name == "ProductArea_Id") != null && Model.CaseSettings.Where(X => X.Name == "ProductArea_Id").FirstOrDefault().ShowOnStartPage != 0)
+        {
+                                        
+            <tr>
+                <td>
+                    @Translation.Get(@Model.CaseSettings.Where(X => X.Name == "ProductArea_Id").FirstOrDefault().Name, Enums.TranslationSource.TextTranslation)
+                </td>
+                <td class="CellTextRed" align="right">
+                    @if (SessionFacade.CurrentUser.MarkRequiredFields == 1 && Model.CaseSettings.Where(X => X.Name == "ProductArea_Id").FirstOrDefault().ShowOnStartPage != 0)
+                    {
+                        @Html.Label("*")
+                    }
+                </td>
+                <td>
+                    @Html.DropDownList("ProductAreaId", Model.ProductAreas, "", new { @Class = "CellText", style = "width: @Model.lstProductArea0Width", id = "lstProductArea0", onChange = "changeProductArea(0)" })
+                    @*<select Class="CellText" Id="lstProductArea0" Name="lstProductArea0" Style="WIDTH:<%=lstProductArea0Width%>px" onChange="changeProductArea(0)">
+											<option Value="<%=""%>">&nbsp;</option>
+											<%If Not IsEmpty(vProductArea) Then																			 					
+												For i = 0 To UBound(vProductArea, 2)
+													If vProductArea(3, i) = "0" Then
+														If vProductArea(5, i) = "1" Or StrComp(iProductAreaLevel0, vProductArea(0, i), 1) = 0 Then%>
+															<option Value="<%=vProductArea(0, i)%>" <%If StrComp(iProductAreaLevel0, vProductArea(0, i), 1) = 0 Then Response.Write " SELECTED"%>><%=vProductArea(1, i)%></option>
+														<%End If
+													End If
+												Next					
+											End If%>					
+										</select>
+										<%' Kontrollera om det finns produktområden på nivå 1
+										sVisibility = "hidden"
+										
+										If Not IsEmpty(vProductArea) Then
+											For i = 0 To UBound(vProductArea, 2)
+												If StrComp(vProductArea(2, i), iProductAreaLevel0, 1) = 0 And vProductArea(3, i) = "1" Then
+													sVisibility = "visible"
+													
+													Exit For
+												End If
+											Next
+										End If
+										%>
+										<select Class="CellText" Id="lstProductArea1" Name="lstProductArea1" Style="WIDTH:<%=lstProductArea1Width%>px;visibility:<%=sVisibility%>" onChange="changeProductArea(1)">
+											<option Value="<%=""%>">&nbsp;</option>
+											<%If Not IsEmpty(vProductArea) Then																			 					
+												For i = 0 To UBound(vProductArea, 2)
+													If vProductArea(3, i) = "1" Then
+														If StrComp(vProductArea(2, i), iProductAreaLevel0, 1) = 0 AND (vProductArea(5, i) = "1" Or StrComp(iProductAreaLevel1, vProductArea(0, i), 1) = 0) Then%>
+															<option Value="<%=vProductArea(0, i)%>" <%If StrComp(iProductAreaLevel1, vProductArea(0, i), 1) = 0 Then Response.Write " SELECTED"%>><%=vProductArea(1, i)%></option>
+														<%End If
+													End If
+												Next					
+											End If%>					
+										</select>
+										<%' Kontrollera om det finns produktområden på nivå 2
+										sVisibility = "hidden"
+										
+										If Not IsEmpty(vProductArea) Then
+											For i = 0 To UBound(vProductArea, 2)
+												If StrComp(vProductArea(2, i), iProductAreaLevel1, 1) = 0 And vProductArea(3, i) = "2" Then
+													sVisibility = "visible"
+													
+													Exit For
+												End If
+											Next
+										End If
+										%>
+										<select Class="CellText" Id="lstProductArea2" Name="lstProductArea2" Style="WIDTH:<%=lstProductArea2Width%>px;visibility:<%=sVisibility%>" onChange="changeProductArea(2)">
+											<option Value="<%=""%>">&nbsp;</option>
+											<%If Not IsEmpty(vProductArea) Then																			 					
+												For i = 0 To UBound(vProductArea, 2)
+													If vProductArea(3, i) = "2" Then
+														If StrComp(vProductArea(2, i), iProductAreaLevel1, 1) = 0 And (vProductArea(5, i) = "1" Or StrComp(iProductAreaLevel2, vProductArea(0, i), 1) = 0) Then%>
+															<option Value="<%=vProductArea(0, i)%>" <%If StrComp(iProductAreaLevel2, vProductArea(0, i), 1) = 0 Then Response.Write " SELECTED"%>><%=vProductArea(1, i)%></option>
+														<%End If
+													End If
+												Next					
+											End If%>					
+										</select>
+										<%' Kontrollera om det finns produktområden på nivå 3
+										sVisibility = "hidden"
+										
+										If Not IsEmpty(vProductArea) Then
+											For i = 0 To UBound(vProductArea, 2)
+												If StrComp(vProductArea(2, i), iProductAreaLevel2, 1) = 0 And vProductArea(3, i) = "3" Then
+													sVisibility = "visible"
+													
+													Exit For
+												End If
+											Next
+										End If
+										
+										%>
+										<select class="CellText" Id="lstProductArea3" Name="lstProductArea3" Style="WIDTH:<%=lstProductArea3Width%>px;visibility:<%=sVisibility%>" onChange="changeProductArea(3)">
+											<option value="<%=""%>">&nbsp;</option>
+											<%If Not IsEmpty(vProductArea) Then																			 					
+												For i = 0 To UBound(vProductArea, 2)
+													If vProductArea(3, i) = "3" Then
+														If StrComp(vProductArea(2, i), iProductAreaLevel2, 1) = 0 And (vProductArea(5, i) = "1" Or StrComp(iProductAreaLevel3, vProductArea(0, i), 1) = 0) Then%>
+															<option value="<%=vProductArea(0, i)%>" <%If StrComp(iProductAreaLevel3, vProductArea(0, i), 1) = 0 Then Response.Write " SELECTED"%>><%=vProductArea(1, i)%></option>
+														<%End If
+													End If
+												Next					
+											End If%>					
+										</select>
+*@
+                </td>
+            </tr>	
+                                            
+                                            
+        }
+        @if (Model.CaseSettings.Where(X => X.Name == "System_Id") != null && Model.CaseSettings.Where(X => X.Name == "System_Id").FirstOrDefault().ShowOnStartPage != 0)
+        {
+                                        
+            <tr>
+                <td>
+                    @Translation.Get(@Model.CaseSettings.Where(X => X.Name == "System_Id").FirstOrDefault().Name, Enums.TranslationSource.TextTranslation)
+                </td>
+                <td class="CellTextRed" align="right">
+                    @if (SessionFacade.CurrentUser.MarkRequiredFields == 1 && Model.CaseSettings.Where(X => X.Name == "System_Id").FirstOrDefault().ShowOnStartPage != 0)
+                    {
+                        @Html.Label("*")
+                    }
+                </td>
+                <td>
+                    @Html.DropDownList("SystemId", Model.Systems, "", new { id = "ddlSystems" })
+                </td>
+            </tr>
+             
+        }
+        @if (Model.CaseSettings.Where(X => X.Name == "Impact_Id") != null && Model.CaseSettings.Where(X => X.Name == "Impact_Id").FirstOrDefault().ShowOnStartPage != 0)
+        {
+            if (Model.Impacts != null)
+            {
+            <tr>
+                <td>
+                    @Translation.Get(@Model.CaseSettings.Where(X => X.Name == "Impact_Id").FirstOrDefault().Name, Enums.TranslationSource.TextTranslation)
+                </td>
+                <td class="CellTextRed" align="right">
+                    @if (SessionFacade.CurrentUser.MarkRequiredFields == 1 && Model.CaseSettings.Where(X => X.Name == "Impact_Id").FirstOrDefault().ShowOnStartPage != 0)
+                    {
+                        @Html.Label("*")
+                    }
+                </td>
+                <td>
+                    @Html.DropDownList("Impact_Id", Model.Impacts, "", new { id = "ddlImpact" })
+                </td>
+            </tr>
+            }
+        }
+        @if (Model.CaseSettings.Where(X => X.Name == "Category_Id") != null && Model.CaseSettings.Where(X => X.Name == "Category_Id").FirstOrDefault().ShowOnStartPage != 0)
+        {
+            <tr>
+                <td>
+                    @Translation.Get(@Model.CaseSettings.Where(X => X.Name == "Category_Id").FirstOrDefault().Name, Enums.TranslationSource.TextTranslation)
+                </td>
+                <td class="CellTextRed" align="right">
+                    @if (SessionFacade.CurrentUser.MarkRequiredFields == 1 && Model.CaseSettings.Where(X => X.Name == "Category_Id").FirstOrDefault().ShowOnStartPage != 0)
+                    {
+                        @Html.Label("*")
+                    }
+                </td>
+                <td>
+                    @Html.DropDownList("Category_Id", Model.Categories, "", new { id = "ddlCategory" })
+                </td>
+            </tr>
+        }
+        @if (Model.CaseSettings.Where(X => X.Name == "Supplier_Id") != null && Model.CaseSettings.Where(X => X.Name == "Supplier_Id").FirstOrDefault().ShowOnStartPage != 0)
+        {
+            <tr>
+                <td>
+                    @if (Model.Countries.Count > 0)
+                    {
+                        @Translation.Get("Land", Enums.TranslationSource.TextTranslation)
+                        @Translation.Get(@Model.CaseSettings.Where(X => X.Name == "Supplier_Id").FirstOrDefault().Name, Enums.TranslationSource.TextTranslation)
+                    }
+                </td>
+                <td class="CellTextRed" align="right">
+                    @if (SessionFacade.CurrentUser.MarkRequiredFields == 1 && Model.CaseSettings.Where(X => X.Name == "Supplier_Id").FirstOrDefault().ShowOnStartPage != 0)
+                    {
+                        @Html.Label("*")
+                    }
+                </td>
+                <td>
+                    @if (Model.Countries.Count > 0)
+                    {
+                        @Html.DropDownList("CountryId", Model.Countries, "", new { id = "ddlCountry" })
+                        @Html.DropDownList("SupplierId", Model.Suppliers, "", new { id = "ddlSupplier" })
+                    }
+                </td>
+            </tr>
+             
+        }
+        @if (Model.CaseSettings.Where(X => X.Name == "InvoiceNumber") != null && Model.CaseSettings.Where(X => X.Name == "InvoiceNumber").FirstOrDefault().ShowOnStartPage != 0)
+        {
+            <tr>
+                <td>
+                    @Translation.Get("InvoiceNumber", Enums.TranslationSource.TextTranslation)
+                </td>
+                <td class="CellTextRed" align="right">
+                    @if (SessionFacade.CurrentUser.MarkRequiredFields == 1 && Model.CaseSettings.Where(X => X.Name == "InvoiceNumber").FirstOrDefault().ShowOnStartPage != 0)
+                    {
+                        @Html.Label("*")
+                    }
+                </td>
+                <td>
+                    @Html.TextBox("txtInvoiceNumber", Model.InvoiceNumber, new { @class = "CellText", maxlength = "50", width = "50px" })
+                </td>
+            </tr>            
+        }
+        @if (Model.CaseSettings.Where(X => X.Name == "ReferenceNumber") != null && Model.CaseSettings.Where(X => X.Name == "ReferenceNumber").FirstOrDefault().ShowOnStartPage != 0)
+        {
+            <tr>
+                <td>
+                    @Translation.Get("ReferenceNumber", Enums.TranslationSource.TextTranslation)
+                </td>
+                <td class="CellTextRed" align="right">
+                    @if (SessionFacade.CurrentUser.MarkRequiredFields == 1 && Model.CaseSettings.Where(X => X.Name == "ReferenceNumber").FirstOrDefault().ShowOnStartPage != 0)
+                    {
+                        @Html.Label("*")
+                    }
+                </td>
+                <td>
+                    @Html.TextArea("txtReferenceNumber", Model.ReferenceNumber, new { @class = "CellText", cols = "89", })
+                </td>
+            </tr>            
+        }
+        @if (Model.CaseSettings.Where(X => X.Name == "Caption") != null && Model.CaseSettings.Where(X => X.Name == "Caption").FirstOrDefault().ShowOnStartPage != 0)
+        {
+            <tr>
+                <td>
+                    @Translation.Get("Caption", Enums.TranslationSource.TextTranslation)
+                </td>
+                <td class="CellTextRed" align="right">
+                    @if (SessionFacade.CurrentUser.MarkRequiredFields == 1 && Model.CaseSettings.Where(X => X.Name == "Caption").FirstOrDefault().ShowOnStartPage != 0)
+                    {
+                        @Html.Label("*")
+                    }
+                </td>
+                <td>
+                    @Html.TextBox("txtCaption", Model.Caption, new { @class = "CellText", maxlength = "60", width = "465px" })
+                </td>
+            </tr>
+        }
+        @if (Model.CaseSettings.Where(X => X.Name == "Description") != null && Model.CaseSettings.Where(X => X.Name == "Description").FirstOrDefault().ShowOnStartPage != 0)
+        {
+            <tr>
+                <td>
+                    @Translation.Get("Description", Enums.TranslationSource.TextTranslation)
+                </td>
+                <td class="CellTextRed" align="right">
+                    @if (SessionFacade.CurrentUser.MarkRequiredFields == 1 && Model.CaseSettings.Where(X => X.Name == "Description").FirstOrDefault().ShowOnStartPage != 0)
+                    {
+                        @Html.Label("*")
+                    }
+                </td>
+                <td>
+                    <table cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td>
+                                @Html.TextArea("txtDescription", Model.Description, new { @class = "CellText", cols = "89" })
+                            </td>
+                            <td valign="top">
+                                &nbsp;
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        }
+        @if (Model.CaseSettings.Where(X => X.Name == "Miscellaneous") != null && Model.CaseSettings.Where(X => X.Name == "Miscellaneous").FirstOrDefault().ShowOnStartPage != 0)
+        {
+            <tr>
+                <td>
+                    @Translation.Get("Miscellaneous", Enums.TranslationSource.TextTranslation)
+                </td>
+                <td class="CellTextRed" align="right">
+                    @if (SessionFacade.CurrentUser.MarkRequiredFields == 1 && Model.CaseSettings.Where(X => X.Name == "Miscellaneous").FirstOrDefault().ShowOnStartPage != 0)
+                    {
+                        @Html.Label("*")
+                    }
+                </td>
+                <td>
+                    @Html.TextArea("txtMiscellaneous", Model.Miscellaneous, new { @class = "CellText", cols = "89", rows = "6" })
+                </td>
+            </tr>            
+        }
+        @if (Model.CaseSettings.Where(X => X.Name == "ContactBeforeAction") != null && Model.CaseSettings.Where(X => X.Name == "ContactBeforeAction").FirstOrDefault().ShowOnStartPage != 0)
+        {
+            <tr>
+                <td>
+                    @Translation.Get("ContactBeforeAction", Enums.TranslationSource.TextTranslation)
+                </td>
+                <td>
+                </td>
+                <td>
+                    @Html.CheckBox("chkContactBeforeAction", Model.ContractBeforeAction, new { @class = "CellText", onclick = "javascript:changeAgreedDate()" })
+                </td>
+            </tr>
+        }
+        @if (Model.CaseSettings.Where(X => X.Name == "SMS") != null && Model.CaseSettings.Where(X => X.Name == "SMS").FirstOrDefault().ShowOnStartPage != 0)
+        {
+            <tr>
+                <td>
+                    @Translation.Get("SMS", Enums.TranslationSource.TextTranslation)
+                </td>
+                <td>
+                </td>
+                <td>
+                    @Html.CheckBox("chkSMS", Model.SMS, new { @class = "CellText", onclick = "javascript:changeAgreedDate()" })
+                </td>
+            </tr>
+        }
+        @if (Model.CaseSettings.Where(X => X.Name == "AgreedDate") != null && Model.CaseSettings.Where(X => X.Name == "AgreedDate").FirstOrDefault().ShowOnStartPage != 0)
+        {
+            <tr>
+                <td>
+                    @Translation.Get("AgreedDate", Enums.TranslationSource.TextTranslation)
+                </td>
+                <td>
+                </td>
+                <td>
+                    @*Html.Inpi("chkSMS", Model.SMS, new { @class = "CellText", onclick = "javascript:changeAgreedDate()" })*@
+                    @Html.TextBox("datepicker", Model.AgreedDate, new { @class = "CellText" })
+                </td>
+            </tr>
+             
+        }
+        
+        @if (Model.CaseSettings.Where(X => X.Name == "Available") != null && Model.CaseSettings.Where(X => X.Name == "Available").FirstOrDefault().ShowOnStartPage != 0)
+        {
+            <tr>
+            <td>
+                    @Translation.Get("Available", Enums.TranslationSource.TextTranslation)
+                </td>
+
+
+                  <td class="CellTextRed" align="right">
+                    @if (SessionFacade.CurrentUser.MarkRequiredFields == 1 && Model.CaseSettings.Where(X => X.Name == "Available").FirstOrDefault().ShowOnStartPage != 0)
+                    {
+                        @Html.Label("*")
+                    }
+                </td>
+
+                  <td>
+                    @Translation.Get("Anmälaren nås säkrast på följande tider", Enums.TranslationSource.TextTranslation)
+                </td>
+                <td>
+                @Html.TextBox("txtAvailable", Model.Available, new { @class = "CellText", @width="465", @maxlength="100" })
+                </td>
+            </tr>
+            
+        }
+        
+         @if (Model.CaseSettings.Where(X => X.Name == "Cost") != null && Model.CaseSettings.Where(X => X.Name == "Cost").FirstOrDefault().ShowOnStartPage != 0)
+         {
+            <tr>
+            	<td Class="Cap4" Valign="top">
+										
+                    @Translation.Get("Cost", Enums.TranslationSource.TextTranslation)
+									</td>
+
+                                     <td class="CellTextRed" align="right">
+                    @if (SessionFacade.CurrentUser.MarkRequiredFields == 1 && Model.CaseSettings.Where(X => X.Name == "Cost").FirstOrDefault().ShowOnStartPage != 0)
+                    {
+                        @Html.Label("*")
+                    }
+                </td>
+
+                <td>
+										<table Cellpadding="0" Cellspacing="4">
+											<tr>
+												<td Class="Cap4"> @Translation.Get("Artikelkostnad", Enums.TranslationSource.TextTranslation)&nbsp;&nbsp;</td>
+												<td Class="Cap4"> @Translation.Get("Övrig kostnad", Enums.TranslationSource.TextTranslation)&nbsp;&nbsp;</td>
+												<td Class="Cap4"> @Translation.Get("Valuta", Enums.TranslationSource.TextTranslation)</td>
+											</tr>
+											<tr>
+												<td Class="CellText">													
+                                                     @Html.TextBox("txtCost", Model.Cost, new { @class = "CellText", @width = "60", @maxlength = "7" })
+												</td>
+												<td Class="CellText">													
+                                                    @Html.TextBox("txtOtherCost", Model.OtherCost, new { @class = "CellText", @width = "60", @maxlength = "7" })
+												</td>
+												<td Class="CellText">
+                                                  @Html.DropDownList("CurrencyCodrId", Model.CurrencyCodes, "", new { id = "ddlCurrencyCode" })
+
+													
+												</td>
+											</tr>
+										</table>
+									</td>
+
+            </tr>
+             
+         }
+
+
+
+
+
+    </table>
+</div>
+<script type="text/javascript">
+
+
+    //$(document).ready(
+    //        function () {
+
+    $(function () { $("#datepicker").datepicker(); });
+
+    function closediv() {
+
+        var i = document.getElementById('showmore');
+        var j = document.getElementById('showless');
+
+        i.style.visibility = 'visible';
+        j.style.visibility = 'hidden';
+
+        $('#divUser').slideUp('slow', function () { });
+
+    }
+
+    function opendiv() {
+        var i = document.getElementById('showmore');
+        var j = document.getElementById('showless');
+
+        i.style.visibility = 'hidden';
+        j.style.visibility = 'visible';
+
+        $('#divUser').slideDown('slow', function () { });
+    }
+</script>

@@ -1,2 +1,36 @@
-﻿@model DH.Helpdesk.Web.Areas.Licenses.Models.Applications.ApplicationsIndexModel
+﻿@using DH.Helpdesk.Web.Areas.Licenses.Models.Applications
+@using DH.Helpdesk.Web.Infrastructure
+@model ApplicationsIndexModel
+@{
+    Layout = "~/Areas/Licenses/Views/Shared/_IndexLayout.cshtml";
+}
 
+@section Actions {
+    <ul class="secnav">               
+        <li>
+            @Html.ActionLink(Translation.Get("Ny applikation"), "Application", "Applications", new { @class = "btn" })
+        </li>
+    </ul>
+}
+
+@using (Ajax.BeginForm("Applications", "Applications", null, 
+    new AjaxOptions { UpdateTargetId = "LicensesApplicationsTableContainer" },
+    new { id ="ApplicationsSearchForm" } ))
+{
+    <table class="tableform">
+        <tr>
+            <td class="span3">@Translation.Get("Endast kopplade")</td>
+            <td>@Html.CheckBoxFor(m => m.OnlyConnected, Model.OnlyConnected)</td>
+        </tr>                
+        <tr>
+            <td class="span3">
+            </td>
+            <td>
+                <input type="submit" value="@Translation.Get("Sök")" class="btn" />
+            </td>
+        </tr>               
+    </table>    
+}
+<div id="LicensesApplicationsTableContainer">
+    @Html.Action("Applications", "Applications", new { model = (ApplicationsIndexModel)null })
+</div>
