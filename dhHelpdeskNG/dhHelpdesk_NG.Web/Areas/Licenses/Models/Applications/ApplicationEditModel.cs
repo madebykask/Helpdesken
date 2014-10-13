@@ -40,11 +40,11 @@
         [LocalizedDisplay("Produkt")]
         public int? ProductId { get; set; }
 
-        public override string Title
+        public override EntityModelType Type
         {
             get
             {
-                return "Applikation";
+                return EntityModelType.Applications;
             }
         }
     }

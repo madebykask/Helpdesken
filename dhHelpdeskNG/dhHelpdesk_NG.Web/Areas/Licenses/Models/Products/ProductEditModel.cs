@@ -37,11 +37,11 @@
         [NotNull]
         public MultiSelectListModel Applications { get; private set; }
 
-        public override string Title
+        public override EntityModelType Type
         {
             get
             {
-                return "Produkt";
+                return EntityModelType.Products;
             }
         }
     }

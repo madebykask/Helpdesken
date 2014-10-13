@@ -12,19 +12,19 @@
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs nav-tabs-actions">
-            <li class="@GetIsActive(IndexModelType.Products)">
+            <li class="@GetIsActive(EntityModelType.Products)">
                 @Html.ActionLink(Translation.Get("Produkter"), "Index", "Products")
             </li>
-            <li class="@GetIsActive(IndexModelType.Licenses)">
+            <li class="@GetIsActive(EntityModelType.Licenses)">
                 @Html.ActionLink(Translation.Get("Licenser"), "Index", "Licenses")
             </li>
-            <li class="@GetIsActive(IndexModelType.Vendors)">
+            <li class="@GetIsActive(EntityModelType.Vendors)">
                 @Html.ActionLink(Translation.Get("Försäljare"), "Index", "Vendors")
             </li>
-            <li class="@GetIsActive(IndexModelType.Manufacturers)">
+            <li class="@GetIsActive(EntityModelType.Manufacturers)">
                 @Html.ActionLink(Translation.Get("Tillverkare"), "Index", "Manufacturers")
             </li>
-            <li class="@GetIsActive(IndexModelType.Applications)">
+            <li class="@GetIsActive(EntityModelType.Applications)">
                 @Html.ActionLink(Translation.Get("Applikationer"), "Index", "Applications")
             </li>
         </ul>
@@ -36,7 +36,7 @@
     </div>
 </div>
 @functions    {
-    private MvcHtmlString GetIsActive(IndexModelType type)
+    private MvcHtmlString GetIsActive(EntityModelType type)
     {
         return MvcHtmlString.Create(Model.Type == type ? "active" : null);
     }

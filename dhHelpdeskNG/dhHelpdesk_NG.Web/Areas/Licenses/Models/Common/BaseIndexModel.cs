@@ -2,6 +2,6 @@
 {
     public abstract class BaseIndexModel
     {
-        public abstract IndexModelType Type { get; }
+        public abstract EntityModelType Type { get; }
     }
 }

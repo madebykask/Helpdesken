@@ -26,8 +26,8 @@
         {
             var applications = new MultiSelectListModel(
                                         "Applikationer",
-                                        WebMvcHelper.GetListItems(data.Applications),
-                                        WebMvcHelper.GetListItems(data.Product.Applications));
+                                        WebMvcHelper.GetEmptyList(),
+                                        WebMvcHelper.GetListItems(data.Applications));
 
             return new ProductEditModel(
                             data.Product.Id,

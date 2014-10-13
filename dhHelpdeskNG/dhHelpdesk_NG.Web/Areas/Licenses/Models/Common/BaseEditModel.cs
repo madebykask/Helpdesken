@@ -6,10 +6,15 @@
 
     public abstract class BaseEditModel
     {
+        public abstract EntityModelType Type { get; }
+
         [MinValue(0)]
         [HiddenInput]
         public int Id { get; set; }
 
-        public abstract string Title { get; }
+        public bool IsNew()
+        {
+            return this.Id == 0;
+        }
     }
 }

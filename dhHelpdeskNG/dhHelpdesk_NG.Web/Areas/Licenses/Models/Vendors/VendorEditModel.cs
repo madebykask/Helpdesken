@@ -73,11 +73,11 @@
         [LocalizedDisplay("Hemsida")]
         public string HomePage { get; set; }
 
-        public override string Title
+        public override EntityModelType Type
         {
             get
             {
-                return "Försäljare";
+                return EntityModelType.Vendors;
             }
         }
     }

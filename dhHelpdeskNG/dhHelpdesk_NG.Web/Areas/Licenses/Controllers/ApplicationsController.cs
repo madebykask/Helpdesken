@@ -84,9 +84,9 @@
         }
 
         [HttpGet]
-        public RedirectToRouteResult Delete(int applicationId)
+        public RedirectToRouteResult Delete(int id)
         {
-            this.applicationsService.Delete(applicationId);
+            this.applicationsService.Delete(id);
 
             return this.RedirectToAction("Index");
         }

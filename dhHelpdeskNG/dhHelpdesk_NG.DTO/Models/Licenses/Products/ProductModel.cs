@@ -13,10 +13,8 @@
                 int? manufacturerId, 
                 int customerId, 
                 DateTime createdDate, 
-                DateTime changedDate, 
-                ItemOverview[] applications)
+                DateTime changedDate)
         {
-            this.Applications = applications;
             this.Id = id;
             this.ChangedDate = changedDate;
             this.CreatedDate = createdDate;

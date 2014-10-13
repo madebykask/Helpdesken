@@ -52,6 +52,11 @@
                                              }).ToArray();
         }
 
+        public static SelectListItem[] GetEmptyList()
+        {
+            return new SelectListItem[0];
+        }
+
         public static ItemOverview[] GetOverviews(SelectListItem[] items)
         {
             return items.Select(i => new ItemOverview(i.Text, i.Value)).ToArray();

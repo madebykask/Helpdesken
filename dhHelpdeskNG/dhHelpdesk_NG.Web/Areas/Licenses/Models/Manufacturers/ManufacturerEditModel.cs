@@ -31,11 +31,11 @@
         [LocalizedDisplay("Tillverkare")]
         public string ManufcturerName { get; set; }
 
-        public override string Title
+        public override EntityModelType Type
         {
             get
             {
-                return "Tillverkare";
+                return EntityModelType.Manufacturers;
             }
         }
     }

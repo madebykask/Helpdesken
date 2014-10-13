@@ -82,9 +82,9 @@
         }
 
         [HttpGet]
-        public RedirectToRouteResult Delete(int manufacturerId)
+        public RedirectToRouteResult Delete(int id)
         {
-            this.manufacturersService.Delete(manufacturerId);
+            this.manufacturersService.Delete(id);
 
             return this.RedirectToAction("Index");
         }

@@ -105,11 +105,11 @@
         [LocalizedDisplay("Uppgradering av")]
         public int? UpgradeLicenseId { get; set; }
 
-        public override string Title
+        public override EntityModelType Type
         {
             get
             {
-                return "Licens";
+                return EntityModelType.Licenses;
             }
         }
     }

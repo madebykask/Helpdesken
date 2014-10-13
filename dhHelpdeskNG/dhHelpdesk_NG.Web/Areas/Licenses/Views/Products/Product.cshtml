@@ -1,15 +1,7 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Licenses.Models.Products.ProductEditModel
-@section Actions {
-    <ul class="secnav">               
-        <li>
-            @Html.ActionLink(Translation.Get("Avbryt"), "Index", null, new { @class = "btn" })
-        </li>
-    </ul>
-}
 
 @section Content {
-    
     <h4>@Translation.Get("Allmänt")</h4>
     <table class="tableform">
         <tr>
@@ -28,6 +20,6 @@
                 @Html.EditorFor(m => m.Applications)
             </td>
         </tr>
-    </table>
+    </table>        
 }
 

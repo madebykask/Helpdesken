@@ -4,11 +4,11 @@
 
     public sealed class LicensesIndexModel : BaseIndexModel
     {
-        public override IndexModelType Type
+        public override EntityModelType Type
         {
             get
             {
-                return IndexModelType.Licenses;
+                return EntityModelType.Licenses;
             }
         }
 

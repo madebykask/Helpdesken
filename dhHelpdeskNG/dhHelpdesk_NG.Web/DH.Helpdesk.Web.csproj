@@ -340,7 +340,7 @@
     <Compile Include="Areas\Licenses\Models\Applications\ApplicationsIndexModel.cs" />
     <Compile Include="Areas\Licenses\Models\Common\BaseEditModel.cs" />
     <Compile Include="Areas\Licenses\Models\Common\BaseIndexModel.cs" />
-    <Compile Include="Areas\Licenses\Models\Common\IndexModelType.cs" />
+    <Compile Include="Areas\Licenses\Models\Common\EntityModelType.cs" />
     <Compile Include="Areas\Licenses\Models\Licenses\LicenseEditModel.cs" />
     <Compile Include="Areas\Licenses\Models\Licenses\LicensesContentModel.cs" />
     <Compile Include="Areas\Licenses\Models\Licenses\LicensesFilterModel.cs" />

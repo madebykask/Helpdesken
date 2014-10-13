@@ -45,16 +45,13 @@
 
             if (entity != null)
             {
-//                var applications = query.GetById(id).Single().Applications;
-
                 model = new ProductModel(
                                 entity.Id,
                                 entity.Name,
                                 entity.Manufacturer_Id,
                                 entity.Customer_Id,
                                 entity.CreatedDate,
-                                entity.ChangedDate,
-                                ApplicationMapper.MapToOverviews(new Application[0]));
+                                entity.ChangedDate);
             }
 
             return model;

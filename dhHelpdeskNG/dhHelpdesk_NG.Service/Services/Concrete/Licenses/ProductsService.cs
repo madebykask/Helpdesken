@@ -71,6 +71,7 @@
                 }
 
                 var applications = applicationRepository.GetAll()
+                                    .GetProductApplications(productId)
                                     .GetByCustomer(customerId)
                                     .MapToItemOverviews();
 

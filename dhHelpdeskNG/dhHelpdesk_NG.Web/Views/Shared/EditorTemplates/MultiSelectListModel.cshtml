@@ -10,23 +10,23 @@
 <table>
     <thead>
         <tr>
-            <th class="span12">
-                @Translation.Get(Model.HeaderText):
-            </th>
-            <th class="span1">
+            <td class="span12">
+                @Translation.Get(Model.HeaderText)
+            </td>
+            <td class="span1">
                 @Translation.Get("Tillgängliga")
-            </th>
-            <th class="span1"></th>
-            <th class="span1">
+            </td>
+            <td class="span1"></td>
+            <td class="span1">
                 @Translation.Get("Valda")
-            </th>
+            </td>
         </tr>        
     </thead>
     <tbody>
         <tr>
             <td></td>
             <td>
-                @Html.ListBoxFor(m => m.AvailableItems, Model.AvailableItems, new { @class="multi-select-field" })
+                @Html.ListBoxFor(m => m.AvailableItems, Model.AvailableItems, new { id=@availableListId, @class="multi-select-field" })
             </td>
             <td>
                 <div class="center">
@@ -35,7 +35,7 @@
                 </div>
             </td>
             <td>
-                @Html.ListBoxFor(m => m.SelectedItems, Model.SelectedItems, new { @class="multi-select-field" })
+                @Html.ListBoxFor(m => m.SelectedItems, Model.SelectedItems, new { id=@selectedListId, @class="multi-select-field" })
             </td>
         </tr>        
     </tbody>

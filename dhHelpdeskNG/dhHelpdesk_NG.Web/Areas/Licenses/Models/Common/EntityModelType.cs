@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Licenses.Models.Common
 {
-    public enum IndexModelType
+    public enum EntityModelType
     {
         Products,
         Licenses,

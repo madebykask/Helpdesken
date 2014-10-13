@@ -82,9 +82,9 @@
         }
 
         [HttpGet]
-        public RedirectToRouteResult Delete(int licenseId)
+        public RedirectToRouteResult Delete(int id)
         {
-            this.licensesService.Delete(licenseId);
+            this.licensesService.Delete(id);
 
             return this.RedirectToAction("Index");
         }

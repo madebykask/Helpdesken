@@ -4,11 +4,11 @@
 
     public sealed class VendorsIndexModel : BaseIndexModel
     {
-        public override IndexModelType Type
+        public override EntityModelType Type
         {
             get
             {
-                return IndexModelType.Vendors;
+                return EntityModelType.Vendors;
             }
         }
 

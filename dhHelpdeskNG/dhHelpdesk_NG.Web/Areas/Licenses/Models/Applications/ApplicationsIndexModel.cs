@@ -13,11 +13,11 @@
         {            
         }
 
-        public override IndexModelType Type
+        public override EntityModelType Type
         {
             get
             {
-                return IndexModelType.Applications;
+                return EntityModelType.Applications;
             }
         }
 

@@ -21,11 +21,11 @@
             this.DepartmentIds = new int[0];
         }
 
-        public override IndexModelType Type
+        public override EntityModelType Type
         {
             get
             {
-                return IndexModelType.Products;
+                return EntityModelType.Products;
             }
         }
 
