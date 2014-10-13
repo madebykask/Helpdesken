@@ -203,7 +203,7 @@
         #region Public Methods and Operators
 
         public ActionResult Index(int? customerId, bool? clearFilters = false)
-        {            
+        {                        
             if (clearFilters == true)
             {
                 SessionFacade.CurrentCaseSearch = null;                
@@ -374,9 +374,15 @@
             return this.View(m);
         }
 
-        public ActionResult New(int customerId, int? templateId, int? copyFromCaseId)
+        public ActionResult New(int customerId, int? templateId, int? copyFromCaseId, int? caseLanguageId)
         {
             CaseInputViewModel m = null;
+
+            if (caseLanguageId == null)
+               SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
+            else
+               SessionFacade.CurrentCaseLanguageId = (int) caseLanguageId.Value;
+
             if (SessionFacade.CurrentUser != null)
                 if (SessionFacade.CurrentUser.CreateCasePermission == 1)
                 {
@@ -1251,6 +1257,13 @@
             return this.RedirectToAction("index", "cases");            
         }
 
+        [HttpGet]
+        public RedirectToRouteResult ChangeCaseLanguage(int customerId, int languageId)
+        {
+            SessionFacade.CurrentCaseLanguageId = languageId;
+            //SessionFacade.CurrentUser.LanguageId = languageId;
+            return this.RedirectToAction("New", "cases", new { customerId = customerId, caseLanguageId = languageId });
+        }
         #endregion
 
         #region Private Methods and Operators
@@ -1468,6 +1481,7 @@
                 var markCaseAsRead = string.IsNullOrWhiteSpace(redirectFrom);
                 m.case_ = this._caseService.GetCaseById(caseId, markCaseAsRead);
                 customerId = customerId == 0 ? m.case_.Customer_Id : customerId;
+                SessionFacade.CurrentCaseLanguageId = m.case_.RegLanguage_Id;
             }
 
             var cu = this._customerUserService.GetCustomerSettings(customerId, userId);
@@ -1536,6 +1550,7 @@
                         }
                     }
                 }
+                
 
                 m.CaseMailSetting = new CaseMailSetting(
                                                     customer.NewCaseEmailList, 

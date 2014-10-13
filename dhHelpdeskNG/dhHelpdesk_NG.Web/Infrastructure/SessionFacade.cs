@@ -47,6 +47,8 @@
 
         private const string _TEXT_TRANSLATION = "TEXT_TRANSLATION";
 
+        private const string _CURRENT_CASE_LANGUAGE_ID = "CURRENT_CASE_LANGUAGE_ID";
+
         #endregion
 
         #region Public Properties
@@ -85,6 +87,25 @@
                 else
                 {
                     HttpContext.Current.Session[_CASE_TRANSLATION] = value;
+                }
+            }
+        }
+
+        public static int CurrentCaseLanguageId
+        {
+            get
+            {
+                return (int)HttpContext.Current.Session[_CURRENT_CASE_LANGUAGE_ID];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_CURRENT_CASE_LANGUAGE_ID] == null)
+                {
+                    HttpContext.Current.Session.Add(_CURRENT_CASE_LANGUAGE_ID, value);
+                }
+                else
+                {
+                    HttpContext.Current.Session[_CURRENT_CASE_LANGUAGE_ID] = value;
                 }
             }
         }

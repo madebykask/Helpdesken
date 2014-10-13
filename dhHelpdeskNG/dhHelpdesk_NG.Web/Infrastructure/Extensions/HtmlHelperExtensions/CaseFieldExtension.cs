@@ -17,9 +17,16 @@
                                 IList<CaseFieldSetting> settings,
                                 IEnumerable<CaseFieldSettingsWithLanguage> settingsEx,
                                 GlobalEnums.TranslationCaseFields field,
-                                int customerId)
+                                int customerId,
+                                int languageId = 0)
         {
-            var caption = Translation.Get(field.ToString(), Enums.TranslationSource.CaseTranslation, customerId);
+            var caption = "";
+
+            if (languageId == 0)
+                caption = Translation.Get(field.ToString(), Enums.TranslationSource.CaseTranslation, customerId);
+            else
+                caption = Translation.Get(field.ToString(), languageId, Enums.TranslationSource.CaseTranslation, customerId);
+
             var setting = settings.getCaseSettingsValue(field.ToString());
             var description = settingsEx.getFieldHelp(field.ToString());
             var url = new UrlHelper(html.ViewContext.RequestContext);

@@ -42,6 +42,43 @@
             return translate;
         }
 
+        public static string Get(string translate, int languageId, Enums.TranslationSource source = Enums.TranslationSource.TextTranslation, int customerId = 0)
+        {
+            if (source == Enums.TranslationSource.TextTranslation)
+            {
+                if (SessionFacade.TextTranslation != null)
+                {
+                    try
+                    {
+                        var translation = SessionFacade.TextTranslation.Where(x => x.TextToTranslate.ToLower() == translate.ToLower()).FirstOrDefault();
+                        if (translation != null)
+                            translate = translation.TextTranslations.Where(x => x.Language_Id == languageId).FirstOrDefault().TextTranslated ?? translate;
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
+            else if (source == Enums.TranslationSource.CaseTranslation)
+            {
+                if (SessionFacade.CaseTranslation != null && customerId > 0)
+                {
+                    try
+                    {
+                        var translation = SessionFacade.CaseTranslation.Where(x => x.Customer_Id == customerId && x.Name.ToLower() == translate.getCaseFieldName().ToLower() && x.Language_Id == languageId).FirstOrDefault();
+                        if (translation != null)
+                            translate = translation.Label;
+                        else
+                            translate = Get(translate, Enums.TranslationSource.TextTranslation);
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
+
+            return translate;
+        }
         /// <summary>
         /// The get case.
         /// </summary>

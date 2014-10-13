@@ -26,7 +26,7 @@
                     <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
                     <li>@Html.ActionLink(Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation), null, null, new { onclick = "EditCaseAndClose();return false;", @class = "btn" })</li>
                     <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), null, null, new { onclick = "EditCaseAndAddCase();return false;", @class = "btn" })</li>
-                    <li class="secspace"></li>
+                    <li class="secspace"></li>                    
                     if (SessionFacade.CurrentUser.DeleteCasePermission == 1)
                     {                            
                         <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteCase", new { caseId = @Model.case_.Id, customerId = @Model.case_.Customer_Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("är du säker pе att du vill ta bort aktuellt ärende", Enums.TranslationSource.TextTranslation) })</li>
@@ -84,9 +84,11 @@
                             *@
 
                         }
+                        
                         </ul> 
                     </div>
                 </li>
+                
             </ul>
         </div>
         <div class="pull-right">
@@ -104,35 +106,14 @@
                         {
                             <li><a data-toggle="modal" href="#divRelatedCases" title="@Translation.Get("Relaterade ärenden", Enums.TranslationSource.TextTranslation)" class="btn"><i class="icon-list"></i></a></li>
                         }
-                    }                                            
+                    }
                 }
                 <li><a href="@Model.case_.Id.GetUrlForNavigationBetweenCases()" title="@Translation.Get("Fцregеende ärende", Enums.TranslationSource.TextTranslation)" class="btn"><i class="icon-chevron-left"></i></a></li>
                 <li><a href="@Model.case_.Id.GetUrlForNavigationBetweenCases(true)"  title="@Translation.Get("Nдsta ärende", Enums.TranslationSource.TextTranslation)" class="btn"><i class="icon-chevron-right"></i></a></li>
             </ul>
         </div>
     </div>
-    <div class="secnavs fixedrow2">
-        <div class="pull-left">
-            <ul class="secnav">
-                @if (Model.Languages != null && Model.Languages.Count() > 1)
-                {
-                    <li>
-                        <select id="case__RegLanguage_Id" name="case_.RegLanguage_Id" class="span2">
-                            @foreach (var e in Model.Languages)
-                            {
-                                <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.RegLanguage_Id.ToString()) >@e.LanguageId</option>
-                            }
-                        </select>
-                    </li>
-                    <li class="secspace"></li>
-                }
-                else
-                {
-                    <li>@Html.HiddenFor(m => m.case_.RegLanguage_Id)</li>
-                }                      
-            </ul>
-        </div>
-    </div>
+    
     @Html.Partial("_Input", Model)
     }
     <div id="divMoveCase" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true" >

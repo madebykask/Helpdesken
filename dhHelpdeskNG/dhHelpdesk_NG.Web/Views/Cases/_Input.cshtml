@@ -8,7 +8,7 @@
 
 @if (Model.case_ != null)
 {
-    <div class="content twomenu">
+    <div class="content onemenu">
         <div class="container">
             <ul class="nav nav-tabs" id="myTab">
                 <li class="active">
@@ -67,9 +67,29 @@
                                 <div class="row">
                                     <div class="span12">
                                         <table class="tableform">
+                                             @if (Model.Languages != null && Model.Languages.Count() > 1)
+                                             {
+                                                <tr>
+                                                    <td>
+                                                        @Translation.Get("Språk")
+                                                    </td>
+                                                    <td>                                                                                                               
+                                                        <select id="case__RegLanguage_Id" name="case_.RegLanguage_Id" class="span2">
+                                                            @foreach (var e in Model.Languages)
+                                                            {
+                                                                <option value="@e.Id" @e.Id.IdIsSelected(SessionFacade.CurrentCaseLanguageId.ToString()) >@Translation.Get(e.Name)</option>
+                                                            }
+                                                        </select>                                                                                                                                                                            
+                                                    </td>                    
+                                                </tr>
+                                             }
+                                             else
+                                             {
+                                                 @Html.HiddenFor(m => m.case_.RegLanguage_Id)
+                                             }
                                             <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber)">
                                                 <td class="span3">
-                                                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ReportedBy)
+                                                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ReportedBy)                                                    
                                                 </td>
                                                 <td class="span4">
                                                     @Html.Hidden("ShowReportedBy", Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ReportedBy.ToString()).ShowOnStartPage)
@@ -93,6 +113,15 @@
                                                 <td class="span4">
                                                     @Html.TextBoxFor(model => model.case_.PersonsName, new { maxlength = "50" })
                                                 </td>
+                                                
+                                            </tr>
+                                            <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString())">
+                                                <td>
+                                                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Persons_EMail)
+                                                </td>
+                                                <td>                                                                 
+                                                    @Html.TextBoxFor(model => model.case_.PersonsEmail, new { maxlength = "100" })                                                                                                                                                                     
+                                                </td>
                                                 <td class="span5" style="@Model.GetFieldStyle(CaseSolutionFields.Email)">
                                                     <label class="checkbox">
                                                         @if (!Model.IsReadOnly(CaseSolutionFields.Email))
@@ -104,16 +133,8 @@
                                                             @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new { @readonly = true, @disabled = "disabled" }) 
                                                         }
                                                         @Translation.Get("Do not send case notifications to user")
-                                                    </label>                                                    
-                                                </td>
-                                            </tr>
-                                            <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString())">
-                                                <td>
-                                                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Persons_EMail)
-                                                </td>
-                                                <td>
-                                                    @Html.TextBoxFor(model => model.case_.PersonsEmail, new { maxlength = "100" })
-                                                </td>
+                                                    </label>                                                                                                                                                                                                            
+                                                </td>                                                
                                             </tr>
                                             <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString())">
                                                 <td>
@@ -1000,11 +1021,14 @@
 
     private MvcHtmlString CaseFieldCaption(GlobalEnums.TranslationCaseFields field)
     {
-        return Html.CaseFieldCaption(
+        var res = 
+           Html.CaseFieldCaption(
                     Model.caseFieldSettings,
                     Model.CaseFieldSettingWithLangauges,
                     field,
-                    Model.case_.Customer_Id);
+                    Model.case_.Customer_Id,
+                    SessionFacade.CurrentCaseLanguageId);
+        return res;
     }
 
 }
@@ -1255,8 +1279,19 @@
         }
         return ret;
     }
+    
 
     $(function() {
+
+        $("#case__RegLanguage_Id").change(function(){ 
+            var newId = $('#case__RegLanguage_Id').val();
+            var cus = $('#case__Customer_Id').val(); 
+            alert(cus + ' : ' + newId );
+            $.get('/Cases/ChangeCaseLanguage', { customerId : cus, languageId: newId  }, function (data) {
+                //
+            });
+        });
+    
         $("#caseDescriptionPreview").click(function() {
             var description = $(".case-description")
                 .attr("value")
