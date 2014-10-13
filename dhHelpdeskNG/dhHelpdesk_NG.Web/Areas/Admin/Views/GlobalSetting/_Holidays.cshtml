@@ -210,11 +210,7 @@
     }
 
     function saveHolidayRow(id, index) {
-        var time1 = $("#HolidaysForList_" + index + "__TimeFrom").val();
-        var time2 = $("#HolidaysForList_" + index + "__TimeTilList").val();
-
-        alert(time1);
-        alert(time2);
+       
         var list = $("#holiday");
       
         $.post('/globalsetting/SaveRowToHolidays/' + id + '?holidayheaderId=' + $("#holidayheaderId").val() + '&holidaydate=' + $("#HolidaysForList_" + index + "__HolidayDate").val() + '&holidayname=' + $("#HolidaysForList_" + index + "__HolidayName").val() + '&timefrom=' + $("#HolidaysForList_" + index + "__TimeFrom").val() + '&timeuntil=' + $("#HolidaysForList_" + index + "__TimeTilList").val(), function (result) {
