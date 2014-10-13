@@ -303,7 +303,7 @@ function CaseInitForm() {
             buttons: { browse: true, start: true, stop: true, cancel: true },
             preinit: {
                 Init: function (up, info) {                    
-                    console.log('1:init', info);
+                    //console.log('1:init', info);
                     $.get('/Cases/GetAllFileName', { id: $('#CaseKey').val() }, function (data) {
                         allFileNames = $.parseJSON(data);
                     });
@@ -311,7 +311,7 @@ function CaseInitForm() {
 
                 
                 UploadFile: function (up, file) {
-                    console.log('2:uploaded file:', file.name);
+                    //console.log('2:uploaded file:', file.name);
                     var fn = file.name;
                     
                     for (var i = 0; i < allFileNames.length; i++) {
@@ -326,7 +326,7 @@ function CaseInitForm() {
 
                 UploadComplete: function (up, file) {
 
-                    console.log('3:uploaded complete',file.name);
+                    //console.log('3:uploaded complete',file.name);
                     //plupload_add
                     $(".plupload_buttons").css("display", "inline");
                     $(".plupload_upload_status").css("display", "inline");
@@ -338,7 +338,7 @@ function CaseInitForm() {
             },
             init: {
                 FileUploaded: function () {
-                    console.log('4:uploaded');
+                    //console.log('4:uploaded');
                     $.get('/Cases/GetAllFileName', { id: $('#CaseKey').val() }, function (data) {
                         allFileNames = $.parseJSON(data);
                     });
@@ -373,10 +373,22 @@ function CaseInitForm() {
             preinit: {
                 Init: function (up, info) {
                     //log('[Init]', 'Info:', info, 'Features:', up.features);
+                    $.get('/Cases/GetAllFileName', { id: $('#LogKey').val() }, function (data) {
+                        allFileNames = $.parseJSON(data);
+                    });
                 },
 
                 UploadFile: function (up, file) {
                     //log('[UploadFile]', file);
+                    var fn = file.name;
+
+                    for (var i = 0; i < allFileNames.length; i++) {
+                        if (fn == allFileNames[i]) {
+                            var d = new Date();
+                            var dstr = d.getFullYear() + '_' + d.getMonth() + '_' + d.getDay() + ' ' + d.getHours() + '\'' + d.getMinutes() + '\'' + d.getSeconds();
+                            file.name = '(' + dstr + ')-' + file.name;
+                        }
+                    }
                 },
 
                 UploadComplete: function (up, file) {
@@ -388,6 +400,9 @@ function CaseInitForm() {
             },
             init: {
                 FileUploaded: function () {
+                    $.get('/Cases/GetAllFileName', { id: $('#LogKey').val() }, function (data) {
+                        allFileNames = $.parseJSON(data);
+                    });
                     getLogFiles();
                 },
 
