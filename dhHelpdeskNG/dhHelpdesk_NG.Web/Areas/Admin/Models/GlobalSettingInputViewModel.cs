@@ -57,6 +57,7 @@
         public IList<SelectListItem> YearList { get; set; }
 
         public IEnumerable<Holiday> Holidays { get; set; }
+        public IList<Holiday> HolidaysForList { get; set; }
     }
 
     public class GlobalSettingWatchDateViewModel : BaseTabInputViewModel

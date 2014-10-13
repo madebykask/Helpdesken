@@ -453,6 +453,7 @@
             #region SelectListItems
 
             List<SelectListItem> li = new List<SelectListItem>();
+
             li.Add(new SelectListItem()
             {
                 Text = Translation.Get("00:00", Enums.TranslationSource.TextTranslation),
@@ -773,6 +774,7 @@
             {
                 Holiday = null,
                 Holidays = this._holidayService.GetHolidaysByHeaderIdAndYear(year, holidayheader.Id),
+                HolidaysForList = this._holidayService.GetHolidaysByHeaderIdAndYearForList(year, holidayheader.Id),
                 HolidayHeader = holidayheader,
                 HolidayHeaders = this._holidayService.GetHolidayHeaders().Select(x => new SelectListItem
                 {
@@ -784,6 +786,7 @@
                 YearList = yearlist,
                 ChangedHeaderName = holidayheader.Name
             };
+
 
             #region SetInts
 
@@ -1066,6 +1069,33 @@
             return this.UpdateHolidayList(holidayheader);
         }
 
+        public string SaveRowToHolidays(int id, int holidayheaderid, DateTime holidaydate, string holidayname, int timefrom, int timeuntil)
+        {
+            var holiday = this._holidayService.GetHoliday(id);
+            var year = DateTime.Today.Year;
+
+            var holidayheader = this._holidayService.GetHolidayHeader(holidayheaderid);
+
+            IDictionary<string, string> errors = new Dictionary<string, string>();
+
+            var model = this.SaveHolidayViewModel(holidayheader, year);
+
+            if (this.ModelState.IsValid)
+            {
+                holiday.HolidayHeader_Id = holidayheaderid;
+                holiday.HolidayDate = holidaydate;
+                holiday.TimeFrom = timefrom;
+                holiday.TimeUntil = timeuntil;
+                holiday.CreatedDate = DateTime.UtcNow;
+                holiday.HolidayName = holidayname;
+
+            }
+
+            model.Holiday = holiday;
+
+            this._holidayService.SaveHoliday(holiday, out errors);
+            return this.UpdateHolidayList(holidayheader);
+        }
 
         [CustomAuthorize(Roles = "3,4")]
         [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
