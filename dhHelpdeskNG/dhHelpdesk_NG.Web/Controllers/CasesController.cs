@@ -857,14 +857,25 @@
          
 
         [HttpGet]
-        public string GetAllFileName(string id)
-        {
-            //var files = this._caseFileService.GetCaseFiles(int.Parse(id));
+        public string GetAllCaseFileName(string id)
+        {            
             var files = GuidHelper.IsGuid(id)
                                 ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Cases)
                                 : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
 
             JavaScriptSerializer  serializer = new JavaScriptSerializer();  
+            string jsonString = serializer.Serialize(files);
+            return jsonString;
+        }
+
+        [HttpGet]
+        public string GetAllLogFileName(string id)
+        {            
+            var files = GuidHelper.IsGuid(id)
+                                ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Log)
+                                : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
             string jsonString = serializer.Serialize(files);
             return jsonString;
         }       
@@ -939,7 +950,7 @@
                 if (this.userTemporaryFilesStorage.FileExists(name, id, ModuleName.Log))
                 {
                     //return;
-                    this.userTemporaryFilesStorage.DeleteFile(name, id, ModuleName.Log); 
+                    //this.userTemporaryFilesStorage.DeleteFile(name, id, ModuleName.Log); 
                     //throw new HttpException((int)HttpStatusCode.Conflict, null); because it take a long time.
                 }
                 this.userTemporaryFilesStorage.AddFile(uploadedData, name, id, ModuleName.Log);

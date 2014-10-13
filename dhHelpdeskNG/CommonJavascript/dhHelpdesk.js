@@ -304,7 +304,8 @@ function CaseInitForm() {
             preinit: {
                 Init: function (up, info) {                    
                     //console.log('1:init', info);
-                    $.get('/Cases/GetAllFileName', { id: $('#CaseKey').val() }, function (data) {
+                    //allFileNames = "";
+                    $.get('/Cases/GetAllCaseFileName', { id: $('#CaseKey').val() }, function (data) {
                         allFileNames = $.parseJSON(data);
                     });
                 },
@@ -330,7 +331,7 @@ function CaseInitForm() {
                     //plupload_add
                     $(".plupload_buttons").css("display", "inline");
                     $(".plupload_upload_status").css("display", "inline");
-                    $.get('/Cases/GetAllFileName', { id: $('#CaseKey').val() }, function (data) {
+                    $.get('/Cases/GetAllCaseFileName', { id: $('#CaseKey').val() }, function (data) {
                         allFileNames = $.parseJSON(data);
                     });
                     up.refresh();
@@ -339,7 +340,7 @@ function CaseInitForm() {
             init: {
                 FileUploaded: function () {
                     //console.log('4:uploaded');
-                    $.get('/Cases/GetAllFileName', { id: $('#CaseKey').val() }, function (data) {
+                    $.get('/Cases/GetAllCaseFileName', { id: $('#CaseKey').val() }, function (data) {
                         allFileNames = $.parseJSON(data);
                     });
                     getCaseFiles();
@@ -373,7 +374,8 @@ function CaseInitForm() {
             preinit: {
                 Init: function (up, info) {
                     //log('[Init]', 'Info:', info, 'Features:', up.features);
-                    $.get('/Cases/GetAllFileName', { id: $('#LogKey').val() }, function (data) {
+                    //allFileNames = "",
+                    $.get('/Cases/GetAllLogFileName', { id: $('#LogKey').val() }, function (data) {
                         allFileNames = $.parseJSON(data);
                     });
                 },
@@ -395,12 +397,15 @@ function CaseInitForm() {
                     //plupload_add
                     $(".plupload_buttons").css("display", "inline");
                     $(".plupload_upload_status").css("display", "inline");
+                    $.get('/Cases/GetAllLogFileName', { id: $('#LogKey').val() }, function (data) {
+                        allFileNames = $.parseJSON(data);
+                    });
                     up.refresh();
                 }
             },
             init: {
                 FileUploaded: function () {
-                    $.get('/Cases/GetAllFileName', { id: $('#LogKey').val() }, function (data) {
+                    $.get('/Cases/GetAllLogFileName', { id: $('#LogKey').val() }, function (data) {
                         allFileNames = $.parseJSON(data);
                     });
                     getLogFiles();
