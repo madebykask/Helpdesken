@@ -1,25 +1,46 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Licenses.Models.Products.ProductEditModel
 
+@section Actions
+{
+    <ul class="secnav">               
+        <li>
+            @Html.ActionLink(Translation.Get("Spara"), null, null, new { id="btnSave", @class = "btn" })
+        </li>
+        <li>
+            @Html.ActionLink(Translation.Get("Avbryt"), "Index", "Products", null, new { @class = "btn" })
+        </li>
+        @if (!Model.IsNew())
+        {
+            <li>
+                @Html.ActionLink(Translation.Get("Ta bort"), "Delete", "Products", new { id = Model.Id }, new { @class = "btn" })
+            </li>                
+        }
+    </ul>    
+}
+
 @section Content {
-    <h4>@Translation.Get("Allmänt")</h4>
-    <table class="tableform">
-        <tr>
-            <td class="span3">
-                @Translation.Get("Produkt")
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.ProductName)
-            </td>
-        </tr>
-    </table>
-    <h4>@Translation.Get("Applikationer som ingår i produkten")</h4>
-    <table class="tableform">
-        <tr>
-            <td class="span9">
-                @Html.EditorFor(m => m.Applications)
-            </td>
-        </tr>
-    </table>        
+    @using (Html.BeginForm("Product", "Products", FormMethod.Post, new { id = "edit_form" }))
+    {
+        <h4>@Translation.Get("Allmänt")</h4>
+        <table class="tableform">
+            <tr>
+                <td class="span3">
+                    @Translation.Get("Produkt")
+                </td>
+                <td class="span9">
+                    @Html.TextBoxFor(m => m.ProductName)
+                </td>
+            </tr>
+        </table>
+        <h4>@Translation.Get("Applikationer som ingår i produkten")</h4>
+        <table class="tableform">
+            <tr>
+                <td class="span9">
+                    @Html.EditorFor(m => m.Applications)
+                </td>
+            </tr>
+        </table>                
+    }    
 }
 

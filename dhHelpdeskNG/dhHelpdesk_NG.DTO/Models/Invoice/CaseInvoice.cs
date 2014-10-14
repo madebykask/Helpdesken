@@ -45,6 +45,14 @@
 
         public CaseInvoiceOrder[] Orders { get; private set; }
 
+        public void DoInvoice()
+        {
+            foreach (var order in this.Orders)
+            {
+                order.DoInvoice();
+            }
+        }
+
         public bool IsNew()
         {
             return this.Id <= 0;

@@ -5,16 +5,18 @@
         <tr>
             <td>
                 <table class='width100 table table-striped table-bordered table-hover'>
-                    <tr>
-                        <th>{{:ArtNoHeader}}</th>
-                        <th>{{:NameHeader}}</th>
-                        <th>{{:NameEngHeader}}</th>
-                        <th>{{:UnitsHeader}}</th>
-                        <th>{{:TypeHeader}}</th>
-                        <th>{{:PpuHeader}}</th>
-                        <th>{{:TotalHeader}}</th>
-                        <th></th>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th>{{:ArtNoHeader}}</th>
+                            <th>{{:NameHeader}}</th>
+                            <th>{{:NameEngHeader}}</th>
+                            <th>{{:UnitsHeader}}</th>
+                            <th>{{:TypeHeader}}</th>
+                            <th>{{:PpuHeader}}</th>
+                            <th>{{:TotalHeader}}</th>
+                            <th></th>
+                        </tr>                        
+                    </thead>
                     <tbody>
                         {{for Articles tmpl="caseInvoiceArticleOverview" /}}                        
                     </tbody>

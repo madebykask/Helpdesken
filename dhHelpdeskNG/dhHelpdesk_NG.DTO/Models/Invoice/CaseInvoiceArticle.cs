@@ -66,7 +66,7 @@
             return this.Id <= 0;
         }
 
-        public void MakeInvoiced()
+        public void DoInvoice()
         {
             this.IsInvoiced = true;
         }

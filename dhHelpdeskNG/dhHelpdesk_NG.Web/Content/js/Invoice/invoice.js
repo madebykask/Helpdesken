@@ -142,20 +142,20 @@ $(function () {
         },
 
         InvoiceArticles: function() {
-            this._invoicesBackup = [];
-            for (var i = 0; i < this._invoices.length; i++) {
-                var invoice = this._invoices[i];
-                invoice.DoInvoice();
-                this._invoicesBackup.push(invoice.Clone());
-            }
-            this.SaveInvoices();
             var th = this;
             $.post("/Invoice/DoInvoice", {
                 customerId: this.CustomerId,
                 caseId: this.CaseId,
                 invoices: this.ToJson()
             },
-            function() {
+            function () {
+                th._invoicesBackup = [];
+                for (var i = 0; i < th._invoices.length; i++) {
+                    var invoice = th._invoices[i];
+                    invoice.DoInvoice();
+                    th._invoicesBackup.push(invoice.Clone());
+                }
+                th.SaveInvoices();
                 th.ShowMessage('Articles invoiced.');
             })
             .fail(function(result) {

@@ -70,6 +70,11 @@
                 var caseOverview = this.caseService.GetCaseOverview(caseId);
                 var articles = this.invoiceArticleService.GetArticles(customerId);
                 var data = this.invoiceHelper.ToCaseInvoices(invoices, caseOverview, articles);
+                foreach (var invoice in data)
+                {
+                    invoice.DoInvoice();
+                }
+
                 var output = this.invoiceHelper.ToOutputXml(data);
                 if (output == null)
                 {

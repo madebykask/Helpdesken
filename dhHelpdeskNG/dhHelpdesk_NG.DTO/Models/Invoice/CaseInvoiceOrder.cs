@@ -64,6 +64,14 @@
 
         public decimal? CaseNumber { get; set; }
 
+        public void DoInvoice()
+        {
+            foreach (var article in this.Articles)
+            {
+                article.DoInvoice();
+            }
+        }
+
         public XmlSchema GetSchema()
         {
             return null;
