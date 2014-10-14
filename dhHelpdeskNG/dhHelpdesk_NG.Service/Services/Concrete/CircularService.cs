@@ -4,12 +4,16 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Enums.MailTemplates;
+    using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.MailTemplates;
     using DH.Helpdesk.BusinessData.Models.Questionnaire;
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Read;
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Write;
     using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.MailTemplates;
     using DH.Helpdesk.Domain.Questionnaire;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Questionnaire;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
@@ -135,7 +139,7 @@
             }
         }
 
-        public List<CircularPart> GetAvaliableCases(
+        public List<AvailableCase> GetAvailableCases(
             int customerId,
             int questionnaireId,
             int[] selectedDepartments,
@@ -200,18 +204,18 @@
                                    select groups.OrderBy(p => p.CaseNumber).FirstOrDefault();
                 }
 
-                List<CircularPart> businessModels =
+                List<AvailableCase> businessModels =
                     anonymus.ToList()
                         .Select(
                             c =>
-                            new CircularPart(c.Id, (int)c.CaseNumber, c.Caption, c.PersonsEmail, c.SendDate != null))
+                            new AvailableCase(c.Id, (int)c.CaseNumber, c.Caption, c.PersonsEmail, c.SendDate != null))
                         .ToList();
 
                 return businessModels;
             }
         }
 
-        public List<CircularPart> GetConnectedCases(int circularId)
+        public List<ConnectedCase> GetConnectedCases(int circularId)
         {
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
@@ -233,17 +237,56 @@
                                            split.CaseNumber,
                                            split.Caption,
                                            split.PersonsEmail,
+                                           connectedCase.Guid,
                                            connectedCase.SendDate
                                        };
 
-                List<CircularPart> businessModels =
+                List<ConnectedCase> businessModels =
                     anonymus.ToList()
                         .Select(
                             c =>
-                            new CircularPart(c.Id, (int)c.CaseNumber, c.Caption, c.PersonsEmail, c.SendDate != null))
+                            new ConnectedCase(c.Id, (int)c.CaseNumber, c.Caption, c.PersonsEmail, c.Guid, c.SendDate != null))
                         .ToList();
 
                 return businessModels;
+            }
+        }
+
+        public void SendQuestionnaire(
+            string actionAbsolutePath,
+            int circularId,
+            OperationContext operationContext)
+        {
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
+                var templateLangaugeRepository = uof.GetRepository<MailTemplateLanguageEntity>();
+                var templateRepository = uof.GetRepository<MailTemplateEntity>();
+
+                var cases =
+                    circularPartRepository.GetAll()
+                        .Where(x => x.QuestionnaireCircular_Id == circularId)
+                        .Select(
+                            x =>
+                            new
+                                {
+                                    x.Guid, x.Case.CaseNumber, x.Case.Description, x.Case.Caption, x.Case.PersonsEmail
+                                })
+                        .ToList();
+
+                var query =
+                    from l in
+                        templateLangaugeRepository.GetAll().Where(x => x.Language_Id == operationContext.CustomerId)
+                    join t in
+                        templateRepository.GetAll()
+                        .Where(
+                            c =>
+                            c.MailID == (int)QuestionnaireTemplates.Questionnaire
+                            && c.Customer_Id == operationContext.CustomerId) on l.MailTemplate_Id equals t.Id
+                    select new { l.Body, l.Subject };
+
+                var anonymus = query.Single(); 
+                var mailTemplate = new MailTemplate(anonymus.Subject, anonymus.Body);
             }
         }
 

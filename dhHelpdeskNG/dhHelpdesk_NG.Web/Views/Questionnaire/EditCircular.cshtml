@@ -9,9 +9,6 @@
         $("#save_button").click(function() {
             $("#circular_edit_form").submit();
         });
-        $("#send_button").click(function () {
-            $("#circular_case_grid_form").submit();
-        });
     })
 </script>
 
@@ -19,7 +16,7 @@
     <div class="pull-left">
         <ul class="secnav">
             <li>
-                <input type="submit" value="@Translation.Get("Save")" class="btn" id="save_button" />
+                <button value="@Translation.Get("Save")" class="btn" id="save_button">@Translation.Get("Save")</button>
             </li>
             <li>
                 @if (Model.State.Value != CircularStates.Sent)
@@ -28,16 +25,14 @@
                 }
             </li>
             <li>
-                <a href="@Url.Action("CircularOverview", "Questionnaire", new { questionnaireId = Model.QuestionnaireId, state = Model.State })" class="btn">
-                    @Translation.Get("Avbryt")
-                </a>
+                @Html.ActionLink(Translation.Get("Avbryt"), "CircularOverview", new { questionnaireId = Model.QuestionnaireId}, new { @class = "btn" })
             </li>
             <li>
                 @{
                     switch (Model.State.Value)
                     {
                         case CircularStates.ReadyToSend:
-                            <input type="submit" value="@Translation.Get("Skicka Enkät")" class="btn" id="send_button" />
+                            @Html.ActionLink(Translation.Get("Skicka Enkät"), "Send", new { circularId = Model.Id }, new { @class = "btn" })
                             break;
                         case CircularStates.Sent:
                             @Html.ActionLink(Translation.Get("Skicka påminnelse"), "Remind", new { }, new { @class = "btn" })
@@ -93,10 +88,7 @@
                     </div>
                 </div>
                 <div id="case_grid_container">
-                    @using (Html.BeginForm("Send", "Questionnaire", FormMethod.Post, new { id = "circular_case_grid_form" }))
-                    {
-                        @Html.Partial("_CircularPartOverviewWithDelete", Model.ConnectedCases, new ViewDataDictionary { { "QuestionnaireId", Model.QuestionnaireId } })
-                    }
+                    @Html.Partial("_CircularPartOverviewWithDelete", Model.ConnectedCases, new ViewDataDictionary { { "QuestionnaireId", Model.QuestionnaireId } })
                 </div>
             </div>
         </div>

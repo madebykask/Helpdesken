@@ -1,13 +1,16 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Questionnaire.Read
 {
-    public sealed class CircularPart 
+    using System;
+
+    public sealed class ConnectedCase
     {
-        public CircularPart(int caseId, int caseNumber, string caption, string email, bool isSent)
+        public ConnectedCase(int caseId, int caseNumber, string caption, string email, Guid guid, bool isSent)
         {
             this.CaseId = caseId;
             this.CaseNumber = caseNumber;
             this.Caption = caption;
             this.Email = email;
+            this.Guid = guid;
             this.IsSent = isSent;
         }
 
@@ -18,6 +21,8 @@
         public string Caption { get; set; }
 
         public string Email { get; set; }
+
+        public Guid Guid { get; set; }
 
         public bool IsSent { get; set; }
     }

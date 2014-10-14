@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Models.Questionnaire.Input
 {
+    using System;
+
     using DH.Helpdesk.Services.DisplayValues;
 
     public class ConnectedToCircularOverview
@@ -14,6 +16,7 @@
             int caseNumber,
             string caption,
             string email,
+            Guid guid,
             bool isSent)
         {
             this.CircularId = circularId;
@@ -21,6 +24,7 @@
             this.CaseNumber = caseNumber;
             this.Caption = caption;
             this.Email = email;
+            this.Guid = guid;
             this.IsSent = (BooleanDisplayValue)isSent;
         }
 
@@ -34,14 +38,8 @@
 
         public string Email { get; set; }
 
-        public BooleanDisplayValue IsSent { get; set; }
+        public Guid Guid { get; set; }        
 
-        public string DisplaySent
-        {
-            get
-            {
-                return this.IsSent.GetDisplayValue();
-            }
-        }
+        public BooleanDisplayValue IsSent { get; set; }
     }
 }

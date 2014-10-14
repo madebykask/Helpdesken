@@ -26,7 +26,7 @@
                         <tr>
                             <td>
                                 @Html.DisplayFor(modelItem => cases[i].CaseNumber)
-                                @Html.HiddenFor(m => cases[i].CaseId)
+                                @Html.HiddenFor(m => cases[i].CaseId, new { Name = "ConnectedCases" })
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => cases[i].Caption)

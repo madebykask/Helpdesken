@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
 
+    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Read;
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Write;
 
@@ -20,7 +21,7 @@
 
         void DeleteConnectedCase(int cirularId, int caseId);
 
-        List<CircularPart> GetAvaliableCases(
+        List<AvailableCase> GetAvailableCases(
             int customerId,
             int questionnaireId,
             int[] selectedDepartments,
@@ -32,6 +33,8 @@
             DateTime? finishingDateTo,
             bool isUniqueEmail);
 
-        List<CircularPart> GetConnectedCases(int id);
+        List<ConnectedCase> GetConnectedCases(int id);
+
+        void SendQuestionnaire(string actionAbsolutePath, int circularId, OperationContext operationContext);
     }
 }

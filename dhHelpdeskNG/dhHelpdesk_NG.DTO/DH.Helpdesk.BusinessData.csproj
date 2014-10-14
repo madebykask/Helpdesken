@@ -93,6 +93,7 @@
     <Compile Include="Enums\Inventory\Fields\Shared\ProcessorFields.cs" />
     <Compile Include="Enums\LanguageTextId.cs" />
     <Compile Include="Enums\Changes\StepStatus.cs" />
+    <Compile Include="Enums\MailTemplates\QuestionnaireTemplates.cs" />
     <Compile Include="Enums\Notifiers\AddressField.cs" />
     <Compile Include="Enums\Notifiers\GeneralField.cs" />
     <Compile Include="Enums\Notifiers\NotifierStatus.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="Models\ComputerUserFieldSettingsLanguage.cs" />
     <Compile Include="Models\Licenses\Licenses\LicenseFileModel.cs" />
     <Compile Include="Models\Questionnaire\Read\CircularOverview.cs" />
+    <Compile Include="Models\Questionnaire\Read\ConnectedCase.cs" />
     <Compile Include="Models\TextList.cs" />
     <Compile Include="Models\Interfaces\IHierarchyItem.cs" />
     <Compile Include="Models\ActionSetting\ActionSetting.cs" />
@@ -267,7 +269,7 @@
     <Compile Include="Models\Operation\OperationObjectForRead.cs" />
     <Compile Include="Models\Questionnaire\Circular.cs" />
     <Compile Include="Models\Questionnaire\Write\CircularForUpdate.cs" />
-    <Compile Include="Models\Questionnaire\Read\CircularPart.cs" />
+    <Compile Include="Models\Questionnaire\Read\AvailableCase.cs" />
     <Compile Include="Models\Reports\Output\AverageSolutionTimeOptionsResponse.cs" />
     <Compile Include="Models\Reports\Output\AverageSolutionTimeReportResponse.cs" />
     <Compile Include="Models\Reports\Output\RegistratedCasesCaseTypeItem.cs" />

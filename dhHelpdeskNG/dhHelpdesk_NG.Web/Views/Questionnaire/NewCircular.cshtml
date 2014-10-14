@@ -7,10 +7,10 @@
     <div class="pull-left">
         <ul class="secnav">
             <li>
-                <input type="submit" value="@Translation.Get("Save")" class="btn" id="subbut" />
+                <button value="@Translation.Get("Save")" class="btn" id="subbut">@Translation.Get("Save")</button>
             </li>
             <li>
-                <input type="submit" value="@Translation.Get("Skapa urval")" class="btn" id="async_subbut" />
+                <button value="@Translation.Get("Skapa urval")" class="btn" id="async_subbut">@Translation.Get("Skapa urval")</button>
             </li>
             <li>
                 <a href="@Url.Action("CircularOverview", new { questionnaireId = Model.QuestionnaireId, state = 0 })" class="btn">
@@ -65,6 +65,7 @@
 
                                 <div>
                                     @Html.CheckBoxFor(x => x.IsUniqueEmail)
+                                    @Translation.Get("Endast unika e-postadresser")
 
                                     <table class="tableform">
                                         <tr>

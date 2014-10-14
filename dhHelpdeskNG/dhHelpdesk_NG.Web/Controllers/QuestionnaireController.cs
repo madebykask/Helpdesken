@@ -13,14 +13,14 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Read;
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Write;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.Services.BusinessLogic.Changes.Concrete;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Models.Questionnaire.Input;
     using DH.Helpdesk.Web.Models.Questionnaire.Output;
 
-    public class QuestionnaireController : BaseController
+    public class QuestionnaireController : UserInteractionController
     {
         #region Fields
 
@@ -530,11 +530,11 @@ namespace DH.Helpdesk.Web.Controllers
         {
             CircularForEdit circular = this._circularService.GetById(circularId);
 
-            List<CircularPart> connectedCases = this._circularService.GetConnectedCases(circularId);
+            List<ConnectedCase> connectedCases = this._circularService.GetConnectedCases(circularId);
             List<ConnectedToCircularOverview> connecteCasesOverviews =
                 connectedCases.Select(
                     x =>
-                    new ConnectedToCircularOverview(circularId, x.CaseId, x.CaseNumber, x.Caption, x.Email, x.IsSent))
+                    new ConnectedToCircularOverview(circularId, x.CaseId, x.CaseNumber, x.Caption, x.Email, x.Guid, x.IsSent))
                     .ToList();
 
             var model = new EditCircularModel(
@@ -569,16 +569,14 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult NewCircular(NewCircularModel newCircular, List<CircularPartOverview> cases)
+        public ActionResult NewCircular(NewCircularModel newCircular, int[] connectedCases)
         {
-            List<int> caseIds = cases.Select(x => x.CaseId).ToList();
-
             var circular = new CircularForInsert(
                 newCircular.CircularName,
                 newCircular.QuestionnaireId,
                 CircularStateId.ReadyToSend,
                 DateTime.Now,
-                caseIds);
+                connectedCases.ToList());
 
             this._circularService.AddCircular(circular);
 
@@ -599,7 +597,7 @@ namespace DH.Helpdesk.Web.Controllers
             DateTime? finishingDateTo,
             bool isUniqueEmail)
         {
-            List<CircularPart> cases = this._circularService.GetAvaliableCases(
+            List<AvailableCase> cases = this._circularService.GetAvailableCases(
                 SessionFacade.CurrentCustomer.Id,
                 questionnaireId,
                 selectedDepartments,
@@ -625,10 +623,13 @@ namespace DH.Helpdesk.Web.Controllers
             return this.RedirectToAction("EditCircular", new { questionnaireId, circularId });
         }
 
-        [HttpPost]
-        public ViewResult Send(int[] connectedCases)
+        [HttpGet]
+        public ContentResult Send(int circularId)
         {
-            throw new NotImplementedException();
+            string actionUrl = this.CreateQuestionnarieUrl();
+            this._circularService.SendQuestionnaire(actionUrl, circularId, this.OperationContext);
+
+            return this.Content(actionUrl);
         }
 
         [HttpPost]
@@ -636,6 +637,14 @@ namespace DH.Helpdesk.Web.Controllers
         {
             throw new NotImplementedException();
         }
+
+        [HttpGet]
+        public ViewResult Questionnaire(Guid guid)
+        {
+            throw new NotImplementedException();
+        }
+
+        #region PRIVATE
 
         private List<CircularOverviewModel> CreateCircularOverviewModels(int questionnaireId, int state)
         {
@@ -648,5 +657,21 @@ namespace DH.Helpdesk.Web.Controllers
                     .ToList();
             return circularOverviews;
         }
+
+        private string CreateQuestionnarieUrl()
+        {
+            const string ParamString = "?guid=";
+
+            Uri url = this.HttpContext.Request.Url;
+            string fullUrl = string.Empty;
+            if (url != null)
+            {
+                fullUrl = this.Url.Action("Questionnaire", "Questionnaire", url.Scheme);
+            }
+
+            return fullUrl + ParamString;
+        }
+
+        #endregion
     }
 }
