@@ -1,8 +1,10 @@
 ﻿namespace DH.Helpdesk.Domain.MailTemplates
 {
+    using DH.Helpdesk.Domain.Interfaces;
+
     using global::System;
 
-    public class MailTemplateEntity : Entity
+    public class MailTemplateEntity : Entity, INulableCustomerEntity
     {
         #region Public Properties
 

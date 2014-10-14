@@ -17,6 +17,8 @@
 
         void SendEmail(MailAddress from, List<MailAddress> recipients, Mail mail);
 
+        void SendEmail(MailAddress from, MailAddress recipient, Mail mail);
+
         void SendEmail(
             string from,
             string to,

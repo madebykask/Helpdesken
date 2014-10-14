@@ -6,7 +6,7 @@
 
     public static class CircularPartSpecifications
     {
-        public static IQueryable<QuestionnaireCircularPartEntity> GetByQuestionnaireId(
+        public static IQueryable<QuestionnaireCircularPartEntity> GetQuestionnaireCases(
             this IQueryable<QuestionnaireCircularPartEntity> query,
             int questionnaireId)
         {

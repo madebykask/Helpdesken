@@ -6,6 +6,7 @@
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Read;
     using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Domain.Questionnaire;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Questionnaire;
 
     public static class CircularSpecifications

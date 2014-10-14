@@ -22,12 +22,19 @@
 
         public void SendEmail(MailAddress from, List<MailAddress> recipients, Mail mail)
         {
-            var mailSendingSettings = emailSendingSettingsProvider.GetSettings();
-            var smtpClient = new SmtpClient(mailSendingSettings.SmtpServer, mailSendingSettings.SmtpPort);
-
             foreach (var recipient in recipients)
             {
-                var mailMessage = new MailMessage(from, recipient) { Subject = mail.Subject, Body = mail.Body };
+                this.SendEmail(from, recipient, mail);
+            }
+        }
+
+        public void SendEmail(MailAddress from, MailAddress recipient, Mail mail)
+        {
+            var mailSendingSettings = this.emailSendingSettingsProvider.GetSettings();
+
+            using (var smtpClient = new SmtpClient(mailSendingSettings.SmtpServer, mailSendingSettings.SmtpPort))
+            {
+                var mailMessage = new MailMessage(@from, recipient) { Subject = mail.Subject, Body = mail.Body };
                 smtpClient.Send(mailMessage);
             }
         }

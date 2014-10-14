@@ -15,6 +15,14 @@
             return query;
         }
 
+        public static IQueryable<T> GetByCustomer<T>(this IQueryable<T> query, int? customerId)
+            where T : class, INulableCustomerEntity
+        {
+            query = query.Where(x => object.Equals(x.Customer_Id, customerId));
+
+            return query;
+        }
+
         public static IQueryable<T> GetById<T>(this IQueryable<T> query, int id)
             where T : Entity
         {

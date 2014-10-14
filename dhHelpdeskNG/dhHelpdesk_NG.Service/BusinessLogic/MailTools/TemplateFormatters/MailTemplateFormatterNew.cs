@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters
+namespace DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -9,7 +9,7 @@
 
     using LinqLib.Sequence;
 
-    public abstract class MailTemplateFormatter<TBusinessModel> : IMailTemplateFormatter<TBusinessModel>
+    public class MailTemplateFormatterNew : IMailTemplateFormatterNew
     {
         #region Constants
 
@@ -19,15 +19,12 @@
 
         #region Public Methods and Operators
 
-        public Mail Format(MailTemplate template, TBusinessModel businessModel, int customerId, int languageId)
+        public Mail Format(MailTemplate template, EmailMarkValues markValues)
         {
-            EmailMarkValues markValues = this.GetMarkValues(template, businessModel, customerId, languageId);
-
             var subjectMarks = Regex.Matches(template.Subject, MarkPattern);
             var bodyMarks = Regex.Matches(template.Body, MarkPattern);
 
-//            CheckMarks(markValues, subjectMarks, bodyMarks);
-
+            // CheckMarks(markValues, subjectMarks, bodyMarks);
             var subject = template.Subject;
             var body = template.Body;
 
@@ -59,12 +56,6 @@
         #endregion
 
         #region Methods
-
-        protected abstract EmailMarkValues GetMarkValues(
-            MailTemplate template,
-            TBusinessModel businessModel,
-            int customerId,
-            int languageId);
 
         private static void CheckMarks(
             EmailMarkValues markValues,

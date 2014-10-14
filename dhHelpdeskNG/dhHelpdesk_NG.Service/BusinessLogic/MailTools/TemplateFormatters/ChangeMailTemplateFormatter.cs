@@ -11,8 +11,7 @@
     using DH.Helpdesk.Dal.Repositories.Changes;
     using DH.Helpdesk.Services.Helpers;
 
-    public sealed class ChangeMailTemplateFormatter : MailTemplateFormatter<UpdatedChange>,
-        IMailTemplateFormatter<UpdatedChange>
+    public sealed class ChangeMailTemplateFormatter : MailTemplateFormatter<UpdatedChange>
     {
         #region Fields
 
