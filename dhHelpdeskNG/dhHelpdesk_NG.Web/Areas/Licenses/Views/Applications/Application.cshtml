@@ -1,5 +1,57 @@
-﻿@model DH.Helpdesk.Web.Areas.Licenses.Models.Applications.ApplicationEditModel
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Licenses.Models.Applications.ApplicationEditModel
+
+@section Actions
+{
+    <ul class="secnav">               
+        <li>
+            @Html.ActionLink(Translation.Get("Spara"), null, null, new { id = "btnSave", @class = "btn" })
+        </li>
+        <li>
+            @Html.ActionLink(Translation.Get("Avbryt"), "Index", "Applications", null, new { @class = "btn" })
+        </li>
+        @if (!Model.IsNew())
+        {
+            <li>
+                @Html.ActionLink(Translation.Get("Ta bort"), "Delete", "Applications", new { id = Model.Id }, 
+                    new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuellt program/applikation") })
+            </li>                
+        }
+    </ul>    
+}
 
 @section Content {
-
+    @using (Html.BeginForm("Application", "Applications", FormMethod.Post, new { id = "edit_form" }))
+    {
+        @Html.HiddenFor(m => m.Id, Model.Id)
+        @Html.HiddenFor(m => m.CustomerId, Model.CustomerId)
+        <h4>@Translation.Get("Allmänt")</h4>
+        <table class="tableform">
+            <tr>
+                <td class="span3">
+                    @Translation.Get("Applikation")
+                </td>
+                <td class="span9">
+                    @Html.TextBoxFor(m => m.ApplicationName)
+                </td>
+            </tr>
+            <tr>
+                <td class="span3">
+                    @Translation.Get("Produkt")
+                </td>
+                <td class="span9">
+                    @Html.DropDownListFor(m => m.ProductId, Model.Products)
+                </td>
+            </tr>
+        </table>                
+    } 
+    <script type="text/javascript">
+        $(function() {
+            $("#btnSave").click(function() {
+                $("#edit_form").submit();
+                return false;
+            });
+        });
+    </script>   
 }
+

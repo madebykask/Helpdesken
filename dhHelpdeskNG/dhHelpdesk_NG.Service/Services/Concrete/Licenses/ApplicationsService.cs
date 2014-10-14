@@ -54,7 +54,6 @@
 
                 var products = productRepository.GetAll()
                                 .GetByCustomer(customerId)
-                                .GetApplicationProducts(applicationId)
                                 .MapToItemOverviews();
 
                 return new ApplicationData(application, products);                
@@ -76,6 +75,13 @@
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var applicationRepository = uow.GetRepository<Application>();
+                var productRepository = uow.GetRepository<Product>();
+                Product product = null;
+                if (application.ProductId.HasValue)
+                {
+                    product = productRepository.GetById(application.ProductId.Value);
+                }
+
                 Application entity;
                 if (application.IsNew())
                 {
@@ -91,6 +97,11 @@
                     ApplicationMapper.MapToEntity(application, entity);
                     entity.ChangedDate = DateTime.Now;
                     applicationRepository.Update(entity);
+                }
+
+                if (product != null)
+                {
+                    product.Applications = new[] { entity };                    
                 }
 
                 uow.Save();

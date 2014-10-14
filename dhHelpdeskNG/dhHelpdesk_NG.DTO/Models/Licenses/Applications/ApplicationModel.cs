@@ -11,9 +11,11 @@
                 int id,
                 int customerId, 
                 string applicationName, 
+                int? productId,
                 DateTime createdDate, 
                 DateTime changedDate)
         {
+            this.ProductId = productId;
             this.Id = id;
             this.ChangedDate = changedDate;
             this.CreatedDate = createdDate;
@@ -24,8 +26,10 @@
         public ApplicationModel(
                 int id,
                 int customerId, 
-                string applicationName)
+                string applicationName, 
+                int? productId)
         {
+            this.ProductId = productId;
             this.Id = id;
             this.ApplicationName = applicationName;
             this.CustomerId = customerId;
@@ -46,6 +50,8 @@
         public DateTime CreatedDate { get; private set; }
 
         public DateTime ChangedDate { get; private set; }
+
+        public int? ProductId { get; private set; }
 
         public static ApplicationModel CreateDefault(int customerId)
         {

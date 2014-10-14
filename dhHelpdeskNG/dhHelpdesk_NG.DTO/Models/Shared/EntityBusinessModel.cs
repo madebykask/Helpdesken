@@ -4,7 +4,7 @@
 
     public abstract class EntityBusinessModel
     {
-        [IsId]
+        [MinValue(0)]
         public int Id { get; set; }
 
         public bool IsNew()

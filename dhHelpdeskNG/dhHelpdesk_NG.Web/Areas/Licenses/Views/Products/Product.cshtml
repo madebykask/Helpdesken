@@ -5,7 +5,7 @@
 {
     <ul class="secnav">               
         <li>
-            @Html.ActionLink(Translation.Get("Spara"), null, null, new { id="btnSave", @class = "btn" })
+            @Html.ActionLink(Translation.Get("Spara"), null, null, new { id = "btnSave", @class = "btn" })
         </li>
         <li>
             @Html.ActionLink(Translation.Get("Avbryt"), "Index", "Products", null, new { @class = "btn" })
@@ -13,7 +13,8 @@
         @if (!Model.IsNew())
         {
             <li>
-                @Html.ActionLink(Translation.Get("Ta bort"), "Delete", "Products", new { id = Model.Id }, new { @class = "btn" })
+                @Html.ActionLink(Translation.Get("Ta bort"), "Delete", "Products", new { id = Model.Id }, 
+                    new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuellt program/applikation") })
             </li>                
         }
     </ul>    
@@ -22,6 +23,8 @@
 @section Content {
     @using (Html.BeginForm("Product", "Products", FormMethod.Post, new { id = "edit_form" }))
     {
+        @Html.HiddenFor(m => m.Id, Model.Id)
+        @Html.HiddenFor(m => m.CustomerId, Model.CustomerId)        
         <h4>@Translation.Get("Allmänt")</h4>
         <table class="tableform">
             <tr>

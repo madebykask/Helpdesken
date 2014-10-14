@@ -43,15 +43,18 @@
                                     a.Customer_Id,
                                     a.Name,
                                     a.CreatedDate,
-                                    a.ChangedDate
+                                    a.ChangedDate,
+                                    a.Products,
                                 }).SingleOrDefault();
 
             if (entity != null)
             {
+                var product = entity.Products.SingleOrDefault();
                 model = new ApplicationModel(
                                     entity.Id,
                                     entity.Customer_Id,
                                     entity.Name,
+                                    product != null ? product.Id : (int?)null,
                                     entity.CreatedDate,
                                     entity.ChangedDate);
             }

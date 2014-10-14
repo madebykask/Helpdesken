@@ -18,7 +18,7 @@
 
         public ApplicationEditModel GetEditModel(ApplicationData data)
         {
-            var products = WebMvcHelper.CreateListField(data.Products);
+            var products = WebMvcHelper.CreateListField(data.Products, data.Application.ProductId);
 
             return new ApplicationEditModel(
                                 data.Application.Id,
@@ -32,7 +32,8 @@
             var model = new ApplicationModel(
                                 editModel.Id,
                                 editModel.CustomerId,
-                                editModel.ApplicationName);
+                                editModel.ApplicationName,
+                                editModel.ProductId);
 
             return model;
         }
