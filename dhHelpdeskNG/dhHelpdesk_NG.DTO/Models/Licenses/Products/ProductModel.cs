@@ -57,6 +57,7 @@
 
         public DateTime ChangedDate { get; private set; }
 
+        [NotNull]
         public ItemOverview[] Applications { get; private set; }
 
         public static ProductModel CreateDefault(int customerId)

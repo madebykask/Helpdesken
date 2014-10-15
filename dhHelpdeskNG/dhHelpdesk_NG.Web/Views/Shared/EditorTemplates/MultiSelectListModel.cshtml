@@ -26,7 +26,7 @@
         <tr>
             <td></td>
             <td>
-                @Html.ListBoxFor(m => m.AvailableItems, Model.AvailableItems, new { id=@availableListId, @class="multi-select-field" })
+                @Html.ListBoxFor(m => m.AvailableItems, Model.AvailableItems, new { id = @availableListId, @class = "multi-select-field" })
             </td>
             <td>
                 <div class="center">
@@ -35,7 +35,7 @@
                 </div>
             </td>
             <td>
-                @Html.ListBoxFor(m => m.SelectedItems, Model.SelectedItems, new { id=@selectedListId, @class="multi-select-field" })
+                @Html.ListBoxFor(m => m.SelectedItems, Model.SelectedItems, new { id = @selectedListId, @class = "multi-select-field" })
             </td>
         </tr>        
     </tbody>
@@ -59,6 +59,10 @@
             selectedList.find("option:selected").remove().appendTo(availableList);
             availableList.get(0).selectedIndex = -1;
             return false;
+        });
+
+        $("form").on("submit", function() {
+            selectedList.find("option").attr("selected", "selected");
         });
     });
 </script>

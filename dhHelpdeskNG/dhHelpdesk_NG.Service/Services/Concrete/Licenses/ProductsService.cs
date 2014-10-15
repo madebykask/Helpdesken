@@ -94,6 +94,7 @@
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var productRepository = uow.GetRepository<Product>();
+                var applicationRepository = uow.GetRepository<Application>();
                 Product entity;
                 if (product.IsNew())
                 {
@@ -111,6 +112,13 @@
                     productRepository.Update(entity);
                 }
 
+                entity.Applications.Clear();
+                foreach (var application in product.Applications)
+                {
+                    var applicationEntity = applicationRepository.GetById(int.Parse(application.Value));
+                    entity.Applications.Add(applicationEntity);
+                }
+
                 uow.Save();
                 return entity.Id;
             }
@@ -120,9 +128,10 @@
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
-                var repository = uow.GetRepository<Product>();
-
-                repository.DeleteById(id);
+                var productRepository = uow.GetRepository<Product>();
+                var product = productRepository.GetById(id);
+                product.Applications.Clear();
+                productRepository.DeleteById(id);
 
                 uow.Save();
             }

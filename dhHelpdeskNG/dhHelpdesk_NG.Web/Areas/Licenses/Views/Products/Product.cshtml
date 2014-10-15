@@ -44,6 +44,14 @@
                 </td>
             </tr>
         </table>                
-    }    
+    } 
+    <script type="text/javascript">
+        $(function() {
+            $("#btnSave").click(function() {
+                $("#edit_form").submit();
+                return false;
+            });
+        });
+    </script>          
 }
 

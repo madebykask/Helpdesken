@@ -1,5 +1,45 @@
-﻿@model DH.Helpdesk.Web.Areas.Licenses.Models.Licenses.LicenseEditModel
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Licenses.Models.Licenses.LicenseEditModel
+
+@section Actions
+{
+    <ul class="secnav">               
+        <li>
+            @Html.ActionLink(Translation.Get("Spara"), null, null, new { id = "btnSave", @class = "btn" })
+        </li>
+        <li>
+            @Html.ActionLink(Translation.Get("Avbryt"), "Index", "Licenses", null, new { @class = "btn" })
+        </li>
+        @if (!Model.IsNew())
+        {
+            <li>
+                @Html.ActionLink(Translation.Get("Ta bort"), "Delete", "Licenses", new { id = Model.Id }, 
+                    new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Are you sure?") })
+            </li>                
+        }
+    </ul>    
+}
 
 @section Content {
-
+    @using (Html.BeginForm("License", "Licenses", FormMethod.Post, new { id = "edit_form" }))
+    {
+        @Html.HiddenFor(m => m.Id, Model.Id)
+        <h4>@Translation.Get("Allmänt")</h4>
+        <table class="tableform">
+            <tr>
+                <td class="span3">
+                </td>
+                <td class="span9">
+                </td>
+            </tr>
+        </table>                
+    } 
+    <script type="text/javascript">
+        $(function() {
+            $("#btnSave").click(function() {
+                $("#edit_form").submit();
+                return false;
+            });
+        });
+    </script>          
 }

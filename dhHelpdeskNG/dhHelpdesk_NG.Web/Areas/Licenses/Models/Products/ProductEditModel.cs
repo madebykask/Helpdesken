@@ -35,7 +35,7 @@
         public string ProductName { get; set; }
 
         [NotNull]
-        public MultiSelectListModel Applications { get; private set; }
+        public MultiSelectListModel Applications { get; set; }
 
         public override EntityModelType Type
         {

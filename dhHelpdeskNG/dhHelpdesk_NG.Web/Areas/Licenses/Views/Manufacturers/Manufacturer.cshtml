@@ -1,5 +1,46 @@
-﻿@model DH.Helpdesk.Web.Areas.Licenses.Models.Manufacturers.ManufacturerEditModel
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Licenses.Models.Manufacturers.ManufacturerEditModel
+
+@section Actions
+{
+    <ul class="secnav">               
+        <li>
+            @Html.ActionLink(Translation.Get("Spara"), null, null, new { id = "btnSave", @class = "btn" })
+        </li>
+        <li>
+            @Html.ActionLink(Translation.Get("Avbryt"), "Index", "Manufacturers", null, new { @class = "btn" })
+        </li>
+        @if (!Model.IsNew())
+        {
+            <li>
+                @Html.ActionLink(Translation.Get("Ta bort"), "Delete", "Manufacturers", new { id = Model.Id }, 
+                    new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Are you sure?") })
+            </li>                
+        }
+    </ul>    
+}
 
 @section Content {
-
+    @using (Html.BeginForm("Manufacturer", "Manufacturers", FormMethod.Post, new { id = "edit_form" }))
+    {
+        @Html.HiddenFor(m => m.Id, Model.Id)
+        @Html.HiddenFor(m => m.CustomerId, Model.CustomerId)        
+        <h4>@Translation.Get("Allmänt")</h4>
+        <table class="tableform">
+            <tr>
+                <td class="span3">
+                </td>
+                <td class="span9">
+                </td>
+            </tr>
+        </table>                
+    } 
+    <script type="text/javascript">
+        $(function() {
+            $("#btnSave").click(function() {
+                $("#edit_form").submit();
+                return false;
+            });
+        });
+    </script>          
 }
