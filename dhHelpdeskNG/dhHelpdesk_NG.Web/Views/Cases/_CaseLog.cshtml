@@ -11,12 +11,12 @@
             {            
                 <thead>
                     <tr>
-                        <th>@Translation.Get("Datum", Enums.TranslationSource.TextTranslation)</th>
-                        <th>@Translation.Get("Registrerad av", Enums.TranslationSource.TextTranslation)</th>
-                        <th>@Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) </th>
-                        <th>@Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) </th>
-                        <th>@Translation.Get("E-post", Enums.TranslationSource.TextTranslation)</th>
-                        <th>@Translation.Get("Filer", Enums.TranslationSource.TextTranslation)</th>
+                        <th>@Translation.Get("Datum",SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.TextTranslation)</th>
+                        <th>@Translation.Get("Registrerad av",SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.TextTranslation)</th>
+                        <th>@Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(),SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) </th>
+                        <th>@Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(),SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) </th>
+                        <th>@Translation.Get("E-post",SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.TextTranslation)</th>
+                        <th>@Translation.Get("Filer",SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.TextTranslation)</th>
                     </tr>
                 </thead>
                 <tbody>

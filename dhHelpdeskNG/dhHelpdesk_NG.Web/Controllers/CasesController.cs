@@ -377,7 +377,7 @@
         public ActionResult New(int customerId, int? templateId, int? copyFromCaseId, int? caseLanguageId)
         {
             CaseInputViewModel m = null;
-
+          
             if (caseLanguageId == null)
                SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
             else
@@ -389,6 +389,15 @@
                     var userId = SessionFacade.CurrentUser.Id;
                     m = this.GetCaseInputViewModel(userId, customerId, 0, 0, "", templateId, copyFromCaseId);
 
+                    var caseParam = new NewCaseParams
+                    {
+                        customerId = customerId,
+                        templateId = templateId,
+                        copyFromCaseId = copyFromCaseId,
+                        caseLanguageId = caseLanguageId
+                    };
+
+                    m.NewModeParams = caseParam;
                     AddViewDataValues();
                     return this.View(m);
                 }
@@ -541,7 +550,7 @@
                 var caseInvoices = this.invoiceArticleService.GetCaseInvoices(id);
                 m.InvoiceArticles = this.invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoices);
                 m.CustomerSettings = this.workContext.Customer.Settings;
-            }
+            }            
 
             AddViewDataValues();
             return this.View(m);
@@ -1256,14 +1265,7 @@
             SessionFacade.CurrentUser.LanguageId = languageId;
             return this.RedirectToAction("index", "cases");            
         }
-
-        [HttpGet]
-        public RedirectToRouteResult ChangeCaseLanguage(int customerId, int languageId)
-        {
-            SessionFacade.CurrentCaseLanguageId = languageId;
-            //SessionFacade.CurrentUser.LanguageId = languageId;
-            return this.RedirectToAction("New", "cases", new { customerId = customerId, caseLanguageId = languageId });
-        }
+        
         #endregion
 
         #region Private Methods and Operators

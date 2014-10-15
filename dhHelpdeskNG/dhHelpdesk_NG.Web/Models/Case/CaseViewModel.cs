@@ -97,6 +97,9 @@
         public string CaseInvoiceArticles { get; set; }
 
         public CustomerSettings CustomerSettings { get; set; }
+
+        public NewCaseParams  NewModeParams { get; set; }                
+
     }
 
     public class CaseIndexViewModel
@@ -112,5 +115,13 @@
         public IList<CaseSettings> caseSettings { get; set; }
         public IList<CaseSearchResult> cases { get; set; }
     }
+
+    public class NewCaseParams
+    {
+        public int customerId { get; set; }
+        public int? templateId { get; set; }
+        public int? copyFromCaseId { get; set; }
+        public int? caseLanguageId { get; set; }
+    }    
 
 }

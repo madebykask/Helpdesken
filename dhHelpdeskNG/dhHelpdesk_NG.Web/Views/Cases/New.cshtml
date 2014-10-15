@@ -9,6 +9,23 @@
         CaseInitForm();
     });
     
+    $("#case__RegLanguage_Id").change(function () {
+
+        var ci = '@Model.NewModeParams.customerId';
+        var cfc = '@Model.NewModeParams.copyFromCaseId';
+        var ti = '@Model.NewModeParams.templateId';
+        var cli = $('#case__RegLanguage_Id').val();
+
+        var p2 = "";
+        if (ti != '')
+            p2 = "&templateId=" + ti;
+
+        var p3 = "";
+        if (cfc != '')
+            p3 = "&copyFromCaseId=" + cfc
+
+        location.href = '/Cases/new?customerId=' + ci + p2 + p3 + '&caseLanguageId=' + cli;       
+    });
 </script>
 }
 

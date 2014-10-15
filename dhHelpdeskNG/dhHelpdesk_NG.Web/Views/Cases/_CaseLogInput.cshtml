@@ -34,14 +34,14 @@
                         @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
                                 new {  InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool() }) 
                     }
-                    <span class="lbl">@Translation.Get("Informera anmälaren om åtgärden") </span>
+                    <span class="lbl">@Translation.Get("Informera anmälaren om åtgärden",SessionFacade.CurrentCaseLanguageId) </span>
                 </div>                                    
             </li>
             <li class="secspace"></li>
             <li>
                 <div class="checkbox">
                     @Html.CheckBoxFor(model => model.CaseLog.HighPriority)
-                    <span class="lbl">@Translation.Get("Hög prioritet") </span>
+                    <span class="lbl">@Translation.Get("Hög prioritet",SessionFacade.CurrentCaseLanguageId) </span>
                 </div> 
             </li>
             @if (Model.CaseLog.Id == 0) 
@@ -52,7 +52,7 @@
                     {                        
                         <li class="secspace"></li>
                         <li>
-                            @Translation.Get("Standardtext")&nbsp;
+                            @Translation.Get("Standardtext",SessionFacade.CurrentCaseLanguageId)&nbsp;
                             <select id="lstStandarTexts">
                                 <option>&nbsp;</option>
                                 @foreach (var e in Model.standardTexts.Where(e => e.IsActive == 1))
@@ -111,7 +111,7 @@
                 <td>
                     <div class="checkbox">
                         @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutLog)  
-                        <span class="lbl">@Translation.Get("Skicka intern loggpost till")</span>
+                        <span class="lbl">@Translation.Get("Skicka intern loggpost till",SessionFacade.CurrentCaseLanguageId)</span>
                     </div>
                     <div id="divEmailRecepientsInternalLog" style="display:none">
                         @Html.TextAreaFor(model => model.CaseLog.EmailRecepientsInternalLog, new { @readonly="readonly"})
@@ -126,7 +126,7 @@
                         @CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Filename) 
                     </td>
                         <td>
-                            <a href="#upload_logfiles_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till")</a>
+                            <a href="#upload_logfiles_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till",SessionFacade.CurrentCaseLanguageId)</a>
                         </td>
                 </tr>                
             }
@@ -191,7 +191,7 @@
             <table class="tableform">
                 <tr>
                     <td class="span3" >
-                        @Translation.Get("Tidsåtgång") 
+                        @Translation.Get("Tidsåtgång",SessionFacade.CurrentCaseLanguageId) 
                     </td>
                     <td class="span4">
                         <select id="CaseLog_WorkingTimeHour" name="CaseLog.WorkingTimeHour" Class="inputw100">
@@ -206,14 +206,14 @@
                         {
                             <option value="@i.ToString()" @i.IdIsSelected(Model.CaseLog.WorkingTimeMinute.ToString()) >@i.ToString()</option>
                         }
-                        </select>&nbsp;@Translation.Get("Min")
+                        </select>&nbsp;@Translation.Get("Min",SessionFacade.CurrentCaseLanguageId)
                     </td>
                     <td class="span5">
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        @Translation.Get("Material") 
+                        @Translation.Get("Material",SessionFacade.CurrentCaseLanguageId) 
                     </td>
                     <td>
                         @Html.TextBoxFor(model => model.CaseLog.EquipmentPrice, new { maxlength = "12"} )
@@ -223,7 +223,7 @@
                 </tr>
                 <tr>
                     <td>
-                        @Translation.Get("Pris") 
+                        @Translation.Get("Pris",SessionFacade.CurrentCaseLanguageId) 
                     </td>
                     <td>
                         @Html.TextBoxFor(model => model.CaseLog.Price, new { maxlength = "8" })
@@ -233,14 +233,14 @@
                 </tr>
                 <tr>
                     <td>
-                        @Translation.Get("Debitering") 
+                        @Translation.Get("Debitering",SessionFacade.CurrentCaseLanguageId) 
                     </td>
                     <td>
                         <div class="checkbox">
                             <label>
                                 <input name="form-field-checkbox" type="checkbox" />
                                 @Html.CheckBoxFor(model => Model.CaseLog.Charge)
-                                <span class="lbl">@Translation.Get("Debitera kunden för genomförd åtgärd")</span>
+                                <span class="lbl">@Translation.Get("Debitera kunden för genomförd åtgärd",SessionFacade.CurrentCaseLanguageId)</span>
                             </label>
                         </div>                                                
                     </td>
@@ -263,7 +263,8 @@
                     Model.caseFieldSettings,
                     Model.CaseFieldSettingWithLangauges,
                     field,
-                    Model.case_.Customer_Id);
+                    Model.case_.Customer_Id,
+                    SessionFacade.CurrentCaseLanguageId);
     }    
 
 }
