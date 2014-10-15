@@ -16,7 +16,7 @@
             this.Property(a => a.CreatedDate).IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed); 
 
             this.HasRequired(a => a.Customer)
-                .WithMany()
+                .WithMany(c => c.Applications)
                 .HasForeignKey(a => a.Customer_Id);
 
 

@@ -78,10 +78,10 @@
             var manufacturer = this.manufacturersModelFactory.GetBusinessModel(model);
             var manufacturerId = this.manufacturersService.AddOrUpdate(manufacturer);
 
-            return this.RedirectToAction("Manufacturer", manufacturerId);
+            return this.RedirectToAction("Manufacturer", new { manufacturerId });
         }
 
-        [HttpGet]
+        [HttpPost]
         public RedirectToRouteResult Delete(int id)
         {
             this.manufacturersService.Delete(id);

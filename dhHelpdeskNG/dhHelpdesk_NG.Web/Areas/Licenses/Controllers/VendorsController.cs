@@ -78,10 +78,10 @@
             var vendor = this.vendorsModelFactory.GetBusinessModel(model);
             var vendorId = this.vendorsService.AddOrUpdate(vendor);
 
-            return this.RedirectToAction("Vendor", vendorId);
+            return this.RedirectToAction("Vendor", new { vendorId });
         }
 
-        [HttpGet]
+        [HttpPost]
         public RedirectToRouteResult Delete(int id)
         {
             this.vendorsService.Delete(id);

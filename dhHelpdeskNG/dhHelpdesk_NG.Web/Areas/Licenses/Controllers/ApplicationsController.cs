@@ -80,10 +80,10 @@
             var application = this.applicationsModelFactory.GetBusinessModel(model);
             var applicationId = this.applicationsService.AddOrUpdate(application);
 
-            return this.RedirectToAction("Application", applicationId);
+            return this.RedirectToAction("Application", new { applicationId });
         }
 
-        [HttpGet]
+        [HttpPost]
         public RedirectToRouteResult Delete(int id)
         {
             this.applicationsService.Delete(id);

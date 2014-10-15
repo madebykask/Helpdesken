@@ -78,10 +78,10 @@
             var license = this.licensesModelFactory.GetBusinessModel(model);
             var licenseId = this.licensesService.AddOrUpdate(license);
 
-            return this.RedirectToAction("License", licenseId);
+            return this.RedirectToAction("License", new { licenseId });
         }
 
-        [HttpGet]
+        [HttpPost]
         public RedirectToRouteResult Delete(int id)
         {
             this.licensesService.Delete(id);

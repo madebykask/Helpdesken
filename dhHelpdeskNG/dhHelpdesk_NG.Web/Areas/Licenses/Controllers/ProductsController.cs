@@ -83,10 +83,10 @@
             var product = this.productsModelFactory.GetBusinessModel(model);
             var productId = this.productsService.AddOrUpdate(product);
 
-            return this.RedirectToAction("Product", productId);
+            return this.RedirectToAction("Product", new { productId });
         }
 
-        [HttpGet]
+        [HttpPost]
         public RedirectToRouteResult Delete(int id)
         {
             this.productsService.Delete(id);

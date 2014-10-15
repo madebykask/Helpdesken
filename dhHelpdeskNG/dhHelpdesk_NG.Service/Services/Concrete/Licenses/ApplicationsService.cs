@@ -76,11 +76,6 @@
             {
                 var applicationRepository = uow.GetRepository<Application>();
                 var productRepository = uow.GetRepository<Product>();
-                Product product = null;
-                if (application.ProductId.HasValue)
-                {
-                    product = productRepository.GetById(application.ProductId.Value);
-                }
 
                 Application entity;
                 if (application.IsNew())
@@ -99,9 +94,11 @@
                     applicationRepository.Update(entity);
                 }
 
-                if (product != null)
+                entity.Products.Clear();
+                if (application.ProductId.HasValue)
                 {
-                    product.Applications = new[] { entity };                    
+                    var product = productRepository.GetById(application.ProductId.Value);
+                    entity.Products.Add(product);
                 }
 
                 uow.Save();
@@ -113,9 +110,10 @@
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
-                var repository = uow.GetRepository<Application>();
-
-                repository.DeleteById(id);
+                var applicationRepository = uow.GetRepository<Application>();
+                var application = applicationRepository.GetById(id);
+                application.Products.Clear();
+                applicationRepository.DeleteById(id);
 
                 uow.Save();
             }

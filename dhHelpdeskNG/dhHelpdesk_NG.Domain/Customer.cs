@@ -58,5 +58,7 @@
         public virtual ICollection<Document> Documents { get; set; }
         public virtual ICollection<FaqEntity> FAQs { get; set; }
         public virtual ICollection<User> Users { get; set; }
+
+        public virtual ICollection<Product> Products { get; set; } 
     }
 }
