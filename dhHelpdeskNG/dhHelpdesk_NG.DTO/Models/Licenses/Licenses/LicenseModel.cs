@@ -108,7 +108,6 @@
 
         public DateTime? ValidDate { get; private set; }
 
-        [NotNull]
         [MaxLength(1000)]
         public string Info { get; private set; }
 

@@ -57,7 +57,6 @@
 
         [LocalizedRequired]
         [LocalizedInteger]
-        [LocalizedMin(1)]
         [LocalizedDisplay("Antal licenser")]
         public int NumberOfLicenses { get; set; }
 
