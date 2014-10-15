@@ -3,10 +3,10 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Net.Mail;
 
     using DH.Helpdesk.BusinessData.Enums.MailTemplates;
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Email;
     using DH.Helpdesk.BusinessData.Models.MailTemplates;
     using DH.Helpdesk.BusinessData.Models.Questionnaire;
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Read;
@@ -69,7 +69,7 @@
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
                 var circularRepository = uof.GetRepository<QuestionnaireCircularEntity>();
-                var query = circularRepository.GetAll().GetByQuestionnaireId(questionnaireId);
+                IQueryable<QuestionnaireCircularEntity> query = circularRepository.GetAll().GetByQuestionnaireId(questionnaireId);
                 if (state != CircularStateId.All)
                 {
                     query = query.GetByState(state);
@@ -115,7 +115,7 @@
             {
                 var circularRepository = uof.GetRepository<QuestionnaireCircularEntity>();
 
-                var entity = circularRepository.GetById(businessModel.Id);
+                QuestionnaireCircularEntity entity = circularRepository.GetById(businessModel.Id);
 
                 Map(businessModel, entity);
                 entity.ChangedDate = businessModel.ChangedDate;
@@ -209,7 +209,7 @@
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
                 var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
-                var businessModels = circularPartRepository.GetAll().GetCircularCases(circularId).MapToConnectedCases();
+                List<ConnectedCase> businessModels = circularPartRepository.GetAll().GetCircularCases(circularId).MapToConnectedCases();
 
                 return businessModels;
             }
@@ -217,51 +217,8 @@
 
         public void SendQuestionnaire(string actionAbsolutePath, int circularId, OperationContext operationContext)
         {
-            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
-            {
-                var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
-                var templateLangaugeRepository = uof.GetRepository<MailTemplateLanguageEntity>();
-                var templateRepository = uof.GetRepository<MailTemplateEntity>();
-                var customerRepository = uof.GetRepository<Customer>();
-
-                var connectedCases =
-                    circularPartRepository.GetAll()
-                        .GetCircularCases(circularId)
-                        .Select(
-                            x =>
-                            new { x.Guid, x.Case.CaseNumber, x.Case.Description, x.Case.Caption, x.Case.PersonsEmail })
-                        .ToList();
-
-                MailTemplate mailTemplate =
-                    templateLangaugeRepository.GetAll()
-                        .ExtractMailTemplate(
-                            templateRepository.GetAll(),
-                            operationContext.CustomerId,
-                            operationContext.LanguageId,
-                            (int)QuestionnaireTemplates.Questionnaire);
-
-                string mailFrom =
-                    customerRepository.GetAll()
-                        .GetById(operationContext.CustomerId)
-                        .Select(x => x.HelpdeskEmail)
-                        .Single();
-
-                foreach (var connectedCase in connectedCases)
-                {
-                    EmailMarkValues markValues = CreateMarkValues(
-                        actionAbsolutePath,
-                        connectedCase.Guid,
-                        connectedCase.CaseNumber,
-                        connectedCase.Caption,
-                        connectedCase.Description);
-
-                    Mail mail = this.mailTemplateFormatter.Format(mailTemplate, markValues);
-                    this.emailService.SendEmail(
-                        new MailAddress(mailFrom),
-                        new MailAddress(connectedCase.PersonsEmail),
-                        mail);
-                }
-            }
+            List<QuestionnaireMailItem> mails = this.GetMails(actionAbsolutePath, circularId, operationContext);
+            this.SendMails(mails, operationContext.DateAndTime);
         }
 
         #endregion
@@ -281,6 +238,7 @@
             string caseDescription)
         {
             string path = string.Format("{0}{1}", actionAbsolutePath, guid);
+            path = string.Format("<a href=\"{0}\">{0}</a>", path);
 
             var markValues = new EmailMarkValues();
             markValues.Add("[#1]", caseNumber.ToString());
@@ -289,6 +247,82 @@
             markValues.Add("[#99]", path);
 
             return markValues;
+        }
+
+        private List<QuestionnaireMailItem> GetMails(string actionAbsolutePath, int circularId, OperationContext operationContext)
+        {
+            var mails = new List<QuestionnaireMailItem>();
+
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
+                var templateLangaugeRepository = uof.GetRepository<MailTemplateLanguageEntity>();
+                var templateRepository = uof.GetRepository<MailTemplateEntity>();
+                var customerRepository = uof.GetRepository<Customer>();
+                var circularRepository = uof.GetRepository<QuestionnaireCircularEntity>();
+
+                QuestionnaireCircularEntity circular = circularRepository.GetById(circularId);
+                circular.Status = (int)CircularStates.Sent;
+
+                var connectedCases =
+                    circularPartRepository.GetAll()
+                        .GetCircularCases(circularId)
+                        .Select(x => new { x.Guid, x.Case.CaseNumber, x.Case.Description, x.Case.Caption, x.Case.PersonsEmail })
+                        .ToList();
+
+                MailTemplate mailTemplate = templateLangaugeRepository.GetAll()
+                    .ExtractMailTemplate(
+                        templateRepository.GetAll(),
+                        operationContext.CustomerId,
+                        operationContext.LanguageId,
+                        (int)QuestionnaireTemplates.Questionnaire);
+
+                string mailFrom =
+                    customerRepository.GetAll().GetById(operationContext.CustomerId).Select(x => x.HelpdeskEmail).Single();
+
+                mails.AddRange(
+                    from connectedCase in connectedCases
+                    let markValues =
+                        CreateMarkValues(
+                            actionAbsolutePath,
+                            connectedCase.Guid,
+                            connectedCase.CaseNumber,
+                            connectedCase.Caption,
+                            connectedCase.Description)
+                    let mail = this.mailTemplateFormatter.Format(mailTemplate, markValues)
+                    select new QuestionnaireMailItem(connectedCase.Guid, mailFrom, connectedCase.PersonsEmail, mail));
+
+                uof.Save();
+            }
+
+            return mails;
+        }
+
+        private void SendMails(List<QuestionnaireMailItem> mailItems, DateTime operationDate)
+        {
+            foreach (QuestionnaireMailItem mailItem in mailItems)
+            {
+                this.SendMail(mailItem, operationDate);
+            }
+        }
+
+        private void SendMail(QuestionnaireMailItem mailItem, DateTime operationDate)
+        {
+            this.emailService.SendEmail(mailItem.MailItem);
+
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
+
+                QuestionnaireCircularPartEntity circularPart = circularPartRepository.GetAll().Where(x => x.Guid == mailItem.Guid).SingleOrDefault();
+
+                if (circularPart != null)
+                {
+                    circularPart.SendDate = operationDate;
+                }
+
+                uof.Save();
+            }
         }
 
         #endregion

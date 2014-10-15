@@ -8,13 +8,13 @@
     public sealed class EmailItem
     {
         public EmailItem(
-            string fromAddress, 
-            string to, 
-            string subject, 
-            string body, 
-            List<Field> fields, 
-            string mailMessageId, 
-            bool isHighPriority, 
+            string fromAddress,
+            string to,
+            string subject,
+            string body,
+            List<Field> fields,
+            string mailMessageId,
+            bool isHighPriority,
             List<string> files)
         {
             this.Files = files;
@@ -56,6 +56,6 @@
         public bool IsHighPriority { get; private set; }
 
         [NotNull]
-        public List<string> Files { get; private set; } 
+        public List<string> Files { get; private set; }
     }
 }

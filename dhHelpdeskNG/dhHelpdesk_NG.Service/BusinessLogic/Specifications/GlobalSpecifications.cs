@@ -18,7 +18,7 @@
         public static IQueryable<T> GetByCustomer<T>(this IQueryable<T> query, int? customerId)
             where T : class, INulableCustomerEntity
         {
-            query = query.Where(x => object.Equals(x.Customer_Id, customerId));
+            query = query.Where(x => customerId == null ? x.Customer_Id == null : x.Customer_Id == customerId);
 
             return query;
         }

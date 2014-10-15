@@ -639,9 +639,9 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpGet]
-        public ViewResult Questionnaire(Guid guid)
+        public ContentResult Questionnaire(Guid guid)
         {
-            throw new NotImplementedException();
+            return this.Content(guid.ToString());
         }
 
         #region PRIVATE
@@ -666,10 +666,11 @@ namespace DH.Helpdesk.Web.Controllers
             string fullUrl = string.Empty;
             if (url != null)
             {
-                fullUrl = this.Url.Action("Questionnaire", "Questionnaire", url.Scheme);
+                fullUrl = this.Url.Action("Questionnaire", "Questionnaire", null, url.Scheme, null);
+                fullUrl = string.Format("{0}{1}", fullUrl, ParamString);
             }
 
-            return fullUrl + ParamString;
+            return fullUrl;
         }
 
         #endregion

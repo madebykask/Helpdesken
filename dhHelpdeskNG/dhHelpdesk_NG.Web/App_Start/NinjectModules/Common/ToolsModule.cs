@@ -11,6 +11,7 @@
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Common;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Common.Concrete;
     using DH.Helpdesk.Services.BusinessLogic.MailTools;
+    using DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters;
     using DH.Helpdesk.Services.BusinessLogic.OtherTools.Concrete;
     using DH.Helpdesk.Services.Infrastructure;
     using DH.Helpdesk.Services.Infrastructure.Concrete;
@@ -48,6 +49,8 @@
 
             this.Bind<ISessionFactory>().To<HelpdeskSessionFactory>().InRequestScope();
             this.Bind<IUnitOfWorkFactory>().To<UnitOfWorkFactory>().InRequestScope();
+
+            this.Bind<IMailTemplateFormatterNew>().To<MailTemplateFormatterNew>().InRequestScope();
         }
 
         #endregion

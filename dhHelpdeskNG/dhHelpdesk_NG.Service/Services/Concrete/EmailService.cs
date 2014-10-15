@@ -28,13 +28,23 @@
             }
         }
 
+        public void SendEmail(MailItem mailItem)
+        {
+            this.SendEmail(new MailAddress(mailItem.From), new MailAddress(mailItem.To), mailItem.Mail);
+        }
+
         public void SendEmail(MailAddress from, MailAddress recipient, Mail mail)
         {
             var mailSendingSettings = this.emailSendingSettingsProvider.GetSettings();
 
             using (var smtpClient = new SmtpClient(mailSendingSettings.SmtpServer, mailSendingSettings.SmtpPort))
             {
-                var mailMessage = new MailMessage(@from, recipient) { Subject = mail.Subject, Body = mail.Body };
+                var mailMessage = new MailMessage(@from, recipient)
+                                      {
+                                          Subject = mail.Subject,
+                                          Body = mail.Body,
+                                          IsBodyHtml = true
+                                      };
                 smtpClient.Send(mailMessage);
             }
         }
