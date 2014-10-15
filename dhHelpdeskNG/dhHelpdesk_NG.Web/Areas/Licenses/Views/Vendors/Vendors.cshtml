@@ -14,7 +14,7 @@
     <tbody>
         @foreach (var vendor in Model.Vendors)
         {
-            <tr onclick="window.location.href='@Url.Action("Vendor", new RouteValueDictionary { { "productId", vendor.VendorId } })'">
+            <tr onclick="window.location.href='@Url.Action("Vendor", new RouteValueDictionary { { "vendorId", vendor.VendorId } })'">
                 <td>@vendor.VendorName</td>
                 <td>@vendor.VendorContact</td>
                 <td>@vendor.VendorPhone</td>

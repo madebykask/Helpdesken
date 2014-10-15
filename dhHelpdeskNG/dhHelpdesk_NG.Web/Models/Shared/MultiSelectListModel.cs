@@ -16,6 +16,10 @@
             this.SelectedItems = selectedItems;
         }
 
+        public MultiSelectListModel()
+        {            
+        }
+
         public string HeaderText { get; private set; } 
         
         [NotNull]

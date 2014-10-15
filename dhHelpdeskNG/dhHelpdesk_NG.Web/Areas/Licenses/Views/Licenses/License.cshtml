@@ -28,8 +28,120 @@
         <table class="tableform">
             <tr>
                 <td class="span3">
+                    @Translation.Get("Produkt")
                 </td>
                 <td class="span9">
+                    @Html.DropDownListFor(m => m.ProductId, Model.Products)
+                </td>
+            </tr>
+            <tr>
+                <td class="span3">
+                    @Translation.Get("Licensnummer")
+                </td>
+                <td class="span9">
+                    @Html.TextBoxFor(m => m.LicenseNumber, Model.LicenseNumber)
+                </td>
+            </tr>
+            <tr>
+                <td class="span3">
+                    @Translation.Get("Antal licenser")
+                </td>
+                <td class="span9">
+                    @Html.TextBoxFor(m => m.NumberOfLicenses, Model.NumberOfLicenses)
+                </td>
+            </tr>
+            <tr>
+                <td class="span3">
+                    @Translation.Get("Avdelning")
+                </td>
+                <td class="span9">
+                    @Html.DropDownListFor(m => m.DepartmentId, Model.Departments)
+                </td>
+            </tr>
+        </table>                
+        <h4>@Translation.Get("Inköp")</h4>
+        <table class="tableform">
+            <tr>
+                <td class="span3">
+                    @Translation.Get("Inköpsdatum")
+                </td>
+                <td class="span9">
+                    @Html.EditorFor(m => m.PurchaseDate, "DatePicker", new { id = "PurchaseDate" })
+                </td>
+            </tr>
+            <tr>
+                <td class="span3">
+                    @Translation.Get("Inköpspris")
+                </td>
+                <td class="span9">
+                    @Html.TextBoxFor(m => m.Price, Model.Price)
+                </td>
+            </tr>
+            <tr>
+                <td class="span3">
+                    @Translation.Get("Inköpsunderlag")
+                </td>
+                <td class="span9">
+                    @Html.TextBoxFor(m => m.PurchaseInfo, Model.PurchaseInfo)
+                </td>
+            </tr>
+            <tr>
+                <td class="span3">
+                    @Translation.Get("Giltig t.o.m")
+                </td>
+                <td class="span9">
+                    @Html.EditorFor(m => m.ValidDate, "DatePicker", new { id = "ValidDate" })
+                </td>
+            </tr>
+            <tr>
+                <td class="span3">
+                    @Translation.Get("Försäljare")
+                </td>
+                <td class="span9">
+                    @Html.DropDownListFor(m => m.VendorId, Model.Vendors)
+                </td>
+            </tr>
+        </table>                
+        <h4>@Translation.Get("Filer")</h4>
+        <table class="tableform">
+            <tr>
+                <td class="span3">
+                    @Translation.Get("Bifogad fil")
+                </td>
+                <td class="span9">
+                </td>
+            </tr>
+        </table>                
+        <h4>@Translation.Get("Service")</h4>
+        <table class="tableform">
+            <tr>
+                <td class="span3">
+                    @Translation.Get("Årlig kostnad")
+                </td>
+                <td class="span9">
+                    @Html.TextBoxFor(m => m.PriceYear)
+                </td>
+            </tr>
+        </table>                
+        <h4>@Translation.Get("Uppgradering")</h4>
+        <table class="tableform">
+            <tr>
+                <td class="span3">
+                    @Translation.Get("Uppgradering av")
+                </td>
+                <td class="span9">
+                    @Html.DropDownListFor(m => m.UpgradeLicenseId, Model.UpgradeLicenses)
+                </td>
+            </tr>
+        </table>                
+        <h4>@Translation.Get("Övrigt")</h4>
+        <table class="tableform">
+            <tr>
+                <td class="span3">
+                    @Translation.Get("Kommentar")
+                </td>
+                <td class="span9">
+                    @Html.TextAreaFor(m => m.Info, Model.Info)
                 </td>
             </tr>
         </table>                

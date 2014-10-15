@@ -29,8 +29,10 @@
         <table class="tableform">
             <tr>
                 <td class="span3">
+                    @Translation.Get("Tillverkare")
                 </td>
                 <td class="span9">
+                    @Html.TextBoxFor(m => m.ManufcturerName, Model.ManufcturerName)
                 </td>
             </tr>
         </table>                

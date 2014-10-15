@@ -74,7 +74,7 @@
                                             productId);
             var model = this.productsModelFactory.GetEditModel(data);
             return this.View(model);
-        }
+        }   
 
         [HttpPost]
         [BadRequestOnNotValid]

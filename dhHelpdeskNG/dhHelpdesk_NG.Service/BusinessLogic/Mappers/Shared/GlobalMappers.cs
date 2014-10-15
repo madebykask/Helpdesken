@@ -15,7 +15,9 @@
             {
                 x.Id,
                 x.Name
-            }).ToArray();
+            })
+            .OrderBy(x => x.Name)
+            .ToArray();
 
             var overviews = entities.Select(x => new ItemOverview(
                                             x.Name,

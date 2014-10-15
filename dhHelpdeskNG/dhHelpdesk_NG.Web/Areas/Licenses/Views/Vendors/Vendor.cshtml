@@ -29,8 +29,66 @@
         <table class="tableform">
             <tr>
                 <td class="span3">
+                    @Translation.Get("Försäljare")            
                 </td>
                 <td class="span9">
+                    @Html.TextBoxFor(m => m.VendorName, Model.VendorName)
+                </td>
+            </tr>
+            <tr>
+                <td class="span3">
+                    @Translation.Get("Kontakt")            
+                </td>
+                <td class="span9">
+                    @Html.TextBoxFor(m => m.Contact, Model.Contact)
+                </td>
+            </tr>
+            <tr>
+                <td class="span3">
+                    @Translation.Get("adress")            
+                </td>
+                <td class="span9">
+                    @Html.TextBoxFor(m => m.Address, Model.Address)
+                </td>
+            </tr>
+            <tr>
+                <td class="span3">
+                    @Translation.Get("Postnummer")            
+                </td>
+                <td class="span9">
+                    @Html.TextBoxFor(m => m.PostalCode, Model.PostalCode)
+                </td>
+            </tr>
+            <tr>
+                <td class="span3">
+                    @Translation.Get("Postadress")            
+                </td>
+                <td class="span9">
+                    @Html.TextBoxFor(m => m.PostalAddress, Model.PostalAddress)
+                </td>
+            </tr>
+            <tr>
+                <td class="span3">
+                    @Translation.Get("Telefon")            
+                </td>
+                <td class="span9">
+                    @Html.TextBoxFor(m => m.Phone, Model.Phone)
+                </td>
+            </tr>
+            <tr>
+                <td class="span3">
+                    @Translation.Get("E-post")            
+                </td>
+                <td class="span9">
+                    @Html.TextBoxFor(m => m.Email, Model.Email)
+                </td>
+            </tr>
+            <tr>
+                <td class="span3">
+                    @Translation.Get("Hemsida")            
+                </td>
+                <td class="span9">
+                    @Html.TextBoxFor(m => m.HomePage, Model.HomePage)
                 </td>
             </tr>
         </table>                

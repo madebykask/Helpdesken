@@ -114,7 +114,9 @@
                 l.Id,
                 l.PurshaseDate,
                 ProductName = l.Product.Name
-            }).ToArray();
+            })
+            .OrderBy(l => l.ProductName)
+            .ToArray();
 
             var overviews = entities.Select(l => new ItemOverview(
                                             string.Format("{0}({1})", l.ProductName, l.PurshaseDate),

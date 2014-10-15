@@ -22,7 +22,7 @@
         }
 
         public ProductEditModel()
-        {            
+        {       
         }
 
         [IsId]
