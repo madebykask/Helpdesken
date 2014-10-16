@@ -23,12 +23,7 @@
         public static IQueryable<License> GetUpgradeLicenses(this IQueryable<License> query, int? licenseId)
         {
 
-            if (!licenseId.HasValue)
-            {
-                return query;
-            }
-
-            query = query.Where(l => l.Id != licenseId);
+            query = query.Where(l => l.Id != licenseId && l.PurshaseDate.HasValue);
 
             return query;
         } 

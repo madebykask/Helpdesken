@@ -119,7 +119,9 @@
             .ToArray();
 
             var overviews = entities.Select(l => new ItemOverview(
-                                            string.Format("{0}({1})", l.ProductName, l.PurshaseDate),
+                                            l.PurshaseDate.HasValue ? 
+                                                string.Format("{0}({1})", l.ProductName, l.PurshaseDate.Value.ToShortDateString()) : 
+                                                l.ProductName,
                                             l.Id.ToString(CultureInfo.InvariantCulture))).ToArray();
 
             return overviews;
