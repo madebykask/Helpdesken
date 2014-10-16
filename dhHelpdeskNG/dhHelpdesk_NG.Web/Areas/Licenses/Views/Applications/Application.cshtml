@@ -33,6 +33,7 @@
                 </td>
                 <td class="span9">
                     @Html.TextBoxFor(m => m.ApplicationName)
+                    @Html.ValidationMessageFor(m => m.ApplicationName)
                 </td>
             </tr>
             <tr>
@@ -41,6 +42,7 @@
                 </td>
                 <td class="span9">
                     @Html.DropDownListFor(m => m.ProductId, Model.Products)
+                    @Html.ValidationMessageFor(m => m.ProductId)
                 </td>
             </tr>
         </table>                

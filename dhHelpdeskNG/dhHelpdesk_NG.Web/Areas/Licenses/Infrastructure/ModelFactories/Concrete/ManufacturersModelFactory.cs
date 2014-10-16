@@ -28,7 +28,7 @@
             var model = new ManufacturerModel(
                                     editModel.Id,
                                     editModel.CustomerId,
-                                    editModel.ManufcturerName);
+                                    editModel.ManufacturerName);
 
             return model;
         }

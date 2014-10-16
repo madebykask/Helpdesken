@@ -32,6 +32,7 @@
                 </td>
                 <td class="span9">
                     @Html.DropDownListFor(m => m.ProductId, Model.Products)
+                    @Html.ValidationMessageFor(m => m.ProductId)
                 </td>
             </tr>
             <tr>
@@ -40,6 +41,7 @@
                 </td>
                 <td class="span9">
                     @Html.TextBoxFor(m => m.LicenseNumber, Model.LicenseNumber)
+                    @Html.ValidationMessageFor(m => m.LicenseNumber)
                 </td>
             </tr>
             <tr>
@@ -48,6 +50,7 @@
                 </td>
                 <td class="span9">
                     @Html.TextBoxFor(m => m.NumberOfLicenses, Model.NumberOfLicenses)
+                    @Html.ValidationMessageFor(m => m.NumberOfLicenses)
                 </td>
             </tr>
             <tr>
@@ -56,6 +59,7 @@
                 </td>
                 <td class="span9">
                     @Html.DropDownListFor(m => m.DepartmentId, Model.Departments)
+                    @Html.ValidationMessageFor(m => m.DepartmentId)
                 </td>
             </tr>
         </table>                
@@ -67,6 +71,7 @@
                 </td>
                 <td class="span9">
                     @Html.EditorFor(m => m.PurchaseDate, "DatePicker", new { id = "PurchaseDate" })
+                    @Html.ValidationMessageFor(m => m.PurchaseDate)
                 </td>
             </tr>
             <tr>
@@ -75,6 +80,7 @@
                 </td>
                 <td class="span9">
                     @Html.TextBoxFor(m => m.Price, Model.Price)
+                    @Html.ValidationMessageFor(m => m.Price)
                 </td>
             </tr>
             <tr>
@@ -83,6 +89,7 @@
                 </td>
                 <td class="span9">
                     @Html.TextBoxFor(m => m.PurchaseInfo, Model.PurchaseInfo)
+                    @Html.ValidationMessageFor(m => m.PurchaseInfo)
                 </td>
             </tr>
             <tr>
@@ -91,6 +98,7 @@
                 </td>
                 <td class="span9">
                     @Html.EditorFor(m => m.ValidDate, "DatePicker", new { id = "ValidDate" })
+                    @Html.ValidationMessageFor(m => m.ValidDate)
                 </td>
             </tr>
             <tr>
@@ -99,6 +107,7 @@
                 </td>
                 <td class="span9">
                     @Html.DropDownListFor(m => m.VendorId, Model.Vendors)
+                    @Html.ValidationMessageFor(m => m.VendorId)
                 </td>
             </tr>
         </table>                
@@ -120,6 +129,7 @@
                 </td>
                 <td class="span9">
                     @Html.TextBoxFor(m => m.PriceYear)
+                    @Html.ValidationMessageFor(m => m.PriceYear)
                 </td>
             </tr>
         </table>                
@@ -131,6 +141,7 @@
                 </td>
                 <td class="span9">
                     @Html.DropDownListFor(m => m.UpgradeLicenseId, Model.UpgradeLicenses)
+                    @Html.ValidationMessageFor(m => m.UpgradeLicenseId)
                 </td>
             </tr>
         </table>                
@@ -142,6 +153,7 @@
                 </td>
                 <td class="span9">
                     @Html.TextAreaFor(m => m.Info, Model.Info)
+                    @Html.ValidationMessageFor(m => m.Info)
                 </td>
             </tr>
         </table>                

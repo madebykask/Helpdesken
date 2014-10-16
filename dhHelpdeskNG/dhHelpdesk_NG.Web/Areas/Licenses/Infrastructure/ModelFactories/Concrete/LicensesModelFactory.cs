@@ -41,6 +41,11 @@
 
         public LicenseModel GetBusinessModel(LicenseEditModel editModel)
         {
+            if (editModel.Info == null)
+            {
+                editModel.Info = string.Empty;
+            }
+
             var model = new LicenseModel(
                                 editModel.Id,
                                 editModel.LicenseNumber,

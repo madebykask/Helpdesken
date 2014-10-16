@@ -8,6 +8,11 @@
 
     public class Application : Entity, ICustomerEntity, INamedEntity
     {
+        public Application()
+        {
+            this.Products = new List<Product>();
+        }
+
         public int Customer_Id { get; set; }
 
         public string Name { get; set; }

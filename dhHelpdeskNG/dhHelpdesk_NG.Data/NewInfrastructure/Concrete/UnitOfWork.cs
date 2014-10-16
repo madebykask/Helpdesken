@@ -2,7 +2,9 @@ namespace DH.Helpdesk.Dal.NewInfrastructure.Concrete
 {
     using System;
     using System.Collections.Generic;
+    using System.Data.Entity.Validation;
     using System.Linq;
+    using System.Text;
 
     public class UnitOfWork : IUnitOfWork
     {
@@ -30,7 +32,27 @@ namespace DH.Helpdesk.Dal.NewInfrastructure.Concrete
 
         public void Save()
         {
-            this.context.SaveChanges();
+            try
+            {
+                this.context.SaveChanges();                
+            }
+            catch (DbEntityValidationException ex)
+            {
+                var sb = new StringBuilder();
+                foreach (var validationErrors in ex.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        sb.AppendLine(string.Format(
+                                                "Property: {0}; Value: {1}; Error message: {2};",
+                                                validationError.PropertyName,
+                                                validationErrors.Entry.Property(validationError.PropertyName).CurrentValue,
+                                                validationError.ErrorMessage));
+                    }
+                }
+             
+                throw new Exception(sb.ToString());
+            }
         }
 
         public void Dispose()

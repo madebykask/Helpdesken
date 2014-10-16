@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Licenses.Infrastructure.ModelFactories.Concrete
 {
+    using System.Data.Entity.Core.Metadata.Edm;
+
     using DH.Helpdesk.BusinessData.Models.Licenses.Vendors;
     using DH.Helpdesk.Web.Areas.Licenses.Models.Vendors;
 
@@ -32,6 +34,41 @@
 
         public VendorModel GetBusinessModel(VendorEditModel editModel)
         {
+            if (editModel.Contact == null)
+            {
+                editModel.Contact = string.Empty;
+            }
+
+            if (editModel.Address == null)
+            {
+                editModel.Address = string.Empty;
+            }
+
+            if (editModel.PostalCode == null)
+            {
+                editModel.PostalCode = string.Empty;
+            }
+
+            if (editModel.PostalAddress == null)
+            {
+                editModel.PostalAddress = string.Empty;
+            }
+
+            if (editModel.Phone == null)
+            {
+                editModel.Phone = string.Empty;
+            }
+
+            if (editModel.Email == null)
+            {
+                editModel.Email = string.Empty;
+            }
+
+            if (editModel.HomePage == null)
+            {
+                editModel.HomePage = string.Empty;
+            }
+
             var model = new VendorModel(
                             editModel.Id,
                             editModel.VendorName,

@@ -8,6 +8,11 @@
 
     public class Product : Entity, ICustomerEntity, INamedEntity
     {
+        public Product()
+        {
+            this.Applications = new List<Application>();
+        }
+
         public int Customer_Id { get; set; }
 
         public int? Manufacturer_Id { get; set; }

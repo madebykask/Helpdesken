@@ -47,6 +47,7 @@
         public SelectList Products { get; private set; }
 
         [IsId]
+        [LocalizedRequired]
         [LocalizedDisplay("Produkt")]
         public int? ProductId { get; set; }
 

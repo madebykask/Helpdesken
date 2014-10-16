@@ -11,11 +11,11 @@
         public ManufacturerEditModel(
                 int id,
                 int customerId,
-                string manufcturerName)
+                string manufacturerName)
         {
             this.Id = id;
             this.CustomerId = customerId;
-            this.ManufcturerName = manufcturerName;
+            this.ManufacturerName = manufacturerName;
         }
 
         public ManufacturerEditModel()
@@ -29,7 +29,7 @@
         [LocalizedRequired]
         [LocalizedStringLength(100)]
         [LocalizedDisplay("Tillverkare")]
-        public string ManufcturerName { get; set; }
+        public string ManufacturerName { get; set; }
 
         public override EntityModelType Type
         {

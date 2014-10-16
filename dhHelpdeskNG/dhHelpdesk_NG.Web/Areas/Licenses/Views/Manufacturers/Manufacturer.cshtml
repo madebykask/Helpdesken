@@ -32,7 +32,8 @@
                     @Translation.Get("Tillverkare")
                 </td>
                 <td class="span9">
-                    @Html.TextBoxFor(m => m.ManufcturerName, Model.ManufcturerName)
+                    @Html.TextBoxFor(m => m.ManufacturerName, Model.ManufacturerName)
+                    @Html.ValidationMessageFor(m => m.ManufacturerName)
                 </td>
             </tr>
         </table>                
