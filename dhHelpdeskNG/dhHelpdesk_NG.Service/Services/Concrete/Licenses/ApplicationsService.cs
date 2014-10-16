@@ -25,12 +25,11 @@
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var applicationRepository = uow.GetRepository<Application>();
-                var productRepository = uow.GetRepository<Product>();
 
                 var overviews = applicationRepository.GetAll()
                                 .GetOnlyConnectedCustomerApplications(customerId, onlyConnected)
                                 .GetByName(name)
-                                .MapToOverviews(productRepository.GetAll());
+                                .MapToOverviews();
 
                 return overviews;
             }

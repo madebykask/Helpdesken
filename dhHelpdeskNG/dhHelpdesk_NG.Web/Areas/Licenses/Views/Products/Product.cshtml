@@ -36,6 +36,15 @@
                     @Html.ValidationMessageFor(m => m.ProductName)
                 </td>
             </tr>
+            <tr>
+                <td class="span3">
+                    @Translation.Get("Tillverkare")
+                </td>
+                <td class="span9">
+                    @Html.DropDownListFor(m => m.ManufacturerId, Model.Manufacturers)
+                    @Html.ValidationMessageFor(m => m.ManufacturerId)
+                </td>
+            </tr>
         </table>
         <h4>@Translation.Get("Applikationer som ingår i produkten")</h4>
         <table>

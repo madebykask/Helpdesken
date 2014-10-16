@@ -13,12 +13,14 @@
                 int id,
                 int customerId,
                 string productName,
+                SelectList manufacturers,
                 IList<SelectListItem> availableApplications,
                 IList<SelectListItem> selectedApplications)
         {
             this.Id = id;
             this.CustomerId = customerId;
             this.ProductName = productName;
+            this.Manufacturers = manufacturers;
             this.AvailableApplications = availableApplications;
             this.SelectedApplications = selectedApplications;
         }
@@ -35,6 +37,13 @@
         [LocalizedStringLength(50)]
         [LocalizedDisplay("Produkt")]
         public string ProductName { get; set; }
+
+        [NotNull]
+        public SelectList Manufacturers { get; private set; }
+
+        [IsId]
+        [LocalizedDisplay("Tillverkare")]
+        public int? ManufacturerId { get; set; }
 
         [NotNull]
         public IList<SelectListItem> AvailableApplications { get; set; }

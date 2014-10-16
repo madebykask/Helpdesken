@@ -59,6 +59,7 @@
             {
                 var productRepository = uow.GetRepository<Product>();
                 var applicationRepository = uow.GetRepository<Application>();
+                var manufacturerRepository = uow.GetRepository<Manufacturer>();
 
                 ProductModel product;
                 if (productId.HasValue)
@@ -70,12 +71,16 @@
                     product = ProductModel.CreateDefault(customerId);
                 }
 
+                var manufacturers = manufacturerRepository.GetAll()
+                                    .GetByCustomer(customerId)
+                                    .MapToItemOverviews();
+
                 var applications = applicationRepository.GetAll()
                                     .GetProductApplications(productId)
                                     .GetByCustomer(customerId)
                                     .MapToItemOverviews();
 
-                return new ProductData(product, applications);
+                return new ProductData(product, manufacturers, applications);
             }
         }
 

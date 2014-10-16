@@ -25,10 +25,13 @@
 
         public ProductEditModel GetEditModel(ProductData data)
         {
+            var manufacturers = WebMvcHelper.CreateListField(data.Manufacturers, data.Product.ManufacturerId);
+
             return new ProductEditModel(
                             data.Product.Id,
                             data.Product.CustomerId,
                             data.Product.ProductName,
+                            manufacturers,
                             WebMvcHelper.GetEmptyList(),
                             WebMvcHelper.GetListItems(data.Applications));
         }
@@ -38,7 +41,7 @@
             var model = new ProductModel(
                             editModel.Id,
                             editModel.ProductName,
-                            null,
+                            editModel.ManufacturerId,
                             editModel.CustomerId,
                             WebMvcHelper.GetOverviews(editModel.SelectedApplications.ToArray()));
 

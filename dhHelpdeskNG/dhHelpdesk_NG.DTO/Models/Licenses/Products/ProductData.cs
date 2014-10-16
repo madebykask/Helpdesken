@@ -7,14 +7,18 @@
     {
         public ProductData(
                 ProductModel product, 
+                ItemOverview[] manufacturers,
                 ItemOverview[] applications)
         {
             this.Applications = applications;
             this.Product = product;
+            this.Manufacturers = manufacturers;
         }
 
         [NotNull]
         public ProductModel Product { get; private set; }
+
+        public ItemOverview[] Manufacturers { get; private set; }
 
         [NotNull]
         public ItemOverview[] Applications { get; private set; }

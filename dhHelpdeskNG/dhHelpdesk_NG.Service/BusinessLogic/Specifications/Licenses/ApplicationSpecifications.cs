@@ -2,7 +2,6 @@
 {
     using System.Linq;
 
-    using DH.Helpdesk.Common.Extensions.String;
     using DH.Helpdesk.Domain;
 
     public static class ApplicationSpecifications

@@ -11,23 +11,26 @@
 
     public static class ApplicationMapper
     {
-        public static ApplicationOverview[] MapToOverviews(this IQueryable<Application> query, IQueryable<Product> products)
+        public static ApplicationOverview[] MapToOverviews(this IQueryable<Application> query)
         {
-            var entities = query.SelectMany(
-                                        a => products,
-                                        (a, p) => new 
-                                                {
-                                                    ApplicationId = a.Id,
-                                                    ApplicationName = a.Name,
-                                                    InstallationsNumber = a.Products.Count(),
-                                                    ProductName = p.Name
-                                                  }).ToArray();
+           var entities = query.Select(a => new 
+                                            {
+                                                ApplicationId = a.Id,
+                                                ApplicationName = a.Name,
+                                                a.Products
+                                            })
+                                            .OrderBy(a => a.ApplicationName)
+                                            .ToArray();
 
-            var overviews = entities.Select(a => new ApplicationOverview(
-                                                    a.ApplicationId,
-                                                    a.ApplicationName,
-                                                    a.ProductName,
-                                                    a.InstallationsNumber)).ToArray();
+            var overviews = entities.Select(a =>
+                {
+                    var product = a.Products.FirstOrDefault();
+                    return new ApplicationOverview(
+                        a.ApplicationId,
+                        a.ApplicationName,
+                        product != null ? product.Name : null,
+                        product != null ? product.Licenses.Sum(l => l.NumberOfLicenses) : 0);
+                }).ToArray();
 
             return overviews;
         }
