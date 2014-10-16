@@ -2,14 +2,17 @@
 {
     public sealed class ApplicationsFilterModel
     {
-        public ApplicationsFilterModel(bool onlyConnected)
+        public ApplicationsFilterModel(string name, bool onlyConnected)
         {
+            this.Name = name;
             this.OnlyConnected = onlyConnected;
         }
 
         private ApplicationsFilterModel()
         {
         }
+
+        public string Name { get; private set; }
 
         public bool OnlyConnected { get; private set; }
 

@@ -8,7 +8,9 @@
     {
         public ApplicationsIndexModel GetIndexModel(ApplicationsFilterModel filter)
         {
-            return new ApplicationsIndexModel(filter.OnlyConnected);
+            return new ApplicationsIndexModel(
+                        filter.Name,
+                        filter.OnlyConnected);
         }
 
         public ApplicationsContentModel GetContentModel(ApplicationOverview[] applications)

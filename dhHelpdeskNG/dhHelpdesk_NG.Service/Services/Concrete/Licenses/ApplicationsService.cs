@@ -20,7 +20,7 @@
             this.unitOfWorkFactory = unitOfWorkFactory;
         }
 
-        public ApplicationOverview[] GetApplications(int customerId, bool onlyConnected)
+        public ApplicationOverview[] GetApplications(int customerId, string name, bool onlyConnected)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
@@ -29,6 +29,7 @@
 
                 var overviews = applicationRepository.GetAll()
                                 .GetOnlyConnectedCustomerApplications(customerId, onlyConnected)
+                                .GetByName(name)
                                 .MapToOverviews(productRepository.GetAll());
 
                 return overviews;

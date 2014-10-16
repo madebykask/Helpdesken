@@ -57,6 +57,7 @@
 
             var applications = this.applicationsService.GetApplications(
                                     this.workContext.Customer.CustomerId,
+                                    null,
                                     filters.OnlyConnected);
 
             var contentModel = this.applicationsModelFactory.GetContentModel(applications);

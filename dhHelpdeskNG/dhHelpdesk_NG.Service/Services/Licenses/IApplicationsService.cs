@@ -4,7 +4,7 @@
 
     public interface IApplicationsService
     {
-        ApplicationOverview[] GetApplications(int customerId, bool onlyConnected);
+        ApplicationOverview[] GetApplications(int customerId, string name, bool onlyConnected);
 
         ApplicationData GetApplicationData(int customerId, int? applicationId);
 

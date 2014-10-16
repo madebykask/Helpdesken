@@ -19,6 +19,10 @@
 {
     <table class="tableform">
         <tr>
+            <td class="span3">@Translation.Get("Applikation")</td>
+            <td>@Html.TextBoxFor(m => m.Name, Model.Name)</td>
+        </tr>                
+        <tr>
             <td class="span3">@Translation.Get("Endast kopplade")</td>
             <td>@Html.CheckBoxFor(m => m.OnlyConnected, Model.OnlyConnected)</td>
         </tr>                

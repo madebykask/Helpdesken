@@ -4,8 +4,11 @@
 
     public sealed class ApplicationsIndexModel : BaseIndexModel
     {
-        public ApplicationsIndexModel(bool onlyConnected)
+        public ApplicationsIndexModel(
+            string name,
+            bool onlyConnected)
         {
+            this.Name = name;
             this.OnlyConnected = onlyConnected;
         }
 
@@ -21,11 +24,13 @@
             }
         }
 
+        public string Name { get; set; }
+
         public bool OnlyConnected { get; set; }
 
         public ApplicationsFilterModel GetFilter()
         {
-            return new ApplicationsFilterModel(this.OnlyConnected);
+            return new ApplicationsFilterModel(this.Name, this.OnlyConnected);
         }
     }
 }
