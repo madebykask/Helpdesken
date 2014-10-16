@@ -2,9 +2,11 @@
 
 namespace DH.Helpdesk.Domain.Questionnaire
 {
+    using DH.Helpdesk.Domain.Interfaces;
+
     using global::System;
 
-    public class QuestionnaireEntity : Entity
+    public class QuestionnaireEntity : Entity, ICustomerEntity
     {
         #region Public Properties
 

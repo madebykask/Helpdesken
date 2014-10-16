@@ -620,16 +620,16 @@ namespace DH.Helpdesk.Web.Controllers
         {
             this._circularService.DeleteConnectedCase(circularId, caseId);
 
-            return this.RedirectToAction("EditCircular", new { questionnaireId, circularId });
+            return this.RedirectToAction("EditCircular", new { circularId });
         }
 
         [HttpGet]
-        public ContentResult Send(int circularId)
+        public RedirectToRouteResult Send(int circularId)
         {
             string actionUrl = this.CreateQuestionnarieUrl();
             this._circularService.SendQuestionnaire(actionUrl, circularId, this.OperationContext);
 
-            return this.Content(actionUrl);
+            return this.RedirectToAction("EditCircular", new { circularId });
         }
 
         [HttpPost]
@@ -641,6 +641,8 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public ContentResult Questionnaire(Guid guid)
         {
+            this._circularService.GetQuestionnaire(guid, this.OperationContext);
+
             return this.Content(guid.ToString());
         }
 

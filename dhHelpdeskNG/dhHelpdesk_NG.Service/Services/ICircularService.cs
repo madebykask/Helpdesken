@@ -21,6 +21,8 @@
 
         void DeleteConnectedCase(int cirularId, int caseId);
 
+        void GetQuestionnaire(Guid guid, OperationContext operationContext);
+
         List<AvailableCase> GetAvailableCases(
             int customerId,
             int questionnaireId,

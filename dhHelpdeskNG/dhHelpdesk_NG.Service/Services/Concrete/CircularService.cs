@@ -69,7 +69,8 @@
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
                 var circularRepository = uof.GetRepository<QuestionnaireCircularEntity>();
-                IQueryable<QuestionnaireCircularEntity> query = circularRepository.GetAll().GetByQuestionnaireId(questionnaireId);
+                IQueryable<QuestionnaireCircularEntity> query =
+                    circularRepository.GetAll().GetByQuestionnaireId(questionnaireId);
                 if (state != CircularStateId.All)
                 {
                     query = query.GetByState(state);
@@ -209,7 +210,8 @@
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
                 var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
-                List<ConnectedCase> businessModels = circularPartRepository.GetAll().GetCircularCases(circularId).MapToConnectedCases();
+                List<ConnectedCase> businessModels =
+                    circularPartRepository.GetAll().GetCircularCases(circularId).MapToConnectedCases();
 
                 return businessModels;
             }
@@ -217,13 +219,59 @@
 
         public void SendQuestionnaire(string actionAbsolutePath, int circularId, OperationContext operationContext)
         {
+            this.SetStatus(circularId, CircularStates.Sent);
+
             List<QuestionnaireMailItem> mails = this.GetMails(actionAbsolutePath, circularId, operationContext);
             this.SendMails(mails, operationContext.DateAndTime);
         }
 
+        public void GetQuestionnaire(Guid guid, OperationContext operationContext)
+        {
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var questionnaireRepository = uof.GetRepository<QuestionnaireEntity>();
+                var questionnaireLanguageRepository = uof.GetRepository<QuestionnaireLanguageEntity>();
+                var questionnaireQuestionRepository = uof.GetRepository<QuestionnaireQuestionEntity>();
+                var questionnaireQuestionLanguageRepository = uof.GetRepository<QuestionnaireQuesLangEntity>();
+                var questionnaireQuestionOptionRepository = uof.GetRepository<QuestionnaireQuestionOptionEntity>();
+                var questionnaireQuestionOptionLanguageRepository = uof.GetRepository<QuestionnaireQuesOpLangEntity>();
+                var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
+
+                if (operationContext.LanguageId == LanguageId.Swedish)
+                {
+                    var query = from circularPart in circularPartRepository.GetAll().GetByGuid(guid)
+                                join questionnaire in
+                                    questionnaireRepository.GetAll().GetByCustomer(operationContext.CustomerId) on
+                                    circularPart.QuestionnaireCircular.Questionnaire_Id equals questionnaire.Id
+                                join questionnaireQuestion in questionnaireQuestionRepository.GetAll() on
+                                    questionnaire.Id equals questionnaireQuestion.Questionnaire_Id
+                                join questionnaireQuestionOption in questionnaireQuestionOptionRepository.GetAll() on
+                                    questionnaireQuestion.Id equals questionnaireQuestionOption.QuestionnaireQuestion_Id
+                                select
+                                    new
+                                        {
+                                            questionnaireId = questionnaire.Id,
+                                            questionnaire.QuestionnaireName,
+                                            questionnaire.QuestionnaireDescription,
+                                            questionnaireQuestionId = questionnaireQuestion.Id,
+                                            questionnaireQuestion.QuestionnaireQuestion,
+                                            questionnaireQuestion.QuestionnaireQuestionNumber,
+                                            questionnaireQuestion.ShowNote,
+                                            questionnaireQuestion.NoteText,
+                                            questionnaireQuestionOptionId = questionnaireQuestionOption.Id,
+                                            questionnaireQuestionOption.OptionValue,
+                                            questionnaireQuestionOption.QuestionnaireQuestionOption,
+                                            questionnaireQuestionOption.QuestionnaireQuestionOptionPos,
+                                        };
+
+                    var anonymus = query.ToList();
+                }
+            }
+        }
+
         #endregion
 
-        #region PRIVATE
+        #region PRIVATE STATIC
 
         private static void Map(Circular businessModel, QuestionnaireCircularEntity entity)
         {
@@ -249,7 +297,14 @@
             return markValues;
         }
 
-        private List<QuestionnaireMailItem> GetMails(string actionAbsolutePath, int circularId, OperationContext operationContext)
+        #endregion
+
+        #region PRIVATE
+
+        private List<QuestionnaireMailItem> GetMails(
+            string actionAbsolutePath,
+            int circularId,
+            OperationContext operationContext)
         {
             var mails = new List<QuestionnaireMailItem>();
 
@@ -259,26 +314,28 @@
                 var templateLangaugeRepository = uof.GetRepository<MailTemplateLanguageEntity>();
                 var templateRepository = uof.GetRepository<MailTemplateEntity>();
                 var customerRepository = uof.GetRepository<Customer>();
-                var circularRepository = uof.GetRepository<QuestionnaireCircularEntity>();
-
-                QuestionnaireCircularEntity circular = circularRepository.GetById(circularId);
-                circular.Status = (int)CircularStates.Sent;
 
                 var connectedCases =
                     circularPartRepository.GetAll()
                         .GetCircularCases(circularId)
-                        .Select(x => new { x.Guid, x.Case.CaseNumber, x.Case.Description, x.Case.Caption, x.Case.PersonsEmail })
+                        .Select(
+                            x =>
+                            new { x.Guid, x.Case.CaseNumber, x.Case.Description, x.Case.Caption, x.Case.PersonsEmail })
                         .ToList();
 
-                MailTemplate mailTemplate = templateLangaugeRepository.GetAll()
-                    .ExtractMailTemplate(
-                        templateRepository.GetAll(),
-                        operationContext.CustomerId,
-                        operationContext.LanguageId,
-                        (int)QuestionnaireTemplates.Questionnaire);
+                MailTemplate mailTemplate =
+                    templateLangaugeRepository.GetAll()
+                        .ExtractMailTemplate(
+                            templateRepository.GetAll(),
+                            operationContext.CustomerId,
+                            operationContext.LanguageId,
+                            (int)QuestionnaireTemplates.Questionnaire);
 
                 string mailFrom =
-                    customerRepository.GetAll().GetById(operationContext.CustomerId).Select(x => x.HelpdeskEmail).Single();
+                    customerRepository.GetAll()
+                        .GetById(operationContext.CustomerId)
+                        .Select(x => x.HelpdeskEmail)
+                        .Single();
 
                 mails.AddRange(
                     from connectedCase in connectedCases
@@ -291,11 +348,22 @@
                             connectedCase.Description)
                     let mail = this.mailTemplateFormatter.Format(mailTemplate, markValues)
                     select new QuestionnaireMailItem(connectedCase.Guid, mailFrom, connectedCase.PersonsEmail, mail));
-
-                uof.Save();
             }
 
             return mails;
+        }
+
+        private void SetStatus(int circularId, CircularStates circularState)
+        {
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var circularRepository = uof.GetRepository<QuestionnaireCircularEntity>();
+
+                QuestionnaireCircularEntity circular = circularRepository.GetById(circularId);
+                circular.Status = (int)circularState;
+
+                uof.Save();
+            }
         }
 
         private void SendMails(List<QuestionnaireMailItem> mailItems, DateTime operationDate)
@@ -314,7 +382,8 @@
             {
                 var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
 
-                QuestionnaireCircularPartEntity circularPart = circularPartRepository.GetAll().Where(x => x.Guid == mailItem.Guid).SingleOrDefault();
+                QuestionnaireCircularPartEntity circularPart =
+                    circularPartRepository.GetAll().Where(x => x.Guid == mailItem.Guid).SingleOrDefault();
 
                 if (circularPart != null)
                 {

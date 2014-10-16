@@ -7,14 +7,6 @@
 
     public static class MailTemplateLanguageSpecifications
     {
-        public static IQueryable<MailTemplateLanguageEntity> GetLanguageTemplates(
-            this IQueryable<MailTemplateLanguageEntity> query,
-            int languageId)
-        {
-            query = query.Where(x => x.Language_Id == languageId);
-            return query;
-        }
-
         public static MailTemplate ExtractMailTemplate(
             this IQueryable<MailTemplateLanguageEntity> query,
             IQueryable<MailTemplateEntity> templates,
@@ -24,7 +16,7 @@
         {
             var nullableCustomerId = (int?)customerId;
 
-            var anonymus = (from l in query.GetLanguageTemplates(languageId)
+            var anonymus = (from l in query.GetByLanguage(languageId)
                             join t in templates.GetByCustomer(nullableCustomerId).GetMailIdTemplates(templateId) on
                                 l.MailTemplate_Id equals t.Id
                             select new { l.Body, l.Subject }).Single();

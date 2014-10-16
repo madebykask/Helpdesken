@@ -1,6 +1,8 @@
 ﻿namespace DH.Helpdesk.Domain.MailTemplates
 {
-    public class MailTemplateLanguageEntity
+    using DH.Helpdesk.Domain.Interfaces;
+
+    public class MailTemplateLanguageEntity : ILanguageEntity
     {
         #region Public Properties
 
