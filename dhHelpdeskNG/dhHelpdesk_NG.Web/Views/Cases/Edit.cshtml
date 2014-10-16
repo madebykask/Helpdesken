@@ -29,7 +29,9 @@
                     <li class="secspace"></li>                    
                     if (SessionFacade.CurrentUser.DeleteCasePermission == 1)
                     {                            
-                        <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteCase", new { caseId = @Model.case_.Id, customerId = @Model.case_.Customer_Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("är du säker pе att du vill ta bort aktuellt ärende", Enums.TranslationSource.TextTranslation) })</li>
+                        <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteCase", 
+                         new { caseId = @Model.case_.Id, customerId = @Model.case_.Customer_Id }, new { @class = "btn deleteDialog", 
+                             deleteDialogText = Translation.Get("Är du säker på att du vill radera detta ärende", Enums.TranslationSource.TextTranslation) + '?' })</li>
                     }
                 }
                 <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "Index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn" })</li>

@@ -406,7 +406,7 @@
                                                 <a href="@Url.Action("NewCase", "case", new { customerId = pCustomerId, caseTemplateId = c.Id, area = "" })">
                                                     <span class="glyphicon glyphicon-plus"></span>@c.Name
                                                     <br />
-                                                    <span class="small">@c.Description </span>
+                                                    <span class="small"> @Translation.Get(c.Name + "_Description", Enums.TranslationSource.TextTranslation) </span>
                                                 </a>
                                             }
                                             else
@@ -416,7 +416,7 @@
                                                 <a href="@Url.Content(tempPath.SetUrlParameters())">                                                
                                                     <span class="glyphicon glyphicon-plus"></span>@c.Name
                                                     <br />
-                                                    <span class="small">@c.Description </span>
+                                                    <span class="small"> @Translation.Get(c.Name + "_Description", Enums.TranslationSource.TextTranslation) </span>
                                                 </a>
                                             }
                                         </li>
