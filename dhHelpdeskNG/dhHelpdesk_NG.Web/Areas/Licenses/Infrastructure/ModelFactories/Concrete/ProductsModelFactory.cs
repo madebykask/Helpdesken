@@ -1,9 +1,10 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Licenses.Infrastructure.ModelFactories.Concrete
 {
+    using System.Linq;
+
     using DH.Helpdesk.BusinessData.Models.Licenses.Products;
     using DH.Helpdesk.Web.Areas.Licenses.Models.Products;
     using DH.Helpdesk.Web.Infrastructure.Tools;
-    using DH.Helpdesk.Web.Models.Shared;
 
     public sealed class ProductsModelFactory : IProductsModelFactory
     {
@@ -24,16 +25,12 @@
 
         public ProductEditModel GetEditModel(ProductData data)
         {
-            var applications = new MultiSelectListModel(
-                                        "Applikationer",
-                                        WebMvcHelper.GetEmptyList(),
-                                        WebMvcHelper.GetListItems(data.Applications));
-
             return new ProductEditModel(
                             data.Product.Id,
                             data.Product.CustomerId,
                             data.Product.ProductName,
-                            applications);
+                            WebMvcHelper.GetEmptyList(),
+                            WebMvcHelper.GetListItems(data.Applications));
         }
 
         public ProductModel GetBusinessModel(ProductEditModel editModel)
@@ -43,7 +40,7 @@
                             editModel.ProductName,
                             null,
                             editModel.CustomerId,
-                            WebMvcHelper.GetOverviews(editModel.Applications.SelectedItems));
+                            WebMvcHelper.GetOverviews(editModel.SelectedApplications.ToArray()));
 
             return model;
         }

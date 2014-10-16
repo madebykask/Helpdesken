@@ -1,11 +1,11 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Licenses.Models.Products
 {
+    using System.Collections.Generic;
     using System.Web.Mvc;
 
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Areas.Licenses.Models.Common;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
-    using DH.Helpdesk.Web.Models.Shared;
 
     public sealed class ProductEditModel : BaseEditModel
     {
@@ -13,12 +13,14 @@
                 int id,
                 int customerId,
                 string productName,
-                MultiSelectListModel applications)
+                IList<SelectListItem> availableApplications,
+                IList<SelectListItem> selectedApplications)
         {
             this.Id = id;
             this.CustomerId = customerId;
-            this.Applications = applications;
             this.ProductName = productName;
+            this.AvailableApplications = availableApplications;
+            this.SelectedApplications = selectedApplications;
         }
 
         public ProductEditModel()
@@ -35,7 +37,10 @@
         public string ProductName { get; set; }
 
         [NotNull]
-        public MultiSelectListModel Applications { get; set; }
+        public IList<SelectListItem> AvailableApplications { get; set; }
+
+        [NotNull]
+        public IList<SelectListItem> SelectedApplications { get; set; }
 
         public override EntityModelType Type
         {

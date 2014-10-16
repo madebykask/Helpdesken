@@ -13,7 +13,7 @@
         @if (!Model.IsNew())
         {
             <li>
-                @Html.ActionLink(Translation.Get("Ta bort"), "Delete", "Products", new { id = Model.Id }, 
+                @Html.ActionLink(Translation.Get("Ta bort"), "Delete", "Products", new { id = Model.Id },
                     new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuellt program/applikation") })
             </li>                
         }
@@ -38,17 +38,62 @@
             </tr>
         </table>
         <h4>@Translation.Get("Applikationer som ingår i produkten")</h4>
-        <table class="tableform">
+        <table>
+        <thead>
             <tr>
-                <td class="span9">
-                    @Html.EditorFor(m => m.Applications)
+                <td class="span12">
+                    @Translation.Get("Applikationer")
                 </td>
-            </tr>
-        </table>                
+                <td class="span1">
+                    @Translation.Get("Tillgängliga")
+                </td>
+                <td class="span1"></td>
+                <td class="span1">
+                    @Translation.Get("Valda")
+                </td>
+            </tr>        
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+                <td>
+                    @Html.ListBox("AvailableApplications", Model.AvailableApplications)
+                </td>
+                <td>
+                    <div class="center">
+                        <input type="button" value="&gt;" id="btnAddApplication" class="btn" />
+                        <input type="button" value="&lt;" id="btnRemoveApplication" class="btn" />
+                    </div>
+                </td>
+                <td>
+                    @Html.ListBox("SelectedApplications", Model.SelectedApplications)
+                </td>
+            </tr>        
+        </tbody>
+    </table>          
     } 
     <script type="text/javascript">
-        $(function() {
-            $("#btnSave").click(function() {
+        $(function () {
+            var addButton = $("#btnAddApplication");
+            var removeButton = $("#btnRemoveApplication");
+            var availableList = $("#AvailableApplications");
+            var selectedList = $("#SelectedApplications");
+
+            addButton.click(function () {
+                availableList.find("option:selected").remove().appendTo(selectedList);
+                availableList.get(0).selectedIndex = -1;
+                selectedList.get(0).selectedIndex = -1;
+                return false;
+            });
+
+            removeButton.click(function () {
+                selectedList.find("option:selected").remove().appendTo(availableList);
+                availableList.get(0).selectedIndex = -1;
+                return false;
+            });
+
+            $("#btnSave").click(function () {
+                selectedList.find("option").attr("selected", "selected");
                 $("#edit_form").submit();
                 return false;
             });

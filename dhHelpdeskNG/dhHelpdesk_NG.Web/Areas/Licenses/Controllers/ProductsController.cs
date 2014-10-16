@@ -1,5 +1,8 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Licenses.Controllers
 {
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
     using System.Web.Mvc;
 
     using DH.Helpdesk.Dal.Infrastructure.Context;
@@ -77,9 +80,11 @@
         }   
 
         [HttpPost]
-        [BadRequestOnNotValid]
-        public RedirectToRouteResult Product(ProductEditModel model)
+        public RedirectToRouteResult Product(ProductEditModel model, int[] selectedApplications)
         {
+            model.SelectedApplications = selectedApplications != null ?
+                selectedApplications.Select(a => new SelectListItem { Value = a.ToString(CultureInfo.InvariantCulture) }).ToList() :
+                new List<SelectListItem>();
             var product = this.productsModelFactory.GetBusinessModel(model);
             var productId = this.productsService.AddOrUpdate(product);
 
