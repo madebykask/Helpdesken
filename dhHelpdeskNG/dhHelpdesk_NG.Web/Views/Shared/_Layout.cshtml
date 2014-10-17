@@ -59,13 +59,13 @@
                     <ul class="nav dh-nav">
                         <li class="orange">
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                <i class="icon-folder-open icon-white"></i>@Translation.Get("Ärenden")<i class="icon-chevron-down icon-white"></i>
+                                <i class="icon-folder-open icon-white"></i><!--@Translation.Get("Ärenden")--> Case Handling <i class="icon-chevron-down icon-white"></i>
                             </a>
                             <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
                                 @if (model.IsCaseVisible())
                                 {                                     
                                     <li><a href="@Url.Action("index", "cases", new { area = "" })">
-                                            <img src="@Url.Content("~/Content/icons/case.png")" alt="cases" />
+                                            <img src="@Url.Content("~/Content/icons/case.png")" />
                                             @Translation.Get("Ärendeöversikt")</a>
                                     </li>
                                     
@@ -76,21 +76,27 @@
                                     if (model.IsProblemVisible())
                                     {                                                
                                         <li><a href="@Url.Action("Index", "Problems", new { area = "" })">
-                                                <img src="@Url.Content("~/Content/icons/problem.png")" alt="problem" />
+                                                <img src="@Url.Content("~/Content/icons/problem.png")" />
                                                 @Translation.Get("Problem")</a></li> 
                                     }
                                     if (model.IsChangeManagementVisible())
                                     {                                                
                                         <!-- TODO finns inställningar på användare tblUsers_tblUserRole -->
                                         <li><a href="@Url.Action("index", "changes", new { area = "" })">
-                                                <img src="@Url.Content("~/Content/icons/changes.png")" alt="changes" />
+                                                <img src="@Url.Content("~/Content/icons/changes.png")" />
                                                 @Translation.Get("Ändringshantering")</a></li>
                                     }
                                     if (model.IsCaseSolutionVisible())
                                     {
                                         <li><a href="@Url.Action("index", "casesolution", new { area = "" })">
-                                                <img src="@Url.Content("~/Content/icons/casetemplate.png")" alt="casesolution" />
+                                                <img src="@Url.Content("~/Content/icons/casetemplate.png")" />
                                                 @Translation.Get("Ärendemallar")</a></li>
+                                    }                                                                        
+                                    if (model.IsComputerUserVisible())
+                                    {                                    
+                                        <li><a href="@Url.Action("index", "Notifiers", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/notifier.png")" />
+                                                @Translation.Get("Anmälare")</a></li>
                                     }
                                 }                                    
                                 <li>
@@ -101,7 +107,7 @@
                         {
                             <li class="green">
                                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                    <i class="icon-briefcase icon-white"></i>@Translation.Get("Moduler")<i class="icon-chevron-down icon-white"></i>
+                                    <i class="icon-signal icon-white"></i><!--@Translation.Get("Moduler")--> Reports & Logs <i class="icon-chevron-down icon-white"></i>
                                 </a>
                                 <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
                                     @if (model.IsCaseVisible())
@@ -109,58 +115,22 @@
                                         if (model.IsReportVisible())
                                         {                                        
                                             <li><a href="@Url.Action("index", "reports", new { area = "" })">
-                                                    <img src="@Url.Content("~/Content/icons/reports.png")" alt="reports" />
+                                                    <img src="@Url.Content("~/Content/icons/reports.png")" />
                                                     @Translation.Get("Rapporter")</a></li>                                    
                                         }                                    
-                                    }                                                                        
-                                    @if (model.IsFaqVisible())
-                                    {    
-                                        <li><a href="@Url.Action("index", "faq", new { area = "" })">
-                                                <img src="@Url.Content("~/Content/icons/faq.png")" alt="faq" />
-                                                @Translation.Get("FAQ")</a></li>
-                                    }              
-                                    @if (model.IsCalendarVisible())
-                                    {    
-                                        <li><a href="@Url.Action("index", "calendar", new { area = "" })">
-                                                <img src="@Url.Content("~/Content/icons/news.png")" alt="news" />
-                                                @Translation.Get("Aktuellt")</a></li>
-                                    }                                    
-                                    @if (model.IsOrderVisible())
-                                    {    
-                                        <li><a href="@Url.Action("index", "order", new { area = "" })">
-                                                <img src="@Url.Content("~/Content/icons/order.png")" alt="order" />
-                                                @Translation.Get("Beställningar")</a></li>
-                                    }
-                                    @if (model.IsAccountVisible())
-                                    {    
-                                        <li><a href="@Url.Action("index", "accounts", new { area = "" })">
-                                                <img src="@Url.Content("~/Content/icons/orderaccount.png")" alt="account" />
-                                                @Translation.Get("Beställning kontobehörighet")</a></li>
-                                    }                                
-                                    @if (model.IsCheckListVisuble())
-                                    {    
-                                        <li><a href="@Url.Action("index", "checklist")">
-                                                <img src="@Url.Content("~/Content/icons/checklist.png")" alt="checklist" />
-                                                @Translation.Get("Checklista")</a></li>
                                     }                                                                            
                                     @if (model.IsDailyReportVisible())
                                     {    
                                         <li><a href="@Url.Action("index", "dailyreport", new { area = "" })">
-                                                <img src="@Url.Content("~/Content/icons/dailyreport.png")" alt="dailyreport" />
+                                                <img src="@Url.Content("~/Content/icons/dailyreport.png")" />
                                                 @Translation.Get("Dagrapport")</a></li>
-                                    }                                                                        
+                                    }                                                                       
                                     @if (model.IsOperationLogVisible())
                                     {    
                                         <li><a href="@Url.Action("index", "operationlog", new { area = "" })">
-                                                <img src="@Url.Content("~/Content/icons/operationlog.png")" alt="operationlog" />
+                                                <img src="@Url.Content("~/Content/icons/operationlog.png")" />
                                                 @Translation.Get("Driftlogg")</a></li>
-                                    }                                    
-                                    @if (model.IsInventoryVisible())
-                                    {    
-                                        <li><a href="@Url.Action("Index", "Inventory", new { area = "" })">
-                                                <img src="@Url.Content("~/Content/icons/inventory.png")" alt="inventory" />
-                                                @Translation.Get("Inventarier")</a></li> 
-                                    }                                    
+                                    }                                   
                                     <li>
                                     </li>
                                 </ul>
@@ -170,8 +140,8 @@
                         {
                             <li class="purple">
                                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                    <i class="icon-wrench icon-white"></i>
-                                    @Translation.Get("Inställningar") @Translation.Get("Moduler")
+                                    <i class="icon-bullhorn icon-white"></i>
+                                    <!--@Translation.Get("Inställningar") @Translation.Get("Moduler")-->Info Modules
                                     <i class="icon-chevron-down icon-white"></i>
                                 </a>
                                 <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
@@ -179,58 +149,93 @@
                                     {                                    
                                         <li>
                                             <a href="@Url.Action("index", "bulletinboard", new { area = "" })">
-                                                <img src="@Url.Content("~/Content/icons/bulletinboard.png")" alt="bulletinboard" />
+                                                <img src="@Url.Content("~/Content/icons/bulletinboard.png")" />
                                                 @Translation.Get("Anslagstavla")
                                             </a>
                                         </li>
-                                    }
-                                    @if (model.IsPlanningVisible())
-                                    {                                    
-                                        <li><a href="@Url.Action("index", "planning", new { area = "" })">
-                                                <img src="@Url.Content("~/Content/icons/planning.png")" alt="planning" />
-                                                @Translation.Get("Planering")</a></li>
-                                    }                                    
-                                    @if (model.IsProjectVisible())
-                                    {                                    
-                                        <li><a href="@Url.Action("Index", "Projects", new { area = "" })">
-                                                <img src="@Url.Content("~/Content/icons/project.png")" alt="project" />
-                                                @Translation.Get("Projekt")</a></li>
-                                    }                                    
-                                    @if (model.IsQuestionVisible())
-                                    {                                    
-                                        <li><a href="@Url.Action("index", "question", new { area = "" })">
-                                                <img src="@Url.Content("~/Content/icons/registerquestion.png")" alt="question" />
-                                                @Translation.Get("Frågeregistrering")</a></li>
+                                    }                                                                         
+                                    @if (model.IsFaqVisible())
+                                    {    
+                                        <li><a href="@Url.Action("index", "faq", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/faq.png")" />
+                                                @Translation.Get("FAQ")</a></li>
+                                    }              
+                                    @if (model.IsCalendarVisible())
+                                    {    
+                                        <li><a href="@Url.Action("index", "calendar", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/news.png")" />
+                                                @Translation.Get("Aktuellt")</a></li>
                                     }                                    
                                     @if (model.IsQuestionnaireVisible())
                                     {                                    
                                         <li><a href="@Url.Action("index", "questionnaire", new { area = "" })">
-                                                <img src="@Url.Content("~/Content/icons/questionnaire.png")" alt="questionnarie" />
+                                                <img src="@Url.Content("~/Content/icons/questionnaire.png")" />
                                                 @Translation.Get("Enkät")</a></li>
-                                    }                                    
-                                    @if (model.IsLicenseVisible())
-                                    {                                    
-                                        <li><a href="@Url.Action("Index", "Products", new { area = "Licenses" })">
-                                                <img src="@Url.Content("~/Content/icons/Licens.png")" alt="license" />
-                                                @Translation.Get("Licenshantering")</a></li>
                                     }                                    
                                     @if (model.IsDocumentVisible())
                                     {                                    
                                         <li><a href="@Url.Action("index", "document", new { area = "" })">
-                                                <img src="@Url.Content("~/Content/icons/documenthandling.png")" alt="document" />
+                                                <img src="@Url.Content("~/Content/icons/documenthandling.png")" />
                                                 @Translation.Get("Dokumenthantering")</a></li> 
-                                    }                                                                        
-                                    @if (model.IsComputerUserVisible())
-                                    {                                    
-                                        <li><a href="@Url.Action("index", "Notifiers", new { area = "" })">
-                                                <img src="@Url.Content("~/Content/icons/notifier.png")" alt="computeruser" />
-                                                @Translation.Get("Anmälare")</a></li>
                                     }                                    
                                     <li>
                                     </li>
                                 </ul>
                             </li>                            
                         }
+
+                        @if (model.IsSettingsModulesVisible())
+                        {
+                            <li class="pink">
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                    <i class="icon-wrench icon-white"></i>
+                                    <!--@Translation.Get("Inställningar") @Translation.Get("Moduler")--> Add-Ons
+                                    <i class="icon-chevron-down icon-white"></i>
+                                </a>
+                                <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">                                    
+                                    @if (model.IsOrderVisible())
+                                    {    
+                                        <li><a href="@Url.Action("index", "order", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/order.png")" />
+                                                @Translation.Get("Beställningar")</a></li>
+                                    }
+                                    @if (model.IsAccountVisible())
+                                    {    
+                                        <li><a href="@Url.Action("index", "accounts", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/orderaccount.png")" />
+                                                @Translation.Get("Beställning kontobehörighet")</a></li>
+                                    }                                
+                                    @if (model.IsCheckListVisuble())
+                                    {    
+                                        <li><a href="@Url.Action("index", "checklist")">
+                                                <img src="@Url.Content("~/Content/icons/checklist.png")" />
+                                                @Translation.Get("Checklista")</a></li>
+                                    }                                    
+                                    @if (model.IsProjectVisible())
+                                    {                                    
+                                        <li><a href="@Url.Action("Index", "Projects", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/project.png")" alt="project" />
+                                                @Translation.Get("Projekt")</a></li>
+                                    }                                     
+                                    @if (model.IsInventoryVisible())
+                                    {    
+                                        <li><a href="@Url.Action("Index", "Inventory", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/inventory.png")" />
+                                                @Translation.Get("Inventarier")</a></li> 
+                                    }                                   
+                                    @if (model.IsLicenseVisible())
+                                    {                                    
+                                        <li><a href="@Url.Action("Index", "Products", new { area = "Licenses" })">
+                                                <img src="@Url.Content("~/Content/icons/Licens.png")" alt="license" />
+                                                @Translation.Get("Licenshantering")</a></li>
+                                    }                                   
+                                    <li>
+                                    </li>
+                                </ul>
+                            </li>                            
+                        }
+
+
                         <li class="light-blue">
                             <a data-toggle="dropdown" href="#" class="dropdown-toggle">
                                 <i class="icon-user icon-white"></i>

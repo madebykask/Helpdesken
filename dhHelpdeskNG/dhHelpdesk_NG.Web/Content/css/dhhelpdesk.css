@@ -334,6 +334,36 @@ input[type="text"] {
 			background-color: #be480b!important;
 		}
 
+        .dh-nav > li.pink > a
+		{
+			background-color: #bb0066;
+		}
+
+			.dh-nav > li.pink > a:hover, .dh-nav > li.grey > a:focus
+			{
+				background-color: #9a0255;
+			}
+
+		.dh-nav > li.open.pink > a
+		{
+			background-color: #9a0255!important;
+		}
+
+        .dh-nav > li.blue > a
+		{
+			background-color: #438eb9;
+		}
+
+			.dh-nav > li.blue > a:hover, .dh-nav > li.grey > a:focus
+			{
+				background-color: #2b7199;
+			}
+
+		.dh-nav > li.open.blue > a
+		{
+			background-color: #2b7199!important;
+		}
+
 		.dh-nav > li.purple > a
 		{
 			background-color: #53378a;

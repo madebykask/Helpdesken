@@ -96,7 +96,7 @@
                                 </td>
                                 <td>
                                     @Html.TextBoxFor(model => model.OLSearch_Filter.Text_Filter, new { maxlength = "50", style = "width: 200px;" })
-                                    <input type="button" id="searchQueryBtn" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" onclick="submit();" />
+                                    <input type="button" class="btn" id="searchQueryBtn" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" onclick="submit();" />
                                 </td>
                                 <td>
                                    @* @Model.OperationLogs.Count()
