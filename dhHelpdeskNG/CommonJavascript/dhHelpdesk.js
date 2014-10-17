@@ -897,9 +897,43 @@ if ($.fn.DataTable.TableTools) {
     });
 }
 
+
+/*function ResetC() {
+    //alert('reset');
+    
+    
+    //initDataTable();
+    var oTable = $("#tablegrid1").dataTable();
+    //oTable.fnPageChange(0);
+
+    oTable.page(0).draw(false);
+
+    //initDataTable();
+
+    //oTable.state.clear();
+    //§initDataTable();
+    //for (iCol = 0; iCol < oSettings.aoPreSearchCols.length; iCol++) {
+    //    oSettings.aoPreSearchCols[iCol].sSearch = '';
+    //}
+    //oTable.fnDraw();
+
+    //localStorage.removeItem('DataTables_tablegrid1_/changes');
+    //table.res;
+    
+
+    //$('#tablegrid1').dataTable();
+};
+*/
+
+var GlobalTable;
 /* Table initialisation */
 $(document).ready(function () {
-    $('#tablegrid').dataTable({
+    initDataTable();
+});
+
+function initDataTable() {
+ GlobalTable = 
+    $('#tablegrid1').dataTable({
         stateSave: true,
         //stateDuration: 10,
         "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
@@ -915,5 +949,5 @@ $(document).ready(function () {
             }
         }
     });
-});
+}
 // TABLE PAGING END

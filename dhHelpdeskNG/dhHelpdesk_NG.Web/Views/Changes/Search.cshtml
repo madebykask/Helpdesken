@@ -6,7 +6,8 @@
 <script type="text/javascript">
     $(function() {
         applySearchBehavior();
-    });
+    });    
+
 </script>
       
 @using (Ajax.BeginForm("ChangesGrid", "Changes", new { customerId = ViewData["CustomerId"] }, new AjaxOptions { UpdateTargetId = "changes_grid_container" }, new { id = "search_form" }))
@@ -91,8 +92,23 @@
                 &nbsp;
             </td>
             <td>
-                <input type="submit" value="@Translation.Get("Search", Enums.TranslationSource.TextTranslation)" class="btn" />
+                <input type="submit" onclick="ResetC();" value="@Translation.Get("Search", Enums.TranslationSource.TextTranslation)" class="btn" />
+                <input id="bt1" type="button" value="@Translation.Get("Search2", Enums.TranslationSource.TextTranslation)" class="btn" />
             </td>
         </tr>
     </table>
 }
+
+<script type="text/javascript">
+        
+    $("#bt1").click(function () {
+        
+        debugger;
+        var oTable = $("#tablegrid1").dataTable();
+        alert('Current:' + oTable.page);
+
+        oTable.page(0).draw(false);
+        alert('New:' + oTable.page());
+    });
+
+</script>
