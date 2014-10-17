@@ -323,6 +323,7 @@
     <Compile Include="Areas\Licenses\Controllers\LicensesController.cs" />
     <Compile Include="Areas\Licenses\Controllers\ManufacturersController.cs" />
     <Compile Include="Areas\Licenses\Controllers\VendorsController.cs" />
+    <Compile Include="Areas\Licenses\Infrastructure\Enums\AttachedFileType.cs" />
     <Compile Include="Areas\Licenses\Infrastructure\ModelFactories\Concrete\ApplicationsModelFactory.cs" />
     <Compile Include="Areas\Licenses\Infrastructure\ModelFactories\IApplicationsModelFactory.cs" />
     <Compile Include="Areas\Licenses\Infrastructure\ModelFactories\ILicensesModelFactory.cs" />
@@ -341,6 +342,7 @@
     <Compile Include="Areas\Licenses\Models\Common\BaseEditModel.cs" />
     <Compile Include="Areas\Licenses\Models\Common\BaseIndexModel.cs" />
     <Compile Include="Areas\Licenses\Models\Common\EntityModelType.cs" />
+    <Compile Include="Areas\Licenses\Models\Common\AttachedFilesModel.cs" />
     <Compile Include="Areas\Licenses\Models\Licenses\LicenseEditModel.cs" />
     <Compile Include="Areas\Licenses\Models\Licenses\LicensesContentModel.cs" />
     <Compile Include="Areas\Licenses\Models\Licenses\LicensesFilterModel.cs" />
@@ -1212,6 +1214,7 @@
     <Content Include="Areas\Licenses\Views\Products\Product.cshtml" />
     <Content Include="Areas\Licenses\Views\Vendors\Vendor.cshtml" />
     <Content Include="Areas\Licenses\Views\Shared\_EditLayout.cshtml" />
+    <Content Include="Areas\Licenses\Views\Shared\AttachedFiles.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />

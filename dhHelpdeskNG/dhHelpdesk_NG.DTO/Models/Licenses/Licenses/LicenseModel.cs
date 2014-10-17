@@ -116,6 +116,7 @@
 
         public DateTime ChangedDate { get; private set; }
 
+        [NotNull]
         public LicenseFileModel[] Files { get; private set; }
 
         public static LicenseModel CreateDefault()

@@ -19,5 +19,7 @@
         public static readonly string Priority = "Priority";
 
         public static readonly string Reports = "Reports";
+
+        public static readonly string Licenses = "Licenses";
     }
 }

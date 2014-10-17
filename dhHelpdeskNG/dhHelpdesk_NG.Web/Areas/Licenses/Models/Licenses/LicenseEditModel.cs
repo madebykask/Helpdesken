@@ -1,11 +1,13 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Licenses.Models.Licenses
 {
     using System;
+    using System.Collections.Generic;
     using System.Web.Mvc;
 
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Areas.Licenses.Models.Common;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Web.Infrastructure.Tools;
 
     public sealed class LicenseEditModel : BaseEditModel
     {
@@ -22,7 +24,8 @@
                 SelectList products, 
                 SelectList departments, 
                 SelectList vendors, 
-                SelectList upgradeLicenses)
+                SelectList upgradeLicenses,
+                AttachedFilesModel files)
         {
             this.UpgradeLicenses = upgradeLicenses;
             this.Id = id;
@@ -37,6 +40,10 @@
             this.ValidDate = validDate;
             this.PriceYear = priceYear;
             this.Info = info;
+            this.Files = files;
+
+            this.NewFiles = new List<WebTemporaryFile>();
+            this.DeletedFiles = new List<string>();
         }
 
         public LicenseEditModel()
@@ -104,6 +111,15 @@
         [IsId]
         [LocalizedDisplay("Uppgradering av")]
         public int? UpgradeLicenseId { get; set; }
+
+        [NotNull]
+        public AttachedFilesModel Files { get; set; }
+
+        [NotNull]
+        public List<WebTemporaryFile> NewFiles { get; set; }
+
+        [NotNull]
+        public List<string> DeletedFiles { get; set; }
 
         public override EntityModelType Type
         {

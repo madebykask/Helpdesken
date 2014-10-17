@@ -39,8 +39,7 @@
 
         public static LicenseModel MapToBusinessModel(
                                 this IQueryable<License> query, 
-                                int id,
-                                IQueryable<LicenseFile> files)
+                                int id)
         {
             LicenseModel model = null;
 
@@ -61,12 +60,13 @@
                                 l.ValidDate,
                                 l.Info,
                                 l.CreatedDate,
-                                l.ChangedDate
+                                l.ChangedDate,
+                                l.Files
                             }).SingleOrDefault();
 
             if (entity != null)
             {
-                var licenseFiles = files.GetLicenseFiles(entity.Id)
+                var licenseFiles = entity.Files
                                     .MapToBusinessModels();
 
                 model = new LicenseModel(

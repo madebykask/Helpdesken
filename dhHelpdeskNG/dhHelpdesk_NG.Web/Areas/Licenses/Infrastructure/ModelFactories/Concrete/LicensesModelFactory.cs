@@ -1,11 +1,24 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Licenses.Infrastructure.ModelFactories.Concrete
 {
+    using System.Globalization;
+    using System.Linq;
+
     using DH.Helpdesk.BusinessData.Models.Licenses.Licenses;
+    using DH.Helpdesk.Services.BusinessLogic.OtherTools.Concrete;
+    using DH.Helpdesk.Web.Areas.Licenses.Infrastructure.Enums;
+    using DH.Helpdesk.Web.Areas.Licenses.Models.Common;
     using DH.Helpdesk.Web.Areas.Licenses.Models.Licenses;
     using DH.Helpdesk.Web.Infrastructure.Tools;
 
     public sealed class LicensesModelFactory : ILicensesModelFactory
     {
+        private readonly TemporaryIdProvider temporaryIdProvider;
+
+        public LicensesModelFactory(TemporaryIdProvider temporaryIdProvider)
+        {
+            this.temporaryIdProvider = temporaryIdProvider;
+        }
+
         public LicensesIndexModel GetIndexModel(LicensesFilterModel filter)
         {
             return new LicensesIndexModel();
@@ -23,6 +36,12 @@
             var vendors = WebMvcHelper.CreateListField(data.Vendors, data.License.VendorId);
             var upgradeLicenss = WebMvcHelper.CreateListField(data.UpgradeLicenses, data.License.UpgradeLicenseId);
 
+            var entityId = data.License.IsNew() ? this.temporaryIdProvider.ProvideTemporaryId() : data.License.Id.ToString(CultureInfo.InvariantCulture);
+            var files = new AttachedFilesModel(
+                            entityId,
+                            AttachedFileType.License,
+                            data.License.Files.Select(f => f.FileName).ToList());
+
             return new LicenseEditModel(
                                 data.License.Id,
                                 data.License.LicenseNumber,
@@ -36,7 +55,8 @@
                                 products, 
                                 departments, 
                                 vendors,
-                                upgradeLicenss);
+                                upgradeLicenss,
+                                files);
         }
 
         public LicenseModel GetBusinessModel(LicenseEditModel editModel)
@@ -60,7 +80,7 @@
                                 editModel.UpgradeLicenseId,
                                 editModel.ValidDate,
                                 editModel.Info,
-                                null);
+                                new LicenseFileModel[0]);
 
             return model;
         }

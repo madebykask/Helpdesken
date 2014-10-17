@@ -1,0 +1,45 @@
+﻿@using DH.Helpdesk.Web.Areas.Licenses.Infrastructure.Enums
+@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Licenses.Models.Common.AttachedFilesModel
+
+@{
+    var filesContainerId = Model.Type.ToString().ToLower() + "_files_container";
+}
+
+<div id="@filesContainerId">
+    @if (!Model.Files.Any())
+    {
+        @Translation.Get("No Uploaded Files")
+        return;
+    }
+    <table>
+        @foreach (var file in Model.Files)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(file, "DownloadFile", GetControllerName(), new { entityId = Model.EntityId, type = Model.Type, fileName = file })
+                </td>
+                <td>
+                    <a onclick="deleteFile('@Model.Type', '@file', '@filesContainerId')" class="btn">
+                        @Translation.Get("Delete")
+                    </a>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+@functions{
+
+    private string GetControllerName()
+    {
+        switch (Model.Type)
+        {
+            case AttachedFileType.License:
+                return "Licenses";
+        }
+
+        return null;
+    }
+
+}

@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Licenses
 {
+    using System.Collections.Generic;
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Licenses.Licenses;
@@ -7,7 +8,7 @@
 
     public static class LicenseFileMapper
     {
-        public static LicenseFileModel[] MapToBusinessModels(this IQueryable<LicenseFile> query)
+        public static LicenseFileModel[] MapToBusinessModels(this IEnumerable<LicenseFile> query)
         {
             var entities = query.Select(f => new
                                     {
@@ -24,6 +25,18 @@
                                         f.CreatedDate)).ToArray();
 
             return models;
+        }
+
+        public static byte[] GetFileContent(this IEnumerable<LicenseFile> query)
+        {
+            var entity = query.SingleOrDefault();
+
+            if (entity == null)
+            {
+                return null;
+            }
+
+            return entity.File;
         }
     }
 }

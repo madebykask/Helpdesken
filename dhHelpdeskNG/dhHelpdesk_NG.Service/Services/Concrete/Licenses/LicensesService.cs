@@ -1,6 +1,8 @@
 ﻿namespace DH.Helpdesk.Services.Services.Concrete.Licenses
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Licenses.Licenses;
     using DH.Helpdesk.Dal.NewInfrastructure;
@@ -41,7 +43,6 @@
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var licenseRepository = uow.GetRepository<License>();
-                var licenseFileRepository = uow.GetRepository<LicenseFile>();
                 var productRepository = uow.GetRepository<Product>();
                 var departmentRepository = uow.GetRepository<Department>();
                 var vendorRepository = uow.GetRepository<Vendor>();
@@ -49,7 +50,7 @@
                 LicenseModel license;
                 if (licenseId.HasValue)
                 {
-                    license = licenseRepository.GetAll().MapToBusinessModel(licenseId.Value, licenseFileRepository.GetAll());
+                    license = licenseRepository.GetAll().MapToBusinessModel(licenseId.Value);
                 }
                 else
                 {
@@ -86,9 +87,7 @@
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var licenseRepository = uow.GetRepository<License>();
-                var licenseFileRepository = uow.GetRepository<LicenseFile>();
-
-                return licenseRepository.GetAll().MapToBusinessModel(id, licenseFileRepository.GetAll());
+                return licenseRepository.GetAll().MapToBusinessModel(id);
             }
         }
 
@@ -128,6 +127,43 @@
                 repository.DeleteById(id);
 
                 uow.Save();
+            }
+        }
+
+        public byte[] GetFileContent(int licenseId, string fileName)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var licenseFileRepository = uow.GetRepository<LicenseFile>();
+
+                return licenseFileRepository.GetAll()
+                        .GetLicenseFile(licenseId, fileName)
+                        .GetFileContent();
+            }
+        }
+
+        public bool FileExists(int licenseId, string fileName)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var licenseFileRepository = uow.GetRepository<LicenseFile>();
+
+                return licenseFileRepository.GetAll()
+                        .GetLicenseFile(licenseId, fileName)
+                        .Any();
+            }
+        }
+
+        public List<string> FindFileNamesExcludeSpecified(int licenseId, List<string> excludeFiles)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var licenseFileRepository = uow.GetRepository<LicenseFile>();
+
+                return licenseFileRepository.GetAll()
+                        .GetLicenseFileExclude(licenseId, excludeFiles)
+                        .Select(f => f.FileName)
+                        .ToList();
             }
         }
     }
