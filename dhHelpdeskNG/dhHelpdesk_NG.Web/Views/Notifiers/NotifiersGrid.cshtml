@@ -5,7 +5,8 @@
 @Translation.Get("poster i sökresultat", Enums.TranslationSource.TextTranslation):
 @Model.NotifiersFound
 
-<table class="table table-striped table-bordered table-hover">
+    
+<table id="tablegrid" class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
             @foreach (var header in Model.Headers)
@@ -45,3 +46,4 @@
         }
     </tbody>
 </table>
+        
