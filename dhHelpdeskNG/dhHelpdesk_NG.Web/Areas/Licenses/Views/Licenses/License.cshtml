@@ -8,10 +8,9 @@
     <script type="text/javascript">
         $(function () {
             var parameters = {
-                id: '@Model.Id',
+                id: '@Model.Files.EntityId',
                 uploadFileUrl: '@Url.Action("UploadFile")',
-                deleteFileUrl: '@Url.Action("DeleteFile")',
-                licenseType: '@Model.Type'
+                deleteFileUrl: '@Url.Action("DeleteFile")'
             };
 
             applyBehavior(parameters);

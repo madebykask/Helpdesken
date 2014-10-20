@@ -6,12 +6,9 @@
 
     using DH.Helpdesk.BusinessData.Models.Licenses.Licenses;
     using DH.Helpdesk.Services.BusinessLogic.OtherTools.Concrete;
-    using DH.Helpdesk.Web.Areas.Licenses.Infrastructure.Enums;
     using DH.Helpdesk.Web.Areas.Licenses.Models.Common;
     using DH.Helpdesk.Web.Areas.Licenses.Models.Licenses;
     using DH.Helpdesk.Web.Infrastructure.Tools;
-
-    using iTextSharp.text;
 
     public sealed class LicensesModelFactory : ILicensesModelFactory
     {
@@ -42,7 +39,6 @@
             var entityId = data.License.IsNew() ? this.temporaryIdProvider.ProvideTemporaryId() : data.License.Id.ToString(CultureInfo.InvariantCulture);
             var files = new AttachedFilesModel(
                             entityId,
-                            AttachedFileType.License,
                             data.License.Files.Select(f => f.FileName).ToList());
 
             return new LicenseEditModel(
@@ -70,8 +66,8 @@
             }
 
             var files = new List<LicenseFileModel>();
-            files.AddRange(editModel.DeletedFiles.Select(f => new LicenseFileModel(editModel.Id, f)));
-            files.AddRange(editModel.NewFiles.Select(f => new LicenseFileModel(editModel.Id, f.Name, f.Content)));
+            files.AddRange(editModel.DeletedFiles.Select(f => new LicenseFileModel(editModel.Id, f, true)));
+            files.AddRange(editModel.NewFiles.Select(f => new LicenseFileModel(editModel.Id, f.Name, false)));
 
             var model = new LicenseModel(
                                 editModel.Id,

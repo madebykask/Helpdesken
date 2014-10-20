@@ -16,8 +16,6 @@
 
         void Delete(int id);
 
-        byte[] GetFileContent(int licenseId, string fileName);
-
         bool FileExists(int licenseId, string fileName);
 
         List<string> FindFileNamesExcludeSpecified(int licenseId, List<string> excludeFiles);

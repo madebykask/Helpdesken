@@ -20,6 +20,6 @@
 
         public static readonly string Reports = "Reports";
 
-        public static readonly string Licenses = "Licenses";
+        public static readonly string Licenses = "li";
     }
 }

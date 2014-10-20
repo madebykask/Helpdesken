@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Licenses.Controllers
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Net;
     using System.Web;
     using System.Web.Mvc;
@@ -10,7 +11,6 @@
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Licenses;
-    using DH.Helpdesk.Web.Areas.Licenses.Infrastructure.Enums;
     using DH.Helpdesk.Web.Areas.Licenses.Infrastructure.ModelFactories;
     using DH.Helpdesk.Web.Areas.Licenses.Models.Licenses;
     using DH.Helpdesk.Web.Enums;
@@ -26,9 +26,9 @@
 
         private readonly ILicensesModelFactory licensesModelFactory;
 
-        private readonly ITemporaryFilesCache temporaryFilesCache;
+        private readonly ITemporaryFilesCache filesStore;
 
-        private readonly IEditorStateCache editorStateCache;
+        private readonly IEditorStateCache filesStateStore;
 
         public LicensesController(
                 IMasterDataService masterDataService, 
@@ -43,8 +43,8 @@
             this.workContext = workContext;
             this.licensesModelFactory = licensesModelFactory;
 
-            this.editorStateCache = editorStateCacheFactory.CreateForModule(ModuleName.Licenses);
-            this.temporaryFilesCache = temporaryFilesCacheFactory.CreateForModule(ModuleName.Licenses);
+            this.filesStateStore = editorStateCacheFactory.CreateForModule(ModuleName.Licenses);
+            this.filesStore = temporaryFilesCacheFactory.CreateForModule(ModuleName.Licenses);
         }
 
         [HttpGet]
@@ -89,15 +89,33 @@
 
         [HttpPost]
         [BadRequestOnNotValid]
-        public RedirectToRouteResult License(LicenseEditModel model)
+        public RedirectToRouteResult License(LicenseEditModel model, string entityId)
         {
-            model.NewFiles = this.temporaryFilesCache.FindFiles(model.Id, AttachedFileType.License.ToString());
-            model.DeletedFiles = this.editorStateCache.FindDeletedFileNames(model.Id, AttachedFileType.License.ToString());
+            model.NewFiles = this.filesStore.FindFiles(entityId);
+            model.DeletedFiles = this.filesStateStore.FindDeletedFileNames(model.Id);
             
             var license = this.licensesModelFactory.GetBusinessModel(model);
             var licenseId = this.licensesService.AddOrUpdate(license);
-            this.temporaryFilesCache.ResetCacheForObject(model.Id);
 
+            if (GuidHelper.IsGuid(entityId))
+            {
+                foreach (var newFile in model.NewFiles)
+                {
+                    this.filesStore.AddFile(newFile.Content, newFile.Name, licenseId);
+                }
+
+                this.filesStore.ResetCacheForObject(entityId);
+            }
+            else
+            {
+                foreach (var deletedFile in model.DeletedFiles)
+                {
+                    this.filesStore.DeleteFile(deletedFile, entityId);
+                }
+
+                this.filesStateStore.ClearObjectDeletedFiles(model.Id);                
+            }    
+            
             return this.RedirectToAction("License", new { licenseId });
         }
 
@@ -105,48 +123,38 @@
         public RedirectToRouteResult Delete(int id)
         {
             this.licensesService.Delete(id);
+            this.filesStateStore.ClearObjectDeletedFiles(id);   
+            this.filesStore.ResetCacheForObject(id);
 
             return this.RedirectToAction("Index");
         }
 
         [HttpGet]
-        public PartialViewResult AttachedFiles(string entityId, AttachedFileType? type)
+        public PartialViewResult AttachedFiles(string entityId)
         {
-            if (type == null)
-            {
-                type = AttachedFileType.License;
-            }
-
             List<string> fileNames;
 
             if (GuidHelper.IsGuid(entityId))
             {
-                fileNames = this.temporaryFilesCache.FindFileNames(entityId, type.ToString());
+                fileNames = this.filesStore.FindFileNames(entityId);
             }
             else
             {
                 var id = int.Parse(entityId);
-                var temporaryFiles = this.temporaryFilesCache.FindFileNames(id, type.ToString());
-                var deletedFiles = this.editorStateCache.FindDeletedFileNames(id, type.ToString());
-                var savedFiles = this.licensesService.FindFileNamesExcludeSpecified(id, deletedFiles);
-
-                fileNames = new List<string>(temporaryFiles.Count + savedFiles.Count);
-                fileNames.AddRange(temporaryFiles);
-                fileNames.AddRange(savedFiles);
+                var savedFiles = this.filesStore.FindFileNames(id);
+                var deletedFiles = this.filesStateStore.FindDeletedFileNames(id);
+                
+                fileNames = new List<string>();
+                fileNames.AddRange(savedFiles.Where(f => !deletedFiles.Contains(f)));
             }
 
-            var model = new Models.Common.AttachedFilesModel(entityId, type.Value, fileNames);
+            var model = new Models.Common.AttachedFilesModel(entityId, fileNames);
             return this.PartialView(model);
         }
 
         [HttpPost]
-        public RedirectToRouteResult UploadFile(string entityId, AttachedFileType? type, string name)
+        public RedirectToRouteResult UploadFile(string entityId, string name)
         {
-            if (type == null)
-            {
-                type = AttachedFileType.License;
-            }
-
             var uploadedFile = this.Request.Files[0];
             if (uploadedFile == null)
             {
@@ -156,84 +164,43 @@
             var fileContent = new byte[uploadedFile.InputStream.Length];
             uploadedFile.InputStream.Read(fileContent, 0, fileContent.Length);
 
-            if (this.temporaryFilesCache.FileExists(name, entityId, type.ToString()))
+            if (this.filesStore.FileExists(name, entityId))
             {
                 throw new HttpException((int)HttpStatusCode.Conflict, null);
             }
 
-            if (GuidHelper.IsGuid(entityId))
-            {
-                this.temporaryFilesCache.AddFile(fileContent, name, entityId, type.ToString());
-            }
-            else
-            {
-                var id = int.Parse(entityId);
+            this.filesStore.AddFile(fileContent, name, entityId);
 
-                if (this.licensesService.FileExists(id, name))
-                {
-                    throw new HttpException((int)HttpStatusCode.Conflict, null);
-                }
-
-                this.temporaryFilesCache.AddFile(fileContent, name, id, type.ToString());
-            }
-
-            return this.RedirectToAction("AttachedFiles", new { entityId, type });
+            return this.RedirectToAction("AttachedFiles", new { entityId });
         }
 
         [HttpGet]
-        public FileContentResult DownloadFile(string entityId, AttachedFileType? type, string fileName)
+        public FileContentResult DownloadFile(string entityId, string fileName)
         {
-            if (type == null)
+            if (!this.filesStore.FileExists(fileName, entityId))
             {
-                type = AttachedFileType.License;
+                throw new HttpException((int)HttpStatusCode.NotFound, null);
             }
 
-            byte[] fileContent;
-
-            if (GuidHelper.IsGuid(entityId))
-            {
-                fileContent = this.temporaryFilesCache.GetFileContent(fileName, entityId, type.ToString());
-            }
-            else
-            {
-                var id = int.Parse(entityId);
-                var temporaryFiles = this.temporaryFilesCache.FileExists(fileName, id, type.ToString());
-
-                fileContent = temporaryFiles
-                    ? this.temporaryFilesCache.GetFileContent(fileName, id, type.ToString())
-                    : this.licensesService.GetFileContent(id, fileName);
-            }
+            var fileContent = this.filesStore.GetFileContent(fileName, entityId);
 
             return this.File(fileContent, MimeType.BinaryFile, fileName);
         }
 
         [HttpPost]
-        public RedirectToRouteResult DeleteFile(string entityId, AttachedFileType? type, string fileName)
+        public RedirectToRouteResult DeleteFile(string entityId, string fileName)
         {
-            if (type == null)
-            {
-                type = AttachedFileType.License;
-            }
-
             if (GuidHelper.IsGuid(entityId))
             {
-                this.temporaryFilesCache.DeleteFile(fileName, entityId, type.ToString());
+                this.filesStore.DeleteFile(fileName, entityId);
             }
             else
             {
                 var id = int.Parse(entityId);
-
-                if (this.temporaryFilesCache.FileExists(fileName, id, type.ToString()))
-                {
-                    this.temporaryFilesCache.DeleteFile(fileName, id, type.ToString());
-                }
-                else
-                {
-                    this.editorStateCache.AddDeletedFile(fileName, id, type.ToString());
-                }
+                this.filesStateStore.AddDeletedFile(fileName, id);
             }
 
-            return this.RedirectToAction("AttachedFiles", new { entityId, type });
+            return this.RedirectToAction("AttachedFiles", new { entityId });
         }
     }
 }

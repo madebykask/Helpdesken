@@ -119,7 +119,7 @@
                 foreach (var file in license.Files)
                 {
                     LicenseFile fileEntity;
-                    if (file.IsEmpty())
+                    if (file.ForDelete)
                     {
                         fileEntity = licenseFileRepository.GetAll()
                                         .GetLicenseFile(entity.Id, file.FileName)
@@ -161,18 +161,6 @@
                 licenseRepository.DeleteById(id);
 
                 uow.Save();
-            }
-        }
-
-        public byte[] GetFileContent(int licenseId, string fileName)
-        {
-            using (var uow = this.unitOfWorkFactory.Create())
-            {
-                var licenseFileRepository = uow.GetRepository<LicenseFile>();
-
-                return licenseFileRepository.GetAll()
-                        .GetLicenseFile(licenseId, fileName)
-                        .GetFileContent();
             }
         }
 

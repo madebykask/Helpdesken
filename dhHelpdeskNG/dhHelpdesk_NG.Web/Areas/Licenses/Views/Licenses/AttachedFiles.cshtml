@@ -1,0 +1,26 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Licenses.Models.Common.AttachedFilesModel
+
+<div id="license_files_container">
+    @Html.HiddenFor(m => m.EntityId)
+    @if (!Model.Files.Any())
+    {
+        @Translation.Get("No Uploaded Files")
+        return;
+    }
+    <table>
+        @foreach (var file in Model.Files)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(file, "DownloadFile", new { entityId = Model.EntityId, fileName = file })
+                </td>
+                <td>
+                    <a onclick="deleteFile('@file', 'license_files_container')" class="btn">
+                        @Translation.Get("Ta bort")
+                    </a>
+                </td>
+            </tr>
+        }
+    </table>
+</div>

@@ -27,23 +27,10 @@
             return models;
         }
 
-        public static byte[] GetFileContent(this IEnumerable<LicenseFile> query)
-        {
-            var entity = query.SingleOrDefault();
-
-            if (entity == null)
-            {
-                return null;
-            }
-
-            return entity.File;
-        }
-
         public static void MapToEntity(LicenseFileModel model, LicenseFile entity)
         {
             entity.License_Id = model.LicenseId;
             entity.FileName = model.FileName;
-            entity.File = model.File;
         }
     }
 }
