@@ -104,10 +104,12 @@
             $.post('/Cases/SaveSetting/', $("#frmCaseSetting").serialize(), function (result) {                                
             });
             
-            $.post('/Cases/SaveColSetting/', $("#frmColCaseSetting").serialize(), function (result) {                
+            $.post('/Cases/SaveColSetting/', $("#frmColCaseSetting").serialize(), function (result) {
+                window.location.href = '@Url.Action("Index")';
             });
 
-            window.location.href = '@Url.Action("Index")';
+
+            
 
 //            ShowToastMessage("Settings saved successfully.", 'success');
         }
