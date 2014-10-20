@@ -1,4 +1,4 @@
-﻿@using DH.Helpdesk.Common.Extensions.DateTime
+﻿@using	 DH.Helpdesk.Common.Extensions.DateTime
 @using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 
@@ -54,7 +54,7 @@
             }
         });
 
-        $('a[class="tree-node"], a[class="tree-selected-node"]', '#categories_tree').click(function () {
+        $('#categories_tree').find('a.tree-node, a.tree-selected-node').click(function () {
             var selectedCategoryId = $(this).siblings('input').val();
             window.selectedCategoryId = selectedCategoryId;
 
@@ -111,7 +111,7 @@
             }
         });
 
-        $('#categories_editing_tree a[class="tree-node"]').click(function () {
+        $('#categories_editing_tree').find('a.tree-node, a.tree-selected-node').click(function () {
             var selectedCategoryId = $(this).siblings('input').val();
             window.location.href = '@this.Url.Action("EditCategory")?id=' + selectedCategoryId;
         });
