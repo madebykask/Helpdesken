@@ -38,5 +38,12 @@
 
             return entity.File;
         }
+
+        public static void MapToEntity(LicenseFileModel model, LicenseFile entity)
+        {
+            entity.License_Id = model.LicenseId;
+            entity.FileName = model.FileName;
+            entity.File = model.File;
+        }
     }
 }

@@ -5,6 +5,11 @@
 
     public class License : Entity
     {
+        public License()
+        {
+            this.Files = new List<LicenseFile>();    
+        }
+
         public int? Department_Id { get; set; }
 
         public int NumberOfLicenses { get; set; }

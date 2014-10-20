@@ -15,10 +15,6 @@
             this.Property(f => f.File).IsOptional();
             this.Property(f => f.CreatedDate).IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
 
-            this.HasRequired(f => f.License)
-                .WithMany()
-                .HasForeignKey(f => f.License_Id);
-
             this.ToTable("tblLicenseFile");   
         }
     }

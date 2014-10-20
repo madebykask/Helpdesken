@@ -17,11 +17,11 @@
         {
             <tr>
                 <td>
-                    @Html.ActionLink(file, "DownloadFile", GetControllerName(), new { entityId = Model.EntityId, type = Model.Type, fileName = file })
+                    @Html.ActionLink(file, "DownloadFile", GetControllerName(), new { entityId = Model.EntityId, type = Model.Type, fileName = file }, null)
                 </td>
                 <td>
                     <a onclick="deleteFile('@Model.Type', '@file', '@filesContainerId')" class="btn">
-                        @Translation.Get("Delete")
+                        @Translation.Get("Ta bort")
                     </a>
                 </td>
             </tr>

@@ -77,6 +77,7 @@
 
         private LicenseModel()
         {
+            this.Files = new LicenseFileModel[0];
         }
 
         [NotNull]

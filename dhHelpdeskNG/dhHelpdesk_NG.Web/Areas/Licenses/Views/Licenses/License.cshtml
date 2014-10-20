@@ -1,6 +1,24 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Licenses.Models.Licenses.LicenseEditModel
 
+@section Scripts
+{
+    <script type="text/javascript" src="@Url.Content("~/Content/js/Licenses/license.js")"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            var parameters = {
+                id: '@Model.Id',
+                uploadFileUrl: '@Url.Action("UploadFile")',
+                deleteFileUrl: '@Url.Action("DeleteFile")',
+                licenseType: '@Model.Type'
+            };
+
+            applyBehavior(parameters);
+        });
+    </script>    
+}
+
 @section Actions
 {
     <ul class="secnav">               
@@ -118,6 +136,25 @@
                     @Translation.Get("Bifogad fil")
                 </td>
                 <td class="span9">
+                    <a href="#license_files_uploader_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Upload")</a>
+                    <div id="license_files_uploader_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h3>&nbsp;</h3>
+                        </div>
+                        <div class="modal-body">
+                            <div id="license_files_uploader"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Avsluta")</button>
+                        </div>
+                    </div>                    
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    @Html.Partial("AttachedFiles", Model.Files)
                 </td>
             </tr>
         </table>                

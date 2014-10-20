@@ -11,7 +11,7 @@
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
 
-    public class VendorsController : BaseController
+    public sealed class VendorsController : BaseController
     {
         private readonly IVendorsService vendorsService;
 

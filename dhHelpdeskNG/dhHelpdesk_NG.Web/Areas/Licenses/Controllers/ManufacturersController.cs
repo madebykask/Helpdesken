@@ -11,7 +11,7 @@
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
 
-    public class ManufacturersController : BaseController
+    public sealed class ManufacturersController : BaseController
     {
         private readonly IManufacturersService manufacturersService;
 

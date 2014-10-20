@@ -11,7 +11,7 @@
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
 
-    public class ApplicationsController : BaseController
+    public sealed class ApplicationsController : BaseController
     {
         private readonly IApplicationsService applicationsService;
 

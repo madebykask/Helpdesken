@@ -18,7 +18,7 @@
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
     using DH.Helpdesk.Web.Infrastructure.Tools;
 
-    public class LicensesController : BaseController
+    public sealed class LicensesController : BaseController
     {
         private readonly ILicensesService licensesService;
 
@@ -35,8 +35,6 @@
                 ILicensesService licensesService, 
                 IWorkContext workContext, 
                 ILicensesModelFactory licensesModelFactory, 
-                ITemporaryFilesCache temporaryFilesCache, 
-                IEditorStateCache editorStateCache,
                 IEditorStateCacheFactory editorStateCacheFactory,
                 ITemporaryFilesCacheFactory temporaryFilesCacheFactory)
             : base(masterDataService)
@@ -44,8 +42,6 @@
             this.licensesService = licensesService;
             this.workContext = workContext;
             this.licensesModelFactory = licensesModelFactory;
-            this.temporaryFilesCache = temporaryFilesCache;
-            this.editorStateCache = editorStateCache;
 
             this.editorStateCache = editorStateCacheFactory.CreateForModule(ModuleName.Licenses);
             this.temporaryFilesCache = temporaryFilesCacheFactory.CreateForModule(ModuleName.Licenses);
@@ -114,8 +110,13 @@
         }
 
         [HttpGet]
-        public PartialViewResult AttachedFiles(string entityId, AttachedFileType type)
+        public PartialViewResult AttachedFiles(string entityId, AttachedFileType? type)
         {
+            if (type == null)
+            {
+                type = AttachedFileType.License;
+            }
+
             List<string> fileNames;
 
             if (GuidHelper.IsGuid(entityId))
@@ -134,13 +135,18 @@
                 fileNames.AddRange(savedFiles);
             }
 
-            var model = new Models.Common.AttachedFilesModel(entityId, type, fileNames);
+            var model = new Models.Common.AttachedFilesModel(entityId, type.Value, fileNames);
             return this.PartialView(model);
         }
 
         [HttpPost]
-        public RedirectToRouteResult UploadFile(string entityId, AttachedFileType type, string name)
+        public RedirectToRouteResult UploadFile(string entityId, AttachedFileType? type, string name)
         {
+            if (type == null)
+            {
+                type = AttachedFileType.License;
+            }
+
             var uploadedFile = this.Request.Files[0];
             if (uploadedFile == null)
             {
@@ -175,8 +181,13 @@
         }
 
         [HttpGet]
-        public FileContentResult DownloadFile(string entityId, AttachedFileType type, string fileName)
+        public FileContentResult DownloadFile(string entityId, AttachedFileType? type, string fileName)
         {
+            if (type == null)
+            {
+                type = AttachedFileType.License;
+            }
+
             byte[] fileContent;
 
             if (GuidHelper.IsGuid(entityId))
@@ -197,8 +208,13 @@
         }
 
         [HttpPost]
-        public RedirectToRouteResult DeleteFile(string entityId, AttachedFileType type, string fileName)
+        public RedirectToRouteResult DeleteFile(string entityId, AttachedFileType? type, string fileName)
         {
+            if (type == null)
+            {
+                type = AttachedFileType.License;
+            }
+
             if (GuidHelper.IsGuid(entityId))
             {
                 this.temporaryFilesCache.DeleteFile(fileName, entityId, type.ToString());

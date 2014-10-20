@@ -96,21 +96,47 @@
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var licenseRepository = uow.GetRepository<License>();
+                var licenseFileRepository = uow.GetRepository<LicenseFile>();
+
                 License entity;
+                var now = DateTime.Now;
                 if (license.IsNew())
                 {
                     entity = new License();
                     LicenseMapper.MapToEntity(license, entity);
-                    entity.CreatedDate = DateTime.Now;
-                    entity.ChangedDate = DateTime.Now;
+                    entity.CreatedDate = now;
+                    entity.ChangedDate = now;
                     licenseRepository.Add(entity);
                 }
                 else
                 {
                     entity = licenseRepository.GetById(license.Id);
                     LicenseMapper.MapToEntity(license, entity);
-                    entity.ChangedDate = DateTime.Now;
+                    entity.ChangedDate = now;
                     licenseRepository.Update(entity);
+                }
+
+                foreach (var file in license.Files)
+                {
+                    LicenseFile fileEntity;
+                    if (file.IsEmpty())
+                    {
+                        fileEntity = licenseFileRepository.GetAll()
+                                        .GetLicenseFile(entity.Id, file.FileName)
+                                        .SingleOrDefault();
+                        if (fileEntity != null)
+                        {
+                            licenseFileRepository.DeleteById(fileEntity.Id);
+                        }
+
+                        continue;
+                    }
+
+                    fileEntity = new LicenseFile();
+                    LicenseFileMapper.MapToEntity(file, fileEntity);
+                    entity.CreatedDate = now;
+                    entity.ChangedDate = now;
+                    entity.Files.Add(fileEntity);
                 }
 
                 uow.Save();
@@ -122,9 +148,17 @@
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
-                var repository = uow.GetRepository<License>();
+                var licenseRepository = uow.GetRepository<License>();
+                var licenseFileRepository = uow.GetRepository<LicenseFile>();
 
-                repository.DeleteById(id);
+                var license = licenseRepository.GetById(id);
+                var fileIds = license.Files.Select(f => f.Id).ToArray();
+                foreach (var fileId in fileIds)
+                {
+                    licenseFileRepository.DeleteById(fileId);    
+                }
+
+                licenseRepository.DeleteById(id);
 
                 uow.Save();
             }

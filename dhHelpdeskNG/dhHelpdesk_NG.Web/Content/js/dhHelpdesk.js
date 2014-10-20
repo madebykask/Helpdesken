@@ -898,7 +898,7 @@ if ($.fn.DataTable.TableTools) {
 }
 
 
-function ResetC() {
+/*function ResetC() {
     //alert('reset');
     
     
@@ -923,6 +923,7 @@ function ResetC() {
 
     //$('#tablegrid1').dataTable();
 };
+*/
 
 var GlobalTable;
 /* Table initialisation */

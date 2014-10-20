@@ -1085,6 +1085,7 @@
     <Content Include="Content\js\jquery.validate.min.js" />
     <Content Include="Content\js\jsrender.js" />
     <Content Include="Content\js\jsrender.min.js" />
+    <Content Include="Content\js\Licenses\license.js" />
     <Content Include="Content\js\Moxie.swf" />
     <Content Include="Content\js\Moxie.xap" />
     <Content Include="Content\js\plupload.full.min.js" />

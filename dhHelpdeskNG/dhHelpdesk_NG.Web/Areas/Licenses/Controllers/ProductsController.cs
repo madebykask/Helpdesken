@@ -14,7 +14,7 @@
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
 
-    public class ProductsController : BaseController
+    public sealed class ProductsController : BaseController
     {
         private readonly IProductsService productsService;
 

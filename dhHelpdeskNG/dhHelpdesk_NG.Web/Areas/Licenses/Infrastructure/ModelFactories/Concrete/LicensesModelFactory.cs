@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Licenses.Infrastructure.ModelFactories.Concrete
 {
+    using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
 
@@ -9,6 +10,8 @@
     using DH.Helpdesk.Web.Areas.Licenses.Models.Common;
     using DH.Helpdesk.Web.Areas.Licenses.Models.Licenses;
     using DH.Helpdesk.Web.Infrastructure.Tools;
+
+    using iTextSharp.text;
 
     public sealed class LicensesModelFactory : ILicensesModelFactory
     {
@@ -66,6 +69,10 @@
                 editModel.Info = string.Empty;
             }
 
+            var files = new List<LicenseFileModel>();
+            files.AddRange(editModel.DeletedFiles.Select(f => new LicenseFileModel(editModel.Id, f)));
+            files.AddRange(editModel.NewFiles.Select(f => new LicenseFileModel(editModel.Id, f.Name, f.Content)));
+
             var model = new LicenseModel(
                                 editModel.Id,
                                 editModel.LicenseNumber,
@@ -80,7 +87,7 @@
                                 editModel.UpgradeLicenseId,
                                 editModel.ValidDate,
                                 editModel.Info,
-                                new LicenseFileModel[0]);
+                                files.ToArray());
 
             return model;
         }
