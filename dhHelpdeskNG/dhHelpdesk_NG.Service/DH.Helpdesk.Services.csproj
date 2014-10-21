@@ -89,6 +89,7 @@
     <Compile Include="BusinessLogic\BusinessModelValidators\Inventory\Concrete\ServerValidator.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Inventory\Concrete\PrinterValidator.cs" />
     <Compile Include="BusinessLogic\MailTools\TemplateFormatters\MailTemplateFormatterNew.cs" />
+    <Compile Include="BusinessLogic\Mappers\Changes\ChangeMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Customers\CaseMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Department\DepartmentMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Licenses\ApplicationMapper.cs" />

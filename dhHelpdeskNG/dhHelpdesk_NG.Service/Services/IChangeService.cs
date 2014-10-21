@@ -63,6 +63,8 @@
 
         List<CustomerChange> GetCustomersChanges(int[] customersIds);
 
+        CustomerChanges[] GetCustomerChanges(int[] customerIds, int userId);
+
         #endregion
     }
 }

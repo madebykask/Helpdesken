@@ -108,6 +108,7 @@
     <Compile Include="Models\Case\CaseSolutionSettingForWrite.cs" />
     <Compile Include="Models\Case\CaseSolutionSettingOverview.cs" />
     <Compile Include="Models\Case\Output\CustomerCases.cs" />
+    <Compile Include="Models\Changes\Output\CustomerChanges.cs" />
     <Compile Include="Models\ComputerUserFieldSettingsLanguage.cs" />
     <Compile Include="Models\Email\MailItem.cs" />
     <Compile Include="Models\Email\QuestionnaireMailItem.cs" />

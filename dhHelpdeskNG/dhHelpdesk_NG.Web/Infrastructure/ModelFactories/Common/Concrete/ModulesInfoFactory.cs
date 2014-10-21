@@ -1,21 +1,15 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Common.Concrete
 {
-    using System.Collections.Generic;
-
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
-    using DH.Helpdesk.Domain;
     using DH.Helpdesk.Web.Models.Case;
     using DH.Helpdesk.Web.Models.Changes;
 
     internal class ModulesInfoFactory : IModulesInfoFactory
     {
-        public CustomerChangesModel GetCustomerChangesModel(
-                IList<CustomerUser> customers,
-                IEnumerable<CustomerChange> changes,
-                int userId)
+        public CustomerChangesModel GetCustomerChangesModel(CustomerChanges[] customerChanges)
         {
-            return new CustomerChangesModel(customers, changes, userId);
+            return new CustomerChangesModel(customerChanges);
         }
 
         public MyCasesModel GetMyCasesModel(MyCase[] cases)

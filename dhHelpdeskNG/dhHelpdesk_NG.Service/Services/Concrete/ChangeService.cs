@@ -18,9 +18,11 @@
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Changes;
     using DH.Helpdesk.Dal.Repositories.Inventory;
+    using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Changes;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport;
@@ -29,6 +31,9 @@
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Changes;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Changes;
     using DH.Helpdesk.Services.BusinessLogic.Changes;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Changes;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Customers;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications.Customers;
     using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Services.Response.Changes;
 
@@ -111,6 +116,8 @@
 
         private readonly IChangeCouncilRepository changeCouncilRepository;
 
+        private readonly IUnitOfWorkFactory unitOfWorkFactory;
+
         #endregion
 
         #region Constructors and Destructors
@@ -147,12 +154,12 @@
             IBusinessModelsMapper<UpdateChangeRequest, History> changeToChangeHistoryMapper,
             List<IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditData>> changeAuditors,
             IExcelFileComposer excelFileComposer,
-            IBusinessModelsMapper<ChangeOverviewSettings, List<ExcelTableHeader>>
-                changeOverviewSettingsToExcelHeadersMapper,
+            IBusinessModelsMapper<ChangeOverviewSettings, List<ExcelTableHeader>> changeOverviewSettingsToExcelHeadersMapper,
             IBusinessModelsMapper<ChangeDetailedOverview, BusinessItem> changeToBusinessItemMapper,
             IExportFileNameFormatter exportFileNameFormatter,
             IInventoryTypeRepository inventoryTypeRepository,
-            IChangeCouncilRepository changeCouncilRepository)
+            IChangeCouncilRepository changeCouncilRepository, 
+            IUnitOfWorkFactory unitOfWorkFactory)
         {
             this.changeCategoryRepository = changeCategoryRepository;
             this.changeChangeGroupRepository = changeChangeGroupRepository;
@@ -190,6 +197,7 @@
             this.exportFileNameFormatter = exportFileNameFormatter;
             this.inventoryTypeRepository = inventoryTypeRepository;
             this.changeCouncilRepository = changeCouncilRepository;
+            this.unitOfWorkFactory = unitOfWorkFactory;
         }
 
         #endregion
@@ -551,6 +559,20 @@
         public List<CustomerChange> GetCustomersChanges(int[] customersIds)
         {
             return this.changeRepository.GetCustomersChanges(customersIds);
+        }
+
+        public CustomerChanges[] GetCustomerChanges(int[] customerIds, int userId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var customerRepository = uow.GetRepository<Customer>();
+
+                var customerChanges = customerRepository.GetAll()
+                                    .GetByIds(customerIds)
+                                    .MapToCustomerChanges(userId);
+
+                return customerChanges;
+            }
         }
 
         #endregion

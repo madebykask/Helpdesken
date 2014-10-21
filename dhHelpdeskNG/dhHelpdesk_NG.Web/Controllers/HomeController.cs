@@ -6,7 +6,6 @@
     using DH.Helpdesk.BusinessData.Enums.Users;
     using DH.Helpdesk.BusinessData.Models.Users.Input;
     using DH.Helpdesk.Dal.Infrastructure.Context;
-    using DH.Helpdesk.Services.Infrastructure.Cases;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Case;
@@ -46,8 +45,6 @@
 
         private readonly ICaseModelFactory caseModelFactory;
 
-        private readonly ICasesCalculator casesCalculator;
-
         private readonly IModulesInfoFactory modulesInfoFactory;
 
         private readonly IChangeService changeService;
@@ -69,7 +66,6 @@
             IDocumentService documentService,
             IWorkContext workContext, 
             ICaseModelFactory caseModelFactory, 
-            ICasesCalculator casesCalculator, 
             IModulesInfoFactory modulesInfoFactory, 
             IChangeService changeService)
             : base(masterDataService)
@@ -89,7 +85,6 @@
             this.documentService = documentService;
             this.workContext = workContext;
             this.caseModelFactory = caseModelFactory;
-            this.casesCalculator = casesCalculator;
             this.modulesInfoFactory = modulesInfoFactory;
             this.changeService = changeService;
         }
@@ -218,12 +213,13 @@
                         if (module.NumberOfRows.HasValue)
                         {
                             changesCustomers = changesCustomers.Take(module.NumberOfRows.Value);
-                        } 
+                        }
 
-                        model.CustomerChanges = this.modulesInfoFactory.GetCustomerChangesModel(
-                            changesCustomers.Select(c => c.Customer).ToArray(),
-                            this.changeService.GetCustomersChanges(changesCustomers.Select(c => c.Customer.Customer_Id).ToArray()),
-                            SessionFacade.CurrentUser.Id);
+                        var customerChanges = this.changeService.GetCustomerChanges(
+                                            changesCustomers.Select(c => c.Customer.Customer_Id).ToArray(),
+                                            SessionFacade.CurrentUser.Id);
+
+                        model.CustomerChanges = this.modulesInfoFactory.GetCustomerChangesModel(customerChanges);
                         break;
                     case Module.Cases:
                         var myCases = this.caseService.GetMyCases(this.workContext.User.UserId, module.NumberOfRows);

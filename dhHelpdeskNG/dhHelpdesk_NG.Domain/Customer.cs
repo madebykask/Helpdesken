@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Domain
 {
+    using DH.Helpdesk.Domain.Changes;
     using DH.Helpdesk.Domain.Computers;
     using DH.Helpdesk.Domain.Faq;
 
@@ -60,5 +61,7 @@
         public virtual ICollection<User> Users { get; set; }
 
         public virtual ICollection<Product> Products { get; set; } 
+
+        public virtual ICollection<ChangeEntity> Changes { get; set; } 
     }
 }

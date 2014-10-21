@@ -1,6 +1,5 @@
 ﻿namespace DH.Helpdesk.Dal.EntityConfigurations.Changes
 {
-    using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.ModelConfiguration;
 
@@ -13,7 +12,7 @@
             this.HasKey(c => c.Id);
             this.Property(c => c.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(c => c.Customer_Id).IsOptional();
-            this.HasOptional(c => c.Customer).WithMany().HasForeignKey(c => c.Customer_Id).WillCascadeOnDelete(false);
+            this.HasOptional(c => c.Customer).WithMany(c => c.Changes).HasForeignKey(c => c.Customer_Id).WillCascadeOnDelete(false);
             this.Property(c => c.ChangeGUID).IsRequired();
             this.Property(c => c.OrdererId).IsOptional().HasMaxLength(20);
             this.Property(c => c.OrdererName).IsOptional().HasMaxLength(50);
