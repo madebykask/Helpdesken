@@ -639,11 +639,11 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpGet]
-        public ContentResult Questionnaire(Guid guid)
+        public ViewResult Questionnaire(Guid guid)
         {
-            this._circularService.GetQuestionnaire(guid, this.OperationContext);
+            QuestionnaireOverview questionnarie = this._circularService.GetQuestionnaire(guid, this.OperationContext);
 
-            return this.Content(guid.ToString());
+            return this.View("Quiestionnaire", questionnarie);
         }
 
         #region PRIVATE

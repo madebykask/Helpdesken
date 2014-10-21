@@ -1641,6 +1641,7 @@
     <Content Include="Views\Questionnaire\_CircularPartOverviewWithDelete.cshtml" />
     <Content Include="Views\Questionnaire\CircularOverviewGrid.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\MultiSelectListModel.cshtml" />
+    <Content Include="Views\Questionnaire\Quiestionnaire.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

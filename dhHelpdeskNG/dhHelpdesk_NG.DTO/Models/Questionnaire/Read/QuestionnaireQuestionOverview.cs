@@ -10,16 +10,16 @@
             int id,
             string question,
             string number,
-            bool showNote,
+            bool isShowNote,
             string noteText,
             List<QuestionnaireQuestionOptionOverview> oprions)
         {
             this.Id = id;
             this.Question = question;
             this.Number = number;
-            this.ShowNote = showNote;
+            this.IsShowNote = isShowNote;
             this.NoteText = noteText;
-            this.Oprions = oprions;
+            this.Options = oprions;
         }
 
         [IsId]
@@ -30,10 +30,10 @@
 
         public string Number { get; private set; }
 
-        public bool ShowNote { get; private set; }
+        public bool IsShowNote { get; private set; }
 
         public string NoteText { get; private set; }
 
-        public List<QuestionnaireQuestionOptionOverview> Oprions { get; private set; }
+        public List<QuestionnaireQuestionOptionOverview> Options { get; private set; }
     }
 }

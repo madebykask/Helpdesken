@@ -1,0 +1,82 @@
+﻿@using DH.Helpdesk.BusinessData.Models.Questionnaire.Read
+@model QuestionnaireOverview
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <li class="active"></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment-1">
+                <div class="container">
+                    <h3 style="color: gray">@Model.Name</h3>
+                    <div class="row">
+                        <div class="span12">
+                            @Model.Description
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="tab-pane tab-pane-border active" id="fragment-2">
+                <div class="container">
+                    @foreach (var question in Model.Questions)
+                    {
+                        <h5>@question.Number. @question.Question</h5>
+                        <div class="row">
+                            <div class="span12">
+                                <table class="span10">
+                                    @foreach (var option in question.Options.OrderBy(x => x.Position))
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.RadioButton("Ok", false)
+                                                @option.Option
+                                            </td>
+                                        </tr>                                                                            
+                                    }
+                                    @if (question.IsShowNote)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.Label("     ")
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @Html.Label("     ")
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @Html.Label(question.NoteText)
+                                                @Html.TextArea("note", "", new { maxlength = "2000", style = "height:80px;" })
+                                            </td>
+                                        </tr>
+                                    }
+                                    <tr>
+                                        <td>
+                                            @Html.Label("     ")
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @Html.Label("     ")
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                        </div>
+                        <table border="1" class="span12">
+                            <tr>
+                                <td></td>
+                            </tr>
+                        </table>
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
