@@ -1,10 +1,12 @@
 ﻿namespace DH.Helpdesk.Domain.Questionnaire
 {
+    using DH.Helpdesk.Domain.Interfaces;
+
     using global::System;
 
-    public class QuestionnaireQuesLangEntity 
+    public class QuestionnaireQuesLangEntity : ILanguageEntity
     {
-        #region Public Properties       
+        #region Public Properties
 
         public DateTime ChangedDate { get; set; }
 

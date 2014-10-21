@@ -12,6 +12,7 @@
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Read;
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Write;
     using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.MailTemplates;
@@ -225,47 +226,189 @@
             this.SendMails(mails, operationContext.DateAndTime);
         }
 
-        public void GetQuestionnaire(Guid guid, OperationContext operationContext)
+        public QuestionnaireOverview GetQuestionnaire(Guid guid, OperationContext operationContext)
         {
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
-                var questionnaireRepository = uof.GetRepository<QuestionnaireEntity>();
-                var questionnaireLanguageRepository = uof.GetRepository<QuestionnaireLanguageEntity>();
-                var questionnaireQuestionRepository = uof.GetRepository<QuestionnaireQuestionEntity>();
-                var questionnaireQuestionLanguageRepository = uof.GetRepository<QuestionnaireQuesLangEntity>();
-                var questionnaireQuestionOptionRepository = uof.GetRepository<QuestionnaireQuestionOptionEntity>();
-                var questionnaireQuestionOptionLanguageRepository = uof.GetRepository<QuestionnaireQuesOpLangEntity>();
                 var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
+                var questionnaireRepository = uof.GetRepository<QuestionnaireEntity>();
+                var questionnaireQuestionRepository = uof.GetRepository<QuestionnaireQuestionEntity>();
+                var questionnaireQuestionOptionRepository = uof.GetRepository<QuestionnaireQuestionOptionEntity>();
+                var questionnaireLanguageRepository = uof.GetRepository<QuestionnaireLanguageEntity>();
+                var questionnaireQuestionLanguageRepository = uof.GetRepository<QuestionnaireQuesLangEntity>();
+                var questionnaireQuestionOptionLanguageRepository = uof.GetRepository<QuestionnaireQuesOpLangEntity>();
 
-                if (operationContext.LanguageId == LanguageId.Swedish)
+                var questionnairies =
+                    from questionnaire in questionnaireRepository.GetAll().GetByCustomer(operationContext.CustomerId)
+                    join questionnaireLanguage in
+                        questionnaireLanguageRepository.GetAll().GetByLanguage(operationContext.LanguageId) on
+                        questionnaire.Id equals questionnaireLanguage.Questionnaire_Id into group1
+                    from g1 in group1.DefaultIfEmpty()
+                    select
+                        new
+                            {
+                                QuestionnaireId = questionnaire.Id,
+                                QuestionnaireName = g1.QuestionnaireName ?? questionnaire.QuestionnaireName,
+                                QuestionnaireDescription =
+                        g1.QuestionnaireDescription ?? questionnaire.QuestionnaireDescription
+                            };
+
+                var questionnairieQuestions = from questionnaireQuestion in questionnaireQuestionRepository.GetAll()
+                                              join questionnairieLanguageQuestion in
+                                                  questionnaireQuestionLanguageRepository.GetAll()
+                                                  .GetByLanguage(operationContext.LanguageId) on
+                                                  questionnaireQuestion.Id equals
+                                                  questionnairieLanguageQuestion.QuestionnaireQuestion_Id into group1
+                                              from g1 in group1.DefaultIfEmpty()
+                                              select
+                                                  new
+                                                      {
+                                                          QuestionnaireId = questionnaireQuestion.Questionnaire_Id,
+                                                          QuestionnaireQuestionId = questionnaireQuestion.Id,
+                                                          questionnaireQuestion.QuestionnaireQuestionNumber,
+                                                          QuestionnaireQuestionNoteText = questionnaireQuestion.NoteText,
+                                                          QuestionnaireQuestionShowNote = questionnaireQuestion.ShowNote,
+                                                          QuestionnaireQuestion =
+                                                  g1.QuestionnaireQuestion
+                                                  ?? questionnaireQuestion.QuestionnaireQuestion
+                                                      };
+
+                var questionnairieQuestionOptions =
+                    from questionnaireQuestionOption in questionnaireQuestionOptionRepository.GetAll()
+                    join questionnaireLanguageQuestionOption in
+                        questionnaireQuestionOptionLanguageRepository.GetAll()
+                        .GetByLanguage(operationContext.LanguageId) on questionnaireQuestionOption.Id equals
+                        questionnaireLanguageQuestionOption.QuestionnaireQuestionOption_Id into group1
+                    from g1 in group1.DefaultIfEmpty()
+                    select
+                        new
+                            {
+                                QuestionnaireQuestionId = questionnaireQuestionOption.QuestionnaireQuestion_Id,
+                                QuestionnaireQuestionOptionId = questionnaireQuestionOption.Id,
+                                QuestionnaireQuestionOptionPosition =
+                        questionnaireQuestionOption.QuestionnaireQuestionOptionPos,
+                                QuestionnaireQuestionOptionValue = questionnaireQuestionOption.OptionValue,
+                                QuestionnaireQuestionOption =
+                        g1.QuestionnaireQuestionOption ?? questionnaireQuestionOption.QuestionnaireQuestionOption
+                            };
+
+                var query = from circularPart in circularPartRepository.GetAll().GetByGuid(guid)
+                            join questionnaire in questionnairies on circularPart.QuestionnaireCircular.Questionnaire_Id
+                                equals questionnaire.QuestionnaireId
+                            join questionnaireQuestion in questionnairieQuestions on questionnaire.QuestionnaireId
+                                equals questionnaireQuestion.QuestionnaireId into group1
+                            from g1 in group1.DefaultIfEmpty()
+                            join questionnaireQuestionOption in questionnairieQuestionOptions on
+                                g1.QuestionnaireQuestionId equals questionnaireQuestionOption.QuestionnaireQuestionId
+                                into group2
+                            from g2 in group2.DefaultIfEmpty()
+                            select
+                                new
+                                    {
+                                        QuestionnaireId = (int?)questionnaire.QuestionnaireId,
+                                        questionnaire.QuestionnaireName,
+                                        questionnaire.QuestionnaireDescription,
+                                        QuestionnaireQuestionId = (int?)g1.QuestionnaireQuestionId,
+                                        g1.QuestionnaireQuestion,
+                                        g1.QuestionnaireQuestionNumber,
+                                        ShowNote = (int?)g1.QuestionnaireQuestionShowNote,
+                                        NoteText = g1.QuestionnaireQuestionNoteText,
+                                        QuestionnaireQuestionOptionId = (int?)g2.QuestionnaireQuestionOptionId,
+                                        OptionValue = (int?)g2.QuestionnaireQuestionOptionValue,
+                                        g2.QuestionnaireQuestionOption,
+                                        questionnaireQuestionOptionPos = (int?)g2.QuestionnaireQuestionOptionPosition,
+                                    };
+
+                var flatData = query.ToList();
+
+                var anonymus =
+                    flatData.GroupBy(
+                        flat =>
+                        new
+                            {
+                                QuestionnaireId = (int)flat.QuestionnaireId,
+                                flat.QuestionnaireName,
+                                flat.QuestionnaireDescription
+                            })
+                        .Select(
+                            g1 =>
+                            new
+                                {
+                                    g1.Key.QuestionnaireId,
+                                    g1.Key.QuestionnaireName,
+                                    g1.Key.QuestionnaireDescription,
+                                    Questions = (from i in g1
+                                                 group i by
+                                                     new
+                                                         {
+                                                             i.QuestionnaireQuestionId,
+                                                             i.QuestionnaireQuestion,
+                                                             i.QuestionnaireQuestionNumber,
+                                                             i.NoteText,
+                                                             i.ShowNote
+                                                         }
+                                                 into g2
+                                                 select
+                                                     new
+                                                         {
+                                                             g2.Key.QuestionnaireQuestionId,
+                                                             g2.Key.QuestionnaireQuestion,
+                                                             g2.Key.QuestionnaireQuestionNumber,
+                                                             g2.Key.NoteText,
+                                                             g2.Key.ShowNote,
+                                                             Options = (from j in g2
+                                                                        group j by
+                                                                            new
+                                                                                {
+                                                                                    j.QuestionnaireQuestionOptionId,
+                                                                                    j.OptionValue,
+                                                                                    j.QuestionnaireQuestionOption,
+                                                                                    j.questionnaireQuestionOptionPos
+                                                                                }
+                                                                        into g3
+                                                                        select
+                                                                            new
+                                                                                {
+                                                                                    g3.Key.QuestionnaireQuestionOptionId,
+                                                                                    g3.Key.OptionValue,
+                                                                                    g3.Key.QuestionnaireQuestionOption,
+                                                                                    g3.Key.questionnaireQuestionOptionPos
+                                                                                })
+                                                     .SkipWhile(x => x.QuestionnaireQuestionOptionId == null).ToList()
+                                                         })
+                                .SkipWhile(x => x.QuestionnaireQuestionId == null).ToList()
+                                }).SingleOrDefault();
+
+                if (anonymus == null)
                 {
-                    var query = from circularPart in circularPartRepository.GetAll().GetByGuid(guid)
-                                join questionnaire in
-                                    questionnaireRepository.GetAll().GetByCustomer(operationContext.CustomerId) on
-                                    circularPart.QuestionnaireCircular.Questionnaire_Id equals questionnaire.Id
-                                join questionnaireQuestion in questionnaireQuestionRepository.GetAll() on
-                                    questionnaire.Id equals questionnaireQuestion.Questionnaire_Id
-                                join questionnaireQuestionOption in questionnaireQuestionOptionRepository.GetAll() on
-                                    questionnaireQuestion.Id equals questionnaireQuestionOption.QuestionnaireQuestion_Id
-                                select
-                                    new
-                                        {
-                                            questionnaireId = questionnaire.Id,
-                                            questionnaire.QuestionnaireName,
-                                            questionnaire.QuestionnaireDescription,
-                                            questionnaireQuestionId = questionnaireQuestion.Id,
-                                            questionnaireQuestion.QuestionnaireQuestion,
-                                            questionnaireQuestion.QuestionnaireQuestionNumber,
-                                            questionnaireQuestion.ShowNote,
-                                            questionnaireQuestion.NoteText,
-                                            questionnaireQuestionOptionId = questionnaireQuestionOption.Id,
-                                            questionnaireQuestionOption.OptionValue,
-                                            questionnaireQuestionOption.QuestionnaireQuestionOption,
-                                            questionnaireQuestionOption.QuestionnaireQuestionOptionPos,
-                                        };
-
-                    var anonymus = query.ToList();
+                    return QuestionnaireOverview.GetDefault();
                 }
+
+                var questions = (from question in anonymus.Questions
+                                 let options =
+                                     question.Options.Select(
+                                         option =>
+                                         new QuestionnaireQuestionOptionOverview(
+                                             (int)option.QuestionnaireQuestionOptionId,
+                                             option.QuestionnaireQuestionOption,
+                                             (int)option.OptionValue,
+                                             (int)option.questionnaireQuestionOptionPos)).ToList()
+                                 select
+                                     new QuestionnaireQuestionOverview(
+                                     (int)question.QuestionnaireQuestionId,
+                                     question.QuestionnaireQuestion,
+                                     question.QuestionnaireQuestionNumber,
+                                     question.ShowNote.ToBool(),
+                                     question.NoteText,
+                                     options)).ToList();
+
+                var questionnarie = new QuestionnaireOverview(
+                    anonymus.QuestionnaireId,
+                    anonymus.QuestionnaireName,
+                    anonymus.QuestionnaireDescription,
+                    questions);
+
+                return questionnarie;
             }
         }
 
