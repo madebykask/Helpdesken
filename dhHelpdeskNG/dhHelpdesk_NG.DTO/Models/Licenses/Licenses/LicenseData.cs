@@ -8,12 +8,14 @@
         public LicenseData(
                 LicenseModel license, 
                 ItemOverview[] products, 
+                ItemOverview[] regions,
                 ItemOverview[] departments, 
                 ItemOverview[] vendors, 
                 ItemOverview[] upgradeLicenses)
         {
             this.UpgradeLicenses = upgradeLicenses;
             this.Vendors = vendors;
+            this.Regions = regions;
             this.Departments = departments;
             this.Products = products;
             this.License = license;
@@ -24,6 +26,9 @@
 
         [NotNull]
         public ItemOverview[] Products { get; private set; }
+
+        [NotNull]
+        public ItemOverview[] Regions { get; private set; }
 
         [NotNull]
         public ItemOverview[] Departments { get; private set; }

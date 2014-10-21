@@ -17,6 +17,7 @@
                 int priceYear, 
                 int? productId, 
                 int? vendorId, 
+                int? regionId,
                 int? departmentId, 
                 int? upgradeLicenseId, 
                 DateTime? validDate, 
@@ -32,6 +33,7 @@
             this.Info = info;
             this.ValidDate = validDate;
             this.UpgradeLicenseId = upgradeLicenseId;
+            this.RegionId = regionId;
             this.DepartmentId = departmentId;
             this.VendorId = vendorId;
             this.ProductId = productId;
@@ -53,6 +55,7 @@
                 int priceYear, 
                 int? productId, 
                 int? vendorId, 
+                int? regionId,
                 int? departmentId, 
                 int? upgradeLicenseId, 
                 DateTime? validDate, 
@@ -64,6 +67,7 @@
             this.Info = info;
             this.ValidDate = validDate;
             this.UpgradeLicenseId = upgradeLicenseId;
+            this.RegionId = regionId;
             this.DepartmentId = departmentId;
             this.VendorId = vendorId;
             this.ProductId = productId;
@@ -100,6 +104,9 @@
 
         [IsId]
         public int? VendorId { get; private set; }
+
+        [IsId]
+        public int? RegionId { get; private set; }
 
         [IsId]
         public int? DepartmentId { get; private set; }

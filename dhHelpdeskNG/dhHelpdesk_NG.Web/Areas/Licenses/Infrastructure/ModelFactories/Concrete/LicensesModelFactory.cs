@@ -32,6 +32,7 @@
         public LicenseEditModel GetEditModel(LicenseData data)
         {
             var products = WebMvcHelper.CreateListField(data.Products, data.License.ProductId);
+            var regions = WebMvcHelper.CreateListField(data.Regions, data.License.RegionId);
             var departments = WebMvcHelper.CreateListField(data.Departments, data.License.DepartmentId);
             var vendors = WebMvcHelper.CreateListField(data.Vendors, data.License.VendorId);
             var upgradeLicenss = WebMvcHelper.CreateListField(data.UpgradeLicenses, data.License.UpgradeLicenseId);
@@ -52,6 +53,7 @@
                                 data.License.PriceYear,
                                 data.License.Info,
                                 products, 
+                                regions,
                                 departments, 
                                 vendors,
                                 upgradeLicenss,
@@ -79,6 +81,7 @@
                                 editModel.PriceYear,
                                 editModel.ProductId,
                                 editModel.VendorId,
+                                editModel.RegionId,
                                 editModel.DepartmentId,
                                 editModel.UpgradeLicenseId,
                                 editModel.ValidDate,

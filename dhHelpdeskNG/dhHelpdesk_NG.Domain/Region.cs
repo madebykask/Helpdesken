@@ -1,16 +1,25 @@
 ﻿namespace DH.Helpdesk.Domain
 {
     using global::System;
+
     using global::System.Collections.Generic;
 
-    public class Region : Entity
+    using DH.Helpdesk.Domain.Interfaces;
+
+    public class Region : Entity, ICustomerEntity, INamedEntity
     {
         public int Customer_Id { get; set; }
+
         public int IsActive { get; set; }
+
         public int IsDefault { get; set; }
+
         public string Name { get; set; }
+
         public string SearchKey { get; set; }
+
         public DateTime ChangedDate { get; set; }
+
         public DateTime CreatedDate { get; set; }
 
         public virtual ICollection<Department> Departments { get; set; }

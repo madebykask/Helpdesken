@@ -55,6 +55,7 @@
                                 l.PriceYear,
                                 l.Product_Id,
                                 l.Vendor_Id,
+                                l.Region_Id,
                                 l.Department_Id,
                                 l.UpgradeLicense_Id,
                                 l.ValidDate,
@@ -79,6 +80,7 @@
                                 entity.PriceYear,
                                 entity.Product_Id,
                                 entity.Vendor_Id,
+                                entity.Region_Id,
                                 entity.Department_Id,
                                 entity.UpgradeLicense_Id,
                                 entity.ValidDate,
@@ -101,6 +103,7 @@
             entity.PriceYear = model.PriceYear;
             entity.Product_Id = model.ProductId;
             entity.Vendor_Id = model.VendorId;
+            entity.Region_Id = model.RegionId;
             entity.Department_Id = model.DepartmentId;
             entity.UpgradeLicense_Id = model.UpgradeLicenseId;
             entity.ValidDate = model.ValidDate;

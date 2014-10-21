@@ -22,6 +22,7 @@
                 int priceYear,
                 string info,
                 SelectList products, 
+                SelectList regions,
                 SelectList departments, 
                 SelectList vendors, 
                 SelectList upgradeLicenses,
@@ -30,6 +31,7 @@
             this.UpgradeLicenses = upgradeLicenses;
             this.Id = id;
             this.Vendors = vendors;
+            this.Regions = regions;
             this.Departments = departments;
             this.Products = products;
             this.LicenseNumber = licenseNumber;
@@ -67,6 +69,13 @@
         [LocalizedInteger]
         [LocalizedDisplay("Antal licenser")]
         public int NumberOfLicenses { get; set; }
+
+        [NotNull]
+        public SelectList Regions { get; private set; }
+
+        [IsId]
+        [LocalizedDisplay("Område")]
+        public int? RegionId { get; set; }
 
         [NotNull]
         public SelectList Departments { get; private set; }

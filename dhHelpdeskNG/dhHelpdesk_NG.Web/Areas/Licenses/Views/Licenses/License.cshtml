@@ -72,6 +72,15 @@
             </tr>
             <tr>
                 <td class="span3">
+                    @Translation.Get("Område")
+                </td>
+                <td class="span9">
+                    @Html.DropDownListFor(m => m.RegionId, Model.Regions)
+                    @Html.ValidationMessageFor(m => m.RegionId)
+                </td>
+            </tr>
+            <tr>
+                <td class="span3">
                     @Translation.Get("Avdelning")
                 </td>
                 <td class="span9">

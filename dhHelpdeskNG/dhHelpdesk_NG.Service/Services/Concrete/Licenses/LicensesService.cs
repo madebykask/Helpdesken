@@ -44,6 +44,7 @@
             {
                 var licenseRepository = uow.GetRepository<License>();
                 var productRepository = uow.GetRepository<Product>();
+                var regionRepository = uow.GetRepository<Region>();
                 var departmentRepository = uow.GetRepository<Department>();
                 var vendorRepository = uow.GetRepository<Vendor>();
 
@@ -61,6 +62,10 @@
                                 .GetByCustomer(customerId)
                                 .MapToItemOverviews();
                 
+                var regions = regionRepository.GetAll()
+                                .GetByCustomer(customerId)
+                                .MapToItemOverviews();
+
                 var departments = departmentRepository.GetAll()
                                 .GetByCustomer(customerId)
                                 .MapToItemOverviews();
@@ -75,7 +80,8 @@
 
                 return new LicenseData(
                                 license, 
-                                products, 
+                                products,
+                                regions,
                                 departments, 
                                 vendors,
                                 upgradeLicenses);
