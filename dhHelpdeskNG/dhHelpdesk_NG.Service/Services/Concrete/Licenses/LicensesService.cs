@@ -123,7 +123,7 @@
                     {
                         fileEntity = licenseFileRepository.GetAll()
                                         .GetLicenseFile(entity.Id, file.FileName)
-                                        .SingleOrDefault();
+                                        .FirstOrDefault();
                         if (fileEntity != null)
                         {
                             licenseFileRepository.DeleteById(fileEntity.Id);

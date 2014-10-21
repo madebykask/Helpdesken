@@ -67,7 +67,7 @@
 
             var files = new List<LicenseFileModel>();
             files.AddRange(editModel.DeletedFiles.Select(f => new LicenseFileModel(editModel.Id, f, true)));
-            files.AddRange(editModel.NewFiles.Select(f => new LicenseFileModel(editModel.Id, f.Name, false)));
+            files.AddRange(editModel.NewFiles.Where(f => !editModel.DeletedFiles.Contains(f.Name)).Select(f => new LicenseFileModel(editModel.Id, f.Name, false)));
 
             var model = new LicenseModel(
                                 editModel.Id,
