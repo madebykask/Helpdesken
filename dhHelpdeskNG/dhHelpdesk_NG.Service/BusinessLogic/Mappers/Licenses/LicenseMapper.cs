@@ -7,7 +7,6 @@
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
-    using DH.Helpdesk.Services.BusinessLogic.Specifications.Licenses;
 
     public static class LicenseMapper
     {

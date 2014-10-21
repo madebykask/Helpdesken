@@ -184,14 +184,11 @@
                     case Module.Customers:
 
                         var showedCustomers = !module.NumberOfRows.HasValue
-                                                  ? customers
-                                                  : customers.Take(module.NumberOfRows.Value).ToArray();                        
+                                                  ? customers.Select(c => c.Customer.Customer_Id).ToArray()
+                                                  : customers.Take(module.NumberOfRows.Value).Select(c => c.Customer.Customer_Id).ToArray();
+                        var customerCases = this.caseService.GetCustomersCases(showedCustomers, this.workContext.User.UserId);
 
-                        model.CustomersInfo = this.caseModelFactory.CreateCustomersInfoModel(
-                                                this.casesCalculator,
-                                                this.caseService.GetCasesByCustomers(showedCustomers.Select(c => c.Customer.Customer_Id)),
-                                                showedCustomers.Select(c => c.Customer).ToArray(),
-                                                this.workContext.User.UserId);
+                        model.CustomersInfo = this.caseModelFactory.CreateCustomerCases(customerCases);
                         break;
                     case Module.DailyReport:
                         model.DailyReportOverviews = this.dailyReportService.GetDailyReportOverviews(customersIds, module.NumberOfRows);

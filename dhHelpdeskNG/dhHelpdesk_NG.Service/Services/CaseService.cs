@@ -12,13 +12,18 @@
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.MailTemplates;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Customers;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications.Customers;
     using DH.Helpdesk.Services.Infrastructure.Email;
     using DH.Helpdesk.Services.utils;
     using DH.Helpdesk.BusinessData.Models.User.Input;
+
+    using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
 
     public interface ICaseService
     {
@@ -83,6 +88,8 @@
                                             DateTime period);
 
         MyCase[] GetMyCases(int userId, int? count = null);
+
+        CustomerCases[] GetCustomersCases(int[] customerIds, int userId);
     }
 
     public class CaseService : ICaseService
@@ -97,7 +104,6 @@
         private readonly IPriorityService _priorityService;
         private readonly IStatusService _statusService;
         private readonly IWorkingGroupService _workingGroupService;
-        private readonly IProductAreaService _productAreaService;
         private readonly UserRepository userRepository;
         private readonly IMailTemplateService _mailTemplateService;
         private readonly IEmailLogRepository _emailLogRepository;
@@ -107,11 +113,12 @@
         private readonly ILogRepository _logRepository;
         private readonly ILogFileRepository _logFileRepository;
         private readonly IFormFieldValueRepository _formFieldValueRepository;
-        private readonly ICustomerUserService _customerUserService;
 
         private readonly ICaseMailer caseMailer;
 
         private readonly IInvoiceArticleService invoiceArticleService;
+
+        private readonly IUnitOfWorkFactory unitOfWorkFactory;
 
         public CaseService(
             ICaseRepository caseRepository,
@@ -125,7 +132,6 @@
             IPriorityService priorityService,
             IStatusService statusService,
             IWorkingGroupService workingGroupService,
-            IProductAreaService productAreaService,
             IMailTemplateService mailTemplateService,
             IEmailLogRepository emailLogRepository,
             IEmailService emailService,
@@ -133,10 +139,10 @@
             IFilesStorage filesStorage,
             IUnitOfWork unitOfWork,
             IFormFieldValueRepository formFieldValueRepository,
-            ICustomerUserService customerUserService, 
             UserRepository userRepository, 
             ICaseMailer caseMailer, 
-            IInvoiceArticleService invoiceArticleService)
+            IInvoiceArticleService invoiceArticleService, 
+            IUnitOfWorkFactory unitOfWorkFactory)
         {
             this._unitOfWork = unitOfWork;
             this._caseRepository = caseRepository;
@@ -150,8 +156,8 @@
             this.userRepository = userRepository;
             this.caseMailer = caseMailer;
             this.invoiceArticleService = invoiceArticleService;
+            this.unitOfWorkFactory = unitOfWorkFactory;
             this._caseHistoryRepository = caseHistoryRepository;
-            this._productAreaService = productAreaService;
             this._mailTemplateService = mailTemplateService;
             this._emailLogRepository = emailLogRepository;
             this._emailService = emailService;
@@ -161,7 +167,6 @@
             this._logRepository = logRepository;
             this._logFileRepository = logFileRepository;
             this._formFieldValueRepository = formFieldValueRepository; 
-            this._customerUserService = customerUserService; 
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -327,6 +332,20 @@
         public MyCase[] GetMyCases(int userId, int? count = null)
         {
             return this._caseRepository.GetMyCases(userId, count);
+        }
+
+        public CustomerCases[] GetCustomersCases(int[] customerIds, int userId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var customerRepository = uow.GetRepository<Customer>();
+
+                var customerCases = customerRepository.GetAll()
+                                    .GetByIds(customerIds)
+                                    .MapToCustomerCases(userId);
+
+                return customerCases;
+            }
         }
 
         public Case Copy(int copyFromCaseid, int userId, int languageId, string ipAddress, GlobalEnums.RegistrationSource source, string adUser)

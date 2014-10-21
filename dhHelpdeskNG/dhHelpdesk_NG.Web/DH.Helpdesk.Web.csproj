@@ -656,6 +656,7 @@
     <Compile Include="Models\Case\CaseTemplateTreeModel.cs" />
     <Compile Include="Models\Case\CaseViewModel.cs" />
     <Compile Include="Models\Case\CaseSettingModel.cs" />
+    <Compile Include="Models\Case\CustomerCasesModel.cs" />
     <Compile Include="Models\Case\MyCasesModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\GeneralModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\InviteToModel.cs" />

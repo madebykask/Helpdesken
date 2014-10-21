@@ -2,8 +2,10 @@
 {
     using System.Collections.Generic;
 
+    using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.Infrastructure.Cases;
+    using DH.Helpdesk.Web.Models.Case;
     using DH.Helpdesk.Web.Models.Customers;
 
     public interface ICaseModelFactory
@@ -13,5 +15,7 @@
                                             IList<Case> cases,
                                             IList<CustomerUser> customers,
                                             int userId);
+
+        CustomerCasesModel CreateCustomerCases(CustomerCases[] customerCases);
     }
 }

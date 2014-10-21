@@ -87,5 +87,17 @@
 
             return query;
         }
+
+        public static IQueryable<Case> GetCustomersCases(this IQueryable<Case> query, int[] customerIds)
+        {
+            if (customerIds == null || !customerIds.Any())
+            {
+                return query;
+            }
+
+            query = query.Where(c => customerIds.Contains(c.Customer_Id));
+
+            return query;
+        }
     }
 }

@@ -15,7 +15,6 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Web.Models.Case;
     using DH.Helpdesk.Web.Models.Changes;
-    using DH.Helpdesk.Web.Models.Customers;
     using DH.Helpdesk.Web.Models.Link;
 
     public class HomeIndexViewModel
@@ -42,7 +41,7 @@
 
         private MyCasesModel myCases = new MyCasesModel();
 
-        private CustomersInfoViewModel customersInfo = new CustomersInfoViewModel();
+        private CustomerCasesModel customersInfo = new CustomerCasesModel();
 
         public IEnumerable<CustomerUser> CustomerUsers { get; set; }
 
@@ -56,7 +55,7 @@
 
         public IList<SelectListItem> Customers { get; set; }
 
-        public CustomersInfoViewModel CustomersInfo
+        public CustomerCasesModel CustomersInfo
         {
             get
             {
