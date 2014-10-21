@@ -316,8 +316,9 @@ function CaseInitForm() {
                     
                     for (var i = 0; i < allFileNames.length; i++) {
                         if (fn == allFileNames[i]) {
-                            var d = new Date();
-                            var dstr = d.getFullYear() + '_' + d.getMonth() + '_' + d.getDay() + ' ' + d.getHours() + '\'' + d.getMinutes() + '\'' + d.getSeconds();
+                            //var d = new Date();
+                            var dstr = 'New_';
+                                //d.getFullYear() + '_' + d.getMonth() + '_' + d.getDay() + ' ' + d.getHours() + '\'' + d.getMinutes() + '\'' + d.getSeconds();
                             file.name = '(' + dstr + ')-' + file.name;
                         }                     
                     }                                       
@@ -898,7 +899,14 @@ if ($.fn.DataTable.TableTools) {
 }
 
 
-/*function ResetC() {
+function ResetC() {
+
+/* Table initialisation */
+function ResetDataTable(tableUniqId) {
+    alert('reset: ' + tableUniqId);
+    var oTable = $('#' + tableUniqId).dataTable();
+    oTable.fnPageChange('first');
+};
     //alert('reset');
     
     
@@ -921,19 +929,16 @@ if ($.fn.DataTable.TableTools) {
     //table.res;
     
 
-    //$('#tablegrid1').dataTable();
+function DestroyDataTable(tableUniqId) {
+    var oTable = $('#' + tableUniqId).dataTable();
+    oTable.destroy();
 };
 */
 
-var GlobalTable;
-/* Table initialisation */
-$(document).ready(function () {
-    initDataTable();
-});
+function InitDataTable(tableUniqId) {
+    alert('init: ' + tableUniqId);
 
-function initDataTable() {
- GlobalTable = 
-    $('#tablegrid1').dataTable({
+    $('#' + tableUniqId).dataTable({
         stateSave: true,
         //stateDuration: 10,
         "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",

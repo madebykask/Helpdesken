@@ -927,13 +927,20 @@ if ($.fn.DataTable.TableTools) {
 
 var GlobalTable;
 /* Table initialisation */
-$(document).ready(function () {
+function ResetDataTable(tableUniqId) {
     initDataTable();
 });
 
 function initDataTable() {
  GlobalTable = 
     $('#tablegrid1').dataTable({
+    var oTable = $('#' + tableUniqId).dataTable();
+    oTable.destroy();
+}
+function InitDataTable(tableUniqId) {
+    alert('init: ' + tableUniqId);
+
+    $('#' + tableUniqId).dataTable({
         stateSave: true,
         //stateDuration: 10,
         "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",

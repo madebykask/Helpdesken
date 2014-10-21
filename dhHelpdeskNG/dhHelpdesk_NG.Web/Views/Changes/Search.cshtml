@@ -92,8 +92,7 @@
                 &nbsp;
             </td>
             <td>
-                <input type="submit" onclick="ResetC();" value="@Translation.Get("Search", Enums.TranslationSource.TextTranslation)" class="btn" />
-                <input id="bt1" type="button" value="@Translation.Get("Search2", Enums.TranslationSource.TextTranslation)" class="btn" />
+                <input id="srch" type="submit" value="@Translation.Get("Search", Enums.TranslationSource.TextTranslation)" class="btn" />                
             </td>
         </tr>
     </table>
@@ -101,14 +100,16 @@
 
 <script type="text/javascript">
         
-    $("#bt1").click(function () {
-        
-        debugger;
-        var oTable = $("#tablegrid1").dataTable();
-        alert('Current:' + oTable.page);
-
-        oTable.page(0).draw(false);
-        alert('New:' + oTable.page());
+    $(document).ready(function () {
+        //DestroyDataTable('tablegrid1');
+        InitDataTable('tablegrid1');
     });
+
+    $("#srch").click(function () {
+        //DestroyDataTable('tablegrid1');
+        //InitDataTable('tablegrid1');
+        //ResetDataTable('tablegrid1');
+    });
+
 
 </script>

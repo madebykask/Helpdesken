@@ -317,8 +317,8 @@ function CaseInitForm() {
                     for (var i = 0; i < allFileNames.length; i++) {
                         if (fn == allFileNames[i]) {
                             var d = new Date();
-                            var dstr = d.getFullYear() + '_' + d.getMonth() + '_' + d.getDay() + ' ' + d.getHours() + '\'' + d.getMinutes() + '\'' + d.getSeconds();
-                            file.name = '(' + dstr + ')-' + file.name;
+                            var dstr = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDay() + ' ' + d.getHours() + '\'' + d.getMinutes() + '\'' + d.getSeconds();
+                            file.name =  dstr + ' ' + file.name;
                         }                     
                     }                                       
 
@@ -898,42 +898,23 @@ if ($.fn.DataTable.TableTools) {
 }
 
 
-/*function ResetC() {
-    //alert('reset');
-    
-    
-    //initDataTable();
-    var oTable = $("#tablegrid1").dataTable();
-    //oTable.fnPageChange(0);
 
-    oTable.page(0).draw(false);
-
-    //initDataTable();
-
-    //oTable.state.clear();
-    //§initDataTable();
-    //for (iCol = 0; iCol < oSettings.aoPreSearchCols.length; iCol++) {
-    //    oSettings.aoPreSearchCols[iCol].sSearch = '';
-    //}
-    //oTable.fnDraw();
-
-    //localStorage.removeItem('DataTables_tablegrid1_/changes');
-    //table.res;
-    
-
-    //$('#tablegrid1').dataTable();
-};
-*/
-
-var GlobalTable;
 /* Table initialisation */
-$(document).ready(function () {
-    initDataTable();
-});
+function ResetDataTable(tableUniqId) {
+    alert('reset: ' + tableUniqId);
+    var oTable = $('#' + tableUniqId).dataTable();
+    oTable.fnPageChange('first');
+};
 
-function initDataTable() {
- GlobalTable = 
-    $('#tablegrid1').dataTable({
+function DestroyDataTable(tableUniqId) {
+    var oTable = $('#' + tableUniqId).dataTable();
+    oTable.destroy();
+};
+
+function InitDataTable(tableUniqId) {
+    alert('init: ' + tableUniqId);
+
+    $('#' + tableUniqId).dataTable({
         stateSave: true,
         //stateDuration: 10,
         "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
