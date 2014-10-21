@@ -7,9 +7,14 @@ namespace DH.Helpdesk.Services.Services
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models;
-    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Dal.Infrastructure.Context;
+    using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.OperationLogs;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications.OperationLogs;
+
+    using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
 
     public interface IOperationLogService
     {
@@ -45,21 +50,23 @@ namespace DH.Helpdesk.Services.Services
         private readonly IOperationLogRepository _operationLogRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IWorkingGroupRepository _workingGroupRepository;
-        private readonly IOperationLogCategoryService _operationLogCategoryService;
-        private readonly IOperationObjectService _operationObjectService;
+
+        private readonly IUnitOfWorkFactory unitOfWorkFactory;
+
+        private readonly IWorkContext workContext;
 
         public OperationLogService(
             IOperationLogRepository operationLogRepository,
             IUnitOfWork unitOfWork,
-            IOperationObjectService operationObjectService,
-            IOperationLogCategoryService operationLogCategoryService,
-            IWorkingGroupRepository workingGroupRepository)
+            IWorkingGroupRepository workingGroupRepository, 
+            IUnitOfWorkFactory unitOfWorkFactory, 
+            IWorkContext workContext)
         {
             this._operationLogRepository = operationLogRepository;
             this._unitOfWork = unitOfWork;
             this._workingGroupRepository = workingGroupRepository;
-            this._operationLogCategoryService = operationLogCategoryService;
-            this._operationObjectService = operationObjectService;
+            this.unitOfWorkFactory = unitOfWorkFactory;
+            this.workContext = workContext;
         }
 
         public IList<OperationLog> GetOperationLogs(int customerId)
@@ -189,35 +196,16 @@ namespace DH.Helpdesk.Services.Services
             this._unitOfWork.Commit();
         }
 
-        /// <summary>
-        /// The get operation log overviews.
-        /// </summary>
-        /// <param name="customers">
-        /// The customers.
-        /// </param>
-        /// <param name="count">
-        /// The count.
-        /// </param>
-        /// <param name="forStartPage">
-        /// The for start page.
-        /// </param>
-        /// <returns>
-        /// The result.
-        /// </returns>
         public IEnumerable<OperationLogOverview> GetOperationLogOverviews(int[] customers, int? count = null, bool forStartPage = true)
         {
-            var operationLogs = this._operationLogRepository.GetOperationLogOverviews(customers);
-            if (forStartPage)
+            using (var uow = this.unitOfWorkFactory.Create())
             {
-                operationLogs = operationLogs.Where(o => o.ShowOnStartPage);
-            }
+                var operationLogRepository = uow.GetRepository<OperationLog>();
 
-            if (!count.HasValue)
-            {
-                return operationLogs;
+                return operationLogRepository.GetAll()
+                        .GetForStartPage(customers, count, forStartPage)
+                        .MapToOverviews(this.workContext);
             }
-
-            return operationLogs.Take(count.Value);
         }
     }
 }
