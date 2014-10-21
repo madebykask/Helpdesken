@@ -2,13 +2,29 @@
 {
     public sealed class StatisticsOverview
     {
-        public int ActiveCases { get; set; }
+        public StatisticsOverview(
+                int activeCases, 
+                int endedCases, 
+                int inRestCases, 
+                int myCases)
+        {
+            this.MyCases = myCases;
+            this.InRestCases = inRestCases;
+            this.EndedCases = endedCases;
+            this.ActiveCases = activeCases;
+        }
 
-        public int EndedCases { get; set; }
+        public StatisticsOverview()
+        {            
+        }
 
-        public int InRestCases { get; set; }
+        public int ActiveCases { get; private set; }
 
-        public int MyCases { get; set; }
+        public int EndedCases { get; private set; }
+
+        public int InRestCases { get; private set; }
+
+        public int MyCases { get; private set; }
 
         public bool IsEmpty()
         {

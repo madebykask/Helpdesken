@@ -1,34 +1,34 @@
 ﻿namespace DH.Helpdesk.Services.Services.Concrete
 {
     using DH.Helpdesk.BusinessData.Models.Statistics.Output;
-    using DH.Helpdesk.Services.Infrastructure.Cases;
+    using DH.Helpdesk.Dal.NewInfrastructure;
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Customers;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
 
     public sealed class StatisticsService : IStatisticsService
     {
-        private readonly ICaseService caseService;
+        private readonly IUnitOfWorkFactory unitOfWorkFactory;
 
-        public StatisticsService(ICaseService caseService)
+        public StatisticsService(IUnitOfWorkFactory unitOfWorkFactory)
         {
-            this.caseService = caseService;
+            this.unitOfWorkFactory = unitOfWorkFactory;
         }
 
         public StatisticsOverview GetStatistics(
                         int[] customers, 
-                        ICasesCalculator calculator, 
                         int userId)
         {
-            var cases = this.caseService.GetCasesByCustomers(customers);
-            calculator.CollectCases(cases);
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var caseRepository = uow.GetRepository<Case>();
 
-            var statistics = new StatisticsOverview
-                                 {
-                                     ActiveCases = calculator.CalculateInProgressForCustomers(customers),
-                                     EndedCases = calculator.CalculateClosedForCustomers(customers),
-                                     InRestCases = calculator.CalculateInRestForCustomers(customers),
-                                     MyCases = calculator.CalculateMyForCustomers(customers, userId)
-                                 };
+                var statistics = caseRepository.GetAll()
+                                .GetCustomersCases(customers)
+                                .MapToStatistics(userId);
 
-            return statistics;
+                return statistics;
+            }
         }
     }
 }

@@ -211,7 +211,6 @@
                     case Module.Statistics:
                         model.StatisticsOverviews = this.statisticsService.GetStatistics(
                                                                         customersIds, 
-                                                                        this.casesCalculator,
                                                                         this.workContext.User.UserId);
                         break;
                     case Module.ChangeManagement:
