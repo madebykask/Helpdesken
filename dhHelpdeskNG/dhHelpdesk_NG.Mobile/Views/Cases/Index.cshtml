@@ -130,29 +130,14 @@
     </script>
 }
 
+<div data-role="page">
+
 @if (Html.MasterModel() != null && SessionFacade.CurrentUser != null && Model != null)
-{    
-<div class="secnavs fixed">
-    <div class="pull-left">
-        <ul class="secnav">
-            @if (SessionFacade.CurrentUser.CreateCasePermission == 1)
-            {                                        
-                <li id="btnNewCase">
-                    @Html.ActionLink(Translation.Get("Skapa ärende"), "new", "cases", new { customerId = SessionFacade.CurrentCustomer.Id} , new { @class = "btn" })
-                </li>                                
-                                    
-                @*<li id="btnCaseTemplate">                   
-                    @Html.Partial("_CaseTemplateTree", Model.CaseTemplateTreeButton)
-                </li>                
-                *@     
-            }                           
-        </ul>
-    </div>
-</div>
-<div class="content">
-    <div class="container">
-        <ul class="nav nav-tabs" id="myTab">
-            <li id="CasesTab"  class="active"><a href="#fragment-1">@Translation.Get("Ärenden", Enums.TranslationSource.TextTranslation)</a></li>
+{ 
+<div data-role="content" class="ui-content">
+
+        @*<ul class="nav nav-tabs" id="myTab">
+            <li id="CasesTab"  class="active"><a href="#fragment-1">@Translation.Get("Ärenden", Enums.TranslationSource.TextTranslation)</a></li>*@
 
             @*
             @if (Html.MasterModel().CustomerSetting.ModuleChangeManagement == 1)
@@ -166,15 +151,15 @@
             *@
 
             @*<li id="SettingTab"><a href="#fragment-4">@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</a></li>*@
-        </ul>
-        <div class="tab-content">
-            <div class="tab-pane tab-pane-border active" id="fragment-1">
+        @*</ul>*@
+        @*<div class="tab-content">*@
+            <div @*class="tab-pane tab-pane-border active" id="fragment-1"*@>
                     @Html.Partial("_Search", Model.caseSearchFilterData)
                 <div class="container" id="search_result">
                     @Html.Partial("_CaseRows", Model.caseSearchResult)
                 </div>
             </div>
-            <div class="tab-pane tab-pane-border" id="fragment-2">
+            @*<div class="tab-pane tab-pane-border" id="fragment-2">
                 <div class="container">
                     -
                 </div>
@@ -183,15 +168,31 @@
                 <div class="container">
                     -
                 </div>
-            </div>
+            </div>*@
             @*<div class="tab-pane tab-pane-border " id="fragment-4">
                 <div id="setting_result" class="container">
                     @Html.Partial("_CaseSetting", Model.CaseSetting)
                 </div>
             </div>*@
-        </div>
+        @*</div>*@
+    
+</div>   
+<div data-role="footer" data-position="fixed">
+    <div class="ui-grid-b">
+            @if (SessionFacade.CurrentUser.CreateCasePermission == 1)
+            {                                        
+                <div class="ui-block-b" id="btnNewCase">
+                    @Html.ActionLink(Translation.Get("Skapa ärende"), "new", "cases", new { customerId = SessionFacade.CurrentCustomer.Id }, new { @class = "ui-btn ui-corner-all" })
+                </div>                                
+                                    
+                @*<li id="btnCaseTemplate">                   
+                    @Html.Partial("_CaseTemplateTree", Model.CaseTemplateTreeButton)
+                </li>                
+                *@     
+            } 
     </div>
 </div>
+
 }
 
-
+</div>

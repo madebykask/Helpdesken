@@ -5,7 +5,7 @@
 
 @if (Model != null)
 {    
-    <table class="table table-striped table-bordered table-hover">
+    @*<table class="table table-striped table-bordered table-hover">
         <thead>
             <tr>
                 <!--fasta kolumner -->
@@ -21,50 +21,42 @@
                 }
             </tr>
         </thead>        
-        <tbody>
+        <tbody>*@
+            <ul data-role="listview" data-inset="true">
             @if (Model.cases.Any())
             {            
                 foreach (var r in Model.cases)
                 {
-                <tr title="@r.Tooltip" class="@r.IsUnread.GetClassForCaseRowTr(@r.IsUrgent)">
-                    <!--fasta kolumner -->
-                
-                    <!-- valbara kolumner -->
-                    <td>
+                <li class="@r.IsUnread.GetClassForCaseRowTr(@r.IsUrgent)">
+                    <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">
                     @foreach (var c in r.Columns)
                     {                           
-                        if (c.FieldType == 1)
+
+                        
+                        if (c.TranslateThis)
                         {
-                            <!-- date -->
-                            <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@Html.DisplayFor(m => c.DateTimeValue, "Date")&nbsp;&nbsp;</a>
-                        }
-                        else if (c.FieldType == 2)                                                        
-                        {
-                            <!-- dateTime -->
-                            <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@(c.DateTimeValue.HasValue ? c.DateTimeValue.Value.ToLocalTime().ToFormattedDateTime() : string.Empty)&nbsp;&nbsp;</a>
+                            <!-- string -->
+                            @Translation.Get(c.StringValue, Enums.TranslationSource.TextTranslation)                        
                         }
                         else    
                         {
-                            if (c.TranslateThis)
-                            {
-                                <!-- string -->
-                                <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@Translation.Get(c.StringValue, Enums.TranslationSource.TextTranslation)&nbsp;&nbsp;</a>
-                            }
-                            else    
-                            {
-                                <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@c.StringValue &nbsp;&nbsp;</a>
-                            }
+                            
+                            @c.StringValue <span>&nbsp;</span>
+
+                            
                         }
-                  
+                        
+                       
                     }    
-                    </td>
-                </tr>                
+                         
+                        </a>
+                </li>                
                 }
             }
             else
             {
                 @Html.Partial("_NoHits", "")
             }
-        </tbody>
-    </table>
+        
+    </ul>
 }

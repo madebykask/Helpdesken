@@ -11,23 +11,23 @@
     
 </script>
 }
-
+<div data-role="page">
 @Html.Partial("_Plupload")
 
 @if (Model != null)
 {
     using (Html.BeginForm("new", "cases", null, FormMethod.Post, new { id = "target" }))
-    {        
-    <div class="secnavs fixed">
-        <div class="pull-left">
+    { 
+     @Html.Partial("_Input", Model)
+    <div data-role="footer" data-position="fixed">       
+    
             <ul class="secnav">                
                 <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "NewCaseAndClose();return false;", @class = "btn" })</li>                
                 <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn" })</li>
             </ul>
-        </div>
+        
     </div>
     
-    @Html.Partial("_Input", Model)
     }
 }
-
+</div>

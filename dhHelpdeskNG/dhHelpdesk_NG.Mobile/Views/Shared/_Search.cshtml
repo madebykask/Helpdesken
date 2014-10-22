@@ -5,45 +5,25 @@
 
 @if (Model != null)
 {<form id="frmCaseSearch" name="frmCaseSearch">
-    <div class="container">
-        <div class="row" id="hiddeninfo" >
-            <div class="span12">
-                <table class="tableform">
-                    <tr>
-                        <td class="span3">
+    
                             <input type="hidden" value="@Model.filterCustomerId" id="hidFilterCustomer_Id" name="hidFilterCustomerId" />                             
                             <input type="hidden" value="@SessionFacade.CurrentCaseSearch.Search.SortBy" id="hidSortBy" name="hidSortBy" />
                             <input type="hidden" value="@SessionFacade.CurrentCaseSearch.Search.Ascending" id="hidSortByAsc" name="hidSortByAsc" />
-                        </td>
-                        <td class="span4">
-                        </td>
-                        <td class="span5">
-                        </td>
-                    </tr>
+
                     
                     @if (Model.Customers != null)
                     {
-                        <tr>
-                            <td>
-                                @Translation.Get("Kunder")
-                            </td>
-                            <td>
+                        
                                 <select id="lstfilterCustomers" name="lstfilterCustomers">
                                 @foreach (var c in Model.Customers)
                                 {
                                     <option value="@c.Id" @c.Id.IdIsSelected(Model.caseSearchFilter.CustomerId.ToString()) >@c.Name</option>
                                 }
-                                </select>
-                            </td>
-                        </tr>                 
+                                </select>               
                     }
                     @if (Model.filterPerformer != null)
                     {
-                        <tr>
-                            <td>
-                                @Translation.Get("Användare")
-                            </td>
-                            <td>
+                        
                                 <select id="lstfilterPerformer" name="lstfilterPerformer">
                                     @foreach (var e in Model.filterPerformer)
                                     {
@@ -53,13 +33,9 @@
                                         }
                                     }
                                 </select>
-                            </td>
-                        </tr>                 
+                                            
                     }                                        
-                </table>
-            </div>
-        </div>          
-    </div>
+                
     </form>
 }
 

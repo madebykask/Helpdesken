@@ -900,6 +900,8 @@
     <Content Include="Content\js\Invoice\invoice.js" />
     <Content Include="Content\js\jquery.form.min.js" />
     <Content Include="Content\js\jquery.mobile-1.4.4.js" />
+    <Content Include="Content\js\jquery.mobile-1.4.4.min.js" />
+    <Content Include="Content\js\jquery.mobile.subpage-1.3.js" />
     <Content Include="Content\js\jquery.plupload.queue\css\jquery.plupload.queue.css" />
     <Content Include="Content\js\jquery.plupload.queue\img\backgrounds.gif" />
     <Content Include="Content\js\jquery.plupload.queue\img\buttons-disabled.png" />
