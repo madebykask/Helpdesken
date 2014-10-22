@@ -1,9 +1,11 @@
 ﻿namespace DH.Helpdesk.Domain.Problems
 {
+    using DH.Helpdesk.Domain.Interfaces;
+
     using global::System;
     using global::System.Collections.Generic;
 
-    public class Problem : Entity
+    public class Problem : Entity, ICustomerEntity, IStartPageEntity, IDatedEntity
     {
         public Problem()
         {

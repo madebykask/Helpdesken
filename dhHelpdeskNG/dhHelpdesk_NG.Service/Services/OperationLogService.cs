@@ -13,7 +13,6 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.OperationLogs;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
-    using DH.Helpdesk.Services.BusinessLogic.Specifications.OperationLogs;
 
     using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
 
@@ -206,7 +205,7 @@ namespace DH.Helpdesk.Services.Services
                 return operationLogRepository.GetAll()
                         .GetForStartPage(customers, count, forStartPage)
                         .RestrictByWorkingGroupsAndUsers(this.workContext)
-                        .GetSorted()
+                        .SortByCreated()
                         .MapToOverviews();
             }
         }

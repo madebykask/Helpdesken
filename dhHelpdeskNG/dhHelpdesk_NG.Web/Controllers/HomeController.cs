@@ -198,7 +198,7 @@
                         model.OperationLogOverviews = this.operationLogService.GetOperationLogOverviews(customersIds, module.NumberOfRows, true);
                         break;
                     case Module.Problems:
-                        model.ProblemOverviews = this.problemService.GetProblemOverviews(customersIds, module.NumberOfRows);
+                        model.ProblemOverviews = this.problemService.GetProblemOverviews(customersIds, module.NumberOfRows, true);
                         break;
                     case Module.QuickLinks:
                         model.LinksInfo = this.linkModelFactory.GetLinksViewModel(this.linkService.GetLinkOverviews(customersIds, module.NumberOfRows));

@@ -41,6 +41,6 @@
         /// <returns>
         /// The result.
         /// </returns>
-        IEnumerable<ProblemInfoOverview> GetProblemOverviews(int[] customers, int? count = null, bool forStartPage = true);
+        IEnumerable<ProblemInfoOverview> GetProblemOverviews(int[] customers, int? count, bool forStartPage);
     }
 }

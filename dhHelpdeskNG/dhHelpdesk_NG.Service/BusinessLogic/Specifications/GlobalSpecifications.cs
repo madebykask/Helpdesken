@@ -98,6 +98,14 @@
                         .RestrictByUsers(workContext);
 
             return query;
-        } 
+        }
+
+        public static IQueryable<T> SortByCreated<T>(this IQueryable<T> query)
+            where T : class, IDatedEntity
+        {
+            query = query.OrderByDescending(x => x.CreatedDate);
+
+            return query;
+        }  
     }
 }

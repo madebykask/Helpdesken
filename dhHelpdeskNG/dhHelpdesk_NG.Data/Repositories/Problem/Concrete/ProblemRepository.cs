@@ -6,7 +6,6 @@ namespace DH.Helpdesk.Dal.Repositories.Problem.Concrete
 
     using DH.Helpdesk.BusinessData.Models.Problem.Input;
     using DH.Helpdesk.BusinessData.Models.Problem.Output;
-    using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Infrastructure;
@@ -104,34 +103,6 @@ namespace DH.Helpdesk.Dal.Repositories.Problem.Concrete
                                         .ToList();
 
             return propblemOverviews;
-        }
-
-        /// <summary>
-        /// The get problem overviews.
-        /// </summary>
-        /// <param name="customers">
-        /// The customers.
-        /// </param>
-        /// <returns>
-        /// The result.
-        /// </returns>
-        public IEnumerable<ProblemInfoOverview> GetProblemOverviews(int[] customers)
-        {
-            return
-                DbContext.Problems.Where(p => customers.Contains(p.Customer_Id))
-                    .OrderByDescending(p => p.CreatedDate)
-                    .ToList()
-                    .Select(
-                        p =>
-                        new ProblemInfoOverview
-                            {
-                                CustomerId = p.Customer_Id,
-                                CreatedDate = p.CreatedDate,
-                                Description = p.Description,
-                                Name = p.Name,
-                                ProblemNumber = p.ProblemNumber,
-                                ShowOnStartPage = p.ShowOnStartPage.ToBool()
-                            });
         }
     }
 }

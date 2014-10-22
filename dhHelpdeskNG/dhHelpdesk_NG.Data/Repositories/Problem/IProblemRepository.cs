@@ -23,16 +23,5 @@ namespace DH.Helpdesk.Dal.Repositories.Problem
         List<ProblemOverview> FindByCustomerId(int customerId);
 
         List<ProblemOverview> FindByCustomerIdAndStatus(int customerId, EntityStatus entityStatus);
-
-        /// <summary>
-        /// The get problem overviews.
-        /// </summary>
-        /// <param name="customers">
-        /// The customers.
-        /// </param>
-        /// <returns>
-        /// The result.
-        /// </returns>
-        IEnumerable<ProblemInfoOverview> GetProblemOverviews(int[] customers);
     }
 }

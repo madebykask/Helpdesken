@@ -6,8 +6,12 @@
     using DH.Helpdesk.BusinessData.Models.Problem.Input;
     using DH.Helpdesk.BusinessData.Models.Problem.Output;
     using DH.Helpdesk.Dal.Enums;
+    using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Problem;
+    using DH.Helpdesk.Domain.Problems;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Problems;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications;
 
     public class ProblemService : IProblemService
     {
@@ -17,13 +21,22 @@
         private readonly ICaseHistoryRepository caseHistoryRepository;
         private readonly ICaseRepository caseRepository;
 
-        public ProblemService(IProblemRepository problemRepository, IProblemLogRepository problemLogRepository, IProblemEMailLogRepository problemEMailLogRepository, ICaseHistoryRepository caseHistoryRepository, ICaseRepository caseRepository)
+        private readonly IUnitOfWorkFactory unitOfWorkFactory;
+
+        public ProblemService(
+                IProblemRepository problemRepository, 
+                IProblemLogRepository problemLogRepository, 
+                IProblemEMailLogRepository problemEMailLogRepository, 
+                ICaseHistoryRepository caseHistoryRepository, 
+                ICaseRepository caseRepository, 
+                IUnitOfWorkFactory unitOfWorkFactory)
         {
             this.problemRepository = problemRepository;
             this.problemLogRepository = problemLogRepository;
             this.problemEMailLogRepository = problemEMailLogRepository;
             this.caseHistoryRepository = caseHistoryRepository;
             this.caseRepository = caseRepository;
+            this.unitOfWorkFactory = unitOfWorkFactory;
         }
 
         public ProblemOverview GetProblem(int id)
@@ -96,35 +109,17 @@
             this.problemRepository.Commit();
         }
 
-        /// <summary>
-        /// The get problem overviews.
-        /// </summary>
-        /// <param name="customers">
-        /// The customers.
-        /// </param>
-        /// <param name="count">
-        /// The count.
-        /// </param>
-        /// <param name="forStartPage">
-        /// The for start page.
-        /// </param>
-        /// <returns>
-        /// The result.
-        /// </returns>
-        public IEnumerable<ProblemInfoOverview> GetProblemOverviews(int[] customers, int? count = null, bool forStartPage = true)
+        public IEnumerable<ProblemInfoOverview> GetProblemOverviews(int[] customers, int? count, bool forStartPage)
         {
-            var problems = this.problemRepository.GetProblemOverviews(customers);
-            if (forStartPage)
+            using (var uow = this.unitOfWorkFactory.Create())
             {
-                problems = problems.Where(p => p.ShowOnStartPage);
-            }
+                var repository = uow.GetRepository<Problem>();
 
-            if (!count.HasValue)
-            {
-                return problems;
+                return repository.GetAll()
+                        .GetForStartPage(customers, count, forStartPage)
+                        .SortByCreated()
+                        .MapToOverviews();
             }
-
-            return problems.Take(count.Value);
         }
     }
 }

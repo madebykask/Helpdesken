@@ -114,6 +114,7 @@
     <Compile Include="Computers\ComputerModel.cs" />
     <Compile Include="Computers\ComputerType.cs" />
     <Compile Include="Interfaces\ICustomerEntity.cs" />
+    <Compile Include="Interfaces\IDatedEntity.cs" />
     <Compile Include="Interfaces\IGuidEntity.cs" />
     <Compile Include="Interfaces\ILanguageEntity.cs" />
     <Compile Include="Interfaces\INamedEntity.cs" />
