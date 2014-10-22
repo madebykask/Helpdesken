@@ -182,7 +182,7 @@
                         model.BulletinBoardOverviews = this.bulletinBoardService.GetBulletinBoardOverviews(customersIds, module.NumberOfRows, true);
                         break;
                     case Module.Calendar:
-                        model.CalendarOverviews = this.calendarService.GetCalendarOverviews(customersIds, module.NumberOfRows, true);
+                        model.CalendarOverviews = this.calendarService.GetCalendarOverviews(customersIds, module.NumberOfRows, true, true);
                         break;
                     case Module.Customers:
 

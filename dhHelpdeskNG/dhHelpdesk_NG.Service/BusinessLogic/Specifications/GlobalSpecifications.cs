@@ -17,6 +17,17 @@
             return query;
         }
 
+        public static IQueryable<T> GetByCustomers<T>(this IQueryable<T> query, int[] customerIds)
+            where T : class, ICustomerEntity
+        {
+            if (customerIds != null && customerIds.Any())
+            {
+                query = query.Where(x => customerIds.Contains(x.Customer_Id));                
+            }
+
+            return query;
+        }
+
         public static IQueryable<T> GetByCustomer<T>(this IQueryable<T> query, int? customerId)
             where T : class, INulableCustomerEntity
         {
@@ -55,10 +66,7 @@
                                     bool forStartPage)
             where T : class, ICustomerEntity, IStartPageEntity, IDatedEntity
         {
-            if (customers != null && customers.Any())
-            {
-                query = query.Where(x => customers.Contains(x.Customer_Id));
-            }
+            query = query.GetByCustomers(customers);
 
             if (forStartPage)
             {
@@ -66,6 +74,23 @@
             }
 
             query = query.SortByCreated();
+
+            if (count.HasValue)
+            {
+                query = query.Take(count.Value);
+            }
+
+            return query;
+        }
+
+        public static IQueryable<T> GetForStartPage<T>(
+                                    this IQueryable<T> query,
+                                    int[] customers,
+                                    int? count)
+            where T : class, ICustomerEntity, IDatedEntity
+        {
+            query = query.GetByCustomers(customers)
+                        .SortByCreated();
 
             if (count.HasValue)
             {

@@ -12,7 +12,7 @@
         {
             var today = DateTime.Today.RoundToDay();
 
-            query = query.Where(c => new DateTime(c.ShowUntilDate.Year, c.ShowUntilDate.Month, c.ShowUntilDate.Day) >= today);
+            query = query.Where(c => c.ShowUntilDate >= today);
 
             return query;
         } 

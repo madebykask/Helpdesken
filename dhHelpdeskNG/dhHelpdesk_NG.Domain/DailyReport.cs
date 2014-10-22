@@ -1,8 +1,10 @@
 ﻿namespace DH.Helpdesk.Domain
 {
+    using DH.Helpdesk.Domain.Interfaces;
+
     using global::System;
 
-    public class DailyReport : Entity
+    public class DailyReport : Entity, ICustomerEntity, IDatedEntity
     {
         public int Customer_Id { get; set; }
         public int DailyReportSubject_Id { get; set; }

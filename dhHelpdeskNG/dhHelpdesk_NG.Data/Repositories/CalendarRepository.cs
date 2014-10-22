@@ -9,11 +9,7 @@
 
 namespace DH.Helpdesk.Dal.Repositories
 {
-    using System.Collections.Generic;
-    using System.Linq;
-
     using DH.Helpdesk.BusinessData.Models.Calendar.Output;
-    using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Dal.Mappers;
@@ -24,17 +20,6 @@ namespace DH.Helpdesk.Dal.Repositories
     /// </summary>
     public interface ICalendarRepository : IRepository<Calendar>
     {
-        /// <summary>
-        /// The get calendar overviews.
-        /// </summary>
-        /// <param name="customers">
-        /// The customers.
-        /// </param>
-        /// <returns>
-        /// The result.
-        /// </returns>
-        IEnumerable<CalendarOverview> GetCalendarOverviews(int[] customers);
-
         /// <summary>
         /// The save calendar.
         /// </summary>
@@ -94,69 +79,6 @@ namespace DH.Helpdesk.Dal.Repositories
         {
             this.toBusinessModelMapper = toBusinessModelMapper;
             this.toEntityMapper = toEntityMapper;
-        }
-
-        /// <summary>
-        /// The get calendar overviews.
-        /// </summary>
-        /// <param name="customers">
-        /// The customers.
-        /// </param>
-        /// <returns>
-        /// The result.
-        /// </returns>
-        public IEnumerable<CalendarOverview> GetCalendarOverviews(int[] customers)
-        {
-            var entities = this.GetSecuredEntities(this.Table
-                .Where(c => customers.Contains(c.Customer_Id))
-                .Select(c => new
-                {
-                    c.Id,
-                    c.Customer_Id,
-                    c.CalendarDate,
-                    c.Caption,
-                    c.Text,
-                    c.ShowOnStartPage,
-                    c.ShowUntilDate,
-                    c.PublicInformation,
-                    c.ChangedByUser_Id,
-                    c.ChangedDate,
-                    c.CreatedDate,
-                    c.WGs                            
-                })
-                .OrderByDescending(p => p.CalendarDate)
-                .ToList()
-                .Select(c => new Calendar
-                {
-                    Id = c.Id,
-                    Customer_Id = c.Customer_Id,
-                    CalendarDate = c.CalendarDate,
-                    Caption = c.Caption,
-                    Text = c.Text,
-                    ShowOnStartPage = c.ShowOnStartPage,
-                    ShowUntilDate = c.ShowUntilDate,
-                    PublicInformation = c.PublicInformation,
-                    ChangedByUser_Id = c.ChangedByUser_Id,
-                    ChangedDate = c.ChangedDate,
-                    CreatedDate = c.CreatedDate,
-                    WGs = c.WGs
-                }));
-
-            return entities.Select(c => new CalendarOverview
-                {
-                    Id = c.Id,
-                    CustomerId = c.Customer_Id,
-                    CalendarDate = c.CalendarDate,
-                    Caption = c.Caption,
-                    Text = c.Text,
-                    ShowOnStartPage = c.ShowOnStartPage.ToBool(),
-                    ShowUntilDate = c.ShowUntilDate,
-                    PublicInformation = c.PublicInformation.ToBool(),
-                    ChangedByUserId = c.ChangedByUser_Id,
-                    ChangedDate = c.ChangedDate,
-                    CreatedDate = c.CreatedDate,
-                    WGs = c.WGs
-                });
         }
 
         /// <summary>

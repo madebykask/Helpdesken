@@ -6,9 +6,13 @@ namespace DH.Helpdesk.Services.Services
     using System.Collections.Generic;
     using System.Linq;
 
-    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.DailyReports;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications;
+
+    using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
 
     public interface IDailyReportService
     {
@@ -20,7 +24,7 @@ namespace DH.Helpdesk.Services.Services
 
         void SaveDailyReportSubject(DailyReportSubject dailyReportSubject, out IDictionary<string, string> errors);
         void Commit();
-        IEnumerable<DailyReportOverview> GetDailyReportOverviews(int[] customers, int? count = null);
+        IEnumerable<DailyReportOverview> GetDailyReportOverviews(int[] customers, int? count);
     }
 
     public class DailyReportService : IDailyReportService
@@ -29,14 +33,18 @@ namespace DH.Helpdesk.Services.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IDailyReportRepository _dailyReportRepository;
 
+        private readonly IUnitOfWorkFactory unitOfWorkFactory;
+
         public DailyReportService(
             IDailyReportSubjectRepository dailyReportSubjectRepository,
             IUnitOfWork unitOfWork,
-            IDailyReportRepository dailyReportRepository)
+            IDailyReportRepository dailyReportRepository, 
+            IUnitOfWorkFactory unitOfWorkFactory)
         {
             this._dailyReportSubjectRepository = dailyReportSubjectRepository;
             this._unitOfWork = unitOfWork;
             _dailyReportRepository = dailyReportRepository;
+            this.unitOfWorkFactory = unitOfWorkFactory;
         }
 
         public IList<DailyReportSubject> GetDailyReportSubjects(int customerId)
@@ -97,14 +105,16 @@ namespace DH.Helpdesk.Services.Services
             this._unitOfWork.Commit();
         }
 
-        public IEnumerable<DailyReportOverview> GetDailyReportOverviews(int[] customers, int? count = null)
+        public IEnumerable<DailyReportOverview> GetDailyReportOverviews(int[] customers, int? count)
         {
-            var dailyReports = _dailyReportRepository.GetDailyReportOverviews(customers);
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var repository = uow.GetRepository<DailyReport>();
 
-            if (!count.HasValue)
-                return dailyReports;
-
-            return dailyReports.Take(count.Value);
+                return repository.GetAll()
+                        .GetForStartPage(customers, count)
+                        .MapToOverviews();
+            }
         }
     }
 }

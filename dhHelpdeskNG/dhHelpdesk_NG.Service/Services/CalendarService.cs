@@ -93,22 +93,7 @@ namespace DH.Helpdesk.Services.Services
         /// </summary>
         void Commit();
 
-        /// <summary>
-        /// The get calendar overviews.
-        /// </summary>
-        /// <param name="customers">
-        /// The customers.
-        /// </param>
-        /// <param name="count">
-        /// The count.
-        /// </param>
-        /// <param name="forStartPage">
-        /// The for start page.
-        /// </param>
-        /// <returns>
-        /// The result.
-        /// </returns>
-        IEnumerable<CalendarOverview> GetCalendarOverviews(int[] customers, int? count, bool forStartPage);
+        IEnumerable<CalendarOverview> GetCalendarOverviews(int[] customers, int? count, bool forStartPage, bool untilTodayOnly);
     }
 
     /// <summary>
@@ -160,7 +145,7 @@ namespace DH.Helpdesk.Services.Services
         /// </returns>
         public IList<CalendarOverview> GetCalendars(int customerId)
         {
-            return this.calendarRepository.GetCalendarOverviews(new[] { customerId }).ToList();
+            return this.GetCalendarOverviews(new[] { customerId }, null, false, false).ToList();
         }
 
         /// <summary>
@@ -177,7 +162,7 @@ namespace DH.Helpdesk.Services.Services
         /// </returns>
         public IList<CalendarOverview> SearchAndGenerateCalendar(int customerId, ICalendarSearch searchCalendars)
         {
-            var query = from c in this.calendarRepository.GetCalendarOverviews(new[] { customerId }) select c;
+            var query = from c in this.GetCalendarOverviews(new[] { customerId }, null, false, false) select c;
 
             if (!string.IsNullOrEmpty(searchCalendars.SearchCs))
             {
@@ -297,30 +282,20 @@ namespace DH.Helpdesk.Services.Services
             this.unitOfWork.Commit();
         }
 
-        /// <summary>
-        /// The get calendar overviews.
-        /// </summary>
-        /// <param name="customers">
-        /// The customers.
-        /// </param>
-        /// <param name="count">
-        /// The count.
-        /// </param>
-        /// <param name="forStartPage">
-        /// The for start page.
-        /// </param>
-        /// <returns>
-        /// The result.
-        /// </returns>
-        public IEnumerable<CalendarOverview> GetCalendarOverviews(int[] customers, int? count, bool forStartPage)
+        public IEnumerable<CalendarOverview> GetCalendarOverviews(int[] customers, int? count, bool forStartPage, bool untilTodayOnly)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var repository = uow.GetRepository<Calendar>();
 
-                return repository.GetAll()
-//                        .GetUntilToday()
-                        .RestrictByWorkingGroups(this.workContext)
+                var query = repository.GetAll();
+
+                if (untilTodayOnly)
+                {
+                    query = query.GetUntilToday();
+                }
+        
+                return query.RestrictByWorkingGroups(this.workContext)
                         .GetForStartPage(customers, count, forStartPage)
                         .MapToOverviews();
             }
