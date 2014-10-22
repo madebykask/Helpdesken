@@ -7,9 +7,14 @@ namespace DH.Helpdesk.Services.Services
     using System.Linq;
 
     using DH.Helpdesk.Common.Extensions.String;
-    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Dal.Infrastructure.Context;
+    using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.BulletinBoards;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications;
+
+    using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
 
     public interface IBulletinBoardService
     {
@@ -23,22 +28,7 @@ namespace DH.Helpdesk.Services.Services
         void SaveBulletinBoard(BulletinBoard bulletinBoard, int[] wgs, out IDictionary<string, string> errors);
         void Commit();
 
-        /// <summary>
-        /// The get bulletin board overviews.
-        /// </summary>
-        /// <param name="customers">
-        /// The customers.
-        /// </param>
-        /// <param name="count">
-        /// The count.
-        /// </param>
-        /// <param name="forStartPage">
-        /// The for start page.
-        /// </param>
-        /// <returns>
-        /// The result.
-        /// </returns>
-        IEnumerable<BulletinBoardOverview> GetBulletinBoardOverviews(int[] customers, int? count = null, bool forStartPage = true);
+        IEnumerable<BulletinBoardOverview> GetBulletinBoardOverviews(int[] customers, int? count, bool forStartPage);
     }
 
     public class BulletinBoardService : IBulletinBoardService
@@ -47,14 +37,22 @@ namespace DH.Helpdesk.Services.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IWorkingGroupRepository _workingGroupRepository;
 
+        private readonly IUnitOfWorkFactory unitOfWorkFactory;
+
+        private readonly IWorkContext workContext;
+
         public BulletinBoardService(
             IBulletinBoardRepository bulletinBoardRepository,
             IUnitOfWork unitOfwork,
-            IWorkingGroupRepository workingGroupRepository)
+            IWorkingGroupRepository workingGroupRepository, 
+            IUnitOfWorkFactory unitOfWorkFactory, 
+            IWorkContext workContext)
         {
             this._bulletinBoardRepository = bulletinBoardRepository;
             this._unitOfWork = unitOfwork;
             this._workingGroupRepository = workingGroupRepository;
+            this.unitOfWorkFactory = unitOfWorkFactory;
+            this.workContext = workContext;
         }
 
         public IList<BulletinBoard> GetBulletinBoards(int customerId)
@@ -151,35 +149,17 @@ namespace DH.Helpdesk.Services.Services
             this._unitOfWork.Commit();
         }
 
-        /// <summary>
-        /// The get bulletin board overviews.
-        /// </summary>
-        /// <param name="customers">
-        /// The customers.
-        /// </param>
-        /// <param name="count">
-        /// The count.
-        /// </param>
-        /// <param name="forStartPage">
-        /// The for start page.
-        /// </param>
-        /// <returns>
-        /// The result.
-        /// </returns>
-        public IEnumerable<BulletinBoardOverview> GetBulletinBoardOverviews(int[] customers, int? count = null, bool forStartPage = true)
+        public IEnumerable<BulletinBoardOverview> GetBulletinBoardOverviews(int[] customers, int? count, bool forStartPage)
         {
-            var bulletinBoards = this._bulletinBoardRepository.GetBulletinBoardOverviews(customers);
-            if (forStartPage)
+            using (var uow = this.unitOfWorkFactory.Create())
             {
-                bulletinBoards = bulletinBoards.Where(b => b.ShowOnStartPage);
-            }
+                var repository = uow.GetRepository<BulletinBoard>();
 
-            if (!count.HasValue)
-            {
-                return bulletinBoards;
+                return repository.GetAll()
+                        .RestrictByWorkingGroups(this.workContext)
+                        .GetForStartPage(customers, count, forStartPage)
+                        .MapToOverviews();
             }
-
-            return bulletinBoards.Take(count.Value);
         }
     }
 }

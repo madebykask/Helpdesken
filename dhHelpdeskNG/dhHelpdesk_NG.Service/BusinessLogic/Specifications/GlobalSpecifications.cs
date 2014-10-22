@@ -53,7 +53,7 @@
                                     int[] customers,
                                     int? count,
                                     bool forStartPage)
-            where T : class, ICustomerEntity, IStartPageEntity
+            where T : class, ICustomerEntity, IStartPageEntity, IDatedEntity
         {
             if (customers != null && customers.Any())
             {
@@ -64,6 +64,8 @@
             {
                 query = query.Where(x => x.ShowOnStartPage == 1);
             }
+
+            query = query.SortByCreated();
 
             if (count.HasValue)
             {

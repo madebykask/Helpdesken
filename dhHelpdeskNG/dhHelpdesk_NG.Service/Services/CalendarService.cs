@@ -15,10 +15,15 @@ namespace DH.Helpdesk.Services.Services
 
     using DH.Helpdesk.BusinessData.Models.Calendar.Output;
     using DH.Helpdesk.Common.Extensions.String;
-    using DH.Helpdesk.Common.Tools;
-    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Dal.Infrastructure.Context;
+    using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Calendars;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications.Calendars;
+
+    using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
 
     /// <summary>
     /// The CalendarService interface.
@@ -103,7 +108,7 @@ namespace DH.Helpdesk.Services.Services
         /// <returns>
         /// The result.
         /// </returns>
-        IEnumerable<CalendarOverview> GetCalendarOverviews(int[] customers, int? count = null, bool forStartPage = true);
+        IEnumerable<CalendarOverview> GetCalendarOverviews(int[] customers, int? count, bool forStartPage);
     }
 
     /// <summary>
@@ -126,26 +131,22 @@ namespace DH.Helpdesk.Services.Services
         /// </summary>
         private readonly IWorkingGroupRepository workingGroupRepository;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CalendarService"/> class.
-        /// </summary>
-        /// <param name="calendarRepository">
-        /// The calendar repository.
-        /// </param>
-        /// <param name="unitOfwork">
-        /// The unit of work.
-        /// </param>
-        /// <param name="workingGroupRepository">
-        /// The working group repository.
-        /// </param>
+        private readonly IUnitOfWorkFactory unitOfWorkFactory;
+
+        private readonly IWorkContext workContext;
+
         public CalendarService(
             ICalendarRepository calendarRepository,
             IUnitOfWork unitOfwork,
-            IWorkingGroupRepository workingGroupRepository)
+            IWorkingGroupRepository workingGroupRepository, 
+            IUnitOfWorkFactory unitOfWorkFactory, 
+            IWorkContext workContext)
         {
             this.calendarRepository = calendarRepository;
             this.unitOfWork = unitOfwork;
             this.workingGroupRepository = workingGroupRepository;
+            this.unitOfWorkFactory = unitOfWorkFactory;
+            this.workContext = workContext;
         }
 
         /// <summary>
@@ -311,22 +312,18 @@ namespace DH.Helpdesk.Services.Services
         /// <returns>
         /// The result.
         /// </returns>
-        public IEnumerable<CalendarOverview> GetCalendarOverviews(int[] customers, int? count = null, bool forStartPage = true)
+        public IEnumerable<CalendarOverview> GetCalendarOverviews(int[] customers, int? count, bool forStartPage)
         {
-            var today = DateTime.Today.RoundToDay();
-            var calendars = this.calendarRepository.GetCalendarOverviews(customers)
-                            .Where(c => c.ShowUntilDate.RoundToDay() >= today);
-            if (forStartPage)
+            using (var uow = this.unitOfWorkFactory.Create())
             {
-                calendars = calendars.Where(c => c.ShowOnStartPage);
-            }
+                var repository = uow.GetRepository<Calendar>();
 
-            if (!count.HasValue)
-            {
-                return calendars;
+                return repository.GetAll()
+//                        .GetUntilToday()
+                        .RestrictByWorkingGroups(this.workContext)
+                        .GetForStartPage(customers, count, forStartPage)
+                        .MapToOverviews();
             }
-
-            return calendars.Take(count.Value);
         }
     }
 }

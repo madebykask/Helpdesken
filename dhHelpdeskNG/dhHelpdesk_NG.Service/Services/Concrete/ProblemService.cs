@@ -117,7 +117,6 @@
 
                 return repository.GetAll()
                         .GetForStartPage(customers, count, forStartPage)
-                        .SortByCreated()
                         .MapToOverviews();
             }
         }

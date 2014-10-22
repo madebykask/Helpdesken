@@ -17,11 +17,6 @@ namespace DH.Helpdesk.BusinessData.Models.BulletinBoard.Output
     public sealed class BulletinBoardOverview
     {
         /// <summary>
-        /// Gets or sets the customer_ id.
-        /// </summary>
-        public int CustomerId { get; set; }
-
-        /// <summary>
         /// Gets or sets the created date.
         /// </summary>
         public DateTime CreatedDate { get; set; }
@@ -30,10 +25,5 @@ namespace DH.Helpdesk.BusinessData.Models.BulletinBoard.Output
         /// Gets or sets the text.
         /// </summary>
         public string Text { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether show on start page.
-        /// </summary>
-        public bool ShowOnStartPage { get; set; }
     }
 }

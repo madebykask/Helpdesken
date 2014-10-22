@@ -179,10 +179,10 @@
                 switch ((Module)module.Module_Id)
                 {
                     case Module.BulletinBoard:
-                        model.BulletinBoardOverviews = this.bulletinBoardService.GetBulletinBoardOverviews(customersIds, module.NumberOfRows);
+                        model.BulletinBoardOverviews = this.bulletinBoardService.GetBulletinBoardOverviews(customersIds, module.NumberOfRows, true);
                         break;
                     case Module.Calendar:
-                        model.CalendarOverviews = this.calendarService.GetCalendarOverviews(customersIds, module.NumberOfRows);
+                        model.CalendarOverviews = this.calendarService.GetCalendarOverviews(customersIds, module.NumberOfRows, true);
                         break;
                     case Module.Customers:
 
@@ -200,7 +200,7 @@
                         model.DailyReportOverviews = this.dailyReportService.GetDailyReportOverviews(customersIds, module.NumberOfRows);
                         break;
                     case Module.Documents:
-                        model.DocumentOverviews = this.documentService.GetDocumentOverviews(customersIds, module.NumberOfRows);
+                        model.DocumentOverviews = this.documentService.GetDocumentOverviews(customersIds, module.NumberOfRows, true);
                         break;
                     case Module.Faq:
                         model.FaqOverviews = this.faqService.GetFaqByCustomers(customersIds, module.NumberOfRows);
@@ -212,7 +212,7 @@
                         model.ProblemOverviews = this.problemService.GetProblemOverviews(customersIds, module.NumberOfRows, true);
                         break;
                     case Module.QuickLinks:
-                        model.LinksInfo = this.linkModelFactory.GetLinksViewModel(this.linkService.GetLinkOverviews(customersIds, module.NumberOfRows));
+                        model.LinksInfo = this.linkModelFactory.GetLinksViewModel(this.linkService.GetLinkOverviews(customersIds, module.NumberOfRows, true));
                         break;
                     case Module.Statistics:
                         model.StatisticsOverviews = this.statisticsService.GetStatistics(

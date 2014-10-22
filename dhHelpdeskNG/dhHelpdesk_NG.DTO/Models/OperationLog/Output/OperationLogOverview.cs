@@ -35,10 +35,5 @@ namespace DH.Helpdesk.BusinessData.Models.OperationLog.Output
         /// Gets or sets the category.
         /// </summary>
         public OperationLogCategoryOverview Category { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether show on start page.
-        /// </summary>
-        public bool ShowOnStartPage { get; set; }
     }
 }

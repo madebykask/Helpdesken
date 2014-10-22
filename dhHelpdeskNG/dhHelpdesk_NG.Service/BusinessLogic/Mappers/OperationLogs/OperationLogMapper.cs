@@ -3,7 +3,6 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.OperationLog.Output;
-    using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Domain;
 
     public static class OperationLogMapper
@@ -15,10 +14,7 @@
                                         o.ChangedDate,
                                         o.CreatedDate,
                                         o.LogText,
-                                        o.Category,
-                                        o.ShowOnStartPage,
-                                        o.Us,
-                                        o.WGs
+                                        o.Category
                                     })
                                     .ToArray();
 
@@ -30,8 +26,7 @@
                                         Category = new OperationLogCategoryOverview
                                         {
                                             OLCName = o.Category != null ? o.Category.OLCName : null
-                                        },
-                                        ShowOnStartPage = o.ShowOnStartPage.ToBool()
+                                        }
                                     }).ToArray();
         }
     }

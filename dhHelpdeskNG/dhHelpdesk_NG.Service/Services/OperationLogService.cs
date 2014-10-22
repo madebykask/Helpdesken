@@ -203,9 +203,8 @@ namespace DH.Helpdesk.Services.Services
                 var operationLogRepository = uow.GetRepository<OperationLog>();
 
                 return operationLogRepository.GetAll()
-                        .GetForStartPage(customers, count, forStartPage)
                         .RestrictByWorkingGroupsAndUsers(this.workContext)
-                        .SortByCreated()
+                        .GetForStartPage(customers, count, forStartPage)
                         .MapToOverviews();
             }
         }
