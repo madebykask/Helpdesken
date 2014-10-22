@@ -289,7 +289,7 @@ function CaseInitForm() {
         }
     });
 
-    var allFileNames = "";
+    var allFileNames = [];
     var newFileName = "";
     $('#upload_files_popup').on('show', function () {
         _plupload = $('#file_uploader').pluploadQueue({
@@ -304,6 +304,7 @@ function CaseInitForm() {
                 Init: function (up, info) {                    
                     //console.log('1:init', info);
                     //allFileNames = "";
+                    alert("preinit");
                     $.get('/Cases/GetAllCaseFileName', { id: $('#CaseKey').val() }, function (data) {
                         allFileNames = $.parseJSON(data);
                     });
@@ -312,14 +313,29 @@ function CaseInitForm() {
                 
                 UploadFile: function (up, file) {
                     //console.log('2:uploaded file:', file.name);
+                    $.get('/Cases/GetAllCaseFileName', { id: $('#CaseKey').val() }, function (data) {
+                        allFileNames = $.parseJSON(data);
+                    });
                     var fn = file.name;
                     
                     for (var i = 0; i < allFileNames.length; i++) {
                         if (fn == allFileNames[i]) {
-                            //var d = new Date();
-                            var dstr = 'New_';
-                                //d.getFullYear() + '_' + d.getMonth() + '_' + d.getDay() + ' ' + d.getHours() + '\'' + d.getMinutes() + '\'' + d.getSeconds();
-                            file.name = '(' + dstr + ')-' + file.name;
+                            var findName = false;
+                            for (var j = 1; j < 100 && !findName; j++) {
+                                findName = true;
+                                for (var k = 0; k < allFileNames.length; k++) {
+                                    if (j.toString() + '-' + fn == allFileNames[k])
+                                        findName = false;
+                                }
+
+                                if (findName) {                                       
+                                    var dstr = j.toString(); //d.getFullYear() + '-' + d.getMonth() + '-' + d.getDay() + ' ' + d.getHours() + ',' + d.getMinutes() + ',' + d.getSeconds();
+                                    file.name = dstr + '-' + fn;
+                                    allFileNames.push(file.name);                                       
+                                }
+                                
+
+                            }
                         }                     
                     }                                       
 
@@ -340,6 +356,7 @@ function CaseInitForm() {
             init: {
                 FileUploaded: function () {
                     //console.log('4:uploaded');
+                    alert('iniit');
                     $.get('/Cases/GetAllCaseFileName', { id: $('#CaseKey').val() }, function (data) {
                         allFileNames = $.parseJSON(data);
                     });
@@ -387,8 +404,8 @@ function CaseInitForm() {
                     for (var i = 0; i < allFileNames.length; i++) {
                         if (fn == allFileNames[i]) {
                             var d = new Date();
-                            var dstr = d.getFullYear() + '_' + d.getMonth() + '_' + d.getDay() + ' ' + d.getHours() + '\'' + d.getMinutes() + '\'' + d.getSeconds();
-                            file.name = '(' + dstr + ')-' + file.name;
+                            var dstr = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDay() + ' ' + d.getHours() + ',' + d.getMinutes() + ',' + d.getSeconds();
+                            file.name =  dstr + '-' + file.name;
                         }
                     }
                 },
@@ -899,7 +916,6 @@ if ($.fn.DataTable.TableTools) {
 }
 
 
-function ResetC() {
 
 /* Table initialisation */
 function ResetDataTable(tableUniqId) {
@@ -907,33 +923,11 @@ function ResetDataTable(tableUniqId) {
     var oTable = $('#' + tableUniqId).dataTable();
     oTable.fnPageChange('first');
 };
-    //alert('reset');
-    
-    
-    //initDataTable();
-    var oTable = $("#tablegrid1").dataTable();
-    //oTable.fnPageChange(0);
-
-    oTable.page(0).draw(false);
-
-    //initDataTable();
-
-    //oTable.state.clear();
-    //§initDataTable();
-    //for (iCol = 0; iCol < oSettings.aoPreSearchCols.length; iCol++) {
-    //    oSettings.aoPreSearchCols[iCol].sSearch = '';
-    //}
-    //oTable.fnDraw();
-
-    //localStorage.removeItem('DataTables_tablegrid1_/changes');
-    //table.res;
-    
 
 function DestroyDataTable(tableUniqId) {
     var oTable = $('#' + tableUniqId).dataTable();
     oTable.destroy();
 };
-*/
 
 function InitDataTable(tableUniqId) {
     alert('init: ' + tableUniqId);

@@ -10,7 +10,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             this.SendMailAboutNewCaseTo = sendEmailAboutNewCaseTo;
             this.HelpdeskMailFromAdress = helpdeskMailFromAdress;
             this.AbsoluterUrl = absoluterUrl;
-            this.DontConnectUserToWorkingGroup = dontConnectUserToWorkingGroup;            
+            this.DontConnectUserToWorkingGroup = dontConnectUserToWorkingGroup;
+            this.DontSendMailToNotifier = true;
         }
 
         public int DontConnectUserToWorkingGroup { get; set; }

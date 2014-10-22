@@ -1541,7 +1541,7 @@
                 else
                 {
                     m.Logs = this._logService.GetCaseLogOverviews(caseId);
-                    m.CaseFilesModel = new CaseFilesModel(caseId.ToString(global::System.Globalization.CultureInfo.InvariantCulture), this._caseFileService.GetCaseFiles(caseId));
+                    m.CaseFilesModel = new CaseFilesModel(caseId.ToString(global::System.Globalization.CultureInfo.InvariantCulture), this._caseFileService.GetCaseFiles(caseId).OrderBy(x=> x.CreatedDate).ToArray());
                     m.RegByUser = this._userService.GetUser(m.case_.User_Id);
                     if (m.Logs != null)
                     {

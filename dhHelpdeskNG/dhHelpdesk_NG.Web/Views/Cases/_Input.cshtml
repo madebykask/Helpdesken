@@ -66,40 +66,8 @@
                                 <h4>@Translation.Get("Anmälare")</h4>
                                 <div class="row">
                                     <div class="span12">
-                                        <table class="tableform">
-                                             @if (Model.Languages != null && Model.Languages.Count() > 1 && Model.case_.Id == 0)
-                                             {
-                                                <tr>
-                                                    <td>
-                                                        @Translation.Get("Språk", SessionFacade.CurrentCaseLanguageId)
-                                                    </td>
-                                                    <td>                                                                                                               
-                                                        <select  id="case__RegLanguage_Id" name="case_.RegLanguage_Id" class="span2">
-                                                            @foreach (var e in Model.Languages)
-                                                            {
-                                                                <option value="@e.Id" @e.Id.IdIsSelected(SessionFacade.CurrentCaseLanguageId.ToString()) >@Translation.Get(e.Name, SessionFacade.CurrentCaseLanguageId)</option>
-                                                            }
-                                                        </select>                                                                                                                                                                            
-                                                    </td>                    
-                                                </tr>
-                                             }
-                                             else
-                                             {
-                                                 <tr>
-                                                    <td>
-                                                        @Translation.Get("Språk", SessionFacade.CurrentCaseLanguageId)
-                                                    </td>
-                                                    <td>                                                                                                               
-                                                        <select  disabled id="cl" name="cl" class="span2">
-                                                            @foreach (var e in Model.Languages)
-                                                            {
-                                                                <option value="@e.Id" @e.Id.IdIsSelected(SessionFacade.CurrentCaseLanguageId.ToString()) >@Translation.Get(e.Name, SessionFacade.CurrentCaseLanguageId)</option>
-                                                            }
-                                                        </select>                                                                                                                                                                            
-                                                    </td>                    
-                                                </tr>
-                                                 @Html.HiddenFor(m => m.case_.RegLanguage_Id)
-                                             }
+                                        <table class="tableform" >
+                                             
                                             <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber)">
                                                 <td class="span3">
                                                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ReportedBy)                                                    
@@ -115,7 +83,7 @@
                                                         @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off", @readonly = true })
                                                     }  
                                                 </td>
-                                                <td class="span5">
+                                                <td class="span3">
                                                     <a href="#" id="AddNotifier" class="btn">@Translation.Get("Lägg till", SessionFacade.CurrentCaseLanguageId)</a> 
                                                 </td>
                                             </tr>
@@ -135,8 +103,8 @@
                                                 <td>                                                                 
                                                     @Html.TextBoxFor(model => model.case_.PersonsEmail, new { maxlength = "100" })                                                                                                                                                                     
                                                 </td>
-                                                <td class="span5" style="@Model.GetFieldStyle(CaseSolutionFields.Email)">
-                                                    <label class="checkbox">
+                                                <td class="span1" style="@Model.GetFieldStyle(CaseSolutionFields.Email)">
+                                                    <label class="checkbox" >
                                                         @if (!Model.IsReadOnly(CaseSolutionFields.Email))
                                                         {
                                                             @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier) 
@@ -145,9 +113,40 @@
                                                         {
                                                             @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new { @readonly = true, @disabled = "disabled" }) 
                                                         }
-                                                        @Translation.Get("Do not send case notifications to user", SessionFacade.CurrentCaseLanguageId)
-                                                    </label>                                                                                                                                                                                                            
+                                                        @*@Translation.Get("Do not send case notifications to user", SessionFacade.CurrentCaseLanguageId)*@
+                                                        @Translation.Get("Informera användaren", SessionFacade.CurrentCaseLanguageId)
+                                                    </label>  
+                                                    
+                                                    
+                                                    @Html.HiddenFor(m => m.case_.RegLanguage_Id)
+                                                                                                                                                                                                                                                           
                                                 </td>                                                
+                                                @if (Model.Languages != null && Model.Languages.Count() > 1 && Model.case_.Id == 0)
+                                                   {
+                                                
+                                                    <td>                                                                                                               
+                                                        <select  id="case__RegLanguage_Id" name="case_.RegLanguage_Id" class="span2">
+                                                            @foreach (var e in Model.Languages)
+                                                            {
+                                                                <option value="@e.Id" @e.Id.IdIsSelected(SessionFacade.CurrentCaseLanguageId.ToString()) >@Translation.Get(e.Name, SessionFacade.CurrentCaseLanguageId)</option>
+                                                            }
+                                                        </select>                                                                                                                                                                            
+                                                    </td>                                                                    
+                                                 }
+                                                 else
+                                                 {       
+                                                    if (Model.Languages != null && Model.Languages.Count() > 1)
+                                                    {                                            
+                                                        <td>                                                                                                               
+                                                            <select  disabled id="cl" name="cl" class="span2">
+                                                                @foreach (var e in Model.Languages)
+                                                                {
+                                                                    <option value="@e.Id" @e.Id.IdIsSelected(SessionFacade.CurrentCaseLanguageId.ToString()) >@Translation.Get(e.Name, SessionFacade.CurrentCaseLanguageId)</option>
+                                                                }
+                                                            </select>                                                                                                                                                                            
+                                                        </td>                                                                    
+                                                    }  
+                                                 } 
                                             </tr>
                                             <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString())">
                                                 <td>

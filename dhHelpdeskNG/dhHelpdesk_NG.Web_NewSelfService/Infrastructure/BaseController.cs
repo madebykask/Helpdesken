@@ -334,8 +334,9 @@
         {
             if(this._masterDataService != null)
             {
+                // TextTypeId 300  is used for Line Manager
                 if(SessionFacade.TextTranslation == null)
-                    SessionFacade.TextTranslation = this._masterDataService.GetTranslationTexts();
+                    SessionFacade.TextTranslation = this._masterDataService.GetTranslationTexts(); //.Where(x=> x.Type == 300).ToList();
 
                 if(SessionFacade.CurrentUser == null)
                     SessionFacade.CaseTranslation = this._masterDataService.GetCaseTranslations();

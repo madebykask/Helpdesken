@@ -1585,7 +1585,7 @@
 
                         m.case_.ReportedBy = caseTemplate.ReportedBy;
                         m.case_.Department_Id = caseTemplate.Department_Id;
-                        m.CaseMailSetting.DontSendMailToNotifier = caseTemplate.NoMailToNotifier.ToBool();
+                        m.CaseMailSetting.DontSendMailToNotifier = (!caseTemplate.NoMailToNotifier.ToBool()); // it is opposite in the case 
                         m.case_.ProductArea_Id = caseTemplate.ProductArea_Id;
                         m.case_.Caption = caseTemplate.Caption;
                         m.case_.Description = caseTemplate.Description;
@@ -1637,12 +1637,12 @@
                 }
 
                 // check state secondary info
-                m.Disable_SendMailAboutCaseToNotifier = false;
+                m.Disable_SendMailAboutCaseToNotifier = true;
                 if (m.case_.StateSecondary_Id > 0)
                 {
                     if (m.case_.StateSecondary != null)
                     {
-                        m.Disable_SendMailAboutCaseToNotifier = m.case_.StateSecondary.NoMailToNotifier == 1;
+                        m.Disable_SendMailAboutCaseToNotifier = !(m.case_.StateSecondary.NoMailToNotifier == 1); // it is opposite of case 
                     }
                 }
 

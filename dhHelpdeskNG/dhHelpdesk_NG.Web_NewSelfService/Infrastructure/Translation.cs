@@ -11,7 +11,7 @@
                 if (SessionFacade.TextTranslation != null)
                 {
                     try
-                    {
+                    {                        
                         var translation = SessionFacade.TextTranslation.Where(x => x.TextToTranslate.ToLower() == translate.ToLower()).FirstOrDefault();
 
                         if (translation != null)

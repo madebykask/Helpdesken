@@ -95,21 +95,7 @@
         {
             return this.CustomerSetting.ModuleInventory.ToBool() && this.IsAdministrator();
         }
-
-        public bool IsModulesVisible()
-        {
-            return this.IsCaseVisible() &&
-                (this.IsReportVisible() ||
-                this.IsFaqVisible() ||
-                this.IsCalendarVisible() ||
-                this.IsOrderVisible() ||
-                this.IsAccountVisible() ||
-                this.IsCheckListVisuble() ||
-                this.IsDailyReportVisible() ||
-                this.IsOperationLogVisible() ||
-                this.IsInventoryVisible());
-        }
-
+             
         public bool IsBulletinBoardVisible()
         {
             return this.CustomerSetting.ModuleBulletinBoard.ToBool()
@@ -152,16 +138,45 @@
             return this.CustomerSetting.ModuleComputerUser.ToBool() && this.IsAdministrator();
         }
 
+        
+
         public bool IsSettingsModulesVisible()
         {
-            return this.IsBulletinBoardVisible() ||
-                this.IsPlanningVisible() ||
+            return
+
+                this.IsOrderVisible() ||
+                this.IsAccountVisible() ||
+                this.IsCheckListVisuble() ||
                 this.IsProjectVisible() ||
-                this.IsQuestionVisible() ||
-                this.IsQuestionnaireVisible() ||
-                this.IsLicenseVisible() ||
-                this.IsDocumentVisible() ||
-                this.IsComputerUserVisible();
+                this.IsInventoryVisible() ||
+                this.IsLicenseVisible();
+
+                //this.IsPlanningVisible() ||                
+                //this.IsQuestionVisible() ||                                                
+                //this.IsComputerUserVisible();
         }
+
+        public bool IsModulesVisible()
+        {
+            return this.IsCaseVisible() &&
+                (
+                this.IsBulletinBoardVisible() ||
+                this.IsFaqVisible() ||
+                this.IsCalendarVisible() ||
+                this.IsQuestionnaireVisible() ||
+                this.IsDocumentVisible());
+
+                
+        }
+
+        public bool IsReportsLogsModulesVisible()
+        {
+            return 
+                   this.IsReportVisible() ||
+                   this.IsDailyReportVisible() ||        
+                   this.IsOperationLogVisible();
+        }
+
+        
     }
 }
