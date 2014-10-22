@@ -118,6 +118,7 @@
     <Compile Include="Interfaces\ILanguageEntity.cs" />
     <Compile Include="Interfaces\INamedEntity.cs" />
     <Compile Include="Interfaces\INulableCustomerEntity.cs" />
+    <Compile Include="Interfaces\IStartPageEntity.cs" />
     <Compile Include="Invoice\CaseInvoiceSettingsEntity.cs" />
     <Compile Include="TextType.cs" />
     <Compile Include="DocumentSearch.cs" />

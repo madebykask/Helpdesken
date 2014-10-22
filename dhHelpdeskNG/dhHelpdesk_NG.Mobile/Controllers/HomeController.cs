@@ -206,7 +206,7 @@
                         model.FaqOverviews = this.faqService.GetFaqByCustomers(customersIds, module.NumberOfRows);
                         break;
                     case Module.OperationalLog:
-                        model.OperationLogOverviews = this.operationLogService.GetOperationLogOverviews(customersIds, module.NumberOfRows);
+                        model.OperationLogOverviews = this.operationLogService.GetOperationLogOverviews(customersIds, module.NumberOfRows, true);
                         break;
                     case Module.Problems:
                         model.ProblemOverviews = this.problemService.GetProblemOverviews(customersIds, module.NumberOfRows);

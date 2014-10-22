@@ -17,11 +17,6 @@ namespace DH.Helpdesk.BusinessData.Models.OperationLog.Output
     public sealed class OperationLogOverview
     {
         /// <summary>
-        /// Gets or sets the customer id.
-        /// </summary>
-        public int CustomerId { get; set; }
-
-        /// <summary>
         /// Gets or sets the created date.
         /// </summary>
         public DateTime CreatedDate { get; set; }

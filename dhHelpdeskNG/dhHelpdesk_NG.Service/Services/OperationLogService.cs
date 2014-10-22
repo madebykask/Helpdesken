@@ -12,6 +12,7 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.OperationLogs;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.OperationLogs;
 
     using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
@@ -42,7 +43,7 @@ namespace DH.Helpdesk.Services.Services
         /// <returns>
         /// The result.
         /// </returns>
-        IEnumerable<OperationLogOverview> GetOperationLogOverviews(int[] customers, int? count = null, bool forStartPage = true);
+        IEnumerable<OperationLogOverview> GetOperationLogOverviews(int[] customers, int? count, bool forStartPage);
     }
 
     public class OperationLogService : IOperationLogService
@@ -196,7 +197,7 @@ namespace DH.Helpdesk.Services.Services
             this._unitOfWork.Commit();
         }
 
-        public IEnumerable<OperationLogOverview> GetOperationLogOverviews(int[] customers, int? count = null, bool forStartPage = true)
+        public IEnumerable<OperationLogOverview> GetOperationLogOverviews(int[] customers, int? count, bool forStartPage)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
@@ -204,7 +205,9 @@ namespace DH.Helpdesk.Services.Services
 
                 return operationLogRepository.GetAll()
                         .GetForStartPage(customers, count, forStartPage)
-                        .MapToOverviews(this.workContext);
+                        .RestrictByWorkingGroupsAndUsers(this.workContext)
+                        .GetSorted()
+                        .MapToOverviews();
             }
         }
     }

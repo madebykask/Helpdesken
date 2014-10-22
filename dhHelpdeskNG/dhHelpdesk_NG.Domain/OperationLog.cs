@@ -6,7 +6,7 @@ namespace DH.Helpdesk.Domain
     using global::System.Collections.Generic;
     using global::System.ComponentModel.DataAnnotations;
 
-    public class OperationLog : Entity, IWorkingGroupEntity, IUserEntity
+    public class OperationLog : Entity, IWorkingGroupEntity, IUserEntity, IStartPageEntity, ICustomerEntity
     {
         public int Customer_Id { get; set; }
         public int InformUsers { get; set; }
