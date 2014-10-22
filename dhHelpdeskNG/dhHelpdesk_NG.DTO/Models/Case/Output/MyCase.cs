@@ -5,7 +5,7 @@
     public sealed class MyCase
     {
         public MyCase(
-                int id, 
+                int id,
                 DateTime registrationDate, 
                 string subject, 
                 string initiatorName,
