@@ -5,7 +5,7 @@ namespace DH.Helpdesk.Domain
     using global::System.Collections.Generic;
     using global::System;
 
-    public class Link : Entity, IUserEntity
+    public class Link : Entity, IUserEntity, IOptionalCustomerEntity, IStartPageEntity, IDatedEntity
     {
         public int? Customer_Id { get; set; }
         public int? Document_Id { get; set; }

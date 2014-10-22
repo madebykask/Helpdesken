@@ -6,9 +6,15 @@ namespace DH.Helpdesk.Services.Services
     using System.Collections.Generic;
     using System.Linq;
 
-    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Dal.Infrastructure.Context;
+    using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Links;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications.Links;
+
+    using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
 
     public interface ILinkService
     {
@@ -37,7 +43,7 @@ namespace DH.Helpdesk.Services.Services
         /// <returns>
         /// The result.
         /// </returns>
-        IEnumerable<LinkOverview> GetLinkOverviews(int[] customers, int? count = null, bool forStartPage = true);
+        IEnumerable<LinkOverview> GetLinkOverviews(int[] customers, int? count, bool forStartPage);
     }
 
     public class LinkService : ILinkService
@@ -47,14 +53,22 @@ namespace DH.Helpdesk.Services.Services
         private readonly ILinkGroupRepository _linkGroupRepository;
         private readonly IUserRepository _userRepository;
 
+        private readonly IWorkContext workContext;
+
+        private readonly IUnitOfWorkFactory unitOfWorkFactory;
+
         public LinkService(
             ILinkRepository linkRepository,
             ILinkGroupRepository linkGroupRepository,
             IUserRepository userRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork, 
+            IWorkContext workContext, 
+            IUnitOfWorkFactory unitOfWorkFactory)
         {
             this._linkRepository = linkRepository;
             this._unitOfWork = unitOfWork;
+            this.workContext = workContext;
+            this.unitOfWorkFactory = unitOfWorkFactory;
             this._linkGroupRepository = linkGroupRepository;
             this._userRepository = userRepository;
         }
@@ -148,35 +162,17 @@ namespace DH.Helpdesk.Services.Services
             this._unitOfWork.Commit();
         }
 
-        /// <summary>
-        /// The get link overviews.
-        /// </summary>
-        /// <param name="customers">
-        /// The customers.
-        /// </param>
-        /// <param name="count">
-        /// The count.
-        /// </param>
-        /// <param name="forStartPage">
-        /// The for start page.
-        /// </param>
-        /// <returns>
-        /// The result.
-        /// </returns>
-        public IEnumerable<LinkOverview> GetLinkOverviews(int[] customers, int? count = null, bool forStartPage = true)
+        public IEnumerable<LinkOverview> GetLinkOverviews(int[] customers, int? count, bool forStartPage)
         {
-            var links = this._linkRepository.GetLinkOverviews(customers);
-            if (forStartPage)
+            using (var uow = this.unitOfWorkFactory.Create())
             {
-                links = links.Where(l => l.ShowOnStartPage);
-            }
+                var repository = uow.GetRepository<Link>();
 
-            if (!count.HasValue)
-            {
-                return links;
+                return repository.GetAll()
+                        .RestrictByUsers(this.workContext)
+                        .GetLinksForStartPage(customers, count, forStartPage)
+                        .MapToOverviews();
             }
-
-            return links.Take(count.Value);
         }
     }
 }

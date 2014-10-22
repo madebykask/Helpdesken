@@ -90,7 +90,7 @@
                                     bool forStartPage)
             where T : class, IOptionalCustomerEntity, IStartPageEntity, IDatedEntity
         {
-            query = query.Where(f => f.Customer_Id.HasValue && customers.Contains(f.Customer_Id.Value));
+            query = query.Where(x => x.Customer_Id.HasValue && customers.Contains(x.Customer_Id.Value));
 
             if (forStartPage)
             {

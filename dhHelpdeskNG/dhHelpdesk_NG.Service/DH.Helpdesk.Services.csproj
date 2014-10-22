@@ -103,6 +103,7 @@
     <Compile Include="BusinessLogic\Mappers\Licenses\ManufacturerMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Licenses\ProductMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Licenses\VendorMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Links\LinkMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\OperationLogs\OperationLogMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Problems\ProblemMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Questionnaire\CircularPartMappers.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="BusinessLogic\Specifications\Licenses\LicenseFileSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Licenses\LicenseSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Licenses\ProductSpecifications.cs" />
+    <Compile Include="BusinessLogic\Specifications\Links\LinkSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Questionnaire\CircularPartSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Questionnaire\CircularSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\User\UserSpecifications.cs" />
