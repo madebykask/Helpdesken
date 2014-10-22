@@ -5,7 +5,7 @@
     <div class="container">
         <ul class="nav nav-tabs">
             <li class="active">
-                <a href="#fragment-1">@Translation.Get("FAQ Category", Enums.TranslationSource.TextTranslation)</a>
+                <a href="#fragment-1">@Translation.Get("FAQ Kategori", Enums.TranslationSource.TextTranslation)</a>
             </li>
         </ul>
         <div class="tab-content">
@@ -16,7 +16,7 @@
                             <table class="tableform">
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get("Name*", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Namn", Enums.TranslationSource.TextTranslation) <span class="mandatorystar">*</span>
                                     </td>
                                     <td class="span9">
                                         @this.Html.TextBoxFor(m => m.Name)

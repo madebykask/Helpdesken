@@ -155,7 +155,7 @@
                     '<table>' +
                     '<tr>' +
                     '<td>' +
-                    '@Translation.Get("Answer: ", Enums.TranslationSource.TextTranslation)' +
+                    '@Translation.Get("Svar", Enums.TranslationSource.TextTranslation)' +
                     '</td>' +
                     '<td>' +
                     faq.Answer +
@@ -166,7 +166,7 @@
                 faqMarkup +=
                     '<tr>' +
                         '<td>' +
-                        '@Translation.Get("Internal Answer: ", Enums.TranslationSource.TextTranslation)' +
+                        '@Translation.Get("Internt svar", Enums.TranslationSource.TextTranslation)' +
                         '</td>' +
                         '<td>' +
                         faq.InternalAnswer +
@@ -261,7 +261,7 @@
                     '<table>' +
                     '<tr>' +
                     '<td>' +
-                    '@Translation.Get("Answer: ", Enums.TranslationSource.TextTranslation)' +
+                    '@Translation.Get("Svar", Enums.TranslationSource.TextTranslation)' +
                     '</td>' +
                     '<td>' +
                     faq.Answer +
@@ -272,7 +272,7 @@
                 faqMarkup +=
                     '<tr>' +
                         '<td>' +
-                        '@Translation.Get("Internal Answer: ", Enums.TranslationSource.TextTranslation)' +
+                        '@Translation.Get("Internt svar", Enums.TranslationSource.TextTranslation)' +
                         '</td>' +
                         '<td>' +
                         faq.InternalAnswer +
@@ -341,8 +341,8 @@
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
-            <li id="add_faq_button" style="@(this.Model.Categories.Items.Any() ? "": "display: none")"><a class="btn">@Translation.Get("Add FAQ", Enums.TranslationSource.TextTranslation)</a></li>    
-            <li id="add_category_button" style="@(this.Model.Categories.Items.Any() ? "display: none" : "")"><a class="btn" href="@this.Url.Action("NewCategory")">@Translation.Get("Add Category", Enums.TranslationSource.TextTranslation)</a></li>
+            <li id="add_faq_button" style="@(this.Model.Categories.Items.Any() ? "": "display: none")"><a class="btn">@Translation.Get("Ny FAQ", Enums.TranslationSource.TextTranslation)</a></li>    
+            <li id="add_category_button" style="@(this.Model.Categories.Items.Any() ? "display: none" : "")"><a class="btn" href="@this.Url.Action("NewCategory")">@Translation.Get("Ny kategori", Enums.TranslationSource.TextTranslation)</a></li>
         </ul>
     </div>
 </div>
@@ -353,10 +353,10 @@
                 <a href="#fragment-1">@Translation.Get("FAQ", Enums.TranslationSource.TextTranslation)</a>
             </li>
             <li id="tab_2" class="@(this.Model.Categories.Items.Any() ? "":"disabled")">
-                <a href="#fragment-2">@Translation.Get("Search", Enums.TranslationSource.TextTranslation)</a>
+                <a href="#fragment-2">@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)</a>
             </li>
             <li id="tab_3" class="@(this.Model.Categories.Items.Any() ? "" :"active")">
-                <a href="#fragment-3">@Translation.Get("Categories", Enums.TranslationSource.TextTranslation)</a>
+                <a href="#fragment-3">@Translation.Get("Kategorier", Enums.TranslationSource.TextTranslation)</a>
             </li>
         </ul>
         <div class="tab-content">
@@ -380,7 +380,7 @@
                                 <thead>
                                     <tr>
                                         <th>
-                                            @Translation.Get("Categories", Enums.TranslationSource.TextTranslation)
+                                            @Translation.Get("Kategorier", Enums.TranslationSource.TextTranslation)
                                         </th>
                                     </tr>
                                 </thead>
@@ -398,10 +398,10 @@
                                 <thead>
                                     <tr>
                                         <th>
-                                            @Translation.Get("Date", Enums.TranslationSource.TextTranslation)
+                                            @Translation.Get("Datum", Enums.TranslationSource.TextTranslation)
                                         </th>
                                         <th>
-                                            @Translation.Get("Question/Answer", Enums.TranslationSource.TextTranslation)
+                                            @Translation.Get("Fråga/Svar", Enums.TranslationSource.TextTranslation)
                                         </th>
                                     </tr>
                                 </thead>
@@ -430,14 +430,14 @@
                             <table class="tableform">
                                 <tr>
                                     <td>
-                                        @Translation.Get("Search Phrase", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Sökord", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
                                         <input id="search_field" type="text" class="CellText" />
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>@Translation.Get("Show all answer within category:", Enums.TranslationSource.TextTranslation)</td>
+                                    <td>@Translation.Get("Visa alla svar inom kategorin", Enums.TranslationSource.TextTranslation)</td>
                                     <td><input type="checkbox" id="show_all_answers_within_category_search_checkbox"/></td>
                                 </tr>
                             </table>
@@ -447,10 +447,10 @@
                         <thead>
                             <tr>
                                 <th>
-                                    @Translation.Get("Date", Enums.TranslationSource.TextTranslation)
+                                    @Translation.Get("Datum", Enums.TranslationSource.TextTranslation)
                                 </th>
                                 <th>
-                                    @Translation.Get("Question/Answer", Enums.TranslationSource.TextTranslation)
+                                    @Translation.Get("Fråga/Svar", Enums.TranslationSource.TextTranslation)
                                 </th>
                             </tr>
                         </thead>
@@ -479,7 +479,7 @@
                     }
                     else
                     {
-                        @Translation.Get("You have no categories.", Enums.TranslationSource.TextTranslation)
+                        @Translation.Get("You have no categories", Enums.TranslationSource.TextTranslation)
                     }
                 </div>
             </div>

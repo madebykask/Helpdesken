@@ -97,7 +97,7 @@
                             <table class="tableform">
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get("Category*", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Kategori", Enums.TranslationSource.TextTranslation) <span class="mandatorystar">*</span>
                                     </td>
                                     <td class="span9">
                                         @this.Html.DropDownWithSubmenus("category_dropdown", "CategoryId", false, Model.Category)
@@ -105,7 +105,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Question", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Fråga", Enums.TranslationSource.TextTranslation)
                                         <span class="mandatorystar">*</span>
                                     </td>
                                     <td>
@@ -115,7 +115,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Answer", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Svar", Enums.TranslationSource.TextTranslation)
                                         <span class="mandatorystar">*</span>
                                     </td>
                                     <td>
@@ -125,7 +125,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Internal Answer", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Internt svar", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
                                         @this.Html.TextAreaFor(m => m.InternalAnswer, new { style = "height: 250px;" })
@@ -134,7 +134,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Attached Files", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
                                         <table id="files_table">
@@ -156,7 +156,7 @@
                                                                 <a href="@this.Url.Action("DownloadFile", new RouteValueDictionary { { "faqId", this.Model.Id }, { "fileName", file } })">@file</a>
                                                             </td>
                                                             <td>
-                                                                <a id="@string.Format("delete_file_button_{0}", i)" class="btn">@Translation.Get("Delete", Enums.TranslationSource.TextTranslation)</a>
+                                                                <a id="@string.Format("delete_file_button_{0}", i)" class="btn">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</a>
                                                             </td>
                                                         </tr>
                                                     }
@@ -173,14 +173,14 @@
                                                 <div id="file_uploader"></div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close", Enums.TranslationSource.TextTranslation)</button>
+                                                <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Stäng", Enums.TranslationSource.TextTranslation)</button>
                                             </div>
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("URL 1", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("URL", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
                                         @this.Html.TextBoxFor(m => m.UrlOne)
@@ -189,7 +189,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("URL 2", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("URL", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
                                         @this.Html.TextBoxFor(m => m.UrlTwo)
@@ -202,13 +202,13 @@
                 </div>
                 
                 <div class="container">
-                    <h4>@Translation.Get("Security", Enums.TranslationSource.TextTranslation)</h4>
+                    <h4>@Translation.Get("Säkerhet", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
                         <div class="span12">
                             <table>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Working Groups", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
                                         @this.Html.DropDown("working_groups_dropdown", "WorkingGroupId", true, this.Model.WorkingGroup)
@@ -219,13 +219,13 @@
                     </div>
                 </div>
                 <div class="container">
-                    <h4>@Translation.Get("Show", Enums.TranslationSource.TextTranslation)</h4>
+                    <h4>@Translation.Get("Visa", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
                         <div class="span12">
                             <table>
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get("Information is available for notifiers", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Uppgifterna är tillgängliga för anmälare", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
                                         @this.Html.CheckBox("InformationIsAvailableForNotifiers", this.Model.InformationIsAvailableForNotifiers)
@@ -233,7 +233,7 @@
                                 </tr>
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get("Show on Start Page", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Visa på startsidan", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
                                         @this.Html.CheckBox("ShowOnStartPage", this.Model.ShowOnStartPage)
