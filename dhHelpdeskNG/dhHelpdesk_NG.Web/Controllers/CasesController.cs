@@ -33,13 +33,6 @@
     using DH.Helpdesk.Web.Models.Shared;
     using System.Web.Script.Serialization;
 
-    using DH.Helpdesk.Web.Models.Faq.Input;
-    using DH.Helpdesk.Web.Models.Faq.Output;
-    using NewFaq = DH.Helpdesk.Services.BusinessModels.Faq.NewFaq;
-    using NewFaqFile = DH.Helpdesk.BusinessData.Models.Faq.Input.NewFaqFile;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Faq;
-    using DH.Helpdesk.Dal.Repositories.Faq;
-
     public class CasesController : BaseController
     {
         #region Private variables
@@ -101,9 +94,6 @@
 
         private readonly IInvoiceHelper invoiceHelper;
 
-        private readonly INewFaqModelFactory newFaqModelFactory;
-        private readonly IFaqCategoryRepository faqCategoryRepository;
-
         #endregion
 
         #region Constructor
@@ -156,9 +146,7 @@
             IInvoiceArticlesModelFactory invoiceArticlesModelFactory, 
             IConfiguration configuration,
             ICaseSolutionSettingService caseSolutionSettingService,            
-            IInvoiceHelper invoiceHelper,
-            INewFaqModelFactory newFaqModelFactory,
-            IFaqCategoryRepository faqCategoryRepository)
+            IInvoiceHelper invoiceHelper)
             : base(masterDataService)
         {            
             this._caseService = caseService;
@@ -208,7 +196,6 @@
             this.configuration = configuration;
             this.caseSolutionSettingService = caseSolutionSettingService;            
             this.invoiceHelper = invoiceHelper;
-            this.faqCategoryRepository = faqCategoryRepository;
         }
 
         #endregion
@@ -1518,7 +1505,7 @@
                 m.MinWorkingTime = cs.MinRegWorkingTime != 0 ? cs.MinRegWorkingTime : 30;
                 m.CaseFilesModel = new CaseFilesModel();
                 m.LogFilesModel = new FilesModel();
-                //m.CategoryWithSubcategories = this.faqCategoryRepository.FindCategoriesWithSubcategoriesByCustomerId(customerId);
+                
 
                 if (caseId == 0)
                 {
