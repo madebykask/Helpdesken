@@ -203,7 +203,7 @@
                         model.DocumentOverviews = this.documentService.GetDocumentOverviews(customersIds, module.NumberOfRows, true);
                         break;
                     case Module.Faq:
-                        model.FaqOverviews = this.faqService.GetFaqByCustomers(customersIds, module.NumberOfRows);
+                        model.FaqOverviews = this.faqService.GetFaqByCustomers(customersIds, module.NumberOfRows, true);
                         break;
                     case Module.OperationalLog:
                         model.OperationLogOverviews = this.operationLogService.GetOperationLogOverviews(customersIds, module.NumberOfRows, true);

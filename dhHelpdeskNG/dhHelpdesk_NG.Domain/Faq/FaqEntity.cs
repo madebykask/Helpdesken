@@ -5,7 +5,7 @@ namespace DH.Helpdesk.Domain.Faq
     using global::System;
     using global::System.Collections.Generic;
 
-    public class FaqEntity : Entity, ISingleWorkingGroupEntity
+    public class FaqEntity : Entity, ISingleWorkingGroupEntity, IOptionalCustomerEntity, IStartPageEntity, IDatedEntity
     {
         #region Public Properties
 

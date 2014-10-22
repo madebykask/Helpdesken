@@ -96,6 +96,7 @@
     <Compile Include="BusinessLogic\Mappers\DailyReports\DailyReportMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Department\DepartmentMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Documents\DocumentMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Faqs\FaqMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Licenses\ApplicationMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Licenses\LicenseFileMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Licenses\LicenseMapper.cs" />

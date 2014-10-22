@@ -37,6 +37,6 @@ namespace DH.Helpdesk.Services.Services
         /// <returns>
         /// The result.
         /// </returns>
-        IEnumerable<FaqInfoOverview> GetFaqByCustomers(int[] customers, int? count = null, bool forStartPage = true);
+        IEnumerable<FaqInfoOverview> GetFaqByCustomers(int[] customers, int? count, bool forStartPage);
     }
 }

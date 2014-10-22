@@ -1,12 +1,16 @@
-﻿using DH.Helpdesk.BusinessData.Models.Faq.Output;
-
-namespace DH.Helpdesk.Services.Services.Concrete
+﻿namespace DH.Helpdesk.Services.Services.Concrete
 {
     using System.Collections.Generic;
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Faq.Input;
+    using DH.Helpdesk.BusinessData.Models.Faq.Output;
+    using DH.Helpdesk.Dal.Infrastructure.Context;
+    using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories.Faq;
+    using DH.Helpdesk.Domain.Faq;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Faqs;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications;
 
     public sealed class FaqService : IFaqService
     {
@@ -20,6 +24,10 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         private readonly IFaqCategoryRepository faqCategoryRepository;
 
+        private readonly IWorkContext workContext;
+
+        private readonly IUnitOfWorkFactory unitOfWorkFactory;
+
         #endregion
 
         #region Constructors and Destructors
@@ -28,12 +36,16 @@ namespace DH.Helpdesk.Services.Services.Concrete
             IFaqFileRepository faqFileRepository,
             IFaqRepository faqRepository,
             IFaqCategoryRepository faqCategoryRepository,
-            IFaqCategoryLanguageRepository faqCategoryLanguageRepository)
+            IFaqCategoryLanguageRepository faqCategoryLanguageRepository, 
+            IWorkContext workContext, 
+            IUnitOfWorkFactory unitOfWorkFactory)
         {
             this.faqFileRepository = faqFileRepository;
             this.faqRepository = faqRepository;
             this.faqCategoryRepository = faqCategoryRepository;
             this.faqCategoryLanguageRepository = faqCategoryLanguageRepository;
+            this.workContext = workContext;
+            this.unitOfWorkFactory = unitOfWorkFactory;
         }
 
         #endregion
@@ -114,20 +126,17 @@ namespace DH.Helpdesk.Services.Services.Concrete
         /// <returns>
         /// The result.
         /// </returns>
-        public IEnumerable<FaqInfoOverview> GetFaqByCustomers(int[] customers, int? count = null, bool forStartPage = true)
+        public IEnumerable<FaqInfoOverview> GetFaqByCustomers(int[] customers, int? count, bool forStartPage)
         {
-            var faqs = this.faqRepository.GetFaqByCustomers(customers);
-            if (forStartPage)
+            using (var uow = this.unitOfWorkFactory.Create())
             {
-                faqs = faqs.Where(f => f.ShowOnStartPage);
-            }
+                var repository = uow.GetRepository<FaqEntity>();
 
-            if (!count.HasValue)
-            {
-                return faqs;
+                return repository.GetAll()
+                        .RestrictByWorkingGroup(this.workContext)
+                        .GetForStartPageWithOptionalCustomer(customers, count, forStartPage)
+                        .MapToOverviews();
             }
-
-            return faqs.Take(count.Value);
         }
 
         #endregion

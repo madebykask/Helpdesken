@@ -7,7 +7,6 @@ namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
 
     using DH.Helpdesk.BusinessData.Models.Faq.Input;
     using DH.Helpdesk.BusinessData.Models.Faq.Output;
-    using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain.Faq;
 
@@ -207,43 +206,7 @@ namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
             faqEntity.URL2 = existingFaq.UrlTwo ?? string.Empty;
             faqEntity.WorkingGroup_Id = existingFaq.WorkingGroupId;
         }
-
-        /// <summary>
-        /// The get by customers.
-        /// </summary>
-        /// <param name="customers">
-        /// The customers.
-        /// </param>
-        /// <returns>
-        /// The result.
-        /// </returns>
-        public IEnumerable<FaqInfoOverview> GetFaqByCustomers(int[] customers)
-        {
-            var entities = this.GetSecuredEntities(this.Table
-                .Where(f => f.Customer_Id.HasValue && customers.Contains(f.Customer_Id.Value))
-                .Select(f => new
-                {
-                    f.Id,
-                    f.CreatedDate,
-                    f.FAQCategory,
-                    f.FAQQuery,
-                    f.Answer,
-                    f.ShowOnStartPage
-                })
-                .OrderByDescending(p => p.CreatedDate)
-                .ToList()); 
-
-            return entities.Select(f => new FaqInfoOverview()
-                {
-                    Id = f.Id,
-                    CreatedDate = f.CreatedDate,
-                    Category = f.FAQCategory,
-                    Text = f.FAQQuery,
-                    Answer = f.Answer,
-                    ShowOnStartPage = f.ShowOnStartPage.ToBool()
-                });
-        }
-
+        
         #endregion
     }
 }

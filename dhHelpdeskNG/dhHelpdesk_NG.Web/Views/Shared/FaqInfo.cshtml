@@ -34,16 +34,15 @@
 }
 @functions 
 {
-    public MvcHtmlString GetCategoryPathString(FaqCategoryEntity category)
+    private MvcHtmlString GetCategoryPathString(FaqCategoryEntity category)
     {
         if (category == null)
             return null;
 
         var result = category.Name;        
-        while (category.ParentFAQCategory != null)
+        if (category.ParentFAQCategory != null)
         {
             result.Insert(0, category.ParentFAQCategory.Name + " - ");
-            category = category.ParentFAQCategory;
         }
 
         return new MvcHtmlString(result);       

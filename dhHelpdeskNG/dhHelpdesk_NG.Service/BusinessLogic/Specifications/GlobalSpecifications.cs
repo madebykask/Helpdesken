@@ -83,6 +83,30 @@
             return query;
         }
 
+        public static IQueryable<T> GetForStartPageWithOptionalCustomer<T>(
+                                    this IQueryable<T> query,
+                                    int[] customers,
+                                    int? count,
+                                    bool forStartPage)
+            where T : class, IOptionalCustomerEntity, IStartPageEntity, IDatedEntity
+        {
+            query = query.Where(f => f.Customer_Id.HasValue && customers.Contains(f.Customer_Id.Value));
+
+            if (forStartPage)
+            {
+                query = query.Where(x => x.ShowOnStartPage == 1);
+            }
+
+            query = query.SortByCreated();
+
+            if (count.HasValue)
+            {
+                query = query.Take(count.Value);
+            }
+
+            return query;
+        }
+
         public static IQueryable<T> GetForStartPage<T>(
                                     this IQueryable<T> query,
                                     int[] customers,
@@ -106,6 +130,16 @@
             var userGroups = workContext.User.UserWorkingGroups.Select(u => u.WorkingGroup_Id);
 
             query = query.Where(x => !x.WGs.Any() || x.WGs.Any(g => userGroups.Contains(g.Id)));
+
+            return query;
+        }
+
+        public static IQueryable<T> RestrictByWorkingGroup<T>(this IQueryable<T> query, IWorkContext workContext)
+            where T : class, ISingleWorkingGroupEntity
+        {
+            var userGroups = workContext.User.UserWorkingGroups.Select(u => u.WorkingGroup_Id);
+
+            query = query.Where(x => x.WorkingGroup == null || userGroups.Contains(x.WorkingGroup.Id));
 
             return query;
         }

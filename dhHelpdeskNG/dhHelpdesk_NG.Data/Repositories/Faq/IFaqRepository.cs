@@ -26,7 +26,5 @@ namespace DH.Helpdesk.Dal.Repositories.Faq
         List<FaqOverview> FindOverviewsByCategoryId(int categoryId);
 
         List<FaqDetailedOverview> FindDetailedOverviewsByCategoryId(int categoryId);
-
-        IEnumerable<FaqInfoOverview> GetFaqByCustomers(int[] customers);
     }
 }
