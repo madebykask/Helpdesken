@@ -14,6 +14,13 @@
     using DH.Helpdesk.Web.Models.Invoice;
     using DH.Helpdesk.Web.Models.Shared;
 
+    //using DH.Helpdesk.Web.Models.Faq.Output;
+    //using DH.Helpdesk.Dal.Repositories.Faq;
+    //using DH.Helpdesk.BusinessData.Models.Faq.Input;
+    //using DH.Helpdesk.BusinessData.Models.Faq.Output;
+    //using DH.Helpdesk.Dal.Infrastructure;
+    //using DH.Helpdesk.Domain.Faq;
+    //using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
     public class CaseInputViewModel
     {
         public CaseInputViewModel()
@@ -98,7 +105,11 @@
 
         public CustomerSettings CustomerSettings { get; set; }
 
-        public NewCaseParams  NewModeParams { get; set; }                
+        public NewCaseParams  NewModeParams { get; set; }
+
+        //public DropDownWithSubmenusContent CategoryWithSubcategories { get; private set; }
+        ////public List<CategoryWithSubcategories> CategoryWithSubcategories { get; set; }
+        //public EditingFaqModel EditFaqModel { get; set; }
 
     }
 

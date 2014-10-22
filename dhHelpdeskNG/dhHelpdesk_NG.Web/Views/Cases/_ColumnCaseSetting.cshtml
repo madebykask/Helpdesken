@@ -32,7 +32,7 @@
                                 <tr class="rowAdding">                                   
                                     <td>
                                         <select style="width: 190px;" id="labellist">
-                                            <option></option>
+                                            @*<option></option>*@
                                              @foreach (var cfs in Model.CaseFieldSettingLanguages)
                                                 {
                                                     if (cfs.Name != "Filename" && cfs.Name != "text_internal" && cfs.Name != "tblLog.Text_External" && cfs.Name != "tblLog.Text_Internal" && cfs.Name != "tblLog.Charge" && cfs.Name != "tblLog.Filename")
@@ -43,7 +43,7 @@
                                         </select>
                                     </td>          
                                     <td>
-                                        <select style="width: auto;" id="linelist">                                            
+                                        <select style="width: 190px;" id="linelist">                                            
                                             @foreach (var line in Model.LineList)
                                             {
                                                 <option id="line" value="@line.Value">@line.Text</option>
@@ -79,7 +79,7 @@
                                             </td> 
                                         }
                                         <td>
-                                            <select style="width: auto;" id="dellinelist" name="rows">                                                
+                                            <select style="width: 190px;" id="dellinelist" name="rows">                                                
                                                 @foreach (var line in Model.LineList)
                                                 {                                            
                                                     <option id="lines" value="@line.Value" @(line.Value == uc.Line.ToString() ? "selected=selected" : "")>@line.Text</option>

@@ -29,7 +29,7 @@
                         {
                             <td>
                                 <select style="width: 190px;" id="labellist">
-                                    <option></option>
+                                    @*<option></option>*@
                                     @foreach (var cfs in Model.CaseFieldSettingLanguages)
                                     {
                                         if (cfs.Name != "Filename" && cfs.Name != "text_internal" && cfs.Name != "tblLog.Text_External" && cfs.Name != "tblLog.Text_Internal" && cfs.Name != "tblLog.Charge" && cfs.Name != "tblLog.Filename")
@@ -44,8 +44,8 @@
                                 </select>
                             </td>          
                             <td>
-                                <select style="width: auto;" id="linelist">
-                                    <option></option>
+                                <select style="width: 190px;" id="linelist">
+                                    @*<option></option>*@
                                     @foreach (var line in Model.LineList)
                                     {
                                         <option id="line" value="@line.Value">@line.Text</option>
@@ -74,7 +74,7 @@
                         {
                             <td>
                                 <select style="width: 190px;" id="dellabellist" disabled="disabled">
-                                    <option></option>
+                                    @*<option></option>*@
                                     @foreach (var cfs in Model.CaseFieldSettingLanguages)
                                     {   
                                         <option id="labels" value="@cfs.Id" @(cfs.Name.ToUpper() == Model.CaseSettings[i].Name.ToUpper() ? "selected=selected" : "")>@cfs.Label</option>                              
@@ -83,8 +83,8 @@
                             </td> 
                         }
                         <td>
-                            <select style="width: auto;" id="dellinelist">
-                                <option></option>
+                            <select style="width: 190px;" id="dellinelist">
+                                @*<option></option>*@
                                 @foreach (var line in Model.LineList)
                                 {
                                     <option id="lines" value="@line.Value" @(line.Value == Model.CaseSettings[i].Line.ToString() ? "selected=selected" : "")>@line.Text</option>

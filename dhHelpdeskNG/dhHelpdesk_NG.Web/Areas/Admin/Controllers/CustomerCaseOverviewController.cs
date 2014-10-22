@@ -134,12 +134,12 @@
                 Value = "1",
                 Selected = false
             });
-            li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Utökad info", Enums.TranslationSource.TextTranslation),
-                Value = "2",
-                Selected = false
-            });
+            //li.Add(new SelectListItem()
+            //{
+            //    Text = Translation.Get("Utökad info", Enums.TranslationSource.TextTranslation),
+            //    Value = "2",
+            //    Selected = false
+            //});
 
             var model = new CustomerCaseSummaryViewModel
             {
