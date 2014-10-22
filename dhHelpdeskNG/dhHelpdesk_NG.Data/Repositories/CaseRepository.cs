@@ -409,7 +409,7 @@ namespace DH.Helpdesk.Dal.Repositories
         public MyCase[] GetMyCases(int userId, int? count = null)
         {
             var entities = this.DataContext.Cases
-                            .Where(c => c.CaseResponsibleUser_Id == userId)
+                            .Where(c => c.CaseResponsibleUser_Id == userId && c.FinishingDate == null)
                             .OrderByDescending(c => c.RegTime)
                             .Select(c => new
                             {

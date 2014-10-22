@@ -9,10 +9,10 @@
                 DateTime registrationDate, 
                 string subject, 
                 string initiatorName,
-                string Description)
+                string description)
         {
             this.InitiatorName = initiatorName;
-            this.Description = Description;
+            this.Description = description;
             this.Subject = subject;
             this.RegistrationDate = registrationDate;
             this.Id = id;
