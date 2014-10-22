@@ -42,17 +42,6 @@ namespace DH.Helpdesk.Dal.Repositories
         List<CategoryWithSubCategory> FindCategoriesWithSubcategories(int customerId);
 
         /// <summary>
-        /// The get document overviews.
-        /// </summary>
-        /// <param name="customers">
-        /// The customers.
-        /// </param>
-        /// <returns>
-        /// The result.
-        /// </returns>
-        IEnumerable<DocumentOverview> GetDocumentOverviews(int[] customers);
-
-        /// <summary>
         /// The get document file.
         /// </summary>
         /// <param name="document">
@@ -116,59 +105,7 @@ namespace DH.Helpdesk.Dal.Repositories
             root[0].Subcategories.AddRange(categories);            
 
             return root;
-        }
-
-        /// <summary>
-        /// The get document overviews.
-        /// </summary>
-        /// <param name="customers">
-        /// The customers.
-        /// </param>
-        /// <returns>
-        /// The result.
-        /// </returns>
-        public IEnumerable<DocumentOverview> GetDocumentOverviews(int[] customers)
-        {
-            var entities = this.GetSecuredEntities(this.Table
-                .Where(d => customers.Contains(d.Customer_Id))
-                .Select(d => new 
-                {
-                    d.CreatedDate,
-                    d.Customer_Id,
-                    d.Description,
-                    d.Id,
-                    d.Name,
-                    d.Size,
-                    d.ShowOnStartPage,
-                    d.Us,
-                    d.WGs
-                })
-                .OrderByDescending(d => d.CreatedDate)
-                .ToList()
-                .Select(d => new Document
-                {
-                    CreatedDate = d.CreatedDate,
-                    Customer_Id = d.Customer_Id,
-                    Description = d.Description,
-                    Id = d.Id,
-                    Name = d.Name,
-                    Size = d.Size,
-                    ShowOnStartPage = d.ShowOnStartPage,
-                    Us = d.Us,
-                    WGs = d.WGs
-                }));
-
-            return entities.Select(d => new DocumentOverview
-                                            {
-                                                CreatedDate = d.CreatedDate,
-                                                CustomerId = d.Customer_Id,
-                                                Description = d.Description,
-                                                Id = d.Id,
-                                                Name = d.Name,
-                                                Size = d.Size,
-                                                ShowOnStartPage = d.ShowOnStartPage                                                
-                                            });
-        }
+        }        
 
         /// <summary>
         /// The get document file.

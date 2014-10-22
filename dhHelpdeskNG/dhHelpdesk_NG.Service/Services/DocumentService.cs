@@ -15,10 +15,15 @@ namespace DH.Helpdesk.Services.Services
 
     using DH.Helpdesk.BusinessData.Models.Document;
     using DH.Helpdesk.BusinessData.Models.Document.Output;
-    using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Infrastructure.Context;
+    using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Documents;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications.Documents;
+
+    using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
 
     /// <summary>
     /// The DocumentService interface.
@@ -158,7 +163,7 @@ namespace DH.Helpdesk.Services.Services
         /// <returns>
         /// The result.
         /// </returns>
-        IEnumerable<DocumentOverview> GetDocumentOverviews(int[] customers, int? count = null, bool forStartPage = true);
+        IEnumerable<DocumentOverview> GetDocumentOverviews(int[] customers, int? count, bool forStartPage);
 
         /// <summary>
         /// The get document file.
@@ -207,32 +212,16 @@ namespace DH.Helpdesk.Services.Services
         /// </summary>
         private readonly IWorkContext workContext;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DocumentService"/> class.
-        /// </summary>
-        /// <param name="documentRepository">
-        /// The document repository.
-        /// </param>
-        /// <param name="documentCategoryRepository">
-        /// The document category repository.
-        /// </param>
-        /// <param name="userRepository">
-        /// The user repository.
-        /// </param>
-        /// <param name="workingGroupRepository">
-        /// The working group repository.
-        /// </param>
-        /// <param name="unitOfWork">
-        /// The unit of work.
-        /// </param>
-        /// <param name="workContext"></param>
+        private readonly IUnitOfWorkFactory unitOfWorkFactory;
+        
         public DocumentService(
             IDocumentRepository documentRepository,
             IDocumentCategoryRepository documentCategoryRepository,
             IUserRepository userRepository,
             IWorkingGroupRepository workingGroupRepository,
             IUnitOfWork unitOfWork, 
-            IWorkContext workContext)
+            IWorkContext workContext, 
+            IUnitOfWorkFactory unitOfWorkFactory)
         {
             this.documentRepository = documentRepository;
             this.documentCategoryRepository = documentCategoryRepository;
@@ -240,6 +229,7 @@ namespace DH.Helpdesk.Services.Services
             this.workingGroupRepository = workingGroupRepository;
             this.unitOfWork = unitOfWork;
             this.workContext = workContext;
+            this.unitOfWorkFactory = unitOfWorkFactory;
         }
 
         /// <summary>
@@ -556,20 +546,17 @@ namespace DH.Helpdesk.Services.Services
         /// <returns>
         /// The result.
         /// </returns>
-        public IEnumerable<DocumentOverview> GetDocumentOverviews(int[] customers, int? count = null, bool forStartPage = true)
+        public IEnumerable<DocumentOverview> GetDocumentOverviews(int[] customers, int? count, bool forStartPage)
         {
-            var documents = this.documentRepository.GetDocumentOverviews(customers);
-            if (forStartPage)
+            using (var uow = this.unitOfWorkFactory.Create())
             {
-                documents = documents.Where(d => d.ShowOnStartPage);
-            }
+                var repository = uow.GetRepository<Document>();
 
-            if (!count.HasValue)
-            {
-                return documents;
+                return repository.GetAll()
+                        .RestrictByWorkingGroupsAndUsers(this.workContext)
+                        .GetForStartPage(customers, count, forStartPage)
+                        .MapToOverviews();
             }
-
-            return documents.Take(count.Value);
         }
 
         /// <summary>

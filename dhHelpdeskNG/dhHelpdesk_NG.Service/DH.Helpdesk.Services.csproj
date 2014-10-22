@@ -95,6 +95,7 @@
     <Compile Include="BusinessLogic\Mappers\Customers\CaseMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\DailyReports\DailyReportMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Department\DepartmentMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Documents\DocumentMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Licenses\ApplicationMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Licenses\LicenseFileMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Licenses\LicenseMapper.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="BusinessLogic\MailTools\EmailMarkValues.cs" />
     <Compile Include="BusinessLogic\OtherTools\ITemporaryIdProvider.cs" />
     <Compile Include="BusinessLogic\Specifications\Customers\CustomerSpecifications.cs" />
+    <Compile Include="BusinessLogic\Specifications\Documents\DocumentSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\EmailTemplate\MailTemplateSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\EmailTemplate\MailTemplateLanguageSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\GlobalSpecifications.cs" />
