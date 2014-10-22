@@ -416,7 +416,8 @@ namespace DH.Helpdesk.Dal.Repositories
                                c.Id,
                                RegistrationDate = c.RegTime,
                                Subject = c.Caption,
-                               InitiatorName = c.PersonsName
+                               InitiatorName = c.PersonsName,
+                               Description = c.Description
                             });
 
             if (count.HasValue)
@@ -430,7 +431,8 @@ namespace DH.Helpdesk.Dal.Repositories
                                 c.Id,
                                 c.RegistrationDate,
                                 c.Subject,
-                                c.InitiatorName))
+                                c.InitiatorName,
+                                c.Description))
                                 .ToArray();
         }
 

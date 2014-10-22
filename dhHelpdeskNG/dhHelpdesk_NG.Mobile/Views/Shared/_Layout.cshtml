@@ -51,7 +51,26 @@
     
     @if(model != null && model.CustomerSetting != null && SessionFacade.CurrentUser != null) {    
         
-        
+        <div data-role="header" class="navbar fixed">        
+            <div class="navbar-container">                
+                <a href="#Menupanel" data-role="button" data-iconpos="notext" data-icon="bars" data-inline="true" class="ui-btn-right ui-nodisc-icon ui-btn ui-icon-bars ui-btn-icon-notext ui-corner-all">Meny</a>
+                <a href="/">
+                    <div class="navbar-header pull-left navbar-brand">
+                        @*<img src="@Url.Content("~/Content/img/dhhelpdesk.png")" class="navbar-brand" />*@
+                    </div>
+                </a>   
+                <div class="pull-right">                    
+                    <a>
+                       @Html.ActionLink(Translation.Get("Ärendeöversikt"), "index", "cases", new { area = "" } , new { @class = "btn" })                    
+                    </a>
+                    <a  href="@Url.Action("login", "login")" class="btn">                            
+                        @Translation.Get("Logga ut")
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
         
     }
     @RenderBody()

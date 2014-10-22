@@ -16,34 +16,34 @@
                     <tr>
                         <th>
                             @Translation.Get("Ärende")
-                        </th>                        
-                        <th>
-                            @Translation.Get("Prioritet")
-                        </th>                        
+                        </th>                         
                         <th>
                             @Translation.Get("Ämne")
-                        </th>                        
+                        </th>                       
                         <th>
-                            @Translation.Get("Anmälare")
+                            @Translation.Get("Datum")
                         </th>                        
+                       @* <th>
+                            @Translation.Get("Anmälare")
+                        </th> *@                       
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var myCase in Model.Cases)
                     {     
-                        <tr rel="tooltip" title="@Translation.Get("Anmälare"): @Html.DisplayFor(m => myCase.InitiatorName)<br />Customer: " style="cursor: pointer" onclick="window.location.href = '@Url.Action("Edit", "Cases", new { id = myCase.Id })'">
+                        <tr rel="tooltip" title="<strong>@Translation.Get("Anmälare"):</strong> @Html.DisplayFor(m => myCase.InitiatorName)<br /><strong>@Translation.Get("Beskrivning"):</strong> @Html.DisplayFor(m => myCase.Description) " style="cursor: pointer" onclick="window.location.href = '@Url.Action("Edit", "Cases", new { id = myCase.Id })'">
                             <td>
                                 @Html.DisplayFor(m => myCase.Id)
-                            </td>
-                            <td>
-                                @myCase.RegistrationDate.ToFormattedDateTime()
                             </td>
                             <td>
                                 @Html.DisplayFor(m => myCase.Subject)
                             </td>
                             <td>
-                                @Html.DisplayFor(m => myCase.InitiatorName)
+                                @myCase.RegistrationDate.ToFormattedDateTime()
                             </td>
+                            @*<td>
+                                @Html.DisplayFor(m => myCase.InitiatorName)
+                            </td>*@
                         </tr>
                     }
                 </tbody>

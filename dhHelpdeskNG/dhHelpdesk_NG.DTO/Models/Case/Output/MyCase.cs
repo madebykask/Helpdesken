@@ -8,9 +8,11 @@
                 int id, 
                 DateTime registrationDate, 
                 string subject, 
-                string initiatorName)
+                string initiatorName,
+                string Description)
         {
             this.InitiatorName = initiatorName;
+            this.Description = Description;
             this.Subject = subject;
             this.RegistrationDate = registrationDate;
             this.Id = id;
@@ -23,5 +25,7 @@
         public string Subject { get; private set; }
 
         public string InitiatorName { get; private set; }
+
+        public string Description { get; private set; }
     }
 }
