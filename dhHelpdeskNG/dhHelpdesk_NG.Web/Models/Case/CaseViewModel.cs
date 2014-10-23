@@ -88,6 +88,9 @@
 
         public CaseFilesModel CaseFilesModel { get; set; }
 
+        public string CaseFileNames { get; set; }
+        public string LogFileNames { get; set; }
+
         /// <summary>
         /// Gets or sets the case owner default working group.
         /// </summary>

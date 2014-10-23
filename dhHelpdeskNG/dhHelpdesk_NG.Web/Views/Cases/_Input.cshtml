@@ -56,7 +56,8 @@
                         @Html.HiddenFor(model => model.CaseMailSetting.HelpdeskMailFromAdress)
                         @Html.HiddenFor(model => model.CaseMailSetting.AbsoluterUrl)
                         @Html.HiddenFor(model => model.CaseMailSetting.DontConnectUserToWorkingGroup)
-
+                        @Html.HiddenFor(model => model.CaseFileNames)
+                        @Html.HiddenFor(model => model.LogFileNames)
                         @Html.Hidden("WriteTextToExternalNote", Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()))
                         @Html.Hidden("Today", DateTime.Now.ToShortDateString())
 
@@ -83,7 +84,7 @@
                                                         @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off", @readonly = true })
                                                     }  
                                                 </td>
-                                                <td class="span3">
+                                                <td class="span5">
                                                     <a href="#" id="AddNotifier" class="btn">@Translation.Get("Lägg till", SessionFacade.CurrentCaseLanguageId)</a> 
                                                 </td>
                                             </tr>
@@ -113,15 +114,15 @@
                                                         {
                                                             @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new { @readonly = true, @disabled = "disabled" }) 
                                                         }
-                                                        @*@Translation.Get("Do not send case notifications to user", SessionFacade.CurrentCaseLanguageId)*@
-                                                        @Translation.Get("Informera användaren", SessionFacade.CurrentCaseLanguageId)
+                                                        @Translation.Get("Do not send case notifications to user", SessionFacade.CurrentCaseLanguageId)
+                                                        
                                                     </label>  
                                                     
                                                     
                                                     @Html.HiddenFor(m => m.case_.RegLanguage_Id)
                                                                                                                                                                                                                                                            
                                                 </td>                                                
-                                                @if (Model.Languages != null && Model.Languages.Count() > 1 && Model.case_.Id == 0)
+                                               @* @if (Model.Languages != null && Model.Languages.Count() > 1 && Model.case_.Id == 0)
                                                    {
                                                 
                                                     <td>                                                                                                               
@@ -146,7 +147,7 @@
                                                             </select>                                                                                                                                                                            
                                                         </td>                                                                    
                                                     }  
-                                                 } 
+                                                 } *@
                                             </tr>
                                             <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString())">
                                                 <td>

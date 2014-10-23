@@ -32,6 +32,21 @@ function today() {
     return today;
 }
 
+function getNow() {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1; //January is 0!
+    var hh = today.getHours();
+    var m = today.getMinutes();
+    var s = today.getSeconds();
+
+    var yyyy = today.getFullYear();
+    if (dd < 10) { dd = '0' + dd } if (mm < 10) { mm = '0' + mm } if (hh < 10) { hh = '0' + hh }
+    if (m < 10) { m = '0' + m } if (s < 10) { s = '0' + s }
+    var today = yyyy + '-' + mm + '-' + dd + ' ' + hh + '.' + m + '.' + s;
+    return today;
+}
+
 // Cose window or tab
 function close_window() {
     //if (confirm("WARNING TEXT XXXXXXX TRANSLATE")) {
@@ -88,7 +103,7 @@ function NewCaseAndAddCase() {
     $("#target").submit();
 }
 
-
+var allFileNames = [];
 function CaseInitForm() {
 
     $('#CaseLog_TextExternal').focus(function () {
@@ -289,7 +304,7 @@ function CaseInitForm() {
         }
     });
 
-    var allFileNames = [];
+    
     var newFileName = "";
     $('#upload_files_popup').on('show', function () {
         _plupload = $('#file_uploader').pluploadQueue({
@@ -302,22 +317,19 @@ function CaseInitForm() {
             buttons: { browse: true, start: true, stop: true, cancel: true },
             preinit: {
                 Init: function (up, info) {                    
-                    //console.log('1:init', info);
-                    //allFileNames = "";
-                    alert("preinit");
-                    $.get('/Cases/GetAllCaseFileName', { id: $('#CaseKey').val() }, function (data) {
-                        allFileNames = $.parseJSON(data);
-                    });
+                    //console.log('1:init', info);                    
                 },
 
                 
                 UploadFile: function (up, file) {
                     //console.log('2:uploaded file:', file.name);
-                    $.get('/Cases/GetAllCaseFileName', { id: $('#CaseKey').val() }, function (data) {
-                        allFileNames = $.parseJSON(data);
-                    });
+                                        
+                    //debugger;
+                    var strFiles = $('#CaseFileNames').val();
+                    var allFileNames = strFiles.split('|');
+
                     var fn = file.name;
-                    
+
                     for (var i = 0; i < allFileNames.length; i++) {
                         if (fn == allFileNames[i]) {
                             var findName = false;
@@ -328,16 +340,18 @@ function CaseInitForm() {
                                         findName = false;
                                 }
 
-                                if (findName) {                                       
-                                    var dstr = j.toString(); //d.getFullYear() + '-' + d.getMonth() + '-' + d.getDay() + ' ' + d.getHours() + ',' + d.getMinutes() + ',' + d.getSeconds();
-                                    file.name = dstr + '-' + fn;
-                                    allFileNames.push(file.name);                                       
+                                if (findName) {                                    
+                                    var d = getNow().toString();
+                                    file.name = d + '-' + fn;                                        
                                 }
-                                
+                            } // for j
+                        }
+                    } // for i
 
-                            }
-                        }                     
-                    }                                       
+                        
+                    
+                    $('#CaseFileNames').val(strFiles + "|" + file.name);                   
+                    
 
                 },
 
@@ -346,20 +360,12 @@ function CaseInitForm() {
                     //console.log('3:uploaded complete',file.name);
                     //plupload_add
                     $(".plupload_buttons").css("display", "inline");
-                    $(".plupload_upload_status").css("display", "inline");
-                    $.get('/Cases/GetAllCaseFileName', { id: $('#CaseKey').val() }, function (data) {
-                        allFileNames = $.parseJSON(data);
-                    });
+                    $(".plupload_upload_status").css("display", "inline");                    
                     up.refresh();
                 }
             },
             init: {
-                FileUploaded: function () {
-                    //console.log('4:uploaded');
-                    alert('iniit');
-                    $.get('/Cases/GetAllCaseFileName', { id: $('#CaseKey').val() }, function (data) {
-                        allFileNames = $.parseJSON(data);
-                    });
+                FileUploaded: function () {                   
                     getCaseFiles();
                 },
 
@@ -702,6 +708,10 @@ function bindDeleteCaseFileBehaviorToDeleteButtons() {
         var pressedDeleteFileButton = this;
         $.post("/Cases/DeleteCaseFile", { id: key, fileName: fileName }, function () {
             $(pressedDeleteFileButton).parents('tr:first').remove();
+            var fileNames = $('#CaseFileNames').val();
+            fileNames = fileNames.replace(fileName + "|", "");
+            fileNames = fileNames.replace("|" + fileName, "");
+            $('#CaseFileNames').val(fileNames);
         });
     });
 }

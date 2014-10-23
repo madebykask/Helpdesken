@@ -378,10 +378,10 @@
         {
             CaseInputViewModel m = null;
           
-            if (caseLanguageId == null)
+            //if (caseLanguageId == null)
                SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
-            else
-               SessionFacade.CurrentCaseLanguageId = (int) caseLanguageId.Value;
+            //else
+            //   SessionFacade.CurrentCaseLanguageId = (int) caseLanguageId.Value;
 
             if (SessionFacade.CurrentUser != null)
                 if (SessionFacade.CurrentUser.CreateCasePermission == 1)
@@ -852,48 +852,48 @@
             return this.PartialView("_CaseFiles", model);
         }
 
-        [HttpPost]
-        public string GetSafeFileName(string id, string name)
-        {                                    
-            if (GuidHelper.IsGuid(id))
-            {
-                if (this.userTemporaryFilesStorage.FileExists(name, id, ModuleName.Cases))                
-                    name = DateTime.Now.ToString() + '_' + name;                
-            }
-            else
-            {
-                if (this._caseFileService.FileExists(int.Parse(id), name))                                 
-                    name = DateTime.Now.ToString() + '_' + name;                                
-            }
+        //[HttpPost]
+        //public string GetSafeFileName(string id, string name)
+        //{                                    
+        //    if (GuidHelper.IsGuid(id))
+        //    {
+        //        if (this.userTemporaryFilesStorage.FileExists(name, id, ModuleName.Cases))                
+        //            name = DateTime.Now.ToString() + '_' + name;                
+        //    }
+        //    else
+        //    {
+        //        if (this._caseFileService.FileExists(int.Parse(id), name))                                 
+        //            name = DateTime.Now.ToString() + '_' + name;                                
+        //    }
 
-            JavaScriptSerializer serializer = new JavaScriptSerializer();
-            return serializer.Serialize(name);            
-        } 
+        //    JavaScriptSerializer serializer = new JavaScriptSerializer();
+        //    return serializer.Serialize(name);            
+        //} 
          
 
-        [HttpGet]
-        public string GetAllCaseFileName(string id)
-        {            
-            var files = GuidHelper.IsGuid(id)
-                                ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Cases)
-                                : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
+        //[HttpGet]
+        //public string GetAllCaseFileName(string id)
+        //{            
+        //    var files = GuidHelper.IsGuid(id)
+        //                        ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Cases)
+        //                        : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
 
-            JavaScriptSerializer  serializer = new JavaScriptSerializer();  
-            string jsonString = serializer.Serialize(files);
-            return jsonString;
-        }
+        //    JavaScriptSerializer  serializer = new JavaScriptSerializer();  
+        //    string jsonString = serializer.Serialize(files);
+        //    return jsonString;
+        //}
 
-        [HttpGet]
-        public string GetAllLogFileName(string id)
-        {            
-            var files = GuidHelper.IsGuid(id)
-                                ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Log)
-                                : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
+        //[HttpGet]
+        //public string GetAllLogFileName(string id)
+        //{            
+        //    var files = GuidHelper.IsGuid(id)
+        //                        ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Log)
+        //                        : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
 
-            JavaScriptSerializer serializer = new JavaScriptSerializer();
-            string jsonString = serializer.Serialize(files);
-            return jsonString;
-        }       
+        //    JavaScriptSerializer serializer = new JavaScriptSerializer();
+        //    string jsonString = serializer.Serialize(files);
+        //    return jsonString;
+        //}       
  
         public RedirectToRouteResult MarkAsUnread(int id, int customerId)
         {
@@ -927,7 +927,7 @@
                     //throw new HttpException(409 , "Already file exist!"); because it take a long time.
 
                     //this.userTemporaryFilesStorage.DeleteFile(name, id, ModuleName.Cases);                               
-                    //name = DateTime.Now.ToString() + '_' + name;
+                    name = DateTime.Now.ToString() + '-' + name;
                 }                
                 this.userTemporaryFilesStorage.AddFile(uploadedData, name, id, ModuleName.Cases);                               
             }
@@ -938,7 +938,7 @@
                     //return;
                     //throw new HttpException(409, "Already file exist!");    because it take a long time.
                     //this._caseFileService.DeleteByCaseIdAndFileName(int.Parse(id), name);   
-                    //name =  DateTime.Now.ToString() + '_' + name;
+                    name =  DateTime.Now.ToString() + '_' + name;
                 }
 
                 var caseFileDto = new CaseFileDto(
@@ -1483,7 +1483,7 @@
                 var markCaseAsRead = string.IsNullOrWhiteSpace(redirectFrom);
                 m.case_ = this._caseService.GetCaseById(caseId, markCaseAsRead);
                 customerId = customerId == 0 ? m.case_.Customer_Id : customerId;
-                SessionFacade.CurrentCaseLanguageId = m.case_.RegLanguage_Id;
+                SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId; //m.case_.RegLanguage_Id;
             }
 
             var cu = this._customerUserService.GetCustomerSettings(customerId, userId);
@@ -1505,7 +1505,8 @@
                 m.MinWorkingTime = cs.MinRegWorkingTime != 0 ? cs.MinRegWorkingTime : 30;
                 m.CaseFilesModel = new CaseFilesModel();
                 m.LogFilesModel = new FilesModel();
-                
+                m.CaseFileNames = GetCaseFileNames(caseId.ToString());
+                m.CaseFileNames = GetLogFileNames(caseId.ToString());
 
                 if (caseId == 0)
                 {
@@ -2151,6 +2152,26 @@
             }
 
             return res;
+        }
+
+        private string GetCaseFileNames(string id)
+        {            
+            var files = GuidHelper.IsGuid(id)
+                                ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Cases)
+                                : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
+
+            return String.Join("|", files);
+
+        }
+
+        private string GetLogFileNames(string id)
+        {
+            var files = GuidHelper.IsGuid(id)
+                                ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Log)
+                                : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
+
+            return String.Join("|", files);
+
         }
         #endregion
 
