@@ -119,10 +119,10 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         public IEnumerable<LanguageOverview> GetActiveLanguages()
         {
-            var entities = this.GetSecuredEntities(this.Table
+            var entities = this.Table
                     .Where(l => l.IsActive > 0)
                     .OrderBy(l => l.Name)
-                    .ToList());
+                    .ToList();
                 
             return entities
                 .Select(l => new LanguageOverview

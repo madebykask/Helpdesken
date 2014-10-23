@@ -1067,8 +1067,8 @@ $(function () {
         CaseInvoiceOrderViewModel: function () {
             this.Id = null;
             this.ArtNoHeader = "Art no";
-            this.NameHeader = "Description";
-            this.NameEngHeader = "Description(eng)";
+            this.NameHeader = "Article name SWE";
+            this.NameEngHeader = "Article name ENG";
             this.UnitsHeader = "Units";
             this.TypeHeader = "Type";
             this.PpuHeader = "PPU";

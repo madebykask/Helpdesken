@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
     using System.Net;
     using System.Web;
@@ -10,7 +9,6 @@
 
     using DH.Helpdesk.BusinessData.Models.Faq.Input;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Repositories;
@@ -23,7 +21,6 @@
     using DH.Helpdesk.Web.Models.Faq.Input;
     using DH.Helpdesk.Web.Models.Faq.Output;
 
-    using IndexModel = DH.Helpdesk.Web.Models.Changes.IndexModel;
     using NewFaq = DH.Helpdesk.Services.BusinessModels.Faq.NewFaq;
     using NewFaqFile = DH.Helpdesk.BusinessData.Models.Faq.Input.NewFaqFile;
 
@@ -141,7 +138,7 @@
         [HttpGet]
         public ViewResult EditFaq(int id)
         {
-            var faq = this.faqRepository.FindById(id);
+            var faq = this.faqService.FindById(id);
             if (faq == null)
             {
                 throw new HttpException((int)HttpStatusCode.NotFound, null);
@@ -192,7 +189,7 @@
         [HttpGet]
         public JsonResult Faqs(int categoryId)
         {
-            var faqOverviews = this.faqRepository.FindOverviewsByCategoryId(categoryId);
+            var faqOverviews = this.faqService.FindOverviewsByCategoryId(categoryId);
 
             var faqModels =
                 faqOverviews.Select(
@@ -204,7 +201,7 @@
         [HttpGet]
         public JsonResult FaqsDetailed(int categoryId)
         {
-            var faqDetailedOverviews = this.faqRepository.FindDetailedOverviewsByCategoryId(categoryId);
+            var faqDetailedOverviews = this.faqService.FindDetailedOverviewsByCategoryId(categoryId);
             var faqIds = faqDetailedOverviews.Select(f => f.Id).ToList();
             var faqFiles = this.faqFileRepository.FindFileOverviewsByFaqIds(faqIds);
             var faqModels = new List<FaqDetailedOverviewModel>(faqFiles.Count);
@@ -251,7 +248,7 @@
             var categoriesWithSubcategories =
                 this.faqCategoryRepository.FindCategoriesWithSubcategoriesByCustomerId(currentCustomerId);
 
-            Models.Faq.Output.IndexModel model;
+            IndexModel model;
             if (!categoriesWithSubcategories.Any())
             {
                 model = this.indexModelFactory.Create(null, null, null);
@@ -259,7 +256,7 @@
             }
 
             var firstCategoryId = categoriesWithSubcategories.First().Id;
-            var faqs = this.faqRepository.FindOverviewsByCategoryId(firstCategoryId);
+            var faqs = this.faqService.FindOverviewsByCategoryId(firstCategoryId);
             model = this.indexModelFactory.Create(categoriesWithSubcategories, firstCategoryId, faqs);
 
             return this.View(model);
@@ -328,7 +325,7 @@
         [HttpGet]
         public JsonResult Search(string pharse)
         {
-            var faqOverviews = this.faqRepository.SearchOverviewsByPharse(pharse, SessionFacade.CurrentCustomer.Id);
+            var faqOverviews = this.faqService.SearchOverviewsByPharse(pharse, SessionFacade.CurrentCustomer.Id);
 
             var faqModels =
                 faqOverviews.Select(
@@ -340,7 +337,7 @@
         [HttpGet]
         public JsonResult SearchDetailed(string pharse)
         {
-            var faqDetailedOverviews = this.faqRepository.SearchDetailedOverviewsByPharse(
+            var faqDetailedOverviews = this.faqService.SearchDetailedOverviewsByPharse(
                 pharse, SessionFacade.CurrentCustomer.Id);
 
             var faqIds = faqDetailedOverviews.Select(f => f.Id).ToList();

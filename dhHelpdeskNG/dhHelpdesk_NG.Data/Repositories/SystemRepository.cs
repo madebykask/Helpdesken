@@ -84,11 +84,11 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         public List<ItemOverview> FindOverviews(int customerId)
         {
-           var systems = this.GetSecuredEntities(this.Table
+           var systems = this.Table
                     .Where(s => s.Customer_Id == customerId)
                     .Select(s => new { s.SystemName, s.Id })
                     .OrderBy(s => s.SystemName)
-                    .ToList());
+                    .ToList();
 
             return systems
                 .Select(s => new ItemOverview(s.SystemName, s.Id.ToString(CultureInfo.InvariantCulture))).ToList();

@@ -951,3 +951,12 @@ function initDataTable() {
     });
 }
 // TABLE PAGING END
+
+
+// YES and NO SWITCH FOR CHECKBOXES
+$('.switchcheckbox').bootstrapSwitch('onText', 'Ja');
+$('.switchcheckbox').bootstrapSwitch('offText', 'Nej');
+$('.switchcheckbox').bootstrapSwitch('size', 'small');
+$('.switchcheckbox').bootstrapSwitch('onColor', 'success');
+
+// YES and NO SWITCH FOR CHECKBOXES END

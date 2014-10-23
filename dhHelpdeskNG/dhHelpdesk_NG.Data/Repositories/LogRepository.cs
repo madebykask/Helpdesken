@@ -3,7 +3,6 @@ namespace DH.Helpdesk.Dal.Repositories
     using System.Collections.Generic;
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
@@ -80,10 +79,10 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         public IEnumerable<BusinessData.Models.Logs.Output.LogOverview> GetCaseLogOverviews(int caseId)
         {
-                var entities = this.GetSecuredEntities(this.Table                    
+                var entities = this.Table                    
                     .Where(l => l.Case_Id == caseId)  
                     .OrderByDescending(l => l.LogDate)
-                    .ToList());
+                    .ToList();
 
                 return entities.Select(l => new BusinessData.Models.Logs.Output.LogOverview()
                         {

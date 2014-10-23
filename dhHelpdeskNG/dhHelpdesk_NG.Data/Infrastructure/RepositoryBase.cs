@@ -20,7 +20,6 @@ namespace DH.Helpdesk.Dal.Infrastructure
     using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.Dal.DbContext;
     using DH.Helpdesk.Dal.Infrastructure.Context;
-    using DH.Helpdesk.Dal.Infrastructure.Security;
     using DH.Helpdesk.Domain;
 
     /// <summary>
@@ -193,7 +192,7 @@ namespace DH.Helpdesk.Dal.Infrastructure
         /// </param>
         public virtual void Delete(Expression<Func<T, bool>> where)
         {
-            IEnumerable<T> objects = this.GetSecuredEntities(this.dbset.Where(where).AsEnumerable());
+            IEnumerable<T> objects = this.dbset.Where(where).AsEnumerable();
             foreach (T obj in objects)
             {
                 this.dbset.Attach(obj);
@@ -212,7 +211,7 @@ namespace DH.Helpdesk.Dal.Infrastructure
         /// </returns>
         public virtual T GetById(int id)
         {
-            return this.GetSecuredEntities(new[] { this.dbset.Find(id) }).FirstOrDefault();
+            return this.dbset.Find(id);
         }
 
         /// <summary>
@@ -226,7 +225,7 @@ namespace DH.Helpdesk.Dal.Infrastructure
         /// </returns>
         public virtual T GetById(string id)
         {
-            return this.GetSecuredEntities(new[] { this.dbset.Find(id) }).FirstOrDefault();
+            return this.dbset.Find(id);
         }
 
         /// <summary>
@@ -237,7 +236,7 @@ namespace DH.Helpdesk.Dal.Infrastructure
         /// </returns>
         public virtual IEnumerable<T> GetAll()
         {
-            return this.GetSecuredEntities(this.dbset);
+            return this.dbset;
         }
 
         /// <summary>
@@ -251,7 +250,7 @@ namespace DH.Helpdesk.Dal.Infrastructure
         /// </returns>
         public virtual IEnumerable<T> GetMany(Expression<Func<T, bool>> where)
         {
-            return this.GetSecuredEntities(this.dbset.Where(where));
+            return this.dbset.Where(where);
         }
 
         /// <summary>
@@ -265,7 +264,7 @@ namespace DH.Helpdesk.Dal.Infrastructure
         /// </returns>
         public virtual T Get(Expression<Func<T, bool>> where)
         {
-            return this.GetSecuredEntities(this.dbset.Where(where).AsNoTracking()).FirstOrDefault();
+            return this.dbset.Where(where).AsNoTracking<T>().FirstOrDefault<T>();
         }
 
         /// <summary>
@@ -289,23 +288,6 @@ namespace DH.Helpdesk.Dal.Infrastructure
         {
             var initializeAfterCommit = new Action(() => businessModel.Id = entity.Id);
             this.initializeAfterCommitActions.Add(initializeAfterCommit);
-        }
-
-        /// <summary>
-        /// The get secured entities.
-        /// </summary>
-        /// <param name="entities">
-        /// The entities.
-        /// </param>
-        /// <typeparam name="TEntity">
-        /// entity type
-        /// </typeparam>
-        /// <returns>
-        /// The result.
-        /// </returns>
-        protected IEnumerable<TEntity> GetSecuredEntities<TEntity>(IEnumerable<TEntity> entities)
-        {
-            return entities.CheckAccess(this.WorkContext);
         }
     }
 } 

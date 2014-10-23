@@ -45,7 +45,12 @@
             this.Property(f => f.ShowOnStartPage).IsRequired();
             this.Property(f => f.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(f => f.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-           
+            
+            this.HasMany(f => f.FAQFiles)
+                .WithRequired(f => f.FAQ)
+                .HasForeignKey(f => f.FAQ_Id)
+                .WillCascadeOnDelete(false);
+
             this.Property(f => f.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.ToTable("tblFAQ");
         }

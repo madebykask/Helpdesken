@@ -140,7 +140,6 @@
     <Compile Include="Infrastructure\ModelFactories\Email\IEmailFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Notifiers\Concrete\NotifierFieldSettingsFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Notifiers\INotifierFieldSettingsFactory.cs" />
-    <Compile Include="Infrastructure\Security\EntityAccess.cs" />
     <Compile Include="Infrastructure\Translate\ITranslator.cs" />
     <Compile Include="MapperData\Changes\FieldEditSettingMapperData.cs" />
     <Compile Include="MapperData\Inventory\FieldOverviewSettingMapperData.cs" />
@@ -302,6 +301,7 @@
     <Compile Include="NewInfrastructure\IUnitOfWork.cs" />
     <Compile Include="NewInfrastructure\IUnitOfWorkFactory.cs" />
     <Compile Include="NewInfrastructure\Concrete\HelpdeskSessionFactory.cs" />
+    <Compile Include="NewInfrastructure\QueryableExtensions.cs" />
     <Compile Include="Repositories\ActionSetting\Concrete\ActionSettingRepository.cs" />
     <Compile Include="Repositories\ActionSetting\IActionSettingRepository.cs" />
     <Compile Include="Repositories\CaseHistoryRepository.cs" />

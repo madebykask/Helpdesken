@@ -58,7 +58,7 @@
 
         public virtual TEntity GetById(long id)
         {
-            return this.dbset.Find(id);
+            return this.dbset.Find(id); 
         }
     }
 }

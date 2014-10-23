@@ -85,10 +85,10 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
         /// </returns>
         public IEnumerable<CausingPartOverview> GetCausingParts(int customerId)
         {
-            var entities = this.GetSecuredEntities(this.Table                    
+            var entities = this.Table                    
                     .Where(c => c.CustomerId == customerId && !c.ParentId.HasValue)
                     .OrderBy(c => c.Name)
-                    .ToList());
+                    .ToList();
 
             return entities
                 .Select(this.causingPartToBusinessModelMapper.Map);
@@ -105,9 +105,9 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
         /// </returns>
         public CausingPartOverview GetCausingPart(int causingPartId)
         {
-            var entities = this.GetSecuredEntities(this.Table                                        
+            var entities = this.Table                                        
                 .Where(c => c.Id == causingPartId)
-                .ToList());
+                .ToList();
 
             return entities
                 .Select(this.causingPartToBusinessModelMapper.Map)

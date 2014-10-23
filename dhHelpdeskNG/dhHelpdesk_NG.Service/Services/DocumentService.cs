@@ -243,7 +243,35 @@ namespace DH.Helpdesk.Services.Services
         /// </returns>
         public IList<Document> GetDocuments(int customerId)
         {
-            return this.documentRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var rep = uow.GetRepository<Document>();
+
+                var entities = rep.GetAll()                        
+                        .RestrictByWorkingGroupsAndUsers(this.workContext)
+                        .GetByCustomer(customerId)
+                        .Select(d => new
+                            {
+                                d.Id,
+                                d.Name,
+                                d.Size,
+                                d.ChangedDate,
+                                d.ChangedByUser,
+                                d.DocumentCategory_Id                                             
+                            })
+                        .OrderBy(d => d.Name)
+                        .ToList();
+               
+                return entities.Select(d => new Document
+                            {
+                                Id = d.Id,
+                                Name = d.Name,
+                                Size = d.Size,
+                                ChangedDate = d.ChangedDate,
+                                ChangedByUser = d.ChangedByUser,
+                                DocumentCategory_Id = d.DocumentCategory_Id                                             
+                            }).ToList();
+            }
         }
 
         /// <summary>
@@ -271,7 +299,17 @@ namespace DH.Helpdesk.Services.Services
         /// </returns>
         public Document GetDocument(int id)
         {
-            return this.documentRepository.GetById(id);
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var rep = uow.GetRepository<Document>();
+
+                return rep.GetAll()
+                        .IncludePath(d => d.Us)
+                        .IncludePath(d => d.WGs)
+                        .RestrictByWorkingGroupsAndUsers(this.workContext)
+                        .GetById(id)
+                        .SingleOrDefault();
+            }
         }
 
         /// <summary>
@@ -299,24 +337,32 @@ namespace DH.Helpdesk.Services.Services
         /// </returns>
         public DeleteMessage DeleteDocument(int id)
         {
-            var document = this.documentRepository.GetById(id);
-
-            if (document != null)
+            try
             {
-                try
+                using (var uow = this.unitOfWorkFactory.Create())
                 {
-                    this.documentRepository.Delete(document);
-                    this.Commit();
+                    var rep = uow.GetRepository<Document>();
 
+                    var document = rep.GetAll()
+                                  .RestrictByWorkingGroupsAndUsers(this.workContext)
+                                  .GetById(id)
+                                  .SingleOrDefault();
+
+                    if (document == null)
+                    {
+                        return DeleteMessage.Error;
+                    }
+
+                    rep.DeleteById(id);
+
+                    uow.Save();
                     return DeleteMessage.Success;
                 }
-                catch
-                {
-                    return DeleteMessage.UnExpectedError;
-                }
             }
-
-            return DeleteMessage.Error;
+            catch
+            {
+                return DeleteMessage.UnExpectedError;
+            }
         }
 
         /// <summary>
@@ -570,7 +616,33 @@ namespace DH.Helpdesk.Services.Services
         /// </returns>
         public DocumentFileOverview GetDocumentFile(int document)
         {
-            return this.documentRepository.GetDocumentFile(document);
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var repository = uow.GetRepository<Document>();
+
+                var entities = repository.GetAll()
+                        .RestrictByWorkingGroupsAndUsers(this.workContext)
+                        .Where(d => d.Id == document)
+                        .Select(d => new
+                        {
+                            d.ContentType,
+                            d.File,
+                            d.FileName,
+                            d.Size,
+                            d.Us,
+                            d.WGs
+                        })
+                        .ToList();
+
+                return entities.Select(d => new DocumentFileOverview
+                {
+                    ContentType = d.ContentType,
+                    File = d.File,
+                    FileName = d.FileName,
+                    Size = d.Size
+                })
+                .FirstOrDefault();
+            }
         }
     }
 }

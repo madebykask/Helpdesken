@@ -255,9 +255,9 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         public CaseOverview GetCaseOverview(int caseId)
         {
-            var entities = this.GetSecuredEntities(this.Table
+            var entities = this.Table
                 .Where(c => c.Id == caseId)
-                .ToList());
+                .ToList();
 
             return entities.Select(c => new CaseOverview
             {

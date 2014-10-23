@@ -40,17 +40,6 @@ namespace DH.Helpdesk.Dal.Repositories
         /// The result.
         /// </returns>
         List<CategoryWithSubCategory> FindCategoriesWithSubcategories(int customerId);
-
-        /// <summary>
-        /// The get document file.
-        /// </summary>
-        /// <param name="document">
-        /// The document.
-        /// </param>
-        /// <returns>
-        /// The <see cref="DocumentFileOverview"/>.
-        /// </returns>
-        DocumentFileOverview GetDocumentFile(int document);
     }
 
     /// <summary>
@@ -106,49 +95,6 @@ namespace DH.Helpdesk.Dal.Repositories
 
             return root;
         }        
-
-        /// <summary>
-        /// The get document file.
-        /// </summary>
-        /// <param name="document">
-        /// The document.
-        /// </param>
-        /// <returns>
-        /// The <see cref="DocumentFileOverview"/>.
-        /// </returns>
-        public DocumentFileOverview GetDocumentFile(int document)
-        {
-            var entities = this.GetSecuredEntities(this.Table
-                .Where(d => d.Id == document)
-                .Select(d => new
-                {
-                    d.ContentType,
-                    d.File,
-                    d.FileName,
-                    d.Size,
-                    d.Us,
-                    d.WGs                                     
-                })
-                .ToList()
-                .Select(d => new Document
-                {
-                    ContentType = d.ContentType,
-                    File = d.File,
-                    FileName = d.FileName,
-                    Size = d.Size,
-                    Us = d.Us,
-                    WGs = d.WGs
-                }));
-
-            return entities.Select(d => new DocumentFileOverview
-                {
-                    ContentType = d.ContentType,
-                    File = d.File,
-                    FileName = d.FileName,
-                    Size = d.Size
-                })
-                .FirstOrDefault();
-        }
     }
 
     /// <summary>

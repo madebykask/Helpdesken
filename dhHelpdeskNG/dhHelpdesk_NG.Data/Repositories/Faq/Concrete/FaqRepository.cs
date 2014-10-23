@@ -1,21 +1,17 @@
-﻿using DH.Helpdesk.Dal.Infrastructure.Context;
-
-namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
+﻿namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
 {
-    using System.Collections.Generic;
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Faq.Input;
-    using DH.Helpdesk.BusinessData.Models.Faq.Output;
     using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Domain.Faq;
 
     public sealed class FaqRepository : RepositoryBase<FaqEntity>, IFaqRepository
     {
         #region Constructors and Destructors
 
-        public FaqRepository(IDatabaseFactory databaseFactory,
-            IWorkContext workContext)
+        public FaqRepository(IDatabaseFactory databaseFactory, IWorkContext workContext)
             : base(databaseFactory, workContext)
         {
         }
@@ -44,137 +40,6 @@ namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
 
             this.DataContext.FAQs.Add(faqEntity);
             this.InitializeAfterCommit(newFaq, faqEntity);
-        }
-
-        public void DeleteById(int faqId)
-        {
-            var faq = GetById(faqId);
-            this.DataContext.FAQs.Remove(faq);
-        }
-
-        public List<FaqOverview> FindOverviewsByCategoryId(int categoryId)
-        {
-            var a =
-                this.FindFaqsByCategoryId(categoryId)
-                    .Select(f => new FaqOverview { CreatedDate = f.CreatedDate, Id = f.Id, Text = f.FAQQuery });
-
-            if (a == null)
-            {
-                
-            }
-
-            return
-                this.FindFaqsByCategoryId(categoryId)
-                    .Select(f => new FaqOverview { CreatedDate = f.CreatedDate, Id = f.Id, Text = f.FAQQuery })
-                    .ToList();
-        }
-
-        /// <summary>
-        /// The find FAQ by category id.
-        /// </summary>
-        /// <param name="categoryId">
-        /// The category id.
-        /// </param>
-        /// <returns>
-        /// The result.
-        /// </returns>
-        private IEnumerable<FaqEntity> FindFaqsByCategoryId(int categoryId)
-        {
-            return this.GetSecuredEntities(this.Table
-                .Where(f => f.FAQCategory_Id == categoryId && !string.IsNullOrEmpty(f.FAQQuery)));
-        }
-
-        public List<FaqDetailedOverview> FindDetailedOverviewsByCategoryId(int categoryId)
-        {
-            var faqEntities = this.FindFaqsByCategoryId(categoryId);
-
-            return
-                faqEntities.Select(
-                    f =>
-                    new FaqDetailedOverview
-                        {
-                            Answer = f.Answer,
-                            CreatedDate = f.CreatedDate,
-                            Id = f.Id,
-                            InternalAnswer = f.Answer_Internal,
-                            Text = f.FAQQuery,
-                            UrlOne = f.URL1,
-                            UrlTwo = f.URL2
-                        }).ToList();
-        }
-
-        /// <summary>
-        /// The search by phrase.
-        /// </summary>
-        /// <param name="pharse">
-        /// The phrase.
-        /// </param>
-        /// <param name="customerId">
-        /// The customer id.
-        /// </param>
-        /// <returns>
-        /// The result.
-        /// </returns>
-        private IEnumerable<FaqEntity> SearchByPharse(string pharse, int customerId)
-        {
-            var pharseInLowerCase = pharse.ToLower();
-
-            return this.GetSecuredEntities(this.Table
-                    .Where(f => f.Customer_Id == customerId)
-                    .Where(
-                        f =>
-                        f.FAQQuery.ToLower().Contains(pharseInLowerCase)
-                        || f.Answer.ToLower().Contains(pharseInLowerCase)
-                        || f.Answer_Internal.ToLower().Contains(pharseInLowerCase)));
-        }
-
-        public List<FaqDetailedOverview> SearchDetailedOverviewsByPharse(string pharse, int customerId)
-        {
-            var faqEntities = this.SearchByPharse(pharse, customerId);
-
-            return
-                faqEntities.Select(
-                    f =>
-                    new FaqDetailedOverview
-                        {
-                            Answer = f.Answer,
-                            CreatedDate = f.CreatedDate,
-                            Id = f.Id,
-                            InternalAnswer = f.Answer_Internal,
-                            Text = f.FAQQuery,
-                            UrlOne = f.URL1,
-                            UrlTwo = f.URL2
-                        }).ToList();
-        }
-
-        public Faq FindById(int faqId)
-        {
-            var faqEntity = GetById(faqId);
-
-            return new Faq
-                       {
-                           Answer = faqEntity.Answer,
-                           ChangedDate = faqEntity.ChangedDate,
-                           CreatedDate = faqEntity.CreatedDate,
-                           CustomerId = faqEntity.Customer_Id.Value,
-                           FaqCategoryId = faqEntity.FAQCategory_Id,
-                           Id = faqEntity.Id,
-                           InformationIsAvailableForNotifiers = faqEntity.InformationIsAvailableForNotifiers != 0,
-                           InternalAnswer = faqEntity.Answer_Internal,
-                           Question = faqEntity.FAQQuery,
-                           ShowOnStartPage = faqEntity.ShowOnStartPage != 0,
-                           UrlOne = faqEntity.URL1,
-                           UrlTwo = faqEntity.URL2,
-                           WorkingGroupId = faqEntity.WorkingGroup_Id
-                       };
-        }
-
-        public List<FaqOverview> SearchOverviewsByPharse(string pharse, int customerId)
-        {
-            return
-                this.SearchByPharse(pharse, customerId)
-                    .Select(f => new FaqOverview { CreatedDate = f.CreatedDate, Id = f.Id, Text = f.FAQQuery })
-                    .ToList();
         }
 
         /// <summary>
