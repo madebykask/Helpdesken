@@ -227,6 +227,11 @@
             this.SendMails(mails, operationContext.DateAndTime);
         }
 
+        public void Remind(string actionAbsolutePath, int circularId)
+        {
+
+        }
+
         public QuestionnaireOverview GetQuestionnaire(Guid guid, OperationContext operationContext)
         {
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())

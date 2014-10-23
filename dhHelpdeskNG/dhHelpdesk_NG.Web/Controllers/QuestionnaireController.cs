@@ -635,7 +635,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
-        public ViewResult Remind()
+        public ViewResult Remind(int circularId)
         {
             throw new NotImplementedException();
         }
@@ -674,7 +674,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
-        public ViewResult Questionnaire(AnswersViewModel model)
+        public RedirectToRouteResult Questionnaire(AnswersViewModel model)
         {
             List<Answer> ids =
                 model.Questions.Where(x => x.SelectedOptionId != null)
@@ -685,7 +685,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             this._circularService.SaveAnswers(participant);
 
-            return null;
+            return this.RedirectToAction("Index", "Home");
         }
 
         #region PRIVATE
