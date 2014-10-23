@@ -13,34 +13,34 @@
             this.IsActive = true;
         }
 
-        [LocalizedDisplay("Project Number")]
+        [LocalizedDisplay("Projektnummer")]
         public int Id { get; set; }
 
         [LocalizedRequired]
         [LocalizedStringLength(50)]
-        [LocalizedDisplay("Project Name")]
+        [LocalizedDisplay("Projektnamn")]
         public string Name { get; set; }
 
-        [LocalizedDisplay("Project Manager")]
+        [LocalizedDisplay("Projektledare")]
         public int? ProjectManagerId { get; set; }
 
-        [LocalizedDisplay("State")]
+        [LocalizedDisplay("Status")]
         public bool IsActive { get; set; }
 
         [LocalizedStringLength(2000)]
-        [LocalizedDisplay("Project Description")]
+        [LocalizedDisplay("Beskrivning")]
         public string Description { get; set; }
 
-        [LocalizedDisplay("Project Date")]
+        [LocalizedDisplay("Projektdatum")]
         public DateTime? StartDate { get; set; }
 
-        [LocalizedDisplay("Finishing Date")]
+        [LocalizedDisplay("Avslutsdatum")]
         public DateTime? EndDate { get; set; }
 
-        [LocalizedDisplay("Project members")]
+        [LocalizedDisplay("Projektmedlemmar")]
         public List<int> ProjectCollaboratorIds { get; set; }
 
-        [LocalizedDisplay("Project files")]
+        [LocalizedDisplay("Bifogad fil")]
         public List<int> ProjectFileNames { get; set; }
     }
 }

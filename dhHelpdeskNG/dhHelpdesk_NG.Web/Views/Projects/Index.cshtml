@@ -2,7 +2,7 @@
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
-            <li id="menu1">@Html.ActionLink(Translation.Get("New Project", Enums.TranslationSource.TextTranslation), "NewProject", null, new { @class = "btn" })</li>
+            <li id="menu1">@Html.ActionLink(Translation.Get("Nytt projekt", Enums.TranslationSource.TextTranslation), "NewProject", null, new { @class = "btn" })</li>
         </ul>
     </div>
 </div>
@@ -11,7 +11,7 @@
     <div class="container">
         <ul class="nav nav-tabs">
             <li class="active">
-                <a href="#fragment-1">@Translation.Get("Projects", Enums.TranslationSource.TextTranslation)</a>
+                <a href="#fragment-1">@Translation.Get("Projekt", Enums.TranslationSource.TextTranslation)</a>
             </li>
         </ul>
         <div class="tab-content">
@@ -23,34 +23,34 @@
                             {
                                 <table>
                                     <tr>
-                                        <td>@Translation.Get("Show", Enums.TranslationSource.TextTranslation)
+                                        <td>@Translation.Get("Visa", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td>
                                             <label class="radio inline">
-                                            @Html.RadioButtonFor(x => x.Filter.State, 1, new { @checked = Model.Filter.State == Enums.Show.Active }) @Translation.Get("Active", Enums.TranslationSource.TextTranslation)
+                                            @Html.RadioButtonFor(x => x.Filter.State, 1, new { @checked = Model.Filter.State == Enums.Show.Active }) @Translation.Get("Pågående projekt", Enums.TranslationSource.TextTranslation)
                                             </label>
                                             <label class="radio inline">
-                                            @Html.RadioButtonFor(x => x.Filter.State, 0, new { @checked = Model.Filter.State == Enums.Show.Inactive }) @Translation.Get("Finished", Enums.TranslationSource.TextTranslation)
+                                            @Html.RadioButtonFor(x => x.Filter.State, 0, new { @checked = Model.Filter.State == Enums.Show.Inactive }) @Translation.Get("Avslutade projekt", Enums.TranslationSource.TextTranslation)
                                             
                                             </label>
                                             <label class="radio inline">
-                                            @Html.RadioButtonFor(x => x.Filter.State, 2, new { @checked = Model.Filter.State == Enums.Show.All }) @Translation.Get("All", Enums.TranslationSource.TextTranslation)
+                                            @Html.RadioButtonFor(x => x.Filter.State, 2, new { @checked = Model.Filter.State == Enums.Show.All }) @Translation.Get("Alla projekt", Enums.TranslationSource.TextTranslation)
                                             
                                             </label>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>@Translation.Get("Project Manager", Enums.TranslationSource.TextTranslation)
+                                        <td>@Translation.Get("Projektledare", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td>
                                             @Html.DropDownListFor(x => x.Filter.ProjectManagerId, Model.Users, string.Empty)
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>@Translation.Get("Search", Enums.TranslationSource.TextTranslation)
+                                        <td>@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td>
-                                            @Html.EditorFor(x => x.Filter.ProjectNameLikeString) <input type ="submit" value="@Translation.Get("Search", Enums.TranslationSource.TextTranslation)" name="btnSearch" class="btn"/>
+                                            @Html.EditorFor(x => x.Filter.ProjectNameLikeString) <input type ="submit" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" name="btnSearch" class="btn"/>
                                         </td>
                                         <td>
                                             

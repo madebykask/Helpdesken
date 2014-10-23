@@ -10,36 +10,36 @@
 
         public int ProjectId { get; set; }
 
-        [LocalizedDisplay("Responsible")]
+        [LocalizedDisplay("Ansvarig")]
         public int? UserId { get; set; }
 
         [LocalizedRequired]
         [LocalizedStringLength(50)]
-        [LocalizedDisplay("Sub Project")]
+        [LocalizedDisplay("Delprojekt")]
         public string Name { get; set; }
 
         [Range(0, 99)]
         [LocalizedDisplay("Pos")]
         public int Position { get; set; }
 
-        [LocalizedDisplay("State")]
+        [LocalizedDisplay("Status")]
         public ScheduleStates? State { get; set; }
 
         [Range(0, 99999)]
-        [LocalizedDisplay("Time")]
+        [LocalizedDisplay("Tid")]
         public int Time { get; set; }
 
         [LocalizedStringLength(1000)]
-        [LocalizedDisplay("Description")]
+        [LocalizedDisplay("Beskrivning")]
         public string Description { get; set; }
 
-        [LocalizedDisplay("Start Date")]
+        [LocalizedDisplay("Startdatum")]
         public string StartDate { get; set; }
 
-        [LocalizedDisplay("Finish Date")]
+        [LocalizedDisplay("Slutdatum")]
         public string FinishDate { get; set; }
 
-        [LocalizedDisplay("Case")]
+        [LocalizedDisplay("Ärende")]
         public decimal? CaseNumber { get; set; }
     }
 }

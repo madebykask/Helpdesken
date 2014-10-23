@@ -3,7 +3,7 @@
 
 <div class="container">
     @Html.ValidationSummary()
-    <h4>@Translation.Get("General", Enums.TranslationSource.TextTranslation)</h4>
+    <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
     <div class="row">
         <div class="span12">
             <table>
@@ -28,7 +28,7 @@
             </table>
         </div>
     </div>
-    <h4><i class="icon-plus-sign project-expand-button" style="cursor: pointer"></i>@Translation.Get("Other", Enums.TranslationSource.TextTranslation)</h4>
+    <h4><i class="icon-plus-sign project-expand-button" style="cursor: pointer"></i>@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</h4>
     <div class="row expanded-project-content">
         <div class="span12">
             <table>
@@ -72,10 +72,10 @@
                     <td>@Html.LabelFor(x => x.ProjectEditModel.IsActive)
                     </td>
                     <td>
-                        @Translation.Get("Active", Enums.TranslationSource.TextTranslation)
+                        @Translation.Get("Pågående", Enums.TranslationSource.TextTranslation)
                         @Html.RadioButtonFor(x => x.ProjectEditModel.IsActive, true)
 
-                        @Translation.Get("Finished", Enums.TranslationSource.TextTranslation)
+                        @Translation.Get("Avslutad", Enums.TranslationSource.TextTranslation)
                         @Html.RadioButtonFor(x => x.ProjectEditModel.IsActive, false)
                     </td>
                 </tr>
@@ -84,7 +84,7 @@
                         <div id="filesContainer">
                             @Html.Action("AttachedFiles", new { guid = Model.Guid, area = string.Empty })
                         </div>
-                        <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Upload", Enums.TranslationSource.TextTranslation)</a>
+                        <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation)</a>
                     </td>
                 </tr>
             </table>
@@ -163,6 +163,6 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close", Enums.TranslationSource.TextTranslation)</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</button>
     </div>
 </div>

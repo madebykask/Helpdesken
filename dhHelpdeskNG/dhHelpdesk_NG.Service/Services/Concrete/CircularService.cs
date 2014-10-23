@@ -27,9 +27,6 @@
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Questionnaire;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.User;
 
-    using LinqLib.Operators;
-    using LinqLib.Sequence;
-
     public class CircularService : ICircularService
     {
         #region Fields
