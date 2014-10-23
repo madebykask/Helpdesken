@@ -23,9 +23,6 @@
                         <th>
                             @Translation.Get("Datum")
                         </th>                        
-                       @* <th>
-                            @Translation.Get("Anmälare")
-                        </th> *@                       
                     </tr>
                 </thead>
                 <tbody>
@@ -33,17 +30,14 @@
                     {     
                         <tr rel="tooltip" title="<strong>@Translation.Get("Anmälare"):</strong> @Html.DisplayFor(m => myCase.InitiatorName)<br /><strong>@Translation.Get("Beskrivning"):</strong> @Html.DisplayFor(m => myCase.Description) " style="cursor: pointer" onclick="window.location.href = '@Url.Action("Edit", "Cases", new { id = myCase.Id })'">
                             <td>
-                                @Html.DisplayFor(m => myCase.Id)
+                                @myCase.CaseNumber 
                             </td>
                             <td>
                                 @Html.DisplayFor(m => myCase.Subject)
                             </td>
                             <td>
-                                @myCase.RegistrationDate.ToFormattedDateTime()
+                                @myCase.ChangedDate.ToFormattedDateTime()
                             </td>
-                            @*<td>
-                                @Html.DisplayFor(m => myCase.InitiatorName)
-                            </td>*@
                         </tr>
                     }
                 </tbody>

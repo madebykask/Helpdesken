@@ -408,17 +408,35 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public MyCase[] GetMyCases(int userId, int? count = null)
         {
-            var entities = this.DataContext.Cases
-                            .Where(c => c.CaseResponsibleUser_Id == userId && c.FinishingDate == null)
-                            .OrderByDescending(c => c.RegTime)
-                            .Select(c => new
+             var entities = from cs in this.DataContext.Cases
+                            join cus in this.DataContext.Customers on cs.Customer_Id equals cus.Id
+                            where (cs.Performer_User_Id == userId && cs.FinishingDate == null)
+                            select new
                             {
-                               c.Id,
-                               RegistrationDate = c.RegTime,
-                               Subject = c.Caption,
-                               InitiatorName = c.PersonsName,
-                               Description = c.Description
-                            });
+                               Id = cs.Id,
+                               CaseNumber = cs.CaseNumber, 
+                               RegistrationDate = cs.RegTime,
+                               ChangedDate = cs.ChangeTime, 
+                               Subject = cs.Caption,
+                               InitiatorName = cs.PersonsName,
+                               Description = cs.Description,
+                               CustomerName = cus.Name
+                            };
+
+            //var entities = this.DataContext.Cases
+            //               .Where(c => c.Performer_User_Id == userId && c.FinishingDate == null)
+            //               .OrderByDescending(c => c.ChangeTime)
+            //               .Select(c => new
+            //                {
+            //                   Id = c.Id,
+            //                   CaseNumber = c.CaseNumber, 
+            //                   RegistrationDate = c.RegTime,
+            //                   ChangedDate = c.ChangeTime, 
+            //                   Subject = c.Caption,
+            //                   InitiatorName = c.PersonsName,
+            //                   Description = c.Description,
+            //                   CustomerName = "CustomerName" 
+            //                });
 
             if (count.HasValue)
             {
@@ -429,10 +447,13 @@ namespace DH.Helpdesk.Dal.Repositories
                 .ToArray()
                 .Select(c => new MyCase(
                                 c.Id,
+                                c.CaseNumber, 
                                 c.RegistrationDate,
+                                c.ChangedDate, 
                                 c.Subject,
                                 c.InitiatorName,
-                                c.Description))
+                                c.Description, 
+                                c.CustomerName))
                                 .ToArray();
         }
 
