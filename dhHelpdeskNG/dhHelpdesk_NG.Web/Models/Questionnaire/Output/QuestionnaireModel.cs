@@ -1,26 +1,21 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Questionnaire.Read
+﻿namespace DH.Helpdesk.Web.Models.Questionnaire.Output
 {
     using System.Collections.Generic;
 
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class QuestionnaireOverview
+    public class QuestionnaireModel
     {
-        public QuestionnaireOverview(
+        public QuestionnaireModel(
             int id,
             string name,
             string description,
-            List<QuestionnaireQuestionOverview> questions)
+            List<QuestionnaireQuestionModel> questions)
         {
             this.Id = id;
             this.Name = name;
             this.Description = description;
             this.Questions = questions;
-        }
-
-        private QuestionnaireOverview()
-        {
-            this.Questions = new List<QuestionnaireQuestionOverview>();
         }
 
         [IsId]
@@ -32,11 +27,6 @@
         public string Description { get; private set; }
 
         [NotNull]
-        public List<QuestionnaireQuestionOverview> Questions { get; private set; }
-
-        public static QuestionnaireOverview GetDefault()
-        {
-            return new QuestionnaireOverview();
-        }
+        public List<QuestionnaireQuestionModel> Questions { get; private set; }
     }
 }

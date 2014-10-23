@@ -1,6 +1,5 @@
 ﻿namespace DH.Helpdesk.Dal.EntityConfigurations.Questionnaire
 {
-    using System.ComponentModel.DataAnnotations;
     using System.Data.Entity.ModelConfiguration;
 
     using DH.Helpdesk.Domain.Questionnaire;
@@ -18,6 +17,10 @@
                 .WithMany()
                 .HasForeignKey(r => r.QuestionnaireCircularPartic_Id)
                 .WillCascadeOnDelete(false);
+
+            this.HasMany(s => s.QuestionnaireQuestionResultEntities)
+                .WithRequired(s => s.QuestionnaireResult)
+                .HasForeignKey(s => s.QuestionnaireResult_Id);
 
             this.Property(r => r.Anonymous).IsRequired();
             this.Property(r => r.CreatedDate);

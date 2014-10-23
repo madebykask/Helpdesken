@@ -1,42 +1,85 @@
-﻿@using DH.Helpdesk.BusinessData.Models.Questionnaire.Read
-@model QuestionnaireOverview
-<div class="content">
-    <div class="container">
-        <ul class="nav nav-tabs">
-            <li class="active"></li>
-        </ul>
-        <div class="tab-content">
-            <div class="tab-pane tab-pane-border active" id="fragment-1">
-                <div class="container">
-                    <h3 style="color: gray">@Model.Name</h3>
-                    <div class="row">
-                        <div class="span12">
-                            @Model.Description
+﻿@using DH.Helpdesk.Web.Models.Questionnaire.Output
+@model QuestionnaireViewModel
+@using (Html.BeginForm("Questionnaire", "Questionnaire", FormMethod.Post, new { id = "edit_form" }))
+{
+    @Html.HiddenFor(x => x.Guid)
+    <div class="secnavs fixed">
+        <div class="pull-left">
+            <ul class="secnav">
+                <li>
+                    <input type="submit" value="@Translation.Get("Spara")" class="btn"/>
+                </li>
+                <li>
+                    @Html.CheckBoxFor(x => x.IsAnonym)
+                    @Translation.Get("Jag vill vara anonym")
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="container">
+            <ul class="nav nav-tabs">
+                <li class="active"></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane tab-pane-border active" id="fragment-1">
+                    <div class="container">
+                        <h3 style="color: gray">@Model.QuestionnaireModel.Name</h3>
+                        <div class="row">
+                            <div class="span12">
+                                @Model.QuestionnaireModel.Description
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
 
-            <div class="tab-pane tab-pane-border active" id="fragment-2">
-                <div class="container">
-                    @foreach (var question in Model.Questions)
-                    {
-                        <h5>@question.Number. @question.Question</h5>
-                        <div class="row">
-                            <div class="span12">
-                                <table class="span10">
-                                    @foreach (var option in question.Options.OrderBy(x => x.Position))
-                                    {
-                                        <tr>
-                                            <td>
-                                                @Html.RadioButton("Ok", false)
-                                                @option.Option
-                                            </td>
-                                        </tr>                                                                            
-                                    }
-                                    @if (question.IsShowNote)
-                                    {
+                <div class="tab-pane tab-pane-border active" id="fragment-2">
+                    <div class="container">
+
+                        @for (int index = 0; index < Model.QuestionnaireModel.Questions.Count; index++)
+                        {
+                            QuestionnaireQuestionModel question = Model.QuestionnaireModel.Questions[index];
+                            List<QuestionnaireQuestionModel> questions = Model.QuestionnaireModel.Questions;
+                            <h5>@(question.Number). @question.Question</h5>
+                            @Html.HiddenFor(x => questions[index].Id)
+                            <div class="row">
+                                <div class="span12">
+
+                                    @Html.ValidationMessageFor(x => questions[index].SelectedOptionId)
+
+                                    <table class="span10">
+
+                                        @foreach (QuestionnaireQuestionOptionModel option in question.Options.OrderBy(x => x.Position))
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @Html.RadioButtonFor(x => questions[index].SelectedOptionId, option.Id)
+                                                    @option.Option
+                                                </td>
+                                            </tr>
+                                        }
+
+                                        @if (question.IsShowNote)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @Html.Label("     ")
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    @Html.Label("     ")
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    @Html.Label(question.NoteText)
+                                                    @Html.TextAreaFor(x => questions[index].NoteText, new { maxlength = "2000", style = "height:80px;" })
+                                                </td>
+                                            </tr>
+                                        }
                                         <tr>
                                             <td>
                                                 @Html.Label("     ")
@@ -47,36 +90,20 @@
                                                 @Html.Label("     ")
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.Label(question.NoteText)
-                                                @Html.TextArea("note", "", new { maxlength = "2000", style = "height:80px;" })
-                                            </td>
-                                        </tr>
-                                    }
-                                    <tr>
-                                        <td>
-                                            @Html.Label("     ")
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Html.Label("     ")
-                                        </td>
-                                    </tr>
 
-                                </table>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
-                        <table border="1" class="span12">
-                            <tr>
-                                <td></td>
-                            </tr>
-                        </table>
-                    }
+                            <table border="1" class="span12">
+                                <tr>
+                                    <td></td>
+                                </tr>
+                            </table>
+                        }
+                    </div>
                 </div>
-            </div>
 
+            </div>
         </div>
     </div>
-</div>
+}

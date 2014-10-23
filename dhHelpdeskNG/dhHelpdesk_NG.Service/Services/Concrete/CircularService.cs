@@ -12,6 +12,7 @@
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Read;
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Write;
     using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.Common.Extensions.Boolean;
     using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
@@ -25,6 +26,9 @@
     using DH.Helpdesk.Services.BusinessLogic.Specifications.EmailTemplate;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Questionnaire;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.User;
+
+    using LinqLib.Operators;
+    using LinqLib.Sequence;
 
     public class CircularService : ICircularService
     {
@@ -347,35 +351,35 @@
                                                              i.NoteText,
                                                              i.ShowNote
                                                          }
-                                                 into g2
-                                                 select
-                                                     new
-                                                         {
-                                                             g2.Key.QuestionnaireQuestionId,
-                                                             g2.Key.QuestionnaireQuestion,
-                                                             g2.Key.QuestionnaireQuestionNumber,
-                                                             g2.Key.NoteText,
-                                                             g2.Key.ShowNote,
-                                                             Options = (from j in g2
-                                                                        group j by
-                                                                            new
-                                                                                {
-                                                                                    j.QuestionnaireQuestionOptionId,
-                                                                                    j.OptionValue,
-                                                                                    j.QuestionnaireQuestionOption,
-                                                                                    j.questionnaireQuestionOptionPos
-                                                                                }
-                                                                        into g3
-                                                                        select
-                                                                            new
-                                                                                {
-                                                                                    g3.Key.QuestionnaireQuestionOptionId,
-                                                                                    g3.Key.OptionValue,
-                                                                                    g3.Key.QuestionnaireQuestionOption,
-                                                                                    g3.Key.questionnaireQuestionOptionPos
-                                                                                })
-                                                     .SkipWhile(x => x.QuestionnaireQuestionOptionId == null).ToList()
-                                                         })
+                                                     into g2
+                                                     select
+                                                         new
+                                                             {
+                                                                 g2.Key.QuestionnaireQuestionId,
+                                                                 g2.Key.QuestionnaireQuestion,
+                                                                 g2.Key.QuestionnaireQuestionNumber,
+                                                                 g2.Key.NoteText,
+                                                                 g2.Key.ShowNote,
+                                                                 Options = (from j in g2
+                                                                            group j by
+                                                                                new
+                                                                                    {
+                                                                                        j.QuestionnaireQuestionOptionId,
+                                                                                        j.OptionValue,
+                                                                                        j.QuestionnaireQuestionOption,
+                                                                                        j.questionnaireQuestionOptionPos
+                                                                                    }
+                                                                                into g3
+                                                                                select
+                                                                                    new
+                                                                                        {
+                                                                                            g3.Key.QuestionnaireQuestionOptionId,
+                                                                                            g3.Key.OptionValue,
+                                                                                            g3.Key.QuestionnaireQuestionOption,
+                                                                                            g3.Key.questionnaireQuestionOptionPos
+                                                                                        })
+                                                         .SkipWhile(x => x.QuestionnaireQuestionOptionId == null).ToList()
+                                                             })
                                 .SkipWhile(x => x.QuestionnaireQuestionId == null).ToList()
                                 }).SingleOrDefault();
 
@@ -409,6 +413,55 @@
                     questions);
 
                 return questionnarie;
+            }
+        }
+
+        public void SaveAnswers(ParticipantForInsert businessModel)
+        {
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var questionnaireResultRepository = uof.GetRepository<QuestionnaireResultEntity>();
+                var questionnaireQuestionResultRepository = uof.GetRepository<QuestionnaireQuestionResultEntity>();
+
+                QuestionnaireResultEntity entity =
+                    questionnaireResultRepository.Find(
+                        x => x.QuestionnaireCircularPart.Guid == businessModel.Guid,
+                        x => x.QuestionnaireQuestionResultEntities).SingleOrDefault();
+
+                if (entity != null)
+                {
+                    entity.QuestionnaireQuestionResultEntities.ToList()
+                        .ForEach(x => questionnaireQuestionResultRepository.DeleteById(x.Id));
+                }
+                else
+                {
+                    var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
+
+                    int id = circularPartRepository.GetAll().GetByGuid(businessModel.Guid).Select(x => x.Id).Single();
+                    entity = new QuestionnaireResultEntity
+                                 {
+                                     CreatedDate = businessModel.CreatedDate,
+                                     QuestionnaireCircularPartic_Id = id
+                                 };
+                    questionnaireResultRepository.Add(entity);
+                }
+
+                entity.Anonymous = businessModel.IsAnonym.ToInt();
+
+                foreach (Answer answer in businessModel.Answers)
+                {
+                    entity.QuestionnaireQuestionResultEntities.Add(
+                        new QuestionnaireQuestionResultEntity
+                            {
+                                QuestionnaireQuestionNote =
+                                    string.IsNullOrWhiteSpace(answer.Note)
+                                        ? string.Empty
+                                        : answer.Note,
+                                QuestionnaireQuestionOption_Id = answer.OptionId
+                            });
+                }
+
+                uof.Save();
             }
         }
 

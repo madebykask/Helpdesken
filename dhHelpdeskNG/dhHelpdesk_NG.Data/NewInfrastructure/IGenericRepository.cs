@@ -4,7 +4,8 @@
     using System.Linq;
     using System.Linq.Expressions;
 
-    public interface IRepository<TEntity> where TEntity : class
+    public interface IRepository<TEntity>
+        where TEntity : class
     {
         void Add(TEntity entity);
 
@@ -19,5 +20,7 @@
         IQueryable<TEntity> GetAll();
 
         IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
+
+        IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includeProperties);
     }
 }

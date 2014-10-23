@@ -6,6 +6,7 @@ using DH.Helpdesk.Common.Extensions.Integer;
 namespace DH.Helpdesk.Web.Controllers
 {
     using System;
+    using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -14,6 +15,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Write;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Services.BusinessLogic.Changes.Concrete;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
@@ -643,7 +645,47 @@ namespace DH.Helpdesk.Web.Controllers
         {
             QuestionnaireOverview questionnarie = this._circularService.GetQuestionnaire(guid, this.OperationContext);
 
-            return this.View("Quiestionnaire", questionnarie);
+            List<QuestionnaireQuestionModel> questionnarieQuestionsModel = (from question in questionnarie.Questions
+                                                                            let options =
+                                                                                question.Options.Select(
+                                                                                    option =>
+                                                                                    new QuestionnaireQuestionOptionModel(
+                                                                                        option.Id,
+                                                                                        option.Option,
+                                                                                        option.Position)).ToList()
+                                                                            select
+                                                                                new QuestionnaireQuestionModel(
+                                                                                question.Id,
+                                                                                question.Question,
+                                                                                question.Number,
+                                                                                question.IsShowNote,
+                                                                                question.NoteText,
+                                                                                options)).ToList();
+
+            var questionnarieModel = new QuestionnaireModel(
+                questionnarie.Id,
+                questionnarie.Name,
+                questionnarie.Description,
+                questionnarieQuestionsModel);
+
+            var questionnarieViewModel = new QuestionnaireViewModel(questionnarieModel, false, guid);
+
+            return this.View("Quiestionnaire", questionnarieViewModel);
+        }
+
+        [HttpPost]
+        public ViewResult Questionnaire(AnswersViewModel model)
+        {
+            List<Answer> ids =
+                model.Questions.Where(x => x.SelectedOptionId != null)
+                    .Select(x => new Answer(x.NoteText, (int)x.SelectedOptionId))
+                    .ToList();
+
+            var participant = new ParticipantForInsert(model.Guid, model.IsAnonym, OperationContext.DateAndTime, ids);
+
+            this._circularService.SaveAnswers(participant);
+
+            return null;
         }
 
         #region PRIVATE

@@ -1,0 +1,23 @@
+namespace DH.Helpdesk.Web.Models.Questionnaire.Output
+{
+    using System;
+
+    using DH.Helpdesk.Common.ValidationAttributes;
+
+    public class QuestionnaireViewModel
+    {
+        public QuestionnaireViewModel(QuestionnaireModel questionnaireModel, bool isAnonym, Guid guid)
+        {
+            this.QuestionnaireModel = questionnaireModel;
+            this.IsAnonym = isAnonym;
+            this.Guid = guid;
+        }
+
+        [NotNull]
+        public QuestionnaireModel QuestionnaireModel { get; set; }
+
+        public bool IsAnonym { get; set; }
+
+        public Guid Guid { get; set; }
+    }
+}

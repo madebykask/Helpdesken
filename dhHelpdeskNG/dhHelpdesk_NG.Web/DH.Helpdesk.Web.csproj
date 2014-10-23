@@ -743,6 +743,12 @@
     <Compile Include="Models\Questionnaire\Input\CircularPartOverview.cs" />
     <Compile Include="Models\Questionnaire\Input\ConnectedToCircularOverview.cs" />
     <Compile Include="Models\Questionnaire\Output\CircularOverviewViewModel.cs" />
+    <Compile Include="Models\Questionnaire\Output\QuestionInputModel.cs" />
+    <Compile Include="Models\Questionnaire\Output\QuestionnaireModel.cs" />
+    <Compile Include="Models\Questionnaire\Output\QuestionnaireQuestionOptionModel.cs" />
+    <Compile Include="Models\Questionnaire\Output\QuestionnaireQuestionModel.cs" />
+    <Compile Include="Models\Questionnaire\Output\QuestionnaireViewModel.cs" />
+    <Compile Include="Models\Questionnaire\Output\QuestionViewModel.cs" />
     <Compile Include="Models\Reports\AverageSolutionTimeOptions.cs" />
     <Compile Include="Models\Reports\AverageSolutionTimeReport.cs" />
     <Compile Include="Models\Reports\IndexModel.cs" />

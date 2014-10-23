@@ -1,18 +1,19 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Questionnaire.Read
+﻿namespace DH.Helpdesk.Web.Models.Questionnaire.Output
 {
     using System.Collections.Generic;
 
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
-    public class QuestionnaireQuestionOverview
+    public class QuestionnaireQuestionModel
     {
-        public QuestionnaireQuestionOverview(
+        public QuestionnaireQuestionModel(
             int id,
             string question,
             string number,
             bool isShowNote,
             string noteText,
-            List<QuestionnaireQuestionOptionOverview> oprions)
+            List<QuestionnaireQuestionOptionModel> oprions)
         {
             this.Id = id;
             this.Question = question;
@@ -35,6 +36,9 @@
         public string NoteText { get; private set; }
 
         [NotNull]
-        public List<QuestionnaireQuestionOptionOverview> Options { get; private set; }
+        public List<QuestionnaireQuestionOptionModel> Options { get; private set; }
+
+        [LocalizedRequired]
+        public int? SelectedOptionId { get; set; }
     }
 }

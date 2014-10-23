@@ -18,11 +18,11 @@
                 .HasForeignKey(r => r.QuestionnaireResult_Id)
                 .WillCascadeOnDelete(false);
 
-            this.Property(r => r.QuestionnaireQuestionOptionId).IsRequired();
+            this.Property(r => r.QuestionnaireQuestionOption_Id).IsRequired();
 
             this.HasRequired(r => r.QuestionnaireQuestionOption)
                 .WithMany()
-                .HasForeignKey(r => r.QuestionnaireQuestionOptionId)
+                .HasForeignKey(r => r.QuestionnaireQuestionOption_Id)
                 .WillCascadeOnDelete(false);
 
             this.Property(r => r.QuestionnaireQuestionNote).IsRequired();

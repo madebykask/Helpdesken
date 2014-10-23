@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Domain.Questionnaire
 {
     using global::System;
+    using global::System.Collections.Generic;
 
     public class QuestionnaireQuestionOptionEntity : Entity
     {
@@ -19,6 +20,8 @@
         public string QuestionnaireQuestionOption { get; set; }
 
         public int QuestionnaireQuestionOptionPos { get; set; }
+
+        public virtual ICollection<QuestionnaireQuestionResultEntity> QuestionnaireQuestionResultEntities { get; set; } 
 
         #endregion
     }

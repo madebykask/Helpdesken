@@ -6,9 +6,11 @@
     using System.Linq;
     using System.Linq.Expressions;
 
-    public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : class
+    public class GenericRepository<TEntity> : IRepository<TEntity>
+        where TEntity : class
     {
         private readonly IDbContext context;
+
         private readonly IDbSet<TEntity> dbset;
 
         public GenericRepository(IDbContext context)
@@ -54,6 +56,15 @@
         public IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
         {
             return this.dbset.Where(predicate);
+        }
+
+        public IQueryable<TEntity> Find(
+            Expression<Func<TEntity, bool>> predicate,
+            params Expression<Func<TEntity, object>>[] includeProperties)
+        {
+            IQueryable<TEntity> query = this.dbset.Where(predicate);
+
+            return includeProperties.Aggregate(query, (current, property) => current.Include(property));
         }
 
         public virtual TEntity GetById(long id)

@@ -38,5 +38,7 @@
         List<ConnectedCase> GetConnectedCases(int id);
 
         void SendQuestionnaire(string actionAbsolutePath, int circularId, OperationContext operationContext);
+
+        void SaveAnswers(ParticipantForInsert businessModel);
     }
 }

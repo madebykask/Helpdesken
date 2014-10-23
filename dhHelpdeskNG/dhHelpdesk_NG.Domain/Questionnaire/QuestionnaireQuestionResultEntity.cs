@@ -8,7 +8,7 @@
 
         public virtual QuestionnaireQuestionOptionEntity QuestionnaireQuestionOption { get; set; }
 
-        public int QuestionnaireQuestionOptionId { get; set; }
+        public int QuestionnaireQuestionOption_Id { get; set; }
 
         public virtual QuestionnaireResultEntity QuestionnaireResult { get; set; }
 
