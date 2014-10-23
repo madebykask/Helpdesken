@@ -70,24 +70,6 @@
                                             <img src="@Url.Content("~/Content/icons/case.png")" />
                                             @Translation.Get("Ärendeöversikt")</a>
                                     </li>
-                                    
-                                    @*<li><a href="@Url.Action("index", "cases", new { area = "" })">
-                                            <img src="@Url.Content("~/Content/icons/casesearch.png")" alt="search" />
-                                            @Translation.Get("Sök ärende")</a></li> *@                                                                                                            
-                                    
-                                    if (model.IsProblemVisible())
-                                    {                                                
-                                        <li><a href="@Url.Action("Index", "Problems", new { area = "" })">
-                                                <img src="@Url.Content("~/Content/icons/problem.png")" />
-                                                @Translation.Get("Problem")</a></li> 
-                                    }
-                                    if (model.IsChangeManagementVisible())
-                                    {                                                
-                                        <!-- TODO finns inställningar på användare tblUsers_tblUserRole -->
-                                        <li><a href="@Url.Action("index", "changes", new { area = "" })">
-                                                <img src="@Url.Content("~/Content/icons/changes.png")" />
-                                                @Translation.Get("Ändringshantering")</a></li>
-                                    }
                                     if (model.IsCaseSolutionVisible())
                                     {
                                         <li><a href="@Url.Action("index", "casesolution", new { area = "" })">
@@ -99,6 +81,32 @@
                                         <li><a href="@Url.Action("index", "Notifiers", new { area = "" })">
                                                 <img src="@Url.Content("~/Content/icons/notifier.png")" />
                                                 @Translation.Get("Anmälare")</a></li>
+                                    }
+                                    if (model.IsChangeManagementVisible() || model.IsProblemVisible() || model.IsProjectVisible())
+                                    { 
+                                    <li class="menu-divide-border">
+
+                                    </li>
+                                    }
+                                    if (model.IsChangeManagementVisible())
+                                    {                                                
+                                        <!-- TODO finns inställningar på användare tblUsers_tblUserRole -->
+                                        <li><a href="@Url.Action("index", "changes", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/changes.png")" />
+                                                @Translation.Get("Ändringshantering")</a></li>
+                                    }                                                                                                          
+                                    
+                                    if (model.IsProblemVisible())
+                                    {                                                
+                                        <li><a href="@Url.Action("Index", "Problems", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/problem.png")" />
+                                                @Translation.Get("Problem")</a></li> 
+                                    }                                    
+                                    if (model.IsProjectVisible())
+                                    {                                    
+                                        <li><a href="@Url.Action("Index", "Projects", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/project.png")" alt="project" />
+                                                @Translation.Get("Projekt")</a></li>
                                     }
                                 }                                    
                                 <li>
@@ -212,12 +220,6 @@
                                         <li><a href="@Url.Action("index", "checklist")">
                                                 <img src="@Url.Content("~/Content/icons/checklist.png")" />
                                                 @Translation.Get("Checklista")</a></li>
-                                    }                                    
-                                    @if (model.IsProjectVisible())
-                                    {                                    
-                                        <li><a href="@Url.Action("Index", "Projects", new { area = "" })">
-                                                <img src="@Url.Content("~/Content/icons/project.png")" alt="project" />
-                                                @Translation.Get("Projekt")</a></li>
                                     }                                     
                                     @if (model.IsInventoryVisible())
                                     {    
@@ -274,15 +276,6 @@
                                         }                                    
                                     </ul>
                                 </li>
-                                @if (model.IsCustomerOrSystemAdministrator())
-                                {
-                                    <li>
-                                        <a href="@Url.Action("index", "start", new { area = "admin" })" target="_blank">
-                                            <i class="icon-wrench"></i>
-                                            @Translation.Get("Administration")
-                                        </a>
-                                    </li>
-                                }
 
                                 @if (model.Languages != null && model.Languages.Count > 1)
                                 {                                    
@@ -307,6 +300,15 @@
                                             }                                                                              
                                         </ul>
                                     </li>                                    
+                                }
+                                @if (model.IsCustomerOrSystemAdministrator())
+                                {
+                                    <li>
+                                        <a href="@Url.Action("index", "start", new { area = "admin" })" target="_blank">
+                                            <i class="icon-wrench"></i>
+                                            @Translation.Get("Administration")
+                                        </a>
+                                    </li>
                                 }
 
                                 <li>
