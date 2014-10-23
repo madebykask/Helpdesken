@@ -29,5 +29,25 @@
                                         }
                                     }).ToArray();
         }
+
+        public static void MapToEntity(OperationLog model, OperationLog entity)
+        {
+            entity.Customer_Id = model.Customer_Id;
+            entity.InformUsers = model.InformUsers;
+            entity.OperationLogCategory_Id = model.OperationLogCategory_Id;
+            entity.OperationObject_Id = model.OperationObject_Id;
+            entity.Popup = model.Popup;
+            entity.PublicInformation = model.PublicInformation;
+            entity.ShowOnStartPage = model.ShowOnStartPage;
+            entity.User_Id = model.User_Id;
+            entity.WorkingTime = model.WorkingTime;
+            entity.LogAction = model.LogAction ?? string.Empty;
+            entity.LogText = model.LogText ?? string.Empty;
+            entity.LogTextExternal = model.LogTextExternal ?? string.Empty;
+            entity.ShowDate = model.ShowDate;
+            entity.ShowUntilDate = model.ShowUntilDate;
+            entity.CreatedDate = model.CreatedDate;
+            entity.ChangedDate = model.ChangedDate;
+        }
     }
 }

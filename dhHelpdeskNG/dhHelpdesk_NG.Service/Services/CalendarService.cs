@@ -196,7 +196,18 @@ namespace DH.Helpdesk.Services.Services
         /// </returns>
         public CalendarOverview GetCalendar(int id)
         {
-            return this.calendarRepository.GetCalendar(id);
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var rep = uow.GetRepository<Calendar>();
+
+                var entity = rep.GetAll()
+                        .RestrictByWorkingGroups(this.workContext)
+                        .GetById(id)
+                        .IncludePath(o => o.WGs)
+                        .SingleOrDefault();
+
+                return CalendarMapper.MapToOverview(entity);
+            }
         }
 
         /// <summary>
@@ -210,24 +221,34 @@ namespace DH.Helpdesk.Services.Services
         /// </returns>
         public DeleteMessage DeleteCalendar(int id)
         {
-            var calendar = this.calendarRepository.GetById(id);
-
-            if (calendar != null)
+            try
             {
-                try
+                using (var uow = this.unitOfWorkFactory.Create())
                 {
-                    this.calendarRepository.Delete(calendar);
-                    this.Commit();
+                    var rep = uow.GetRepository<Calendar>();
 
+                    var entity = rep.GetAll()
+                                  .RestrictByWorkingGroups(this.workContext)
+                                  .GetById(id)
+                                  .SingleOrDefault();
+
+                    if (entity == null)
+                    {
+                        return DeleteMessage.Error;
+                    }
+
+                    entity.WGs.Clear();
+
+                    rep.DeleteById(id);
+
+                    uow.Save();
                     return DeleteMessage.Success;
                 }
-                catch
-                {
-                    return DeleteMessage.UnExpectedError;
-                }
             }
-
-            return DeleteMessage.Error;
+            catch
+            {
+                return DeleteMessage.UnExpectedError;
+            }
         }
 
         /// <summary>
@@ -246,32 +267,44 @@ namespace DH.Helpdesk.Services.Services
                 throw new ArgumentNullException("calendar");
             }
 
-            if (calendar.WGs != null)
+            using (var uow = this.unitOfWorkFactory.Create())
             {
-                foreach (var delete in calendar.WGs.ToList())
+                var calendarRep = uow.GetRepository<Calendar>();
+                var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
+
+                Calendar entity;
+                int userId = this.workContext.User.UserId;
+                var now = DateTime.Now;
+                if (calendar.Id == 0)
                 {
-                    calendar.WGs.Remove(delete);
+                    entity = new Calendar();
+                    CalendarMapper.MapToEntity(calendar, entity);
+                    entity.CreatedDate = now;
+                    entity.ChangedDate = now;
+                    entity.ChangedByUser_Id = userId;
+                    calendarRep.Add(entity);
                 }
-            }
-            else
-            {
-                calendar.WGs = new List<WorkingGroupEntity>();
-            }
-
-            if (workGroups != null)
-            {
-                foreach (int id in workGroups)
+                else
                 {
-                    var wg = this.workingGroupRepository.GetById(id);
+                    entity = calendarRep.GetById(calendar.Id);
+                    CalendarMapper.MapToEntity(calendar, entity);
+                    entity.ChangedDate = now;
+                    entity.ChangedByUser_Id = userId;
+                    calendarRep.Update(entity);
+                }
 
-                    if (wg != null)
+                entity.WGs.Clear();
+                if (workGroups != null)
+                {
+                    foreach (var wg in workGroups)
                     {
-                        calendar.WGs.Add(wg);
+                        var workingGroupEntity = workingGroupRep.GetById(wg);
+                        entity.WGs.Add(workingGroupEntity);
                     }
                 }
-            }
-            
-            this.calendarRepository.SaveCalendar(calendar);
+
+                uow.Save();
+            }                        
         }
 
         /// <summary>

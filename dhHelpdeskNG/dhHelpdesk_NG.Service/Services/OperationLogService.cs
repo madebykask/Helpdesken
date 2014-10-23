@@ -19,9 +19,9 @@ namespace DH.Helpdesk.Services.Services
     public interface IOperationLogService
     {
         IList<OperationLog> GetOperationLogs(int customerId);
-        OperationLog getoperationlog(int id);
-        IList<OperationLog> getAllOpertionLogs();
-        IList<OperationLogList> getListForIndexPage();
+        OperationLog GetOperationLog(int id);
+        IList<OperationLog> GetAllOpertionLogs();
+        IList<OperationLogList> GetListForIndexPage();
         IList<OperationLogList> SearchAndGenerateOperationLog(int customerId, IOperationLogSearch SearchOperationLogs);
         void SaveOperationLog(OperationLog operationlog, int[] wgs, out IDictionary<string, string> errors);
         DeleteMessage DeleteOperationLog(int id);
@@ -71,7 +71,15 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<OperationLog> GetOperationLogs(int customerId)
         {
-            return this._operationLogRepository.GetMany(x => x.Customer_Id == customerId).ToList();
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var operationLogRep = uow.GetRepository<OperationLog>();
+
+                return operationLogRep.GetAll()
+                        .RestrictByWorkingGroupsAndUsers(this.workContext)
+                        .GetByCustomer(customerId)
+                        .ToList();
+            }
         }
 
         public IList<OperationLogList> SearchAndGenerateOperationLog(int customerId, IOperationLogSearch SearchOperationLogs)
@@ -80,7 +88,7 @@ namespace DH.Helpdesk.Services.Services
             if (SearchOperationLogs.CustomerId > 0)
                 CID = SearchOperationLogs.CustomerId;
 
-            var query = (from c in this._operationLogRepository.ListForIndexPage().Where(x => x.Customer_Id == CID)
+            var query = (from c in this.GetListForIndexPage().Where(x => x.Customer_Id == CID)
                          select c);
 
             if (!string.IsNullOrEmpty(SearchOperationLogs.Text_Filter))
@@ -115,82 +123,118 @@ namespace DH.Helpdesk.Services.Services
 
         }
 
-        public OperationLog getoperationlog(int id)
+        public OperationLog GetOperationLog(int id)
         {
-            return this._operationLogRepository.GetById(id);
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var operationLogRep = uow.GetRepository<OperationLog>();
+
+                return operationLogRep.GetAll()
+                        .RestrictByWorkingGroupsAndUsers(this.workContext)
+                        .GetById(id)
+                        .IncludePath(o => o.Us)
+                        .IncludePath(o => o.WGs)
+                        .SingleOrDefault();
+            }
         }
 
-        public IList<OperationLog> getAllOpertionLogs()
+        public IList<OperationLog> GetAllOpertionLogs()
         {
-            return this._operationLogRepository.GetAll().ToList();
-        }
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var operationLogRep = uow.GetRepository<OperationLog>();
 
-        public IList<OperationLogList> getListForIndexPage()
-        {
-            return this._operationLogRepository.ListForIndexPage();
+                return operationLogRep.GetAll()
+                        .RestrictByWorkingGroupsAndUsers(this.workContext)
+                        .ToList();
+            }
         }
 
         public DeleteMessage DeleteOperationLog(int id)
         {
-            var operationlog = this._operationLogRepository.GetById(id);
-
-            if (operationlog != null)
+            try
             {
-                try
+                using (var uow = this.unitOfWorkFactory.Create())
                 {
-                    this._operationLogRepository.Delete(operationlog);
-                    this.Commit();
+                    var rep = uow.GetRepository<OperationLog>();
 
+                    var entity = rep.GetAll()
+                                  .RestrictByWorkingGroupsAndUsers(this.workContext)
+                                  .GetById(id)
+                                  .SingleOrDefault();
+
+                    if (entity == null)
+                    {
+                        return DeleteMessage.Error;
+                    }
+
+                    entity.Us.Clear();
+                    entity.WGs.Clear();
+                    entity.EmailLogs.Clear();
+
+                    rep.DeleteById(id);
+
+                    uow.Save();
                     return DeleteMessage.Success;
                 }
-                catch
-                {
-                    return DeleteMessage.UnExpectedError;
-                }
             }
-
-            return DeleteMessage.Error;
+            catch
+            {
+                return DeleteMessage.UnExpectedError;
+            }
         }
 
 
         public void SaveOperationLog(OperationLog operationlog, int[] wgs, out IDictionary<string, string> errors)
         {
             if (operationlog == null)
+            {
                 throw new ArgumentNullException("operationlog");
+            }
 
             errors = new Dictionary<string, string>();
-
-            operationlog.LogText = operationlog.LogText ?? string.Empty;
-            operationlog.LogAction = operationlog.LogAction ?? string.Empty;
-            operationlog.LogTextExternal = operationlog.LogTextExternal ?? string.Empty;
-
-            if (operationlog.WGs != null)
-                foreach (var delete in operationlog.WGs.ToList())
-                    operationlog.WGs.Remove(delete);
-            else
-                operationlog.WGs = new List<WorkingGroupEntity>();
-
-            if (wgs != null)
+            if (errors.Any())
             {
-                foreach (int id in wgs)
+                return;
+            }
+
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var operationLogRep = uow.GetRepository<OperationLog>();
+                var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
+
+                OperationLog entity;
+                var now = DateTime.Now;
+                if (operationlog.IsNew())
                 {
-                    var wg = this._workingGroupRepository.GetById(id);
-
-                    if (wg != null)
-                        operationlog.WGs.Add(wg);
+                    entity = new OperationLog();
+                    OperationLogMapper.MapToEntity(operationlog, entity);
+                    entity.CreatedDate = now;
+                    entity.ChangedDate = now;
+                    operationLogRep.Add(entity);
                 }
-            }
+                else
+                {
+                    entity = operationLogRep.GetById(operationlog.Id);
+                    OperationLogMapper.MapToEntity(operationlog, entity);
+                    entity.ChangedDate = now;
+                    operationLogRep.Update(entity);
+                }
 
-            if (operationlog.Id == 0)
-                this._operationLogRepository.Add(operationlog);
-            else
-            {
-                this._operationLogRepository.Update(operationlog);
-            }
+                entity.WGs.Clear();
+                if (wgs != null)
+                {
+                    foreach (var wg in wgs)
+                    {
+                        var workingGroupEntity = workingGroupRep.GetById(wg);
+                        entity.WGs.Add(workingGroupEntity);
+                    }
+                }
 
-            if (errors.Count == 0)
-                this.Commit();
+                uow.Save();
+            }            
         }
+
         public void Commit()
         {
             this._unitOfWork.Commit();
@@ -207,6 +251,52 @@ namespace DH.Helpdesk.Services.Services
                         .GetForStartPage(customers, count, forStartPage)
                         .MapToOverviews();
             }
+        }
+
+        public IList<OperationLogList> GetListForIndexPage()
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var operationLogRep = uow.GetRepository<OperationLog>();
+                var operationLogCategoryRep = uow.GetRepository<OperationLogCategory>();
+                var operationObjectRep = uow.GetRepository<OperationObject>();
+                var userRep = uow.GetRepository<User>();
+
+                var query = from ol in operationLogRep.GetAll().RestrictByWorkingGroupsAndUsers(this.workContext)
+                            join olc in operationLogCategoryRep.GetAll() on ol.OperationLogCategory_Id equals olc.Id into gj
+                            from x in gj.DefaultIfEmpty()
+                            join ob in operationObjectRep.GetAll() on ol.OperationObject_Id equals ob.Id
+                            join u in userRep.GetAll() on ol.User_Id equals u.Id
+                            group ol by new
+                            {
+                                ol.Id,
+                                OLCName = x == null ? string.Empty : x.OLCName,
+                                ob.Name,
+                                u.UserID,
+                                ol.LogText,
+                                ol.LogAction,
+                                ol.CreatedDate,
+                                ol.Customer_Id,
+                                OOI = ob.Id,
+                                OLCID = x == null ? 0 : x.Id
+                            }
+                                into g
+                                select new OperationLogList
+                                {
+                                    OperationLogAction = g.Key.LogAction,
+                                    OperationLogAdmin = g.Key.UserID,
+                                    CreatedDate = g.Key.CreatedDate,
+                                    OperationLogCategoryName = g.Key.OLCName,
+                                    OperationLogDescription = g.Key.LogText,
+                                    OperationObjectName = g.Key.Name,
+                                    Id = g.Key.Id,
+                                    Customer_Id = g.Key.Customer_Id,
+                                    OperationObject_ID = g.Key.OOI,
+                                    OperationCategoriy_ID = g.Key.OLCID
+                                };
+
+                return query.ToList();
+            }            
         }
     }
 }

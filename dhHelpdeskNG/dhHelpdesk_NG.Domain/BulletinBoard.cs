@@ -8,6 +8,11 @@ namespace DH.Helpdesk.Domain
 
     public class BulletinBoard : Entity, IWorkingGroupEntity, IDatedEntity, ICustomerEntity, IStartPageEntity
     {
+        public BulletinBoard()
+        {
+            this.WGs = new List<WorkingGroupEntity>();
+        }
+
         public int Customer_Id { get; set; }
         public int PublicInformation { get; set; }
         public int ShowOnStartPage { get; set; }

@@ -12,7 +12,6 @@ namespace DH.Helpdesk.Dal.Repositories
     using System.Collections.Generic;
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output;
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Dal.Infrastructure;
@@ -23,9 +22,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface IOperationLogRepository : IRepository<OperationLog>
     {
-        IList<OperationLogList> ListForIndexPage();
-
-        List<OperationServerLogOverview> GetOperationServerLogOverviews(int customerId, int serverId);
+       List<OperationServerLogOverview> GetOperationServerLogOverviews(int customerId, int serverId);
 
         void DeleteByOperationObjectId(int operationObjectId);
 
@@ -51,50 +48,6 @@ namespace DH.Helpdesk.Dal.Repositories
             IWorkContext workContext)
             : base(databaseFactory, workContext)
         {
-        }
-
-        /// <summary>
-        /// The list for index page.
-        /// </summary>
-        /// <returns>
-        /// The result.
-        /// </returns>
-        public IList<OperationLogList> ListForIndexPage()
-        {
-            var query = from ol in this.Table
-                        join olc in this.DataContext.OperationLogCategories on ol.OperationLogCategory_Id equals olc.Id into gj
-                        from x in gj.DefaultIfEmpty()
-                        join ob in this.DataContext.OperationObjects on ol.OperationObject_Id equals ob.Id
-                        join u in this.DataContext.Users on ol.User_Id equals u.Id
-                        group ol by new
-                        {
-                            ol.Id,
-                            OLCName = x == null ? string.Empty : x.OLCName,
-                            ob.Name,
-                            u.UserID,
-                            ol.LogText,
-                            ol.LogAction,
-                            ol.CreatedDate,
-                            ol.Customer_Id,
-                            OOI = ob.Id,
-                            OLCID = x == null ? 0 : x.Id
-                        }
-                            into g
-                            select new OperationLogList
-                            {
-                                OperationLogAction = g.Key.LogAction,
-                                OperationLogAdmin = g.Key.UserID,
-                                CreatedDate = g.Key.CreatedDate,
-                                OperationLogCategoryName = g.Key.OLCName,
-                                OperationLogDescription = g.Key.LogText,
-                                OperationObjectName = g.Key.Name,
-                                Id = g.Key.Id,
-                                Customer_Id = g.Key.Customer_Id,
-                                OperationObject_ID = g.Key.OOI,
-                                OperationCategoriy_ID = g.Key.OLCID
-                            };
-
-            return query.ToList();
         }
 
         public List<OperationServerLogOverview> GetOperationServerLogOverviews(int customerId, int serverId)

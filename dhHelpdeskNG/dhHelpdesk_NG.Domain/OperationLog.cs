@@ -8,6 +8,13 @@ namespace DH.Helpdesk.Domain
 
     public class OperationLog : Entity, IWorkingGroupEntity, IUserEntity, IStartPageEntity, ICustomerEntity, IDatedEntity
     {
+        public OperationLog()
+        {
+            this.Us = new List<User>();
+            this.WGs = new List<WorkingGroupEntity>();
+            this.EmailLogs = new List<OperationLogEMailLog>();
+        }
+
         public int Customer_Id { get; set; }
         public int InformUsers { get; set; }
         public int? OperationLogCategory_Id { get; set; }
@@ -36,5 +43,7 @@ namespace DH.Helpdesk.Domain
         public virtual ICollection<User> Us { get; set; }
         public virtual ICollection<WorkingGroupEntity> WGs { get; set; }
         public virtual OperationLogCategory Category { get; set; }
+
+        public virtual ICollection<OperationLogEMailLog> EmailLogs { get; set; } 
     }
 }

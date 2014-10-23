@@ -8,6 +8,11 @@ namespace DH.Helpdesk.Domain
 
     public class Calendar : Entity, IWorkingGroupEntity, ICustomerEntity, IStartPageEntity, IDatedEntity
     {
+        public Calendar()
+        {
+            this.WGs = new List<WorkingGroupEntity>();    
+        }
+
         public int ChangedByUser_Id { get; set; }
         public int Customer_Id { get; set; }
         public int PublicInformation { get; set; }

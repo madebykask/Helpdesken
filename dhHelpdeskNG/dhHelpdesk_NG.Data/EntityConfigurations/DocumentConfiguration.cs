@@ -50,6 +50,21 @@
                 .HasForeignKey(x => x.DocumentCategory_Id)
                 .WillCascadeOnDelete(false);
 
+            this.HasMany(d => d.AccountActivities)
+                .WithOptional(a => a.Document)
+                .HasForeignKey(a => a.Document_Id)
+                .WillCascadeOnDelete(false);
+
+            this.HasMany(d => d.OrderTypes)
+                .WithOptional(a => a.Document)
+                .HasForeignKey(a => a.Document_Id)
+                .WillCascadeOnDelete(false);
+
+            this.HasMany(d => d.Links)
+                .WithOptional(a => a.Document)
+                .HasForeignKey(a => a.Document_Id)
+                .WillCascadeOnDelete(false);
+
             this.Property(x => x.ChangedByUser_Id).IsOptional();
             this.Property(x => x.ContentType).IsRequired().HasMaxLength(100);
             this.Property(x => x.CreatedByUser_Id).IsOptional();

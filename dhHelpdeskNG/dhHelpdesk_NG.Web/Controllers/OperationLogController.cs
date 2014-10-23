@@ -126,7 +126,7 @@
 
         public ActionResult Edit(int id)
         {
-            var operationlog = this._operationLogService.getoperationlog(id);
+            var operationlog = this._operationLogService.GetOperationLog(id);
 
 
             if (operationlog == null)
@@ -140,7 +140,7 @@
         [HttpPost]
         public ActionResult Edit(int id, OperationLog operationlog, int[] WGsSelected, int OperationLogHour, int OperationLogMinute,int chkSecurity)
         {
-            var operationlogToSave = this._operationLogService.getoperationlog(id);
+            var operationlogToSave = this._operationLogService.GetOperationLog(id);
             this.UpdateModel(operationlogToSave, "OperationLog");
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
@@ -222,18 +222,15 @@
 
 
         private OperationLogIndexViewModel GetIndex()
-        {
-            
-            
+        {                        
             var model = new OperationLogIndexViewModel
             {
-                OperationLogs = this._operationLogService.getAllOpertionLogs(),
+                OperationLogs = this._operationLogService.GetAllOpertionLogs(),
                 Customers = this._customerService.GetAllCustomers(),
                 OperationObjects = this._operationObjectService.GetOperationObjects(SessionFacade.CurrentCustomer.Id),
-                OperationLogList = this._operationLogService.getListForIndexPage(),
+                OperationLogList = this._operationLogService.GetListForIndexPage(),
                 OperationLogCategories = this._operationLogCategoryService.GetOperationLogCategories(SessionFacade.CurrentCustomer.Id),
                 OLSearch_Filter = new OperationLogSearch ()
-
             };
 
             return model;

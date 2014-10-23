@@ -1,11 +1,10 @@
-﻿using DH.Helpdesk.BusinessData.Models.BulletinBoard.Output;
-
-namespace DH.Helpdesk.Services.Services
+﻿namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.BulletinBoard.Output;
     using DH.Helpdesk.Common.Extensions.String;
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Dal.NewInfrastructure;
@@ -19,6 +18,7 @@ namespace DH.Helpdesk.Services.Services
     public interface IBulletinBoardService
     {
         IList<BulletinBoard> GetBulletinBoards(int customerId);
+
         IList<BulletinBoard> SearchAndGenerateBulletinBoard(int customerId, IBulletinBoardSearch SearchBulletinBoards);
 
         BulletinBoard GetBulletinBoard(int id);
@@ -26,6 +26,7 @@ namespace DH.Helpdesk.Services.Services
         DeleteMessage DeleteBulletinBoard(int id);
 
         void SaveBulletinBoard(BulletinBoard bulletinBoard, int[] wgs, out IDictionary<string, string> errors);
+
         void Commit();
 
         IEnumerable<BulletinBoardOverview> GetBulletinBoardOverviews(int[] customers, int? count, bool forStartPage);
@@ -34,8 +35,8 @@ namespace DH.Helpdesk.Services.Services
     public class BulletinBoardService : IBulletinBoardService
     {
         private readonly IBulletinBoardRepository _bulletinBoardRepository;
+
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IWorkingGroupRepository _workingGroupRepository;
 
         private readonly IUnitOfWorkFactory unitOfWorkFactory;
 
@@ -44,104 +45,162 @@ namespace DH.Helpdesk.Services.Services
         public BulletinBoardService(
             IBulletinBoardRepository bulletinBoardRepository,
             IUnitOfWork unitOfwork,
-            IWorkingGroupRepository workingGroupRepository, 
             IUnitOfWorkFactory unitOfWorkFactory, 
             IWorkContext workContext)
         {
             this._bulletinBoardRepository = bulletinBoardRepository;
             this._unitOfWork = unitOfwork;
-            this._workingGroupRepository = workingGroupRepository;
             this.unitOfWorkFactory = unitOfWorkFactory;
             this.workContext = workContext;
         }
 
         public IList<BulletinBoard> GetBulletinBoards(int customerId)
         {
-            return this._bulletinBoardRepository.GetMany(x => x.Customer_Id == customerId).ToList();
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var rep = uow.GetRepository<BulletinBoard>();
+
+                return rep.GetAll()
+                        .RestrictByWorkingGroups(this.workContext)
+                        .GetByCustomer(customerId)
+                        .ToList();
+            }
         }
 
         public IList<BulletinBoard> SearchAndGenerateBulletinBoard(int customerId, IBulletinBoardSearch SearchBulletinBoards)
         {
-            var query = (from bb in this._bulletinBoardRepository.GetAll().Where(x => x.Customer_Id == customerId)
-                         select bb);
-
-            if (!string.IsNullOrEmpty(SearchBulletinBoards.SearchBbs))
-                query = query.Where(x => x.Text.ContainsText(SearchBulletinBoards.SearchBbs));
-
-            if (!string.IsNullOrEmpty(SearchBulletinBoards.SortBy) && (SearchBulletinBoards.SortBy != "undefined"))
+            using (var uow = this.unitOfWorkFactory.Create())
             {
-                if (SearchBulletinBoards.Ascending)
-                    query = query.OrderBy(x => x.GetType().GetProperty(SearchBulletinBoards.SortBy).GetValue(x, null));
-                else
-                    query = query.OrderByDescending(x => x.GetType().GetProperty(SearchBulletinBoards.SortBy).GetValue(x, null));
+                var rep = uow.GetRepository<BulletinBoard>();
+
+                var query = from bb in rep.GetAll()
+                                        .RestrictByWorkingGroups(this.workContext)
+                                        .GetByCustomer(customerId)
+                             select bb;
+
+                if (!string.IsNullOrEmpty(SearchBulletinBoards.SearchBbs))
+                {
+                    query = query.Where(x => x.Text.Trim().ToLower().Contains(SearchBulletinBoards.SearchBbs.Trim().ToLower()));
+                }
+
+                var entities = query.ToList();
+
+                if (!string.IsNullOrEmpty(SearchBulletinBoards.SortBy) && (SearchBulletinBoards.SortBy != "undefined"))
+                {
+                    if (SearchBulletinBoards.Ascending)
+                    {
+                        entities = entities.OrderBy(x => x.GetType().GetProperty(SearchBulletinBoards.SortBy).GetValue(x, null)).ToList();
+                    }
+                    else
+                    {
+                        entities = entities.OrderByDescending(x => x.GetType().GetProperty(SearchBulletinBoards.SortBy).GetValue(x, null)).ToList();
+                    }
+                }
+
+                return entities;                
             }
-
-            return query.ToList();
-
-            //return query.OrderBy(x => x.ChangedDate).ToList();
         }
 
         public BulletinBoard GetBulletinBoard(int id)
         {
-            return this._bulletinBoardRepository.GetById(id);
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var rep = uow.GetRepository<BulletinBoard>();
+
+                return rep.GetAll()
+                        .RestrictByWorkingGroups(this.workContext)
+                        .GetById(id)
+                        .IncludePath(o => o.WGs)
+                        .SingleOrDefault();
+            }
         }
 
         public DeleteMessage DeleteBulletinBoard(int id)
         {
-            var bulletinBoard = this._bulletinBoardRepository.GetById(id);
-
-            if (bulletinBoard != null)
+            try
             {
-                try
+                using (var uow = this.unitOfWorkFactory.Create())
                 {
-                    this._bulletinBoardRepository.Delete(bulletinBoard);
-                    this.Commit();
+                    var rep = uow.GetRepository<BulletinBoard>();
 
+                    var entity = rep.GetAll()
+                                  .RestrictByWorkingGroups(this.workContext)
+                                  .GetById(id)
+                                  .SingleOrDefault();
+
+                    if (entity == null)
+                    {
+                        return DeleteMessage.Error;
+                    }
+
+                    entity.WGs.Clear();
+
+                    rep.DeleteById(id);
+
+                    uow.Save();
                     return DeleteMessage.Success;
                 }
-                catch
-                {
-                    return DeleteMessage.UnExpectedError;
-                }
             }
-
-            return DeleteMessage.Error;
+            catch
+            {
+                return DeleteMessage.UnExpectedError;
+            }
         }
 
         public void SaveBulletinBoard(BulletinBoard bulletinBoard, int[] wgs, out IDictionary<string, string> errors)
         {
             if (bulletinBoard == null)
-                throw new ArgumentNullException("bulletinboard");
+            {
+                throw new ArgumentNullException("bulletinBoard");
+            }
 
             errors = new Dictionary<string, string>();
 
             if (string.IsNullOrEmpty(bulletinBoard.Text))
-                errors.Add("BulletinBoard.Text", "Du måste ange en anslagstavla");
-
-            if (bulletinBoard.WGs != null)
-                foreach (var delete in bulletinBoard.WGs.ToList())
-                    bulletinBoard.WGs.Remove(delete);
-            else
-                bulletinBoard.WGs = new List<WorkingGroupEntity>();
-
-            if (wgs != null)
             {
-                foreach (int id in wgs)
-                {
-                    var wg = this._workingGroupRepository.GetById(id);
-
-                    if (wg != null)
-                        bulletinBoard.WGs.Add(wg);
-                }
+                errors.Add("BulletinBoard.Text", "Du måste ange en anslagstavla");
             }
 
-            if (bulletinBoard.Id == 0)
-                this._bulletinBoardRepository.Add(bulletinBoard);
-            else
-                this._bulletinBoardRepository.Update(bulletinBoard);
+            if (errors.Any())
+            {
+                return;
+            }
 
-            if (errors.Count == 0)
-                this.Commit();
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var bulletinBoardRep = uow.GetRepository<BulletinBoard>();
+                var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
+
+                BulletinBoard entity;
+                var now = DateTime.Now;
+                if (bulletinBoard.IsNew())
+                {
+                    entity = new BulletinBoard();
+                    BulletinBoardMapper.MapToEntity(bulletinBoard, entity);
+                    entity.CreatedDate = now;
+                    entity.ChangedDate = now;
+                    bulletinBoardRep.Add(entity);
+                }
+                else
+                {
+                    entity = bulletinBoardRep.GetById(bulletinBoard.Id);
+                    BulletinBoardMapper.MapToEntity(bulletinBoard, entity);
+                    entity.ChangedDate = now;
+                    bulletinBoardRep.Update(entity);
+                }
+
+                entity.WGs.Clear();
+                if (wgs != null)
+                {
+                    foreach (var wg in wgs)
+                    {
+                        var workingGroupEntity = workingGroupRep.GetById(wg);
+                        entity.WGs.Add(workingGroupEntity);
+                    }
+                }
+
+                uow.Save();
+            }                        
         }
 
         public void Commit()

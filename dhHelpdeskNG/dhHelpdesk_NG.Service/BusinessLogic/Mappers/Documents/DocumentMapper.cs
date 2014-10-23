@@ -25,5 +25,22 @@
                                             Size = d.Size
                                         }).ToArray();
         }
+
+        public static void MapToEntity(Document model, Document entity)
+        {
+            entity.File = model.File;
+            entity.ChangedByUser_Id = model.ChangedByUser_Id;
+            entity.CreatedByUser_Id = model.CreatedByUser_Id;
+            entity.Customer_Id = model.Customer_Id;
+            entity.DocumentCategory_Id = model.DocumentCategory_Id;
+            entity.Size = model.Size;
+            entity.ContentType = model.ContentType;
+            entity.Description = model.Description;
+            entity.FileName = model.FileName;
+            entity.Name = model.Name;
+            entity.ShowOnStartPage = model.ShowOnStartPage;
+            entity.CreatedDate = model.CreatedDate;
+            entity.ChangedDate = model.ChangedDate;
+        }
     }
 }

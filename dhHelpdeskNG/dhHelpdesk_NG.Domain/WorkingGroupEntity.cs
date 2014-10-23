@@ -7,6 +7,11 @@
 
     public class WorkingGroupEntity : Entity
     {
+        public WorkingGroupEntity()
+        {
+            this.Calendars = new List<Calendar>();
+        }
+
         public int IsActive { get; set; }
         public int IsDefault { get; set; }
         public int IsDefaultBulletinBoard { get; set; }

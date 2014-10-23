@@ -343,15 +343,21 @@ namespace DH.Helpdesk.Services.Services
                 {
                     var rep = uow.GetRepository<Document>();
 
-                    var document = rep.GetAll()
+                    var entity = rep.GetAll()
                                   .RestrictByWorkingGroupsAndUsers(this.workContext)
                                   .GetById(id)
                                   .SingleOrDefault();
 
-                    if (document == null)
+                    if (entity == null)
                     {
                         return DeleteMessage.Error;
                     }
+
+                    entity.Us.Clear();
+                    entity.WGs.Clear();
+                    entity.AccountActivities.Clear();
+                    entity.OrderTypes.Clear();
+                    entity.Links.Clear();
 
                     rep.DeleteById(id);
 
@@ -396,109 +402,68 @@ namespace DH.Helpdesk.Services.Services
             return DeleteMessage.Error;
         }
 
-        /// <summary>
-        /// The save document.
-        /// </summary>
-        /// <param name="document">
-        /// The document.
-        /// </param>
-        /// <param name="us">
-        /// The users.
-        /// </param>
-        /// <param name="wgs">
-        /// The working groups.
-        /// </param>
-        /// <param name="errors">
-        /// The errors.
-        /// </param>
         public void SaveDocument(Document document, int[] us, int[] wgs, out IDictionary<string, string> errors) 
         {
-            if (document == null)
-            {
-                throw new ArgumentNullException("document");
-            }
-
             errors = new Dictionary<string, string>();
-
             if (string.IsNullOrEmpty(document.Name))
             {
                 errors.Add("Document.Name", "Du måste ange ett dokumentnamn");
             }
 
-            if (document.Us != null)
+            if (errors.Any())
             {
-                foreach (var delete in document.Us.ToList())
+                return;
+            }
+
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var documentRep = uow.GetRepository<Document>();
+                var userRep = uow.GetRepository<User>();
+                var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
+
+                Document entity;
+                var now = DateTime.Now;
+                int userId = this.workContext.User.UserId;
+                if (document.IsNew())
                 {
-                    document.Us.Remove(delete);
+                    entity = new Document();
+                    DocumentMapper.MapToEntity(document, entity);
+                    entity.CreatedDate = now;
+                    entity.CreatedByUser_Id = userId;
+                    entity.ChangedDate = now;
+                    entity.ChangedByUser_Id = userId;
+                    documentRep.Add(entity);
                 }
-            }
-            else
-            {
-                document.Us = new List<User>();
-            }
-
-            if (us != null)
-            {
-                foreach (int id in us)
+                else
                 {
-                    var u = this.userRepository.GetById(id);
+                    entity = documentRep.GetById(document.Id);
+                    DocumentMapper.MapToEntity(document, entity);
+                    entity.ChangedDate = now;
+                    entity.ChangedByUser_Id = userId;
+                    documentRep.Update(entity);
+                }
 
-                    if (u != null)
+                entity.Us.Clear();
+                if (us != null)
+                {
+                    foreach (var user in us)
                     {
-                        document.Us.Add(u);
+                        var userEntity = userRep.GetById(user);
+                        entity.Us.Add(userEntity);
                     }
                 }
-            }
 
-            if (document.WGs != null)
-            {
-                foreach (var delete in document.WGs.ToList())
+                entity.WGs.Clear();
+                if (wgs != null)
                 {
-                    document.WGs.Remove(delete);
-                }
-            }
-            else
-            {
-                document.WGs = new List<WorkingGroupEntity>();
-            }
-
-            if (wgs != null)
-            {
-                foreach (int id in wgs)
-                {
-                    var wg = this.workingGroupRepository.GetById(id);
-
-                    if (wg != null)
+                    foreach (var wg in wgs)
                     {
-                        document.WGs.Add(wg);
+                        var workingGroupEntity = workingGroupRep.GetById(wg);
+                        entity.WGs.Add(workingGroupEntity);
                     }
                 }
-            }
 
-            var currentUserId = this.workContext.User.UserId;
-            var now = DateTime.Now;
-            if (!document.CreatedByUser_Id.HasValue)
-            {
-                document.CreatedByUser_Id = currentUserId;
-                document.CreatedDate = now;
-            }
-            
-            document.ChangedByUser_Id = currentUserId;
-            document.ChangedDate = now;
-
-
-            if (document.Id == 0)
-            {
-                this.documentRepository.Add(document);
-            }
-            else
-            {
-                this.documentRepository.Update(document);
-            }
-
-            if (errors.Count == 0)
-            {
-                this.Commit();
+                uow.Save();
             }
         }
 

@@ -7,6 +7,15 @@ namespace DH.Helpdesk.Domain
 
     public class Document : Entity, IWorkingGroupEntity, IUserEntity, ICustomerEntity, IDatedEntity
     {
+        public Document()
+        {
+            this.Us = new List<User>();
+            this.WGs = new List<WorkingGroupEntity>();
+            this.AccountActivities = new List<AccountActivity>();
+            this.OrderTypes = new List<OrderType>();
+            this.Links = new List<Link>();
+        }
+
         public byte[] File { get; set; }
         public int? ChangedByUser_Id { get; set; }
         public int? CreatedByUser_Id { get; set; }
@@ -27,5 +36,11 @@ namespace DH.Helpdesk.Domain
         public virtual User ChangedByUser { get; set; }
         public virtual ICollection<User> Us { get; set; }     
         public virtual ICollection<WorkingGroupEntity> WGs { get; set; }
+
+        public virtual ICollection<AccountActivity> AccountActivities { get; set; } 
+
+        public virtual ICollection<OrderType> OrderTypes { get; set; } 
+
+        public virtual ICollection<Link> Links { get; set; }
     }
 }
