@@ -954,9 +954,10 @@ function initDataTable() {
 
 
 // YES and NO SWITCH FOR CHECKBOXES
-$('.switchcheckbox').bootstrapSwitch('onText', 'Ja');
-$('.switchcheckbox').bootstrapSwitch('offText', 'Nej');
+$('.switchcheckbox').bootstrapSwitch('onText', '@Translation.Get("Ja", Enums.TranslationSource.TextTranslation)');
+$('.switchcheckbox').bootstrapSwitch('offText', '@Translation.Get("Nej", Enums.TranslationSource.TextTranslation)');
 $('.switchcheckbox').bootstrapSwitch('size', 'small');
 $('.switchcheckbox').bootstrapSwitch('onColor', 'success');
+//$('.switchcheckbox').bootstrapSwitch('offColor', 'danger');
 
 // YES and NO SWITCH FOR CHECKBOXES END
