@@ -1,6 +1,7 @@
 ﻿@using DH.Helpdesk.Common.Enums
 @model DH.Helpdesk.Web.Models.Inventory.InventoryGridModel
-@Model.Inventories.Count
+
+@Translation.Get("poster per sida", Enums.TranslationSource.TextTranslation): @Model.Inventories.Count
 
 <table class="table table-striped table-bordered table-hover">
     <thead>
