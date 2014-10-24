@@ -8,7 +8,7 @@
         <title>@Translation.Get("dhHelpdesk")</title>
 
         <link rel="stylesheet" href="@Url.Content("~/Content/themes/base/minified/jquery-ui.min.css")" />
-        <link rel="stylesheet" href="@Url.Content("~/Content/css/bootstrap-switch.css")" />
+        @*<link rel="stylesheet" href="@Url.Content("~/Content/css/bootstrap-switch.css")" />*@
         <link rel="stylesheet" href="@Url.Content("~/Content/css/bootstrap.css")" />
         <link rel="stylesheet" href="@Url.Content("~/Content/css/dhhelpdesk.css")" />
         <link rel="stylesheet" href="@Url.Content("~/img-profile/profile.css")" />
@@ -22,7 +22,7 @@
         <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.validate.unobtrusive.min.js")"></script>
         <script type="text/javascript" src="@Url.Content("~/Content/js/jquery-ui-1.9.2.min.js")"></script>
         <script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap.js")"></script>
-        <script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap-switch.min.js")"></script>
+        @*<script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap-switch.min.js")"></script>*@
         <script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap-multiselect.js")"></script>
         <script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap-datepicker.js")"></script>
         <script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap-timepicker.min.js")"></script>
@@ -64,12 +64,15 @@
                                 <i class="icon-folder-open icon-white"></i>@Translation.Get("Ärendehanteringsmeny") <i class="icon-chevron-down icon-white"></i>
                             </a>
                             <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
-                                @if (model.IsCaseVisible())
-                                {                                     
-                                    <li><a href="@Url.Action("index", "cases", new { area = "" })">
-                                            <img src="@Url.Content("~/Content/icons/case.png")" />
-                                            @Translation.Get("Ärendeöversikt")</a>
-                                    </li>
+                                 @if (model.IsCaseHandlingModulesVisible())
+                                 {
+                                    if (model.IsCaseVisible())
+                                    {                                     
+                                        <li><a href="@Url.Action("index", "cases", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/case.png")" />
+                                                @Translation.Get("Ärendeöversikt")</a>
+                                        </li>
+                                    }
                                     if (model.IsCaseSolutionVisible())
                                     {
                                         <li><a href="@Url.Action("index", "casesolution", new { area = "" })">
@@ -113,22 +116,21 @@
                                 </li>
                             </ul>
                         </li>
-                        @if (model.IsModulesVisible())
+                        @if (model.IsReportsLogsModulesVisible())
                         {
                             <li class="green">
                                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                     <i class="icon-signal icon-white"></i>@Translation.Get("Rapportmeny") <i class="icon-chevron-down icon-white"></i>
                                 </a>
                                 <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
-                                    @if (model.IsCaseVisible())
-                                    {                                    
-                                        if (model.IsReportVisible())
-                                        {                                        
-                                            <li><a href="@Url.Action("index", "reports", new { area = "" })">
-                                                    <img src="@Url.Content("~/Content/icons/reports.png")" />
-                                                    @Translation.Get("Rapporter")</a></li>                                    
-                                        }                                    
-                                    }                                                                            
+                                                                        
+                                    @*@if (model.IsReportVisible())
+                                    {                                        
+                                        <li><a href="@Url.Action("index", "reports", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/reports.png")" />
+                                                @Translation.Get("Rapporter")</a></li>                                    
+                                    }                                    
+                                               *@                                                                 
                                     @if (model.IsDailyReportVisible())
                                     {    
                                         <li><a href="@Url.Action("index", "dailyreport", new { area = "" })">
@@ -146,7 +148,7 @@
                                 </ul>
                             </li>                            
                         }
-                        @if (model.IsSettingsModulesVisible())
+                        @if (model.IsModulesVisible())
                         {
                             <li class="purple">
                                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">

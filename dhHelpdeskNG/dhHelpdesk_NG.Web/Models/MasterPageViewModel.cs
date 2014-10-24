@@ -138,45 +138,50 @@
             return this.CustomerSetting.ModuleComputerUser.ToBool() && this.IsAdministrator();
         }
 
-        
+
+   
 
         public bool IsSettingsModulesVisible()
         {
             return
-
                 this.IsOrderVisible() ||
                 this.IsAccountVisible() ||
-                this.IsCheckListVisuble() ||
-                this.IsProjectVisible() ||
+                this.IsCheckListVisuble() ||                
                 this.IsInventoryVisible() ||
                 this.IsLicenseVisible();
 
-                //this.IsPlanningVisible() ||                
-                //this.IsQuestionVisible() ||                                                
-                //this.IsComputerUserVisible();
+            //this.IsPlanningVisible() ||                
+            //this.IsQuestionVisible() ||                                                
+            //this.IsComputerUserVisible();
         }
 
         public bool IsModulesVisible()
         {
-            return this.IsCaseVisible() &&
-                (
+            return                 
                 this.IsBulletinBoardVisible() ||
                 this.IsFaqVisible() ||
                 this.IsCalendarVisible() ||
                 this.IsQuestionnaireVisible() ||
-                this.IsDocumentVisible());
-
-                
+                this.IsDocumentVisible();                
         }
 
         public bool IsReportsLogsModulesVisible()
         {
             return 
-                   this.IsReportVisible() ||
+                   //this.IsReportVisible() ||
                    this.IsDailyReportVisible() ||        
                    this.IsOperationLogVisible();
         }
 
-        
+        public bool IsCaseHandlingModulesVisible()
+        {
+            return
+                this.IsCaseVisible() ||
+                this.IsCaseSolutionVisible() ||
+                this.IsComputerUserVisible() ||
+                this.IsChangeManagementVisible() ||
+                this.IsProblemVisible() ||
+                this.IsProjectVisible();
+        }
     }
 }

@@ -384,7 +384,7 @@
     });
 
     function deleteFile(id) {
-        alert(1);
+        //alert(1);
         if (confirm('@Translation.Get("Vill du verkligen ta bort bifogad fil?", Enums.TranslationSource.TextTranslation)')) {
             $.post('/Priority/DeleteUploadedFile/' + id, function (result) {
                 window.location.reload()
