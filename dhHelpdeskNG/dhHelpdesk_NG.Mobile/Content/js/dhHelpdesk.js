@@ -321,10 +321,8 @@ function CaseInitForm() {
                 },
 
                 
-                UploadFile: function (up, file) {
-                    //console.log('2:uploaded file:', file.name);
-                                        
-                    //debugger;
+                UploadFile: function (up, file) {                    
+                                                            
                     var strFiles = $('#CaseFileNames').val();
                     var allFileNames = strFiles.split('|');
 
@@ -347,12 +345,8 @@ function CaseInitForm() {
                             } // for j
                         }
                     } // for i
-
-                        
-                    
-                    $('#CaseFileNames').val(strFiles + "|" + file.name);                   
-                    
-
+                                            
+                    $('#CaseFileNames').val(strFiles + "|" + file.name);                                       
                 },
 
                 UploadComplete: function (up, file) {
@@ -396,41 +390,46 @@ function CaseInitForm() {
             buttons: { browse: true, start: true, stop: true, cancel: true },
             preinit: {
                 Init: function (up, info) {
-                    //log('[Init]', 'Info:', info, 'Features:', up.features);
-                    //allFileNames = "",
-                    $.get('/Cases/GetAllLogFileName', { id: $('#LogKey').val() }, function (data) {
-                        allFileNames = $.parseJSON(data);
-                    });
+                    //log('[Init]', 'Info:', info, 'Features:', up.features);                                        
                 },
 
                 UploadFile: function (up, file) {
                     //log('[UploadFile]', file);
+                    var strFiles = $('#LogFileNames').val();
+                    var allFileNames = strFiles.split('|');
+
                     var fn = file.name;
 
                     for (var i = 0; i < allFileNames.length; i++) {
                         if (fn == allFileNames[i]) {
-                            var d = new Date();
-                            var dstr = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDay() + ' ' + d.getHours() + ',' + d.getMinutes() + ',' + d.getSeconds();
-                            file.name =  dstr + '-' + file.name;
+                            var findName = false;
+                            for (var j = 1; j < 100 && !findName; j++) {
+                                findName = true;
+                                for (var k = 0; k < allFileNames.length; k++) {
+                                    if (j.toString() + '-' + fn == allFileNames[k])
+                                        findName = false;
+                                }
+
+                                if (findName) {
+                                    var d = getNow().toString();
+                                    file.name = d + '-' + fn;
+                                }
+                            } // for j
                         }
-                    }
+                    } // for i
+
+                    $('#LogFileNames').val(strFiles + "|" + file.name);
                 },
 
                 UploadComplete: function (up, file) {
                     //plupload_add
                     $(".plupload_buttons").css("display", "inline");
-                    $(".plupload_upload_status").css("display", "inline");
-                    $.get('/Cases/GetAllLogFileName', { id: $('#LogKey').val() }, function (data) {
-                        allFileNames = $.parseJSON(data);
-                    });
+                    $(".plupload_upload_status").css("display", "inline");                    
                     up.refresh();
                 }
             },
             init: {
-                FileUploaded: function () {
-                    $.get('/Cases/GetAllLogFileName', { id: $('#LogKey').val() }, function (data) {
-                        allFileNames = $.parseJSON(data);
-                    });
+                FileUploaded: function () {                    
                     getLogFiles();
                 },
 
@@ -708,9 +707,9 @@ function bindDeleteCaseFileBehaviorToDeleteButtons() {
         var pressedDeleteFileButton = this;
         $.post("/Cases/DeleteCaseFile", { id: key, fileName: fileName }, function () {
             $(pressedDeleteFileButton).parents('tr:first').remove();
-            var fileNames = $('#CaseFileNames').val();
-            fileNames = fileNames.replace(fileName + "|", "");
-            fileNames = fileNames.replace("|" + fileName, "");
+            var fileNames = $('#CaseFileNames').val();            
+            fileNames = fileNames.replace("|" + fileName.trim(), "");
+            fileNames = fileNames.replace(fileName.trim() + "|", "");            
             $('#CaseFileNames').val(fileNames);
         });
     });
@@ -724,6 +723,10 @@ function bindDeleteLogFileBehaviorToDeleteButtons() {
 
         $.post("/Cases/DeleteLogFile", { id: key, fileName: fileName }, function () {
             $(pressedDeleteFileButton).parents('tr:first').remove();
+            var fileNames = $('#LogFileNames').val();
+            fileNames = fileNames.replace("|" + fileName.trim(), "");
+            fileNames = fileNames.replace(fileName.trim() + "|", "");
+            $('#LogFileNames').val(fileNames);
         });
     });
 }

@@ -1,8 +1,10 @@
 ﻿namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Licenses
 {
+    using System.Globalization;
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Licenses.Products;
+    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
 
@@ -62,6 +64,38 @@
             entity.Customer_Id = model.CustomerId;
             entity.Manufacturer_Id = model.ManufacturerId;
             entity.Name = model.ProductName;
+        }
+
+        public static ProductsFilterData MatToFilterData(
+                        IQueryable<Region> regions,
+                        IQueryable<Department> departments)
+        {
+            var overviews = regions.Select(m => new { m.Id, m.Name, Type = "Region" }).Union(
+                            departments.Select(a => new { a.Id, Name = a.DepartmentName, Type = "Department" }))
+                            .OrderBy(o => o.Type)
+                            .ThenBy(o => o.Name)
+                            .ToArray();
+
+            return new ProductsFilterData(
+                        overviews.Where(o => o.Type == "Region").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+                        overviews.Where(o => o.Type == "Department").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray());
+        }
+
+        public static ProductData MapToData(
+                        ProductModel product,
+                        IQueryable<Manufacturer> manufacturers,
+                        IQueryable<Application> applications)
+        {
+            var overviews = manufacturers.Select(m => new { m.Id, m.Name, Type = "Manufacturer" }).Union(
+                            applications.Select(a => new { a.Id, a.Name, Type = "Application" }))
+                            .OrderBy(o => o.Type)
+                            .ThenBy(o => o.Name)
+                            .ToArray();
+
+            return new ProductData(
+                        product,
+                        overviews.Where(o => o.Type == "Manufacturer").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+                        overviews.Where(o => o.Type == "Application").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray());
         }
     }
 }

@@ -7,9 +7,7 @@
     using DH.Helpdesk.BusinessData.Models.Licenses.Licenses;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Services.BusinessLogic.Mappers.Department;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Licenses;
-    using DH.Helpdesk.Services.BusinessLogic.Mappers.Shared;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Licenses;
     using DH.Helpdesk.Services.Services.Licenses;
@@ -59,32 +57,27 @@
                 }
 
                 var products = productRepository.GetAll()
-                                .GetByCustomer(customerId)
-                                .MapToItemOverviews();
+                                .GetByCustomer(customerId);
                 
                 var regions = regionRepository.GetAll()
-                                .GetByCustomer(customerId)
-                                .MapToItemOverviews();
+                                .GetByCustomer(customerId);
 
                 var departments = departmentRepository.GetAll()
-                                .GetByCustomer(customerId)
-                                .MapToItemOverviews();
+                                .GetByCustomer(customerId);
 
                 var vendors = vendorRepository.GetAll()
-                                .GetByCustomer(customerId)
-                                .MapToItemOverviews();
+                                .GetByCustomer(customerId);
 
                 var upgradeLicenses = licenseRepository.GetAll()
-                                .GetUpgradeLicenses(licenseId)
-                                .MapToItemOverviews();
+                                .GetUpgradeLicenses(licenseId);
 
-                return new LicenseData(
-                                license, 
-                                products,
-                                regions,
-                                departments, 
-                                vendors,
-                                upgradeLicenses);
+                return LicenseMapper.MapToData(
+                                    license,
+                                    products,
+                                    regions,
+                                    departments,
+                                    vendors,
+                                    upgradeLicenses);
             }
         }
 

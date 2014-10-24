@@ -53,7 +53,8 @@
                            PublicInformation = entity.PublicInformation.ToBool(),
                            ChangedByUserId = entity.ChangedByUser_Id,
                            CreatedDate = entity.CreatedDate,
-                           ChangedDate = entity.ChangedDate
+                           ChangedDate = entity.ChangedDate,
+                           WGs = entity.WGs
                        };
         }
 

@@ -6,7 +6,6 @@
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Licenses;
-    using DH.Helpdesk.Services.BusinessLogic.Mappers.Shared;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Licenses;
     using DH.Helpdesk.Services.Services.Licenses;
@@ -47,10 +46,19 @@
 
         public ProductsFilterData GetProductsFilterData(int customerId)
         {
-            var regions = this.regionService.FindByCustomerId(customerId);
-            var departments = this.departmentService.FindActiveOverviews(customerId);
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var regionRepository = uow.GetRepository<Region>();
+                var departmentRepository = uow.GetRepository<Department>();
 
-            return new ProductsFilterData(regions.ToArray(), departments.ToArray());
+                var regions = regionRepository.GetAll()
+                                .GetByCustomer(customerId);
+
+                var departments = departmentRepository.GetAll()
+                                .GetByCustomer(customerId);
+
+                return ProductMapper.MatToFilterData(regions, departments);
+            }
         }
 
         public ProductData GetProductData(int customerId, int? productId)
@@ -72,15 +80,13 @@
                 }
 
                 var manufacturers = manufacturerRepository.GetAll()
-                                    .GetByCustomer(customerId)
-                                    .MapToItemOverviews();
+                                    .GetByCustomer(customerId);
 
                 var applications = applicationRepository.GetAll()
                                     .GetProductApplications(productId)
-                                    .GetByCustomer(customerId)
-                                    .MapToItemOverviews();
+                                    .GetByCustomer(customerId);
 
-                return new ProductData(product, manufacturers, applications);
+                return ProductMapper.MapToData(product, manufacturers, applications);
             }
         }
 

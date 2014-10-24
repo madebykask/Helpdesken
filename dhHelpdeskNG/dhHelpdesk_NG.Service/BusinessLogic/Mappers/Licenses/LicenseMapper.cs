@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Licenses
 {
+    using System;
     using System.Globalization;
     using System.Linq;
 
@@ -127,6 +128,41 @@
                                             l.Id.ToString(CultureInfo.InvariantCulture))).ToArray();
 
             return overviews;
-        }         
+        }
+
+        public static LicenseData MapToData(
+                        LicenseModel license,
+                        IQueryable<Product> products,
+                        IQueryable<Region> regions,
+                        IQueryable<Department> departments,
+                        IQueryable<Vendor> vendors,
+                        IQueryable<License> upgradeLicenses)
+        {
+            var overviews = products.Select(p => new { p.Id, p.Name, Type = "Product" }).Union(
+                            regions.Select(r => new { r.Id, r.Name, Type = "Region" }).Union(
+                            departments.Select(d => new { d.Id, Name = d.DepartmentName, Type = "Department" }).Union(
+                            vendors.Select(v => new { v.Id, v.Name, Type = "Vendor" }).Union(
+                            upgradeLicenses.Select(l => new
+                                                {
+                                                    l.Id, 
+                                                    Name = l.PurshaseDate.HasValue ? l.PurshaseDate.Value + ";" + l.Product.Name : l.Product.Name, 
+                                                    Type = "UpgradeLicense"
+                                                })))))
+                                                .OrderBy(o => o.Type)
+                                                .ThenBy(o => o.Name)
+                                                .ToArray();
+
+            return new LicenseData(
+                            license,
+                            overviews.Where(o => o.Type == "Product").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+                            overviews.Where(o => o.Type == "Region").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+                            overviews.Where(o => o.Type == "Department").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+                            overviews.Where(o => o.Type == "Vendor").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+                            overviews.Where(o => o.Type == "UpgradeLicense").Select(o => 
+                                {
+                                    var values = o.Name.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+                                    return new ItemOverview(values.Length == 1 ? values[0] : string.Format("{0}({1})", values[1], DateTime.Parse(values[0]).ToShortDateString()), o.Id.ToString(CultureInfo.InvariantCulture));
+                                }).ToArray());
+        }
     }
 }
