@@ -411,6 +411,7 @@ namespace DH.Helpdesk.Dal.Repositories
              var entities = from cs in this.DataContext.Cases
                             join cus in this.DataContext.Customers on cs.Customer_Id equals cus.Id
                             where (cs.Performer_User_Id == userId && cs.FinishingDate == null)
+                            orderby (cs.ChangeTime) descending
                             select new
                             {
                                Id = cs.Id,
