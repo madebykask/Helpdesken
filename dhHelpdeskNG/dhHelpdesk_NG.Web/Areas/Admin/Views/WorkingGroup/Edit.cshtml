@@ -23,13 +23,13 @@
         $(function () {
             var validator = $("#target").validate({
                 rules: {
-                    "WorkingGroup.Name": {
+                    "WorkingGroup.WorkingGroupName": {
                         required: true
                     }
                     
                 },
                 messages: {
-                    "WrokingGroup.Name": {
+                    "WrokingGroup.WorkingGroupName": {
                         required: "@Translation.Get("Du måste ange en driftgrupp", Enums.TranslationSource.TextTranslation)"
                 }                
             },
@@ -38,6 +38,7 @@
             }
         });
     });
+
 
 </script>
 }

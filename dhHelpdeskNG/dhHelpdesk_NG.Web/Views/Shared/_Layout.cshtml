@@ -103,14 +103,17 @@
                                     {                                                
                                         <li><a href="@Url.Action("Index", "Problems", new { area = "" })">
                                                 <img src="@Url.Content("~/Content/icons/problem.png")" />
-                                                @Translation.Get("Problem")</a></li> 
-                                    }                                    
+                                                @Translation.Get("Problem")</a></li>
+                                    }
+                                                                        
+                                    @* 
                                     if (model.IsProjectVisible())
                                     {                                    
                                         <li><a href="@Url.Action("Index", "Projects", new { area = "" })">
                                                 <img src="@Url.Content("~/Content/icons/project.png")" alt="project" />
                                                 @Translation.Get("Projekt")</a></li>
-                                    }
+                                    }*@
+                                    
                                 }                                    
                                 <li>
                                 </li>
@@ -177,13 +180,15 @@
                                         <li><a href="@Url.Action("index", "calendar", new { area = "" })">
                                                 <img src="@Url.Content("~/Content/icons/news.png")" />
                                                 @Translation.Get("Aktuellt")</a></li>
-                                    }                                    
-                                    @if (model.IsQuestionnaireVisible())
+                                    }    
+                                                                    
+                                    @*@if (model.IsQuestionnaireVisible())
                                     {                                    
                                         <li><a href="@Url.Action("index", "questionnaire", new { area = "" })">
                                                 <img src="@Url.Content("~/Content/icons/questionnaire.png")" />
                                                 @Translation.Get("Enkät")</a></li>
-                                    }                                    
+                                    }                                    *@
+
                                     @if (model.IsDocumentVisible())
                                     {                                    
                                         <li><a href="@Url.Action("index", "document", new { area = "" })">
@@ -216,25 +221,28 @@
                                         <li><a href="@Url.Action("index", "accounts", new { area = "" })">
                                                 <img src="@Url.Content("~/Content/icons/orderaccount.png")" />
                                                 @Translation.Get("Beställning kontobehörighet")</a></li>
-                                    }                                
+                                    }                                                                    
                                     @if (model.IsCheckListVisuble())
                                     {    
                                         <li><a href="@Url.Action("index", "checklist")">
                                                 <img src="@Url.Content("~/Content/icons/checklist.png")" />
                                                 @Translation.Get("Checklista")</a></li>
-                                    }                                     
-                                    @if (model.IsInventoryVisible())
+                                    }   
+                                                                      
+                                    @*@if (model.IsInventoryVisible())
                                     {    
                                         <li><a href="@Url.Action("Index", "Inventory", new { area = "" })">
                                                 <img src="@Url.Content("~/Content/icons/inventory.png")" />
                                                 @Translation.Get("Inventarier")</a></li> 
-                                    }                                   
-                                    @if (model.IsLicenseVisible())
+                                    }*@                                   
+
+                                    @*@if (model.IsLicenseVisible())
                                     {                                    
                                         <li><a href="@Url.Action("Index", "Products", new { area = "Licenses" })">
                                                 <img src="@Url.Content("~/Content/icons/Licens.png")" alt="license" />
                                                 @Translation.Get("Licenshantering")</a></li>
-                                    }                                   
+                                    }        *@                           
+
                                     <li>
                                     </li>
                                 </ul>
