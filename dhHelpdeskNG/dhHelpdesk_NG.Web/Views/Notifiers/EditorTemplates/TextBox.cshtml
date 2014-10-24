@@ -3,6 +3,11 @@
            
 @if (Model.Show)
 {
+    var htmlAttributes = new Dictionary<string, object>()
+    {
+        {"data-dh-is-required", Model.Required}
+    };
+
     <tr>
         <td class="span3">
             @if (!Model.Required)
@@ -15,7 +20,7 @@
             }
         </td>
         <td class="span9">
-            @Html.TextBoxFor(m => m.Value)
+            @Html.TextBoxFor(m => m.Value, htmlAttributes)
             @Html.ValidationMessageFor(m => m.Value)
             @Html.HiddenFor(m => m.Required)
             @Html.HiddenFor(m => m.MaxLength)
