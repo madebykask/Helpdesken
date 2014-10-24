@@ -16,14 +16,12 @@
     using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Domain.MailTemplates;
     using DH.Helpdesk.Domain.Questionnaire;
     using DH.Helpdesk.Services.BusinessLogic.MailTools;
     using DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Questionnaire;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
-    using DH.Helpdesk.Services.BusinessLogic.Specifications.EmailTemplate;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Questionnaire;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.User;
 
@@ -37,6 +35,8 @@
 
         private readonly IEmailService emailService;
 
+        private readonly IMailTemplateServiceNew mailTemplateService;
+
         #endregion
 
         #region Constructors and Destructors
@@ -44,11 +44,13 @@
         public CircularService(
             IUnitOfWorkFactory unitOfWorkFactory,
             IMailTemplateFormatterNew mailTemplateFormatter,
-            IEmailService emailService)
+            IEmailService emailService,
+            IMailTemplateServiceNew mailTemplateService)
         {
             this.unitOfWorkFactory = unitOfWorkFactory;
             this.mailTemplateFormatter = mailTemplateFormatter;
             this.emailService = emailService;
+            this.mailTemplateService = mailTemplateService;
         }
 
         #endregion
@@ -223,13 +225,36 @@
         {
             this.SetStatus(circularId, CircularStates.Sent);
 
-            List<QuestionnaireMailItem> mails = this.GetMails(actionAbsolutePath, circularId, operationContext);
+            MailTemplate mailTemplate = this.mailTemplateService.GetTemplate(
+                (int)QuestionnaireTemplates.Questionnaire,
+                operationContext);
+
+            List<BusinessLogic.MapperData.Participant> participants = this.GetAllParticipants(circularId);
+
+            List<QuestionnaireMailItem> mails = this.GetMails(
+                actionAbsolutePath,
+                mailTemplate,
+                participants,
+                operationContext.CustomerId);
+
             this.SendMails(mails, operationContext.DateAndTime);
         }
 
-        public void Remind(string actionAbsolutePath, int circularId)
+        public void Remind(string actionAbsolutePath, int circularId, OperationContext operationContext)
         {
+            MailTemplate mailTemplate = this.mailTemplateService.GetTemplate(
+                (int)QuestionnaireTemplates.Reminder,
+                operationContext);
 
+            List<BusinessLogic.MapperData.Participant> participants = this.GetNotAnsweredParticipants(circularId);
+
+            List<QuestionnaireMailItem> mails = this.GetMails(
+                actionAbsolutePath,
+                mailTemplate,
+                participants,
+                operationContext.CustomerId);
+
+            this.SendMails(mails, operationContext.DateAndTime);
         }
 
         public QuestionnaireOverview GetQuestionnaire(Guid guid, OperationContext operationContext)
@@ -499,53 +524,65 @@
 
         #region PRIVATE
 
+        private List<BusinessLogic.MapperData.Participant> GetAllParticipants(int circularId)
+        {
+            List<BusinessLogic.MapperData.Participant> connectedCases;
+
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
+
+                connectedCases = circularPartRepository.GetAll().GetCircularCases(circularId).MapToParticipants();
+            }
+
+            return connectedCases;
+        }
+
+        private List<BusinessLogic.MapperData.Participant> GetNotAnsweredParticipants(int circularId)
+        {
+            List<BusinessLogic.MapperData.Participant> connectedCases;
+
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
+                var questionnaireResultRepository = uof.GetRepository<QuestionnaireResultEntity>();
+
+                connectedCases = (from circularPart in circularPartRepository.GetAll().GetCircularCases(circularId)
+                                  join participant in questionnaireResultRepository.GetAll() on circularPart.Id equals
+                                      participant.QuestionnaireCircularPartic_Id into group1
+                                  from g1 in group1.DefaultIfEmpty()
+                                  where g1 == null
+                                  select circularPart).MapToParticipants();
+            }
+
+            return connectedCases;
+        }
+
         private List<QuestionnaireMailItem> GetMails(
             string actionAbsolutePath,
-            int circularId,
-            OperationContext operationContext)
+            MailTemplate mailTemplate,
+            List<BusinessLogic.MapperData.Participant> participants,
+            int customerId)
         {
             var mails = new List<QuestionnaireMailItem>();
 
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
-                var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
-                var templateLangaugeRepository = uof.GetRepository<MailTemplateLanguageEntity>();
-                var templateRepository = uof.GetRepository<MailTemplateEntity>();
                 var customerRepository = uof.GetRepository<Customer>();
 
-                var connectedCases =
-                    circularPartRepository.GetAll()
-                        .GetCircularCases(circularId)
-                        .Select(
-                            x =>
-                            new { x.Guid, x.Case.CaseNumber, x.Case.Description, x.Case.Caption, x.Case.PersonsEmail })
-                        .ToList();
-
-                MailTemplate mailTemplate =
-                    templateLangaugeRepository.GetAll()
-                        .ExtractMailTemplate(
-                            templateRepository.GetAll(),
-                            operationContext.CustomerId,
-                            operationContext.LanguageId,
-                            (int)QuestionnaireTemplates.Questionnaire);
-
-                string mailFrom =
-                    customerRepository.GetAll()
-                        .GetById(operationContext.CustomerId)
-                        .Select(x => x.HelpdeskEmail)
-                        .Single();
+                string mailFrom = customerRepository.GetAll().GetById(customerId).Select(x => x.HelpdeskEmail).Single();
 
                 mails.AddRange(
-                    from connectedCase in connectedCases
+                    from connectedCase in participants
                     let markValues =
                         CreateMarkValues(
                             actionAbsolutePath,
                             connectedCase.Guid,
                             connectedCase.CaseNumber,
                             connectedCase.Caption,
-                            connectedCase.Description)
+                            connectedCase.CaseDescription)
                     let mail = this.mailTemplateFormatter.Format(mailTemplate, markValues)
-                    select new QuestionnaireMailItem(connectedCase.Guid, mailFrom, connectedCase.PersonsEmail, mail));
+                    select new QuestionnaireMailItem(connectedCase.Guid, mailFrom, connectedCase.Email, mail));
             }
 
             return mails;
@@ -581,7 +618,7 @@
                 var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
 
                 QuestionnaireCircularPartEntity circularPart =
-                    circularPartRepository.GetAll().Where(x => x.Guid == mailItem.Guid).SingleOrDefault();
+                    circularPartRepository.GetAll().GetByGuid(mailItem.Guid).SingleOrDefault();
 
                 if (circularPart != null)
                 {

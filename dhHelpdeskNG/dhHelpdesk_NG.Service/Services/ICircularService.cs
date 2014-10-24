@@ -39,6 +39,8 @@
 
         void SendQuestionnaire(string actionAbsolutePath, int circularId, OperationContext operationContext);
 
+        void Remind(string actionAbsolutePath, int circularId, OperationContext operationContext);
+
         void SaveAnswers(ParticipantForInsert businessModel);
     }
 }

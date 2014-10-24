@@ -6,6 +6,7 @@
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Read;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Questionnaire;
+    using DH.Helpdesk.Services.BusinessLogic.MapperData;
 
     public static class CircularPartMappers
     {
@@ -58,6 +59,23 @@
                     .Select(
                         c => new AvailableCase(c.Id, (int)c.CaseNumber, c.Caption, c.PersonsEmail, c.SendDate != null))
                     .ToList();
+
+            return businessModels;
+        }
+
+        public static List<Participant> MapToParticipants(this IQueryable<QuestionnaireCircularPartEntity> query)
+        {
+            var businessModels =
+                query.Select(
+                    x =>
+                    new Participant
+                        {
+                            Guid = x.Guid,
+                            CaseNumber = x.Case.CaseNumber,
+                            CaseDescription = x.Case.Description,
+                            Caption = x.Case.Caption,
+                            Email = x.Case.PersonsEmail
+                        }).ToList();
 
             return businessModels;
         }

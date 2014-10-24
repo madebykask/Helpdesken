@@ -19,7 +19,12 @@
             var anonymus = (from l in query.GetByLanguage(languageId)
                             join t in templates.GetByCustomer(nullableCustomerId).GetMailIdTemplates(templateId) on
                                 l.MailTemplate_Id equals t.Id
-                            select new { l.Body, l.Subject }).Single();
+                            select new { l.Body, l.Subject }).SingleOrDefault();
+
+            if (anonymus == null)
+            {
+                return new MailTemplate(string.Empty, string.Empty);
+            }
 
             var mailTemplate = new MailTemplate(anonymus.Subject, anonymus.Body);
 

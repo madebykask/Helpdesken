@@ -114,6 +114,7 @@
             this.Bind<IVendorsService>().To<VendorsService>();
             this.Bind<IManufacturersService>().To<ManufacturersService>();
             this.Bind<IApplicationsService>().To<ApplicationsService>();
+            this.Bind<IMailTemplateServiceNew>().To<MailTemplateServiceNew>();
         }
 
         #endregion

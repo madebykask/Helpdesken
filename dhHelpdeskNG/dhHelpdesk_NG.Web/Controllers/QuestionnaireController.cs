@@ -1,12 +1,7 @@
-﻿using System.Collections.Generic;
-
-using DH.Helpdesk.BusinessData.Models.Questionnaire.Output;
-using DH.Helpdesk.Common.Extensions.Integer;
-
-namespace DH.Helpdesk.Web.Controllers
+﻿namespace DH.Helpdesk.Web.Controllers
 {
     using System;
-    using System.ComponentModel.DataAnnotations;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -15,8 +10,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Write;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Common.Enums;
-    using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Services.BusinessLogic.Changes.Concrete;
+    using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Models.Questionnaire.Input;
@@ -634,10 +628,13 @@ namespace DH.Helpdesk.Web.Controllers
             return this.RedirectToAction("EditCircular", new { circularId });
         }
 
-        [HttpPost]
-        public ViewResult Remind(int circularId)
+        [HttpGet]
+        public RedirectToRouteResult Remind(int circularId)
         {
-            throw new NotImplementedException();
+            string actionUrl = this.CreateQuestionnarieUrl();
+            this._circularService.Remind(actionUrl, circularId, this.OperationContext);
+
+            return this.RedirectToAction("EditCircular", new { circularId });
         }
 
         [HttpGet]
