@@ -27,36 +27,38 @@
     });
 </script>
 
-<div class="content popup">
-    <div class="container">
-        <ul class="nav nav-tabs">
-            <li class="active">
-                <a href="#fragment-1">@Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation)</a>
-            </li>
-        </ul>
-        <div class="tab-content">
-            <div class="tab-pane tab-pane-border active" id="fragment-1">
-                @if (Model.UserId.Show || Model.Domain.Show || Model.LoginName.Show || Model.FirstName.Show || Model.Initials.Show || Model.LastName.Show || Model.DisplayName.Show || Model.Place.Show || Model.Phone.Show || Model.CellPhone.Show || Model.Email.Show || Model.Code.Show)
-                {
-                    @Html.Partial("NotifierEdit/GeneralFields", Model)
-                }
+<div class="contentContent">
+    <div class="content">
+        <div class="container">
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a href="#fragment-1">@Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation)</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane tab-pane-border active" id="fragment-1">
+                    @if (Model.UserId.Show || Model.Domain.Show || Model.LoginName.Show || Model.FirstName.Show || Model.Initials.Show || Model.LastName.Show || Model.DisplayName.Show || Model.Place.Show || Model.Phone.Show || Model.CellPhone.Show || Model.Email.Show || Model.Code.Show)
+                    {
+                        @Html.Partial("NotifierEdit/GeneralFields", Model)
+                    }
                 
-                @if (Model.PostalAddress.Show || Model.PostalCode.Show || Model.City.Show)
-                {
-                    @Html.Partial("NotifierEdit/AddressFields", Model)
-                }
+                    @if (Model.PostalAddress.Show || Model.PostalCode.Show || Model.City.Show)
+                    {
+                        @Html.Partial("NotifierEdit/AddressFields", Model)
+                    }
                     
-                @if (Model.Title.Show || Model.Department.Show || Model.Unit.Show || Model.OrganizationUnit.Show || Model.Division.Show || Model.Managers.Show || Model.Group.Show || Model.Other.Show)
-                {
-                    @Html.Partial("NotifierEdit/OrganizationFields", Model)
-                }
+                    @if (Model.Title.Show || Model.Department.Show || Model.Unit.Show || Model.OrganizationUnit.Show || Model.Division.Show || Model.Managers.Show || Model.Group.Show || Model.Other.Show)
+                    {
+                        @Html.Partial("NotifierEdit/OrganizationFields", Model)
+                    }
                     
-                @if (Model.Ordered.Show)
-                {
-                    @Html.Partial("NotifierEdit/OrdererFields", Model)
-                }
+                    @if (Model.Ordered.Show)
+                    {
+                        @Html.Partial("NotifierEdit/OrdererFields", Model)
+                    }
                 
-                @Html.Partial("NotifierEdit/StateFields", Model)
+                    @Html.Partial("NotifierEdit/StateFields", Model)
+                </div>
             </div>
         </div>
     </div>
