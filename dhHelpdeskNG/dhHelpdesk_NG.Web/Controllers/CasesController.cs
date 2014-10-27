@@ -1,4 +1,8 @@
-﻿namespace DH.Helpdesk.Web.Controllers
+﻿using System.Collections.Specialized;
+using System.IO;
+using System.Web.Routing;
+
+namespace DH.Helpdesk.Web.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -1263,13 +1267,59 @@
         {
             SessionFacade.CurrentLanguageId = languageId;
             SessionFacade.CurrentUser.LanguageId = languageId;
-            return this.RedirectToAction("index", "cases");            
+            var prevInfo = this.ExtractPreviousRouteInfo();
+            var res = new RedirectToRouteResult(prevInfo);
+            return res;
         }
-        
+
         #endregion
 
         #region Private Methods and Operators
 
+        private RouteValueDictionary ExtractPreviousRouteInfo()
+        {
+            var fullUrl = Request.UrlReferrer.ToString();
+            var questionMarkIndex = fullUrl.IndexOf('?');
+            string queryString = null;
+            string url = fullUrl;
+            var qsObject = new NameValueCollection();
+            if (questionMarkIndex != -1)
+            {
+                url = fullUrl.Substring(0, questionMarkIndex);
+                queryString = fullUrl.Substring(questionMarkIndex + 1);
+                qsObject = HttpUtility.ParseQueryString(queryString);
+            }
+
+            var request = new HttpRequest(null, url, queryString);
+            var response = new HttpResponse(new StringWriter());
+            var httpContext = new HttpContext(request, response);
+            var routeData = RouteTable.Routes.GetRouteData(new HttpContextWrapper(httpContext));
+            var res = new RouteValueDictionary
+            {
+                {"action", "index"},
+                {"controller", "cases"},
+            };
+            if (routeData != null && routeData.Values != null)
+            {
+                if (routeData.Values.ContainsKey("action") && routeData.Values.ContainsKey("controller"))
+                {
+                    res["action"] = routeData.Values["action"];
+                    res["controller"] = routeData.Values["controller"];
+                }
+                if (routeData.Values.ContainsKey("id") && !String.IsNullOrEmpty(routeData.Values["id"].ToString()))
+                {
+                    res["id"] = routeData.Values["id"];
+                }
+            }
+
+            foreach (var key in qsObject.AllKeys)
+            {
+                res.Add(key, qsObject[key]);
+            }
+
+            return res;
+        }
+        
         private int Save(
                     Case case_, 
                     CaseLog caseLog, 
