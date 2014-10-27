@@ -53,6 +53,13 @@
             return this.dbset;
         }
 
+        public IQueryable<TEntity> GetAll(params Expression<Func<TEntity, object>>[] includeProperties)
+        {
+            IQueryable<TEntity> query = this.dbset;
+
+            return includeProperties.Aggregate(query, (current, property) => current.Include(property));
+        }
+
         public IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
         {
             return this.dbset.Where(predicate);
@@ -69,7 +76,7 @@
 
         public virtual TEntity GetById(long id)
         {
-            return this.dbset.Find(id); 
+            return this.dbset.Find(id);
         }
     }
 }

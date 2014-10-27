@@ -1,13 +1,21 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace DH.Helpdesk.Domain.Questionnaire
+﻿namespace DH.Helpdesk.Domain.Questionnaire
 {
-    using DH.Helpdesk.Domain.Interfaces;
-
     using global::System;
+
+    using global::System.Collections.Generic;
+
+    using global::System.Collections.ObjectModel;
+
+    using DH.Helpdesk.Domain.Interfaces;
 
     public class QuestionnaireEntity : Entity, ICustomerEntity
     {
+        //public QuestionnaireEntity()
+        //{
+        //    this.QuestionnaireQuestionEntities = new List<QuestionnaireQuestionEntity>();
+        //    this.QuestionnaireLanguageEntities = new List<QuestionnaireLanguageEntity>();
+        //}
+
         #region Public Properties
 
         public DateTime ChangedDate { get; set; }
@@ -21,6 +29,10 @@ namespace DH.Helpdesk.Domain.Questionnaire
         public string QuestionnaireDescription { get; set; }
         
         public string QuestionnaireName { get; set; }
+
+        public virtual ICollection<QuestionnaireQuestionEntity> QuestionnaireQuestionEntities { get; set; }
+
+        public virtual ICollection<QuestionnaireLanguageEntity> QuestionnaireLanguageEntities { get; set; } 
 
         #endregion
     }

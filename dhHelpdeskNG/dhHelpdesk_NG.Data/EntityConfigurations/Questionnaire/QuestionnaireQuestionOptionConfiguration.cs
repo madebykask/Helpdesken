@@ -24,6 +24,10 @@
                 .WithRequired(s => s.QuestionnaireQuestionOption)
                 .HasForeignKey(s => s.QuestionnaireQuestionOption_Id);
 
+            this.HasMany(s => s.QuestionnaireQuesOpLangEntities)
+                .WithRequired(s => s.QuestionnaireQuestionOptions)
+                .HasForeignKey(s => s.QuestionnaireQuestionOption_Id);
+
             this.Property(o => o.QuestionnaireQuestionOptionPos).IsRequired();
             this.Property(o => o.QuestionnaireQuestionOption).IsRequired().HasMaxLength(100);
             this.Property(o => o.OptionValue).IsRequired();

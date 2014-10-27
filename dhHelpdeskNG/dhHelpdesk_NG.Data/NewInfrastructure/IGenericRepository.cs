@@ -19,8 +19,12 @@
 
         IQueryable<TEntity> GetAll();
 
+        IQueryable<TEntity> GetAll(params Expression<Func<TEntity, object>>[] includeProperties);
+
         IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
 
-        IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includeProperties);
+        IQueryable<TEntity> Find(
+            Expression<Func<TEntity, bool>> predicate,
+            params Expression<Func<TEntity, object>>[] includeProperties);
     }
 }

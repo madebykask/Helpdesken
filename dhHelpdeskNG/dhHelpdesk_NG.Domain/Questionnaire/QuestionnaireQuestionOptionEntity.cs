@@ -5,6 +5,12 @@
 
     public class QuestionnaireQuestionOptionEntity : Entity
     {
+        //public QuestionnaireQuestionOptionEntity()
+        //{
+        //    this.QuestionnaireQuestionResultEntities = new List<QuestionnaireQuestionResultEntity>();
+        //    this.QuestionnaireQuesOpLangEntities = new List<QuestionnaireQuesOpLangEntity>();
+        //}
+
         #region Public Properties
 
         public DateTime ChangedDate { get; set; }
@@ -21,7 +27,9 @@
 
         public int QuestionnaireQuestionOptionPos { get; set; }
 
-        public virtual ICollection<QuestionnaireQuestionResultEntity> QuestionnaireQuestionResultEntities { get; set; } 
+        public virtual ICollection<QuestionnaireQuestionResultEntity> QuestionnaireQuestionResultEntities { get; set; }
+ 
+        public virtual ICollection<QuestionnaireQuesOpLangEntity> QuestionnaireQuesOpLangEntities { get; set; } 
 
         #endregion
     }

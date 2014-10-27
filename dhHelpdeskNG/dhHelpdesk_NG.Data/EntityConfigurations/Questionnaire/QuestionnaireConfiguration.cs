@@ -1,6 +1,5 @@
 ﻿namespace DH.Helpdesk.Dal.EntityConfigurations.Questionnaire
 {
-    using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.ModelConfiguration;
 
@@ -21,6 +20,14 @@
                 .WithMany()
                 .HasForeignKey(q => q.Customer_Id)
                 .WillCascadeOnDelete(false);
+
+            this.HasMany(s => s.QuestionnaireQuestionEntities)
+                .WithRequired(s => s.Questionnaire)
+                .HasForeignKey(s => s.Questionnaire_Id);
+
+            this.HasMany(s => s.QuestionnaireLanguageEntities)
+                .WithRequired(s => s.Questionnaire)
+                .HasForeignKey(s => s.Questionnaire_Id);
 
             this.Property(q => q.CreatedDate);
             this.Property(q => q.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
