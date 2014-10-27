@@ -2378,6 +2378,21 @@ h4
   border-bottom:1px solid #ddd;
 }
 
+/**************************ABOUT***********************************************************************/
+
+.bg-blue {
+    background: #438eb9;
+}
+.bg-orange {
+    background: #d96326;
+}
+.bg-purple {
+    background: #53378a !important;
+}
+.bg-green {
+    background: #2e8965;
+}
+
 
 /************************LOGIN*************************************************************************/
 body.login {

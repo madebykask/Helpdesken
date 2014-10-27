@@ -318,6 +318,10 @@
     <Compile Include="Areas\Admin\Models\UrgencyInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\WorkingGroupInputViewModel.cs" />
     <Content Include="Content\icons\ajax-loader.gif" />
+    <Content Include="Content\img\ico-customerservice.png" />
+    <Content Include="Content\img\ico-dhhelpdesk.png" />
+    <Content Include="Content\img\ico-dhsolutions.png" />
+    <Content Include="Content\img\ico-license.png" />
     <Content Include="Content\js\Changes\inventoryDialog.js" />
     <Compile Include="Areas\Licenses\Controllers\ApplicationsController.cs" />
     <Compile Include="Areas\Licenses\Controllers\LicensesController.cs" />
