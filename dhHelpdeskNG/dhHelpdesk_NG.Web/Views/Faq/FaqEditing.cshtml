@@ -142,7 +142,7 @@
                                                 @if (!this.Model.Files.Any())
                                                 {
                                                     <div id="no_uploaded_files_label">
-                                                        @Translation.Get("No uploaded files", Enums.TranslationSource.TextTranslation)
+                                                        @*@Translation.Get("No uploaded files", Enums.TranslationSource.TextTranslation)*@
                                                     </div>
                                                 }
                                                 else
@@ -163,7 +163,7 @@
                                                 }
                                             </tbody>
                                         </table>
-                                        <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Upload", Enums.TranslationSource.TextTranslation)</a>
+                                        <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)</a>
                                         <div id="upload_files_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
                                             <div class="modal-header">
                                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
