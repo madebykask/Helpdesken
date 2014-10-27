@@ -50,7 +50,7 @@
                 var url = '@Url.Action("NewComputerModule", "Inventory")';
                 url += '?moduleType=' + selectedValue;
                 $('#new_master_data_button').attr('href', url);
-                $('#new_master_data_button').html('Nytt ' + selectedName);
+                $('#new_master_data_button').html('Lägg till ' + selectedName);
             });
         });
 
@@ -110,11 +110,11 @@
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
-            <li>@Html.ActionLink(Translation.Get("Nytt"), "RedirectToNewInventory", new { currentMode = Model.CurrentMode }, new { @class = "btn inventory_buttons", id = "new_inventory_button", style = inventoryButtonStyle })</li>
+            <li>@Html.ActionLink(Translation.Get("Lägg till"), "RedirectToNewInventory", new { currentMode = Model.CurrentMode }, new { @class = "btn inventory_buttons", id = "new_inventory_button", style = inventoryButtonStyle })</li>
             <li>@Html.ActionLink(Translation.Get("Excel"), "ExportGridToExcelFile", new { currentMode = Model.CurrentMode }, new { @class = "btn inventory_buttons", id = "excel_report_inventory_button", style = inventoryButtonStyle })</li>
-            <li>@Html.ActionLink(Translation.Get("Nytt"), "NewCustomInventoryType", "InventorySettings", new { }, new { @class = "btn", id = "new_custom_inventory_type_button", style = settingsButtonStyle })</li>
+            <li>@Html.ActionLink(Translation.Get("Lägg till"), "NewCustomInventoryType", "InventorySettings", new { }, new { @class = "btn", id = "new_custom_inventory_type_button", style = settingsButtonStyle })</li>
             <li>@Html.ActionLink(Translation.Get("Excel"), "ExportReportToExcelFile", new { reportType = Model.ReportType }, new { @class = "btn", id = "excel_report_modules_button", style = reportDataButtonStyle })</li>
-            <li>@Html.ActionLink(Translation.Get(string.Format("Nytt {0} ", ((ModuleTypes)Model.ModuleType))), "NewComputerModule", new { moduleType = Model.ModuleType }, new { @class = "btn", id = "new_master_data_button", style = masterDataButtonStyle })</li>
+            <li>@Html.ActionLink(Translation.Get(string.Format("Lägg till {0} ", ((ModuleTypes)Model.ModuleType))), "NewComputerModule", new { moduleType = Model.ModuleType }, new { @class = "btn", id = "new_master_data_button", style = masterDataButtonStyle })</li>
         </ul>
     </div>
 </div>
