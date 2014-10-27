@@ -12,7 +12,7 @@
             <ul class="secnav">
                 <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "new", null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
                 @*<li>
-                    <input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn" />
+                    @Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "$('#target').submit();return false;", @class = "btn" })
                 </li>*@
                 <li>
                     @Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", "Notifiers", new { @class = "btn" })

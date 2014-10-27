@@ -222,26 +222,29 @@
                                                 <img src="@Url.Content("~/Content/icons/orderaccount.png")" />
                                                 @Translation.Get("Beställning kontobehörighet")</a></li>
                                     }                                                                    
-                                    @if (model.IsCheckListVisuble())
+
+                                    @*@if (model.IsCheckListVisuble())
                                     {    
                                         <li><a href="@Url.Action("index", "checklist")">
                                                 <img src="@Url.Content("~/Content/icons/checklist.png")" />
                                                 @Translation.Get("Checklista")</a></li>
                                     }   
                                                                       
-                                    @*@if (model.IsInventoryVisible())
+                                    
+                                    @if (model.IsInventoryVisible())
                                     {    
                                         <li><a href="@Url.Action("Index", "Inventory", new { area = "" })">
                                                 <img src="@Url.Content("~/Content/icons/inventory.png")" />
                                                 @Translation.Get("Inventarier")</a></li> 
-                                    }*@                                   
+                                    }                                   
 
-                                    @*@if (model.IsLicenseVisible())
+                                    @if (model.IsLicenseVisible())
                                     {                                    
                                         <li><a href="@Url.Action("Index", "Products", new { area = "Licenses" })">
                                                 <img src="@Url.Content("~/Content/icons/Licens.png")" alt="license" />
                                                 @Translation.Get("Licenshantering")</a></li>
-                                    }        *@                           
+                                    }                                   
+                                    *@
 
                                     <li>
                                     </li>
