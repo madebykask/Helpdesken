@@ -123,13 +123,19 @@
             var wgSelected = productArea.WorkingGroups ?? new List<WorkingGroupEntity>();
             var wgAvailable = new List<WorkingGroupEntity>();
 
-            if (productArea.Id != 0)
+            //if (productArea.Id != 0)
+            //{
+            //    foreach (var wg in _workingGroupService.GetWorkingGroups(customer.Id))
+            //    {
+            //        if (!wgSelected.Contains(wg))
+            //            wgAvailable.Add(wg);
+            //    }
+            //}
+
+            foreach (var wg in _workingGroupService.GetWorkingGroups(customer.Id))
             {
-                foreach (var wg in _workingGroupService.GetWorkingGroups(customer.Id))
-                {
-                    if (!wgSelected.Contains(wg))
-                        wgAvailable.Add(wg);
-                }
+                if (!wgSelected.Contains(wg))
+                    wgAvailable.Add(wg);
             }
 
             var model = new ProductAreaInputViewModel
