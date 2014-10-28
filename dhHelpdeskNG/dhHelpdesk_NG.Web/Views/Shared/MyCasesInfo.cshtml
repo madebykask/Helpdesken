@@ -14,9 +14,10 @@
             <table class="table table-bordered table-hover">
                 <tbody>
                     @foreach (var myCase in Model.Cases)
-                    {     
-                        <tr rel="tooltip" title="<p style='text-align:left'><strong>@Translation.Get("Kund"):</strong> @Html.DisplayFor(m => myCase.CustomerName)</p><p style='text-align:left'><strong>@Translation.Get("Anmälare"):</strong> @Html.DisplayFor(m => myCase.InitiatorName)</p><p style='text-align:left'><strong>@Translation.Get("Beskrivning"):</strong> @Html.DisplayFor(m => myCase.Description)</div>" style="cursor: pointer" onclick="window.location.href = '@Url.Action("Edit", "Cases", new { id = myCase.Id })'">
-                            <td>
+                    {  
+                        if ((Request.Browser.Browser == "IE") && ((Request.Browser.MajorVersion < 9)))  {
+                            <tr alt="@Translation.Get("Kund"): @Html.DisplayFor(m => myCase.CustomerName)" style="cursor: pointer" onclick="window.location.href = '@Url.Action("Edit", "Cases", new { id = myCase.Id })'">
+                                <td>
                                  @myCase.CaseNumber
                             </td>
                             <td>
@@ -26,6 +27,32 @@
                                 @myCase.ChangedDate.ToFormattedDateTime()
                             </td>
                         </tr>
+                        }
+                         else      {
+                            <tr rel="tooltip" title="<p style='text-align:left'><strong>@Translation.Get("Kund"):</strong> @Html.DisplayFor(m => myCase.CustomerName)</p><p style='text-align:left'><strong>@Translation.Get("Anmälare"):</strong> @Html.DisplayFor(m => myCase.InitiatorName)</p><p style='text-align:left'><strong>@Translation.Get("Beskrivning"):</strong> @Html.DisplayFor(m => myCase.Description)</div>" style="cursor: pointer" onclick="window.location.href = '@Url.Action("Edit", "Cases", new { id = myCase.Id })'">
+                                <td>
+                                 @myCase.CaseNumber
+                            </td>
+                            <td>
+                                 @Html.DisplayFor(m => myCase.Subject)
+                            </td>
+                            <td style="width:30%;">
+                                @myCase.ChangedDate.ToFormattedDateTime()
+                            </td>
+                        </tr>
+                        }
+                        
+                        @*<tr rel="tooltip" title="<p style='text-align:left'><strong>@Translation.Get("Kund"):</strong> @Html.DisplayFor(m => myCase.CustomerName)</p><p style='text-align:left'><strong>@Translation.Get("Anmälare"):</strong> @Html.DisplayFor(m => myCase.InitiatorName)</p><p style='text-align:left'><strong>@Translation.Get("Beskrivning"):</strong> @Html.DisplayFor(m => myCase.Description)</div>" style="cursor: pointer" onclick="window.location.href = '@Url.Action("Edit", "Cases", new { id = myCase.Id })'">*@
+                            @*<td>
+                                 @myCase.CaseNumber
+                            </td>
+                            <td>
+                                 @Html.DisplayFor(m => myCase.Subject)
+                            </td>
+                            <td style="width:30%;">
+                                @myCase.ChangedDate.ToFormattedDateTime()
+                            </td>
+                        </tr>*@
                     }
                 </tbody>
             </table>

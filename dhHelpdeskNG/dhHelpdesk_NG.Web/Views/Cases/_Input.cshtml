@@ -104,11 +104,11 @@
 
                                             </tr>
                                             <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString())">
-                                                <td>
+                                                <td class="span3">
                                                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Persons_EMail)
                                                 </td>
-                                                <td>
-                                                    @Html.TextBoxFor(model => model.case_.PersonsEmail, new { maxlength = "100" })
+                                                <td class="span4">                                                                 
+                                                    @Html.TextBoxFor(model => model.case_.PersonsEmail, new { maxlength = "100" })                                                                                                                                                                     
                                                 </td>
                                                 <td style="@Model.GetFieldStyle(CaseSolutionFields.Email)">
                                                     <label class="checkbox">
@@ -156,26 +156,26 @@
                                                  } *@
                                             </tr>
                                             <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString())">
-                                                <td>
+                                                <td class="span3">
                                                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Persons_Phone)
                                                 </td>
-                                                <td>
+                                                <td class="span4">
                                                     @Html.TextBoxFor(model => model.case_.PersonsPhone, new { maxlength = "30" })
                                                 </td>
                                             </tr>
                                             <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString())">
-                                                <td>
+                                                <td class="span3">
                                                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Persons_CellPhone)
                                                 </td>
-                                                <td>
+                                                <td class="span4">
                                                     @Html.TextBoxFor(model => model.case_.PersonsCellphone, new { maxlength = "30" })
                                                 </td>
                                             </tr>
                                             <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Region_Id.ToString())">
-                                                <td>
+                                                <td class="span3">
                                                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Region_Id)
                                                 </td>
-                                                <td>
+                                                <td class="span4">
                                                     <select id="case__Region_Id" name="case_.Region_Id">
                                                         <option value="">&nbsp;</option>
                                                         @if (Model.regions != null)
@@ -189,10 +189,10 @@
                                                 </td>
                                             </tr>
                                             <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Department_Id, CaseSolutionFields.Department)">
-                                                <td>
+                                                <td class="span3">
                                                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Department_Id)
                                                 </td>
-                                                <td>
+                                                <td class="span4">
                                                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Department_Id, CaseSolutionFields.Department))
                                                     {
                                                         <select id="case__Department_Id" name="case_.Department_Id">
@@ -221,10 +221,10 @@
                                                 </td>
                                             </tr>
                                             <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.OU_Id.ToString())">
-                                                <td>
+                                                <td class="span3">
                                                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.OU_Id)
                                                 </td>
-                                                <td>
+                                                <td class="span4">
                                                     <select id="case__Ou_Id" name="case_.Ou_Id">
                                                         <option value="">&nbsp;</option>
                                                         @if (Model.ous != null)
@@ -238,26 +238,26 @@
                                                 </td>
                                             </tr>
                                             <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Place.ToString())">
-                                                <td>
+                                                <td class="span3">
                                                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Place)
                                                 </td>
-                                                <td>
+                                                <td class="span4">
                                                     @Html.TextBoxFor(model => model.case_.Place, new { maxlength = "100" })
                                                 </td>
                                             </tr>
                                             <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.UserCode.ToString())">
-                                                <td>
+                                                <td class="span3">
                                                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.UserCode)
                                                 </td>
-                                                <td>
+                                                <td class="span4">
                                                     @Html.TextBoxFor(model => model.case_.UserCode, new { maxlength = "20" })
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>
+                                                <td class="span3">
                                                     @Translation.Get("Spara användaruppgifter", SessionFacade.CurrentCaseLanguageId)
                                                 </td>
-                                                <td>
+                                                <td class="span4">
                                                     @Html.CheckBoxFor(m => m.UpdateNotifierInformation)
                                                 </td>
                                             </tr>
@@ -288,18 +288,18 @@
                                             <td></td>
                                         </tr>
                                         <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString())>
-                                            <td>
+                                            <td class="span3">
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ComputerType_Id)
                                             </td>
-                                            <td>
+                                            <td class="span4">
                                                 @Html.TextBoxFor(model => model.case_.InventoryType, new { maxlength = "50" })
                                             </td>
                                         </tr>
                                         <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString())">
-                                            <td>
+                                            <td class="span3">
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.InventoryLocation)
                                             </td>
-                                            <td>
+                                            <td class="span4">
                                                 @Html.TextBoxFor(model => model.case_.InventoryLocation, new { maxlength = "100" })
                                             </td>
                                         </tr>
