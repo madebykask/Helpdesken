@@ -582,11 +582,12 @@
                                                       
                                         </td>
                                            <td colspan="2">
-                                                <span id="caseDescriptionPreview" rel="tooltip" 
-                                                  
-                                                  class="icon-circle-arrow-up cursor-pointer" 
-                                                 title="@Translation.Get("Förhandsgranska")">
-
+                                               <span id="caseDescriptionPreview" 
+                                                     rel="tooltip" 
+                                                     class="icon-circle-arrow-up cursor-pointer" 
+                                                     title="@Translation.Get("Förhandsgranska")"
+                                                   style="@((Model.case_.Description.Length == 0)?"visibility: hidden":"")"
+                                                    >
                                                 </span>
                                             </td>
                                     </tr>
@@ -1323,7 +1324,7 @@
         //errorPlacement: function (error, element) {
         //    alert(error.text());
         //},
-        submitHandler: function (form) {
+        submitHandler: function(form) {
             form.submit();
         }
     });
@@ -1335,12 +1336,14 @@
         }
         return ret;
     }
-    
 
-    $(function() {        
-    
-        $("#caseDescriptionPreview").click(function() {
-            var description = $(".case-description")
+
+    $(function() {
+        var description = $(".case-description");
+        var previewBtn = $("#caseDescriptionPreview");
+
+        previewBtn.click(function() {
+            description
                 .attr("value")
                 .replace(/\r\n|\r|\n/g, "<br />");
             var d = $(document.createElement("div"))
@@ -1355,8 +1358,13 @@
                     }
                 });
         });
+
+        description.keyup(function(ev) {
+            var visibility = 'visible';
+            if (ev.target.value.length == 0) {
+                visibility = 'hidden';
+            }
+            previewBtn.css('visibility', visibility);
+        });
     });
-
 </script>
-
-
