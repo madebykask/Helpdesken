@@ -3,21 +3,9 @@
 
 @model DH.Helpdesk.Web.Models.Faq.Output.NewFaqModel
 
-  
-
-<script type="text/javascript" src="@Url.Content("~/Content/js/dhHelpdesk.js")"></script>
-<script>
-     $(document).ready(function () {
-         FAQInitForm();
-     });
-</script>
-
-@Html.Partial("_Plupload") 
-
 @{
     this.ViewBag.Title = Translation.Get("Ny FAQ", Enums.TranslationSource.TextTranslation);
 }
-
 @using (this.Html.BeginForm("NewFaq", "Faq", FormMethod.Post, new { id = "target" }))
 
 {
@@ -32,7 +20,3 @@
     </div>
     @this.Html.Partial("FaqEditing", new EditingFaqModel(this.Model.TemporaryId, this.Model.Categories, string.Empty, string.Empty, string.Empty, new List<string>(0), string.Empty, string.Empty, this.Model.WorkingGroups, false, false))
 }
-
-@*<script type="text/javascript" src="~/Content/js/dhHelpdesk.js">*@
-
-

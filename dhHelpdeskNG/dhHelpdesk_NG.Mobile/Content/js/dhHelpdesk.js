@@ -104,105 +104,6 @@ function NewCaseAndAddCase() {
 }
 
 var allFileNames = [];
-function FAQInitForm() {
-    var _plupload;
-    var getFAQFiles = function () {
-        $.get('/FAQ/Files', { faqId: $('#FAQKey').val() }, function (data) {
-            $('#divFAQFiles').html(data);
-            bindDeleteFAQFileBehaviorToDeleteButtons();
-        });
-    };
-    $('#upload_FAQfiles_popup').on('hide', function () {
-
-        if (_plupload != undefined) {
-            if (_plupload.pluploadQueue().files.length > 0) {
-                if (_plupload.pluploadQueue().state == plupload.UPLOADING) {
-                    _plupload.pluploadQueue().stop();
-                    for (var i = 0; i < _plupload.pluploadQueue().files.length; i++) {
-                        _plupload.pluploadQueue().removeFile(_plupload.pluploadQueue().files[i]);
-                    }
-                    _plupload.pluploadQueue().refresh();
-                }
-            }
-        }
-    });
-
-    $('#upload_FAQfiles_popup').on('show', function () {
-        _plupload = $('#FAQfile_uploader').pluploadQueue({
-            runtimes: 'html5,html4',
-            url: '/FAQ/UploadFile',
-            multipart_params: { faqId: $('#FAQKey').val() },
-            filters: {
-                max_file_size: '10mb',
-            },
-            buttons: { browse: true, start: true, stop: true, cancel: true },
-            preinit: {
-                Init: function (up, info) {
-                    //console.log('1:init', info);                    
-                },
-
-
-                UploadFile: function (up, file) {
-
-                    var strFiles = $('#FAQFileNames').val();
-                    if (strFiles != undefined) {
-                        var allFileNames = strFiles.split('|');
-
-                        var fn = file.name;
-
-                        for (var i = 0; i < allFileNames.length; i++) {
-                            if (fn == allFileNames[i]) {
-                                var findName = false;
-                                for (var j = 1; j < 100 && !findName; j++) {
-                                    findName = true;
-                                    for (var k = 0; k < allFileNames.length; k++) {
-                                        if (j.toString() + '-' + fn == allFileNames[k])
-                                            findName = false;
-                                    }
-
-                                    if (findName) {
-                                        var d = getNow().toString();
-                                        file.name = d + '-' + fn;
-                                    }
-                                } // for j
-                            }
-                        } // for i
-                    }
-                    $('#FAQFileNames').val(strFiles + "|" + file.name);
-                },
-
-                UploadComplete: function (up, file) {
-
-                    //console.log('3:uploaded complete',file.name);
-                    //plupload_add
-                    $(".plupload_buttons").css("display", "inline");
-                    $(".plupload_upload_status").css("display", "inline");
-                    up.refresh();
-                }
-            },
-            init: {
-                FileUploaded: function () {
-                    getFAQFiles();
-                },
-
-                Error: function (uploader, e) {
-                    if (e.status != 409) {
-                        return;
-                    }
-                },
-
-                StateChanged: function (uploader) {
-                    if (uploader.state != plupload.STOPPED) {
-                        return;
-                    }
-                    uploader.refresh();
-                }
-            }
-        });
-    });
-    bindDeleteFAQFileBehaviorToDeleteButtons();
-
-}
 function CaseInitForm() {
 
     $('#CaseLog_TextExternal').focus(function () {
@@ -402,8 +303,6 @@ function CaseInitForm() {
             }
         }
     });
-
-    
 
     
     var newFileName = "";
@@ -801,20 +700,6 @@ $('.multiselect').multiselect({
     }
 });
 
-function bindDeleteFAQFileBehaviorToDeleteButtons() {
-    $('#faq_files_table a[id^="delete_faqfile_button_"]').click(function () {
-        var key = $('#FAQKey').val();
-        var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
-        var pressedDeleteFileButton = this;
-        $.post("/FAQ/DeleteFile", { faqId: key, fileName: fileName }, function () {
-            $(pressedDeleteFileButton).parents('tr:first').remove();
-            var fileNames = $('#FAQFileNames').val();
-            fileNames = fileNames.replace("|" + fileName.trim(), "");
-            fileNames = fileNames.replace(fileName.trim() + "|", "");
-            $('#FAQFileNames').val(fileNames);
-        });
-    });
-}
 function bindDeleteCaseFileBehaviorToDeleteButtons() {
     $('#case_files_table a[id^="delete_casefile_button_"]').click(function () {
         var key = $('#CaseKey').val();

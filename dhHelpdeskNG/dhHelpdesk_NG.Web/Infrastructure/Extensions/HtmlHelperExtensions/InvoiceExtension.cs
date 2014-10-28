@@ -16,9 +16,7 @@
                         string productAreaSelector,
                         int caseId,
                         string caseInvoiceArticlesSelector,
-                        int customerId,
-                        string btnCaption,
-                        string btnHint)
+                        int customerId)
         {
             var result = new StringBuilder();
             var tag = new TagBuilder("input");
@@ -34,9 +32,6 @@
             tag.MergeAttribute("data-invoice-articles-for-save", caseInvoiceArticlesSelector);
             tag.MergeAttribute("data-invoice-date-format", Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern.ToLower());
             tag.MergeAttribute("data-invoice-customerId", customerId.ToString(CultureInfo.InvariantCulture));
-            tag.MergeAttribute("data-invoice-Caption", btnCaption);
-            tag.MergeAttribute("data-invoice-Hint", btnHint);
-
             result.Append(tag);
             return MvcHtmlString.Create(result.ToString());            
         }

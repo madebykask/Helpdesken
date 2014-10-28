@@ -697,7 +697,6 @@
     <Compile Include="Models\Changes\SettingsEdit\SettingsModel.cs" />
     <Compile Include="Models\Changes\SettingsEdit\TextFieldSettingModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\ConfigurableFieldModel.cs" />
-    <Compile Include="Models\Faq\Output\FAQFileModelModel.cs" />
     <Compile Include="Models\IConfigurableFieldModel.cs" />
     <Compile Include="Models\Inventory\ComputerModuleModeFilter.cs" />
     <Compile Include="Models\Inventory\EditModel\Computer\AccesoriesViewModel.cs" />
@@ -1653,8 +1652,6 @@
     <Content Include="Views\Questionnaire\CircularOverviewGrid.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\MultiSelectListModel.cshtml" />
     <Content Include="Views\Questionnaire\Quiestionnaire.cshtml" />
-    <Content Include="Views\Faq\_FAQFiles.cshtml" />
-    <Content Include="Views\Faq\_Plupload.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

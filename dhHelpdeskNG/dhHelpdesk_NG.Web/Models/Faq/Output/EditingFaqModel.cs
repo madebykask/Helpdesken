@@ -49,9 +49,6 @@
             this.WorkingGroup = workingGroup;
             this.InformationIsAvailableForNotifiers = informationIsAvailableForNotifiers;
             this.ShowOnStartPage = showOnStartPage;
-
-            var ff = new FAQFileModel() { FAQId = id, FAQFiles = files };
-            this.FAQLFile = ff;
         }
 
         #endregion
@@ -66,8 +63,6 @@
         public DropDownWithSubmenusContent Category { get; private set; }
 
         public List<string> Files { get; private set; }
-
-        public FAQFileModel FAQLFile { get; private set; }
 
         public bool InformationIsAvailableForNotifiers { get; private set; }
 

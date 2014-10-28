@@ -162,8 +162,6 @@
             }
 
             var model = this.editFaqModelFactory.Create(faq, categoriesWithSubcategories, fileNames, workingGroups);
-            ViewData["FN"] = GetFAQFileNames(faq.Id.ToString());
-
             return this.View(model);
         }
 
@@ -200,7 +198,6 @@
             return this.Json(faqModels, JsonRequestBehavior.AllowGet);
         }
 
-        
         [HttpGet]
         public JsonResult FaqsDetailed(int categoryId)
         {
@@ -228,15 +225,14 @@
         }
 
         [HttpGet]
-        public ActionResult Files(string faqId)
+        public JsonResult Files(string faqId)
         {
             var fileNames = GuidHelper.IsGuid(faqId)
                                 ? this.userTemporaryFilesStorage.FindFileNames(faqId)
                                 : this.faqFileRepository.FindFileNamesByFaqId(int.Parse(faqId));
-            var model = new FAQFileModel(){FAQId=faqId,FAQFiles=fileNames.ToList()};
-            return this.PartialView("_FAQFiles", model);
-        }
 
+            return this.Json(fileNames, JsonRequestBehavior.AllowGet);
+        }
 
         /// <summary>
         /// The index.
@@ -297,8 +293,7 @@
 
             var workingGroups = this.workingGroupRepository.FindActiveOverviews(currentCustomerId);
             var model = this.newFaqModelFactory.Create(Guid.NewGuid().ToString(), categoriesWithSubcategories, categoryId, workingGroups);
-            ViewData["FN"] = GetFAQFileNames(model.TemporaryId);
-
+            
             return this.View(model);
         }
 
@@ -397,17 +392,5 @@
         }
 
         #endregion
-
-        private string GetFAQFileNames(string id)
-        {
-            var fileNames = GuidHelper.IsGuid(id)
-                               ? this.userTemporaryFilesStorage.FindFileNames(id)
-                                : this.faqFileRepository.FindFileNamesByFaqId(int.Parse(id));
-
-            return String.Join("|", fileNames);
-
-        }
-
- 
     }
 }
