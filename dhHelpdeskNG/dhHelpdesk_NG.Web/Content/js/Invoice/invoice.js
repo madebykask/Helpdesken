@@ -1,4 +1,5 @@
-﻿if (window.dhHelpdesk == null)
+﻿
+if (window.dhHelpdesk == null)
     dhHelpdesk = {};
 
 $(function () {
@@ -399,11 +400,13 @@ $(function () {
             th.CustomerId = e.attr("data-invoice-customerId");
             th.CaseInvoicesElement = $(document).find("." + e.attr("data-invoice-articles-for-save"));
             th.DateFormat = e.attr("data-invoice-date-format");
-
+            var ButtonCaption = e.attr("data-invoice-Caption");
+            var ButtonHint = e.attr("data-invoice-Hint");
+            
             var button = $(document.createElement("input"))
                 .attr("type", "button")
-                .attr("value", "Invoice articles")
-                .attr("title", "Articles to be invoiced")
+                .attr("value", ButtonCaption )
+                .attr("title", ButtonHint)
                 .addClass("btn");
             button.click(function () {
                 th.CreateContainer();

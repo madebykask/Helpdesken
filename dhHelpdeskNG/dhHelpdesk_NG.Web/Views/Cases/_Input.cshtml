@@ -384,7 +384,7 @@
                                         <td colspan="2">
                                             <div id="divProductArea" class="btn-group">
                                                 @{
-                                    string disabledProductArea = Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ProductArea_Id, CaseSolutionFields.ProductArea);
+                                                    string disabledProductArea = Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ProductArea_Id, CaseSolutionFields.ProductArea);
                                                 }
                                                 <div class="btn @disabledProductArea" id="divBreadcrumbs_ProductArea">@Model.ParantPath_ProductArea</div>
                                                 <button class="btn dropdown-toggle" data-toggle="dropdown" @disabledProductArea>
@@ -403,7 +403,9 @@
                                                     "product-area-id",
                                                     Model.case_.Id,
                                                     "case-invoice-articles",
-                                                    Model.case_.Customer_Id)
+                                                    Model.case_.Customer_Id,
+                                                    Translation.Get("Skicka till fakturering"),
+                                                    Translation.Get("Artiklar att fakturera"))
                                                 @Html.HiddenFor(m => m.CaseInvoiceArticles, new { @class = "case-invoice-articles" })                                                                                            
                                             }
                                         </td>
@@ -559,7 +561,8 @@
                                         <td>
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Description)
                                         </td>
-                                        <td colspan="2">
+                                        <td colspan="3">
+                                       
                                             @{
                                             var descriptionSize = Model.caseFieldSettings.getFieldSize(GlobalEnums.TranslationCaseFields.Description.ToString());
                                             if (descriptionSize == 0)
@@ -567,6 +570,7 @@
                                                 descriptionSize = 5;
                                             }
                                             }
+                                            
                                             @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Description, CaseSolutionFields.Description))
                                             {
                                                 @Html.TextAreaFor(model => model.case_.Description, new { rows = descriptionSize, @class = "case-description width90" })
@@ -575,11 +579,16 @@
                                             {
                                                 @Html.TextAreaFor(model => model.case_.Description, new { rows = descriptionSize, @class = "case-description width90", @readonly = true })
                                             }
-                                            <span id="caseDescriptionPreview" rel="tooltip" 
+                                                      
+                                        </td>
+                                           <td colspan="2">
+                                                <span id="caseDescriptionPreview" rel="tooltip" 
                                                   
                                                   class="icon-circle-arrow-up cursor-pointer" 
-                                                  title="@Translation.Get("Förhandsgranska")"></span>
-                                        </td>
+                                                 title="@Translation.Get("Förhandsgranska")">
+
+                                                </span>
+                                            </td>
                                     </tr>
                                     <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Miscellaneous, CaseSolutionFields.Miscellaneous)">
                                         <td>

@@ -4,6 +4,15 @@
 
 @model DH.Helpdesk.Web.Models.Faq.Output.EditFaqModel
 
+
+<script type="text/javascript" src="@Url.Content("~/Content/js/dhHelpdesk.js")"></script>
+<script>
+    $(document).ready(function () {
+        FAQInitForm();
+    });
+</script>
+
+
 @{
     this.ViewBag.Title = @Translation.Get("Edit FAQ", Enums.TranslationSource.TextTranslation);
 }
@@ -18,6 +27,7 @@
     });
 </script>
 
+@Html.Partial("_Plupload")
 @using (this.Html.BeginForm("EditFaq", "Faq", FormMethod.Post, new { id = "target" }))
 {
     <div class="secnavs fixed">
