@@ -14,10 +14,10 @@
         <div class="pull-left">
             <ul class="secnav">
                 <li>
-                    <input type="submit" value="@Translation.Get("Save", Enums.TranslationSource.TextTranslation)" class="btn" />
+                    <input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn" />
                 </li>
                 <li>
-                    @Html.ActionLink(Translation.Get("nya", Enums.TranslationSource.TextTranslation) + " " + 
+                    @Html.ActionLink(Translation.Get("Ny", Enums.TranslationSource.TextTranslation) + " " + 
                                      Translation.Get("Fråga", Enums.TranslationSource.TextTranslation),
                                      "NewQuestionnaireQuestion", "Questionnaire", new {questionnaireId  = Model.Id, languageId = Model.LanguageId}, new { @class = "btn" } )
                 </li>                
