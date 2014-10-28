@@ -1,0 +1,38 @@
+﻿@using DH.Helpdesk.Common.Extensions.DateTime
+@model DH.Helpdesk.Web.Models.Faq.Output.FAQFileModel     
+
+@if (Model != null && Model.FAQFiles != null && Model.FAQFiles.Any())
+{    
+    <table id="faq_files_table" class="table" style="width:auto" >
+        <thead>
+            <tr>
+                <th>
+                    @Translation.Get("Filnamn")
+                </th>
+               
+                <th></th>
+            </tr>    
+        </thead>
+        <tbody>            
+        @{
+            var i = 0;
+            foreach (var file in Model.FAQFiles) 
+            {
+                <tr>
+                    <td>
+                       
+                        <a href="@this.Url.Action("DownloadFile", new RouteValueDictionary { { "faqId", this.Model.FAQId }, { "fileName", file } })">@file</a>
+                    </td>
+                    
+                    <td>
+                        <a id="@string.Format("delete_faqfile_button_{0}", i)" class="btn bt-small" title="@Translation.Get("Ta bort")"><i class="icon-remove"></i></a>
+                    </td>
+                                          
+                </tr>
+                
+                i++;
+            }
+        }
+        </tbody>
+    </table> 
+}    

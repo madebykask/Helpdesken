@@ -2,88 +2,14 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Models.Faq.Output.EditingFaqModel
            
-<script type="text/javascript">
-    $(function() {
-        window.alreadyExistFileIds = [];
-        bindDeleteFileBehaviorToDeleteButtons();
 
-        $('#file_uploader').pluploadQueue({
-            url: '@this.Url.Action("UploadFile")',
-            multipart_params: { faqId: '@this.Model.Id' },
-            max_file_size: '10mb',
-
-            init: {
-                FileUploaded: function() {
-                    $.get('@this.Url.Action("Files")', { faqId: '@this.Model.Id' }, function(files) {
-                        refreshFilesTable(files);
-                        $('#no_uploaded_files_label').hide();
-                    });
-                },
-
-                Error: function(uploader, e) {
-                    if (e.status != 409) {
-                        return;
-                    }
-
-                    window.alreadyExistFileIds.push(e.file.id);
-                },
-
-                StateChanged: function(uploader) {
-                    if (uploader.state != plupload.STOPPED) {
-                        return;
-                    }
-
-                    for (var i = 0; i < window.alreadyExistFileIds.length; i++) {
-                        var fileId = window.alreadyExistFileIds[i];
-                        $('#file_uploader ul[class="plupload_filelist"] li[id="' + fileId + '"] div[class="plupload_file_action"] a').prop('title', '@Translation.Get("File already exists.", Enums.TranslationSource.TextTranslation)');
-                    }
-
-                    window.alreadyExistFileIds.length = 0;
-                    uploader.refresh();
-                }
-            }
-        });
-    });
-
-    function refreshFilesTable(files) {
-        $('#files_table > tbody > tr').remove();
-
-        for (var i = 0; i < files.length; i++) {
-            var file = files[i];
-
-            var fileMarkup =
-                $('<tr>' +
-                    '<td>' +
-                    '<a href="@this.Url.Action("DownloadFile")?@(!string.IsNullOrEmpty(this.Model.Id) ? "faqId=" + this.Model.Id + "&" : string.Empty)' + 'fileName=' + file + '">' + file + '</a>' +
-                    '</td>' +
-                    '<td>' +
-                    '<a id="delete_file_button_' + i + '" class="btn">@Translation.Get("Delete", Enums.TranslationSource.TextTranslation)</a>' +
-                    '</td>' +
-                    '</tr>');
-
-            $('#files_table > tbody').append(fileMarkup);
-        }
-
-        bindDeleteFileBehaviorToDeleteButtons();
-    }
-
-    function bindDeleteFileBehaviorToDeleteButtons() {
-        $('#files_table a[id^="delete_file_button_"]').click(function() {
-            var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
-            var pressedDeleteFileButton = this;
-
-            $.post('@this.Url.Action("DeleteFile")', { faqId: '@this.Model.Id', fileName: fileName }, function() {
-                $(pressedDeleteFileButton).parents('tr:first').remove();
-            });
-        });
-    }
-</script>
 
 <input type="hidden" name="Id" value="@this.Model.Id" />
+ 
 
 <div class="content">
     <div class="container">
-        <ul class="nav nav-tabs">
+               <ul class="nav nav-tabs">
             <li class="active">
                 <a href="#fragment-1">@Translation.Get("FAQ", Enums.TranslationSource.TextTranslation)</a>
             </li>
@@ -91,6 +17,9 @@
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
                 <div class="container">
+                     <input type="hidden" id ="FAQKey" name="FAQKey" value="@this.Model.Id" />
+                     <input type="hidden" id = "FAQFileNames" name="FAQFileNames" value="@ViewData["FN"]" />
+
                     <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
                         <div class="span12">
@@ -100,6 +29,7 @@
                                         @Translation.Get("Kategori", Enums.TranslationSource.TextTranslation) <span class="mandatorystar">*</span>
                                     </td>
                                     <td class="span9">
+                                        
                                         @this.Html.DropDownWithSubmenus("category_dropdown", "CategoryId", false, Model.Category)
                                     </td>
                                 </tr>
@@ -137,7 +67,7 @@
                                         @Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        <table id="files_table">
+                                        @*<table id="files_table">
                                             <tbody>
                                                 @if (!this.Model.Files.Any())
                                                 {
@@ -162,20 +92,30 @@
                                                     }
                                                 }
                                             </tbody>
-                                        </table>
-                                        <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Upload", Enums.TranslationSource.TextTranslation)</a>
+                                        </table>*@
+    
+                                        @*<a href="#upload_files_popup" role="button" class="btn" data-toggle="modal" id ="b1">@Translation.Get("Upload", Enums.TranslationSource.TextTranslation)</a>
+
                                         <div id="upload_files_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
                                             <div class="modal-header">
                                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                                 <h3>&nbsp;</h3>
                                             </div>
                                             <div class="modal-body">
-                                                <div id="file_uploader"></div>
+                                                <div id="file_uploader"></div>                                                
                                             </div>
                                             <div class="modal-footer">
-                                                <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Stäng", Enums.TranslationSource.TextTranslation)</button>
+                                                <button class="btn" data-dismiss="modal" aria-hidden="true" onclick="refreshFileList()">@Translation.Get("Stäng", Enums.TranslationSource.TextTranslation)</button>
                                             </div>
                                         </div>
+                                        *@
+
+                                        <a href="#upload_FAQfiles_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till")</a>
+                                                
+                                        <div id="divFAQFiles">
+                                            @Html.Partial("_FAQFiles", Model.FAQLFile)
+                                        </div>
+                                            
                                     </td>
                                 </tr>
                                 <tr>
