@@ -767,6 +767,7 @@
     <Compile Include="Models\Questionnaire\Output\QuestionnaireQuestionModel.cs" />
     <Compile Include="Models\Questionnaire\Output\QuestionnaireViewModel.cs" />
     <Compile Include="Models\Questionnaire\Output\QuestionViewModel.cs" />
+    <Compile Include="Models\Questionnaire\Output\StatisticsViewModel.cs" />
     <Compile Include="Models\Reports\AverageSolutionTimeOptions.cs" />
     <Compile Include="Models\Reports\AverageSolutionTimeReport.cs" />
     <Compile Include="Models\Reports\IndexModel.cs" />
@@ -1663,6 +1664,7 @@
     <Content Include="Views\Shared\EditorTemplates\MultiSelectListModel.cshtml" />
     <Content Include="Views\Questionnaire\Quiestionnaire.cshtml" />
     <Content Include="Views\Faq\_FAQFiles.cshtml" />
+    <Content Include="Views\Questionnaire\Statistics.cshtml" />
     <Content Include="Views\Faq\_Plupload.cshtml" />
   </ItemGroup>
   <ItemGroup>

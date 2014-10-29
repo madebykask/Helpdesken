@@ -1,0 +1,102 @@
+﻿@using DH.Helpdesk.Services.Response.Questionnaire
+@using DH.Helpdesk.Web.Models.Questionnaire.Output
+@model StatisticsViewModel
+<div class="secnavs fixed">
+    <div class="pull-left">
+        <ul class="secnav">
+            <li>
+                <a href="@Url.Action("CircularOverview", new { questionnaireId = Model.QuestionnaireId })" class="btn">
+                    @Translation.Get("Avbryt")
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <li class="active"></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment-1">
+                <div class="container">
+                    <h3 style="color: gray">@Model.QuestionnaireOverview.Name</h3>
+                    <div class="row">
+                        <div class="span12">
+                            @Model.QuestionnaireOverview.Description
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane tab-pane-border active" id="fragment-2">
+                <div class="container">
+
+                    <table class="table table-striped table-bordered table-hover">
+                        @foreach (var question in Model.QuestionnaireOverview.Questions)
+                        {
+                            var values = new List<OptionResult>();
+
+                            foreach (var option in question.Options)
+                            {
+                                int count = 0;
+
+                                OptionResult result = Model.OptionResults.FirstOrDefault(x => x.OptionId == option.Id);
+
+                                if (result != null)
+                                {
+                                    count = result.Count;
+                                }
+
+                                values.Add(new OptionResult(option.Id, count));
+                            }
+                            
+                            <tr>
+                                <td colspan="5" class="header">@question.Number. @question.Question (@Translation.Get("Antal svar"): @values.Sum(x=>x.Count))</td>
+                            </tr>
+
+                            foreach (var option in question.Options.OrderBy(x => x.Position))
+                            {
+                                int count = values.First(x => x.OptionId == option.Id).Count;
+                                int percent = GetPercent(count, values.Select(x => x.Count));
+                                
+                                <tr>
+                                    <td>
+                                        @option.Option
+                                    </td>
+                                    <td>
+                                        <div style="background: lightblue; width: @percent%; height: 20px;">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @count
+                                    </td>
+                                    <td>
+                                        @Translation.Get("svar")
+                                    </td>
+                                    <td>@percent%
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions 
+{
+
+    private int GetPercent(int value, IEnumerable<int> values)
+    {
+        int sum = values.Sum();
+
+        int percent = value * 100 / sum;
+
+        return percent;
+    }
+
+}

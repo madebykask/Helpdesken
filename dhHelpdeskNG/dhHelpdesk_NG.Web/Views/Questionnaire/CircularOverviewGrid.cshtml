@@ -1,4 +1,12 @@
 ﻿@model List<DH.Helpdesk.Web.Models.Questionnaire.Output.CircularOverviewModel>
+@{
+    var questionnaireId = ViewData["QuestionnaireId"];
+    if (questionnaireId == null)
+    {
+        throw new ArgumentNullException("QuestionnaireId", "QuestionnaireId must be specified.");
+    }
+}
+
 <table id="tblCircular" class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
@@ -36,7 +44,7 @@
                 @Html.DisplayFor(modelItem => item.TotalParticipants)
                 (@Html.DisplayFor(modelItem => item.SentParticipants))
             </td>
-            <td class="tdpointer">Icon
+            <td onclick=" window.location.href = '@Url.Action("Statistics", "Questionnaire", new { questionnaireId = questionnaireId, circularId = item.Id })' " class="tdpointer">@Translation.Get("Statistik")
             </td>
         </tr>
     }

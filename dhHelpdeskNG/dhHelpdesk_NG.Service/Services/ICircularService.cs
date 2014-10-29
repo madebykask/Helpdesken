@@ -6,6 +6,7 @@
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Read;
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Write;
+    using DH.Helpdesk.Services.Response.Questionnaire;
 
     public interface ICircularService
     {
@@ -22,6 +23,12 @@
         void DeleteConnectedCase(int cirularId, int caseId);
 
         QuestionnaireOverview GetQuestionnaire(Guid guid, OperationContext operationContext);
+
+        QuestionnaireOverview GetQuestionnaire(int id, OperationContext operationContext);
+
+        List<OptionResult> GetResult(int circularId);
+
+        List<OptionResult> GetResults(List<int> circularIds);
 
         List<AvailableCase> GetAvailableCases(
             int customerId,

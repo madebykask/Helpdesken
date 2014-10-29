@@ -62,7 +62,7 @@
                     </div>
 
                     <div id="circulars_grid">
-                        @Html.Partial("CircularOverviewGrid", Model.CircularOverviewModels)
+                        @Html.Partial("CircularOverviewGrid", Model.CircularOverviewModels, new ViewDataDictionary { { "QuestionnaireId", @Model.QuestionnaireId } })
                     </div>
                 </div>
             </div>

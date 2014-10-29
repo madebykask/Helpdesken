@@ -9,8 +9,10 @@
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Read;
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Write;
     using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.Statistics.Output;
     using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Common.Extensions.Integer;
+    using DH.Helpdesk.Services.Response.Questionnaire;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Models.Questionnaire.Input;
@@ -683,6 +685,21 @@
             this._circularService.SaveAnswers(participant);
 
             return this.RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public ViewResult Statistics(int questionnaireId, int circularId)
+        {
+            QuestionnaireOverview questionnaire = this._circularService.GetQuestionnaire(
+                questionnaireId,
+                OperationContext);
+            List<OptionResult> results = this._circularService.GetResult(circularId);
+
+            var viewModel = new StatisticsViewModel(questionnaireId, questionnaire, results);
+
+            // return this.View("StatisticsInfo", new StatisticsOverview(3, 0, 1, 2));
+
+            return this.View("Statistics", viewModel);
         }
 
         #region PRIVATE

@@ -24,6 +24,7 @@
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Questionnaire;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.User;
+    using DH.Helpdesk.Services.Response.Questionnaire;
 
     public class CircularService : ICircularService
     {
@@ -259,33 +260,57 @@
 
         public QuestionnaireOverview GetQuestionnaire(Guid guid, OperationContext operationContext)
         {
+            int id;
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
                 var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
-                var questionnaireRepository = uof.GetRepository<QuestionnaireEntity>();
 
                 // todo ef include with join doesn't work
-                int id =
+                id =
                     circularPartRepository.GetAll()
                         .GetByGuid(guid)
                         .Select(x => x.QuestionnaireCircular.Questionnaire_Id)
                         .SingleOrDefault();
+            }
 
-                QuestionnaireEntity anonymus =
-                    questionnaireRepository.GetAll(
-                        x => x.QuestionnaireQuestionEntities,
-                        x => x.QuestionnaireQuestionEntities.Select(y => y.QuestionnaireQuestionOptionEntities),
-                        x => x.QuestionnaireLanguageEntities,
-                        x => x.QuestionnaireQuestionEntities.Select(y => y.QuestionnaireQuesLangEntities),
-                        x =>
-                        x.QuestionnaireQuestionEntities.Select(
-                            y => y.QuestionnaireQuestionOptionEntities.Select(z => z.QuestionnaireQuesOpLangEntities)))
-                        .GetById(id)
-                        .SingleOrDefault();
+            QuestionnaireOverview overview = this.GetQuestionnaireEntity(id, operationContext);
+            return overview;
+        }
 
-                return anonymus == null
-                           ? QuestionnaireOverview.GetDefault()
-                           : GetQuestionnaireOverview(operationContext.LanguageId, anonymus);
+        public QuestionnaireOverview GetQuestionnaire(int id, OperationContext operationContext)
+        {
+            QuestionnaireOverview overview = this.GetQuestionnaireEntity(id, operationContext);
+            return overview;
+        }
+
+        public List<OptionResult> GetResult(int circularId)
+        {
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var questionnaireQuestionResultRepository = uof.GetRepository<QuestionnaireQuestionResultEntity>();
+
+                List<OptionResult> overviews =
+                    questionnaireQuestionResultRepository.GetAll()
+                        .GetCircularQuestionnaireQuestionResultEntities(circularId)
+                        .MapToOptionResults();
+
+                return overviews;
+            }
+        }
+
+        public List<OptionResult> GetResults(List<int> circularIds)
+        {
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var questionnaireQuestionResultRepository = uof.GetRepository<QuestionnaireQuestionResultEntity>();
+
+                List<OptionResult> overviews =
+                    questionnaireQuestionResultRepository.GetAll()
+                        .GetCircularsQuestionnaireQuestionResultEntities(circularIds)
+                        .MapToOptionResults()
+                        .ToList();
+
+                return overviews;
             }
         }
 
@@ -342,7 +367,36 @@
 
         #region PRIVATE STATIC
 
-        private static QuestionnaireOverview GetQuestionnaireOverview(int languageId, QuestionnaireEntity anonymus)
+        private static void Map(Circular businessModel, QuestionnaireCircularEntity entity)
+        {
+            entity.CircularName = businessModel.CircularName;
+        }
+
+        private static EmailMarkValues CreateMarkValues(
+            string actionAbsolutePath,
+            Guid guid,
+            decimal caseNumber,
+            string caseCaption,
+            string caseDescription)
+        {
+            string path = string.Format("{0}{1}", actionAbsolutePath, guid);
+            path = string.Format("<a href=\"{0}\">{0}</a>", path);
+
+            var markValues = new EmailMarkValues();
+            markValues.Add("[#1]", caseNumber.ToString());
+            markValues.Add("[#4]", caseCaption);
+            markValues.Add("[#5]", caseDescription);
+            markValues.Add("[#99]", path);
+
+            return markValues;
+        }
+
+        #endregion
+
+        #region PRIVATE
+
+        private
+           QuestionnaireOverview MapToQuestionnaireOverview(int languageId, QuestionnaireEntity anonymus)
         {
             var questions = (from question in anonymus.QuestionnaireQuestionEntities
                              let options = (from option in question.QuestionnaireQuestionOptionEntities
@@ -401,33 +455,29 @@
             return questionnarie;
         }
 
-        private static void Map(Circular businessModel, QuestionnaireCircularEntity entity)
+        private QuestionnaireOverview GetQuestionnaireEntity(int id, OperationContext operationContext)
         {
-            entity.CircularName = businessModel.CircularName;
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var questionnaireRepository = uof.GetRepository<QuestionnaireEntity>();
+
+                QuestionnaireEntity anonymus =
+                    questionnaireRepository.GetAll(
+                        x => x.QuestionnaireQuestionEntities,
+                        x => x.QuestionnaireQuestionEntities.Select(y => y.QuestionnaireQuestionOptionEntities),
+                        x => x.QuestionnaireLanguageEntities,
+                        x => x.QuestionnaireQuestionEntities.Select(y => y.QuestionnaireQuesLangEntities),
+                        x =>
+                        x.QuestionnaireQuestionEntities.Select(
+                            y => y.QuestionnaireQuestionOptionEntities.Select(z => z.QuestionnaireQuesOpLangEntities)))
+                        .GetById(id)
+                        .SingleOrDefault();
+
+                return anonymus == null
+                           ? QuestionnaireOverview.GetDefault()
+                           : this.MapToQuestionnaireOverview(operationContext.LanguageId, anonymus);
+            }
         }
-
-        private static EmailMarkValues CreateMarkValues(
-            string actionAbsolutePath,
-            Guid guid,
-            decimal caseNumber,
-            string caseCaption,
-            string caseDescription)
-        {
-            string path = string.Format("{0}{1}", actionAbsolutePath, guid);
-            path = string.Format("<a href=\"{0}\">{0}</a>", path);
-
-            var markValues = new EmailMarkValues();
-            markValues.Add("[#1]", caseNumber.ToString());
-            markValues.Add("[#4]", caseCaption);
-            markValues.Add("[#5]", caseDescription);
-            markValues.Add("[#99]", path);
-
-            return markValues;
-        }
-
-        #endregion
-
-        #region PRIVATE
 
         private List<BusinessLogic.MapperData.Participant> GetAllParticipants(int circularId)
         {
