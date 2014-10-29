@@ -697,8 +697,6 @@
 
             var viewModel = new StatisticsViewModel(questionnaireId, questionnaire, results);
 
-            // return this.View("StatisticsInfo", new StatisticsOverview(3, 0, 1, 2));
-
             return this.View("Statistics", viewModel);
         }
 

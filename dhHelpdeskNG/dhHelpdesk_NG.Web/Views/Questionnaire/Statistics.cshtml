@@ -36,21 +36,7 @@
                     <table class="table table-striped table-bordered table-hover">
                         @foreach (var question in Model.QuestionnaireOverview.Questions)
                         {
-                            var values = new List<OptionResult>();
-
-                            foreach (var option in question.Options)
-                            {
-                                int count = 0;
-
-                                OptionResult result = Model.OptionResults.FirstOrDefault(x => x.OptionId == option.Id);
-
-                                if (result != null)
-                                {
-                                    count = result.Count;
-                                }
-
-                                values.Add(new OptionResult(option.Id, count));
-                            }
+                            List<OptionResult> values = Model.OptionResults.Where(x => question.Options.Select(y => y.Id).Contains(x.OptionId)).ToList();
                             
                             <tr>
                                 <td colspan="5" class="header">@question.Number. @question.Question (@Translation.Get("Antal svar"): @values.Sum(x=>x.Count))</td>
@@ -58,7 +44,9 @@
 
                             foreach (var option in question.Options.OrderBy(x => x.Position))
                             {
-                                int count = values.First(x => x.OptionId == option.Id).Count;
+                                OptionResult result = values.FirstOrDefault(x => x.OptionId == option.Id);
+                                int count = result == null ? 0 : result.Count;
+
                                 int percent = GetPercent(count, values.Select(x => x.Count));
                                 
                                 <tr>
