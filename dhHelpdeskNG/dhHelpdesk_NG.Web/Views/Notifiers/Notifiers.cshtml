@@ -1,7 +1,8 @@
 ﻿
+@using System.Web.Optimization
 @model DH.Helpdesk.Web.Models.Notifiers.NotifiersModel
            
-<script type="text/javascript" src="@Url.Content("~/Content/js/Notifiers/notifiers.js")"></script>
+@Scripts.Render("~/bundles/notifiers/notifiers")
 
 <script type="text/javascript">
     var parameters = {};

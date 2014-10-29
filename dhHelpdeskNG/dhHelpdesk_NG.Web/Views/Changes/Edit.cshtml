@@ -1,9 +1,10 @@
 ﻿
+@using System.Web.Optimization
 @using DH.Helpdesk.BusinessData.Enums.Changes
 @using DH.Helpdesk.Web.Enums.Changes
 @model DH.Helpdesk.Web.Models.Changes.ChangeEdit.InputModel
 
-<script type="text/javascript" src="@Url.Content("~/Content/js/Changes/change.js")"></script>
+@Scripts.Render("~/bundles/changes/change")
 
 <script type="text/javascript">
     $(function() {

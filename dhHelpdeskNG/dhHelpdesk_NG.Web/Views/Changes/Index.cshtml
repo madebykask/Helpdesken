@@ -1,9 +1,10 @@
 ﻿
+@using System.Web.Optimization
 @using DH.Helpdesk.Dal.Enums
 @using DH.Helpdesk.Web.Enums.Changes
 @model DH.Helpdesk.Web.Models.Changes.IndexModel
 
-<script type="text/javascript" src="@Url.Content("~/Content/js/Changes/index.js")"></script>
+@Scripts.Render("~/bundles/changes/index")
 
 <script type="text/javascript">
     $(function() {

@@ -1,4 +1,5 @@
-﻿@using DH.Helpdesk.Web.Infrastructure.Extensions
+﻿@using System.Web.Optimization
+@using DH.Helpdesk.Web.Infrastructure.Extensions
 
 <!DOCTYPE html>
 <html>
@@ -7,43 +8,8 @@
         <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
         <title>@Translation.Get("dhHelpdesk")</title>
 
-        <link rel="stylesheet" href="@Url.Content("~/Content/themes/base/minified/jquery-ui.min.css")" />
-        @*<link rel="stylesheet" href="@Url.Content("~/Content/css/bootstrap-switch.css")" />*@
-        <link rel="stylesheet" href="@Url.Content("~/Content/css/bootstrap.css")" />
-        <link rel="stylesheet" href="@Url.Content("~/Content/css/dhhelpdesk.css")" />
-        <link rel="stylesheet" href="@Url.Content("~/img-profile/profile.css")" />
-        <link rel="stylesheet" href="@Url.Content("~/Content/js/jquery.plupload.queue/css/jquery.plupload.queue.css")" />
-        <link rel="stylesheet" href="@Url.Content("~/Content/css/jquery.toastmessage.css")" />
-        <link rel="stylesheet" href="@Url.Content("~/Content/css/bootstrap-timepicker.min.css")" />
-
-        <script type="text/javascript" src="@Url.Content("~/Content/js/jquery-1.8.3.min.js")"></script>
-        <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.unobtrusive-ajax.min.js")"></script>
-        <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.validate.min.js")"></script>
-        <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.validate.unobtrusive.min.js")"></script>
-        <script type="text/javascript" src="@Url.Content("~/Content/js/jquery-ui-1.9.2.min.js")"></script>
-        <script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap.js")"></script>
-        @*<script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap-switch.min.js")"></script>*@
-        <script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap-multiselect.js")"></script>
-        <script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap-datepicker.js")"></script>
-        <script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap-timepicker.min.js")"></script>
-        <script type="text/javascript" src="@Url.Content("~/Content/js/plupload.full.min.js")"></script>
-        <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.plupload.queue/jquery.plupload.queue.min.js")"></script>
-        <script type="text/javascript" src="@Url.Content("~/Content/js/MicrosoftAjax.js")"></script>
-        <script type="text/javascript" src="@Url.Content("~/Content/js/MicrosoftMvcAjax.js")"></script>
-        <script type="text/javascript" src="@Url.Content("~/Content/js/jsrender.min.js")"></script>
-        
-        <script type="text/javascript" src="@Url.Content("~/Content/js/Shared/custom.validation.maxlengthfrom.notrequired.js")"></script>
-        <script type="text/javascript" src="@Url.Content("~/Content/js/Shared/custom.validation.requiredfrom.js")"></script>
-        <script type="text/javascript" src="@Url.Content("~/Content/js/Shared/custom.validation.maxlengthfrom.js")"></script>
-        <script type="text/javascript" src="@Url.Content("~/Content/js/Shared/sortby.js")"></script>
-        <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.toastmessage.js")"> </script>
-        <script type="text/javascript" src="@Url.Content("~/Content/js/dhHelpdesk-head.js")"></script>
-    
-    
-        <script type="text/javascript" src="@Url.Content("~/Content/js/ui/dh.ui.hierarchylist.js")"></script>
-
-        <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.dataTables.min.js")"></script>
-
+        @Styles.Render("~/Content/bundles/css")
+        @Scripts.Render("~/bundles/common")
     </head>
     @{
         var model = Html.MasterModel();        
@@ -352,7 +318,7 @@
     }
     @RenderBody()
     @RenderSection("Dialogs", false)
-    <script type="text/javascript" src="@Url.Content("~/Content/js/dhHelpdesk.js")"></script>
+    @Scripts.Render("~/bundles/dhhelpdesk")
     @RenderSection("Scripts", false)
     <input type="hidden" value="@Request.RawUrl" id="rawUrl" />
     @Html.Partial("_Translations", null)

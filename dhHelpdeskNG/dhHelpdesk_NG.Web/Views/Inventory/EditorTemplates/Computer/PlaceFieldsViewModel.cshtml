@@ -1,5 +1,6 @@
-﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.PlaceFieldsViewModel
-<script type="text/javascript" src="@Url.Content("~/Content/js/Inventory/place-cascading.js")"></script>
+﻿@using System.Web.Optimization
+@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.PlaceFieldsViewModel
+@Scripts.Render("~/bundles/inventory/place-cascading")
 
 <script>
     $(function () {

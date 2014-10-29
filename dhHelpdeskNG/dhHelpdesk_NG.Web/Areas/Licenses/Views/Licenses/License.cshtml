@@ -1,9 +1,10 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
+﻿@using System.Web.Optimization
+@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Licenses.Models.Licenses.LicenseEditModel
 
 @section Scripts
 {
-    <script type="text/javascript" src="@Url.Content("~/Content/js/Licenses/license.js")"></script>
+    @Scripts.Render("~/bundles/licenses")
 
     <script type="text/javascript">
         $(function () {

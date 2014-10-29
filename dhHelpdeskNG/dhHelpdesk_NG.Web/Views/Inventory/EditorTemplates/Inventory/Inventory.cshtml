@@ -1,6 +1,7 @@
-﻿@using DH.Helpdesk.Web.Models.Inventory.EditModel.Inventory
+﻿@using System.Web.Optimization
+@using DH.Helpdesk.Web.Models.Inventory.EditModel.Inventory
 @model InventoryEditViewModel
-<script type="text/javascript" src="@Url.Content("~/Content/js/Inventory/place-cascading.js")"></script>
+@Scripts.Render("~/bundles/inventory/place-cascading")
 
 <script>
     $(function () {

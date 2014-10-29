@@ -1,6 +1,7 @@
-﻿@model DH.Helpdesk.Web.Models.Reports.IndexModel
+﻿@using System.Web.Optimization
+@model DH.Helpdesk.Web.Models.Reports.IndexModel
 
-<script type="text/javascript" src="@Url.Content("~/Content/js/Reports/index.js")"></script>
+@Scripts.Render("~/bundles/reports")
 
 @{
     ViewBag.Title = @Translation.Get("Rapporter");

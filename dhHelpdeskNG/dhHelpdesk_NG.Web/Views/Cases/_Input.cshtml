@@ -1,10 +1,11 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel 
+@using System.Web.Optimization
 @using DH.Helpdesk.BusinessData.OldComponents
 @using DH.Helpdesk.Common.Enums.Settings
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 
-<script type="text/javascript" src="@Url.Content("~/Content/js/Invoice/invoice.js")"></script>
+@Scripts.Render("~/bundles/invoices")
 
 @if (Model.case_ != null)
 {

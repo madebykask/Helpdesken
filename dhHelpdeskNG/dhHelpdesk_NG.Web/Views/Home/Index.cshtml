@@ -1,10 +1,11 @@
-﻿@using DH.Helpdesk.BusinessData.Enums.Users
+﻿@using System.Web.Optimization
+@using DH.Helpdesk.BusinessData.Enums.Users
 @model DH.Helpdesk.Web.Models.HomeIndexViewModel
 @{
     ViewBag.Title = "Helpdesk start page";
 }
 
-<script type="text/javascript" src="@Url.Content("~/Content/js/Users/modules.js")"></script>
+@Scripts.Render("~/bundles/modules")
 
 <div id="mainContainer" class="content nonemenu">
     <div class="container">

@@ -1,4 +1,5 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
+﻿@using System.Web.Optimization
+@using DH.Helpdesk.Web.Infrastructure
 @{
     ViewBag.Title = "Login";
     Layout = null;
@@ -8,12 +9,8 @@
 <head>
     <meta content="html/text; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
-    <link href="@Url.Content("~/Content/css/bootstrap.css")" rel="stylesheet">
-    <link href="@Url.Content("~/Content/css/dhhelpdesk.css")" rel="stylesheet">
-    <link rel="stylesheet" href="@Url.Content("~/img-profile/profile.css")" />
-
-    <script src="@Url.Content("~/Content/js/jquery-1.8.3.min.js")"></script>
-    <script src="@Url.Content("~/Content/js/bootstrap.js")"></script>
+    @Styles.Render("~/Content/css/login")
+    @Scripts.Render("~/bundles/common/login")
     <title>@ViewBag.Title</title>
 </head>
 <body class="login">

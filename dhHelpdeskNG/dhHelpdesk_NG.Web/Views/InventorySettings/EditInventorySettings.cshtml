@@ -1,6 +1,7 @@
-﻿@model int
-<script type="text/javascript" src="@Url.Content("~/Content/js/Changes/settings.js")"></script>
-<script type="text/javascript" src="@Url.Content("~/Content/js/Inventory/settings.js")"></script>
+﻿@using System.Web.Optimization
+@model int
+@Scripts.Render("~/bundles/changes/settings")
+@Scripts.Render("~/bundles/inventory/settings")
 
 <div class="secnavs fixed">
     <div class="pull-left">

@@ -1,5 +1,6 @@
-﻿@model DH.Helpdesk.Web.Models.Projects.ProjectEditViewModel
-<script type="text/javascript" src="@Url.Content("~/Content/js/jquery.typing-0.2.0.min.js")"></script>
+﻿@using System.Web.Optimization
+@model DH.Helpdesk.Web.Models.Projects.ProjectEditViewModel
+@Scripts.Render("~/bundles/jquery-typing")
 
 <div class="container">
     @Html.ValidationSummary()

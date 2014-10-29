@@ -1,11 +1,12 @@
 ﻿@using System.Globalization
+@using System.Web.Optimization
 @using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Models.Faq.Output
 
 @model DH.Helpdesk.Web.Models.Faq.Output.EditFaqModel
 
 
-<script type="text/javascript" src="@Url.Content("~/Content/js/dhHelpdesk.js")"></script>
+@Scripts.Render("~/bundles/dhhelpdesk")
 <script>
     $(document).ready(function () {
         FAQInitForm();

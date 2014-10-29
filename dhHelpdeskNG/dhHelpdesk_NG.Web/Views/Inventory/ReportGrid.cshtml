@@ -1,10 +1,11 @@
-﻿@using DH.Helpdesk.BusinessData.Models.Inventory
+﻿@using System.Web.Optimization
+@using DH.Helpdesk.BusinessData.Models.Inventory
 @model DH.Helpdesk.Web.Models.Inventory.ReportViewModel
 @{
     var howerClass = Model.IsGrouped ? "header" : string.Empty;
 }
 
-<script type="text/javascript" src="@Url.Content("~/Content/js/Inventory/reports.js")"></script>
+@Scripts.Render("~/bundles/inventory/reports")
 <script type="text/javascript">
     $(function () {
         var inventoryParameters = {
