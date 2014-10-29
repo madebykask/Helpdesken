@@ -108,7 +108,7 @@ var allFileNames = [];
 function FAQInitForm() {
     var _plupload;
     var getFAQFiles = function () {
-        $.get('/FAQ/Files', { faqId: $('#FAQKey').val() }, function (data) {
+        $.get('/FAQ/Files', { faqId: $('#FAQKey').val(), now: Date.now() }, function (data) {
             $('#divFAQFiles').html(data);
             bindDeleteFAQFileBehaviorToDeleteButtons();
         });
@@ -125,7 +125,7 @@ function FAQInitForm() {
                     _plupload.pluploadQueue().refresh();
                 }
             }
-        }
+        }        
     });
 
     $('#upload_FAQfiles_popup').on('show', function () {

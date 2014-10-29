@@ -15,12 +15,13 @@
         </thead>
         <tbody>            
         @{
+            var myFiles = ViewData["FN"];
+            //.ToString().Split('|').ToList()
             var i = 0;
             foreach (var file in Model.FAQFiles) 
             {
                 <tr>
-                    <td>
-                       
+                    <td>                       
                         <a href="@this.Url.Action("DownloadFile", new RouteValueDictionary { { "faqId", this.Model.FAQId }, { "fileName", file } })">@file</a>
                     </td>
                     

@@ -104,6 +104,7 @@ function NewCaseAndAddCase() {
 }
 
 var allFileNames = [];
+
 function FAQInitForm() {
     var _plupload;
     var getFAQFiles = function () {

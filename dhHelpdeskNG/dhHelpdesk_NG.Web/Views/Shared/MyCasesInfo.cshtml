@@ -15,7 +15,7 @@
                 <tbody>
                     @foreach (var myCase in Model.Cases)
                     {  
-                        if ((Request.Browser.Browser == "IE") && ((Request.Browser.MajorVersion < 9)))  {
+                        if ((Request.Browser.Browser == "IE") && ((Request.Browser.MajorVersion == 8)))  {
                             <tr alt="@Translation.Get("Kund"): @Html.DisplayFor(m => myCase.CustomerName)" style="cursor: pointer" onclick="window.location.href = '@Url.Action("Edit", "Cases", new { id = myCase.Id })'">
                                 <td>
                                  @myCase.CaseNumber
