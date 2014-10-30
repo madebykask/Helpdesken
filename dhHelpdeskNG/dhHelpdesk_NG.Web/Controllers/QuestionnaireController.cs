@@ -74,8 +74,9 @@
             var languageOverviews =
                 languageOverviewsOrginal.Select(
                     o =>
-                        new ItemOverview(Translation.Get(o.Name, Enums.TranslationSource.TextTranslation),
-                            o.Value.ToString())).ToList();
+                    new ItemOverview(
+                        Translation.Get(o.Name, Enums.TranslationSource.TextTranslation),
+                        o.Value.ToString())).ToList();
             var languageList = new SelectList(languageOverviews, "Value", "Name");
 
             var questionnaireQuestions =
@@ -102,8 +103,7 @@
                     questionnaire.LanguageId,
                     questionnaire.ChangedDate,
                     languageList,
-                    questionModel
-                    );
+                    questionModel);
             }
             else
             {
@@ -114,8 +114,7 @@
                     languageId,
                     DateTime.Now,
                     languageList,
-                    null
-                    );
+                    null);
             }
             return View(model);
         }
@@ -131,7 +130,8 @@
                 DateTime.Now);
 
             _questionnaireService.UpdateQuestionnaire(editQuestionniare);
-            return RedirectToAction("EditQuestionnaire",
+            return RedirectToAction(
+                "EditQuestionnaire",
                 new { questionnaireId = questionnaireModel.Id, languageId = questionnaireModel.LanguageId });
         }
 
@@ -170,7 +170,8 @@
 
             _questionnaireService.AddQuestionnaire(newQuestionniare);
 
-            return RedirectToAction("EditQuestionnaire",
+            return RedirectToAction(
+                "EditQuestionnaire",
                 new { questionnaireId = newQuestionniare.Id, languageId = LanguageId.Swedish });
         }
 
@@ -187,7 +188,8 @@
 
             _questionnaireQuestionService.AddQuestionnaireQuestion(newQuestionniareQuestion);
 
-            return RedirectToAction("EditQuestionnaire",
+            return RedirectToAction(
+                "EditQuestionnaire",
                 new { questionnaireId = newQuestionniareQuestion.QuestionnaireId, languageId = LanguageId.Swedish });
         }
 
@@ -200,8 +202,9 @@
             var languageOverviews =
                 languageOverviewsOrginal.Select(
                     o =>
-                        new ItemOverview(Translation.Get(o.Name, Enums.TranslationSource.TextTranslation),
-                            o.Value.ToString())).ToList();
+                    new ItemOverview(
+                        Translation.Get(o.Name, Enums.TranslationSource.TextTranslation),
+                        o.Value.ToString())).ToList();
             var languageList = new SelectList(languageOverviews, "Value", "Name");
 
 
@@ -211,7 +214,8 @@
             if (languageId != LanguageId.Swedish)
             {
                 var questionnaireQuestionSwedish =
-                    _questionnaireQuestionService.GetQuestionnaireQuestionById(questionnaireQuestionId,
+                    _questionnaireQuestionService.GetQuestionnaireQuestionById(
+                        questionnaireQuestionId,
                         LanguageId.Swedish);
                 currentQuestionNumber = questionnaireQuestionSwedish.QuestionNumber;
                 currentShowNote = questionnaireQuestionSwedish.ShowNote;
@@ -223,7 +227,9 @@
             }
 
             var questionnaireQuestionOptions =
-                _questionnaireQuestionOptionService.FindQuestionnaireQuestionOptions(questionnaireQuestionId, languageId);
+                _questionnaireQuestionOptionService.FindQuestionnaireQuestionOptions(
+                    questionnaireQuestionId,
+                    languageId);
 
             List<QuestionnaireQuesOptionModel> questionOptionsModel = null;
             if (questionnaireQuestionOptions != null)
@@ -231,8 +237,14 @@
                 questionOptionsModel =
                     questionnaireQuestionOptions.Select(
                         q =>
-                            new QuestionnaireQuesOptionModel(q.Id, q.QuestionId, q.OptionPos, q.Option, q.OptionValue,
-                                q.LanguageId, q.ChangedDate)).OrderBy(qq => qq.OptionPos).ToList();
+                        new QuestionnaireQuesOptionModel(
+                            q.Id,
+                            q.QuestionId,
+                            q.OptionPos,
+                            q.Option,
+                            q.OptionValue,
+                            q.LanguageId,
+                            q.ChangedDate)).OrderBy(qq => qq.OptionPos).ToList();
             }
 
 
@@ -249,8 +261,7 @@
                     questionnaireQuestion.NoteText,
                     questionnaireQuestion.ChangeDate,
                     languageList,
-                    questionOptionsModel
-                    );
+                    questionOptionsModel);
             }
             else
             {
@@ -264,14 +275,15 @@
                     "",
                     DateTime.Now,
                     languageList,
-                    questionOptionsModel
-                    );
+                    questionOptionsModel);
             }
             return View(model);
         }
 
         [HttpPost]
-        public RedirectToRouteResult EditQuestionnaireQuestion(EditQuestionnaireQuestionModel questionnaireQuestionModel, List<QuestionnaireQuesOptionModel> Options)
+        public RedirectToRouteResult EditQuestionnaireQuestion(
+            EditQuestionnaireQuestionModel questionnaireQuestionModel,
+            List<QuestionnaireQuesOptionModel> Options)
         {
             var editQuestionniareQuestion = new EditQuestionnaireQuestion(
                 questionnaireQuestionModel.Id,
@@ -290,67 +302,75 @@
                 DateTime now = DateTime.Now;
                 foreach (var option in Options)
                 {
-                    var questionOption = new QuestionnaireQuesOption
-                        (
+                    var questionOption = new QuestionnaireQuesOption(
                         option.Id,
                         option.QuestionId,
                         option.OptionPos,
                         option.Option,
                         option.OptionValue,
                         questionnaireQuestionModel.LanguageId,
-                        now
-                        );
+                        now);
                     _questionnaireQuestionOptionService.UpdateQuestionnaireQuestionOption(questionOption);
                 }
             }
 
-            return RedirectToAction("EditQuestionnaireQuestion", new
-            {
-                questionnaireId = questionnaireQuestionModel.QuestionnaireId,
-                questionnaireQuestionId = questionnaireQuestionModel.Id,
-                languageId = questionnaireQuestionModel.LanguageId
-            }
-                );
+            return RedirectToAction(
+                "EditQuestionnaireQuestion",
+                new
+                    {
+                        questionnaireId = questionnaireQuestionModel.QuestionnaireId,
+                        questionnaireQuestionId = questionnaireQuestionModel.Id,
+                        languageId = questionnaireQuestionModel.LanguageId
+                    });
         }
 
         [HttpGet]
-        public RedirectToRouteResult AddQuestionOption(int questionnaireId, int questionnaireQuestionId, int languageId,
-                                                       int optionPos, string optionText, int optionValue)
+        public RedirectToRouteResult AddQuestionOption(
+            int questionnaireId,
+            int questionnaireQuestionId,
+            int languageId,
+            int optionPos,
+            string optionText,
+            int optionValue)
         {
-            var newOption = new QuestionnaireQuesOption
-                (
+            var newOption = new QuestionnaireQuesOption(
                 1,
                 questionnaireQuestionId,
                 optionPos,
                 optionText,
                 optionValue,
                 languageId,
-                DateTime.Now
-                );
+                DateTime.Now);
 
             _questionnaireQuestionOptionService.AddQuestionnaireQuestionOption(newOption);
 
-            return RedirectToAction("EditQuestionnaireQuestion",
+            return RedirectToAction(
+                "EditQuestionnaireQuestion",
                 new
-                {
-                    questionnaireId = questionnaireId,
-                    questionnaireQuestionId = questionnaireQuestionId,
-                    languageId = languageId
-                });
+                    {
+                        questionnaireId = questionnaireId,
+                        questionnaireQuestionId = questionnaireQuestionId,
+                        languageId = languageId
+                    });
         }
 
         [HttpPost]
-        public RedirectToRouteResult DeleteQuestionOption(int questionnaireId, int questionnaireQuestionId, int languageId, int optionId)
+        public RedirectToRouteResult DeleteQuestionOption(
+            int questionnaireId,
+            int questionnaireQuestionId,
+            int languageId,
+            int optionId)
         {
             _questionnaireQuestionOptionService.DeleteQuestionnaireQuestionOptionById(optionId, languageId);
 
-            return RedirectToAction("EditQuestionnaireQuestion",
+            return RedirectToAction(
+                "EditQuestionnaireQuestion",
                 new
-                {
-                    questionnaireId = questionnaireId,
-                    questionnaireQuestionId = questionnaireQuestionId,
-                    languageId = languageId
-                });
+                    {
+                        questionnaireId = questionnaireId,
+                        questionnaireQuestionId = questionnaireQuestionId,
+                        languageId = languageId
+                    });
         }
 
         [HttpPost]
@@ -358,12 +378,9 @@
         {
             _questionnaireQuestionService.DeleteQuestionnaireQuestionById(questionId);
 
-            return RedirectToAction("EditQuestionnaire",
-                new
-                {
-                    questionnaireId = questionnaireId,
-                    languageId = languageId
-                });
+            return RedirectToAction(
+                "EditQuestionnaire",
+                new { questionnaireId = questionnaireId, languageId = languageId });
         }
 
         [HttpPost]
@@ -382,53 +399,49 @@
             var languageOverviews =
                 languageOverviewsOrginal.Select(
                     o =>
-                        new ItemOverview(Translation.Get(o.Name, Enums.TranslationSource.TextTranslation),
-                            o.Value.ToString())).ToList();
+                    new ItemOverview(
+                        Translation.Get(o.Name, Enums.TranslationSource.TextTranslation),
+                        o.Value.ToString())).ToList();
             var languageList = new SelectList(languageOverviews, "Value", "Name");
 
             List<SubQuestions> questions = new List<SubQuestions>();
 
-            var allQuestions = _questionnaireQuestionService.FindQuestionnaireQuestionsOverviews(questionnaireId, languageId);
+            var allQuestions = _questionnaireQuestionService.FindQuestionnaireQuestionsOverviews(
+                questionnaireId,
+                languageId);
 
             foreach (var question in allQuestions)
             {
                 List<SubOptions> options = new List<SubOptions>();
-                var allOptions = _questionnaireQuestionOptionService.FindQuestionnaireQuestionOptions(question.Id, question.LanguageId);
+                var allOptions = _questionnaireQuestionOptionService.FindQuestionnaireQuestionOptions(
+                    question.Id,
+                    question.LanguageId);
 
                 foreach (var option in allOptions)
                 {
-                    SubOptions opt = new SubOptions
-                    (
-                      option.OptionPos,
-                      option.Option,
-                      option.OptionValue
-                    );
+                    SubOptions opt = new SubOptions(option.OptionPos, option.Option, option.OptionValue);
                     options.Add(opt);
                 }
 
 
-                SubQuestions ques = new SubQuestions
-                    (
-                      question.QuestionNumber,
-                      question.Question,
-                      question.ShowNote.ToBool(),
-                      question.NoteText,
-                      options.OrderBy(o => o.OptionPos).ToList()
-                    );
+                SubQuestions ques = new SubQuestions(
+                    question.QuestionNumber,
+                    question.Question,
+                    question.ShowNote.ToBool(),
+                    question.NoteText,
+                    options.OrderBy(o => o.OptionPos).ToList());
                 questions.Add(ques);
             }
 
             var questionnaire = _questionnaireService.GetQuestionnaireById(questionnaireId, languageId);
 
-            PreviewQuestionnaireModel model = new PreviewQuestionnaireModel
-                (
-                  questionnaireId,
-                  languageId,
-                  questionnaire.Name,
-                  questionnaire.Description,
-                  questions.OrderBy(q => q.QuestionNumber).ToList(),
-                  languageList
-                );
+            PreviewQuestionnaireModel model = new PreviewQuestionnaireModel(
+                questionnaireId,
+                languageId,
+                questionnaire.Name,
+                questionnaire.Description,
+                questions.OrderBy(q => q.QuestionNumber).ToList(),
+                languageList);
 
             return View(model);
         }
@@ -532,8 +545,14 @@
             List<ConnectedToCircularOverview> connecteCasesOverviews =
                 connectedCases.Select(
                     x =>
-                    new ConnectedToCircularOverview(circularId, x.CaseId, x.CaseNumber, x.Caption, x.Email, x.Guid, x.IsSent))
-                    .ToList();
+                    new ConnectedToCircularOverview(
+                        circularId,
+                        x.CaseId,
+                        x.CaseNumber,
+                        x.Caption,
+                        x.Email,
+                        x.Guid,
+                        x.IsSent)).ToList();
 
             var model = new EditCircularModel(
                 circular.Id,
@@ -553,9 +572,7 @@
 
             this._circularService.UpdateCircular(circular);
 
-            return this.RedirectToAction(
-                "CircularOverview",
-                new { questionnaireId = editedCircular.QuestionnaireId });
+            return this.RedirectToAction("CircularOverview", new { questionnaireId = editedCircular.QuestionnaireId });
         }
 
         [HttpPost]
@@ -608,7 +625,8 @@
                 isUniqueEmail);
 
             List<CircularPartOverview> models =
-                cases.Select(c => new CircularPartOverview(c.CaseId, c.CaseNumber, c.Caption, c.Email, c.IsSent)).ToList();
+                cases.Select(c => new CircularPartOverview(c.CaseId, c.CaseNumber, c.Caption, c.Email, c.IsSent))
+                    .ToList();
 
             return this.PartialView("_CircularPartOverview", models);
         }
@@ -648,7 +666,8 @@
                                                                             let options =
                                                                                 question.Options.Select(
                                                                                     option =>
-                                                                                    new QuestionnaireQuestionOptionModel(
+                                                                                    new QuestionnaireQuestionOptionModel
+                                                                                        (
                                                                                         option.Id,
                                                                                         option.Option,
                                                                                         option.Position)).ToList()
@@ -709,8 +728,13 @@
             List<CircularOverviewModel> circularOverviews =
                 circulars.Select(
                     c =>
-                    new CircularOverviewModel(c.Id, c.CircularName, c.Date, c.State, c.TotalParticipants, c.SentParticipants))
-                    .ToList();
+                    new CircularOverviewModel(
+                        c.Id,
+                        c.CircularName,
+                        c.Date,
+                        c.State,
+                        c.TotalParticipants,
+                        c.SentParticipants)).ToList();
             return circularOverviews;
         }
 
