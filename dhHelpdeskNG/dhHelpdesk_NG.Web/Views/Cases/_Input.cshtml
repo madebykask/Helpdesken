@@ -587,7 +587,7 @@
                                                      rel="tooltip" 
                                                      class="icon-circle-arrow-up cursor-pointer" 
                                                      title="@Translation.Get("Förhandsgranska")"
-                                                   style="@((Model.case_.Description.Length == 0)?"visibility: hidden":"")"
+                                                   style="@(string.IsNullOrEmpty(Model.case_.Description)?"visibility: hidden":"")"
                                                     >
                                                 </span>
                                             </td>
