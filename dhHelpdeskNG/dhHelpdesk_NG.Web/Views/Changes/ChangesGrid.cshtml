@@ -8,7 +8,7 @@
 @Translation.Get("Changes found: ")
 @Model.ChangesFound
 
-<table class="table table-striped table-bordered table-hover">
+<table id="Change_Table" class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
             @foreach (var header in Model.Headers)
@@ -122,3 +122,12 @@
 
 }
 
+<script type="text/javascript" src="@Url.Content("~/Content/js/dhHelpdesk.js")"></script>
+
+<script>
+
+    //$(document).ready(function () {
+    //    InitDataTable("Change_Table");
+    //});
+
+</script>

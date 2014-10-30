@@ -485,8 +485,9 @@ function CaseInitForm() {
         _plupload = $('#logfile_uploader').pluploadQueue({
             runtimes: 'html5,html4',
             url: '/Cases/UploadLogFile',
+            
             multipart_params: { id: $('#LogKey').val() },
-            filters: {
+            filters: {                
                 max_file_size: '30mb',
             },
             buttons: { browse: true, start: true, stop: true, cancel: true },
@@ -1078,7 +1079,7 @@ $.validator.methods.number = function (value, element) {
 //        }
 //    });
 //}
-// TABLE PAGING END
+//// TABLE PAGING END
 
 
 // YES and NO SWITCH FOR CHECKBOXES

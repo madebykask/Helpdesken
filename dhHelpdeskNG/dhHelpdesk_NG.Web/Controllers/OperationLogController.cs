@@ -85,7 +85,7 @@
         }
        
 
-        public ActionResult Sort(string FieldName)
+        public void Sort(string FieldName)
         {
             var model = this.GetIndex();
             
@@ -94,8 +94,7 @@
                 CS = SessionFacade.CurrentOperationLogSearch;
             CS.Ascending = !CS.Ascending;
             CS.SortBy = FieldName;
-            SessionFacade.CurrentOperationLogSearch = CS;            
-            return this.View(model);
+            SessionFacade.CurrentOperationLogSearch = CS;                        
         }
 
         public ActionResult New()

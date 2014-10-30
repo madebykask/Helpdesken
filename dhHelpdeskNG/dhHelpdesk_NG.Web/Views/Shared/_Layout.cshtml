@@ -100,12 +100,12 @@
                                                 @Translation.Get("Rapporter")</a></li>                                    
                                     }                                    
                                                *@                                                                 
-                                    @if (model.IsDailyReportVisible())
+                                   @* @if (model.IsDailyReportVisible())
                                     {    
                                         <li><a href="@Url.Action("index", "dailyreport", new { area = "" })">
                                                 <img src="@Url.Content("~/Content/icons/dailyreport.png")" />
                                                 @Translation.Get("Dagrapport")</a></li>
-                                    }                                                                       
+                                    }             *@                                                          
                                     @if (model.IsOperationLogVisible())
                                     {    
                                         <li><a href="@Url.Action("index", "operationlog", new { area = "" })">
@@ -167,6 +167,7 @@
                             </li>                            
                         }
 
+                        @*
                         @if (model.IsSettingsModulesVisible())
                         {
                             <li class="pink">
@@ -189,7 +190,7 @@
                                                 @Translation.Get("Beställning kontobehörighet")</a></li>
                                     }                                                                    
 
-                                    @*@if (model.IsCheckListVisuble())
+                                    @if (model.IsCheckListVisuble())
                                     {    
                                         <li><a href="@Url.Action("index", "checklist")">
                                                 <img src="@Url.Content("~/Content/icons/checklist.png")" />
@@ -210,14 +211,14 @@
                                                 <img src="@Url.Content("~/Content/icons/Licens.png")" alt="license" />
                                                 @Translation.Get("Licenshantering")</a></li>
                                     }                                   
-                                    *@
+                                    
 
                                     <li>
                                     </li>
                                 </ul>
                             </li>                            
                         }
-
+                        *@
 
                         <li class="light-blue">
                             <a data-toggle="dropdown" href="#" class="dropdown-toggle">

@@ -37,27 +37,27 @@
                         <table class="table table-striped table-bordered table-hover" id="tblbulletinboard">
                             <thead>
                                 <tr>
-                                    <th sort-data="ChangedDate" onclick="submit();" style="cursor: pointer; cursor: hand">
+                                    <th sort-data="ChangedDate" style="cursor: pointer; cursor: hand" >
                                         @Translation.Get("Datum", Enums.TranslationSource.TextTranslation)
                                         @{CurIcon = "ChangedDate";}
                                         <i class="@CurIcon.SetBulletinBoardSortIcon()"></i>
                                     </th>
-                                    <th sort-data="ShowUntilDate" onclick="submit();" style="cursor: pointer; cursor: hand">
+                                    <th sort-data="ShowUntilDate" style="cursor: pointer; cursor: hand" >
                                         @Translation.Get("Visa t.o.m", Enums.TranslationSource.TextTranslation)
                                         @{CurIcon = "ShowUntilDate";}
                                         <i class="@CurIcon.SetBulletinBoardSortIcon()"></i>
                                     </th>
-                                    <th sort-data="Text" onclick="submit();" style="cursor: pointer; cursor: hand">
+                                    <th sort-data="Text" style="cursor: pointer; cursor: hand">
                                         @Translation.Get("Text", Enums.TranslationSource.TextTranslation)
                                         @{CurIcon = "Text";}
                                         <i class="@CurIcon.SetBulletinBoardSortIcon()"></i>
                                     </th>
-                                    <th sort-data="ShowOnStartPage" onclick="submit();" style="cursor: pointer; cursor: hand">
+                                    <th sort-data="ShowOnStartPage" style="cursor: pointer; cursor: hand">
                                         @Translation.Get("Visa på startsidan", Enums.TranslationSource.TextTranslation)
                                         @{CurIcon = "ShowOnStartPage";}
                                         <i class="@CurIcon.SetBulletinBoardSortIcon()"></i>
                                     </th>
-                                    <th sort-data="PublicInformation" onclick="submit();" style="cursor: pointer; cursor: hand">
+                                    <th sort-data="PublicInformation" style="cursor: pointer; cursor: hand">
                                         @Translation.Get("Självservice", Enums.TranslationSource.TextTranslation)
                                         @{CurIcon = "PublicInformation";}
                                         <i class="@CurIcon.SetBulletinBoardSortIcon()"></i>
@@ -109,11 +109,12 @@
         });
     });
 
+
     $(document).on('click', 'th', function (e) {
         var sortBy = $(this).attr('sort-data');
-        $.ajax({
-            url: 'bulletinboard/Sort/?FieldName=' + sortBy,
-            type: 'POST'
-        });
+        $.post("/bulletinboard/Sort", { fieldName: sortBy });
+        $("#search").submit();
+
     });
+    
 </script>

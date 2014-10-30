@@ -70,16 +70,36 @@
             return this.View(model);
         }
 
-        public ActionResult Sort(string FieldName)
+        //public ActionResult Sort(string FieldName)
+        //{
+        //    var model = this.IndexInputViewModel();
+        //    BulletinBoardSearch CS = new BulletinBoardSearch();
+        //    if (SessionFacade.CurrentBulletinBoardSearch!= null)
+        //        CS = SessionFacade.CurrentBulletinBoardSearch;
+        //    CS.Ascending = !CS.Ascending;
+        //    CS.SortBy = FieldName;
+        //    SessionFacade.CurrentBulletinBoardSearch = CS;
+        //    return this.View(model);
+        //}
+
+        public void Sort(string fieldName)
         {
             var model = this.IndexInputViewModel();
             BulletinBoardSearch CS = new BulletinBoardSearch();
-            if (SessionFacade.CurrentBulletinBoardSearch!= null)
+            if (SessionFacade.CurrentBulletinBoardSearch != null)
                 CS = SessionFacade.CurrentBulletinBoardSearch;
             CS.Ascending = !CS.Ascending;
-            CS.SortBy = FieldName;
+            CS.SortBy = fieldName;
             SessionFacade.CurrentBulletinBoardSearch = CS;
-            return this.View(model);
+
+            //var model = this.IndexInputViewModel();
+            //BulletinBoardSearch CS = new BulletinBoardSearch();
+            //if (SessionFacade.CurrentBulletinBoardSearch != null)
+            //    CS = SessionFacade.CurrentBulletinBoardSearch;
+            //CS.Ascending = !CS.Ascending;
+            //CS.SortBy = FieldName;
+            //SessionFacade.CurrentBulletinBoardSearch = CS;
+            //return this.View(model);
         }
 
         public ActionResult New()

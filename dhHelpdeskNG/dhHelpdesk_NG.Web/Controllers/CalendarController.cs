@@ -125,7 +125,7 @@ namespace DH.Helpdesk.Web.Controllers
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        public ActionResult Sort(string fieldName)
+        public void Sort(string fieldName)
         {
             var cs = new CalendarSearch();
             if (SessionFacade.CurrentCalenderSearch != null)
@@ -142,7 +142,7 @@ namespace DH.Helpdesk.Web.Controllers
             model.Calendars = c;
             model.SearchCs = cs.SearchCs;
 
-            return this.View("Index", model);            
+            //return this.View("Index", model);            
         }
 
         /// <summary>

@@ -217,7 +217,7 @@
 
             if (SessionFacade.CurrentBulletinBoardSearch != null)
                 if (SessionFacade.CurrentBulletinBoardSearch.SortBy == value)
-                    ret = SessionFacade.CurrentBulletinBoardSearch.Ascending ? "icon-chevron-down" : "icon-chevron-up";
+                    ret = SessionFacade.CurrentBulletinBoardSearch.Ascending ? "icon-chevron-up" : "icon-chevron-down";
 
             return ret;
         }
