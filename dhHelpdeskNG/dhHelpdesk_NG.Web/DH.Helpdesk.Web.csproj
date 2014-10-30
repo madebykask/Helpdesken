@@ -780,6 +780,7 @@
     <Compile Include="Models\Questionnaire\Output\QuestionnaireQuestionModel.cs" />
     <Compile Include="Models\Questionnaire\Output\QuestionnaireViewModel.cs" />
     <Compile Include="Models\Questionnaire\Output\QuestionViewModel.cs" />
+    <Compile Include="Models\Questionnaire\Output\ReportFilter.cs" />
     <Compile Include="Models\Questionnaire\Output\StatisticsViewModel.cs" />
     <Compile Include="Models\Reports\AverageSolutionTimeOptions.cs" />
     <Compile Include="Models\Reports\AverageSolutionTimeReport.cs" />
@@ -1679,6 +1680,7 @@
     <Content Include="Views\Faq\_FAQFiles.cshtml" />
     <Content Include="Views\Questionnaire\Statistics.cshtml" />
     <Content Include="Views\Faq\_Plupload.cshtml" />
+    <Content Include="Views\Questionnaire\StatisticsGrid.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Services.BusinessLogic.Specifications.Questionnaire
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -17,10 +18,42 @@
             return query;
         }
 
+        public static IQueryable<QuestionnaireQuestionResultEntity> GetCircularDateFromQuestionnaireQuestionResultEntities(
+            this IQueryable<QuestionnaireQuestionResultEntity> query,
+            DateTime? dateTime)
+        {
+            if (dateTime.HasValue)
+            {
+                query = query.Where(x => x.QuestionnaireResult.QuestionnaireCircularPart.QuestionnaireCircular.CreatedDate >= dateTime);
+            }
+
+            return query;
+        }
+
+        public static IQueryable<QuestionnaireQuestionResultEntity> GetCircularDateToQuestionnaireQuestionResultEntities(
+            this IQueryable<QuestionnaireQuestionResultEntity> query,
+            DateTime? dateTime)
+        {
+            if (!dateTime.HasValue)
+            {
+                return query;
+            }
+
+            DateTime time = dateTime.Value.AddHours(24);
+            query = query.Where(x => x.QuestionnaireResult.QuestionnaireCircularPart.QuestionnaireCircular.CreatedDate <= time);
+
+            return query;
+        }
+
         public static IQueryable<QuestionnaireQuestionResultEntity> GetCircularsQuestionnaireQuestionResultEntities(
             this IQueryable<QuestionnaireQuestionResultEntity> query,
             List<int> circularIds)
         {
+            if (circularIds == null || circularIds.Count == 0)
+            {
+                return query;
+            }
+
             query =
                 query.Where(
                             x =>

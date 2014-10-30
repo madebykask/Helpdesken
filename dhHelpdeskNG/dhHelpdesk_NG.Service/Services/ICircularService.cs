@@ -28,7 +28,7 @@
 
         List<OptionResult> GetResult(int circularId);
 
-        List<OptionResult> GetResults(List<int> circularIds);
+        List<OptionResult> GetResults(List<int> circularIds, DateTime? from, DateTime? to);
 
         List<AvailableCase> GetAvailableCases(
             int customerId,

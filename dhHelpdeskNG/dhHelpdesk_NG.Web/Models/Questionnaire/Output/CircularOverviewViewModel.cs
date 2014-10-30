@@ -9,11 +9,13 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Output
         public CircularOverviewViewModel(
             int questionnaireId,
             List<CircularOverviewModel> circularOverviewModels,
-            int circularStateId)
+            int circularStateId,
+            ReportFilter reportFilter)
         {
             this.QuestionnaireId = questionnaireId;
             this.CircularOverviewModels = circularOverviewModels;
             this.CircularStateId = circularStateId;
+            this.ReportFilter = reportFilter;
         }
 
         public int QuestionnaireId { get; set; }
@@ -22,5 +24,7 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Output
         public List<CircularOverviewModel> CircularOverviewModels { get; set; }
 
         public int CircularStateId { get; set; }
+
+        public ReportFilter ReportFilter { get; set; }
     }
 }

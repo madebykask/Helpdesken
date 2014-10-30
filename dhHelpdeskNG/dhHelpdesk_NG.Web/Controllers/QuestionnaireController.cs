@@ -456,7 +456,8 @@
             var viewModel = new CircularOverviewViewModel(
                 questionnaireId,
                 circularOverviews,
-                CircularStateId.ReadyToSend);
+                CircularStateId.ReadyToSend,
+                new ReportFilter(new List<int>()));
 
             return this.View(viewModel);
         }
@@ -465,6 +466,7 @@
         public PartialViewResult SearchCirculars(int questionnaireId, int show)
         {
             List<CircularOverviewModel> circularOverviews = this.CreateCircularOverviewModels(questionnaireId, show);
+            ViewBag.QuestionnaireId = questionnaireId; // todo
 
             return this.PartialView("CircularOverviewGrid", circularOverviews);
         }
@@ -717,6 +719,22 @@
             var viewModel = new StatisticsViewModel(questionnaireId, questionnaire, results);
 
             return this.View("Statistics", viewModel);
+        }
+
+        [HttpPost]
+        public PartialViewResult Statistics(int questionnaireId, ReportFilter reportFilter)
+        {
+            QuestionnaireOverview questionnaire = this._circularService.GetQuestionnaire(
+                questionnaireId,
+                OperationContext);
+            List<OptionResult> results = this._circularService.GetResults(
+                reportFilter.ConnectedCirculars,
+                reportFilter.CircularCreatedDate.DateFrom,
+                reportFilter.CircularCreatedDate.DateTo);
+
+            var viewModel = new StatisticsViewModel(questionnaireId, questionnaire, results);
+
+            return this.PartialView("StatisticsGrid", viewModel);
         }
 
         #region PRIVATE

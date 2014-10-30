@@ -7,15 +7,17 @@
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
-            <li>
+            <li id="menu1">
                 @Html.ActionLink(Translation.Get("Nytt utskick"), "NewCircular", "Questionnaire",
                         new { questionnaireId = Model.QuestionnaireId },
                         new { @class = "btn" })
             </li>
-            <li>
+            <li id="menu2">
                 @Html.ActionLink(Translation.Get("Avbryt"), "Index", "Questionnaire", new { @class = "btn" })
             </li>
-
+            <li id="menu3" style="display: none;">
+                <button value="@Translation.Get("Visa")" class="btn" id="async_subbut">@Translation.Get("Visa")</button>
+            </li>
         </ul>
     </div>
 </div>
@@ -23,10 +25,10 @@
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs">
-            <li class="active">
+            <li class="active" id="circular_tab">
                 <a href="#fragment-1">@Translation.Get("utskick")</a>
             </li>
-            <li class="">
+            <li class="" id="report_tab">
                 <a href="#fragment-2">@Translation.Get("Rapporter")</a>
             </li>
         </ul>
@@ -49,10 +51,10 @@
                                             @Html.RadioButtonFor(x => x.CircularStateId, CircularStateId.ReadyToSend, new { @checked = Model.CircularStateId == CircularStateId.ReadyToSend, Name = "Show" })
                                             @Translation.Get("Klar att skicka")
                                             &nbsp; &nbsp; &nbsp;
-                                                @Html.RadioButtonFor(x => x.CircularStateId, CircularStateId.Sent, new { @checked = Model.CircularStateId == CircularStateId.Sent, Name = "Show" })
+                                            @Html.RadioButtonFor(x => x.CircularStateId, CircularStateId.Sent, new { @checked = Model.CircularStateId == CircularStateId.Sent, Name = "Show" })
                                             @Translation.Get("Skickad")
                                             &nbsp; &nbsp; &nbsp;
-                                                @Html.RadioButtonFor(x => x.CircularStateId, CircularStateId.All, new { @checked = Model.CircularStateId == CircularStateId.All, Name = "Show" })
+                                            @Html.RadioButtonFor(x => x.CircularStateId, CircularStateId.All, new { @checked = Model.CircularStateId == CircularStateId.All, Name = "Show" })
                                             @Translation.Get("Alla")
                                         </td>
                                     </tr>
@@ -70,37 +72,33 @@
             <div id="fragment-2" class="tab-pane tab-pane-border">
                 <div class="row">
                     <div class="span12">
-                        <table class="tableform">
-                            @*<tr>
-                                    <td class="span3">
-                                        @Translation.Get("Språk", Enums.TranslationSource.TextTranslation):
-                                    </td>
-                                    <td class="span9">
-                                        @Html.DropDownListFor(model => model.LanguageId, Model.Languages,new {id = "languageList"})                                            
-                                    </td> 
+                        @using (Ajax.BeginForm("Statistics", null, new AjaxOptions { UpdateTargetId = "statistics_grid" }, new { id = "statistics_search_form" }))
+                        {
+                            @Html.HiddenFor(x => x.QuestionnaireId)
+                            
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">@Translation.Get("Circular")</td>
+                                    <td>@Html.EditorFor(m => m.ReportFilter.CircularCreatedDate.DateFrom, "DatePicker", new { id = "circularCreatedDateFrom_datepicker" })
+                                        -
+                                        @Html.EditorFor(m => m.ReportFilter.CircularCreatedDate.DateTo, "DatePicker", new { id = "circularCreatedDateTo_datepicker" })</td>
                                 </tr>
                                 <tr>
-                                    <td class="span3">
-                                        @Translation.Get("Namn", Enums.TranslationSource.TextTranslation):
-                                    </td>
-                                    <td class="span9">
-                                        @Html.TextBoxFor(model => model.Name)
-                                    </td> 
+                                    @{
+                            var circulars = new SelectList(Model.CircularOverviewModels.Where(x => x.State.Value == CircularStates.Sent), "Id", "CircularName");
+                                        <td class="span3">@Translation.Get("Utskick Datum")</td>
+                                        <td>@Html.DropDownListFor(m => m.ReportFilter.ConnectedCirculars, circulars, new { id = "circular_dropdown", multiple = "multiple", @class = "multiselect multiselect-search dropup" })</td>
+                                    }
                                 </tr>
-                                <tr>
-                                    <td class="span3">
-                                        @Translation.Get("Beskrivning", Enums.TranslationSource.TextTranslation):
-                                    </td>
-                                    <td class="span9">
-                                        @Html.TextAreaFor(model => model.Description, new { maxlength = "2000", style = "height:100px;" })
-                                    </td> 
-                                </tr>*@
-                        </table>
+                            </table>
+                        }
                     </div>
                 </div>
+
+                <div id="statistics_grid">
+                </div>
+
             </div>
-
-
         </div>
     </div>
 </div>
@@ -111,7 +109,21 @@
         $('input[name="Show"]').click(function () {
             $('#search_form').submit();
         });
-    })
+    });
+
+    $(function () {
+        $('#async_subbut').click(function () {
+            $('#statistics_search_form').submit();
+        });
+    });
+
+    $('#report_tab').click(function () {
+        $('#menu3').show();
+    });
+
+    $('#circular_tab').click(function () {
+        $('#menu3').hide();
+    });
 
 </script>
 
