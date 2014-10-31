@@ -1707,6 +1707,12 @@ td .btn-group {
     margin-bottom: 5px;
 }
 
+td.td-bottom-multiselect .btn-group {
+    margin-bottom: 5px;
+    position:absolute;
+    z-index:10 !important;
+}
+
 
 /***********************************STARTPAGE***************************/
 .start-tile {

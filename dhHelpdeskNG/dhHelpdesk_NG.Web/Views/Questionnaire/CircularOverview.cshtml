@@ -42,23 +42,21 @@
                             {
                                 @Html.HiddenFor(x => x.QuestionnaireId)
                                     
-                                <table class="tableform">
-                                    <tr>
-                                        <td class="span3">
-                                            @Translation.Get("Status"):
-                                        </td>
-                                        <td class="span12">
+                                
+                                            <label class="radio inline">@Translation.Get("Status"):</label>
+                                            <label class="radio inline">
                                             @Html.RadioButtonFor(x => x.CircularStateId, CircularStateId.ReadyToSend, new { @checked = Model.CircularStateId == CircularStateId.ReadyToSend, Name = "Show" })
                                             @Translation.Get("Klar att skicka")
-                                            &nbsp; &nbsp; &nbsp;
+                                            </label>
+                                            <label class="radio inline">
                                             @Html.RadioButtonFor(x => x.CircularStateId, CircularStateId.Sent, new { @checked = Model.CircularStateId == CircularStateId.Sent, Name = "Show" })
                                             @Translation.Get("Skickad")
-                                            &nbsp; &nbsp; &nbsp;
+                                            </label>
+                                            <label class="radio inline">
                                             @Html.RadioButtonFor(x => x.CircularStateId, CircularStateId.All, new { @checked = Model.CircularStateId == CircularStateId.All, Name = "Show" })
                                             @Translation.Get("Alla")
-                                        </td>
-                                    </tr>
-                                </table>
+                                            </label>
+                                        
                             }
                         </div>
                     </div>
@@ -87,7 +85,7 @@
                                     @{
                             var circulars = new SelectList(Model.CircularOverviewModels.Where(x => x.State.Value == CircularStates.Sent), "Id", "CircularName");
                                         <td class="span3">@Translation.Get("Utskick Datum")</td>
-                                        <td>@Html.DropDownListFor(m => m.ReportFilter.ConnectedCirculars, circulars, new { id = "circular_dropdown", multiple = "multiple", @class = "multiselect multiselect-search dropup" })</td>
+                                        <td class="td-bottom-multiselect">@Html.DropDownListFor(m => m.ReportFilter.ConnectedCirculars, circulars, new { id = "circular_dropdown", multiple = "multiple", @class = "multiselect multiselect-search dropup" })</td>
                                     }
                                 </tr>
                             </table>

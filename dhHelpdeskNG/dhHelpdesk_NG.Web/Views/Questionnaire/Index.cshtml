@@ -66,8 +66,8 @@
                                             </a>
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("CircularOverview", "Questionnaire", new { questionnaireId = item.Id, state = CircularStateId.All})">
-                                                <img src="@Url.Content("~/Content/img/Circular.png")" style="width: 23px; height: 23px" />                                            
+                                            <a class="btn" href="@Url.Action("CircularOverview", "Questionnaire", new { questionnaireId = item.Id, state = CircularStateId.All})" rel="tooltip" title="@Translation.Get("Circular", Enums.TranslationSource.TextTranslation)">
+                                                <i class="icon-list-alt"></i>
                                             </a>
                                         </td>
                                     </tr>
