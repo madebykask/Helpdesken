@@ -121,12 +121,17 @@
             {
                 var circularRepository = uof.GetRepository<QuestionnaireCircularEntity>();
 
-                QuestionnaireCircularEntity entity = circularRepository.GetById(businessModel.Id);
+                var entity = new QuestionnaireCircularEntity();
 
                 Map(businessModel, entity);
+                entity.Id = businessModel.Id;
                 entity.ChangedDate = businessModel.ChangedDate;
 
-                circularRepository.Update(entity);
+                circularRepository.Update(
+                    entity,
+                    x => x.CreatedDate,
+                    x => x.Questionnaire_Id,
+                    x => x.Status);
 
                 uof.Save();
             }

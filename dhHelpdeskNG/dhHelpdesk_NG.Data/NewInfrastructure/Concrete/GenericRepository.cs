@@ -31,6 +31,18 @@
             entry.State = EntityState.Modified;
         }
 
+        public void Update(TEntity entity, params Expression<Func<TEntity, object>>[] excludedProperties)
+        {
+            DbEntityEntry<TEntity> entry = this.context.Entry(entity);
+            this.dbset.Attach(entity);
+            entry.State = EntityState.Modified;
+
+            foreach (Expression<Func<TEntity, object>> property in excludedProperties)
+            {
+                entry.Property(property).IsModified = false;
+            }
+        }
+
         public virtual void DeleteById(int id)
         {
             TEntity entity = this.dbset.Find(id);

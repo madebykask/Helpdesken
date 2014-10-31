@@ -11,6 +11,8 @@
 
         void Update(TEntity entity);
 
+        void Update(TEntity entity, params Expression<Func<TEntity, object>>[] excludedProperties);
+
         void DeleteById(int id);
 
         void DeleteWhere(Expression<Func<TEntity, bool>> predicate);
