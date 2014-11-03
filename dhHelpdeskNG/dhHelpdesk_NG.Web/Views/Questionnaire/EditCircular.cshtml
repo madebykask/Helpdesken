@@ -32,7 +32,7 @@
                     switch (Model.State.Value)
                     {
                         case CircularStates.ReadyToSend:
-                            @Html.ActionLink(Translation.Get("Skicka Enkät"), "Send", new { circularId = Model.Id }, new { @class = "btn" })
+                            @Html.ActionLink(Translation.Get("Skicka enkät"), "Send", new { circularId = Model.Id }, new { @class = "btn" })
                             break;
                         case CircularStates.Sent:
                             @Html.ActionLink(Translation.Get("Skicka påminnelse"), "Remind", new { circularId = Model.Id }, new { @class = "btn" })
