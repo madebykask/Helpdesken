@@ -855,54 +855,12 @@ namespace DH.Helpdesk.Web.Controllers
             var model = new CaseFilesModel(id, cfs.ToArray());
             return this.PartialView("_CaseFiles", model);
         }
-
-        //[HttpPost]
-        //public string GetSafeFileName(string id, string name)
-        //{                                    
-        //    if (GuidHelper.IsGuid(id))
-        //    {
-        //        if (this.userTemporaryFilesStorage.FileExists(name, id, ModuleName.Cases))                
-        //            name = DateTime.Now.ToString() + '_' + name;                
-        //    }
-        //    else
-        //    {
-        //        if (this._caseFileService.FileExists(int.Parse(id), name))                                 
-        //            name = DateTime.Now.ToString() + '_' + name;                                
-        //    }
-
-        //    JavaScriptSerializer serializer = new JavaScriptSerializer();
-        //    return serializer.Serialize(name);            
-        //} 
-         
-
-        //[HttpGet]
-        //public string GetAllCaseFileName(string id)
-        //{            
-        //    var files = GuidHelper.IsGuid(id)
-        //                        ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Cases)
-        //                        : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
-
-        //    JavaScriptSerializer  serializer = new JavaScriptSerializer();  
-        //    string jsonString = serializer.Serialize(files);
-        //    return jsonString;
-        //}
-
-        //[HttpGet]
-        //public string GetAllLogFileName(string id)
-        //{            
-        //    var files = GuidHelper.IsGuid(id)
-        //                        ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Log)
-        //                        : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
-
-        //    JavaScriptSerializer serializer = new JavaScriptSerializer();
-        //    string jsonString = serializer.Serialize(files);
-        //    return jsonString;
-        //}       
- 
-        public RedirectToRouteResult MarkAsUnread(int id, int customerId)
+        
+        public JsonResult MarkAsUnread(int id, int customerId)
         {
             this._caseService.MarkAsUnread(id);   
-            return this.RedirectToAction("index", "cases", new { customerId = customerId });
+            //return this.RedirectToAction("index", "cases", new { customerId = customerId });
+            return Json("Success");
         }
 
         [HttpGet]

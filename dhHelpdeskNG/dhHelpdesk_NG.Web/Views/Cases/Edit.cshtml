@@ -9,6 +9,12 @@
          CaseInitForm();
      });
 
+     function MakeAsUnread() {         
+         $.post('/cases/markasunread/', { id: '@Model.case_.Id', customerId: '@Model.case_.Customer_Id'}, function (data) {
+                         
+         });
+     };
+
 </script>
 }
 
@@ -42,7 +48,11 @@
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
-                        <li><a href="/cases/markasunread/@Model.case_.Id?customerId=@Model.case_.Customer_Id">@Translation.Get("Markera ärendet som oläst", Enums.TranslationSource.TextTranslation)</a></li> 
+                        <li>
+                            <a href="#" onclick="MakeAsUnread();">
+                               @Translation.Get("Markera ärendet som oläst", Enums.TranslationSource.TextTranslation)
+                            </a>
+                        </li> 
                         @if (SessionFacade.CurrentUser.ActivateCasePermission == 1 && Model.case_.FinishingDate.HasValue)
                         {                                
                             <li><a href="/cases/activate/@Model.case_.Id">@Translation.Get("Aktivera", Enums.TranslationSource.TextTranslation)</a></li>

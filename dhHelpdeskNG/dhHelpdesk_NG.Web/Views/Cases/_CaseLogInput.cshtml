@@ -81,7 +81,7 @@
             </thead>
             <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Text_External, CaseSolutionFields.ExternalLogNote)">
                 <td>
-                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Text_External)
+                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Text_External,"Extern notering")
                 </td>
                 <td>
                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Description, CaseSolutionFields.Description))
@@ -103,9 +103,10 @@
                     @Html.HiddenFor(model => model.LogKey)
                 </td>
             </tr>
-            <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote)">
+
+            <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote)">            
                 <td>
-                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal)
+                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal,"Intern notering")
                 </td>
                 <td>
                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Description, CaseSolutionFields.Description))
@@ -126,19 +127,18 @@
                         @Html.TextAreaFor(model => model.CaseLog.EmailRecepientsInternalLog, new { @readonly = "readonly" })
                     </div>
                 </td>
-            </tr>
-            <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString())">
-                @if (Model.CaseLog.Id == 0)
-                {                                        
-                    <tr>
-                        <td>
-                            @CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Filename)
-                        </td>
-                        <td>
-                            <a href="#upload_logfiles_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentCaseLanguageId)</a>
-                        </td>
-                    </tr>                
-                }
+            </tr>            
+            @if (Model.CaseLog.Id == 0)
+            {                                        
+                <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString())">
+                    <td>
+                        @CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Filename,"Bifogad fil")
+                    </td>
+                    <td>
+                        <a href="#upload_logfiles_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentCaseLanguageId)</a>
+                    </td>
+                </tr>                
+            }            
             <tr>
                 <td class="span3"></td>
                 <td>
@@ -147,9 +147,10 @@
                     </div>
                 </td>
             </tr>
+            
             <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString())">
                 <td>
-                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDescription)
+                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDescription,"Avslutsbeskrivning")
                     @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString()).Required == 1)
                     {
                         <span class="mandatorystar">*</span>
@@ -161,7 +162,7 @@
             </tr>
             <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause)">
                 <td>
-                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ClosingReason)
+                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ClosingReason,"Avslutsorsak")
                 </td>
                 <td>
                     <div id="divFinishingType" class="btn-group">
@@ -180,9 +181,9 @@
                     </div>
                 </td>
             </tr>
-            <tr>
+            <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.FinishingDate.ToString())">
                 <td>
-                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDate)
+                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDate,"Avslutsdatum")
                 </td>
                 <td>
                     @Html.EditorFor(m => m.CaseLog.FinishingDate, "DatePicker", new { id = "divCaseLog_FinishingDate" })
@@ -271,14 +272,15 @@
 
 @functions    {
 
-    private MvcHtmlString CaseFieldCaption(GlobalEnums.TranslationCaseFields field)
+    private MvcHtmlString CaseFieldCaption(GlobalEnums.TranslationCaseFields field, string defaultCaption = "")
     {
         return Html.CaseFieldCaption(
                     Model.caseFieldSettings,
                     Model.CaseFieldSettingWithLangauges,
                     field,
                     Model.case_.Customer_Id,
-                    SessionFacade.CurrentCaseLanguageId);
+                    SessionFacade.CurrentCaseLanguageId,
+                    defaultCaption);
     }    
 
 }

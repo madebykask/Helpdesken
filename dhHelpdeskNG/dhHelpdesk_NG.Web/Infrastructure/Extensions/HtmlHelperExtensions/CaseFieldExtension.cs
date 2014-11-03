@@ -18,7 +18,8 @@
                                 IEnumerable<CaseFieldSettingsWithLanguage> settingsEx,
                                 GlobalEnums.TranslationCaseFields field,
                                 int customerId,
-                                int languageId = 0)
+                                int languageId = 0,
+                                string defaultCaption = "")
         {
             var caption = "";
 
@@ -26,6 +27,9 @@
                 caption = Translation.Get(field.ToString(), Enums.TranslationSource.CaseTranslation, customerId);
             else
                 caption = Translation.Get(field.ToString(), languageId, Enums.TranslationSource.CaseTranslation, customerId);
+
+            if (string.IsNullOrEmpty(caption) && defaultCaption != "")
+                caption = Translation.Get(defaultCaption, languageId, Enums.TranslationSource.TextTranslation, customerId);
 
             var setting = settings.getCaseSettingsValue(field.ToString());
             var description = settingsEx.getFieldHelp(field.ToString());
