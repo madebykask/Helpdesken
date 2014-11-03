@@ -580,17 +580,17 @@
                                             {
                                                 @Html.TextAreaFor(model => model.case_.Description, new { rows = descriptionSize, @class = "case-description width90", @readonly = true })
                                             }
-                                                      
-                                        </td>
-                                           <td colspan="2">
                                                <span id="caseDescriptionPreview" 
                                                      rel="tooltip" 
                                                      class="icon-circle-arrow-up cursor-pointer" 
-                                                     title="@Translation.Get("Förhandsgranska")">
-                                                   style="@(string.IsNullOrEmpty(Model.case_.Description)?"visibility: hidden":"")"
+                                                     title="@Translation.Get("Förhandsgranska")"
+                                                     style="@(string.IsNullOrEmpty(Model.case_.Description)?"visibility: hidden":"")"
                                                     >
                                                 </span>
-                                            </td>
+                                                      
+                                        </td>
+                                          
+                                          
                                     </tr>
                                     <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Miscellaneous, CaseSolutionFields.Miscellaneous)">
                                         <td>
@@ -1344,12 +1344,10 @@
     }
 
 
-    $(function() {
-        var description = $(".case-description");
-        var previewBtn = $("#caseDescriptionPreview");
+    $(function() {        
 
-        previewBtn.click(function() {
-            description
+        $("#caseDescriptionPreview").click(function() {
+            var description = $(".case-description")
                 .attr("value")
                 .replace(/\r\n|\r|\n/g, "<br />");
             var d = $(document.createElement("div"))
@@ -1363,14 +1361,14 @@
                         d.dialog("destroy");
                     }
                 });
-        });
+         });
 
-        description.keyup(function(ev) {
+        $(".case-description").keyup(function(ev) {
             var visibility = 'visible';
             if (ev.target.value.length == 0) {
                 visibility = 'hidden';
             }
-            previewBtn.css('visibility', visibility);
+            $("#caseDescriptionPreview").css('visibility', visibility);
         });
     });
 </script>
