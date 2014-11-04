@@ -7,6 +7,7 @@
         public CaseNotifier Create(
             string userId,
             string firstName,
+            string sureName,
             string email,
             string phone,
             string cellphone,
@@ -19,6 +20,7 @@
             var instance = new CaseNotifier(
                 userId,
                 firstName,
+                sureName,
                 email,
                 phone,
                 cellphone,

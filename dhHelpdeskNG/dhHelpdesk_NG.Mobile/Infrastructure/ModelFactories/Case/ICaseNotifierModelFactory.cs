@@ -7,6 +7,7 @@
         CaseNotifier Create(
             string userId,
             string firstName,
+            string sureName,
             string email,
             string phone,
             string cellphone,

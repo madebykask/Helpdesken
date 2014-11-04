@@ -1345,9 +1345,27 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (updateNotifierInformation.HasValue && updateNotifierInformation.Value)
             {
+                var names = case_.PersonsName.Split(' ');
+
+                var fName = "";
+                var lName = "";
+
+                if (names.Length > 0)
+                   fName = names[0];
+
+                if (names.Length > 1)
+                {
+                    for (int i = 1; i < names.Length; i++ )
+                        if (i==1) 
+                          lName = names[i];
+                        else
+                          lName += " " + names[i];
+                }
+
                 var caseNotifier = this.caseNotifierModelFactory.Create(
                                                             case_.ReportedBy,
-                                                            case_.PersonsName,
+                                                            fName,
+                                                            lName,
                                                             case_.PersonsEmail,
                                                             case_.PersonsPhone,
                                                             case_.PersonsCellphone,

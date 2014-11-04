@@ -13,7 +13,8 @@
             <div class="pull-left">
                 <ul class="secnav">
                     <li>
-                        <input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn"/>
+                        @*<input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn"/>*@
+                        <a href="#" onclick="DoSubmit()" class="btn">@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)</a>                        
                     </li>
 
                     <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", null, new { @class = "btn" })</li>
@@ -66,6 +67,10 @@
     function updateForm() {
         $("form").each(function () { $.data($(this)[0], 'validator', false); });
         $.validator.unobtrusive.parse("form");
+    }
+
+    function DoSubmit() {
+        $("#edit_form").submit();        
     }
 
 </script>

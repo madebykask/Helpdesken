@@ -8,8 +8,8 @@
         <ul class="secnav">
             @if (!Model.Problem.IsFinished)
             {
-                <li id="menu1">
-                    <input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn" onclick=" $('#problem_edit_form').submit(); "/>
+                <li id="menu1">                    
+                    <a href="#" onclick="$('#problem_edit_form').submit();" class="btn">@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)</a>  
                 </li>
             }
             else

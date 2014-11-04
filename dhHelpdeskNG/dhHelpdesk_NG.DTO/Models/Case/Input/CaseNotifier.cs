@@ -7,7 +7,8 @@
     {
         public CaseNotifier(
             string userId, 
-            string firstName, 
+            string firstName,
+            string sureName, 
             string email, 
             string phone, 
             string cellphone, 
@@ -26,6 +27,7 @@
             this.Email = email;
             this.UserId = userId;
             this.FirstName = firstName;
+            this.LastName = sureName;
             this.CustomerId = customerId;
         }
 
@@ -34,6 +36,9 @@
 
         [MaxLength(NotifierConstraint.FirstNameMaxLength)]
         public string FirstName { get; private set; }
+
+        [MaxLength(NotifierConstraint.LastNameMaxLength)]
+        public string LastName { get; private set; }
 
         [MaxLength(NotifierConstraint.EmailMaxLength)]
         public string Email { get; private set; }
