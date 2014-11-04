@@ -28,8 +28,15 @@
                             @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Region_Id.ToString()) == 1) 
                             { 
                                 <tr>
-                                    <td class="span3">
-                                        @Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.Region_Id.ToString()):
+                                    <td class="span3">                                        
+                                        @{
+                                            var lbl = Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.Region_Id.ToString());
+                                            if (lbl == null)
+                                            {
+                                                lbl = GlobalEnums.TranslationCaseFields.Region_Id.ToString();                                                                                           
+                                            }
+                                         }
+                                        @lbl:     
                                     </td>                            
                                     <td>
                                         @Html.CheckBoxFor(m => Model.RegionCheck)                                    
@@ -48,7 +55,14 @@
                             {                                    
                                 <tr>
                                     <td class="span3">
-                                        @Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.User_Id.ToString()):
+                                        @{
+                                            var lbl = Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.User_Id.ToString());
+                                            if (lbl == null)
+                                            {
+                                                lbl = GlobalEnums.TranslationCaseFields.User_Id.ToString();                                                                                           
+                                            }
+                                         }
+                                         @lbl:                                         
                                     </td>                            
                                     <td>
                                         @Html.CheckBoxFor(m => Model.RegisteredByCheck)
@@ -66,8 +80,15 @@
                             @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()) == 1) 
                             {                                 
                                 <tr>
-                                    <td class="span3">
-                                        @Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()):
+                                    <td class="span3">                                        
+                                        @{
+                                            var lbl = Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString());
+                                            if (lbl == null)
+                                            {
+                                                lbl = GlobalEnums.TranslationCaseFields.CaseType_Id.ToString();                                                                                           
+                                            }
+                                         }
+                                        @lbl:                                             
                                     </td>                            
                                     <td>
                                         @Html.CheckBoxFor(m => Model.CaseTypeCheck)
@@ -80,8 +101,15 @@
                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()) == 1)
                            {
                                 <tr>
-                                    <td class="span3">
-                                        @Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()): 
+                                    <td class="span3">                                        
+                                        @{
+                                             var lbl = Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString());
+                                            if (lbl == null)
+                                            {
+                                                lbl = GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString();                                                                                           
+                                            }
+                                         }
+                                        @lbl:                                             
                                     </td>
                                     <td>
                                         @Html.CheckBoxFor(m => Model.ProductAreaCheck)
@@ -104,8 +132,15 @@
                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()) == 1)
                            {                                         
                                 <tr>
-                                    <td class="span3">
-                                        @Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()):
+                                    <td class="span3">                                        
+                                        @{
+                                            var lbl = Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString());
+                                            if (lbl == null)
+                                            {
+                                                lbl = GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString();                                                                                           
+                                            }
+                                         }
+                                         @lbl:   
                                     </td>                            
                                     <td>
                                         @Html.CheckBoxFor(m => Model.WorkingGroupCheck)
@@ -123,8 +158,15 @@
                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString()) == 1)
                            {         
                                 <tr>
-                                    <td class="span3">
-                                        @Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString()): 
+                                    <td class="span3">                                        
+                                        @{
+                                            var lbl = Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString());
+                                            if (lbl == null)
+                                            {
+                                                lbl = GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString();                                                                                           
+                                            }
+                                         }
+                                         @lbl: 
                                     </td>
                                     <td>
                                         @Html.CheckBoxFor(m => Model.ResponsibleCheck)
@@ -137,8 +179,15 @@
                            @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()) == 1)
                            {             
                                 <tr>
-                                    <td class="span3">
-                                        @Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()):
+                                    <td class="span3">                                        
+                                        @{
+                                            var lbl = Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString());
+                                            if (lbl == null)
+                                            {
+                                                lbl = GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString();                                                                                           
+                                            }
+                                         }
+                                         @lbl:
                                     </td>                            
                                     <td>
                                         @Html.CheckBoxFor(m => Model.AdministratorCheck, new { disabled = "1" })
@@ -156,8 +205,15 @@
                             @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()) == 1)
                            {                                                         
                                 <tr>
-                                    <td class="span3">
-                                        @Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()):
+                                    <td class="span3">                                        
+                                        @{
+                                            var lbl = Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.Priority_Id.ToString());
+                                            if (lbl == null)
+                                            {
+                                                lbl = GlobalEnums.TranslationCaseFields.Priority_Id.ToString();                                                                                           
+                                            }
+                                         }
+                                         @lbl:
                                     </td>                            
                                     <td>
                                         @Html.CheckBoxFor(m => Model.PriorityCheck)
@@ -175,8 +231,15 @@
                             @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Status_Id.ToString()) == 1)
                             { 
                                 <tr>
-                                    <td class="span3">
-                                        @Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.Status_Id.ToString()):
+                                    <td class="span3">                                        
+                                        @{
+                                            var lbl = Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.Status_Id.ToString());
+                                            if (lbl == null)
+                                            {
+                                                lbl = GlobalEnums.TranslationCaseFields.Status_Id.ToString();                                                                                           
+                                            }
+                                         }
+                                         @lbl:
                                     </td>                            
                                     <td>
                                         @Html.CheckBoxFor(m => Model.StateCheck)
@@ -189,8 +252,15 @@
                             @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()) == 1)
                             { 
                             <tr>
-                                <td class="span3">
-                                    @Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()):
+                                <td class="span3">                                    
+                                     @{
+                                        var lbl = Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString());
+                                        if (lbl == null)
+                                        {
+                                            lbl = GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString();                                                                                           
+                                        }
+                                      }
+                                      @lbl:
                                 </td>                            
                                 <td>
                                     @Html.CheckBoxFor(m => Model.SubStateCheck)
@@ -208,8 +278,15 @@
                             @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.RegTime.ToString()) == 1)
                             { 
                                 <tr>
-                                    <td class="span3">
-                                        @Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.RegTime.ToString()):
+                                    <td class="span3">                                      
+                                      @{
+                                         var lbl = Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.RegTime.ToString());
+                                         if (lbl == null)
+                                         {
+                                            lbl = GlobalEnums.TranslationCaseFields.RegTime.ToString();                                                                                           
+                                         }
+                                      }
+                                      @lbl:
                                     </td>                            
                                     <td>
                                         @Html.CheckBoxFor(m => m.CaseRegistrationDateFilterShow)
@@ -223,8 +300,15 @@
                             @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.WatchDate.ToString()) == 1)
                             { 
                                 <tr>
-                                    <td class="span3">
-                                        @Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.WatchDate.ToString()):
+                                    <td class="span3">                                       
+                                      @{
+                                         var lbl = Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.WatchDate.ToString());
+                                         if (lbl == null)
+                                         {
+                                             lbl = GlobalEnums.TranslationCaseFields.WatchDate.ToString();                                                                                           
+                                         }
+                                      }
+                                      @lbl:
                                     </td>                            
                                     <td>
                                         @Html.CheckBoxFor(m => m.CaseWatchDateFilterShow)
@@ -238,8 +322,15 @@
                             @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.FinishingDate.ToString()) == 1)
                             { 
                                 <tr>
-                                    <td class="span3">
-                                        @Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.FinishingDate.ToString()):
+                                    <td class="span3">                                        
+                                      @{
+                                         var lbl = Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.FinishingDate.ToString());
+                                         if (lbl == null)
+                                         {
+                                             lbl = GlobalEnums.TranslationCaseFields.FinishingDate.ToString();                                                                                           
+                                         }
+                                      }
+                                      @lbl:
                                     </td>                            
                                     <td>
                                         @Html.CheckBoxFor(m => m.CaseClosingDateFilterShow)
@@ -253,8 +344,15 @@
                             @if (Model.ColumnSettingModel.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.ClosingReason.ToString()) == 1)
                             {
                                 <tr>
-                                    <td class="span3">
-                                        @Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.ClosingReason.ToString()): 
+                                    <td class="span3">                                        
+                                      @{
+                                         var lbl = Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.ClosingReason.ToString());
+                                         if (lbl == null)
+                                         {
+                                             lbl = GlobalEnums.TranslationCaseFields.ClosingReason.ToString();                                                                                           
+                                         }
+                                      }
+                                      @lbl:
                                     </td>
                                     <td>
                                         @Html.CheckBoxFor(m => Model.ClosingReasonCheck)

@@ -35,6 +35,7 @@
 
         $('#SettingTab').click(function (e) {
             $('#btnSaveCaseSetting').show();
+
             $('#btnNewCase').hide();
             $('#btnCaseTemplate').hide();
         });
@@ -92,7 +93,7 @@
         window.onload = function () {
             $('#btnNewCase').show();
             $('#btnCaseTemplate').show();
-            $('#btnSaveCaseSetting').hide();
+            //$('#btnSaveCaseSetting').hide();
         };
 
         $('#btnSaveCaseSetting').click(function (e) {
@@ -146,8 +147,8 @@
                     @Html.Partial("_CaseTemplateTree", Model.CaseTemplateTreeButton)
                 </li>                
             }                    
-            <li id="btnSaveCaseSetting">                   
-                <input type="button" class="btn" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" /> 
+            <li id="btnSaveCaseSetting" style= "display: none">                   
+                <input type="button"  class="btn" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" /> 
             </li>    
         </ul>
     </div>

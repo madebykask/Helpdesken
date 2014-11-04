@@ -23,8 +23,15 @@
                     @if (Model.filterRegion != null)
                     {
                         <tr>
-                            <td>
-                                @Translation.Get(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)
+                            <td>                                
+                                @{
+                                    var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId);
+                                    if (lbl == null)
+                                    {
+                                        lbl = GlobalEnums.TranslationCaseFields.Region_Id.ToString();
+                                    }
+                                }
+                                @lbl:
                             </td>
                             <td>
                                 <select id="lstFilterRegion" name="lstFilterRegion" class="multiselect multiselect-search" multiple="multiple">
@@ -61,8 +68,15 @@
                     @if (Model.filterDepartment != null)
                     {
                         <tr>
-                            <td>
-                                @Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)
+                            <td>                                
+                                @{
+                                    var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId);
+                                    if (lbl == null)
+                                    {
+                                        lbl = GlobalEnums.TranslationCaseFields.Department_Id.ToString();
+                                    }
+                                }
+                                @lbl:
                             </td>
                             <td>
                                 <select id="lstfilterDepartment" name="lstfilterDepartment" class="multiselect" multiple="multiple">
@@ -80,8 +94,15 @@
                     @if (Model.filterCaseUser != null)
                     {
                         <tr>
-                            <td>
-                                @Translation.Get(GlobalEnums.TranslationCaseFields.User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)
+                            <td>                                
+                                @{
+                                    var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId);
+                                    if (lbl == null)
+                                    {
+                                        lbl = GlobalEnums.TranslationCaseFields.User_Id.ToString();
+                                    }
+                                }
+                                @lbl:
                             </td>
                             <td>
                                 <select id="lstfilterUser" name="lstfilterUser" class="multiselect multiselect-search" multiple="multiple">
@@ -96,8 +117,15 @@
                     @if (Model.filterCaseType != null)
                     {
                         <tr>
-                            <td>
-                                @Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)
+                            <td>                                
+                                @{
+                                    var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId) ;
+                                    if (lbl == null)
+                                    {
+                                        lbl = GlobalEnums.TranslationCaseFields.CaseType_Id.ToString();
+                                    }
+                                }
+                                @lbl:
                             </td>
                             <td>
                                 <div>
@@ -120,8 +148,15 @@
                     @if (Model.filterProductArea != null)
                     {
                         <tr>
-                            <td>
-                                @Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)
+                            <td>                                
+                                @{
+                                    var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId) ;
+                                    if (lbl == null)
+                                    {
+                                        lbl = GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString();
+                                    }
+                                }
+                                @lbl:
                             </td>
                             <td>
                                 <div id="divProductArea" class="btn-group pull-left">
@@ -141,8 +176,15 @@
                     @if (Model.filterCategory != null)
                     {
                         <tr>
-                            <td>
-                                @Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)
+                            <td>                                
+                                @{
+                                    var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId) ;
+                                    if (lbl == null)
+                                    {
+                                        lbl = GlobalEnums.TranslationCaseFields.Category_Id.ToString();
+                                    }
+                                }
+                                @lbl:
                             </td>
                             <td>
                                 <select id="lstfilterCategory" name="lstfilterCategory" class="multiselect multiselect-search" multiple="multiple">
@@ -160,8 +202,15 @@
                     @if (Model.filterWorkingGroup != null)
                     {
                         <tr>
-                            <td>
-                                @Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)
+                            <td>                                
+                                @{
+                                    var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId) ;
+                                    if (lbl == null)
+                                    {
+                                        lbl = GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString();
+                                    }
+                                }
+                                @lbl:
                             </td>
                             <td>
                                 <select id="lstfilterWorkingGroup" name="lstfilterWorkingGroup" class="multiselect multiselect-search" multiple="multiple">
@@ -180,8 +229,15 @@
                     @if (Model.filterUser != null)
                     {
                         <tr>
-                            <td>
-                                @Translation.Get(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)
+                            <td>                                
+                                @{
+                                    var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId) ;
+                                    if (lbl == null)
+                                    {
+                                        lbl = GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString();
+                                    }
+                                }
+                                @lbl:
                             </td>
                             <td>
                                 <select id="lstfilterResponsible" name="lstfilterResponsible" class="multiselect multiselect-search" multiple="multiple">
@@ -199,8 +255,15 @@
                     @if (Model.filterPerformer != null)
                     {
                         <tr>
-                            <td>
-                                @Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)
+                            <td>                               
+                                @{
+                                    var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId);
+                                    if (lbl == null)
+                                    {
+                                        lbl = GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString();
+                                    }
+                                }
+                                @lbl:
                             </td>
                             <td>
                                 <select id="lstfilterPerformer" name="lstfilterPerformer" class="multiselect multiselect-search" multiple="multiple">
@@ -218,8 +281,15 @@
                     @if (Model.filterPriority != null)
                     {
                         <tr>
-                            <td>
-                                @Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)
+                            <td>                                
+                               @{
+                                    var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId);
+                                    if (lbl == null)
+                                    {
+                                        lbl = GlobalEnums.TranslationCaseFields.Priority_Id.ToString();
+                                    }
+                                }
+                                @lbl:
                             </td>
                             <td>
                                 <select id="lstfilterPriority" name="lstfilterPriority" class="multiselect multiselect-search" multiple="multiple">
@@ -237,8 +307,15 @@
                     @if (Model.filterStatus != null)
                     {
                         <tr>
-                            <td>
-                                @Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)
+                            <td>                                
+                                @{
+                                    var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId);
+                                    if (lbl == null)
+                                    {
+                                        lbl = GlobalEnums.TranslationCaseFields.Status_Id.ToString();
+                                    }
+                                 }
+                                 @lbl:
                             </td>
                             <td>
                                 <select id="lstfilterStatus" name="lstfilterStatus" class="multiselect multiselect-search" multiple="multiple">
@@ -256,8 +333,15 @@
                     @if (Model.filterStateSecondary != null)
                     {
                         <tr>
-                            <td>
-                                @Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)
+                            <td>                                
+                                @{
+                                    var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId);
+                                    if (lbl == null)
+                                    {
+                                        lbl = GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString();
+                                    }
+                                 }
+                                 @lbl:
                             </td>
                             <td>
                                 <select id="lstfilterStateSecondary" name="lstfilterStateSecondary" class="multiselect multiselect-search" multiple="multiple">
@@ -275,8 +359,15 @@
                     @if (Model.customerUserSetting.CaseRegistrationDateFilterShow)
                     {
                         <tr>
-                            <td>
-                                @Translation.Get(GlobalEnums.TranslationCaseFields.RegTime.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)
+                            <td>                                
+                                @{
+                                    var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.RegTime.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId);
+                                    if (lbl == null)
+                                    {
+                                        lbl = GlobalEnums.TranslationCaseFields.RegTime.ToString();
+                                    }
+                                 }
+                                 @lbl:
                             </td>
                             <td>
                                 @Html.EditorFor(m => m.CaseRegistrationDateStartFilter, "DatePicker", new { id = "CaseRegistrationDateStartFilter" })                                         
@@ -287,8 +378,15 @@
                     @if (Model.customerUserSetting.CaseWatchDateFilterShow)
                     {
                         <tr>
-                            <td>
-                                @Translation.Get(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)
+                            <td>                               
+                                 @{
+                                    var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId);
+                                    if (lbl == null)
+                                    {
+                                        lbl = GlobalEnums.TranslationCaseFields.WatchDate.ToString();
+                                    }
+                                 }
+                                 @lbl:
                             </td>
                             <td>
                                 @Html.EditorFor(m => m.CaseWatchDateStartFilter, "DatePicker", new { id = "CaseWatchDateStartFilter" })                                         
@@ -299,8 +397,15 @@
                     @if (Model.customerUserSetting.CaseClosingDateFilterShow)
                     {
                         <tr>
-                            <td>
-                                @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)
+                            <td>                                
+                                 @{
+                                    var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId);
+                                    if (lbl == null)
+                                    {
+                                        lbl = GlobalEnums.TranslationCaseFields.FinishingDate.ToString();
+                                    }
+                                 }
+                                 @lbl:
                             </td>
                             <td>
                                 @Html.EditorFor(m => m.CaseClosingDateStartFilter, "DatePicker", new { id = "CaseClosingDateStartFilter" })                                         
@@ -311,8 +416,15 @@
                     @if (Model.ClosingReasons != null)
                     {
                         <tr>
-                            <td>
-                                @Translation.Get(GlobalEnums.TranslationCaseFields.ClosingReason.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)
+                            <td>                                
+                                @{
+                                    var lbl = Translation.Get(GlobalEnums.TranslationCaseFields.ClosingReason.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId);
+                                    if (lbl == null)
+                                    {
+                                        lbl = GlobalEnums.TranslationCaseFields.ClosingReason.ToString();
+                                    }
+                                 }
+                                 @lbl:
                             </td>
                             <td>
                                 <div id="divClosingReason" class="btn-group pull-left">

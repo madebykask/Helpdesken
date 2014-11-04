@@ -14,9 +14,14 @@
                 @if (Model.caseSettings != null)
                 {                
                     foreach (var c in Model.caseSettings)
-                    {                                            
+                    {
+                        var colName = Translation.Get(c.Name, Enums.TranslationSource.CaseTranslation, c.Customer_Id);
+                        if (colName == null)
+                        {
+                            colName = c.Name;
+                        }
                         <th onclick="sortCases('@c.Name')" class="thpointer" >
-                            @Translation.Get(c.Name, Enums.TranslationSource.CaseTranslation, c.Customer_Id)<i class="@c.Name.SetCaseSortIcon()"></i>                                
+                            @colName <i class="@c.Name.SetCaseSortIcon()"></i>                                
                         </th>                        
                     }    
                 }
