@@ -1351,17 +1351,17 @@ namespace DH.Helpdesk.Web.Controllers
                 var lName = "";
 
                 if (names.Length > 0)
-                   fName = names[0];
-
-                if (names.Length > 1)
                 {
-                    for (int i = 1; i < names.Length; i++ )
-                        if (i==1) 
-                          lName = names[i];
+                    for (int i = 0; i < names.Length - 1; i++)
+                        if (i == 0)
+                            lName = names[i];
                         else
-                          lName += " " + names[i];
+                            lName += " " + names[i];
                 }
 
+                if (names.Length > 1)
+                    fName = names[names.Length-1];
+                
                 var caseNotifier = this.caseNotifierModelFactory.Create(
                                                             case_.ReportedBy,
                                                             fName,

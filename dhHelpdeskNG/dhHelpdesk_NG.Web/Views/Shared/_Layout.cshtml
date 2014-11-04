@@ -148,12 +148,12 @@
                                                 @Translation.Get("Aktuellt")</a></li>
                                     }    
                                                                     
-                                    @if (model.IsQuestionnaireVisible())
+                                    @*@if (model.IsQuestionnaireVisible())
                                     {                                    
                                         <li><a href="@Url.Action("index", "questionnaire", new { area = "" })">
                                                 <img src="@Url.Content("~/Content/icons/questionnaire.png")" />
                                                 @Translation.Get("Enkät")</a></li>
-                                    }                                    
+                                    }      *@                              
 
                                     @if (model.IsDocumentVisible())
                                     {                                    

@@ -161,7 +161,7 @@
                 this.IsBulletinBoardVisible() ||
                 this.IsFaqVisible() ||
                 this.IsCalendarVisible() ||
-                this.IsQuestionnaireVisible() ||
+                //this.IsQuestionnaireVisible() ||
                 this.IsDocumentVisible();                
         }
 
@@ -169,7 +169,7 @@
         {
             return 
                    //this.IsReportVisible() ||
-                   this.IsDailyReportVisible() ||        
+                   //this.IsDailyReportVisible() ||        
                    this.IsOperationLogVisible();
         }
 
@@ -180,8 +180,8 @@
                 this.IsCaseSolutionVisible() ||
                 this.IsComputerUserVisible() ||
                 this.IsChangeManagementVisible() ||
-                this.IsProblemVisible() ||
-                this.IsProjectVisible();
+                this.IsProblemVisible();
+                //this.IsProjectVisible();
         }
     }
 }
