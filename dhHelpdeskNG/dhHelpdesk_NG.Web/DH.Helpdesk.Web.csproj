@@ -1221,7 +1221,11 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="Areas\Admin\Views\Customer\_CopyCustomer.cshtml" />
+    <Content Include="img-profile\CHS-logo-H31px_140227.png" />
+    <Content Include="img-profile\CHS-logo-W300_140227.png" />
     <Content Include="img-profile\ikea-logo-login.png" />
+    <Content Include="img-profile\ikea-logo.png" />
+    <Content Include="img-profile\ikea-quality-text.png" />
     <Content Include="img-profile\print-logo.png" />
     <Content Include="img-profile\profile.css" />
     <Content Include="log4net.config" />
