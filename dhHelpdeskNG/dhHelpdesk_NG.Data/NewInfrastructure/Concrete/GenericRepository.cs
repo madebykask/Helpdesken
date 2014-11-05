@@ -6,7 +6,7 @@
     using System.Linq;
     using System.Linq.Expressions;
 
-    public class GenericRepository<TEntity> : IRepository<TEntity>
+    public sealed class GenericRepository<TEntity> : IRepository<TEntity>
         where TEntity : class
     {
         private readonly IDbContext context;
@@ -19,12 +19,12 @@
             this.dbset = context.Set<TEntity>();
         }
 
-        public virtual void Add(TEntity entity)
+        public void Add(TEntity entity)
         {
             this.dbset.Add(entity);
         }
 
-        public virtual void Update(TEntity entity)
+        public void Update(TEntity entity)
         {
             DbEntityEntry<TEntity> entry = this.context.Entry(entity);
             this.dbset.Attach(entity);
@@ -43,13 +43,13 @@
             }
         }
 
-        public virtual void DeleteById(int id)
+        public void DeleteById(int id)
         {
             TEntity entity = this.dbset.Find(id);
             this.dbset.Remove(entity);
         }
 
-        public virtual void DeleteWhere(Expression<Func<TEntity, bool>> predicate)
+        public void DeleteWhere(Expression<Func<TEntity, bool>> predicate)
         {
             IQueryable<TEntity> delList = this.dbset.Where(predicate);
 
@@ -86,7 +86,7 @@
             return includeProperties.Aggregate(query, (current, property) => current.Include(property));
         }
 
-        public virtual TEntity GetById(long id)
+        public TEntity GetById(long id)
         {
             return this.dbset.Find(id);
         }
