@@ -15,7 +15,21 @@
                 {                
                     foreach (var c in Model.caseSettings)
                     {
-                        var colName = Translation.Get(c.Name, Enums.TranslationSource.CaseTranslation, c.Customer_Id);
+                        var colName = "";
+                        if (c.Name == "_temporary_.LeadTime")
+                        {
+                            colName = Translation.Get("Tid kvar", Enums.TranslationSource.TextTranslation, c.Customer_Id);
+                        }
+                        else
+                        if (c.Name == "tblProblem.ResponsibleUser_Id")
+                        {
+                            colName = Translation.Get("Problem", Enums.TranslationSource.TextTranslation, c.Customer_Id);
+                        }
+                        else
+                        {
+                            colName = Translation.Get(c.Name, Enums.TranslationSource.CaseTranslation, c.Customer_Id);
+                        }
+                        
                         if (colName == null)
                         {
                             colName = c.Name;
