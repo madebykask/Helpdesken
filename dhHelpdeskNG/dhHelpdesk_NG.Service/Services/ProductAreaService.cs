@@ -20,7 +20,7 @@
 
         DeleteMessage DeleteProductArea(int id);
        
-        void SaveProductArea(ProductArea productArea, out IDictionary<string, string> errors);
+        void SaveProductArea(ProductArea productArea,int[] wg, out IDictionary<string, string> errors);
 
         void Commit();
 
@@ -80,14 +80,17 @@
     public class ProductAreaService : IProductAreaService
     {
         private readonly IProductAreaRepository productAreaRepository;
+        private readonly IWorkingGroupRepository workingGroupRepository;
 
         private readonly IUnitOfWork unitOfWork;
 
         public ProductAreaService(
             IProductAreaRepository productAreaRepository,
+            IWorkingGroupRepository workingGroupRepository,
             IUnitOfWork unitOfWork)
         {
             this.productAreaRepository = productAreaRepository;
+            this.workingGroupRepository = workingGroupRepository;
             this.unitOfWork = unitOfWork;
         }
 
@@ -142,7 +145,7 @@
             return DeleteMessage.Error;
         }
 
-        public void SaveProductArea(ProductArea productArea, out IDictionary<string, string> errors)
+        public void SaveProductArea(ProductArea productArea, int[] wg, out IDictionary<string, string> errors)
         {
             if (productArea == null)
                 throw new ArgumentNullException("productarea");
@@ -151,6 +154,22 @@
 
             if (string.IsNullOrEmpty(productArea.Name))
                 errors.Add("ProductArea.Name", "Du måste ange ett ämnesområde");
+
+            if (productArea.WorkingGroups != null)
+                foreach (var delete in productArea.WorkingGroups.ToList())
+                    productArea.WorkingGroups.Remove(delete);
+            else
+                productArea.WorkingGroups = new List<WorkingGroupEntity>();
+
+            if (wg != null)
+            {
+                foreach (int id in wg)
+                {
+                    var w = this.workingGroupRepository.GetById(id);
+                    if (w != null)
+                        productArea.WorkingGroups.Add(w);
+                }
+            }
 
             if (productArea.Id == 0)
                 this.productAreaRepository.Add(productArea);

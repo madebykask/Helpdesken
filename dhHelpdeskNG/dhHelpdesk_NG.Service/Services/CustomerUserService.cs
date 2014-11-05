@@ -24,6 +24,8 @@
         void UpdateUserCaseSetting(UserCaseSetting newSetting);
 
         void SaveCustomerUser(CustomerUser customerUser, out IDictionary<string, string> errors);
+
+        void SaveCustomerUserForCopy(CustomerUser customerUser, out IDictionary<string, string> errors);
     }
 
     public class CustomerUserService : ICustomerUserService
@@ -100,6 +102,15 @@
             errors = new Dictionary<string, string>();
 
             this.customerUserRepository.Update(customerUser);
+            //this.customerUserRepository.Add(customerUser);
+            this.customerUserRepository.Commit();
+        }
+
+        public void SaveCustomerUserForCopy(CustomerUser customerUser, out IDictionary<string, string> errors)
+        {
+            errors = new Dictionary<string, string>();
+
+            this.customerUserRepository.Add(customerUser);
             this.customerUserRepository.Commit();
         }
     }

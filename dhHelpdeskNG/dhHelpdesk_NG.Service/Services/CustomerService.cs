@@ -80,7 +80,7 @@
 
         public IList<Customer> GetAllCustomers()
         {
-            return this._customerRepository.GetAll().ToList();
+            return this._customerRepository.GetAll().OrderBy(x => x.Name).ToList();
         }
 
         public IList<Customer> GetCustomers(int customerId)

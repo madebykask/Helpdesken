@@ -3,7 +3,7 @@
 @model DH.Helpdesk.Web.Areas.Admin.Models.ProductAreaInputViewModel
 
 <div class="content">
-    <div class="container">
+    <div class="formContainer">
         <ul class="nav nav-tabs" id="myTab">
             <li class="active"><a href="#fragment-1">@Translation.Get("Produktområde", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
         </ul>
@@ -115,7 +115,7 @@
                                         @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td style="vertical-align:top" class="span9">
-                                        <input type="checkbox" name="chkPermission" id="chkPermission" onchange="showWorkingGroup()" value="0"/> @Translation.Get("Begränsa rättighet att skapa ärenden till", Enums.TranslationSource.TextTranslation)
+                                        <input type="checkbox" name="chkPermission" id="chkPermission" onchange="showWorkingGroup()" @(Model.WgSelected.Count > 0 ? "checked=checked" : "") value="0"/> @Translation.Get("Begränsa rättighet att skapa ärenden till", Enums.TranslationSource.TextTranslation)
                                     </td>
                                 </tr>
                             </table>
@@ -124,7 +124,7 @@
                             @Html.HiddenFor(model => model.ProductArea.Parent_ProductArea_Id)
                         </div>
                     </div>
-                    <div class="row" id="divWorkingGroup" style="display:none">
+                    <div class="row" id="divWorkingGroup" @(Model.WgSelected.Count > 0 ? "display:block" : "")>
                         <div class="span20">
                             <table class="tableform">
                                 <tr>
@@ -213,17 +213,42 @@
         }
     }
 
+    //$("#addWg").click(function () {
+    //    $("#WgAvailable option:selected").remove().appendTo("#WgSelected");
+    //    $("#WgAvailable").get(0).selectedIndex = -1;
+    //    $("#WgSelected").get(0).selectedIndex = -1;
+    //    return false;
+    //});
+
+    //$("#removeWg").click(function () {
+    //    $("#WgSelected option:selected").remove().appendTo("#WgAvailable");
+    //    $("#WgAvailable").get(0).selectedIndex = -1;
+    //    $("#WgAvailable").get(0).selectedIndex = -1;
+    //    return false;
+    //});
+
     $("#addWg").click(function () {
-        $("#WgAvailable option:selected").remove().appendTo("#WgSelected");
-        $("#WgAvailable").get(0).selectedIndex = -1;
-        $("#WgSelected").get(0).selectedIndex = -1;
+        if (document.getElementById("WgAvailable").length != 0 && document.getElementById("WgAvailable").selectedIndex != -1) {
+            // Lägg till bild
+            document.getElementById("WgSelected").options[document.getElementById("WgSelected").length] = new Option(document.getElementById("WgAvailable")[document.getElementById("WgAvailable").selectedIndex].text, document.getElementById("WgAvailable")[document.getElementById("WgAvailable").selectedIndex].value, false, false)
+
+            // Ta bort bild
+            document.getElementById("WgAvailable").options[document.getElementById("WgAvailable").selectedIndex] = null
+        }
+
         return false;
     });
 
     $("#removeWg").click(function () {
-        $("#WgSelected option:selected").remove().appendTo("#WgAvailable");
-        $("#WgAvailable").get(0).selectedIndex = -1;
-        $("#WgAvailable").get(0).selectedIndex = -1;
+
+        if (document.getElementById("WgSelected").length != 0 && document.getElementById("WgSelected").selectedIndex != -1) {
+            // Lägg till bild
+            document.getElementById("WgAvailable").options[document.getElementById("WgAvailable").length] = new Option(document.getElementById("WgSelected")[document.getElementById("WgSelected").selectedIndex].text, document.getElementById("WgSelected")[document.getElementById("WgSelected").selectedIndex].value, false, false)
+
+            // Ta bort bild
+            document.getElementById("WgSelected").options[document.getElementById("WgSelected").selectedIndex] = null
+        }
+
         return false;
     });
 </script>

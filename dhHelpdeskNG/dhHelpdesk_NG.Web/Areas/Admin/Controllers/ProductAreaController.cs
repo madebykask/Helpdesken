@@ -63,10 +63,10 @@
         }
 
         [HttpPost]
-        public ActionResult New(ProductArea productArea)
+        public ActionResult New(ProductArea productArea, int[] wgSelected)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            this._productAreaService.SaveProductArea(productArea, out errors);
+            this._productAreaService.SaveProductArea(productArea, wgSelected, out errors);
 
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "productarea", new { customerid = productArea.Customer_Id });
@@ -91,16 +91,26 @@
         }
 
         [HttpPost]
-        public ActionResult Edit(ProductArea productArea)
+        public ActionResult Edit(int id, ProductArea productArea, int[] wgSelected)
         {
+            var productAreaToSave = this._productAreaService.GetProductArea(id);
+
+            productAreaToSave.Name = productArea.Name;
+            productAreaToSave.Description = productArea.Description;
+            productAreaToSave.InformUserText = productArea.InformUserText;
+            productAreaToSave.WorkingGroup_Id = productArea.WorkingGroup_Id;
+            productAreaToSave.Priority_Id = productArea.Priority_Id;
+            productAreaToSave.MailID = productArea.MailID;
+            productAreaToSave.IsActive = productArea.IsActive;
+
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            this._productAreaService.SaveProductArea(productArea, out errors);
+            this._productAreaService.SaveProductArea(productAreaToSave, wgSelected, out errors);
 
             if (errors.Count == 0)
-                return this.RedirectToAction("index", "productarea", new { customerid = productArea.Customer_Id });
+                return this.RedirectToAction("index", "productarea", new { customerid = productAreaToSave.Customer_Id });
 
             var customer = this._customerService.GetCustomer(productArea.Customer_Id);
-            var model = this.CreateInputViewModel(productArea, customer);
+            var model = this.CreateInputViewModel(productAreaToSave, customer);
 
             return this.View(model);
         }

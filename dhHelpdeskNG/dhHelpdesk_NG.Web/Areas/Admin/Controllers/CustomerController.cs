@@ -956,7 +956,7 @@
                 newCustomerCustomerUser.CasePerformerFilter = string.Empty;
                 newCustomerCustomerUser.ShowOnStartPage = cu.ShowOnStartPage;
 
-                this._customerUserService.SaveCustomerUser(newCustomerCustomerUser, out errors);
+                this._customerUserService.SaveCustomerUserForCopy(newCustomerCustomerUser, out errors);
             }
 
 
@@ -1034,7 +1034,7 @@
                 newCustomerProductArea.Parent_ProductArea_Id = p.Parent_ProductArea_Id;
                 newCustomerProductArea.IsActive = p.IsActive;
 
-                this._productAreaService.SaveProductArea(newCustomerProductArea, out errors);
+                this._productAreaService.SaveProductArea(newCustomerProductArea, null, out errors);
             }
             
             //Get StateSecondary to copy
