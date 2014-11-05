@@ -5,21 +5,21 @@
     public static class BundleConfig
     {
         public static void RegisterBundles(BundleCollection bundles)
-        {   
+        {
+            bundles.Add(new StyleBundle("~/img-profile/css").Include(
+                            "~/img-profile/profile.css"));
+
             bundles.Add(new StyleBundle("~/Content/bundles/css").Include(
                             "~/Content/css/*.css",
                             "~/Content/themes/base/minified/jquery-ui.min.css",                            
-                            "~/Content/js/jquery.plupload.queue/css/jquery.plupload.queue.css",
-                            "~/img-profile/profile.css"));
+                            "~/Content/js/jquery.plupload.queue/css/jquery.plupload.queue.css"));
 
             bundles.Add(new StyleBundle("~/Content/css/admin").Include(
                             "~/Content/css/*.css",
-                            "~/img-profile/profile.css",
                             "~/Content/js/jquery.plupload.queue/css/jquery.plupload.queue.css"));
 
             bundles.Add(new StyleBundle("~/Content/css/login").Include(
-                            "~/Content/css/*.css",
-                            "~/img-profile/profile.css"));
+                            "~/Content/css/*.css"));
 
             bundles.Add(new StyleBundle("~/Content/css/popup").Include(
                             "~/Content/css/*.css",
