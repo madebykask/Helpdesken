@@ -403,6 +403,13 @@ namespace DH.Helpdesk.Web.Controllers
 
                     m.NewModeParams = caseParam;
                     AddViewDataValues();
+
+                    // Positive: Send Mail to...
+                    if (m.CaseMailSetting.DontSendMailToNotifier == false)
+                        m.CaseMailSetting.DontSendMailToNotifier = true;
+                    else
+                        m.CaseMailSetting.DontSendMailToNotifier = false;
+
                     return this.View(m);
                 }
 
@@ -557,6 +564,13 @@ namespace DH.Helpdesk.Web.Controllers
             }            
 
             AddViewDataValues();
+
+            // Positive: Send Mail to...
+            if (m.CaseMailSetting.DontSendMailToNotifier == false)
+                m.CaseMailSetting.DontSendMailToNotifier = true;
+            else
+                m.CaseMailSetting.DontSendMailToNotifier = false;
+            
             return this.View(m);
         }
 
@@ -1289,6 +1303,12 @@ namespace DH.Helpdesk.Web.Controllers
             IDictionary<string, string> errors;
 
             var mailSenders = new MailSenders();
+
+            // Positive: Send Mail to...
+            if (caseMailSetting.DontSendMailToNotifier == false)
+                caseMailSetting.DontSendMailToNotifier = true;
+            else
+                caseMailSetting.DontSendMailToNotifier = false;
 
             mailSenders.SystemEmail = caseMailSetting.HelpdeskMailFromAdress;
 

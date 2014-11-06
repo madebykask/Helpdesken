@@ -47,6 +47,13 @@
 
             var model = this.CreateInputViewModel(statesecondary, customer);
 
+            // Positive: Send Mail to...
+            if (model.StateSecondary.NoMailToNotifier == 0)
+                model.StateSecondary.NoMailToNotifier = 1;
+            else
+                model.StateSecondary.NoMailToNotifier = 0;
+
+
             return this.View(model);
         }
 
@@ -54,6 +61,13 @@
         public ActionResult New(StateSecondary stateSecondary)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
+
+            // Positive: Send Mail to...
+            if (stateSecondary.NoMailToNotifier == 0)
+                stateSecondary.NoMailToNotifier = 1;
+            else
+                stateSecondary.NoMailToNotifier = 0;
+
             this._stateSecondaryService.SaveStateSecondary(stateSecondary, out errors);
 
             if (errors.Count == 0)                
@@ -75,6 +89,12 @@
             var customer = this._customerService.GetCustomer(statesecondary.Customer_Id);
             var model = this.CreateInputViewModel(statesecondary, customer);
 
+            // Positive: Send Mail to...
+            if (model.StateSecondary.NoMailToNotifier == 0)
+                model.StateSecondary.NoMailToNotifier = 1;
+            else
+                model.StateSecondary.NoMailToNotifier = 0;
+
             return this.View(model);
         }
 
@@ -82,6 +102,13 @@
         public ActionResult Edit(StateSecondary stateSecondary)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
+
+            // Positive: Send Mail to...
+            if (stateSecondary.NoMailToNotifier == 0)
+                stateSecondary.NoMailToNotifier = 1;
+            else
+                stateSecondary.NoMailToNotifier = 0;
+
             this._stateSecondaryService.SaveStateSecondary(stateSecondary, out errors);
 
             if (errors.Count == 0)                

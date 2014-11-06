@@ -128,7 +128,8 @@ namespace DH.Helpdesk.Web.Controllers
 
         public ActionResult New(int? backToPageId)
         {
-            var caseSolution = new CaseSolution { Customer_Id = SessionFacade.CurrentCustomer.Id };
+            // Positive: Send Mail to...
+            var caseSolution = new CaseSolution (){ Customer_Id = SessionFacade.CurrentCustomer.Id, NoMailToNotifier = 1};
 
             if (backToPageId == null)
                 ViewBag.PageId = 0;
@@ -152,6 +153,12 @@ namespace DH.Helpdesk.Web.Controllers
             this.TempData["RequiredFields"] = null;
 
             var caseSolutionSchedule = this.CreateCaseSolutionSchedule(caseSolutionInputViewModel);
+
+            // Positive: Send Mail to...
+            if (caseSolutionInputViewModel.CaseSolution.NoMailToNotifier == 0)
+                caseSolutionInputViewModel.CaseSolution.NoMailToNotifier = 1;
+            else
+                caseSolutionInputViewModel.CaseSolution.NoMailToNotifier = 0;
 
             this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
 
@@ -203,6 +210,12 @@ namespace DH.Helpdesk.Web.Controllers
             if (caseSolution == null)
                 return new HttpNotFoundResult("No case solution found...");
 
+            // Positive: Send Mail to...
+            if (caseSolution.NoMailToNotifier == 0)
+                caseSolution.NoMailToNotifier = 1;
+            else
+                caseSolution.NoMailToNotifier = 0;
+
             if (backToPageId == null)
                 ViewBag.PageId = 0;
             else
@@ -221,6 +234,13 @@ namespace DH.Helpdesk.Web.Controllers
             this.TempData["RequiredFields"] = null;
 
             var caseSolutionSchedule = this.CreateCaseSolutionSchedule(caseSolutionInputViewModel);
+
+            // Positive: Send Mail to...
+            if (caseSolutionInputViewModel.CaseSolution.NoMailToNotifier == 0)
+                caseSolutionInputViewModel.CaseSolution.NoMailToNotifier = 1;
+            else
+                caseSolutionInputViewModel.CaseSolution.NoMailToNotifier = 0;
+
             this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
 
             CaseSettingsSolutionAggregate settingsSolutionAggregate =
