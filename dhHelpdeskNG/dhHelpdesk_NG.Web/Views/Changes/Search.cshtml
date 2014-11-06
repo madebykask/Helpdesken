@@ -93,7 +93,7 @@
                 &nbsp;
             </td>
             <td>
-                <input id="srch" type="submit" value="@Translation.Get("Search", Enums.TranslationSource.TextTranslation)" class="btn" />                
+                <input id="srch" type="submit" onclick="ResetPaging()" value="@Translation.Get("Search", Enums.TranslationSource.TextTranslation)" class="btn" />                
             </td>
         </tr>
     </table>
@@ -101,10 +101,9 @@
 
 <script type="text/javascript">
         
-    //$(document).ready(function () {
-    //    //DestroyDataTable('tablegrid1');
-    //    InitDataTable('tablegrid1');
-    //});
+    function ResetPaging() {
+        ResetDataTable("Change_Table");
+    };
 
     
 
