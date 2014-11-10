@@ -94,6 +94,9 @@
     <Compile Include="EntityConfigurations\Licenses\VendorConfiguration.cs" />
     <Compile Include="EntityConfigurations\MailTemplates\MailTemplateLanguageConfiguration.cs" />
     <Compile Include="EntityConfigurations\OperationLogEmailLogConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Orders\OrderEMailLogConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Orders\OrderHistoryConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Orders\OrderPropertyConfiguration.cs" />
     <Compile Include="EntityConfigurations\SSO\SSOLogConfiguration.cs" />
     <Compile Include="EntityConfigurations\Users\ModuleConfiguration.cs" />
     <Compile Include="EntityConfigurations\Users\UserModuleConfiguration.cs" />
@@ -224,7 +227,7 @@
     <Compile Include="EntityConfigurations\Changes\ChangeChangeGroupConfiguration.cs" />
     <Compile Include="EntityConfigurations\Computers\ComputerInventoryConfiguration.cs" />
     <Compile Include="EntityConfigurations\LinkUserConfiguration.cs" />
-    <Compile Include="EntityConfigurations\OrderFieldSettingsConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Orders\OrderFieldSettingsConfiguration.cs" />
     <Compile Include="Enums\Changes\AnalyzeField.cs" />
     <Compile Include="Enums\Changes\EvaluationField.cs" />
     <Compile Include="Enums\Changes\GeneralField.cs" />
@@ -482,8 +485,8 @@
     <Compile Include="EntityConfigurations\MailTemplates\MailTemplateIdentifierConfiguration.cs" />
     <Compile Include="EntityConfigurations\OperationLogCategoryConfiguration.cs" />
     <Compile Include="EntityConfigurations\OperationObjectConfiguration.cs" />
-    <Compile Include="EntityConfigurations\OrderConfiguration.cs" />
-    <Compile Include="EntityConfigurations\OrderStateConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Orders\OrderConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Orders\OrderStateConfiguration.cs" />
     <Compile Include="EntityConfigurations\OUConfiguration.cs" />
     <Compile Include="EntityConfigurations\PriorityConfiguration.cs" />
     <Compile Include="EntityConfigurations\PriorityImpactUrgencyConfiguration.cs" />
@@ -512,7 +515,7 @@
     <Compile Include="EntityConfigurations\UserWorkingGroupConfiguration.cs" />
     <Compile Include="EntityConfigurations\WatchDateCalendarConfiguration.cs" />
     <Compile Include="EntityConfigurations\WorkingGroupConfiguration.cs" />
-    <Compile Include="EntityConfigurations\OrderTypeConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Orders\OrderTypeConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AccountActivityRepository.cs" />
     <Compile Include="Repositories\AccountRepository.cs" />

@@ -1,0 +1,98 @@
+﻿namespace DH.Helpdesk.Dal.EntityConfigurations.Orders
+{
+    using System.ComponentModel.DataAnnotations.Schema;
+    using System.Data.Entity.ModelConfiguration;
+
+    using DH.Helpdesk.Domain.Orders;
+
+    internal sealed class OrderHistoryConfiguration : EntityTypeConfiguration<OrderHistoryEntity>
+    {
+        internal OrderHistoryConfiguration()
+        {
+            this.HasKey(o => o.Id);
+            this.Property(o => o.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            this.HasRequired(o => o.Domain)
+                .WithMany()
+                .HasForeignKey(o => o.Domain_Id);
+            this.Property(o => o.OrderDate).IsOptional();
+            this.Property(o => o.UserId).IsOptional().HasMaxLength(20);
+            this.Property(o => o.UserFirstName).IsOptional().HasMaxLength(20);
+            this.Property(o => o.UserLastName).IsOptional().HasMaxLength(50);
+            this.Property(o => o.OrdererID).IsRequired().HasMaxLength(40);
+            this.Property(o => o.Orderer).IsRequired().HasMaxLength(50);
+            this.Property(o => o.OrdererAddress).IsRequired().HasMaxLength(50);
+            this.Property(o => o.OrdererInvoiceAddress).IsRequired().HasMaxLength(50);
+            this.Property(o => o.OrdererLocation).IsRequired().HasMaxLength(50);
+            this.Property(o => o.OrdererEMail).IsRequired().HasMaxLength(100);
+            this.Property(o => o.OrdererPhone).IsRequired().HasMaxLength(50);
+            this.Property(o => o.OrdererCode).IsRequired().HasMaxLength(10);
+            this.Property(o => o.OrdererReferenceNumber).IsOptional().HasMaxLength(20);
+            this.Property(o => o.AccountingDimension1).IsOptional().HasMaxLength(20);
+            this.Property(o => o.AccountingDimension2).IsOptional().HasMaxLength(20);
+            this.Property(o => o.AccountingDimension3).IsOptional().HasMaxLength(20);
+            this.Property(o => o.AccountingDimension4).IsOptional().HasMaxLength(20);
+            this.Property(o => o.AccountingDimension5).IsOptional().HasMaxLength(20);
+            this.Property(o => o.Department_Id).IsOptional();
+            this.HasRequired(o => o.Ou)
+                .WithMany()
+                .HasForeignKey(o => o.OU_Id);
+            this.Property(o => o.OrderPropertyId).HasColumnName("OrderProperty_Id");
+            this.HasOptional(o => o.OrderProperty)
+                .WithMany()
+                .HasForeignKey(o => o.OrderPropertyId);
+            this.Property(o => o.OrderRow).IsRequired().HasMaxLength(100);
+            this.Property(o => o.OrderRow2).IsRequired().HasMaxLength(100);
+            this.Property(o => o.OrderRow3).IsRequired().HasMaxLength(100);
+            this.Property(o => o.OrderRow4).IsRequired().HasMaxLength(100);
+            this.Property(o => o.OrderRow5).IsRequired().HasMaxLength(100);
+            this.Property(o => o.OrderRow6).IsRequired().HasMaxLength(100);
+            this.Property(o => o.OrderRow7).IsRequired().HasMaxLength(100);
+            this.Property(o => o.OrderRow8).IsRequired().HasMaxLength(100);
+            this.Property(o => o.Configuration).IsRequired().HasMaxLength(400);
+            this.Property(o => o.OrderInfo).IsOptional().HasMaxLength(800);
+            this.Property(o => o.OrderInfo2).IsRequired();
+            this.Property(o => o.ReceiverId).IsRequired().HasMaxLength(40);
+            this.Property(o => o.ReceiverName).IsRequired().HasMaxLength(50);
+            this.Property(o => o.ReceiverEMail).IsRequired().HasMaxLength(100);
+            this.Property(o => o.ReceiverPhone).IsRequired().HasMaxLength(50);
+            this.Property(o => o.ReceiverLocation).IsRequired().HasMaxLength(50);
+            this.Property(o => o.MarkOfGoods).IsRequired().HasMaxLength(100);
+            this.Property(o => o.SupplierOrderNumber).IsRequired().HasMaxLength(20);
+            this.Property(o => o.SupplierOrderDate).IsOptional();
+            this.Property(o => o.SupplierOrderInfo).IsRequired().HasMaxLength(200);
+            this.Property(o => o.User_Id).IsOptional();
+            this.Property(o => o.Deliverydate).IsOptional();
+            this.Property(o => o.InstallDate).IsOptional();
+            this.HasRequired(o => o.OrderState)
+                .WithMany()
+                .HasForeignKey(o => o.OrderState_Id);
+            this.HasRequired(o => o.OrderType)
+                .WithMany()
+                .HasForeignKey(o => o.OrderType_Id);
+            this.Property(o => o.DeliveryDepartmentId).IsOptional().HasColumnName("DeliveryDepartment_Id");
+            this.HasOptional(o => o.DeliveryDepartment)
+                .WithMany()
+                .HasForeignKey(o => o.DeliveryDepartmentId);
+            this.Property(o => o.DeliveryOu).HasColumnName("DeliveryOU").HasMaxLength(50).IsOptional();
+            this.Property(o => o.DeliveryAddress).HasMaxLength(50).IsOptional();
+            this.Property(o => o.DeliveryPostalCode).HasMaxLength(10).IsOptional();
+            this.Property(o => o.DeliveryPostalAddress).HasMaxLength(50).IsOptional();
+            this.Property(o => o.DeliveryLocation).HasMaxLength(50).IsOptional();
+            this.Property(o => o.DeliveryInfo).HasMaxLength(200).IsRequired();
+            this.Property(o => o.DeliveryInfo2).HasMaxLength(50).IsRequired();
+            this.Property(o => o.DeliveryInfo3).HasMaxLength(50).IsRequired();
+            this.Property(o => o.Filename).HasMaxLength(100).IsRequired();
+            this.Property(o => o.CaseNumber).HasPrecision(18, 0).IsOptional();
+            this.Property(o => o.Info).HasMaxLength(200).IsOptional();
+            this.Property(o => o.Deleted).IsRequired();
+            this.Property(o => o.CreatedDate).IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+            this.Property(o => o.CreatedByUser_Id).IsOptional();
+            this.Property(o => o.DeliveryOuId).HasColumnName("DeliveryOU_Id").IsOptional();
+            this.HasOptional(o => o.DeliveryOU)
+                .WithMany()
+                .HasForeignKey(o => o.DeliveryOuId);
+
+            this.ToTable("tblOrderHistory");            
+        }
+    }
+}

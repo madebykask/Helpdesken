@@ -24,5 +24,7 @@
         public virtual OU Parent { get; set; }
         public virtual ICollection<ComputerUserGroup> ComputerUserGroups { get; set; }
         public virtual ICollection<OU> SubOUs { get; set; }
+
+        public virtual ICollection<Order> Orders { get; set; } 
     }
 }

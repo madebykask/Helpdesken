@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Domain
 {
     using global::System;
+    using global::System.Collections.Generic;
 
     public class Domain : Entity
     {

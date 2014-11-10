@@ -14,6 +14,7 @@
     using DH.Helpdesk.Dal.EntityConfigurations.Invoice;
     using DH.Helpdesk.Dal.EntityConfigurations.Licenses;
     using DH.Helpdesk.Dal.EntityConfigurations.MailTemplates;
+    using DH.Helpdesk.Dal.EntityConfigurations.Orders;
     using DH.Helpdesk.Dal.EntityConfigurations.Printers;
     using DH.Helpdesk.Dal.EntityConfigurations.Problems;
     using DH.Helpdesk.Dal.EntityConfigurations.Projects;
@@ -616,6 +617,9 @@
             modelBuilder.Configurations.Add(new OperationObjectConfiguration());
             modelBuilder.Configurations.Add(new OperatingSystemConfiguration());
             modelBuilder.Configurations.Add(new OrderConfiguration());
+            modelBuilder.Configurations.Add(new OrderHistoryConfiguration());
+            modelBuilder.Configurations.Add(new OrderPropertyConfiguration());
+            modelBuilder.Configurations.Add(new OrderEMailLogConfiguration());
             modelBuilder.Configurations.Add(new OrderFieldSettingsConfiguration());
             modelBuilder.Configurations.Add(new OrderStateConfiguration());
             modelBuilder.Configurations.Add(new OrderTypeConfiguration());

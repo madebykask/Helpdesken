@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.Domain
 {
+    using DH.Helpdesk.Domain.Orders;
+
     using global::System;
 
     public class OrderEMailLog : Entity
@@ -11,6 +13,10 @@
         public DateTime CreatedDate { get; set; }
         public Guid OrderEMailLogGUID { get; set; }
 
+        public int? OrderHistoryId { get; set; }
+
         public virtual Order Order { get; set; }
+
+        public virtual OrderHistoryEntity OrderHistory { get; set; }
     }
 }

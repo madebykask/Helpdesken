@@ -1,21 +1,13 @@
-﻿namespace DH.Helpdesk.Domain
+﻿namespace DH.Helpdesk.Domain.Orders
 {
-    using DH.Helpdesk.Domain.Orders;
-
     using global::System;
-    using global::System.Collections.Generic;
 
-    public class Order : Entity
+    public class OrderHistoryEntity : Entity
     {
-        public Order()
-        {
-            this.Programs = new List<Program>();    
-        }
+        public Guid OrderHistoryGuid { get; set; }
 
         public decimal CaseNumber { get; set; }
-        public int ChangedByUser_Id { get; set; }
         public int CreatedByUser_Id { get; set; }
-        public int Customer_Id { get; set; }
         public int Deleted { get; set; }
         public int Department_Id { get; set; }
         public int Domain_Id { get; set; }
@@ -86,14 +78,13 @@
         public string UserFirstName { get; set; }
         public string UserId { get; set; }
         public string UserLastName { get; set; }
-        public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime Deliverydate { get; set; }
         public DateTime InstallDate { get; set; }
         public DateTime OrderDate { get; set; }
         public DateTime SupplierOrderDate { get; set; }
 
-        public int? DeliveryOuId { get; set; } 
+        public int? DeliveryOuId { get; set; }
 
         public virtual Customer Customer { get; set; }
 
@@ -109,8 +100,6 @@
 
         public virtual Department DeliveryDepartment { get; set; }
 
-        public virtual OU DeliveryOU { get; set; }
-
-        public virtual ICollection<Program> Programs { get; set; } 
+        public virtual OU DeliveryOU { get; set; }         
     }
 }
