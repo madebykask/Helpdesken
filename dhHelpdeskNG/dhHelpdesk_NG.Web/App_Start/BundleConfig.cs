@@ -32,6 +32,7 @@
                             "~/Content/js/jquery.validate.unobtrusive.min.js",
                             "~/Content/js/jquery-ui-1.9.2.min.js",
                             "~/Content/js/bootstrap.js",
+                            "~/Content/js/chosen.jquery.min.js",
                             "~/Content/js/bootstrap-multiselect.js",
                             "~/Content/js/bootstrap-datepicker.js",
                             "~/Content/js/bootstrap-timepicker.min.js",
@@ -59,6 +60,7 @@
             bundles.Add(new ScriptBundle("~/bundles/common/admin").Include(
                             "~/Content/js/jquery-1.8.3.min.js",
                             "~/Content/js/bootstrap.js",
+                            "~/Content/js/chosen.jquery.min.js",
                             "~/Content/js/bootstrap-multiselect.js",
                             "~/Content/js/bootstrap-datepicker.js",
                             "~/Content/js/jquery.validate.min.js",
@@ -78,6 +80,7 @@
                             "~/Content/js/jquery.validate.unobtrusive.min.js",
                             "~/Content/js/jquery-ui-1.9.2.min.js",
                             "~/Content/js/bootstrap.js",
+                            "~/Content/js/chosen.jquery.min.js",
                             "~/Content/js/bootstrap-multiselect.js",
                             "~/Content/js/bootstrap-datepicker.js",
                             "~/Content/js/MicrosoftAjax.js",
