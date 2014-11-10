@@ -45,6 +45,7 @@
                             "~/Content/js/Shared/custom.validation.maxlengthfrom.js",
                             "~/Content/js/Shared/sortby.js",
                             "~/Content/js/jquery.toastmessage.js",
+                            "~/Content/js/bootstrap-switch.min.js",
                             "~/Content/js/dhHelpdesk-head.js",
                             "~/Content/js/ui/dh.ui.hierarchylist.js",
                             "~/Content/js/jquery.dataTables.min.js"));

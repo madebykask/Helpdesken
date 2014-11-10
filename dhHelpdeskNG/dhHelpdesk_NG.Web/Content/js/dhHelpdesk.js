@@ -1082,11 +1082,15 @@ function InitDataTable(tableUniqId) {
 // TABLE PAGING END
 
 
+
 // YES and NO SWITCH FOR CHECKBOXES
-//$('.switchcheckbox').bootstrapSwitch('onText', '@Translation.Get("Ja", Enums.TranslationSource.TextTranslation)');
-//$('.switchcheckbox').bootstrapSwitch('offText', '@Translation.Get("Nej", Enums.TranslationSource.TextTranslation)');
-//$('.switchcheckbox').bootstrapSwitch('size', 'small');
-//$('.switchcheckbox').bootstrapSwitch('onColor', 'success');
+$('.switchcheckbox').bootstrapSwitch('onText', trans_yes);
+$('.switchcheckbox').bootstrapSwitch('offText', trans_no);
+$('.switchcheckbox').bootstrapSwitch('size', 'small');
+$('.switchcheckbox').bootstrapSwitch('onColor', 'success');
 //$('.switchcheckbox').bootstrapSwitch('offColor', 'danger');
 
 // YES and NO SWITCH FOR CHECKBOXES END
+
+
+$(".chosen-select").chosen({ width: "300px" });

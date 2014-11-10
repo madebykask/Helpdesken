@@ -39,10 +39,10 @@
                                         @lbl:     
                                     </td>                            
                                     <td>
-                                        @Html.CheckBoxFor(m => Model.RegionCheck)                                    
+                                        @Html.CheckBoxFor(m => Model.RegionCheck, new { @class = "switchcheckbox" })                                   
                                     </td>                            
                                     <td colspan="2">
-                                        <select id="lstRegions" name="lstRegions" class="multiselect multiselect-search" multiple="multiple">
+                                        <select id="lstRegions" name="lstRegions" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                             @foreach (var e in Model.Regions)
                                             {                                                                                                      
                                                 <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedRegion)>@e.Name</option>                                       
@@ -65,10 +65,10 @@
                                          @lbl:                                         
                                     </td>                            
                                     <td>
-                                        @Html.CheckBoxFor(m => Model.RegisteredByCheck)
+                                        @Html.CheckBoxFor(m => Model.RegisteredByCheck, new { @class = "switchcheckbox" })
                                     </td>                            
                                     <td colspan="2">
-                                        <select id="lstRegisterBys" name="lstRegisterBy" class="multiselect multiselect-search" multiple="multiple">
+                                        <select id="lstRegisterBys" name="lstRegisterBy" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                             @foreach (var e in Model.RegisteredBy)
                                             {                                                                                                      
                                                 <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedRegisteredBy)>@e.SurName @e.FirstName</option>                                       
@@ -91,7 +91,7 @@
                                         @lbl:                                             
                                     </td>                            
                                     <td>
-                                        @Html.CheckBoxFor(m => Model.CaseTypeCheck)
+                                        @Html.CheckBoxFor(m => Model.CaseTypeCheck, new { @class = "switchcheckbox" })
                                     </td>                        
                                     <td>
                                 
@@ -112,7 +112,7 @@
                                         @lbl:                                             
                                     </td>
                                     <td>
-                                        @Html.CheckBoxFor(m => Model.ProductAreaCheck)
+                                        @Html.CheckBoxFor(m => Model.ProductAreaCheck, new { @class = "switchcheckbox" })
                                     </td>                                                        
                                     <td colspan="2">
                                         <div id="divProductAreaSetting" class="btn-group">
@@ -143,10 +143,10 @@
                                          @lbl:   
                                     </td>                            
                                     <td>
-                                        @Html.CheckBoxFor(m => Model.WorkingGroupCheck)
+                                        @Html.CheckBoxFor(m => Model.WorkingGroupCheck, new { @class = "switchcheckbox" })
                                     </td>                        
                                     <td colspan="2">
-                                        <select id="lstWorkingGroups" name="lstWorkingGroup" class="multiselect multiselect-search" multiple="multiple">
+                                        <select id="lstWorkingGroups" name="lstWorkingGroup" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                             @foreach (var e in Model.WorkingGroups)
                                             {                                                                                                      
                                                 <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedWorkingGroup)>@e.WorkingGroupName</option>                                       
@@ -169,7 +169,7 @@
                                          @lbl: 
                                     </td>
                                     <td>
-                                        @Html.CheckBoxFor(m => Model.ResponsibleCheck)
+                                        @Html.CheckBoxFor(m => Model.ResponsibleCheck, new { @class = "switchcheckbox" })
                                     </td>                            
                                     <td>
                                 
@@ -190,10 +190,10 @@
                                          @lbl:
                                     </td>                            
                                     <td>
-                                        @Html.CheckBoxFor(m => Model.AdministratorCheck, new { disabled = "1" })
+                                        @Html.CheckBoxFor(m => Model.AdministratorCheck, new { disabled = "1", @class = "switchcheckbox" })
                                     </td>
                                     <td colspan="2">
-                                        <select id="lstAdministrators" name="lstAdministrator" class="multiselect multiselect-search" multiple="multiple">
+                                        <select id="lstAdministrators" name="lstAdministrator" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                             @foreach (var e in Model.Administrators)
                                             {                                                                                                      
                                                 <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedAdministrator)>@e.SurName @e.FirstName</option>                                       
@@ -216,10 +216,10 @@
                                          @lbl:
                                     </td>                            
                                     <td>
-                                        @Html.CheckBoxFor(m => Model.PriorityCheck)
+                                        @Html.CheckBoxFor(m => Model.PriorityCheck, new { @class = "switchcheckbox" })
                                     </td>                            
                                     <td colspan="2">
-                                        <select id="lstPriorities" name="lstPriority" class="multiselect multiselect-search" multiple="multiple">
+                                        <select id="lstPriorities" name="lstPriority" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                             @foreach (var e in Model.Priorities)
                                             {                                                                                                      
                                                 <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedPriority)>@e.Code. @e.Name </option>                                       
@@ -242,7 +242,7 @@
                                          @lbl:
                                     </td>                            
                                     <td>
-                                        @Html.CheckBoxFor(m => Model.StateCheck)
+                                        @Html.CheckBoxFor(m => Model.StateCheck, new { @class = "switchcheckbox" })
                                     </td>                        
                                     <td>
                                 
@@ -263,10 +263,10 @@
                                       @lbl:
                                 </td>                            
                                 <td>
-                                    @Html.CheckBoxFor(m => Model.SubStateCheck)
+                                    @Html.CheckBoxFor(m => Model.SubStateCheck, new { @class = "switchcheckbox" })
                                 </td>                            
                                 <td colspan="2">
-                                    <select id="lstSubStates" name="lstSubState" class="multiselect multiselect-search" multiple="multiple">
+                                    <select id="lstSubStates" name="lstSubState" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                         @foreach (var e in Model.SubStates)
                                         {                                                                                                      
                                             <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedSubState)>@e.Name </option>                                       
@@ -289,7 +289,7 @@
                                       @lbl:
                                     </td>                            
                                     <td>
-                                        @Html.CheckBoxFor(m => m.CaseRegistrationDateFilterShow)
+                                        @Html.CheckBoxFor(m => m.CaseRegistrationDateFilterShow, new { @class = "switchcheckbox" })
                                     </td>                            
                                     <td>
                                         @Html.EditorFor(m => m.CaseRegistrationDateStartFilter, "DatePicker", new { id = "CaseRegistrationDateStartFilter" })                                         
@@ -311,7 +311,7 @@
                                       @lbl:
                                     </td>                            
                                     <td>
-                                        @Html.CheckBoxFor(m => m.CaseWatchDateFilterShow)
+                                        @Html.CheckBoxFor(m => m.CaseWatchDateFilterShow, new { @class = "switchcheckbox" })
                                     </td>                            
                                     <td>
                                         @Html.EditorFor(m => m.CaseWatchDateStartFilter, "DatePicker", new { id = "CaseWatchDateStartFilter" })                                         
@@ -333,7 +333,7 @@
                                       @lbl:
                                     </td>                            
                                     <td>
-                                        @Html.CheckBoxFor(m => m.CaseClosingDateFilterShow)
+                                        @Html.CheckBoxFor(m => m.CaseClosingDateFilterShow, new { @class = "switchcheckbox" })
                                     </td>                            
                                     <td>
                                         @Html.EditorFor(m => m.CaseClosingDateStartFilter, "DatePicker", new { id = "CaseClosingDateStartFilter" })                                         
@@ -355,7 +355,7 @@
                                       @lbl:
                                     </td>
                                     <td>
-                                        @Html.CheckBoxFor(m => Model.ClosingReasonCheck)
+                                        @Html.CheckBoxFor(m => Model.ClosingReasonCheck, new { @class = "switchcheckbox" })
                                     </td>                                                        
                                     <td colspan="2">
                                         <div id="divClosingReasonSetting" class="btn-group">
@@ -402,4 +402,5 @@
         $("#ClosingReasonId").val(val);
     });
   
+    
 </script>

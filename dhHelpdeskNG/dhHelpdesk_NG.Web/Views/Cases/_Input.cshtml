@@ -259,7 +259,7 @@
                                                     @Translation.Get("Spara användaruppgifter", SessionFacade.CurrentCaseLanguageId)
                                                 </td>
                                                 <td class="span4">
-                                                    @Html.CheckBoxFor(m => m.UpdateNotifierInformation)
+                                                    @Html.CheckBoxFor(m => m.UpdateNotifierInformation, new { @class = "switchcheckbox" })
                                                 </td>
                                             </tr>
                                         </table>
@@ -614,7 +614,7 @@
                                         <td colspan="2">
                                             @if (Model.customerUserSetting.ContactBeforeActionPermission == 1 || Model.case_.Id == 0)
                                             {                                                
-                                                <input type="checkbox" name="case_.ContactBeforeAction" @(Model.case_.ContactBeforeAction == 1 ? "checked=checked" : "") value="1"/>
+                                                <input type="checkbox" name="case_.ContactBeforeAction" @(Model.case_.ContactBeforeAction == 1 ? "checked=checked" : "") value="1" class="switchcheckbox" />
                                                 <input type="hidden" name="case_.ContactBeforeAction" value="0" />
                                             }
                                             else

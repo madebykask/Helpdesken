@@ -1661,6 +1661,7 @@ table th.thpointer {
 
 
 /****************VARIOUS SELECT, INPUT, ETC*******************************/
+.bootstrap-switch,
 select,
 textarea,
 input[type="text"],
@@ -2954,3 +2955,4 @@ div.DTFC_LeftBodyWrapper tbody tr:first-child td {
 div.DTFC_LeftFootWrapper table {
 	border-top: none;
 }
+

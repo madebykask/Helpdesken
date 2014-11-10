@@ -343,11 +343,16 @@
     <Content Include="Content\bundles\images\ui-icons_454545_256x240.png" />
     <Content Include="Content\bundles\images\ui-icons_888888_256x240.png" />
     <Content Include="Content\bundles\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\css\chosen-sprite%402x.png" />
+    <Content Include="Content\css\chosen-sprite.png" />
+    <Content Include="Content\css\chosen.css" />
     <Content Include="Content\icons\ajax-loader.gif" />
     <Content Include="Content\img\ico-customerservice.png" />
     <Content Include="Content\img\ico-dhhelpdesk.png" />
     <Content Include="Content\img\ico-dhsolutions.png" />
     <Content Include="Content\img\ico-license.png" />
+    <Content Include="Content\js\bootstrap-switch.js" />
+    <Content Include="Content\js\bootstrap-switch.min.js" />
     <Content Include="Content\js\Changes\inventoryDialog.js" />
     <Compile Include="Areas\Licenses\Controllers\ApplicationsController.cs" />
     <Compile Include="Areas\Licenses\Controllers\LicensesController.cs" />
@@ -1097,6 +1102,8 @@
     <Content Include="Content\js\bootstrap.js" />
     <Content Include="Content\js\Changes\search.js" />
     <Content Include="Content\js\Changes\settings.js" />
+    <Content Include="Content\js\chosen.jquery.js" />
+    <Content Include="Content\js\chosen.jquery.min.js" />
     <Content Include="Content\js\dhHelpdesk-head.js" />
     <Content Include="Content\js\Inventory\place-cascading.js" />
     <Content Include="Content\js\Inventory\reports.js" />
