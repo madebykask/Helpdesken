@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure
 {
     using System.Linq;
+    using DH.Helpdesk.Common.Extensions.String;
 
     public static class Translation
     {
@@ -22,21 +23,22 @@
                 }
             }
             else if (source == Enums.TranslationSource.CaseTranslation)
-            {
+            {                
                 if (SessionFacade.CaseTranslation != null && customerId > 0)
                 {
                     try
                     {
                         var translation = SessionFacade.CaseTranslation.Where(x => x.Customer_Id == customerId && x.Name.ToLower() == translate.getCaseFieldName().ToLower() && x.Language_Id == SessionFacade.CurrentLanguageId).FirstOrDefault();
-                        if (translation != null)
+                        if (translation != null && !string.IsNullOrEmpty(translation.Label))
                             translate = translation.Label;
                         else
-                            translate = Get(translate, Enums.TranslationSource.TextTranslation); 
+                            translate = translate.GetDefaultValue(SessionFacade.CurrentLanguageId);
+                            //translate = Get(translate, Enums.TranslationSource.TextTranslation); 
                     }
                     catch
                     {
                     }
-                }
+                }                                    
             }
 
             return translate;
@@ -60,20 +62,22 @@
                 }
             }
             else if (source == Enums.TranslationSource.CaseTranslation)
-            {
+            {                
                 if (SessionFacade.CaseTranslation != null && customerId > 0)
                 {
                     try
                     {
                         var translation = SessionFacade.CaseTranslation.Where(x => x.Customer_Id == customerId && x.Name.ToLower() == translate.getCaseFieldName().ToLower() && x.Language_Id == languageId).FirstOrDefault();
-                        if (translation != null)
+                        if (translation != null && !string.IsNullOrEmpty(translation.Label))
                             translate = translation.Label;
                         else
-                            translate = Get(translate, Enums.TranslationSource.TextTranslation);
+                            translate = translate.GetDefaultValue(languageId);
+                            //translate = Get(translate, Enums.TranslationSource.TextTranslation);
                     }
                     catch
                     {
-                    }
+                    }                    
+                        
                 }
             }
 

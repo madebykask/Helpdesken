@@ -34,13 +34,13 @@
                                     {
                                         if (cfs.Name != "Filename" && cfs.Name != "text_internal" && cfs.Name != "tblLog.Text_External" && cfs.Name != "tblLog.Text_Internal" && cfs.Name != "tblLog.Charge" && cfs.Name != "tblLog.Filename")
                                         {
-                                        <option id="label" value="@cfs.Name">@(cfs.Label == null?cfs.Name:cfs.Label)</option>  
+                                        <option id="label" value="@cfs.Name">@(cfs.Label == null? Translation.Get(cfs.Name, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id) : cfs.Label)</option>  
                                         }
                                     }
                                     <option value="">--------------------------</option>
-                                    <option value="_temporary_.LeadTime">@Translation.Get("Tid kvar", Enums.TranslationSource.TextTranslation)</option>
+                                    <option value="_temporary_.LeadTime">@Translation.Get("_temporary_.LeadTime", Enums.TranslationSource.CaseTranslation)</option>
                                     <option value="">--------------------------</option>
-                                    <option value="tblProblem.ResponsibleUser_Id">@Translation.Get("Problem", Enums.TranslationSource.TextTranslation)</option>
+                                    <option value="tblProblem.ResponsibleUser_Id">@Translation.Get("tblProblem.ResponsibleUser_Id", Enums.TranslationSource.CaseTranslation)</option>
                                 </select>
                             </td>          
                             <td>
