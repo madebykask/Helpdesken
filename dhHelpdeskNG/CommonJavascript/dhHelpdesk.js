@@ -1073,8 +1073,10 @@ function InitDataTable(tableUniqId) {
             "oPaginate": {
                 "sFirst": "First",
                 "sLast": "Last",
-                //"sNext": "@Translation.Get("Nästa", Enums.TranslationSource.TextTranslation)",
-                //"sPrevious": "@Translation.Get("Föregående", Enums.TranslationSource.TextTranslation)"
+                "sNext": "",
+                "sPrevious":""
+                //"sNext": "@Translation.Get('Nästa', Enums.TranslationSource.TextTranslation)",
+                //"sPrevious": "@Translation.Get('Föregående', Enums.TranslationSource.TextTranslation)"
             }
         }
     });

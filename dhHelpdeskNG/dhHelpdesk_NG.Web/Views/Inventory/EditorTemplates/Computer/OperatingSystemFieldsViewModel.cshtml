@@ -7,7 +7,7 @@
         || Model.OperatingSystemFieldsModel.ProductKey.Show)
     {
         <tr>
-            <th colspan="2" class="header">@Translation.Get("Operativsystem")</th>
+            <th colspan="2" class="header"><h4>@Translation.Get("Operativsystem")</h4></th>
         </tr>
     }
     @Html.EditorFor(m => m.OperatingSystemFieldsModel.OperatingSystemId, "Fields/List", new { Source = Model.OperatingSystems })

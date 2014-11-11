@@ -11,7 +11,7 @@
 
 </script>
       
-@using (Ajax.BeginForm("ChangesGrid", "Changes", new { customerId = ViewData["CustomerId"] }, new AjaxOptions { UpdateTargetId = "changes_grid_container" }, new { id = "search_form" }))
+@using (Ajax.BeginForm("ChangesGrid", "Changes", new { customerId = ViewData["CustomerId"] }, new AjaxOptions { UpdateTargetId = "changes_grid_container" }, new { id = "search_form", data_placeholder = Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation) }))
 {
     @Html.HiddenFor(m => m.SortField.Name, new { id = "sortFieldName" })
     @Html.HiddenFor(m => m.SortField.SortBy, new { id = "sortFieldBy" })
@@ -21,7 +21,7 @@
         {
             <tr>
                 <td class="span3">@Translation.Get(Model.Statuses.Caption, Enums.TranslationSource.TextTranslation)</td>
-                <td>@Html.DropDownListFor(m => m.StatusIds, Model.Statuses.Value, new { id = "statuses_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })</td>
+                <td>@Html.DropDownListFor(m => m.StatusIds, Model.Statuses.Value, new { id = "statuses_dropdown", multiple = "multiple", @class = "chosen-select", data_placeholder = Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation) })</td>
             </tr>
         }
 
@@ -29,7 +29,7 @@
         {
             <tr>
                 <td class="span3">@Translation.Get(Model.Objects.Caption, Enums.TranslationSource.TextTranslation)</td>
-                <td>@Html.DropDownListFor(m => m.ObjectIds, Model.Objects.Value, new { id = "objects_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })</td>
+                <td>@Html.DropDownListFor(m => m.ObjectIds, Model.Objects.Value, new { id = "objects_dropdown", multiple = "multiple", @class = "chosen-select", data_placeholder = Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation) })</td>
             </tr>
         }
 
@@ -37,7 +37,7 @@
         {
             <tr>
                 <td class="span3">@Translation.Get(Model.Owners.Caption, Enums.TranslationSource.TextTranslation)</td>
-                <td>@Html.DropDownListFor(m => m.OwnerIds, Model.Owners.Value, new { id = "owners_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })</td>
+                <td>@Html.DropDownListFor(m => m.OwnerIds, Model.Owners.Value, new { id = "owners_dropdown", multiple = "multiple", @class = "chosen-select", data_placeholder = Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation) })</td>
             </tr>
         }
 
@@ -45,7 +45,7 @@
         {
             <tr>
                 <td class="span3">@Translation.Get(Model.AffectedProcesses.Caption, Enums.TranslationSource.TextTranslation)</td>
-                <td>@Html.DropDownListFor(m => m.AffectedProcessIds, Model.AffectedProcesses.Value, new { id = "affected_processes_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })</td>
+                <td>@Html.DropDownListFor(m => m.AffectedProcessIds, Model.AffectedProcesses.Value, new { id = "affected_processes_dropdown", multiple = "multiple", @class = "chosen-select", data_placeholder = Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation) })</td>
             </tr>
         }
 
@@ -53,7 +53,7 @@
         {
             <tr>
                 <td class="span3">@Translation.Get(Model.WorkingGroups.Caption, Enums.TranslationSource.TextTranslation)</td>
-                <td>@Html.DropDownListFor(m => m.WorkingGroupIds, Model.WorkingGroups.Value, new { id = "working_groups_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })</td>
+                <td>@Html.DropDownListFor(m => m.WorkingGroupIds, Model.WorkingGroups.Value, new { id = "working_groups_dropdown", multiple = "multiple", @class = "chosen-select", data_placeholder = Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation) })</td>
             </tr>
         }
 
@@ -61,7 +61,7 @@
         {
             <tr>
                 <td class="span3">@Translation.Get(Model.Administrators.Caption, Enums.TranslationSource.TextTranslation)</td>
-                <td>@Html.DropDownListFor(m => m.AdministratorIds, Model.Administrators.Value, new { id = "administrators_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })</td>
+                <td>@Html.DropDownListFor(m => m.AdministratorIds, Model.Administrators.Value, new { id = "administrators_dropdown", multiple = "multiple", @class = "chosen-select", data_placeholder = Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation) })</td>
             </tr>
         }
         <tr>

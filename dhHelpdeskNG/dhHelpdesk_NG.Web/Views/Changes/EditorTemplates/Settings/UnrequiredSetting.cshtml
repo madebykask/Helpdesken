@@ -2,9 +2,9 @@
 @model DH.Helpdesk.Web.Models.Changes.SettingsEdit.FieldSettingModel
 
 <td>@Html.LabelFor(m => m)</td>
-<td>@Html.CheckBoxFor(m => m.ShowInDetails)</td>
-<td>@Html.CheckBoxFor(m => m.ShowInChanges)</td>
-<td>@Html.CheckBoxFor(m => m.ShowInSelfService)</td>
+<td>@Html.CheckBoxFor(m => m.ShowInDetails, new { @class = "switchcheckbox" })</td>
+<td>@Html.CheckBoxFor(m => m.ShowInChanges, new { @class = "switchcheckbox" })</td>
+<td>@Html.CheckBoxFor(m => m.ShowInSelfService, new { @class = "switchcheckbox" })</td>
 <td>@Html.TextBoxFor(m => m.Caption)</td>
 <td></td>
 <td></td>

@@ -20,11 +20,11 @@
     <table class="tableform">
         <tr>
             <td class="span3">@Translation.Get("Område")</td>
-            <td>@Html.DropDownListFor(m => m.RegionIds, Model.Regions, new { id = "regions_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })</td>
+            <td>@Html.DropDownListFor(m => m.RegionIds, Model.Regions, new { id = "regions_dropdown", multiple = "multiple", @class = "chosen-select", data_placeholder = Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation) })</td>
         </tr>                
         <tr>
             <td class="span3">@Translation.Get("Avdelning")</td>
-            <td>@Html.DropDownListFor(m => m.DepartmentIds, Model.Departments, new { id = "departments_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })</td>
+            <td>@Html.DropDownListFor(m => m.DepartmentIds, Model.Departments, new { id = "departments_dropdown", multiple = "multiple", @class = "chosen-select", data_placeholder = Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation) })</td>
         </tr>         
         <tr>
             <td class="span3">

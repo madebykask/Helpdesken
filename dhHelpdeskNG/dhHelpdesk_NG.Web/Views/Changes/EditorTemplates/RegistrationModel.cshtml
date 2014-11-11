@@ -21,7 +21,7 @@
                 <label>@Html.FieldCaption(Model.AffectedProcesses)</label>
             </td>
             <td class="span9">
-                @Html.DropDownListFor(m => m.AffectedProcessIds, Model.AffectedProcesses.Value, new { @class = "multiselect multiselect-search", multiple = "multiple" })
+                @Html.DropDownListFor(m => m.AffectedProcessIds, Model.AffectedProcesses.Value, new { @class = "chosen-select", multiple = "multiple", data_placeholder = Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation) })
             </td>
         </tr>
     }
@@ -32,7 +32,7 @@
                 <label>@Html.FieldCaption(Model.AffectedDepartments)</label>
             </td>
             <td class="span9">
-                @Html.DropDownListFor(m => m.AffectedDepartmentIds, Model.AffectedDepartments.Value, new { @class = "multiselect multiselect-search", multiple = "multiple" })
+                @Html.DropDownListFor(m => m.AffectedDepartmentIds, Model.AffectedDepartments.Value, new { @class = "chosen-select", multiple = "multiple", data_placeholder = Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation) })
             </td>
         </tr>
     }

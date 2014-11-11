@@ -39,8 +39,8 @@
                                     <td>
                                          @Translation.Get("Standard", Enums.TranslationSource.TextTranslation)
                                     </td>                                    
-                                    <td class="checkbox" style="padding-left: 20px">                                        
-                                        <input type="checkbox" name="IsDefault" @(Model.IsDefault== 1 ? "checked=checked" : "") value ="1" />                                        
+                                    <td class="checkbox">                                        
+                                        <input type="checkbox" name="IsDefault" @(Model.IsDefault== 1 ? "checked=checked" : "") value ="1" class="switchcheckbox" />                                        
                                         <input type="hidden" name="IsDefault" value="0" />                                                                      
                                     </td>                                   
                                 </tr>               

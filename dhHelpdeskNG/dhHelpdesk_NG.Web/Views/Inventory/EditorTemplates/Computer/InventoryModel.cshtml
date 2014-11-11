@@ -3,7 +3,7 @@
     @if (Model.BarCode.Show)
     {
         <tr>
-            <th colspan="2" class="header">@Translation.Get("Inventering")</th>
+            <th colspan="2" class="header"><h4>@Translation.Get("Inventering")</h4></th>
         </tr>
     }
     @Html.EditorFor(m => m.BarCode, "Fields/Text")

@@ -14,9 +14,6 @@
         @Styles.Render("~/Content/bundles/css")
         @Styles.Render("~/img-profile/css")  
         @Scripts.Render("~/bundles/common")
-        @*<link rel="stylesheet" href="@Url.Content("~/Content/css/chosen.css")" />
-
-        <script type="text/javascript" src="@Url.Content("~/Content/js/chosen.jquery.min.js")"></script>*@
     </head>
     @{
         var model = Html.MasterModel();        
@@ -27,7 +24,7 @@
             <div class="navbar-container">
                 <a href="/">
                     <div class="navbar-header pull-left navbar-brand">
-                        @*<img src="@Url.Content("~/Content/img/dhhelpdesk.png")" class="navbar-brand" />*@
+                       
                     </div>
                 </a>
                 <div class="navbar-header pull-right">
@@ -79,13 +76,13 @@
                                                 @Translation.Get("Problem")</a></li>
                                     }
                                                                         
-                                    @* 
+                                     
                                     if (model.IsProjectVisible())
                                     {                                    
                                         <li><a href="@Url.Action("Index", "Projects", new { area = "" })">
                                                 <img src="@Url.Content("~/Content/icons/project.png")" alt="project" />
                                                 @Translation.Get("Projekt")</a></li>
-                                    }*@
+                                    }
                                     
                                 }                                    
                                 <li>
@@ -174,7 +171,7 @@
                             </li>                            
                         }
 
-                        @*
+                        
                         @if (model.IsSettingsModulesVisible())
                         {
                             <li class="pink">
@@ -225,7 +222,7 @@
                                 </ul>
                             </li>                            
                         }
-                        *@
+                        
 
                         <li class="light-blue">
                             <a data-toggle="dropdown" href="#" class="dropdown-toggle">

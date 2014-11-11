@@ -34,7 +34,7 @@
                                 @lbl:
                             </td>
                             <td>
-                                <select id="lstFilterRegion" name="lstFilterRegion" class="multiselect multiselect-search" multiple="multiple">
+                                <select id="lstFilterRegion" name="lstFilterRegion" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                     @foreach (var e in Model.filterRegion)
                                     {
                                         if (e.IsActive == 1)
@@ -53,7 +53,7 @@
                                 @Translation.Get("Country", Enums.TranslationSource.TextTranslation)
                             </td>
                             <td>
-                                <select id="lstFilterCountry" name="lstFilterRegion" class="multiselect multiselect-search" multiple="multiple">
+                                <select id="lstFilterCountry" name="lstFilterRegion" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                     @foreach (var e in Model.filterCountry)
                                     {
                                         if (e.IsActive == 1)
@@ -79,7 +79,7 @@
                                 @lbl:
                             </td>
                             <td>
-                                <select id="lstfilterDepartment" name="lstfilterDepartment" class="multiselect" multiple="multiple">
+                                <select id="lstfilterDepartment" name="lstfilterDepartment" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                     @foreach (var e in Model.filterDepartment)
                                     {
                                         if (e.IsActive == 1)
@@ -105,7 +105,7 @@
                                 @lbl:
                             </td>
                             <td>
-                                <select id="lstfilterUser" name="lstfilterUser" class="multiselect multiselect-search" multiple="multiple">
+                                <select id="lstfilterUser" name="lstfilterUser" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                     @foreach (var e in Model.filterCaseUser)
                                     {
                                         <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.User)>@e.Name</option>
@@ -187,7 +187,7 @@
                                 @lbl:
                             </td>
                             <td>
-                                <select id="lstfilterCategory" name="lstfilterCategory" class="multiselect multiselect-search" multiple="multiple">
+                                <select id="lstfilterCategory" name="lstfilterCategory" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                     @foreach (var e in Model.filterCategory)
                                     {
                                         if (e.IsActive == 1)
@@ -213,7 +213,7 @@
                                 @lbl:
                             </td>
                             <td>
-                                <select id="lstfilterWorkingGroup" name="lstfilterWorkingGroup" class="multiselect multiselect-search" multiple="multiple">
+                                <select id="lstfilterWorkingGroup" name="lstfilterWorkingGroup" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                     @foreach (var e in Model.filterWorkingGroup)
                                     {
                                         if (e.IsActive == 1)
@@ -240,7 +240,7 @@
                                 @lbl:
                             </td>
                             <td>
-                                <select id="lstfilterResponsible" name="lstfilterResponsible" class="multiselect multiselect-search" multiple="multiple">
+                                <select id="lstfilterResponsible" name="lstfilterResponsible" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                     @foreach (var e in Model.filterUser)
                                     {
                                         if (e.IsActive == 1 && e.Performer == 1)
@@ -266,7 +266,7 @@
                                 @lbl:
                             </td>
                             <td>
-                                <select id="lstfilterPerformer" name="lstfilterPerformer" class="multiselect multiselect-search" multiple="multiple">
+                                <select id="lstfilterPerformer" name="lstfilterPerformer" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                     @foreach (var e in Model.filterPerformer)
                                     {
                                         if (e.IsActive == 1 && e.Performer == 1)
@@ -292,7 +292,7 @@
                                 @lbl:
                             </td>
                             <td>
-                                <select id="lstfilterPriority" name="lstfilterPriority" class="multiselect multiselect-search" multiple="multiple">
+                                <select id="lstfilterPriority" name="lstfilterPriority" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                     @foreach (var e in Model.filterPriority)
                                     {
                                         if (e.IsActive == 1)
@@ -318,7 +318,7 @@
                                  @lbl:
                             </td>
                             <td>
-                                <select id="lstfilterStatus" name="lstfilterStatus" class="multiselect multiselect-search" multiple="multiple">
+                                <select id="lstfilterStatus" name="lstfilterStatus" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                     @foreach (var e in Model.filterStatus)
                                     {
                                         if (e.IsActive == 1)
@@ -344,7 +344,7 @@
                                  @lbl:
                             </td>
                             <td>
-                                <select id="lstfilterStateSecondary" name="lstfilterStateSecondary" class="multiselect multiselect-search" multiple="multiple">
+                                <select id="lstfilterStateSecondary" name="lstfilterStateSecondary" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                     @foreach (var e in Model.filterStateSecondary)
                                     {
                                         if (e.IsActive == 1)

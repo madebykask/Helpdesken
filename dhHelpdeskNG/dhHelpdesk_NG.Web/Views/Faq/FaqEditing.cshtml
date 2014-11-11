@@ -147,7 +147,7 @@
                         <div class="span12">
                             <table>
                                 <tr>
-                                    <td>
+                                    <td class="span3">
                                         @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
@@ -168,7 +168,7 @@
                                         @Translation.Get("Uppgifterna är tillgängliga för anmälare", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @this.Html.CheckBox("InformationIsAvailableForNotifiers", this.Model.InformationIsAvailableForNotifiers)
+                                        @this.Html.CheckBox("InformationIsAvailableForNotifiers", this.Model.InformationIsAvailableForNotifiers, new { @class = "switchcheckbox" })
                                     </td>
                                 </tr>
                                 <tr>
@@ -176,7 +176,7 @@
                                         @Translation.Get("Visa på startsidan", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @this.Html.CheckBox("ShowOnStartPage", this.Model.ShowOnStartPage)
+                                        @this.Html.CheckBox("ShowOnStartPage", this.Model.ShowOnStartPage, new { @class = "switchcheckbox" })
                                     </td>
                                 </tr>
                             </table>

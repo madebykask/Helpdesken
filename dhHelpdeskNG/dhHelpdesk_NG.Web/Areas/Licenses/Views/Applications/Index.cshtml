@@ -24,7 +24,7 @@
         </tr>                
         <tr>
             <td class="span3">@Translation.Get("Endast kopplade")</td>
-            <td>@Html.CheckBoxFor(m => m.OnlyConnected, Model.OnlyConnected)</td>
+            <td>@Html.CheckBoxFor(m => m.OnlyConnected, new { @class = "switchcheckbox" })</td>
         </tr>                
         <tr>
             <td class="span3">

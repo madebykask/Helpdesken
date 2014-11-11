@@ -96,8 +96,8 @@
                                             @Html.HiddenFor(model => uc.Id)
                                             @Html.HiddenFor(model => uc.Name)
                                             @Html.HiddenFor(model => uc.UserGroup)
-                                            <input class="btn btn-danger" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)"
-                                                   onclick="deleteCaseSettingRow(@uc.Id)" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
+                                            <button class="btn"
+                                                   onclick="deleteCaseSettingRow(@uc.Id)" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"><i class="icon-remove"></i></button>
                                             <input type="hidden" id="deleteCaseSettingsId" value="@uc.Id" />
                                             <input type="hidden" id="userGroup" value="@uc.UserGroup" />                                                                                         
                                         </td>

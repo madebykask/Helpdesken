@@ -7,7 +7,7 @@
         || Model.CommunicationFieldsModel.NovellClient.Show)
     {
         <tr>
-            <th colspan="2" class="header">@Translation.Get("Kommunikation")</th>
+            <th colspan="2" class="header"><h4>@Translation.Get("Kommunikation")</h4></th>
         </tr>
     }
     @Html.EditorFor(m => m.CommunicationFieldsModel.NetworkAdapterId, "Fields/List", new { Source = Model.NetworkAdapters })

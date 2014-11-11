@@ -3,7 +3,7 @@
     @if (Model.MemoryFieldsModel.RAMId.Show)
     {
         <tr>
-            <th colspan="2" class="header">@Translation.Get("Minne")</th>
+            <th colspan="2" class="header"><h4>@Translation.Get("Minne")</h4></th>
         </tr>
     }
     @Html.EditorFor(m => m.MemoryFieldsModel.RAMId, "Fields/List", new { Source = Model.RAMs })

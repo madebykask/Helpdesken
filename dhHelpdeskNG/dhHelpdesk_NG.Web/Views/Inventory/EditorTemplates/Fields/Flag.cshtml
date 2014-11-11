@@ -11,7 +11,7 @@
     </td>
     <td class="span9">
         @(!Model.IsReadOnly
-            ? Html.CheckBoxFor(m => m.Value)
-            : Html.CheckBoxFor(m => m.Value, new { @readonly = true, @disabled = "disabled" }))
+            ? Html.CheckBoxFor(m => m.Value, new { @class = "switchcheckbox" })
+            : Html.CheckBoxFor(m => m.Value, new { @readonly = true, @disabled = "disabled", @class = "switchcheckbox" }))
     </td>
 </tr>

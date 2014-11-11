@@ -39,7 +39,7 @@
     @if (Model.UserStringId.Show)
     {
         <tr>
-            <th colspan="4" class="header">@Translation.Get("Användarinformation")</th>
+            <th colspan="4" class="header"><h4>@Translation.Get("Användarinformation")</h4></th>
         </tr>
         @Html.EditorFor(m => m.UserStringId, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "user_dialog_textbox" } } })
         <tr>

@@ -11,17 +11,17 @@
                 @if (Model.ProjectEditModel.Id != 0)
                 {
                     <tr>
-                        <td>@Html.LabelFor(x => x.ProjectEditModel.Id)
+                        <td class="span3">@Html.LabelFor(x => x.ProjectEditModel.Id)
                         </td>
-                        <td>
+                        <td class="span9">
                             @Html.DisplayTextFor(x => x.ProjectEditModel.Id)
                         </td>
                     </tr>
                 }
                 <tr>
-                    <td>@Html.LabelFor(x => x.ProjectEditModel.Name)
+                    <td class="span3">@Html.LabelFor(x => x.ProjectEditModel.Name)
                     </td>
-                    <td>
+                    <td class="span9">
                         @Html.EditorFor(x => x.ProjectEditModel.Name)
                         @Html.ValidationMessageFor(x => x.ProjectEditModel.Name)
                     </td>
@@ -34,9 +34,9 @@
         <div class="span12">
             <table>
                 <tr>
-                    <td>@Html.LabelFor(x => Model.Users)
+                    <td class="span3">@Html.LabelFor(x => Model.Users)
                     </td>
-                    <td>
+                    <td class="span9">
                         @Html.DropDownListFor(x => x.ProjectEditModel.ProjectManagerId, Model.Users, string.Empty)
                     </td>
                 </tr>
@@ -66,18 +66,21 @@
                         @Html.LabelFor(x => x.ProjectEditModel.ProjectCollaboratorIds)
                     </td>
                     <td>
-                        @Html.ListBoxFor(x => x.ProjectEditModel.ProjectCollaboratorIds, Model.Users, new { id = "collaborators_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })
+                        @Html.ListBoxFor(x => x.ProjectEditModel.ProjectCollaboratorIds, Model.Users, new { id = "collaborators_dropdown", multiple = "multiple", @class = "chosen-select", data_placeholder = Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation) })
                     </td>
                 </tr>
                 <tr>
                     <td>@Html.LabelFor(x => x.ProjectEditModel.IsActive)
                     </td>
                     <td>
-                        @Translation.Get("Pågående", Enums.TranslationSource.TextTranslation)
+                        <label class="radio inline">
                         @Html.RadioButtonFor(x => x.ProjectEditModel.IsActive, true)
-
-                        @Translation.Get("Avslutad", Enums.TranslationSource.TextTranslation)
+                        @Translation.Get("Pågående", Enums.TranslationSource.TextTranslation)
+                        </label>
+                        <label class="radio inline">
                         @Html.RadioButtonFor(x => x.ProjectEditModel.IsActive, false)
+                        @Translation.Get("Avslutad", Enums.TranslationSource.TextTranslation)
+                        </label>
                     </td>
                 </tr>
                 <tr>

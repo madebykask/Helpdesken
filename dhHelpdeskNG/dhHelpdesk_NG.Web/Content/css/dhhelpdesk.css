@@ -1661,6 +1661,7 @@ table th.thpointer {
 
 
 /****************VARIOUS SELECT, INPUT, ETC*******************************/
+.chosen-container,
 .bootstrap-switch,
 select,
 textarea,

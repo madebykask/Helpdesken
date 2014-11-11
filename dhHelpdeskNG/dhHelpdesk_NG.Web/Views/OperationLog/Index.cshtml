@@ -34,7 +34,7 @@
                                         @Translation.Get("Driftobjekt", Enums.TranslationSource.TextTranslation):                                        
                                     </td>
                                     <td>
-                                        <select id="OperationObject_Filter" name="OLSearch_Filter.OperationObject_Filter" class="multiselect multiselect-search" multiple="multiple">
+                                        <select id="OperationObject_Filter" name="OLSearch_Filter.OperationObject_Filter" class="chosen-select" multiple="multiple" data-placeholder = "@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)">
                                             
                                             @{
                                 string s = "";
@@ -58,7 +58,7 @@
                                         @Translation.Get("Kategori", Enums.TranslationSource.TextTranslation):
                                     </td>
                                     <td>
-                                        <select id="OperationCategory_Filter" name="OLSearch_Filter.OperationCategory_Filter" class="multiselect multiselect-search" multiple="multiple">
+                                        <select id="OperationCategory_Filter" name="OLSearch_Filter.OperationCategory_Filter" class="chosen-select" multiple="multiple" data-placeholder = "@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)">
                                             @{
                                 string s = "";
                                 int m = 0;

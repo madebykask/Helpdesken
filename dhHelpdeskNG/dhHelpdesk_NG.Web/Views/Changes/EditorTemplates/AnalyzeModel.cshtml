@@ -19,7 +19,7 @@
             @Html.LabelFor(m => m.RelatedChanges)
         </td>
         <td class="span9">
-            @Html.DropDownListFor(m => m.RelatedChangeIds, Model.RelatedChanges, new { @class = "multiselect multiselect-search", multiple = "multiple" })
+            @Html.DropDownListFor(m => m.RelatedChangeIds, Model.RelatedChanges, new { @class = "chosen-select", multiple = "multiple", data_placeholder = Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation) })
         </td>
     </tr>
     @if (Model.Priorities.Show)

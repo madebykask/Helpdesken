@@ -41,22 +41,25 @@
             <td>@Translation.Get("Typ")
             </td>
             <td>
-                @Translation.Get("Arbetsstationer")
+                <label class="radio inline">
                 @Html.RadioButton("Filter.ReportDataType", 1, Model.Filter.ReportDataType == ReportDataTypes.Workstation, new { id = "show_workstation_radio_button" })
-
-                @Translation.Get("Server")
+                @Translation.Get("Arbetsstationer")
+                </label>
+                <label class="radio inline">
                 @Html.RadioButton("Filter.ReportDataType", 2, Model.Filter.ReportDataType == ReportDataTypes.Server, new { id = "show_server_radio_button" })
-
-                @Translation.Get("Alla")
+                @Translation.Get("Server")
+                </label>
+                <label class="radio inline">
                 @Html.RadioButton("Filter.ReportDataType", 3, Model.Filter.ReportDataType == ReportDataTypes.All, new { id = "show_all_radio_button" })
+                @Translation.Get("Alla")
+                </label>
             </td>
         </tr>
         <tr id="inventory_tr">
-            <td>@Translation.Get("Visa")
+            <td>@Translation.Get("Visa") @Translation.Get("Inventarie")
             </td>
-            <td>
-                @Translation.Get("Inventarie")
-                @Html.CheckBoxFor(x => x.Filter.IsShowParentInventory)
+            <td>                
+                @Html.CheckBoxFor(x => x.Filter.IsShowParentInventory, new { @class = "switchcheckbox" })
             </td>
         </tr>
         <tr>
