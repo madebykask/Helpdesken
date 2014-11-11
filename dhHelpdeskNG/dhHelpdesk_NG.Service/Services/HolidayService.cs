@@ -5,9 +5,12 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Holiday.Output;
-    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Cases;
+
+    using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
 
     public interface IHolidayService
     {
@@ -43,14 +46,18 @@
         private readonly IHolidayHeaderRepository _holidayHeaderRepository;
         private readonly IUnitOfWork _unitOfWork;
 
+        private readonly IUnitOfWorkFactory unitOfWorkFactory;
+
         public HolidayService(
             IHolidayRepository holidayRepository,
             IHolidayHeaderRepository holidayHeaderRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork, 
+            IUnitOfWorkFactory unitOfWorkFactory)
         {
             this._holidayRepository = holidayRepository;
             this._holidayHeaderRepository = holidayHeaderRepository;
             this._unitOfWork = unitOfWork;
+            this.unitOfWorkFactory = unitOfWorkFactory;
         }
 
         public IEnumerable<Holiday> GetAll()
@@ -165,7 +172,12 @@
         /// </returns>
         public IEnumerable<HolidayOverview> GetHolidays()
         {
-            return this._holidayRepository.GetHolidays();
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var rep = uow.GetRepository<Holiday>();
+
+                return rep.GetAll().MapToOverviews();
+            }
         }
     }
 }

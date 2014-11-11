@@ -8,11 +8,9 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace DH.Helpdesk.Dal.Repositories
 {
-    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models.Holiday.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
 
@@ -23,14 +21,6 @@ namespace DH.Helpdesk.Dal.Repositories
     /// </summary>
     public interface IHolidayRepository : IRepository<Holiday>
     {
-        /// <summary>
-        /// The get holidays.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IEnumerable"/>.
-        /// </returns>
-        IEnumerable<HolidayOverview> GetHolidays();
-
         IEnumerable<Holiday> GetHolidaysByHeaderId(int id);
         IEnumerable<Holiday> GetHolidaysByHeaderIdAndYear(int year, int id);
         IList<Holiday> GetHolidaysByHeaderIdAndYearForList(int year, int id);
@@ -57,29 +47,6 @@ namespace DH.Helpdesk.Dal.Repositories
         public HolidayRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
-        }
-
-        /// <summary>
-        /// The get holidays.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IEnumerable"/>.
-        /// </returns>
-        public IEnumerable<HolidayOverview> GetHolidays()
-        {
-            return this.GetAll()
-                .ToList()
-                .Select(h => new HolidayOverview
-                                 {
-                                     HolidayDate = h.HolidayDate,
-                                     TimeFrom = h.TimeFrom,
-                                     TimeUntil = h.TimeUntil,
-                                     HolidayHeader = new HolidayHeaderOverview
-                                                         {
-                                                             Name = h.HolidayHeader.Name
-                                                         }
-                                 })
-                .OrderBy(h => h.HolidayDate);
         }
 
         public IEnumerable<Holiday> GetHolidaysByHeaderId(int id)

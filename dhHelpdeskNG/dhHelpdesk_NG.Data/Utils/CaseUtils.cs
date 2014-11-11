@@ -90,12 +90,12 @@ namespace DH.Helpdesk.Dal.Utils
                                 int workingDayEnd,
                                 IEnumerable<HolidayOverview> holidays)
         {
-            int holidaysMinutes = holidays
+            int holidaysMinutes = holidays != null ? holidays
                 .Where(holiday => startDate.RoundToDay() <= holiday.HolidayDate.RoundToDay() &&
                         holiday.HolidayDate.RoundToDay() <= endDate.RoundToDay() &&
                         holiday.HolidayDate.DayOfWeek != DayOfWeek.Saturday &&
                         holiday.HolidayDate.DayOfWeek != DayOfWeek.Sunday)
-                 .Sum(holiday => (holiday.TimeUntil - holiday.TimeFrom) * 60);
+                        .Sum(holiday => (holiday.TimeUntil - holiday.TimeFrom) * 60) : 0;
 
             var businessDays = DatesHelper.GetBusinessDays(startDate, endDate);
 
