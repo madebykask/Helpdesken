@@ -16,6 +16,7 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Accounts;
 
     public interface IUserService
     {

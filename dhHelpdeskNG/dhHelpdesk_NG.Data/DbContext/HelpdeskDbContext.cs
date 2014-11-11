@@ -25,6 +25,7 @@
     using DH.Helpdesk.Dal.EntityConfigurations.SSO;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Accounts;
     using DH.Helpdesk.Domain.Cases;
     using DH.Helpdesk.Domain.Changes;
     using DH.Helpdesk.Domain.Computers;

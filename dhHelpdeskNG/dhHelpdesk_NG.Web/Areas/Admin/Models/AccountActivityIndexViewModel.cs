@@ -3,6 +3,7 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Accounts;
 
     public class AccountActivityIndexViewModel
     {

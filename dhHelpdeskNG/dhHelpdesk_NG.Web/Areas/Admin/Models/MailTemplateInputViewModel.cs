@@ -5,6 +5,7 @@
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Accounts;
     using DH.Helpdesk.Domain.MailTemplates;
 
     public class RegularCaseInputViewModel

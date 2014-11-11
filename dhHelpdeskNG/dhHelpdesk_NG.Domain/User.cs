@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Domain
 {
+    using DH.Helpdesk.Domain.Accounts;
     using DH.Helpdesk.Domain.Interfaces;
 
     using global::System;

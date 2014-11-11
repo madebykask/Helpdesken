@@ -10,6 +10,8 @@ using DH.Helpdesk.Domain;
 
 namespace DH.Helpdesk.Services.Services
 {
+    using DH.Helpdesk.Domain.Accounts;
+
     public interface IAccountFieldSettingsService
     {
         

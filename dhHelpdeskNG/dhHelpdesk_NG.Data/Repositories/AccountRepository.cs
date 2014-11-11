@@ -6,6 +6,8 @@
     using DH.Helpdesk.Domain;
     using System.Collections.Generic;
 
+    using DH.Helpdesk.Domain.Accounts;
+
     #region ACCOUNT
 
     public interface IAccountRepository : IRepository<Account>

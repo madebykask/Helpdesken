@@ -1,9 +1,8 @@
-﻿
-namespace DH.Helpdesk.Dal.EntityConfigurations
+﻿namespace DH.Helpdesk.Dal.EntityConfigurations
 {
     using System.Data.Entity.ModelConfiguration;
 
-    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Accounts;
 
     public class AccountFieldSettingsConfiguration : EntityTypeConfiguration<AccountFieldSettings>
     {
@@ -31,8 +30,19 @@ namespace DH.Helpdesk.Dal.EntityConfigurations
             this.Property(x => x.FieldHelp).IsOptional().HasMaxLength(200);
             this.Property(x => x.Required).IsRequired();
             this.Property(x => x.EMailIdentifier).IsOptional().HasMaxLength(10);
-    
+
             this.ToTable("tblaccountfieldsettings");
+        }
+    }
+
+    public class AccountTypeConfiguration : EntityTypeConfiguration<AccountType>
+    {
+        internal AccountTypeConfiguration()
+        {
+            this.HasKey(x => x.Id);
+
+            this.Property(x => x.Name).HasColumnName("").IsRequired();
+
         }
     }
 }

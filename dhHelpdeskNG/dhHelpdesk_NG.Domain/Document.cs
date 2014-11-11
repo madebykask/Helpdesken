@@ -2,6 +2,8 @@
 
 namespace DH.Helpdesk.Domain
 {
+    using DH.Helpdesk.Domain.Accounts;
+
     using global::System;
     using global::System.Collections.Generic;
 

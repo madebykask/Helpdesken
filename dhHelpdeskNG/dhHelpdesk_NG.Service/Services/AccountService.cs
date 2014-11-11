@@ -2,6 +2,7 @@
 {
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Accounts;
 
     public interface IAccountService
     {

@@ -2,6 +2,7 @@
 {
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Accounts;
 
     #region ACCOUNTACTIVITY
 

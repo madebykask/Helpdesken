@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Domain
+﻿namespace DH.Helpdesk.Domain.Accounts
 {
     using global::System;
     using global::System.Collections.Generic;

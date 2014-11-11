@@ -55,12 +55,12 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Account.cs" />
-    <Compile Include="AccountActivity.cs" />
-    <Compile Include="AccountActivityGroup.cs" />
-    <Compile Include="AccountEMailLog.cs" />
-    <Compile Include="AccountFieldSettings.cs" />
-    <Compile Include="AccountType.cs" />
+    <Compile Include="Accounts\Account.cs" />
+    <Compile Include="Accounts\AccountActivity.cs" />
+    <Compile Include="Accounts\AccountActivityGroup.cs" />
+    <Compile Include="Accounts\AccountEMailLog.cs" />
+    <Compile Include="Accounts\AccountFieldSettings.cs" />
+    <Compile Include="Accounts\AccountType.cs" />
     <Compile Include="ActionSetting\ActionSetting.cs" />
     <Compile Include="Application.cs" />
     <Compile Include="Building.cs" />

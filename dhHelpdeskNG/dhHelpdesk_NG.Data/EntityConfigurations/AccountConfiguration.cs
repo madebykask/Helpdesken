@@ -2,7 +2,7 @@
 {
     using System.Data.Entity.ModelConfiguration;
 
-    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Accounts;
 
     public class AccountConfiguration : EntityTypeConfiguration<Account>
     {
