@@ -5,7 +5,7 @@
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class ProductModel : EntityBusinessModel
+    public sealed class ProductModel : Shared.Input.BusinessModel
     {
         public ProductModel(
                 int id,

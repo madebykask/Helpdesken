@@ -113,6 +113,7 @@
     <Compile Include="Models\Email\MailItem.cs" />
     <Compile Include="Models\Email\QuestionnaireMailItem.cs" />
     <Compile Include="Models\Licenses\Licenses\LicenseFileModel.cs" />
+    <Compile Include="Models\Orders\OrdersFilterData.cs" />
     <Compile Include="Models\Questionnaire\Participant.cs" />
     <Compile Include="Models\Questionnaire\Read\CircularOverview.cs" />
     <Compile Include="Models\Questionnaire\Read\ConnectedCase.cs" />
@@ -289,7 +290,6 @@
     <Compile Include="Models\Reports\Output\RegistratedCasesDayItem.cs" />
     <Compile Include="Models\Reports\Output\RegistratedCasesDayOptionsResponse.cs" />
     <Compile Include="Models\Reports\Output\RegistratedCasesDayReportResponse.cs" />
-    <Compile Include="Models\Shared\EntityBusinessModel.cs" />
     <Compile Include="Models\Shared\Input\SortField.cs" />
     <Compile Include="Models\BusinessModel.cs" />
     <Compile Include="Models\Customer\CustomerSettings.cs" />

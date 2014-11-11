@@ -2,10 +2,9 @@
 {
     using System;
 
-    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class VendorModel : EntityBusinessModel
+    public sealed class VendorModel : Shared.Input.BusinessModel
     {
         public VendorModel(
                 int id,

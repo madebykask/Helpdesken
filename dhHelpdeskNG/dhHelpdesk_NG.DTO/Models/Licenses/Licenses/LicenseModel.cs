@@ -2,10 +2,9 @@
 {
     using System;
 
-    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class LicenseModel : EntityBusinessModel
+    public sealed class LicenseModel : Shared.Input.BusinessModel
     {
         public LicenseModel(
                 int id,
