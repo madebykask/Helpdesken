@@ -1,11 +1,12 @@
 ﻿namespace DH.Helpdesk.Domain
 {
+    using DH.Helpdesk.Domain.Interfaces;
     using DH.Helpdesk.Domain.Orders;
 
     using global::System;
     using global::System.Collections.Generic;
 
-    public class Order : Entity
+    public class Order : Entity, ICustomerEntity
     {
         public Order()
         {

@@ -1,8 +1,10 @@
 ﻿namespace DH.Helpdesk.Domain
 {
+    using DH.Helpdesk.Domain.Interfaces;
+
     using global::System;
 
-    public class OrderFieldSettings : Entity
+    public class OrderFieldSettings : Entity, ICustomerEntity
     {
         public int Customer_Id { get; set; }
         public int? OrderType_Id { get; set; }

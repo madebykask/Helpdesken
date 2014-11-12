@@ -3,7 +3,9 @@
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Concrete;
     using DH.Helpdesk.Services.Services.Concrete.Licenses;
+    using DH.Helpdesk.Services.Services.Concrete.Orders;
     using DH.Helpdesk.Services.Services.Licenses;
+    using DH.Helpdesk.Services.Services.Orders;
 
     using Ninject.Modules;
 
@@ -108,13 +110,16 @@
             this.Bind<ICaseSolutionSettingService>().To<CaseSolutionSettingService>();
             this.Bind<ICaseInvoiceSettingsService>().To<CaseInvoiceSettingsService>();
 
-            // Liceneses module servises
+            // Liceneses module services
             this.Bind<IProductsService>().To<ProductsService>();
             this.Bind<ILicensesService>().To<LicensesService>();
             this.Bind<IVendorsService>().To<VendorsService>();
             this.Bind<IManufacturersService>().To<ManufacturersService>();
             this.Bind<IApplicationsService>().To<ApplicationsService>();
             this.Bind<IMailTemplateServiceNew>().To<MailTemplateServiceNew>();
+
+            // Orders module services
+            this.Bind<IOrdersService>().To<OrdersService>();
         }
 
         #endregion

@@ -113,6 +113,7 @@
     <Compile Include="Models\Email\MailItem.cs" />
     <Compile Include="Models\Email\QuestionnaireMailItem.cs" />
     <Compile Include="Models\Licenses\Licenses\LicenseFileModel.cs" />
+    <Compile Include="Models\Orders\OrderFieldSettingsOverview.cs" />
     <Compile Include="Models\Orders\OrdersFilterData.cs" />
     <Compile Include="Models\Questionnaire\Participant.cs" />
     <Compile Include="Models\Questionnaire\Read\CircularOverview.cs" />

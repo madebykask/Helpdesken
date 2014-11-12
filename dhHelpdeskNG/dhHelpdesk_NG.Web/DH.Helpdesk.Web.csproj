@@ -101,9 +101,6 @@
     <Reference Include="RazorPDF">
       <HintPath>..\packages\RazorPDF.1.0.0\lib\net40\RazorPDF.dll</HintPath>
     </Reference>
-    <Reference Include="System.Linq.Dynamic">
-      <HintPath>..\packages\System.Linq.Dynamic.1.0.3\lib\net40\System.Linq.Dynamic.dll</HintPath>
-    </Reference>
     <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.dll</HintPath>
     </Reference>
@@ -402,6 +399,8 @@
     <Compile Include="Areas\Licenses\Models\Vendors\VendorsContentModel.cs" />
     <Compile Include="Areas\Licenses\Models\Vendors\VendorsFilterModel.cs" />
     <Compile Include="Areas\Licenses\Models\Vendors\VendorsIndexModel.cs" />
+    <Compile Include="Areas\Orders\Controllers\OrdersController.cs" />
+    <Compile Include="Areas\Orders\OrdersAreaRegistration.cs" />
     <Compile Include="Controllers\AboutController.cs" />
     <Compile Include="Controllers\AjaxController.cs" />
     <Compile Include="Controllers\BulletinBoardController.cs" />
@@ -1272,6 +1271,7 @@
     <Content Include="Areas\Licenses\Views\Vendors\Vendor.cshtml" />
     <Content Include="Areas\Licenses\Views\Shared\_EditLayout.cshtml" />
     <Content Include="Areas\Licenses\Views\Licenses\AttachedFiles.cshtml" />
+    <Content Include="Areas\Orders\Views\Web.config" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />
@@ -2418,6 +2418,8 @@
     <Content Include="Areas\Admin\Views\Users\_Appearance.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Areas\Orders\Models\" />
+    <Folder Include="Areas\Orders\Views\Shared\" />
     <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
   </ItemGroup>
   <ItemGroup>
