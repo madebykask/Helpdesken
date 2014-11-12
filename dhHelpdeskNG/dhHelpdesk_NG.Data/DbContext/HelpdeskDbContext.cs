@@ -5,6 +5,7 @@
     using System.Text;
 
     using DH.Helpdesk.Dal.EntityConfigurations;
+    using DH.Helpdesk.Dal.EntityConfigurations.Accounts;
     using DH.Helpdesk.Dal.EntityConfigurations.Cases;
     using DH.Helpdesk.Dal.EntityConfigurations.Changes;
     using DH.Helpdesk.Dal.EntityConfigurations.Computers;

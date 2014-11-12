@@ -353,7 +353,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 CaseTypes = this._caseTypeService.GetCaseTypes(SessionFacade.CurrentCustomer.Id),
 
-                CaseWorkingGroups = this._workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                CaseWorkingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.WorkingGroupName,
                     Value = x.Id.ToString()

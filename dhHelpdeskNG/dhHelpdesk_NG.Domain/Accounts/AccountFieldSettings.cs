@@ -14,6 +14,7 @@
         public string EMailIdentifier { get; set; }
         public string FieldHelp { get; set; }
         public string Label { get; set; }
+        public int MultiValue { get; set; }
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
 

@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Dal.EntityConfigurations
+﻿namespace DH.Helpdesk.Dal.EntityConfigurations.Accounts
 {
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.ModelConfiguration;

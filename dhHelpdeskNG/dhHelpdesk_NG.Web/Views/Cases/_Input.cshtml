@@ -764,7 +764,7 @@
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Performer_User_Id,"Handläggare")
                                         </td>
                                         <td>
-                                            @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, CaseSolutionFields.WorkingGroup))
+                                            @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Performer_User_Id, CaseSolutionFields.Administrator))
                                             {
                                                 <select id="case__Performer_User_Id" name="case_.Performer_User_Id">
                                                     <option value="">&nbsp;</option>
@@ -785,7 +785,7 @@
                                                     var performerName = string.Format("{0} {1}", performer.SurName, performer.FirstName);
                                                 @Html.TextBoxFor(m => performerName, new { @readonly = true })
                                                 }
-                                                @Html.HiddenFor(x => x.case_.WorkingGroup_Id)
+                                                @Html.HiddenFor(x => x.case_.Performer_User_Id)
                                             }
                                         </td>
                                     </tr>
@@ -794,7 +794,7 @@
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Priority_Id,"Prioritet")
                                         </td>
                                         <td>
-                                            @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, CaseSolutionFields.WorkingGroup))
+                                            @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Priority_Id, CaseSolutionFields.Priority))
                                             {
                                                 <select id="case__Priority_Id" @Model.case_.Id.HtmlReadOnlyFlag(Model.customerUserSetting.PriorityPermission) name="case_.Priority_Id">
                                                     <option value="">&nbsp;</option>

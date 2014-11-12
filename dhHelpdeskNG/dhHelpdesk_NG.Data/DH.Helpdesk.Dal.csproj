@@ -75,7 +75,9 @@
     <Compile Include="Attributes\Inventory\CreateMissingServerSettingsAttribute.cs" />
     <Compile Include="Attributes\Inventory\CreateMissingComputerSettingsAttribute.cs" />
     <Compile Include="Dal\INewRepository.cs" />
-    <Compile Include="EntityConfigurations\AccountActivityGroupConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Accounts\AccountActivityGroupConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Accounts\AccountEMailLogConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Accounts\AccountTypeConfiguration.cs" />
     <Compile Include="EntityConfigurations\ActionSetting\ActionSettingConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseSolutionSettingConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CausingPartConfiguration.cs" />
@@ -224,7 +226,7 @@
     <Compile Include="Mappers\Projects\UpdatedProjectScheduleToProjectScheduleEntityMapper.cs" />
     <Compile Include="Mappers\Projects\ProjectScheduleEntityToProjectScheduleOverviewMapper.cs" />
     <Compile Include="Dal\Repository.cs" />
-    <Compile Include="EntityConfigurations\AccountFieldSettingsConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Accounts\AccountFieldSettingsConfiguration.cs" />
     <Compile Include="EntityConfigurations\Changes\ChangeChangeGroupConfiguration.cs" />
     <Compile Include="EntityConfigurations\Computers\ComputerInventoryConfiguration.cs" />
     <Compile Include="EntityConfigurations\LinkUserConfiguration.cs" />
@@ -421,8 +423,8 @@
     <Compile Include="Infrastructure\IUnitOfWork.cs" />
     <Compile Include="Infrastructure\RepositoryBase.cs" />
     <Compile Include="Infrastructure\UnitOfWork.cs" />
-    <Compile Include="EntityConfigurations\AccountActivityConfiguration.cs" />
-    <Compile Include="EntityConfigurations\AccountConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Accounts\AccountActivityConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Accounts\AccountConfiguration.cs" />
     <Compile Include="EntityConfigurations\BuildingConfiguration.cs" />
     <Compile Include="EntityConfigurations\BulletinBoardConfiguration.cs" />
     <Compile Include="EntityConfigurations\CalendarConfiguration.cs" />

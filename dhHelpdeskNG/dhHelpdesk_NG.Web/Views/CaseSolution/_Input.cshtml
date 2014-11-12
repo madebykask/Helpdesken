@@ -503,6 +503,16 @@
     </div>
 </div>
 <script type="text/javascript">
+    
+    $('#case__WorkingGroup_Id').change(function () {
+        // filter administrators
+        var DontConnectUserToWorkingGroup = $('#CaseMailSetting_DontConnectUserToWorkingGroup').val();
+        if (DontConnectUserToWorkingGroup == 0) {
+            CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeWorkingGroupFilterUser/', '#case__Performer_User_Id', $('#DepartmentFilterFormat').val());
+        }
+        //set state secondery
+        SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeWorkingGroupSetStateSecondary/', '#case__StateSecondary_Id')
+    });
 
     $('#divFinishingCause ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();
@@ -598,8 +608,8 @@
         messages: {
             "CaseSolution.Name": {
                 required: "@Translation.Get("Du måste ange ett namn på ärendemallen", Enums.TranslationSource.TextTranslation)"
-                }
-            },
+            }
+        },
         submitHandler: function (form) {
             form.submit();
         }
