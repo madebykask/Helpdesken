@@ -1,9 +1,11 @@
 ﻿namespace DH.Helpdesk.Domain
 {
+    using DH.Helpdesk.Domain.Interfaces;
+
     using global::System;
     using global::System.Collections.Generic;
 
-    public class OrderType : Entity
+    public class OrderType : Entity, ICustomerEntity, INamedEntity
     {
         public int? CreateCase_CaseType_Id { get; set; }
         public int Customer_Id { get; set; }

@@ -101,6 +101,22 @@
                         .GetByText(text);
 
             return query;
+        }
+
+        public static IQueryable<OrderType> GetOrderTypes(this IQueryable<OrderType> query, int customerId)
+        {
+            query = query.GetByCustomer(customerId)
+                    .Where(t => t.IsActive == 1);
+
+            return query;
+        }
+
+        public static IQueryable<OrderState> GetOrderStatuses(this IQueryable<OrderState> query, int customerId)
+        {
+            query = query.GetByCustomer(customerId)
+                    .Where(s => s.IsActive == 1);
+
+            return query;
         } 
     }
 }

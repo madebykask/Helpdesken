@@ -66,7 +66,7 @@
             entity.Name = model.ProductName;
         }
 
-        public static ProductsFilterData MatToFilterData(
+        public static ProductsFilterData MapToFilterData(
                         IQueryable<Region> regions,
                         IQueryable<Department> departments)
         {

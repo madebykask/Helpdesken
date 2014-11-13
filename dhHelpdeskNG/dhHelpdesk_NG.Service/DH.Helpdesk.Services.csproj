@@ -123,6 +123,7 @@
     <Compile Include="BusinessLogic\Invoice\IkeaExcelImporter.cs" />
     <Compile Include="BusinessLogic\MailTools\EmailMarkValues.cs" />
     <Compile Include="BusinessLogic\OtherTools\ITemporaryIdProvider.cs" />
+    <Compile Include="BusinessLogic\Specifications\Common\UserSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Customers\CustomerSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Documents\DocumentSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\EmailTemplate\MailTemplateSpecifications.cs" />
@@ -235,6 +236,7 @@
     <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\BusinessItem.cs" />
     <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\ExcelTableHeader.cs" />
     <Compile Include="Services\Concrete\ActionSettingService.cs" />
+    <Compile Include="Services\Concrete\Orders\OrderFieldSettingsService.cs" />
     <Compile Include="Services\Concrete\Orders\OrdersService.cs" />
     <Compile Include="Services\IMailTemplateService.cs" />
     <Compile Include="Services\Concrete\Licenses\ApplicationsService.cs" />
@@ -324,6 +326,7 @@
     <Compile Include="Services\OperationObjectService.cs" />
     <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\OrderStateService.cs" />
+    <Compile Include="Services\Orders\IOrderFieldSettingsService.cs" />
     <Compile Include="Services\Orders\IOrdersService.cs" />
     <Compile Include="Services\OrderTypeService.cs" />
     <Compile Include="Services\OUService.cs" />

@@ -1,9 +1,10 @@
 ﻿namespace DH.Helpdesk.Services.Services.Concrete.Orders
 {
-    using DH.Helpdesk.BusinessData.Models.Orders;
+    using DH.Helpdesk.BusinessData.Models.Orders.Index;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Orders;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications.Common;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Orders;
     using DH.Helpdesk.Services.Services.Orders;
 
@@ -16,15 +17,24 @@
             this.unitOfWorkFactory = unitOfWorkFactory;
         }
 
-        public OrderFieldSettingsOverview[] GetFieldSettingsOverviews(int customerId, int? orderTypeId)
+        public OrdersFilterData GetOrdersFilterData(int customerId)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
-                var fieldSettingsRep = uow.GetRepository<OrderFieldSettings>();
+                var orderTypeRep = uow.GetRepository<OrderType>();
+                var administratorRep = uow.GetRepository<User>();
+                var statusRep = uow.GetRepository<OrderState>();
 
-                return fieldSettingsRep.GetAll()
-                        .GetByTypeForList(customerId, orderTypeId)
-                        .MapToListOverviews();
+                var orderTypes = orderTypeRep.GetAll()
+                                    .GetOrderTypes(customerId);
+
+                var administrators = administratorRep.GetAll()
+                                    .GetAdministrators(customerId);
+
+                var statuses = statusRep.GetAll()
+                                    .GetOrderStatuses(customerId);
+
+                return OrderMapper.MapToFilterData(orderTypes, administrators, statuses);
             }
         }
     }

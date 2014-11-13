@@ -2,7 +2,7 @@
 {
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models.Orders;
+    using DH.Helpdesk.BusinessData.Models.Orders.OrderSettings;
     using DH.Helpdesk.Domain;
 
     public static class OrderFieldSettingsMapper

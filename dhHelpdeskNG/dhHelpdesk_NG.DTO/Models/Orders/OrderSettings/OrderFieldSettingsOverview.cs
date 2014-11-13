@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Orders
+﻿namespace DH.Helpdesk.BusinessData.Models.Orders.OrderSettings
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 

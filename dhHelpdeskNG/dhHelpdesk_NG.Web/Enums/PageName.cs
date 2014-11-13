@@ -26,6 +26,8 @@
 
         public static readonly string LicensesApplications = "LicensesApplications";
 
+        public static readonly string OrdersOrders = "OrdersOrders";
+
         #endregion
     }
 }

@@ -205,6 +205,7 @@
     <Compile Include="App_Start\NinjectModules\Modules\LicensesModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\LinkModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\NotifiersModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Modules\OrdersModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\ProblemModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\ProjectModule.cs" />
     <Compile Include="App_Start\NinjectModules\Common\RepositoriesModule.cs" />
@@ -400,6 +401,16 @@
     <Compile Include="Areas\Licenses\Models\Vendors\VendorsFilterModel.cs" />
     <Compile Include="Areas\Licenses\Models\Vendors\VendorsIndexModel.cs" />
     <Compile Include="Areas\Orders\Controllers\OrdersController.cs" />
+    <Compile Include="Areas\Orders\Controllers\OrderFieldSettingsController.cs" />
+    <Compile Include="Areas\Orders\Infrastructure\ModelFactories\Concrete\OrderFieldSettingsModelFactory.cs" />
+    <Compile Include="Areas\Orders\Infrastructure\ModelFactories\Concrete\OrdersModelFactory.cs" />
+    <Compile Include="Areas\Orders\Infrastructure\ModelFactories\IOrderFieldSettingsModelFactory.cs" />
+    <Compile Include="Areas\Orders\Infrastructure\ModelFactories\IOrdersModelFactory.cs" />
+    <Compile Include="Areas\Orders\Models\Index\BaseIndexModel.cs" />
+    <Compile Include="Areas\Orders\Models\Index\IndexModelType.cs" />
+    <Compile Include="Areas\Orders\Models\Index\OrdersFilterModel.cs" />
+    <Compile Include="Areas\Orders\Models\Index\OrdersIndexModel.cs" />
+    <Compile Include="Areas\Orders\Models\OrderFieldSettings\OrderFieldSettingsEditModel.cs" />
     <Compile Include="Areas\Orders\OrdersAreaRegistration.cs" />
     <Compile Include="Controllers\AboutController.cs" />
     <Compile Include="Controllers\AjaxController.cs" />
@@ -1272,6 +1283,11 @@
     <Content Include="Areas\Licenses\Views\Shared\_EditLayout.cshtml" />
     <Content Include="Areas\Licenses\Views\Licenses\AttachedFiles.cshtml" />
     <Content Include="Areas\Orders\Views\Web.config" />
+    <Content Include="Areas\Orders\Views\Orders\Index.cshtml" />
+    <Content Include="Areas\Orders\Views\OrderFieldSettings\OrderFieldSettings.cshtml" />
+    <Content Include="Areas\Orders\Views\Shared\_IndexLayout.cshtml" />
+    <Content Include="Areas\Orders\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Orders\Views\Orders\Orders.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />
@@ -2418,8 +2434,6 @@
     <Content Include="Areas\Admin\Views\Users\_Appearance.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\Orders\Models\" />
-    <Folder Include="Areas\Orders\Views\Shared\" />
     <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
   </ItemGroup>
   <ItemGroup>

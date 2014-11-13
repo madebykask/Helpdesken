@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Orders
+﻿namespace DH.Helpdesk.BusinessData.Models.Orders.Index
 {
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Common.ValidationAttributes;

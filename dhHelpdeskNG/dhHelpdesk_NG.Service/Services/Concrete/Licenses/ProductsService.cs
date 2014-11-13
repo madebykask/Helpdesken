@@ -57,7 +57,7 @@
                 var departments = departmentRepository.GetAll()
                                 .GetByCustomer(customerId);
 
-                return ProductMapper.MatToFilterData(regions, departments);
+                return ProductMapper.MapToFilterData(regions, departments);
             }
         }
 

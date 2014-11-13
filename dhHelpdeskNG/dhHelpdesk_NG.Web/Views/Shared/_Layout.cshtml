@@ -183,7 +183,7 @@
                                 <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">                                    
                                     @if (model.IsOrderVisible())
                                     {    
-                                        <li><a href="@Url.Action("index", "order", new { area = "" })">
+                                        <li><a href="@Url.Action("Index", "Orders", new { area = "Orders" })">
                                                 <img src="@Url.Content("~/Content/icons/order.png")" />
                                                 @Translation.Get("Beställningar")</a></li>
                                     }

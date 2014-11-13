@@ -1,9 +1,11 @@
 ﻿namespace DH.Helpdesk.Domain
 {
+    using DH.Helpdesk.Domain.Interfaces;
+
     using global::System;
     using global::System.Collections.Generic;
 
-    public class OrderState : Entity
+    public class OrderState : Entity, ICustomerEntity, INamedEntity
     {
         public int? ChangedByUser_Id { get; set; }
         public int CreateCase { get; set; }
