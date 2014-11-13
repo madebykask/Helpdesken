@@ -17,7 +17,7 @@
 
     public interface IBulletinBoardService
     {
-        IList<BulletinBoard> GetBulletinBoards(int customerId);
+        IList<BulletinBoard> GetBulletinBoards(int customerId, bool secure = true);
 
         IList<BulletinBoard> SearchAndGenerateBulletinBoard(int customerId, IBulletinBoardSearch SearchBulletinBoards);
 
@@ -54,19 +54,25 @@
             this.workContext = workContext;
         }
 
-        public IList<BulletinBoard> GetBulletinBoards(int customerId)
+        public IList<BulletinBoard> GetBulletinBoards(int customerId, bool secure = true)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var rep = uow.GetRepository<BulletinBoard>();
 
-                return rep.GetAll()
-                        .RestrictByWorkingGroups(this.workContext)
-                        .GetByCustomer(customerId)
-                        .ToList();
+                if (secure)
+                    return rep.GetAll()
+                            .RestrictByWorkingGroups(this.workContext)
+                            .GetByCustomer(customerId)
+                            .ToList();
+                else
+                    return rep.GetAll()
+                            .GetByCustomer(customerId)
+                            .ToList();
+
             }
         }
-
+        
         public IList<BulletinBoard> SearchAndGenerateBulletinBoard(int customerId, IBulletinBoardSearch SearchBulletinBoards)
         {
             using (var uow = this.unitOfWorkFactory.Create())

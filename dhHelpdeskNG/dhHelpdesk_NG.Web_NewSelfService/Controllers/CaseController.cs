@@ -453,7 +453,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
 
             // save case history
             // may be need change PersonsEmail
-            int caseHistoryId = this._caseService.SaveCaseHistory(currentCase, 0, currentCase.PersonsEmail, out errors, currentCase.RegUserId);
+            int caseHistoryId = this._caseService.SaveCaseHistory(currentCase, 0, currentCase.PersonsEmail, out errors, SessionFacade.CurrentUserIdentity.UserId);
 
             //var guid = new Guid(curGUID);
             //var emailLog = _caseService.GetEMailLogByGUID(guid);

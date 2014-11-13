@@ -67,7 +67,9 @@
                             "~/Content/js/plupload.full.min.js",
                             "~/Content/js/jquery.plupload.queue/jquery.plupload.queue.js",
                             "~/Content/js/dhHelpdesk-head.js",
-                            "~/Content/js/jquery.form.min.js"));
+                            "~/Content/js/jquery.form.min.js",
+                            "~/Content/js/bootstrap-switch.min.js",
+                            "~/Content/js/jquery.dataTables.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/common/login").Include(
                             "~/Content/js/jquery-1.8.3.min.js",

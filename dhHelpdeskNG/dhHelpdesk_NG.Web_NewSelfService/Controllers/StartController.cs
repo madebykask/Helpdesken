@@ -44,7 +44,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
         public  ActionResult Index(int customerId = -1)
         {
             var model = new StartPageModel();
-            var bb = _bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id);
+            var bb = _bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id,false);
 
             model.BulletinBoard = bb.ToList();
             return this.View(model);            

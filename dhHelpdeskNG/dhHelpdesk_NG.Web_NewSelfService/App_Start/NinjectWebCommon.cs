@@ -179,6 +179,7 @@ namespace DH.Helpdesk.NewSelfService
             kernel.Bind<ICaseSolutionSettingRepository>().To<CaseSolutionSettingRepository>();
             kernel.Bind<IDocumentRepository>().To<DocumentRepository>();
             kernel.Bind<IDocumentCategoryRepository>().To<DocumentCategoryRepository>();            
+
             
                                        
             // Service             
@@ -224,9 +225,8 @@ namespace DH.Helpdesk.NewSelfService
             kernel.Bind<IAMAPIService>().To<AMAPIService>();
             kernel.Bind<IBulletinBoardService>().To<BulletinBoardService>();
             kernel.Bind<ICaseSolutionSettingService>().To<CaseSolutionSettingService>();
-            kernel.Bind<IDocumentService>().To<DocumentService>();
-            
-            
+            kernel.Bind<IDocumentService>().To<DocumentService>();            
+             
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();
 
