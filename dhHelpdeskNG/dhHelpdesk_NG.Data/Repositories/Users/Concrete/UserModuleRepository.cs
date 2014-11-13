@@ -36,7 +36,9 @@ namespace DH.Helpdesk.Dal.Repositories.Users.Concrete
                     {
                         Id = u.Module.Id,
                         Name = u.Module.Name,
-                        Description = u.Module.Description
+                        Description = u.Module.Description,
+                        FieldName = u.Module.Name
+
                     } : new ModuleOverview(){}
                 })
                 .OrderBy(u => u.Module.Name);
