@@ -53,7 +53,11 @@ namespace DH.Helpdesk.Web.Controllers
 
 
             var modules = new UserModulesViewModel();
-            modules.Modules = _workContext.User.Modules;            
+            var originModules = _workContext.User.Modules;
+            foreach (var mod in originModules)            
+                mod.Module.Description = Translation.Get(mod.Module.Description, Enums.TranslationSource.TextTranslation);
+            
+            modules.Modules = originModules;            
             var model = this.CreateInputViewModel(user, modules);
 
             return this.View(model);
