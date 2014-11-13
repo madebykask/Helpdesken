@@ -15,7 +15,7 @@
                                         IQueryable<OrderState> statuses)
         {
             var overviews = orderTypes.Select(t => new { t.Id, t.Name, Type = "OrderType" }).Union(
-                            administrators.Select(a => new { a.Id, Name = a.FirstName + a.SurName, Type = "Administrator"}).Union(
+                            administrators.Select(a => new { a.Id, Name = a.FirstName + " " + a.SurName, Type = "Administrator" }).Union(
                             statuses.Select(s => new { s.Id, s.Name, Type = "Status" })))
                             .OrderBy(o => o.Type)
                             .ThenBy(o => o.Name)
