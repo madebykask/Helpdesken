@@ -39,6 +39,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             entity.MonitorModel = string.Empty;
             entity.MonitorSerialnumber = string.Empty;
             entity.MonitorTheftMark = string.Empty;
+            entity.LDAPPath = string.Empty;
 
             this.DbSet.Add(entity);
             this.InitializeAfterCommit(businessModel, entity);

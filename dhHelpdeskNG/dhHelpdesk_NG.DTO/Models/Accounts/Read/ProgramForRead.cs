@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Accounts
+﻿namespace DH.Helpdesk.BusinessData.Models.Accounts.Read
 {
     using System.Collections.Generic;
 
