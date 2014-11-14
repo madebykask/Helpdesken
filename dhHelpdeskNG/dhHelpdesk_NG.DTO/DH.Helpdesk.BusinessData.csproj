@@ -106,7 +106,12 @@
     <Compile Include="Models\Accounts\Contact.cs" />
     <Compile Include="Models\Accounts\DeliveryInformation.cs" />
     <Compile Include="Models\Accounts\Orderer.cs" />
+    <Compile Include="Models\Accounts\Other.cs" />
+    <Compile Include="Models\Accounts\OtherForRead.cs" />
+    <Compile Include="Models\Accounts\OtherForWrite.cs" />
     <Compile Include="Models\Accounts\Program.cs" />
+    <Compile Include="Models\Accounts\ProgramForRead.cs" />
+    <Compile Include="Models\Accounts\ProgramForWrite.cs" />
     <Compile Include="Models\Accounts\User.cs" />
     <Compile Include="Models\Case\CaseFileModel.cs" />
     <Compile Include="Models\Case\CaseSolutionSetting.cs" />
