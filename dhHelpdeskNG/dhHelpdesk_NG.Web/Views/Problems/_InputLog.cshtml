@@ -15,9 +15,9 @@
         <div class="span12">
             <table>
                 <tr>
-                    <td>@Translation.Get("Loggtext", Enums.TranslationSource.TextTranslation)
+                    <td class="span3">@Translation.Get("Loggtext", Enums.TranslationSource.TextTranslation)
                     </td>
-                    <td>
+                    <td class="span9">
                         @Html.TextAreaFor(x => x.LogText)
                         @Html.ValidationMessageFor(x => x.LogText)
                     </td>

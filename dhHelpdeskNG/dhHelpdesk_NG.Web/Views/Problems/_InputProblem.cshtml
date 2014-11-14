@@ -11,17 +11,17 @@
                 @if (Model.Problem.Id != 0)
                 {
                     <tr>
-                        <td>@Translation.Get("Problem", Enums.TranslationSource.TextTranslation)
+                        <td class="span3">@Translation.Get("Problem", Enums.TranslationSource.TextTranslation)
                         </td>
-                        <td>
+                        <td class="span9">
                             @Html.DisplayTextFor(x => x.Problem.ProblemNumber)
                         </td>
                     </tr>
                 }
                 <tr>
-                    <td>@Translation.Get("Rubrik", Enums.TranslationSource.TextTranslation)
+                    <td class="span3">@Translation.Get("Rubrik", Enums.TranslationSource.TextTranslation)
                     </td>
-                    <td>
+                    <td class="span9">
                         @Html.EditorFor(x => x.Problem.Name)
                         @Html.ValidationMessageFor(x => x.Problem.Name)
                     </td>
