@@ -7,7 +7,7 @@
     <div class="pull-left">
         <ul class="secnav">
             <li>
-                <button value="@Translation.Get("Spara")" class="btn" id="subbut">@Translation.Get("Save")</button>
+                <button value="@Translation.Get("Spara")" class="btn" id="subbut">@Translation.Get("Spara")</button>
             </li>
             <li>
                 <button value="@Translation.Get("Skapa urval")" class="btn" id="async_subbut">@Translation.Get("Skapa urval")</button>
@@ -25,7 +25,7 @@
     <div class="container">
         <ul class="nav nav-tabs">
             <li class="active">
-                <a href="#fragment-1">@Translation.Get("utskick")</a>
+                <a href="#fragment-1">@Translation.Get("Utskick")</a>
             </li>
         </ul>
         <div class="tab-content">
@@ -70,7 +70,7 @@
                                     <table class="tableform">
                                         <tr>
                                             <td class="span3">
-                                                @Translation.Get("Closing Date"):
+                                                @Translation.Get("Avslutsdatum"):
                                             </td>
                                             <td class="span9">
                                                 @Html.EditorFor(model => model.FinishingDateFrom, "DatePicker", new { id = "finishing_date_from_datepicker" })

@@ -26,7 +26,7 @@
     <div class="container">
         <ul class="nav nav-tabs">
             <li class="active" id="circular_tab">
-                <a href="#fragment-1">@Translation.Get("utskick")</a>
+                <a href="#fragment-1">@Translation.Get("Utskick")</a>
             </li>
             <li class="" id="report_tab">
                 <a href="#fragment-2">@Translation.Get("Rapporter")</a>
@@ -76,7 +76,7 @@
                             
                             <table class="tableform">
                                 <tr>
-                                    <td class="span3">@Translation.Get("Utskick Datum")</td>
+                                    <td class="span3">@Translation.Get("Utskick") @Translation.Get("Datum")</td>
                                     <td>@Html.EditorFor(m => m.ReportFilter.CircularCreatedDate.DateFrom, "DatePicker", new { id = "circularCreatedDateFrom_datepicker" })
                                         -
                                         @Html.EditorFor(m => m.ReportFilter.CircularCreatedDate.DateTo, "DatePicker", new { id = "circularCreatedDateTo_datepicker" })</td>

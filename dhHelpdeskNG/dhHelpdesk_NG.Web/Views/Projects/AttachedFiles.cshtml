@@ -1,10 +1,5 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Models.Projects.FilesModel
-@if (!Model.Files.Any())
-{
-    @Translation.Get("No uploaded files", Enums.TranslationSource.TextTranslation)
-    return;
-}
 
 <table>
     @foreach (var file in Model.Files)

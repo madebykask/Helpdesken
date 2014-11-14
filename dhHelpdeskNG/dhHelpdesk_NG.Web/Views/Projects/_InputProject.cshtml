@@ -34,7 +34,7 @@
         <div class="span12">
             <table>
                 <tr>
-                    <td class="span3">@Html.LabelFor(x => Model.Users)
+                    <td class="span3">@Translation.Get("Projektledare", Enums.TranslationSource.TextTranslation)
                     </td>
                     <td class="span9">
                         @Html.DropDownListFor(x => x.ProjectEditModel.ProjectManagerId, Model.Users, string.Empty)
@@ -84,6 +84,8 @@
                     </td>
                 </tr>
                 <tr>
+                    <td class="span3">@Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation)
+                    </td>
                     <td>
                         <div id="filesContainer">
                             @Html.Action("AttachedFiles", new { guid = Model.Guid, area = string.Empty })
