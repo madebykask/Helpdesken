@@ -14,15 +14,19 @@
                                         IQueryable<User> administrators,
                                         IQueryable<OrderState> statuses)
         {
-            var overviews = orderTypes.Select(t => new { t.Id, t.Name, Type = "OrderType" }).Union(
-                            administrators.Select(a => new { a.Id, Name = a.FirstName + " " + a.SurName, Type = "Administrator" }).Union(
-                            statuses.Select(s => new { s.Id, s.Name, Type = "Status" })))
+            var orderTypesEntities = orderTypes.Select(t => new
+                                                            {
+                                                                t.Id,
+                                                                t.Name
+                                                            }).ToArray();
+            var overviews = administrators.Select(a => new { a.Id, Name = a.FirstName + " " + a.SurName, Type = "Administrator" }).Union(
+                            statuses.Select(s => new { s.Id, s.Name, Type = "Status" }))
                             .OrderBy(o => o.Type)
                             .ThenBy(o => o.Name)
                             .ToArray();
 
             return new OrdersFilterData(
-                            overviews.Where(o => o.Type == "OrderType").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
+                            orderTypesEntities.Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
                             overviews.Where(o => o.Type == "Administrator").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
                             overviews.Where(o => o.Type == "Status").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray());
         }

@@ -125,6 +125,16 @@
     <Compile Include="Models\Email\MailItem.cs" />
     <Compile Include="Models\Email\QuestionnaireMailItem.cs" />
     <Compile Include="Models\Licenses\Licenses\LicenseFileModel.cs" />
+    <Compile Include="Enums\Orders\Fields\DeliveryFields.cs" />
+    <Compile Include="Enums\Orders\Fields\GeneralFields.cs" />
+    <Compile Include="Enums\Orders\Fields\LogFields.cs" />
+    <Compile Include="Enums\Orders\Fields\OrdererFields.cs" />
+    <Compile Include="Enums\Orders\Fields\OrderFields.cs" />
+    <Compile Include="Enums\Orders\Fields\OtherFields.cs" />
+    <Compile Include="Enums\Orders\Fields\ProgramFields.cs" />
+    <Compile Include="Enums\Orders\Fields\ReceiverFields.cs" />
+    <Compile Include="Enums\Orders\Fields\SupplierFields.cs" />
+    <Compile Include="Enums\Orders\Fields\UserFields.cs" />
     <Compile Include="Models\Orders\OrderSettings\OrderFieldSettingsOverview.cs" />
     <Compile Include="Models\Orders\Index\OrdersFilterData.cs" />
     <Compile Include="Models\Questionnaire\Participant.cs" />

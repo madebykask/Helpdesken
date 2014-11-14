@@ -6,8 +6,12 @@
     {
         public OrderFieldSettingsOverview(
                 string fieldName, 
-                string title)
+                string title, 
+                bool show, 
+                bool showInList)
         {
+            this.ShowInList = showInList;
+            this.Show = show;
             this.Title = title;
             this.FieldName = fieldName;
         }
@@ -17,5 +21,9 @@
 
         [NotNullAndEmpty]
         public string Title { get; private set; }
+
+        public bool Show { get; private set; }
+
+        public bool ShowInList { get; private set; }
     }
 }

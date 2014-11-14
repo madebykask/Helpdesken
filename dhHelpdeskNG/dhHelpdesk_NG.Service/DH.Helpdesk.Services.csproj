@@ -64,6 +64,7 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\Orders\CreateMissingOrderFieldSettingsAttribute.cs" />
     <Compile Include="BusinessLogic\BusinessModelAuditors\Changes\InvitationToCabAudit.cs" />
     <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\ExcelFileComposer.cs" />
     <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\ICell.cs" />
