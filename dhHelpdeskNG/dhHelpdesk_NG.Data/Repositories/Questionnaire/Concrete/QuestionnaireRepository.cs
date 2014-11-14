@@ -28,7 +28,7 @@
             var questionnaireEntity = new QuestionnaireEntity
             {
                 QuestionnaireName = questionnaire.Name,
-                QuestionnaireDescription = questionnaire.Description,
+                QuestionnaireDescription = questionnaire.Description ?? string.Empty,
                 Customer_Id = questionnaire.CustomerId,
                 CreatedDate = questionnaire.CreatedDate
             };
@@ -107,7 +107,7 @@
             var questionnaireEntity = this.DbContext.Questionnaires.Find(questionnaire.Id);
 
             questionnaireEntity.QuestionnaireName = questionnaire.Name;
-            questionnaireEntity.QuestionnaireDescription = questionnaire.Description;
+            questionnaireEntity.QuestionnaireDescription = questionnaire.Description ?? string.Empty;
             questionnaireEntity.ChangedDate = questionnaire.ChangedDate;
         }
 

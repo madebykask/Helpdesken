@@ -588,12 +588,16 @@
         [HttpPost]
         public ActionResult NewCircular(NewCircularModel newCircular, int[] connectedCases)
         {
+            var cases = connectedCases == null || connectedCases.Count() == 0
+                            ? new List<int>()
+                            : connectedCases.ToList();
+
             var circular = new CircularForInsert(
                 newCircular.CircularName,
                 newCircular.QuestionnaireId,
                 CircularStateId.ReadyToSend,
                 DateTime.Now,
-                connectedCases.ToList());
+                cases);
 
             this._circularService.AddCircular(circular);
 

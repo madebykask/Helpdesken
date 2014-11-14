@@ -1,7 +1,4 @@
-﻿
-@model DH.Helpdesk.Web.Models.Questionnaire.Input.EditQuestionnaireModel
-
-
+﻿@model DH.Helpdesk.Web.Models.Questionnaire.Input.EditQuestionnaireModel
 @{
     ViewBag.Title = "EditQuestionnaire";
 }
@@ -17,20 +14,23 @@
                     <input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn" />
                 </li>
                 <li>
-                    @Html.ActionLink(Translation.Get("Ny", Enums.TranslationSource.TextTranslation) + " " + 
+                    @Html.ActionLink(Translation.Get("Ny", Enums.TranslationSource.TextTranslation) + " " +
                                      Translation.Get("Fråga", Enums.TranslationSource.TextTranslation),
-                                     "NewQuestionnaireQuestion", "Questionnaire", new {questionnaireId  = Model.Id, languageId = Model.LanguageId}, new { @class = "btn" } )
-                </li>                
+                                     "NewQuestionnaireQuestion", "Questionnaire", new { questionnaireId = Model.Id, languageId = Model.LanguageId }, new { @class = "btn" })
+                </li>
                 <li>
-                    @Html.ActionLink(Translation.Get("Förhandsgranska", Enums.TranslationSource.TextTranslation) ,
-                        "PreviewQuestionnaire", "Questionnaire", new {questionnaireId  = Model.Id, languageId = Model.LanguageId}, new { @class = "btn", target = "_blank" } )
+                    @Html.ActionLink(Translation.Get("Förhandsgranska", Enums.TranslationSource.TextTranslation),
+                        "PreviewQuestionnaire", "Questionnaire", new { questionnaireId = Model.Id, languageId = Model.LanguageId }, new { @class = "btn", target = "_blank" })
                 </li>
                 <li>
                     @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteQuestionnaire",
-                        new { questionnaireId = Model.Id},
-                        new { @class = "btn deleteDialog", 
-                            deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post" , 
-                                Enums.TranslationSource.TextTranslation) + "?"}) 
+                        new { questionnaireId = Model.Id },
+                        new
+                        {
+                            @class = "btn deleteDialog",
+                            deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post",
+                                Enums.TranslationSource.TextTranslation) + "?"
+                        })
                 </li>
                 <li>
                     @Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", "Questionnaire", new { @class = "btn" })
@@ -58,8 +58,8 @@
                                             @Translation.Get("Språk", Enums.TranslationSource.TextTranslation):
                                         </td>
                                         <td class="span9">
-                                            @Html.DropDownListFor(model => model.LanguageId, Model.Languages,new {id = "languageList"})                                            
-                                        </td> 
+                                            @Html.DropDownListFor(model => model.LanguageId, Model.Languages, new { id = "languageList" })
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td class="span3">
@@ -67,7 +67,8 @@
                                         </td>
                                         <td class="span9">
                                             @Html.TextBoxFor(model => model.Name)
-                                        </td> 
+                                            @Html.ValidationMessageFor(model => model.Name)
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td class="span3">
@@ -75,19 +76,20 @@
                                         </td>
                                         <td class="span9">
                                             @Html.TextAreaFor(model => model.Description, new { maxlength = "2000", style = "height:100px;" })
-                                        </td> 
+                                        </td>
                                     </tr>
                                 </table>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div> <!-- Questionnaire -->                   
+            </div>
+            <!-- Questionnaire -->
             @if (Model.Questions != null)
             {
                 @this.Html.Partial("_QuestionnaireQuestionsOverview", Model);
             }
-            
+
         </div>
     </div>        
 }

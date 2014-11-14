@@ -25,7 +25,6 @@
 
         public int CustomerId { get; private set; }
 
-        [NotNullAndEmpty]
         public string Description { get; private set; }
 
         [IsId]

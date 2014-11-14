@@ -22,7 +22,6 @@
         [NotNullAndEmpty]
         public string Name { get; private set; }
 
-        [NotNullAndEmpty]
         public string Description { get; private set; }
         
         public int LanguageId { get; private set; }

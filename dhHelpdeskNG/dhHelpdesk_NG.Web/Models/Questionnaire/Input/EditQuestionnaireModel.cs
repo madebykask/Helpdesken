@@ -33,12 +33,11 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
         [IsId]
         public int Id { get; set; }
 
-        [Required]
+        [LocalizedRequired]
         [LocalizedStringLength(100)]
         [LocalizedDisplay("Name")]
         public string Name { get; set; }
 
-        [Required]
         [LocalizedDisplay("Description")]
         public string Description { get; set; }
 
