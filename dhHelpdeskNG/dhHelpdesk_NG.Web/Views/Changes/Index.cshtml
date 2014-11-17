@@ -33,10 +33,10 @@
     <div class="pull-left">
         <ul class="secnav">
             <li>
-                @Html.ActionLink(Translation.Get("New Change"), "New", "Changes", new { id = "new_change_button", @class = "btn", style = newChangeButtonStyle })
+                @Html.ActionLink(Translation.Get("Ny ändring"), "New", "Changes", new { id = "new_change_button", @class = "btn", style = newChangeButtonStyle })
             </li>
             <li>
-                @Html.ActionLink("Export to Excel", "ExportChangesGridToExcelFile", "Changes", new { id = "export_to_excel_file_button", @class = "btn", style = newChangeButtonStyle })
+                @Html.ActionLink("Excel", "ExportChangesGridToExcelFile", "Changes", new { id = "export_to_excel_file_button", @class = "btn", style = newChangeButtonStyle })
             </li>
             <li>
                 <a id="save_settings_button" class="btn" style="@saveSettingsButtonStyle">@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)</a>
@@ -49,10 +49,10 @@
     <div class="container">
         <ul class="nav nav-tabs">
             <li id="changes_tab" class="@changesTabClass">
-                <a href="#fragment-2">@Translation.Get("Changes", Enums.TranslationSource.TextTranslation)</a>
+                <a href="#fragment-2">@Translation.Get("Ändringshantering", Enums.TranslationSource.TextTranslation)</a>
             </li>
             <li id="settings_tab" class="@settingsTabClass">
-                <a href="#fragment-4">@Translation.Get("Settings", Enums.TranslationSource.TextTranslation)</a>
+                <a href="#fragment-4">@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</a>
             </li>
         </ul>
         <div class="tab-content">

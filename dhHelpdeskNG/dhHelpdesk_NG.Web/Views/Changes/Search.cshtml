@@ -20,7 +20,7 @@
         @if (Model.Statuses.Show)
         {
             <tr>
-                <td class="span3">@Translation.Get(Model.Statuses.Caption, Enums.TranslationSource.TextTranslation)</td>
+                <td class="span3">@Translation.Get("Visa", Enums.TranslationSource.TextTranslation)</td>
                 <td>@Html.DropDownListFor(m => m.StatusIds, Model.Statuses.Value, new { id = "statuses_dropdown", multiple = "multiple", @class = "chosen-select", data_placeholder = Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation) })</td>
             </tr>
         }
@@ -93,7 +93,7 @@
                 &nbsp;
             </td>
             <td>
-                <input id="srch" type="submit" onclick="ResetPaging()" value="@Translation.Get("Search", Enums.TranslationSource.TextTranslation)" class="btn" />                
+                <input id="srch" type="submit" onclick="ResetPaging()" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" class="btn" />                
             </td>
         </tr>
     </table>
