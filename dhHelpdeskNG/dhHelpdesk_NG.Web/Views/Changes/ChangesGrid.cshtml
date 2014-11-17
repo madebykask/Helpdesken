@@ -127,7 +127,9 @@
 <script>
 
     $(document).ready(function () {
-        InitDataTable("Change_Table");
+        var perPageText = '@Translation.Get("Antal per sida",Enums.TranslationSource.TextTranslation)';
+        var perShowingText = '@Translation.Get("Visar sida",Enums.TranslationSource.TextTranslation)'; 
+        InitDataTable("Change_Table", perPageText, perShowingText);
     });
 
 </script>

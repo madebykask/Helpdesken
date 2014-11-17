@@ -74,7 +74,7 @@
         </tr>
         <tr>
             <td class="span3">
-                @Html.LabelFor(m => m.Status)
+                @Html.Label(Translation.Get("Visa", Enums.TranslationSource.TextTranslation))
             </td>
             <td>
                 @Html.DropDownListFor(m => m.StatusValue, Model.Status)

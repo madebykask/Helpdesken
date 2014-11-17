@@ -1,5 +1,6 @@
 ﻿var dhHelpdesk = {};
 
+
 //Start FAQ Acordion
 
 //tabbar
@@ -1059,7 +1060,7 @@ function DestroyDataTable(tableUniqId) {
     oTable.destroy();
 };
 
-function InitDataTable(tableUniqId) {
+function InitDataTable(tableUniqId, perText, showingText) {
     //alert('init: ' + tableUniqId);
 
     $('#' + tableUniqId).dataTable({
@@ -1068,8 +1069,8 @@ function InitDataTable(tableUniqId) {
         "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
         "sPaginationType": "bootstrap",
         "oLanguage": {
-            "sLengthMenu": "_MENU_ records per page",
-            "sInfo": "Showing page _PAGE_ of _PAGES_",
+            "sLengthMenu": "_MENU_ " + perText ,
+            "sInfo": showingText + " _PAGE_ / _PAGES_",
             "oPaginate": {
                 "sFirst": "First",
                 "sLast": "Last",
