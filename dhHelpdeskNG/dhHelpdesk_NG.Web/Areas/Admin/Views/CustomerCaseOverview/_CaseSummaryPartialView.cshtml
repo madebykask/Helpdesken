@@ -34,7 +34,7 @@
                                     {
                                         if (cfs.Name != "Filename" && cfs.Name != "text_internal" && cfs.Name != "tblLog.Text_External" && cfs.Name != "tblLog.Text_Internal" && cfs.Name != "tblLog.Charge" && cfs.Name != "tblLog.Filename")
                                         {
-                                        <option id="label" value="@cfs.Name">@(cfs.Label == null? Translation.Get(cfs.Name, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id) : cfs.Label)</option>  
+                                        <option id="label" value="@cfs.Name">@(string.IsNullOrEmpty(cfs.Label)? Translation.Get(cfs.Name, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id) : cfs.Label)</option>  
                                         }
                                     }
                                     <option value="">--------------------------</option>
@@ -77,7 +77,7 @@
                                     @*<option></option>*@
                                     @foreach (var cfs in Model.CaseFieldSettingLanguages)
                                     {   
-                                        <option id="labels" value="@cfs.Id" @(cfs.Name.ToUpper() == Model.CaseSettings[i].Name.ToUpper() ? "selected=selected" : "")>@cfs.Label</option>                              
+                                        <option id="labels" value="@cfs.Id" @(cfs.Name.ToUpper() == Model.CaseSettings[i].Name.ToUpper() ? "selected=selected" : "")>@(cfs.Label==null? Translation.Get(cfs.Name, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id): cfs.Label)</option>                              
                                     }
                                 </select>
                             </td> 

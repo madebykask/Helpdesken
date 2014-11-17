@@ -143,13 +143,13 @@
 
         public bool IsSettingsModulesVisible()
         {
-            return
-                this.IsOrderVisible() ||
-                this.IsAccountVisible() ||
-                this.IsCheckListVisuble() ||                
+            return                
                 this.IsInventoryVisible() ||
                 this.IsLicenseVisible();
 
+            //this.IsOrderVisible() ||
+            //this.IsAccountVisible() ||
+            //this.IsCheckListVisuble() ||                
             //this.IsPlanningVisible() ||                
             //this.IsQuestionVisible() ||                                                
             //this.IsComputerUserVisible();
@@ -161,7 +161,7 @@
                 this.IsBulletinBoardVisible() ||
                 this.IsFaqVisible() ||
                 this.IsCalendarVisible() ||
-                //this.IsQuestionnaireVisible() ||
+                this.IsQuestionnaireVisible() ||
                 this.IsDocumentVisible();                
         }
 
@@ -180,8 +180,8 @@
                 this.IsCaseSolutionVisible() ||
                 this.IsComputerUserVisible() ||
                 this.IsChangeManagementVisible() ||
-                this.IsProblemVisible();
-                //this.IsProjectVisible();
+                this.IsProblemVisible() ||
+                this.IsProjectVisible();
         }
     }
 }

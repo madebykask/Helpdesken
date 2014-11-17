@@ -152,12 +152,12 @@
                                                 @Translation.Get("Aktuellt")</a></li>
                                     }    
                                                                     
-                                    @*@if (model.IsQuestionnaireVisible())
+                                    @if (model.IsQuestionnaireVisible())
                                     {                                    
                                         <li><a href="@Url.Action("index", "questionnaire", new { area = "" })">
                                                 <img src="@Url.Content("~/Content/icons/questionnaire.png")" />
                                                 @Translation.Get("Enkät")</a></li>
-                                    }      *@                              
+                                    }      
 
                                     @if (model.IsDocumentVisible())
                                     {                                    
@@ -181,7 +181,7 @@
                                     <i class="icon-chevron-down icon-white"></i>
                                 </a>
                                 <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">                                    
-                                    @if (model.IsOrderVisible())
+                                    @*@if (model.IsOrderVisible())
                                     {    
                                         <li><a href="@Url.Action("Index", "Orders", new { area = "Orders" })">
                                                 <img src="@Url.Content("~/Content/icons/order.png")" />
@@ -200,7 +200,7 @@
                                                 <img src="@Url.Content("~/Content/icons/checklist.png")" />
                                                 @Translation.Get("Checklista")</a></li>
                                     }   
-                                                                      
+                                                                      *@
                                     
                                     @if (model.IsInventoryVisible())
                                     {    

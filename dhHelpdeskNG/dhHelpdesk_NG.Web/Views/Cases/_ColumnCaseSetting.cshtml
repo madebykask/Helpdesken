@@ -37,7 +37,7 @@
                                                 {
                                                     if (cfs.Name != "Filename" && cfs.Name != "text_internal" && cfs.Name != "tblLog.Text_External" && cfs.Name != "tblLog.Text_Internal" && cfs.Name != "tblLog.Charge" && cfs.Name != "tblLog.Filename")
                                                     {
-                                                        <option id="label" value="@cfs.Name">@(cfs.Label==null? Translation.Get(cfs.Name, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id): cfs.Label)</option>  
+                                                        <option id="label" value="@cfs.Name">@(string.IsNullOrEmpty(cfs.Label)? Translation.Get(cfs.Name, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id): cfs.Label)</option>  
                                                     }
                                                 }
                                         </select>
@@ -73,7 +73,7 @@
                                                 <select style="width: 190px;" id="_dellabellist" disabled="disabled">                                                    
                                                     @foreach (var cfs in Model.CaseFieldSettingLanguages)
                                                     {                                                    
-                                                        <option value="@cfs.Id" @(cfs.Name.ToUpper() == uc.Name.ToUpper() ? "selected=selected" : "")>@(cfs.Label==null?cfs.Name:cfs.Label)</option>
+                                                        <option value="@cfs.Id" @(cfs.Name.ToUpper() == uc.Name.ToUpper() ? "selected=selected" : "")>@(string.IsNullOrEmpty(cfs.Label)? Translation.Get(cfs.Name, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id): cfs.Label)</option>
                                                     }                                                    
                                                 </select>
                                             </td> 
@@ -96,8 +96,7 @@
                                             @Html.HiddenFor(model => uc.Id)
                                             @Html.HiddenFor(model => uc.Name)
                                             @Html.HiddenFor(model => uc.UserGroup)
-                                            <button class="btn"
-                                                   onclick="deleteCaseSettingRow(@uc.Id)" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"><i class="icon-remove"></i></button>
+                                            <button class="btn btn-danger" type="button" style="color: teal" onclick="deleteCaseSettingRow(@uc.Id)" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"><i class="icon-remove"></i></button>
                                             <input type="hidden" id="deleteCaseSettingsId" value="@uc.Id" />
                                             <input type="hidden" id="userGroup" value="@uc.UserGroup" />                                                                                         
                                         </td>
@@ -116,7 +115,7 @@
 <script type="text/javascript">       
 
     function addCaseSettingRow() {                       
-        $.post('/cases/AddCaseSettingColumn/' + '?customerId=' + @Model.CustomerId.ToString() + '&userId=' + @Model.UserId.ToString() + 
+        $.post('/cases/AddCaseSettingColumn/' + '?customerId=' + '@Model.CustomerId.ToString()' + '&userId=' + '@Model.UserId.ToString()' + 
             '&labellist=' + $("#labellist").val() + '&linelist=' + $("#linelist").val() +
             '&minWidthValue=' + $("#minWidthValue").val() + '&colOrderValue=' + $("#colOrderValue").val() + '&userGroup= 4 ' , function (result) {
                 $("#colsetting_result").html(result);
@@ -124,7 +123,7 @@
     }
 
     function deleteCaseSettingRow(id) {                
-        $.post('/cases/DeleteRowFromCaseSettings/' + id + '?userId=' + @Model.UserId.ToString() + '&customerId=' + @Model.CustomerId.ToString() , 
+        $.post('/cases/DeleteRowFromCaseSettings/' + id + '?userId=' + '@Model.UserId.ToString()' + '&customerId=' + '@Model.CustomerId.ToString()', 
                function(result) {$("#colsetting_result").html(result);}
               );
     }
