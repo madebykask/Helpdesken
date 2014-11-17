@@ -6,7 +6,7 @@
     {
         protected Account(
             Orderer orderer,
-            Orderer user,
+            User user,
             AccountInformation accountInformation,
             DeliveryInformation deliveryInformation,
             Program program,
@@ -22,7 +22,7 @@
 
         public Orderer Orderer { get; private set; }
 
-        public Orderer User { get; private set; }
+        public User User { get; private set; }
 
         public AccountInformation AccountInformation { get; private set; }
 

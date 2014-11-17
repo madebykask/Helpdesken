@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\AllowReadAttribute.cs" />
+    <Compile Include="Enums\Accounts\AccountFields.cs" />
     <Compile Include="Enums\Changes\Fields\AnalyzeField.cs" />
     <Compile Include="Enums\Changes\Fields\EvaluationField.cs" />
     <Compile Include="Enums\Changes\Fields\GeneralField.cs" />
@@ -122,6 +123,22 @@
     <Compile Include="Models\Orders\Index\FieldSettingsOverview\UserFieldSettingsOverview.cs" />
     <Compile Include="Enums\Users\Module.cs" />
     <Compile Include="Models\Accounts\Account.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Write\Account.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Write\AccountFieldsSettingsForInsert.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Write\AccountFieldsSettingsForUpdate.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Write\AccountInformationFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Write\ContactFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Write\DeliveryInformationFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Write\FieldSetting.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Write\FieldSettingMultipleChoices.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Write\OrdererFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Write\OtherFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Write\ProgramFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Write\UserFieldSettings.cs" />
+    <Compile Include="Models\Accounts\Read\AccountForEdit.cs" />
+    <Compile Include="Models\Accounts\Write\AccountForInsert.cs" />
+    <Compile Include="Models\Accounts\Write\AccountForUpdate.cs" />
+    <Compile Include="Models\Accounts\Write\AccountForWrite.cs" />
     <Compile Include="Models\Accounts\AccountInformation.cs" />
     <Compile Include="Models\Accounts\Contact.cs" />
     <Compile Include="Models\Accounts\DeliveryInformation.cs" />
@@ -716,7 +733,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\Accounts\AccountSettings\Read\" />
-    <Folder Include="Models\Accounts\AccountSettings\Write\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\PostSharp.3.1.33\tools\PostSharp.targets" Condition="Exists('..\packages\PostSharp.3.1.33\tools\PostSharp.targets')" />

@@ -18,6 +18,7 @@
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ServerFieldSettings;
     using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport.ExcelExport;
     using DH.Helpdesk.Services.DisplayValues;
     using DH.Helpdesk.Services.DisplayValues.Inventory;
     using DH.Helpdesk.Services.Response.Inventory;
@@ -1421,7 +1422,7 @@
         {
             if (sortFieldModel.SortBy.HasValue)
             {
-                var displayValueComparer = new InventoryOverviewModelComparer(sortFieldModel.Name);
+                var displayValueComparer = new RowCellModelComparer(sortFieldModel.Name);
                 var sortedModels = new List<InventoryOverviewModel>();
 
                 switch (sortFieldModel.SortBy)
@@ -1440,19 +1441,19 @@
             return models;
         }
 
-        private class InventoryOverviewModelComparer : IComparer<InventoryOverviewModel>
+        private class RowCellModelComparer : IComparer<IRow<ICell>>
         {
             private readonly string fieldName;
 
-            public InventoryOverviewModelComparer(string fieldName)
+            public RowCellModelComparer(string fieldName)
             {
                 this.fieldName = fieldName;
             }
 
-            public int Compare(InventoryOverviewModel x, InventoryOverviewModel y)
+            public int Compare(IRow<ICell> x, IRow<ICell> y)
             {
-                NewGridRowCellValueModel valueX = x.Fields.SingleOrDefault(m => m.FieldName.Equals(this.fieldName));
-                NewGridRowCellValueModel valueY = y.Fields.SingleOrDefault(m => m.FieldName.Equals(this.fieldName));
+                ICell valueX = x.Fields.SingleOrDefault(m => m.FieldName.Equals(this.fieldName));
+                ICell valueY = y.Fields.SingleOrDefault(m => m.FieldName.Equals(this.fieldName));
 
                 if (valueX == null && valueY == null)
                 {
