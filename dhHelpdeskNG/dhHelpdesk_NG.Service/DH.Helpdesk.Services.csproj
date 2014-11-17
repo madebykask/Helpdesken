@@ -113,7 +113,9 @@
     <Compile Include="BusinessLogic\Mappers\OperationLogs\OperationLogMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\Data\OrdersFieldSettingsOverviewMapData.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\OrderFieldSettingsMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Orders\OrderFieldSettingsOverviewMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\OrderMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Orders\OrderOverviewMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Problems\ProblemMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Questionnaire\CircularPartMappers.cs" />
     <Compile Include="BusinessLogic\Mappers\Questionnaire\QuestionnaireQuestionResultMappers.cs" />

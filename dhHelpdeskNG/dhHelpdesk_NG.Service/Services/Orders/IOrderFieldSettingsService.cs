@@ -1,10 +1,11 @@
 ﻿namespace DH.Helpdesk.Services.Services.Orders
 {
     using DH.Helpdesk.BusinessData.Models.Orders.Index;
+    using DH.Helpdesk.BusinessData.Models.Orders.Index.FieldSettingsOverview;
 
     public interface IOrderFieldSettingsService
     {
-        OrdersFieldSettingsOverview GetOrdersFieldSettingsOverview(
+        FullFieldSettingsOverview GetOrdersFieldSettingsOverview(
                                 int customerId,
                                 int? orderTypeId); 
     }

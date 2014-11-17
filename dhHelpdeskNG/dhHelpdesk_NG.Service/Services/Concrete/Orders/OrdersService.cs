@@ -46,8 +46,22 @@
         public SearchResponse Search(SearchParameters parameters)
         {
             var settings = this.orderFieldSettingsService.GetOrdersFieldSettingsOverview(parameters.CustomerId, parameters.OrderTypeId);
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var orderRep = uow.GetRepository<Order>();
 
-            return new SearchResponse(settings, null);
+                var request = orderRep.GetAll().Search(
+                                    parameters.CustomerId,
+                                    parameters.OrderTypeId,
+                                    parameters.AdministratorIds,
+                                    parameters.StartDate,
+                                    parameters.EndDate,
+                                    parameters.StatusIds,
+                                    parameters.Phrase,
+                                    parameters.SortField);
+
+                return new SearchResponse(settings, null);                
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Services.Services.Concrete.Orders
 {
     using DH.Helpdesk.BusinessData.Models.Orders.Index;
+    using DH.Helpdesk.BusinessData.Models.Orders.Index.FieldSettingsOverview;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.Attributes.Orders;
@@ -18,7 +19,7 @@
         }
 
         [CreateMissingOrderFieldSettings("customerId", "orderTypeId")]
-        public OrdersFieldSettingsOverview GetOrdersFieldSettingsOverview(int customerId, int? orderTypeId)
+        public FullFieldSettingsOverview GetOrdersFieldSettingsOverview(int customerId, int? orderTypeId)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {

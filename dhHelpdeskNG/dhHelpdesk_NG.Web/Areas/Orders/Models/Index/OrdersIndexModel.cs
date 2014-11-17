@@ -8,7 +8,7 @@
     public sealed class OrdersIndexModel : BaseIndexModel
     {
         public OrdersIndexModel(
-                MultiSelectList orderTypes, 
+                SelectList orderTypes, 
                 MultiSelectList administrators, 
                 MultiSelectList statuses)
         {
@@ -19,7 +19,6 @@
 
         public OrdersIndexModel()
         {
-            this.OrderTypeIds = new int[0];
             this.AdministratorIds = new int[0];
             this.StatusIds = new int[0];
         }
@@ -33,10 +32,9 @@
         }
 
         [NotNull]
-        public MultiSelectList OrderTypes { get; private set; }
+        public SelectList OrderTypes { get; private set; }
 
-        [NotNull]
-        public int[] OrderTypeIds { get; set; }
+        public int? OrderTypeId { get; set; }
 
         [NotNull]
         public MultiSelectList Administrators { get; private set; }
@@ -58,7 +56,7 @@
         public OrdersFilterModel GetFilter()
         {
             return new OrdersFilterModel(
-                                    this.OrderTypeIds,
+                                    this.OrderTypeId,
                                     this.AdministratorIds,
                                     this.StartDate,
                                     this.EndDate,

@@ -1,11 +1,10 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Orders.Index
+﻿namespace DH.Helpdesk.BusinessData.Models.Orders.Index.FieldSettingsOverview
 {
-    using DH.Helpdesk.BusinessData.Models.Orders.Index.FieldSettingsOverview;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class OrdersFieldSettingsOverview
+    public sealed class FullFieldSettingsOverview
     {
-        public OrdersFieldSettingsOverview(
+        public FullFieldSettingsOverview(
                 DeliveryFieldSettingsOverview delivery, 
                 GeneralFieldSettingsOverview general, 
                 LogFieldSettingsOverview log, 

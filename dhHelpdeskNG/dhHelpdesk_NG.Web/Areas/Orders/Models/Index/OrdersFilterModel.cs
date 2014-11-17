@@ -7,7 +7,7 @@
     public sealed class OrdersFilterModel
     {
         public OrdersFilterModel(
-                int[] orderTypeIds, 
+                int? orderTypeId, 
                 int[] administratiorIds, 
                 DateTime? startDate, 
                 DateTime? endDate, 
@@ -19,18 +19,16 @@
             this.EndDate = endDate;
             this.StartDate = startDate;
             this.AdministratiorIds = administratiorIds;
-            this.OrderTypeIds = orderTypeIds;
+            this.OrderTypeId = orderTypeId;
         }
 
         private OrdersFilterModel()
         {
-            this.OrderTypeIds = new int[0];
             this.AdministratiorIds = new int[0];
             this.StatusIds = new int[0];
         }
 
-        [NotNull]
-        public int[] OrderTypeIds { get; private set; }
+        public int? OrderTypeId { get; private set; }
 
         [NotNull]
         public int[] AdministratiorIds { get; private set; }

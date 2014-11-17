@@ -3,18 +3,19 @@
     using System;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.Domain;
 
     public static class OrderSpecifications
     {
-        public static IQueryable<Order> GetByTypes(this IQueryable<Order> query, int[] orderTypeIds)
+        public static IQueryable<Order> GetByType(this IQueryable<Order> query, int? orderTypeId)
         {
-            if (orderTypeIds == null || !orderTypeIds.Any())
+            if (!orderTypeId.HasValue)
             {
                 return query;
             }
 
-            query = query.Where(o => orderTypeIds.Contains(o.OrderType_Id));
+            query = query.Where(o => o.OrderType_Id == orderTypeId);
 
             return query;
         }
@@ -82,23 +83,25 @@
             return query;
         } 
 
-        public static IQueryable<Order> GetForList(
+        public static IQueryable<Order> Search(
                         this IQueryable<Order> query,
                         int customerId,
-                        int[] orderTypeIds,
+                        int? orderTypeId,
                         int[] administratorIds,
                         DateTime? startDate,
                         DateTime? endDate,
                         int[] statusIds,
-                        string text)
+                        string text,
+                        SortField sort)
         {
             query = query
                         .GetByCustomer(customerId)
-                        .GetByTypes(orderTypeIds)
+                        .GetByType(orderTypeId)
                         .GetByAdministrators(administratorIds)
                         .GetByPeriod(startDate, endDate)
                         .GetByStatuses(statusIds)
-                        .GetByText(text);
+                        .GetByText(text)
+                        .Sort(sort);
 
             return query;
         }
@@ -117,6 +120,12 @@
                     .Where(s => s.IsActive == 1);
 
             return query;
-        } 
+        }
+
+
+        public static IQueryable<Order> Sort(this IQueryable<Order> query, SortField sort)
+        {
+            return query;
+        }
     }
 }

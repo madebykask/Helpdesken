@@ -1,11 +1,12 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Orders.Index
 {
+    using DH.Helpdesk.BusinessData.Models.Orders.Index.FieldSettingsOverview;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class SearchResponse
     {
         public SearchResponse(
-                OrdersFieldSettingsOverview overviewSettings, 
+                FullFieldSettingsOverview overviewSettings, 
                 SearchResult searchResult)
         {
             this.SearchResult = searchResult;
@@ -13,7 +14,7 @@
         }
 
         [NotNull]
-        public OrdersFieldSettingsOverview OverviewSettings { get; private set; }
+        public FullFieldSettingsOverview OverviewSettings { get; private set; }
 
         [NotNull]
         public SearchResult SearchResult { get; private set; }
