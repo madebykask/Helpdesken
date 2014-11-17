@@ -1,0 +1,62 @@
+﻿namespace DH.Helpdesk.BusinessData.Models.Orders.Index
+{
+    using DH.Helpdesk.BusinessData.Models.Orders.Index.FieldSettingsOverview;
+    using DH.Helpdesk.Common.ValidationAttributes;
+
+    public sealed class OrdersFieldSettingsOverview
+    {
+        public OrdersFieldSettingsOverview(
+                DeliveryFieldSettingsOverview delivery, 
+                GeneralFieldSettingsOverview general, 
+                LogFieldSettingsOverview log, 
+                OrdererFieldSettingsOverview orderer, 
+                OrderFieldSettingsOverview order, 
+                OtherFieldSettingsOverview other, 
+                ProgramFieldSettingsOverview program, 
+                ReceiverFieldSettingsOverview receiver, 
+                SupplierFieldSettingsOverview supplier, 
+                UserFieldSettingsOverview user)
+        {
+            this.User = user;
+            this.Supplier = supplier;
+            this.Receiver = receiver;
+            this.Program = program;
+            this.Other = other;
+            this.Order = order;
+            this.Orderer = orderer;
+            this.Log = log;
+            this.General = general;
+            this.Delivery = delivery;
+        }
+
+        [NotNull]
+        public DeliveryFieldSettingsOverview Delivery { get; private set; }
+
+        [NotNull]
+        public GeneralFieldSettingsOverview General { get; private set; }
+
+        [NotNull]
+        public LogFieldSettingsOverview Log { get; private set; }
+
+        [NotNull]
+        public OrdererFieldSettingsOverview Orderer { get; private set; }
+
+        [NotNull]
+        public OrderFieldSettingsOverview Order { get; private set; }
+
+        [NotNull]
+        public OtherFieldSettingsOverview Other { get; private set; }
+
+        [NotNull]
+        public ProgramFieldSettingsOverview Program { get; private set; }
+
+        [NotNull]
+        public ReceiverFieldSettingsOverview Receiver { get; private set; }
+
+        [NotNull]
+        public SupplierFieldSettingsOverview Supplier { get; private set; }
+
+        [NotNull]
+        public UserFieldSettingsOverview User { get; private set; }
+    }
+}

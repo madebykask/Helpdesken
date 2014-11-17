@@ -100,6 +100,16 @@
     <Compile Include="Enums\Notifiers\OrdererField.cs" />
     <Compile Include="Enums\Notifiers\OrganizationField.cs" />
     <Compile Include="Enums\Notifiers\StateField.cs" />
+    <Compile Include="Models\Orders\Index\FieldSettingsOverview\DeliveryFieldSettingsOverview.cs" />
+    <Compile Include="Models\Orders\Index\FieldSettingsOverview\GeneralFieldSettingsOverview.cs" />
+    <Compile Include="Models\Orders\Index\FieldSettingsOverview\LogFieldSettingsOverview.cs" />
+    <Compile Include="Models\Orders\Index\FieldSettingsOverview\OrdererFieldSettingsOverview.cs" />
+    <Compile Include="Models\Orders\Index\FieldSettingsOverview\OrderFieldSettingsOverview.cs" />
+    <Compile Include="Models\Orders\Index\FieldSettingsOverview\OtherFieldSettingsOverview.cs" />
+    <Compile Include="Models\Orders\Index\FieldSettingsOverview\ProgramFieldSettingsOverview.cs" />
+    <Compile Include="Models\Orders\Index\FieldSettingsOverview\ReceiverFieldSettingsOverview.cs" />
+    <Compile Include="Models\Orders\Index\FieldSettingsOverview\SupplierFieldSettingsOverview.cs" />
+    <Compile Include="Models\Orders\Index\FieldSettingsOverview\UserFieldSettingsOverview.cs" />
     <Compile Include="Enums\Users\Module.cs" />
     <Compile Include="Models\Accounts\Account.cs" />
     <Compile Include="Models\Accounts\AccountInformation.cs" />
@@ -135,6 +145,10 @@
     <Compile Include="Enums\Orders\Fields\ReceiverFields.cs" />
     <Compile Include="Enums\Orders\Fields\SupplierFields.cs" />
     <Compile Include="Enums\Orders\Fields\UserFields.cs" />
+    <Compile Include="Models\Orders\Index\OrdersFieldSettingsOverview.cs" />
+    <Compile Include="Models\Orders\Index\SearchParameters.cs" />
+    <Compile Include="Models\Orders\Index\SearchResponse.cs" />
+    <Compile Include="Models\Orders\Index\SearchResult.cs" />
     <Compile Include="Models\Orders\OrderSettings\OrderFieldSettingsOverview.cs" />
     <Compile Include="Models\Orders\Index\OrdersFilterData.cs" />
     <Compile Include="Models\Questionnaire\Participant.cs" />

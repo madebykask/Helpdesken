@@ -5,5 +5,7 @@
     public interface IOrdersService
     {
         OrdersFilterData GetOrdersFilterData(int customerId);
+
+        SearchResponse Search(SearchParameters parameters);
     }
 }
