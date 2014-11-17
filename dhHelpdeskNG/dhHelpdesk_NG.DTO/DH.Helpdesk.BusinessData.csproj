@@ -100,6 +100,16 @@
     <Compile Include="Enums\Notifiers\OrdererField.cs" />
     <Compile Include="Enums\Notifiers\OrganizationField.cs" />
     <Compile Include="Enums\Notifiers\StateField.cs" />
+    <Compile Include="Enums\Orders\FieldNames\DeliveryFieldNames.cs" />
+    <Compile Include="Enums\Orders\FieldNames\GeneralFieldNames.cs" />
+    <Compile Include="Enums\Orders\FieldNames\LogFieldNames.cs" />
+    <Compile Include="Enums\Orders\FieldNames\OrdererFieldNames.cs" />
+    <Compile Include="Enums\Orders\FieldNames\OrderFieldNames.cs" />
+    <Compile Include="Enums\Orders\FieldNames\OtherFieldNames.cs" />
+    <Compile Include="Enums\Orders\FieldNames\ProgramFieldNames.cs" />
+    <Compile Include="Enums\Orders\FieldNames\ReceiverFieldNames.cs" />
+    <Compile Include="Enums\Orders\FieldNames\SupplierFieldNames.cs" />
+    <Compile Include="Enums\Orders\FieldNames\UserFieldNames.cs" />
     <Compile Include="Models\Orders\Index\FieldSettingsOverview\DeliveryFieldSettingsOverview.cs" />
     <Compile Include="Models\Orders\Index\FieldSettingsOverview\GeneralFieldSettingsOverview.cs" />
     <Compile Include="Models\Orders\Index\FieldSettingsOverview\LogFieldSettingsOverview.cs" />
