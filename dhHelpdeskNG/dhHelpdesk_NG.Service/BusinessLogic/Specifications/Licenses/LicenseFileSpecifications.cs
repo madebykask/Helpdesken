@@ -22,8 +22,24 @@
             query = query.Where(f => f.License_Id == licenseId && f.FileName == fileName);
 
             return query;
+        }
+
+        public static IQueryable<LicenseFile> GetLicenseFile(
+                                       this IQueryable<LicenseFile> query,
+                                       int licenseId,
+                                       string[] fileNames)
+        {
+            if (fileNames == null || !fileNames.Any())
+            {
+                return query;
+            }
+
+            query = query.Where(f => f.License_Id == licenseId && fileNames.Contains(f.FileName));
+
+            return query;
         }  
-        
+                
+
         public static IQueryable<LicenseFile> GetLicenseFileExclude(
                                 this IQueryable<LicenseFile> query,
                                 int licenseId,

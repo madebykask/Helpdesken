@@ -19,5 +19,7 @@
         bool FileExists(int licenseId, string fileName);
 
         List<string> FindFileNamesExcludeSpecified(int licenseId, List<string> excludeFiles);
+
+        string[] GetLicenseFileNames(int licenseId);
     }
 }

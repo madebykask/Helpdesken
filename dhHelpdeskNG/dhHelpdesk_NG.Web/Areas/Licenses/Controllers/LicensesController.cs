@@ -83,6 +83,22 @@
             var data = this.licensesService.GetLicenseData(
                                             this.workContext.Customer.CustomerId,
                                             licenseId);
+
+            if (licenseId.HasValue)
+            {
+                var filesInDb = this.licensesService.GetLicenseFileNames(licenseId.Value);
+                var filesOnDisc = this.filesStore.FindFiles(licenseId.Value).Select(f => f.Name).ToArray();
+                foreach (var fileOnDisc in filesOnDisc)
+                {
+                    if (!filesInDb.Contains(fileOnDisc))
+                    {
+                        this.filesStore.DeleteFile(fileOnDisc, licenseId.Value);
+                    } 
+                }
+
+                this.filesStateStore.ClearObjectDeletedFiles(licenseId.Value);
+            }  
+
             var model = this.licensesModelFactory.GetEditModel(data);
             return this.View(model);
         }
@@ -91,7 +107,16 @@
         [BadRequestOnNotValid]
         public RedirectToRouteResult License(LicenseEditModel model, string entityId)
         {
-            model.NewFiles = this.filesStore.FindFiles(entityId);
+            if (GuidHelper.IsGuid(entityId))
+            {
+                model.NewFiles = this.filesStore.FindFiles(entityId);
+            }
+            else
+            {
+                var filesInDb = this.licensesService.GetLicenseFileNames(model.Id);
+                model.NewFiles = this.filesStore.FindFiles(entityId).Where(f => !filesInDb.Contains(f.Name)).ToList();
+            }
+            
             model.DeletedFiles = this.filesStateStore.FindDeletedFileNames(model.Id);
             
             var license = this.licensesModelFactory.GetBusinessModel(model);

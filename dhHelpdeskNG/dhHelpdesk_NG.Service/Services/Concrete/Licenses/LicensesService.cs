@@ -187,5 +187,18 @@
                         .ToList();
             }
         }
+
+        public string[] GetLicenseFileNames(int licenseId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var licenseFileRepository = uow.GetRepository<LicenseFile>();
+
+                return licenseFileRepository.GetAll()
+                        .GetLicenseFiles(licenseId)
+                        .Select(f => f.FileName)
+                        .ToArray();
+            }
+        }
     }
 }
