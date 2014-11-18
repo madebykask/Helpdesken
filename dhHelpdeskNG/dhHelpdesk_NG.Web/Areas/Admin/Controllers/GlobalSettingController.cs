@@ -117,7 +117,7 @@
                 this._holidayService.SaveHolidayHeader(holidayheader, out errors);
 
                 if (errors.Count == 0)
-                    return this.RedirectToAction("index", "globalsetting");
+                    return this.RedirectToAction("editholiday", "globalsetting", new { id = id });
 
                 var model = this.SaveHolidayViewModel(holidayheader, viewModel.Year);
                 SessionFacade.ActiveTab = coll["activeTab"];
