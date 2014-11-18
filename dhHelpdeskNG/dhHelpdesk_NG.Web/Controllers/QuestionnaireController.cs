@@ -189,8 +189,13 @@
             _questionnaireQuestionService.AddQuestionnaireQuestion(newQuestionniareQuestion);
 
             return RedirectToAction(
-                "EditQuestionnaire",
-                new { questionnaireId = newQuestionniareQuestion.QuestionnaireId, languageId = LanguageId.Swedish });
+                "EditQuestionnaireQuestion",
+                new
+                    {
+                        questionnaireId = questionnaireQuestionModel.QuestionnaireId,
+                        questionnaireQuestionId = newQuestionniareQuestion.Id,
+                        languageId = LanguageId.Swedish
+                    });
         }
 
         [HttpGet]
