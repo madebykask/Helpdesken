@@ -16,14 +16,13 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             var general = CreateGeneral(model.GeneralFieldsModel);
             var chassis = CreateChassis(model.ChassisFieldsModel);
             var inventering = CreateInventering(model.InventoryFieldsModel);
-            var operatingSystem = CretateOperatingSystem(
-                model.OperatingSystemFieldsViewModel.OperatingSystemFieldsModel);
-            var processor = CreateProcessor(model.ProccesorFieldsViewModel.ProccesorFieldsModel);
-            var memory = CreateMemory(model.MemoryFieldsViewModel.MemoryFieldsModel);
+            var operatingSystem = CretateOperatingSystem(model.OperatingSystemFieldsViewModel);
+            var processor = CreateProcessor(model.ProccesorFieldsViewModel);
+            var memory = CreateMemory(model.MemoryFieldsViewModel);
             var storage = CreateStorage(model.StorageFieldsModel);
-            var communication = CreateCommunication(model.CommunicationFieldsViewModel.CommunicationFieldsModel);
+            var communication = CreateCommunication(model.CommunicationFieldsViewModel);
             var other = CreateOther(model.OtherFieldsModel);
-            var place = CreatePlace(model.PlaceFieldsViewModel.PlaceFieldsModel);
+            var place = CreatePlace(model.PlaceFieldsViewModel);
 
             var fieldsModel = new ServerForUpdate(
                 model.Id,
@@ -49,14 +48,13 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             var general = CreateGeneral(model.GeneralFieldsModel);
             var chassis = CreateChassis(model.ChassisFieldsModel);
             var inventering = CreateInventering(model.InventoryFieldsModel);
-            var operatingSystem = CretateOperatingSystem(
-                model.OperatingSystemFieldsViewModel.OperatingSystemFieldsModel);
-            var processor = CreateProcessor(model.ProccesorFieldsViewModel.ProccesorFieldsModel);
-            var memory = CreateMemory(model.MemoryFieldsViewModel.MemoryFieldsModel);
+            var operatingSystem = CretateOperatingSystem(model.OperatingSystemFieldsViewModel);
+            var processor = CreateProcessor(model.ProccesorFieldsViewModel);
+            var memory = CreateMemory(model.MemoryFieldsViewModel);
             var storage = CreateStorage(model.StorageFieldsModel);
-            var communication = CreateCommunication(model.CommunicationFieldsViewModel.CommunicationFieldsModel);
+            var communication = CreateCommunication(model.CommunicationFieldsViewModel);
             var other = CreateOther(model.OtherFieldsModel);
-            var place = CreatePlace(model.PlaceFieldsViewModel.PlaceFieldsModel);
+            var place = CreatePlace(model.PlaceFieldsViewModel);
 
             var fieldsModel = new ServerForInsert(
                 model.IsOperationObject,
@@ -134,18 +132,18 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             return fields;
         }
 
-        private static OperatingSystemFields CretateOperatingSystem(OperatingSystemFieldsModel fieldsModel)
+        private static OperatingSystemFields CretateOperatingSystem(OperatingSystemFieldsViewModel fieldsModel)
         {
-            if (fieldsModel == null)
+            if (fieldsModel == null || fieldsModel.OperatingSystemFieldsModel == null)
             {
                 return OperatingSystemFields.CreateDefault();
             }
 
-            var operatingSystem = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.OperatingSystemId);
-            var version = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.Version);
-            var servicePack = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.ServicePack);
-            var registrationCode = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.RegistrationCode);
-            var productKey = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.ProductKey);
+            var operatingSystem = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.OperatingSystemFieldsModel.OperatingSystemId);
+            var version = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.OperatingSystemFieldsModel.Version);
+            var servicePack = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.OperatingSystemFieldsModel.ServicePack);
+            var registrationCode = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.OperatingSystemFieldsModel.RegistrationCode);
+            var productKey = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.OperatingSystemFieldsModel.ProductKey);
 
             var fields = new OperatingSystemFields(
                 operatingSystem,
@@ -157,44 +155,44 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             return fields;
         }
 
-        private static ProcessorFields CreateProcessor(ProccesorFieldsModel fieldsModel)
+        private static ProcessorFields CreateProcessor(ProccesorFieldsViewModel fieldsModel)
         {
-            if (fieldsModel == null)
+            if (fieldsModel == null || fieldsModel.ProccesorFieldsModel == null)
             {
                 return ProcessorFields.CreateDefault();
             }
 
-            var processor = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.ProccesorId);
+            var processor = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.ProccesorFieldsModel.ProccesorId);
 
             var fields = new ProcessorFields(processor);
 
             return fields;
         }
 
-        private static MemoryFields CreateMemory(MemoryFieldsModel fieldsModel)
+        private static MemoryFields CreateMemory(MemoryFieldsViewModel fieldsModel)
         {
-            if (fieldsModel == null)
+            if (fieldsModel == null || fieldsModel.MemoryFieldsModel == null)
             {
                 return MemoryFields.CreateDefault();
             }
 
-            var memory = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.RAMId);
+            var memory = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.MemoryFieldsModel.RAMId);
 
             var fields = new MemoryFields(memory);
 
             return fields;
         }
 
-        private static CommunicationFields CreateCommunication(CommunicationFieldsModel fieldsModel)
+        private static CommunicationFields CreateCommunication(CommunicationFieldsViewModel fieldsModel)
         {
-            if (fieldsModel == null)
+            if (fieldsModel == null || fieldsModel.CommunicationFieldsModel == null)
             {
                 return CommunicationFields.CreateDefault();
             }
 
-            var networkAdapter = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.NetworkAdapterId);
-            var ipaddress = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.IPAddress);
-            var macAddress = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.MacAddress);
+            var networkAdapter = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.CommunicationFieldsModel.NetworkAdapterId);
+            var ipaddress = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.CommunicationFieldsModel.IPAddress);
+            var macAddress = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.CommunicationFieldsModel.MacAddress);
 
             var fields = new CommunicationFields(
                 networkAdapter,
@@ -222,15 +220,15 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             return fields;
         }
 
-        private static PlaceFields CreatePlace(PlaceFieldsModel fieldsModel)
+        private static PlaceFields CreatePlace(PlaceFieldsViewModel fieldsModel)
         {
-            if (fieldsModel == null)
+            if (fieldsModel == null || fieldsModel.PlaceFieldsModel == null)
             {
                 return PlaceFields.CreateDefault();
             }
 
-            var room = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.RoomId);
-            var location = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.Location);
+            var room = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.PlaceFieldsModel.RoomId);
+            var location = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.PlaceFieldsModel.Location);
 
             var fields = new PlaceFields(room, location);
 

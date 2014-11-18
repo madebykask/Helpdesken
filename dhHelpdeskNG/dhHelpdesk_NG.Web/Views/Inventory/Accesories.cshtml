@@ -1,5 +1,13 @@
 ﻿@using DH.Helpdesk.Web.Models.Inventory
-@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.AccesoriesViewModel 
+@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.AccesoriesViewModel
+@{
+    string style = string.Empty;
+    if (!Model.Inventories.Any())
+    {
+        style = "display: none;";
+    }
+}
+ 
 <script>
     $(function () {
         $('#inventory_types_dropdown').change(function () {
@@ -38,5 +46,5 @@
 @using (Html.BeginForm("ConnectInventoryToComputer", "Inventory", new { computerId = Model.ComputerId }, FormMethod.Post, new { id = "log_edit_form" }))
 {
     @Html.DropDownListFor(x => x.InventoryId, Model.Inventories, new { id = "inventories_dropdown" })
-    <input type="submit" value="@Translation.Get("Lägg till")" class="btn" id="inventory_button" />
+    <input type="submit" value="@Translation.Get("Lägg till")" class="btn" style="@style" id="inventory_button" />
 }

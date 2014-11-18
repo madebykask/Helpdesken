@@ -17,8 +17,8 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             var inventering = CreateInventering(model.InventoryFieldsModel);
             var communication = CreateCommunication(model.CommunicationFieldsModel);
             var other = CreateOther(model.OtherFieldsModel);
-            var place = CreatePlace(model.PlaceFieldsViewModel.PlaceFieldsModel);
-            var organzation = CreateOrganization(model.OrganizationFieldsViewModel.OrganizationFieldsModel);
+            var place = CreatePlace(model.PlaceFieldsViewModel);
+            var organzation = CreateOrganization(model.OrganizationFieldsViewModel);
 
             var fieldsModel = new PrinterForUpdate(
                 model.Id,
@@ -40,8 +40,8 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             var inventering = CreateInventering(model.InventoryFieldsModel);
             var communication = CreateCommunication(model.CommunicationFieldsModel);
             var other = CreateOther(model.OtherFieldsModel);
-            var place = CreatePlace(model.PlaceFieldsViewModel.PlaceFieldsModel);
-            var organzation = CreateOrganization(model.OrganizationFieldsViewModel.OrganizationFieldsModel);
+            var place = CreatePlace(model.PlaceFieldsViewModel);
+            var organzation = CreateOrganization(model.OrganizationFieldsViewModel);
 
             var fieldsModel = new PrinterForInsert(
                 inventering,
@@ -125,30 +125,30 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             return fields;
         }
 
-        private static PlaceFields CreatePlace(PlaceFieldsModel fieldsModel)
+        private static PlaceFields CreatePlace(PlaceFieldsViewModel fieldsModel)
         {
-            if (fieldsModel == null)
+            if (fieldsModel == null || fieldsModel.PlaceFieldsModel == null)
             {
                 return PlaceFields.CreateDefault();
             }
 
-            var room = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.RoomId);
-            var location = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.Location);
+            var room = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.PlaceFieldsModel.RoomId);
+            var location = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.PlaceFieldsModel.Location);
 
             var fields = new PlaceFields(room, location);
 
             return fields;
         }
 
-        private static OrganizationFields CreateOrganization(OrganizationFieldsModel fieldsModel)
+        private static OrganizationFields CreateOrganization(OrganizationFieldsViewModel fieldsModel)
         {
-            if (fieldsModel == null)
+            if (fieldsModel == null || fieldsModel.OrganizationFieldsModel == null)
             {
                 return OrganizationFields.CreateDefault();
             }
 
-            var department = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.DepartmentId);
-            var domain = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.UnitId);
+            var department = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.OrganizationFieldsModel.DepartmentId);
+            var domain = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.OrganizationFieldsModel.UnitId);
 
             var fields = new OrganizationFields(department, domain);
 

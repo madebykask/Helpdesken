@@ -656,7 +656,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             entity.LocationRoom = businessModel.PlaceFields.Location;
             entity.Location2 = businessModel.PlaceFields.Location2;
 
-            entity.Info = businessModel.OtherFields.Info;
+            entity.Info = businessModel.OtherFields.Info ?? string.Empty;
 
             entity.VideoCard = businessModel.GraphicsFields.VideoCard ?? string.Empty;
 

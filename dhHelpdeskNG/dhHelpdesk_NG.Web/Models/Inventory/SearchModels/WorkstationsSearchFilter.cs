@@ -12,15 +12,16 @@
     {
         public WorkstationsSearchFilter()
         {
-        }
-
-        private WorkstationsSearchFilter(int recordsOnPage)
-        {
-            this.RecordsOnPage = recordsOnPage;
             this.ContractStartDate = new DateRange();
             this.ContractEndDate = new DateRange();
             this.ScanDate = new DateRange();
             this.ScrapDate = new DateRange();
+        }
+
+        private WorkstationsSearchFilter(int recordsOnPage)
+            : this()
+        {
+            this.RecordsOnPage = recordsOnPage;
 
             this.SortField = new SortFieldModel();
         }

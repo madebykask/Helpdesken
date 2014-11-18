@@ -14,6 +14,8 @@
 
         void ValidateIntegerField(int? value, string fieldName, ElementaryValidationRule rule);
 
+        void ValidateIntegerField(int value, string fieldName, ElementaryValidationRule rule);
+
         void ValidateRealField(
             double? newValue, double? oldValue, string fieldName, ElementaryValidationRule rule);
 

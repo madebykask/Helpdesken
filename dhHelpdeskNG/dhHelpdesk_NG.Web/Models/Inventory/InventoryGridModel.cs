@@ -125,7 +125,7 @@
                     settings.InventoryFieldSettingsOverviews.Single(x => x.InventoryTypeId == item.InventoryTypeId);
 
                 var dynamicSettings =
-                    settings.InventoryDynamicFieldSettingOverviews.Single(
+                    settings.InventoryDynamicFieldSettingOverviews.FirstOrDefault(
                         x => x.InventoryTypeId == item.InventoryTypeId);
 
                 var overviews =
@@ -135,10 +135,15 @@
                             c,
                             response.DynamicData,
                             setting.InventoryFieldSettingsOverview,
-                            dynamicSettings.InventoryDynamicFieldSettingOverviews)).ToList();
+                            dynamicSettings != null
+                                ? dynamicSettings.InventoryDynamicFieldSettingOverviews
+                                : new List<InventoryDynamicFieldSettingOverview>())).ToList();
+
                 var headers = GetInventoryHeaders(
                     setting.InventoryFieldSettingsOverview,
-                    dynamicSettings.InventoryDynamicFieldSettingOverviews);
+                    dynamicSettings != null
+                        ? dynamicSettings.InventoryDynamicFieldSettingOverviews
+                        : new List<InventoryDynamicFieldSettingOverview>());
 
                 var inventoryGridModel = new InventoryGridModel(headers, overviews, item.InventoryTypeId, null)
                                              {
@@ -1306,7 +1311,7 @@
                         item.FieldType == FieldTypes.Bool
                             ? new NewGridRowCellValueModel(
                                   item.InventoryTypePropertyId.ToString(CultureInfo.InvariantCulture),
-                                  (BooleanDisplayValue)(item.Value == "0"))
+                                  (BooleanDisplayValue)(item.Value == "1"))
                             : new NewGridRowCellValueModel(
                                   item.InventoryTypePropertyId.ToString(CultureInfo.InvariantCulture),
                                   (StringDisplayValue)item.Value)));

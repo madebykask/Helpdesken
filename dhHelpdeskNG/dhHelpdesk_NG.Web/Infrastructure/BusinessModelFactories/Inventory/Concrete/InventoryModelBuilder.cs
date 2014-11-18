@@ -8,8 +8,13 @@
 
     public class InventoryModelBuilder : IInventoryModelBuilder
     {
-        public InventoryForUpdate BuildForUpdate(InventoryViewModel model, OperationContext contex)
+        public InventoryForUpdate BuildForUpdate(InventoryViewModel model, OperationContext context)
         {
+            if (model.DefaultFieldsViewModel == null || model.DefaultFieldsViewModel.DefaultFieldsModel == null)
+            {
+                return CreateDefaultInventoryForUpdate(model.Id, context.DateAndTime, context.UserId);
+            }
+
             var fieldsModel = model.DefaultFieldsViewModel.DefaultFieldsModel;
 
             var departmentId = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.DepartmentId);
@@ -38,14 +43,19 @@
                 barCode,
                 purchaseDate,
                 info,
-                contex.DateAndTime,
-                contex.UserId);
+                context.DateAndTime,
+                context.UserId);
 
             return businessModel;
         }
 
         public InventoryForInsert BuildForAdd(InventoryViewModel model, OperationContext context)
         {
+            if (model.DefaultFieldsViewModel == null || model.DefaultFieldsViewModel.DefaultFieldsModel == null)
+            {
+                return CreateDefaultInventoryForInsert(context.DateAndTime, model.InventoryTypeId, context.UserId);
+            }
+
             var fieldsModel = model.DefaultFieldsViewModel.DefaultFieldsModel;
 
             var departmentId = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.DepartmentId);
@@ -78,6 +88,46 @@
                 context.UserId);
 
             return businessModel;
+        }
+
+        private static InventoryForInsert CreateDefaultInventoryForInsert(
+            DateTime dateAndTime,
+            int inventoryTypeId,
+            int? userId)
+        {
+            return new InventoryForInsert(
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                dateAndTime,
+                inventoryTypeId,
+                userId);
+        }
+
+        // todo refactor this
+        private static InventoryForUpdate CreateDefaultInventoryForUpdate(int id, DateTime dateAndTime, int? userId)
+        {
+            return new InventoryForUpdate(
+                id,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                dateAndTime,
+                userId);
         }
     }
 }

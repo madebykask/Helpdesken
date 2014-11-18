@@ -58,6 +58,18 @@
             }
         }
 
+        public void ValidateIntegerField(int value, string fieldName, ElementaryValidationRule rule)
+        {
+            if (rule.ReadOnly)
+            {
+                ValidateReadOnly(value, fieldName);
+            }
+            else if (rule.Required)
+            {
+                ValidateRequired(value, fieldName);
+            }
+        }
+
         public void ValidateRealField(
             double? newValue,
             double? oldValue,
@@ -118,6 +130,16 @@
         private static void ValidateReadOnly(int? value, string fieldName)
         {
             if (value == null)
+            {
+                return;
+            }
+
+            throw new ElementaryValidationRulesException(fieldName, ReadOnlyMessage);
+        }
+
+        private static void ValidateReadOnly(int value, string fieldName)
+        {
+            if (value == 0)
             {
                 return;
             }

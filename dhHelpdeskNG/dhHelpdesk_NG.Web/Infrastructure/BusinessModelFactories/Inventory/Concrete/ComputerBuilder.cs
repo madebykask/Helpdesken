@@ -13,23 +13,23 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
     {
         public ComputerForUpdate BuildForUpdate(ComputerViewModel model, OperationContext contex)
         {
-            var workstation = CreateWorkstation(model.WorkstationFieldsViewModel.WorkstationFieldsModel);
+            var workstation = CreateWorkstation(model.WorkstationFieldsViewModel);
             var chassis = CreateChassis(model.ChassisFieldsModel);
             var inventering = CreateInventering(model.InventoryFieldsModel);
-            var operatingSystem = CretateOperatingSystem(model.OperatingSystemFieldsViewModel.OperatingSystemFieldsModel);
-            var processor = CreateProcessor(model.ProccesorFieldsViewModel.ProccesorFieldsModel);
-            var memory = CreateMemory(model.MemoryFieldsViewModel.MemoryFieldsModel);
-            var communication = CreateCommunication(model.CommunicationFieldsViewModel.CommunicationFieldsModel);
+            var operatingSystem = CreateOperatingSystem(model.OperatingSystemFieldsViewModel);
+            var processor = CreateProcessor(model.ProccesorFieldsViewModel);
+            var memory = CreateMemory(model.MemoryFieldsViewModel);
+            var communication = CreateCommunication(model.CommunicationFieldsViewModel);
             var graphics = CreateGraphics(model.GraphicsFieldsModel);
             var sound = CreateSound(model.SoundFieldsModel);
-            var contract = CreateContract(model.ContractFieldsViewModel.ContractFieldsModel);
+            var contract = CreateContract(model.ContractFieldsViewModel);
             var other = CreateOther(model.OtherFieldsModel);
             var contactInformation = CreateContactInformation(model.ContactInformationFieldsModel);
-            var organization = CreateOrganization(model.OrganizationFieldsViewModel.OrganizationFieldsModel);
-            var place = CreatePlace(model.PlaceFieldsViewModel.PlaceFieldsModel);
+            var organization = CreateOrganization(model.OrganizationFieldsViewModel);
+            var place = CreatePlace(model.PlaceFieldsViewModel);
             var contact = CreateContact(model.ContactFieldsModel);
-            var state = CreateState(model.StateFieldsViewModel.StateFieldsModel);
-            
+            var state = CreateState(model.StateFieldsViewModel);
+
             // var date = CreateDate(model.DateFieldsModel); todo
             var fieldsModel = new ComputerForUpdate(
                 model.Id,
@@ -57,24 +57,35 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
 
         public ComputerForInsert BuildForAdd(ComputerViewModel model, OperationContext context)
         {
-            var workstation = CreateWorkstation(model.WorkstationFieldsViewModel.WorkstationFieldsModel);
+            var workstation = CreateWorkstation(model.WorkstationFieldsViewModel);
             var chassis = CreateChassis(model.ChassisFieldsModel);
             var inventering = CreateInventering(model.InventoryFieldsModel);
-            var operatingSystem = CretateOperatingSystem(
-                model.OperatingSystemFieldsViewModel.OperatingSystemFieldsModel);
-            var processor = CreateProcessor(model.ProccesorFieldsViewModel.ProccesorFieldsModel);
-            var memory = CreateMemory(model.MemoryFieldsViewModel.MemoryFieldsModel);
-            var communication = CreateCommunication(model.CommunicationFieldsViewModel.CommunicationFieldsModel);
+
+            var operatingSystem = CreateOperatingSystem(
+                model.OperatingSystemFieldsViewModel);
+
+            var processor = CreateProcessor(model.ProccesorFieldsViewModel);
+
+            var memory = CreateMemory(model.MemoryFieldsViewModel);
+
+            var communication = CreateCommunication(model.CommunicationFieldsViewModel);
+
             var graphics = CreateGraphics(model.GraphicsFieldsModel);
             var sound = CreateSound(model.SoundFieldsModel);
-            var contract = CreateContract(model.ContractFieldsViewModel.ContractFieldsModel);
+
+            var contract = CreateContract(model.ContractFieldsViewModel);
+
             var other = CreateOther(model.OtherFieldsModel);
             var contactInformation = CreateContactInformation(model.ContactInformationFieldsModel);
-            var organization = CreateOrganization(model.OrganizationFieldsViewModel.OrganizationFieldsModel);
-            var place = CreatePlace(model.PlaceFieldsViewModel.PlaceFieldsModel);
+
+            var organization = CreateOrganization(model.OrganizationFieldsViewModel);
+
+            var place = CreatePlace(model.PlaceFieldsViewModel);
+
             var contact = CreateContact(model.ContactFieldsModel);
-            var state = CreateState(model.StateFieldsViewModel.StateFieldsModel);
-            
+
+            var state = CreateState(model.StateFieldsViewModel);
+
             // var date = CreateDate(model.DateFieldsModel);
             var fieldsModel = new ComputerForInsert(
                 communication,
@@ -100,23 +111,23 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             return fieldsModel;
         }
 
-        private static WorkstationFields CreateWorkstation(WorkstationFieldsModel fieldsModel)
+        private static WorkstationFields CreateWorkstation(WorkstationFieldsViewModel fieldsModel)
         {
-            if (fieldsModel == null)
+            if (fieldsModel == null || fieldsModel.WorkstationFieldsModel == null)
             {
                 return WorkstationFields.CreateDefault();
             }
 
-            var name = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.Name);
-            var manufacturer = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.Manufacturer);
-            var model = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.ComputerModelId);
-            var serialNumber = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.SerialNumber);
-            var biosDate = ConfigurableFieldModel<DateTime?>.GetValueOrDefault(fieldsModel.BIOSDate);
-            var biosVersion = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.BIOSVersion);
-            var theftMark = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.Theftmark);
-            var carepackNumber = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.CarePackNumber);
-            var computerType = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.ComputerTypeId);
-            var place = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.Location);
+            var name = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.WorkstationFieldsModel.Name);
+            var manufacturer = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.WorkstationFieldsModel.Manufacturer);
+            var model = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.WorkstationFieldsModel.ComputerModelId);
+            var serialNumber = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.WorkstationFieldsModel.SerialNumber);
+            var biosDate = ConfigurableFieldModel<DateTime?>.GetValueOrDefault(fieldsModel.WorkstationFieldsModel.BIOSDate);
+            var biosVersion = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.WorkstationFieldsModel.BIOSVersion);
+            var theftMark = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.WorkstationFieldsModel.Theftmark);
+            var carepackNumber = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.WorkstationFieldsModel.CarePackNumber);
+            var computerType = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.WorkstationFieldsModel.ComputerTypeId);
+            var place = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.WorkstationFieldsModel.Location);
 
             var fields = new WorkstationFields(
                 name,
@@ -160,18 +171,18 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             return fields;
         }
 
-        private static OperatingSystemFields CretateOperatingSystem(OperatingSystemFieldsModel fieldsModel)
+        private static OperatingSystemFields CreateOperatingSystem(OperatingSystemFieldsViewModel fieldsModel)
         {
-            if (fieldsModel == null)
+            if (fieldsModel == null || fieldsModel.OperatingSystemFieldsModel == null)
             {
                 return OperatingSystemFields.CreateDefault();
             }
 
-            var operatingSystem = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.OperatingSystemId);
-            var version = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.Version);
-            var servicePack = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.ServicePack);
-            var registrationCode = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.RegistrationCode);
-            var productKey = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.ProductKey);
+            var operatingSystem = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.OperatingSystemFieldsModel.OperatingSystemId);
+            var version = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.OperatingSystemFieldsModel.Version);
+            var servicePack = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.OperatingSystemFieldsModel.ServicePack);
+            var registrationCode = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.OperatingSystemFieldsModel.RegistrationCode);
+            var productKey = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.OperatingSystemFieldsModel.ProductKey);
 
             var fields = new OperatingSystemFields(
                 operatingSystem,
@@ -183,46 +194,46 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             return fields;
         }
 
-        private static ProcessorFields CreateProcessor(ProccesorFieldsModel fieldsModel)
+        private static ProcessorFields CreateProcessor(ProccesorFieldsViewModel fieldsModel)
         {
-            if (fieldsModel == null)
+            if (fieldsModel == null || fieldsModel.ProccesorFieldsModel == null)
             {
                 return ProcessorFields.CreateDefault();
             }
 
-            var processor = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.ProccesorId);
+            var processor = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.ProccesorFieldsModel.ProccesorId);
 
             var fields = new ProcessorFields(processor);
 
             return fields;
         }
 
-        private static MemoryFields CreateMemory(MemoryFieldsModel fieldsModel)
+        private static MemoryFields CreateMemory(MemoryFieldsViewModel fieldsModel)
         {
-            if (fieldsModel == null)
+            if (fieldsModel == null || fieldsModel.MemoryFieldsModel == null)
             {
                 return MemoryFields.CreateDefault();
             }
 
-            var memory = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.RAMId);
+            var memory = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.MemoryFieldsModel.RAMId);
 
             var fields = new MemoryFields(memory);
 
             return fields;
         }
 
-        private static CommunicationFields CreateCommunication(CommunicationFieldsModel fieldsModel)
+        private static CommunicationFields CreateCommunication(CommunicationFieldsViewModel fieldsModel)
         {
-            if (fieldsModel == null)
+            if (fieldsModel == null || fieldsModel.CommunicationFieldsModel == null)
             {
                 return CommunicationFields.CreateDefault();
             }
 
-            var networkAdapter = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.NetworkAdapterId);
-            var ipaddress = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.IPAddress);
-            var macAddress = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.MacAddress);
-            var ras = ConfigurableFieldModel<bool>.GetValueOrDefault(fieldsModel.IsRAS);
-            var novellClient = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.NovellClient);
+            var networkAdapter = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.CommunicationFieldsModel.NetworkAdapterId);
+            var ipaddress = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.CommunicationFieldsModel.IPAddress);
+            var macAddress = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.CommunicationFieldsModel.MacAddress);
+            var ras = ConfigurableFieldModel<bool>.GetValueOrDefault(fieldsModel.CommunicationFieldsModel.IsRAS);
+            var novellClient = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.CommunicationFieldsModel.NovellClient);
 
             var fields = new CommunicationFields(
                 networkAdapter,
@@ -262,23 +273,23 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             return fields;
         }
 
-        private static ContractFields CreateContract(ContractFieldsModel fieldsModel)
+        private static ContractFields CreateContract(ContractFieldsViewModel fieldsModel)
         {
-            if (fieldsModel == null)
+            if (fieldsModel == null || fieldsModel.ContractFieldsModel == null)
             {
                 return ContractFields.CreateDefault();
             }
 
-            var contractStatusName = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.ContractStatusId);
-            var contractNumber = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.ContractNumber);
-            var contractStartDate = ConfigurableFieldModel<DateTime?>.GetValueOrDefault(fieldsModel.ContractStartDate);
-            var contractEndDate = ConfigurableFieldModel<DateTime?>.GetValueOrDefault(fieldsModel.ContractEndDate);
-            var purchasePrice = ConfigurableFieldModel<int>.GetValueOrDefault(fieldsModel.PurchasePrice);
-            var accountingDimension1 = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.AccountingDimension1);
-            var accountingDimension2 = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.AccountingDimension2);
-            var accountingDimension3 = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.AccountingDimension3);
-            var accountingDimension4 = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.AccountingDimension4);
-            var accountingDimension5 = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.AccountingDimension5);
+            var contractStatusName = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.ContractFieldsModel.ContractStatusId);
+            var contractNumber = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.ContractFieldsModel.ContractNumber);
+            var contractStartDate = ConfigurableFieldModel<DateTime?>.GetValueOrDefault(fieldsModel.ContractFieldsModel.ContractStartDate);
+            var contractEndDate = ConfigurableFieldModel<DateTime?>.GetValueOrDefault(fieldsModel.ContractFieldsModel.ContractEndDate);
+            var purchasePrice = ConfigurableFieldModel<int>.GetValueOrDefault(fieldsModel.ContractFieldsModel.PurchasePrice);
+            var accountingDimension1 = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.ContractFieldsModel.AccountingDimension1);
+            var accountingDimension2 = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.ContractFieldsModel.AccountingDimension2);
+            var accountingDimension3 = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.ContractFieldsModel.AccountingDimension3);
+            var accountingDimension4 = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.ContractFieldsModel.AccountingDimension4);
+            var accountingDimension5 = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.ContractFieldsModel.AccountingDimension5);
 
             var fields = new ContractFields(
                 contractStatusName,
@@ -322,35 +333,35 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             return fields;
         }
 
-        private static OrganizationFields CreateOrganization(OrganizationFieldsModel fieldsModel)
+        private static OrganizationFields CreateOrganization(OrganizationFieldsViewModel fieldsModel)
         {
-            if (fieldsModel == null)
+            if (fieldsModel == null || fieldsModel.OrganizationFieldsModel == null)
             {
                 return OrganizationFields.CreateDefault();
             }
 
-            var department = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.DepartmentId);
-            var domain = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.DomainId);
-            var unit = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.UnitId);
+            var department = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.OrganizationFieldsModel.DepartmentId);
+            var domain = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.OrganizationFieldsModel.DomainId);
+            var unit = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.OrganizationFieldsModel.UnitId);
 
             var fields = new OrganizationFields(department, domain, unit);
 
             return fields;
         }
 
-        private static PlaceFields CreatePlace(PlaceFieldsModel fieldsModel)
+        private static PlaceFields CreatePlace(PlaceFieldsViewModel fieldsModel)
         {
-            if (fieldsModel == null)
+            if (fieldsModel == null || fieldsModel.PlaceFieldsModel == null)
             {
                 return PlaceFields.CreateDefault();
             }
 
-            var room = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.RoomId);
-            var address = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.Address);
-            var postalCode = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.PostalCode);
-            var postalAddress = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.PostalAddress);
-            var location = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.Location);
-            var location2 = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.Location2);
+            var room = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.PlaceFieldsModel.RoomId);
+            var address = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.PlaceFieldsModel.Address);
+            var postalCode = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.PlaceFieldsModel.PostalCode);
+            var postalAddress = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.PlaceFieldsModel.PostalAddress);
+            var location = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.PlaceFieldsModel.Location);
+            var location2 = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.PlaceFieldsModel.Location2);
 
             var fields = new PlaceFields(room, address, postalCode, postalAddress, location, location2);
 
@@ -373,18 +384,18 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             return fields;
         }
 
-        private static StateFields CreateState(StateFieldsModel fieldsModel)
+        private static StateFields CreateState(StateFieldsViewModel fieldsModel)
         {
-            if (fieldsModel == null)
+            if (fieldsModel == null || fieldsModel.StateFieldsModel == null)
             {
                 return StateFields.CreateDefault();
             }
 
-            var state = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.StateId);
-            var stolen = ConfigurableFieldModel<bool>.GetValueOrDefault(fieldsModel.IsStolen);
-            var replaced = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.Replaced);
-            var sendBack = ConfigurableFieldModel<bool>.GetValueOrDefault(fieldsModel.IsSendBack);
-            var scrapDate = ConfigurableFieldModel<DateTime?>.GetValueOrDefault(fieldsModel.ScrapDate);
+            var state = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.StateFieldsModel.StateId);
+            var stolen = ConfigurableFieldModel<bool>.GetValueOrDefault(fieldsModel.StateFieldsModel.IsStolen);
+            var replaced = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.StateFieldsModel.Replaced);
+            var sendBack = ConfigurableFieldModel<bool>.GetValueOrDefault(fieldsModel.StateFieldsModel.IsSendBack);
+            var scrapDate = ConfigurableFieldModel<DateTime?>.GetValueOrDefault(fieldsModel.StateFieldsModel.ScrapDate);
 
             var fields = new StateFields(state.HasValue ? state.Value : 0, stolen, replaced, sendBack, scrapDate);
 
