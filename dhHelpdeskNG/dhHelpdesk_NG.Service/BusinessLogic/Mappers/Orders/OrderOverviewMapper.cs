@@ -2,7 +2,6 @@
 {
     using System.Globalization;
     using System.Linq;
-    using System.Text;
 
     using DH.Helpdesk.BusinessData.Models.Orders.Index.OrderOverview;
     using DH.Helpdesk.Dal.NewInfrastructure;

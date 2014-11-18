@@ -196,7 +196,7 @@
 
                                     @if (model.IsCheckListVisuble())
                                     {    
-                                        <li><a href="@Url.Action("index", "checklist")">
+                                        <li><a href="@Url.Action("index", "checklist", new { area = "" })">
                                                 <img src="@Url.Content("~/Content/icons/checklist.png")" />
                                                 @Translation.Get("Checklista")</a></li>
                                     }   
@@ -249,11 +249,11 @@
                                                 <li>
                                                     @if (customer.Id == SessionFacade.CurrentCustomer.Id)
                                                     {
-                                                    <a href="@Url.Action("Index", "cases", new { customerId = customer.Id })">@customer.Name <i class="icon-ok"></i> </a>
+                                                    <a href="@Url.Action("Index", "cases", new { area = "", customerId = customer.Id })">@customer.Name <i class="icon-ok"></i> </a>
                                                     }
                                                     else
                                                     {
-                                                      <a href="@Url.Action("Index", "cases", new { customerId = customer.Id })">@customer.Name</a>
+                                                      <a href="@Url.Action("Index", "cases", new { area = "", customerId = customer.Id })">@customer.Name</a>
                                                     }
                                                 </li>
                                             }
@@ -274,11 +274,11 @@
                                                 <li>
                                                     @if (lang.Id == SessionFacade.CurrentUser.LanguageId)
                                                     {
-                                                      <a href="@Url.Action("ChangeCurrentLanguage", "cases", new { languageId = lang.Id })" > @Translation.Get(lang.Name)  <i class="icon-ok"></i> </a>
+                                                      <a href="@Url.Action("ChangeCurrentLanguage", "cases", new { area = "", languageId = lang.Id })" > @Translation.Get(lang.Name)  <i class="icon-ok"></i> </a>
                                                     }
                                                     else
                                                     {
-                                                      <a href="@Url.Action("ChangeCurrentLanguage", "cases", new { languageId = lang.Id })">  @Translation.Get(lang.Name) </a>
+                                                      <a href="@Url.Action("ChangeCurrentLanguage", "cases", new { area = "", languageId = lang.Id })">  @Translation.Get(lang.Name) </a>
                                                     }
                                                 </li>
                                             }                                                                              
@@ -296,20 +296,20 @@
                                 }
 
                                 <li>
-                                    <a href="@Url.Action("edit", "profile", new { id = SessionFacade.CurrentUser.Id })">
+                                    <a href="@Url.Action("edit", "profile", new { area = "", id = SessionFacade.CurrentUser.Id })">
                                         <i class="icon-user"></i>
                                         @Translation.Get("Profil")
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="@Url.Action("index", "about")" >
+                                    <a href="@Url.Action("index", "about", new { area = "" })" >
                                         <i class="icon-info-sign"></i>
                                         @Translation.Get("Om")
                                     </a>
                                 </li>
                                 <li class="divider"></li>
                                 <li>
-                                    <a href="@Url.Action("login", "login")">
+                                    <a href="@Url.Action("login", "login", new { area = "" })">
                                         <i class="icon-off"></i>
                                         @Translation.Get("Logga ut")
                                     </a>

@@ -1239,9 +1239,11 @@ namespace DH.Helpdesk.Web.Controllers
         {
             SessionFacade.CurrentLanguageId = languageId;
             SessionFacade.CurrentUser.LanguageId = languageId;
-            var prevInfo = this.ExtractPreviousRouteInfo();
+            /*var prevInfo = this.ExtractPreviousRouteInfo();
             var res = new RedirectToRouteResult(prevInfo);
-            return res;
+            return res;*/
+
+            return this.RedirectToAction("Index", "Home");
         }
 
         #endregion

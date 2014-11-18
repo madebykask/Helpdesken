@@ -410,7 +410,9 @@
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\IOrdersModelFactory.cs" />
     <Compile Include="Areas\Orders\Models\Index\BaseIndexModel.cs" />
     <Compile Include="Areas\Orders\Models\Index\IndexModelType.cs" />
+    <Compile Include="Areas\Orders\Models\Index\OrderOverviewModel.cs" />
     <Compile Include="Areas\Orders\Models\Index\OrdersFilterModel.cs" />
+    <Compile Include="Areas\Orders\Models\Index\OrdersGridModel.cs" />
     <Compile Include="Areas\Orders\Models\Index\OrdersIndexModel.cs" />
     <Compile Include="Areas\Orders\Models\OrderFieldSettings\OrderFieldSettingsEditModel.cs" />
     <Compile Include="Areas\Orders\OrdersAreaRegistration.cs" />
