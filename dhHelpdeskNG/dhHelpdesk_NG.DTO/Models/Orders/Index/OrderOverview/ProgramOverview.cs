@@ -2,11 +2,11 @@
 {
     public sealed class ProgramOverview
     {
-        public ProgramOverview(string program)
+        public ProgramOverview(string[] programs)
         {
-            this.Program = program;
+            this.Programs= programs;
         }
 
-        public string Program { get; private set; }    
+        public string[] Programs { get; private set; }    
     }
 }

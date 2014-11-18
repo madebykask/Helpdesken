@@ -99,6 +99,7 @@
     <Compile Include="EntityConfigurations\OperationLogEmailLogConfiguration.cs" />
     <Compile Include="EntityConfigurations\Orders\OrderEMailLogConfiguration.cs" />
     <Compile Include="EntityConfigurations\Orders\OrderHistoryConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Orders\OrderLogConfiguration.cs" />
     <Compile Include="EntityConfigurations\Orders\OrderPropertyConfiguration.cs" />
     <Compile Include="EntityConfigurations\SSO\SSOLogConfiguration.cs" />
     <Compile Include="EntityConfigurations\Users\ModuleConfiguration.cs" />

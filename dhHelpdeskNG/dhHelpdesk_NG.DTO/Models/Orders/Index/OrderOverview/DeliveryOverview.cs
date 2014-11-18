@@ -15,10 +15,10 @@
                 string deliveryLocation, 
                 string deliveryInfo1, 
                 string deliveryInfo2, 
-                string deliveryInfo3, 
-                string deliveryInfo4)
+                string deliveryInfo3,
+                string deliveryOuId)
         {
-            this.DeliveryInfo4 = deliveryInfo4;
+            this.DeliveryOuId = deliveryOuId;
             this.DeliveryInfo3 = deliveryInfo3;
             this.DeliveryInfo2 = deliveryInfo2;
             this.DeliveryInfo1 = deliveryInfo1;
@@ -53,7 +53,7 @@
         public string DeliveryInfo2 { get; private set; }
         
         public string DeliveryInfo3 { get; private set; }
-        
-        public string DeliveryInfo4 { get; private set; }
+
+        public string DeliveryOuId { get; private set; }
     }
 }

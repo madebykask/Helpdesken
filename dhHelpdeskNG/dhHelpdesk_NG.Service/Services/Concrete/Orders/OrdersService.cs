@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.Services.Services.Concrete.Orders
 {
+    using System.Linq;
+
     using DH.Helpdesk.BusinessData.Models.Orders.Index;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
@@ -50,7 +52,7 @@
             {
                 var orderRep = uow.GetRepository<Order>();
 
-                var request = orderRep.GetAll().Search(
+                var overviews = orderRep.GetAll().Search(
                                     parameters.CustomerId,
                                     parameters.OrderTypeId,
                                     parameters.AdministratorIds,
@@ -58,9 +60,12 @@
                                     parameters.EndDate,
                                     parameters.StatusIds,
                                     parameters.Phrase,
-                                    parameters.SortField);
+                                    parameters.SortField,
+                                    parameters.SelectCount)
+                                    .MapToFullOverviews();
 
-                return new SearchResponse(settings, null);                
+                var searchResult = new SearchResult(overviews.Count(), overviews);
+                return new SearchResponse(settings, searchResult);                
             }
         }
     }

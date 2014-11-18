@@ -16,10 +16,10 @@
                 FieldOverviewSetting deliveryLocation, 
                 FieldOverviewSetting deliveryInfo1, 
                 FieldOverviewSetting deliveryInfo2, 
-                FieldOverviewSetting deliveryInfo3, 
-                FieldOverviewSetting deliveryInfo4)
+                FieldOverviewSetting deliveryInfo3,
+                FieldOverviewSetting deliveryOuId)
         {
-            this.DeliveryInfo4 = deliveryInfo4;
+            this.DeliveryOuId = deliveryOuId;
             this.DeliveryInfo3 = deliveryInfo3;
             this.DeliveryInfo2 = deliveryInfo2;
             this.DeliveryInfo1 = deliveryInfo1;
@@ -67,6 +67,6 @@
         public FieldOverviewSetting DeliveryInfo3 { get; private set; }
 
         [NotNull]
-        public FieldOverviewSetting DeliveryInfo4 { get; private set; }
+        public FieldOverviewSetting DeliveryOuId { get; private set; }
     }
 }

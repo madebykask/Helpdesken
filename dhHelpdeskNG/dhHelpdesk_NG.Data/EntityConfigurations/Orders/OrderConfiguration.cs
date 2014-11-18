@@ -105,6 +105,13 @@
                     m.ToTable("tblOrder_tblProgram");
                 });
 
+            this.HasOptional(o => o.User)
+                .WithMany()
+                .HasForeignKey(o => o.User_Id);
+            this.HasOptional(o => o.Department)
+                .WithMany()
+                .HasForeignKey(o => o.Department_Id);
+
             this.ToTable("tblorder");
         }
     }

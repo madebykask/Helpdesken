@@ -2,11 +2,11 @@
 {
     public sealed class LogOverview
     {
-        public LogOverview(string log)
+        public LogOverview(string[] logs)
         {
-            this.Log = log;
+            this.Logs = logs;
         }
 
-        public string Log { get; private set; }
+        public string[] Logs { get; private set; }
     }
 }

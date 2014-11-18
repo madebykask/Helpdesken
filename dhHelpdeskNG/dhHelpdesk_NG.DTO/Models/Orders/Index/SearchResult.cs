@@ -7,7 +7,7 @@
     {
         public SearchResult(
                 int ordersFound, 
-                FullOrderOverview orders)
+                FullOrderOverview[] orders)
         {
             this.Orders = orders;
             this.OrdersFound = ordersFound;
@@ -17,6 +17,6 @@
         public int OrdersFound { get; private set; }
 
         [NotNull]
-        public FullOrderOverview Orders { get; private set; }
+        public FullOrderOverview[] Orders { get; private set; }
     }
 }

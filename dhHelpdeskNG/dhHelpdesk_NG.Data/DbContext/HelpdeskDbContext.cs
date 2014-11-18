@@ -620,6 +620,7 @@
             modelBuilder.Configurations.Add(new OperatingSystemConfiguration());
             modelBuilder.Configurations.Add(new OrderConfiguration());
             modelBuilder.Configurations.Add(new OrderHistoryConfiguration());
+            modelBuilder.Configurations.Add(new OrderLogConfiguration());
             modelBuilder.Configurations.Add(new OrderPropertyConfiguration());
             modelBuilder.Configurations.Add(new OrderEMailLogConfiguration());
             modelBuilder.Configurations.Add(new OrderFieldSettingsConfiguration());
