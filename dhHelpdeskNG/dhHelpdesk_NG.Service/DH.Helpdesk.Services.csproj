@@ -149,12 +149,15 @@
     <Compile Include="DisplayValues\Changes\StepStatusDisplayValue.cs" />
     <Compile Include="DisplayValues\BooleanDisplayValue.cs" />
     <Compile Include="DisplayValues\DateTimeDisplayValue.cs" />
+    <Compile Include="DisplayValues\DecimalDisplayValue.cs" />
     <Compile Include="DisplayValues\DisplayValue.cs" />
+    <Compile Include="DisplayValues\HtmlStringsDisplayValue.cs" />
     <Compile Include="DisplayValues\IntegerDisplayValue.cs" />
     <Compile Include="DisplayValues\Inventory\ComputerStatusesDisplayValue.cs" />
     <Compile Include="DisplayValues\Inventory\ContractStatusDisplayValue.cs" />
     <Compile Include="DisplayValues\Questionnaire\CircularStatesDisplayValue.cs" />
     <Compile Include="DisplayValues\StringDisplayValue.cs" />
+    <Compile Include="DisplayValues\StringsDisplayValue.cs" />
     <Compile Include="DisplayValues\UserNameDisplayValue.cs" />
     <Compile Include="Exceptions\BusinessLogicException.cs" />
     <Compile Include="Exceptions\ElementaryValidationRulesException.cs" />

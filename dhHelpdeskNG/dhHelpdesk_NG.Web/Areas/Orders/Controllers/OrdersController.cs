@@ -2,6 +2,7 @@
 {
     using System.Web.Mvc;
 
+    using DH.Helpdesk.BusinessData.Models.Orders.Index;
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Orders;
@@ -15,8 +16,6 @@
     {
         private readonly IOrdersService ordersService;
 
-        private readonly IOrderFieldSettingsService orderFieldSettingsService;
-
         private readonly IWorkContext workContext;
 
         private readonly IOrdersModelFactory ordersModelFactory;
@@ -24,13 +23,11 @@
         public OrdersController(
                 IMasterDataService masterDataService, 
                 IOrdersService ordersService, 
-                IOrderFieldSettingsService orderFieldSettingsService, 
                 IWorkContext workContext, 
                 IOrdersModelFactory ordersModelFactory)
             : base(masterDataService)
         {
             this.ordersService = ordersService;
-            this.orderFieldSettingsService = orderFieldSettingsService;
             this.workContext = workContext;
             this.ordersModelFactory = ordersModelFactory;
         }
@@ -61,7 +58,21 @@
 
             SessionFacade.SavePageFilters(PageName.OrdersOrders, filters);
 
-            return this.PartialView();
+            var parameters = new SearchParameters(
+                                    this.workContext.Customer.CustomerId,
+                                    filters.OrderTypeId,
+                                    filters.AdministratiorIds,
+                                    filters.StartDate,
+                                    filters.EndDate,
+                                    filters.StatusIds,
+                                    filters.Text,
+                                    filters.RecordsOnPage,
+                                    filters.SortField);
+
+            var response = this.ordersService.Search(parameters);
+            var ordersModel = this.ordersModelFactory.Create(response, filters.SortField);
+
+            return this.PartialView(ordersModel);
         }
 
         [HttpGet]

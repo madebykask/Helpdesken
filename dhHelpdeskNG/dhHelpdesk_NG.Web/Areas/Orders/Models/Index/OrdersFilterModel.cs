@@ -2,6 +2,7 @@
 {
     using System;
 
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class OrdersFilterModel
@@ -12,8 +13,12 @@
                 DateTime? startDate, 
                 DateTime? endDate, 
                 int[] statusIds, 
-                string text)
+                string text, 
+                int recordsOnPage, 
+                SortField sortField)
         {
+            this.SortField = sortField;
+            this.RecordsOnPage = recordsOnPage;
             this.Text = text;
             this.StatusIds = statusIds;
             this.EndDate = endDate;
@@ -42,9 +47,14 @@
 
         public string Text { get; private set; }
 
+        [MinValue(0)]
+        public int RecordsOnPage { get; private set; }
+
+        public SortField SortField { get; private set; }
+
         public static OrdersFilterModel CreateDefault()
         {
-            return new OrdersFilterModel();
+            return new OrdersFilterModel { RecordsOnPage = 100 };
         }
     }
 }

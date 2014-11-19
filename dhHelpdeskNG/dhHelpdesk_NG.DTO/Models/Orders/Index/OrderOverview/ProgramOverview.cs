@@ -4,7 +4,7 @@
     {
         public ProgramOverview(string[] programs)
         {
-            this.Programs= programs;
+            this.Programs = programs;
         }
 
         public string[] Programs { get; private set; }    

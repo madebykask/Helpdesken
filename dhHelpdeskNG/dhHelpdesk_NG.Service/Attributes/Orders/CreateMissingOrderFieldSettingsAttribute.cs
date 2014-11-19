@@ -8,6 +8,7 @@
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Orders;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications.Orders;
     using DH.Helpdesk.Services.Infrastructure;
 
     using PostSharp.Aspects;
@@ -42,7 +43,9 @@
             using (var uow = unitOfWorkFactory.Create())
             {
                 var rep = uow.GetRepository<OrderFieldSettings>();
-                var existing = rep.GetAll().MapToFieldNames();
+                var existing = rep.GetAll()
+                                .GetByType(customerId, orderTypeId)
+                                .MapToFieldNames();
 
                 var missing = new List<string>();
                 CollectDeliveryMissingFields(existing, missing);
@@ -187,17 +190,20 @@
                                 int customerId,
                                 int? orderTypeId)
         {
+            var now = DateTime.Now;
             return new OrderFieldSettings
                        {
                            OrderField = fieldName,
                            Customer_Id = customerId,
                            OrderType_Id = orderTypeId,
-                           CreatedDate = DateTime.Now,
+                           CreatedDate = now,
+                           ChangedDate = now,
                            Label = fieldName,
                            Required = 0,
                            Show = 0,
                            ShowExternal = 0,
-                           ShowInList = 0
+                           ShowInList = 0,
+                           DefaultValue = string.Empty
                        };
         }
     }

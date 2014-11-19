@@ -11,6 +11,15 @@
                                 int customerId,
                                 int? orderTypeId)
         {
+            if (!orderTypeId.HasValue)
+            {
+                query = query
+                    .GetByCustomer(customerId)
+                    .Where(f => !f.OrderType_Id.HasValue);
+
+                return query;
+            }
+
             query = query
                     .GetByCustomer(customerId)
                     .Where(f => f.OrderType_Id == orderTypeId);
