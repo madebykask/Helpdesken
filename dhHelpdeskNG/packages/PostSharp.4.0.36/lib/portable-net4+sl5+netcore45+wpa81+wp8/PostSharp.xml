@@ -172,6 +172,12 @@
       <param name="instance">The instance related to the advice invocation, or
               <c>null</c> if the advice is associated to a static element of code.</param>
     </member>
+    <member name="P:PostSharp.Aspects.AdviceArgs.DeclarationIdentifier">
+      <summary>
+              Gets the <see cref="P:PostSharp.Aspects.AdviceArgs.DeclarationIdentifier" /> of the declaration to which the
+              advice has been applied.
+            </summary>
+    </member>
     <member name="P:PostSharp.Aspects.AdviceArgs.Instance">
       <summary>
               Gets or sets the object instance on which the method is being executed.
@@ -210,6 +216,297 @@
       <summary>
               Gets the number of arguments encapsulated by the current object.
             </summary>
+    </member>
+    <member name="M:PostSharp.Aspects.Arguments.Create(System.Object[])">
+      <summary>
+            Creates a weakly-typed <see cref="T:PostSharp.Aspects.Arguments" /> object representing any number of arguments.
+            </summary>
+      <param name="array">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="array"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create(System.Object[])"]</p>
+      </param>
+      <returns>
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;returns&gt; documentation for "M:PostSharp.Aspects.Arguments.Create(System.Object[])"]</p>
+      </returns>
+    </member>
+    <member name="M:PostSharp.Aspects.Arguments.Create``1(``0)">
+      <summary>
+            Creates a strongly-typed <see cref="T:PostSharp.Aspects.Arguments" /> object representing 1 argument.
+            </summary>
+      <param name="arg0">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="arg0"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``1(``0)"]</p>
+      </param>
+      <typeparam name="T">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``1(``0)"]</p>
+      </typeparam>
+      <returns>
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;returns&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``1(``0)"]</p>
+      </returns>
+    </member>
+    <member name="M:PostSharp.Aspects.Arguments.Create``2(``0,``1)">
+      <summary>
+            Creates a strongly-typed <see cref="T:PostSharp.Aspects.Arguments" /> object representing 2 arguments.
+            </summary>
+      <param name="arg0">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="arg0"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``2(``0,``1)"]</p>
+      </param>
+      <param name="arg1">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="arg1"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``2(``0,``1)"]</p>
+      </param>
+      <typeparam name="T0">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T0"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``2(``0,``1)"]</p>
+      </typeparam>
+      <typeparam name="T1">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T1"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``2(``0,``1)"]</p>
+      </typeparam>
+      <returns>
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;returns&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``2(``0,``1)"]</p>
+      </returns>
+    </member>
+    <member name="M:PostSharp.Aspects.Arguments.Create``3(``0,``1,``2)">
+      <summary>
+            Creates a strongly-typed <see cref="T:PostSharp.Aspects.Arguments" /> object representing 3 arguments.
+            </summary>
+      <param name="arg0">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="arg0"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``3(``0,``1,``2)"]</p>
+      </param>
+      <param name="arg1">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="arg1"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``3(``0,``1,``2)"]</p>
+      </param>
+      <param name="arg2">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="arg2"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``3(``0,``1,``2)"]</p>
+      </param>
+      <typeparam name="T0">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T0"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``3(``0,``1,``2)"]</p>
+      </typeparam>
+      <typeparam name="T1">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T1"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``3(``0,``1,``2)"]</p>
+      </typeparam>
+      <typeparam name="T2">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T2"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``3(``0,``1,``2)"]</p>
+      </typeparam>
+      <returns>
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;returns&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``3(``0,``1,``2)"]</p>
+      </returns>
+    </member>
+    <member name="M:PostSharp.Aspects.Arguments.Create``4(``0,``1,``2,``3)">
+      <summary>
+            Creates a strongly-typed <see cref="T:PostSharp.Aspects.Arguments" /> object representing 4 arguments.
+            </summary>
+      <param name="arg0">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="arg0"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``4(``0,``1,``2,``3)"]</p>
+      </param>
+      <param name="arg1">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="arg1"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``4(``0,``1,``2,``3)"]</p>
+      </param>
+      <param name="arg2">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="arg2"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``4(``0,``1,``2,``3)"]</p>
+      </param>
+      <param name="arg3">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="arg3"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``4(``0,``1,``2,``3)"]</p>
+      </param>
+      <typeparam name="T0">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T0"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``4(``0,``1,``2,``3)"]</p>
+      </typeparam>
+      <typeparam name="T1">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T1"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``4(``0,``1,``2,``3)"]</p>
+      </typeparam>
+      <typeparam name="T2">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T2"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``4(``0,``1,``2,``3)"]</p>
+      </typeparam>
+      <typeparam name="T3">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T3"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``4(``0,``1,``2,``3)"]</p>
+      </typeparam>
+      <returns>
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;returns&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``4(``0,``1,``2,``3)"]</p>
+      </returns>
+    </member>
+    <member name="M:PostSharp.Aspects.Arguments.Create``5(``0,``1,``2,``3,``4)">
+      <summary>
+            Creates a strongly-typed <see cref="T:PostSharp.Aspects.Arguments" /> object representing 5 arguments.
+            </summary>
+      <param name="arg0">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="arg0"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``5(``0,``1,``2,``3,``4)"]</p>
+      </param>
+      <param name="arg1">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="arg1"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``5(``0,``1,``2,``3,``4)"]</p>
+      </param>
+      <param name="arg2">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="arg2"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``5(``0,``1,``2,``3,``4)"]</p>
+      </param>
+      <param name="arg3">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="arg3"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``5(``0,``1,``2,``3,``4)"]</p>
+      </param>
+      <param name="arg4">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="arg4"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``5(``0,``1,``2,``3,``4)"]</p>
+      </param>
+      <typeparam name="T0">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T0"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``5(``0,``1,``2,``3,``4)"]</p>
+      </typeparam>
+      <typeparam name="T1">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T1"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``5(``0,``1,``2,``3,``4)"]</p>
+      </typeparam>
+      <typeparam name="T2">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T2"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``5(``0,``1,``2,``3,``4)"]</p>
+      </typeparam>
+      <typeparam name="T3">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T3"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``5(``0,``1,``2,``3,``4)"]</p>
+      </typeparam>
+      <typeparam name="T4">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T4"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``5(``0,``1,``2,``3,``4)"]</p>
+      </typeparam>
+      <returns>
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;returns&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``5(``0,``1,``2,``3,``4)"]</p>
+      </returns>
+    </member>
+    <member name="M:PostSharp.Aspects.Arguments.Create``6(``0,``1,``2,``3,``4,``5)">
+      <summary>
+            Creates a strongly-typed <see cref="T:PostSharp.Aspects.Arguments" /> object representing 6 arguments.
+            </summary>
+      <param name="arg0">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="arg0"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``6(``0,``1,``2,``3,``4,``5)"]</p>
+      </param>
+      <param name="arg1">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="arg1"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``6(``0,``1,``2,``3,``4,``5)"]</p>
+      </param>
+      <param name="arg2">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="arg2"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``6(``0,``1,``2,``3,``4,``5)"]</p>
+      </param>
+      <param name="arg3">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="arg3"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``6(``0,``1,``2,``3,``4,``5)"]</p>
+      </param>
+      <param name="arg4">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="arg4"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``6(``0,``1,``2,``3,``4,``5)"]</p>
+      </param>
+      <param name="args5">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="args5"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``6(``0,``1,``2,``3,``4,``5)"]</p>
+      </param>
+      <typeparam name="T0">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T0"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``6(``0,``1,``2,``3,``4,``5)"]</p>
+      </typeparam>
+      <typeparam name="T1">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T1"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``6(``0,``1,``2,``3,``4,``5)"]</p>
+      </typeparam>
+      <typeparam name="T2">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T2"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``6(``0,``1,``2,``3,``4,``5)"]</p>
+      </typeparam>
+      <typeparam name="T3">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T3"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``6(``0,``1,``2,``3,``4,``5)"]</p>
+      </typeparam>
+      <typeparam name="T4">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T4"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``6(``0,``1,``2,``3,``4,``5)"]</p>
+      </typeparam>
+      <typeparam name="T5">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T5"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``6(``0,``1,``2,``3,``4,``5)"]</p>
+      </typeparam>
+      <returns>
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;returns&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``6(``0,``1,``2,``3,``4,``5)"]</p>
+      </returns>
+    </member>
+    <member name="M:PostSharp.Aspects.Arguments.Create``7(``0,``1,``2,``3,``4,``5,``6)">
+      <summary>
+            Creates a strongly-typed <see cref="T:PostSharp.Aspects.Arguments" /> object representing 7 arguments.
+            </summary>
+      <param name="arg0">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="arg0"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``7(``0,``1,``2,``3,``4,``5,``6)"]</p>
+      </param>
+      <param name="arg1">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="arg1"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``7(``0,``1,``2,``3,``4,``5,``6)"]</p>
+      </param>
+      <param name="arg2">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="arg2"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``7(``0,``1,``2,``3,``4,``5,``6)"]</p>
+      </param>
+      <param name="arg3">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="arg3"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``7(``0,``1,``2,``3,``4,``5,``6)"]</p>
+      </param>
+      <param name="arg4">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="arg4"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``7(``0,``1,``2,``3,``4,``5,``6)"]</p>
+      </param>
+      <param name="args5">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="args5"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``7(``0,``1,``2,``3,``4,``5,``6)"]</p>
+      </param>
+      <param name="args6">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="args6"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``7(``0,``1,``2,``3,``4,``5,``6)"]</p>
+      </param>
+      <typeparam name="T0">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T0"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``7(``0,``1,``2,``3,``4,``5,``6)"]</p>
+      </typeparam>
+      <typeparam name="T1">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T1"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``7(``0,``1,``2,``3,``4,``5,``6)"]</p>
+      </typeparam>
+      <typeparam name="T2">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T2"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``7(``0,``1,``2,``3,``4,``5,``6)"]</p>
+      </typeparam>
+      <typeparam name="T3">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T3"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``7(``0,``1,``2,``3,``4,``5,``6)"]</p>
+      </typeparam>
+      <typeparam name="T4">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T4"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``7(``0,``1,``2,``3,``4,``5,``6)"]</p>
+      </typeparam>
+      <typeparam name="T5">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T5"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``7(``0,``1,``2,``3,``4,``5,``6)"]</p>
+      </typeparam>
+      <typeparam name="T6">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T6"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``7(``0,``1,``2,``3,``4,``5,``6)"]</p>
+      </typeparam>
+      <returns>
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;returns&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``7(``0,``1,``2,``3,``4,``5,``6)"]</p>
+      </returns>
+    </member>
+    <member name="M:PostSharp.Aspects.Arguments.Create``8(``0,``1,``2,``3,``4,``5,``6,``7)">
+      <summary>
+            Creates a strongly-typed <see cref="T:PostSharp.Aspects.Arguments" /> object representing 8 arguments.
+            </summary>
+      <param name="arg0">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="arg0"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``8(``0,``1,``2,``3,``4,``5,``6,``7)"]</p>
+      </param>
+      <param name="arg1">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="arg1"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``8(``0,``1,``2,``3,``4,``5,``6,``7)"]</p>
+      </param>
+      <param name="arg2">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="arg2"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``8(``0,``1,``2,``3,``4,``5,``6,``7)"]</p>
+      </param>
+      <param name="arg3">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="arg3"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``8(``0,``1,``2,``3,``4,``5,``6,``7)"]</p>
+      </param>
+      <param name="arg4">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="arg4"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``8(``0,``1,``2,``3,``4,``5,``6,``7)"]</p>
+      </param>
+      <param name="args5">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="args5"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``8(``0,``1,``2,``3,``4,``5,``6,``7)"]</p>
+      </param>
+      <param name="args6">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="args6"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``8(``0,``1,``2,``3,``4,``5,``6,``7)"]</p>
+      </param>
+      <param name="args7">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="args7"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``8(``0,``1,``2,``3,``4,``5,``6,``7)"]</p>
+      </param>
+      <typeparam name="T0">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T0"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``8(``0,``1,``2,``3,``4,``5,``6,``7)"]</p>
+      </typeparam>
+      <typeparam name="T1">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T1"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``8(``0,``1,``2,``3,``4,``5,``6,``7)"]</p>
+      </typeparam>
+      <typeparam name="T2">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T2"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``8(``0,``1,``2,``3,``4,``5,``6,``7)"]</p>
+      </typeparam>
+      <typeparam name="T3">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T3"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``8(``0,``1,``2,``3,``4,``5,``6,``7)"]</p>
+      </typeparam>
+      <typeparam name="T4">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T4"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``8(``0,``1,``2,``3,``4,``5,``6,``7)"]</p>
+      </typeparam>
+      <typeparam name="T5">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T5"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``8(``0,``1,``2,``3,``4,``5,``6,``7)"]</p>
+      </typeparam>
+      <typeparam name="T6">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T6"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``8(``0,``1,``2,``3,``4,``5,``6,``7)"]</p>
+      </typeparam>
+      <typeparam name="T7">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T7"/&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``8(``0,``1,``2,``3,``4,``5,``6,``7)"]</p>
+      </typeparam>
+      <returns>
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;returns&gt; documentation for "M:PostSharp.Aspects.Arguments.Create``8(``0,``1,``2,``3,``4,``5,``6,``7)"]</p>
+      </returns>
     </member>
     <member name="F:PostSharp.Aspects.Arguments.Empty">
       <summary>
@@ -369,7 +666,7 @@
       <param name="aspectConstruction">An <see cref="T:PostSharp.Reflection.ObjectConstruction" /> instructing how the aspect instance
               should be constructed.</param>
       <param name="aspectConfiguration">An optional configuration object whose type corresponds to 
-              the the aspect type.</param>
+              the aspect type.</param>
     </member>
     <member name="P:PostSharp.Aspects.AspectInstance.TargetElement">
       <summary>
@@ -449,6 +746,48 @@
       <param name="assembly">Assembly to which the current aspect is applied</param>
       <param name="aspectInfo">Reserved for future usage.</param>
     </member>
+    <member name="M:PostSharp.Aspects.AssemblyLevelAspect.CompileTimeValidate(System.Object)">
+      <summary>
+              Method invoked at build time to ensure that the aspect has been applied to the right target.
+            </summary>
+      <param name="target">Code element (<see cref="T:System.Reflection.Assembly" />, <see cref="T:System.Type" />, 
+              <see cref="T:System.Reflection.FieldInfo" />, <see cref="T:System.Reflection.MethodBase" />, <see cref="T:System.Reflection.PropertyInfo" />, <see cref="T:System.Reflection.EventInfo" />, 
+              <see cref="T:System.Reflection.ParameterInfo" />, or <see cref="T:PostSharp.Reflection.LocationInfo" />) to which the aspect has been applied.</param>
+      <returns>
+        <c>true</c> if the aspect was applied to an acceptable target, otherwise
+              <c>false</c>.</returns>
+    </member>
+    <member name="M:PostSharp.Aspects.AssemblyLevelAspect.CompileTimeValidate(System.Reflection.Assembly)">
+      <summary>
+              Method invoked at build time to ensure that the aspect has been applied to the right target.
+            </summary>
+      <param name="assembly">Assembly on which the current aspect is applied.</param>
+      <returns>
+        <c>true</c> if the aspect was applied to an acceptable target, otherwise
+              <c>false</c>.</returns>
+    </member>
+    <member name="M:PostSharp.Aspects.AssemblyLevelAspect.SetAspectConfiguration(PostSharp.Aspects.Configuration.AspectConfiguration,System.Object)">
+      <summary>
+              Method invoked at build time to set up an <see cref="T:PostSharp.Aspects.Configuration.AspectConfiguration" /> object according to the current 
+              <see cref="T:PostSharp.Aspects.Aspect" /> instance and a specified target element of the current aspect.
+            </summary>
+      <param name="aspectConfiguration">The <see cref="T:PostSharp.Aspects.Configuration.AspectConfiguration" /> instance previously returned  by the
+              <see cref="M:PostSharp.Aspects.Aspect.CreateAspectConfiguration" /> method.</param>
+      <param name="targetElement">Code element (<see cref="T:System.Reflection.Assembly" />, <see cref="T:System.Type" />, 
+              <see cref="T:System.Reflection.FieldInfo" />, <see cref="T:System.Reflection.MethodBase" />, <see cref="T:System.Reflection.PropertyInfo" />, <see cref="T:System.Reflection.EventInfo" />, 
+              <see cref="T:System.Reflection.ParameterInfo" />, or <see cref="T:PostSharp.Reflection.LocationInfo" />) to which the current <see cref="T:PostSharp.Aspects.Aspect" />
+              has been applied.
+            </param>
+    </member>
+    <member name="M:PostSharp.Aspects.AssemblyLevelAspect.SetAspectConfiguration(PostSharp.Aspects.Configuration.AspectConfiguration,System.Reflection.Assembly)">
+      <summary>
+              Method invoked at build time to set up an <see cref="T:PostSharp.Aspects.Configuration.AspectConfiguration" /> object according to the current 
+              <see cref="T:PostSharp.Aspects.Aspect" /> instance and a specified target element of the current aspect.
+            </summary>
+      <param name="aspectConfiguration">The <see cref="T:PostSharp.Aspects.Configuration.AspectConfiguration" /> instance previously returned  by the
+              <see cref="M:PostSharp.Aspects.Aspect.CreateAspectConfiguration" /> method.</param>
+      <param name="targetAssembly">Assembly to which the current aspect has been applied.</param>
+    </member>
     <member name="T:PostSharp.Aspects.CompositionAspect">
       <summary>
             Aspect that, when applied on a type, introduces one or many new interfaces
@@ -523,6 +862,27 @@
       <param name="aspectConfiguration">The <see cref="T:PostSharp.Aspects.Configuration.AspectConfiguration" /> instance previously returned  by the
               <see cref="M:PostSharp.Aspects.Aspect.CreateAspectConfiguration" /> method.</param>
       <param name="targetType">Type to which the current aspect has been applied.</param>
+    </member>
+    <member name="T:PostSharp.Aspects.ConstructorDepth">
+      <summary>
+            System type used in the implementation of the <see cref="T:PostSharp.Aspects.Advices.OnInstanceConstructedAdvice" />. Do not use in user code.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Aspects.ConstructorDepth.Increment">
+      <summary>
+            Creates a new instance of the <see cref="T:PostSharp.Aspects.ConstructorDepth" /> type with a depth level that is one more than the current one.
+            </summary>
+      <returns>A new <see cref="T:PostSharp.Aspects.ConstructorDepth" />, incremented of one from the current <see cref="T:PostSharp.Aspects.ConstructorDepth" />.</returns>
+    </member>
+    <member name="P:PostSharp.Aspects.ConstructorDepth.IsZero">
+      <summary>
+            Determines whether the current depth is zero.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Aspects.ConstructorDepth.Zero">
+      <summary>
+            Gets a <see cref="T:PostSharp.Aspects.ConstructorDepth" /> instance representing zero.
+            </summary>
     </member>
     <member name="T:PostSharp.Aspects.CustomAttributeIntroductionAspect">
       <summary>
@@ -673,11 +1033,53 @@
       <param name="targetEvent">Event to which the current aspect is applied</param>
       <param name="aspectInfo">Reserved for future usage.</param>
     </member>
+    <member name="M:PostSharp.Aspects.EventLevelAspect.CompileTimeValidate(System.Object)">
+      <summary>
+              Method invoked at build time to ensure that the aspect has been applied to the right target.
+            </summary>
+      <param name="target">Code element (<see cref="T:System.Reflection.Assembly" />, <see cref="T:System.Type" />, 
+              <see cref="T:System.Reflection.FieldInfo" />, <see cref="T:System.Reflection.MethodBase" />, <see cref="T:System.Reflection.PropertyInfo" />, <see cref="T:System.Reflection.EventInfo" />, 
+              <see cref="T:System.Reflection.ParameterInfo" />, or <see cref="T:PostSharp.Reflection.LocationInfo" />) to which the aspect has been applied.</param>
+      <returns>
+        <c>true</c> if the aspect was applied to an acceptable target, otherwise
+              <c>false</c>.</returns>
+    </member>
+    <member name="M:PostSharp.Aspects.EventLevelAspect.CompileTimeValidate(System.Reflection.EventInfo)">
+      <summary>
+              Method invoked at build time to ensure that the aspect has been applied to the right target.
+            </summary>
+      <param name="targetEvent">Event to which the aspect has been applied</param>
+      <returns>
+        <c>true</c> if the aspect was applied to an acceptable event, otherwise
+              <c>false</c>.</returns>
+    </member>
     <member name="M:PostSharp.Aspects.EventLevelAspect.RuntimeInitialize(System.Reflection.EventInfo)">
       <summary>
               Initializes the current aspect.
             </summary>
       <param name="eventInfo">Event to which the current aspect is applied.</param>
+    </member>
+    <member name="M:PostSharp.Aspects.EventLevelAspect.SetAspectConfiguration(PostSharp.Aspects.Configuration.AspectConfiguration,System.Object)">
+      <summary>
+              Method invoked at build time to set up an <see cref="T:PostSharp.Aspects.Configuration.AspectConfiguration" /> object according to the current 
+              <see cref="T:PostSharp.Aspects.Aspect" /> instance and a specified target element of the current aspect.
+            </summary>
+      <param name="aspectConfiguration">The <see cref="T:PostSharp.Aspects.Configuration.AspectConfiguration" /> instance previously returned  by the
+              <see cref="M:PostSharp.Aspects.Aspect.CreateAspectConfiguration" /> method.</param>
+      <param name="targetElement">Code element (<see cref="T:System.Reflection.Assembly" />, <see cref="T:System.Type" />, 
+              <see cref="T:System.Reflection.FieldInfo" />, <see cref="T:System.Reflection.MethodBase" />, <see cref="T:System.Reflection.PropertyInfo" />, <see cref="T:System.Reflection.EventInfo" />, 
+              <see cref="T:System.Reflection.ParameterInfo" />, or <see cref="T:PostSharp.Reflection.LocationInfo" />) to which the current <see cref="T:PostSharp.Aspects.Aspect" />
+              has been applied.
+            </param>
+    </member>
+    <member name="M:PostSharp.Aspects.EventLevelAspect.SetAspectConfiguration(PostSharp.Aspects.Configuration.AspectConfiguration,System.Reflection.EventInfo)">
+      <summary>
+              Method invoked at build time to set up an <see cref="T:PostSharp.Aspects.Configuration.AspectConfiguration" /> object according to the current 
+              <see cref="T:PostSharp.Aspects.Aspect" /> instance and a specified target element of the current aspect.
+            </summary>
+      <param name="aspectConfiguration">The <see cref="T:PostSharp.Aspects.Configuration.AspectConfiguration" /> instance previously returned  by the
+              <see cref="M:PostSharp.Aspects.Aspect.CreateAspectConfiguration" /> method.</param>
+      <param name="targetEvent">Event to which the current aspect has been applied.</param>
     </member>
     <member name="M:PostSharp.Aspects.ExternalAspect.#ctor">
       <summary>Initializes a new instance of the <see cref="T:PostSharp.Aspects.ExternalAspect" /> class</summary>
@@ -698,11 +1100,53 @@
       <param name="field">Field to which the current aspect is applied</param>
       <param name="aspectInfo">Reserved for future usage.</param>
     </member>
+    <member name="M:PostSharp.Aspects.FieldLevelAspect.CompileTimeValidate(System.Object)">
+      <summary>
+              Method invoked at build time to ensure that the aspect has been applied to the right target.
+            </summary>
+      <param name="target">Code element (<see cref="T:System.Reflection.Assembly" />, <see cref="T:System.Type" />, 
+              <see cref="T:System.Reflection.FieldInfo" />, <see cref="T:System.Reflection.MethodBase" />, <see cref="T:System.Reflection.PropertyInfo" />, <see cref="T:System.Reflection.EventInfo" />, 
+              <see cref="T:System.Reflection.ParameterInfo" />, or <see cref="T:PostSharp.Reflection.LocationInfo" />) to which the aspect has been applied.</param>
+      <returns>
+        <c>true</c> if the aspect was applied to an acceptable target, otherwise
+              <c>false</c>.</returns>
+    </member>
+    <member name="M:PostSharp.Aspects.FieldLevelAspect.CompileTimeValidate(System.Reflection.FieldInfo)">
+      <summary>
+              Method invoked at build time to ensure that the aspect has been applied to the right target.
+            </summary>
+      <param name="field">Field to which the aspect has been applied</param>
+      <returns>
+        <c>true</c> if the aspect was applied to an acceptable field, otherwise
+              <c>false</c>.</returns>
+    </member>
     <member name="M:PostSharp.Aspects.FieldLevelAspect.RuntimeInitialize(System.Reflection.FieldInfo)">
       <summary>
               Method invoked at runtime before any other method of the aspect is invoked.
             </summary>
       <param name="field">Field on which this instance is applied.</param>
+    </member>
+    <member name="M:PostSharp.Aspects.FieldLevelAspect.SetAspectConfiguration(PostSharp.Aspects.Configuration.AspectConfiguration,System.Object)">
+      <summary>
+              Method invoked at build time to set up an <see cref="T:PostSharp.Aspects.Configuration.AspectConfiguration" /> object according to the current 
+              <see cref="T:PostSharp.Aspects.Aspect" /> instance and a specified target element of the current aspect.
+            </summary>
+      <param name="aspectConfiguration">The <see cref="T:PostSharp.Aspects.Configuration.AspectConfiguration" /> instance previously returned  by the
+              <see cref="M:PostSharp.Aspects.Aspect.CreateAspectConfiguration" /> method.</param>
+      <param name="targetElement">Code element (<see cref="T:System.Reflection.Assembly" />, <see cref="T:System.Type" />, 
+              <see cref="T:System.Reflection.FieldInfo" />, <see cref="T:System.Reflection.MethodBase" />, <see cref="T:System.Reflection.PropertyInfo" />, <see cref="T:System.Reflection.EventInfo" />, 
+              <see cref="T:System.Reflection.ParameterInfo" />, or <see cref="T:PostSharp.Reflection.LocationInfo" />) to which the current <see cref="T:PostSharp.Aspects.Aspect" />
+              has been applied.
+            </param>
+    </member>
+    <member name="M:PostSharp.Aspects.FieldLevelAspect.SetAspectConfiguration(PostSharp.Aspects.Configuration.AspectConfiguration,System.Reflection.FieldInfo)">
+      <summary>
+              Method invoked at build time to set up an <see cref="T:PostSharp.Aspects.Configuration.AspectConfiguration" /> object according to the current 
+              <see cref="T:PostSharp.Aspects.Aspect" /> instance and a specified target element of the current aspect.
+            </summary>
+      <param name="aspectConfiguration">The <see cref="T:PostSharp.Aspects.Configuration.AspectConfiguration" /> instance previously returned  by the
+              <see cref="M:PostSharp.Aspects.Aspect.CreateAspectConfiguration" /> method.</param>
+      <param name="targetField">Field to which the current aspect has been applied.</param>
     </member>
     <member name="T:PostSharp.Aspects.FlowBehavior">
       <summary>
@@ -766,6 +1210,31 @@
       <returns>An <see cref="T:PostSharp.Aspects.Configuration.AspectConfiguration" /> representing the imperative configuration
               of the current <see cref="T:PostSharp.Aspects.Aspect" />.</returns>
     </member>
+    <member name="T:PostSharp.Aspects.IAspectInstance">
+      <summary>
+            Represents an instance of an aspect applied to a declaration.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Aspects.IAspectInstance.Aspect">
+      <summary>
+              Gets the aspect instance.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Aspects.IAspectInstance.AspectConfiguration">
+      <summary>
+              Gets the aspect configuration.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Aspects.IAspectInstance.AspectConstruction">
+      <summary>
+              Gets the aspect construction.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Aspects.IAspectInstance.AspectType">
+      <summary>
+            Gets the type of the aspect.
+            </summary>
+    </member>
     <member name="T:PostSharp.Aspects.IAspectProvider">
       <summary>
               Interface that, when implemented by an aspect class, allows aspect instances
@@ -781,6 +1250,33 @@
               <see cref="T:System.Reflection.ParameterInfo" />, or <see cref="T:PostSharp.Reflection.LocationInfo" />) to which the current aspect has been applied.
             </param>
       <returns>A set of aspect instances.</returns>
+    </member>
+    <member name="T:PostSharp.Aspects.IAspectRepositoryService">
+      <summary>
+            Service that allows to determine which aspects have been applied to a given declaration, whether declaratively through custom attributes or <see cref="T:PostSharp.Extensibility.MulticastAttribute" />,
+            or programmatically using <see cref="T:PostSharp.Aspects.IAspectProvider" />.
+            </summary>
+    </member>
+    <member name="E:PostSharp.Aspects.IAspectRepositoryService.AspectDiscoveryCompleted">
+      <summary>
+            Event invoked after all the aspects in the current project have been discovered and initialized.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Aspects.IAspectRepositoryService.GetAspectInstances(System.Object)">
+      <summary>
+            Gets the list of aspect instances on a given declaration.
+            </summary>
+      <param name="declaration">The declaration (in the current assembly) for which the list of aspect instances is required.</param>
+      <returns>The list of aspect instances applied on <paramref name="declaration" />.</returns>
+    </member>
+    <member name="M:PostSharp.Aspects.IAspectRepositoryService.HasAspect(System.Object,System.Type)">
+      <summary>
+            Determines whether an aspect of a given type has been applied to a given declaration.
+            </summary>
+      <param name="declaration">The declaration on which the presence of the aspect must be checked.</param>
+      <param name="aspectType">The type of aspect.</param>
+      <returns>
+        <c>true</c> if an aspect of type <paramref name="aspectType" /> has been applied to <paramref name="declaration" />, otherwise <c>false</c>.</returns>
     </member>
     <member name="T:PostSharp.Aspects.IAssemblyLevelAspect">
       <summary>
@@ -814,6 +1310,16 @@
             </summary>
       <param name="source">Aspect instance corresponding to the current
             aspect instance in the cloned target object.</param>
+    </member>
+    <member name="M:PostSharp.Aspects.IComposed`1.GetImplementation(PostSharp.Aspects.InstanceCredentials)">
+      <summary>
+              Gets the object implementing the interface <typeparamref name="T" />
+              on behalf of the current instance.
+            </summary>
+      <param name="credentials">Credentials provided by the current instance.</param>
+      <returns>The object implementing the interface <typeparamref name="T" />
+              on behalf of the current instance.
+            </returns>
     </member>
     <member name="T:PostSharp.Aspects.ICompositionAspect">
       <summary>
@@ -968,6 +1474,11 @@
               invoke the next node in the chain of invocation.
             </summary>
     </member>
+    <member name="P:PostSharp.Aspects.ILocationBinding.DeclarationIdentifier">
+      <summary>
+            Gets the <see cref="P:PostSharp.Aspects.ILocationBinding.DeclarationIdentifier" /> of the declaration that the binding represents.
+            </summary>
+    </member>
     <member name="M:PostSharp.Aspects.ILocationBinding.GetValue(System.Object@,PostSharp.Aspects.Arguments)">
       <summary>
               Invokes the <c>Get</c> semantic on the next node in the chain of invocation.
@@ -976,6 +1487,16 @@
       <param name="index">Index arguments, if the location is an indexer property.</param>
       <returns>The value stored at the location.</returns>
     </member>
+    <member name="P:PostSharp.Aspects.ILocationBinding.LocationInfo">
+      <summary>
+            Gets metadata information about the field or property represented by the current binding.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Aspects.ILocationBinding.LocationType">
+      <summary>
+            Gets the type of the field or property.
+            </summary>
+    </member>
     <member name="M:PostSharp.Aspects.ILocationBinding.SetValue(System.Object@,PostSharp.Aspects.Arguments,System.Object)">
       <summary>
               Invokes the <c>Set</c> semantic on the next node in the chain of invocation.
@@ -983,6 +1504,147 @@
       <param name="instance">Target instance from which the field or property should be retrieved (<c>null</c> if the field or property is static).</param>
       <param name="index">Index arguments, if the location is an indexer property.</param>
       <param name="value">New value to be stored at the location.</param>
+    </member>
+    <member name="T:PostSharp.Aspects.ILocationBinding`1">
+      <summary>
+            A strongly-typed variant for <see cref="T:PostSharp.Aspects.ILocationBinding" />.
+            </summary>
+      <typeparam name="T">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="T"/&gt; documentation for "T:PostSharp.Aspects.ILocationBinding`1"]</p>
+      </typeparam>
+    </member>
+    <member name="M:PostSharp.Aspects.ILocationBinding`1.GetValue(System.Object@,PostSharp.Aspects.Arguments)">
+      <summary>
+              Invokes the <c>Get</c> semantic on the next node in the chain of invocation.
+            </summary>
+      <param name="instance">Target instance from which the field or property should be retrieved (<c>null</c> if the field or property is static).</param>
+      <param name="index">Index arguments, if the location is an indexer property.</param>
+      <returns>The value stored at the location.</returns>
+    </member>
+    <member name="M:PostSharp.Aspects.ILocationBinding`1.SetValue(System.Object@,PostSharp.Aspects.Arguments,`0)">
+      <summary>
+              Invokes the <c>Set</c> semantic on the next node in the chain of invocation.
+            </summary>
+      <param name="instance">Target instance from which the field or property should be retrieved (<c>null</c> if the field or property is static).</param>
+      <param name="index">Index arguments, if the location is an indexer property.</param>
+      <param name="value">New value to be stored at the location.</param>
+    </member>
+    <member name="T:PostSharp.Aspects.ILocationInterceptionArgs">
+      <summary>
+            An interface for <see cref="T:PostSharp.Aspects.LocationInterceptionArgs" />.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Aspects.ILocationInterceptionArgs.Binding">
+      <summary>
+              Gets an interface that allows to invoke the next node in the chain of invocation of the intercepted method.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Aspects.ILocationInterceptionArgs.Execute``1(PostSharp.Aspects.ILocationInterceptionArgsAction{``0},``0@)">
+      <summary>
+            Executes a delegate for the current <see cref="T:PostSharp.Aspects.LocationInterceptionArgs" />. This method allows to
+            execute strongly-typed operations and avoid boxing required by the weakly typed <see cref="T:PostSharp.Aspects.ILocationInterceptionArgs" /> interface.
+            </summary>
+      <param name="action">Class (typically a singleton) that contains the generic method <see cref="M:PostSharp.Aspects.ILocationInterceptionArgsAction`1.Execute``1(PostSharp.Aspects.ILocationInterceptionArgs{``0},`0@)" />
+            that will be executed with the right method generic argument.</param>
+      <param name="payload">An argument being passed to the <see cref="M:PostSharp.Aspects.ILocationInterceptionArgsAction`1.Execute``1(PostSharp.Aspects.ILocationInterceptionArgs{``0},`0@)" /> method of the <paramref name="action" />
+            parameter.</param>
+      <typeparam name="TPayload">Type of the payload.</typeparam>
+    </member>
+    <member name="M:PostSharp.Aspects.ILocationInterceptionArgs.GetCurrentValue">
+      <summary>
+              Retrieves the current value of the location without overwriting the <see cref="P:PostSharp.Aspects.LocationInterceptionArgs.Value" /> property.
+            </summary>
+      <returns>The current value of the location, as returned by the next node in the chain of invocation (see <see cref="P:PostSharp.Aspects.LocationInterceptionArgs.Binding" />).</returns>
+    </member>
+    <member name="P:PostSharp.Aspects.ILocationInterceptionArgs.Index">
+      <summary>
+              Gets the current index arguments (in case of a property with parameters).
+            </summary>
+    </member>
+    <member name="P:PostSharp.Aspects.ILocationInterceptionArgs.Instance">
+      <summary>
+              Gets or sets the object instance on which the method is being executed.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Aspects.ILocationInterceptionArgs.Location">
+      <summary>
+              Gets the location (field, property or parameter) related to the aspect or advice being executed.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Aspects.ILocationInterceptionArgs.LocationFullName">
+      <summary>
+              Gets the full name (including the full name of the declaring type) of the location (field, property or parameter) related to the aspect or advice being executed.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Aspects.ILocationInterceptionArgs.LocationName">
+      <summary>
+              Gets the name of the location (field, property or parameter) related to the aspect or advice being executed.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Aspects.ILocationInterceptionArgs.ProceedGetValue">
+      <summary>
+              Invokes the <b>Get Location Value</b> semantic on the next node in the chain of invocation and stores the location value in the <see cref="P:PostSharp.Aspects.LocationInterceptionArgs.Value" /> property.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Aspects.ILocationInterceptionArgs.ProceedSetValue">
+      <summary>
+              Invokes the <b>Set Location Value</b> semantic on the next node in the chain of invocation and stores the value of the <see cref="P:PostSharp.Aspects.LocationInterceptionArgs.Value" /> property into
+              the location.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Aspects.ILocationInterceptionArgs.SetNewValue(System.Object)">
+      <summary>
+              Sets the value of the location without overwriting the <see cref="P:PostSharp.Aspects.LocationInterceptionArgs.Value" /> property.
+            </summary>
+      <param name="value">The value to be passed to the next node in the chain of invocation (see <see cref="P:PostSharp.Aspects.LocationInterceptionArgs.Binding" />).</param>
+    </member>
+    <member name="P:PostSharp.Aspects.ILocationInterceptionArgs.Value">
+      <summary>
+              Gets or sets the location value.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Aspects.ILocationInterceptionArgs`1">
+      <summary>
+            A strongly-typed specialization of the <see cref="T:PostSharp.Aspects.ILocationInterceptionArgs" /> interface.
+            </summary>
+      <typeparam name="T">Type of the location value.</typeparam>
+    </member>
+    <member name="P:PostSharp.Aspects.ILocationInterceptionArgs`1.Binding">
+      <summary>
+              Gets an interface that allows to invoke the next node in the chain of invocation of the intercepted method.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Aspects.ILocationInterceptionArgs`1.GetCurrentValue">
+      <summary>
+              Retrieves the current value of the location without overwriting the <see cref="P:PostSharp.Aspects.LocationInterceptionArgs.Value" /> property.
+            </summary>
+      <returns>The current value of the location, as returned by the next node in the chain of invocation (see <see cref="P:PostSharp.Aspects.LocationInterceptionArgs.Binding" />).</returns>
+    </member>
+    <member name="M:PostSharp.Aspects.ILocationInterceptionArgs`1.SetNewValue(`0)">
+      <summary>
+              Sets the value of the location without overwriting the <see cref="P:PostSharp.Aspects.LocationInterceptionArgs.Value" /> property.
+            </summary>
+      <param name="value">The value to be passed to the next node in the chain of invocation (see <see cref="P:PostSharp.Aspects.LocationInterceptionArgs.Binding" />).</param>
+    </member>
+    <member name="P:PostSharp.Aspects.ILocationInterceptionArgs`1.Value">
+      <summary>
+              Gets or sets the location value.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Aspects.ILocationInterceptionArgsAction`1">
+      <summary>
+            Exposes an <see cref="M:PostSharp.Aspects.ILocationInterceptionArgsAction`1.Execute``1(PostSharp.Aspects.ILocationInterceptionArgs{``0},`0@)" /> method invoked by the <see cref="M:PostSharp.Aspects.LocationInterceptionArgs.Execute``1(PostSharp.Aspects.ILocationInterceptionArgsAction{``0},``0@)" /> method,
+            which allows to execute strongly-typed operations and avoid boxing required by the weakly typed <see cref="T:PostSharp.Aspects.ILocationInterceptionArgs" /> interface.
+            </summary>
+      <typeparam name="TPayload">Type of the payload of the <see cref="M:PostSharp.Aspects.ILocationInterceptionArgsAction`1.Execute``1(PostSharp.Aspects.ILocationInterceptionArgs{``0},`0@)" /> method.</typeparam>
+    </member>
+    <member name="M:PostSharp.Aspects.ILocationInterceptionArgsAction`1.Execute``1(PostSharp.Aspects.ILocationInterceptionArgs{``0},`0@)">
+      <summary>
+            Method invoked by the <see cref="M:PostSharp.Aspects.LocationInterceptionArgs.Execute``1(PostSharp.Aspects.ILocationInterceptionArgsAction{``0},``0@)" /> method.
+            </summary>
+      <param name="args">The typed <see cref="T:PostSharp.Aspects.LocationInterceptionArgs" />.</param>
+      <param name="payload">Payload passed to the <see cref="M:PostSharp.Aspects.LocationInterceptionArgs.Execute``1(PostSharp.Aspects.ILocationInterceptionArgsAction{``0},``0@)" /> method.</param>
+      <typeparam name="TValue">Type of the value of the <see cref="T:PostSharp.Aspects.LocationInterceptionArgs" /> object.</typeparam>
     </member>
     <member name="T:PostSharp.Aspects.ILocationInterceptionAspect">
       <summary>
@@ -1106,6 +1768,62 @@
       <param name="method">Method to which the current aspect is applied</param>
       <param name="aspectInfo">Reserved for future usage.</param>
     </member>
+    <member name="M:PostSharp.Aspects.InstanceCredentials.AssertEquals(PostSharp.Aspects.InstanceCredentials)">
+      <summary>
+              Throws an exception if given credentials are not equal
+              to the current one.
+            </summary>
+      <param name="others">Other credentials.</param>
+    </member>
+    <member name="M:PostSharp.Aspects.InstanceCredentials.Equals(PostSharp.Aspects.InstanceCredentials)">
+      <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+      <param name="other">An object to compare with this object.</param>
+      <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
+    </member>
+    <member name="M:PostSharp.Aspects.InstanceCredentials.Equals(System.Object)">
+      <summary>Indicates whether this instance and a specified object are equal.</summary>
+      <param name="obj">Another object to compare to. </param>
+      <returns>true if <paramref name="obj" /> and this instance are the same type and represent the same value; otherwise, false.</returns>
+    </member>
+    <member name="M:PostSharp.Aspects.InstanceCredentials.GetHashCode">
+      <summary>Returns the hash code for this instance.</summary>
+      <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
+    </member>
+    <member name="M:PostSharp.Aspects.InstanceCredentials.MakeNew">
+      <summary>
+              Creates a new <see cref="T:PostSharp.Aspects.InstanceCredentials" />.
+            </summary>
+      <returns>A new <see cref="T:PostSharp.Aspects.InstanceCredentials" />.</returns>
+    </member>
+    <member name="F:PostSharp.Aspects.InstanceCredentials.Null">
+      <summary>
+            Gets a null (or empty) <see cref="T:PostSharp.Aspects.InstanceCredentials" />/
+            </summary>
+    </member>
+    <member name="M:PostSharp.Aspects.InstanceCredentials.op_Equality(PostSharp.Aspects.InstanceCredentials,PostSharp.Aspects.InstanceCredentials)">
+      <summary>
+              Determines whether two <see cref="T:PostSharp.Aspects.InstanceCredentials" /> are equal.
+            </summary>
+      <param name="left">An <see cref="T:PostSharp.Aspects.InstanceCredentials" /> object.</param>
+      <param name="right">An <see cref="T:PostSharp.Aspects.InstanceCredentials" /> object.</param>
+      <returns>
+        <c>true</c> if <paramref name="left" /> equals <paramref name="right" />,
+              otherwise <c>false</c>.</returns>
+    </member>
+    <member name="M:PostSharp.Aspects.InstanceCredentials.op_Inequality(PostSharp.Aspects.InstanceCredentials,PostSharp.Aspects.InstanceCredentials)">
+      <summary>
+              Determines whether two <see cref="T:PostSharp.Aspects.InstanceCredentials" /> are different.
+            </summary>
+      <param name="left">An <see cref="T:PostSharp.Aspects.InstanceCredentials" /> object.</param>
+      <param name="right">An <see cref="T:PostSharp.Aspects.InstanceCredentials" /> object.</param>
+      <returns>
+        <c>true</c> if <paramref name="left" /> is different than <paramref name="right" />,
+              otherwise <c>false</c>.</returns>
+    </member>
+    <member name="M:PostSharp.Aspects.InstanceCredentials.ToString">
+      <summary>Returns the fully qualified type name of this instance.</summary>
+      <returns>A <see cref="T:System.String" /> containing a fully qualified type name.</returns>
+    </member>
     <member name="T:PostSharp.Aspects.InstanceLevelAspect">
       <summary>
             Base class for aspects applied on types, but having the same lifetime as
@@ -1226,6 +1944,13 @@
               is being executed and which are its arguments. In iterator methods, the <see cref="P:PostSharp.Aspects.MethodExecutionArgs.YieldValue" />
             property gives access to the operand of the <c>yield return</c> statement.</param>
     </member>
+    <member name="M:PostSharp.Aspects.IProtectedInterface`1.GetInterface(PostSharp.Aspects.InstanceCredentials)">
+      <summary>
+              Gets a protected interface.
+            </summary>
+      <param name="credentials">Credentials of the current instance.</param>
+      <returns>The implementation of the interface <typeparamref name="T" />.</returns>
+    </member>
     <member name="T:PostSharp.Aspects.ITypeLevelAspect">
       <summary>
               Run-time semantics of aspects applied to types.
@@ -1250,6 +1975,47 @@
       <param name="type">Type to which the current aspect is applied</param>
       <param name="aspectInfo">Reserved for future usage.</param>
     </member>
+    <member name="T:PostSharp.Aspects.LocationBindingExtensions">
+      <summary>
+            Extension methods for the <see cref="T:PostSharp.Aspects.ILocationBinding" /> interface.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Aspects.LocationBindingExtensions.GetValue(PostSharp.Aspects.ILocationBinding,System.Object)">
+      <summary>
+            Gets the value of a field or property.
+            </summary>
+      <param name="locationBinding">The binding for the field or property.</param>
+      <param name="instance">The instance for which the field or property is evaluated, or <c>null</c> if the location is static.</param>
+      <returns>The field or property value.</returns>
+    </member>
+    <member name="M:PostSharp.Aspects.LocationBindingExtensions.GetValue(PostSharp.Aspects.ILocationBinding,System.Object,PostSharp.Aspects.Arguments)">
+      <summary>
+            Gets the value of an indexer (property with arguments).
+            </summary>
+      <param name="locationBinding">The binding for the indexer.</param>
+      <param name="instance">The instance for which the indexer is evaluated, or <c>null</c> if the indexer is static.</param>
+      <param name="index">The arguments of the indexer.</param>
+      <returns>The indexer value.</returns>
+    </member>
+    <member name="M:PostSharp.Aspects.LocationBindingExtensions.SetValue(PostSharp.Aspects.ILocationBinding,System.Object,PostSharp.Aspects.Arguments,System.Object)">
+      <summary>
+            Sets the value of an indexer (property with arguments).
+            </summary>
+      <param name="locationBinding">The binding for the indexer.</param>
+      <param name="instance">The instance for which the indexer is set, or <c>null</c> if the indexer is static.</param>
+      <param name="index">The arguments of the indexer.</param>
+      <param name="value">The new value.</param>
+      <returns>The indexer value.</returns>
+    </member>
+    <member name="M:PostSharp.Aspects.LocationBindingExtensions.SetValue(PostSharp.Aspects.ILocationBinding,System.Object,System.Object)">
+      <summary>
+            Sets the value of a field or property.
+            </summary>
+      <param name="locationBinding">The binding for the field or property.</param>
+      <param name="instance">The instance for which the field or property is set, or <c>null</c> if the location is static.</param>
+      <param name="value">The new value assigned to the field or property.</param>
+      <returns>The field or property value.</returns>
+    </member>
     <member name="T:PostSharp.Aspects.LocationInterceptionArgs">
       <summary>
               Arguments of advices of aspect type <see cref="T:PostSharp.Aspects.LocationInterceptionAspect" />.
@@ -1259,6 +2025,20 @@
       <summary>
               Gets an interface that allows to invoke the next node in the chain of invocation of the intercepted method.
             </summary>
+    </member>
+    <member name="M:PostSharp.Aspects.LocationInterceptionArgs.Execute``1(PostSharp.Aspects.ILocationInterceptionArgsAction{``0},``0@)">
+      <summary>
+            Executes a delegate for the current <see cref="T:PostSharp.Aspects.LocationInterceptionArgs" />. This method allows to
+            </summary>
+      <param name="action">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="action"/&gt; documentation for "M:PostSharp.Aspects.LocationInterceptionArgs.Execute``1(PostSharp.Aspects.ILocationInterceptionArgsAction{``0},``0@)"]</p>
+      </param>
+      <param name="payload">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="payload"/&gt; documentation for "M:PostSharp.Aspects.LocationInterceptionArgs.Execute``1(PostSharp.Aspects.ILocationInterceptionArgsAction{``0},``0@)"]</p>
+      </param>
+      <typeparam name="TPayload">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;typeparam name="TPayload"/&gt; documentation for "M:PostSharp.Aspects.LocationInterceptionArgs.Execute``1(PostSharp.Aspects.ILocationInterceptionArgsAction{``0},``0@)"]</p>
+      </typeparam>
     </member>
     <member name="M:PostSharp.Aspects.LocationInterceptionArgs.GetCurrentValue">
       <summary>
@@ -1355,11 +2135,53 @@
       <param name="targetLocation">Location to which the current aspect is applied</param>
       <param name="aspectInfo">Reserved for future usage.</param>
     </member>
+    <member name="M:PostSharp.Aspects.LocationLevelAspect.CompileTimeValidate(PostSharp.Reflection.LocationInfo)">
+      <summary>
+              Method invoked at build time to ensure that the aspect has been applied to the right target.
+            </summary>
+      <param name="locationInfo">Location to which the aspect has been applied</param>
+      <returns>
+        <c>true</c> if the aspect was applied to an acceptable field, otherwise
+              <c>false</c>.</returns>
+    </member>
+    <member name="M:PostSharp.Aspects.LocationLevelAspect.CompileTimeValidate(System.Object)">
+      <summary>
+              Method invoked at build time to ensure that the aspect has been applied to the right target.
+            </summary>
+      <param name="target">Code element (<see cref="T:System.Reflection.Assembly" />, <see cref="T:System.Type" />, 
+              <see cref="T:System.Reflection.FieldInfo" />, <see cref="T:System.Reflection.MethodBase" />, <see cref="T:System.Reflection.PropertyInfo" />, <see cref="T:System.Reflection.EventInfo" />, 
+              <see cref="T:System.Reflection.ParameterInfo" />, or <see cref="T:PostSharp.Reflection.LocationInfo" />) to which the aspect has been applied.</param>
+      <returns>
+        <c>true</c> if the aspect was applied to an acceptable target, otherwise
+              <c>false</c>.</returns>
+    </member>
     <member name="M:PostSharp.Aspects.LocationLevelAspect.RuntimeInitialize(PostSharp.Reflection.LocationInfo)">
       <summary>
               Initializes the current aspect.
             </summary>
       <param name="locationInfo">Location to which the current aspect is applied.</param>
+    </member>
+    <member name="M:PostSharp.Aspects.LocationLevelAspect.SetAspectConfiguration(PostSharp.Aspects.Configuration.AspectConfiguration,PostSharp.Reflection.LocationInfo)">
+      <summary>
+              Method invoked at build time to set up an <see cref="T:PostSharp.Aspects.Configuration.AspectConfiguration" /> object according to the current 
+              <see cref="T:PostSharp.Aspects.Aspect" /> instance and a specified target element of the current aspect.
+            </summary>
+      <param name="aspectConfiguration">The <see cref="T:PostSharp.Aspects.Configuration.AspectConfiguration" /> instance previously returned  by the
+              <see cref="M:PostSharp.Aspects.Aspect.CreateAspectConfiguration" /> method.</param>
+      <param name="targetLocation">Location to which the current aspect has been applied.</param>
+    </member>
+    <member name="M:PostSharp.Aspects.LocationLevelAspect.SetAspectConfiguration(PostSharp.Aspects.Configuration.AspectConfiguration,System.Object)">
+      <summary>
+              Method invoked at build time to set up an <see cref="T:PostSharp.Aspects.Configuration.AspectConfiguration" /> object according to the current 
+              <see cref="T:PostSharp.Aspects.Aspect" /> instance and a specified target element of the current aspect.
+            </summary>
+      <param name="aspectConfiguration">The <see cref="T:PostSharp.Aspects.Configuration.AspectConfiguration" /> instance previously returned  by the
+              <see cref="M:PostSharp.Aspects.Aspect.CreateAspectConfiguration" /> method.</param>
+      <param name="targetElement">Code element (<see cref="T:System.Reflection.Assembly" />, <see cref="T:System.Type" />, 
+              <see cref="T:System.Reflection.FieldInfo" />, <see cref="T:System.Reflection.MethodBase" />, <see cref="T:System.Reflection.PropertyInfo" />, <see cref="T:System.Reflection.EventInfo" />, 
+              <see cref="T:System.Reflection.ParameterInfo" />, or <see cref="T:PostSharp.Reflection.LocationInfo" />) to which the current <see cref="T:PostSharp.Aspects.Aspect" />
+              has been applied.
+            </param>
     </member>
     <member name="T:PostSharp.Aspects.ManagedResourceIntroductionAspect">
       <summary>
@@ -1526,11 +2348,53 @@
       <param name="method">Method to which the current aspect is applied</param>
       <param name="aspectInfo">Reserved for future usage.</param>
     </member>
+    <member name="M:PostSharp.Aspects.MethodLevelAspect.CompileTimeValidate(System.Object)">
+      <summary>
+              Method invoked at build time to ensure that the aspect has been applied to the right target.
+            </summary>
+      <param name="target">Code element (<see cref="T:System.Reflection.Assembly" />, <see cref="T:System.Type" />, 
+              <see cref="T:System.Reflection.FieldInfo" />, <see cref="T:System.Reflection.MethodBase" />, <see cref="T:System.Reflection.PropertyInfo" />, <see cref="T:System.Reflection.EventInfo" />, 
+              <see cref="T:System.Reflection.ParameterInfo" />, or <see cref="T:PostSharp.Reflection.LocationInfo" />) to which the aspect has been applied.</param>
+      <returns>
+        <c>true</c> if the aspect was applied to an acceptable target, otherwise
+              <c>false</c>.</returns>
+    </member>
+    <member name="M:PostSharp.Aspects.MethodLevelAspect.CompileTimeValidate(System.Reflection.MethodBase)">
+      <summary>
+              Method invoked at build time to ensure that the aspect has been applied to the right target.
+            </summary>
+      <param name="method">Method to which the aspect has been applied</param>
+      <returns>
+        <c>true</c> if the aspect was applied to an acceptable field, otherwise
+              <c>false</c>.</returns>
+    </member>
     <member name="M:PostSharp.Aspects.MethodLevelAspect.RuntimeInitialize(System.Reflection.MethodBase)">
       <summary>
               Initializes the current aspect.
             </summary>
       <param name="method">Method to which the current aspect is applied.</param>
+    </member>
+    <member name="M:PostSharp.Aspects.MethodLevelAspect.SetAspectConfiguration(PostSharp.Aspects.Configuration.AspectConfiguration,System.Object)">
+      <summary>
+              Method invoked at build time to set up an <see cref="T:PostSharp.Aspects.Configuration.AspectConfiguration" /> object according to the current 
+              <see cref="T:PostSharp.Aspects.Aspect" /> instance and a specified target element of the current aspect.
+            </summary>
+      <param name="aspectConfiguration">The <see cref="T:PostSharp.Aspects.Configuration.AspectConfiguration" /> instance previously returned  by the
+              <see cref="M:PostSharp.Aspects.Aspect.CreateAspectConfiguration" /> method.</param>
+      <param name="targetElement">Code element (<see cref="T:System.Reflection.Assembly" />, <see cref="T:System.Type" />, 
+              <see cref="T:System.Reflection.FieldInfo" />, <see cref="T:System.Reflection.MethodBase" />, <see cref="T:System.Reflection.PropertyInfo" />, <see cref="T:System.Reflection.EventInfo" />, 
+              <see cref="T:System.Reflection.ParameterInfo" />, or <see cref="T:PostSharp.Reflection.LocationInfo" />) to which the current <see cref="T:PostSharp.Aspects.Aspect" />
+              has been applied.
+            </param>
+    </member>
+    <member name="M:PostSharp.Aspects.MethodLevelAspect.SetAspectConfiguration(PostSharp.Aspects.Configuration.AspectConfiguration,System.Reflection.MethodBase)">
+      <summary>
+              Method invoked at build time to set up an <see cref="T:PostSharp.Aspects.Configuration.AspectConfiguration" /> object according to the current 
+              <see cref="T:PostSharp.Aspects.Aspect" /> instance and a specified target element of the current aspect.
+            </summary>
+      <param name="aspectConfiguration">The <see cref="T:PostSharp.Aspects.Configuration.AspectConfiguration" /> instance previously returned  by the
+              <see cref="M:PostSharp.Aspects.Aspect.CreateAspectConfiguration" /> method.</param>
+      <param name="targetMethod">Method to which the current aspect has been applied.</param>
     </member>
     <member name="T:PostSharp.Aspects.OnExceptionAspect">
       <summary>
@@ -1541,6 +2405,12 @@
     </member>
     <member name="M:PostSharp.Aspects.OnExceptionAspect.#ctor">
       <summary>Initializes a new instance of the <see cref="T:PostSharp.Aspects.OnExceptionAspect" /> class</summary>
+    </member>
+    <member name="P:PostSharp.Aspects.OnExceptionAspect.ApplyToStateMachine">
+      <summary>
+            Determines how the aspect should behave when it is applied to an iterator or
+            async methods, which are compiled into state machines.
+            </summary>
     </member>
     <member name="M:PostSharp.Aspects.OnExceptionAspect.CreateAspectConfiguration">
       <summary>
@@ -1724,11 +2594,53 @@
       <param name="type">Type to which the current aspect is applied</param>
       <param name="aspectInfo">Reserved for future usage.</param>
     </member>
+    <member name="M:PostSharp.Aspects.TypeLevelAspect.CompileTimeValidate(System.Object)">
+      <summary>
+              Method invoked at build time to ensure that the aspect has been applied to the right target.
+            </summary>
+      <param name="target">Code element (<see cref="T:System.Reflection.Assembly" />, <see cref="T:System.Type" />, 
+              <see cref="T:System.Reflection.FieldInfo" />, <see cref="T:System.Reflection.MethodBase" />, <see cref="T:System.Reflection.PropertyInfo" />, <see cref="T:System.Reflection.EventInfo" />, 
+              <see cref="T:System.Reflection.ParameterInfo" />, or <see cref="T:PostSharp.Reflection.LocationInfo" />) to which the aspect has been applied.</param>
+      <returns>
+        <c>true</c> if the aspect was applied to an acceptable target, otherwise
+              <c>false</c>.</returns>
+    </member>
+    <member name="M:PostSharp.Aspects.TypeLevelAspect.CompileTimeValidate(System.Type)">
+      <summary>
+              Method invoked at build time to ensure that the aspect has been applied to the right target.
+            </summary>
+      <param name="type">Type to which the aspect has been applied</param>
+      <returns>
+        <c>true</c> if the aspect was applied to an acceptable field, otherwise
+              <c>false</c>.</returns>
+    </member>
     <member name="M:PostSharp.Aspects.TypeLevelAspect.RuntimeInitialize(System.Type)">
       <summary>
               Initializes the current aspect.
             </summary>
       <param name="type">Type to which the current aspect is applied.</param>
+    </member>
+    <member name="M:PostSharp.Aspects.TypeLevelAspect.SetAspectConfiguration(PostSharp.Aspects.Configuration.AspectConfiguration,System.Object)">
+      <summary>
+              Method invoked at build time to set up an <see cref="T:PostSharp.Aspects.Configuration.AspectConfiguration" /> object according to the current 
+              <see cref="T:PostSharp.Aspects.Aspect" /> instance and a specified target element of the current aspect.
+            </summary>
+      <param name="aspectConfiguration">The <see cref="T:PostSharp.Aspects.Configuration.AspectConfiguration" /> instance previously returned  by the
+              <see cref="M:PostSharp.Aspects.Aspect.CreateAspectConfiguration" /> method.</param>
+      <param name="targetElement">Code element (<see cref="T:System.Reflection.Assembly" />, <see cref="T:System.Type" />, 
+              <see cref="T:System.Reflection.FieldInfo" />, <see cref="T:System.Reflection.MethodBase" />, <see cref="T:System.Reflection.PropertyInfo" />, <see cref="T:System.Reflection.EventInfo" />, 
+              <see cref="T:System.Reflection.ParameterInfo" />, or <see cref="T:PostSharp.Reflection.LocationInfo" />) to which the current <see cref="T:PostSharp.Aspects.Aspect" />
+              has been applied.
+            </param>
+    </member>
+    <member name="M:PostSharp.Aspects.TypeLevelAspect.SetAspectConfiguration(PostSharp.Aspects.Configuration.AspectConfiguration,System.Type)">
+      <summary>
+              Method invoked at build time to set up an <see cref="T:PostSharp.Aspects.Configuration.AspectConfiguration" /> object according to the current 
+              <see cref="T:PostSharp.Aspects.Aspect" /> instance and a specified target element of the current aspect.
+            </summary>
+      <param name="aspectConfiguration">The <see cref="T:PostSharp.Aspects.Configuration.AspectConfiguration" /> instance previously returned  by the
+              <see cref="M:PostSharp.Aspects.Aspect.CreateAspectConfiguration" /> method.</param>
+      <param name="targetType">Type to which the current aspect has been applied.</param>
     </member>
     <member name="T:PostSharp.Aspects.Advices.Advice">
       <summary>
@@ -1737,6 +2649,49 @@
     </member>
     <member name="M:PostSharp.Aspects.Advices.Advice.#ctor">
       <summary>Initializes a new instance of the <see cref="T:PostSharp.Aspects.Advices.Advice" /> class</summary>
+    </member>
+    <member name="T:PostSharp.Aspects.Advices.AdviceInstance">
+      <summary>
+            Base class for advice instances, which can be provided dynamically by the aspect thanks to the <see cref="T:PostSharp.Aspects.Advices.IAdviceProvider" /> interface.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Aspects.Advices.AdviceInstance.#ctor">
+      <summary>Initializes a new instance of the <see cref="T:PostSharp.Aspects.Advices.AdviceInstance" /> class</summary>
+    </member>
+    <member name="P:PostSharp.Aspects.Advices.AdviceInstance.MasterAspectMember">
+      <summary>
+            Gets the main field or method of the aspect class that the current <see cref="T:PostSharp.Aspects.Advices.AdviceInstance" /> relates to.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Aspects.Advices.AspectInitializationReason">
+      <summary>
+            Enumerates the reasons why the target method of the <see cref="T:PostSharp.Aspects.Advices.InitializeAspectInstanceAdvice" /> has been invoked.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Advices.AspectInitializationReason.None">
+      <summary>
+            None.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Advices.AspectInitializationReason.Manual">
+      <summary>
+            Manual call of the <c>InitializeAspects</c> method.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Advices.AspectInitializationReason.Constructor">
+      <summary>
+            Call from the instance constructor.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Advices.AspectInitializationReason.Clone">
+      <summary>
+            Call from <c>MemberwiseClone</c>.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Advices.AspectInitializationReason.Deserialize">
+      <summary>
+            Call during deserialization.
+            </summary>
     </member>
     <member name="T:PostSharp.Aspects.Advices.CopyCustomAttributesAttribute">
       <summary>
@@ -1809,7 +2764,7 @@
     </member>
     <member name="F:PostSharp.Aspects.Advices.CustomAttributeOverrideAction.MergeReplaceProperty">
       <summary>
-              Merges the exising custom attribute with the template custom attribute
+              Merges the existing custom attribute with the template custom attribute
               by adding and replacing properties and fields. If the existing custom
               attribute defines the same properties and fields as the template custom
               attribute, they are replaced by the values defined in the template
@@ -1858,6 +2813,100 @@
               the current method is itself the master of the group. Only
               master methods can define selectors (<see cref="T:PostSharp.Aspects.Advices.Pointcut" />)
               and dependencies (<see cref="T:PostSharp.Aspects.Dependencies.AspectDependencyAttribute" />).
+            </summary>
+    </member>
+    <member name="T:PostSharp.Aspects.Advices.IAdviceProvider">
+      <summary>
+            Interface that allows an aspect to provide aspects dynamically, instead of declaratively using custom attributes.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Aspects.Advices.IAdviceProvider.ProvideAdvices(System.Object)">
+      <summary>
+            Provides an enumeration of advices, represented as instances of the <see cref="T:PostSharp.Aspects.Advices.AdviceInstance" /> class, for the current aspect instance.
+            </summary>
+      <param name="targetElement">Element of code to which the current aspect has been applied.</param>
+      <returns>A collection of advices to be added to the current aspect instance.</returns>
+    </member>
+    <member name="T:PostSharp.Aspects.Advices.ImportLocationAdviceInstance">
+      <summary>
+            Represents an advice that imports a field or property (represented by a <see cref="T:PostSharp.Reflection.LocationInfo" />) of the target class
+            into a field of the aspect class. This class is the imperative equivalent of the <see cref="T:PostSharp.Aspects.Advices.ImportMemberAttribute" /> declarative advise.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Aspects.Advices.ImportLocationAdviceInstance.#ctor(System.Reflection.FieldInfo,PostSharp.Reflection.LocationInfo)">
+      <summary>
+            Initializes a new instance of the <see cref="T:PostSharp.Aspects.Advices.ImportLocationAdviceInstance" /> class and specifies which field or property should be imported by giving its reflection representation.
+            </summary>
+      <param name="aspectField">A field of the aspect class to which <paramref name="location" /> should be bound at runtime.
+                This field can be of type <see cref="T:PostSharp.Aspects.ILocationBinding" />, <see cref="T:PostSharp.Aspects.Advices.Property`1" />, or a type that is both (a) derived from <c>ICollection&lt;ILocationBinding&gt;</c> and (b) has a parameterless constructor.</param>
+      <param name="location">The field or property to import.</param>
+    </member>
+    <member name="M:PostSharp.Aspects.Advices.ImportLocationAdviceInstance.#ctor(System.Reflection.FieldInfo,System.String,System.Boolean,PostSharp.Aspects.Advices.ImportMemberOrder)">
+      <summary>
+            Initializes a new instance of the <see cref="T:PostSharp.Aspects.Advices.ImportLocationAdviceInstance" /> class and specifies the name of the property to be imported; the type of this
+            property will be matched according to the type of the aspect field.
+            </summary>
+      <param name="aspectField">A field of the aspect class to which the field or property should be bound at build time.
+                This field must be of type <see cref="T:PostSharp.Aspects.Advices.Property`1" />.</param>
+      <param name="propertyName">The name of the property to import.</param>
+      <param name="isRequired">Determines whether a build-time error should be emitted if the member cannot be found.
+            If <c>false</c>, the binding field will be <c>null</c> in case the imported member is absent.
+            </param>
+      <param name="order">Determines whether the <paramref name="aspectField" /> should be bound to the member
+            as resolved before or after introduction of new members into the target class by the current advise.</param>
+    </member>
+    <member name="P:PostSharp.Aspects.Advices.ImportLocationAdviceInstance.Location">
+      <summary>
+            Gets the field or property of the target class that needs to be imported into the aspect.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Aspects.Advices.ImportLocationAdviceInstance.Member">
+      <summary>
+            Gets the reflection object (<see cref="T:PostSharp.Reflection.LocationInfo" /> or <see cref="T:System.Reflection.MethodInfo" />) that needs to be
+            imported, or <c>null</c> if the exact member is unknown and must be matched by name and signature.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Aspects.Advices.ImportLocationAdviceInstance.MemberName">
+      <summary>
+            Gets the name of the member to be imported.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Aspects.Advices.ImportMemberAdviceInstance">
+      <summary>
+            Base class for <see cref="T:PostSharp.Aspects.Advices.ImportLocationAdviceInstance" /> and <see cref="T:PostSharp.Aspects.Advices.ImportMethodAdviceInstance" />.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Aspects.Advices.ImportMemberAdviceInstance.AspectField">
+      <summary>
+            Gets the field of the aspect class to which the field or property needs to be bound.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Aspects.Advices.ImportMemberAdviceInstance.IsRequired">
+      <summary>
+            Determines whether a build-time error should be emitted if the member cannot be found.
+            If <c>false</c>, the binding field will be <c>null</c> in case the imported member is absent.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Aspects.Advices.ImportMemberAdviceInstance.MasterAspectMember">
+      <summary>
+            Gets the main field or method of the aspect class that the current <see cref="T:PostSharp.Aspects.Advices.AdviceInstance" /> relates to.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Aspects.Advices.ImportMemberAdviceInstance.Member">
+      <summary>
+            Gets the reflection object (<see cref="T:PostSharp.Reflection.LocationInfo" /> or <see cref="T:System.Reflection.MethodInfo" />) that needs to be
+            imported, or <c>null</c> if the exact member is unknown and must be matched by name and signature.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Aspects.Advices.ImportMemberAdviceInstance.MemberName">
+      <summary>
+            Gets the name of the member to be imported.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Aspects.Advices.ImportMemberAdviceInstance.Order">
+      <summary>
+            Determines whether the <see cref="P:PostSharp.Aspects.Advices.ImportMemberAdviceInstance.AspectField" /> should be bound to the member
+            as resolved before or after introduction of new members into the target class by the current advise.
             </summary>
     </member>
     <member name="T:PostSharp.Aspects.Advices.ImportMemberAttribute">
@@ -1919,6 +2968,44 @@
               the imported member is dynamically resolved using the virtual table of the target object.
             </summary>
     </member>
+    <member name="T:PostSharp.Aspects.Advices.ImportMethodAdviceInstance">
+      <summary>
+            Represents an advises that import a method of the target class into the aspect class.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Aspects.Advices.ImportMethodAdviceInstance.#ctor(System.Reflection.FieldInfo,System.String,System.Boolean,PostSharp.Aspects.Advices.ImportMemberOrder)">
+      <summary>
+            Initializes a new instance of the <see cref="T:PostSharp.Aspects.Advices.ImportMethodAdviceInstance" />.
+            </summary>
+      <param name="aspectField">A field of the aspect class into that will be assigned to a delegate of the imported method at runtime. The field type should be a delegate of the same signature than the method to import.</param>
+      <param name="methodName">Name of the method to import.</param>
+      <param name="isRequired">
+        <c>true</c> if the build should fail if there no matching method in the target class, <c>false</c> to set <paramref name="aspectField" /> to <c>null</c> in this case.</param>
+      <param name="order">Determines whether the <paramref name="aspectField" /> should be bound to the member
+            as resolved before or after introduction of new members into the target class by the current advise.
+            </param>
+    </member>
+    <member name="P:PostSharp.Aspects.Advices.ImportMethodAdviceInstance.Member">
+      <summary>
+            Gets the reflection object (<see cref="T:PostSharp.Reflection.LocationInfo" /> or <see cref="T:System.Reflection.MethodInfo" />) that needs to be
+            imported, or <c>null</c> if the exact member is unknown and must be matched by name and signature.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Aspects.Advices.ImportMethodAdviceInstance.MemberName">
+      <summary>
+            Gets the name of the member to be imported.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Aspects.Advices.InitializeAspectInstanceAdvice">
+      <summary>
+            Custom attribute that, when applied to a method of an aspect class, specifies that this method
+            should be invoked whenever the aspect instance needs to be initialized. The target method
+            must have a <c>void</c> return value and have a single parameter of type <see cref="T:PostSharp.Aspects.Advices.AspectInitializationReason" />.
+            This method is equivalent to <see cref="M:PostSharp.Aspects.IInstanceScopedAspect.RuntimeInitializeInstance" /></summary>
+    </member>
+    <member name="M:PostSharp.Aspects.Advices.InitializeAspectInstanceAdvice.#ctor">
+      <summary>Initializes a new instance of the <see cref="T:PostSharp.Aspects.Advices.InitializeAspectInstanceAdvice" /> class</summary>
+    </member>
     <member name="T:PostSharp.Aspects.Advices.InterfaceOverrideAction">
       <summary>
               Enumeration of actions to be overtaken when an interface that should be introduced into a type is already
@@ -1937,7 +3024,48 @@
     </member>
     <member name="F:PostSharp.Aspects.Advices.InterfaceOverrideAction.Ignore">
       <summary>
-              Silently ignore this interface (does not introduct it).
+              Silently ignore this interface (does not introduce it).
+            </summary>
+    </member>
+    <member name="T:PostSharp.Aspects.Advices.IntroduceInterfaceAdviceInstance">
+      <summary>
+            Represents an advise that introduces an interface into the target class. The interface must be implemented by the aspect class.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Aspects.Advices.IntroduceInterfaceAdviceInstance.#ctor(System.Type,PostSharp.Aspects.Advices.InterfaceOverrideAction,PostSharp.Aspects.Advices.InterfaceOverrideAction)">
+      <summary>
+            Initializes a new instance of the <see cref="T:PostSharp.Aspects.Advices.IntroduceInterfaceAdviceInstance" /> class.
+            </summary>
+      <param name="interfaceType">Interface to introduce to the target class. Must be implemented by the aspect class itself.</param>
+      <param name="overrideAction">Specifies the action (<see cref="F:PostSharp.Aspects.Advices.InterfaceOverrideAction.Fail" /> or <see cref="F:PostSharp.Aspects.Advices.InterfaceOverrideAction.Ignore" />)
+              to be overtaken when the interface specified in the constructor of this custom attribute
+              is already implemented by the type to which the current aspect is applied.</param>
+      <param name="ancestorOverrideAction"> Specifies the action (<see cref="F:PostSharp.Aspects.Advices.InterfaceOverrideAction.Fail" /> or <see cref="F:PostSharp.Aspects.Advices.InterfaceOverrideAction.Ignore" />)
+              to be overtaken when an <i>ancestor</i> of the interface specified in the constructor of this custom attribute
+              is already implemented by the type to which the current aspect is applied.</param>
+    </member>
+    <member name="P:PostSharp.Aspects.Advices.IntroduceInterfaceAdviceInstance.AncestorOverrideAction">
+      <summary>
+              Specifies the action (<see cref="F:PostSharp.Aspects.Advices.InterfaceOverrideAction.Fail" /> or <see cref="F:PostSharp.Aspects.Advices.InterfaceOverrideAction.Ignore" />)
+              to be overtaken when an <i>ancestor</i> of the interface specified in the constructor of this custom attribute
+              is already implemented by the type to which the current aspect is applied.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Aspects.Advices.IntroduceInterfaceAdviceInstance.InterfaceType">
+      <summary>
+            Gets the interface to be introduced into the target class.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Aspects.Advices.IntroduceInterfaceAdviceInstance.MasterAspectMember">
+      <summary>
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;summary&gt; documentation for "P:PostSharp.Aspects.Advices.IntroduceInterfaceAdviceInstance.MasterAspectMember"]</p>
+      </summary>
+    </member>
+    <member name="P:PostSharp.Aspects.Advices.IntroduceInterfaceAdviceInstance.OverrideAction">
+      <summary>
+              Specifies the action (<see cref="F:PostSharp.Aspects.Advices.InterfaceOverrideAction.Fail" /> or <see cref="F:PostSharp.Aspects.Advices.InterfaceOverrideAction.Ignore" />)
+              to be overtaken when the interface specified in the constructor of this custom attribute
+              is already implemented by the type to which the current aspect is applied.
             </summary>
     </member>
     <member name="T:PostSharp.Aspects.Advices.IntroduceInterfaceAttribute">
@@ -1960,18 +3088,32 @@
               is already implemented by the type to which the current aspect is applied.
             </summary>
     </member>
-    <member name="P:PostSharp.Aspects.Advices.IntroduceInterfaceAttribute.IsProtected">
-      <summary>
-              Determines whether the interface should be exposed indirectly through the 
-              <see cref="T:PostSharp.Aspects.IProtectedInterface`1" /> interface. If <c>false</c>, the interface
-              will be implemented directly by the type.
-            </summary>
-    </member>
     <member name="P:PostSharp.Aspects.Advices.IntroduceInterfaceAttribute.OverrideAction">
       <summary>
               Specifies the action (<see cref="F:PostSharp.Aspects.Advices.InterfaceOverrideAction.Fail" /> or <see cref="F:PostSharp.Aspects.Advices.InterfaceOverrideAction.Ignore" />)
               to be overtaken when the interface specified in the constructor of this custom attribute
               is already implemented by the type to which the current aspect is applied.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Aspects.Advices.IntroduceMemberAdviceInstance">
+      <summary>
+            Base class for <see cref="T:PostSharp.Aspects.Advices.IntroduceMethodAdviceInstance" />.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Aspects.Advices.IntroduceMemberAdviceInstance.IsVirtual">
+      <summary>
+            Determines whether the introduced member should be virtual. 
+            </summary>
+    </member>
+    <member name="P:PostSharp.Aspects.Advices.IntroduceMemberAdviceInstance.OverrideAction">
+      <summary>
+              Determines the action to be overtaken when the member to be introduced already exists
+              in the type to which the aspect is applied, or to a base type.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Aspects.Advices.IntroduceMemberAdviceInstance.Visibility">
+      <summary>
+            Gets the visibility of the introduced member.
             </summary>
     </member>
     <member name="T:PostSharp.Aspects.Advices.IntroduceMemberAttribute">
@@ -2004,6 +3146,46 @@
               Determines the visibility (<see cref="F:PostSharp.Reflection.Visibility.Public" />, (<see cref="F:PostSharp.Reflection.Visibility.Family" />, ...)
               of the introduced member.
             </summary>
+    </member>
+    <member name="T:PostSharp.Aspects.Advices.IntroduceMethodAdviceInstance">
+      <summary>
+            Represents an advice that introduces a method of the aspect class into the target class.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Aspects.Advices.IntroduceMethodAdviceInstance.#ctor(System.Reflection.MethodInfo,PostSharp.Reflection.Visibility,System.Nullable{System.Boolean},PostSharp.Aspects.Advices.MemberOverrideAction)">
+      <summary>
+            Initializes a new instance of the <see cref="T:PostSharp.Aspects.Advices.IntroduceMethodAdviceInstance" /> class.
+            </summary>
+      <param name="method">A public method of the aspect class.</param>
+      <param name="visibility">Visibility of the introduced method.</param>
+      <param name="isVirtual">
+        <c>true</c> if the introduced method should be virtual, <c>false</c> if it should be non-virtual (or sealed, if the method is overriding another one),
+            or <c>null</c> if the method should be virtual only if the overridden method is also virtual. See <see cref="P:PostSharp.Aspects.Advices.IntroduceMemberAdviceInstance.IsVirtual" /> for details.</param>
+      <param name="overrideAction">Determines the action to be overtaken when the member to be introduced already exists
+              in the type to which the aspect is applied, or to a base type.
+            </param>
+    </member>
+    <member name="P:PostSharp.Aspects.Advices.IntroduceMethodAdviceInstance.MasterAspectMember">
+      <summary>
+            Gets the main field or method of the aspect class that the current <see cref="T:PostSharp.Aspects.Advices.AdviceInstance" /> relates to.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Aspects.Advices.IProperty">
+      <summary>
+            A weakly-typed interface for the <seealso cref="T:PostSharp.Aspects.Advices.Property`1" /> class.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Aspects.Advices.IProperty.GetValue">
+      <summary>
+            Gets the property value.
+            </summary>
+      <returns>The property value.</returns>
+    </member>
+    <member name="M:PostSharp.Aspects.Advices.IProperty.SetValue(System.Object)">
+      <summary>
+            Sets the property value.
+            </summary>
+      <param name="value">The new property value.</param>
     </member>
     <member name="T:PostSharp.Aspects.Advices.LocationValidationAdvice">
       <summary>
@@ -2121,6 +3303,16 @@
     <member name="M:PostSharp.Aspects.Advices.OnEventRemoveHandlerAdvice.#ctor">
       <summary>Initializes a new instance of the <see cref="T:PostSharp.Aspects.Advices.OnEventRemoveHandlerAdvice" /> class</summary>
     </member>
+    <member name="T:PostSharp.Aspects.Advices.OnInstanceConstructedAdvice">
+      <summary>
+            Custom attribute that, when applied to a method of an aspect implementing <seealso cref="T:PostSharp.Aspects.IInstanceScopedAspect" />, specifies that this method should be executed 
+            after the last instance constructor of the target class of the aspect has completed execution. That is, this method will be invoked when the target object
+            will be fully constructed. This custom attribute can be applied only on methods that have <c>void</c> return type and accepts no parameter.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Aspects.Advices.OnInstanceConstructedAdvice.#ctor">
+      <summary>Initializes a new instance of the <see cref="T:PostSharp.Aspects.Advices.OnInstanceConstructedAdvice" /> class</summary>
+    </member>
     <member name="T:PostSharp.Aspects.Advices.OnLocationGetValueAdvice">
       <summary>
               Custom attribute that, when applied on a method of an aspect class, specifies
@@ -2141,16 +3333,15 @@
     </member>
     <member name="T:PostSharp.Aspects.Advices.OnMethodBoundaryAdvice">
       <summary>
-        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;summary&gt; documentation for "T:PostSharp.Aspects.Advices.OnMethodBoundaryAdvice"]</p>
-      </summary>
-    </member>
-    <member name="M:PostSharp.Aspects.Advices.OnMethodBoundaryAdvice.#ctor">
-      <summary>Initializes a new instance of the <see cref="T:PostSharp.Aspects.Advices.OnMethodBoundaryAdvice" /> class</summary>
+            Base class for <see cref="T:PostSharp.Aspects.Advices.OnMethodEntryAdvice" />, <see cref="T:PostSharp.Aspects.Advices.OnMethodExceptionAdvice" />,
+            <see cref="T:PostSharp.Aspects.Advices.OnMethodSuccessAdvice" /> or <see cref="T:PostSharp.Aspects.Advices.OnMethodExitAdvice" />.
+            </summary>
     </member>
     <member name="P:PostSharp.Aspects.Advices.OnMethodBoundaryAdvice.ApplyToStateMachine">
       <summary>
-        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;summary&gt; documentation for "P:PostSharp.Aspects.Advices.OnMethodBoundaryAdvice.ApplyToStateMachine"]</p>
-      </summary>
+            Determines how the advice should behave when it is applied to an iterator or
+            async methods, which are compiled into state machines. 
+            </summary>
     </member>
     <member name="T:PostSharp.Aspects.Advices.OnMethodEntryAdvice">
       <summary>
@@ -2615,6 +3806,12 @@
     <member name="M:PostSharp.Aspects.Configuration.OnExceptionAspectConfiguration.#ctor">
       <summary>Initializes a new instance of the <see cref="T:PostSharp.Aspects.Configuration.OnExceptionAspectConfiguration" /> class</summary>
     </member>
+    <member name="P:PostSharp.Aspects.Configuration.OnExceptionAspectConfiguration.ApplyToStateMachine">
+      <summary>
+            Determines how the aspect should behave when it is applied to an iterator or
+            async methods, which are compiled into state machines.
+            </summary>
+    </member>
     <member name="P:PostSharp.Aspects.Configuration.OnExceptionAspectConfiguration.ExceptionType">
       <summary>
               Gets or sets the type of exceptions that are caught by this aspect.
@@ -2707,7 +3904,7 @@
     </member>
     <member name="F:PostSharp.Aspects.Dependencies.AspectDependencyAction.Require">
       <summary>
-              The depedency specifies that the current aspect or advice requires
+              The dependency specifies that the current aspect or advice requires
               another aspect or advice.
             </summary>
     </member>
@@ -3061,6 +4258,725 @@
             </summary>
       <param name="effects">List of effects of which the aspect class or advice
               to which this custom attribute is applied is guaranteed to be exempt.</param>
+    </member>
+    <member name="T:PostSharp.Aspects.Internals.Arguments`1">
+      <summary>
+              Implementation of <see cref="T:PostSharp.Aspects.Arguments" /> representing a list of 1 argument.
+            </summary>
+      <typeparam name="TArg0">Type of the first argument.</typeparam>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`1.#ctor">
+      <summary>
+              Initializes a new <see cref="T:PostSharp.Aspects.Internals.Arguments`1" />.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`1.Arg0">
+      <summary>
+              First Argument.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`1.CopyFrom(System.Object[],System.Int32)">
+      <summary>
+              Copies all the argument values from the elements of <see cref="T:System.Array" />.
+            </summary>
+      <param name="array">The array that is the source of the argument values copied into the current <see cref="T:PostSharp.Aspects.Arguments" />.</param>
+      <param name="index">An integer that represents the index in <paramref name="array" /> at which copying begins.</param>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="array" /> is <c>null</c>.</exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="index" /> is lower than zero.</exception>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`1.CopyTo(System.Object[],System.Int32)">
+      <summary>
+              Copies all arguments values to the specified <see cref="T:System.Array" /> starting at the specified destination <see cref="T:System.Array" /> index.
+            </summary>
+      <param name="array">The array that is the destination of argument values copied from the current <see cref="T:PostSharp.Aspects.Arguments" />.</param>
+      <param name="index">An integer that represents the index in <paramref name="array" /> at which copying begins</param>
+      <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="array" /> is null.</exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="arrayIndex" /> is less than 0.</exception>
+      <exception cref="T:System.ArgumentException">The number of elements in the source <see cref="T:System.Collections.Generic.ICollection`1" /> is greater than the available space from <paramref name="arrayIndex" /> to the end of the destination <paramref name="array" />.</exception>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`1.GetArgument(System.Int32)">
+      <summary>
+              Gets the value of the argument at a given index.
+            </summary>
+      <param name="index">Argument index.</param>
+      <returns>The value of the argument at position <paramref name="index" />.</returns>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="index" /> is lower than zero or greater or equal than <see cref="P:PostSharp.Aspects.Arguments.Count" />.</exception>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`1.SetArgument(System.Int32,System.Object)">
+      <summary>
+              Sets the value of the argument at a given index.
+            </summary>
+      <param name="index">Argument index.</param>
+      <param name="value">New value of the argument at position <paramref name="index" />.</param>
+      <exception cref="T:System.InvalidCastException">
+        <paramref name="value" /> is not assignable to parameter
+              at position <paramref name="index" />.</exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="index" /> is lower than zero or greater or equal than <see cref="P:PostSharp.Aspects.Arguments.Count" />.</exception>
+    </member>
+    <member name="T:PostSharp.Aspects.Internals.Arguments`2">
+      <summary>
+              Implementation of <see cref="T:PostSharp.Aspects.Arguments" /> representing a list of 2 arguments.
+            </summary>
+      <typeparam name="TArg0">Type of the first argument.</typeparam>
+      <typeparam name="TArg1">Type of the second argument.</typeparam>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`2.#ctor">
+      <summary>
+              Initializes a new <see cref="T:PostSharp.Aspects.Internals.Arguments`2" />.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`2.Arg0">
+      <summary>
+              First argument.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`2.Arg1">
+      <summary>
+              Second argument.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`2.CopyFrom(System.Object[],System.Int32)">
+      <summary>
+              Copies all the argument values from the elements of <see cref="T:System.Array" />.
+            </summary>
+      <param name="array">The array that is the source of the argument values copied into the current <see cref="T:PostSharp.Aspects.Arguments" />.</param>
+      <param name="index">An integer that represents the index in <paramref name="array" /> at which copying begins.</param>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="array" /> is <c>null</c>.</exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="index" /> is lower than zero.</exception>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`2.CopyTo(System.Object[],System.Int32)">
+      <summary>
+              Copies all arguments values to the specified <see cref="T:System.Array" /> starting at the specified destination <see cref="T:System.Array" /> index.
+            </summary>
+      <param name="array">The array that is the destination of argument values copied from the current <see cref="T:PostSharp.Aspects.Arguments" />.</param>
+      <param name="index">An integer that represents the index in <paramref name="array" /> at which copying begins</param>
+      <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="array" /> is null.</exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="arrayIndex" /> is less than 0.</exception>
+      <exception cref="T:System.ArgumentException">The number of elements in the source <see cref="T:System.Collections.Generic.ICollection`1" /> is greater than the available space from <paramref name="arrayIndex" /> to the end of the destination <paramref name="array" />.</exception>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`2.GetArgument(System.Int32)">
+      <summary>
+              Gets the value of the argument at a given index.
+            </summary>
+      <param name="index">Argument index.</param>
+      <returns>The value of the argument at position <paramref name="index" />.</returns>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="index" /> is lower than zero or greater or equal than <see cref="P:PostSharp.Aspects.Arguments.Count" />.</exception>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`2.SetArgument(System.Int32,System.Object)">
+      <summary>
+              Sets the value of the argument at a given index.
+            </summary>
+      <param name="index">Argument index.</param>
+      <param name="value">New value of the argument at position <paramref name="index" />.</param>
+      <exception cref="T:System.InvalidCastException">
+        <paramref name="value" /> is not assignable to parameter
+              at position <paramref name="index" />.</exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="index" /> is lower than zero or greater or equal than <see cref="P:PostSharp.Aspects.Arguments.Count" />.</exception>
+    </member>
+    <member name="T:PostSharp.Aspects.Internals.Arguments`3">
+      <summary>
+              Implementation of <see cref="T:PostSharp.Aspects.Arguments" /> representing a list of 3 arguments.
+            </summary>
+      <typeparam name="TArg0">Type of the first argument.</typeparam>
+      <typeparam name="TArg1">Type of the second argument.</typeparam>
+      <typeparam name="TArg2">Type of the third argument.</typeparam>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`3.#ctor">
+      <summary>
+              Initializes a new <see cref="T:PostSharp.Aspects.Internals.Arguments`3" />.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`3.Arg0">
+      <summary>
+              First argument.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`3.Arg1">
+      <summary>
+              Second argument.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`3.Arg2">
+      <summary>
+              Third argument.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`3.CopyFrom(System.Object[],System.Int32)">
+      <summary>
+              Copies all the argument values from the elements of <see cref="T:System.Array" />.
+            </summary>
+      <param name="array">The array that is the source of the argument values copied into the current <see cref="T:PostSharp.Aspects.Arguments" />.</param>
+      <param name="index">An integer that represents the index in <paramref name="array" /> at which copying begins.</param>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="array" /> is <c>null</c>.</exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="index" /> is lower than zero.</exception>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`3.CopyTo(System.Object[],System.Int32)">
+      <summary>
+              Copies all arguments values to the specified <see cref="T:System.Array" /> starting at the specified destination <see cref="T:System.Array" /> index.
+            </summary>
+      <param name="array">The array that is the destination of argument values copied from the current <see cref="T:PostSharp.Aspects.Arguments" />.</param>
+      <param name="index">An integer that represents the index in <paramref name="array" /> at which copying begins</param>
+      <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="array" /> is null.</exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="arrayIndex" /> is less than 0.</exception>
+      <exception cref="T:System.ArgumentException">The number of elements in the source <see cref="T:System.Collections.Generic.ICollection`1" /> is greater than the available space from <paramref name="arrayIndex" /> to the end of the destination <paramref name="array" />.</exception>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`3.GetArgument(System.Int32)">
+      <summary>
+              Gets the value of the argument at a given index.
+            </summary>
+      <param name="index">Argument index.</param>
+      <returns>The value of the argument at position <paramref name="index" />.</returns>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="index" /> is lower than zero or greater or equal than <see cref="P:PostSharp.Aspects.Arguments.Count" />.</exception>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`3.SetArgument(System.Int32,System.Object)">
+      <summary>
+              Sets the value of the argument at a given index.
+            </summary>
+      <param name="index">Argument index.</param>
+      <param name="value">New value of the argument at position <paramref name="index" />.</param>
+      <exception cref="T:System.InvalidCastException">
+        <paramref name="value" /> is not assignable to parameter
+              at position <paramref name="index" />.</exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="index" /> is lower than zero or greater or equal than <see cref="P:PostSharp.Aspects.Arguments.Count" />.</exception>
+    </member>
+    <member name="T:PostSharp.Aspects.Internals.Arguments`4">
+      <summary>
+              Implementation of <see cref="T:PostSharp.Aspects.Arguments" /> representing a list of 4 arguments.
+            </summary>
+      <typeparam name="TArg0">Type of the first argument.</typeparam>
+      <typeparam name="TArg1">Type of the second argument.</typeparam>
+      <typeparam name="TArg2">Type of the third argument.</typeparam>
+      <typeparam name="TArg3">Type of the fourth argument.</typeparam>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`4.#ctor">
+      <summary>
+              Initializes a new <see cref="T:PostSharp.Aspects.Internals.Arguments`4" />.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`4.Arg0">
+      <summary>
+              First argument.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`4.Arg1">
+      <summary>
+              Second argument.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`4.Arg2">
+      <summary>
+              Third argument.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`4.Arg3">
+      <summary>
+              Fourth argument.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`4.CopyFrom(System.Object[],System.Int32)">
+      <summary>
+              Copies all the argument values from the elements of <see cref="T:System.Array" />.
+            </summary>
+      <param name="array">The array that is the source of the argument values copied into the current <see cref="T:PostSharp.Aspects.Arguments" />.</param>
+      <param name="index">An integer that represents the index in <paramref name="array" /> at which copying begins.</param>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="array" /> is <c>null</c>.</exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="index" /> is lower than zero.</exception>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`4.CopyTo(System.Object[],System.Int32)">
+      <summary>
+              Copies all arguments values to the specified <see cref="T:System.Array" /> starting at the specified destination <see cref="T:System.Array" /> index.
+            </summary>
+      <param name="array">The array that is the destination of argument values copied from the current <see cref="T:PostSharp.Aspects.Arguments" />.</param>
+      <param name="index">An integer that represents the index in <paramref name="array" /> at which copying begins</param>
+      <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="array" /> is null.</exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="arrayIndex" /> is less than 0.</exception>
+      <exception cref="T:System.ArgumentException">The number of elements in the source <see cref="T:System.Collections.Generic.ICollection`1" /> is greater than the available space from <paramref name="arrayIndex" /> to the end of the destination <paramref name="array" />.</exception>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`4.GetArgument(System.Int32)">
+      <summary>
+              Gets the value of the argument at a given index.
+            </summary>
+      <param name="index">Argument index.</param>
+      <returns>The value of the argument at position <paramref name="index" />.</returns>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="index" /> is lower than zero or greater or equal than <see cref="P:PostSharp.Aspects.Arguments.Count" />.</exception>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`4.SetArgument(System.Int32,System.Object)">
+      <summary>
+              Sets the value of the argument at a given index.
+            </summary>
+      <param name="index">Argument index.</param>
+      <param name="value">New value of the argument at position <paramref name="index" />.</param>
+      <exception cref="T:System.InvalidCastException">
+        <paramref name="value" /> is not assignable to parameter
+              at position <paramref name="index" />.</exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="index" /> is lower than zero or greater or equal than <see cref="P:PostSharp.Aspects.Arguments.Count" />.</exception>
+    </member>
+    <member name="T:PostSharp.Aspects.Internals.Arguments`5">
+      <summary>
+              Implementation of <see cref="T:PostSharp.Aspects.Arguments" /> representing a list of 5 arguments.
+            </summary>
+      <typeparam name="TArg0">Type of the first argument.</typeparam>
+      <typeparam name="TArg1">Type of the second argument.</typeparam>
+      <typeparam name="TArg2">Type of the third argument.</typeparam>
+      <typeparam name="TArg3">Type of the fourth argument.</typeparam>
+      <typeparam name="TArg4">Type of the fifth argument.</typeparam>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`5.#ctor">
+      <summary>
+              Initializes a new <see cref="T:PostSharp.Aspects.Internals.Arguments`5" />.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`5.Arg0">
+      <summary>
+              First argument.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`5.Arg1">
+      <summary>
+              Second argument.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`5.Arg2">
+      <summary>
+              Third argument.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`5.Arg3">
+      <summary>
+              Fourth argument.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`5.Arg4">
+      <summary>
+              Fifth argument.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`5.CopyFrom(System.Object[],System.Int32)">
+      <summary>
+              Copies all the argument values from the elements of <see cref="T:System.Array" />.
+            </summary>
+      <param name="array">The array that is the source of the argument values copied into the current <see cref="T:PostSharp.Aspects.Arguments" />.</param>
+      <param name="index">An integer that represents the index in <paramref name="array" /> at which copying begins.</param>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="array" /> is <c>null</c>.</exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="index" /> is lower than zero.</exception>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`5.CopyTo(System.Object[],System.Int32)">
+      <summary>
+              Copies all arguments values to the specified <see cref="T:System.Array" /> starting at the specified destination <see cref="T:System.Array" /> index.
+            </summary>
+      <param name="array">The array that is the destination of argument values copied from the current <see cref="T:PostSharp.Aspects.Arguments" />.</param>
+      <param name="index">An integer that represents the index in <paramref name="array" /> at which copying begins</param>
+      <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="array" /> is null.</exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="arrayIndex" /> is less than 0.</exception>
+      <exception cref="T:System.ArgumentException">The number of elements in the source <see cref="T:System.Collections.Generic.ICollection`1" /> is greater than the available space from <paramref name="arrayIndex" /> to the end of the destination <paramref name="array" />.</exception>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`5.GetArgument(System.Int32)">
+      <summary>
+              Gets the value of the argument at a given index.
+            </summary>
+      <param name="index">Argument index.</param>
+      <returns>The value of the argument at position <paramref name="index" />.</returns>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="index" /> is lower than zero or greater or equal than <see cref="P:PostSharp.Aspects.Arguments.Count" />.</exception>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`5.SetArgument(System.Int32,System.Object)">
+      <summary>
+              Sets the value of the argument at a given index.
+            </summary>
+      <param name="index">Argument index.</param>
+      <param name="value">New value of the argument at position <paramref name="index" />.</param>
+      <exception cref="T:System.InvalidCastException">
+        <paramref name="value" /> is not assignable to parameter
+              at position <paramref name="index" />.</exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="index" /> is lower than zero or greater or equal than <see cref="P:PostSharp.Aspects.Arguments.Count" />.</exception>
+    </member>
+    <member name="T:PostSharp.Aspects.Internals.Arguments`6">
+      <summary>
+              Implementation of <see cref="T:PostSharp.Aspects.Arguments" /> representing a list of 6 arguments.
+            </summary>
+      <typeparam name="TArg0">Type of the first argument.</typeparam>
+      <typeparam name="TArg1">Type of the second argument.</typeparam>
+      <typeparam name="TArg2">Type of the third argument.</typeparam>
+      <typeparam name="TArg3">Type of the fourth argument.</typeparam>
+      <typeparam name="TArg4">Type of the fifth argument.</typeparam>
+      <typeparam name="TArg5">Type of the sixth argument.</typeparam>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`6.#ctor">
+      <summary>
+              Initializes a new <see cref="T:PostSharp.Aspects.Internals.Arguments`6" />.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`6.Arg0">
+      <summary>
+              First argument.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`6.Arg1">
+      <summary>
+              Second argument.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`6.Arg2">
+      <summary>
+              Third argument.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`6.Arg3">
+      <summary>
+              Fourth argument.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`6.Arg4">
+      <summary>
+              Fifth argument.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`6.Arg5">
+      <summary>
+              Sixth argument.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`6.CopyFrom(System.Object[],System.Int32)">
+      <summary>
+              Copies all the argument values from the elements of <see cref="T:System.Array" />.
+            </summary>
+      <param name="array">The array that is the source of the argument values copied into the current <see cref="T:PostSharp.Aspects.Arguments" />.</param>
+      <param name="index">An integer that represents the index in <paramref name="array" /> at which copying begins.</param>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="array" /> is <c>null</c>.</exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="index" /> is lower than zero.</exception>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`6.CopyTo(System.Object[],System.Int32)">
+      <summary>
+              Copies all arguments values to the specified <see cref="T:System.Array" /> starting at the specified destination <see cref="T:System.Array" /> index.
+            </summary>
+      <param name="array">The array that is the destination of argument values copied from the current <see cref="T:PostSharp.Aspects.Arguments" />.</param>
+      <param name="index">An integer that represents the index in <paramref name="array" /> at which copying begins</param>
+      <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="array" /> is null.</exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="arrayIndex" /> is less than 0.</exception>
+      <exception cref="T:System.ArgumentException">The number of elements in the source <see cref="T:System.Collections.Generic.ICollection`1" /> is greater than the available space from <paramref name="arrayIndex" /> to the end of the destination <paramref name="array" />.</exception>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`6.GetArgument(System.Int32)">
+      <summary>
+              Gets the value of the argument at a given index.
+            </summary>
+      <param name="index">Argument index.</param>
+      <returns>The value of the argument at position <paramref name="index" />.</returns>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="index" /> is lower than zero or greater or equal than <see cref="P:PostSharp.Aspects.Arguments.Count" />.</exception>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`6.SetArgument(System.Int32,System.Object)">
+      <summary>
+              Sets the value of the argument at a given index.
+            </summary>
+      <param name="index">Argument index.</param>
+      <param name="value">New value of the argument at position <paramref name="index" />.</param>
+      <exception cref="T:System.InvalidCastException">
+        <paramref name="value" /> is not assignable to parameter
+              at position <paramref name="index" />.</exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="index" /> is lower than zero or greater or equal than <see cref="P:PostSharp.Aspects.Arguments.Count" />.</exception>
+    </member>
+    <member name="T:PostSharp.Aspects.Internals.Arguments`7">
+      <summary>
+              Implementation of <see cref="T:PostSharp.Aspects.Arguments" /> representing a list of 7 arguments.
+            </summary>
+      <typeparam name="TArg0">Type of the first argument.</typeparam>
+      <typeparam name="TArg1">Type of the second argument.</typeparam>
+      <typeparam name="TArg2">Type of the third argument.</typeparam>
+      <typeparam name="TArg3">Type of the fourth argument.</typeparam>
+      <typeparam name="TArg4">Type of the fifth argument.</typeparam>
+      <typeparam name="TArg5">Type of the sixth argument.</typeparam>
+      <typeparam name="TArg6">Type of the seventh argument.</typeparam>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`7.#ctor">
+      <summary>
+              Initializes a new <see cref="T:PostSharp.Aspects.Internals.Arguments`7" />.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`7.Arg0">
+      <summary>
+              First argument.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`7.Arg1">
+      <summary>
+              Second argument.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`7.Arg2">
+      <summary>
+              Third argument.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`7.Arg3">
+      <summary>
+              Fourth argument.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`7.Arg4">
+      <summary>
+              Fifth argument.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`7.Arg5">
+      <summary>
+              Sixth argument.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`7.Arg6">
+      <summary>
+              Seventh argument.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`7.CopyFrom(System.Object[],System.Int32)">
+      <summary>
+              Copies all the argument values from the elements of <see cref="T:System.Array" />.
+            </summary>
+      <param name="array">The array that is the source of the argument values copied into the current <see cref="T:PostSharp.Aspects.Arguments" />.</param>
+      <param name="index">An integer that represents the index in <paramref name="array" /> at which copying begins.</param>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="array" /> is <c>null</c>.</exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="index" /> is lower than zero.</exception>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`7.CopyTo(System.Object[],System.Int32)">
+      <summary>
+              Copies all arguments values to the specified <see cref="T:System.Array" /> starting at the specified destination <see cref="T:System.Array" /> index.
+            </summary>
+      <param name="array">The array that is the destination of argument values copied from the current <see cref="T:PostSharp.Aspects.Arguments" />.</param>
+      <param name="index">An integer that represents the index in <paramref name="array" /> at which copying begins</param>
+      <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="array" /> is null.</exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="arrayIndex" /> is less than 0.</exception>
+      <exception cref="T:System.ArgumentException">The number of elements in the source <see cref="T:System.Collections.Generic.ICollection`1" /> is greater than the available space from <paramref name="arrayIndex" /> to the end of the destination <paramref name="array" />.</exception>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`7.GetArgument(System.Int32)">
+      <summary>
+              Gets the value of the argument at a given index.
+            </summary>
+      <param name="index">Argument index.</param>
+      <returns>The value of the argument at position <paramref name="index" />.</returns>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="index" /> is lower than zero or greater or equal than <see cref="P:PostSharp.Aspects.Arguments.Count" />.</exception>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`7.SetArgument(System.Int32,System.Object)">
+      <summary>
+              Sets the value of the argument at a given index.
+            </summary>
+      <param name="index">Argument index.</param>
+      <param name="value">New value of the argument at position <paramref name="index" />.</param>
+      <exception cref="T:System.InvalidCastException">
+        <paramref name="value" /> is not assignable to parameter
+              at position <paramref name="index" />.</exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="index" /> is lower than zero or greater or equal than <see cref="P:PostSharp.Aspects.Arguments.Count" />.</exception>
+    </member>
+    <member name="T:PostSharp.Aspects.Internals.Arguments`8">
+      <summary>
+              Implementation of <see cref="T:PostSharp.Aspects.Arguments" /> representing a list of 8 arguments.
+            </summary>
+      <typeparam name="TArg0">Type of the first argument.</typeparam>
+      <typeparam name="TArg1">Type of the second argument.</typeparam>
+      <typeparam name="TArg2">Type of the third argument.</typeparam>
+      <typeparam name="TArg3">Type of the fourth argument.</typeparam>
+      <typeparam name="TArg4">Type of the fifth argument.</typeparam>
+      <typeparam name="TArg5">Type of the sixth argument.</typeparam>
+      <typeparam name="TArg6">Type of the seventh argument.</typeparam>
+      <typeparam name="TArg7">Type of the eighth argument.</typeparam>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`8.#ctor">
+      <summary>
+              Initializes a new <see cref="T:PostSharp.Aspects.Internals.Arguments`8" />.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`8.Arg0">
+      <summary>
+              First argument.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`8.Arg1">
+      <summary>
+              Second argument.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`8.Arg2">
+      <summary>
+              Third argument.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`8.Arg3">
+      <summary>
+              Fourth argument.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`8.Arg4">
+      <summary>
+              Fifth argument.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`8.Arg5">
+      <summary>
+              Sixth argument.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`8.Arg6">
+      <summary>
+              Seventh argument.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Aspects.Internals.Arguments`8.Arg7">
+      <summary>
+              Eighth argument.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`8.CopyFrom(System.Object[],System.Int32)">
+      <summary>
+              Copies all the argument values from the elements of <see cref="T:System.Array" />.
+            </summary>
+      <param name="array">The array that is the source of the argument values copied into the current <see cref="T:PostSharp.Aspects.Arguments" />.</param>
+      <param name="index">An integer that represents the index in <paramref name="array" /> at which copying begins.</param>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="array" /> is <c>null</c>.</exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="index" /> is lower than zero.</exception>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`8.CopyTo(System.Object[],System.Int32)">
+      <summary>
+              Copies all arguments values to the specified <see cref="T:System.Array" /> starting at the specified destination <see cref="T:System.Array" /> index.
+            </summary>
+      <param name="array">The array that is the destination of argument values copied from the current <see cref="T:PostSharp.Aspects.Arguments" />.</param>
+      <param name="index">An integer that represents the index in <paramref name="array" /> at which copying begins</param>
+      <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="array" /> is null.</exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="arrayIndex" /> is less than 0.</exception>
+      <exception cref="T:System.ArgumentException">The number of elements in the source <see cref="T:System.Collections.Generic.ICollection`1" /> is greater than the available space from <paramref name="arrayIndex" /> to the end of the destination <paramref name="array" />.</exception>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`8.GetArgument(System.Int32)">
+      <summary>
+              Gets the value of the argument at a given index.
+            </summary>
+      <param name="index">Argument index.</param>
+      <returns>The value of the argument at position <paramref name="index" />.</returns>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="index" /> is lower than zero or greater or equal than <see cref="P:PostSharp.Aspects.Arguments.Count" />.</exception>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.Arguments`8.SetArgument(System.Int32,System.Object)">
+      <summary>
+              Sets the value of the argument at a given index.
+            </summary>
+      <param name="index">Argument index.</param>
+      <param name="value">New value of the argument at position <paramref name="index" />.</param>
+      <exception cref="T:System.InvalidCastException">
+        <paramref name="value" /> is not assignable to parameter
+              at position <paramref name="index" />.</exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="index" /> is lower than zero or greater or equal than <see cref="P:PostSharp.Aspects.Arguments.Count" />.</exception>
+    </member>
+    <member name="T:PostSharp.Aspects.Internals.ArgumentsArray">
+      <summary>
+              Implementation of <see cref="T:PostSharp.Aspects.Arguments" /> representing a
+              list of arguments of arbitrary length and type.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.ArgumentsArray.#ctor(System.Object[])">
+      <summary>
+              Initializes a new <see cref="T:PostSharp.Aspects.Internals.ArgumentsArray" />.
+            </summary>
+      <param name="arguments">
+        <see cref="T:System.Array" /> containing the argument values.</param>
+    </member>
+    <member name="P:PostSharp.Aspects.Internals.ArgumentsArray.Arguments">
+      <summary>
+              Gets or sets the underlying array of arguments.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.ArgumentsArray.CopyFrom(System.Object[],System.Int32)">
+      <summary>
+              Copies all the argument values from the elements of <see cref="T:System.Array" />.
+            </summary>
+      <param name="array">The array that is the source of the argument values copied into the current <see cref="T:PostSharp.Aspects.Arguments" />.</param>
+      <param name="index">An integer that represents the index in <paramref name="array" /> at which copying begins.</param>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="array" /> is <c>null</c>.</exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="index" /> is lower than zero.</exception>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.ArgumentsArray.CopyTo(System.Object[],System.Int32)">
+      <summary>
+              Copies all arguments values to the specified <see cref="T:System.Array" /> starting at the specified destination <see cref="T:System.Array" /> index.
+            </summary>
+      <param name="array">The array that is the destination of argument values copied from the current <see cref="T:PostSharp.Aspects.Arguments" />.</param>
+      <param name="index">An integer that represents the index in <paramref name="array" /> at which copying begins</param>
+      <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="array" /> is null.</exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="arrayIndex" /> is less than 0.</exception>
+      <exception cref="T:System.ArgumentException">The number of elements in the source <see cref="T:System.Collections.Generic.ICollection`1" /> is greater than the available space from <paramref name="arrayIndex" /> to the end of the destination <paramref name="array" />.</exception>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.ArgumentsArray.GetArgument(System.Int32)">
+      <summary>
+              Gets the value of the argument at a given index.
+            </summary>
+      <param name="index">Argument index.</param>
+      <returns>The value of the argument at position <paramref name="index" />.</returns>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="index" /> is lower than zero or greater or equal than <see cref="P:PostSharp.Aspects.Arguments.Count" />.</exception>
+    </member>
+    <member name="M:PostSharp.Aspects.Internals.ArgumentsArray.SetArgument(System.Int32,System.Object)">
+      <summary>
+              Sets the value of the argument at a given index.
+            </summary>
+      <param name="index">Argument index.</param>
+      <param name="value">New value of the argument at position <paramref name="index" />.</param>
+      <exception cref="T:System.InvalidCastException">
+        <paramref name="value" /> is not assignable to parameter
+              at position <paramref name="index" />.</exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="index" /> is lower than zero or greater or equal than <see cref="P:PostSharp.Aspects.Arguments.Count" />.</exception>
     </member>
     <member name="T:PostSharp.Aspects.Serialization.AspectSerializer">
       <summary>
@@ -3497,7 +5413,7 @@
             is being referenced from classes that are not derived from the target class. This constraint is similar to the
             C# keyword <c>protected</c> and should be used only when the target declaration must be made public or internal
             for non-architectural reasons.
-            <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;include&gt; target documentation in 'T:PostSharp.Constraints.ProtectedAttribute'.  File: '../Documentation.xml' Path: '/documentation/section[@name='ultimateEdition']/*']</p></summary>
+            </summary>
     </member>
     <member name="M:PostSharp.Constraints.ProtectedAttribute.#ctor">
       <summary>
@@ -3700,7 +5616,7 @@
             Gets a message text given a message key.
             </summary>
       <param name="key">Message key.</param>
-      <returns>The rext corresponding to <paramref name="key" />.</returns>
+      <returns>The text corresponding to <paramref name="key" />.</returns>
     </member>
     <member name="T:PostSharp.Extensibility.IMessageSink">
       <summary>
@@ -3965,7 +5881,7 @@
               all inner exceptions.
             </summary>
       <param name="outerException">The outer exception.</param>
-      <returns>A string composed of the mesages of all
+      <returns>A string composed of the messages of all
               <paramref name="outerException" /> and all inner exceptions,
               concatenated by the string <c>--&gt;</c>.</returns>
     </member>
@@ -4062,7 +5978,7 @@
             Gets a message text given a message key.
             </summary>
       <param name="key">Message key.</param>
-      <returns>The rext corresponding to <paramref name="key" />.</returns>
+      <returns>The text corresponding to <paramref name="key" />.</returns>
     </member>
     <member name="P:PostSharp.Extensibility.MessageDispenser.Prefix">
       <summary>
@@ -4098,13 +6014,16 @@
               Provides commodity methods to work with an <see cref="T:PostSharp.Extensibility.IMessageSink" />.
             </summary>
     </member>
-    <member name="M:PostSharp.Extensibility.MessageSource.#ctor(System.String,PostSharp.Extensibility.IMessageDispenser)">
+    <member name="M:PostSharp.Extensibility.MessageSource.CreateMessage(PostSharp.MessageLocation,PostSharp.Extensibility.SeverityType,System.String,System.Exception,System.Object[])">
       <summary>
-              Initializes a new <see cref="T:PostSharp.Extensibility.MessageSource" /> backed by a <see cref="T:PostSharp.Extensibility.IMessageDispenser" />.
+            Creates a <see cref="T:PostSharp.Extensibility.Message" /> from the current <see cref="T:PostSharp.Extensibility.MessageSource" />.
             </summary>
-      <param name="source">Name of the component emitting. the messages.</param>
-      <param name="messageDispenser">The <see cref="T:PostSharp.Extensibility.IMessageDispenser" /> that will be used to
-              retrieve message texts.</param>
+      <param name="location">Location of the source code artifact causing the message.</param>
+      <param name="severity">Severity.</param>
+      <param name="messageId">Message identifier (resolved by the current <see cref="T:PostSharp.Extensibility.MessageSource" />).</param>
+      <param name="innerException">Exception causing the message, or <c>null</c>.</param>
+      <param name="arguments">Arguments of the message text.</param>
+      <returns>A <see cref="T:PostSharp.Extensibility.Message" />.</returns>
     </member>
     <member name="P:PostSharp.Extensibility.MessageSource.MessageSink">
       <summary>
@@ -4185,8 +6104,8 @@
     </member>
     <member name="P:PostSharp.Extensibility.MetricAttribute.AllowImplementationMetrics">
       <summary>
-        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;summary&gt; documentation for "P:PostSharp.Extensibility.MetricAttribute.AllowImplementationMetrics"]</p>
-      </summary>
+            Determines whether the usage of features used by the target aspects must be instrumented.
+            </summary>
     </member>
     <member name="P:PostSharp.Extensibility.MetricAttribute.MetricName">
       <summary>
@@ -4381,7 +6300,7 @@
     </member>
     <member name="F:PostSharp.Extensibility.MulticastAttributes.Managed">
       <summary>
-              Managed code implemetation.
+              Managed code implementation.
             </summary>
     </member>
     <member name="F:PostSharp.Extensibility.MulticastAttributes.NonManaged">
@@ -4738,7 +6657,7 @@
       <param name="format">Message formatting string.</param>
       <param name="arg0">The first formatting parameter.</param>
       <param name="arg1">The second formatting parameter.</param>
-      <param name="arg2">The thirs formatting parameter.</param>
+      <param name="arg2">The third formatting parameter.</param>
     </member>
     <member name="M:PostSharp.Extensibility.PostSharpTrace.Write(System.String,System.Object[])">
       <summary>
@@ -4779,7 +6698,7 @@
       <param name="format">Message formatting string.</param>
       <param name="arg0">The first formatting parameter.</param>
       <param name="arg1">The second formatting parameter.</param>
-      <param name="arg2">The thirs formatting parameter.</param>
+      <param name="arg2">The third formatting parameter.</param>
     </member>
     <member name="M:PostSharp.Extensibility.PostSharpTrace.WriteLine(System.String,System.Object[])">
       <summary>
@@ -5124,6 +7043,103 @@
       <exception cref="T:System.Reflection.AmbiguousMatchException">For the default binder, <paramref name="match" /> contains multiple properties that are equally good matches for <paramref name="returnType" /> and <paramref name="indexes" />. </exception>
       <exception cref="T:System.ArgumentException">For the default binder, <paramref name="match" /> is null or an empty array. </exception>
     </member>
+    <member name="T:PostSharp.Reflection.DeclarationIdentifier">
+      <summary>
+            Encapsulates a unique identifier of a declaration. The identifier does not contain the kind of declaration. Different declarations of different kinds can have the same identifier.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Reflection.DeclarationIdentifier.AssemblyId">
+      <summary>
+            Gets a 29-bit of the name of the assembly containing the declaration represented by the current <see cref="T:PostSharp.Reflection.DeclarationIdentifier" />.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Reflection.DeclarationIdentifier.Equals(PostSharp.Reflection.DeclarationIdentifier)">
+      <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+      <param name="other">An object to compare with this object.</param>
+      <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
+    </member>
+    <member name="M:PostSharp.Reflection.DeclarationIdentifier.Equals(System.Object)">
+      <summary>Indicates whether this instance and a specified object are equal.</summary>
+      <param name="obj">Another object to compare to. </param>
+      <returns>true if <paramref name="obj" /> and this instance are the same type and represent the same value; otherwise, false.</returns>
+    </member>
+    <member name="M:PostSharp.Reflection.DeclarationIdentifier.GetDeclarationIdentifier(System.Reflection.MemberInfo)">
+      <summary>
+            Gets the <see cref="T:PostSharp.Reflection.DeclarationIdentifier" /> for a given declaration.
+            </summary>
+      <param name="declaration">A <see cref="T:System.Type" />, <see cref="T:System.Reflection.MethodInfo" />, <see cref="T:System.Reflection.ConstructorInfo" />, <see cref="T:System.Reflection.FieldInfo" />, <see cref="T:System.Reflection.EventInfo" /> or <see cref="T:System.Reflection.PropertyInfo" />.</param>
+      <returns>A <see cref="T:PostSharp.Reflection.DeclarationIdentifier" /> that identifies <paramref name="declaration" />.</returns>
+    </member>
+    <member name="M:PostSharp.Reflection.DeclarationIdentifier.GetDeclaringTypeIdentifier">
+      <summary>
+            Gets the <see cref="T:PostSharp.Reflection.DeclarationIdentifier" /> that represents the declaring type of the declaration represented by the current <see cref="T:PostSharp.Reflection.DeclarationIdentifier" />.
+            </summary>
+      <returns>The <see cref="T:PostSharp.Reflection.DeclarationIdentifier" /> that represents the declaring type of the declaration represented by the current <see cref="T:PostSharp.Reflection.DeclarationIdentifier" />.
+            If the current <see cref="T:PostSharp.Reflection.DeclarationIdentifier" /> already represents a type, this method returns the current <see cref="T:PostSharp.Reflection.DeclarationIdentifier" />.
+            </returns>
+    </member>
+    <member name="M:PostSharp.Reflection.DeclarationIdentifier.GetHashCode">
+      <summary>Returns the hash code for this instance.</summary>
+      <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
+    </member>
+    <member name="P:PostSharp.Reflection.DeclarationIdentifier.IsNull">
+      <summary>
+            Determines whether the current <see cref="T:PostSharp.Reflection.DeclarationIdentifier" /> is null.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Reflection.DeclarationIdentifier.MaxMemberIndex">
+      <summary>
+            Maximum number of the same kind in the same type supported by the <see cref="T:PostSharp.Reflection.DeclarationIdentifier" /> class.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Reflection.DeclarationIdentifier.MaxTypeIndex">
+      <summary>
+            Maximum number of types per assembly supported by the <see cref="T:PostSharp.Reflection.DeclarationIdentifier" /> class.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Reflection.DeclarationIdentifier.MemberIndex">
+      <summary>
+            Gets a number that uniquely identifies the member inside its declaring type, for the given member kind. 
+            </summary>
+    </member>
+    <member name="P:PostSharp.Reflection.DeclarationIdentifier.Null">
+      <summary>
+            Gets a null instance of the <see cref="T:PostSharp.Reflection.DeclarationIdentifier" /> type/
+            </summary>
+    </member>
+    <member name="M:PostSharp.Reflection.DeclarationIdentifier.op_Equality(PostSharp.Reflection.DeclarationIdentifier,PostSharp.Reflection.DeclarationIdentifier)">
+      <summary>
+            Determines whether two instances of the <see cref="T:PostSharp.Reflection.DeclarationIdentifier" /> type are equal.
+            </summary>
+      <param name="left">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="left"/&gt; documentation for "M:PostSharp.Reflection.DeclarationIdentifier.op_Equality(PostSharp.Reflection.DeclarationIdentifier,PostSharp.Reflection.DeclarationIdentifier)"]</p>
+      </param>
+      <param name="right">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="right"/&gt; documentation for "M:PostSharp.Reflection.DeclarationIdentifier.op_Equality(PostSharp.Reflection.DeclarationIdentifier,PostSharp.Reflection.DeclarationIdentifier)"]</p>
+      </param>
+      <returns>
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;returns&gt; documentation for "M:PostSharp.Reflection.DeclarationIdentifier.op_Equality(PostSharp.Reflection.DeclarationIdentifier,PostSharp.Reflection.DeclarationIdentifier)"]</p>
+      </returns>
+    </member>
+    <member name="M:PostSharp.Reflection.DeclarationIdentifier.op_Inequality(PostSharp.Reflection.DeclarationIdentifier,PostSharp.Reflection.DeclarationIdentifier)">
+      <summary>
+            Determines whether two instances of the <see cref="T:PostSharp.Reflection.DeclarationIdentifier" /> type are different.
+            </summary>
+      <param name="left">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="left"/&gt; documentation for "M:PostSharp.Reflection.DeclarationIdentifier.op_Inequality(PostSharp.Reflection.DeclarationIdentifier,PostSharp.Reflection.DeclarationIdentifier)"]</p>
+      </param>
+      <param name="right">
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="right"/&gt; documentation for "M:PostSharp.Reflection.DeclarationIdentifier.op_Inequality(PostSharp.Reflection.DeclarationIdentifier,PostSharp.Reflection.DeclarationIdentifier)"]</p>
+      </param>
+      <returns>
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;returns&gt; documentation for "M:PostSharp.Reflection.DeclarationIdentifier.op_Inequality(PostSharp.Reflection.DeclarationIdentifier,PostSharp.Reflection.DeclarationIdentifier)"]</p>
+      </returns>
+    </member>
+    <member name="P:PostSharp.Reflection.DeclarationIdentifier.TypeIndex">
+      <summary>
+            Gets a number that uniquely identifies the type inside its declaring assembly.
+            </summary>
+    </member>
     <member name="T:PostSharp.Reflection.IAssemblyName">
       <summary>
               Defines the semantics of an assembly name.
@@ -5276,15 +7292,6 @@
               Initializes a new <see cref="T:PostSharp.Reflection.LocationInfo" /> from a <see cref="T:System.Reflection.PropertyInfo" />.
             </summary>
       <param name="propertyInfo">The property represented by the <see cref="T:PostSharp.Reflection.LocationInfo" />.</param>
-    </member>
-    <member name="M:PostSharp.Reflection.LocationInfo.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-      <summary>Initializes a new instance of the <see cref="T:PostSharp.Reflection.LocationInfo" /> class</summary>
-      <param name="si">
-        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="si"/&gt; documentation for "M:PostSharp.Reflection.LocationInfo.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)"]</p>
-      </param>
-      <param name="context">
-        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;param name="context"/&gt; documentation for "M:PostSharp.Reflection.LocationInfo.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)"]</p>
-      </param>
     </member>
     <member name="P:PostSharp.Reflection.LocationInfo.DeclaringType">
       <summary>
@@ -5642,10 +7649,66 @@
               Gets the assembly-qualified type name of the object.
             </summary>
     </member>
+    <member name="T:PostSharp.Reflection.ReflectionExtensions">
+      <summary>
+            Provides utility methods to work with the <c>System.Reflection</c> namespace.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Reflection.ReflectionExtensions.GetAutomaticProperty(System.Reflection.FieldInfo)">
+      <summary>
+            Gets the <see cref="T:System.Reflection.PropertyInfo" /> whose a given field is the backing field from the current type or base types.
+            </summary>
+      <param name="field">A field.</param>
+      <returns>The <see cref="T:System.Reflection.PropertyInfo" /> representing the property whose <paramref name="field" /> is the backing field, or <c>null</c>
+            if <paramref name="field" /> is not the backing field of an automatic property.</returns>
+    </member>
+    <member name="M:PostSharp.Reflection.ReflectionExtensions.GetAutomaticProperty(System.Reflection.FieldInfo,System.Boolean)">
+      <summary>
+            Gets the <see cref="T:System.Reflection.PropertyInfo" /> whose a given field is the backing field and specifies whether base types should be considered.
+            </summary>
+      <param name="field">A field.</param>
+      <param name="inherit">
+        <c>true</c> if the property should be looked for in the base, otherwise <c>false</c>.</param>
+      <returns>The <see cref="T:System.Reflection.PropertyInfo" /> representing the property whose <paramref name="field" /> is the backing field, or <c>null</c>
+            if <paramref name="field" /> is not the backing field of an automatic property.</returns>
+    </member>
+    <member name="M:PostSharp.Reflection.ReflectionExtensions.GetBackingField(System.Reflection.PropertyInfo)">
+      <summary>
+            Gets the backing field of a given property.
+            </summary>
+      <param name="propertyInfo">A property.</param>
+      <returns>The <see cref="T:System.Reflection.FieldInfo" /> representing the backing field of <paramref name="propertyInfo" />, or <c>null</c> if <paramref name="propertyInfo" />
+            is not an automatic property.</returns>
+    </member>
+    <member name="M:PostSharp.Reflection.ReflectionExtensions.GetStateMachineKind(System.Reflection.MethodInfo)">
+      <summary>
+            Gets the kind of state machine (typically <see cref="F:PostSharp.Reflection.StateMachineKind.Async" />, <see cref="F:PostSharp.Reflection.StateMachineKind.Enumerable" /> or <see cref="F:PostSharp.Reflection.StateMachineKind.None" />) that implements a given method.
+            </summary>
+      <param name="method">A method.</param>
+      <returns>A <see cref="T:PostSharp.Reflection.StateMachineKind" /> value, or <see cref="F:PostSharp.Reflection.StateMachineKind.None" /> if <paramref name="method" /> is not implemented by a state machine.</returns>
+    </member>
+    <member name="M:PostSharp.Reflection.ReflectionExtensions.IsAutomaticProperty(System.Reflection.PropertyInfo)">
+      <summary>
+            Determines whether a given property is an automatic property.
+            </summary>
+      <param name="propertyInfo">A property.</param>
+      <returns>
+        <c>true</c> if <paramref name="propertyInfo" /> represents an automatic property, otherwise <c>false</c>.</returns>
+    </member>
     <member name="T:PostSharp.Reflection.ReflectionHelper">
       <summary>
             Provides helper methods for work with <see cref="N:System.Reflection" />.
             </summary>
+    </member>
+    <member name="M:PostSharp.Reflection.ReflectionHelper.AreInternalsVisibleTo(System.Reflection.Assembly,System.Reflection.Assembly)">
+      <summary>
+            Determines whether the <see cref="T:System.Runtime.CompilerServices.InternalsVisibleToAttribute" /> attribute relationship exists between two assemblies.
+            </summary>
+      <param name="definingAssembly">The assembly defining the <see cref="T:System.Runtime.CompilerServices.InternalsVisibleToAttribute" /> attribute.</param>
+      <param name="referencingAssembly">The assembly referenced by the <see cref="T:System.Runtime.CompilerServices.InternalsVisibleToAttribute" /> attribute.</param>
+      <returns>
+        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;returns&gt; documentation for "M:PostSharp.Reflection.ReflectionHelper.AreInternalsVisibleTo(System.Reflection.Assembly,System.Reflection.Assembly)"]</p>
+      </returns>
     </member>
     <member name="M:PostSharp.Reflection.ReflectionHelper.GetEvent(System.Type,System.Reflection.MethodInfo,System.Reflection.MethodInfo,System.Reflection.MethodInfo)">
       <summary>
@@ -5752,16 +7815,28 @@
     </member>
     <member name="M:PostSharp.Reflection.ReflectionSearch.GetCustomAttributesOnTarget(System.Object)">
       <summary>
-              Gets all custom attributes on a given element of code, including those who have beed added indirectly, for
+              Gets all custom attributes on a given element of code, including those who have been added indirectly, for
               instance through <see cref="T:PostSharp.Extensibility.MulticastAttribute" />.
             </summary>
       <param name="target">Element of code (<see cref="T:System.Type" />, <see cref="T:System.Reflection.MethodInfo" />, ...) whose
               custom attributes are requested.</param>
       <returns>The set of all custom attributes added, directly or indirectly, to <paramref name="target" />.</returns>
     </member>
+    <member name="M:PostSharp.Reflection.ReflectionSearch.GetCustomAttributesOnTarget``1(System.Object,PostSharp.Reflection.ReflectionSearchOptions)">
+      <summary>
+              Gets all custom attributes of a given type on a given element of code, including those who have been added indirectly, for
+              instance through <see cref="T:PostSharp.Extensibility.MulticastAttribute" /> and specifies additional options.
+            </summary>
+      <param name="target">Element of code (<see cref="T:System.Type" />, <see cref="T:System.Reflection.MethodInfo" />, ...) whose
+              custom attributes are requested.</param>
+      <param name="options">
+        <see cref="F:PostSharp.Reflection.ReflectionSearchOptions.UseReflectionWrappers" /> or <see cref="F:PostSharp.Reflection.ReflectionSearchOptions.None" />.</param>
+      <typeparam name="T">Type of the custom attribute.</typeparam>
+      <returns>The set of all custom attributes added, directly or indirectly, to <paramref name="target" />.</returns>
+    </member>
     <member name="M:PostSharp.Reflection.ReflectionSearch.GetCustomAttributesOnTarget(System.Object,PostSharp.Reflection.ReflectionSearchOptions)">
       <summary>
-              Gets all custom attributes on a given element of code, including those who have beed added indirectly, for
+              Gets all custom attributes on a given element of code, including those who have been added indirectly, for
               instance through <see cref="T:PostSharp.Extensibility.MulticastAttribute" /> and specifies additional options.
             </summary>
       <param name="target">Element of code (<see cref="T:System.Type" />, <see cref="T:System.Reflection.MethodInfo" />, ...) whose
@@ -5803,7 +7878,7 @@
     <member name="M:PostSharp.Reflection.ReflectionSearch.GetDerivedTypes(System.Type,PostSharp.Reflection.ReflectionSearchOptions)">
       <summary>
               Gets the set of types derived from a given class or implementing a given interface.
-              and specifies aditional options.
+              and specifies additional options.
             </summary>
       <param name="baseType">A class or interface.</param>
       <param name="options">Any valid combination of the options <see cref="F:PostSharp.Reflection.ReflectionSearchOptions.UseReflectionWrappers" />,
@@ -5859,6 +7934,19 @@
       <returns>An array of <see cref="T:PostSharp.Reflection.MethodUsageCodeReference" /> containing one
               item for each method or constructor whose body references <paramref name="declaration" />.
             </returns>
+    </member>
+    <member name="M:PostSharp.Reflection.ReflectionSearch.HasCustomAttribute(System.Object,System.Type,System.Boolean)">
+      <summary>
+            Determines whether a declaration has a custom attribute of a given type, including those who have been added indirectly, for
+              instance through <see cref="T:PostSharp.Extensibility.MulticastAttribute" />.
+            </summary>
+      <param name="target">Element of code (<see cref="T:System.Type" />, <see cref="T:System.Reflection.MethodInfo" />, ...) whose
+              custom attributes are requested.</param>
+      <param name="type">The type of custom attributes.</param>
+      <param name="inherit">
+        <c>true</c> to consider custom attributes derived from <paramref name="type" />, <c>false</c> to consider
+            only custom attributes strictly of type <paramref name="type" />.</param>
+      <returns>True if <paramref name="type" /> has a custom attribute of type <paramref name="type" />, otherwise <c>false</c>.</returns>
     </member>
     <member name="T:PostSharp.Reflection.ReflectionSearchOptions">
       <summary>
@@ -5944,6 +8032,31 @@
       <param name="rightGenericTypeParameters">Array of types to be substituted to the
               generic type parameters of the right member.</param>
       <returns>An instance of <see cref="T:PostSharp.Reflection.ReflectionTypeComparer" />.</returns>
+    </member>
+    <member name="T:PostSharp.Reflection.StateMachineKind">
+      <summary>
+            Enumeration of kinds of state machines.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Reflection.StateMachineKind.None">
+      <summary>
+            The method is not implemented by a state machine.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Reflection.StateMachineKind.Enumerator">
+      <summary>
+            Iterator method returning an <see cref="T:System.Collections.Generic.IEnumerator`1" />.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Reflection.StateMachineKind.Enumerable">
+      <summary>
+            Iterator method returning an <see cref="T:System.Collections.Generic.IEnumerable`1" />.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Reflection.StateMachineKind.Async">
+      <summary>
+            Async method.
+            </summary>
     </member>
     <member name="T:PostSharp.Reflection.SymbolSequencePoint">
       <summary>
@@ -6071,6 +8184,237 @@
     <member name="F:PostSharp.Reflection.Visibility.Private">
       <summary>
               Private.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Reflection.GenericArgs.GenericArg">
+      <summary>
+              Classes derived from <see cref="T:PostSharp.Reflection.GenericArgs.GenericArg" /> represent unbound generic arguments.
+              It is a 'trick' to create unbound generic instances, because C# and <c>System.Reflection</c>
+              does not make it possible. Use the <see cref="M:PostSharp.Reflection.GenericArgs.GenericArg.Map(System.Type,System.Type[],System.Type[])" /> method to bind the unbound
+              generic arguments to concrete types.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Reflection.GenericArgs.GenericArg.Map(System.Type,System.Type[],System.Type[])">
+      <summary>
+              Binds unbound generic arguments to concrete types.
+            </summary>
+      <param name="type">A <see cref="T:System.Type" /> containing unbound generic arguments
+              (derived from <see cref="T:PostSharp.Reflection.GenericArgs.GenericArg" />).</param>
+      <param name="genericTypeParameters">Array of types to which
+              the unbound generic type arguments should be bound.</param>
+      <param name="genericMethodParameters">Array of types to which
+              the unbound generic method parameters should be bound.</param>
+      <returns>A <see cref="T:System.Type" /> where unbound generic arguments have been replaced
+              by <paramref name="genericTypeParameters" /> and <paramref name="genericMethodParameters" />.</returns>
+    </member>
+    <member name="T:PostSharp.Reflection.GenericArgs.GenericMethodArg">
+      <summary>
+              Classes derived from <see cref="T:PostSharp.Reflection.GenericArgs.GenericMethodArg" /> represent unbound generic method parameters.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Reflection.GenericArgs.GenericMethodArg0">
+      <summary>
+              Unbound generic method argument. Reference to the 0-th generic method argument.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Reflection.GenericArgs.GenericMethodArg0.#ctor">
+      <summary>
+            Initializes a new <see cref="T:PostSharp.Reflection.GenericArgs.GenericMethodArg0" />.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Reflection.GenericArgs.GenericMethodArg1">
+      <summary>
+              Unbound generic method argument. Reference to the 1-th generic method argument.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Reflection.GenericArgs.GenericMethodArg1.#ctor">
+      <summary>
+            Initializes a new <see cref="T:PostSharp.Reflection.GenericArgs.GenericMethodArg1" />.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Reflection.GenericArgs.GenericMethodArg2">
+      <summary>
+              Unbound generic method argument. Reference to the 2-th generic method argument.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Reflection.GenericArgs.GenericMethodArg2.#ctor">
+      <summary>
+            Initializes a new <see cref="T:PostSharp.Reflection.GenericArgs.GenericMethodArg2" />.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Reflection.GenericArgs.GenericMethodArg3">
+      <summary>
+              Unbound generic method argument. Reference to the 3-th generic method argument.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Reflection.GenericArgs.GenericMethodArg3.#ctor">
+      <summary>
+            Initializes a new <see cref="T:PostSharp.Reflection.GenericArgs.GenericMethodArg0" />.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Reflection.GenericArgs.GenericMethodArg4">
+      <summary>
+              Unbound generic method argument. Reference to the 4-th generic method argument.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Reflection.GenericArgs.GenericMethodArg4.#ctor">
+      <summary>
+            Initializes a new <see cref="T:PostSharp.Reflection.GenericArgs.GenericMethodArg4" />.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Reflection.GenericArgs.GenericMethodArg5">
+      <summary>
+              Unbound generic method argument. Reference to the 5-th generic method argument.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Reflection.GenericArgs.GenericMethodArg5.#ctor">
+      <summary>
+            Initializes a new <see cref="T:PostSharp.Reflection.GenericArgs.GenericMethodArg5" />.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Reflection.GenericArgs.GenericMethodArg6">
+      <summary>
+              Unbound generic method argument. Reference to the 6-th generic method argument.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Reflection.GenericArgs.GenericMethodArg6.#ctor">
+      <summary>
+            Initializes a new <see cref="T:PostSharp.Reflection.GenericArgs.GenericMethodArg6" />.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Reflection.GenericArgs.GenericMethodArg7">
+      <summary>
+              Unbound generic method argument. Reference to the 7-th generic method argument.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Reflection.GenericArgs.GenericMethodArg7.#ctor">
+      <summary>
+            Initializes a new <see cref="T:PostSharp.Reflection.GenericArgs.GenericMethodArg7" />.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Reflection.GenericArgs.GenericMethodArg8">
+      <summary>
+              Unbound generic method argument. Reference to the 8-th generic method argument.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Reflection.GenericArgs.GenericMethodArg8.#ctor">
+      <summary>
+            Initializes a new <see cref="T:PostSharp.Reflection.GenericArgs.GenericMethodArg8" />.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Reflection.GenericArgs.GenericMethodArg9">
+      <summary>
+              Unbound generic method argument. Reference to the 9-th generic method argument.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Reflection.GenericArgs.GenericMethodArg9.#ctor">
+      <summary>
+            Initializes a new <see cref="T:PostSharp.Reflection.GenericArgs.GenericMethodArg9" />.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Reflection.GenericArgs.GenericTypeArg">
+      <summary>
+              Classes derived from <see cref="T:PostSharp.Reflection.GenericArgs.GenericTypeArg" /> represent unbound generic type parameters.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Reflection.GenericArgs.GenericTypeArg0">
+      <summary>
+              Unbound generic type argument. Reference to the 0-th generic type argument.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Reflection.GenericArgs.GenericTypeArg0.#ctor">
+      <summary>
+            Initializes a new <see cref="T:PostSharp.Reflection.GenericArgs.GenericTypeArg0" />.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Reflection.GenericArgs.GenericTypeArg1">
+      <summary>
+              Unbound generic type argument. Reference to the 1-th generic type argument.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Reflection.GenericArgs.GenericTypeArg1.#ctor">
+      <summary>
+            Initializes a new <see cref="T:PostSharp.Reflection.GenericArgs.GenericTypeArg1" />.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Reflection.GenericArgs.GenericTypeArg2">
+      <summary>
+              Unbound generic type argument. Reference to the 2-th generic type argument.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Reflection.GenericArgs.GenericTypeArg2.#ctor">
+      <summary>
+            Initializes a new <see cref="T:PostSharp.Reflection.GenericArgs.GenericTypeArg2" />.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Reflection.GenericArgs.GenericTypeArg3">
+      <summary>
+              Unbound generic type argument. Reference to the 3-th generic type argument.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Reflection.GenericArgs.GenericTypeArg3.#ctor">
+      <summary>
+            Initializes a new <see cref="T:PostSharp.Reflection.GenericArgs.GenericTypeArg3" />.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Reflection.GenericArgs.GenericTypeArg4">
+      <summary>
+              Unbound generic type argument. Reference to the 4-th generic type argument.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Reflection.GenericArgs.GenericTypeArg4.#ctor">
+      <summary>
+            Initializes a new <see cref="T:PostSharp.Reflection.GenericArgs.GenericTypeArg4" />.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Reflection.GenericArgs.GenericTypeArg5">
+      <summary>
+              Unbound generic type argument. Reference to the 5-th generic type argument.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Reflection.GenericArgs.GenericTypeArg5.#ctor">
+      <summary>
+            Initializes a new <see cref="T:PostSharp.Reflection.GenericArgs.GenericTypeArg5" />.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Reflection.GenericArgs.GenericTypeArg6">
+      <summary>
+              Unbound generic type argument. Reference to the 6-th generic type argument.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Reflection.GenericArgs.GenericTypeArg6.#ctor">
+      <summary>
+            Initializes a new <see cref="T:PostSharp.Reflection.GenericArgs.GenericTypeArg6" />.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Reflection.GenericArgs.GenericTypeArg7">
+      <summary>
+              Unbound generic type argument. Reference to the 7-th generic type argument.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Reflection.GenericArgs.GenericTypeArg7.#ctor">
+      <summary>
+            Initializes a new <see cref="T:PostSharp.Reflection.GenericArgs.GenericTypeArg7" />.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Reflection.GenericArgs.GenericTypeArg8">
+      <summary>
+              Unbound generic type argument. Reference to the 8-th generic type argument.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Reflection.GenericArgs.GenericTypeArg8.#ctor">
+      <summary>
+            Initializes a new <see cref="T:PostSharp.Reflection.GenericArgs.GenericTypeArg7" />.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Reflection.GenericArgs.GenericTypeArg9">
+      <summary>
+              Unbound generic type argument. Reference to the 9-th generic type argument.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Reflection.GenericArgs.GenericTypeArg9.#ctor">
+      <summary>
+            Initializes a new <see cref="T:PostSharp.Reflection.GenericArgs.GenericTypeArg9" />.
             </summary>
     </member>
     <member name="T:PostSharp.Reflection.Syntax.AddressAlignment">
@@ -6580,7 +8924,7 @@
     </member>
     <member name="F:PostSharp.Reflection.Syntax.SyntaxElementKind.ArrayLength">
       <summary>
-            Lenght of an array (<see cref="T:PostSharp.Reflection.Syntax.IUnaryExpression" />).
+            Length of an array (<see cref="T:PostSharp.Reflection.Syntax.IUnaryExpression" />).
             </summary>
     </member>
     <member name="F:PostSharp.Reflection.Syntax.SyntaxElementKind.Assign">
@@ -6645,7 +8989,7 @@
     </member>
     <member name="F:PostSharp.Reflection.Syntax.SyntaxElementKind.GreaterThanOrEqual">
       <summary>
-            Greated than (<see cref="T:PostSharp.Reflection.Syntax.IBinaryExpression" />).
+            Greater than (<see cref="T:PostSharp.Reflection.Syntax.IBinaryExpression" />).
             </summary>
     </member>
     <member name="F:PostSharp.Reflection.Syntax.SyntaxElementKind.Substract">
@@ -7125,7 +9469,7 @@
       <summary>
             Visits a local variable definition.
             </summary>
-      <param name="localVariable">The local variavle to be visited.</param>
+      <param name="localVariable">The local variable to be visited.</param>
       <returns>
         <paramref name="localVariable" />, unless the override returns something else.</returns>
     </member>
@@ -7233,11 +9577,6 @@
       <param name="expression">The element to be visited.</param>
       <returns>
         <paramref name="expression" />, unless the override returns something else.</returns>
-    </member>
-    <member name="T:PostSharp.Serialization.ActivatorProvider">
-      <summary>
-        <p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;summary&gt; documentation for "T:PostSharp.Serialization.ActivatorProvider"]</p>
-      </summary>
     </member>
     <member name="T:PostSharp.Serialization.ActivatorSecurityToken">
       <summary>
@@ -7415,7 +9754,7 @@
     <member name="T:PostSharp.Serialization.ISerializationCallback">
       <summary>
             Interface that can be implemented by serializable classes.
-            It defines methos <see cref="M:PostSharp.Serialization.ISerializationCallback.OnDeserialized" /> and <see cref="M:PostSharp.Serialization.ISerializationCallback.OnSerializing" /> called during serialization.
+            It defines methods <see cref="M:PostSharp.Serialization.ISerializationCallback.OnDeserialized" /> and <see cref="M:PostSharp.Serialization.ISerializationCallback.OnSerializing" /> called during serialization.
             </summary>
     </member>
     <member name="M:PostSharp.Serialization.ISerializationCallback.OnDeserialized">
@@ -7548,7 +9887,7 @@
             Initializes a new <see cref="T:PostSharp.Serialization.PortableFormatter" />.
             </summary>
       <param name="binder">A <see cref="T:PostSharp.Serialization.PortableSerializationBinder" /> customizing bindings between types and type names, or <c>null</c> to use the default implementation.</param>
-      <param name="serializerProvider">A custom implementation of <see cref="T:PostSharp.Serialization.ISerializerFactoryProvider" />, or <c>null</c> to use the default implementaiton.</param>
+      <param name="serializerProvider">A custom implementation of <see cref="T:PostSharp.Serialization.ISerializerFactoryProvider" />, or <c>null</c> to use the default implementation.</param>
     </member>
     <member name="M:PostSharp.Serialization.PortableFormatter.Deserialize(System.IO.Stream)">
       <summary>
@@ -7582,7 +9921,9 @@
             </summary>
     </member>
     <member name="M:PostSharp.Serialization.PortableSerializationBinder.#ctor">
-      <summary>Initializes a new instance of the <see cref="T:PostSharp.Serialization.PortableSerializationBinder" /> class</summary>
+      <summary>
+            Initializes a new instance of the <see cref="T:PostSharp.Serialization.PortableSerializationBinder" /> class.
+            </summary>
     </member>
     <member name="M:PostSharp.Serialization.PortableSerializationBinder.BindToName(System.Type,System.String@,System.String@)">
       <summary>
