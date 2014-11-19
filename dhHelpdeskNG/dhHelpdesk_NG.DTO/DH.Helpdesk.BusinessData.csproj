@@ -111,6 +111,16 @@
     <Compile Include="Enums\Orders\FieldNames\ReceiverFieldNames.cs" />
     <Compile Include="Enums\Orders\FieldNames\SupplierFieldNames.cs" />
     <Compile Include="Enums\Orders\FieldNames\UserFieldNames.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\Edit\AccountFieldsSettingsForEdit.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\Edit\AccountInformationFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\Edit\ContactFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\Edit\DeliveryInformationFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\Edit\FieldSetting.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\Edit\FieldSettingMultipleChoices.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\Edit\OrdererFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\Edit\OtherFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\Edit\ProgramFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\Edit\UserFieldSettings.cs" />
     <Compile Include="Models\Orders\Index\FieldSettingsOverview\DeliveryFieldSettingsOverview.cs" />
     <Compile Include="Models\Orders\Index\FieldSettingsOverview\GeneralFieldSettingsOverview.cs" />
     <Compile Include="Models\Orders\Index\FieldSettingsOverview\LogFieldSettingsOverview.cs" />
@@ -123,7 +133,7 @@
     <Compile Include="Models\Orders\Index\FieldSettingsOverview\UserFieldSettingsOverview.cs" />
     <Compile Include="Enums\Users\Module.cs" />
     <Compile Include="Models\Accounts\Account.cs" />
-    <Compile Include="Models\Accounts\AccountSettings\Write\Account.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Write\AccountFieldsSettingsForWrite.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Write\AccountFieldsSettingsForInsert.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Write\AccountFieldsSettingsForUpdate.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Write\AccountInformationFieldSettings.cs" />
@@ -732,7 +742,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\Accounts\AccountSettings\Read\" />
+    <Folder Include="Models\Accounts\AccountSettings\Read\ModelEdit\" />
+    <Folder Include="Models\Accounts\AccountSettings\Read\Overview\" />
+    <Folder Include="Models\Accounts\AccountSettings\Read\Processing\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\PostSharp.3.1.33\tools\PostSharp.targets" Condition="Exists('..\packages\PostSharp.3.1.33\tools\PostSharp.targets')" />
