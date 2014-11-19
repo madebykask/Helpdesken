@@ -93,7 +93,7 @@
             this.Property(o => o.ChangedDate).IsRequired();
             this.Property(o => o.ChangedByUser_Id).IsOptional();
             this.Property(o => o.DeliveryOuId).HasColumnName("DeliveryOU_Id").IsOptional();
-            this.HasOptional(o => o.DeliveryOU)
+            this.HasOptional(o => o.DeliveryOuEntity)
                 .WithMany()
                 .HasForeignKey(o => o.DeliveryOuId);
             this.HasMany(o => o.Programs)

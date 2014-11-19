@@ -23,7 +23,22 @@
             var administrators = WebMvcHelper.CreateMultiSelectField(data.Administrators, filter.AdministratiorIds);
             var statuses = WebMvcHelper.CreateMultiSelectField(data.OrderStatuses, filter.StatusIds);
 
-            return new OrdersIndexModel(orderTypes, administrators, statuses);
+            SortFieldModel sortField = null;
+
+            if (filter.SortField != null)
+            {
+                sortField = new SortFieldModel { Name = filter.SortField.Name, SortBy = filter.SortField.SortBy };
+            }
+
+            return new OrdersIndexModel(
+                                    orderTypes, 
+                                    administrators, 
+                                    filter.StartDate,
+                                    filter.EndDate,
+                                    statuses,
+                                    filter.Text,
+                                    filter.RecordsOnPage,
+                                    sortField);
         }
 
         public OrdersGridModel Create(SearchResponse response, SortField sortField)

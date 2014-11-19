@@ -19,7 +19,7 @@
                             .IncludePath(o => o.OrderState)
                             .IncludePath(o => o.OrderType)
                             .IncludePath(o => o.DeliveryDepartment)
-                            .IncludePath(o => o.DeliveryOU)
+                            .IncludePath(o => o.DeliveryOuEntity)
                             .IncludePath(o => o.Logs)
                             .IncludePath(o => o.Programs)
                             .ToArray();
@@ -70,7 +70,7 @@
                                     entity.DeliveryInfo,
                                     entity.DeliveryInfo2,
                                     entity.DeliveryInfo3,
-                                    entity.DeliveryOU != null ? entity.DeliveryOU.Name : string.Empty);
+                                    entity.DeliveryOuEntity != null ? entity.DeliveryOuEntity.Name : string.Empty);
         }
 
         private static GeneralOverview CreateGeneralOverview(Order entity)

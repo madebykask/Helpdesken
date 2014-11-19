@@ -10,12 +10,12 @@
     {
         public OrdersGridModel(
                 List<GridColumnHeaderModel> headers, 
-                List<OrderOverviewModel> orders, 
-                int changesFound, 
+                List<OrderOverviewModel> orders,
+                int ordersFound, 
                 SortField sortField)
         {
             this.SortField = sortField;
-            this.ChangesFound = changesFound;
+            this.OrdersFound = ordersFound;
             this.Orders = orders;
             this.Headers = headers;
         }
@@ -27,7 +27,7 @@
         public List<OrderOverviewModel> Orders { get; private set; }
 
         [MinValue(0)]
-        public int ChangesFound { get; private set; }
+        public int OrdersFound { get; private set; }
 
         public SortField SortField { get; private set; }
     }

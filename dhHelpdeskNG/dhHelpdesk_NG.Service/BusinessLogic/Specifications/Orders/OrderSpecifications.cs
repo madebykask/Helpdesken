@@ -85,7 +85,7 @@
                                     o.DeliveryInfo.Trim().ToLower().Contains(search) ||                    
                                     o.DeliveryInfo.Trim().ToLower().Contains(search) ||                    
                                     o.DeliveryInfo2.Trim().ToLower().Contains(search) ||                    
-                                    o.DeliveryOU.Name.Trim().ToLower().Contains(search) ||       
+                                    o.DeliveryOuEntity.Name.Trim().ToLower().Contains(search) ||       
              
                                     // General
                                     o.Domain.Name.Trim().ToLower().Contains(search) ||      
@@ -246,7 +246,7 @@
                     }
                     else if (sort.Name == DeliveryFieldNames.DeliveryOuId)
                     {
-                        query = query.OrderBy(o => o.DeliveryOU.Name);
+                        query = query.OrderBy(o => o.DeliveryOuEntity.Name);
                     }
 
                     // General
@@ -521,7 +521,7 @@
                     }
                     else if (sort.Name == DeliveryFieldNames.DeliveryOuId)
                     {
-                        query = query.OrderByDescending(o => o.DeliveryOU.Name);
+                        query = query.OrderByDescending(o => o.DeliveryOuEntity.Name);
                     }
 
                     // General

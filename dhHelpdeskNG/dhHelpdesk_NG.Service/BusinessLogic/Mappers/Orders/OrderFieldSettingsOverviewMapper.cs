@@ -6,7 +6,6 @@
     using DH.Helpdesk.BusinessData.Models.Orders.Index.FieldSettingsOverview;
     using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Common.Collections;
-    using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Orders.Data;
 
@@ -241,7 +240,7 @@
 
         private static FieldOverviewSetting CreateFieldSetting(OrdersFieldSettingsOverviewMapData fieldSetting)
         {
-            return new FieldOverviewSetting(fieldSetting.Show.ToBool(), fieldSetting.Caption);
+            return new FieldOverviewSetting(fieldSetting.IsShowInList(), fieldSetting.Caption);
         }
 
         #endregion

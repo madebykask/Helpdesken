@@ -12,7 +12,7 @@ namespace DH.Helpdesk.Dal.EntityConfigurations
         {
             this.HasKey(x => x.Id);
 
-            this.HasRequired(x => x.OrderType)
+            this.HasOptional(x => x.OrderType)
                 .WithMany()
                 .HasForeignKey(o => o.OrderType_Id)
                 .WillCascadeOnDelete(false);
@@ -22,7 +22,6 @@ namespace DH.Helpdesk.Dal.EntityConfigurations
                 .HasForeignKey(o => o.Customer_Id)
                 .WillCascadeOnDelete(false);
 
-            this.Property(x => x.OrderType_Id).IsOptional();
             this.Property(x => x.Customer_Id).IsRequired();
             this.Property(x => x.OrderField).IsRequired().HasMaxLength(50);
             this.Property(x => x.Show).IsRequired();

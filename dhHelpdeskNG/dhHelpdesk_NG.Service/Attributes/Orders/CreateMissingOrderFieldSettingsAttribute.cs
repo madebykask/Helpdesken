@@ -164,7 +164,7 @@
         {
             CollectMissingField(SupplierFields.SupplierOrderNumber, existing, missingFields);
             CollectMissingField(SupplierFields.SupplierOrderDate, existing, missingFields);
-            CollectMissingField(SupplierFields.SupplierOrderNumber, existing, missingFields);
+            CollectMissingField(SupplierFields.SupplierOrderInfo, existing, missingFields);
         }
 
         private static void CollectUserMissingFields(string[] existing, List<string> missingFields)

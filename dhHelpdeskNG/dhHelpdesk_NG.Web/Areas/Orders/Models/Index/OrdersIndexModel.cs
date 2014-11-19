@@ -12,12 +12,22 @@
     {
         public OrdersIndexModel(
                 SelectList orderTypes, 
-                MultiSelectList administrators, 
-                MultiSelectList statuses)
+                MultiSelectList administrators,
+                DateTime? startDate,
+                DateTime? endDate,                
+                MultiSelectList statuses,
+                string text,
+                int recordsOnPage,
+                SortFieldModel sortField)
         {
             this.Statuses = statuses;
             this.Administrators = administrators;
             this.OrderTypes = orderTypes;
+            this.StartDate = startDate;
+            this.EndDate = endDate;
+            this.Text = text;
+            this.RecordsOnPage = recordsOnPage;
+            this.SortField = sortField;
         }
 
         public OrdersIndexModel()

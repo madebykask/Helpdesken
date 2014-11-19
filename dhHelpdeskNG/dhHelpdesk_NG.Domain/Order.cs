@@ -161,7 +161,7 @@
 
         public virtual Department DeliveryDepartment { get; set; }
 
-        public virtual OU DeliveryOU { get; set; }
+        public virtual OU DeliveryOuEntity { get; set; }
 
         public virtual ICollection<Program> Programs { get; set; } 
 
