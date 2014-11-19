@@ -1,0 +1,102 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions
+
+@{
+    ViewBag.Title = "Index"; 
+}
+
+<div class="secnavs fixed">
+    <div class="pull-left">
+        <ul class="secnav">
+            <li> @Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "Save", "DailyReport", null, new { @class = "btn" }) </li>            
+       </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li id="DailyTab" class="active">
+                <a href="#fragment-1">@Translation.Get("Daily Report,", Enums.TranslationSource.TextTranslation)</a>
+            </li>
+            <li id="HistoryTab">
+                <a href="#fragment-2">@Translation.Get("Historik", Enums.TranslationSource.TextTranslation)</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment-1">
+
+                @using (Html.BeginForm("index", "DailyReport", FormMethod.Post, new { id = "dailyReport" }))
+                {                                        
+                    <div class="container">
+                        <div class="row">                        
+                            <div class="span100">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                @Translation.Get("Sent", Enums.TranslationSource.TextTranslation)
+                                            </th>
+                                            <th>
+                                                @Translation.Get("Created By", Enums.TranslationSource.TextTranslation)
+                                            </th>
+                                            <th>
+                                                @Translation.Get("Subject", Enums.TranslationSource.TextTranslation)
+                                            </th>
+                                            <th>
+                                                @Translation.Get("Text", Enums.TranslationSource.TextTranslation)
+                                            </th>                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                
+                                            </td>
+                                            <td>
+                                                
+                                            </td>
+                                            <td>
+                                                
+                                            </td>
+                                            <td>
+                                                
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="">
+                                @*@this.Html.Partial("_DocumentListOverview", Model)*@
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="tab-pane tab-pane-border" id="fragment-2">
+                <table class="table table-striped table-bordered table-hover" id="tbldocumentCategory">
+                    <thead>
+                        <tr>
+                            <th>
+                                Test1
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @*@foreach (var items in Model.DocumentCategories)
+                        {
+                            *@
+                            <tr>
+                                <td>
+                                    @*<a href="@Url.Action("editcategory", "document", new { id = items.Id })">@Html.DisplayFor(modelItem => items.Name)</a>*@
+                                    value1
+                                </td>
+                            </tr>
+                        @*}*@
+                    </tbody>
+                </table>
+            </div>            
+        </div>
+    </div>
+</div>
