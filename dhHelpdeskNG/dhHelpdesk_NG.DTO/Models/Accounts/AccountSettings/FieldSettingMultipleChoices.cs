@@ -1,15 +1,15 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Write
+﻿namespace DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings
 {
     public class FieldSettingMultipleChoices : FieldSetting
     {
         public FieldSettingMultipleChoices(
-            bool showInDetails,
-            bool showInList,
+            bool isShowInDetails,
+            bool isShowInList,
             string caption,
             string help,
             bool isRequired,
             bool isMultiple)
-            : base(showInDetails, showInList, caption, help, isRequired)
+            : base(isShowInDetails, isShowInList, caption, help, isRequired)
         {
             this.IsMultiple = isMultiple;
         }

@@ -117,12 +117,38 @@
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\AccountInformationFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\ContactFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\DeliveryInformationFieldSettings.cs" />
-    <Compile Include="Models\Accounts\AccountSettings\Read\Edit\FieldSetting.cs" />
-    <Compile Include="Models\Accounts\AccountSettings\Read\Edit\FieldSettingMultipleChoices.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\OrdererFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\OtherFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\ProgramFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\UserFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\AccountFieldsSettingsForEdit.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\AccountInformationFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\ContactFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\DeliveryInformationFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\FieldSetting.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\FieldSettingMultipleChoices.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\OrdererFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\OtherFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\ProgramFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\UserFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\Overview\AccountFieldsSettingsForEdit.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\Overview\AccountInformationFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\Overview\ContactFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\Overview\DeliveryInformationFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\Overview\FieldSetting.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\Overview\OrdererFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\Overview\OtherFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\Overview\ProgramFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\Overview\UserFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\Processing\AccountFieldsSettingsForEdit.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\Processing\AccountInformationFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\Processing\ContactFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\Processing\DeliveryInformationFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\Processing\FieldSetting.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\Processing\OrdererFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\Processing\OtherFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\Processing\ProgramFieldSettings.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\Processing\UserFieldSettings.cs" />
     <Compile Include="Models\Orders\Index\FieldSettingsOverview\DeliveryFieldSettingsOverview.cs" />
     <Compile Include="Models\Orders\Index\FieldSettingsOverview\GeneralFieldSettingsOverview.cs" />
     <Compile Include="Models\Orders\Index\FieldSettingsOverview\LogFieldSettingsOverview.cs" />
@@ -141,13 +167,13 @@
     <Compile Include="Models\Accounts\AccountSettings\Write\AccountInformationFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Write\ContactFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Write\DeliveryInformationFieldSettings.cs" />
-    <Compile Include="Models\Accounts\AccountSettings\Write\FieldSetting.cs" />
-    <Compile Include="Models\Accounts\AccountSettings\Write\FieldSettingMultipleChoices.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\FieldSetting.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\FieldSettingMultipleChoices.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Write\OrdererFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Write\OtherFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Write\ProgramFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Write\UserFieldSettings.cs" />
-    <Compile Include="Models\Accounts\Read\AccountForEdit.cs" />
+    <Compile Include="Models\Accounts\Read\Edit\AccountForEdit.cs" />
     <Compile Include="Models\Accounts\Write\AccountForInsert.cs" />
     <Compile Include="Models\Accounts\Write\AccountForUpdate.cs" />
     <Compile Include="Models\Accounts\Write\AccountForWrite.cs" />
@@ -755,9 +781,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\Accounts\AccountSettings\Read\ModelEdit\" />
-    <Folder Include="Models\Accounts\AccountSettings\Read\Overview\" />
-    <Folder Include="Models\Accounts\AccountSettings\Read\Processing\" />
+    <Folder Include="Models\Accounts\Read\Overview\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

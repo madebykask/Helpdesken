@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Accounts.Read
+﻿namespace DH.Helpdesk.BusinessData.Models.Accounts.Read.Edit
 {
     using System;
 
