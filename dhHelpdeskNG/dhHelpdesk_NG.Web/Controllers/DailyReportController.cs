@@ -7,10 +7,17 @@ using System.Web.Mvc;
 
 namespace DH.Helpdesk.Web.Controllers
 {
+    using DH.Helpdesk.Services.Services;
+
     public class DailyReportController : BaseController
     {
         //
         // GET: /DailyReport/
+
+        public DailyReportController(IMasterDataService masterDataService)
+            : base(masterDataService)
+        {
+        }
 
         public ActionResult Index()
         {
