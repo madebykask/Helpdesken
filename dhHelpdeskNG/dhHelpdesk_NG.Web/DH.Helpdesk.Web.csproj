@@ -1293,7 +1293,7 @@
     <Content Include="Areas\Orders\Views\Shared\_IndexLayout.cshtml" />
     <Content Include="Areas\Orders\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Orders\Views\Orders\Orders.cshtml" />
-    <Content Include="Controllers\Index.cshtml" />
+    <Content Include="Views\DailyReport\Index.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />
@@ -2443,7 +2443,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
-    <Folder Include="Views\DailyReport\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Login\Login.cshtml" />

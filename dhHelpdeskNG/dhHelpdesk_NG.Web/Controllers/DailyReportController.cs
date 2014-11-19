@@ -11,13 +11,15 @@ namespace DH.Helpdesk.Web.Controllers
 
     public class DailyReportController : BaseController
     {
-        //
-        // GET: /DailyReport/
-
-        public DailyReportController(IMasterDataService masterDataService)
+        public DailyReportController(            
+            IMasterDataService masterDataService)
             : base(masterDataService)
         {
+            //
         }
+        //
+        // GET: /DailyReport/
+        
 
         public ActionResult Index()
         {
