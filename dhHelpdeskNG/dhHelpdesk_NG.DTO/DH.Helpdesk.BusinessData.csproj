@@ -112,6 +112,7 @@
     <Compile Include="Enums\Orders\FieldNames\ReceiverFieldNames.cs" />
     <Compile Include="Enums\Orders\FieldNames\SupplierFieldNames.cs" />
     <Compile Include="Enums\Orders\FieldNames\UserFieldNames.cs" />
+    <Compile Include="Models\Checklists\Output\ChecklistsOverview.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\AccountFieldsSettingsForEdit.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\AccountInformationFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\ContactFieldSettings.cs" />

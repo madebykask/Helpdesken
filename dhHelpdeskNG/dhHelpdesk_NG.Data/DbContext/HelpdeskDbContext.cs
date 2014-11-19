@@ -8,6 +8,7 @@
     using DH.Helpdesk.Dal.EntityConfigurations.Accounts;
     using DH.Helpdesk.Dal.EntityConfigurations.Cases;
     using DH.Helpdesk.Dal.EntityConfigurations.Changes;
+    using DH.Helpdesk.Dal.EntityConfigurations.Checklists;
     using DH.Helpdesk.Dal.EntityConfigurations.Computers;
     using DH.Helpdesk.Dal.EntityConfigurations.DailyReport;
     using DH.Helpdesk.Dal.EntityConfigurations.Faq;
@@ -156,7 +157,9 @@
 
         public DbSet<ChecklistService> ChecklistServices { get; set; }
 
-        public DbSet<Checklist> Checklists { get; set; }
+        public DbSet<Checklist> Checklist { get; set; }
+
+        public DbSet<Checklists> Checklists { get; set; }
 
         public DbSet<ComputerFieldSettings> ComputerFieldSettings { get; set; }
 
@@ -562,6 +565,7 @@
             modelBuilder.Configurations.Add(new ChangeObjectConfiguration());
             modelBuilder.Configurations.Add(new ChangePriorityConfiguration());
             modelBuilder.Configurations.Add(new ChangeStatusConfiguration());
+            modelBuilder.Configurations.Add(new ChecklistsConfiguration());
             modelBuilder.Configurations.Add(new ChecklistActionConfiguration());
             modelBuilder.Configurations.Add(new ChecklistServiceConfiguration());
             modelBuilder.Configurations.Add(new ComputerInventoryConfiguration());

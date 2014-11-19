@@ -83,6 +83,7 @@
     <Compile Include="EntityConfigurations\Cases\CaseSolutionSettingConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CausingPartConfiguration.cs" />
     <Compile Include="EntityConfigurations\Changes\ChangeCouncilConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Checklists\ChecklistsConfiguration.cs" />
     <Compile Include="EntityConfigurations\DailyReport\DailyReportConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\CaseInvoiceArticleConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\CaseInvoiceConfiguration.cs" />
@@ -341,6 +342,7 @@
     <Compile Include="Repositories\Changes\IChangeDepartmentRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeFieldSettingRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeHistoryRepository.cs" />
+    <Compile Include="Repositories\ChecklistsRepository.cs" />
     <Compile Include="Repositories\Computers\Concrete\ComputerInventoryRepository.cs" />
     <Compile Include="Repositories\Computers\Concrete\ComputerFieldSettingsRepository.cs" />
     <Compile Include="Repositories\Computers\Concrete\ComputerHistoryRepository.cs" />
