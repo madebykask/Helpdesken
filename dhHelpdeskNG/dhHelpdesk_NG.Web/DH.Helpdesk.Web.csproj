@@ -1728,6 +1728,7 @@
     <Content Include="Views\Questionnaire\StatisticsGrid.cshtml" />
     <Content Include="Views\GlobalSetting\Holiday.cshtml" />
     <Content Include="Views\GlobalSetting\vssver2.scc" />
+    <Content Include="Views\Checklists\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
