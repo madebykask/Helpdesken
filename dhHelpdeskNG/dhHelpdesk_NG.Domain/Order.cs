@@ -15,25 +15,25 @@
             this.Logs = new List<OrderLog>();
         }
 
-        public decimal CaseNumber { get; set; }
+        public decimal? CaseNumber { get; set; }
 
-        public int ChangedByUser_Id { get; set; }
+        public int? ChangedByUser_Id { get; set; }
 
-        public int CreatedByUser_Id { get; set; }
+        public int? CreatedByUser_Id { get; set; }
 
         public int Customer_Id { get; set; }
 
         public int Deleted { get; set; }
 
-        public int Department_Id { get; set; }
+        public int? Department_Id { get; set; }
 
-        public int Domain_Id { get; set; }
+        public int? Domain_Id { get; set; }
 
         public int OrderInfo2 { get; set; }
 
-        public int OrderState_Id { get; set; }
+        public int? OrderState_Id { get; set; }
 
-        public int OrderType_Id { get; set; }
+        public int? OrderType_Id { get; set; }
 
         public int? DeliveryDepartmentId { get; set; }
 
@@ -47,11 +47,11 @@
 
         public string DeliveryLocation { get; set; }
 
-        public int OU_Id { get; set; }
+        public int? OU_Id { get; set; }
 
         public int? OrderPropertyId { get; set; }
 
-        public int User_Id { get; set; }
+        public int? User_Id { get; set; }
 
         public string Configuration { get; set; }
 
@@ -137,13 +137,13 @@
 
         public DateTime CreatedDate { get; set; }
 
-        public DateTime Deliverydate { get; set; }
+        public DateTime? Deliverydate { get; set; }
 
-        public DateTime InstallDate { get; set; }
+        public DateTime? InstallDate { get; set; }
 
-        public DateTime OrderDate { get; set; }
+        public DateTime? OrderDate { get; set; }
 
-        public DateTime SupplierOrderDate { get; set; }
+        public DateTime? SupplierOrderDate { get; set; }
 
         public int? DeliveryOuId { get; set; } 
 

@@ -4,7 +4,7 @@
     {
         public OtherOverview(
                 string fileName, 
-                decimal caseNumber, 
+                decimal? caseNumber, 
                 string info, 
                 string status)
         {
@@ -16,7 +16,7 @@
 
         public string FileName { get; private set; }
         
-        public decimal CaseNumber { get; private set; }
+        public decimal? CaseNumber { get; private set; }
         
         public string Info { get; private set; }
         

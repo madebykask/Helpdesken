@@ -14,7 +14,7 @@
             this.HasRequired(o => o.Customer)
                 .WithMany(c => c.Orders)
                 .HasForeignKey(o => o.Customer_Id);
-            this.HasRequired(o => o.Domain)
+            this.HasOptional(o => o.Domain)
                 .WithMany()
                 .HasForeignKey(o => o.Domain_Id);
             this.Property(o => o.OrderDate).IsOptional();
@@ -36,7 +36,7 @@
             this.Property(o => o.AccountingDimension4).IsOptional().HasMaxLength(20);
             this.Property(o => o.AccountingDimension5).IsOptional().HasMaxLength(20);
             this.Property(o => o.Department_Id).IsOptional();
-            this.HasRequired(o => o.Ou)
+            this.HasOptional(o => o.Ou)
                 .WithMany(o => o.Orders)
                 .HasForeignKey(o => o.OU_Id);
             this.Property(o => o.OrderPropertyId).HasColumnName("OrderProperty_Id");
@@ -66,10 +66,10 @@
             this.Property(o => o.User_Id).IsOptional();
             this.Property(o => o.Deliverydate).IsOptional();
             this.Property(o => o.InstallDate).IsOptional();
-            this.HasRequired(o => o.OrderState)
+            this.HasOptional(o => o.OrderState)
                 .WithMany()
                 .HasForeignKey(o => o.OrderState_Id);
-            this.HasRequired(o => o.OrderType)
+            this.HasOptional(o => o.OrderType)
                 .WithMany()
                 .HasForeignKey(o => o.OrderType_Id);
             this.Property(o => o.DeliveryDepartmentId).IsOptional().HasColumnName("DeliveryDepartment_Id");

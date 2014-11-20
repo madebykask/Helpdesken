@@ -9,7 +9,7 @@
                 string customer, 
                 string administrator, 
                 string domain, 
-                DateTime orderDate)
+                DateTime? orderDate)
         {
             this.OrderDate = orderDate;
             this.Domain = domain;
@@ -26,6 +26,6 @@
         
         public string Domain { get; private set; }
         
-        public DateTime OrderDate { get; private set; }     
+        public DateTime? OrderDate { get; private set; }     
     }
 }

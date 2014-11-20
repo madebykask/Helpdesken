@@ -1,6 +1,9 @@
-﻿@using DH.Helpdesk.Web.Areas.Orders.Models.Index
+﻿@using System.Web.Optimization
+@using DH.Helpdesk.Web.Areas.Orders.Models.Index
 @using DH.Helpdesk.Web.Infrastructure
 @model OrdersIndexModel
+
+@Scripts.Render("~/bundles/orders/index")
 
 @section Actions {
     <ul class="secnav">               
@@ -10,10 +13,20 @@
     </ul>
 }
 
+<script type="text/javascript">
+    $(function() {
+        applyIndexBehavior();
+    });    
+
+</script>
+      
 @using (Ajax.BeginForm("Orders", "Orders", null, 
     new AjaxOptions { UpdateTargetId = "OrdersOrdersTableContainer" },
-    new { id ="ProductsSearchForm" } ))
+    new { id ="OrdersSearchForm" } ))
 {
+    @Html.HiddenFor(m => m.SortField.Name, new { id = "sortFieldName" })
+    @Html.HiddenFor(m => m.SortField.SortBy, new { id = "sortFieldBy" })
+
     <table class="tableform">
         <tr>
             <td class="span3">@Translation.Get("Typ")</td>
@@ -49,6 +62,13 @@
         </tr>               
     </table>
 }
+<script type="text/javascript">
+
+    function ResetPaging() {
+        ResetDataTable("Orders_Table");
+    };
+
+</script>
 <div id="OrdersOrdersTableContainer">
     @Html.Action("Orders", "Orders", new { model = (OrdersIndexModel)null })
 </div>

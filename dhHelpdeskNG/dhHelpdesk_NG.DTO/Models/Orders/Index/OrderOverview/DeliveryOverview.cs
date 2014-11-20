@@ -5,8 +5,8 @@
     public sealed class DeliveryOverview
     {
         public DeliveryOverview(
-                DateTime deliveryDate, 
-                DateTime installDate, 
+                DateTime? deliveryDate, 
+                DateTime? installDate, 
                 string deliveryDepartment, 
                 string deliveryOu, 
                 string deliveryAddress, 
@@ -32,9 +32,9 @@
             this.DeliveryDate = deliveryDate;
         }
 
-        public DateTime DeliveryDate { get; private set; }
+        public DateTime? DeliveryDate { get; private set; }
         
-        public DateTime InstallDate { get; private set; }
+        public DateTime? InstallDate { get; private set; }
         
         public string DeliveryDepartment { get; private set; }
         

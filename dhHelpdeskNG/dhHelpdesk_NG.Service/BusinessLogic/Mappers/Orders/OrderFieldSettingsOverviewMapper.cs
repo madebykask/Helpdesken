@@ -240,7 +240,7 @@
 
         private static FieldOverviewSetting CreateFieldSetting(OrdersFieldSettingsOverviewMapData fieldSetting)
         {
-            return new FieldOverviewSetting(fieldSetting.IsShowInList(), fieldSetting.Caption);
+            return new FieldOverviewSetting(fieldSetting.IsShowInList(), fieldSetting.GetFieldCaption());
         }
 
         #endregion

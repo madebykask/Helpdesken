@@ -18,6 +18,16 @@
             return this.FieldName;
         }
 
+        public string GetFieldCaption()
+        {
+            if (string.IsNullOrEmpty(this.Caption))
+            {
+                return this.FieldName;
+            }
+
+            return this.Caption;
+        }
+
         public bool IsShowInList()
         {
             return this.Show.ToBool() &&

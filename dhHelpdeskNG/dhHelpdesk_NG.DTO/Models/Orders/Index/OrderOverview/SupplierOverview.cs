@@ -6,7 +6,7 @@
     {
         public SupplierOverview(
                 string supplierOrderNumber, 
-                DateTime supplierOrderDate, 
+                DateTime? supplierOrderDate, 
                 string supplierOrderInfo)
         {
             this.SupplierOrderInfo = supplierOrderInfo;
@@ -16,7 +16,7 @@
 
         public string SupplierOrderNumber { get; private set; }
         
-        public DateTime SupplierOrderDate { get; private set; }
+        public DateTime? SupplierOrderDate { get; private set; }
         
         public string SupplierOrderInfo { get; private set; }    
     }

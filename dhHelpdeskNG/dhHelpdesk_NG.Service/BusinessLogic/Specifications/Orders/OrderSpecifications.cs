@@ -29,7 +29,7 @@
                 return query;
             }
 
-            query = query.Where(o => administratorIds.Contains(o.User_Id));
+            query = query.Where(o => o.User_Id.HasValue && administratorIds.Contains(o.User_Id.Value));
 
             return query;
         }
@@ -59,7 +59,7 @@
                 return query;
             }
 
-            query = query.Where(o => statusIds.Contains(o.OrderState_Id));
+            query = query.Where(o => o.OrderState_Id.HasValue && statusIds.Contains(o.OrderState_Id.Value));
 
             return query;
         }
@@ -167,8 +167,12 @@
                         .GetByPeriod(startDate, endDate)
                         .GetByStatuses(statusIds)
                         .GetByText(text)
-                        .Sort(sort)
-                        .Take(selectCount);
+                        .Sort(sort);
+
+            if (selectCount > 0)
+            {
+                query = query.Take(selectCount);
+            }
 
             return query;
         }

@@ -30,5 +30,10 @@
                             overviews.Where(o => o.Type == "Administrator").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
                             overviews.Where(o => o.Type == "Status").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray());
         }
+
+        public static string MapToOrderNumber(this int orderId)
+        {
+            return string.Format("O-{0}", orderId);
+        }
     }
 }

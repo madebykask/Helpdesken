@@ -355,11 +355,11 @@
             var displayValue = new StringDisplayValue(value);
             CreateValueIfNeeded(setting, fieldName, displayValue, values);
         }
-
+        
         private static void CreateValueIfNeeded(
             FieldOverviewSetting setting,
             string fieldName,
-            decimal value,
+            decimal? value,
             List<NewGridRowCellValueModel> values)
         {
             var displayValue = new DecimalDisplayValue(value);

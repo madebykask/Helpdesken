@@ -2,21 +2,21 @@
 {
     using System.Globalization;
 
-    public sealed class DecimalDisplayValue : DisplayValue<decimal>
+    public sealed class DecimalDisplayValue : DisplayValue<decimal?>
     {
-        public DecimalDisplayValue(decimal value)
+        public DecimalDisplayValue(decimal? value)
             : base(value)
         {
         }
 
-        public static explicit operator DecimalDisplayValue(decimal value)
+        public static explicit operator DecimalDisplayValue(decimal? value)
         {
             return new DecimalDisplayValue(value);
         }
 
         public override string GetDisplayValue()
         {
-            return this.Value.ToString(CultureInfo.InvariantCulture);
+            return this.Value.HasValue ? this.Value.Value.ToString(CultureInfo.InvariantCulture) : null;
         }
     }
 }
