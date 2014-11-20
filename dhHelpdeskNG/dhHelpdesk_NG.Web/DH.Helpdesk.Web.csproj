@@ -416,6 +416,8 @@
     <Compile Include="Areas\Orders\Models\Index\OrdersGridModel.cs" />
     <Compile Include="Areas\Orders\Models\Index\OrdersIndexModel.cs" />
     <Compile Include="Areas\Orders\Models\OrderFieldSettings\OrderFieldSettingsEditModel.cs" />
+    <Compile Include="Areas\Orders\Models\OrderFieldSettings\OrderFieldSettingsFilterModel.cs" />
+    <Compile Include="Areas\Orders\Models\OrderFieldSettings\OrderFieldSettingsIndexModel.cs" />
     <Compile Include="Areas\Orders\OrdersAreaRegistration.cs" />
     <Compile Include="Controllers\AboutController.cs" />
     <Compile Include="Controllers\AjaxController.cs" />
@@ -1296,6 +1298,7 @@
     <Content Include="Areas\Orders\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Orders\Views\Orders\Orders.cshtml" />
     <Content Include="Views\DailyReport\Index.cshtml" />
+    <Content Include="Areas\Orders\Views\OrderFieldSettings\Index.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />

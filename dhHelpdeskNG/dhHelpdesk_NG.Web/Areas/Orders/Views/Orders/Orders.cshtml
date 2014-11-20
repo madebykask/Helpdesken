@@ -43,6 +43,10 @@
 </table>
 
 <script type="text/javascript">
+    function ResetPaging() {
+        ResetDataTable("Orders_Table");
+    };
+
     $(document).ready(function () {
         var perPageText = '@Translation.Get("Antal per sida")';
         var perShowingText = '@Translation.Get("Visar sida")';

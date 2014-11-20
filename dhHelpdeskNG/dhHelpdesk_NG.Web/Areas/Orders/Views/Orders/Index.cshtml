@@ -62,13 +62,7 @@
         </tr>               
     </table>
 }
-<script type="text/javascript">
 
-    function ResetPaging() {
-        ResetDataTable("Orders_Table");
-    };
-
-</script>
 <div id="OrdersOrdersTableContainer">
     @Html.Action("Orders", "Orders", new { model = (OrdersIndexModel)null })
 </div>

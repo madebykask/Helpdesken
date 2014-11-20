@@ -5,6 +5,7 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Enums.Orders.Fields;
+    using DH.Helpdesk.Common.Extensions.Boolean;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Orders;
@@ -191,6 +192,10 @@
                                 int? orderTypeId)
         {
             var now = DateTime.Now;
+            var visibleByDefault = (
+                        fieldName == GeneralFields.OrderNumber ||
+                        fieldName == GeneralFields.OrderDate)
+                        .ToInt();
             return new OrderFieldSettings
                        {
                            OrderField = fieldName,
@@ -200,9 +205,9 @@
                            ChangedDate = now,
                            Label = fieldName,
                            Required = 0,
-                           Show = 0,
+                           Show = visibleByDefault,
                            ShowExternal = 0,
-                           ShowInList = 0,
+                           ShowInList = visibleByDefault,
                            DefaultValue = string.Empty
                        };
         }

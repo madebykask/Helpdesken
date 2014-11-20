@@ -199,8 +199,10 @@
     <Compile Include="Models\Orders\Index\SearchParameters.cs" />
     <Compile Include="Models\Orders\Index\SearchResponse.cs" />
     <Compile Include="Models\Orders\Index\SearchResult.cs" />
-    <Compile Include="Models\Orders\OrderSettings\OrderFieldSettingsOverview.cs" />
+    <Compile Include="Models\Orders\OrderFieldSettings\OrderFieldSettingsFilterData.cs" />
+    <Compile Include="Models\Orders\OrderFieldSettings\OrderFieldSettingsOverview.cs" />
     <Compile Include="Models\Orders\Index\OrdersFilterData.cs" />
+    <Compile Include="Models\Orders\OrderFieldSettings\SearchParameters.cs" />
     <Compile Include="Models\Questionnaire\Participant.cs" />
     <Compile Include="Models\Questionnaire\Read\CircularOverview.cs" />
     <Compile Include="Models\Questionnaire\Read\ConnectedCase.cs" />

@@ -1,7 +1,7 @@
 ﻿namespace DH.Helpdesk.Services.Services.Concrete.Orders
 {
-    using DH.Helpdesk.BusinessData.Models.Orders.Index;
     using DH.Helpdesk.BusinessData.Models.Orders.Index.FieldSettingsOverview;
+    using DH.Helpdesk.BusinessData.Models.Orders.OrderFieldSettings;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.Attributes.Orders;
@@ -28,6 +28,19 @@
                 return fieldSettingsRep.GetAll()
                         .GetByType(customerId, orderTypeId)
                         .MapToOrdersFieldSettingsOverview();
+            }
+        }
+
+        public OrderFieldSettingsFilterData GetFilterData(int customerId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var orderTypeRep = uow.GetRepository<OrderType>();
+
+                var orderTypes = orderTypeRep.GetAll()
+                                    .GetOrderTypes(customerId);
+
+                return OrderFieldSettingsMapper.MapToFilterData(orderTypes);
             }
         }
     }

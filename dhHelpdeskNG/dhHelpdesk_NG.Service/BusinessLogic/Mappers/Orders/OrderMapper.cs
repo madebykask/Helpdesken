@@ -18,7 +18,9 @@
                                                             {
                                                                 t.Id,
                                                                 t.Name
-                                                            }).ToArray();
+                                                            })
+                                                            .OrderBy(t => t.Name)
+                                                            .ToArray();
             var overviews = administrators.Select(a => new { a.Id, Name = a.FirstName + " " + a.SurName, Type = "Administrator" }).Union(
                             statuses.Select(s => new { s.Id, s.Name, Type = "Status" }))
                             .OrderBy(o => o.Type)
