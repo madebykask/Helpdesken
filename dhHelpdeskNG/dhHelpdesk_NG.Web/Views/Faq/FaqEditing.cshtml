@@ -28,9 +28,9 @@
                                     <td class="span3">
                                         @Translation.Get("Kategori", Enums.TranslationSource.TextTranslation) <span class="mandatorystar">*</span>
                                     </td>
-                                    <td class="span9">
-                                        
+                                    <td class="span9" style="">                                        
                                         @this.Html.DropDownWithSubmenus("category_dropdown", "CategoryId", false, Model.Category)
+                                        
                                     </td>
                                 </tr>
                                 <tr>
@@ -42,7 +42,7 @@
                                         @this.Html.TextBoxFor(m => m.Question)
                                         @this.Html.ValidationMessageFor(m => m.Question)
                                     </td>
-                                </tr>
+                                </tr>                                
                                 <tr>
                                     <td>
                                         @Translation.Get("Svar", Enums.TranslationSource.TextTranslation)

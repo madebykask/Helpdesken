@@ -76,7 +76,9 @@
             window.location.href = '@this.Url.Action("NewFaq")?categoryId=' + window.selectedCategoryId;
         });
 
-        $('#search_field').typing({
+        
+
+        @*$('#search_field').typing({
             stop: function (event, $elem) {
                 if (!$elem.val()) {
                     clearSearchResultsTable();
@@ -94,7 +96,7 @@
                 }
             },
             delay: 300
-        });
+        });*@
 
         $('#show_all_answers_within_category_search_checkbox').change(function () {
             if (!$('#search_field').val()) {
@@ -117,6 +119,24 @@
             window.location.href = '@this.Url.Action("EditCategory")?id=' + selectedCategoryId;
         });
     });
+
+    function SearchFAQs() {
+        var txt = $('#search_field').val();
+        //alert(txt);
+        if (!txt) {
+            return;
+        }
+
+        if ($('#show_all_answers_within_category_search_checkbox').is(':checked')) {
+            $.get('@this.Url.Action("SearchDetailed")', { pharse: txt }, function (faqsWithDescription) {
+                refreshSearchTableWithDescription(faqsWithDescription);
+            });
+        } else {
+            $.get('@this.Url.Action("Search")', { pharse: txt }, function (faqs) {
+                refreshSearchResultsTable(faqs);
+            });
+        }
+    }
 
     function refreshFaqTable(faqs) {
         var faqsTable = $('#faqs_table');
@@ -398,10 +418,10 @@
                             <table class="table table-striped table-bordered table-hover" id="faqs_table">
                                 <thead>
                                     <tr>
-                                        <th>
+                                        <th style="width:10%">
                                             @Translation.Get("Datum", Enums.TranslationSource.TextTranslation)
                                         </th>
-                                        <th>
+                                        <th style="width:90%">
                                             @Translation.Get("Fråga/Svar", Enums.TranslationSource.TextTranslation)
                                         </th>
                                     </tr>
@@ -410,10 +430,10 @@
                                     @foreach (var faq in this.Model.FirstCategoryFaqs)
                                     {
                                         <tr>
-                                            <td>
+                                            <td style="width:10%">
                                                 <a href="@this.Url.Action("EditFaq", "faq", new { id = faq.Id })">@faq.CreatedDate.ToFormattedDate()</a>
                                             </td>
-                                            <td>
+                                            <td style="width:90%">
                                                 <a href="@this.Url.Action("EditFaq", "faq", new { id = faq.Id })">@faq.Text</a>
                                             </td>
                                         </tr>
@@ -434,7 +454,7 @@
                                         @Translation.Get("Sökord", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        <input id="search_field" type="text" class="CellText" />
+                                        <input id="search_field" type="text" class="CellText" /> <input type="button" class="btn" onclick="SearchFAQs()" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -447,7 +467,7 @@
                     <table class="table table-striped table-bordered table-hover" id="search_results_table">
                         <thead>
                             <tr>
-                                <th>
+                                <th >
                                     @Translation.Get("Datum", Enums.TranslationSource.TextTranslation)
                                 </th>
                                 <th>

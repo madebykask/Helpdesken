@@ -50,8 +50,8 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (user == null)
                 return new HttpNotFoundResult("No user found...");
-
-
+            
+                
             var modules = new UserModulesViewModel();
             var originModules = _workContext.User.Modules;
             

@@ -22,35 +22,35 @@
             bool informationIsAvailableForNotifiers, 
             bool showOnStartPage)
         {
-            if (id <= 0)
-            {
-                throw new ArgumentOutOfRangeException("id", "Must be more than zero.");
-            }
+            //if (id <= 0)
+            //{
+            //    throw new ArgumentOutOfRangeException("id", "Must be more than zero.");
+            //}
 
-            if (category == null)
-            {
-                throw new ArgumentNullException("category", "Value cannot be null.");
-            }
+            //if (category == null)
+            //{
+            //    throw new ArgumentNullException("category", "Value cannot be null.");
+            //}
 
-            if (string.IsNullOrEmpty(question))
-            {
-                throw new ArgumentNullException("question", "Value cannot be null or empty.");
-            }
+            //if (string.IsNullOrEmpty(question))
+            //{
+            //    throw new ArgumentNullException("question", "Value cannot be null or empty.");
+            //}
 
-            if (string.IsNullOrEmpty(answer))
-            {
-                throw new ArgumentNullException("answer", "Value cannot be null or empty.");
-            }
+            //if (string.IsNullOrEmpty(answer))
+            //{
+            //    throw new ArgumentNullException("answer", "Value cannot be null or empty.");
+            //}
 
-            if (files == null)
-            {
-                throw new ArgumentNullException("files", "Value cannot be null.");
-            }
+            //if (files == null)
+            //{
+            //    throw new ArgumentNullException("files", "Value cannot be null.");
+            //}
 
-            if (workingGroup == null)
-            {
-                throw new ArgumentNullException("workingGroup", "Value cannot be null.");
-            }
+            //if (workingGroup == null)
+            //{
+            //    throw new ArgumentNullException("workingGroup", "Value cannot be null.");
+            //}
 
             this.Id = id;
             this.Category = category;

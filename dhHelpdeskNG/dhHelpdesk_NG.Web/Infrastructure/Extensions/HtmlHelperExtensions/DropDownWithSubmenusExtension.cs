@@ -80,7 +80,7 @@
 
         private static void DrawHat(StringBuilder htmlOutput, string controlId)
         {
-            htmlOutput.AppendLine(string.Format(@"<div id=""{0}"" class=""dropup"">", controlId));
+            htmlOutput.AppendLine(string.Format(@"<div id=""{0}"" class=""dropdown"">", controlId));
         }
 
         private static void DrawFooter(StringBuilder htmlOutput)

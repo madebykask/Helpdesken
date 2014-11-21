@@ -32,15 +32,15 @@ namespace DH.Helpdesk.Web.Models.Faq.Output
         /// </param>
         public FaqOverviewModel(int id, DateTime createdDate, string text)
         {
-            if (id == 0)
-            {
-                throw new ArgumentOutOfRangeException("id", "Must be more than zero.");
-            }
+            //if (id == 0)
+            //{
+            //    throw new ArgumentOutOfRangeException("id", "Must be more than zero.");
+            //}
 
-            if (string.IsNullOrEmpty(text))
-            {
-                throw new ArgumentNullException("text", "Value cannot be null or empty.");
-            }
+            //if (string.IsNullOrEmpty(text))
+            //{
+            //    throw new ArgumentNullException("text", "Value cannot be null or empty.");
+            //}
 
             this.Id = id;
             this.CreatedDate = createdDate;
