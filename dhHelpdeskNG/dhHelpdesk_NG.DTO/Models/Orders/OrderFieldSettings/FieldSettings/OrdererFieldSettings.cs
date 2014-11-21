@@ -5,22 +5,22 @@
     public sealed class OrdererFieldSettings
     {
         public OrdererFieldSettings(
-                FieldSettings ordererId, 
-                FieldSettings ordererName, 
-                FieldSettings ordererLocation, 
-                FieldSettings ordererEmail, 
-                FieldSettings ordererPhone, 
-                FieldSettings ordererCode, 
-                FieldSettings department, 
-                FieldSettings unit, 
-                FieldSettings ordererAddress, 
-                FieldSettings ordererInvoiceAddress, 
-                FieldSettings ordererReferenceNumber, 
-                FieldSettings accountingDimension1, 
-                TextFieldSettings accountingDimension2, 
-                FieldSettings accountingDimension3, 
-                TextFieldSettings accountingDimension4, 
-                FieldSettings accountingDimension5)
+                TextFieldSettings ordererId, 
+                TextFieldSettings ordererName, 
+                TextFieldSettings ordererLocation, 
+                TextFieldSettings ordererEmail, 
+                TextFieldSettings ordererPhone, 
+                TextFieldSettings ordererCode, 
+                TextFieldSettings department, 
+                TextFieldSettings unit, 
+                TextFieldSettings ordererAddress, 
+                TextFieldSettings ordererInvoiceAddress, 
+                TextFieldSettings ordererReferenceNumber, 
+                TextFieldSettings accountingDimension1, 
+                FieldSettings accountingDimension2, 
+                TextFieldSettings accountingDimension3, 
+                FieldSettings accountingDimension4, 
+                TextFieldSettings accountingDimension5)
         {
             this.AccountingDimension5 = accountingDimension5;
             this.AccountingDimension4 = accountingDimension4;
@@ -41,51 +41,51 @@
         }
 
         [NotNull]
-        public FieldSettings OrdererId { get; private set; }
+        public TextFieldSettings OrdererId { get; private set; }
 
         [NotNull]
-        public FieldSettings OrdererName { get; private set; }
+        public TextFieldSettings OrdererName { get; private set; }
 
         [NotNull]
-        public FieldSettings OrdererLocation { get; private set; }
+        public TextFieldSettings OrdererLocation { get; private set; }
 
         [NotNull]
-        public FieldSettings OrdererEmail { get; private set; }
+        public TextFieldSettings OrdererEmail { get; private set; }
 
         [NotNull]
-        public FieldSettings OrdererPhone { get; private set; }
+        public TextFieldSettings OrdererPhone { get; private set; }
 
         [NotNull]
-        public FieldSettings OrdererCode { get; private set; }
+        public TextFieldSettings OrdererCode { get; private set; }
 
         [NotNull]
-        public FieldSettings Department { get; private set; }
+        public TextFieldSettings Department { get; private set; }
 
         [NotNull]
-        public FieldSettings Unit { get; private set; }
+        public TextFieldSettings Unit { get; private set; }
 
         [NotNull]
-        public FieldSettings OrdererAddress { get; private set; }
+        public TextFieldSettings OrdererAddress { get; private set; }
 
         [NotNull]
-        public FieldSettings OrdererInvoiceAddress { get; private set; }
+        public TextFieldSettings OrdererInvoiceAddress { get; private set; }
 
         [NotNull]
-        public FieldSettings OrdererReferenceNumber { get; private set; }
+        public TextFieldSettings OrdererReferenceNumber { get; private set; }
 
         [NotNull]
-        public FieldSettings AccountingDimension1 { get; private set; }
+        public TextFieldSettings AccountingDimension1 { get; private set; }
 
         [NotNull]
-        public TextFieldSettings AccountingDimension2 { get; private set; }
+        public FieldSettings AccountingDimension2 { get; private set; }
 
         [NotNull]
-        public FieldSettings AccountingDimension3 { get; private set; }
+        public TextFieldSettings AccountingDimension3 { get; private set; }
 
         [NotNull]
-        public TextFieldSettings AccountingDimension4 { get; private set; }
+        public FieldSettings AccountingDimension4 { get; private set; }
 
         [NotNull]
-        public FieldSettings AccountingDimension5 { get; private set; }     
+        public TextFieldSettings AccountingDimension5 { get; private set; }     
     }
 }

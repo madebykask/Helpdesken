@@ -18,6 +18,8 @@
 
         public string EmailIdentifier { get; set; }
 
+        public string DefaultValue { get; set; }
+
         public string GetName()
         {
             return this.OrderField;

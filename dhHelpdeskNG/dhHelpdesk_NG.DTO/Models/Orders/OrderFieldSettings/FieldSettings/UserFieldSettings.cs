@@ -5,9 +5,9 @@
     public sealed class UserFieldSettings
     {
         public UserFieldSettings(
-                FieldSettings userId, 
-                FieldSettings userFirstName, 
-                FieldSettings userLastName)
+                TextFieldSettings userId, 
+                TextFieldSettings userFirstName, 
+                TextFieldSettings userLastName)
         {
             this.UserLastName = userLastName;
             this.UserFirstName = userFirstName;
@@ -15,12 +15,12 @@
         }
 
         [NotNull]
-        public FieldSettings UserId { get; private set; }
+        public TextFieldSettings UserId { get; private set; }
          
         [NotNull]
-        public FieldSettings UserFirstName { get; private set; }
+        public TextFieldSettings UserFirstName { get; private set; }
          
         [NotNull]
-        public FieldSettings UserLastName { get; private set; }                  
+        public TextFieldSettings UserLastName { get; private set; }                  
     }
 }

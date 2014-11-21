@@ -5,18 +5,18 @@
     public sealed class DeliveryFieldSettings
     {
         public DeliveryFieldSettings(
-                FieldSettings deliveryDate, 
-                FieldSettings installDate, 
-                FieldSettings deliveryDepartment, 
-                FieldSettings deliveryOu, 
-                FieldSettings deliveryAddress, 
-                FieldSettings deliveryPostalCode, 
-                FieldSettings deliveryPostalAddress, 
-                FieldSettings deliveryLocation, 
-                FieldSettings deliveryInfo1, 
-                FieldSettings deliveryInfo2, 
-                FieldSettings deliveryInfo3, 
-                FieldSettings deliveryOuId)
+                TextFieldSettings deliveryDate, 
+                TextFieldSettings installDate, 
+                TextFieldSettings deliveryDepartment, 
+                TextFieldSettings deliveryOu, 
+                TextFieldSettings deliveryAddress, 
+                TextFieldSettings deliveryPostalCode, 
+                TextFieldSettings deliveryPostalAddress, 
+                TextFieldSettings deliveryLocation, 
+                TextFieldSettings deliveryInfo1, 
+                TextFieldSettings deliveryInfo2, 
+                TextFieldSettings deliveryInfo3, 
+                TextFieldSettings deliveryOuId)
         {
             this.DeliveryOuId = deliveryOuId;
             this.DeliveryInfo3 = deliveryInfo3;
@@ -33,39 +33,39 @@
         }
 
         [NotNull]
-        public FieldSettings DeliveryDate { get; private set; }
+        public TextFieldSettings DeliveryDate { get; private set; }
 
         [NotNull]
-        public FieldSettings InstallDate { get; private set; }
+        public TextFieldSettings InstallDate { get; private set; }
 
         [NotNull]
-        public FieldSettings DeliveryDepartment { get; private set; }
+        public TextFieldSettings DeliveryDepartment { get; private set; }
 
         [NotNull]
-        public FieldSettings DeliveryOu { get; private set; }
+        public TextFieldSettings DeliveryOu { get; private set; }
 
         [NotNull]
-        public FieldSettings DeliveryAddress { get; private set; }
+        public TextFieldSettings DeliveryAddress { get; private set; }
 
         [NotNull]
-        public FieldSettings DeliveryPostalCode { get; private set; }
+        public TextFieldSettings DeliveryPostalCode { get; private set; }
 
         [NotNull]
-        public FieldSettings DeliveryPostalAddress { get; private set; }
+        public TextFieldSettings DeliveryPostalAddress { get; private set; }
 
         [NotNull]
-        public FieldSettings DeliveryLocation { get; private set; }
+        public TextFieldSettings DeliveryLocation { get; private set; }
 
         [NotNull]
-        public FieldSettings DeliveryInfo1 { get; private set; }
+        public TextFieldSettings DeliveryInfo1 { get; private set; }
 
         [NotNull]
-        public FieldSettings DeliveryInfo2 { get; private set; }
+        public TextFieldSettings DeliveryInfo2 { get; private set; }
 
         [NotNull]
-        public FieldSettings DeliveryInfo3 { get; private set; }
+        public TextFieldSettings DeliveryInfo3 { get; private set; }
 
         [NotNull]
-        public FieldSettings DeliveryOuId { get; private set; }
+        public TextFieldSettings DeliveryOuId { get; private set; }
     }
 }

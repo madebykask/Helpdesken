@@ -5,11 +5,11 @@
     public sealed class GeneralFieldSettings
     {
         public GeneralFieldSettings(
-                TextFieldSettings orderNumber, 
-                TextFieldSettings customer, 
-                FieldSettings administrator, 
-                FieldSettings domain, 
-                FieldSettings orderDate)
+                FieldSettings orderNumber, 
+                FieldSettings customer, 
+                TextFieldSettings administrator, 
+                TextFieldSettings domain, 
+                TextFieldSettings orderDate)
         {
             this.OrderDate = orderDate;
             this.Domain = domain;
@@ -19,18 +19,18 @@
         }
 
         [NotNull]
-        public TextFieldSettings OrderNumber { get; private set;}
+        public FieldSettings OrderNumber { get; private set;}
     
         [NotNull]
-        public TextFieldSettings Customer { get; private set;}
+        public FieldSettings Customer { get; private set;}
     
         [NotNull]
-        public FieldSettings Administrator { get; private set; }
+        public TextFieldSettings Administrator { get; private set; }
     
         [NotNull]
-        public FieldSettings Domain { get; private set; }
+        public TextFieldSettings Domain { get; private set; }
     
         [NotNull]
-        public FieldSettings OrderDate { get; private set; }     
+        public TextFieldSettings OrderDate { get; private set; }     
     }
 }

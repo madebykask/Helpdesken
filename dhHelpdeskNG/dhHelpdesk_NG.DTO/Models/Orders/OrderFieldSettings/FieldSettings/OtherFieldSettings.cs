@@ -5,10 +5,10 @@
     public sealed class OtherFieldSettings
     {
         public OtherFieldSettings(
-                FieldSettings fileName, 
-                FieldSettings caseNumber, 
-                FieldSettings info, 
-                FieldSettings status)
+                TextFieldSettings fileName, 
+                TextFieldSettings caseNumber, 
+                TextFieldSettings info, 
+                TextFieldSettings status)
         {
             this.Status = status;
             this.Info = info;
@@ -17,15 +17,15 @@
         }
 
         [NotNull]
-        public FieldSettings FileName { get; private set; }
+        public TextFieldSettings FileName { get; private set; }
          
         [NotNull]
-        public FieldSettings CaseNumber { get; private set; }
+        public TextFieldSettings CaseNumber { get; private set; }
          
         [NotNull]
-        public FieldSettings Info { get; private set; }
+        public TextFieldSettings Info { get; private set; }
          
         [NotNull]
-        public FieldSettings Status { get; private set; }         
+        public TextFieldSettings Status { get; private set; }         
     }
 }

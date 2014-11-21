@@ -4,12 +4,12 @@
 
     public sealed class ProgramFieldSettings
     {
-        public ProgramFieldSettings(FieldSettings program)
+        public ProgramFieldSettings(TextFieldSettings program)
         {
             this.Program = program;
         }
 
         [NotNull]
-        public FieldSettings Program { get; private set; }         
+        public TextFieldSettings Program { get; private set; }         
     }
 }

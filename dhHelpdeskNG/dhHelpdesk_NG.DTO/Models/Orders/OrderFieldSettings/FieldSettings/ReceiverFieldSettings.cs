@@ -5,12 +5,12 @@
     public sealed class ReceiverFieldSettings
     {
         public ReceiverFieldSettings(
-                FieldSettings receiverId, 
-                FieldSettings receiverName, 
-                FieldSettings receiverEmail, 
-                FieldSettings receiverPhone, 
-                FieldSettings receiverLocation, 
-                FieldSettings markOfGoods)
+                TextFieldSettings receiverId, 
+                TextFieldSettings receiverName, 
+                TextFieldSettings receiverEmail, 
+                TextFieldSettings receiverPhone, 
+                TextFieldSettings receiverLocation, 
+                TextFieldSettings markOfGoods)
         {
             this.MarkOfGoods = markOfGoods;
             this.ReceiverLocation = receiverLocation;
@@ -21,21 +21,21 @@
         }
 
         [NotNull]
-        public FieldSettings ReceiverId { get; private set; }
+        public TextFieldSettings ReceiverId { get; private set; }
          
         [NotNull]
-        public FieldSettings ReceiverName { get; private set; }
+        public TextFieldSettings ReceiverName { get; private set; }
          
         [NotNull]
-        public FieldSettings ReceiverEmail { get; private set; }
+        public TextFieldSettings ReceiverEmail { get; private set; }
          
         [NotNull]
-        public FieldSettings ReceiverPhone { get; private set; }
+        public TextFieldSettings ReceiverPhone { get; private set; }
          
         [NotNull]
-        public FieldSettings ReceiverLocation { get; private set; }
+        public TextFieldSettings ReceiverLocation { get; private set; }
          
         [NotNull]
-        public FieldSettings MarkOfGoods { get; private set; }                  
+        public TextFieldSettings MarkOfGoods { get; private set; }                  
     }
 }
