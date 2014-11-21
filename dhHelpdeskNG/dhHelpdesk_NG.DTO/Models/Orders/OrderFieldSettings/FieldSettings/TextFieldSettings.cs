@@ -8,7 +8,7 @@
         {            
         }
 
-        [NotNullAndEmpty]
+        [NotNull]
         public string DefaultValue { get; private set; }
 
         public static TextFieldSettings CreateUpdated(

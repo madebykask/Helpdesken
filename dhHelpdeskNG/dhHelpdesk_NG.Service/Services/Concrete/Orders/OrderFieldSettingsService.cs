@@ -45,5 +45,18 @@
                 return OrderFieldSettingsMapper.MapToFilterData(orderTypes);
             }
         }
+
+        [CreateMissingOrderFieldSettings("customerId", "orderTypeId")]
+        public GetSettingsResponse GetOrderFieldSettings(int customerId, int? orderTypeId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var fieldSettingsRep = uow.GetRepository<OrderFieldSettings>();
+
+                return fieldSettingsRep.GetAll()
+                        .GetByType(customerId, orderTypeId)
+                        .MapToFullFieldSettings();
+            }
+        }
     }
 }

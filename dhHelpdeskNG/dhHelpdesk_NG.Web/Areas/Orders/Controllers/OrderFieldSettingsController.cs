@@ -2,7 +2,6 @@
 {
     using System.Web.Mvc;
 
-    using DH.Helpdesk.BusinessData.Models.Orders.OrderFieldSettings;
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Orders;
@@ -58,7 +57,9 @@
 
             SessionFacade.SavePageFilters(PageName.OrdersOrderFieldSettings, filters);
 
-            var parameters = new SearchParameters(filters.OrderTypeId);
+            var response = this.orderFieldSettingsService.GetOrderFieldSettings(
+                                    this.workContext.Customer.CustomerId,
+                                    filters.OrderTypeId);
 
             return this.PartialView();
         }

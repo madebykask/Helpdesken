@@ -35,7 +35,7 @@
                 entities.Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray());
         }
 
-        public static FullFieldSettings MapToFullFieldSettings(this IQueryable<OrderFieldSettings> query)
+        public static GetSettingsResponse MapToFullFieldSettings(this IQueryable<OrderFieldSettings> query)
         {
             var entities = query.Select(f => new OrdersFieldSettingsMapData
                                                  {
@@ -50,7 +50,7 @@
                                                  }).ToList();
 
             var fieldSettings = new NamedObjectCollection<OrdersFieldSettingsMapData>(entities);
-            return CreateFullFieldSettings(fieldSettings);
+            return new GetSettingsResponse(CreateFullFieldSettings(fieldSettings));
         }
 
         private static FullFieldSettings CreateFullFieldSettings(

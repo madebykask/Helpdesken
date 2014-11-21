@@ -10,5 +10,9 @@
                                 int? orderTypeId);
 
         OrderFieldSettingsFilterData GetFilterData(int customerId);
+
+        GetSettingsResponse GetOrderFieldSettings(
+                                int customerId,
+                                int? orderTypeId);
     }
 }

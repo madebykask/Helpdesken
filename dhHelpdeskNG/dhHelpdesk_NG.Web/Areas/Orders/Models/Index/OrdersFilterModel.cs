@@ -33,6 +33,7 @@
             this.StatusIds = new int[0];
         }
 
+        [IsId]
         public int? OrderTypeId { get; private set; }
 
         [NotNull]

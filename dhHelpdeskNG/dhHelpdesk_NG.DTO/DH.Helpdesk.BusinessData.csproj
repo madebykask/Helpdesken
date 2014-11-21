@@ -214,7 +214,7 @@
     <Compile Include="Models\Orders\OrderFieldSettings\OrderFieldSettingsFilterData.cs" />
     <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\FieldSettings.cs" />
     <Compile Include="Models\Orders\Index\OrdersFilterData.cs" />
-    <Compile Include="Models\Orders\OrderFieldSettings\SearchParameters.cs" />
+    <Compile Include="Models\Orders\OrderFieldSettings\GetSettingsResponse.cs" />
     <Compile Include="Models\Questionnaire\Participant.cs" />
     <Compile Include="Models\Questionnaire\Read\CircularOverview.cs" />
     <Compile Include="Models\Questionnaire\Read\ConnectedCase.cs" />

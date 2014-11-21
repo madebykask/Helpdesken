@@ -32,6 +32,7 @@
         [IsId]
         public int CustomerId { get; private set; }
 
+        [IsId]
         public int? OrderTypeId { get; private set; }
 
         [NotNull]
