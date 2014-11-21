@@ -1,10 +1,12 @@
 ﻿using DH.Helpdesk.BusinessData.Models.DailyReport.Output;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DH.Helpdesk.Services.Services
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
+    //using System.Collections.Generic;
+    //using System.Linq;
 
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories;
@@ -16,6 +18,8 @@ namespace DH.Helpdesk.Services.Services
 
     public interface IDailyReportService
     {
+        IList<DailyReportOverview> GetDailyReports(int customerId);
+
         IList<DailyReportSubject> GetDailyReportSubjects(int customerId);
 
         DailyReportSubject GetDailyReportSubject(int id);
@@ -103,6 +107,20 @@ namespace DH.Helpdesk.Services.Services
         public void Commit()
         {
             this._unitOfWork.Commit();
+        }
+
+        /// <summary>
+        /// The get DailyReports.
+        /// </summary>
+        /// <param name="customerId">
+        /// The customer id.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
+        public IList<DailyReportOverview> GetDailyReports(int customerId)
+        {
+            return this.GetDailyReportOverviews(new[] { customerId }, null).ToList();
         }
 
         public IEnumerable<DailyReportOverview> GetDailyReportOverviews(int[] customers, int? count)

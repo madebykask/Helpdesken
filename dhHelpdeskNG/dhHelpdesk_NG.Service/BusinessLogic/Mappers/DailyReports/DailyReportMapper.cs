@@ -1,6 +1,7 @@
-﻿namespace DH.Helpdesk.Services.BusinessLogic.Mappers.DailyReports
+﻿using System.Linq;
+namespace DH.Helpdesk.Services.BusinessLogic.Mappers.DailyReports
 {
-    using System.Linq;
+    
 
     using DH.Helpdesk.BusinessData.Models.DailyReport.Output;
     using DH.Helpdesk.Domain;
@@ -11,12 +12,18 @@
         {
             var entities = query.Select(d => new
                                         {
+                                            d.Id,
+                                            d.MailSent,
+                                            d.User.UserID,
                                             d.CreatedDate,
                                             d.DailyReportSubject,
                                             d.DailyReportText
                                         }).ToArray();
 
             return entities.Select(d => new DailyReportOverview(
+                                            d.Id,
+                                            d.MailSent,
+                                            d.UserID,
                                             d.CreatedDate,
                                             d.DailyReportSubject,
                                             d.DailyReportText)).ToArray();

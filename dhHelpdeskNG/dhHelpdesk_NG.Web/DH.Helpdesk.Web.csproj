@@ -54,6 +54,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Accessibility" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
@@ -755,6 +756,7 @@
     <Compile Include="Models\Changes\SettingsEdit\SettingsModel.cs" />
     <Compile Include="Models\Changes\SettingsEdit\TextFieldSettingModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\ConfigurableFieldModel.cs" />
+    <Compile Include="Models\DailyReports\DailyReportOutputModel.cs" />
     <Compile Include="Models\Faq\Output\FAQFileModelModel.cs" />
     <Compile Include="Models\IConfigurableFieldModel.cs" />
     <Compile Include="Models\Inventory\ComputerModuleModeFilter.cs" />
@@ -1733,6 +1735,7 @@
     <Content Include="Views\GlobalSetting\Holiday.cshtml" />
     <Content Include="Views\GlobalSetting\vssver2.scc" />
     <Content Include="Views\Checklists\Index.cshtml" />
+    <Content Include="Views\DailyReport\_HistoryOverview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

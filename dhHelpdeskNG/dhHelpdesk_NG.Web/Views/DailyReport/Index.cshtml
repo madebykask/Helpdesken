@@ -1,5 +1,7 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions
+@model DH.Helpdesk.Web.Models.DailyReports.DailyReportOutputModel
+
 
 @{
     ViewBag.Title = "Index"; 
@@ -16,7 +18,7 @@
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
             <li id="DailyTab" class="active">
-                <a href="#fragment-1">@Translation.Get("Daily Report,", Enums.TranslationSource.TextTranslation)</a>
+                <a href="#fragment-1">@Translation.Get("Daily Report, "+ System.DateTime.Now.ToShortDateString() , Enums.TranslationSource.TextTranslation)</a>
             </li>
             <li id="HistoryTab">
                 <a href="#fragment-2">@Translation.Get("Historik", Enums.TranslationSource.TextTranslation)</a>
@@ -45,23 +47,63 @@
                                             <th>
                                                 @Translation.Get("Text", Enums.TranslationSource.TextTranslation)
                                             </th>                                            
+                                            <th>                                               
+                                            </th>  
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>
+
+                                         <tr>
+                                            <td style="width:5%">                                                
                                                 
+                                            </td>                                            
+                                            <td style="width:10%">
+                                                @SessionFacade.CurrentUser.UserId
                                             </td>
-                                            <td>
-                                                
+                                            <td style="width:13%">
+                                                <select id="lstNewSubjectList" name="lstNewSubjectList"  class="valid">
+                                                    <option value=""></option>
+                                                    @foreach (var e in Model.Subjects)
+                                                    {                                                                                                                                       
+                                                       <option value="@e.Id">@e.Subject</option>                                                      
+                                                    }
+                                                </select>
+                                               
                                             </td>
-                                            <td>
-                                                
+                                            <td style="width:60%">
+                                                @*<input type="text" value="" />*@
+                                                <textarea></textarea>
                                             </td>
-                                            <td>
-                                                
+                                             <td style="width:5%">                                             
                                             </td>
                                         </tr>
+
+                                        @foreach (var item in Model.Reports)
+                                        {
+                                        <tr>
+                                            <td style="width:5%">                                                
+                                                @item.Sent.IntToYES_NO()                                                
+                                            </td>                                            
+                                            <td style="width:10%">
+                                                @Html.DisplayFor(modelitem => item.UserName)
+                                            </td>
+                                            <td style="width:13%">                                                
+                                                <select id="lstSubjectList" name="lstSubjectList"  class="valid">
+                                                    @foreach (var e in Model.Subjects)
+                                                    {                                                                               
+                                                       <option value="@e.Id" @(e.Id ==item.DailyReportSubject.Id? "selected":"")>@e.Subject</option>                                                      
+                                                    }
+                                                </select>
+                                            </td>
+                                            <td style="width:60%">                                                                                                                                                                           
+                                               @*<input type="text" value="@item.DailyReportText"/>*@                                                                                                          
+                                                <textarea>@item.DailyReportText</textarea>
+                                            </td>
+                                            <td style="width:5%">                                                                                                                                                                                                                          
+                                              @Html.ActionLink(Translation.Get("Tabort", Enums.TranslationSource.TextTranslation), "Delete", "DailyReport", null, new { @class = "btn" })
+                                            </td>
+                                        </tr>
+                                        }
                                     </tbody>
                                 </table>
                             </div>
