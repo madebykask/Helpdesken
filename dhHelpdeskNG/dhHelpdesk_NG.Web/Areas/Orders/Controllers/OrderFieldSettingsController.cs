@@ -60,8 +60,9 @@
             var response = this.orderFieldSettingsService.GetOrderFieldSettings(
                                     this.workContext.Customer.CustomerId,
                                     filters.OrderTypeId);
+            var settingsModel = this.orderFieldSettingsModelFactory.Create(response);
 
-            return this.PartialView();
+            return this.PartialView(settingsModel);
         }
     }
 }
