@@ -9,6 +9,8 @@
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Orders;
     using DH.Helpdesk.Services.Services.Orders;
 
+    using OrderFieldSettings = DH.Helpdesk.Domain.OrderFieldSettings;
+
     public sealed class OrderFieldSettingsService : IOrderFieldSettingsService
     {
         private readonly IUnitOfWorkFactory unitOfWorkFactory;

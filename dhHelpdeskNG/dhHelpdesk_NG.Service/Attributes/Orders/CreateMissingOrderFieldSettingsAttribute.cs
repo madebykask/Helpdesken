@@ -194,7 +194,14 @@
             var now = DateTime.Now;
             var visibleByDefault = (
                         fieldName == GeneralFields.OrderNumber ||
-                        fieldName == GeneralFields.OrderDate)
+                        fieldName == GeneralFields.OrderDate ||
+                        fieldName == OrdererFields.Department ||
+                        fieldName == OrderFields.OrderRow1 ||
+                        fieldName == ReceiverFields.ReceiverName ||
+                        fieldName == SupplierFields.SupplierOrderNumber || 
+                        fieldName == DeliveryFields.DeliveryDate ||
+                        fieldName == OtherFields.CaseNumber ||
+                        fieldName == OtherFields.Status)
                         .ToInt();
             return new OrderFieldSettings
                        {
