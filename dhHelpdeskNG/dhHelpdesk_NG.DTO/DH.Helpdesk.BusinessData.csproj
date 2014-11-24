@@ -120,8 +120,6 @@
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\AccountInformationFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\ContactFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\DeliveryInformationFieldSettings.cs" />
-    <Compile Include="Models\Accounts\AccountSettings\Read\Edit\FieldSetting.cs" />
-    <Compile Include="Models\Accounts\AccountSettings\Read\Edit\FieldSettingMultipleChoices.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\OrdererFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\OtherFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\ProgramFieldSettings.cs" />
@@ -788,11 +786,7 @@
       <Name>DH.Helpdesk.Domain</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\Accounts\AccountSettings\Read\ModelEdit\" />
-    <Folder Include="Models\Accounts\AccountSettings\Read\Overview\" />
-    <Folder Include="Models\Accounts\AccountSettings\Read\Processing\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
