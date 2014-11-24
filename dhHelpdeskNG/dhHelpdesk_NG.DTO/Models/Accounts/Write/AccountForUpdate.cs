@@ -8,12 +8,13 @@
             Orderer orderer,
             User user,
             AccountInformation accountInformation,
+            Contact contact,
             DeliveryInformation deliveryInformation,
             ProgramForWrite program,
             OtherForWrite other,
             DateTime changedDate,
             int changedByUserId)
-            : base(orderer, user, accountInformation, deliveryInformation, program, other)
+            : base(orderer, user, accountInformation, contact, deliveryInformation, program, other)
         {
             this.ChangedDate = changedDate;
             this.ChangedByUserId = changedByUserId;

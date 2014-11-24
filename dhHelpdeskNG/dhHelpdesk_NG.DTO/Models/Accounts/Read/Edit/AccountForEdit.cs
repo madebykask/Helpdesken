@@ -10,6 +10,7 @@
             Orderer orderer,
             User user,
             AccountInformation accountInformation,
+            Contact contact,
             DeliveryInformation deliveryInformation,
             Program program,
             Other other,
@@ -18,7 +19,7 @@
             UserOverview createdByUser,
             DateTime changedDate,
             DateTime createdDate)
-            : base(orderer, user, accountInformation, deliveryInformation, program, other)
+            : base(orderer, user, accountInformation, contact, deliveryInformation, program, other)
         {
             this.Number = number;
             this.FinishingDate = finishingDate;

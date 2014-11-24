@@ -6,10 +6,11 @@
             Orderer orderer,
             User user,
             AccountInformation accountInformation,
+            Contact contact,
             DeliveryInformation deliveryInformation,
             ProgramForWrite program,
             OtherForWrite other)
-            : base(orderer, user, accountInformation, deliveryInformation, program, other)
+            : base(orderer, user, accountInformation, contact, deliveryInformation, program, other)
         {
         }
     }
