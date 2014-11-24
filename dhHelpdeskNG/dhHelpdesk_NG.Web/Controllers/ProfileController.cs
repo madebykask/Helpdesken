@@ -20,22 +20,27 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Models.Profile;
     using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.BusinessData.Models.Modules.Output;
+    using DH.Helpdesk.BusinessData.Models.Users.Output;
    
 
     public class ProfileController : BaseController
     {
         private readonly IUserService _userService;
         private readonly IWorkContext _workContext;
+        private readonly IModulesService _ModuleService;
 
         public ProfileController(
             
             IUserService userService,
             IMasterDataService masterDataService,
+            IModulesService moduleService,
             IWorkContext workContext)
             : base(masterDataService)
         {
             this._userService = userService;
             _workContext = workContext;
+            _ModuleService = moduleService;
         }
 
         public ActionResult Index()
@@ -50,21 +55,51 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (user == null)
                 return new HttpNotFoundResult("No user found...");
-            
-                
+
+            var allModules = _ModuleService.GetAllModules();
+                                          
             var modules = new UserModulesViewModel();
-            var originModules = _workContext.User.Modules;
-            
-            var translatedModules = new List<BusinessData.Models.Users.Output.UserModuleOverview> ();
-            foreach (var mod in originModules)
+            var userModules = _workContext.User.Modules;
+                   
+            List<UserModuleOverview>  primaryModules = new List<UserModuleOverview>();
+
+            foreach (var mod in allModules)
             {
-                var newMod = new  BusinessData.Models.Users.Output.UserModuleOverview();
-                newMod =  mod;
-                newMod.Module.Name = Translation.Get(newMod.Module.FieldName, Enums.TranslationSource.TextTranslation);
-                translatedModules.Add(newMod);
+                
+                var curUserModule = userModules.Where(u=> u.Id == mod.Id).SingleOrDefault();
+
+                var newMod = new  UserModuleOverview();
+
+                var subMod = new ModuleOverview()
+                                {  Id = mod.Id,
+                                   Name = Translation.Get(mod.Name, Enums.TranslationSource.TextTranslation),
+                                   Description = mod.Description
+                                };
+
+                newMod.Module = subMod;
+                
+                newMod.Id = mod.Id;
+                if (curUserModule == null)
+                {
+                    newMod.isVisible = false;
+                    newMod.NumberOfRows = null;
+                    newMod.Position = 303;
+                    newMod.User_Id = SessionFacade.CurrentUser.Id;
+                    newMod.Module_Id = mod.Id;                    
+                }
+                else
+                {
+                    newMod.isVisible = curUserModule.isVisible;
+                    newMod.NumberOfRows = curUserModule.NumberOfRows;
+                    newMod.Position = curUserModule.Position;
+                    newMod.User_Id = curUserModule.User_Id;
+                    newMod.Module_Id = curUserModule.Module_Id;                                        
+                }
+
+                primaryModules.Add(newMod);
             }
-                        
-            modules.Modules = translatedModules;            
+
+            modules.Modules = primaryModules;            
             var model = this.CreateInputViewModel(user, modules);
 
             return this.View(model);

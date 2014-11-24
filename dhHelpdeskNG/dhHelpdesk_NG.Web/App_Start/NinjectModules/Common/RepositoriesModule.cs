@@ -16,6 +16,8 @@
     using DH.Helpdesk.Dal.Repositories.Invoice.Concrete;
     using DH.Helpdesk.Dal.Repositories.MailTemplates;
     using DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete;
+    using DH.Helpdesk.Dal.Repositories.Modules;
+    using DH.Helpdesk.Dal.Repositories.Modules.Concrete;
     using DH.Helpdesk.Dal.Repositories.Notifiers;
     using DH.Helpdesk.Dal.Repositories.Notifiers.Concrete;
     using DH.Helpdesk.Dal.Repositories.Printers;
@@ -32,7 +34,6 @@
     using DH.Helpdesk.Dal.Repositories.Users.Concrete;
     using DH.Helpdesk.Dal.Repositories.WorkstationModules;
     using DH.Helpdesk.Dal.Repositories.WorkstationModules.Concrete;
-
     using Ninject.Modules;
 
     public sealed class RepositoriesModule : NinjectModule
@@ -257,6 +258,8 @@
             this.Bind<IOperationLogEMailLogRepository>().To<OperationLogEMailLogRepository>();
 
             this.Bind<ICaseSolutionSettingRepository>().To<CaseSolutionSettingRepository>();
+
+            this.Bind<IModulesRepository>().To<ModulesRepository>();
         }
 
         #endregion

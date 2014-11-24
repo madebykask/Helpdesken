@@ -407,6 +407,8 @@
     <Compile Include="Repositories\LinkGroupRepository.cs" />
     <Compile Include="Repositories\MailTemplateIdentifierRepository.cs" />
     <Compile Include="Repositories\MailTemplates\Concrete\MailTemplateLanguageRepository.cs" />
+    <Compile Include="Repositories\Modules\Concrete\ModulesRepository.cs" />
+    <Compile Include="Repositories\Modules\IModulesRepository.cs" />
     <Compile Include="Repositories\Notifiers\Concrete\NotifierFieldSettingLanguageRepository.cs" />
     <Compile Include="Repositories\Notifiers\Concrete\NotifierFieldSettingRepository.cs" />
     <Compile Include="Repositories\Notifiers\Concrete\NotifierGroupRepository.cs" />

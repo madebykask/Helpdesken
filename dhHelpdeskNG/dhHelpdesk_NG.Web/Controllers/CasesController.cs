@@ -206,7 +206,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         #region Public Methods and Operators
 
-        public ActionResult Index(int? customerId, bool? clearFilters = false)
+        public ActionResult Index(int? customerId, bool? clearFilters = false, string customFilter = "")
         {                        
             if (clearFilters == true)
             {
@@ -216,7 +216,7 @@ namespace DH.Helpdesk.Web.Controllers
             ApplicationFacade.UpdateLoggedInUser(Session.SessionID, "");
 
             CaseIndexViewModel m = null;
-
+            //c => c.FinishingDate == null && c.Performer_User_Id == userId
             if (SessionFacade.CurrentUser != null)
             {
                 var userId = SessionFacade.CurrentUser.Id;
@@ -240,6 +240,7 @@ namespace DH.Helpdesk.Web.Controllers
                     fd.customerUserSetting = cu;
                     fd.customerSetting = this._settingService.GetCustomerSetting(cusId);
                     fd.filterCustomerId = cusId;
+                    
 
                     //region
                     if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseRegionFilter))
@@ -349,6 +350,26 @@ namespace DH.Helpdesk.Web.Controllers
                             sm.caseSearchFilter.ParantPath_CaseType = c.getCaseTypeParentPath();
                     }
 
+                    if (!string.IsNullOrEmpty(customFilter))
+                    {
+                        switch (customFilter)
+                        {
+                            case "MyCases":
+                                sm.caseSearchFilter.UserPerformer = SessionFacade.CurrentUser.Id.ToString();
+                                sm.caseSearchFilter.CaseProgress = "2";
+                                break;
+                            case "ClosedCases":
+                                sm.caseSearchFilter.CaseProgress = "1";
+                                break;
+                            case "HoldCases":
+                                sm.caseSearchFilter.CaseProgress = "3";
+                                break;
+                            case "InProcessCases":
+                                sm.caseSearchFilter.CaseProgress = "2";
+                                break;                                
+                        }//switch
+                    }
+
                     fd.caseSearchFilter = sm.caseSearchFilter;
                     srm.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(cusId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
                     srm.cases = this._caseSearchService.Search(
@@ -367,6 +388,13 @@ namespace DH.Helpdesk.Web.Controllers
                     m.caseSearchResult = srm;
                     m.caseSearchFilterData = fd;
                     sm.Search.IdsForLastSearch = GetIdsFromSearchResult(srm.cases);
+
+                    if (!string.IsNullOrEmpty(customFilter))
+                    {
+                        sm.caseSearchFilter.UserPerformer = "";
+                        sm.caseSearchFilter.CaseProgress = "2";                        
+                    }
+
                     SessionFacade.CurrentCaseSearch = sm;
 
                     var caseTemplateTree = GetCaseTemplateTreeModel(cusId, userId);

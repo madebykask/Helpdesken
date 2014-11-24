@@ -128,6 +128,7 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
             }
         }
 
+        
         private UserOverview User
         {
             get

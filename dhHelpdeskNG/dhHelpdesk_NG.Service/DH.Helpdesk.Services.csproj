@@ -246,8 +246,10 @@
     <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\BusinessItem.cs" />
     <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\ExcelTableHeader.cs" />
     <Compile Include="Services\Concrete\ActionSettingService.cs" />
+    <Compile Include="Services\Concrete\ModulesService.cs" />
     <Compile Include="Services\Concrete\Orders\OrderFieldSettingsService.cs" />
     <Compile Include="Services\Concrete\Orders\OrdersService.cs" />
+    <Compile Include="Services\IModuleService.cs" />
     <Compile Include="Services\IMailTemplateService.cs" />
     <Compile Include="Services\Concrete\Licenses\ApplicationsService.cs" />
     <Compile Include="Services\Concrete\Licenses\LicensesService.cs" />

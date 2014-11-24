@@ -121,6 +121,8 @@
             // Orders module services
             this.Bind<IOrdersService>().To<OrdersService>();
             this.Bind<IOrderFieldSettingsService>().To<OrderFieldSettingsService>();
+            this.Bind<IModulesService>().To<ModulesService>();
+
         }
 
         #endregion
