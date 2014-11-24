@@ -1184,6 +1184,7 @@
     <Content Include="Content\js\Moxie.swf" />
     <Content Include="Content\js\Moxie.xap" />
     <Content Include="Content\js\Orders\index.js" />
+    <Content Include="Content\js\Orders\settings.js" />
     <Content Include="Content\js\plupload.full.min.js" />
     <Content Include="Content\js\Reports\index.js" />
     <Content Include="Content\js\Shared\custom.validation.maxlengthfrom.notrequired.js" />
@@ -1321,6 +1322,9 @@
     <Content Include="Areas\Orders\Views\Orders\Orders.cshtml" />
     <Content Include="Views\DailyReport\Index.cshtml" />
     <Content Include="Areas\Orders\Views\OrderFieldSettings\Index.cshtml" />
+    <Content Include="Areas\Orders\Views\OrderFieldSettings\EditorTemplates\FullFieldSettingsModel.cshtml" />
+    <Content Include="Areas\Orders\Views\OrderFieldSettings\EditorTemplates\FieldSettingsModel.cshtml" />
+    <Content Include="Areas\Orders\Views\OrderFieldSettings\EditorTemplates\TextFieldSettingsModel.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />

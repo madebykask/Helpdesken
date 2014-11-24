@@ -8,6 +8,10 @@
 
     public sealed class OrderFieldSettingsIndexModel : BaseIndexModel
     {
+        public OrderFieldSettingsIndexModel()
+        {            
+        }
+
         public OrderFieldSettingsIndexModel(SelectList orderTypes)
         {
             this.OrderTypes = orderTypes;

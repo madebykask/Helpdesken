@@ -7,6 +7,7 @@
     using DH.Helpdesk.Services.Services.Orders;
     using DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories;
     using DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings;
+    using DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings;
     using DH.Helpdesk.Web.Enums;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
@@ -63,6 +64,13 @@
             var settingsModel = this.orderFieldSettingsModelFactory.Create(response);
 
             return this.PartialView(settingsModel);
+        }
+
+        [HttpPost]
+        [BadRequestOnNotValid]
+        public RedirectToRouteResult SaveSettings(FullFieldSettingsModel model)
+        {
+            return this.RedirectToAction("Index");
         }
     }
 }

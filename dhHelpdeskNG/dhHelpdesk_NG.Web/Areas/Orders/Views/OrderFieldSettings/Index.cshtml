@@ -1,11 +1,14 @@
-﻿@using DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings
+﻿@using System.Web.Optimization
+@using DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings
 @using DH.Helpdesk.Web.Infrastructure
 @model OrderFieldSettingsIndexModel
+
+@Scripts.Render("~/bundles/orders/settings")
 
 @section Actions {
     <ul class="secnav">               
         <li>
-            @Html.ActionLink(Translation.Get("Spara"), "Save", "OrderFieldSettings", new { @class = "btn" })
+            <a id="SaveOrderFieldSettings" href="javascript:void(0)" class="btn">@Translation.Get("Spara")</a>    
         </li>
     </ul>
 }

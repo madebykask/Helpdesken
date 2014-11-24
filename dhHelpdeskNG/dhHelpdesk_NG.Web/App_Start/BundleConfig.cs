@@ -142,6 +142,9 @@
 
             bundles.Add(new ScriptBundle("~/bundles/orders/index").Include(
                             "~/Content/js/Orders/index.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/orders/settings").Include(
+                            "~/Content/js/Orders/settings.js"));
         }
     }
 }
