@@ -121,7 +121,6 @@
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\OtherFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\ProgramFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\UserFieldSettings.cs" />
-<<<<<<< HEAD
     <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\AccountFieldsSettingsForEdit.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\AccountInformationFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\ContactFieldSettings.cs" />
@@ -150,9 +149,7 @@
     <Compile Include="Models\Accounts\AccountSettings\Read\Processing\OtherFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Processing\ProgramFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Processing\UserFieldSettings.cs" />
-=======
     <Compile Include="Models\Modules\Output\ModulesOverview.cs" />
->>>>>>> [FIX] Modules showing in the Home page
     <Compile Include="Models\Orders\Index\FieldSettingsOverview\DeliveryFieldSettingsOverview.cs" />
     <Compile Include="Models\Orders\Index\FieldSettingsOverview\GeneralFieldSettingsOverview.cs" />
     <Compile Include="Models\Orders\Index\FieldSettingsOverview\LogFieldSettingsOverview.cs" />
@@ -769,7 +766,6 @@
     <Compile Include="Models\UserSearchResults.cs" />
     <Compile Include="Enums\Changes\ChangeStatus.cs" />
     <Compile Include="Enums\Changes\Subtopic.cs" />
-    <Compile Include="Models\Modules\Output\ModulesOverview.cs" />
     <Compile Include="OldComponents\DbUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\User\Input\UserOverview.cs" />
