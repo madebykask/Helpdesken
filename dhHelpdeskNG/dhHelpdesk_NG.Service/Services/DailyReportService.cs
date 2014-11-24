@@ -26,6 +26,10 @@ namespace DH.Helpdesk.Services.Services
 
         DeleteMessage DeleteDailyReportSubject(int id);
 
+        DeleteMessage DeleteDailyReport(int id);
+
+        //void SaveDailyReport(DailyReport dailyReport, out IDictionary<string, string> errors);
+
         void SaveDailyReportSubject(DailyReportSubject dailyReportSubject, out IDictionary<string, string> errors);
         void Commit();
         IEnumerable<DailyReportOverview> GetDailyReportOverviews(int[] customers, int? count);
@@ -82,6 +86,104 @@ namespace DH.Helpdesk.Services.Services
 
             return DeleteMessage.Error;
         }
+
+        public DeleteMessage DeleteDailyReport(int id)
+        {
+            var dailyReport = this._dailyReportRepository.GetById(id);
+
+            if (dailyReport != null)
+            {
+                try
+                {
+                    this._dailyReportRepository.Delete(dailyReport);
+                    this.Commit();
+
+                    return DeleteMessage.Success;
+                }
+                catch
+                {
+                    return DeleteMessage.UnExpectedError;
+                }
+            }
+
+            return DeleteMessage.Error;
+        }
+
+        //public void SaveDailyReport(DailyReportOverview dailyReport, out IDictionary<string, string> errors)
+        //{
+
+        //    using (var uow = this.unitOfWorkFactory.Create())
+        //    {
+        //        var repository = uow.GetRepository<DailyReport>();
+
+        //        return repository.GetAll()
+        //                .GetForStartPage(customers, count)
+        //                .MapToOverviews();
+        //    }
+
+
+        //    if (dailyReport == null)
+        //    {
+        //        throw new ArgumentNullException("dailyreport");
+        //    }
+
+        //    using (var uow = this.unitOfWorkFactory.Create())
+        //    {
+
+        //        var repository = uow.GetRepository<DailyReport>();
+
+        //        DailyReport entity;
+                
+        //        var now = DateTime.Now;
+        //        if (dailyReport.Id == 0)
+        //        {
+        //            entity = new DailyReport();
+        //            DailyReportMapper.MapToOverviews(entity);
+        //            entity.CreatedDate = now;
+        //            entity.ChangedDate = now;
+        //            entity.ChangedByUser_Id = userId;
+        //            calendarRep.Add(entity);
+        //        }
+        //        else
+        //        {
+        //            entity = calendarRep.GetById(calendar.Id);
+        //            CalendarMapper.MapToEntity(calendar, entity);
+        //            entity.ChangedDate = now;
+        //            entity.ChangedByUser_Id = userId;
+        //            calendarRep.Update(entity);
+        //        }
+
+        //        entity.WGs.Clear();
+        //        if (workGroups != null)
+        //        {
+        //            foreach (var wg in workGroups)
+        //            {
+        //                var workingGroupEntity = workingGroupRep.GetById(wg);
+        //                entity.WGs.Add(workingGroupEntity);
+        //            }
+        //        }
+
+        //        uow.Save();
+        //    }                     
+
+        //    //if (dailyReport == null)
+        //    //    throw new ArgumentNullException("dailyreport");
+
+        //    //errors = new Dictionary<string, string>();
+
+        //    //if (string.IsNullOrEmpty(dailyReport.DailyReportSubject.ToString()))
+        //    //    errors.Add("DailyReportSubject.Subject", "Du måste ange ett delområde");
+
+        //    //dailyReport.ChangedDate = DateTime.UtcNow;
+
+        //    //if (dailyReport.Id == 0)
+        //    //    this._dailyReportRepository.Add(dailyReport);
+        //    //else
+        //    //    this._dailyReportRepository.Update(dailyReport);
+
+        //    //if (errors.Count == 0)
+        //    //    this.Commit();
+        //}
 
         public void SaveDailyReportSubject(DailyReportSubject dailyReportSubject, out IDictionary<string, string> errors)
         {

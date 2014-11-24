@@ -14,12 +14,12 @@ namespace DH.Helpdesk.Web.Models.DailyReports
     public class HistoryInputViewModel
     {
         /// <summary>
-        /// Gets or sets the calendar From.
+        /// Gets or sets the  From.
         /// </summary>
         public DateTime ReportsFrom { get; set; }
 
         /// <summary>
-        /// Gets or sets the calendar From.
+        /// Gets or sets the  From.
         /// </summary>
         public DateTime ReportsTo { get; set; }
 
