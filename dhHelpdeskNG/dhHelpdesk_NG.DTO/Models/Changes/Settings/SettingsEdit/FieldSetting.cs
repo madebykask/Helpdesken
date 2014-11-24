@@ -1,7 +1,5 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Changes.Settings.SettingsEdit
 {
-    using System;
-
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public class FieldSetting

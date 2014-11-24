@@ -9,6 +9,7 @@
         }
 
         public FullFieldSettingsModel(
+            int? orderTypeId,
             DeliveryFieldSettingsModel delivery,
             GeneralFieldSettingsModel general,
             LogFieldSettingsModel log,
@@ -20,6 +21,7 @@
             SupplierFieldSettingsModel supplier,
             UserFieldSettingsModel user)
         {
+            this.OrderTypeId = orderTypeId;
             this.Delivery = delivery;
             this.General = general;
             this.Log = log;
@@ -31,6 +33,9 @@
             this.Supplier = supplier;
             this.User = user;
         }
+
+        [IsId]
+        public int? OrderTypeId { get; set; }
 
         [NotNull]
         public DeliveryFieldSettingsModel Delivery { get; set; }

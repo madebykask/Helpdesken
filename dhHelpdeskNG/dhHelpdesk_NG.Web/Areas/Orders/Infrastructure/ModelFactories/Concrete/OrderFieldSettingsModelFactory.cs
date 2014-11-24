@@ -1,10 +1,13 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
 {
+    using System;
+
     using DH.Helpdesk.BusinessData.Models.Orders.OrderFieldSettings;
     using DH.Helpdesk.BusinessData.Models.Orders.OrderFieldSettings.FieldSettings;
     using DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings;
     using DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings;
     using DH.Helpdesk.Web.Infrastructure.Tools;
+    using OrderFieldSettingsModel = DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings.OrderFieldSettingsModel;
 
     public sealed class OrderFieldSettingsModelFactory : IOrderFieldSettingsModelFactory
     {
@@ -15,9 +18,10 @@
             return new OrderFieldSettingsIndexModel(orderTypes);
         }
 
-        public FullFieldSettingsModel Create(GetSettingsResponse response)
+        public FullFieldSettingsModel Create(GetSettingsResponse response, int? orderTypeId)
         {
-            return new FullFieldSettingsModel(
+           return new FullFieldSettingsModel(
+                        orderTypeId,
                         CreateDeliverySettings(response.Settings.Delivery),
                         CreateGeneralSettings(response.Settings.General),
                         CreateLogSettings(response.Settings.Log),
@@ -29,6 +33,29 @@
                         CreateSupplierSettings(response.Settings.Supplier),
                         CreateUserSettings(response.Settings.User));
         }
+
+        public FullFieldSettings CreateForUpdate(
+                        FullFieldSettingsModel model, 
+                        int customerId,
+                        int? orderTypeId,
+                        DateTime changedDate)
+        {
+            return FullFieldSettings.CreateUpdated(
+                        customerId,
+                        CreateDeliveryForUpdate(model.Delivery),
+                        CreateGeneralForUpdate(model.General),
+                        CreateLogForUpdate(model.Log),
+                        CreateOrdererForUpdate(model.Orderer),
+                        CreateOrderForUpdate(model.Order),
+                        CreateOtherForUpdate(model.Other),
+                        CreateProgramForUpdate(model.Program),
+                        CreateReceiverForUpdate(model.Receiver),
+                        CreateSupplierForUpdate(model.Supplier),
+                        CreateUserForUpdate(model.User),
+                        changedDate);
+        }
+
+        #region Create model for edit
 
         private static DeliveryFieldSettingsModel CreateDeliverySettings(DeliveryFieldSettings settings)
         {
@@ -165,5 +192,147 @@
                         settings.EmailIdentifier,
                         settings.DefaultValue);
         }
+
+        #endregion
+
+        #region Create model for update
+
+        private static DeliveryFieldSettings CreateDeliveryForUpdate(DeliveryFieldSettingsModel settings)
+        {
+            return new DeliveryFieldSettings(
+                        CreateTextFieldSettingForUpdate(settings.DeliveryDate),
+                        CreateTextFieldSettingForUpdate(settings.InstallDate),
+                        CreateTextFieldSettingForUpdate(settings.DeliveryDepartment),
+                        CreateTextFieldSettingForUpdate(settings.DeliveryOu),
+                        CreateTextFieldSettingForUpdate(settings.DeliveryAddress),
+                        CreateTextFieldSettingForUpdate(settings.DeliveryPostalCode),
+                        CreateTextFieldSettingForUpdate(settings.DeliveryPostalAddress),
+                        CreateTextFieldSettingForUpdate(settings.DeliveryLocation),
+                        CreateTextFieldSettingForUpdate(settings.DeliveryInfo1),
+                        CreateTextFieldSettingForUpdate(settings.DeliveryInfo2),
+                        CreateTextFieldSettingForUpdate(settings.DeliveryInfo3),
+                        CreateTextFieldSettingForUpdate(settings.DeliveryOuId));
+        }
+
+        private static GeneralFieldSettings CreateGeneralForUpdate(GeneralFieldSettingsModel settings)
+        {
+            return new GeneralFieldSettings(
+                        CreateFieldSettingForUpdate(settings.OrderNumber),
+                        CreateFieldSettingForUpdate(settings.Customer),
+                        CreateTextFieldSettingForUpdate(settings.Administrator),
+                        CreateTextFieldSettingForUpdate(settings.Domain),
+                        CreateTextFieldSettingForUpdate(settings.OrderDate));
+        }
+
+        private static LogFieldSettings CreateLogForUpdate(LogFieldSettingsModel settings)
+        {
+            return new LogFieldSettings(
+                        CreateTextFieldSettingForUpdate(settings.Log));
+        }
+
+        private static OrdererFieldSettings CreateOrdererForUpdate(OrdererFieldSettingsModel settings)
+        {
+            return new OrdererFieldSettings(
+                        CreateTextFieldSettingForUpdate(settings.OrdererId),
+                        CreateTextFieldSettingForUpdate(settings.OrdererName),
+                        CreateTextFieldSettingForUpdate(settings.OrdererLocation),
+                        CreateTextFieldSettingForUpdate(settings.OrdererEmail),
+                        CreateTextFieldSettingForUpdate(settings.OrdererPhone),
+                        CreateTextFieldSettingForUpdate(settings.OrdererCode),
+                        CreateTextFieldSettingForUpdate(settings.Department),
+                        CreateTextFieldSettingForUpdate(settings.Unit),
+                        CreateTextFieldSettingForUpdate(settings.OrdererAddress),
+                        CreateTextFieldSettingForUpdate(settings.OrdererInvoiceAddress),
+                        CreateTextFieldSettingForUpdate(settings.OrdererReferenceNumber),
+                        CreateTextFieldSettingForUpdate(settings.AccountingDimension1),
+                        CreateFieldSettingForUpdate(settings.AccountingDimension2),
+                        CreateTextFieldSettingForUpdate(settings.AccountingDimension3),
+                        CreateFieldSettingForUpdate(settings.AccountingDimension4),
+                        CreateTextFieldSettingForUpdate(settings.AccountingDimension5));
+        }
+
+        private static OrderFieldSettings CreateOrderForUpdate(OrderFieldSettingsModel settings)
+        {
+            return new OrderFieldSettings(
+                        CreateFieldSettingForUpdate(settings.Property),
+                        CreateTextFieldSettingForUpdate(settings.OrderRow1),
+                        CreateTextFieldSettingForUpdate(settings.OrderRow2),
+                        CreateTextFieldSettingForUpdate(settings.OrderRow3),
+                        CreateTextFieldSettingForUpdate(settings.OrderRow4),
+                        CreateTextFieldSettingForUpdate(settings.OrderRow5),
+                        CreateTextFieldSettingForUpdate(settings.OrderRow6),
+                        CreateTextFieldSettingForUpdate(settings.OrderRow7),
+                        CreateTextFieldSettingForUpdate(settings.OrderRow8),
+                        CreateTextFieldSettingForUpdate(settings.Configuration),
+                        CreateTextFieldSettingForUpdate(settings.OrderInfo),
+                        CreateTextFieldSettingForUpdate(settings.OrderInfo2));
+        }
+
+        private static OtherFieldSettings CreateOtherForUpdate(OtherFieldSettingsModel settings)
+        {
+            return new OtherFieldSettings(
+                        CreateTextFieldSettingForUpdate(settings.FileName),
+                        CreateTextFieldSettingForUpdate(settings.CaseNumber),
+                        CreateTextFieldSettingForUpdate(settings.Info),
+                        CreateTextFieldSettingForUpdate(settings.Status));
+        }
+
+        private static ProgramFieldSettings CreateProgramForUpdate(ProgramFieldSettingsModel settings)
+        {
+            return new ProgramFieldSettings(
+                        CreateTextFieldSettingForUpdate(settings.Program));
+        }
+
+        private static ReceiverFieldSettings CreateReceiverForUpdate(ReceiverFieldSettingsModel settings)
+        {
+            return new ReceiverFieldSettings(
+                        CreateTextFieldSettingForUpdate(settings.ReceiverId),
+                        CreateTextFieldSettingForUpdate(settings.ReceiverName),
+                        CreateTextFieldSettingForUpdate(settings.ReceiverEmail),
+                        CreateTextFieldSettingForUpdate(settings.ReceiverPhone),
+                        CreateTextFieldSettingForUpdate(settings.ReceiverLocation),
+                        CreateTextFieldSettingForUpdate(settings.MarkOfGoods));
+        }
+
+        private static SupplierFieldSettings CreateSupplierForUpdate(SupplierFieldSettingsModel settings)
+        {
+            return new SupplierFieldSettings(
+                        CreateTextFieldSettingForUpdate(settings.SupplierOrderNumber),
+                        CreateTextFieldSettingForUpdate(settings.SupplierOrderDate),
+                        CreateTextFieldSettingForUpdate(settings.SupplierOrderInfo));
+        }
+
+        private static UserFieldSettings CreateUserForUpdate(UserFieldSettingsModel settings)
+        {
+            return new UserFieldSettings(
+                        CreateTextFieldSettingForUpdate(settings.UserId),
+                        CreateTextFieldSettingForUpdate(settings.UserFirstName),
+                        CreateTextFieldSettingForUpdate(settings.UserLastName));
+        }
+
+        private static FieldSettings CreateFieldSettingForUpdate(FieldSettingsModel settings)
+        {
+            return FieldSettings.CreateUpdated(
+                        settings.Show,
+                        settings.ShowInList,
+                        settings.ShowExternal,
+                        settings.Label,
+                        settings.Required,
+                        settings.EmailIdentifier);
+        }
+
+        private static TextFieldSettings CreateTextFieldSettingForUpdate(TextFieldSettingsModel settings)
+        {
+            return TextFieldSettings.CreateUpdated(
+                        settings.Show,
+                        settings.ShowInList,
+                        settings.ShowExternal,
+                        settings.Label,
+                        settings.Required,
+                        settings.EmailIdentifier,
+                        settings.DefaultValue);
+        }
+
+        #endregion
     }
 }

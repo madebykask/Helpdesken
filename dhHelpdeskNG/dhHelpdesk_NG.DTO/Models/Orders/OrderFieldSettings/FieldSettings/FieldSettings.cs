@@ -25,7 +25,6 @@
         public string EmailIdentifier { get; protected set; }
 
         public static FieldSettings CreateUpdated(
-                string orderField,
                 bool show,
                 bool showInList,
                 bool showExternal,
@@ -35,7 +34,6 @@
         {
             return new FieldSettings
                        {
-                           OrderField = orderField,
                            Show = show,
                            ShowInList = showInList,
                            ShowExternal = showExternal,

@@ -3,6 +3,7 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Orders.Index;
+    using DH.Helpdesk.BusinessData.Models.Orders.OrderFieldSettings.FieldSettings;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Orders;

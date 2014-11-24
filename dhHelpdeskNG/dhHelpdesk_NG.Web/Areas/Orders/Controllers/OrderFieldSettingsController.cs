@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Orders.Controllers
 {
+    using System;
     using System.Web.Mvc;
 
     using DH.Helpdesk.Dal.Infrastructure.Context;
@@ -61,15 +62,23 @@
             var response = this.orderFieldSettingsService.GetOrderFieldSettings(
                                     this.workContext.Customer.CustomerId,
                                     filters.OrderTypeId);
-            var settingsModel = this.orderFieldSettingsModelFactory.Create(response);
+            var settingsModel = this.orderFieldSettingsModelFactory.Create(response, filters.OrderTypeId);
 
             return this.PartialView(settingsModel);
         }
 
         [HttpPost]
         [BadRequestOnNotValid]
-        public RedirectToRouteResult SaveSettings(FullFieldSettingsModel model)
+        public RedirectToRouteResult SaveSettings(FullFieldSettingsModel model, int? orderTypeId)
         {
+            var settings = this.orderFieldSettingsModelFactory.CreateForUpdate(
+                                    model,
+                                    this.workContext.Customer.CustomerId,
+                                    orderTypeId,
+                                    DateTime.Now);
+
+            this.orderFieldSettingsService.Update(settings);
+
             return this.RedirectToAction("Index");
         }
     }

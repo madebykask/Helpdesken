@@ -2,6 +2,7 @@
 {
     using DH.Helpdesk.BusinessData.Models.Orders.Index.FieldSettingsOverview;
     using DH.Helpdesk.BusinessData.Models.Orders.OrderFieldSettings;
+    using DH.Helpdesk.BusinessData.Models.Orders.OrderFieldSettings.FieldSettings;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.Attributes.Orders;
@@ -56,6 +57,14 @@
                 return fieldSettingsRep.GetAll()
                         .GetByType(customerId, orderTypeId)
                         .MapToFullFieldSettings();
+            }
+        }
+
+        public void Update(FullFieldSettings settings)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+
             }
         }
     }

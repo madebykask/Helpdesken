@@ -1,9 +1,10 @@
 ﻿@model DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings.FullFieldSettingsModel
 
-@using (Html.BeginForm("SaveSettings", "OrderFieldSettings", 
+@using (Html.BeginForm("SaveSettings", "OrderFieldSettings",
             FormMethod.Post,
             new { id = "SaveSettingsForm" }))
 {
+    @Html.HiddenFor(m => m.OrderTypeId)
     @Html.EditorFor(m => m)
 }
 <script type="text/javascript">

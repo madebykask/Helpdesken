@@ -12,7 +12,6 @@
         public string DefaultValue { get; private set; }
 
         public static TextFieldSettings CreateUpdated(
-                        string orderField,
                         bool show,
                         bool showInList,
                         bool showExternal,
@@ -23,14 +22,13 @@
         {
             return new TextFieldSettings
             {
-                OrderField = orderField,
                 Show = show,
                 ShowInList = showInList,
                 ShowExternal = showExternal,
                 Label = label,
                 Required = required,
                 EmailIdentifier = emailIdentifier,
-                DefaultValue = defaultValue
+                DefaultValue = !string.IsNullOrEmpty(defaultValue) ? defaultValue : string.Empty
             };
         }
 
