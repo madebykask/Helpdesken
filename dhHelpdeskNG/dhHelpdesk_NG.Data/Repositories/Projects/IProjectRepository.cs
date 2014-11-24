@@ -4,6 +4,7 @@ namespace DH.Helpdesk.Dal.Repositories.Projects
 
     using DH.Helpdesk.BusinessData.Models.Projects.Input;
     using DH.Helpdesk.BusinessData.Models.Projects.Output;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Enums;
 
@@ -19,6 +20,11 @@ namespace DH.Helpdesk.Dal.Repositories.Projects
 
         List<ProjectOverview> Find(int customerId);
 
-        List<ProjectOverview> Find(int customerId, EntityStatus entityStatus, int? projectManagerId, string projectNameLike);
+        List<ProjectOverview> Find(
+            int customerId,
+            EntityStatus entityStatus,
+            int? projectManagerId,
+            string projectNameLike,
+            SortField sortField);
     }
 }

@@ -265,6 +265,7 @@
     <Compile Include="Services\Concrete\PlaceService.cs" />
     <Compile Include="Services\ICaseInvoiceSettingsService.cs" />
     <Compile Include="Services\ICaseSolutionSettingService.cs" />
+    <Compile Include="Services\IOrderAccountService.cs" />
     <Compile Include="Services\ISSOService.cs" />
     <Compile Include="Services\IActionSettingService.cs" />
     <Compile Include="Services\IInventorySettingsService.cs" />

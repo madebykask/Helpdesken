@@ -8,6 +8,8 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models.Projects.Input;
+    using DH.Helpdesk.BusinessData.Models.Projects.Output;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Services.Services;
@@ -89,11 +91,14 @@
         public ActionResult Index()
         {
             var filter = SessionFacade.FindPageFilters<ProjectFilter>(PageName.Projects) ?? new ProjectFilter();
+            SortField sortField = ExtractSortField(filter);
+
             var projects = this.projectService.GetCustomerProjects(
                 SessionFacade.CurrentCustomer.Id,
                 (EntityStatus)filter.State,
                 filter.ProjectManagerId,
-                filter.ProjectNameLikeString);
+                filter.ProjectNameLikeString,
+                sortField);
             var users = this.userService.GetUsers(SessionFacade.CurrentCustomer.Id).ToList();
 
             var viewModel = this.indexProjectViewModelFactory.Create(projects, users, filter);
@@ -104,13 +109,19 @@
         public PartialViewResult Search(ProjectFilter filter)
         {
             SessionFacade.SavePageFilters(PageName.Projects, filter);
-            var projects = this.projectService.GetCustomerProjects(
+
+            SortField sortField = ExtractSortField(filter);
+
+            List<ProjectOverview> projects = this.projectService.GetCustomerProjects(
                 SessionFacade.CurrentCustomer.Id,
                 (EntityStatus)filter.State,
                 filter.ProjectManagerId,
-                filter.ProjectNameLikeString);
+                filter.ProjectNameLikeString,
+                sortField);
 
-            return this.PartialView("ProjectGrid", projects);
+            var viewModel = new ProjectOverviewSorting(projects, filter.SortField);
+
+            return this.PartialView("ProjectGrid", viewModel);
         }
 
         [HttpGet]
@@ -410,6 +421,17 @@
                 cases);
 
             return viewModel;
+        }
+
+        private static SortField ExtractSortField(ProjectFilter filter)
+        {
+            SortField sortField = null;
+
+            if (!string.IsNullOrEmpty(filter.SortField.Name))
+            {
+                sortField = new SortField(filter.SortField.Name, filter.SortField.SortBy.Value);
+            }
+            return sortField;
         }
     }
 }

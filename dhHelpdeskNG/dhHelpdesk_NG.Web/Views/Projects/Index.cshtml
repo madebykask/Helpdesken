@@ -1,4 +1,24 @@
-﻿@model DH.Helpdesk.Web.Models.Projects.IndexProjectViewModel
+﻿@using DH.Helpdesk.Web.Models.Projects
+@model DH.Helpdesk.Web.Models.Projects.IndexProjectViewModel
+<script>
+    $(function() {
+        window.sortGrid = function (fieldName) {
+            var sortFieldName = $('#sortFieldName').val();
+            if (sortFieldName == null || sortFieldName != fieldName) {
+                $('#sortFieldName').val(fieldName);
+                $('#sortFieldBy').val(sortBy.ASCENDING);
+            } else {
+                if ($('#sortFieldBy').val() == sortBy.ASCENDING) {
+                    $('#sortFieldBy').val(sortBy.DESCENDING);
+                } else {
+                    $('#sortFieldBy').val(sortBy.ASCENDING);
+                }
+            }
+
+            $('#search_form').submit();
+        };
+    });
+</script>
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
@@ -21,21 +41,24 @@
                         <div class="span12">
                             @using (Ajax.BeginForm("Search", null, new AjaxOptions { UpdateTargetId = "projects_grid" }, new { id = "search_form" }))
                             {
+                                @Html.HiddenFor(m => m.Filter.SortField.Name, new { id = "sortFieldName" })
+                                @Html.HiddenFor(m => m.Filter.SortField.SortBy, new { id = "sortFieldBy" })
+
                                 <table>
                                     <tr>
                                         <td>@Translation.Get("Visa", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td>
                                             <label class="radio inline">
-                                            @Html.RadioButtonFor(x => x.Filter.State, 1, new { @checked = Model.Filter.State == Enums.Show.Active }) @Translation.Get("Pågående projekt", Enums.TranslationSource.TextTranslation)
+                                                @Html.RadioButtonFor(x => x.Filter.State, 1, new { @checked = Model.Filter.State == Enums.Show.Active }) @Translation.Get("Pågående projekt", Enums.TranslationSource.TextTranslation)
                                             </label>
                                             <label class="radio inline">
-                                            @Html.RadioButtonFor(x => x.Filter.State, 0, new { @checked = Model.Filter.State == Enums.Show.Inactive }) @Translation.Get("Avslutade projekt", Enums.TranslationSource.TextTranslation)
-                                            
+                                                @Html.RadioButtonFor(x => x.Filter.State, 0, new { @checked = Model.Filter.State == Enums.Show.Inactive }) @Translation.Get("Avslutade projekt", Enums.TranslationSource.TextTranslation)
+
                                             </label>
                                             <label class="radio inline">
-                                            @Html.RadioButtonFor(x => x.Filter.State, 2, new { @checked = Model.Filter.State == Enums.Show.All }) @Translation.Get("Alla projekt", Enums.TranslationSource.TextTranslation)
-                                            
+                                                @Html.RadioButtonFor(x => x.Filter.State, 2, new { @checked = Model.Filter.State == Enums.Show.All }) @Translation.Get("Alla projekt", Enums.TranslationSource.TextTranslation)
+
                                             </label>
                                         </td>
                                     </tr>
@@ -50,11 +73,10 @@
                                         <td>@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td>
-                                            @Html.EditorFor(x => x.Filter.ProjectNameLikeString) <input type ="submit" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" name="btnSearch" class="btn"/>
+                                            @Html.EditorFor(x => x.Filter.ProjectNameLikeString)
+                                            <input type ="submit" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" name="btnSearch" class="btn"/>
                                         </td>
-                                        <td>
-                                            
-                                        </td>
+                                        <td></td>
                                     </tr>
                                 </table>
                             }
@@ -63,7 +85,7 @@
                     <div>
                     </div>
                     <div id="projects_grid">
-                        @Html.Partial("ProjectGrid", Model.Projects)
+                        @Html.Partial("ProjectGrid", new ProjectOverviewSorting(Model.Projects, Model.Filter.SortField)) 
                     </div>
                 </div>
             </div>

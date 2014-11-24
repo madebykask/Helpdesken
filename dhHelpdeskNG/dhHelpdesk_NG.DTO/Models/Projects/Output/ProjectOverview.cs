@@ -2,6 +2,8 @@
 {
     using System;
 
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
+
     public class ProjectOverview
     {
         public int Id { get; set; }

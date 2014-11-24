@@ -1,24 +1,111 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
-@model List<DH.Helpdesk.BusinessData.Models.Projects.Output.ProjectOverview>
+﻿@using DH.Helpdesk.BusinessData.Enums.Projects
+@using DH.Helpdesk.Common.Enums
+@model DH.Helpdesk.Web.Models.Projects.ProjectOverviewSorting
+
 <table id="tblCases" class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
-            <th>@Translation.Get("Projektnummer", Enums.TranslationSource.TextTranslation)
+            <th onclick=" sortGrid('@ProjectFields.Number') " class="thpointer">@Translation.Get("Projektnummer")
+                @if (Model.SortFieldModel != null && @ProjectFields.Number == Model.SortFieldModel.Name)
+                {
+                    switch (Model.SortFieldModel.SortBy)
+                    {
+                        case SortBy.Ascending:
+                    <i class="icon-chevron-up"></i>
+                            break;
+                        case SortBy.Descending:
+                    <i class="icon-chevron-down"></i>
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                }
             </th>
-            <th>@Translation.Get("Projektnamn", Enums.TranslationSource.TextTranslation)
+            <th onclick=" sortGrid('@ProjectFields.Name') " class="thpointer">@Translation.Get("Projektnamn")
+                @if (Model.SortFieldModel != null && @ProjectFields.Name == Model.SortFieldModel.Name)
+                {
+                    switch (Model.SortFieldModel.SortBy)
+                    {
+                        case SortBy.Ascending:
+                    <i class="icon-chevron-up"></i>
+                            break;
+                        case SortBy.Descending:
+                    <i class="icon-chevron-down"></i>
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                }
             </th>
-            <th>@Translation.Get("Projektledare", Enums.TranslationSource.TextTranslation)
+            <th onclick=" sortGrid('@ProjectFields.Manager') " class="thpointer">@Translation.Get("Projektledare")
+                @if (Model.SortFieldModel != null && @ProjectFields.Manager == Model.SortFieldModel.Name)
+                {
+                    switch (Model.SortFieldModel.SortBy)
+                    {
+                        case SortBy.Ascending:
+                    <i class="icon-chevron-up"></i>
+                            break;
+                        case SortBy.Descending:
+                    <i class="icon-chevron-down"></i>
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                }
             </th>
-            <th>@Translation.Get("Projektdatum", Enums.TranslationSource.TextTranslation)
+            <th onclick=" sortGrid('@ProjectFields.Date') " class="thpointer">@Translation.Get("Projektdatum")
+                @if (Model.SortFieldModel != null && @ProjectFields.Date == Model.SortFieldModel.Name)
+                {
+                    switch (Model.SortFieldModel.SortBy)
+                    {
+                        case SortBy.Ascending:
+                    <i class="icon-chevron-up"></i>
+                            break;
+                        case SortBy.Descending:
+                    <i class="icon-chevron-down"></i>
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                }
             </th>
-            <th>@Translation.Get("Avslutsdatum", Enums.TranslationSource.TextTranslation)
+            <th onclick=" sortGrid('@ProjectFields.ClosingDate') " class="thpointer">@Translation.Get("Avslutsdatum")
+                @if (Model.SortFieldModel != null && @ProjectFields.ClosingDate == Model.SortFieldModel.Name)
+                {
+                    switch (Model.SortFieldModel.SortBy)
+                    {
+                        case SortBy.Ascending:
+                    <i class="icon-chevron-up"></i>
+                            break;
+                        case SortBy.Descending:
+                    <i class="icon-chevron-down"></i>
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                }
             </th>
-            <th>@Translation.Get("Beskrivning", Enums.TranslationSource.TextTranslation)
+            <th onclick=" sortGrid('@ProjectFields.Description') " class="thpointer">@Translation.Get("Beskrivning")
+                @if (Model.SortFieldModel != null && @ProjectFields.Description == Model.SortFieldModel.Name)
+                {
+                    switch (Model.SortFieldModel.SortBy)
+                    {
+                        case SortBy.Ascending:
+                    <i class="icon-chevron-up"></i>
+                            break;
+                        case SortBy.Descending:
+                    <i class="icon-chevron-down"></i>
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                }
             </th>
         </tr>
     </thead>
+
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Projects)
         {
             <tr style="cursor: pointer" onclick="window.location.href = '@Url.Action("EditProject", new RouteValueDictionary { { "id", item.Id } })'">
                 <td>@Html.DisplayFor(x => item.Id)

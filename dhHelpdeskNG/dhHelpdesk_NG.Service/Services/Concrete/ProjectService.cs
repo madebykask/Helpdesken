@@ -5,6 +5,7 @@
 
     using DH.Helpdesk.BusinessData.Models.Projects.Input;
     using DH.Helpdesk.BusinessData.Models.Projects.Output;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Projects;
@@ -84,9 +85,9 @@
             return projects;
         }
 
-        public List<ProjectOverview> GetCustomerProjects(int customerId, EntityStatus entityStatus, int? projectManagerId, string projectNameLike)
+        public List<ProjectOverview> GetCustomerProjects(int customerId, EntityStatus entityStatus, int? projectManagerId, string projectNameLike, SortField sortField)
         {
-            var projects = this.projectRepository.Find(customerId, entityStatus, projectManagerId, projectNameLike);
+            var projects = this.projectRepository.Find(customerId, entityStatus, projectManagerId, projectNameLike, sortField);
             return projects;
         }
 

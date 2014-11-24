@@ -825,6 +825,7 @@
     <Compile Include="Models\Inventory\SearchModels\ReportsSearchViewModel.cs" />
     <Compile Include="Areas\Admin\Models\Invoice\ArticlesImportModel.cs" />
     <Compile Include="Models\Invoice\CaseInvoiceArticlesModel.cs" />
+    <Compile Include="Models\Projects\ProjectOverviewSorting.cs" />
     <Compile Include="Models\Questionnaire\Input\CircularPartOverview.cs" />
     <Compile Include="Models\Questionnaire\Input\ConnectedToCircularOverview.cs" />
     <Compile Include="Models\Questionnaire\Output\CircularOverviewViewModel.cs" />

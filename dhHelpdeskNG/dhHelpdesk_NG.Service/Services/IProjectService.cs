@@ -4,6 +4,7 @@ namespace DH.Helpdesk.Services.Services
 
     using DH.Helpdesk.BusinessData.Models.Projects.Input;
     using DH.Helpdesk.BusinessData.Models.Projects.Output;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.Dal.Enums;
 
     public interface IProjectService
@@ -18,7 +19,12 @@ namespace DH.Helpdesk.Services.Services
 
         List<ProjectOverview> GetCustomerProjects(int customerId);
 
-        List<ProjectOverview> GetCustomerProjects(int customerId, EntityStatus entityStatus, int? projectManagerId, string projectNameLike);
+        List<ProjectOverview> GetCustomerProjects(
+            int customerId,
+            EntityStatus entityStatus,
+            int? projectManagerId,
+            string projectNameLike,
+            SortField sortField);
 
         void AddSchedule(NewProjectSchedule schedule);
 

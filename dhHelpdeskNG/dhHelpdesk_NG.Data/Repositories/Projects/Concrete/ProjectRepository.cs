@@ -3,8 +3,11 @@ namespace DH.Helpdesk.Dal.Repositories.Projects.Concrete
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Enums.Projects;
     using DH.Helpdesk.BusinessData.Models.Projects.Input;
     using DH.Helpdesk.BusinessData.Models.Projects.Output;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
+    using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Infrastructure;
@@ -59,14 +62,25 @@ namespace DH.Helpdesk.Dal.Repositories.Projects.Concrete
 
         public List<ProjectOverview> Find(int customerId)
         {
-            var projects = this.DbContext.Projects.Where(x => x.Customer_Id == customerId).Select(this.overviewMapper.Map).OrderBy(x => x.Name).ToList();
+            var projects =
+                this.DbContext.Projects.Where(x => x.Customer_Id == customerId)
+                    .Select(this.overviewMapper.Map)
+                    .OrderBy(x => x.Name)
+                    .ToList();
             return projects;
         }
 
-        public List<ProjectOverview> Find(int customerId, EntityStatus entityStatus, int? projectManagerId, string projectNameLike)
+        public List<ProjectOverview> Find(
+            int customerId,
+            EntityStatus entityStatus,
+            int? projectManagerId,
+            string projectNameLike,
+            SortField sortField)
         {
-            var toLowerProjectNameLike = projectNameLike == null ? string.Empty : projectNameLike.ToLower();
-            var projects = this.DbContext.Projects.Where(x => x.Customer_Id == customerId && x.Name.ToLower().Contains(toLowerProjectNameLike));
+            string toLowerProjectNameLike = projectNameLike == null ? string.Empty : projectNameLike.ToLower();
+            IQueryable<Project> projects =
+                this.DbContext.Projects.Where(
+                    x => x.Customer_Id == customerId && x.Name.ToLower().Contains(toLowerProjectNameLike));
 
             if (projectManagerId.HasValue)
             {
@@ -83,10 +97,70 @@ namespace DH.Helpdesk.Dal.Repositories.Projects.Concrete
                     break;
             }
 
-            var projectDtos = projects.OrderBy(x => x.Name);
+            if (sortField != null)
+            {
+                switch (sortField.SortBy)
+                {
+                    case SortBy.Ascending:
+                        if (sortField.Name == ProjectFields.Number)
+                        {
+                            projects = projects.OrderBy(x => x.Id);
+                        }
+                        else if (sortField.Name == ProjectFields.Name)
+                        {
+                            projects = projects.OrderBy(x => x.Name);
+                        }
+                        else if (sortField.Name == ProjectFields.Manager)
+                        {
+                            projects = projects.OrderBy(x => x.Manager.FirstName).ThenBy(x => x.Manager.SurName);
+                        }
+                        else if (sortField.Name == ProjectFields.Date)
+                        {
+                            projects = projects.OrderBy(x => x.CreatedDate);
+                        }
+                        else if (sortField.Name == ProjectFields.ClosingDate)
+                        {
+                            projects = projects.OrderBy(x => x.EndDate);
+                        }
+                        else if (sortField.Name == ProjectFields.Description)
+                        {
+                            projects = projects.OrderBy(x => x.Description);
+                        }
 
-            return projectDtos.Select(this.overviewMapper.Map)
-                                      .ToList();
+                        break;
+                    case SortBy.Descending:
+                        if (sortField.Name == ProjectFields.Number)
+                        {
+                            projects = projects.OrderByDescending(x => x.Id);
+                        }
+                        else if (sortField.Name == ProjectFields.Name)
+                        {
+                            projects = projects.OrderByDescending(x => x.Name);
+                        }
+                        else if (sortField.Name == ProjectFields.Manager)
+                        {
+                            projects =
+                                projects.OrderByDescending(x => x.Manager.FirstName)
+                                    .ThenBy(x => x.Manager.SurName);
+                        }
+                        else if (sortField.Name == ProjectFields.Date)
+                        {
+                            projects = projects.OrderByDescending(x => x.CreatedDate);
+                        }
+                        else if (sortField.Name == ProjectFields.ClosingDate)
+                        {
+                            projects = projects.OrderByDescending(x => x.EndDate);
+                        }
+                        else if (sortField.Name == ProjectFields.Description)
+                        {
+                            projects = projects.OrderByDescending(x => x.Description);
+                        }
+
+                        break;
+                }
+            }
+
+            return projects.Select(this.overviewMapper.Map).ToList();
         }
     }
 }
