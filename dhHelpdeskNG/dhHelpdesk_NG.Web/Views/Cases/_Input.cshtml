@@ -61,6 +61,7 @@
                         @Html.HiddenFor(model => model.LogFileNames)
                         @Html.Hidden("WriteTextToExternalNote", Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()))
                         @Html.Hidden("Today", DateTime.Now.ToShortDateString())
+                        @Html.Hidden("CurLanguageId", SessionFacade.CurrentLanguageId)
 
                         @if (Model.customerUserSetting.UserInfoPermission == 1)
                         {                                                        

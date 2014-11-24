@@ -42,29 +42,28 @@
         $('#show_all_answers_within_category').change(function () {
             if (!window.selectedCategoryId) {
                 return;
-            }
-
+            }            
             if ($(this).is(':checked')) {
-                $.get('@this.Url.Action("FaqsDetailed")', { categoryId: window.selectedCategoryId }, function (faqsWithDescription) {
+                $.get('@this.Url.Action("FaqsDetailed")', { categoryId: window.selectedCategoryId, now: Date.now() }, function (faqsWithDescription) {
                     refreshFaqTableWithDescription(faqsWithDescription);
                 });
             } else {
-                $.get('@this.Url.Action("Faqs")', { categoryId: window.selectedCategoryId }, function (faqs) {
+                $.get('@this.Url.Action("Faqs")', { categoryId: window.selectedCategoryId, now: Date.now() }, function (faqs) {
                     refreshFaqTable(faqs);
                 });
             }
         });
 
-        $('#categories_tree').find('a.tree-node, a.tree-selected-node').click(function () {
-            var selectedCategoryId = $(this).siblings('input').val();
+        $('#categories_tree').find('a.tree-node, a.tree-selected-node').click(function () {            
+            var selectedCategoryId = $(this).siblings('input').val();            
             window.selectedCategoryId = selectedCategoryId;
 
-            if ($('#show_all_answers_within_category').is(':checked')) {
-                $.get('@this.Url.Action("FaqsDetailed")', { categoryId: window.selectedCategoryId }, function (faqsWithDescription) {
+            if ($('#show_all_answers_within_category').is(':checked')) {                
+                $.get('@this.Url.Action("FaqsDetailed")', { categoryId: window.selectedCategoryId, now: Date.now() }, function (faqsWithDescription) {
                     refreshFaqTableWithDescription(faqsWithDescription);
                 });
-            } else {
-                $.get('@this.Url.Action("Faqs")', { categoryId: selectedCategoryId }, function (faqs) {
+            } else {                
+                $.get('@this.Url.Action("Faqs")', { categoryId: selectedCategoryId, now: Date.now() } , function (faqs) {
                     refreshFaqTable(faqs);
                 });
             }
@@ -104,11 +103,11 @@
             }
 
             if ($(this).is(':checked')) {
-                $.get('@this.Url.Action("SearchDetailed")', { pharse: $('#search_field').val() }, function (faqsWithDescription) {
+                $.get('@this.Url.Action("SearchDetailed")', { pharse: $('#search_field').val(), now: Date.now() }, function (faqsWithDescription) {
                     refreshSearchTableWithDescription(faqsWithDescription);
                 });
             } else {
-                $.get('@this.Url.Action("Search")', { pharse: $('#search_field').val() }, function (faqs) {
+                $.get('@this.Url.Action("Search")', { pharse: $('#search_field').val(), now: Date.now() }, function (faqs) {
                     refreshSearchResultsTable(faqs);
                 });
             }
