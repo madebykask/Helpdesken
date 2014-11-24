@@ -1,6 +1,9 @@
 ﻿@using DH.Helpdesk.Services.Response.Questionnaire
 @using DH.Helpdesk.Web.Models.Questionnaire.Output
-@model StatisticsViewModel       
+@model StatisticsViewModel    
+@{
+    bool isAnswersExists = Model.OptionResults.Any();
+}
 <div class="tab-content">
     <div class="tab-pane tab-pane-border active" id="fragment-1">
         <div class="container">
@@ -24,7 +27,7 @@
                     <tr>
                         <td colspan="5" class="header">@question.Number. @question.Question (@Translation.Get("Antal svar"): @values.Sum(x => x.Count))</td>
                     </tr>
-
+                    
                     foreach (var option in question.Options.OrderBy(x => x.Position))
                     {
                         OptionResult result = values.FirstOrDefault(x => x.OptionId == option.Id);
@@ -33,20 +36,23 @@
                         int percent = GetPercent(count, values.Select(x => x.Count).ToList());
                                 
                         <tr>
-                            <td>
+                            <td style="width: 40%">
                                 @option.Option
                             </td>
-                            <td>
-                                <div style="background: lightblue; width: @percent%; height: 20px;">
-                                </div>
+                            @if (isAnswersExists)
+                            {
+                                <td style="width: 30%">
+                                    <div style="background: lightblue; width: @percent%; height: 20px;">
+                                    </div>
+                                </td>
+                            }
+                            <td style="width: 10%">
+                                <div class='text-right'>@count</div>
                             </td>
-                            <td>
-                                @count
-                            </td>
-                            <td>
+                            <td style="width: 10%">
                                 @Translation.Get("svar")
                             </td>
-                            <td>@percent%
+                            <td style="width: 10%">@percent%
                             </td>
                         </tr>
                     }

@@ -32,7 +32,7 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
                 QuestionnaireQuestionNumber = questionnaireQuestion.QuestionNumber,
                 QuestionnaireQuestion = questionnaireQuestion.Question,
                 ShowNote = questionnaireQuestion.ShowNote,
-                NoteText = questionnaireQuestion.NoteText,
+                NoteText = questionnaireQuestion.NoteText ?? string.Empty,
                 CreatedDate = questionnaireQuestion.CreatedDate,
                 ChangedDate = questionnaireQuestion.CreatedDate
             };
@@ -178,7 +178,7 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
             questionnaireQuestionEntity.QuestionnaireQuestionNumber = questionnaireQuestion.QuestionNumber;
             questionnaireQuestionEntity.QuestionnaireQuestion = questionnaireQuestion.Question;
             questionnaireQuestionEntity.ShowNote = questionnaireQuestion.ShowNote;
-            questionnaireQuestionEntity.NoteText = questionnaireQuestion.NoteText;            
+            questionnaireQuestionEntity.NoteText = questionnaireQuestion.NoteText ?? string.Empty;            
             questionnaireQuestionEntity.ChangedDate = questionnaireQuestion.ChangeDate;
         }
 

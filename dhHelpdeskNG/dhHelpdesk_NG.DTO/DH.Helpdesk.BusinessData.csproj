@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Attributes\AllowReadAttribute.cs" />
     <Compile Include="Enums\Accounts\AccountFields.cs" />
+    <Compile Include="Enums\Accounts\AccountStates.cs" />
     <Compile Include="Enums\Changes\Fields\AnalyzeField.cs" />
     <Compile Include="Enums\Changes\Fields\EvaluationField.cs" />
     <Compile Include="Enums\Changes\Fields\GeneralField.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="Enums\Orders\FieldNames\SupplierFieldNames.cs" />
     <Compile Include="Enums\Orders\FieldNames\UserFieldNames.cs" />
     <Compile Include="Enums\Projects\ProjectFields.cs" />
+    <Compile Include="Models\Accounts\Read\Overview\AccountOverview.cs" />
     <Compile Include="Models\Checklists\Output\ChecklistsOverview.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\AccountFieldsSettingsForEdit.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\AccountInformationFieldSettings.cs" />
@@ -783,9 +785,7 @@
       <Name>DH.Helpdesk.Domain</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\Accounts\Read\Overview\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

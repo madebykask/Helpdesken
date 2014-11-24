@@ -66,6 +66,7 @@
                                             @if (Model.LanguageId == LanguageId.Swedish)
                                             {
                                                 @Html.EditorFor(model => model.QuestionNumber)
+                                                @Html.ValidationMessageFor(model => model.QuestionNumber)
                                             }
                                             else
                                             {
@@ -79,6 +80,7 @@
                                         </td>
                                         <td class="span9">
                                             @Html.TextAreaFor(model => model.Question, new { maxlength = "1000", style = "height:100px;" })
+                                            @Html.ValidationMessageFor(model => model.Question)
                                         </td> 
                                     </tr>
                                     <tr>

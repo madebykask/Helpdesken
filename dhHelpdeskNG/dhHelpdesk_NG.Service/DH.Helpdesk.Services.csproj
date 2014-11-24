@@ -122,6 +122,7 @@
     <Compile Include="BusinessLogic\Mappers\Questionnaire\CircularPartMappers.cs" />
     <Compile Include="BusinessLogic\Mappers\Questionnaire\QuestionnaireQuestionResultMappers.cs" />
     <Compile Include="BusinessLogic\Mappers\Shared\GlobalMappers.cs" />
+    <Compile Include="BusinessLogic\Specifications\Accounts\AccountSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Calendars\CalendarsSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Case\CaseSpecifications.cs" />
     <Compile Include="BusinessLogic\Invoice\ArticlesImportData.cs" />
@@ -187,9 +188,11 @@
     <Compile Include="Infrastructure\ManualDependencyResolver.cs" />
     <Compile Include="Localization\Translator.cs" />
     <Compile Include="BusinessLogic\Mappers\Questionnaire\CircularMappers.cs" />
+    <Compile Include="Requests\Account\AccountFilter.cs" />
     <Compile Include="Requests\Cases\CaseSettingsSolutionAggregate.cs" />
     <Compile Include="Requests\Changes\NewChangeRequest.cs" />
     <Compile Include="Requests\Changes\UpdateChangeRequest.cs" />
+    <Compile Include="Response\Account\AccountOverviewResponse.cs" />
     <Compile Include="Response\Changes\FindChangeResponse.cs" />
     <Compile Include="Response\Changes\GetNewChangeEditDataResponse.cs" />
     <Compile Include="Response\Changes\GetSettingsResponse.cs" />
@@ -247,6 +250,7 @@
     <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\ExcelTableHeader.cs" />
     <Compile Include="Services\Concrete\ActionSettingService.cs" />
     <Compile Include="Services\Concrete\ModulesService.cs" />
+    <Compile Include="Services\Concrete\OrderAccountService.cs" />
     <Compile Include="Services\Concrete\Orders\OrderFieldSettingsService.cs" />
     <Compile Include="Services\Concrete\Orders\OrdersService.cs" />
     <Compile Include="Services\IModuleService.cs" />

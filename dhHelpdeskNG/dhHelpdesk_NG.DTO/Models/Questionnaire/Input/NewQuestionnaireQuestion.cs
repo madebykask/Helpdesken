@@ -36,12 +36,10 @@
 
         public int ShowNote { get; private set; }
 
-        [NotNullAndEmpty]
         public string NoteText { get; private set; }
 
         public DateTime CreatedDate { get; private set; }
         
-       
         #endregion
     }
 }
