@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Domain.Accounts
 {
     using global::System;
+    using global::System.Collections.Generic;
 
     public class Account : Entity
     {
@@ -10,6 +11,7 @@
         public int AccountType_Id { get; set; }
         public int? AccountType3 { get; set; }
         public int? AccountType4 { get; set; }
+        public int? AccountType5 { get; set; }
         public int ChangedByUser_Id { get; set; }
         public int CreatedByUser_Id { get; set; }
         public int Customer_Id { get; set; }
@@ -71,5 +73,6 @@
         public virtual Department Department { get; set; }
         public virtual Department Department2 { get; set; }
         public virtual OU OU { get; set; }
+        public virtual List<Program> Programs { get; set; }
     }
 }
