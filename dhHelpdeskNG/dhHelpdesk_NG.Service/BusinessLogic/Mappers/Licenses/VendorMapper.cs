@@ -18,7 +18,9 @@
                                                     VendorPhone = v.Phone,
                                                     VendorEmail = v.EMail,
                                                     VendorHomePage = v.HomePage
-                                                }).ToArray();
+                                                })
+                                                .OrderBy(v => v.Name)
+                                                .ToArray();
 
             var overviews = entities.Select(v => new VendorOverview(
                                                     v.VendorId,

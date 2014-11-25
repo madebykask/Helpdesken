@@ -129,6 +129,8 @@ function FAQInitForm() {
         }        
     });
 
+    PluploadTranslation($('#CurLanguageId').val());
+
     $('#upload_FAQfiles_popup').on('show', function () {
         _plupload = $('#FAQfile_uploader').pluploadQueue({
             runtimes: 'html5,html4',
@@ -408,7 +410,7 @@ function CaseInitForm() {
         }
     });
 
-    PluploadTranslation($('#CurLanguageId').val());
+    PluploadTranslation($('#CurLanguageId').val());    
 
     var newFileName = "";
     $('#upload_files_popup').on('show', function () {
@@ -422,13 +424,12 @@ function CaseInitForm() {
             buttons: { browse: true, start: true, stop: true, cancel: true },
             preinit: {
                 Init: function (up, info) {
-
+                    
                     //console.log('1:init', info);                    
                 },
 
                 
-                UploadFile: function (up, file) {                    
-                                                            
+                UploadFile: function (up, file) {                                        
                     var strFiles = $('#CaseFileNames').val();
                     var allFileNames = strFiles.split('|');
 
@@ -484,6 +485,8 @@ function CaseInitForm() {
             }
         });
     });
+
+    PluploadTranslation($('#CurLanguageId').val());
 
     $('#upload_logfiles_popup').on('show', function () {
         _plupload = $('#logfile_uploader').pluploadQueue({
@@ -817,11 +820,12 @@ function PluploadTranslation(languageId) {
             'Status': 'Status',
             'Size': 'Storlek',
             'Add files': 'Lägg till filer',
-            'Start upload': ' ssss',
+            'Add files.': 'nnnnn',
+            'Start upload': 'ssss',            
             'Stop current upload': 'Stoppa uppladdningen',
             'Start uploading queue': 'Starta uppladdningen',
             'Drag files here.': 'Dra filer hit'
-        });
+            });
     }
 
     if (languageId == 2)

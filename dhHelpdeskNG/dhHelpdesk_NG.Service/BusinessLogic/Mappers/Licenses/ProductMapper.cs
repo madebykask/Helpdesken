@@ -18,7 +18,9 @@
                                                     ProductName = p.Name,
                                                     LicencesNumber = p.Licenses.Count(),
                                                     UsedLicencesNumber = p.Licenses.Where(l => l.PurshaseDate.HasValue).Count()
-                                                }).ToArray();
+                                                })
+                                                .OrderBy(p => p.ProductName)
+                                                .ToArray();
 
             var overviews = entities.Select(p => new ProductOverview(
                                                     p.ProductId,

@@ -14,7 +14,9 @@
                                                 {
                                                     ManufacturerId = m.Id,
                                                     ManufcturerName = m.Name
-                                                }).ToArray();
+                                                })
+                                                .OrderBy(m => m.ManufcturerName)
+                                                .ToArray();
 
             var overviews = entities.Select(m => new ManufacturerOverview(
                                                     m.ManufacturerId,

@@ -16,7 +16,9 @@
                                         f.License_Id,
                                         f.FileName,
                                         f.CreatedDate
-                                    }).ToArray();
+                                    })
+                                    .OrderBy(f => f.FileName)
+                                    .ToArray();
 
             var models = entities.Select(f => new LicenseFileModel(
                                         f.Id,

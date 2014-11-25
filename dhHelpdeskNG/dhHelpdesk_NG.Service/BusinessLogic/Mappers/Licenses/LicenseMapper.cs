@@ -25,7 +25,9 @@
                                         LicensesNumber = a.License.NumberOfLicenses,
                                         PurchaseDate = a.License.PurshaseDate,
                                         Department = a.License.Department != null ? a.License.Department.DepartmentName : null
-                                    })).ToArray();
+                                    }))
+                                    .OrderBy(l => l.ProductName)
+                                    .ToArray();
 
             var overviews = entities.Select(l => new LicenseOverview(
                                                     l.LicenseId,
