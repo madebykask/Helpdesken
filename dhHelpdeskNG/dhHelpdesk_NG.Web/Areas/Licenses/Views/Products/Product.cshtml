@@ -45,41 +45,44 @@
                     @Html.ValidationMessageFor(m => m.ManufacturerId)
                 </td>
             </tr>
+            <tr>
+                <td class="span12" colspan="4">
+                    <h4>@Translation.Get("Applikationer som ingår i produkten")</h4>                
+                </td>
+            </tr>
+            <tr>
+                <td class="span3">@Translation.Get("Applikationer")</td>
+                <td>
+                    <table>                        
+                        <tbody>
+                            <tr>
+                                <td class="span4">
+                                    @Translation.Get("Tillgängliga")
+                                </td>
+                                <td class="span4"></td>
+                                <td class="span4">
+                                    @Translation.Get("Valda")
+                                </td>
+                            </tr>                                    
+                            <tr>
+                                <td class="span4">
+                                    @Html.ListBox("AvailableApplications", Model.AvailableApplications)                                
+                                </td>
+                                <td class="span4">
+                                    <div class="center">
+                                        <input type="button" value="&gt;" id="btnAddApplication" class="btn" />
+                                        <input type="button" value="&lt;" id="btnRemoveApplication" class="btn" />   
+                                    </div>                             
+                                </td>
+                                <td class="span4">
+                                    @Html.ListBox("SelectedApplications", Model.SelectedApplications)                                
+                                </td>                                                            
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>        
         </table>
-        <h4>@Translation.Get("Applikationer som ingår i produkten")</h4>
-        <table>
-        <thead>
-            <tr>
-                <td class="span12">
-                    @Translation.Get("Applikationer")
-                </td>
-                <td class="span1">
-                    @Translation.Get("Tillgängliga")
-                </td>
-                <td class="span1"></td>
-                <td class="span1">
-                    @Translation.Get("Valda")
-                </td>
-            </tr>        
-        </thead>
-        <tbody>
-            <tr>
-                <td></td>
-                <td>
-                    @Html.ListBox("AvailableApplications", Model.AvailableApplications)
-                </td>
-                <td>
-                    <div class="center">
-                        <input type="button" value="&gt;" id="btnAddApplication" class="btn" />
-                        <input type="button" value="&lt;" id="btnRemoveApplication" class="btn" />
-                    </div>
-                </td>
-                <td>
-                    @Html.ListBox("SelectedApplications", Model.SelectedApplications)
-                </td>
-            </tr>        
-        </tbody>
-    </table>          
     } 
     <script type="text/javascript">
         $(function () {
