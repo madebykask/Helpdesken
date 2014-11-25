@@ -77,9 +77,6 @@
             @Html.EditorFor(m => m.InventoryFieldsSettingsModel.BarCodeFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            @Html.EditorFor(m => m.InventoryFieldsSettingsModel.PurchaseDateFieldSettingModel, "Settings/FieldSettingForComputerModel")
-        </tr>
-        <tr>
             <td colspan="6" class="header">@Translation.Get("Operativsystem")</td>
         </tr>
         <tr>
@@ -156,6 +153,9 @@
         </tr>
         <tr>
             @Html.EditorFor(m => m.ContractFieldsSettingsModel.PurchasePriceFieldSettingModel, "Settings/FieldSettingForComputerModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.InventoryFieldsSettingsModel.PurchaseDateFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
             @Html.EditorFor(m => m.ContractFieldsSettingsModel.AccountingDimension1FieldSettingModel, "Settings/FieldSettingForComputerModel")
