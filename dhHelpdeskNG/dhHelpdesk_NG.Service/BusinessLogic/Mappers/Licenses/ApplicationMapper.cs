@@ -29,7 +29,7 @@
                         a.ApplicationId,
                         a.ApplicationName,
                         product != null ? product.Name : null,
-                        product != null ? product.Licenses.Sum(l => l.NumberOfLicenses) : 0);
+                        product != null ? product.Licenses.Count : 0);
                 }).ToArray();
 
             return overviews;
