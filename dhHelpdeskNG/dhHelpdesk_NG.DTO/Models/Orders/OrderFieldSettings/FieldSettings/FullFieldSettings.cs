@@ -13,6 +13,9 @@
         [IsId]
         public int CustomerId { get; private set; }
 
+        [IsId]
+        public int? OrderTypeId { get; private set; }
+
         [NotNull]
         public DeliveryFieldSettings Delivery { get; private set; }
 
@@ -74,6 +77,7 @@
 
         public static FullFieldSettings CreateUpdated(
                         int customerId,
+                        int? orderTypeId,
                         DeliveryFieldSettings delivery,
                         GeneralFieldSettings general,
                         LogFieldSettings log,
@@ -89,6 +93,7 @@
             return new FullFieldSettings
                        {
                            CustomerId = customerId,
+                           OrderTypeId = orderTypeId,
                            Delivery = delivery,
                            General = general,
                            Log = log,

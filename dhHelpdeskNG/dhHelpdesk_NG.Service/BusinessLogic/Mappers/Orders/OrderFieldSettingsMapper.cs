@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
 {
+    using System;
     using System.Globalization;
     using System.Linq;
 
@@ -8,6 +9,7 @@
     using DH.Helpdesk.BusinessData.Models.Orders.OrderFieldSettings.FieldSettings;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Common.Collections;
+    using DH.Helpdesk.Common.Extensions.Boolean;
     using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Orders.Data;
@@ -52,6 +54,26 @@
             var fieldSettings = new NamedObjectCollection<OrdersFieldSettingsMapData>(entities);
             return new GetSettingsResponse(CreateFullFieldSettings(fieldSettings));
         }
+
+        public static void MapToEntitiesForUpdate(
+                    this IQueryable<OrderFieldSettings> query,
+                    FullFieldSettings settings)
+        {
+            var entities = query.ToList();
+            var fieldSettings = new NamedObjectCollection<OrderFieldSettings>(entities);
+            MapDeliverySettings(settings.Delivery, fieldSettings, settings.ChangedDate);
+            MapGeneralSettings(settings.General, fieldSettings, settings.ChangedDate);
+            MapLogSettings(settings.Log, fieldSettings, settings.ChangedDate);
+            MapOrdererSettings(settings.Orderer, fieldSettings, settings.ChangedDate);
+            MapOrderSettings(settings.Order, fieldSettings, settings.ChangedDate);
+            MapOtherSettings(settings.Other, fieldSettings, settings.ChangedDate);
+            MapProgramSettings(settings.Program, fieldSettings, settings.ChangedDate);
+            MapReceiverSettings(settings.Receiver, fieldSettings, settings.ChangedDate);
+            MapSupplierSettings(settings.Supplier, fieldSettings, settings.ChangedDate);
+            MapUserSettings(settings.User, fieldSettings, settings.ChangedDate);
+        }
+
+        #region Map settings for edit
 
         private static FullFieldSettings CreateFullFieldSettings(
             NamedObjectCollection<OrdersFieldSettingsMapData> fieldSettings)
@@ -215,6 +237,174 @@
                         data.Required.ToBool(),
                         data.EmailIdentifier,
                         data.DefaultValue);
-        }        
+        }
+
+        #endregion
+
+        #region Map settings for update
+
+        private static void MapDeliverySettings(
+                DeliveryFieldSettings updatedSettings,
+                NamedObjectCollection<OrderFieldSettings> existingSettings,
+                DateTime changedDate)
+        {
+            MapTextFieldSettings(updatedSettings.DeliveryDate, existingSettings.FindByName(DeliveryFields.DeliveryDate), changedDate);
+            MapTextFieldSettings(updatedSettings.InstallDate, existingSettings.FindByName(DeliveryFields.InstallDate), changedDate);
+            MapTextFieldSettings(updatedSettings.DeliveryDepartment, existingSettings.FindByName(DeliveryFields.DeliveryDepartment), changedDate);
+            MapTextFieldSettings(updatedSettings.DeliveryOu, existingSettings.FindByName(DeliveryFields.DeliveryOu), changedDate);
+            MapTextFieldSettings(updatedSettings.DeliveryAddress, existingSettings.FindByName(DeliveryFields.DeliveryAddress), changedDate);
+            MapTextFieldSettings(updatedSettings.DeliveryPostalCode, existingSettings.FindByName(DeliveryFields.DeliveryPostalCode), changedDate);
+            MapTextFieldSettings(updatedSettings.DeliveryPostalAddress, existingSettings.FindByName(DeliveryFields.DeliveryPostalAddress), changedDate);
+            MapTextFieldSettings(updatedSettings.DeliveryLocation, existingSettings.FindByName(DeliveryFields.DeliveryLocation), changedDate);
+            MapTextFieldSettings(updatedSettings.DeliveryInfo1, existingSettings.FindByName(DeliveryFields.DeliveryInfo1), changedDate);
+            MapTextFieldSettings(updatedSettings.DeliveryInfo2, existingSettings.FindByName(DeliveryFields.DeliveryInfo2), changedDate);
+            MapTextFieldSettings(updatedSettings.DeliveryInfo3, existingSettings.FindByName(DeliveryFields.DeliveryInfo3), changedDate);
+            MapTextFieldSettings(updatedSettings.DeliveryOuId, existingSettings.FindByName(DeliveryFields.DeliveryOuId), changedDate);
+        }
+
+        private static void MapGeneralSettings(
+                GeneralFieldSettings updatedSettings,
+                NamedObjectCollection<OrderFieldSettings> existingSettings,
+                DateTime changedDate)
+        {
+            MapFieldSettings(updatedSettings.OrderNumber, existingSettings.FindByName(GeneralFields.OrderNumber), changedDate);
+            MapFieldSettings(updatedSettings.Customer, existingSettings.FindByName(GeneralFields.Customer), changedDate);
+            MapTextFieldSettings(updatedSettings.Administrator, existingSettings.FindByName(GeneralFields.Administrator), changedDate);
+            MapTextFieldSettings(updatedSettings.Domain, existingSettings.FindByName(GeneralFields.Domain), changedDate);
+            MapTextFieldSettings(updatedSettings.OrderDate, existingSettings.FindByName(GeneralFields.OrderDate), changedDate);
+        }
+
+        private static void MapLogSettings(
+                LogFieldSettings updatedSettings,
+                NamedObjectCollection<OrderFieldSettings> existingSettings,
+                DateTime changedDate)
+        {
+            MapTextFieldSettings(updatedSettings.Log, existingSettings.FindByName(LogFields.Log), changedDate);
+        }
+
+        private static void MapOrdererSettings(
+                OrdererFieldSettings updatedSettings,
+                NamedObjectCollection<OrderFieldSettings> existingSettings,
+                DateTime changedDate)
+        {
+            MapTextFieldSettings(updatedSettings.OrdererId, existingSettings.FindByName(OrdererFields.OrdererId), changedDate);
+            MapTextFieldSettings(updatedSettings.OrdererName, existingSettings.FindByName(OrdererFields.OrdererName), changedDate);
+            MapTextFieldSettings(updatedSettings.OrdererLocation, existingSettings.FindByName(OrdererFields.OrdererLocation), changedDate);
+            MapTextFieldSettings(updatedSettings.OrdererEmail, existingSettings.FindByName(OrdererFields.OrdererEmail), changedDate);
+            MapTextFieldSettings(updatedSettings.OrdererPhone, existingSettings.FindByName(OrdererFields.OrdererPhone), changedDate);
+            MapTextFieldSettings(updatedSettings.OrdererCode, existingSettings.FindByName(OrdererFields.OrdererCode), changedDate);
+            MapTextFieldSettings(updatedSettings.Department, existingSettings.FindByName(OrdererFields.Department), changedDate);
+            MapTextFieldSettings(updatedSettings.Unit, existingSettings.FindByName(OrdererFields.Unit), changedDate);
+            MapTextFieldSettings(updatedSettings.OrdererAddress, existingSettings.FindByName(OrdererFields.OrdererAddress), changedDate);
+            MapTextFieldSettings(updatedSettings.OrdererInvoiceAddress, existingSettings.FindByName(OrdererFields.OrdererInvoiceAddress), changedDate);
+            MapTextFieldSettings(updatedSettings.OrdererReferenceNumber, existingSettings.FindByName(OrdererFields.OrdererReferenceNumber), changedDate);
+            MapTextFieldSettings(updatedSettings.AccountingDimension1, existingSettings.FindByName(OrdererFields.AccountingDimension1), changedDate);
+            MapFieldSettings(updatedSettings.AccountingDimension2, existingSettings.FindByName(OrdererFields.AccountingDimension2), changedDate);
+            MapTextFieldSettings(updatedSettings.AccountingDimension3, existingSettings.FindByName(OrdererFields.AccountingDimension3), changedDate);
+            MapFieldSettings(updatedSettings.AccountingDimension4, existingSettings.FindByName(OrdererFields.AccountingDimension4), changedDate);
+            MapTextFieldSettings(updatedSettings.AccountingDimension5, existingSettings.FindByName(OrdererFields.AccountingDimension5), changedDate);
+        }
+
+        private static void MapOrderSettings(
+                BusinessData.Models.Orders.OrderFieldSettings.FieldSettings.OrderFieldSettings updatedSettings,
+                NamedObjectCollection<OrderFieldSettings> existingSettings,
+                DateTime changedDate)
+        {
+            MapFieldSettings(updatedSettings.Property, existingSettings.FindByName(OrderFields.Property), changedDate);
+            MapTextFieldSettings(updatedSettings.OrderRow1, existingSettings.FindByName(OrderFields.OrderRow1), changedDate);
+            MapTextFieldSettings(updatedSettings.OrderRow2, existingSettings.FindByName(OrderFields.OrderRow2), changedDate);
+            MapTextFieldSettings(updatedSettings.OrderRow3, existingSettings.FindByName(OrderFields.OrderRow3), changedDate);
+            MapTextFieldSettings(updatedSettings.OrderRow4, existingSettings.FindByName(OrderFields.OrderRow4), changedDate);
+            MapTextFieldSettings(updatedSettings.OrderRow5, existingSettings.FindByName(OrderFields.OrderRow5), changedDate);
+            MapTextFieldSettings(updatedSettings.OrderRow6, existingSettings.FindByName(OrderFields.OrderRow6), changedDate);
+            MapTextFieldSettings(updatedSettings.OrderRow7, existingSettings.FindByName(OrderFields.OrderRow7), changedDate);
+            MapTextFieldSettings(updatedSettings.OrderRow8, existingSettings.FindByName(OrderFields.OrderRow8), changedDate);
+            MapTextFieldSettings(updatedSettings.Configuration, existingSettings.FindByName(OrderFields.Configuration), changedDate);
+            MapTextFieldSettings(updatedSettings.OrderInfo, existingSettings.FindByName(OrderFields.OrderInfo), changedDate);
+            MapTextFieldSettings(updatedSettings.OrderInfo2, existingSettings.FindByName(OrderFields.OrderInfo2), changedDate);
+        }
+
+        private static void MapOtherSettings(
+                OtherFieldSettings updatedSettings,
+                NamedObjectCollection<OrderFieldSettings> existingSettings,
+                DateTime changedDate)
+        {
+            MapTextFieldSettings(updatedSettings.FileName, existingSettings.FindByName(OtherFields.FileName), changedDate);
+            MapTextFieldSettings(updatedSettings.CaseNumber, existingSettings.FindByName(OtherFields.CaseNumber), changedDate);
+            MapTextFieldSettings(updatedSettings.Info, existingSettings.FindByName(OtherFields.Info), changedDate);
+            MapTextFieldSettings(updatedSettings.Status, existingSettings.FindByName(OtherFields.Status), changedDate);
+        }
+
+        private static void MapProgramSettings(
+                ProgramFieldSettings updatedSettings,
+                NamedObjectCollection<OrderFieldSettings> existingSettings,
+                DateTime changedDate)
+        {
+            MapTextFieldSettings(updatedSettings.Program, existingSettings.FindByName(ProgramFields.Program), changedDate);
+        }
+
+        private static void MapReceiverSettings(
+                ReceiverFieldSettings updatedSettings,
+                NamedObjectCollection<OrderFieldSettings> existingSettings,
+                DateTime changedDate)
+        {
+            MapTextFieldSettings(updatedSettings.ReceiverId, existingSettings.FindByName(ReceiverFields.ReceiverId), changedDate);
+            MapTextFieldSettings(updatedSettings.ReceiverName, existingSettings.FindByName(ReceiverFields.ReceiverName), changedDate);
+            MapTextFieldSettings(updatedSettings.ReceiverEmail, existingSettings.FindByName(ReceiverFields.ReceiverEmail), changedDate);
+            MapTextFieldSettings(updatedSettings.ReceiverPhone, existingSettings.FindByName(ReceiverFields.ReceiverPhone), changedDate);
+            MapTextFieldSettings(updatedSettings.ReceiverLocation, existingSettings.FindByName(ReceiverFields.ReceiverLocation), changedDate);
+            MapTextFieldSettings(updatedSettings.MarkOfGoods, existingSettings.FindByName(ReceiverFields.MarkOfGoods), changedDate);
+        }
+
+        private static void MapSupplierSettings(
+                SupplierFieldSettings updatedSettings,
+                NamedObjectCollection<OrderFieldSettings> existingSettings,
+                DateTime changedDate)
+        {
+            MapTextFieldSettings(updatedSettings.SupplierOrderNumber, existingSettings.FindByName(SupplierFields.SupplierOrderNumber), changedDate);
+            MapTextFieldSettings(updatedSettings.SupplierOrderDate, existingSettings.FindByName(SupplierFields.SupplierOrderDate), changedDate);
+            MapTextFieldSettings(updatedSettings.SupplierOrderInfo, existingSettings.FindByName(SupplierFields.SupplierOrderInfo), changedDate);
+        }
+
+        private static void MapUserSettings(
+                UserFieldSettings updatedSettings,
+                NamedObjectCollection<OrderFieldSettings> existingSettings,
+                DateTime changedDate)
+        {
+            MapTextFieldSettings(updatedSettings.UserId, existingSettings.FindByName(UserFields.UserId), changedDate);
+            MapTextFieldSettings(updatedSettings.UserFirstName, existingSettings.FindByName(UserFields.UserFirstName), changedDate);
+            MapTextFieldSettings(updatedSettings.UserLastName, existingSettings.FindByName(UserFields.UserLastName), changedDate);
+        }
+
+        private static void MapFieldSettings(
+                FieldSettings updatedSettings,
+                OrderFieldSettings fieldSettings,
+                DateTime changedDate)
+        {
+            fieldSettings.Required = updatedSettings.Required.ToInt();
+            fieldSettings.Show = updatedSettings.Show.ToInt();
+            fieldSettings.ShowExternal = updatedSettings.ShowExternal.ToInt();
+            fieldSettings.ShowInList = updatedSettings.ShowInList.ToInt();
+            fieldSettings.EMailIdentifier = updatedSettings.EmailIdentifier;
+            fieldSettings.Label = updatedSettings.Label;
+            fieldSettings.ChangedDate = changedDate;
+        }
+
+        private static void MapTextFieldSettings(
+                TextFieldSettings updatedSettings,
+                OrderFieldSettings fieldSettings,
+                DateTime changedDate)
+        {
+            fieldSettings.Required = updatedSettings.Required.ToInt();
+            fieldSettings.Show = updatedSettings.Show.ToInt();
+            fieldSettings.ShowExternal = updatedSettings.ShowExternal.ToInt();
+            fieldSettings.ShowInList = updatedSettings.ShowInList.ToInt();
+            fieldSettings.EMailIdentifier = updatedSettings.EmailIdentifier;
+            fieldSettings.Label = updatedSettings.Label;
+            fieldSettings.ChangedDate = changedDate;
+            fieldSettings.DefaultValue = updatedSettings.DefaultValue;
+        }
+
+        #endregion
     }
 }

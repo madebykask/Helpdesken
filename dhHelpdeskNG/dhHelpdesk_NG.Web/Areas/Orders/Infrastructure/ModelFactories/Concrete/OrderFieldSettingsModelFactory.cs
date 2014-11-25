@@ -42,6 +42,7 @@
         {
             return FullFieldSettings.CreateUpdated(
                         customerId,
+                        orderTypeId,
                         CreateDeliveryForUpdate(model.Delivery),
                         CreateGeneralForUpdate(model.General),
                         CreateLogForUpdate(model.Log),

@@ -60,11 +60,17 @@
             }
         }
 
-        public void Update(FullFieldSettings settings)
+        public void UpdateSettings(FullFieldSettings settings)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
+                var fieldSettingsRep = uow.GetRepository<OrderFieldSettings>();
 
+                fieldSettingsRep.GetAll()
+                        .GetByType(settings.CustomerId, settings.OrderTypeId)
+                        .MapToEntitiesForUpdate(settings);
+
+                uow.Save();
             }
         }
     }

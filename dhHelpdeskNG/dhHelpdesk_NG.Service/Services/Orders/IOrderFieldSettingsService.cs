@@ -16,6 +16,6 @@
                                 int customerId,
                                 int? orderTypeId);
 
-        void Update(FullFieldSettings settings);
+        void UpdateSettings(FullFieldSettings settings);
     }
 }

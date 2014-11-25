@@ -1,10 +1,12 @@
 ﻿namespace DH.Helpdesk.Domain
 {
+    using DH.Helpdesk.Common.Collections;
+
     using global::System;
 
     using DH.Helpdesk.Domain.Interfaces;
 
-    public class OrderFieldSettings : Entity, ICustomerEntity
+    public class OrderFieldSettings : Entity, ICustomerEntity, INamedObject
     {
         public int Customer_Id { get; set; }
 
@@ -33,5 +35,10 @@
         public virtual Customer Customer { get; set; }
 
         public virtual OrderType OrderType { get; set; }
+
+        public string GetName()
+        {
+            return this.OrderField;
+        }
     }
 }

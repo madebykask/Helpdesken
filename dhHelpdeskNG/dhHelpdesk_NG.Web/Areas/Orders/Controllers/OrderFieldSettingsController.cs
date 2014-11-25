@@ -71,13 +71,14 @@
         [BadRequestOnNotValid]
         public RedirectToRouteResult SaveSettings(FullFieldSettingsModel model, int? orderTypeId)
         {
+            var customerId = this.workContext.Customer.CustomerId;
             var settings = this.orderFieldSettingsModelFactory.CreateForUpdate(
                                     model,
-                                    this.workContext.Customer.CustomerId,
+                                    customerId,
                                     orderTypeId,
                                     DateTime.Now);
 
-            this.orderFieldSettingsService.Update(settings);
+            this.orderFieldSettingsService.UpdateSettings(settings);
 
             return this.RedirectToAction("Index");
         }
