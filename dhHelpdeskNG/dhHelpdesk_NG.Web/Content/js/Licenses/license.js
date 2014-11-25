@@ -21,3 +21,7 @@
         });
     };
 }
+
+$(function() {
+    $(".license-product").focus();
+});

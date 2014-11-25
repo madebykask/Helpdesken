@@ -49,7 +49,7 @@
                     @Translation.Get("Produkt")
                 </td>
                 <td class="span9">
-                    @Html.DropDownListFor(m => m.ProductId, Model.Products)
+                    @Html.DropDownListFor(m => m.ProductId, Model.Products, new { @class = "license-product" })
                     @Html.ValidationMessageFor(m => m.ProductId)
                 </td>
             </tr>
