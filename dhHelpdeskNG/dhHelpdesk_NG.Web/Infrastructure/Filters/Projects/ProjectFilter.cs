@@ -6,7 +6,7 @@
     {
         public ProjectFilter()
         {
-            this.State = Enums.Show.All;
+            this.State = Enums.Show.Active;
             this.SortField = new SortFieldModel();
         }
 

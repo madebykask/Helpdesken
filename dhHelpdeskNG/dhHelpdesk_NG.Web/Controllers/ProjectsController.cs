@@ -6,6 +6,7 @@
     using System.Net;
     using System.Web;
     using System.Web.Mvc;
+    using System.Web.Routing;
 
     using DH.Helpdesk.BusinessData.Models.Projects.Input;
     using DH.Helpdesk.BusinessData.Models.Projects.Output;
@@ -181,7 +182,7 @@
             if (projectScheduleEditModels != null)
             {
                 var projecScheduleBussinesModels = projectScheduleEditModels.Select(x => this.updatedProjectScheduleFactory.Create(x, DateTime.Now)).ToList();
-                this.projectService.UpdateSchedule(projecScheduleBussinesModels);                
+                this.projectService.UpdateSchedule(projecScheduleBussinesModels);
             }
 
             return this.RedirectToAction("Index");
@@ -190,7 +191,11 @@
         [HttpGet]
         public ActionResult NewProject()
         {
-            var users = this.userService.GetUsers(SessionFacade.CurrentCustomer.Id).ToList();
+            var users =
+                this.userService.GetUsers(SessionFacade.CurrentCustomer.Id)
+                    .OrderBy(x => x.FirstName)
+                    .ThenBy(x => x.SurName)
+                    .ToList();
             var viewModel = this.newProjectViewModelFactory.Create(users, Guid.NewGuid().ToString());
 
             return this.View(viewModel);
@@ -219,7 +224,7 @@
 
             this.userTemporaryFilesStorage.ResetCacheForObject(guid);
 
-            return this.RedirectToAction("Index");
+            return this.RedirectToAction("EditProject", new { id = projectBussinesModel.Id });
         }
 
         [HttpGet]
@@ -404,13 +409,17 @@
             this.userEditorValuesStorage.ClearObjectDeletedFiles(id); // todo redirect after New Project
 
             var project = this.projectService.GetProject(id);
-            var projectCollaborators = this.projectService.GetProjectCollaborators(id);
+            var projectCollaborators = this.projectService.GetProjectCollaborators(id).OrderBy(x => x.UserName).ToList();
             var projectSchedules = this.projectService.GetProjectSchedules(id);
             var projectLogs = this.projectService.GetProjectLogs(id);
 
             // todo
             var cases = this.caseService.GetCases().Where(x => x.Customer_Id == SessionFacade.CurrentCustomer.Id && x.Project_Id == id).ToList();
-            var users = this.userService.GetUsers(SessionFacade.CurrentCustomer.Id).ToList();
+            var users =
+                this.userService.GetUsers(SessionFacade.CurrentCustomer.Id)
+                    .OrderBy(x => x.FirstName)
+                    .ThenBy(x => x.SurName)
+                    .ToList();
 
             var viewModel = this.updatedProjectViewModelFactory.Create(
                 project,
