@@ -1267,11 +1267,9 @@ namespace DH.Helpdesk.Web.Controllers
         {
             SessionFacade.CurrentLanguageId = languageId;
             SessionFacade.CurrentUser.LanguageId = languageId;
-            /*var prevInfo = this.ExtractPreviousRouteInfo();
+            var prevInfo = this.ExtractPreviousRouteInfo();
             var res = new RedirectToRouteResult(prevInfo);
-            return res;*/
-
-            return this.RedirectToAction("Index", "Home");
+            return res;
         }
 
         #endregion
@@ -1308,6 +1306,12 @@ namespace DH.Helpdesk.Web.Controllers
                     res["action"] = routeData.Values["action"];
                     res["controller"] = routeData.Values["controller"];
                 }
+
+                if (routeData.Values.ContainsKey("area"))
+                {
+                    res["area"] = routeData.Values["area"];
+                }
+
                 if (routeData.Values.ContainsKey("id") && !String.IsNullOrEmpty(routeData.Values["id"].ToString()))
                 {
                     res["id"] = routeData.Values["id"];

@@ -17,8 +17,7 @@ namespace DH.Helpdesk.Web.Areas.Orders
             context.MapRoute(
                 "Orders_default",
                 "Orders/{controller}/{action}/{id}",
-                new { action = "Index", id = UrlParameter.Optional }
-            );
+                new { area = "Orders", action = "Index", id = UrlParameter.Optional });
         }
     }
 }

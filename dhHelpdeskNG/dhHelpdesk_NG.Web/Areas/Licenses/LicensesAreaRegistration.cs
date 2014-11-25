@@ -17,8 +17,7 @@ namespace DH.Helpdesk.Web.Areas.Licenses
             context.MapRoute(
                 "Licenses_default",
                 "Licenses/{controller}/{action}/{id}",
-                new { action = "Index", id = UrlParameter.Optional }
-            );
+                new { area = "Licenses", action = "Index", id = UrlParameter.Optional });
         }
     }
 }
