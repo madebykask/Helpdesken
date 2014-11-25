@@ -16,6 +16,8 @@
                                                 {
                                                     ProductId = p.Id,
                                                     ProductName = p.Name,
+                                                    Regions = p.Licenses.Select(l => l.Region.Name).Distinct(),
+                                                    Departments = p.Licenses.Select(l => l.Department.DepartmentName).Distinct(),
                                                     LicencesNumber = p.Licenses.Count(),
                                                     UsedLicencesNumber = p.Licenses.Where(l => l.PurshaseDate.HasValue).Count()
                                                 })
@@ -25,6 +27,8 @@
             var overviews = entities.Select(p => new ProductOverview(
                                                     p.ProductId,
                                                     p.ProductName,
+                                                    p.Regions.ToArray(),
+                                                    p.Departments.ToArray(),
                                                     p.LicencesNumber,
                                                     p.UsedLicencesNumber)).ToArray();
 

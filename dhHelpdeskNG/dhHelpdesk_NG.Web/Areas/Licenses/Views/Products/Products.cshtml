@@ -5,6 +5,8 @@
     <thead>
         <tr>
             <th>@Translation.Get("Produkt")</th>
+            <th>@Translation.Get("Område")</th>
+            <th>@Translation.Get("Avdelning")</th>
             <th>@Translation.Get("Antal licenser")</th>
             <th>@Translation.Get("Använda licenser")</th>
             <th>@Translation.Get("Differens")</th>
@@ -15,6 +17,26 @@
         {
             <tr onclick="window.location.href='@Url.Action("Product", new RouteValueDictionary { { "productId", product.ProductId } })'">
                 <td>@product.ProductName</td>
+                <td>
+                    @for (var i = 0; i < product.Regions.Length; i++)
+                    {
+                        if (i > 0)
+                        {
+                            <br/>
+                        }                        
+                        @product.Regions[i];
+                    }
+                </td>                
+                <td>
+                    @for (var i = 0; i < product.Departments.Length; i++)
+                    {
+                        if (i > 0)
+                        {
+                            <br/>
+                        }                        
+                        @product.Departments[i];
+                    }
+                </td>                
                 <td>@product.LicencesNumber</td>
                 <td>@product.UsedLicencesNumber</td>
                 <td>@product.GetLicensesDifference()</td>
