@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Licenses
 {
+    using System;
     using System.Globalization;
     using System.Linq;
 
@@ -12,14 +13,15 @@
     {
         public static ProductOverview[] MapToOverviews(this IQueryable<Product> query)
         {
+            var today = DateTime.Today;
             var entities = query.Select(p => new 
                                                 {
                                                     ProductId = p.Id,
                                                     ProductName = p.Name,
                                                     Regions = p.Licenses.Select(l => l.Region.Name).Distinct(),
                                                     Departments = p.Licenses.Select(l => l.Department.DepartmentName).Distinct(),
-                                                    LicencesNumber = p.Licenses.Count(),
-                                                    UsedLicencesNumber = p.Licenses.Where(l => l.PurshaseDate.HasValue).Count()
+                                                    LicencesNumber = p.Licenses.Select(l => l.NumberOfLicenses),
+                                                    UsedLicencesNumber = p.Licenses.Where(l => l.ValidDate.HasValue && (today > l.ValidDate.Value)).Select(l => l.NumberOfLicenses)
                                                 })
                                                 .OrderBy(p => p.ProductName)
                                                 .ToArray();
@@ -29,8 +31,8 @@
                                                     p.ProductName,
                                                     p.Regions.ToArray(),
                                                     p.Departments.ToArray(),
-                                                    p.LicencesNumber,
-                                                    p.UsedLicencesNumber)).ToArray();
+                                                    p.LicencesNumber.Sum(),
+                                                    p.UsedLicencesNumber.Sum())).ToArray();
 
             return overviews;
         }
