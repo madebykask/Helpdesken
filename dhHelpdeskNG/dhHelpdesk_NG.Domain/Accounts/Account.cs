@@ -5,6 +5,12 @@
 
     public class Account : Entity
     {
+        public Account()
+        {
+            this.Programs = new List<Program>();
+            this.AccountEMailLogs = new List<AccountEMailLog>();
+        }
+
         public byte[] AccountFile { get; set; }
         public decimal CaseNumber { get; set; }
         public int AccountActivity_Id { get; set; }
@@ -13,7 +19,7 @@
         public int? AccountType4 { get; set; }
         public int? AccountType5 { get; set; }
         public int ChangedByUser_Id { get; set; }
-        public int CreatedByUser_Id { get; set; }
+        public int? CreatedByUser_Id { get; set; }
         public int Customer_Id { get; set; }
         public int? Department_Id { get; set; }
         public int? Department_Id2 { get; set; }
@@ -74,5 +80,6 @@
         public virtual Department Department2 { get; set; }
         public virtual OU OU { get; set; }
         public virtual List<Program> Programs { get; set; }
+        public virtual List<AccountEMailLog> AccountEMailLogs { get; set; }
     }
 }

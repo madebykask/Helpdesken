@@ -10,10 +10,10 @@
     using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Dal.NewInfrastructure;
 
-    public static class AccountMapper
+    public static class AccountOverviewMapper
     {
         public static List<AccountOverview> MapToAccountOverview(
-            IQueryable<Domain.Accounts.Account> query,
+            this IQueryable<Domain.Accounts.Account> query,
             IQueryable<Domain.EmploymentType> employmentTypes,
             IQueryable<Domain.Accounts.AccountType> accountTypes)
         {
@@ -50,6 +50,8 @@
                 anonymus.Select(
                     x =>
                     new AccountOverview(
+                        x.Entity.Id,
+                        x.Entity.AccountType_Id,
                         new Orderer(
                         x.Entity.OrdererId,
                         x.Entity.OrdererFirstName,

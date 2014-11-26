@@ -9,17 +9,13 @@
             User user,
             AccountInformation accountInformation,
             Contact contact,
-            DeliveryInformation deliveryInformation,
-            Program program,
-            Other other)
+            DeliveryInformation deliveryInformation)
         {
             this.Orderer = orderer;
             this.User = user;
             this.AccountInformation = accountInformation;
             this.Contact = contact;
             this.DeliveryInformation = deliveryInformation;
-            this.Program = program;
-            this.Other = other;
         }
 
         public Orderer Orderer { get; private set; }
@@ -31,9 +27,5 @@
         public Contact Contact { get; private set; }
 
         public DeliveryInformation DeliveryInformation { get; private set; }
-
-        public Program Program { get; private set; }
-
-        public Other Other { get; private set; }
     }
 }

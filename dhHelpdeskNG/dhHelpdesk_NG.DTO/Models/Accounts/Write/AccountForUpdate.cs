@@ -5,6 +5,7 @@
     public class AccountForUpdate : AccountForWrite
     {
         public AccountForUpdate(
+            int id,
             Orderer orderer,
             User user,
             AccountInformation accountInformation,
@@ -16,6 +17,7 @@
             int changedByUserId)
             : base(orderer, user, accountInformation, contact, deliveryInformation, program, other)
         {
+            this.Id = id;
             this.ChangedDate = changedDate;
             this.ChangedByUserId = changedByUserId;
         }

@@ -2,16 +2,14 @@
 {
     using System.Collections.Generic;
 
-    using DH.Helpdesk.BusinessData.Models.Shared;
-
     public class ProgramForRead : Program
     {
-        public ProgramForRead(string infoProduct, List<ItemOverview> programs)
+        public ProgramForRead(string infoProduct, List<int> programs)
             : base(infoProduct)
         {
             this.Programs = programs;
         }
 
-        public List<ItemOverview> Programs { get; private set; }
+        public List<int> Programs { get; private set; }
     }
 }

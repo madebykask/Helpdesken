@@ -79,6 +79,7 @@
     <Compile Include="EntityConfigurations\Accounts\AccountActivityGroupConfiguration.cs" />
     <Compile Include="EntityConfigurations\Accounts\AccountEMailLogConfiguration.cs" />
     <Compile Include="EntityConfigurations\Accounts\AccountTypeConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Accounts\EmploymentTypeConfiguration.cs" />
     <Compile Include="EntityConfigurations\ActionSetting\ActionSettingConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseSolutionSettingConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CausingPartConfiguration.cs" />

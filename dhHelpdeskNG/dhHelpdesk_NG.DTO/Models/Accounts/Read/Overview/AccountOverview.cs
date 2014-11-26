@@ -3,6 +3,8 @@
     public class AccountOverview
     {
         public AccountOverview(
+            int id,
+            int activityId,
             Orderer orderer,
             User user,
             AccountInformation accountInformation,
@@ -11,6 +13,8 @@
             Program program,
             Other other)
         {
+            this.Id = id;
+            this.ActivityId = activityId;
             this.Orderer = orderer;
             this.User = user;
             this.AccountInformation = accountInformation;
@@ -19,6 +23,10 @@
             this.Program = program;
             this.Other = other;
         }
+
+        public int Id { get; private set; }
+
+        public int ActivityId { get; private set; }
 
         public Orderer Orderer { get; private set; }
 

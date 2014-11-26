@@ -2,20 +2,22 @@
 {
     using System;
 
+    using DH.Helpdesk.BusinessData.Enums.Accounts;
+
     public sealed class AccountInformation
     {
         public AccountInformation(
             DateTime? startedDate,
             DateTime? finishDate,
-            int eMailTypeId,
-            int homeDirectory,
-            int profile,
+            EMailTypes eMailTypeId,
+            bool homeDirectory,
+            bool profile,
             string inventoryNumber,
-            int accountTypeId,
-            int accountType2,
-            string accountType3,
-            int accountType4,
-            int accountType5,
+            int? accountTypeId,
+            string accountType2,
+            int? accountType3,
+            int? accountType4,
+            int? accountType5,
             string info)
         {
             this.StartedDate = startedDate;
@@ -36,23 +38,23 @@
 
         public DateTime? FinishDate { get; private set; }
 
-        public int EMailTypeId { get; private set; }
+        public EMailTypes EMailTypeId { get; private set; }
 
-        public int HomeDirectory { get; private set; }
+        public bool HomeDirectory { get; private set; }
 
-        public int Profile { get; private set; }
+        public bool Profile { get; private set; }
 
         public string InventoryNumber { get; private set; }
 
-        public int AccountTypeId { get; private set; }
+        public int? AccountTypeId { get; private set; }
 
-        public int AccountType2 { get; private set; }
+        public string AccountType2 { get; private set; }
 
-        public string AccountType3 { get; private set; }
+        public int? AccountType3 { get; private set; }
 
-        public int AccountType4 { get; private set; }
+        public int? AccountType4 { get; private set; }
 
-        public int AccountType5 { get; private set; }
+        public int? AccountType5 { get; private set; }
 
         public string Info { get; private set; }
     }

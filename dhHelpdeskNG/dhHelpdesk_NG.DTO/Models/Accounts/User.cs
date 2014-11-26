@@ -18,9 +18,9 @@ namespace DH.Helpdesk.BusinessData.Models.Accounts
             string roomNumber,
             string postalAddress,
             int employmentType,
-            int departmentId,
-            int unitId,
-            int departmentId2,
+            int? departmentId,
+            int? unitId,
+            int? departmentId2,
             string info,
             string responsibility,
             string activity,
@@ -76,11 +76,11 @@ namespace DH.Helpdesk.BusinessData.Models.Accounts
 
         public int EmploymentType { get; private set; }
 
-        public int DepartmentId { get; private set; }
+        public int? DepartmentId { get; private set; }
 
-        public int UnitId { get; private set; }
+        public int? UnitId { get; private set; }
 
-        public int DepartmentId2 { get; private set; }
+        public int? DepartmentId2 { get; private set; }
 
         public string Info { get; private set; }
 
