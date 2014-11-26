@@ -14,9 +14,9 @@
 
         AccountForEdit Get(int id);
 
-        void Update(AccountForUpdate dto);
+        void Update(AccountForUpdate dto, OperationContext context);
 
-        void Add(AccountForInsert dto);
+        void Add(AccountForInsert dto, OperationContext context);
 
         void Delete(int id);
     }

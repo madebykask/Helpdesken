@@ -13,19 +13,16 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Accounts
 
     public static class AccountForReadMapper
     {
-        public static AccountForEdit ExtractAccountDto(this IQueryable<Domain.Accounts.Account> query, IQueryable<Domain.User> users)
+        public static AccountForEdit ExtractAccountDto(
+            this IQueryable<Domain.Accounts.Account> query,
+            IQueryable<Domain.User> users)
         {
             var anonymus =
                 query.GroupJoin(users, s => s.ChangedByUser_Id, u => u.Id, (s, res) => new { s, res })
                     .SelectMany(
                         t => t.res.DefaultIfEmpty(),
                         (t, k) =>
-                        new
-                            {
-                                Entity = t.s, 
-                                ChangedByUserFirstName = k.FirstName, 
-                                ChangedByUserSurName = k.SurName
-                            })
+                        new { Entity = t.s, ChangedByUserFirstName = k.FirstName, ChangedByUserSurName = k.SurName })
                     .IncludePath(x => x.Entity.Programs);
 
             AccountForEdit dto =
@@ -33,7 +30,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Accounts
                     x =>
                     new AccountForEdit(
                         x.Entity.Id,
-                        x.Entity.AccountType_Id,
+                        x.Entity.AccountActivity_Id,
                         new Orderer(
                         x.Entity.OrdererId,
                         x.Entity.OrdererFirstName,
@@ -70,7 +67,9 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Accounts
                         x.Entity.Profile.ToBool(),
                         x.Entity.InventoryNumber,
                         x.Entity.AccountType_Id,
-                        x.Entity.AccountType2,
+                        x.Entity.AccountType2 != null
+                            ? x.Entity.AccountType2.Split(',').Select(int.Parse).ToList()
+                            : new List<int>(),
                         x.Entity.AccountType3,
                         x.Entity.AccountType4,
                         x.Entity.AccountType5,

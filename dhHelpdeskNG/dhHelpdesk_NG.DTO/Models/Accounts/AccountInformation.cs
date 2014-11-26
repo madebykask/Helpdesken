@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Accounts
 {
     using System;
+    using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Enums.Accounts;
 
@@ -14,7 +15,7 @@
             bool profile,
             string inventoryNumber,
             int? accountTypeId,
-            string accountType2,
+            List<int> accountType2,
             int? accountType3,
             int? accountType4,
             int? accountType5,
@@ -48,7 +49,7 @@
 
         public int? AccountTypeId { get; private set; }
 
-        public string AccountType2 { get; private set; }
+        public List<int> AccountType2 { get; private set; }
 
         public int? AccountType3 { get; private set; }
 

@@ -51,7 +51,7 @@
                     x =>
                     new AccountOverview(
                         x.Entity.Id,
-                        x.Entity.AccountType_Id,
+                        x.Entity.AccountActivity_Id,
                         new Orderer(
                         x.Entity.OrdererId,
                         x.Entity.OrdererFirstName,

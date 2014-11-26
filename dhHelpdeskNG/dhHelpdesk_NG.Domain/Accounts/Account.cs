@@ -14,7 +14,7 @@
         public byte[] AccountFile { get; set; }
         public decimal CaseNumber { get; set; }
         public int AccountActivity_Id { get; set; }
-        public int AccountType_Id { get; set; }
+        public int? AccountType_Id { get; set; }
         public int? AccountType3 { get; set; }
         public int? AccountType4 { get; set; }
         public int? AccountType5 { get; set; }
