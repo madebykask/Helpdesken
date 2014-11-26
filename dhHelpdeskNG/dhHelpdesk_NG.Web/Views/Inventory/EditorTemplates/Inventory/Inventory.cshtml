@@ -22,7 +22,7 @@
          || Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.TheftMark.Show)
     {
         <tr>
-            <th colspan="2" class="header">@Translation.Get("Allmänt")</th>
+            <th colspan="2" class="header"><h4>@Translation.Get("Allmänt")</h4></th>
         </tr>
     }
     @Html.EditorFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.DepartmentId, "CustomTypesFields/List", new { Source = Model.InventoryViewModel.DefaultFieldsViewModel.Departments })
@@ -37,7 +37,7 @@
          || Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.PurchaseDate.Show)
     {
         <tr>
-            <th colspan="2" class="header">@Translation.Get("Inventering")</th>
+            <th colspan="2" class="header"><h4>@Translation.Get("Inventering")</h4></th>
         </tr>
     }
     @Html.EditorFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.BarCode, "CustomTypesFields/Text")
@@ -47,7 +47,7 @@
     @if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.RoomId.Show)
     {
         <tr>
-            <th colspan="2" class="header">@Translation.Get("Placering")</th>
+            <th colspan="2" class="header"><h4>@Translation.Get("Placering")</h4></th>
         </tr>
         <tr>
             <td class="span3">
@@ -102,7 +102,7 @@
             {
                 var name = Model.TypeGroupModels.Where(x => x.Id == currentGroupId).Select(x => x.Name);
                 <tr>
-                    <th colspan="2" class="header">@Html.DisplayFor(m => name)</th>
+                    <th colspan="2" class="header"><h4>@Html.DisplayFor(m => name)</h4></th>
                 </tr>
             }
 

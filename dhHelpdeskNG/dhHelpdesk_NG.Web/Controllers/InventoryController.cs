@@ -1462,18 +1462,23 @@
 
         private ComputerEditOptions GetWorkstationEditOptions(int customerId)
         {
-            var computerModels = this.computerModulesService.GetComputerModels();
-            var computerTypes = this.computerModulesService.GetComputerTypes(customerId);
-            var operatingSystems = this.computerModulesService.GetOperatingSystems();
-            var processors = this.computerModulesService.GetProcessors();
-            var rams = this.computerModulesService.GetRams();
-            var netAdapters = this.computerModulesService.GetNetAdapters();
-            var departments = this.organizationService.GetDepartments(customerId);
-            var domains = this.organizationService.GetDepartments(customerId);
-            var ous = this.organizationService.GetOrganizationUnits();
-            var buildings = this.placeService.GetBuildings(customerId);
-            var floors = this.placeService.GetFloors(customerId);
-            var rooms = this.placeService.GetRooms(customerId);
+            List<ItemOverview> computerModels =
+                this.computerModulesService.GetComputerModels().OrderBy(x => x.Name).ToList();
+            List<ItemOverview> computerTypes =
+                this.computerModulesService.GetComputerTypes(customerId).OrderBy(x => x.Name).ToList();
+            List<ItemOverview> operatingSystems =
+                this.computerModulesService.GetOperatingSystems().OrderBy(x => x.Name).ToList();
+            List<ItemOverview> processors = this.computerModulesService.GetProcessors().OrderBy(x => x.Name).ToList();
+            List<ItemOverview> rams = this.computerModulesService.GetRams().OrderBy(x => x.Name).ToList();
+            List<ItemOverview> netAdapters = this.computerModulesService.GetNetAdapters().OrderBy(x => x.Name).ToList();
+            List<ItemOverview> departments =
+                this.organizationService.GetDepartments(customerId).OrderBy(x => x.Name).ToList();
+            List<ItemOverview> domains =
+                this.organizationService.GetDepartments(customerId).OrderBy(x => x.Name).ToList();
+            List<ItemOverview> ous = this.organizationService.GetOrganizationUnits().OrderBy(x => x.Name).ToList();
+            List<ItemOverview> buildings = this.placeService.GetBuildings(customerId).OrderBy(x => x.Name).ToList();
+            List<ItemOverview> floors = this.placeService.GetFloors(customerId).OrderBy(x => x.Name).ToList();
+            List<ItemOverview> rooms = this.placeService.GetRooms(customerId).OrderBy(x => x.Name).ToList();
 
             var computerResponse = new ComputerEditOptions(
                 computerModels,
@@ -1494,33 +1499,36 @@
 
         private ServerEditOptions GetServerEditOptions(int customerId)
         {
-            var operatingSystems = this.computerModulesService.GetOperatingSystems();
-            var processors = this.computerModulesService.GetProcessors();
-            var rams = this.computerModulesService.GetRams();
-            var netAdapters = this.computerModulesService.GetNetAdapters();
-            var buildings = this.placeService.GetBuildings(customerId);
-            var floors = this.placeService.GetFloors(customerId);
-            var rooms = this.placeService.GetRooms(customerId);
+            List<ItemOverview> operatingSystems =
+                this.computerModulesService.GetOperatingSystems().OrderBy(x => x.Name).ToList();
+            List<ItemOverview> processors = this.computerModulesService.GetProcessors().OrderBy(x => x.Name).ToList();
+            List<ItemOverview> rams = this.computerModulesService.GetRams().OrderBy(x => x.Name).ToList();
+            List<ItemOverview> netAdapters = this.computerModulesService.GetNetAdapters().OrderBy(x => x.Name).ToList();
+            List<ItemOverview> buildings = this.placeService.GetBuildings(customerId).OrderBy(x => x.Name).ToList();
+            List<ItemOverview> floors = this.placeService.GetFloors(customerId).OrderBy(x => x.Name).ToList();
+            List<ItemOverview> rooms = this.placeService.GetRooms(customerId).OrderBy(x => x.Name).ToList();
 
             return new ServerEditOptions(operatingSystems, processors, rams, netAdapters, buildings, floors, rooms);
         }
 
         private PrinterEditOptions GetPrinterEditOptions(int customerId)
         {
-            var departments = this.organizationService.GetDepartments(customerId);
-            var buildings = this.placeService.GetBuildings(customerId);
-            var floors = this.placeService.GetFloors(customerId);
-            var rooms = this.placeService.GetRooms(customerId);
+            List<ItemOverview> departments =
+                this.organizationService.GetDepartments(customerId).OrderBy(x => x.Name).ToList();
+            List<ItemOverview> buildings = this.placeService.GetBuildings(customerId).OrderBy(x => x.Name).ToList();
+            List<ItemOverview> floors = this.placeService.GetFloors(customerId).OrderBy(x => x.Name).ToList();
+            List<ItemOverview> rooms = this.placeService.GetRooms(customerId).OrderBy(x => x.Name).ToList();
 
             return new PrinterEditOptions(departments, buildings, floors, rooms);
         }
 
         private InventoryEditOptions GetInventoryInventoryEditOptions(int customerId)
         {
-            var departments = this.organizationService.GetDepartments(customerId);
-            var buildings = this.placeService.GetBuildings(customerId);
-            var floors = this.placeService.GetFloors(customerId);
-            var rooms = this.placeService.GetRooms(customerId);
+            List<ItemOverview> departments =
+                this.organizationService.GetDepartments(customerId).OrderBy(x => x.Name).ToList();
+            List<ItemOverview> buildings = this.placeService.GetBuildings(customerId).OrderBy(x => x.Name).ToList();
+            List<ItemOverview> floors = this.placeService.GetFloors(customerId).OrderBy(x => x.Name).ToList();
+            List<ItemOverview> rooms = this.placeService.GetRooms(customerId).OrderBy(x => x.Name).ToList();
 
             return new InventoryEditOptions(departments, buildings, floors, rooms);
         }

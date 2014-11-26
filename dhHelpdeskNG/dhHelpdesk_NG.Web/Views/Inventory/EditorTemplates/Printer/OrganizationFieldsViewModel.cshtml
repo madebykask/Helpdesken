@@ -4,7 +4,7 @@
         || Model.OrganizationFieldsModel.UnitId.Show)
     {
         <tr>
-            <th colspan="2" class="header">@Translation.Get("Organisation")</th>
+            <th colspan="2" class="header"><h4>@Translation.Get("Organisation")</h4></th>
         </tr>
     }
     @Html.EditorFor(m => m.OrganizationFieldsModel.DepartmentId, "NotReadonlyFields/List", new { Source = Model.Departments })
