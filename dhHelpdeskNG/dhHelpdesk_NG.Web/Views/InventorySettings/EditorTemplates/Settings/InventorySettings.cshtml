@@ -14,7 +14,7 @@
     </thead>
     <tbody>
         <tr>
-            <td colspan="8" class="header">@Translation.Get("Nytt")</td>
+            <td colspan="8" class="header">@Translation.Get("Ny")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.NewDynamicFieldViewModel, "Settings/NewInventoryFieldSettingModel")
@@ -62,13 +62,13 @@
             @Html.EditorFor(m => m.DefaultSettings.InfoFieldSettingModel, "Settings/InventoryFieldSettingModelDefault")
         </tr>
         <tr>
-            <td colspan="8" class="header">@Translation.Get("Tillbehör till")</td>
+            <td colspan="8" class="header">@Translation.Get("Tillbehör")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.DefaultSettings.WorkstationFieldSettingModel, "Settings/InventoryFieldSettingModelDefault")
         </tr>
         <tr>
-            <td colspan="8" class="header">@Translation.Get("Additional")</td>
+            <td colspan="8" class="header">@Translation.Get("Tillägg")</td>
         </tr>
         @{
             var inventoryDynamicFieldViewModelSettings = Model.InventoryDynamicFieldViewModelSettings.OrderBy(x => x.InventoryDynamicFieldSettingModel.Position).ThenBy(x => x.InventoryDynamicFieldSettingModel.Caption).ToList();
