@@ -35,7 +35,7 @@
             <tr onclick=" window.location.href = '@Url.Action("Edit", new RouteValueDictionary { { "id", order.Id } })' ">
                 @foreach(var value in order.FieldValues)
                 {
-                    <td class="tdpointer">@value.Value.GetDisplayValue()</td>
+                    <td class="tdpointer">@MvcHtmlString.Create(value.Value.GetDisplayValue())</td>
                 }
             </tr>
         }

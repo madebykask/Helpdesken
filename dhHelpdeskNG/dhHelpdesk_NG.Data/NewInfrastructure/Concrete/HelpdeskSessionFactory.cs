@@ -8,5 +8,12 @@
         {
             return new HelpdeskSqlServerDbContext();
         }
+
+        public IDbContext GetSessionWithDisabledLazyLoading()
+        {
+            var session = new HelpdeskSqlServerDbContext();
+            session.Configuration.LazyLoadingEnabled = false;
+            return session;
+        }
     }
 }

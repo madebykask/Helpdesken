@@ -13,5 +13,10 @@
         {
             return new UnitOfWork(this.sessionFactory.GetSession());
         }
+
+        public IUnitOfWork CreateWithDisabledLazyLoading()
+        {
+            return new UnitOfWork(this.sessionFactory.GetSessionWithDisabledLazyLoading());
+        }
     }
 }

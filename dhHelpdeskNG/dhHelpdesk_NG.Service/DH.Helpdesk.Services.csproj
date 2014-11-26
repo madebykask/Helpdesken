@@ -46,6 +46,7 @@
     <Reference Include="LinqLib">
       <HintPath>..\packages\LinqExtLibrary.1.0.4.2\lib\LinqLib.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.3.2.2.0\lib\net40\Ninject.dll</HintPath>
     </Reference>

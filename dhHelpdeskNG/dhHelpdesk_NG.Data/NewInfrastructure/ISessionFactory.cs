@@ -3,5 +3,7 @@
     public interface ISessionFactory
     {
         IDbContext GetSession();
+
+        IDbContext GetSessionWithDisabledLazyLoading();
     }
 }

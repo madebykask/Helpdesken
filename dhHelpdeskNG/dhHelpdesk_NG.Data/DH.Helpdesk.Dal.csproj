@@ -304,13 +304,14 @@
     <Compile Include="NewInfrastructure\Concrete\GenericRepository.cs" />
     <Compile Include="NewInfrastructure\Concrete\UnitOfWork.cs" />
     <Compile Include="NewInfrastructure\Concrete\UnitOfWorkFactory.cs" />
+    <Compile Include="NewInfrastructure\DynamicTypeBuilder.cs" />
     <Compile Include="NewInfrastructure\IDbContext.cs" />
+    <Compile Include="NewInfrastructure\QueryableExtensions.cs" />
     <Compile Include="NewInfrastructure\ISessionFactory.cs" />
     <Compile Include="NewInfrastructure\IGenericRepository.cs" />
     <Compile Include="NewInfrastructure\IUnitOfWork.cs" />
     <Compile Include="NewInfrastructure\IUnitOfWorkFactory.cs" />
     <Compile Include="NewInfrastructure\Concrete\HelpdeskSessionFactory.cs" />
-    <Compile Include="NewInfrastructure\QueryableExtensions.cs" />
     <Compile Include="Repositories\ActionSetting\Concrete\ActionSettingRepository.cs" />
     <Compile Include="Repositories\ActionSetting\IActionSettingRepository.cs" />
     <Compile Include="Repositories\CaseHistoryRepository.cs" />

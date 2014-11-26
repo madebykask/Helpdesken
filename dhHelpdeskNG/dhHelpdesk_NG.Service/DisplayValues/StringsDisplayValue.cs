@@ -25,9 +25,14 @@
             var sb = new StringBuilder();
             if (this.Value != null && this.Value.Any())
             {
-                foreach (var str in this.Value)
+                for (var i = 0; i < this.Value.Length; i++)
                 {
-                    sb.AppendLine(str + this.Separator);
+                    if (i > 0)
+                    {
+                        sb.Append(this.Separator);
+                    }
+
+                    sb.Append(this.Value[i]);
                 }
             }
 

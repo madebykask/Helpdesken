@@ -1,30 +1,59 @@
 ﻿namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
 {
+    using System;
+    using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Linq.Expressions;
 
     using DH.Helpdesk.BusinessData.Models.Orders.Index.OrderOverview;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Orders;
 
     public static class OrderOverviewMapper
     {
         public static FullOrderOverview[] MapToFullOverviews(this IQueryable<Order> query)
         {
             var entities = query
-                            .IncludePath(o => o.Customer)
-                            .IncludePath(o => o.Domain)
-                            .IncludePath(o => o.Ou)
-                            .IncludePath(o => o.OrderProperty)
-                            .IncludePath(o => o.OrderState)
-                            .IncludePath(o => o.OrderType)
-                            .IncludePath(o => o.DeliveryDepartment)
-                            .IncludePath(o => o.DeliveryOuEntity)
-                            .IncludePath(o => o.Logs)
-                            .IncludePath(o => o.Programs)
-                            .ToArray();
+                            .SelectIncluding(new List<Expression<Func<Order, object>>>
+                                                {                                                    
+                                                    o => o.Customer.Name,
+                                                    o => o.Domain.Name,
+                                                    o => o.Ou.Name,
+                                                    o => o.OrderProperty.OrderProperty,
+                                                    o => o.OrderState.Name,
+                                                    o => o.OrderType.Name,
+                                                    o => o.DeliveryDepartment.DepartmentName,
+                                                    o => o.DeliveryOuEntity.Name,
+                                                    o => o.Logs.Select(l => l.LogNote),
+                                                    o => o.Programs.Select(p => p.Name),
+                                                    o => o.User.FirstName,
+                                                    o => o.User.SurName,
+                                                    o => o.Department.DepartmentName
+                                                })
+                                                .ToArray();
 
-            return entities.Select(CreateFullOverview).ToArray();
+            return entities.Select(
+                o =>
+                    {
+                        var order = (Order)o.sourceObject;
+
+                        order.Customer = new Customer { Name = o.f0 };
+                        order.Domain = new Domain { Name = o.f1 };
+                        order.Ou = new OU { Name = o.f2 };
+                        order.OrderProperty = new OrderPropertyEntity { OrderProperty = o.f3 };
+                        order.OrderState = new OrderState { Name = o.f4 };
+                        order.OrderType = new OrderType { Name = o.f5 };
+                        order.DeliveryDepartment = new Department { DepartmentName = o.f6 };
+                        order.DeliveryOuEntity = new OU { Name = o.f7 };
+                        order.Logs = ((List<string>)o.f8).Select(l => new OrderLog { LogNote = l }).ToArray();
+                        order.Programs = ((List<string>)o.f9).Select(p => new Program { Name = p }).ToArray();
+                        order.User = new User { FirstName = o.f10, SurName = o.f11 };
+                        order.Department = new Department { DepartmentName = o.f12 };
+
+                        return CreateFullOverview(order);
+                    }).ToArray();
         }
 
         #region Create fields

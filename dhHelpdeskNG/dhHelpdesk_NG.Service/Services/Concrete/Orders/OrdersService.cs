@@ -49,7 +49,7 @@
         public SearchResponse Search(SearchParameters parameters)
         {
             var settings = this.orderFieldSettingsService.GetOrdersFieldSettingsOverview(parameters.CustomerId, parameters.OrderTypeId);
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
                 var orderRep = uow.GetRepository<Order>();
 
