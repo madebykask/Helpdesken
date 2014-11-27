@@ -74,8 +74,8 @@
                                         <td>
                                             @Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation)
                                         </td>
-                                        <td>                                            
-                                            <input type="text" name="FileName" value="@Model.Document.FileName"/>
+                                        <td>
+                                            @Html.ActionLink(Model.Document.FileName, "DocumentFile", new { document = Model.Document.Id})                                            
                                             <input type="hidden" name="FileName" id="FileName" value="@Model.Document.FileName" />
                                             <input type="hidden" name="Id" id="Id" value="@Model.Document.Id" />
                                             <input type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" name="remove" id="remove" class="btn" onclick="deleteFile(@Model.Document.Id)" />
