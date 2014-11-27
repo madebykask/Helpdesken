@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.BusinessData.Enums.Accounts
+﻿namespace DH.Helpdesk.BusinessData.Enums.Accounts.Fields
 {
     public enum EMailTypes
     {

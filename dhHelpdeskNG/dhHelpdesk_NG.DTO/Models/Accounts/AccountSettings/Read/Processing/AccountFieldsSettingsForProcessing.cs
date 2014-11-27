@@ -2,9 +2,9 @@
 {
     using System;
 
-    public abstract class AccountFieldsSettingsForEdit
+    public abstract class AccountFieldsSettingsForProcessing
     {
-        protected AccountFieldsSettingsForEdit(
+        protected AccountFieldsSettingsForProcessing(
             int activityId,
             OrdererFieldSettings orderer,
             UserFieldSettings user,

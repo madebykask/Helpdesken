@@ -4,6 +4,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Accounts
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Enums.Accounts;
+    using DH.Helpdesk.BusinessData.Enums.Accounts.Fields;
     using DH.Helpdesk.BusinessData.Models.Accounts;
     using DH.Helpdesk.BusinessData.Models.Accounts.Read;
     using DH.Helpdesk.BusinessData.Models.Accounts.Read.Edit;

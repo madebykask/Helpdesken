@@ -3,6 +3,7 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Enums.Accounts;
+    using DH.Helpdesk.BusinessData.Enums.Accounts.Fields;
     using DH.Helpdesk.Domain.Accounts;
 
     public static class AccountSpecifications

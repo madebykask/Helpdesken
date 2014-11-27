@@ -54,9 +54,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\AllowReadAttribute.cs" />
-    <Compile Include="Enums\Accounts\AccountFields.cs" />
-    <Compile Include="Enums\Accounts\AccountStates.cs" />
-    <Compile Include="Enums\Accounts\EMailTypes.cs" />
+    <Compile Include="Enums\Accounts\Fields\AccountInformationFields.cs" />
+    <Compile Include="Enums\Accounts\Fields\AccountStates.cs" />
+    <Compile Include="Enums\Accounts\Fields\DeliveryInformationFields.cs" />
+    <Compile Include="Enums\Accounts\Fields\EMailTypes.cs" />
+    <Compile Include="Enums\Accounts\Fields\OrdererFields.cs" />
+    <Compile Include="Enums\Accounts\Fields\OtherFields.cs" />
+    <Compile Include="Enums\Accounts\Fields\ProgramFields.cs" />
+    <Compile Include="Enums\Accounts\Fields\UserFields.cs" />
     <Compile Include="Enums\Changes\Fields\AnalyzeField.cs" />
     <Compile Include="Enums\Changes\Fields\EvaluationField.cs" />
     <Compile Include="Enums\Changes\Fields\GeneralField.cs" />
@@ -152,7 +157,7 @@
     <Compile Include="Models\Accounts\AccountSettings\Read\Overview\OtherFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Overview\ProgramFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Overview\UserFieldSettings.cs" />
-    <Compile Include="Models\Accounts\AccountSettings\Read\Processing\AccountFieldsSettingsForEdit.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\Processing\AccountFieldsSettingsForProcessing.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Processing\AccountInformationFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Processing\ContactFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Processing\DeliveryInformationFieldSettings.cs" />

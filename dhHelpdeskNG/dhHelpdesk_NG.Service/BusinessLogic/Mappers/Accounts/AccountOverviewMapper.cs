@@ -5,6 +5,7 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Enums.Accounts;
+    using DH.Helpdesk.BusinessData.Enums.Accounts.Fields;
     using DH.Helpdesk.BusinessData.Models.Accounts.Read.Overview;
     using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Common.Extensions.Integer;

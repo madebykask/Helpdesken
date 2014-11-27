@@ -4,6 +4,7 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Enums.Accounts;
+    using DH.Helpdesk.BusinessData.Enums.Accounts.Fields;
 
     public sealed class AccountInformation
     {
