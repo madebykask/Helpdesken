@@ -1,0 +1,27 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Licenses.Models.Computers.ComputersContentModel
+
+@{
+    Layout = "~/Views/Shared/_PopupLayout.cshtml";
+}
+
+<table class="table table-striped table-bordered table-hover table-pointer">
+    <thead>
+        <tr>
+            <th>@Translation.Get("Datornamn")</th>
+            <th>@Translation.Get("Användare")</th>
+            <th>@Translation.Get("Scanningsdatum")</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var computer in Model.Computers)
+        {
+            <tr>
+                <td>@computer.ComputerName</td>
+                <td>@computer.User</td>
+                <td>@Html.DisplayFor(m => computer.ScanDate, "Date")</td>
+            </tr>
+        }        
+    </tbody>
+</table>
+@Translation.Get("Arbetsstationer") : @Model.Computers.Length

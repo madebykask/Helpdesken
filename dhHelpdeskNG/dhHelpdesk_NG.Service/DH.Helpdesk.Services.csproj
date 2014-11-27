@@ -108,6 +108,7 @@
     <Compile Include="BusinessLogic\Mappers\Documents\DocumentMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Faqs\FaqMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Licenses\ApplicationMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Licenses\ComputerMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Licenses\LicenseFileMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Licenses\LicenseMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Licenses\ManufacturerMapper.cs" />
@@ -140,6 +141,7 @@
     <Compile Include="BusinessLogic\Specifications\EmailTemplate\MailTemplateLanguageSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\GlobalSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Licenses\ApplicationSpecifications.cs" />
+    <Compile Include="BusinessLogic\Specifications\Licenses\ComputerSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Licenses\LicenseFileSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Licenses\LicenseSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Licenses\ProductSpecifications.cs" />
@@ -252,6 +254,7 @@
     <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\BusinessItem.cs" />
     <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\ExcelTableHeader.cs" />
     <Compile Include="Services\Concrete\ActionSettingService.cs" />
+    <Compile Include="Services\Concrete\Licenses\ComputersService.cs" />
     <Compile Include="Services\Concrete\ModulesService.cs" />
     <Compile Include="Services\Concrete\OrderAccountService.cs" />
     <Compile Include="Services\Concrete\Orders\OrderFieldSettingsService.cs" />
@@ -312,6 +315,7 @@
     <Compile Include="Services\IReportsService.cs" />
     <Compile Include="Services\IStatisticsService.cs" />
     <Compile Include="Services\Licenses\IApplicationsService.cs" />
+    <Compile Include="Services\Licenses\IComputersService.cs" />
     <Compile Include="Services\Licenses\ILicensesService.cs" />
     <Compile Include="Services\Licenses\IManufacturersService.cs" />
     <Compile Include="Services\Licenses\IProductsService.cs" />

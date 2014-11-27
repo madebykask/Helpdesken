@@ -14,6 +14,7 @@
             this.Bind<IVendorsModelFactory>().To<VendorsModelFactory>().InSingletonScope();
             this.Bind<IManufacturersModelFactory>().To<ManufacturersModelFactory>().InSingletonScope();
             this.Bind<IApplicationsModelFactory>().To<ApplicationsModelFactory>().InSingletonScope();
+            this.Bind<IComputersModelFactory>().To<ComputersModelFactory>().InSingletonScope();
         }
     }
 }

@@ -116,6 +116,7 @@
             this.Bind<IVendorsService>().To<VendorsService>();
             this.Bind<IManufacturersService>().To<ManufacturersService>();
             this.Bind<IApplicationsService>().To<ApplicationsService>();
+            this.Bind<IComputersService>().To<ComputersService>();
             this.Bind<IMailTemplateServiceNew>().To<MailTemplateServiceNew>();
 
             // Orders module services

@@ -95,6 +95,9 @@
             bundles.Add(new ScriptBundle("~/bundles/licenses").Include(
                             "~/Content/js/Licenses/license.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/licenses/products").Include(
+                            "~/Content/js/Licenses/products.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/modules").Include(
                             "~/Content/js/Users/modules.js"));
 

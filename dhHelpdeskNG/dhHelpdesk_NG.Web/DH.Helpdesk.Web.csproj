@@ -374,11 +374,14 @@
     <Content Include="Content\js\bootstrap-switch.min.js" />
     <Content Include="Content\js\Changes\inventoryDialog.js" />
     <Compile Include="Areas\Licenses\Controllers\ApplicationsController.cs" />
+    <Compile Include="Areas\Licenses\Controllers\ComputersController.cs" />
     <Compile Include="Areas\Licenses\Controllers\LicensesController.cs" />
     <Compile Include="Areas\Licenses\Controllers\ManufacturersController.cs" />
     <Compile Include="Areas\Licenses\Controllers\VendorsController.cs" />
     <Compile Include="Areas\Licenses\Infrastructure\ModelFactories\Concrete\ApplicationsModelFactory.cs" />
+    <Compile Include="Areas\Licenses\Infrastructure\ModelFactories\Concrete\ComputersModelFactory.cs" />
     <Compile Include="Areas\Licenses\Infrastructure\ModelFactories\IApplicationsModelFactory.cs" />
+    <Compile Include="Areas\Licenses\Infrastructure\ModelFactories\IComputersModelFactory.cs" />
     <Compile Include="Areas\Licenses\Infrastructure\ModelFactories\ILicensesModelFactory.cs" />
     <Compile Include="Areas\Licenses\Infrastructure\ModelFactories\IManufacturersModelFactory.cs" />
     <Compile Include="Areas\Licenses\Infrastructure\ModelFactories\IProductsModelFactory.cs" />
@@ -396,6 +399,7 @@
     <Compile Include="Areas\Licenses\Models\Common\BaseIndexModel.cs" />
     <Compile Include="Areas\Licenses\Models\Common\EntityModelType.cs" />
     <Compile Include="Areas\Licenses\Models\Common\AttachedFilesModel.cs" />
+    <Compile Include="Areas\Licenses\Models\Computers\ComputersContentModel.cs" />
     <Compile Include="Areas\Licenses\Models\Licenses\LicenseEditModel.cs" />
     <Compile Include="Areas\Licenses\Models\Licenses\LicensesContentModel.cs" />
     <Compile Include="Areas\Licenses\Models\Licenses\LicensesFilterModel.cs" />
@@ -1183,6 +1187,7 @@
     <Content Include="Content\js\jsrender.js" />
     <Content Include="Content\js\jsrender.min.js" />
     <Content Include="Content\js\Licenses\license.js" />
+    <Content Include="Content\js\Licenses\products.js" />
     <Content Include="Content\js\Moxie.swf" />
     <Content Include="Content\js\Moxie.xap" />
     <Content Include="Content\js\Orders\index.js" />
@@ -1327,6 +1332,7 @@
     <Content Include="Areas\Orders\Views\OrderFieldSettings\EditorTemplates\FullFieldSettingsModel.cshtml" />
     <Content Include="Areas\Orders\Views\OrderFieldSettings\EditorTemplates\FieldSettingsModel.cshtml" />
     <Content Include="Areas\Orders\Views\OrderFieldSettings\EditorTemplates\TextFieldSettingsModel.cshtml" />
+    <Content Include="Areas\Licenses\Views\Computers\Computers.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />

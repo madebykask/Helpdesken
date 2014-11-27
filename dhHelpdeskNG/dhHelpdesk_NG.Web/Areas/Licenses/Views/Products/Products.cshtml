@@ -15,9 +15,11 @@
     <tbody>
         @foreach (var product in Model.Products)
         {
-            <tr onclick="window.location.href='@Url.Action("Product", new RouteValueDictionary { { "productId", product.ProductId } })'">
-                <td>@product.ProductName</td>
-                <td>
+            <tr>
+                <td onclick="window.location.href='@Url.Action("Product", new RouteValueDictionary { { "productId", product.ProductId } })'">
+                    @product.ProductName
+                </td>
+                <td onclick="window.location.href='@Url.Action("Product", new RouteValueDictionary { { "productId", product.ProductId } })'">
                     @for (var i = 0; i < product.Regions.Length; i++)
                     {
                         if (i > 0)
@@ -27,7 +29,7 @@
                         @product.Regions[i];
                     }
                 </td>                
-                <td>
+                <td onclick="window.location.href='@Url.Action("Product", new RouteValueDictionary { { "productId", product.ProductId } })'">
                     @for (var i = 0; i < product.Departments.Length; i++)
                     {
                         if (i > 0)
@@ -37,9 +39,25 @@
                         @product.Departments[i];
                     }
                 </td>                
-                <td>@product.LicencesNumber</td>
-                <td>@product.UsedLicencesNumber</td>
-                <td>@product.GetLicensesDifference()</td>
+                <td onclick="window.location.href='@Url.Action("Product", new RouteValueDictionary { { "productId", product.ProductId } })'">
+                    @product.LicencesNumber
+                </td>
+                @if (product.UsedLicencesNumber > 0)
+                {
+                    <td>
+                        @product.UsedLicencesNumber
+                        <img style="display: none;" src="@Url.Content("~/Content/icons/case.png")" data-productId="@product.ProductId" onclick=" showComputers(this, parameters.computersUrl); return false; " />   
+                    </td>
+                }
+                else
+                {
+                    <td onclick="window.location.href='@Url.Action("Product", new RouteValueDictionary { { "productId", product.ProductId } })'">
+                        @product.UsedLicencesNumber
+                    </td>                        
+                }
+                <td onclick="window.location.href='@Url.Action("Product", new RouteValueDictionary { { "productId", product.ProductId } })'">
+                    @product.GetLicensesDifference()
+                </td>
             </tr>
         }        
     </tbody>

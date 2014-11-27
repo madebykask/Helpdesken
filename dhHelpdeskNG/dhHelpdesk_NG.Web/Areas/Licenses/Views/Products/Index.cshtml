@@ -1,8 +1,20 @@
-﻿@using DH.Helpdesk.Web.Areas.Licenses.Models.Products
+﻿@using System.Web.Optimization
+@using DH.Helpdesk.Web.Areas.Licenses.Models.Products
 @using DH.Helpdesk.Web.Infrastructure
 @model ProductsIndexModel
 @{
     Layout = "~/Areas/Licenses/Views/Shared/_IndexLayout.cshtml";
+}
+
+@section Scripts
+{
+    @Scripts.Render("~/bundles/licenses/products")
+
+    <script type="text/javascript">
+        var parameters = {
+            computersUrl: '@Url.Action("Index", "Computers")'
+        };
+    </script>    
 }
 
 @section Actions {
