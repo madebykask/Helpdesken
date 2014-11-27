@@ -67,8 +67,9 @@
                                 -->
                             }
                             if (SessionFacade.CurrentUser.CopyCasePermission == 1)
-                            {                                
-                                <li><a href="/cases/copy/@Model.case_.Id?customerId=@Model.case_.Customer_Id" >@Translation.Get("Kopiera", Enums.TranslationSource.TextTranslation)</a></li>
+                            {     
+                                <li><a data-toggle="modal" href="#divCopyCase" >@Translation.Get("Kopiera", Enums.TranslationSource.TextTranslation)</a></li>@*                           
+                                <li><a href="/cases/copy/@Model.case_.Id?customerId=@Model.case_.Customer_Id" >@Translation.Get("Kopiera", Enums.TranslationSource.TextTranslation)</a></li>*@
                             }
                             if (SessionFacade.CurrentUser.FollowUpPermission == 1)
                             {
@@ -133,6 +134,9 @@
     </div>    
     <div id="divRelatedCases" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true" >
         @Html.Partial("_RelatedCases", Model)
+    </div> 
+    <div id="divCopyCase" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true" >
+        @Html.Partial("_CopyCase", Model)
     </div>        
 }
 

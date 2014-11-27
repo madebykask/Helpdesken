@@ -1,0 +1,17 @@
+﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel 
+@using DH.Helpdesk.BusinessData.OldComponents
+<div class="modal-header">
+<strong>@Translation.Get("Kopiera", Enums.TranslationSource.TextTranslation) @Translation.Get("ärende", Enums.TranslationSource.TextTranslation)</strong>
+</div>
+<div class="modal-body">
+    <p>
+        @Translation.Get("Är du säker på att du vill kopiera ärendet", Enums.TranslationSource.TextTranslation)?                
+    </p>
+    <p>
+        @Translation.Get("Logg och bifogade filer kopieras ej", Enums.TranslationSource.TextTranslation)
+    </p>
+</div>
+<div class="modal-footer">
+    <button id="btnCopyCase" onclick="copyCase(@Model.case_.Id, @Model.case_.Customer_Id)"  class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Kopiera", Enums.TranslationSource.TextTranslation)</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</button>
+</div>

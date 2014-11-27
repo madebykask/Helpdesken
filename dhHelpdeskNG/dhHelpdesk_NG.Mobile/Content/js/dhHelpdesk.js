@@ -930,6 +930,13 @@ function moveCase(id) {
     }
 }
 
+function copyCase(id, customerId) {
+   
+        var url = '/cases/copy/' + id + '?customerId=' + customerId;
+        window.location.href = url;
+    
+}
+
 // calculate utc time
 $(function(){
     $('[data-datetimeutc]', 'body').each(function () {
