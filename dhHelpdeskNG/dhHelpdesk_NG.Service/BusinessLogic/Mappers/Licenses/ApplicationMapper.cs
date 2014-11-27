@@ -11,13 +11,14 @@
 
     public static class ApplicationMapper
     {
-        public static ApplicationOverview[] MapToOverviews(this IQueryable<Application> query)
-        {
-           var entities = query.Select(a => new 
+        public static ApplicationOverview[] MapToOverviews(this IQueryable<Application> query, IQueryable<Software> software)
+        {            
+            var entities = query.Select(a => new 
                                             {
                                                 ApplicationId = a.Id,
                                                 ApplicationName = a.Name,
-                                                a.Products
+                                                a.Products,
+                                                NumberOfInstallations = software.Where(s => s.Name == a.Name).Count()
                                             })
                                             .OrderBy(a => a.ApplicationName)
                                             .ToArray();
@@ -29,7 +30,7 @@
                         a.ApplicationId,
                         a.ApplicationName,
                         product != null ? product.Name : null,
-                        product != null ? product.Licenses.Count : 0);
+                        a.NumberOfInstallations);
                 }).ToArray();
 
             return overviews;
