@@ -113,7 +113,7 @@
         //public DropDownWithSubmenusContent CategoryWithSubcategories { get; private set; }
         ////public List<CategoryWithSubcategories> CategoryWithSubcategories { get; set; }
         //public EditingFaqModel EditFaqModel { get; set; }
-
+        public CaseTemplateTreeModel CaseTemplateTreeButton { get; set; }
     }
 
     public class CaseIndexViewModel

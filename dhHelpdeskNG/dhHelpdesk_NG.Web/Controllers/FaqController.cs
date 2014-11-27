@@ -246,7 +246,7 @@
         /// </returns>
         [HttpGet]
         public ViewResult Index()
-        {
+        {            
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
 
             var categoriesWithSubcategories =
@@ -259,9 +259,19 @@
                 return this.View(model);
             }
 
-            var firstCategoryId = categoriesWithSubcategories.First().Id;
+            var firstCategoryId = 0;
+            if (string.IsNullOrEmpty(SessionFacade.TemporaryValue))
+            {
+                firstCategoryId = categoriesWithSubcategories.First().Id;
+                SessionFacade.TemporaryValue = firstCategoryId.ToString();
+            }
+            else
+                firstCategoryId = int.Parse(SessionFacade.TemporaryValue);
+
             var faqs = this.faqService.FindOverviewsByCategoryId(firstCategoryId);
             model = this.indexModelFactory.Create(categoriesWithSubcategories, firstCategoryId, faqs);
+
+            
 
             return this.View(model);
         }
@@ -394,6 +404,13 @@
                 var newFaqFile = new NewFaqFile(uploadedData, name, DateTime.Now, int.Parse(faqId));
                 this.faqService.AddFile(newFaqFile);
             }
+        }
+
+        public ActionResult SetSelectedCategory(string value)
+        {
+            SessionFacade.TemporaryValue = value;
+
+            return this.Json(new { success = true });
         }
 
         #endregion

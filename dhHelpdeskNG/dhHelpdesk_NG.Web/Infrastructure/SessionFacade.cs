@@ -49,6 +49,8 @@
 
         private const string _CURRENT_CASE_LANGUAGE_ID = "CURRENT_CASE_LANGUAGE_ID";
 
+        private const string _TEMPORARY_VALUE = "TEMPORARY_VALUE";
+
         #endregion
 
         #region Public Properties
@@ -68,6 +70,25 @@
                 else
                 {
                     HttpContext.Current.Session[_ACTIVE_TAB] = value;
+                }
+            }
+        }
+
+        public static string TemporaryValue
+        {
+            get
+            {
+                return (string)HttpContext.Current.Session[_TEMPORARY_VALUE];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_TEMPORARY_VALUE] == null)
+                {
+                    HttpContext.Current.Session.Add(_TEMPORARY_VALUE, value);
+                }
+                else
+                {
+                    HttpContext.Current.Session[_TEMPORARY_VALUE] = value;
                 }
             }
         }

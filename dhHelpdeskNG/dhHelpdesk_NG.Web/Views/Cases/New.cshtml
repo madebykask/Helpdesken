@@ -43,6 +43,9 @@
                 <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "NewCaseAndAddCase();return false;", @class = "btn" })</li>
                 <li class="secspace"></li>
                 <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn" })</li>
+                <li id="btnCaseTemplate">                                       
+                    @Html.Partial("_CaseTemplateTree", Model.CaseTemplateTreeButton)
+                </li>                
             </ul>
         </div>
     </div>    

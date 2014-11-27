@@ -1871,6 +1871,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m.CustomerSettings = this.workContext.Customer.Settings;
             }
 
+            m.CaseTemplateTreeButton = GetCaseTemplateTreeModel(customerId, userId);
             return m;
         }
 

@@ -8,11 +8,11 @@
 
     public static class TreeExtension   
     {
-        public static MvcHtmlString Tree(this HtmlHelper htmlHelper, string id, bool expandAll, TreeContent treeContent)
+        public static MvcHtmlString Tree(this HtmlHelper htmlHelper, string id, bool expandAll, TreeContent treeContent, string selected = "")
         {
             var htmlOutput = new StringBuilder();
             DrawScripts(htmlOutput, id, expandAll);
-            DrawTree(htmlOutput, id, expandAll, treeContent);
+            DrawTree(htmlOutput, id, expandAll, treeContent, selected);
             return new MvcHtmlString(htmlOutput.ToString());
         }
 
@@ -118,13 +118,13 @@
             htmlOutput.AppendLine("</li>");
         }
 
-        private static void DrawTree(StringBuilder htmlOutput, string controlId, bool expandAll, TreeContent treeContent)
+        private static void DrawTree(StringBuilder htmlOutput, string controlId, bool expandAll, TreeContent treeContent, string selected = "" )
         {
             htmlOutput.AppendLine(string.Format(@"<ul id=""{0}"">", controlId));
 
             foreach (var item in treeContent.Items)
             {
-                DrawBrunch(htmlOutput, item, treeContent.SelectedValue, expandAll);
+                DrawBrunch(htmlOutput, item, selected, expandAll); //treeContent.SelectedValue
             }
 
             htmlOutput.AppendLine("</ul>");

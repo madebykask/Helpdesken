@@ -6,7 +6,7 @@
 @model DH.Helpdesk.Web.Models.Faq.Output.IndexModel
 
 @{
-    this.ViewBag.Title = @Translation.Get("FAQ", Enums.TranslationSource.TextTranslation);
+    this.ViewBag.Title = Translation.Get("FAQ", Enums.TranslationSource.TextTranslation);    
 }
 
 @Scripts.Render("~/bundles/jquery-typing")
@@ -57,6 +57,8 @@
         $('#categories_tree').find('a.tree-node, a.tree-selected-node').click(function () {            
             var selectedCategoryId = $(this).siblings('input').val();            
             window.selectedCategoryId = selectedCategoryId;
+
+            ChangeCat(selectedCategoryId);
 
             if ($('#show_all_answers_within_category').is(':checked')) {                
                 $.get('@this.Url.Action("FaqsDetailed")', { categoryId: window.selectedCategoryId, now: Date.now() }, function (faqsWithDescription) {
@@ -113,11 +115,20 @@
             }
         });
 
+        ChangeCat(selectedCategoryId);        
+
         $('#categories_editing_tree').find('a.tree-node, a.tree-selected-node').click(function () {
             var selectedCategoryId = $(this).siblings('input').val();
             window.location.href = '@this.Url.Action("EditCategory")?id=' + selectedCategoryId;
         });
     });
+
+    function ChangeCat(strValue) {
+        $.post('/FAQ/SetSelectedCategory',
+               { value: strValue }, function (data) {
+                   //
+               });
+    }
 
     function SearchFAQs() {
         var txt = $('#search_field').val();
@@ -407,7 +418,7 @@
                                 <tbody>
                                     <tr>
                                         <td>
-                                            @this.Html.Tree("categories_tree", false, this.Model.Categories)
+                                            @this.Html.Tree("categories_tree", false, this.Model.Categories, SessionFacade.TemporaryValue)
                                         </td>
                                     </tr>
                                 </tbody>
