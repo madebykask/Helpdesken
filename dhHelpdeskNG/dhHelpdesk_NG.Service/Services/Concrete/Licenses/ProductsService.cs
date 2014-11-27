@@ -33,12 +33,13 @@
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var productsRepository = uow.GetRepository<Product>();
+                var softwareRep = uow.GetRepository<Software>();
 
                 var overviews = productsRepository.GetAll()
                                 .GetByCustomer(customerId)
                                 .GetRegionsProducts(regions)
                                 .GetDepartmentsProducts(departments)
-                                .MapToOverviews();
+                                .MapToOverviews(softwareRep.GetAll());
 
                 return overviews;
             }
