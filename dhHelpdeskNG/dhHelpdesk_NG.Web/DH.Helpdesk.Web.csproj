@@ -782,6 +782,7 @@
     <Compile Include="Models\Changes\ChangeEdit\ConfigurableFieldModel.cs" />
     <Compile Include="Models\DailyReports\DailyReportInputViewModel.cs" />
     <Compile Include="Models\DailyReports\DailyReportOutputModel.cs" />
+    <Compile Include="Models\Documents\DocumentsFilterModel.cs" />
     <Compile Include="Models\Faq\Output\FAQFileModelModel.cs" />
     <Compile Include="Models\IConfigurableFieldModel.cs" />
     <Compile Include="Models\Inventory\ComputerModuleModeFilter.cs" />

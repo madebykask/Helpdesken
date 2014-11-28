@@ -30,6 +30,8 @@
 
         public static readonly string OrdersOrderFieldSettings = "OrdersOrderFieldSettings";
 
+        public static readonly string DocumentsDocumentsList = "DocumentsDocumentsList";
+
         #endregion
     }
 }

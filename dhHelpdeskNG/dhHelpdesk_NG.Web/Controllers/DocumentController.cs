@@ -13,9 +13,11 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Domain;    
     using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Enums;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
     using DH.Helpdesk.Web.Models;
+    using DH.Helpdesk.Web.Models.Documents;
 
     public class TreeNodeType
     {
@@ -51,12 +53,20 @@ namespace DH.Helpdesk.Web.Controllers
 
         public ActionResult Index(int? listType, int Id = 0)
         {
+            DocumentsFilterModel filters;
             if (listType == null)
             {
-                listType = 0;
+                filters = SessionFacade.FindPageFilters<DocumentsFilterModel>(PageName.DocumentsDocumentsList)
+                          ?? DocumentsFilterModel.CreateDefault();
+            }
+            else
+            {
+                filters = new DocumentsFilterModel(listType.Value, Id);
             }
 
-            var model = this.IndexInputViewModel(listType.Value, Id);
+            SessionFacade.SavePageFilters(PageName.DocumentsDocumentsList, filters);
+
+            var model = this.IndexInputViewModel(filters.DocumentType, filters.CategoryId);
              
             return this.View(model);
         }
