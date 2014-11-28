@@ -180,10 +180,15 @@
             var wgsSelected = bulletinBoard.WGs ?? new List<WorkingGroupEntity>();
             var wgsAvailable = new List<WorkingGroupEntity>();
 
-            foreach (var wg in this._workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id))
+            var workingGroups = this._workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id);
+            var wgsSelectedIds = wgsSelected.Select(g => g.Id).ToArray();
+
+            foreach (var wg in workingGroups)
             {
-                if (!wgsSelected.Contains(wg))
+                if (!wgsSelectedIds.Contains(wg.Id))
+                {
                     wgsAvailable.Add(wg);
+                }
             }
 
             var model = new BulletinBoardInputViewModel
