@@ -292,9 +292,12 @@ namespace DH.Helpdesk.Web.Controllers
             var wgsSelected = calendar.WGs ?? new List<WorkingGroupEntity>();
             var wgsAvailable = new List<WorkingGroupEntity>();
 
-            foreach (var wg in this.workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id))
+            var workingGroups = this.workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id);
+            var wgsSelectedIds = wgsSelected.Select(g => g.Id).ToArray();
+
+            foreach (var wg in workingGroups)
             {
-                if (!wgsSelected.Contains(wg))
+                if (!wgsSelectedIds.Contains(wg.Id))
                 {
                     wgsAvailable.Add(wg);
                 }
