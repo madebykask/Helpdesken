@@ -1,20 +1,21 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Server.OtherFieldsModel
-<table class="tableform">
-    @if (Model.Info.Show
+@if (Model.Info.Show
         || Model.Other.Show
         || Model.URL.Show
         || Model.URL2.Show
         || Model.Owner.Show)
-    {
-        <tr>
-            <th colspan="2" class="header"><h4>@Translation.Get("Övrigt")</h4></th>
-        </tr>
-    }
-    @Html.EditorFor(m => m.Info, "NotReadonlyFields/WideText")
-    @Html.EditorFor(m => m.Other, "NotReadonlyFields/Text")
-    @Html.EditorFor(m => m.URL, "NotReadonlyFields/Text")
-    @Html.EditorFor(m => m.URL2, "NotReadonlyFields/Text")
-    @Html.EditorFor(m => m.Owner, "NotReadonlyFields/Text")
-</table>
-
+{
+    <h4>@Translation.Get("Övrigt")</h4>
+    <div class="row">
+        <div class="span12">
+            <table class="tableform">
+                @Html.EditorFor(m => m.Info, "NotReadonlyFields/WideText")
+                @Html.EditorFor(m => m.Other, "NotReadonlyFields/Text")
+                @Html.EditorFor(m => m.URL, "NotReadonlyFields/Text")
+                @Html.EditorFor(m => m.URL2, "NotReadonlyFields/Text")
+                @Html.EditorFor(m => m.Owner, "NotReadonlyFields/Text")
+            </table>
+        </div>
+    </div>
+}
 

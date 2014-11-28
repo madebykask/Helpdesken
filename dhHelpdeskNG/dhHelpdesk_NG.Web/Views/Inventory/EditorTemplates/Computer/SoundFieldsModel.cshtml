@@ -1,11 +1,12 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.SoundFieldsModel
-<table class="tableform">
-    @if (Model.SoundCard.Show)
-    {
-        <tr>
-            <th colspan="2" class="header"><h4>@Translation.Get("Ljud")</h4></th>
-        </tr>
-    }
-    @Html.EditorFor(m => m.SoundCard, "Fields/Text")
-</table>
-
+@if (Model.SoundCard.Show)
+{
+    <h4>@Translation.Get("Ljud")</h4>
+    <div class="row">
+        <div class="span12">
+            <table class="tableform">
+                @Html.EditorFor(m => m.SoundCard, "Fields/Text")
+            </table>
+        </div>
+    </div>
+}

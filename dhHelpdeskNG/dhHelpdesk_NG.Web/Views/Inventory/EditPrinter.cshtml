@@ -29,47 +29,49 @@
                     @Html.EditorFor(m => m.OtherFieldsModel, "Printer/OtherFieldsModel")
                     @Html.EditorFor(m => m.OrganizationFieldsViewModel, "Printer/OrganizationFieldsViewModel")
                     @Html.EditorFor(m => m.PlaceFieldsViewModel, "Shared/PlaceFieldsViewModel")
-                    <table class="tableform">
-                        @if (Model.CreatedDate.Show || Model.ChangedDate.Show)
-                        {
-                            <tr>
-                                <th colspan="2" class="header"><h4>@Translation.Get("Status")</h4></th>
-                            </tr>
-                        }
-                        @if (Model.CreatedDate.Show)
-                        {
-                            <tr>
-                                <td class="span3">
-                                    <label>@Translation.Get(Model.CreatedDate.Caption)</label>
-                                </td>
-                                <td class="span9">
-                                    @Html.DisplayFor(m => m.CreatedDate.Value, "Date")
-                                </td>
-                            </tr>
-                        }
-                        @if (Model.ChangedDate.Show)
-                        {
-                            <tr>
-                                <td class="span3">
-                                    <label>@Translation.Get(Model.ChangedDate.Caption)</label>
-                                </td>
-                                <td class="span9">
-                                    @Html.DisplayFor(m => m.ChangedDate.Value, "Date")
-                                </td>
-                            </tr>
-                            if (Model.StateFieldsModel.ChangedByUserName != null)
-                            {
-                            <tr>
-                                <td class="span3">
-                                    <label>@Translation.Get("Changed by")</label>
-                                </td>
-                                <td class="span9">
-                                    @Html.DisplayFor(m => m.StateFieldsModel.ChangedByUserName.FirstName) @Html.DisplayFor(m => m.StateFieldsModel.ChangedByUserName.LastName)
-                                </td>
-                            </tr>
-                            }
-                        }
-                    </table>
+                    @if (Model.CreatedDate.Show || Model.ChangedDate.Show)
+                    {
+                        <h4>@Translation.Get("Status")</h4>
+                    }
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                @if (Model.CreatedDate.Show)
+                                {
+                                    <tr>
+                                        <td class="span3">
+                                            <label>@Translation.Get(Model.CreatedDate.Caption)</label>
+                                        </td>
+                                        <td class="span9">
+                                            @Html.DisplayFor(m => m.CreatedDate.Value, "Date")
+                                        </td>
+                                    </tr>
+                                }
+                                @if (Model.ChangedDate.Show)
+                                {
+                                    <tr>
+                                        <td class="span3">
+                                            <label>@Translation.Get(Model.ChangedDate.Caption)</label>
+                                        </td>
+                                        <td class="span9">
+                                            @Html.DisplayFor(m => m.ChangedDate.Value, "Date")
+                                        </td>
+                                    </tr>
+                                    if (Model.StateFieldsModel.ChangedByUserName != null)
+                                    {
+                                    <tr>
+                                        <td class="span3">
+                                            <label>@Translation.Get("Changed by")</label>
+                                        </td>
+                                        <td class="span9">
+                                            @Html.DisplayFor(m => m.StateFieldsModel.ChangedByUserName.FirstName) @Html.DisplayFor(m => m.StateFieldsModel.ChangedByUserName.LastName)
+                                        </td>
+                                    </tr>
+                                    }
+                                }
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

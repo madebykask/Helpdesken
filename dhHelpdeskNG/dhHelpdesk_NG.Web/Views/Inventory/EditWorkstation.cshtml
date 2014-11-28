@@ -65,47 +65,49 @@
                     @Html.EditorFor(m => m.ComputerViewModel.ContactFieldsModel, "Computer/ContactFieldsModel")
                     @Html.EditorFor(m => m.ComputerViewModel.StateFieldsViewModel, "Computer/StateFieldsViewModel")
                     @Html.EditorFor(m => m.ComputerViewModel.DateFieldsModel, "Computer/DateFieldsModel")
-                    <table class="tableform">
-                        @if (Model.ComputerViewModel.CreatedDate.Show || Model.ComputerViewModel.ChangedDate.Show)
-                        {
-                            <tr>
-                                <th colspan="2" class="header"><h4>@Translation.Get("Status")</h4></th>
-                            </tr>
-                        }
-                        @if (Model.ComputerViewModel.CreatedDate.Show)
-                        {
-                            <tr>
-                                <td class="span3">
-                                    <label>@Translation.Get(Model.ComputerViewModel.CreatedDate.Caption)</label>
-                                </td>
-                                <td class="span9">
-                                    @Html.DisplayFor(m => m.ComputerViewModel.CreatedDate.Value, "Date")
-                                </td>
-                            </tr>
-                        }
-                        @if (Model.ComputerViewModel.ChangedDate.Show)
-                        {
-                            <tr>
-                                <td class="span3">
-                                    <label>@Translation.Get(Model.ComputerViewModel.ChangedDate.Caption)</label>
-                                </td>
-                                <td class="span9">
-                                    @Html.DisplayFor(m => m.ComputerViewModel.ChangedDate.Value, "Date")
-                                </td>
-                            </tr>
-                            if (Model.ComputerViewModel.ChangedByUserName != null)
-                            {
-                                <tr>
-                                    <td class="span3">
-                                        <label>@Translation.Get("Changed by")</label>
-                                    </td>
-                                    <td class="span9">
-                                        @Html.DisplayFor(m => m.ComputerViewModel.ChangedByUserName.FirstName) @Html.DisplayFor(m => m.ComputerViewModel.ChangedByUserName.LastName)
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    </table>
+                    if (Model.ComputerViewModel.CreatedDate.Show || Model.ComputerViewModel.ChangedDate.Show)
+                    {
+                    <h4>@Translation.Get("Status")</h4>
+                    }
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                @if (Model.ComputerViewModel.CreatedDate.Show)
+                                {
+                                    <tr>
+                                        <td class="span3">
+                                            <label>@Translation.Get(Model.ComputerViewModel.CreatedDate.Caption)</label>
+                                        </td>
+                                        <td class="span9">
+                                            @Html.DisplayFor(m => m.ComputerViewModel.CreatedDate.Value, "Date")
+                                        </td>
+                                    </tr>
+                                }
+                                @if (Model.ComputerViewModel.ChangedDate.Show)
+                                {
+                                    <tr>
+                                        <td class="span3">
+                                            <label>@Translation.Get(Model.ComputerViewModel.ChangedDate.Caption)</label>
+                                        </td>
+                                        <td class="span9">
+                                            @Html.DisplayFor(m => m.ComputerViewModel.ChangedDate.Value, "Date")
+                                        </td>
+                                    </tr>
+                                    if (Model.ComputerViewModel.ChangedByUserName != null)
+                                    {
+                                    <tr>
+                                        <td class="span3">
+                                            <label>@Translation.Get("Changed by")</label>
+                                        </td>
+                                        <td class="span9">
+                                            @Html.DisplayFor(m => m.ComputerViewModel.ChangedByUserName.FirstName) @Html.DisplayFor(m => m.ComputerViewModel.ChangedByUserName.LastName)
+                                        </td>
+                                    </tr>
+                                    }
+                                }
+                            </table>
+                        </div>
+                    </div>
                 }
             </div>
             <div class="tab-pane tab-pane-border" id="fragment-2">
@@ -128,10 +130,10 @@
 
                             foreach (var model in models)
                             {
-                                <tr>
-                                    <th>@Html.DisplayFor(x => model);
-                                    </th>
-                                </tr>
+                            <tr>
+                                <th>@Html.DisplayFor(x => model);
+                                </th>
+                            </tr>
                             }
                         }
                     </tbody>

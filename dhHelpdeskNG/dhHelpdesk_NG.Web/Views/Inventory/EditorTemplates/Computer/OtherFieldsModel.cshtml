@@ -1,10 +1,12 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.OtherFieldsModel
-<table class="tableform">
-    @if (Model.Info.Show)
-    {
-        <tr>
-            <th colspan="2" class="header"><h4>@Translation.Get("Övrigt")</h4></th>
-        </tr>
-    }
-    @Html.EditorFor(m => m.Info, "Fields/WideText")
-</table>
+@if (Model.Info.Show)
+{
+    <h4>@Translation.Get("Övrigt")</h4>
+    <div class="row">
+        <div class="span12">
+            <table class="tableform">
+                @Html.EditorFor(m => m.Info, "Fields/WideText")
+            </table>
+        </div>
+    </div>
+}

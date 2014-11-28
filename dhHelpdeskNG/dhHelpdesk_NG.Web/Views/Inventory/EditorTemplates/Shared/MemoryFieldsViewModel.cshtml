@@ -1,11 +1,13 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Shared.MemoryFieldsViewModel
-<table class="tableform">
-    @if (Model.MemoryFieldsModel.RAMId.Show)
-    {
-        <tr>
-            <th colspan="2" class="header">@Translation.Get("Minne")</th>
-        </tr>
-    }
-    @Html.EditorFor(m => m.MemoryFieldsModel.RAMId, "NotReadonlyFields/List", new { Source = Model.RAMs })
-</table>
+@if (Model.MemoryFieldsModel.RAMId.Show)
+{
+    <h4>@Translation.Get("Minne")</h4>
+    <div class="row">
+        <div class="span12">
+            <table class="tableform">
+                @Html.EditorFor(m => m.MemoryFieldsModel.RAMId, "NotReadonlyFields/List", new { Source = Model.RAMs })
+            </table>
+        </div>
+    </div>
+}
 

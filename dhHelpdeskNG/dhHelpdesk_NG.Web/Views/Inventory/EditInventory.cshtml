@@ -23,41 +23,49 @@
             <div class="tab-content">
                 <div class="tab-pane tab-pane-border active" id="fragment-1">
                     @Html.EditorFor(m => m, "Inventory/Inventory")
-                    <table class="tableform">
-                        @if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.ComputerName.Show)
-                        {
-                            <tr>
-                                <th colspan="2" class="header"><h4>@Translation.Get("Tillbehör till")</h4></th>
-                            </tr>
-                            <tr>
-                                <td class="span3">
-                                    <label>@Translation.Get(Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.ComputerName.Caption)</label>
-                                </td>
-                                <td class="span9">
-                                    @Html.DisplayFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.ComputerName.Value)
-                                </td>
-                            </tr>
-                        }
-                        <tr>
-                            <th colspan="2" class="header"><h4>@Translation.Get("Status")</h4></th>
-                        </tr>
-                        <tr>
-                            <td class="span3">
-                                <label>@Translation.Get("Skapad datum")</label>
-                            </td>
-                            <td class="span9">
-                                @Html.DisplayFor(m => m.InventoryViewModel.ChangeDate, "Date")
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="span3">
-                                <label>@Translation.Get("Senast ändrad datum")</label>
-                            </td>
-                            <td class="span9">
-                                @Html.DisplayFor(m => m.InventoryViewModel.CreatedDate, "Date")
-                            </td>
-                        </tr>
-                    </table>
+                    @if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.ComputerName.Show)
+                    {
+                        <h4>@Translation.Get("Tillbehör till")</h4>
+
+                        <div class="row">
+                            <div class="span12">
+                                <table class="tableform">
+                                    <tr>
+                                        <td class="span3">
+                                            <label>@Translation.Get(Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.ComputerName.Caption)</label>
+                                        </td>
+                                        <td class="span9">
+                                            @Html.DisplayFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.ComputerName.Value)
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    }
+                    <h4>@Translation.Get("Status")</h4>
+
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">                                        
+                                <tr>
+                                    <td class="span3">
+                                        <label>@Translation.Get("Skapad datum")</label>
+                                    </td>
+                                    <td class="span9">
+                                        @Html.DisplayFor(m => m.InventoryViewModel.ChangeDate, "Date")
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="span3">
+                                        <label>@Translation.Get("Senast ändrad datum")</label>
+                                    </td>
+                                    <td class="span9">
+                                        @Html.DisplayFor(m => m.InventoryViewModel.CreatedDate, "Date")
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

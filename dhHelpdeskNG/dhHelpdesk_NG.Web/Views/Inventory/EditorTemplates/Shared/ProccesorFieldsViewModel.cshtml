@@ -1,11 +1,12 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Shared.ProccesorFieldsViewModel
-<table class="tableform">
-    @if (Model.ProccesorFieldsModel.ProccesorId.Show)
-    {
-        <tr>
-            <th colspan="2" class="header">@Translation.Get("Processor")</th>
-        </tr>
-    }
-    @Html.EditorFor(m => m.ProccesorFieldsModel.ProccesorId, "NotReadonlyFields/List", new { Source = Model.Proccessors })
-</table>
-
+@if (Model.ProccesorFieldsModel.ProccesorId.Show)
+{
+    <h4>@Translation.Get("Processor")</h4>
+    <div class="row">
+        <div class="span12">
+            <table class="tableform">
+                @Html.EditorFor(m => m.ProccesorFieldsModel.ProccesorId, "NotReadonlyFields/List", new { Source = Model.Proccessors })
+            </table>
+        </div>
+    </div>
+}

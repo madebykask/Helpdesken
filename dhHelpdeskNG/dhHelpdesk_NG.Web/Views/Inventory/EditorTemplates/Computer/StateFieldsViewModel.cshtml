@@ -1,19 +1,16 @@
-﻿@using System.Globalization
-@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.StateFieldsViewModel
-<table class="tableform">
-    @if (Model.StateFieldsModel.StateId.Show
-        || Model.StateFieldsModel.IsStolen.Show
-        || Model.StateFieldsModel.Replaced.Show
-        || Model.StateFieldsModel.IsSendBack.Show
-        || Model.StateFieldsModel.ScrapDate.Show)
-    {
-        <tr>
-            <th colspan="2" class="header"><h4>@Translation.Get("Status")</h4></th>
-        </tr>
-    }
-   @Html.EditorFor(m => m.StateFieldsModel.StateId, "Fields/List", new { Source = Model.States })
-    @Html.EditorFor(m => m.StateFieldsModel.IsStolen, "Fields/Flag")
-    @Html.EditorFor(m => m.StateFieldsModel.Replaced, "Fields/Text")
-    @Html.EditorFor(m => m.StateFieldsModel.IsSendBack, "Fields/Flag")
-    @Html.EditorFor(m => m.StateFieldsModel.ScrapDate, "Fields/Date", new { id = "computer_edit_scrapdate_datepicker" })
-</table>
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.StateFieldsViewModel
+@if (Model.StateFieldsModel.StateId.Show || Model.StateFieldsModel.IsStolen.Show || Model.StateFieldsModel.Replaced.Show || Model.StateFieldsModel.IsSendBack.Show || Model.StateFieldsModel.ScrapDate.Show)
+{
+    <h4>@Translation.Get("Status")</h4>
+    <div class="row">
+        <div class="span12">
+            <table class="tableform">
+                @Html.EditorFor(m => m.StateFieldsModel.StateId, "Fields/List", new { Source = Model.States })
+                @Html.EditorFor(m => m.StateFieldsModel.IsStolen, "Fields/Flag")
+                @Html.EditorFor(m => m.StateFieldsModel.Replaced, "Fields/Text")
+                @Html.EditorFor(m => m.StateFieldsModel.IsSendBack, "Fields/Flag")
+                @Html.EditorFor(m => m.StateFieldsModel.ScrapDate, "Fields/Date", new { id = "computer_edit_scrapdate_datepicker" })
+            </table>
+        </div>
+    </div>
+}

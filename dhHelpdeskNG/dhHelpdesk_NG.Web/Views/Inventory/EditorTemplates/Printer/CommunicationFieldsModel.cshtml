@@ -1,14 +1,16 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Printer.CommunicationFieldsModel
-<table class="tableform">
-    @if (Model.NetworkAdapterName.Show
+@if (Model.NetworkAdapterName.Show
         || Model.IPAddress.Show
         || Model.MacAddress.Show)
-    {
-        <tr>
-            <th colspan="2" class="header"><h4>@Translation.Get("Kommunikation")</h4></th>
-        </tr>
-    }
-    @Html.EditorFor(m => m.NetworkAdapterName, "NotReadonlyFields/Text")
-    @Html.EditorFor(m => m.IPAddress, "NotReadonlyFields/Text")
-    @Html.EditorFor(m => m.MacAddress, "NotReadonlyFields/Text")
-</table>
+{
+    <h4>@Translation.Get("Kommunikation")</h4>
+    <div class="row">
+        <div class="span12">
+            <table class="tableform">
+                @Html.EditorFor(m => m.NetworkAdapterName, "NotReadonlyFields/Text")
+                @Html.EditorFor(m => m.IPAddress, "NotReadonlyFields/Text")
+                @Html.EditorFor(m => m.MacAddress, "NotReadonlyFields/Text")
+            </table>
+        </div>
+    </div>
+}

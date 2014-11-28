@@ -1,10 +1,12 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.GraphicsFieldsModel
-<table class="tableform">
-    @if (Model.VideoCard.Show)
-    {
-        <tr>
-            <th colspan="2" class="header"><h4>@Translation.Get("Grafik")</h4></th>
-        </tr>
-    }
-    @Html.EditorFor(m => m.VideoCard, "Fields/Text")
-</table>
+@if (Model.VideoCard.Show)
+{
+    <h4>@Translation.Get("Grafik")</h4>
+    <div class="row">
+        <div class="span12">
+            <table class="tableform">
+                @Html.EditorFor(m => m.VideoCard, "Fields/Text")
+            </table>
+        </div>
+    </div>
+}

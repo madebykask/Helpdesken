@@ -1,15 +1,16 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.DateFieldsModel
-<table class="tableform">
-    @if (Model.ScanDate.Show
+@if (Model.ScanDate.Show
         || Model.SynchronizeDate.Show
         || Model.PathDirectory.Show)
-    {
-        <tr>
-            <th colspan="2" class="header"><h4>@Translation.Get("Status")</h4></th>
-        </tr>
-    }
-    @Html.EditorFor(m => m.ScanDate, "Fields/Date", new { id = "computer_edit_scandate_datepicker" })
-    @Html.EditorFor(m => m.SynchronizeDate, "Fields/Date", new { id = "computer_edit_syncdate_datepicker" })
-    @Html.EditorFor(m => m.PathDirectory, "Fields/Text")
-</table>
-
+{
+    <h4>@Translation.Get("Status")</h4>
+    <div class="row">
+        <div class="span12">
+            <table class="tableform">
+                @Html.EditorFor(m => m.ScanDate, "Fields/Date", new { id = "computer_edit_scandate_datepicker" })
+                @Html.EditorFor(m => m.SynchronizeDate, "Fields/Date", new { id = "computer_edit_syncdate_datepicker" })
+                @Html.EditorFor(m => m.PathDirectory, "Fields/Text")
+            </table>
+        </div>
+    </div>
+}

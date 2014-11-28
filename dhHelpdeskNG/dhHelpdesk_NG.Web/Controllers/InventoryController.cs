@@ -467,12 +467,12 @@
         [BadRequestOnNotValid]
         public RedirectToRouteResult EditInventory(
             InventoryViewModel inventoryViewModel,
-            List<DynamicFieldModel> dynamicFieldModels)
+            List<DynamicFieldModel> allModels)
         {
             var businessModel = this.inventoryModelBuilder.BuildForUpdate(inventoryViewModel, OperationContext);
             var dynamicBusinessModels = this.inventoryValueBuilder.BuildForWrite(
                 inventoryViewModel.Id,
-                dynamicFieldModels);
+                allModels);
             this.inventoryService.UpdateInventory(
                 businessModel,
                 dynamicBusinessModels,
@@ -620,11 +620,11 @@
         [BadRequestOnNotValid]
         public RedirectToRouteResult NewInventory(
             InventoryViewModel inventoryViewModel,
-            List<DynamicFieldModel> dynamicFieldModels)
+            List<DynamicFieldModel> allModels)
         {
             var businessModel = this.inventoryModelBuilder.BuildForAdd(inventoryViewModel, OperationContext);
             this.inventoryService.AddInventory(businessModel);
-            var dynamicBusinessModels = this.inventoryValueBuilder.BuildForWrite(businessModel.Id, dynamicFieldModels);
+            var dynamicBusinessModels = this.inventoryValueBuilder.BuildForWrite(businessModel.Id, allModels);
             this.inventoryService.AddDynamicFieldsValuesInventory(dynamicBusinessModels);
 
             return this.RedirectToAction("Index");
