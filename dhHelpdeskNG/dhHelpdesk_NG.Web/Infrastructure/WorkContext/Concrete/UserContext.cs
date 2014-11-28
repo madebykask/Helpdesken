@@ -127,7 +127,6 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
                 return this.modules;
             }
         }
-
         
         private UserOverview User
         {
@@ -151,6 +150,11 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
             this.userName = null;
             this.userWorkingGroups = null;
             HttpContext.Current.Session[UserModules] = this.modules = null;
+        }
+
+        public bool IsUserEmpty()
+        {
+            return this.User == null;
         }
     }
 }

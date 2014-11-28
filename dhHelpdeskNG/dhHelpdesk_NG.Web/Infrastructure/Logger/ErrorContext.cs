@@ -46,13 +46,13 @@
             res.AppendLine(string.Format("Action: {0}", this.Action));
             if (this.WorkContext != null)
             {
-                if (this.WorkContext.User != null)
+                if (this.WorkContext.User != null && !this.WorkContext.User.IsUserEmpty())
                 {
                     res.AppendLine(string.Format("UserId: {0}", this.WorkContext.User.UserId));
                     res.AppendLine(string.Format("User: {0}", this.WorkContext.User.UserName));                    
                 }
 
-                if (this.WorkContext.Customer != null)
+                if (this.WorkContext.Customer != null && !this.WorkContext.Customer.IsCutomerEmpty())
                 {
                     res.AppendLine(string.Format("CustomerId: {0}", this.WorkContext.Customer.CustomerId));
                     res.AppendLine(string.Format("Customer: {0}", this.WorkContext.Customer.CustomerName));                                    

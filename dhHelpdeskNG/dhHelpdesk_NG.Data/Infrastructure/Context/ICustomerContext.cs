@@ -44,5 +44,7 @@ namespace DH.Helpdesk.Dal.Infrastructure.Context
         void Refresh();
 
         void SetCustomer(int customerId);
+
+        bool IsCutomerEmpty();
     }
 }

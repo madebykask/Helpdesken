@@ -151,5 +151,10 @@ namespace DH.Helpdesk.Mobile.Infrastructure.WorkContext.Concrete
             this.userWorkingGroups = null;
             HttpContext.Current.Session[UserModules] = this.modules = null;
         }
+
+        public bool IsUserEmpty()
+        {
+            return this.User == null;
+        }
     }
 }

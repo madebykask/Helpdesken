@@ -16,13 +16,9 @@
         {
             query =
                 query.Where(c => c.Customer_Id == customerId)
-                    .Where(
-                        c =>
-                        software.Where(
-                            s =>
-                            applications.Where(a => a.Products.Select(p => p.Id).Contains(productId))
-                                .Select(a => a.Name)
-                                .Contains(s.Name)).Select(s => s.Computer_Id).Contains(c.Id)); 
+                    .Where(c =>
+                        software.Where(s => applications.Where(a => a.Products.FirstOrDefault().Id == productId).Select(a => a.Name).Contains(s.Name))
+                            .Select(s => s.Computer_Id).Contains(c.Id)); 
 
             return query;
         }

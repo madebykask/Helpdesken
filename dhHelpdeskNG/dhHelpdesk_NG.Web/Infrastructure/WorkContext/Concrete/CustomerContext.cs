@@ -191,6 +191,11 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
             this.Refresh();
         }
 
+        public bool IsCutomerEmpty()
+        {
+            return this.Customer == null;
+        }
+
         private Customer GetCurrentCustomer()
         {
             return SessionFacade.CurrentCustomer;

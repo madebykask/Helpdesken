@@ -49,5 +49,10 @@ namespace DH.Helpdesk.SelfService.Infrastructure.WorkContext.Concrete
         {
             throw new System.NotImplementedException();
         }
+
+        public bool IsUserEmpty()
+        {
+            return SessionFacade.CurrentUser == null;
+        }
     }
 }

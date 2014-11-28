@@ -42,5 +42,7 @@ namespace DH.Helpdesk.Dal.Infrastructure.Context
         /// The refresh.
         /// </summary>
         void Refresh();
+
+        bool IsUserEmpty();
     }
 }

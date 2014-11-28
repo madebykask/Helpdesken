@@ -5,6 +5,7 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Computers;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Licenses;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Licenses;
     using DH.Helpdesk.Services.Services.Licenses;
 
@@ -26,7 +27,11 @@
                 var applicationsRep = uow.GetRepository<Application>();
 
                 return computersRep.GetAll()
-                        .GetByProduct(softwareRep.GetAll(), applicationsRep.GetAll(), customerId, productId)
+                        .GetByProduct(
+                                softwareRep.GetAll(), 
+                                applicationsRep.GetAll().GetByCustomer(customerId), 
+                                customerId, 
+                                productId)
                         .MapToOverviews();
             }
         }
