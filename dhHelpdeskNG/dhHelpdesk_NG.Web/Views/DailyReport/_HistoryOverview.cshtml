@@ -1,9 +1,51 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions
-@model DH.Helpdesk.Web.Models.DailyReports.DailyReportOutputModel
-
+@model DH.Helpdesk.Web.Models.DailyReports.DailyReportHistoryModel
 @{
     ViewBag.Title = "_HistoryOverview";
+    
 }
 
-<h2>_HistoryOverview</h2>
+@using (Html.BeginForm("Search", "DailyReport", FormMethod.Post, new { id = "tab_history" }))
+{
+   <form class="form-inline" role="form">
+    <div class="tab-content overflow-visible">
+        <div class="container">
+            <div class="form-inline">
+
+                        @Html.Label(Translation.Get("Datum", Enums.TranslationSource.TextTranslation) + ":")
+
+                        @Html.EditorFor(model => model.ReportsFrom, "DatePicker", new { id = "FromDate" })
+
+                        @Html.Label(" - ")
+
+                        @Html.EditorFor(model => model.ReportsTo, "DatePicker", new { id = "ToDate" })
+                
+                        <input type="submit"  value="@Translation.Get("Sök")" class="btn btn-default" />    
+            </div>
+           
+        </div>
+        <div id="tbldailyReportHistoryContainer">
+            @Html.Partial("_HistoryOverviewData", Model.Reports)    
+            @Html.HiddenFor(model => Model.Reports)
+        </div>
+    </div>
+ </form>
+}
+
+<script type="text/javascript">
+
+    $('#tab_history').submit(function (e) {
+        e.preventDefault();
+        _this = $(this);
+        var data = _this.serialize();
+        var url = _this.attr('action');
+        var container = $('#tbldailyReportHistoryContainer');
+
+        $.post(url, data, function (result) {
+            container.html(result);
+        });
+
+    });
+
+</script>

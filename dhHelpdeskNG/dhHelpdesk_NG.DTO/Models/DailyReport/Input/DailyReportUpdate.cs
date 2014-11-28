@@ -2,8 +2,6 @@
 {
     using System;
 
-    using DH.Helpdesk.Domain;
-
     public sealed class DailyReportUpdate
     {
         public DailyReportUpdate(
@@ -20,8 +18,8 @@
             this.CustomerId = customerId;
             this.Id = id;
             this.Sent = Sent;
-            this.DailyReportText = dailyReportText;
             this.DailyReportSubjectId = dailyReportSubjectId;
+            this.DailyReportText = dailyReportText;            
             this.CreatedDate = createdDate;
             this.ChangedDate = changedDate;
             this.UserId = userId;

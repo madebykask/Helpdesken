@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using DH.Helpdesk.Web.Infrastructure.Extensions;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -11,13 +12,13 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.BusinessData.Models.DailyReport.Input;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Models.DailyReports;
-
+   
     public class DailyReportController : BaseController
     {
         private readonly IUserService _userService;
         private readonly IDailyReportService _dailyReportService;
-    
-        public DailyReportController(      
+
+        public DailyReportController(
             IUserService userService,
             IDailyReportService dailyReportService,
             IMasterDataService masterDataService)
@@ -26,31 +27,43 @@ namespace DH.Helpdesk.Web.Controllers
             this._userService = userService;
             this._dailyReportService = dailyReportService;
         }
-        //
-        // GET: /DailyReport/
 
-        /// <summary>
-        /// The index view model.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="DailyReportOutputModel"/>.
-        /// </returns>
-        private DailyReportOutputModel IndexViewModel()
-        {
-            var model = new DailyReportOutputModel();
-           
-            return model;
-        }
 
         public ActionResult Index()
         {
-            var model = this.IndexViewModel();
-
-            model.Subjects = this._dailyReportService.GetDailyReportSubjects(SessionFacade.CurrentCustomer.Id).ToList();
-            model.Reports = this._dailyReportService.GetDailyReports(SessionFacade.CurrentCustomer.Id).Where(d => d.CreatedDate.ToShortDateString() == DateTime.Now.ToShortDateString()).ToList();   
-
+            var model = CreateDailyReportModel();
+                    
             return this.View(model);
         }
+
+
+        [HttpPost]
+        public ActionResult Save(List<DailyReportInputModel> DailyReports) 
+        {
+            for (int i = 0; i < DailyReports.Count(); i++)
+            {
+              
+                var updatedDailyReport = new DailyReportUpdate
+                (
+                    SessionFacade.CurrentCustomer.Id,
+                    DailyReports[i].Id,
+                    DailyReports[i].Sent,
+                    DailyReports[i].DailyReportSubjectId,
+                    (DailyReports[i].DailyReportText == null ? " " : DailyReports[i].DailyReportText),
+                    SessionFacade.CurrentUser.Id,
+                    DailyReports[i].CreatedDate,
+                    DateTime.Now
+               );
+
+                if (updatedDailyReport.DailyReportSubjectId != 0)
+                                        
+                    this._dailyReportService.SaveDailyReport(updatedDailyReport);                
+            }
+
+            return this.RedirectToAction("Index");          
+        }
+
+   
 
         [HttpPost]
         public RedirectToRouteResult Delete(int id)
@@ -60,58 +73,79 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
 
-
-    //    [HttpPost]
-    //    public ActionResult Update(DailyReportOverview ) // DailyReportOutputModel
-    //    {
-
-    //        var model = this.CreateInputViewModel(new DailyReportOverview 
-    //        (
-    //            SessionFacade.CurrentUser.Id,
-    //            0,
-    //            null,
-    //            DateTime.Now,
-    //            null,
-    //            null
-    //        ));
-
-    //        return this.View(model);
-
-        [HttpGet]
-        public ActionResult Update(IEnumerable<DailyReportOverview> dailyReport) 
+      
+        [HttpPost]
+        public PartialViewResult Search(DailyReportHistoryModel historyDailyReports)
         {
-            //foreach (var m in dailyReport)
-            //{
-            //    if (m.DailyReportSubject.Id != 0)
-            //    {
-            //        var newDailyReport = new DailyReportUpdate(
-            //        SessionFacade.CurrentCustomer.Id,
-            //        m.Id,
-            //        m.Sent,
-            //        m.DailyReportSubject.Id,
-            //        m.DailyReportText,
-            //        SessionFacade.CurrentUser.Id,
-            //        m.CreatedDate,
-            //        DateTime.Now
-            //        );
-            //    }
-            //}
-            
+            var searchedReports = (dynamic) null;;
+            var toDate = (historyDailyReports.ReportsTo == null ? DateTime.Now : historyDailyReports.ReportsTo);
+
+            toDate = toDate.Value.AddDays(1);
+            if (historyDailyReports.ReportsFrom == historyDailyReports.ReportsTo)
+                searchedReports = this._dailyReportService.GetDailyReports(SessionFacade.CurrentCustomer.Id)
+                                  .Where(d => d.CreatedDate.ToShortDateString() == historyDailyReports.ReportsFrom.ToShortDateString()).OrderBy(d  => d.CreatedDate)
+                                  .ToList();
+            else 
+                searchedReports =  this._dailyReportService.GetDailyReports(SessionFacade.CurrentCustomer.Id)
+                                 .Where(d => d.CreatedDate >= historyDailyReports.ReportsFrom &&  d.CreatedDate <= (toDate))
+                                 .OrderBy(d => d.CreatedDate).ToList();
 
 
-            return this.RedirectToAction("Index"); 
-       }
+            return this.PartialView("_HistoryOverviewData", searchedReports);                              
+        }
 
-        //private DailyReportInputViewModel CreateInputViewModel(DailyReportOverview dailyReport)
-        //{
-        //    var model = new DailyReportInputViewModel
-        //    {
-        //        DailyReport = dailyReport,
-        //        NewDailyreport = null
-        //    };
 
-        //    return model;
-        //}
+        private DailyReportModel IndexViewModel()
+        {
+            var model = new DailyReportModel();
+
+            return model;
+        }
+
+        private DailyReportModel CreateDailyReportModel()
+        {
+            var model = new DailyReportModel();
+
+            var allSubjects = this._dailyReportService.GetAllDailyReportSubjects(SessionFacade.CurrentCustomer.Id).ToList();
+
+            var todayReports = this._dailyReportService.GetDailyReports(SessionFacade.CurrentCustomer.Id)
+                                      .Where(d => d.CreatedDate.ToShortDateString() == DateTime.Now.ToShortDateString()).OrderBy(d=> d.CreatedDate).ToList();
+
+            var inputModel = todayReports.Select(r => new DailyReportInputModel
+                      (   r.Id,
+                          r.Sent,
+                          r.UserName,
+                          r.CreatedDate,
+                          r.DailyReportSubject.Id,
+                          r.DailyReportText,
+                          r.FirstName,
+                          r.LastName,
+                          allSubjects
+                      )).ToList();
+
+            model.InputModels = inputModel;
+
+            var emptyChoice = new DailyReportSubjectBM(0,0,1,0,"",DateTime.Now,DateTime.Now);
+            allSubjects.Insert(0, emptyChoice);
+  
+            var newInput = new DailyReportInputModel ( 0, 0, SessionFacade.CurrentUser.UserId,
+                                                        DateTime.Now, 0, " ", "", "", allSubjects);
+            model.InputModels.Insert(0, newInput);
+
+
+            //var activeTab = SessionFacade.FindActiveTab("DailyReport");
+            //activeTab = (activeTab == null) ? "DailyTab" : activeTab;
+
+
+            model.HistoryModel = new DailyReportHistoryModel()
+            {
+                Reports = this._dailyReportService.GetDailyReports(SessionFacade.CurrentCustomer.Id).Where(d => d.CreatedDate.ToShortDateString() == DateTime.Now.ToShortDateString()).ToList(),
+                ReportsFrom = DateTime.Now,
+                ReportsTo = null
+            };
+           
+            return model;
+        }
 
     }
 }

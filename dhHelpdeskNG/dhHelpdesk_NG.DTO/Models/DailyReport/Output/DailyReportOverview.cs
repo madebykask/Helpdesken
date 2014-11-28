@@ -1,9 +1,11 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.DailyReport.Output
+﻿using System;
+
+
+using System.Collections.Generic;
+
+namespace DH.Helpdesk.BusinessData.Models.DailyReport.Output
 {
-    using System;
-
     using DH.Helpdesk.Domain;
-
     public sealed class DailyReportOverview
     {
         public DailyReportOverview(
@@ -12,7 +14,10 @@
                 string userName,
                 DateTime createdDate, 
                 DailyReportSubject dailyReportSubject, 
-                string dailyReportText)
+                string dailyReportText,
+                string firstName,
+                string lastName
+               )
         {
             this.Id = id;
             this.Sent = Sent;
@@ -20,6 +25,8 @@
             this.DailyReportText = dailyReportText;
             this.DailyReportSubject = dailyReportSubject;
             this.CreatedDate = createdDate;
+            this.FirstName = firstName;
+            this.LastName = lastName;
         }
 
         public int Id { get; private set; }
@@ -33,5 +40,10 @@
         public DailyReportSubject DailyReportSubject { get; private set; }
 
         public string DailyReportText { get; private set; }
+
+        public string FirstName { get; private set; }
+
+        public string LastName { get; private set; }
+
     }
 }

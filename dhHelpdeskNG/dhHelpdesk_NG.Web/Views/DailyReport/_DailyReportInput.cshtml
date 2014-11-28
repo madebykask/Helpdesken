@@ -1,0 +1,65 @@
+﻿
+@model IList<DH.Helpdesk.Web.Models.DailyReports.DailyReportInputModel>
+@{
+    
+    ViewBag.Title = "_DailyReportInput";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="span100">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>
+                            @Translation.Get("Skickad", Enums.TranslationSource.TextTranslation)
+                        </th>
+                        <th>
+                            @Translation.Get("Skapad av", Enums.TranslationSource.TextTranslation)
+                        </th>
+                        <th>
+                            @Translation.Get("Ämne", Enums.TranslationSource.TextTranslation)
+                        </th>
+                        <th colspan="2">
+                            @Translation.Get("Text", Enums.TranslationSource.TextTranslation)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>                    
+                    @for (int i = 0; i < Model.Count(); i++ )
+                    {
+                        <tr>
+                            <td style="width: 5%">
+                                @Html.HiddenFor(t => Model[i].Sent)
+                                @if(Model[i].Id != 0)
+                                {
+                                   @Model[i].Sent.IntToYES_NO()
+                                }
+                            </td>
+                            <td style="width: 10%">
+                                @Html.DisplayFor(t => Model[i].UserName)
+                            </td>
+                            <td style="width: 13%">
+                                @Html.DropDownListFor(t => Model[i].DailyReportSubjectId, Model[i].Subjects)
+                            </td>
+                            <td style="width: 58%">
+                                @Html.TextAreaFor(t => Model[i].DailyReportText)                                                               
+                            </td>
+                            <td style="width: 7%; border-left-style: none; vertical-align: middle">
+                                @if(Model[i].Id != 0)
+                                {
+                                    @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "delete",
+                                    new { id = Model[i].Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) + "?" })
+                                }
+                            </td>
+                            @Html.HiddenFor(t => Model[i].Id)
+                            @Html.HiddenFor(t => Model[i].FirstName)                           
+                            @Html.HiddenFor(t => Model[i].LastName)
+                            @Html.HiddenFor(t => Model[i].CreatedDate)                          
+                        </tr>                        
+                    }                   
+                </tbody>
+            </table>
+        </div>       
+    </div>
+</div>

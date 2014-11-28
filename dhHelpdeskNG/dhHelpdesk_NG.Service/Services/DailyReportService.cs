@@ -1,13 +1,12 @@
-﻿using DH.Helpdesk.BusinessData.Models.DailyReport.Output;
+﻿
 using System.Collections.Generic;
 using System.Linq;
 
 namespace DH.Helpdesk.Services.Services
 {
     using System;
-    //using System.Collections.Generic;
-    //using System.Linq;
-
+    using DH.Helpdesk.BusinessData.Models.DailyReport.Output;
+    using DH.Helpdesk.BusinessData.Models.DailyReport.Input;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
@@ -20,19 +19,23 @@ namespace DH.Helpdesk.Services.Services
     {
         IList<DailyReportOverview> GetDailyReports(int customerId);
 
+        DailyReportOverview GetDailyReport(int customerId , int id);
+
         IList<DailyReportSubject> GetDailyReportSubjects(int customerId);
+
+        IList<DailyReportSubjectBM> GetAllDailyReportSubjects(int customerId);
 
         DailyReportSubject GetDailyReportSubject(int id);
 
         DeleteMessage DeleteDailyReportSubject(int id);
 
-        DeleteMessage DeleteDailyReport(int id);
-
-        //void SaveDailyReport(DailyReport dailyReport, out IDictionary<string, string> errors);
+        DeleteMessage DeleteDailyReport(int id);   
 
         void SaveDailyReportSubject(DailyReportSubject dailyReportSubject, out IDictionary<string, string> errors);
         void Commit();
         IEnumerable<DailyReportOverview> GetDailyReportOverviews(int[] customers, int? count);
+
+        void SaveDailyReport(DailyReportUpdate updatedDailyReport);
     }
 
     public class DailyReportService : IDailyReportService
@@ -58,6 +61,21 @@ namespace DH.Helpdesk.Services.Services
         public IList<DailyReportSubject> GetDailyReportSubjects(int customerId)
         {
             return this._dailyReportSubjectRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Subject).ToList();
+        }
+
+        public IList<DailyReportSubjectBM> GetAllDailyReportSubjects(int customerId)
+        {
+            var dailyReportSubjectEntity  = 
+                  this._dailyReportSubjectRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Subject).ToList();
+            
+            if (dailyReportSubjectEntity != null)
+            {
+                var dailyReportSubject = dailyReportSubjectEntity.Select(d=> new 
+                    DailyReportSubjectBM(d.Customer_Id, d.Id, d.IsActive, d.ShowOnStartPage, d.Subject, d.ChangedDate, d.CreatedDate)).ToList();
+                return dailyReportSubject;
+            }
+            else
+              return null;
         }
 
         public DailyReportSubject GetDailyReportSubject(int id)
@@ -109,81 +127,31 @@ namespace DH.Helpdesk.Services.Services
             return DeleteMessage.Error;
         }
 
-        //public void SaveDailyReport(DailyReportOverview dailyReport, out IDictionary<string, string> errors)
-        //{
+        public void SaveDailyReport(DailyReportUpdate dailyReport)
+        {
 
-        //    using (var uow = this.unitOfWorkFactory.Create())
-        //    {
-        //        var repository = uow.GetRepository<DailyReport>();
+            if (dailyReport == null)
+                throw new ArgumentNullException("dailyreport");
 
-        //        return repository.GetAll()
-        //                .GetForStartPage(customers, count)
-        //                .MapToOverviews();
-        //    }
+            var dailyReportEntity = new DailyReport()
+            {
+                Customer_Id = dailyReport.CustomerId,
+                Id = dailyReport.Id,
+                MailSent = dailyReport.Sent,
+                User_Id = dailyReport.UserId,
+                DailyReportText = dailyReport.DailyReportText,
+                DailyReportSubject_Id = dailyReport.DailyReportSubjectId,
+                CreatedDate = dailyReport.ChangedDate,
+                ChangedDate = dailyReport.ChangedDate
+            };
 
-
-        //    if (dailyReport == null)
-        //    {
-        //        throw new ArgumentNullException("dailyreport");
-        //    }
-
-        //    using (var uow = this.unitOfWorkFactory.Create())
-        //    {
-
-        //        var repository = uow.GetRepository<DailyReport>();
-
-        //        DailyReport entity;
-                
-        //        var now = DateTime.Now;
-        //        if (dailyReport.Id == 0)
-        //        {
-        //            entity = new DailyReport();
-        //            DailyReportMapper.MapToOverviews(entity);
-        //            entity.CreatedDate = now;
-        //            entity.ChangedDate = now;
-        //            entity.ChangedByUser_Id = userId;
-        //            calendarRep.Add(entity);
-        //        }
-        //        else
-        //        {
-        //            entity = calendarRep.GetById(calendar.Id);
-        //            CalendarMapper.MapToEntity(calendar, entity);
-        //            entity.ChangedDate = now;
-        //            entity.ChangedByUser_Id = userId;
-        //            calendarRep.Update(entity);
-        //        }
-
-        //        entity.WGs.Clear();
-        //        if (workGroups != null)
-        //        {
-        //            foreach (var wg in workGroups)
-        //            {
-        //                var workingGroupEntity = workingGroupRep.GetById(wg);
-        //                entity.WGs.Add(workingGroupEntity);
-        //            }
-        //        }
-
-        //        uow.Save();
-        //    }                     
-
-        //    //if (dailyReport == null)
-        //    //    throw new ArgumentNullException("dailyreport");
-
-        //    //errors = new Dictionary<string, string>();
-
-        //    //if (string.IsNullOrEmpty(dailyReport.DailyReportSubject.ToString()))
-        //    //    errors.Add("DailyReportSubject.Subject", "Du måste ange ett delområde");
-
-        //    //dailyReport.ChangedDate = DateTime.UtcNow;
-
-        //    //if (dailyReport.Id == 0)
-        //    //    this._dailyReportRepository.Add(dailyReport);
-        //    //else
-        //    //    this._dailyReportRepository.Update(dailyReport);
-
-        //    //if (errors.Count == 0)
-        //    //    this.Commit();
-        //}
+            if (dailyReport.Id == 0)
+                this._dailyReportRepository.Add(dailyReportEntity);
+            else
+                this._dailyReportRepository.Update(dailyReportEntity);
+            
+            this.Commit();
+        }
 
         public void SaveDailyReportSubject(DailyReportSubject dailyReportSubject, out IDictionary<string, string> errors)
         {
@@ -223,6 +191,11 @@ namespace DH.Helpdesk.Services.Services
         public IList<DailyReportOverview> GetDailyReports(int customerId)
         {
             return this.GetDailyReportOverviews(new[] { customerId }, null).ToList();
+        }
+
+        public DailyReportOverview GetDailyReport(int customerId ,int id )
+        {
+            return this.GetDailyReports(customerId).FirstOrDefault(x => x.Id == id);
         }
 
         public IEnumerable<DailyReportOverview> GetDailyReportOverviews(int[] customers, int? count)

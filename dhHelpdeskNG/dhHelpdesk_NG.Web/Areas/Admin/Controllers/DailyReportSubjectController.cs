@@ -71,7 +71,7 @@
 
             return this.View(model);
         }
-
+         
         [HttpPost]
         public ActionResult Edit(int id, DailyReportSubjectInputViewModel vmodel)
         {
