@@ -6,11 +6,18 @@
 @Scripts.Render("~/bundles/orders/index")
 
 @section Actions {
-    <ul class="secnav">               
-        <li>
-            @Html.ActionLink(Translation.Get("Skapa beställning"), "Order", "Orders", new { @class = "btn" })
-        </li>
-    </ul>
+    @if (Model.OrderTypesForCreateOrder.Any())
+    {
+        using (Html.BeginForm("CreateOrder", "Orders", FormMethod.Post, new { id = "CreateOrderForm" }))
+        {
+            <ul class="secnav">
+                <li>
+                    @Html.DropDownListFor(m => m.OrderTypeForCteateOrderId, Model.OrderTypesForCreateOrder, new { id = "ordertypesforcreateorder_dropdown" })
+                    <input type="submit" value="@Translation.Get("Skapa beställning")" class="btn" />
+                </li>
+            </ul>                     
+        }
+    }
 }
 
 <script type="text/javascript">
@@ -20,9 +27,9 @@
 
 </script>
       
-@using (Ajax.BeginForm("Orders", "Orders", null, 
+@using (Ajax.BeginForm("Orders", "Orders", null,
     new AjaxOptions { UpdateTargetId = "OrdersOrdersTableContainer" },
-    new { id ="OrdersSearchForm" } ))
+    new { id = "OrdersSearchForm" }))
 {
     @Html.HiddenFor(m => m.SortField.Name, new { id = "sortFieldName" })
     @Html.HiddenFor(m => m.SortField.SortBy, new { id = "sortFieldBy" })

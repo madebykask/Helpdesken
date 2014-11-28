@@ -18,8 +18,10 @@
                 MultiSelectList statuses,
                 string text,
                 int recordsOnPage,
-                SortFieldModel sortField)
+                SortFieldModel sortField, 
+                SelectList orderTypesForCreateOrder)
         {
+            this.OrderTypesForCreateOrder = orderTypesForCreateOrder;
             this.Statuses = statuses;
             this.Administrators = administrators;
             this.OrderTypes = orderTypes;
@@ -43,6 +45,12 @@
                 return IndexModelType.Orders;
             }
         }
+
+        [NotNull]
+        public SelectList OrderTypesForCreateOrder { get; private set; }
+
+        [LocalizedDisplay("Typ")]
+        public int? OrderTypeForCteateOrderId { get; set; }
 
         [NotNull]
         public SelectList OrderTypes { get; private set; }

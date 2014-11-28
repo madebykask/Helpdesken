@@ -22,6 +22,7 @@
             var orderTypes = WebMvcHelper.CreateListField(data.OrderTypes, filter.OrderTypeId, true);
             var administrators = WebMvcHelper.CreateMultiSelectField(data.Administrators, filter.AdministratiorIds);
             var statuses = WebMvcHelper.CreateMultiSelectField(data.OrderStatuses, filter.StatusIds);
+            var orderTypesForCreateOrder = WebMvcHelper.CreateListField(data.OrderTypes, filter.OrderTypeId, false);
 
             SortFieldModel sortField = null;
 
@@ -38,7 +39,8 @@
                                     statuses,
                                     filter.Text,
                                     filter.RecordsOnPage,
-                                    sortField);
+                                    sortField,
+                                    orderTypesForCreateOrder);
         }
 
         public OrdersGridModel Create(SearchResponse response, SortField sortField)

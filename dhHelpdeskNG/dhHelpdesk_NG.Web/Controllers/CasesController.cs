@@ -350,24 +350,28 @@ namespace DH.Helpdesk.Web.Controllers
                             sm.caseSearchFilter.ParantPath_CaseType = c.getCaseTypeParentPath();
                     }
 
-                    if (!string.IsNullOrEmpty(customFilter))
+                    switch (customFilter)
                     {
-                        switch (customFilter)
-                        {
-                            case "MyCases":
-                                sm.caseSearchFilter.UserPerformer = SessionFacade.CurrentUser.Id.ToString();
-                                sm.caseSearchFilter.CaseProgress = "2";
-                                break;
-                            case "ClosedCases":
-                                sm.caseSearchFilter.CaseProgress = "1";
-                                break;
-                            case "HoldCases":
-                                sm.caseSearchFilter.CaseProgress = "3";
-                                break;
-                            case "InProcessCases":
-                                sm.caseSearchFilter.CaseProgress = "2";
-                                break;                                
-                        }//switch
+                        case "MyCases":
+                            sm.caseSearchFilter.UserPerformer = SessionFacade.CurrentUser.Id.ToString();
+                            sm.caseSearchFilter.CaseProgress = "2";
+                            break;
+                        case "ClosedCases":
+                            sm.caseSearchFilter.UserPerformer = string.Empty;
+                            sm.caseSearchFilter.CaseProgress = "1";
+                            break;
+                        case "HoldCases":
+                            sm.caseSearchFilter.UserPerformer = string.Empty;
+                            sm.caseSearchFilter.CaseProgress = "3";
+                            break;
+                        case "InProcessCases":
+                            sm.caseSearchFilter.UserPerformer = string.Empty;
+                            sm.caseSearchFilter.CaseProgress = "2";
+                            break;
+                        default:
+                            sm.caseSearchFilter.UserPerformer = string.Empty;
+                            sm.caseSearchFilter.CaseProgress = "2";
+                            break;
                     }
 
                     fd.caseSearchFilter = sm.caseSearchFilter;
@@ -388,12 +392,6 @@ namespace DH.Helpdesk.Web.Controllers
                     m.caseSearchResult = srm;
                     m.caseSearchFilterData = fd;
                     sm.Search.IdsForLastSearch = GetIdsFromSearchResult(srm.cases);
-
-                    if (!string.IsNullOrEmpty(customFilter))
-                    {
-                        sm.caseSearchFilter.UserPerformer = "";
-                        sm.caseSearchFilter.CaseProgress = "2";                        
-                    }
 
                     SessionFacade.CurrentCaseSearch = sm;
 

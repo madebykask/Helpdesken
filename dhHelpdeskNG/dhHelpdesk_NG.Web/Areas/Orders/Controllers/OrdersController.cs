@@ -76,7 +76,14 @@
         }
 
         [HttpGet]
-        public ViewResult Order(int? ordersId)
+        public ViewResult Order(int? orderId)
+        {
+            return this.View();
+        }
+
+        [HttpPost]
+        [BadRequestOnNotValid]
+        public ViewResult CreateOrder(int orderTypeForCteateOrderId)
         {
             return this.View();
         }
