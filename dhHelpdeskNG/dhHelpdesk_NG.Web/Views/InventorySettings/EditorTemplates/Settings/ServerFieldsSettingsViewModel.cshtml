@@ -1,4 +1,14 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Server.ServerFieldsSettingsViewModel
+<script>
+    $(function () {
+
+        // YES and NO SWITCH FOR CHECKBOXES
+        $('.switchcheckbox').bootstrapSwitch('onText', trans_yes);
+        $('.switchcheckbox').bootstrapSwitch('offText', trans_no);
+        $('.switchcheckbox').bootstrapSwitch('size', 'small');
+        $('.switchcheckbox').bootstrapSwitch('onColor', 'success');
+    });
+</script>
 <table class="table table-striped table-bordered table-hover">
     <thead>
         <tr>

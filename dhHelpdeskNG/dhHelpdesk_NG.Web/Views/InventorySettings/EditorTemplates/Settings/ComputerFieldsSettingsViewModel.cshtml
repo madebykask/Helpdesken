@@ -1,17 +1,38 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Computer.ComputerFieldsSettingsViewModel
 <script>
-    $(function () {
-        $(".is_required").change(function () {
-            var value = $(this).is(":checked");
+    $(function() {
+
+        // YES and NO SWITCH FOR CHECKBOXES
+        $('.switchcheckbox').bootstrapSwitch('onText', trans_yes);
+        $('.switchcheckbox').bootstrapSwitch('offText', trans_no);
+        $('.switchcheckbox').bootstrapSwitch('size', 'small');
+        $('.switchcheckbox').bootstrapSwitch('onColor', 'success');
+
+        //$(".is_required").change(function () {
+        //    var value = $(this).is(":checked");
+        //    if (value == true) {
+        //        $(this).closest("tr").find(".is_readonly").prop('checked', !value);
+        //    }
+        //});
+
+        //$(".is_readonly").change(function () {
+        //    var value = $(this).is(":checked");
+        //    if (value == true) {
+        //        $(this).closest("tr").find(".is_required").prop('checked', !value);
+        //    }
+        //});
+
+        $('.is_readonly_checkbox').on('switchChange.bootstrapSwitch', function(event, state) {
+            var value = state;
             if (value == true) {
-                $(this).closest("tr").find(".is_readonly").prop('checked', !value);
+                $(this).closest("tr").find(".is_required_checkbox").bootstrapSwitch('state', !value);
             }
         });
 
-        $(".is_readonly").change(function () {
-            var value = $(this).is(":checked");
+        $('.is_required_checkbox').on('switchChange.bootstrapSwitch', function(event, state) {
+            var value = state;
             if (value == true) {
-                $(this).closest("tr").find(".is_required").prop('checked', !value);
+                $(this).closest("tr").find(".is_readonly_checkbox").bootstrapSwitch('state', !value);
             }
         });
     });
