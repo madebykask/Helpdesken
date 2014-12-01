@@ -66,7 +66,7 @@ namespace DH.Helpdesk.Web.Controllers
             foreach (var mod in allModules)
             {
                 
-                var curUserModule = userModules.Where(u=> u.Id == mod.Id).SingleOrDefault();
+                var curUserModule = userModules.Where(u=> u.Module_Id == mod.Id).SingleOrDefault();
 
                 var newMod = new  UserModuleOverview();
 
@@ -82,7 +82,7 @@ namespace DH.Helpdesk.Web.Controllers
                 if (curUserModule == null)
                 {
                     newMod.isVisible = false;
-                    newMod.NumberOfRows = null;
+                    newMod.NumberOfRows = 3;
                     newMod.Position = 303;
                     newMod.User_Id = SessionFacade.CurrentUser.Id;
                     newMod.Module_Id = mod.Id;                    

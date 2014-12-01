@@ -37,6 +37,7 @@ namespace DH.Helpdesk.Services.Services
         IList<UserWorkingGroup> GetUserWorkingGroups();
         IList<User> GetUsersForWorkingGroup(int customerId, int workingGroupId);
         IList<User> GetUsersForWorkingGroup(int workingGroupId);
+        bool UserHasCase(int customerId, int userId, List<int> workingGroups);
 
         User GetUser(int id);
         UserRole GetUserRoleById(int id);
@@ -161,6 +162,12 @@ namespace DH.Helpdesk.Services.Services
             _userModuleRepository = userModuleRepository;
         }
 
+
+        public bool UserHasCase(int customerId, int userId, List<int> workingGroups)
+        {
+            return this._userRepository.UserHasCase(customerId, userId, workingGroups);
+        }
+
         public IEnumerable<CustomerUser> GetCustomerUserForUser(int userId)
         {
             return this._customerUserRepository.GetAll().Where(x => x.User_Id == userId);
@@ -225,7 +232,6 @@ namespace DH.Helpdesk.Services.Services
         public IList<User> SearchSortAndGenerateUsers(UserSearch searchUsers)
         {
             return this._userRepository.GetUsersForUserSettingList(searchUsers).OrderBy(x => x.FirstName).ToList();
-
         }
 
         public IList<UserGroup> GetUserGroups()
@@ -332,7 +338,7 @@ namespace DH.Helpdesk.Services.Services
         {
             if (user == null)
                 throw new ArgumentNullException("user");
-
+         
             user.Address = user.Address ?? string.Empty;
             user.ArticleNumber = user.ArticleNumber ?? string.Empty;
             user.BulletinBoardDate = user.BulletinBoardDate ?? DateTime.Now;
@@ -351,7 +357,7 @@ namespace DH.Helpdesk.Services.Services
             user.Password = user.Password ?? string.Empty;
 
             errors = new Dictionary<string, string>();
-
+                        
             if (string.IsNullOrEmpty(user.SurName + user.FirstName + user.UserID))
                 errors.Add("User.SurName" + "User.FirstName" + "User.UserID", "Du måste ange ett för- och efternamn, samt ett Id");
 

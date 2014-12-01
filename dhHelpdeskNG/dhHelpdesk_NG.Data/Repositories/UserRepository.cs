@@ -50,6 +50,8 @@ namespace DH.Helpdesk.Dal.Repositories
         List<ItemOverview> FindUsersWithPermissionsForCustomers(int[] customers);
 
         IEnumerable<User> FindUsersByName(string name);
+
+        bool UserHasCase(int customerId, int userId, List<int> workingGroupIds);
     }
 
     public sealed class UserRepository : RepositoryBase<User>, IUserRepository
@@ -62,6 +64,40 @@ namespace DH.Helpdesk.Dal.Repositories
         private IQueryable<User> FindByCustomerId(int customerId)
         {
             return this.DataContext.Users.Where(u => u.Customer_Id == customerId);
+        }
+
+        public bool UserHasCase(int customerId, int userId, List<int> workingGroupIds)
+        {            
+            if (workingGroupIds.Any())
+            {
+                var allUserCases =
+                    this.DataContext.Cases.Where(
+                        c => c.Customer_Id == customerId && c.Performer_User_Id == userId && c.WorkingGroup_Id != null)
+                        .Select(c => new { c.WorkingGroup_Id })
+                        .ToList();
+
+                var validCases =   allUserCases.Where(a => workingGroupIds.Contains(a.WorkingGroup_Id.Value)).ToList();
+                var invalidCases = allUserCases.Except(validCases).ToList();
+
+                if (invalidCases.Any())
+                    return true;
+                else
+                    return false;
+            }
+            else
+            {
+                var allUserCases =
+                    this.DataContext.Cases.Where(
+                        c => c.Customer_Id == customerId && c.Performer_User_Id == userId)
+                        .Select(c => new { c.Id })
+                        .ToList();
+
+                if (allUserCases.Any())
+                    return true;
+                else
+                    return false;
+            }
+                        
         }
 
         public List<ItemOverview> FindActiveUsersIncludeEmails(int customerId)

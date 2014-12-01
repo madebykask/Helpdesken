@@ -2,6 +2,12 @@
 
 @{
     ViewBag.Title = "_CaseTemplateTree";
+
+    var isJS = "";
+    if (ViewData["isJS"] != null)
+    {
+        isJS = ViewData["isJS"].ToString();
+    }
 }
 
 <div id="divCaseTemplate" class="btn-group">
@@ -12,8 +18,14 @@
             <span class="caret"> </span>
         </button>
         <ul class="dropdown-menu">
-            @Html.CaseSolutionDropdownButtonString(Model.CaseTemplateCategoryTree, Model.CustomerId)
+            @Html.CaseSolutionDropdownButtonString(Model.CaseTemplateCategoryTree, Model.CustomerId, isJS)
         </ul>    
     }
 </div>
 
+<script type ="text/javascript">
+    function LoadTemplate(id) {
+        
+        alert(id + ' ' + $("#case__ReportedBy").val());
+    }
+</script>

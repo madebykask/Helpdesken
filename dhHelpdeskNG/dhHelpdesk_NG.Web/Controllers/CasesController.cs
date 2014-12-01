@@ -1555,13 +1555,13 @@ namespace DH.Helpdesk.Web.Controllers
         private CaseInputViewModel GetCaseInputViewModel(int userId, int customerId, int caseId, int lockedByUserId = 0, string redirectFrom = "", int? templateId = null, int? copyFromCaseId = null)
         {
             var m = new CaseInputViewModel();
-
+            SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
             if (caseId != 0)
             {
                 var markCaseAsRead = string.IsNullOrWhiteSpace(redirectFrom);
                 m.case_ = this._caseService.GetCaseById(caseId, markCaseAsRead);
                 customerId = customerId == 0 ? m.case_.Customer_Id : customerId;
-                SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId; //m.case_.RegLanguage_Id;
+                //SessionFacade.CurrentCaseLanguageId = m.case_.RegLanguage_Id;
             }
 
             var cu = this._customerUserService.GetCustomerSettings(customerId, userId);
@@ -1729,11 +1729,21 @@ namespace DH.Helpdesk.Web.Controllers
                 if (cs.DontConnectUserToWorkingGroup == 0 && m.case_.WorkingGroup_Id > 0)
                 {
                     m.performers = this._userService.GetUsersForWorkingGroup(customerId, m.case_.WorkingGroup_Id.Value);
+                    
                 }
                 else
                 {
                     m.performers = m.users;
                 }
+
+                if (caseId != 0)
+                {
+                    var admUser = _userService.GetUser(m.case_.Performer_User_Id);
+                    if (!m.performers.Contains(admUser))
+                        m.performers.Insert(0, admUser);
+                }
+
+                
 
                 m.SendToDialogModel = this.CreateNewSendToDialogModel(customerId, m.users);
                 m.CaseLog = this._logService.InitCaseLog(SessionFacade.CurrentUser.Id, string.Empty);

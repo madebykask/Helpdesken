@@ -45,9 +45,12 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete
 
         public int GetNewMailTemplateMailId()
         {
-            var max_MailId = (from m in this.DataContext.MailTemplates select m.MailID).Max();
+            var mailIds = (from m in this.DataContext.MailTemplates select m.MailID).ToList();
 
-            return max_MailId;
+            if (mailIds.Any())
+                return mailIds.Max();
+            else
+                return 0;
         }
 
         public MailTemplateEntity GetMailTemplateForCustomer(int id, int customerId, int languageId)

@@ -16,6 +16,7 @@
                             @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
                         </div>   
                     }
+                   
                     @Html.ValidationSummary()
                     <div class="row">
                         <div class="span12">
@@ -49,7 +50,7 @@
                         <li class="active"><a href="#subfragment-1">@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</a></li>               
                         <li><a href="#subfragment-2">@Translation.Get("Säkerhet", Enums.TranslationSource.TextTranslation)</a></li>
                         <li><a href="#subfragment-3">@Translation.Get("Meddelande", Enums.TranslationSource.TextTranslation)</a></li>
-                        <!--<li><a href="#subfragment-4">@Translation.Get("Utseende", Enums.TranslationSource.TextTranslation)</a></li>-->
+                        <!--<li><a href="#subfragment-4">Translation.Get("Utseende", Enums.TranslationSource.TextTranslation)</a></li>-->
                         <li><a href="#subfragment-5">@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</a></li>
                         <li><a href="#subfragment-6">@Translation.Get("Kund", Enums.TranslationSource.TextTranslation)</a></li>
                         <li><a href="#subfragment-7">@Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation)</a></li>
@@ -100,6 +101,9 @@
 </div>
 <script type="text/javascript">
 
+    function showError(err) {
+        alert(err);
+    }
     function submitForm() {
 
         //$("#CsSelected option").attr("selected", "selected");

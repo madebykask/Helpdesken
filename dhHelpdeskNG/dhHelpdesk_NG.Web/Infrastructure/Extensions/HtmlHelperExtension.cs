@@ -540,11 +540,14 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return new MvcHtmlString(sb.ToString());
         }
 
-        public static MvcHtmlString CaseSolutionDropdownButtonString(this HtmlHelper helper, IList<CaseTemplateCategoryNode> categories, int customerId)
+        public static MvcHtmlString CaseSolutionDropdownButtonString(this HtmlHelper helper, IList<CaseTemplateCategoryNode> categories, int customerId, string isJS = "")
         {
             if (categories != null)
             {
-                return BuildCaseSolutionCategoryDropdownButton(categories, customerId);
+                if (isJS == "")
+                    return BuildCaseSolutionCategoryDropdownButton(categories, customerId);
+                else
+                   return BuildCaseSolutionCategoryJSDropdownButton(categories, customerId);                   
             }
             else
                 return new MvcHtmlString(string.Empty);
@@ -800,6 +803,42 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return new MvcHtmlString(result.ToString());
         }
 
+        private static MvcHtmlString BuildCaseSolutionCategoryJSDropdownButton(IList<CaseTemplateCategoryNode> categories, int customerId)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            foreach (CaseTemplateCategoryNode f in categories)
+            {
+
+                bool hasChild = false;
+                if (f.CaseTemplates != null)
+                    if (f.CaseTemplates.Count > 0)
+                        hasChild = true;
+
+                if (hasChild)
+                    sb.Append("<li class='dropdown-submenu'>");
+                else
+                    sb.Append("<li>");
+
+                if (f.IsRootTemplate)
+                    sb.Append("<a href='#' onclick = 'LoadTemplate(" + f.CategoryId.ToString()  + ")'" + customerId.ToString() + "&templateId=" + f.CategoryId.ToString() + "' value=" + f.CategoryId.ToString() + ">" +
+                           Translation.Get(f.CategoryName, Enums.TranslationSource.TextTranslation) + "</a>");
+                else
+                    sb.Append("<a href='#' value=" + f.CategoryId.ToString() + ">" +
+                            Translation.Get(f.CategoryName, Enums.TranslationSource.TextTranslation) + "</a>");
+
+                if (hasChild)
+                {
+                    sb.Append("<ul class='dropdown-menu'>");
+                    sb.Append(BuildCaseSolutionJSDropdownButton(f.CaseTemplates.ToList(), customerId));
+                    sb.Append("</ul>");
+                }
+                sb.Append("</li>");
+
+            }
+
+            return new MvcHtmlString(sb.ToString());
+        }
         private static MvcHtmlString BuildCaseSolutionCategoryDropdownButton(IList<CaseTemplateCategoryNode> categories, int customerId)
         {
             StringBuilder sb = new StringBuilder();
@@ -842,7 +881,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             StringBuilder sb = new StringBuilder();
 
             foreach (CaseTemplateNode f in caseTemplate)
-            {                
+            {
                 sb.Append("<li>");
                 sb.Append("<a href='cases/new/?customerId=" + customerId.ToString() + "&templateId=" + f.CaseTemplateId.ToString() + "' value=" + f.CaseTemplateId.ToString() + ">" +
                           Translation.Get(f.CaseTemplateName, Enums.TranslationSource.TextTranslation) + "</a>");                
@@ -852,6 +891,20 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return new MvcHtmlString(sb.ToString());
         }
 
+        private static MvcHtmlString BuildCaseSolutionJSDropdownButton(IList<CaseTemplateNode> caseTemplate, int customerId)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            foreach (CaseTemplateNode f in caseTemplate)
+            {
+                sb.Append("<li>");
+                sb.Append("<a href='#' onclick = 'LoadTemplate(" + f.CaseTemplateId.ToString() + ")' value=" + f.CaseTemplateId.ToString() + ">" +
+                          Translation.Get(f.CaseTemplateName, Enums.TranslationSource.TextTranslation) + "</a>");
+                sb.Append("</li>");
+            }
+
+            return new MvcHtmlString(sb.ToString());
+        }
 
         #endregion
     }

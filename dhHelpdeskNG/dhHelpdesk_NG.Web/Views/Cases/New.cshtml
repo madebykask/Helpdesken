@@ -24,13 +24,15 @@
         if (cfc != '')
             p3 = "&copyFromCaseId=" + cfc
 
-        location.href = '/Cases/new?customerId=' + ci + p2 + p3 + '&caseLanguageId=' + cli;       
+        //location.href = '/Cases/new?customerId=' + ci + p2 + p3 + '&caseLanguageId=' + cli;       
     });
 </script>
 }
 
 @Html.Partial("_Plupload")
-
+@{ var t = new ViewDataDictionary();
+   t.Add("isJS","true");
+ }
 @if (Model != null)
 {
     using (Html.BeginForm("new", "cases", null, FormMethod.Post, new { id = "target" }))
@@ -44,7 +46,7 @@
                 <li class="secspace"></li>
                 <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn" })</li>
                 <li id="btnCaseTemplate">                                       
-                    @Html.Partial("_CaseTemplateTree", Model.CaseTemplateTreeButton)
+                    @Html.Partial("_CaseTemplateTree", Model.CaseTemplateTreeButton, t)
                 </li>                
             </ul>
         </div>

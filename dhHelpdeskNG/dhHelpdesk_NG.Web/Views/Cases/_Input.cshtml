@@ -93,7 +93,7 @@
                                                     }
                                                 </td>
                                                 <td>
-                                                    <a href="#" id="AddNotifier" class="btn">@Translation.Get("Lägg till", SessionFacade.CurrentCaseLanguageId)</a>
+                                                    <a href="#" id="AddNotifier" class="btn">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
                                                 </td>
                                             </tr>
                                             <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Persons_Name.ToString())">
@@ -122,22 +122,22 @@
                                                         {
                                                             @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new { @readonly = true, @disabled = "disabled" }) 
                                                         }
-                                                        @Translation.Get("Skicka mail till anmälaren", SessionFacade.CurrentCaseLanguageId)
+                                                        @Translation.Get("Skicka mail till anmälaren", SessionFacade.CurrentLanguageId)
 
                                                     </label>
 
 
-                                                    @Html.HiddenFor(m => m.case_.RegLanguage_Id)
+                                                    @*@Html.HiddenFor(m => m.case_.RegLanguage_Id)*@
 
                                                 </td>
-                                                @* @if (Model.Languages != null && Model.Languages.Count() > 1 && Model.case_.Id == 0)
+                                                 @if (Model.Languages != null && Model.Languages.Count() > 1 && Model.case_.Id == 0)
                                                    {
                                                 
                                                     <td>                                                                                                               
                                                         <select  id="case__RegLanguage_Id" name="case_.RegLanguage_Id" class="span2">
                                                             @foreach (var e in Model.Languages)
                                                             {
-                                                                <option value="@e.Id" @e.Id.IdIsSelected(SessionFacade.CurrentCaseLanguageId.ToString()) >@Translation.Get(e.Name, SessionFacade.CurrentCaseLanguageId)</option>
+                                                                <option value="@e.Id" @e.Id.IdIsSelected(SessionFacade.CurrentLanguageId.ToString()) >@Translation.Get(e.Name, SessionFacade.CurrentLanguageId)</option>
                                                             }
                                                         </select>                                                                                                                                                                            
                                                     </td>                                                                    
@@ -147,15 +147,15 @@
                                                     if (Model.Languages != null && Model.Languages.Count() > 1)
                                                     {                                            
                                                         <td>                                                                                                               
-                                                            <select  disabled id="cl" name="cl" class="span2">
+                                                            <select  id="case__RegLanguage_Id" name="case_.RegLanguage_Id" class="span2">
                                                                 @foreach (var e in Model.Languages)
                                                                 {
-                                                                    <option value="@e.Id" @e.Id.IdIsSelected(SessionFacade.CurrentCaseLanguageId.ToString()) >@Translation.Get(e.Name, SessionFacade.CurrentCaseLanguageId)</option>
+                                                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.RegLanguage_Id.ToString()) >@Translation.Get(e.Name, SessionFacade.CurrentLanguageId)</option>
                                                                 }
                                                             </select>                                                                                                                                                                            
                                                         </td>                                                                    
                                                     }  
-                                                 } *@
+                                                 } 
                                             </tr>
                                             <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString())">
                                                 <td class="span3">
@@ -257,7 +257,7 @@
                                             </tr>
                                             <tr>
                                                 <td class="span3">
-                                                    @Translation.Get("Spara användaruppgifter", SessionFacade.CurrentCaseLanguageId)
+                                                    @Translation.Get("Spara användaruppgifter", SessionFacade.CurrentLanguageId)
                                                 </td>
                                                 <td class="span4">
                                                     @Html.CheckBoxFor(m => m.UpdateNotifierInformation, new { @class = "switchcheckbox" })
@@ -632,7 +632,7 @@
                                         <td colspan="2">
                                             <input type="checkbox" name="case_.SMS" @(Model.case_.SMS == 1 ? "checked=checked" : "") value="1"/>
                                             <input type="hidden" name="case_.SMS" value="0" />
-                                            <span class="lbl">@Translation.Get("Skicka SMS när ärendet avslutas", SessionFacade.CurrentCaseLanguageId).</span>
+                                            <span class="lbl">@Translation.Get("Skicka SMS när ärendet avslutas", SessionFacade.CurrentLanguageId).</span>
                                         </td>
                                     </tr>
                                     <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.AgreedDate.ToString())">
@@ -658,13 +658,13 @@
                                         <td colspan="2">
                                             <table>
                                                 <tr>
-                                                    <td>@Translation.Get("Artikelkostnad", SessionFacade.CurrentCaseLanguageId)<br />
+                                                    <td>@Translation.Get("Artikelkostnad", SessionFacade.CurrentLanguageId)<br />
                                                         @Html.TextBoxFor(model => model.case_.Cost, new { maxlength = "7", Class = "inputw50" })
                                                     </td>
-                                                    <td>@Translation.Get("Övrig kostnad", SessionFacade.CurrentCaseLanguageId)<br />
+                                                    <td>@Translation.Get("Övrig kostnad", SessionFacade.CurrentLanguageId)<br />
                                                         @Html.TextBoxFor(model => model.case_.OtherCost, new { maxlength = "7", Class = "inputw50" })
                                                     </td>
-                                                    <td>@Translation.Get("Valuta", SessionFacade.CurrentCaseLanguageId)<br />
+                                                    <td>@Translation.Get("Valuta", SessionFacade.CurrentLanguageId)<br />
                                                         <select id="case__Currency" name="case_.Currency" class="inputw100">
                                                             <option value="">&nbsp;</option>
                                                             @if (Model.currencies != null)
@@ -687,7 +687,7 @@
                                         <td colspan="2">
                                             @if (Model.EditMode == Enums.AccessMode.FullAccess)
                                             {
-                                                <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentCaseLanguageId)</a>
+                                                <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
                                             }
                                             <div id="divCaseFiles">
                                                 @Html.Partial("_CaseFiles", Model.CaseFilesModel)
@@ -862,7 +862,7 @@
                                         {                                                                                        
                                         <tr style="@Model.GetFieldStyle(CaseSolutionFields.Project)">
                                             <td>
-                                                @Translation.Get("Projekt", SessionFacade.CurrentCaseLanguageId)
+                                                @Translation.Get("Projekt", SessionFacade.CurrentLanguageId)
                                             </td>
                                             <td>
                                                 @if (!Model.IsReadOnly(CaseSolutionFields.Project))
@@ -900,7 +900,7 @@
                                         {                                                                                        
                                         <tr>
                                             <td>
-                                                @Translation.Get("ITIL Problem", SessionFacade.CurrentCaseLanguageId)
+                                                @Translation.Get("ITIL Problem", SessionFacade.CurrentLanguageId)
                                             </td>
                                             <td>
                                                 <select id="case__Problem_Id" name="case_.Problem_Id">
@@ -911,7 +911,7 @@
                                                     }
                                                 </select>
                                                 <div id="divProblemResponsible" style="display: none">
-                                                    @Translation.Get("Ansvarig", SessionFacade.CurrentCaseLanguageId)
+                                                    @Translation.Get("Ansvarig", SessionFacade.CurrentLanguageId)
                                                 </div>
                                             </td>
                                         </tr>
@@ -932,7 +932,7 @@
                                         {                                           
                                         <tr>
                                             <td>
-                                                @Translation.Get("Ändring", SessionFacade.CurrentCaseLanguageId)
+                                                @Translation.Get("Ändring", SessionFacade.CurrentLanguageId)
                                             </td>
                                             <td>
                                                 <select id="case__Change_Id" name="case_.Change_Id">
@@ -1007,8 +1007,8 @@
                         {
                             <div class="container">
                                 <ul class="nav nav-tabs" id="logandhistorytabs">
-                                    <li class="active"><a href="#logtab">@Translation.Get("Ärendelogg", SessionFacade.CurrentCaseLanguageId)</a></li>
-                                    <li><a href="#historytab">@Translation.Get("Historik", SessionFacade.CurrentCaseLanguageId)</a></li>
+                                    <li class="active"><a href="#logtab">@Translation.Get("Ärendelogg", SessionFacade.CurrentLanguageId)</a></li>
+                                    <li><a href="#historytab">@Translation.Get("Historik", SessionFacade.CurrentLanguageId)</a></li>
                                 </ul>
                                 <div class="tab-content">
                                     @Html.Partial("_CaseLog", Model)
@@ -1033,7 +1033,7 @@
                                         </thead>
                                         <tr>
                                             <td>
-                                                @Translation.Get("Avslutsorsak", SessionFacade.CurrentCaseLanguageId)
+                                                @Translation.Get("Avslutsorsak", SessionFacade.CurrentLanguageId)
                                             </td>
                                             <td>
                                                 @Model.FinishingCause
@@ -1086,7 +1086,7 @@
                     Model.CaseFieldSettingWithLangauges,
                     field,
                     Model.case_.Customer_Id,
-                    SessionFacade.CurrentCaseLanguageId,
+                    SessionFacade.CurrentLanguageId,
                     defaultCaption);
 
         //if (string.IsNullOrEmpty(res))

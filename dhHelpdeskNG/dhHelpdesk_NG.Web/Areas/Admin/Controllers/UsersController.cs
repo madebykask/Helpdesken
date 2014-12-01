@@ -21,7 +21,7 @@
         private readonly IOrderTypeService _orderTypeService;
         private readonly IUserService _userService;
         private readonly IWorkingGroupService _workingGroupService;
-        private readonly ICaseSettingsService _caseSettingsService;
+        private readonly ICaseSettingsService _caseSettingsService;        
 
         public UsersController(
             IAccountActivityService accountActivityService,
@@ -33,7 +33,7 @@
             IOrderTypeService orderTypeService,
             IUserService userService,
             IWorkingGroupService workingGroupService,
-            ICaseSettingsService caseSettingsService,
+            ICaseSettingsService caseSettingsService,            
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
@@ -46,7 +46,7 @@
             this._orderTypeService = orderTypeService;
             this._userService = userService;
             this._workingGroupService = workingGroupService;
-            this._caseSettingsService = caseSettingsService;
+            this._caseSettingsService = caseSettingsService;            
         }
 
         [CustomAuthorize(Roles = "3,4")]
@@ -241,8 +241,29 @@
 
                 userToSave.OrderPermission = this.returnOrderPermissionForSave(userModel);
                 userToSave.CaseInfoMail = this.returnCaseInfoMailForEditSave(userModel);
-
+               
                 this.TryUpdateModel(userToSave, "user");
+
+                var allCustomers = _customerService.GetAllCustomers();
+
+                IDictionary<string, string> err = new Dictionary<string, string>();
+                if (userToSave.IsActive == 0)
+                {
+                    var emptyWG = new List<int>();
+                    foreach (var c in allCustomers)
+                    {
+                        if (_userService.UserHasCase(c.Id, userToSave.Id , emptyWG))
+                            err.Add("Alert", "This user is responsible for some cases in customer: " + c.Name);
+                    }
+                }
+                else
+                {
+                    foreach (var c in allCustomers)
+                    {
+                        if (_userService.UserHasCase(c.Id, userToSave.Id, UserWorkingGroups.Where(w=> w.UserRole != 0).Select(w => w.WorkingGroup_Id).ToList()))
+                            err.Add("Alert", "User has some cases in non-selected working group in customer: " + c.Name);
+                    }
+                }                
 
                 if (userToSave.UserRoles != null)
                 {
@@ -257,14 +278,17 @@
                         userToSave.UserRoles.Add(userRight);
                     }
                 }
-
+                
+                                              
                 this._userService.SaveEditUser(userToSave, AAsSelected, CsSelected, OTsSelected, Departments, UserWorkingGroups, out errors);
 
                 if (errors.Count == 0)
                 {
+                    ViewData["errors"] = err;
                     return this.RedirectToAction("index", "users");
                 }
 
+                
                 var model = this.CreateInputViewModel(userToSave);
 
                 return this.View(model);
@@ -591,7 +615,7 @@
                 CaseInfoMailList = li,
                 RefreshInterval = sli,
                 StartPageShowList = lis,
-                CustomerUsers = this._userService.GetCustomerUserForUser(user.Id),
+                CustomerUsers = (user.CustomerUsers == null? this._userService.GetCustomerUserForUser(user.Id) : user.CustomerUsers),
                 Departments = this._userService.GetDepartmentsForUser(user.Id),
                 ListWorkingGroupsForUser = this._userService.GetListToUserWorkingGroup(user.Id),
                 //UserColumns = _caseSettingsService.GetCaseSettingsWithUser(user.Customer_Id, user.Id, SessionFacade.CurrentUser.UserGroupId),
@@ -660,7 +684,7 @@
 
             #endregion
 
-            #region SetInts
+            #region SetInts           
 
             if (model.User.Id != 0)
             {
