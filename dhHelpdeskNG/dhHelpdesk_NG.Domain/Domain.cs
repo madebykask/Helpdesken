@@ -1,9 +1,10 @@
 ﻿namespace DH.Helpdesk.Domain
 {
-    using global::System;
-    using global::System.Collections.Generic;
+    using DH.Helpdesk.Domain.Interfaces;
 
-    public class Domain : Entity
+    using global::System;
+
+    public class Domain : Entity, ICustomerEntity
     {
         public int Customer_Id { get; set; }
         public string Base { get; set; }

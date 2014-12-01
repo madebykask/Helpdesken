@@ -119,8 +119,11 @@
     <Compile Include="BusinessLogic\Mappers\Licenses\VendorMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Links\LinkMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\OperationLogs\OperationLogMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Orders\Data\OrdersEditSettingsMapData.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\Data\OrdersFieldSettingsMapData.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\Data\OrdersFieldSettingsOverviewMapData.cs" />
+    <Compile Include="BusinessLogic\Mappers\Orders\OrderEditMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Orders\OrderEditSettingsMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\OrderFieldSettingsMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\OrderFieldSettingsOverviewMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\OrderMapper.cs" />
@@ -150,6 +153,7 @@
     <Compile Include="BusinessLogic\Specifications\Licenses\ProductSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Links\LinkSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Orders\OrderFieldSettingsSpecifications.cs" />
+    <Compile Include="BusinessLogic\Specifications\Orders\OrderPropertySpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Orders\OrderSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Questionnaire\CircularPartSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Questionnaire\CircularSpecifications.cs" />

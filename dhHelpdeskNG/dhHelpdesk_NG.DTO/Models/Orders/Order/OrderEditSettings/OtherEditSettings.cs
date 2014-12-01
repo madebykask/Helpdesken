@@ -1,0 +1,31 @@
+﻿namespace DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditSettings
+{
+    using DH.Helpdesk.Common.ValidationAttributes;
+
+    public sealed class OtherEditSettings
+    {
+        public OtherEditSettings(
+                TextFieldEditSettings fileName, 
+                TextFieldEditSettings caseNumber, 
+                TextFieldEditSettings info, 
+                TextFieldEditSettings status)
+        {
+            this.Status = status;
+            this.Info = info;
+            this.CaseNumber = caseNumber;
+            this.FileName = fileName;
+        }
+
+        [NotNull]
+        public TextFieldEditSettings FileName { get; private set; }
+         
+        [NotNull]
+        public TextFieldEditSettings CaseNumber { get; private set; }
+         
+        [NotNull]
+        public TextFieldEditSettings Info { get; private set; }
+         
+        [NotNull]
+        public TextFieldEditSettings Status { get; private set; }         
+    }
+}

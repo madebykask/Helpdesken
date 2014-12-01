@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Services.Services.Concrete.Orders
 {
     using DH.Helpdesk.BusinessData.Models.Orders.Index.FieldSettingsOverview;
+    using DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditSettings;
     using DH.Helpdesk.BusinessData.Models.Orders.OrderFieldSettings;
     using DH.Helpdesk.BusinessData.Models.Orders.OrderFieldSettings.FieldSettings;
     using DH.Helpdesk.Dal.NewInfrastructure;
@@ -72,6 +73,16 @@
 
                 uow.Save();
             }
+        }
+
+        [CreateMissingOrderFieldSettings("customerId", "orderTypeId")]
+        public FullOrderEditSettings GetOrderEditSettings(int customerId, int? orderTypeId, IUnitOfWork uow)
+        {
+            var fieldSettingsRep = uow.GetRepository<OrderFieldSettings>();
+
+            return fieldSettingsRep.GetAll()
+                        .GetByType(customerId, orderTypeId)
+                        .MapToFullOrderEditSettings();
         }
     }
 }
