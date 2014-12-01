@@ -2774,7 +2774,13 @@ body.login {
     width: 340px;
     height: 100px;
 }
-
+.editcase .notifier-block .checkbox 
+{
+    width: 160px;
+    float: left;
+    margin-top: 5px;
+    margin-right: 5px;
+}
 
 
 
