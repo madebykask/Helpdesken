@@ -85,6 +85,7 @@
         [BadRequestOnNotValid]
         public ViewResult CreateOrder(int orderTypeForCteateOrderId)
         {
+            var data = this.ordersService.GetNewOrderEditData(this.workContext.Customer.CustomerId, orderTypeForCteateOrderId);
             return this.View();
         }
     }
