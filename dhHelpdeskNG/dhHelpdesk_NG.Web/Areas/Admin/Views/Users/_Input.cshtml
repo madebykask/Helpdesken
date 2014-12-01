@@ -22,7 +22,7 @@
                             <table class="tableform">
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get("Id", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Id", Enums.TranslationSource.TextTranslation) <span class="mandatorystar">*</span>
                                     </td>
                                     <td>
                                         @Html.TextBoxFor(model => model.User.UserID, new { maxlength = "20" })
@@ -35,7 +35,7 @@
                                             @Translation.Get("Domän", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td>
-                                            @Html.DropDownListFor(model => model.User.Domain_Id, Model.Domains, "", new {})
+                                            @Html.DropDownListFor(model => model.User.Domain_Id, Model.Domains, "", new { })
                                         </td>
                                     </tr>
                                 }

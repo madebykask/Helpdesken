@@ -41,17 +41,6 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="StateSecondary.NoMailToNotifier" @(Model.StateSecondary.NoMailToNotifier == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="StateSecondary.NoMailToNotifier" value="0" />
-                                        &nbsp;@Translation.Get("Skicka mail till anmälaren", Enums.TranslationSource.TextTranslation)
-                                        </label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
                                         @Translation.Get("Självservice", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td><label class="checkbox">
