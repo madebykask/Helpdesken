@@ -66,7 +66,7 @@
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [CustomAuthorize(Roles = "3,4")]
-        public ActionResult Index()
+        public ActionResult Index(string alertMessage = "")
         {
             var model = this.IndexInputViewModel();
             if (this.Session["UserSearch"] == null)
@@ -80,6 +80,9 @@
                 model.Users = this._userService.SearchSortAndGenerateUsers(filter);
                 model.StatusUsers.FirstOrDefault(x => x.Value == filter.StatusId.ToString()).Selected = true;
             }
+
+            if (!string.IsNullOrEmpty(alertMessage))
+                ViewData["AlertMessage"] = alertMessage;
 
             return this.View(model);
         }
@@ -100,7 +103,7 @@
             model.Filter = filter;
             this.Session["UserSearch"] = filter;
             model.Users = this._userService.SearchSortAndGenerateUsers(filter);
-
+           
             return this.View(model);
         }
 
@@ -246,24 +249,32 @@
 
                 var allCustomers = _customerService.GetAllCustomers();
 
-                IDictionary<string, string> err = new Dictionary<string, string>();
+                string err = "";
+                List<string> customersAlert = new List<string>(); 
                 if (userToSave.IsActive == 0)
                 {
                     var emptyWG = new List<int>();
                     foreach (var c in allCustomers)
-                    {
+                    {                        
                         if (_userService.UserHasCase(c.Id, userToSave.Id , emptyWG))
-                            err.Add("Alert", "This user is responsible for some cases in customer: " + c.Name);
-                    }
+                             customersAlert.Add(c.Name);
+                    }                                       
                 }
                 else
                 {
                     foreach (var c in allCustomers)
                     {
                         if (_userService.UserHasCase(c.Id, userToSave.Id, UserWorkingGroups.Where(w=> w.UserRole != 0).Select(w => w.WorkingGroup_Id).ToList()))
-                            err.Add("Alert", "User has some cases in non-selected working group in customer: " + c.Name);
-                    }
-                }                
+                            customersAlert.Add(c.Name); 
+                    }                    
+                }
+
+                if (customersAlert.Any())
+                {
+                    err = Translation.Get("Denna användare står som ansvarig/handläggare på befintliga ärenden hos kund") + ": ";                      
+                    err += "(" + string.Join(",", customersAlert.ToArray()) + ") ";
+                    err += " " + Translation.Get("Var vänlig se över de ärenden som användaren står på");
+                }
 
                 if (userToSave.UserRoles != null)
                 {
@@ -284,8 +295,8 @@
 
                 if (errors.Count == 0)
                 {
-                    ViewData["errors"] = err;
-                    return this.RedirectToAction("index", "users");
+                    ViewBag.AlertMessage = err;
+                    return this.RedirectToAction("index", "users", new { alertMessage = err});
                 }
 
                 
@@ -427,6 +438,25 @@
         [HttpPost]
         public ActionResult Delete(int id)
         {
+            var allCustomers = _customerService.GetAllCustomers();
+            string err = "";
+            List<string> customersAlert = new List<string>();
+            
+            var emptyWG = new List<int>();
+            foreach (var c in allCustomers)
+            {
+                if (_userService.UserHasCase(c.Id, id, emptyWG))
+                    customersAlert.Add(c.Name);
+            }
+                        
+            if (customersAlert.Any())
+            {
+                err = Translation.Get("Det är inte möjligt att ta bort denna användare. Var vänlig inaktivera användaren istället") + ": ";
+                err += "(" + string.Join(",", customersAlert.ToArray()) + ") ";
+                TempData["PreventError"] = err;                
+                return this.RedirectToAction("edit", "users", new { id = id });
+            }                        
+
             if (this._userService.DeleteUser(id) == DeleteMessage.Success)
                 return this.RedirectToAction("index", "users");
             else

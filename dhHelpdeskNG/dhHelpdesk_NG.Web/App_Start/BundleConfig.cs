@@ -68,6 +68,7 @@
                             "~/Content/js/jquery.plupload.queue/jquery.plupload.queue.js",                            
                             "~/Content/js/dhHelpdesk-head.js",
                             "~/Content/js/jquery.form.min.js",
+                            "~/Content/js/jquery.toastmessage.js",
                             "~/Content/js/bootstrap-switch.min.js",
                             "~/Content/js/jquery.dataTables.min.js"));
 

@@ -16,6 +16,14 @@
                             @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
                         </div>   
                     }
+                    else
+                    if (TempData["PreventError"] != null)
+                    {
+                        var msg = (string)TempData["PreventError"];
+                        <div class="alert alert-error">
+                            @msg
+                        </div>   
+                    }
                    
                     @Html.ValidationSummary()
                     <div class="row">
@@ -101,9 +109,7 @@
 </div>
 <script type="text/javascript">
 
-    function showError(err) {
-        alert(err);
-    }
+    
     function submitForm() {
 
         //$("#CsSelected option").attr("selected", "selected");

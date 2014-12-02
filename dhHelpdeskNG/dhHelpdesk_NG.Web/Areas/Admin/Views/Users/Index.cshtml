@@ -2,7 +2,9 @@
 @model DH.Helpdesk.Web.Areas.Admin.Models.UserIndexViewModel
 @{
     ViewBag.Title = "Users";
+    var AMessage = ViewData["AlertMessage"];        
 }
+
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
@@ -213,10 +215,34 @@
     </div>
 </div>
 <input type="hidden" id="activeTab" value="@SessionFacade.ActiveTab" />
+
 <script type="text/javascript">
 
     var customerId = $("#currentCustomerId").val();
 
+    $(document).ready(function () {
+        var e = '@AMessage';
+        if (e!= "")
+            ShowToastMessage(e, "Warning");
+    });
+
+    function ShowToastMessage(message, msgType) {
+        $().toastmessage('showToast', {
+            text: message,
+            sticky: false,
+            position: 'top-center',
+            type: msgType,
+            closeText: '',
+            stayTime: 10000,
+            inEffectDuration: 1000,
+            width : 500,
+            close: function () {
+                //console.log("toast is closed ...");
+            }
+        });
+    }
+
+    
     $(function () {
         $("#customerDDL").change(function () {
             $("#searchUsers").submit();
