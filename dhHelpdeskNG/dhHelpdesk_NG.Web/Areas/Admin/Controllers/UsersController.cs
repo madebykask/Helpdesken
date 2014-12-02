@@ -273,7 +273,7 @@
                 {
                     err = Translation.Get("Denna användare står som ansvarig/handläggare på befintliga ärenden hos kund") + ": ";                      
                     err += "(" + string.Join(",", customersAlert.ToArray()) + ") ";
-                    err += " " + Translation.Get("Var vänlig se över de ärenden som användaren står på");
+                    err += " " + Translation.Get("Var vänlig se över de ärenden som användaren står på.");
                 }
 
                 if (userToSave.UserRoles != null)
