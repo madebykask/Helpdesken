@@ -4,6 +4,7 @@
 
     using DH.Helpdesk.BusinessData.Models.Orders.Index;
     using DH.Helpdesk.Dal.Infrastructure.Context;
+    using DH.Helpdesk.Services.BusinessLogic.OtherTools.Concrete;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Orders;
     using DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories;
@@ -20,16 +21,28 @@
 
         private readonly IOrdersModelFactory ordersModelFactory;
 
+        private readonly TemporaryIdProvider temporaryIdProvider;
+
+        private readonly INewOrderModelFactory newOrderModelFactory;
+
+        private readonly IOrderModelFactory orderModelFactory;
+
         public OrdersController(
                 IMasterDataService masterDataService, 
                 IOrdersService ordersService, 
                 IWorkContext workContext, 
-                IOrdersModelFactory ordersModelFactory)
+                IOrdersModelFactory ordersModelFactory, 
+                TemporaryIdProvider temporaryIdProvider, 
+                INewOrderModelFactory newOrderModelFactory, 
+                IOrderModelFactory orderModelFactory)
             : base(masterDataService)
         {
             this.ordersService = ordersService;
             this.workContext = workContext;
             this.ordersModelFactory = ordersModelFactory;
+            this.temporaryIdProvider = temporaryIdProvider;
+            this.newOrderModelFactory = newOrderModelFactory;
+            this.orderModelFactory = orderModelFactory;
         }
 
         [HttpGet]
@@ -86,7 +99,15 @@
         public ViewResult CreateOrder(int orderTypeForCteateOrderId)
         {
             var data = this.ordersService.GetNewOrderEditData(this.workContext.Customer.CustomerId, orderTypeForCteateOrderId);
-            return this.View();
+            var temporaryId = this.temporaryIdProvider.ProvideTemporaryId();
+
+            var model = this.newOrderModelFactory.Create(
+                                                temporaryId, 
+                                                data,
+                                                this.workContext.Customer.CustomerId,
+                                                orderTypeForCteateOrderId);
+
+            return this.View(model);
         }
     }
 }

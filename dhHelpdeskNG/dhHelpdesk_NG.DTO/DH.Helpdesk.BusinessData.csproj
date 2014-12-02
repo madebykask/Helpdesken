@@ -119,6 +119,7 @@
     <Compile Include="Enums\Orders\FieldNames\ReceiverFieldNames.cs" />
     <Compile Include="Enums\Orders\FieldNames\SupplierFieldNames.cs" />
     <Compile Include="Enums\Orders\FieldNames\UserFieldNames.cs" />
+    <Compile Include="Enums\Orders\Subtopic.cs" />
     <Compile Include="Enums\Projects\ProjectFields.cs" />
     <Compile Include="Models\Accounts\Read\Overview\AccountInformation.cs" />
     <Compile Include="Models\Accounts\Read\Overview\AccountOverview.cs" />

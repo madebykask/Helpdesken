@@ -1,0 +1,80 @@
+﻿namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
+{
+    using DH.Helpdesk.Common.ValidationAttributes;
+
+    public sealed class FullOrderEditModel
+    {
+        public FullOrderEditModel()
+        {            
+        }
+
+        public FullOrderEditModel(
+                    DeliveryEditModel delivery,
+                    GeneralEditModel general,
+                    LogEditModel log,
+                    OrdererEditModel orderer,
+                    OrderEditModel order,
+                    OtherEditModel other,
+                    ProgramEditModel program,
+                    ReceiverEditModel receiver,
+                    SupplierEditModel supplier,
+                    UserEditModel user,
+                    string id,
+                    int customerId,
+                    int? orderTypeId)
+        {
+            this.Delivery = delivery;
+            this.General = general;
+            this.Log = log;
+            this.Orderer = orderer;
+            this.Order = order;
+            this.Other = other;
+            this.Program = program;
+            this.Receiver = receiver;
+            this.Supplier = supplier;
+            this.User = user;
+            this.Id = id;
+            this.CustomerId = customerId;
+            this.OrderTypeId = orderTypeId;
+        }
+
+        [NotNull]
+        public DeliveryEditModel Delivery { get; set; }
+
+        [NotNull]
+        public GeneralEditModel General { get; set; }
+
+        [NotNull]
+        public LogEditModel Log { get; set; }
+
+        [NotNull]
+        public OrdererEditModel Orderer { get; set; }
+
+        [NotNull]
+        public OrderEditModel Order { get; set; }
+
+        [NotNull]
+        public OtherEditModel Other { get; set; }
+
+        [NotNull]
+        public ProgramEditModel Program { get; set; }
+
+        [NotNull]
+        public ReceiverEditModel Receiver { get; set; }
+
+        [NotNull]
+        public SupplierEditModel Supplier { get; set; }
+
+        [NotNull]
+        public UserEditModel User { get; set; }
+
+        [NotNullAndEmpty]
+        public string Id { get; set; }
+
+        [IsId]
+        public int CustomerId { get; set; }
+
+        [IsId]
+        public int? OrderTypeId { get; set; }
+    }
+}

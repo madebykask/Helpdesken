@@ -11,6 +11,9 @@
         {
             this.Bind<IOrdersModelFactory>().To<OrdersModelFactory>().InSingletonScope();
             this.Bind<IOrderFieldSettingsModelFactory>().To<OrderFieldSettingsModelFactory>().InSingletonScope();
+            this.Bind<IConfigurableFieldModelFactory>().To<ConfigurableFieldModelFactory>().InSingletonScope();
+            this.Bind<INewOrderModelFactory>().To<NewOrderModelFactory>().InSingletonScope();
+            this.Bind<IOrderModelFactory>().To<OrderModelFactory>().InSingletonScope();
         }
     }
 }
