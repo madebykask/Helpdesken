@@ -268,8 +268,7 @@
                         {
                             customersAlert.Add(c.Name);
                             //break;
-                        }
-                    }
+                    }                                               
                 }
 
                 if (customersAlert.Any())
