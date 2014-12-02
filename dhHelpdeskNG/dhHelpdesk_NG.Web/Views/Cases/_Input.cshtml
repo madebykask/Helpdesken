@@ -144,8 +144,12 @@
                                                                     <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.RegLanguage_Id.ToString()) >@Translation.Get(e.Name, SessionFacade.CurrentLanguageId)</option>
                                                                 }
                                                             </select>                                                                                                                                                                            
-                                                    }  
-                                                 }
+                                                        } 
+                                                        else
+                                                        {
+                                                           @Html.HiddenFor(m=> Model.case_.RegLanguage_Id);
+                                                        }
+                                                    }
                                                 </td>
                                             </tr>
                                             <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString())">

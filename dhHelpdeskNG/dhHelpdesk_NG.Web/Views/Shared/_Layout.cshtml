@@ -261,7 +261,7 @@
                                     </ul>
                                 </li>
 
-                                @if (model.Languages != null && model.Languages.Count > 1)
+                                @if (model.Languages != null && model.Languages.Where(l => l.IsActive == 1).ToList().Count > 1)
                                 {                                    
                                     <li class="dropdown-submenu">
                                         <a href="#">
@@ -269,7 +269,7 @@
                                             @Translation.Get("Språk")
                                         </a>
                                         <ul class="dropdown-menu">                                            
-                                            @foreach (var lang in model.Languages)
+                                            @foreach (var lang in model.Languages.Where(l=> l.IsActive == 1).ToList())
                                             {
                                                 <li>
                                                     @if (lang.Id == SessionFacade.CurrentUser.LanguageId)

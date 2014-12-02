@@ -1739,7 +1739,7 @@ namespace DH.Helpdesk.Web.Controllers
                 if (caseId != 0)
                 {
                     var admUser = _userService.GetUser(m.case_.Performer_User_Id);
-                    if (!m.performers.Contains(admUser))
+                    if (!m.performers.Contains(admUser) && admUser != null)
                         m.performers.Insert(0, admUser);
                 }
 
