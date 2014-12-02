@@ -17,6 +17,7 @@
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.MailTemplates;
+    using DH.Helpdesk.Domain.Problems;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Customers;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Customers;
     using DH.Helpdesk.Services.Infrastructure.Email;
@@ -339,10 +340,11 @@
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var customerRepository = uow.GetRepository<Customer>();
+                var problemsRep = uow.GetRepository<Problem>();
 
                 var customerCases = customerRepository.GetAll()
                                     .GetByIds(customerIds)
-                                    .MapToCustomerCases(userId);
+                                    .MapToCustomerCases(problemsRep.GetAll(), userId);
 
                 return customerCases;
             }

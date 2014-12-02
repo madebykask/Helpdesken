@@ -5,11 +5,13 @@
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.BusinessData.Models.Statistics.Output;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Problems;
 
     public static class CaseMapper
     {
         public static CustomerCases[] MapToCustomerCases(
                                             this IQueryable<Customer> query, 
+                                            IQueryable<Problem> problems, 
                                             int userId)
         {
             var entities = query.Select(cus => new
@@ -19,7 +21,14 @@
                                                 CasesInProgress = cus.Cases.Where(c => c.FinishingDate == null).Count(),
                                                 CasesClosed = cus.Cases.Where(c => c.FinishingDate != null).Count(),
                                                 CasesInRest = cus.Cases.Where(c => c.FinishingDate == null && c.StateSecondary_Id != null).Count(),
-                                                CasesMy = cus.Cases.Where(c => c.FinishingDate == null && c.Performer_User_Id == userId).Count()
+                                                CasesMy = (from c in cus.Cases
+                                                           join p in problems on c.Problem equals p into gj
+                                                           from cp in gj.DefaultIfEmpty()
+                                                           where (c.FinishingDate == null && 
+                                                                (c.Performer_User_Id == userId ||
+                                                                c.CaseResponsibleUser_Id == userId ||
+                                                                c.Problem.ResponsibleUser_Id == userId))
+                                                           select c).Count()
                                             }).ToArray();
 
             var overviews = entities.Select(c => new CustomerCases(
@@ -33,14 +42,24 @@
             return overviews;
         }
 
-        public static StatisticsOverview MapToStatistics(this IQueryable<Case> query, int userId)
+        public static StatisticsOverview MapToStatistics(
+                                                this IQueryable<Case> query,
+                                                IQueryable<Problem> problems, 
+                                                int userId)
         {
             var entity = query.Take(1).Select(cs => new
                                                 {
                                                     ActiveCases = query.Where(c => c.FinishingDate == null).Count(),
                                                     EndedCases = query.Where(c => c.FinishingDate != null).Count(),
                                                     InRestCases = query.Where(c => c.FinishingDate == null && c.StateSecondary_Id != null).Count(),
-                                                    MyCases = query.Where(c => c.FinishingDate == null && c.Performer_User_Id == userId).Count()                                                              
+                                                    MyCases = (from c in query
+                                                               join p in problems on c.Problem equals p into gj
+                                                               from cp in gj.DefaultIfEmpty()
+                                                               where (c.FinishingDate == null &&
+                                                                    (c.Performer_User_Id == userId ||
+                                                                    c.CaseResponsibleUser_Id == userId ||
+                                                                    c.Problem.ResponsibleUser_Id == userId))
+                                                               select c).Count()                                                             
                                                 }).SingleOrDefault();
             if (entity == null)
             {
