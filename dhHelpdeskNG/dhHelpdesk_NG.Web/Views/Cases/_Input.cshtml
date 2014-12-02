@@ -123,7 +123,6 @@
                                                             @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new { @readonly = true, @disabled = "disabled" }) 
                                                         }
                                                         @Translation.Get("Skicka mail till anmälaren", SessionFacade.CurrentLanguageId)
-
                                                     </label>
                                                     
                                                     @if (Model.Languages != null && Model.Languages.Count() > 1 && Model.case_.Id == 0)

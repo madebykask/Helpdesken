@@ -1200,16 +1200,16 @@ $(function () {
 
     var langEl = $('#case__RegLanguage_Id'),
         doNotSendEl = $("#CaseMailSetting_DontSendMailToNotifier");
-    doNotSendEl.on('change', function(ev) {
+    doNotSendEl.on('change', function() {
         if ($(doNotSendEl).is(':checked')) {
-            langEl.hide();
-        } else {
             langEl.show();
+        } else {
+            langEl.hide();
         }
     });
     if ($(doNotSendEl).is(':checked')) {
-        langEl.hide();
-    } else {
         langEl.show();
+    } else {
+        langEl.hide();
     }
 });
