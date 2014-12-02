@@ -154,11 +154,11 @@
             {
                 workingGroups =
                     this.workingGroupRepository.FindActiveByCustomerIdIncludingSpecifiedWorkingGroup(
-                        faq.CustomerId, faq.WorkingGroupId.Value);
+                        faq.CustomerId, faq.WorkingGroupId.Value).OrderBy(w => w.Name).ToList();
             }
             else
             {
-                workingGroups = this.workingGroupRepository.FindActiveOverviews(faq.CustomerId);
+                workingGroups = this.workingGroupRepository.FindActiveOverviews(faq.CustomerId).OrderBy(w=> w.Name).ToList();
             }
 
             var model = this.editFaqModelFactory.Create(faq, categoriesWithSubcategories, fileNames, workingGroups);
@@ -305,7 +305,7 @@
             var categoriesWithSubcategories =
                 this.faqCategoryRepository.FindCategoriesWithSubcategoriesByCustomerId(currentCustomerId);
 
-            var workingGroups = this.workingGroupRepository.FindActiveOverviews(currentCustomerId);
+            var workingGroups = this.workingGroupRepository.FindActiveOverviews(currentCustomerId).OrderBy(w=> w.Name).ToList();
             var model = this.newFaqModelFactory.Create(Guid.NewGuid().ToString(), categoriesWithSubcategories, categoryId, workingGroups);
             ViewData["FN"] = GetFAQFileNames(model.TemporaryId);
 

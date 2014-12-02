@@ -59,7 +59,7 @@
                 categories.Add(category);
             }
 
-            return categories;
+            return categories.OrderBy(c=> c.Name).ToList();
         }
 
         public bool CategoryHasSubcategories(int categoryId)
@@ -79,7 +79,7 @@
         {
             var category = new CategoryWithSubcategories { Id = parentCategory.Id, Name = parentCategory.Name };
 
-            var subcategoryEntities = allCategories.Where(c => c.Parent_FAQCategory_Id == parentCategory.Id).ToList();
+            var subcategoryEntities = allCategories.Where(c => c.Parent_FAQCategory_Id == parentCategory.Id).OrderBy(c=>c.Name).ToList();
             if (subcategoryEntities.Any())
             {
                 var subcategories =
