@@ -256,7 +256,7 @@
                     var emptyWG = new List<int>();
                     foreach (var c in allCustomers)
                     {                        
-                        if (_userService.UserHasCase(c.Id, userToSave.Id , emptyWG))
+                        if (_userService.UserHasCase(c.Id, userToSave.Id, emptyWG))
                              customersAlert.Add(c.Name);
                     }                                       
                 }
@@ -264,9 +264,11 @@
                 {
                     foreach (var c in allCustomers)
                     {
-                        if (_userService.UserHasCase(c.Id, userToSave.Id, UserWorkingGroups.Where(w=> w.UserRole != 0).Select(w => w.WorkingGroup_Id).ToList()))
+                        if (_userService.UserHasCase(c.Id, userToSave.Id, UserWorkingGroups.Where(w => w.UserRole != 0).Select(w => w.WorkingGroup_Id).ToList()))
                             customersAlert.Add(c.Name); 
                     }                    
+                            break;
+                        }
                 }
 
                 if (customersAlert.Any())
