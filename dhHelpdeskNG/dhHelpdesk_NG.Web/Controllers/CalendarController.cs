@@ -154,11 +154,13 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public ActionResult New()
         {
+            var today = DateTime.Today;
             var model = this.CreateInputViewModel(new CalendarOverview
                                                       {
                                                           CustomerId = SessionFacade.CurrentCustomer.Id, 
-                                                          CalendarDate = DateTime.Now, 
-                                                          ShowUntilDate = DateTime.Now
+                                                          CalendarDate = today, 
+                                                          ShowFromDate = today,
+                                                          ShowUntilDate = today
                                                       });
 
             return this.View(model);

@@ -35,6 +35,7 @@ namespace DH.Helpdesk.Dal.Mappers.Calendars.BusinessModelToEntity
             entity.Caption = businessModel.Caption;
             entity.Text = businessModel.Text;
             entity.ShowOnStartPage = businessModel.ShowOnStartPage.ToInt();
+            entity.ShowFromDate = businessModel.ShowFromDate;
             entity.ShowUntilDate = businessModel.ShowUntilDate;
             entity.PublicInformation = businessModel.PublicInformation.ToInt();
             entity.ChangedByUser_Id = businessModel.ChangedByUserId;

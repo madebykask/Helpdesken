@@ -56,6 +56,8 @@ namespace DH.Helpdesk.BusinessData.Models.Calendar.Output
         /// </summary>
         public bool ShowOnStartPage { get; set; }
 
+        public DateTime? ShowFromDate { get; set; }
+
         /// <summary>
         /// Gets or sets the show until date.
         /// </summary>

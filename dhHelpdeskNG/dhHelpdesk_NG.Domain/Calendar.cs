@@ -23,6 +23,9 @@ namespace DH.Helpdesk.Domain
         public DateTime CalendarDate { get; set; }
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
+
+        public DateTime? ShowFromDate { get; set; }
+
         [DataType(DataType.Date)]
         public DateTime ShowUntilDate { get; set; }
 

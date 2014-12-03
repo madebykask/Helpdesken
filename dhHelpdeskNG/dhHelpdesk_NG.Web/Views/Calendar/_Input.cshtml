@@ -28,6 +28,14 @@
                                 </tr>
                                 <tr>
                                     <td>
+                                        @Translation.Get("Visa fr.o.m")
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(model => model.Calendar.ShowFromDate, "DatePicker", new { id = "divCalendar_ShowFromDate" }) 
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
                                         @Translation.Get("Visa t.o.m")
                                     </td>
                                     <td>

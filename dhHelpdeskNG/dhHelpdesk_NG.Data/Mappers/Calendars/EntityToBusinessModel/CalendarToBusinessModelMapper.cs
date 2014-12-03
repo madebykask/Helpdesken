@@ -42,6 +42,7 @@ namespace DH.Helpdesk.Dal.Mappers.Calendars.EntityToBusinessModel
                            Caption = entity.Caption,
                            Text = entity.Text,
                            ShowOnStartPage = entity.ShowOnStartPage.ToBool(),
+                           ShowFromDate = entity.ShowFromDate,
                            ShowUntilDate = entity.ShowUntilDate,
                            PublicInformation = entity.PublicInformation.ToBool(),
                            ChangedByUserId = entity.ChangedByUser_Id,

@@ -18,6 +18,7 @@
                                             c.Caption,
                                             c.Text,
                                             c.ShowOnStartPage,
+                                            c.ShowFromDate,
                                             c.ShowUntilDate,
                                             c.PublicInformation
                                         }).ToArray();
@@ -29,6 +30,7 @@
                                             Caption = c.Caption,
                                             Text = c.Text,
                                             ShowOnStartPage = c.ShowOnStartPage.ToBool(),
+                                            ShowFromDate = c.ShowFromDate,
                                             ShowUntilDate = c.ShowUntilDate,
                                             PublicInformation = c.PublicInformation.ToBool()
                                         }).ToArray();
@@ -49,6 +51,7 @@
                            Caption = entity.Caption,
                            Text = entity.Text,
                            ShowOnStartPage = entity.ShowOnStartPage.ToBool(),
+                           ShowFromDate = entity.ShowFromDate,
                            ShowUntilDate = entity.ShowUntilDate,
                            PublicInformation = entity.PublicInformation.ToBool(),
                            ChangedByUserId = entity.ChangedByUser_Id,
@@ -65,6 +68,7 @@
             entity.Caption = model.Caption;
             entity.Text = model.Text;
             entity.ShowOnStartPage = model.ShowOnStartPage.ToInt();
+            entity.ShowFromDate = model.ShowFromDate;
             entity.ShowUntilDate = model.ShowUntilDate;
             entity.PublicInformation = model.PublicInformation.ToInt();
             entity.ChangedByUser_Id = model.ChangedByUserId;

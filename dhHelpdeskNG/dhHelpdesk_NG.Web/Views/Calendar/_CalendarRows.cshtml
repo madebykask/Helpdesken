@@ -11,6 +11,11 @@
                 @{CurIcon = "CalendarDate";}                
                 <i class="@CurIcon.SetCalendarSortIcon()"></i>
             </th>           
+            <th sort-data="ShowFromDate"   style="cursor: pointer; cursor: hand">
+                @Translation.Get("Visa fr.o.m")                                
+                @{CurIcon = "ShowFromDate";}
+                <i class="@CurIcon.SetCalendarSortIcon()"></i>                
+            </th>
             <th sort-data="ShowUntilDate"   style="cursor: pointer; cursor: hand">
                 @Translation.Get("Visa t.o.m")                                
                 @{CurIcon = "ShowUntilDate";}
@@ -44,6 +49,9 @@
             <tr>
                 <td>
                     <a href="@Url.Action("edit", "calendar", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CalendarDate, "Date")</a>
+                </td>
+                <td>
+                    <a href="@Url.Action("edit", "calendar", new { id = item.Id })">@Html.DisplayFor(modelItem => item.ShowFromDate , "Date")</a>
                 </td>
                 <td>
                     <a href="@Url.Action("edit", "calendar", new { id = item.Id })">@Html.DisplayFor(modelItem => item.ShowUntilDate , "Date")</a>

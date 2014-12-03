@@ -38,6 +38,7 @@
             this.Property(x => x.Customer_Id).IsRequired();
             this.Property(x => x.PublicInformation).IsRequired();
             this.Property(x => x.ShowOnStartPage).IsRequired();
+            this.Property(c => c.ShowFromDate).IsOptional();
             this.Property(x => x.ShowUntilDate).IsRequired();
             this.Property(x => x.Text).IsRequired().HasMaxLength(2000).HasColumnName("CalendarText");
             this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
