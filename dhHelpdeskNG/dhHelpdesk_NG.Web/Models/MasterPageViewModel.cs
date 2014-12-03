@@ -143,9 +143,9 @@
 
         public bool IsSettingsModulesVisible()
         {
-            return false;                
-                //this.IsInventoryVisible() ||
-                //this.IsLicenseVisible();
+            return                 
+                this.IsInventoryVisible() ||
+                this.IsLicenseVisible();
 
             //this.IsOrderVisible() ||
             //this.IsAccountVisible() ||
@@ -168,8 +168,8 @@
         public bool IsReportsLogsModulesVisible()
         {
             return 
-                   //this.IsReportVisible() ||
-                   //this.IsDailyReportVisible() ||        
+                   this.IsReportVisible() ||
+                   this.IsDailyReportVisible() ||        
                    this.IsOperationLogVisible();
         }
 
@@ -180,8 +180,8 @@
                 this.IsCaseSolutionVisible() ||
                 this.IsComputerUserVisible() ||
                 this.IsChangeManagementVisible() ||
-                this.IsProblemVisible();// ||
-                //this.IsProjectVisible();
+                this.IsProblemVisible() ||
+                this.IsProjectVisible();
         }
     }
 }
