@@ -325,7 +325,9 @@ namespace DH.Helpdesk.Services.Services
 
                 if (untilTodayOnly)
                 {
-                    query = query.GetUntilToday();
+                    query = query
+                        .GetFromDate()
+                        .GetUntilDate();
                 }
         
                 return query.RestrictByWorkingGroups(this.workContext)

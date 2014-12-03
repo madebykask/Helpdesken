@@ -134,6 +134,7 @@
     <Compile Include="BusinessLogic\Mappers\Shared\Data\UnionItemOverview.cs" />
     <Compile Include="BusinessLogic\Mappers\Shared\GlobalMappers.cs" />
     <Compile Include="BusinessLogic\Specifications\Accounts\AccountSpecifications.cs" />
+    <Compile Include="BusinessLogic\Specifications\BulletinBoards\BulletinBoardsSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Calendars\CalendarsSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Case\CaseSpecifications.cs" />
     <Compile Include="BusinessLogic\Invoice\ArticlesImportData.cs" />

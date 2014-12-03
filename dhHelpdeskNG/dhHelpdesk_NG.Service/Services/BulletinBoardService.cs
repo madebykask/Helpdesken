@@ -12,6 +12,7 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.BulletinBoards;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications.BulletinBoards;
 
     using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
 
@@ -221,6 +222,8 @@
                 var repository = uow.GetRepository<BulletinBoard>();
 
                 return repository.GetAll()
+                        .GetFromDate()
+                        .GetUntilDate()
                         .RestrictByWorkingGroups(this.workContext)
                         .GetForStartPage(customers, count, forStartPage)
                         .MapToOverviews();

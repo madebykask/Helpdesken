@@ -8,7 +8,16 @@
 
     public static class CalendarsSpecifications
     {
-        public static IQueryable<Calendar> GetUntilToday(this IQueryable<Calendar> query)
+        public static IQueryable<Calendar> GetFromDate(this IQueryable<Calendar> query)
+        {
+            var today = DateTime.Today.RoundToDay();
+
+            query = query.Where(c => c.ShowFromDate <= today);
+
+            return query;
+        } 
+
+        public static IQueryable<Calendar> GetUntilDate(this IQueryable<Calendar> query)
         {
             var today = DateTime.Today.RoundToDay();
 
