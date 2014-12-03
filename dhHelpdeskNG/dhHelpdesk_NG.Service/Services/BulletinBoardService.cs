@@ -81,7 +81,6 @@
                 var rep = uow.GetRepository<BulletinBoard>();
 
                 var query = from bb in rep.GetAll()
-                                        .RestrictByWorkingGroups(this.workContext)
                                         .GetByCustomer(customerId)
                              select bb;
 
@@ -220,11 +219,16 @@
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var repository = uow.GetRepository<BulletinBoard>();
+                var query = repository.GetAll();
 
-                return repository.GetAll()
+                if (forStartPage)
+                {
+                    query = query.RestrictByWorkingGroups(this.workContext);
+                }
+
+                return query
                         .GetFromDate()
                         .GetUntilDate()
-                        .RestrictByWorkingGroups(this.workContext)
                         .GetForStartPage(customers, count, forStartPage)
                         .MapToOverviews();
             }

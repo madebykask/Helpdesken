@@ -152,10 +152,14 @@
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var repository = uow.GetRepository<FaqEntity>();
+                var query = repository.GetAll();
 
-                return repository.GetAll()
-                        .RestrictByWorkingGroup(this.workContext)
-                        .GetForStartPageWithOptionalCustomer(customers, count, forStartPage)
+                if (forStartPage)
+                {
+                    query = query.RestrictByWorkingGroup(this.workContext);
+                }
+
+                return query.GetForStartPageWithOptionalCustomer(customers, count, forStartPage)
                         .MapToOverviews();
             }
         }
@@ -257,7 +261,6 @@
             {
                 var repository = uow.GetRepository<FaqEntity>();
                 return repository.GetAll()
-                    .RestrictByWorkingGroup(this.workContext)
                     .Where(f => f.FAQCategory_Id == categoryId && !string.IsNullOrEmpty(f.FAQQuery))
                     .ToList();
             }

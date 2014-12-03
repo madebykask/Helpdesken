@@ -329,9 +329,13 @@ namespace DH.Helpdesk.Services.Services
                         .GetFromDate()
                         .GetUntilDate();
                 }
-        
-                return query.RestrictByWorkingGroups(this.workContext)
-                        .GetForStartPage(customers, count, forStartPage)
+
+                if (forStartPage)
+                {
+                    query = query.RestrictByWorkingGroups(this.workContext);
+                }
+
+                return query.GetForStartPage(customers, count, forStartPage)
                         .MapToOverviews();
             }
         }
