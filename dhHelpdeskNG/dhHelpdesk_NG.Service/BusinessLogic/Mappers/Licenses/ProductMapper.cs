@@ -18,7 +18,7 @@
                                                     ProductName = p.Name,
                                                     Regions = p.Licenses.Select(l => l.Region.Name).Distinct(),
                                                     Departments = p.Licenses.Select(l => l.Department.DepartmentName).Distinct(),
-                                                    LicencesNumber = p.Licenses.Select(l => l.NumberOfLicenses).Sum(),
+                                                    LicencesNumber = p.Licenses.Select(l => l.NumberOfLicenses),
                                                     UsedLicencesNumber = software.Where(s => p.Applications.Select(a => a.Name).Contains(s.Name)).Count()
                                                 })
                                                 .OrderBy(p => p.ProductName)
@@ -29,7 +29,7 @@
                                                     p.ProductName,
                                                     p.Regions.ToArray(),
                                                     p.Departments.ToArray(),
-                                                    p.LicencesNumber,
+                                                    p.LicencesNumber.Sum(),
                                                     p.UsedLicencesNumber)).ToArray();
 
             return overviews;
