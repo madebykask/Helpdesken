@@ -248,7 +248,6 @@ namespace DH.Helpdesk.Services.Services
                 var rep = uow.GetRepository<Document>();
 
                 var entities = rep.GetAll()                        
-                        .RestrictByWorkingGroupsAndUsers(this.workContext)
                         .GetByCustomer(customerId)
                         .Select(d => new
                             {
@@ -306,7 +305,6 @@ namespace DH.Helpdesk.Services.Services
                 return rep.GetAll()
                         .IncludePath(d => d.Us)
                         .IncludePath(d => d.WGs)
-                        .RestrictByWorkingGroupsAndUsers(this.workContext)
                         .GetById(id)
                         .SingleOrDefault();
             }
@@ -344,7 +342,6 @@ namespace DH.Helpdesk.Services.Services
                     var rep = uow.GetRepository<Document>();
 
                     var entity = rep.GetAll()
-                                  .RestrictByWorkingGroupsAndUsers(this.workContext)
                                   .GetById(id)
                                   .SingleOrDefault();
 
@@ -562,9 +559,13 @@ namespace DH.Helpdesk.Services.Services
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var repository = uow.GetRepository<Document>();
+                var query = repository.GetAll();
+                if (forStartPage)
+                {
+                    query = query.RestrictByWorkingGroupsAndUsers(this.workContext);
+                }
 
-                return repository.GetAll()
-                        .RestrictByWorkingGroupsAndUsers(this.workContext)
+                return query                        
                         .GetForStartPage(customers, count, forStartPage)
                         .MapToOverviews();
             }
@@ -586,7 +587,6 @@ namespace DH.Helpdesk.Services.Services
                 var repository = uow.GetRepository<Document>();
 
                 var entities = repository.GetAll()
-                        .RestrictByWorkingGroupsAndUsers(this.workContext)
                         .Where(d => d.Id == document)
                         .Select(d => new
                         {

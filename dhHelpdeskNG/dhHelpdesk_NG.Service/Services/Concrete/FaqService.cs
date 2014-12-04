@@ -85,7 +85,6 @@
                 var faqFileRep = uow.GetRepository<FaqFileEntity>();
 
                 var faq = faqRep.GetAll()
-                        .RestrictByWorkingGroup(this.workContext)
                         .GetById(faqId)
                         .SingleOrDefault();
 
@@ -225,7 +224,6 @@
                 var repository = uow.GetRepository<FaqEntity>();
 
                 var faqEntity = repository.GetAll()
-                                .RestrictByWorkingGroup(this.workContext)
                                 .GetById(faqId)
                                 .SingleOrDefault();
 
@@ -274,7 +272,6 @@
 
                 var repository = uow.GetRepository<FaqEntity>();
                 return repository.GetAll()
-                    .RestrictByWorkingGroup(this.workContext)
                     .Where(f => f.Customer_Id == customerId)
                     .Where(
                         f =>

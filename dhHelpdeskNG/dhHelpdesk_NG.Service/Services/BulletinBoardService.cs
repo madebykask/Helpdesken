@@ -18,7 +18,7 @@
 
     public interface IBulletinBoardService
     {
-        IList<BulletinBoard> GetBulletinBoards(int customerId, bool secure = true);
+        IList<BulletinBoard> GetBulletinBoards(int customerId, bool secure = false);
 
         IList<BulletinBoard> SearchAndGenerateBulletinBoard(int customerId, IBulletinBoardSearch SearchBulletinBoards);
 
@@ -55,19 +55,19 @@
             this.workContext = workContext;
         }
 
-        public IList<BulletinBoard> GetBulletinBoards(int customerId, bool secure = true)
+        public IList<BulletinBoard> GetBulletinBoards(int customerId, bool secure = false)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var rep = uow.GetRepository<BulletinBoard>();
+                var query = rep.GetAll();
 
                 if (secure)
-                    return rep.GetAll()
-                            .RestrictByWorkingGroups(this.workContext)
-                            .GetByCustomer(customerId)
-                            .ToList();
-                else
-                    return rep.GetAll()
+                {
+                    query = query.RestrictByWorkingGroups(this.workContext);
+                }
+
+                return query                            
                             .GetByCustomer(customerId)
                             .ToList();
 
@@ -114,7 +114,6 @@
                 var rep = uow.GetRepository<BulletinBoard>();
 
                 return rep.GetAll()
-                        .RestrictByWorkingGroups(this.workContext)
                         .GetById(id)
                         .IncludePath(o => o.WGs)
                         .SingleOrDefault();
@@ -130,7 +129,6 @@
                     var rep = uow.GetRepository<BulletinBoard>();
 
                     var entity = rep.GetAll()
-                                  .RestrictByWorkingGroups(this.workContext)
                                   .GetById(id)
                                   .SingleOrDefault();
 

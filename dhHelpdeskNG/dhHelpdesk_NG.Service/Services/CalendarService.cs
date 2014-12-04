@@ -201,7 +201,6 @@ namespace DH.Helpdesk.Services.Services
                 var rep = uow.GetRepository<Calendar>();
 
                 var entity = rep.GetAll()
-                        .RestrictByWorkingGroups(this.workContext)
                         .GetById(id)
                         .IncludePath(o => o.WGs)
                         .SingleOrDefault();
@@ -228,7 +227,6 @@ namespace DH.Helpdesk.Services.Services
                     var rep = uow.GetRepository<Calendar>();
 
                     var entity = rep.GetAll()
-                                  .RestrictByWorkingGroups(this.workContext)
                                   .GetById(id)
                                   .SingleOrDefault();
 
