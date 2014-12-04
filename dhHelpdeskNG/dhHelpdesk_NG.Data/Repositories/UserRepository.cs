@@ -180,7 +180,7 @@ namespace DH.Helpdesk.Dal.Repositories
         public IEnumerable<User> GetUsers(int customerId)
         {
             var query = from u in this.DataContext.Users
-                        where u.Customer_Id == customerId
+                        where u.Customer_Id == customerId && u.CustomerUsers.Any(c => c.Customer_Id == customerId)
                         select u;
 
             return query;
