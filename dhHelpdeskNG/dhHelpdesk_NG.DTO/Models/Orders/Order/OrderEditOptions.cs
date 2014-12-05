@@ -1,6 +1,9 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Orders.Order
 {
+    using System.Collections.Generic;
+
     using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class OrderEditOptions
@@ -13,8 +16,14 @@
                 ItemOverview[] units, 
                 ItemOverview[] properties, 
                 ItemOverview[] deliveryDepartment, 
-                ItemOverview[] deliveryOuId)
+                ItemOverview[] deliveryOuId, 
+                List<GroupWithEmails> emailGroups, 
+                List<GroupWithEmails> workingGroupsWithEmails, 
+                List<ItemOverview> administratorsWithEmails)
         {
+            this.AdministratorsWithEmails = administratorsWithEmails;
+            this.WorkingGroupsWithEmails = workingGroupsWithEmails;
+            this.EmailGroups = emailGroups;
             this.DeliveryOuId = deliveryOuId;
             this.DeliveryDepartment = deliveryDepartment;
             this.Properties = properties;
@@ -47,6 +56,15 @@
         public ItemOverview[] DeliveryDepartment { get; private set; } 
         
         [NotNull]
-        public ItemOverview[] DeliveryOuId { get; private set; } 
+        public ItemOverview[] DeliveryOuId { get; private set; }
+
+        [NotNull]
+        public List<GroupWithEmails> EmailGroups { get; private set; }
+
+        [NotNull]
+        public List<GroupWithEmails> WorkingGroupsWithEmails { get; private set; }
+
+        [NotNull]
+        public List<ItemOverview> AdministratorsWithEmails { get; private set; }
     }
 }

@@ -19,5 +19,22 @@
 
             return query;
         }
+
+        public static IQueryable<User> GetActive(this IQueryable<User> query)
+        {
+            query = query.Where(u => u.IsActive != 0);
+
+            return query;
+        } 
+
+        public static IQueryable<User> GetAdministratorsWithEmails(this IQueryable<User> query, int customerId)
+        {
+            query = query
+                .GetByCustomer(customerId)
+                .GetActive()
+                .Where(u => u.Email != string.Empty);
+
+            return query;
+        } 
     }
 }

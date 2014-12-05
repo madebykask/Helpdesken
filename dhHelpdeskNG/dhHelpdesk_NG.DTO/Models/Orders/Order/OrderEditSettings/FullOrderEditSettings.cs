@@ -14,9 +14,9 @@
                 ProgramEditSettings program, 
                 ReceiverEditSettings receiver, 
                 SupplierEditSettings supplier, 
-                UserEditSettings userEditSettings)
+                UserEditSettings user)
         {
-            this.UserEditSettings = userEditSettings;
+            this.User = user;
             this.Supplier = supplier;
             this.Receiver = receiver;
             this.Program = program;
@@ -56,6 +56,6 @@
         public SupplierEditSettings Supplier { get; private set; }
 
         [NotNull]
-        public UserEditSettings UserEditSettings { get; private set; }
+        public UserEditSettings User { get; private set; }
     }
 }

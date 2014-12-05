@@ -102,7 +102,7 @@
 
         public ConfigurableFieldModel<MultiSelectList> CreateMultiSelectListField(
             FieldEditSettings setting,
-            List<ItemOverview> items,
+            ItemOverview[] items,
             List<string> selectedValues)
         {
             if (!setting.Show)
@@ -123,7 +123,7 @@
 
         public ConfigurableFieldModel<SelectList> CreateSelectListField(
             FieldEditSettings setting,
-            List<ItemOverview> items,
+            ItemOverview[] items,
             string selectedValue,
             bool needEmptyItem = false)
         {
@@ -132,12 +132,13 @@
                 return ConfigurableFieldModel<SelectList>.CreateUnshowable();
             }
 
+            var itemsList = items.ToList();
             if (needEmptyItem)
             {
-                items.Insert(0, new ItemOverview(string.Empty, string.Empty));
+                itemsList.Insert(0, new ItemOverview(string.Empty, string.Empty));
             }
 
-            var list = new SelectList(items, "Value", "Name", selectedValue);
+            var list = new SelectList(itemsList, "Value", "Name", selectedValue);
             return new ConfigurableFieldModel<SelectList>(setting.Caption, list, setting.Required);
         }
 

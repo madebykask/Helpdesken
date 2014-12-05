@@ -145,6 +145,7 @@
     <Compile Include="BusinessLogic\Specifications\Common\UserSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Customers\CustomerSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Documents\DocumentSpecifications.cs" />
+    <Compile Include="BusinessLogic\Mappers\EmailGroup\EmailGroupMapper.cs" />
     <Compile Include="BusinessLogic\Specifications\EmailTemplate\MailTemplateSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\EmailTemplate\MailTemplateLanguageSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\GlobalSpecifications.cs" />
