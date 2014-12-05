@@ -1,0 +1,18 @@
+﻿@model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.FullOrderEditModel
+@{
+    Layout = "~/Areas/Orders/Views/Shared/_OrderLayout.cshtml";
+}
+
+@section Actions
+{
+    
+}
+
+@section Content
+{
+    @using (Html.BeginForm("New", "Orders", FormMethod.Post, new { id = "order_form" }))
+    {
+        @Html.EditorFor(m => m)
+    }
+}
+

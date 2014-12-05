@@ -37,5 +37,13 @@
 
         [IsId]
         public int? StatusId { get; set; }
+
+        public bool HasShowableFields()
+        {
+            return this.FileName.Show ||
+                this.CaseNumber.Show ||
+                this.Info.Show ||
+                this.Status.Show;
+        }
     }
 }

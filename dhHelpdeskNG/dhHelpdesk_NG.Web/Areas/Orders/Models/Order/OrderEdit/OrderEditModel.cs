@@ -76,6 +76,22 @@
         public ConfigurableFieldModel<string> OrderInfo { get; set; } 
 
         [NotNull]
-        public ConfigurableFieldModel<string> OrderInfo2 { get; set; } 
+        public ConfigurableFieldModel<string> OrderInfo2 { get; set; }
+
+        public bool HasShowableFields()
+        {
+            return this.Property.Show ||
+                this.OrderRow1.Show ||
+                this.OrderRow2.Show ||
+                this.OrderRow3.Show ||
+                this.OrderRow4.Show ||
+                this.OrderRow5.Show ||
+                this.OrderRow6.Show ||
+                this.OrderRow7.Show ||
+                this.OrderRow8.Show ||
+                this.Configuration.Show ||
+                this.OrderInfo.Show ||
+                this.OrderInfo2.Show;
+        }
     }
 }

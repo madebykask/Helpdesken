@@ -28,6 +28,13 @@
         public ConfigurableFieldModel<DateTime?> SupplierOrderDate { get; set; } 
 
         [NotNull]
-        public ConfigurableFieldModel<string> SupplierOrderInfo { get; set; } 
+        public ConfigurableFieldModel<string> SupplierOrderInfo { get; set; }
+
+        public bool HasShowableFields()
+        {
+            return this.SupplierOrderNumber.Show ||
+                this.SupplierOrderDate.Show ||
+                this.SupplierOrderInfo.Show;
+        }
     }
 }

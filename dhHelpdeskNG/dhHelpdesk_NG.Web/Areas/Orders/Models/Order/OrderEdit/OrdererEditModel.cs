@@ -99,6 +99,26 @@
         public ConfigurableFieldModel<string> AccountingDimension4 { get; set; } 
 
         [NotNull]
-        public ConfigurableFieldModel<string> AccountingDimension5 { get; set; } 
+        public ConfigurableFieldModel<string> AccountingDimension5 { get; set; }
+
+        public bool HasShowableFields()
+        {
+            return this.OrdererId.Show ||
+                this.OrdererName.Show ||
+                this.OrdererLocation.Show ||
+                this.OrdererEmail.Show ||
+                this.OrdererPhone.Show ||
+                this.OrdererCode.Show ||
+                this.Department.Show ||
+                this.Unit.Show ||
+                this.OrdererAddress.Show ||
+                this.OrdererInvoiceAddress.Show ||
+                this.OrdererReferenceNumber.Show ||
+                this.AccountingDimension1.Show ||
+                this.AccountingDimension2.Show ||
+                this.AccountingDimension3.Show ||
+                this.AccountingDimension4.Show ||
+                this.AccountingDimension5.Show;
+        }
     }
 }

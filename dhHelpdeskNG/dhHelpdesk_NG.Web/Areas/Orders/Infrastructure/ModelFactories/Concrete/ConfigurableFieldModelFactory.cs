@@ -36,7 +36,7 @@
 
         public ConfigurableFieldModel<AttachedFilesModel> CreateAttachedFiles(
             FieldEditSettings setting,
-            string changeId,
+            string orderId,
             Subtopic area,
             List<string> files)
         {
@@ -45,7 +45,7 @@
                 return ConfigurableFieldModel<AttachedFilesModel>.CreateUnshowable();
             }
 
-            var attachedFilesModel = new AttachedFilesModel(changeId, area, files);
+            var attachedFilesModel = new AttachedFilesModel(orderId, area, files);
             return new ConfigurableFieldModel<AttachedFilesModel>(setting.Caption, attachedFilesModel, setting.Required);
         }
 
@@ -63,9 +63,16 @@
                 : new ConfigurableFieldModel<int>(setting.Caption, value, setting.Required);
         }
 
+        public ConfigurableFieldModel<decimal?> CreateNullableDecimalField(FieldEditSettings setting, decimal? value)
+        {
+            return !setting.Show
+                ? ConfigurableFieldModel<decimal?>.CreateUnshowable()
+                : new ConfigurableFieldModel<decimal?>(setting.Caption, value, setting.Required);
+        }
+
         public ConfigurableFieldModel<LogsModel> CreateLogs(
             FieldEditSettings setting,
-            int changeId,
+            int orderId,
             Subtopic area,
             List<Log> logs,
             List<GroupWithEmails> emailGroups,
@@ -79,7 +86,7 @@
 
             var logModels = logs.Select(l => new LogModel(l.Id, l.DateAndTime, l.RegisteredBy, l.Text)).ToList();
             var sendToDialog = this.sendToDialogModelFactory.Create(emailGroups, workingGroups, administrators);
-            var logsModel = new LogsModel(changeId, area, logModels, sendToDialog);
+            var logsModel = new LogsModel(orderId, area, logModels, sendToDialog);
 
             return new ConfigurableFieldModel<LogsModel>(setting.Caption, logsModel, setting.Required);
         }
@@ -147,6 +154,28 @@
             return !setting.Show
                 ? ConfigurableFieldModel<string>.CreateUnshowable()
                 : new ConfigurableFieldModel<string>(setting.Caption, value, setting.Required);
+        }
+
+        public ConfigurableFieldModel<ProgramsModel> CreatePrograms(FieldEditSettings setting, List<ProgramModel> programs)
+        {
+            if (!setting.Show)
+            {
+                return ConfigurableFieldModel<ProgramsModel>.CreateUnshowable();
+            }
+
+            var programsModel = new ProgramsModel(0, programs);
+            return new ConfigurableFieldModel<ProgramsModel>(setting.Caption, programsModel, setting.Required);
+        }
+
+        public ConfigurableFieldModel<ProgramsModel> CreatePrograms(FieldEditSettings setting, int orderId, List<ProgramModel> programs)
+        {
+            if (!setting.Show)
+            {
+                return ConfigurableFieldModel<ProgramsModel>.CreateUnshowable();
+            }
+
+            var programsModel = new ProgramsModel(orderId, programs);
+            return new ConfigurableFieldModel<ProgramsModel>(setting.Caption, programsModel, setting.Required);
         }
 
         #endregion

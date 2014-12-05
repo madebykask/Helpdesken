@@ -45,6 +45,15 @@
         public int? DomainId { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<DateTime?> OrderDate { get; set; } 
+        public ConfigurableFieldModel<DateTime?> OrderDate { get; set; }
+
+        public bool HasShowableFields()
+        {
+            return this.OrderNumber.Show ||
+                this.Customer.Show ||
+                this.Administrator.Show ||
+                this.Domain.Show ||
+                this.OrderDate.Show;
+        }
     }
 }

@@ -81,5 +81,21 @@
 
         [IsId]
         public int? DeliveryOuIdId { get; set; }
+
+        public bool HasShowableFields()
+        {
+            return this.DeliveryDate.Show ||
+                this.InstallDate.Show ||
+                this.DeliveryDepartment.Show ||
+                this.DeliveryOu.Show ||
+                this.DeliveryAddress.Show ||
+                this.DeliveryPostalCode.Show ||
+                this.DeliveryPostalAddress.Show ||
+                this.DeliveryLocation.Show ||
+                this.DeliveryInfo1.Show ||
+                this.DeliveryInfo2.Show ||
+                this.DeliveryInfo3.Show ||
+                this.DeliveryOuId.Show;
+        }
     }
 }

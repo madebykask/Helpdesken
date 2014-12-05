@@ -107,7 +107,7 @@
                                                 this.workContext.Customer.CustomerId,
                                                 orderTypeForCteateOrderId);
 
-            return this.View(model);
+            return this.View("New", model);
         }
     }
 }

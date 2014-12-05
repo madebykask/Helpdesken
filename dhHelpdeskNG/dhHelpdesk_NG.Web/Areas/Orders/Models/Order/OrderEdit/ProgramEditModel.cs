@@ -17,5 +17,10 @@
 
         [NotNull]
         public ConfigurableFieldModel<ProgramsModel> Program { get; set; }
+
+        public bool HasShowableFields()
+        {
+            return this.Program.Show;
+        }
     }
 }

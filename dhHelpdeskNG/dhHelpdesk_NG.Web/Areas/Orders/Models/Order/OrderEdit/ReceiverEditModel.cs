@@ -41,6 +41,16 @@
         public ConfigurableFieldModel<string> ReceiverLocation { get; set; } 
 
         [NotNull]
-        public ConfigurableFieldModel<string> MarkOfGoods { get; set; } 
+        public ConfigurableFieldModel<string> MarkOfGoods { get; set; }
+
+        public bool HasShowableFields()
+        {
+            return this.ReceiverId.Show ||
+                this.ReceiverName.Show ||
+                this.ReceiverEmail.Show ||
+                this.ReceiverPhone.Show ||
+                this.ReceiverLocation.Show ||
+                this.MarkOfGoods.Show;
+        }
     }
 }

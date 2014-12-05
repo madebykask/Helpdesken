@@ -16,6 +16,11 @@
         }
 
         [NotNull]
-        public ConfigurableFieldModel<LogsModel> Log { get; set; } 
+        public ConfigurableFieldModel<LogsModel> Log { get; set; }
+
+        public bool HasShowableFields()
+        {
+            return this.Log.Show;
+        }
     }
 }

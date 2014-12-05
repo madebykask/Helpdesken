@@ -26,6 +26,13 @@
         public ConfigurableFieldModel<string> UserFirstName { get; set; } 
 
         [NotNull]
-        public ConfigurableFieldModel<string> UserLastName { get; set; } 
+        public ConfigurableFieldModel<string> UserLastName { get; set; }
+
+        public bool HasShowableFields()
+        {
+            return this.UserId.Show ||
+                this.UserFirstName.Show ||
+                this.UserLastName.Show;
+        }
     }
 }

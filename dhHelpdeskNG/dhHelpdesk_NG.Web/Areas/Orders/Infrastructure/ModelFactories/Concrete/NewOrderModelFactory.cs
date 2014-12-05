@@ -1,7 +1,11 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
 {
+    using System.Collections.Generic;
+
+    using DH.Helpdesk.BusinessData.Enums.Orders;
     using DH.Helpdesk.BusinessData.Models.Orders.Order;
     using DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditSettings;
+    using DH.Helpdesk.Web.Areas.Orders.Models.Order.FieldModels;
     using DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit;
 
     public class NewOrderModelFactory : INewOrderModelFactory
@@ -21,11 +25,11 @@
                 this.CreateLogEditModel(data.EditSettings.Log, data.EditOptions),
                 this.CreateOrdererEditModel(data.EditSettings.Orderer, data.EditOptions),
                 this.CreateOrderEditModel(data.EditSettings.Order, data.EditOptions),
-                this.CreateOtherEditModel(data.EditSettings.Other, data.EditOptions),
-                this.CreateProgramEditModel(data.EditSettings.Program, data.EditOptions),
-                this.CreateReceiverEditModel(data.EditSettings.Receiver, data.EditOptions),
-                this.CreateSupplierEditModel(data.EditSettings.Supplier, data.EditOptions),
-                this.CreateUserEditModel(data.EditSettings.User, data.EditOptions),
+                this.CreateOtherEditModel(data.EditSettings.Other, data.EditOptions, temporatyId),
+                this.CreateProgramEditModel(data.EditSettings.Program),
+                this.CreateReceiverEditModel(data.EditSettings.Receiver),
+                this.CreateSupplierEditModel(data.EditSettings.Supplier),
+                this.CreateUserEditModel(data.EditSettings.User),
                 temporatyId,
                 customerId,
                 orderTypeId);
@@ -138,42 +142,98 @@
                                 OrderEditSettings settings,
                                 OrderEditOptions options)
         {
-            return null;
+            var property = this.configurableFieldModelFactory.CreateSelectListField(settings.Property, options.Properties, null);
+            var orderRow1 = this.configurableFieldModelFactory.CreateStringField(settings.OrderRow1, null);
+            var orderRow2 = this.configurableFieldModelFactory.CreateStringField(settings.OrderRow2, null);
+            var orderRow3 = this.configurableFieldModelFactory.CreateStringField(settings.OrderRow3, null);
+            var orderRow4 = this.configurableFieldModelFactory.CreateStringField(settings.OrderRow4, null);
+            var orderRow5 = this.configurableFieldModelFactory.CreateStringField(settings.OrderRow5, null);
+            var orderRow6 = this.configurableFieldModelFactory.CreateStringField(settings.OrderRow6, null);
+            var orderRow7 = this.configurableFieldModelFactory.CreateStringField(settings.OrderRow7, null);
+            var orderRow8 = this.configurableFieldModelFactory.CreateStringField(settings.OrderRow8, null);
+            var configuration = this.configurableFieldModelFactory.CreateStringField(settings.Configuration, null);
+            var orderInfo = this.configurableFieldModelFactory.CreateStringField(settings.OrderInfo, null);
+            var orderInfo2 = this.configurableFieldModelFactory.CreateStringField(settings.OrderInfo2, null);
+
+            return new OrderEditModel(
+                            property,
+                            orderRow1,
+                            orderRow2,
+                            orderRow3,
+                            orderRow4,
+                            orderRow5,
+                            orderRow6,
+                            orderRow7,
+                            orderRow8,
+                            configuration,
+                            orderInfo,
+                            orderInfo2);
         }
 
         private OtherEditModel CreateOtherEditModel(
                                 OtherEditSettings settings,
-                                OrderEditOptions options)
+                                OrderEditOptions options,
+                                string orderId)
         {
-            return null;
+            var fileName = this.configurableFieldModelFactory.CreateAttachedFiles(settings.FileName, orderId, Subtopic.FileName, new List<string>(0));
+            var caseNumber = this.configurableFieldModelFactory.CreateNullableDecimalField(settings.CaseNumber, null);
+            var info = this.configurableFieldModelFactory.CreateStringField(settings.Info, null);
+            var status = this.configurableFieldModelFactory.CreateSelectListField(settings.Status, options.Statuses, null);
+
+            return new OtherEditModel(
+                            fileName,
+                            caseNumber,
+                            info,
+                            status);
         }
 
-        private ProgramEditModel CreateProgramEditModel(
-                                ProgramEditSettings settings,
-                                OrderEditOptions options)
+        private ProgramEditModel CreateProgramEditModel(ProgramEditSettings settings)
         {
-            return null;
+            var program = this.configurableFieldModelFactory.CreatePrograms(settings.Program, new List<ProgramModel>(0));
+
+            return new ProgramEditModel(program);
         }
 
-        private ReceiverEditModel CreateReceiverEditModel(
-                                ReceiverEditSettings settings,
-                                OrderEditOptions options)
+        private ReceiverEditModel CreateReceiverEditModel(ReceiverEditSettings settings)
         {
-            return null;
+            var receiverId = this.configurableFieldModelFactory.CreateStringField(settings.ReceiverId, null);
+            var receiverName = this.configurableFieldModelFactory.CreateStringField(settings.ReceiverName, null);
+            var receiverEmail = this.configurableFieldModelFactory.CreateStringField(settings.ReceiverEmail, null);
+            var receiverPhone = this.configurableFieldModelFactory.CreateStringField(settings.ReceiverPhone, null);
+            var receiverLocation = this.configurableFieldModelFactory.CreateStringField(settings.ReceiverLocation, null);
+            var markOfGoods = this.configurableFieldModelFactory.CreateStringField(settings.MarkOfGoods, null);
+
+            return new ReceiverEditModel(
+                            receiverId,
+                            receiverName,
+                            receiverEmail,
+                            receiverPhone,
+                            receiverLocation,
+                            markOfGoods);
         }
 
-        private SupplierEditModel CreateSupplierEditModel(
-                                SupplierEditSettings settings,
-                                OrderEditOptions options)
+        private SupplierEditModel CreateSupplierEditModel(SupplierEditSettings settings)
         {
-            return null;
+            var supplierOrderNumber = this.configurableFieldModelFactory.CreateStringField(settings.SupplierOrderNumber, null);
+            var supplierOrderDate = this.configurableFieldModelFactory.CreateNullableDateTimeField(settings.SupplierOrderDate, null);
+            var supplierOrderInfo = this.configurableFieldModelFactory.CreateStringField(settings.SupplierOrderInfo, null);
+
+            return new SupplierEditModel(
+                            supplierOrderNumber,
+                            supplierOrderDate,
+                            supplierOrderInfo);
         }
 
-        private UserEditModel CreateUserEditModel(
-                                UserEditSettings settings,
-                                OrderEditOptions options)
+        private UserEditModel CreateUserEditModel(UserEditSettings settings)
         {
-            return null;
+            var userId = this.configurableFieldModelFactory.CreateStringField(settings.UserId, null);
+            var userFirstName = this.configurableFieldModelFactory.CreateStringField(settings.UserFirstName, null);
+            var userLastName = this.configurableFieldModelFactory.CreateStringField(settings.UserLastName, null);
+
+            return new UserEditModel(
+                            userId,
+                            userFirstName,
+                            userLastName);
         }
     }
 }

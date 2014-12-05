@@ -17,7 +17,7 @@
 
         ConfigurableFieldModel<AttachedFilesModel> CreateAttachedFiles(
             FieldEditSettings setting,
-            string changeId,
+            string orderId,
             Subtopic area,
             List<string> files);
 
@@ -25,9 +25,11 @@
 
         ConfigurableFieldModel<int> CreateIntegerField(FieldEditSettings setting, int value);
 
+        ConfigurableFieldModel<decimal?> CreateNullableDecimalField(FieldEditSettings setting, decimal? value);
+
         ConfigurableFieldModel<LogsModel> CreateLogs(
             FieldEditSettings setting,
-            int changeId,
+            int orderId,
             Subtopic area,
             List<Log> logs,
             List<GroupWithEmails> emailGroups,
@@ -54,5 +56,9 @@
             bool needEmptyItem = false);
 
         ConfigurableFieldModel<string> CreateStringField(FieldEditSettings setting, string value);
+
+        ConfigurableFieldModel<ProgramsModel> CreatePrograms(FieldEditSettings setting, List<ProgramModel> programs);
+
+        ConfigurableFieldModel<ProgramsModel> CreatePrograms(FieldEditSettings setting, int orderId, List<ProgramModel> programs);
     }
 }
