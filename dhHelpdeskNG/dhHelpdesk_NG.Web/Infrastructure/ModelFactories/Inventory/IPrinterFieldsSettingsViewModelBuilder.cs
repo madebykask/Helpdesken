@@ -4,7 +4,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.PrinterSettings;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Printer;
+    using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Settings.Printer;
 
     public interface IPrinterFieldsSettingsViewModelBuilder
     {

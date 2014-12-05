@@ -1,0 +1,34 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Inventory.ConfigurableFieldModel<string>
+@if (!Model.Show)
+{
+    return;
+}
+
+@{
+    var inputAttributes = (Dictionary<string, object>)ViewData["inputAttributes"];
+    Dictionary<string, object> htmlAttributes;
+    if (inputAttributes != null)
+    {
+        htmlAttributes = new Dictionary<string, object>(inputAttributes.Count + 1);
+
+        foreach (var inputAttribute in inputAttributes)
+        {
+            htmlAttributes.Add(inputAttribute.Key, inputAttribute.Value);
+        }
+    }
+    else
+    {
+        htmlAttributes = new Dictionary<string, object>(1);
+    }
+}
+
+<tr>
+    <td class="span3">
+        @Translation.Get(Model.Caption)
+    </td>
+    <td class="span9">
+        @Html.TextBoxFor(m => m.Value, htmlAttributes)
+        @Html.ValidationMessageFor(m => m.Value)
+    </td>
+</tr>

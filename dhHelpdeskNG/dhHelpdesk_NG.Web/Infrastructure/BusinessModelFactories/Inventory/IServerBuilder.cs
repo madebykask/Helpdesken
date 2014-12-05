@@ -2,7 +2,7 @@
 {
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Server;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Server;
+    using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Server;
 
     public interface IServerBuilder
     {

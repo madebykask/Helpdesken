@@ -4,7 +4,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory;
     using DH.Helpdesk.Services.Response.Inventory;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Inventory;
+    using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Settings.Inventory;
 
     public interface IInventoryFieldSettingsEditViewModelBuilder
     {

@@ -1,0 +1,32 @@
+﻿@using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings
+@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Settings.Inventory.InventoryFieldSettingsEditViewModel
+<script type="text/javascript">
+    $(function () {
+        var inventoryParameters = {
+            textModeId: '@FieldTypes.Text'
+        };
+
+        applyInventorySettingsBehavior(inventoryParameters);
+    });
+
+    $.validator.setDefaults({
+        ignore: ""
+    });
+
+</script>
+@using (Html.BeginForm("NewInventorySettings", "InventorySettings", FormMethod.Post, new { id = "settings_form" }))
+{
+    <ul class="nav nav-tabs" id="problem_tab">
+        <li class="active">
+            <a href="#fragment-1">@Translation.Get("Inventarietyp")
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane tab-pane-border active" id="fragment-1">
+            @Html.EditorFor(m => m.InventoryTypeModel)
+            @Html.EditorFor(m => m.InventoryFieldSettingsViewModel, "Settings/InventorySettings")
+        </div>
+    </div>
+}

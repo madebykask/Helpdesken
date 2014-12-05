@@ -2,9 +2,9 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 {
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Printer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.PrinterSettings;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Printer;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Shared;
-    using DH.Helpdesk.Web.Models.Inventory.OptionsAggregates;
+    using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Printer;
+    using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Shared;
+    using DH.Helpdesk.Web.Areas.Inventory.Models.OptionsAggregates;
 
     public class PrinterViewModelBuilder : IPrinterViewModelBuilder
     {

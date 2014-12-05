@@ -1,0 +1,17 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels.SettingsIndexViewModel
+@{
+    Layout = "~/Areas/Inventory/Views/Shared/_IndexLayout.cshtml";
+}
+
+@section Actions
+{
+    <ul class="secnav">
+        <li>
+            @Html.ActionLink(Translation.Get("Lägg till"), "NewCustomInventoryType", "InventorySettings", new { }, new { @class = "btn", id = "new_custom_inventory_type_button" })
+        </li>
+
+    </ul>
+}
+
+@Html.Partial("InventoryTypesGrid", Model.InventoryTypes)

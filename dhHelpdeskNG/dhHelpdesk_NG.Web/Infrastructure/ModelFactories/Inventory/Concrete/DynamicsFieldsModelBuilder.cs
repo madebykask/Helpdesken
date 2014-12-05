@@ -5,7 +5,7 @@
 
     using DH.Helpdesk.BusinessData.Models.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.InventorySettings;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Inventory;
+    using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Inventory;
 
     public class DynamicsFieldsModelBuilder : IDynamicsFieldsModelBuilder
     {

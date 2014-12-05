@@ -1,0 +1,32 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Inventory.ConfigurableFieldModel<int?>
+@if (!Model.Show)
+{
+    return;
+}           
+
+@{
+    if (!ViewData.ContainsKey("Source"))
+    {
+        throw new ArgumentNullException("Source", "\"ComputerId\" ViewData parameter must be specified.");
+    }
+
+    var source = (SelectList)ViewData["Source"];
+
+    var attributes = new Dictionary<string, object>();
+
+    if (ViewData.ContainsKey("Id"))
+    {
+        attributes.Add("Id", ViewData["Id"]);
+    }
+}
+
+<tr>
+    <td class="span3">
+        @Translation.Get(Model.Caption)
+    </td>
+    <td class="span9">
+        @Html.DropDownListFor(m => m.Value, source, string.Empty, attributes)
+        @Html.ValidationMessageFor(m => m.Value)
+    </td>
+</tr>

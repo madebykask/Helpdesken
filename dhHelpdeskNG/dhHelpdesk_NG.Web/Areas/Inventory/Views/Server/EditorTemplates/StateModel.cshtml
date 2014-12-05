@@ -1,0 +1,19 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Server.StateFieldsModel
+<div class="row">
+    <div class="span12">
+        <table class="tableform">
+            @if (Model.SyncChangeDate.Show)
+            {
+                <tr>
+                    <td class="span3">
+                        <label>@Translation.Get(Model.SyncChangeDate.Caption)</label>
+                    </td>
+                    <td class="span9">
+                        @Html.DisplayFor(m => m.SyncChangeDate.Value, "Date")
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

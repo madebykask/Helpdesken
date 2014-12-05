@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
 
+    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Input;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output;
@@ -261,9 +262,9 @@
             this.operatingSystemRepository.Commit();
         }
 
-        public void AddComputerType(ComputerModule module)
+        public void AddComputerType(ComputerModule module, OperationContext context)
         {
-            this.computerTypeRepository.Add(module);
+            this.computerTypeRepository.Add(module, context.CustomerId);
             this.computerTypeRepository.Commit();
         }
 
@@ -304,9 +305,6 @@
 
             this.serverRepository.RemoveReferenceOnProcessor(id);
             this.serverRepository.Commit();
-
-            this.ramRepository.DeleteById(id);
-            this.ramRepository.Commit();
 
             this.processorRepository.DeleteById(id);
             this.processorRepository.Commit();

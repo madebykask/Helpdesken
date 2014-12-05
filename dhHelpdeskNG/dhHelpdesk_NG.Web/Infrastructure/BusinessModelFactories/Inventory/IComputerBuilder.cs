@@ -2,7 +2,7 @@
 {
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Computer;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Computer;
+    using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Computer;
 
     public interface IComputerBuilder
     {

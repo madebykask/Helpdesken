@@ -1,0 +1,23 @@
+﻿@using System.Web.Optimization
+@using DH.Helpdesk.Web.Infrastructure
+@Scripts.Render("~/bundles/inventory/settings")
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="secnavs fixed">
+    <div class="pull-left">
+        <ul class="secnav">
+            <li id="menu1">
+                <input type="submit" value="@Translation.Get("Spara")" class="btn" onclick=" $('#settings_form').submit(); "/>
+            </li>
+            <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt"), "Index", null, new { @class = "btn" })</li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="container">
+        <div id="settings_container">
+            @Html.Action("NewInventorySettings", "InventorySettings")
+        </div>
+    </div>
+</div>

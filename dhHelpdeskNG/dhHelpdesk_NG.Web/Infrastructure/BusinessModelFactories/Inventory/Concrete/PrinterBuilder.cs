@@ -5,9 +5,9 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Printer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Shared;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Printer;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Shared;
+    using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel;
+    using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Printer;
+    using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Shared;
 
     public class PrinterBuilder : IPrinterBuilder
     {

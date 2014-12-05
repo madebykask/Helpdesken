@@ -1,0 +1,36 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model IList<DH.Helpdesk.BusinessData.Models.Inventory.Output.LogicalDriveOverview>
+<table id="tblCases" class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>@Translation.Get("Volym")
+            </th>
+            <th>@Translation.Get("Filsystem")
+            </th>
+            <th>@Translation.Get("Kapacitet")
+            </th>
+            <th>@Translation.Get("Ledigt utrymme")
+            </th>
+            <th>@Translation.Get("Procent ledigt utrymme")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(x => item.DriveLetter)
+                </td>
+                <td>@Html.DisplayFor(x => item.FileSystemName)
+                </td>
+                <td>@Html.DisplayFor(x => item.TotalBytes)
+                </td>
+                <td>@Html.DisplayFor(x => item.FreeBytes)
+                </td>
+                <td>@Html.DisplayFor(x => item.Percent) %
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

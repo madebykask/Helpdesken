@@ -1,0 +1,25 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Server.HotfixViewModel
+@{
+    Layout = "~/Areas/Inventory/Views/Server/_EditServerLayout.cshtml";
+}
+
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>@Translation.Get("Program")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var model in Model.Overviews)
+            {
+            <tr>
+                <th>@Html.DisplayFor(x => model);
+                </th>
+            </tr>
+            }
+        }
+    </tbody>
+</table>

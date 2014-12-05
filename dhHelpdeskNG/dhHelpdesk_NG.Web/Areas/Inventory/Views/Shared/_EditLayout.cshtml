@@ -1,0 +1,28 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@RenderSection("Scripts", false)
+<div class="secnavs fixed">
+    <div class="pull-left">
+        @RenderSection("Actions", false)
+    </div>
+</div>
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#mainTab">
+                    @RenderSection("Title", false)
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="mainTab">
+                <div class="container">
+                    @RenderSection("Content", false)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

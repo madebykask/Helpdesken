@@ -1,0 +1,29 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Inventory.InventoryEditViewModel
+@{
+    Layout = "~/Areas/Inventory/Views/Shared/_EditLayout.cshtml";
+}
+
+@section Actions
+{
+    <ul class="secnav">
+        <li id="menu1">
+            <input type="submit" value="@Translation.Get("Spara")" class="btn" onclick=" $('#inventory_edit_form').submit(); "/>
+        </li>
+        <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt"), "Index", new { inventoryTypeId = Model.InventoryViewModel.InventoryTypeId }, new { @class = "btn" })</li>
+    </ul>
+}
+
+@section Title
+{
+    @Translation.Get(Model.InventoryViewModel.Name)
+}
+
+@section Content
+{
+    @using (Html.BeginForm("New", "CustomInventory", FormMethod.Post, new { id = "inventory_edit_form" }))
+    {
+        @Html.EditorFor(m => m)
+        @Html.HiddenFor(m => m.InventoryViewModel.InventoryTypeId)
+    }
+}

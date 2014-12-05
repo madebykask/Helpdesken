@@ -3,7 +3,7 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Inventory;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Inventory;
+    using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Inventory;
 
     public interface IInventoryValueBuilder
     {

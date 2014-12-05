@@ -2,7 +2,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory
 {
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Printer;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Printer;
+    using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Printer;
 
     public interface IPrinterBuilder
     {

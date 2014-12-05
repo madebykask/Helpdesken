@@ -1,0 +1,39 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Server.ServerViewModel
+@{
+    Layout = "~/Areas/Inventory/Views/Shared/_EditLayout.cshtml";
+}
+
+@section Actions
+{
+    <ul class="secnav">
+        <li id="menu1">
+            <input type="submit" value="@Translation.Get("Spara")" class="btn" onclick=" $('#server_edit_form').submit(); "/>
+        </li>
+        <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt"), "Index", null, new { @class = "btn" })</li>
+    </ul>
+}
+
+@section Title
+{
+    @Translation.Get("Servrar")
+}
+
+@section Content
+{
+    @using (Html.BeginForm("New", "Server", FormMethod.Post, new { id = "server_edit_form" }))
+    {
+        @Html.CheckBoxFor(m => m.IsOperationObject) @Translation.Get("Driftobjekt")
+
+        @Html.EditorFor(m => m.GeneralFieldsModel)
+        @Html.EditorFor(m => m.ChassisFieldsModel)
+        @Html.EditorFor(m => m.InventoryFieldsModel)
+        @Html.EditorFor(m => m.OperatingSystemFieldsViewModel)
+        @Html.EditorFor(m => m.ProccesorFieldsViewModel)
+        @Html.EditorFor(m => m.MemoryFieldsViewModel)
+        @Html.EditorFor(m => m.StorageFieldsModel)
+        @Html.EditorFor(m => m.CommunicationFieldsViewModel)
+        @Html.EditorFor(m => m.OtherFieldsModel)
+        @Html.EditorFor(m => m.PlaceFieldsViewModel)
+    }
+}

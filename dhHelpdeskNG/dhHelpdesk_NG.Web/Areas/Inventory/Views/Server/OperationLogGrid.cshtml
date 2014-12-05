@@ -1,0 +1,31 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model List<DH.Helpdesk.BusinessData.Models.Inventory.Output.OperationServerLogOverview>
+<table id="tblCases" class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>@Translation.Get("Description")
+            </th>
+            <th>@Translation.Get("CreatedDate")
+            </th>
+            <th>@Translation.Get("Registered By")
+            </th>
+            <th>@Translation.Get("Action")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(x => item.Description)
+                </td>
+                <td>@Html.DisplayFor(x => item.CreatedDate, "Date")
+                </td>
+                <td>@Html.DisplayFor(x => item.Admin.FirstName) @Html.DisplayFor(x => item.Admin.LastName)
+                </td>
+                <td>@Html.DisplayFor(x => item.Action)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

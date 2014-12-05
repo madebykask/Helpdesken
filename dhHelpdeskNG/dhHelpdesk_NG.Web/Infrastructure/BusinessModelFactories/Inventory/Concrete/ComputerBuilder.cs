@@ -5,7 +5,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Computer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Shared;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Computer;
+    using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Computer;
 
     using PlaceFields = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Computer.PlaceFields;
 

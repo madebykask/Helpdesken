@@ -1,0 +1,45 @@
+﻿namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
+{
+    using System.Collections.Generic;
+
+    using DH.Helpdesk.BusinessData.Models.Inventory.Input;
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel;
+
+    public class NetWorkAdapterController : ComputerModuleBaseController
+    {
+        public NetWorkAdapterController(IMasterDataService masterDataService, IComputerModulesService computerModulesService)
+            : base(masterDataService, computerModulesService)
+        {
+        }
+
+        public override ModuleTypes ModuleType
+        {
+            get
+            {
+                return ModuleTypes.NetworkAdapter;
+            }
+        }
+
+        protected override List<ItemOverview> Get()
+        {
+            return this.ComputerModulesService.GetNetAdapters();
+        }
+
+        protected override void Create(ComputerModule computerModule)
+        {
+            this.ComputerModulesService.AddNetAdapter(computerModule);
+        }
+
+        protected override void Update(ComputerModule computerModule)
+        {
+            this.ComputerModulesService.UpdateNetAdapter(computerModule);
+        }
+
+        protected override void Remove(int id)
+        {
+            this.ComputerModulesService.DeleteNetAdapter(id);
+        }
+    }
+}

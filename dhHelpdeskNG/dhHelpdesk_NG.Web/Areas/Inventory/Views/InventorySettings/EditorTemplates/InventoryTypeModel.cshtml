@@ -1,0 +1,19 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Settings.Inventory.InventoryTypeModel
+<div class="container">
+    <h4>@Translation.Get("Allmänt")</h4>
+    <div class="row">
+        <div class="span12">
+            <table>
+                <tr>
+                    <td>@Translation.Get("Inventarietyp")
+                    </td>
+                    <td>
+                        @Html.EditorFor(x => x.Name)
+                    </td>
+                </tr>
+            </table>
+            @Html.HiddenFor(x => x.Id)
+        </div>
+    </div>
+</div>

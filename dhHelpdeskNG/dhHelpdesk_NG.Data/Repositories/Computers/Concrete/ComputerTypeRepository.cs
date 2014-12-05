@@ -16,7 +16,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
         {
         }
 
-        public void Add(ComputerModule businessModel)
+        public void Add(ComputerModule businessModel, int customerId)
         {
             var entity = new Domain.Computers.ComputerType
             {
@@ -24,6 +24,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                 Name = businessModel.Name,
                 CreatedDate = businessModel.CreatedDate,
                 ChangedDate = businessModel.CreatedDate, // todo
+                ComputerTypeDescription = string.Empty,
+                Customer_Id = customerId
             };
             this.DbSet.Add(entity);
             this.InitializeAfterCommit(businessModel, entity);

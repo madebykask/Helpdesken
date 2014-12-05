@@ -1,8 +1,8 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory
 {
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ServerSettings;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Server;
-    using DH.Helpdesk.Web.Models.Inventory.OptionsAggregates;
+    using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Server;
+    using DH.Helpdesk.Web.Areas.Inventory.Models.OptionsAggregates;
 
     public interface IServerViewModelBuilder
     {

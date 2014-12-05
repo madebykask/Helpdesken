@@ -1,0 +1,57 @@
+﻿@using DH.Helpdesk.Web.Areas.Inventory.Models
+@using DH.Helpdesk.Web.Infrastructure
+@model BaseIndexModel
+@{
+    Layout = "~/Areas/Inventory/Views/Shared/_IndexLayout.cshtml";
+}
+
+@section Scripts
+{
+    <script>
+        $(function () {
+            window.sortGrid = function (fieldName) {
+                var sortFieldName = $('#sortFieldName').val();
+                if (sortFieldName == null || sortFieldName != fieldName) {
+                    $('#sortFieldName').val(fieldName);
+                    $('#sortFieldBy').val(sortBy.ASCENDING);
+                } else {
+                    if ($('#sortFieldBy').val() == sortBy.ASCENDING) {
+                        $('#sortFieldBy').val(sortBy.DESCENDING);
+                    } else {
+                        $('#sortFieldBy').val(sortBy.ASCENDING);
+                    }
+                }
+
+                $('#search_form').submit();
+            };
+
+            $('select option[value=Separator]').each(function () {
+                $(this).attr("disabled", "disabled");
+            });
+
+            $('#type_dropdown').change(function () {
+                $('#type_form').submit();
+            });
+        }
+    )
+    </script>
+}
+
+@section Actions
+{
+    @RenderSection("Actions")
+}
+
+<table class="tableform">
+    <tr>
+        <td class="span3">@Translation.Get("Typ")</td>
+        <td>
+            @using (Html.BeginForm("RedirectToIndex", "InventoryRouting", FormMethod.Post, new { id = "type_form" }))
+            {
+                @Html.DropDownListFor(x => x.CurrentMode, Model.InventoryTypes, new { id = "type_dropdown" })
+            }
+        </td>
+    </tr>
+</table>
+
+@RenderBody()

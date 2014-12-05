@@ -1,0 +1,29 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.ComputerModuleEditModel
+@{
+    Layout = "~/Areas/Inventory/Views/Shared/_EditLayout.cshtml";
+}
+
+@section Actions
+{
+    <ul class="secnav">
+        <li id="menu1">
+            <input type="submit" value="@Translation.Get("Spara")" class="btn" onclick=" $('#computerModule_edit_form').submit(); "/>
+        </li>
+        <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt"), "Index", null, new { @class = "btn" })</li>
+    </ul>
+}
+
+@section Title
+{
+    @Translation.Get("Operativsystem")
+}
+
+@section Content
+{
+    @using (Html.BeginForm("New", "OperatingSystem", FormMethod.Post, new { id = "computerModule_edit_form" }))
+    {
+        @Html.EditorFor(m => m.Name)
+        @Html.ValidationMessageFor(m => m.Name)
+    }
+}

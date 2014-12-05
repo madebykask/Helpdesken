@@ -1,0 +1,38 @@
+﻿@using DH.Helpdesk.Web.Areas.Inventory.Models
+@using DH.Helpdesk.Web.Infrastructure
+@model InventoryGridModelForDynamicInventory
+@Model.InventoryGridModel.Inventories.Count
+
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            @foreach (var header in Model.InventoryGridModel.Headers)
+            {
+                <th>@Translation.Get(header.Caption)</th>
+            }
+            <th>
+                @Translation.Get("Edit")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var inventory in Model.InventoryGridModel.Inventories)
+        {
+            <tr onclick=" window.location.href = '@Url.Action("Edit", "CustomInventory", new { id = inventory.Id, inventoryTypeId = Model.InventoryGridModel.CurrentMode })' ">
+                @{
+                    var fields = inventory.Fields.ToList();
+                    for (var i = 0; i < fields.Count; i++)
+                    {
+                        var inventoryField = Model.InventoryGridModel.Headers[i];
+                        var inventoryFieldValue = fields.Single(v => v.FieldName == inventoryField.FieldName);
+
+                        <td class="tdpointer">@inventoryFieldValue.Value.GetDisplayValue()</td>
+                    }
+                }
+                <td>
+                    @Html.ActionLink(Translation.Get("Ta bort"), "DeleteInventoryFromComputer", new { computerId = Model.ParentId, inventoryId = inventory.Id }, new { @class = "btn" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

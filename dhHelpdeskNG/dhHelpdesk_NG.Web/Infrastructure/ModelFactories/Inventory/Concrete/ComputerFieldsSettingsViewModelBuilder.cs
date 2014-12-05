@@ -6,10 +6,10 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Computer;
+    using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Settings.Computer;
 
-    using FieldSettingModel = DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Computer.FieldSettingModel;
-    using PlaceFieldsSettingsModel = DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Computer.PlaceFieldsSettingsModel;
+    using FieldSettingModel = DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Settings.Computer.FieldSettingModel;
+    using PlaceFieldsSettingsModel = DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Settings.Computer.PlaceFieldsSettingsModel;
 
     public class ComputerFieldsSettingsViewModelBuilder : IComputerFieldsSettingsViewModelBuilder
     {

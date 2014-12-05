@@ -1,0 +1,44 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels.InventorySearchViewModel
+@using (Ajax.BeginForm("InventoriesGrid", "CustomInventory", null, new AjaxOptions { UpdateTargetId = "grid_container" }, new { id = "search_form" }))
+{
+    @Html.HiddenFor(m => m.Filter.SortField.Name, new { id = "sortFieldName" })
+    @Html.HiddenFor(m => m.Filter.SortField.SortBy, new { id = "sortFieldBy" })
+    
+    <table class="tableform">
+        @if (Model.Settings.DepartmentFieldSetting.IsShow)
+        {
+            <tr>
+                <td class="span3">@Translation.Get(Model.Settings.DepartmentFieldSetting.Caption)</td>
+                <td>@Html.DropDownListFor(m => m.Filter.DepartmentId, Model.Departments, string.Empty)</td>
+            </tr>
+        }
+        <tr>
+            <td class="span3">
+                @Html.LabelFor(m => m.Filter.SearchFor)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.Filter.SearchFor)
+            </td>
+        </tr>
+        <tr>
+            <td class="span3">
+                @Html.LabelFor(m => m.Filter.RecordsOnPage)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.Filter.RecordsOnPage)
+            </td>
+        </tr>
+        <tr>
+            <td class="span3">&nbsp;
+            </td>
+            <td>
+                <input type="submit" value="@Translation.Get("Sök")" class="btn" />
+            </td>
+        </tr>
+    </table>
+    @Html.HiddenFor(x => x.InventoryTypeId)
+}
+<div id="grid_container">
+    @Html.Action("InventoriesGrid", "CustomInventory", new { filter = Model.Filter, inventoryTypeId = Model.InventoryTypeId })
+</div>

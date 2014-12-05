@@ -1,0 +1,44 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Computer.ComputerViewModel
+@{
+    Layout = "~/Areas/Inventory/Views/Shared/_EditLayout.cshtml";
+}
+
+@section Actions
+{
+    <ul class="secnav">
+        <li id="menu1">
+            <input type="submit" value="@Translation.Get("Spara")" class="btn" onclick=" $('#workstation_edit_form').submit(); "/>
+        </li>
+        <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt"), "Index", null, new { @class = "btn" })</li>
+    </ul>
+}
+
+@section Title
+{
+    @Translation.Get("Arbetsstation")
+}
+
+@section Content
+{
+    @using (Html.BeginForm("New", "Workstation", FormMethod.Post, new { id = "workstation_edit_form" }))
+    {
+        @Html.EditorFor(m => m.WorkstationFieldsViewModel)
+        @Html.EditorFor(m => m.ChassisFieldsModel)
+        @Html.EditorFor(m => m.InventoryFieldsModel)
+        @Html.EditorFor(m => m.OperatingSystemFieldsViewModel)
+        @Html.EditorFor(m => m.ProccesorFieldsViewModel)
+        @Html.EditorFor(m => m.MemoryFieldsViewModel)
+        @Html.EditorFor(m => m.GraphicsFieldsModel)
+        @Html.EditorFor(m => m.CommunicationFieldsViewModel)
+        @Html.EditorFor(m => m.SoundFieldsModel)
+        @Html.EditorFor(m => m.ContractFieldsViewModel)
+        @Html.EditorFor(m => m.OtherFieldsModel)
+        @Html.EditorFor(m => m.ContactInformationFieldsModel, new { ComputerId = Model.Id })
+        @Html.EditorFor(m => m.OrganizationFieldsViewModel)
+        @Html.EditorFor(m => m.PlaceFieldsViewModel)
+        @Html.EditorFor(m => m.ContactFieldsModel)
+        @Html.EditorFor(m => m.StateFieldsViewModel)
+        @Html.EditorFor(m => m.DateFieldsModel)
+    }
+}

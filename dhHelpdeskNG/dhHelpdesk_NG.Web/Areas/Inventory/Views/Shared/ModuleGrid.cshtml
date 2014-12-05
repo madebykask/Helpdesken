@@ -1,0 +1,17 @@
+﻿@model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.ComputerModuleGridModel
+@if (Model.Overviews.Any())
+{
+    <table id="tblCases" class="table table-striped table-bordered table-hover">
+        <tbody>
+            @foreach (var item in Model.Overviews)
+            {
+                <tr onclick=" window.location.href = '@Url.Action("Edit", new { id = Convert.ToInt32(item.Value), name = item.Name })' ">
+                    <td class="tdpointer">@Html.DisplayFor(x => item.Name)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+

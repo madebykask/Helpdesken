@@ -1,0 +1,38 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels.CustomTypeReportSearchViewModel
+@using (Ajax.BeginForm("CustomInventoryReportGrid", null, new AjaxOptions { UpdateTargetId = "report_grid_container" }, new { id = "report_search_form" }))
+{
+    <table class="tableform">
+        <tr id="departments_tr">
+            <td class="span3">@Translation.Get("Avdelning")</td>
+            <td>@Html.DropDownListFor(m => m.Filter.DepartmentId, Model.Departments, string.Empty, new { id = "departments_drop_down" })</td>
+        </tr>
+        <tr>
+            <td class="span3">
+                @Html.LabelFor(m => m.Filter.SearchFor)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.Filter.SearchFor)
+            </td>
+        </tr>
+        <tr id="inventory_tr">
+            <td>@Translation.Get("Visa")
+            </td>
+            <td>
+                @Translation.Get("Inventarie")
+                @Html.CheckBoxFor(x => x.Filter.IsShowParentInventory, new { @class = "switchcheckbox" })
+            </td>
+        </tr>
+        <tr>
+            <td class="span3">&nbsp;
+            </td>
+            <td>
+                <input type="submit" value="@Translation.Get("Sök")" class="btn" />
+            </td>
+        </tr>
+    </table>
+    @Html.HiddenFor(x => x.InventoryTypeId)
+}
+<div id="report_grid_container">
+    @Html.Action("CustomInventoryReportGrid", "CustomInventoryReport", new { filter = Model.Filter, inventoryTypeId = Model.InventoryTypeId })
+</div>

@@ -1,0 +1,19 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels.WorkstationSearchViewModel
+@{
+    Layout = "~/Areas/Inventory/Views/Shared/_IndexInventoryLayout.cshtml";
+}
+
+@section Actions
+{
+    <ul class="secnav">
+        <li>
+            @Html.ActionLink(Translation.Get("Ny Arbetsstationer"), "New", "Workstaion", new { @class = "btn" })
+        </li>
+        <li>
+            @Html.ActionLink(Translation.Get("Excel"), "ExportGridToExcelFile", "Workstaion", new { @class = "btn", id = "excel_report_inventory_button" })
+        </li>
+    </ul>
+}
+
+@Html.Partial("Workstations", Model)

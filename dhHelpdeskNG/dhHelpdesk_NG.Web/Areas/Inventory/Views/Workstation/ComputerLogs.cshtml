@@ -1,0 +1,13 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Computer.LogsViewModel
+@{
+    Layout = "~/Areas/Inventory/Views/Workstation/_EditWorkstationLayout.cshtml";
+}
+
+
+@using (Html.BeginForm("NewComputerLog", "Workstation", FormMethod.Post, new { id = "log_edit_form" }))
+{
+    @Html.EditorFor(x => Model.ComputerLogModel)
+    <input type="submit" value="@Translation.Get("Nytt logg")" class="btn"/>
+}
+@Html.Partial("LogGrid", Model.ComputerLogs)

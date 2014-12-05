@@ -4,8 +4,8 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.InventorySettings;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Settings;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Inventory;
+    using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Settings;
+    using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Settings.Inventory;
 
     public class InventoryFieldsSettingsBuilder : IInventoryFieldsSettingsBuilder
     {

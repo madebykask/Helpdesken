@@ -1,0 +1,7 @@
+﻿@model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Server.LogsViewModel
+
+@{
+    Layout = "~/Areas/Inventory/Views/Server/_EditServerLayout.cshtml";
+}
+
+@Html.Partial("OperationLogGrid", Model.Overviews)

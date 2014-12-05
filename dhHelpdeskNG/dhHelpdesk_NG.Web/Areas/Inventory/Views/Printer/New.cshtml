@@ -1,0 +1,33 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Printer.PrinterViewModel
+@{
+    Layout = "~/Areas/Inventory/Views/Shared/_EditLayout.cshtml";
+}
+
+@section Actions
+{
+    <ul class="secnav">
+        <li id="menu1">
+            <input type="submit" value="@Translation.Get("Spara")" class="btn" onclick=" $('#printer_edit_form').submit(); "/>
+        </li>
+        <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt"), "Index", null, new { @class = "btn" })</li>
+    </ul>
+}
+
+@section Title
+{
+    @Translation.Get("Skrivare")
+}
+
+@section Content
+{
+    @using (Html.BeginForm("New", "Printer", FormMethod.Post, new { id = "printer_edit_form" }))
+    {
+        @Html.EditorFor(m => m.GeneralFieldsModel)
+        @Html.EditorFor(m => m.InventoryFieldsModel)
+        @Html.EditorFor(m => m.CommunicationFieldsModel)
+        @Html.EditorFor(m => m.OtherFieldsModel)
+        @Html.EditorFor(m => m.OrganizationFieldsViewModel)
+        @Html.EditorFor(m => m.PlaceFieldsViewModel)
+    }
+}

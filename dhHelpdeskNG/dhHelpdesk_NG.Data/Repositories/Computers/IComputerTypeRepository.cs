@@ -8,7 +8,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
 
     public interface IComputerTypeRepository : INewRepository
     {
-        void Add(ComputerModule businessModel);
+        void Add(ComputerModule businessModel, int customerId);
 
         void DeleteById(int id);
 

@@ -1,0 +1,56 @@
+﻿@using DH.Helpdesk.Web.Areas.Inventory.Models
+@using DH.Helpdesk.Web.Infrastructure
+
+@{
+    Layout = "~/Areas/Inventory/Views/Workstation/_EditWorkstationLayout.cshtml";
+}
+
+@model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Computer.AccesoriesViewModel
+@{
+    string style = string.Empty;
+    if (!Model.Inventories.Any())
+    {
+        style = "display: none;";
+    }
+}
+ 
+<script>
+    $(function () {
+        $('#inventory_types_dropdown').change(function () {
+            var selectedValue = $(this).val();
+            $.get('@Url.Action("SearchNotConnectedInventory")', { selected: selectedValue, computerId: '@Model.Id' }, function (json) {
+
+                var sel = $('#inventories_dropdown');
+                sel.empty();
+                for (var i = 0; i < json.length; i++) {
+                    var e = json[i];
+                    $('<option>').text(e.Name).val(e.Value).appendTo(sel);
+                }
+
+                if ($('#inventories_dropdown').val() == null) {
+                    $('#inventory_button').hide();
+                } else {
+                    $('#inventory_button').show();
+                }
+            });
+        });
+    });
+</script>
+<table>
+    @{
+        foreach (var model in Model.InventoryGridModels)
+        {
+            @Translation.Get(model.CurrentModeName)
+            @Html.Partial("InventoryGridWithDeleteButton", new InventoryGridModelForDynamicInventory(model, Model.Id))
+        }
+    }
+</table>
+@Translation.Get("Lägg till")
+<div>
+    @Html.DropDownListFor(x => x.InventoryTypeId, Model.InventoryTypes, new { id = "inventory_types_dropdown" })
+</div>
+@using (Html.BeginForm("ConnectInventoryToComputer", "Workstation", new { computerId = Model.Id}, FormMethod.Post, new { id = "log_edit_form" }))
+{
+    @Html.DropDownListFor(x => x.InventoryId, Model.Inventories, new { id = "inventories_dropdown" })
+    <input type="submit" value="@Translation.Get("Lägg till")" class="btn" style="@style" id="inventory_button" />
+}

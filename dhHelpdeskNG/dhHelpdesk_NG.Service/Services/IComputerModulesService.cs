@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
 
+    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Input;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output;
@@ -86,7 +87,7 @@
 
         void AddOperatingSystem(ComputerModule module);
 
-        void AddComputerType(ComputerModule module);
+        void AddComputerType(ComputerModule module, OperationContext context);
 
         void AddComputerModel(ComputerModule module);
 

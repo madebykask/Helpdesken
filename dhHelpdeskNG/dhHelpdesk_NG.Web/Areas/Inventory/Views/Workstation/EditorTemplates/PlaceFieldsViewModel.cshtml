@@ -1,0 +1,66 @@
+﻿@using System.Web.Optimization
+@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Computer.PlaceFieldsViewModel
+@Scripts.Render("~/bundles/inventory/place-cascading")
+
+<script>
+    $(function () {
+        var parameters = {
+            floorsSearchUrl: '@Url.Action("SearchFloorsByBuildingId")',
+            roomsSearchUrl: '@Url.Action("SearchRoomsByFloorId")'
+        };
+
+        applyCascadingBehivarior(parameters);
+    });
+</script>
+@if (Model.PlaceFieldsModel.RoomId.Show || Model.PlaceFieldsModel.Address.Show || Model.PlaceFieldsModel.PostalCode.Show || Model.PlaceFieldsModel.PostalAddress.Show || Model.PlaceFieldsModel.Location.Show || Model.PlaceFieldsModel.Location2.Show)
+{
+    <h4>@Translation.Get("Placering")</h4>
+    <div class="row">
+        <div class="span12">
+            <table class="tableform">
+                @if (Model.PlaceFieldsModel.RoomId.Show)
+                {
+                    <tr>
+                        <td class="span3">
+                            <label>@Translation.Get("Byggnad")</label>
+                        </td>
+                        <td class="span9">
+                            @if (!Model.PlaceFieldsModel.RoomId.IsReadOnly)
+                            {
+                                @Html.DropDownListFor(m => m.PlaceFieldsModel.BuildingId, Model.Buildings, string.Empty, new { id = "buildings_dropdown" })
+                            }
+                            else
+                            {
+                                @(!Model.PlaceFieldsModel.BuildingId.HasValue ? Html.TextBoxFor(m => m.PlaceFieldsModel.BuildingId, new { @readonly = true }) : Html.TextBoxFor(m => m.Buildings.SingleOrDefault(x => x.Value == Model.PlaceFieldsModel.BuildingId.ToString()).Text, new { @readonly = true }))
+                                @Html.HiddenFor(m => m.PlaceFieldsModel.BuildingId)
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">
+                            <label>@Translation.Get("Våning")</label>
+                        </td>
+                        <td class="span9">
+                            @if (!Model.PlaceFieldsModel.RoomId.IsReadOnly)
+                            {
+                                @Html.DropDownListFor(m => m.PlaceFieldsModel.FloorId, Model.Floors, string.Empty, new { id = "floors_dropdown" })
+                            }
+                            else
+                            {
+                                @(!Model.PlaceFieldsModel.FloorId.HasValue ? Html.TextBoxFor(m => m.PlaceFieldsModel.FloorId, new { @readonly = true }) : Html.TextBoxFor(m => m.Floors.SingleOrDefault(x => x.Value == Model.PlaceFieldsModel.FloorId.ToString()).Text, new { @readonly = true }))
+                                @Html.HiddenFor(m => m.PlaceFieldsModel.FloorId)
+                            }
+                        </td>
+                    </tr>
+                }
+                @Html.EditorFor(m => m.PlaceFieldsModel.RoomId, "Fields/List", new { Source = Model.Rooms, Id = "rooms_dropdown" })
+                @Html.EditorFor(m => m.PlaceFieldsModel.Address, "Fields/Text")
+                @Html.EditorFor(m => m.PlaceFieldsModel.PostalCode, "Fields/Text")
+                @Html.EditorFor(m => m.PlaceFieldsModel.PostalAddress, "Fields/Text")
+                @Html.EditorFor(m => m.PlaceFieldsModel.Location, "Fields/Text")
+                @Html.EditorFor(m => m.PlaceFieldsModel.Location2, "Fields/Text")
+            </table>
+        </div>
+    </div>
+}

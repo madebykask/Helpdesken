@@ -1,0 +1,49 @@
+﻿@using DH.Helpdesk.Web.Areas.Inventory.Models
+@using DH.Helpdesk.Web.Infrastructure
+@model BaseEditWorkstationModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@RenderSection("Scripts", false)
+
+<div class="secnavs fixed">
+    <div class="pull-left">
+        @RenderSection("Actions", false)
+    </div>
+</div>
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs nav-tabs-actions">
+            <li class="@GetIsActive(WorkstationEditTabs.Workstation)">
+                @Html.ActionLink(Translation.Get("Arbetsstation"), "Edit", "Workstation", new { id = Model.Id }, new { })
+            </li>
+            <li class="@GetIsActive(WorkstationEditTabs.Storage)">
+                @Html.ActionLink(Translation.Get("Lagring"), "Storage", "Workstation", new { computerId = Model.Id }, new { })
+            </li>
+            <li class="@GetIsActive(WorkstationEditTabs.Programs)">
+                @Html.ActionLink(Translation.Get("Program"), "Software", "Workstation", new { computerId = Model.Id }, new { })
+            </li>
+            <li class="@GetIsActive(WorkstationEditTabs.Hotfix)">
+                @Html.ActionLink(Translation.Get("Hotfix"), "HotFixes", "Workstation", new { computerId = Model.Id }, new { })
+            </li>
+            <li class="@GetIsActive(WorkstationEditTabs.Log)">
+                @Html.ActionLink(Translation.Get("Logg"), "ComputerLogs", "Workstation", new { computerId = Model.Id }, new { })
+            </li>
+            <li class="@GetIsActive(WorkstationEditTabs.Accessories)">
+                @Html.ActionLink(Translation.Get("Tillbehör"), "Accessories", "Workstation", new { computerId = Model.Id }, new { })
+            </li>
+        </ul>
+        <div class="tab-content overflow-visible">
+            <div class="tab-pane tab-pane-border active">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+</div>
+@functions    {
+    private MvcHtmlString GetIsActive(WorkstationEditTabs tab)
+    {
+        return MvcHtmlString.Create(Model.Tab == tab ? "active" : null);
+    }
+}

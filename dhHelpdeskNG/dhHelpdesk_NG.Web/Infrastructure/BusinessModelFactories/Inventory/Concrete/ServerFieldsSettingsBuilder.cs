@@ -4,7 +4,7 @@
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ServerSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.SharedSettings;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Server;
+    using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Settings.Server;
 
     public class ServerFieldsSettingsBuilder : IServerFieldsSettingsBuilder
     {

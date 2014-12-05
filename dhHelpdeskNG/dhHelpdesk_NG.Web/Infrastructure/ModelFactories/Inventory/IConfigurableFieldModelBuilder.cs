@@ -6,7 +6,7 @@
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel;
+    using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel;
 
     public interface IConfigurableFieldModelBuilder
     {

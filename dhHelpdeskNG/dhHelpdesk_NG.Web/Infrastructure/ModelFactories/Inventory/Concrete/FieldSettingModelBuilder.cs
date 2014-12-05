@@ -1,7 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 {
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Settings;
+    using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Settings;
 
     public class FieldSettingModelBuilder : IFieldSettingModelBuilder
     {

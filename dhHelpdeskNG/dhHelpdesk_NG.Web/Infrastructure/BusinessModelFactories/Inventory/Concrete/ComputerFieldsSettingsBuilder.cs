@@ -3,11 +3,11 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
     using System;
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Computer;
+    using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Settings.Computer;
 
     using CommunicationFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings.CommunicationFieldsSettings;
     using FieldSetting = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings.FieldSetting;
-    using FieldSettingModel = DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Computer.FieldSettingModel;
+    using FieldSettingModel = DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Settings.Computer.FieldSettingModel;
     using PlaceFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings.PlaceFieldsSettings;
 
     public class ComputerFieldsSettingsBuilder : IComputerFieldsSettingsBuilder

@@ -1,0 +1,35 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.ComputerModuleGridModel
+@{
+    Layout = "~/Areas/Inventory/Views/Shared/_IndexLayout.cshtml";
+}
+
+@section Scripts
+{
+    <script>
+        $(function () {
+            $('#type_dropdown').change(function () {
+                $('#type_form').submit();
+            });
+        });
+    </script>
+}
+
+@section Actions
+{
+    @RenderSection("Actions")
+}
+
+<table class="tableform">
+    <tr>
+        <td class="span3">@Translation.Get("Typ")</td>
+        <td>
+            @using (Html.BeginForm("RedirectToMasterDataIndex", "InventoryRouting", FormMethod.Post, new { id = "type_form" }))
+            {
+                @Html.DropDownListFor(x => x.ModuleType, Model.ModuleTypes, new { id = "type_dropdown" })
+            }
+        </td>
+    </tr>
+</table>
+
+@Html.Partial("ModuleGrid", Model)

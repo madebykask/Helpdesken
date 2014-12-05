@@ -2,9 +2,9 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 {
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Server;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ServerSettings;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Server;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Shared;
-    using DH.Helpdesk.Web.Models.Inventory.OptionsAggregates;
+    using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Server;
+    using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Shared;
+    using DH.Helpdesk.Web.Areas.Inventory.Models.OptionsAggregates;
 
     public class ServerViewModelBuilder : IServerViewModelBuilder
     {

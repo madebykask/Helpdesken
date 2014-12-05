@@ -204,7 +204,7 @@
                                     
                                     @if (model.IsInventoryVisible())
                                     {    
-                                        <li><a href="@Url.Action("Index", "Inventory", new { area = "" })">
+                                        <li><a href="@Url.Action("Index", "Workstation", new { area = "Inventory" })">
                                                 <img src="@Url.Content("~/Content/icons/inventory.png")" />
                                                 @Translation.Get("Inventarier")</a></li> 
                                     }                                   

@@ -4,7 +4,7 @@
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Computer;
+    using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Settings.Computer;
 
     public interface IComputerFieldsSettingsViewModelBuilder
     {
