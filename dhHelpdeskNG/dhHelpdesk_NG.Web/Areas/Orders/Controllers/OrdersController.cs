@@ -6,6 +6,7 @@
 
     using DH.Helpdesk.BusinessData.Enums.Orders;
     using DH.Helpdesk.BusinessData.Models.Orders.Index;
+    using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Services.BusinessLogic.OtherTools.Concrete;
     using DH.Helpdesk.Services.Services;
@@ -44,8 +45,8 @@
                 TemporaryIdProvider temporaryIdProvider, 
                 INewOrderModelFactory newOrderModelFactory, 
                 IOrderModelFactory orderModelFactory, 
-                ITemporaryFilesCache temporaryFilesCache, 
-                IEditorStateCache editorStateCache)
+                IEditorStateCacheFactory editorStateCacheFactory,
+                ITemporaryFilesCacheFactory temporaryFilesCacheFactory)
             : base(masterDataService)
         {
             this.ordersService = ordersService;
@@ -54,8 +55,9 @@
             this.temporaryIdProvider = temporaryIdProvider;
             this.newOrderModelFactory = newOrderModelFactory;
             this.orderModelFactory = orderModelFactory;
-            this.temporaryFilesCache = temporaryFilesCache;
-            this.editorStateCache = editorStateCache;
+
+            this.editorStateCache = editorStateCacheFactory.CreateForModule(ModuleName.Orders);
+            this.temporaryFilesCache = temporaryFilesCacheFactory.CreateForModule(ModuleName.Orders);
         }
 
         [HttpGet]
@@ -135,7 +137,8 @@
                 throw new HttpException((int)HttpStatusCode.NotFound, null);
             }
 
-            return this.View();
+            var model = this.orderModelFactory.Create(response, this.workContext.Customer.CustomerId);
+            return this.View(model);
         }
 
         [HttpPost]

@@ -21,5 +21,7 @@
         public static readonly string Reports = "Reports";
 
         public static readonly string Licenses = "li";
+
+        public static readonly string Orders = "Orders";
     }
 }
