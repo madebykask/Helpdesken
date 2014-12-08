@@ -385,9 +385,18 @@
          @Html.Partial("_ColumnCaseSetting", Model.ColumnSettingModel) 
     </div>  
                                    
+
+@*<style>
+  #tblCaseSetting { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+  #tblCaseSetting li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
+  #tblCaseSetting li span { position: absolute; margin-left: -1.3em; }
+</style>*@
+
+@*<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>*@
        
-<script type="text/javascript">
-    
+<script type="text/javascript">   
+
     $('#divProductAreaSetting ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();
         var val = $(this).attr('value');

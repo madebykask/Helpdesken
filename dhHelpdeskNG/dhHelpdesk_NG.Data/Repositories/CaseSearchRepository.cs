@@ -774,8 +774,8 @@
                     sb.Append(" and (tblCase.Performer_User_Id = " + userId + " or tblcase.CaseResponsibleUser_Id = " + userId + ")");
                 else if (userGroupId == 1)
                     sb.Append(" and (lower(tblCase.reportedBy) = lower(" + userUserId + ") or tblcase.UserId = " + userId + ")");
-            }
-
+            }            
+            
             // ärende progress - iShow i gammal helpdesk
             switch (f.CaseProgress)
             {
@@ -788,7 +788,7 @@
                     sb.Append(" and (tblCase.FinishingDate is null)");
                     break;
                 case "3":
-                    sb.Append(" and (tblCase.FinishingDate is null and tblCase.StateSecondary_Id is not null)");
+                    sb.Append(" and (tblCase.FinishingDate is null and tblCase.StateSecondary_Id is not null and tblStateSecondary.IncludeInCaseStatistics = 0)");
                     break;
                 case "4":
                     sb.Append(" and (tblCase.FinishingDate is null and tblCase.Status = 1)");
@@ -887,7 +887,7 @@
             if (f.CaseWatchDateEndFilter.HasValue)
             {
                 sb.AppendFormat(" AND ([tblCase].[WatchDate] <= '{0}')", f.CaseWatchDateEndFilter);
-            }
+            }            
 
             if (f.CaseClosingDateStartFilter.HasValue)
             {

@@ -279,7 +279,7 @@
                                 @Translation.Get(GlobalEnums.TranslationCaseFields.RegTime.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                    
                             </td>
                             <td>
-                                @Html.EditorFor(m => m.CaseRegistrationDateStartFilter, "DatePicker", new { id = "CaseRegistrationDateStartFilter" })                                         
+                                @Html.EditorFor(m => m.CaseRegistrationDateStartFilter, "DatePicker", new { id = "CaseRegistrationDateStartFilter"  })                                         
                                 @Html.EditorFor(m => m.CaseRegistrationDateEndFilter, "DatePicker", new { id = "CaseRegistrationDateEndFilter" })                                                                         
                             </td>
                         </tr>                
@@ -291,8 +291,8 @@
                                 @Translation.Get(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId):                                 
                             </td>
                             <td>
-                                @Html.EditorFor(m => m.CaseWatchDateStartFilter, "DatePicker", new { id = "CaseWatchDateStartFilter" })                                         
-                                @Html.EditorFor(m => m.CaseWatchDateEndFilter, "DatePicker", new { id = "CaseWatchDateEndFilter" })                                                                         
+                                @Html.EditorFor(m => Model.CaseWatchDateStartFilter, "DatePicker", new { id = "CaseWatchDateStartFilter" })                                         
+                                @Html.EditorFor(m => Model.CaseWatchDateEndFilter, "DatePicker", new { id = "CaseWatchDateEndFilter" })                                                                         
                             </td>
                         </tr>                
                     }

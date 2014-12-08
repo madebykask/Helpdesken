@@ -41,6 +41,8 @@
 
         private MyCasesModel myCases = new MyCasesModel();
 
+        private MyCasesModel adminCases = new MyCasesModel();
+
         private CustomerCasesModel customersInfo = new CustomerCasesModel();
 
         public IEnumerable<CustomerUser> CustomerUsers { get; set; }
@@ -81,7 +83,7 @@
             }
         }
 
-        public MyCasesModel MyCases
+        public MyCasesModel MyCases // User is Responsible 
         {
             get
             {
@@ -94,6 +96,18 @@
             }
         }
 
+        public MyCasesModel AdminCases // User is Adminstrator
+        {
+            get
+            {
+                return this.adminCases;
+            }
+
+            set
+            {
+                this.adminCases = value;
+            }
+        }
         public IEnumerable<BulletinBoardOverview> BulletinBoardOverviews
         {
             get { return this.bulletinBoardOverviews; }

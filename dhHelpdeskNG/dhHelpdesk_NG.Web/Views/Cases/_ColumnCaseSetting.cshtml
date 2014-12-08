@@ -65,8 +65,8 @@
                                               
                                 </tr>                                                 
                                 foreach (var uc in  Model.UserColumns)
-                                {          
-                                    <tr>                                        
+                                {                                    
+                                    <tr id = "movable" >                                        
                                         @if (Model.UserColumns != null)
                                         {
                                             <td>
@@ -113,6 +113,10 @@
 </form>
 
 <script type="text/javascript">       
+    $(function () {
+        $("#movable").sortable();
+        $("#movable").disableSelection();
+    });
 
     function addCaseSettingRow() {                       
         $.post('/cases/AddCaseSettingColumn/' + '?customerId=' + '@Model.CustomerId.ToString()' + '&userId=' + '@Model.UserId.ToString()' + 

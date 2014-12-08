@@ -26,17 +26,18 @@
                                     title="@Translation.Get("Mina ärenden")">
                                 @customer.CasesMy                                           
                             </a>
+                                                            
                             <a href="@Url.Action("index", "cases", new { customerId = customer.CustomerId, customFilter = "HoldCases" })" 
                                     class="start-tile label inrest" 
                                     rel="tooltip" 
                                     title="@Translation.Get("Vilande ärenden")">
                                 @customer.CasesInRest
                             </a>
-                            <a href="@Url.Action("index", "cases", new { customerId = customer.CustomerId, customFilter = "ClosedCases" })" 
+                            <a href="@Url.Action("index", "cases", new { customerId = customer.CustomerId, customFilter = "UnreadCases" })" 
                                     rel="tooltip" 
                                     class="start-tile label closed" 
                                     title="@Translation.Get("Avslutade ärenden")">
-                                @customer.CasesClosed                                          
+                                @customer.CasesUnreaded                                          
                             </a>
                             <a href="@Url.Action("index", "cases", new { customerId = customer.CustomerId, customFilter = "InProcessCases" })" 
                                     rel="tooltip" 

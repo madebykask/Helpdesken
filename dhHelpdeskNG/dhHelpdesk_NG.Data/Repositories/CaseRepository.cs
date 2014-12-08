@@ -64,6 +64,7 @@ namespace DH.Helpdesk.Dal.Repositories
                                                     DateTime period);
 
         MyCase[] GetMyCases(int userId, int? count = null);
+                
     }
 
     public class CaseRepository : RepositoryBase<Case>, ICaseRepository
@@ -410,7 +411,7 @@ namespace DH.Helpdesk.Dal.Repositories
         {
              var entities = from cs in this.DataContext.Cases
                             join cus in this.DataContext.Customers on cs.Customer_Id equals cus.Id
-                            where (cs.Performer_User_Id == userId && cs.FinishingDate == null)
+                            where (cs.Performer_User_Id == userId && cs.FinishingDate == null && cs.Deleted == 0)
                             orderby (cs.ChangeTime) descending
                             select new
                             {
@@ -457,7 +458,7 @@ namespace DH.Helpdesk.Dal.Repositories
                                 c.CustomerName))
                                 .ToArray();
         }
-
+        
         private void MarkCaseAsRead(int id)
         {
             SetCaseUnreadFlag(id);

@@ -6,13 +6,13 @@
                 int customerId, 
                 string customerName, 
                 int casesInProgress, 
-                int casesClosed, 
+                int casesUnreaded, 
                 int casesInRest, 
                 int casesMy)
-        {
+        {            
             this.CasesMy = casesMy;
             this.CasesInRest = casesInRest;
-            this.CasesClosed = casesClosed;
+            this.CasesUnreaded = casesUnreaded;
             this.CasesInProgress = casesInProgress;
             this.CustomerName = customerName;
             this.CustomerId = customerId;
@@ -24,10 +24,11 @@
 
         public int CasesInProgress { get; private set; }
 
-        public int CasesClosed { get; private set; }
+        public int CasesUnreaded { get; private set; }
 
         public int CasesInRest { get; private set; }
 
         public int CasesMy { get; private set; }
+        
     }
 }

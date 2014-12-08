@@ -79,6 +79,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             r.CaseClosingDateEndFilter = o.CaseClosingDateEndFilter;
             r.CaseClosingReasonFilter = o.CaseClosingReasonFilter;
             r.ParentPathClosingReason = o.ParentPathClosingReason;
+                   
             return r;
         }
     }

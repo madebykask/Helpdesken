@@ -350,31 +350,40 @@ namespace DH.Helpdesk.Web.Controllers
                             sm.caseSearchFilter.ParantPath_CaseType = c.getCaseTypeParentPath();
                     }
 
+                    
+
                     switch (customFilter)
                     {
                         case "MyCases":
-                            sm.caseSearchFilter.UserPerformer = SessionFacade.CurrentUser.Id.ToString();
-                            sm.caseSearchFilter.CaseProgress = "2";
+                            sm.caseSearchFilter.UserPerformer = SessionFacade.CurrentUser.Id.ToString();                            
+                            sm.caseSearchFilter.CaseProgress = "2";                            
+                            break;                        
+                        case "UnreadCases":
+                            sm.caseSearchFilter.CaseProgress = "4";
+                            sm.caseSearchFilter.UserPerformer = "";                            
                             break;
-                        case "ClosedCases":
-                            sm.caseSearchFilter.UserPerformer = string.Empty;
-                            sm.caseSearchFilter.CaseProgress = "1";
-                            break;
-                        case "HoldCases":
-                            sm.caseSearchFilter.UserPerformer = string.Empty;
+                        case "HoldCases":                            
                             sm.caseSearchFilter.CaseProgress = "3";
+                            sm.caseSearchFilter.UserPerformer = "";                            
                             break;
-                        case "InProcessCases":
-                            sm.caseSearchFilter.UserPerformer = string.Empty;
+                        case "InProcessCases":                            
                             sm.caseSearchFilter.CaseProgress = "2";
+                            sm.caseSearchFilter.UserPerformer = "";                           
                             break;
                         default:
-                            sm.caseSearchFilter.UserPerformer = string.Empty;
+                            sm.caseSearchFilter.UserPerformer = "";                            
                             sm.caseSearchFilter.CaseProgress = "2";
                             break;
                     }
 
                     fd.caseSearchFilter = sm.caseSearchFilter;
+                    fd.CaseClosingDateEndFilter = sm.caseSearchFilter.CaseClosingDateEndFilter;
+                    fd.CaseClosingDateStartFilter = sm.caseSearchFilter.CaseClosingDateStartFilter;
+                    fd.CaseRegistrationDateEndFilter = sm.caseSearchFilter.CaseRegistrationDateEndFilter;
+                    fd.CaseRegistrationDateStartFilter = sm.caseSearchFilter.CaseRegistrationDateStartFilter;
+                    fd.CaseWatchDateEndFilter = sm.caseSearchFilter.CaseWatchDateEndFilter;
+                    fd.CaseWatchDateStartFilter = sm.caseSearchFilter.CaseWatchDateStartFilter;
+                    
                     srm.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(cusId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
                     srm.cases = this._caseSearchService.Search(
                         sm.caseSearchFilter,
