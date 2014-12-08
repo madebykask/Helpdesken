@@ -1,8 +1,8 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Read.Overview
 {
-    public abstract class OtherFieldSettings
+    public class OtherFieldSettings
     {
-        protected OtherFieldSettings(FieldSetting caseNumber, FieldSetting fileName, FieldSetting info)
+        public OtherFieldSettings(FieldSetting caseNumber, FieldSetting fileName, FieldSetting info)
         {
             this.CaseNumber = caseNumber;
             this.FileName = fileName;

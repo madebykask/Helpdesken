@@ -3,40 +3,36 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings;
-    using DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Read.Edit;
+    using DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Read.Overview;
     using DH.Helpdesk.Common.Collections;
     using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Dal.Enums.Accounts.Fields;
     using DH.Helpdesk.Domain.Accounts;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Accounts.MapperData;
 
-    public static class AccountFieldSettingsForEditMapper
+    using FieldSetting = DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Read.Overview.FieldSetting;
+
+    public static class AccountFieldSettingsOverviewMapper
     {
-        public static AccountFieldsSettingsForEdit ExtractOrdersFieldSettingsForEdit(
+        public static AccountFieldsSettingsOverview ExtractOrdersFieldSettingsOverview(
             this IQueryable<AccountFieldSettings> query)
         {
-            List<AccountSettingsMapperDataForEdit> mapperData =
+            List<AccountSettingsMapperDataOverview> mapperData =
                 query.Select(
                     s =>
-                    new AccountSettingsMapperDataForEdit
+                    new AccountSettingsMapperDataOverview
                         {
                             Caption = s.Label,
                             FieldName = s.AccountField,
                             ShowInList = s.ShowInList,
-                            ShowExternal = s.ShowExternal,
-                            ShowInDetails = s.Show,
-                            Required = s.Required,
-                            Help = s.FieldHelp,
-                            MultiValue = s.MultiValue
                         }).ToList();
 
-            var settingCollection = new NamedObjectCollection<AccountSettingsMapperDataForEdit>(mapperData);
+            var settingCollection = new NamedObjectCollection<AccountSettingsMapperDataOverview>(mapperData);
             return Map(settingCollection);
         }
 
-        private static AccountFieldsSettingsForEdit Map(
-            NamedObjectCollection<AccountSettingsMapperDataForEdit> settingCollection)
+        private static AccountFieldsSettingsOverview Map(
+            NamedObjectCollection<AccountSettingsMapperDataOverview> settingCollection)
         {
             OrdererFieldSettings ordererSettings = CreateOrdererFieldSettings(settingCollection);
             UserFieldSettings userSettings = CreateUserFieldSettings(settingCollection);
@@ -47,7 +43,7 @@
             DeliveryInformationFieldSettings delveryInformationSettings =
                 CreateDeliveryInformationFieldSettings(settingCollection);
 
-            return new AccountFieldsSettingsForEdit(
+            return new AccountFieldsSettingsOverview(
                 ordererSettings,
                 userSettings,
                 accountInformationSettings,
@@ -57,7 +53,7 @@
         }
 
         private static OrdererFieldSettings CreateOrdererFieldSettings(
-            NamedObjectCollection<AccountSettingsMapperDataForEdit> entity)
+            NamedObjectCollection<AccountSettingsMapperDataOverview> entity)
         {
             var id = CreateFieldSetting(entity.FindByName(OrdererFields.Id));
             var name = CreateFieldSetting(entity.FindByName(OrdererFields.FirstName));
@@ -71,14 +67,14 @@
         }
 
         private static UserFieldSettings CreateUserFieldSettings(
-            NamedObjectCollection<AccountSettingsMapperDataForEdit> entity)
+            NamedObjectCollection<AccountSettingsMapperDataOverview> entity)
         {
-            var ids = CreateFieldSettingMultipleChoices(entity.FindByName(UserFields.Ids));
+            var ids = CreateFieldSetting(entity.FindByName(UserFields.Ids));
             var firstName = CreateFieldSetting(entity.FindByName(UserFields.FirstName));
             var initials = CreateFieldSetting(entity.FindByName(UserFields.Initials));
             var lastName = CreateFieldSetting(entity.FindByName(UserFields.LastName));
             var personalIdentityNumber =
-                CreateFieldSettingMultipleChoices(entity.FindByName(UserFields.PersonalIdentityNumber));
+                CreateFieldSetting(entity.FindByName(UserFields.PersonalIdentityNumber));
             var phone = CreateFieldSetting(entity.FindByName(UserFields.Phone));
             var extension = CreateFieldSetting(entity.FindByName(UserFields.Extension));
             var eMail = CreateFieldSetting(entity.FindByName(UserFields.EMail));
@@ -123,7 +119,7 @@
         }
 
         private static AccountInformationFieldSettings CreateAccountInformationFieldSettings(
-            NamedObjectCollection<AccountSettingsMapperDataForEdit> entity)
+            NamedObjectCollection<AccountSettingsMapperDataOverview> entity)
         {
             var startedDate = CreateFieldSetting(entity.FindByName(AccountInformationFields.StartedDate));
             var finishDate = CreateFieldSetting(entity.FindByName(AccountInformationFields.FinishDate));
@@ -163,7 +159,7 @@
         }
 
         private static ProgramFieldSettings CreateProgramFieldSettings(
-            NamedObjectCollection<AccountSettingsMapperDataForEdit> entity)
+            NamedObjectCollection<AccountSettingsMapperDataOverview> entity)
         {
             var programs = CreateFieldSetting(entity.FindByName(ProgramFields.Programs));
             var infoProduct = CreateFieldSetting(entity.FindByName(ProgramFields.InfoProduct));
@@ -174,7 +170,7 @@
         }
 
         private static OtherFieldSettings CreateOtherFieldSettings(
-            NamedObjectCollection<AccountSettingsMapperDataForEdit> entity)
+            NamedObjectCollection<AccountSettingsMapperDataOverview> entity)
         {
             var caseNumber = CreateFieldSetting(entity.FindByName(OtherFields.CaseNumber));
             var fileName = CreateFieldSetting(entity.FindByName(OtherFields.FileName));
@@ -186,7 +182,7 @@
         }
 
         private static DeliveryInformationFieldSettings CreateDeliveryInformationFieldSettings(
-            NamedObjectCollection<AccountSettingsMapperDataForEdit> entity)
+            NamedObjectCollection<AccountSettingsMapperDataOverview> entity)
         {
             var name = CreateFieldSetting(entity.FindByName(DeliveryInformationFields.Name));
             var phone = CreateFieldSetting(entity.FindByName(DeliveryInformationFields.Phone));
@@ -199,28 +195,11 @@
             return settings;
         }
 
-        private static FieldSetting CreateFieldSetting(AccountSettingsMapperDataForEdit fieldSetting)
+        private static FieldSetting CreateFieldSetting(AccountSettingsMapperDataOverview fieldSetting)
         {
             return new FieldSetting(
-                fieldSetting.ShowInDetails.ToBool(),
                 fieldSetting.ShowInList.ToBool(),
-                fieldSetting.ShowExternal.ToBool(),
-                fieldSetting.Caption,
-                fieldSetting.Help,
-                fieldSetting.Required.ToBool());
-        }
-
-        private static FieldSettingMultipleChoices CreateFieldSettingMultipleChoices(
-            AccountSettingsMapperDataForEdit fieldSetting)
-        {
-            return new FieldSettingMultipleChoices(
-                fieldSetting.ShowInDetails.ToBool(),
-                fieldSetting.ShowExternal.ToBool(),
-                fieldSetting.ShowInList.ToBool(),
-                fieldSetting.Caption,
-                fieldSetting.Help,
-                fieldSetting.Required.ToBool(),
-                fieldSetting.MultiValue.ToBool());
+                fieldSetting.Caption);
         }
     }
 }

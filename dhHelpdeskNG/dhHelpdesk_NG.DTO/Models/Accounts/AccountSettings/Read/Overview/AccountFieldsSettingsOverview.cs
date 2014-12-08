@@ -1,32 +1,22 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Read.Overview
 {
-    using System;
-
-    public abstract class AccountFieldsSettingsOverview
+    public class AccountFieldsSettingsOverview
     {
-        protected AccountFieldsSettingsOverview(
-            int activityId,
+        public AccountFieldsSettingsOverview(
             OrdererFieldSettings orderer,
             UserFieldSettings user,
             AccountInformationFieldSettings accountInformation,
             DeliveryInformationFieldSettings deliveryInformation,
             ProgramFieldSettings program,
-            OtherFieldSettings other,
-            DateTime createdDate,
-            DateTime changedDate)
+            OtherFieldSettings other)
         {
-            this.ActivityId = activityId;
             this.Orderer = orderer;
             this.User = user;
             this.AccountInformation = accountInformation;
             this.DeliveryInformation = deliveryInformation;
             this.Program = program;
             this.Other = other;
-            this.CreatedDate = createdDate;
-            this.ChangedDate = changedDate;
         }
-
-        public int ActivityId { get; private set; }
 
         public OrdererFieldSettings Orderer { get; private set; }
 
@@ -39,9 +29,5 @@
         public ProgramFieldSettings Program { get; private set; }
 
         public OtherFieldSettings Other { get; private set; }
-
-        public DateTime CreatedDate { get; private set; }
-
-        public DateTime ChangedDate { get; private set; }
     }
 }

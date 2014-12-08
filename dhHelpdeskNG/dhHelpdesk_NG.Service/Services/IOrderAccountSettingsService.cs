@@ -19,6 +19,6 @@
             int accountActivityId,
             OperationContext context);
 
-        void Update(AccountFieldsSettingsForUpdate dto);
+        void Update(AccountFieldsSettingsForUpdate dto, OperationContext context);
     }
 }

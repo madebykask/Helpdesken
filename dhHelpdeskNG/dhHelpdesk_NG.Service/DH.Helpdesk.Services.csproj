@@ -103,7 +103,14 @@
     <Compile Include="BusinessLogic\Mappers\Accounts\AccountFieldSettingsForEditMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Accounts\AccountForReadMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Accounts\AccountOverviewMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Accounts\AccountFieldSettingsForModelEditMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Accounts\AccountFieldSettingsOverviewMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Accounts\AccountFieldSettingsForProcessing.cs" />
+    <Compile Include="BusinessLogic\Mappers\Accounts\AccountSettingsMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Accounts\MapperData\AccountSettingsMapperDataForEdit.cs" />
+    <Compile Include="BusinessLogic\Mappers\Accounts\MapperData\AccountSettingsMapperDataForModelEdit.cs" />
+    <Compile Include="BusinessLogic\Mappers\Accounts\MapperData\AccountSettingsMapperDataOverview.cs" />
+    <Compile Include="BusinessLogic\Mappers\Accounts\MapperData\AccountSettingsMapperForProcessing.cs" />
     <Compile Include="BusinessLogic\Mappers\BulletinBoards\BulletinBoardMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Calendars\CalendarMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Cases\HolidayMapper.cs" />

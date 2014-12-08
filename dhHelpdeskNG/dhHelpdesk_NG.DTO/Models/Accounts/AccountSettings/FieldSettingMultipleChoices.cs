@@ -5,11 +5,12 @@
         public FieldSettingMultipleChoices(
             bool isShowInDetails,
             bool isShowInList,
+            bool isShowExternal,
             string caption,
             string help,
             bool isRequired,
             bool isMultiple)
-            : base(isShowInDetails, isShowInList, caption, help, isRequired)
+            : base(isShowInDetails, isShowInList, isShowExternal, caption, help, isRequired)
         {
             this.IsMultiple = isMultiple;
         }

@@ -1,8 +1,8 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Read.Overview
 {
-    public abstract class ProgramFieldSettings
+    public class ProgramFieldSettings
     {
-        protected ProgramFieldSettings(FieldSetting programs, FieldSetting infoProduct)
+        public ProgramFieldSettings(FieldSetting programs, FieldSetting infoProduct)
         {
             this.Programs = programs;
             this.InfoProduct = infoProduct;

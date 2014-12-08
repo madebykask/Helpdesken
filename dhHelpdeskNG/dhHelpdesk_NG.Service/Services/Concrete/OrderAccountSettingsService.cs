@@ -31,28 +31,65 @@ namespace DH.Helpdesk.Services.Services.Concrete
                     fieldSettingsRep.GetAll()
                         .GetByCustomer(context.CustomerId)
                         .GetActivityTypeSettings(accountActivityId)
-                        .ExtractOrdersFieldSettingsOverview();
+                        .ExtractOrdersFieldSettingsForEdit();
             }
         }
 
         public AccountFieldsSettingsForModelEdit GetFieldsSettingsForModelEdit(int accountActivityId, OperationContext context)
         {
-            throw new global::System.NotImplementedException();
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var fieldSettingsRep = uow.GetRepository<AccountFieldSettings>();
+
+                return
+                    fieldSettingsRep.GetAll()
+                        .GetByCustomer(context.CustomerId)
+                        .GetActivityTypeSettings(accountActivityId)
+                        .ExtractOrdersFieldSettingsForModelEdit();
+            }
         }
 
         public AccountFieldsSettingsOverview GetFieldsSettingsOverview(int accountActivityId, OperationContext context)
         {
-            throw new global::System.NotImplementedException();
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var fieldSettingsRep = uow.GetRepository<AccountFieldSettings>();
+
+                return
+                    fieldSettingsRep.GetAll()
+                        .GetByCustomer(context.CustomerId)
+                        .GetActivityTypeSettings(accountActivityId)
+                        .ExtractOrdersFieldSettingsOverview();
+            }
         }
 
         public AccountFieldsSettingsForProcessing GetFieldsSettingsForProcessing(int accountActivityId, OperationContext context)
         {
-            throw new global::System.NotImplementedException();
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var fieldSettingsRep = uow.GetRepository<AccountFieldSettings>();
+
+                return
+                    fieldSettingsRep.GetAll()
+                        .GetByCustomer(context.CustomerId)
+                        .GetActivityTypeSettings(accountActivityId)
+                        .ExtractOrdersFieldSettingsForProcessing();
+            }
         }
 
-        public void Update(AccountFieldsSettingsForUpdate dto)
+        public void Update(AccountFieldsSettingsForUpdate dto, OperationContext context)
         {
-            throw new global::System.NotImplementedException();
+            //using (var uow = this.unitOfWorkFactory.Create())
+            //{
+            //    var fieldSettingsRep = uow.GetRepository<AccountFieldSettings>();
+
+            //        fieldSettingsRep.GetAll()
+            //            .GetByCustomer(context.CustomerId)
+            //            .GetActivityTypeSettings(dto.ActivityId)
+            //            .MapToDomainEntity(dto);
+
+            //    uow.Save();
+            //}
         }
     }
 }
