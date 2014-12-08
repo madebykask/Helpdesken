@@ -96,7 +96,7 @@
             }
         }
 
-        public NewOrderEditData GetNewOrderEditData(int customerId, int? orderTypeId)
+        public NewOrderEditData GetNewOrderEditData(int customerId, int orderTypeId)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
@@ -108,6 +108,7 @@
                 var departmentsRep = uow.GetRepository<Department>();
                 var ousRep = uow.GetRepository<OU>();
                 var propertiesRep = uow.GetRepository<OrderPropertyEntity>();
+                var orderTypeRep = uow.GetRepository<OrderType>();
 
                 var statuses = statusesRep.GetAll().GetByCustomer(customerId);
                 var administrators = administratorsRep.GetAll().GetByCustomer(customerId);
@@ -118,6 +119,7 @@
                 var deliveryDepartments = departmentsRep.GetAll().GetByCustomer(customerId);
                 var deliveryOuIds = ousRep.GetAll();
                 var administratorsWithEmails = administratorsRep.GetAll().GetAdministratorsWithEmails(customerId);
+                var orderTypes = orderTypeRep.GetAll().GetById(orderTypeId);
 
                 var workingGroupsWithEmails = new List<GroupWithEmails>();
                 var emailGroupsWithEmails = new List<GroupWithEmails>();
@@ -165,6 +167,7 @@
                 }
 
                 var options = OrderEditMapper.MapToOrderEditOptions(
+                                        orderTypes,
                                         statuses,
                                         administrators,
                                         domains,

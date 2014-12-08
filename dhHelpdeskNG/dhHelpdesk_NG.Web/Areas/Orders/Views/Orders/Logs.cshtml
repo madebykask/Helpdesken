@@ -1,0 +1,42 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions
+@model DH.Helpdesk.Web.Areas.Orders.Models.Order.FieldModels.LogsModel
+
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.LabelFor(m => m.Logs.FirstOrDefault().DateAndTime)
+            </th>
+            <th>
+                @Html.LabelFor(m => m.Logs.FirstOrDefault().RegisteredBy)
+            </th>
+            <th>
+                @Html.LabelFor(m => m.Logs.FirstOrDefault().Text)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var log in Model.Logs)
+        {
+            <tr>
+                <td>
+                    @log.DateAndTime
+                </td>
+                <td>
+                    @log.RegisteredBy.FirstName
+                    @log.RegisteredBy.LastName
+                </td>
+                <td>
+                    @log.Text.ForHtmlView()
+                </td>
+                <td>
+                    <a onclick="deleteLog('@Model.Area', @log.Id, '@Model.Area.ToString().ToLower()_logs_container')" class="btn">
+                        @Translation.Get("Ta bort")
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,2 +1,52 @@
-﻿@model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.OtherEditModel
+﻿@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.OtherEditModel
 
+<h4>@Translation.Get("Övrigt")</h4>
+<table class="tableform">
+    <tbody>
+        @if (Model.Status.Show)
+        {
+            <tr>
+                <td class="span3">
+                    @Html.FieldCaption(Model.Status)
+                </td>
+                <td class="span9">
+                    @Html.DropDownListFor(m => m.StatusId, Model.Status.Value)
+                    @Html.ValidationMessageFor(m => m.StatusId)
+                </td>
+            </tr>             
+        }        
+        @if (Model.FileName.Show)
+        {
+            <tr>
+                <td class="span3">
+                    @Html.FieldCaption(Model.FileName)
+                </td>    
+                <td class="span9">
+                    <a href="#fileName_files_uploader_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Upload")</a>
+                    <div id="fileName_files_uploader_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h3>&nbsp;</h3>
+                        </div>
+                        <div class="modal-body">
+                            <div id="fileName_files_uploader"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close")</button>
+                        </div>
+                    </div>
+                </td>    
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    @Html.Partial("AttachedFiles", Model.FileName.Value)
+                </td>
+            </tr>
+        }
+        @Html.EditorFor(m => m.CaseNumber, "Fields/NullableDecimal")                
+        @Html.EditorFor(m => m.Info, "Fields/WideText")                
+    </tbody>
+</table>

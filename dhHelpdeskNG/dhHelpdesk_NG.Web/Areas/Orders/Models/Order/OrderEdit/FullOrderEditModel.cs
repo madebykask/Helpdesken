@@ -5,7 +5,7 @@
     public sealed class FullOrderEditModel
     {
         public FullOrderEditModel()
-        {            
+        {
         }
 
         public FullOrderEditModel(
@@ -21,8 +21,10 @@
                     UserEditModel user,
                     string id,
                     int customerId,
-                    int? orderTypeId)
+                    int? orderTypeId, 
+                    bool isNew)
         {
+            this.IsNew = isNew;
             this.Delivery = delivery;
             this.General = general;
             this.Log = log;
@@ -37,6 +39,8 @@
             this.CustomerId = customerId;
             this.OrderTypeId = orderTypeId;
         }
+
+        public bool IsNew { get; private set; }
 
         [NotNull]
         public DeliveryEditModel Delivery { get; set; }

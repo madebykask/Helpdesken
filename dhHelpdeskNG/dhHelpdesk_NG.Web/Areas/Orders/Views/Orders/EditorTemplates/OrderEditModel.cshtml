@@ -1,2 +1,32 @@
-﻿@model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.OrderEditModel
+﻿@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.OrderEditModel
 
+<h4>@Translation.Get("Beställning")</h4>
+<table class="tableform">
+    <tbody>
+        @if (Model.Property.Show)
+        {
+            <tr>
+                <td class="span3">
+                    @Html.FieldCaption(Model.Property)
+                </td>
+                <td class="span9">
+                    @Html.DropDownListFor(m => m.PropertyId, Model.Property.Value)
+                    @Html.ValidationMessageFor(m => m.PropertyId)
+                </td>
+            </tr>             
+        }
+        @Html.EditorFor(m => m.OrderRow1, "Fields/Text")           
+        @Html.EditorFor(m => m.OrderRow2, "Fields/Text")           
+        @Html.EditorFor(m => m.OrderRow3, "Fields/Text")           
+        @Html.EditorFor(m => m.OrderRow4, "Fields/Text")           
+        @Html.EditorFor(m => m.OrderRow5, "Fields/Text")           
+        @Html.EditorFor(m => m.OrderRow6, "Fields/Text")           
+        @Html.EditorFor(m => m.OrderRow7, "Fields/Text")           
+        @Html.EditorFor(m => m.OrderRow8, "Fields/Text")           
+        @Html.EditorFor(m => m.Configuration, "Fields/Text")           
+        @Html.EditorFor(m => m.OrderInfo, "Fields/WideText")           
+        @Html.EditorFor(m => m.OrderInfo2, "Fields/WideText")           
+    </tbody>
+</table>

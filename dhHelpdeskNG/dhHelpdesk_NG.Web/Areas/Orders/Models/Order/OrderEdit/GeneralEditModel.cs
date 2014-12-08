@@ -8,8 +8,9 @@
 
     public sealed class GeneralEditModel
     {
-        public GeneralEditModel()
-        {            
+        public GeneralEditModel(string orderTypeName)
+        {
+            this.OrderTypeName = orderTypeName;
         }
 
         public GeneralEditModel(
@@ -17,14 +18,19 @@
             ConfigurableFieldModel<int> customer,
             ConfigurableFieldModel<SelectList> administrator,
             ConfigurableFieldModel<SelectList> domain,
-            ConfigurableFieldModel<DateTime?> orderDate)
+            ConfigurableFieldModel<DateTime?> orderDate, 
+            string orderTypeName)
         {
+            this.OrderTypeName = orderTypeName;
             this.OrderNumber = orderNumber;
             this.Customer = customer;
             this.Administrator = administrator;
             this.Domain = domain;
             this.OrderDate = orderDate;
         }
+
+        [NotNullAndEmpty]
+        public string OrderTypeName { get; private set; }
 
         [NotNull]
         public ConfigurableFieldModel<int> OrderNumber { get; set; } 

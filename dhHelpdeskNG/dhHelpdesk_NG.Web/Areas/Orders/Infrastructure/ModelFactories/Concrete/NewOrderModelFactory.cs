@@ -32,7 +32,8 @@
                 this.CreateUserEditModel(data.EditSettings.User),
                 temporatyId,
                 customerId,
-                orderTypeId);
+                orderTypeId,
+                true);
         }
 
         private DeliveryEditModel CreateDeliveryEditModel(
@@ -82,7 +83,8 @@
                             customer,
                             administrator,
                             domain,
-                            orderDate);
+                            orderDate,
+                            options.OrderTypeName);
         }
 
         private LogEditModel CreateLogEditModel(

@@ -1,6 +1,88 @@
-﻿@model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.FullOrderEditModel
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.FullOrderEditModel
 
 @Html.HiddenFor(m => m.Id)
 @Html.HiddenFor(m => m.CustomerId)
 @Html.HiddenFor(m => m.OrderTypeId)
 
+<ul class="nav nav-tabs">
+    <li class="active">
+        <a href="#tab-1">@Translation.Get("Beställning")</a>
+    </li>    
+    @if (Model.Log.HasShowableFields())
+    {
+        <li>
+            <a href="#tab-2">@Translation.Get("Logg")</a>
+        </li>                                
+    }                            
+    <li>
+        <a href="#tab-3">@Translation.Get("Historik")</a>
+    </li>                            
+</ul>
+
+<div class="tab-content">
+    <div id="tab-1" class="tab-pane tab-pane-border active">
+        <div class="container">
+            <div class="row">
+                <div class="span12">  
+                    @if (Model.General.HasShowableFields())
+                    {
+                        @Html.EditorFor(m => m.General)
+                    }
+                    @if (Model.User.HasShowableFields())
+                    {
+                        @Html.EditorFor(m => m.User)
+                    }
+                    @if (Model.Orderer.HasShowableFields())
+                    {
+                        @Html.EditorFor(m => m.Orderer)
+                    }
+                    @if (Model.Order.HasShowableFields())
+                    {
+                        @Html.EditorFor(m => m.Order)
+                    }
+                    @if (Model.Receiver.HasShowableFields())
+                    {
+                        @Html.EditorFor(m => m.Receiver)
+                    }
+                    @if (Model.Supplier.HasShowableFields())
+                    {
+                        @Html.EditorFor(m => m.Supplier)
+                    }
+                    @if (Model.Delivery.HasShowableFields())
+                    {
+                        @Html.EditorFor(m => m.Delivery)
+                    }
+                    @if (Model.Other.HasShowableFields())
+                    {
+                        @Html.EditorFor(m => m.Other)
+                    }
+                    @if (Model.Program.HasShowableFields())
+                    {
+                        @Html.EditorFor(m => m.Program)
+                    }
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if (Model.Log.HasShowableFields())
+        {
+            <div id="tab-2" class="tab-pane tab-pane-border">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">                        
+                           @(Model.IsNew ? Html.EditorFor(m => m.Log, "NewLogEditModel") : Html.EditorFor(m => m.Log))                
+                        </div>
+                    </div>
+                </div>
+            </div>                            
+        }
+        <div id="tab-3" class="tab-pane tab-pane-border">
+            <div class="container">
+                <div class="row">
+                    <div class="span12">
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>

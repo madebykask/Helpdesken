@@ -9,6 +9,6 @@
 
         SearchResponse Search(SearchParameters parameters);
 
-        NewOrderEditData GetNewOrderEditData(int customerId, int? orderTypeId);
+        NewOrderEditData GetNewOrderEditData(int customerId, int orderTypeId);
     }
 }

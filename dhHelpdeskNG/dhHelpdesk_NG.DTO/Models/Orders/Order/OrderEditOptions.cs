@@ -9,6 +9,7 @@
     public sealed class OrderEditOptions
     {
         public OrderEditOptions(
+                string orderTypeName,
                 ItemOverview[] statuses, 
                 ItemOverview[] administrators, 
                 ItemOverview[] domains, 
@@ -21,6 +22,7 @@
                 List<GroupWithEmails> workingGroupsWithEmails, 
                 List<ItemOverview> administratorsWithEmails)
         {
+            this.OrderTypeName = orderTypeName;
             this.AdministratorsWithEmails = administratorsWithEmails;
             this.WorkingGroupsWithEmails = workingGroupsWithEmails;
             this.EmailGroups = emailGroups;
@@ -33,6 +35,9 @@
             this.Administrators = administrators;
             this.Statuses = statuses;
         }
+
+        [NotNullAndEmpty]
+        public string OrderTypeName { get; private set; }
 
         [NotNull]
         public ItemOverview[] Statuses { get; private set; }

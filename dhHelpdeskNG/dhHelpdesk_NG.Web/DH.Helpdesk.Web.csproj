@@ -1256,6 +1256,7 @@
     <Content Include="Content\js\Moxie.swf" />
     <Content Include="Content\js\Moxie.xap" />
     <Content Include="Content\js\Orders\index.js" />
+    <Content Include="Content\js\Orders\order.js" />
     <Content Include="Content\js\Orders\settings.js" />
     <Content Include="Content\js\plupload.full.min.js" />
     <Content Include="Content\js\Reports\index.js" />
@@ -1535,6 +1536,15 @@
     <Content Include="Areas\Inventory\Views\Shared\ComputerShortInfoDialog.cshtml" />
     <Content Include="Areas\Inventory\Views\Shared\LogGrid.cshtml" />
     <Content Include="Areas\Inventory\Views\Shared\HotFixesGrid.cshtml" />
+    <Content Include="Areas\Orders\Views\Orders\EditorTemplates\Fields\Date.cshtml" />
+    <Content Include="Areas\Orders\Views\Orders\EditorTemplates\Fields\Number.cshtml" />
+    <Content Include="Areas\Orders\Views\Orders\EditorTemplates\Fields\Text.cshtml" />
+    <Content Include="Areas\Orders\Views\Orders\EditorTemplates\Fields\WideText.cshtml" />
+    <Content Include="Areas\Orders\Views\Orders\EditorTemplates\Fields\NullableDecimal.cshtml" />
+    <Content Include="Areas\Orders\Views\Orders\DisplayTemplates\Fields\Label.cshtml" />
+    <Content Include="Areas\Orders\Views\Orders\EditorTemplates\NewLogEditModel.cshtml" />
+    <Content Include="Areas\Orders\Views\Orders\Logs.cshtml" />
+    <Content Include="Areas\Orders\Views\Orders\AttachedFiles.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />

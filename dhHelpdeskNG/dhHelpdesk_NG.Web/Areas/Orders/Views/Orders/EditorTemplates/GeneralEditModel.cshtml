@@ -1,2 +1,43 @@
-﻿@model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.GeneralEditModel
+﻿@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.GeneralEditModel
 
+<h4>@Translation.Get("Allmänt")</h4>
+<table class="tableform">
+    <tbody>
+        @Html.DisplayFor(m => m.OrderNumber, "Fields/Label")
+        <tr>
+            <td class="span3">
+                @Translation.Get("Typ")
+            </td>
+            <td class="span9">
+                @Html.DisplayFor(m => m.OrderTypeName)    
+            </td>
+        </tr>  
+        @if (Model.Administrator.Show)
+        {
+            <tr>
+                <td class="span3">
+                    @Html.FieldCaption(Model.Administrator)
+                </td>
+                <td class="span9">
+                    @Html.DropDownListFor(m => m.AdministratorId, Model.Administrator.Value)
+                    @Html.ValidationMessageFor(m => m.AdministratorId)
+                </td>
+            </tr>             
+        }
+        @if (Model.Domain.Show)
+        {
+            <tr>
+                <td class="span3">
+                    @Html.FieldCaption(Model.Domain)
+                </td>
+                <td class="span9">
+                    @Html.DropDownListFor(m => m.DomainId, Model.Domain.Value)
+                    @Html.ValidationMessageFor(m => m.DomainId)
+                </td>
+            </tr>             
+        }
+        @Html.EditorFor(m => m.OrderDate, "Fields/Date")                                
+    </tbody>
+</table>

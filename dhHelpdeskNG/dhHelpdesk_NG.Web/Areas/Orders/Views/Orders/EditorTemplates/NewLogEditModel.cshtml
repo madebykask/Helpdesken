@@ -1,0 +1,29 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.LogEditModel
+
+@if (Model.Log.Value == null)
+{
+    return;
+}
+
+<table class="tableform">
+    <tr>
+        <td class="span3">
+            @Html.FieldCaption(Model.Log)
+        </td>
+        <td class="span9">
+            @Html.TextAreaFor(m => m.Log.Value.Text)
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            @Html.Partial("_SendToDialog", Model.Log.Value.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "log_send_to_dialog" }, { "Callback", "fillLogSendLogNoteToEmailsTextArea" } }))
+            @Html.TextAreaFor(m => m.Log.Value.Emails, new { id = "log_send_to_emails_textarea", @readonly = "readonly" })
+            <a id="log_send_to_button" class="btn">
+                @Translation.Get("till")
+            </a>
+        </td>
+    </tr>
+</table>
