@@ -333,7 +333,7 @@
                         <td>                            
                         </td>
                         <td>
-                            <button id="btnClearFilter" name="btnClearFilter" class="btn">@Translation.Get("Rensa")</button>                                                        
+                            <input type="button" id="btnClearFilter" name="btnClearFilter" class="btn" value='@Translation.Get("Rensa")'>
                         </td>
                     </tr>
                 </table>
@@ -347,7 +347,9 @@
                             @Translation.Get("Sök")
                         </td>
                         <td class="span4">
-                            <input type="text" id="txtFreeTextSearch" value="@Model.caseSearchFilter.FreeTextSearch" name="txtFreeTextSearch" />
+                            <input type="text" id="txtFreeTextSearch" value="@Model.caseSearchFilter.FreeTextSearch" name="txtFreeTextSearch" 
+                                    rel="tooltip" 
+                                    title="@Translation.Get("Use # to search for case number")" />
                         </td>
                         <td>
                             <select id="lstfilterCaseProgress" name="lstfilterCaseProgress">
@@ -375,12 +377,45 @@
 }
 
 <script>
+
+ 
+
     $(function () {
+
+        if (
+            '@Model.caseSearchFilter.Region' != '' ||
+            '@Model.caseSearchFilter.Country' != '' ||
+            '@Model.caseSearchFilter.Department' != '' ||
+            '@Model.caseSearchFilter.User' != '' ||
+            '@Model.caseSearchFilter.CaseType.supressZero()' != '' ||
+            '@Model.caseSearchFilter.ProductArea' != '' ||
+            '@Model.caseSearchFilter.Category' != '' ||
+            '@Model.caseSearchFilter.WorkingGroup' != '' ||
+            '@Model.caseSearchFilter.UserResponsible' != '' ||
+            '@Model.caseSearchFilter.UserPerformer' != '' ||
+            '@Model.caseSearchFilter.Priority' != '' ||
+            '@Model.caseSearchFilter.Status' != '' ||
+            '@Model.caseSearchFilter.StateSecondary' != '' ||
+            '@Model.caseSearchFilter.CaseClosingReasonFilter' != '' ||
+            '@Model.CaseClosingDateEndFilter' != '' ||
+            '@Model.CaseClosingDateStartFilter' != '' ||
+            '@Model.CaseRegistrationDateEndFilter' != '' ||
+            '@Model.CaseRegistrationDateStartFilter' != '' ||
+            '@Model.CaseWatchDateEndFilter' != '' ||
+            '@Model.CaseWatchDateStartFilter' != '') {
+
+            $("#hiddeninfo").toggle();
+            $("#icoPlus").removeClass('icon-plus-sign').addClass('icon-minus-sign');
+            $("#icoFilter").addClass('icon-filter');                        
+        }
+           
+        
 
         $("#btnClearFilter").click(function() {
             window.location.href = '@Url.Action("Index", "Cases", new { customerId = Model.customer != null ? Model.customer.Id : (int?)null, clearFilters = true })';
             return false;
         });
+        
 
         $("#btnMore").click(function (e) {
             e.preventDefault();
@@ -399,10 +434,12 @@
             }
         });
 
-        if ('@Model.IsClearFilters.ToString().ToLower()' == 'true')
+        @*if ('@Model.IsClearFilters.ToString().ToLower()' == 'true')
         {
             $("#btnMore").click();
-        }
+        }*@
     });
+
+
 </script>
 

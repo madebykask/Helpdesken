@@ -9,6 +9,7 @@
     <script type="text/javascript">
         $(function () {
             var parameters = {
+                languageId: '@SessionFacade.CurrentLanguageId',
                 id: '@Model.Files.EntityId',
                 uploadFileUrl: '@Url.Action("UploadFile")',
                 deleteFileUrl: '@Url.Action("DeleteFile")'

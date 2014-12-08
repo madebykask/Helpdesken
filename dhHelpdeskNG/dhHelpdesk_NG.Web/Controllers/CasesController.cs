@@ -369,11 +369,7 @@ namespace DH.Helpdesk.Web.Controllers
                         case "InProcessCases":                            
                             sm.caseSearchFilter.CaseProgress = "2";
                             sm.caseSearchFilter.UserPerformer = "";                           
-                            break;
-                        default:
-                            sm.caseSearchFilter.UserPerformer = "";                            
-                            sm.caseSearchFilter.CaseProgress = "2";
-                            break;
+                            break;                        
                     }
 
                     fd.caseSearchFilter = sm.caseSearchFilter;

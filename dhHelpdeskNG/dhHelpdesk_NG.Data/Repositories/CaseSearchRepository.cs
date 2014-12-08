@@ -901,23 +901,43 @@
 
             if (!string.IsNullOrWhiteSpace(f.FreeTextSearch))
             {
-                var text = f.FreeTextSearch; 
-                sb.Append(" AND (");
-                sb.Append(this.GetSqlLike("[tblCase].[CaseNumber]", text));
-                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[ReportedBy]", text));
-                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Name]", text));
-                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_EMail]", text));
-                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Phone]", text));
-                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_CellPhone]", text));
-                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Place]", text));
-                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Caption]", text));
-                sb.AppendFormat(" OR [tblCase].[Description] LIKE '%{0}%'", text);
-                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Miscellaneous]", text));
-                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblDepartment].[Department]", text));
-                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblDepartment].[DepartmentId]", text));
-                sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblLog] WHERE [tblLog].[Text_Internal] LIKE '%{0}%' OR [tblLog].[Text_External] LIKE '%{0}%'))", text);
-                sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblFormFieldValue] WHERE {0}))", this.GetSqlLike("FormFieldValue", text));
-                sb.Append(") ");
+                if (f.FreeTextSearch[0] == '#')
+                {
+                    var text = f.FreeTextSearch.Substring(1, f.FreeTextSearch.Length-1);
+                    int res = 0;
+                    if (int.TryParse(text, out res))
+                    {
+                        sb.Append(" AND (");
+                        sb.Append("[tblCase].[CaseNumber] = " + text);
+                        sb.Append(") ");
+                    }
+                    else
+                    {
+                        sb.Append(" AND (");
+                        sb.Append(this.GetSqlLike("[tblCase].[CaseNumber]", text));
+                        sb.Append(") ");
+                    }
+                }
+                else
+                {
+                    var text = f.FreeTextSearch;
+                    sb.Append(" AND (");
+                    sb.Append(this.GetSqlLike("[tblCase].[CaseNumber]", text));
+                    sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[ReportedBy]", text));
+                    sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Name]", text));
+                    sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_EMail]", text));
+                    sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Phone]", text));
+                    sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_CellPhone]", text));
+                    sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Place]", text));
+                    sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Caption]", text));
+                    sb.AppendFormat(" OR [tblCase].[Description] LIKE '%{0}%'", text);
+                    sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Miscellaneous]", text));
+                    sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblDepartment].[Department]", text));
+                    sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblDepartment].[DepartmentId]", text));
+                    sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblLog] WHERE [tblLog].[Text_Internal] LIKE '%{0}%' OR [tblLog].[Text_External] LIKE '%{0}%'))", text);
+                    sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblFormFieldValue] WHERE {0}))", this.GetSqlLike("FormFieldValue", text));
+                    sb.Append(") ");
+                }
             }
 
             //LockCaseToWorkingGroup
