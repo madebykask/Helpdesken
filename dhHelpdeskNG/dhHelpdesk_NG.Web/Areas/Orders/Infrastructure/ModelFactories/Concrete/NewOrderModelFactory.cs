@@ -5,6 +5,7 @@
     using DH.Helpdesk.BusinessData.Enums.Orders;
     using DH.Helpdesk.BusinessData.Models.Orders.Order;
     using DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditSettings;
+    using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Web.Areas.Orders.Models.Order.FieldModels;
     using DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit;
 
@@ -17,7 +18,7 @@
             this.configurableFieldModelFactory = configurableFieldModelFactory;
         }
 
-        public FullOrderEditModel Create(string temporatyId, NewOrderEditData data, int customerId, int? orderTypeId)
+        public FullOrderEditModel Create(string temporatyId, NewOrderEditData data, IWorkContext workContext, int? orderTypeId)
         {
             return new FullOrderEditModel(
                 this.CreateDeliveryEditModel(data.EditSettings.Delivery, data.EditOptions),
@@ -29,9 +30,9 @@
                 this.CreateProgramEditModel(data.EditSettings.Program),
                 this.CreateReceiverEditModel(data.EditSettings.Receiver),
                 this.CreateSupplierEditModel(data.EditSettings.Supplier),
-                this.CreateUserEditModel(data.EditSettings.User),
+                this.CreateUserEditModel(data.EditSettings.User, workContext),
                 temporatyId,
-                customerId,
+                workContext.Customer.CustomerId,
                 orderTypeId,
                 true);
         }
@@ -226,11 +227,13 @@
                             supplierOrderInfo);
         }
 
-        private UserEditModel CreateUserEditModel(UserEditSettings settings)
+        private UserEditModel CreateUserEditModel(
+                        UserEditSettings settings,
+                        IWorkContext workContext)
         {
-            var userId = this.configurableFieldModelFactory.CreateStringField(settings.UserId, null);
-            var userFirstName = this.configurableFieldModelFactory.CreateStringField(settings.UserFirstName, null);
-            var userLastName = this.configurableFieldModelFactory.CreateStringField(settings.UserLastName, null);
+            var userId = this.configurableFieldModelFactory.CreateStringField(settings.UserId, workContext.User.Login);
+            var userFirstName = this.configurableFieldModelFactory.CreateStringField(settings.UserFirstName, workContext.User.FirstName);
+            var userLastName = this.configurableFieldModelFactory.CreateStringField(settings.UserLastName, workContext.User.LastName);
 
             return new UserEditModel(
                             userId,

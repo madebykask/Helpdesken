@@ -90,18 +90,26 @@
         public static ProductData MapToData(
                         ProductModel product,
                         IQueryable<Manufacturer> manufacturers,
+                        IQueryable<Application> availableApplications,
                         IQueryable<Application> applications)
         {
             var overviews = manufacturers.Select(m => new { m.Id, m.Name, Type = "Manufacturer" }).Union(
-                            applications.Select(a => new { a.Id, a.Name, Type = "Application" }))
+                            availableApplications.Select(m => new { m.Id, m.Name, Type = "availableApplications" }).Union(
+                            applications.Select(a => new { a.Id, a.Name, Type = "Application" })))
                             .OrderBy(o => o.Type)
                             .ThenBy(o => o.Name)
                             .ToArray();
 
+            var applicationsOverviews = overviews.Where(o => o.Type == "Application").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray();
+            var availableApplicationsOverviews = overviews
+                        .Where(o => o.Type == "availableApplications" && !applicationsOverviews.Any(a => a.Value == o.Id.ToString(CultureInfo.InvariantCulture)))
+                        .Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray();
+
             return new ProductData(
                         product,
                         overviews.Where(o => o.Type == "Manufacturer").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray(),
-                        overviews.Where(o => o.Type == "Application").Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToArray());
+                        availableApplicationsOverviews,
+                        applicationsOverviews);
         }
     }
 }

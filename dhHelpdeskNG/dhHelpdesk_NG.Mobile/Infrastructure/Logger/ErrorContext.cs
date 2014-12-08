@@ -49,7 +49,7 @@
                 if (this.WorkContext.User != null)
                 {
                     res.AppendLine(string.Format("UserId: {0}", this.WorkContext.User.UserId));
-                    res.AppendLine(string.Format("User: {0}", this.WorkContext.User.UserName));                    
+                    res.AppendLine(string.Format("User: {0}", string.Format("{0} {1}", this.WorkContext.User.FirstName, this.WorkContext.User.LastName)));                    
                 }
 
                 if (this.WorkContext.Customer != null)

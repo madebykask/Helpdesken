@@ -24,13 +24,29 @@ namespace DH.Helpdesk.SelfService.Infrastructure.WorkContext.Concrete
             get { return SessionFacade.CurrentUser.Id; }
         }
 
-        public string UserName
+        public string Login
         {
             get
             {
                 throw new NotImplementedException();
             }
         }
+
+        public string FirstName
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public string LastName
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }   
 
         public ICollection<UserWorkingGroup> UserWorkingGroups
         {

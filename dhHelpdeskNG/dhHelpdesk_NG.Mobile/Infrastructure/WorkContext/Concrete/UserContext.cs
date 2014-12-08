@@ -79,16 +79,42 @@ namespace DH.Helpdesk.Mobile.Infrastructure.WorkContext.Concrete
             }
         }
 
-        public string UserName
+        public string Login
         {
             get
             {
-                if (string.IsNullOrEmpty(this.userName))
+                if (this.User != null)
                 {
-                    this.userName = string.Format("{0} {1}", this.User.FirstName, this.User.SurName);
+                    return this.User.UserId;
                 }
 
-                return this.userName;
+                return string.Empty;
+            }
+        }
+
+        public string FirstName
+        {
+            get
+            {
+                if (this.User != null)
+                {
+                    return this.User.FirstName;
+                }
+
+                return string.Empty;
+            }
+        }
+
+        public string LastName
+        {
+            get
+            {
+                if (this.User != null)
+                {
+                    return this.User.SurName;
+                }
+
+                return string.Empty;
             }
         }
 

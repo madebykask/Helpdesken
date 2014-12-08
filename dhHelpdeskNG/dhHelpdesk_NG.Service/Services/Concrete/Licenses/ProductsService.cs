@@ -14,18 +14,10 @@
     {
         private readonly IUnitOfWorkFactory unitOfWorkFactory;
 
-        private readonly IRegionService regionService;
-
-        private readonly IDepartmentService departmentService;
-
         public ProductsService(
-                IUnitOfWorkFactory unitOfWorkFactory, 
-                IRegionService regionService, 
-                IDepartmentService departmentService)
+                IUnitOfWorkFactory unitOfWorkFactory)
         {
             this.unitOfWorkFactory = unitOfWorkFactory;
-            this.regionService = regionService;
-            this.departmentService = departmentService;
         }
 
         public ProductOverview[] GetProducts(int customerId, int[] regions, int[] departments)
@@ -83,11 +75,14 @@
                 var manufacturers = manufacturerRepository.GetAll()
                                     .GetByCustomer(customerId);
 
+                var availableApplications = applicationRepository.GetAll()
+                                    .GetByCustomer(customerId);
+
                 var applications = applicationRepository.GetAll()
                                     .GetProductApplications(productId)
                                     .GetByCustomer(customerId);
 
-                return ProductMapper.MapToData(product, manufacturers, applications);
+                return ProductMapper.MapToData(product, manufacturers, availableApplications, applications);
             }
         }
 

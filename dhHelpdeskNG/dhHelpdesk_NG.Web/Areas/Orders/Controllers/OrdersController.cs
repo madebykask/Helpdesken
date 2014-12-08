@@ -105,7 +105,7 @@
             var model = this.newOrderModelFactory.Create(
                                                 temporaryId, 
                                                 data,
-                                                this.workContext.Customer.CustomerId,
+                                                this.workContext,
                                                 orderTypeForCteateOrderId);
 
             return this.View("New", model);

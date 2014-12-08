@@ -32,7 +32,7 @@
                             data.Product.CustomerId,
                             data.Product.ProductName,
                             manufacturers,
-                            WebMvcHelper.GetEmptyList(),
+                            WebMvcHelper.GetListItems(data.AvailableApplications),
                             WebMvcHelper.GetListItems(data.Applications));
         }
 

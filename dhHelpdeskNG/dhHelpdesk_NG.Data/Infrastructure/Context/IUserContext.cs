@@ -26,7 +26,11 @@ namespace DH.Helpdesk.Dal.Infrastructure.Context
         /// </summary>
         int UserId { get; }
 
-        string UserName { get; }
+        string Login { get; }
+
+        string FirstName { get; }
+
+        string LastName { get; }
 
         /// <summary>
         /// Gets the user working groups.
