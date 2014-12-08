@@ -3,7 +3,6 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Accounts
     using System.Collections.Generic;
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Enums.Accounts;
     using DH.Helpdesk.BusinessData.Enums.Accounts.Fields;
     using DH.Helpdesk.BusinessData.Models.Accounts;
     using DH.Helpdesk.BusinessData.Models.Accounts.Read;
@@ -43,7 +42,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Accounts
                         x.Entity.UserFirstName,
                         x.Entity.UserInitials,
                         x.Entity.UserLastName,
-                        x.Entity.UserPersonalIdentityNumber,
+                        x.Entity.UserPersonalIdentityNumber != null ? x.Entity.UserPersonalIdentityNumber.Split(';').ToList() : new List<string>(),
                         x.Entity.UserPhone,
                         x.Entity.UserExtension,
                         x.Entity.UserEMail,
@@ -86,7 +85,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Accounts
                         x.Entity.DeliveryAddress,
                         x.Entity.DeliveryPostalAddress),
                         new ProgramForRead(x.Entity.InfoProduct, x.Entity.Programs.Select(y => y.Id).ToList()),
-                        new OtherForRead(x.Entity.CaseNumber, x.Entity.InfoOther, x.Entity.AccountFileName),
+                        new OtherForRead(x.Entity.CaseNumber, x.Entity.InfoOther, x.Entity.AccountFileName, x.Entity.AccountFile),
                         x.Entity.FinishingDate,
                         new UserName(x.ChangedByUserFirstName, x.ChangedByUserSurName),
                         x.Entity.ChangedDate,

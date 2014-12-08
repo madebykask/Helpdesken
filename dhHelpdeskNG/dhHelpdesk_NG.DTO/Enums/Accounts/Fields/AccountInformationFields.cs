@@ -23,5 +23,7 @@ namespace DH.Helpdesk.BusinessData.Enums.Accounts.Fields
         public static readonly string AccountType4 = "AccountInformation.AccountType4";
 
         public static readonly string AccountType5 = "AccountInformation.AccountType5";
+
+        public static readonly string Info = "AccountInformation.Info";
     }
 }

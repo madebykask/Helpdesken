@@ -139,7 +139,7 @@
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\ProgramFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\UserFieldSettings.cs" />
     <Compile Include="Models\DailyReport\Input\DailyReportUpdate.cs" />
-    <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\AccountFieldsSettingsForEdit.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\AccountFieldsSettingsForModelEdit.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\AccountInformationFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\ContactFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\DeliveryInformationFieldSettings.cs" />
@@ -149,7 +149,7 @@
     <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\OtherFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\ProgramFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\UserFieldSettings.cs" />
-    <Compile Include="Models\Accounts\AccountSettings\Read\Overview\AccountFieldsSettingsForEdit.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\Overview\AccountFieldsSettingsOverview.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Overview\AccountInformationFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Overview\ContactFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Overview\DeliveryInformationFieldSettings.cs" />

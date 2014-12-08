@@ -1,10 +1,10 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Read.Overview
+﻿namespace DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Read.ModelEdit
 {
     using System;
 
-    public abstract class AccountFieldsSettingsForEdit
+    public abstract class AccountFieldsSettingsForModelEdit
     {
-        protected AccountFieldsSettingsForEdit(
+        protected AccountFieldsSettingsForModelEdit(
             int activityId,
             OrdererFieldSettings orderer,
             UserFieldSettings user,

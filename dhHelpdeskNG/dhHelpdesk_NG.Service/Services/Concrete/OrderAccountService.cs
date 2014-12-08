@@ -22,7 +22,8 @@
     {
         private readonly UnitOfWorkFactory unitOfWorkFactory;
 
-        public OrderAccountService(UnitOfWorkFactory unitOfWorkFactory)
+        public OrderAccountService(
+            UnitOfWorkFactory unitOfWorkFactory)
         {
             this.unitOfWorkFactory = unitOfWorkFactory;
         }
@@ -133,7 +134,7 @@
             domainEntity.UserFirstName = dto.User.FirstName;
             domainEntity.UserInitials = dto.User.Initials;
             domainEntity.UserLastName = dto.User.LastName;
-            domainEntity.UserPersonalIdentityNumber = dto.User.PersonalIdentityNumber;
+            domainEntity.UserPersonalIdentityNumber = dto.User.PersonalIdentityNumber != null ? string.Join(";", dto.User.PersonalIdentityNumber) : string.Empty;
             domainEntity.UserPhone = dto.User.Phone;
             domainEntity.UserExtension = dto.User.Extension;
             domainEntity.UserEMail = dto.User.EMail;
@@ -183,12 +184,12 @@
             domainEntity.AccountFile = dto.Other.Content;
             domainEntity.InfoOther = dto.Other.Info;
         }
-
+        
         private static void AddPrograms(AccountForWrite dto, Account domainEntity)
         {
             foreach (var id in dto.Program.ProgramIds)
             {
-                domainEntity.Programs.Add(new Helpdesk.Domain.Program() { Id = id });
+                domainEntity.Programs.Add(new Helpdesk.Domain.Program { Id = id });
             }
         }
     }

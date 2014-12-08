@@ -88,6 +88,7 @@
     <Compile Include="BusinessLogic\BusinessModelRestorers\Inventory\IServerRestorer.cs" />
     <Compile Include="BusinessLogic\BusinessModelRestorers\Inventory\Concrete\ServerRestorer.cs" />
     <Compile Include="BusinessLogic\BusinessModelRestorers\Inventory\Concrete\PrinterRestorer.cs" />
+    <Compile Include="BusinessLogic\BusinessModelValidators\Accounts\Concrete\AccountValidator.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Accounts\IAccountValidator.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Inventory\Concrete\ComputerValidator.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Inventory\IComputerValidator.cs" />
@@ -99,8 +100,10 @@
     <Compile Include="BusinessLogic\BusinessModelValidators\Inventory\Concrete\PrinterValidator.cs" />
     <Compile Include="BusinessLogic\MailTools\TemplateFormatters\MailTemplateFormatterNew.cs" />
     <Compile Include="BusinessLogic\MapperData\Participant.cs" />
+    <Compile Include="BusinessLogic\Mappers\Accounts\AccountFieldSettingsForEditMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Accounts\AccountForReadMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Accounts\AccountOverviewMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Accounts\MapperData\AccountSettingsMapperDataForEdit.cs" />
     <Compile Include="BusinessLogic\Mappers\BulletinBoards\BulletinBoardMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Calendars\CalendarMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Cases\HolidayMapper.cs" />
@@ -135,6 +138,7 @@
     <Compile Include="BusinessLogic\Mappers\Questionnaire\QuestionnaireQuestionResultMappers.cs" />
     <Compile Include="BusinessLogic\Mappers\Shared\Data\UnionItemOverview.cs" />
     <Compile Include="BusinessLogic\Mappers\Shared\GlobalMappers.cs" />
+    <Compile Include="BusinessLogic\Specifications\Accounts\AccountFieldSettingsSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Accounts\AccountSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\BulletinBoards\BulletinBoardsSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Calendars\CalendarsSpecifications.cs" />
@@ -268,7 +272,9 @@
     <Compile Include="Services\Concrete\ActionSettingService.cs" />
     <Compile Include="Services\Concrete\Licenses\ComputersService.cs" />
     <Compile Include="Services\Concrete\ModulesService.cs" />
+    <Compile Include="Services\Concrete\OrderAccountProxyService.cs" />
     <Compile Include="Services\Concrete\OrderAccountService.cs" />
+    <Compile Include="Services\Concrete\OrderAccountSettingsService.cs" />
     <Compile Include="Services\Concrete\Orders\OrderFieldSettingsService.cs" />
     <Compile Include="Services\Concrete\Orders\OrdersService.cs" />
     <Compile Include="Services\IModuleService.cs" />
@@ -288,6 +294,7 @@
     <Compile Include="Services\ICaseInvoiceSettingsService.cs" />
     <Compile Include="Services\ICaseSolutionSettingService.cs" />
     <Compile Include="Services\IOrderAccountService.cs" />
+    <Compile Include="Services\IOrderAccountSettingsService.cs" />
     <Compile Include="Services\ISSOService.cs" />
     <Compile Include="Services\IActionSettingService.cs" />
     <Compile Include="Services\IInventorySettingsService.cs" />
@@ -423,9 +430,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="BusinessLogic\BusinessModelValidators\Accounts\Concrete\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\PostSharp.4.0.36\tools\PostSharp.targets" Condition="Exists('..\packages\PostSharp.4.0.36\tools\PostSharp.targets')" />
   <Target Name="EnsurePostSharpImported" BeforeTargets="BeforeBuild" Condition="'$(PostSharp30Imported)' == ''">

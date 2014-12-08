@@ -46,6 +46,14 @@
             }
         }
 
+        public void ValidateBooleanField(bool newValue, string fieldName, ElementaryValidationRule rule)
+        {
+            if (rule.ReadOnly)
+            {
+                ValidateReadOnly(newValue, fieldName);
+            }
+        }
+
         public void ValidateIntegerField(int? value, string fieldName, ElementaryValidationRule rule)
         {
             if (rule.ReadOnly)
@@ -111,6 +119,30 @@
             }
         }
 
+        public void ValidateForNew(object value, string fieldName, ElementaryValidationRule rule)
+        {
+            if (rule.ReadOnly)
+            {
+                ValidateReadOnly(value, fieldName);
+            }
+            else if (rule.Required)
+            {
+                ValidateRequired(value, fieldName);
+            }
+        }
+
+        public void ValidateRealField(decimal value, string fieldName, ElementaryValidationRule rule)
+        {
+            if (rule.ReadOnly)
+            {
+                ValidateReadOnly(value, fieldName);
+            }
+            else if (rule.Required)
+            {
+                ValidateRequired(value, fieldName);
+            }
+        }
+
         public void ValidateStringField(
             string newValue,
             string oldValue,
@@ -138,6 +170,16 @@
         }
 
         private static void ValidateReadOnly(int value, string fieldName)
+        {
+            if (value == 0)
+            {
+                return;
+            }
+
+            throw new ElementaryValidationRulesException(fieldName, ReadOnlyMessage);
+        }
+
+        private static void ValidateReadOnly(decimal value, string fieldName)
         {
             if (value == 0)
             {

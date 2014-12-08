@@ -6,6 +6,7 @@
     {
         public AccountForUpdate(
             int id,
+            int activityId,
             Orderer orderer,
             User user,
             AccountInformation accountInformation,
@@ -18,9 +19,12 @@
             : base(orderer, user, accountInformation, contact, deliveryInformation, program, other)
         {
             this.Id = id;
+            this.ActivityId = activityId;
             this.ChangedDate = changedDate;
             this.ChangedByUserId = changedByUserId;
         }
+
+        public int ActivityId { get; private set; }
 
         public DateTime ChangedDate { get; private set; }
 

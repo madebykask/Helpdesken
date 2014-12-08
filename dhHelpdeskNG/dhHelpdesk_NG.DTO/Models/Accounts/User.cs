@@ -9,7 +9,7 @@ namespace DH.Helpdesk.BusinessData.Models.Accounts
             string firstName,
             string initials,
             string lastName,
-            string personalIdentityNumber,
+            List<string> personalIdentityNumber,
             string phone,
             string extension,
             string eMail,
@@ -58,7 +58,7 @@ namespace DH.Helpdesk.BusinessData.Models.Accounts
 
         public string LastName { get; private set; }
 
-        public string PersonalIdentityNumber { get; private set; }
+        public List<string> PersonalIdentityNumber { get; private set; }
 
         public string Phone { get; private set; }
 

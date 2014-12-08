@@ -196,11 +196,6 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Account.Conc
                 () => updated.AccountInformation.Info,
                 existing.AccountInformation.Info,
                 settings.AccountInformation.Info);
-            this.RestoreFieldIfNeeded(
-                updated,
-                () => updated.AccountInformation.StartedDate,
-                existing.AccountInformation.StartedDate,
-                settings.AccountInformation.StartedDate);
         }
 
         private void RestoreDelivery(
@@ -254,6 +249,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Account.Conc
             AccountFieldsSettingsForProcessing settings)
         {
             this.RestoreFieldIfNeeded(updated, () => updated.Other.Info, existing.Other.Info, settings.Other.Info);
+
             this.RestoreFieldIfNeeded(
                 updated,
                 () => updated.Other.CaseNumber,
@@ -265,15 +261,11 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Account.Conc
                 () => updated.Other.FileName,
                 existing.Other.FileName,
                 settings.Other.FileName);
+
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.Other.FileName,
-                existing.Other.FileName,
-                settings.Other.FileName);
-            this.RestoreFieldIfNeeded(
-                updated,
-                () => updated.Other.FileName,
-                existing.Other.FileName,
+                () => updated.Other.Content,
+                existing.Other.Content,
                 settings.Other.FileName);
         }
     }

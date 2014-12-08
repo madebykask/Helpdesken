@@ -2,9 +2,12 @@
 {
     public class OtherForRead : Other
     {
-        public OtherForRead(decimal caseNumber, string info, string fileName)
+        public OtherForRead(decimal caseNumber, string info, string fileName, byte[] content)
             : base(caseNumber, info, fileName)
         {
+            this.Content = content;
         }
+
+        public byte[] Content { get; set; }
     }
 }
