@@ -105,6 +105,10 @@
             bundles.Add(new ScriptBundle("~/bundles/invoices").Include(
                             "~/Content/js/Invoice/invoice.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/cases/edit").Include(
+                            "~/Content/js/Cases/edit.logic.js",
+                            "~/Content/js/Cases/case.templates.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/changes/change").Include(
                             "~/Content/js/Changes/change.js"));
 

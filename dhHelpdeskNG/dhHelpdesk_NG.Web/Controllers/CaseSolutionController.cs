@@ -10,6 +10,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Common.Enums.Settings;
+    using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.Requests.Cases;
     using DH.Helpdesk.Services.Services;
@@ -227,6 +228,48 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
+        public ActionResult GetTemplate(int id)
+        {
+            var caseSolution = this._caseSolutionService.GetCaseSolution(id);
+
+            if (caseSolution == null)
+            {
+                return new HttpNotFoundResult("No case solution found...");
+            }
+
+            // Positive: Send Mail to...
+            if (caseSolution.NoMailToNotifier == 0)
+            {
+                caseSolution.NoMailToNotifier = 1;
+            }
+            else
+            {
+                caseSolution.NoMailToNotifier = 0;
+            }
+          
+            return this.Json(new
+                                 {
+                                     caseSolution.CaseType_Id,
+                                     caseSolution.PerformerUser_Id,
+                                     caseSolution.Category_Id,
+                                     caseSolution.ReportedBy,
+                                     caseSolution.Department_Id,
+                                     NoMailToNotifier = !caseSolution.NoMailToNotifier.ToBool(),
+                                     caseSolution.ProductArea_Id,
+                                     caseSolution.Caption,
+                                     caseSolution.Description,
+                                     caseSolution.Miscellaneous,
+                                     caseSolution.CaseWorkingGroup_Id,
+
+                                     caseSolution.Priority_Id,
+                                     caseSolution.Project_Id,
+                                     caseSolution.Text_External,
+                                     caseSolution.Text_Internal,
+                                     caseSolution.FinishingCause_Id
+                                 });
+        }
+
+        [HttpPost]
         public ActionResult Edit(CaseSolutionInputViewModel caseSolutionInputViewModel, CaseSolutionSettingModel[] caseSolutionSettingModels, int PageId)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
@@ -309,7 +352,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
             else
             {
-                this.TempData.Add("Error", "");
+                this.TempData.Add("Error", string.Empty);
                 return this.RedirectToAction("edit", "casesolution", new { id = id });
             }
         }
@@ -447,8 +490,8 @@ namespace DH.Helpdesk.Web.Controllers
                 model.ScheduleType = schedule.ScheduleType;
                 model.ScheduleWatchDate = schedule.ScheduleWatchDate;
 
-                model.ScheduleMonths = "";
-                model.ScheduleDays = "";
+                model.ScheduleMonths = string.Empty;
+                model.ScheduleDays = string.Empty;
 
                 if (schedule.ScheduleDay != null)
                     model.ScheduleDays = schedule.ScheduleDay;

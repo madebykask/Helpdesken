@@ -444,7 +444,7 @@
                                             }
                                         </select>
                                         <br />
-                                        <input type="radio" name="ScheduleMonthly" onchange="click()+" @(Model.ScheduleMonthlyOrder != 0 ? "checked='checked'" : "") id="optthe"  value="2" style="vertical-align:top"/>
+                                        <input type="radio" name="ScheduleMonthly" onchange="click()" @(Model.ScheduleMonthlyOrder != 0 ? "checked='checked'" : "") id="optthe"  value="2" style="vertical-align:top"/>
                                         @Translation.Get("Den", Enums.TranslationSource.TextTranslation):
                                         <select name="ScheduleMonthlyOrder" style="width: 85px;" id="cbo1">
                                             <option value="1" @(Model.ScheduleMonthlyOrder == 1 ? "selected='selected'" : "")>@Translation.Get("första", Enums.TranslationSource.TextTranslation)</option>
