@@ -1,0 +1,64 @@
+﻿@model DH.Helpdesk.Web.Models.CheckLists.CheckListIndexViewModel
+
+@{
+    //Model.WorkingGroups.Insert(0, new SelectListItem { });
+    //SelectList WorkingGroups = new SelectList(Model.WorkingGroups, null,null);
+
+    Model.ListOfExistances.Insert(0, new SelectListItem { });
+    SelectList CheckListInputs = new SelectList(Model.ListOfExistances, " ", " ");
+ }
+<table>               
+    <tbody> 
+            
+            <tr>
+                <td>
+                  @Html.Label(Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation) + ":")
+                </td>
+                <td>
+                  @Html.DropDownList("WorkingGroupList" , Model.WorkingGroups)
+                </td>
+            </tr>
+              
+            <tr>
+                <td>
+                    @Html.Label(Translation.Get("Checklista", Enums.TranslationSource.TextTranslation) + ":")
+                </td>
+                <td>
+                    @Html.DropDownList("ChecklistsName" , Model.ListOfExistances) 
+                </td>                                                  
+             </tr>        
+             <tr>
+                <td>
+                    @Html.Label(Translation.Get("Datum", Enums.TranslationSource.TextTranslation) + ":")
+                </td>
+                <td>
+                    <div class="form-inline">
+                     @Html.EditorFor(model => model.From, "DatePicker", new { id = "FromDate" })
+                @*</td>
+                 <td>*@
+                        @Html.Label(" ")
+                 @*</td>
+                 <td>*@
+                        @Html.EditorFor(model => model.To, "DatePicker", new { id = "ToDate" })
+
+                    @*  @Html.DropDownList("ChecklistsDates" , Model.ListOfDates)*@
+                        </div>
+                </td>                                                  
+             </tr>        
+             <tr>
+                <td>
+                    @Html.Label(Translation.Get("Visa", Enums.TranslationSource.TextTranslation) + ":")
+                </td>
+                <td>
+                    @* @Html.DropDownList("ChecklistsName" , Model.WorkingGroups)*@
+                    <select id="Show" name="Show">
+                        <option value="0">&nbsp;</option>
+                        <option value="1">@Translation.Get("Godkänd", Enums.TranslationSource.TextTranslation)</option> 
+                        <option value="2">@Translation.Get("Godkänd med anm", Enums.TranslationSource.TextTranslation)</option>
+                        <option value="3">@Translation.Get("Ej godkänd", Enums.TranslationSource.TextTranslation)</option>
+                    </select>
+                  @*  @Html.HiddenFor(m => Model.Show)*@
+                </td>                                                  
+            </tr>                        
+    </tbody>
+</table>

@@ -10,7 +10,7 @@
 {
    <form class="form-inline" role="form">
     <div class="tab-content overflow-visible">
-        <div class="container">
+        <div class="container">           
             <div class="form-inline">
 
                         @Html.Label(Translation.Get("Datum", Enums.TranslationSource.TextTranslation) + ":")
@@ -20,7 +20,7 @@
                         @Html.Label(" - ")
 
                         @Html.EditorFor(model => model.ReportsTo, "DatePicker", new { id = "ToDate" })
-                
+                        &nbsp;&nbsp;
                         <input type="submit"  value="@Translation.Get("Sök")" class="btn btn-default" />    
             </div>
            

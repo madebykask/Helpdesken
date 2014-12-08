@@ -6,6 +6,7 @@
     public class ChecklistService : Entity
     {
         public int Customer_Id { get; set; }
+        public int CheckList_Id { get; set; }
         public int IsActive { get; set; }
         public string Name { get; set; }
         public DateTime ChangedDate { get; set; }

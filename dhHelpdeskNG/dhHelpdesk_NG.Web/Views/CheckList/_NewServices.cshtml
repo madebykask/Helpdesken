@@ -1,0 +1,50 @@
+﻿@model DH.Helpdesk.Web.Models.CheckLists.CheckListserviceModel
+
+<div class="span8">
+<table class="tableform" id="tblNewService">        
+    <tbody>                                         
+            <tr>
+                <td>                  
+                   @Translation.Get("Nytt Område/Tjänst", Enums.TranslationSource.TextTranslation)
+                </td>
+                </tr>
+             <tr>
+                <td> 
+                    @Html.TextBoxFor(model => model.ServiceName)
+                </td>
+             
+                @*<td>
+                    @Translation.Get("Aktivera", Enums.TranslationSource.TextTranslation)
+                </td>
+                <td class="field switch">
+                    @Html.SpecialLabel("IsActive", Model.IsActive, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
+                    @Html.SpecialLabelOff("IsActive", Model.IsActive, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
+                    @Html.SpecialCheckBox("IsActive", Model.IsActive, 1, new { @class = "checkbox" })
+                </td>*@
+                <td>
+                    @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation), "new", null, new { @class = "btn" })
+                </td>
+            </tr>                                                                                        
+            <tr> 
+                <td>                  
+                   @Translation.Get("Ny åtgärd", Enums.TranslationSource.TextTranslation)
+                </td>
+             </tr>
+             <tr>
+                <td> 
+                   @* @Html.DropDownList("Services List" , Model.ServiceName)*@
+                    <select id="services" name="Services">
+                        <option value="0">&nbsp;</option>                       
+                    </select>
+                </td>                         
+                <td> 
+                    @Html.TextAreaFor(model => model.ListOfActions.ActionName)
+                </td>
+                <td>
+                    @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation), "new", null, new { @class = "btn" })
+                </td>
+            </tr>
+
+    </tbody>                                             
+</table>
+</div>

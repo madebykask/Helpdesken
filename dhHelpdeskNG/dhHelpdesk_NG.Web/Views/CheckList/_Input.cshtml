@@ -1,0 +1,44 @@
+﻿
+@model DH.Helpdesk.Web.Models.CheckLists.CheckListIndexViewModel
+
+@{
+    Model.WorkingGroups.Insert(0, new SelectListItem { });
+    SelectList WorkingGroups = new SelectList(Model.WorkingGroups, " ", " ");        
+}
+
+
+<form class="form-inline" role="form">
+    <div class="tab-content overflow-visible">
+        <div class="container">           
+            <div class="form-inline">
+                @Html.Label(Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation) + ":")
+                 @Html.DropDownList("WorkingGroupList" , Model.WorkingGroups)
+            </div>           
+        </div>
+        <div>
+         &nbsp
+        </div>
+        <div id="tblChecklistsListContainer">
+            <table class="table table-striped table-bordered table-hover" id="tblChecklistsList">
+                 <thead> 
+                    
+                <tr>                    
+                    <th>@Translation.Get("Namn", Enums.TranslationSource.TextTranslation)</th>                    
+                </tr>
+                
+            </thead>                          
+            <tbody>
+                @foreach (var item in Model.CheckListsList)
+                {                       
+                    <tr style="cursor: pointer" onclick="window.location.href = '@Url.Action("getSelectedCheckList", new RouteValueDictionary { { "id", item.CheckListId } })'">
+                        <td>
+                           @Html.DisplayFor(x => item.CheckListName)
+                        </td>
+                    </tr>                                                                                        
+                }
+            </tbody>
+                   
+            </table>
+        </div>
+    </div>
+ </form>

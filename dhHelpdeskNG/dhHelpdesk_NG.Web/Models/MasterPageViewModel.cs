@@ -144,12 +144,13 @@
         public bool IsSettingsModulesVisible()
         {
             return                 
+                this.IsCheckListVisuble() ||
                 this.IsInventoryVisible() ||
                 this.IsLicenseVisible();
 
             //this.IsOrderVisible() ||
             //this.IsAccountVisible() ||
-            //this.IsCheckListVisuble() ||                
+                            
             //this.IsPlanningVisible() ||                
             //this.IsQuestionVisible() ||                                                
             //this.IsComputerUserVisible();

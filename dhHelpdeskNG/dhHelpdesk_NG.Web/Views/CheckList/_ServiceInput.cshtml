@@ -1,0 +1,81 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions
+@*@model DH.Helpdesk.Domain.ChecklistService*@
+@model DH.Helpdesk.Web.Models.CheckLists.ChecklistInputModel
+
+@{
+    Model.WorkingGroups.Insert(0, new SelectListItem { });
+    SelectList WorkingGroups = new SelectList(Model.WorkingGroups, " ", " ");
+    }
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-error">@Translation.Get("Område/Tjänst", Enums.TranslationSource.TextTranslation)
+        @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+    </div>    
+}
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-1">@Translation.Get("Område/Tjänst", Enums.TranslationSource.TextTranslation)</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment1">
+                <div class="container">
+                    <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span8">                            
+                            <table class="tableform">                                
+                                <tr>
+                                    <td>
+                                        @Html.Label(Translation.Get("Namn", Enums.TranslationSource.TextTranslation) + ":")                                          
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.CheckListName)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Html.Label(Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation) + ":")                                          
+                                    </td>
+                                    <td>                                       
+                                        @Html.DropDownListFor(t => Model.WGId, Model.WorkingGroups)
+                                    </td>
+                                    @Html.HiddenFor( model => model.CheckListId)
+                                </tr>                             
+                            </table>                           
+                           @* @Html.HiddenFor(model => model.Customer_Id)
+                            @Html.HiddenFor(model => model.Service_Id)*@
+                        </div>
+                    </div>
+                    <h4> 
+                        @Translation.Get("Område/Tjänst", Enums.TranslationSource.TextTranslation) 
+                        @Translation.Get("Åtgärder", Enums.TranslationSource.TextTranslation)
+                    </h4>
+                     @Html.Partial("_NewServices", Model.ListOfServices)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(function () {
+        var validator = $("#target").validate({
+            rules: {
+                "Name": {
+                    required: true
+                }
+            },
+            messages: {
+                "Name": {
+                    required: "@Translation.Get("Du måste ange ett område/tjänst", Enums.TranslationSource.TextTranslation)"
+                }
+            },
+            submitHandler: function (form) {
+                form.submit();
+            }
+        });
+    });
+
+</script>

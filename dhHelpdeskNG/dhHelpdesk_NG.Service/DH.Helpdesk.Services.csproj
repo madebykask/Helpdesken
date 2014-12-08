@@ -115,6 +115,7 @@
     <Compile Include="BusinessLogic\Mappers\Calendars\CalendarMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Cases\HolidayMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Changes\ChangeMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\CheckLists\CheckListsMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Customers\CaseMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\DailyReports\DailyReportMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Department\DepartmentMapper.cs" />
@@ -257,6 +258,7 @@
     <Compile Include="Services\CaseService.cs" />
     <Compile Include="Services\CaseSettingsService.cs" />
     <Compile Include="Services\CaseSolutionService.cs" />
+    <Compile Include="Services\CheckListService.cs" />
     <Compile Include="Services\ChecklistsService.cs" />
     <Compile Include="Services\Concrete\CaseInvoiceSettingsService.cs" />
     <Compile Include="Services\Concrete\CaseSolutionSettingService.cs" />

@@ -661,6 +661,7 @@
     <Compile Include="Controllers\CaseSolutionController.cs" />
     <Compile Include="Controllers\ChangeLanguageController.cs" />
     <Compile Include="Controllers\ChangesController.cs" />
+    <Compile Include="Controllers\CheckListController.cs" />
     <Compile Include="Controllers\DailyReportController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FaqController.cs" />
@@ -988,6 +989,11 @@
     <Compile Include="Models\Changes\SettingsEdit\SettingsModel.cs" />
     <Compile Include="Models\Changes\SettingsEdit\TextFieldSettingModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\ConfigurableFieldModel.cs" />
+    <Compile Include="Models\CheckLists\CheckListIndexViewModel.cs" />
+    <Compile Include="Models\CheckLists\ChecklistInputModel.cs" />
+    <Compile Include="Models\CheckLists\CheckListserviceModel.cs" />
+    <Compile Include="Models\CheckLists\ServicesActionsModel.cs" />
+    <Compile Include="Models\CheckLists\WorkingGroupMapper.cs" />
     <Compile Include="Models\DailyReports\DailyReportHistoryModel.cs" />
     <Compile Include="Models\DailyReports\DailyReportInputModel.cs" />
     <Compile Include="Models\Documents\DocumentsFilterModel.cs" />
@@ -1891,13 +1897,19 @@
     <Content Include="Views\Questionnaire\StatisticsGrid.cshtml" />
     <Content Include="Views\GlobalSetting\Holiday.cshtml" />
     <Content Include="Views\GlobalSetting\vssver2.scc" />
-    <Content Include="Views\Checklists\Index.cshtml" />
     <Content Include="Views\DailyReport\_HistoryOverview.cshtml" />
     <Content Include="Views\Cases\_CopyCase.cshtml" />
     <Content Include="Views\DailyReport\_DailyReportInput.cshtml" />
     <Content Include="Views\DailyReport\_HistoryOverviewData.cshtml" />
     <Content Include="Areas\Inventory\Views\Shared\_IndexLayout.cshtml" />
     <Content Include="Areas\Inventory\Views\Workstation\Index.cshtml" />
+    <Content Include="Views\CheckList\Index.cshtml" />
+    <Content Include="Views\CheckList\_Input.cshtml" />
+    <Content Include="Views\CheckList\_CheckListsAction.cshtml" />
+    <Content Include="Views\CheckList\SelectedCheckList.cshtml" />
+    <Content Include="Views\CheckList\_ServiceInput.cshtml" />
+    <Content Include="Views\CheckList\New.cshtml" />
+    <Content Include="Views\CheckList\_NewServices.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

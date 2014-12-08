@@ -77,16 +77,12 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         public PartialViewResult Search(DailyReportHistoryModel historyDailyReports)
         {
-            var searchedReports = (dynamic) null;;
+            
             var toDate = (historyDailyReports.ReportsTo == null ? DateTime.Now : historyDailyReports.ReportsTo);
 
             toDate = toDate.Value.AddDays(1);
-            if (historyDailyReports.ReportsFrom == historyDailyReports.ReportsTo)
-                searchedReports = this._dailyReportService.GetDailyReports(SessionFacade.CurrentCustomer.Id)
-                                  .Where(d => d.CreatedDate.ToShortDateString() == historyDailyReports.ReportsFrom.ToShortDateString()).OrderBy(d  => d.CreatedDate)
-                                  .ToList();
-            else 
-                searchedReports =  this._dailyReportService.GetDailyReports(SessionFacade.CurrentCustomer.Id)
+
+            var searchedReports = this._dailyReportService.GetDailyReports(SessionFacade.CurrentCustomer.Id)
                                  .Where(d => d.CreatedDate >= historyDailyReports.ReportsFrom &&  d.CreatedDate <= (toDate))
                                  .OrderBy(d => d.CreatedDate).ToList();
 

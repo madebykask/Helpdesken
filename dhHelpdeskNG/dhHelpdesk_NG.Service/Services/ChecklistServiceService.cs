@@ -1,8 +1,10 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace DH.Helpdesk.Services.Services
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
+    
 
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
@@ -15,6 +17,8 @@
         IList<ChecklistService> GetChecklistServices(int customerId);
 
         ChecklistService GetChecklistService(int id, int customerId);
+
+        IList<ChecklistService> GetChecklistServiceByCheckListID(int id, int customerId);
 
         void DeleteChecklistService(ChecklistService checklistService);
         void NewChecklistService(ChecklistService checklistService);
@@ -35,7 +39,7 @@
             this._unitOfWork = unitOfWork;
         }
 
-        public IDictionary<string, string> Validate(Helpdesk.Domain.ChecklistService checklistServiceToValidate)
+        public IDictionary<string, string> Validate(ChecklistService checklistServiceToValidate)
         {
             if (checklistServiceToValidate == null)
                 throw new ArgumentNullException("checklistservicetovalidate");
@@ -53,6 +57,11 @@
         public ChecklistService GetChecklistService(int id, int customerId)
         {
             return this._checklistServiceRepository.Get(x => x.Id == id && x.Customer_Id == customerId);
+        }
+
+        public IList<ChecklistService> GetChecklistServiceByCheckListID(int id, int customerId)
+        {
+            return this._checklistServiceRepository.GetMany(x => x.Id == id && x.Customer_Id == customerId).ToList();
         }
 
         public void DeleteChecklistService(ChecklistService checklistService)
@@ -74,5 +83,6 @@
         {
             this._unitOfWork.Commit();
         }
+        
     }
 }

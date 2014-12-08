@@ -130,6 +130,9 @@
     <Compile Include="Models\Accounts\Read\Overview\Other.cs" />
     <Compile Include="Models\Accounts\Read\Overview\Program.cs" />
     <Compile Include="Models\Accounts\Read\Overview\User.cs" />
+    <Compile Include="Models\Checklists\Output\ActionsForService.cs" />
+    <Compile Include="Models\Checklists\Output\CheckListBM.cs" />
+    <Compile Include="Models\Checklists\Output\ChecklistService.cs" />
     <Compile Include="Models\Checklists\Output\ChecklistsOverview.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\AccountFieldsSettingsForEdit.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\AccountInformationFieldSettings.cs" />
