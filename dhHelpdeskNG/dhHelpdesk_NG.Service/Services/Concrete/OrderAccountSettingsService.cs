@@ -35,7 +35,9 @@ namespace DH.Helpdesk.Services.Services.Concrete
             }
         }
 
-        public AccountFieldsSettingsForModelEdit GetFieldsSettingsForModelEdit(int accountActivityId, OperationContext context)
+        public AccountFieldsSettingsForModelEdit GetFieldsSettingsForModelEdit(
+            int accountActivityId,
+            OperationContext context)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
@@ -63,7 +65,9 @@ namespace DH.Helpdesk.Services.Services.Concrete
             }
         }
 
-        public AccountFieldsSettingsForProcessing GetFieldsSettingsForProcessing(int accountActivityId, OperationContext context)
+        public AccountFieldsSettingsForProcessing GetFieldsSettingsForProcessing(
+            int accountActivityId,
+            OperationContext context)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
@@ -79,17 +83,17 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         public void Update(AccountFieldsSettingsForUpdate dto, OperationContext context)
         {
-            //using (var uow = this.unitOfWorkFactory.Create())
-            //{
-            //    var fieldSettingsRep = uow.GetRepository<AccountFieldSettings>();
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var fieldSettingsRep = uow.GetRepository<AccountFieldSettings>();
 
-            //        fieldSettingsRep.GetAll()
-            //            .GetByCustomer(context.CustomerId)
-            //            .GetActivityTypeSettings(dto.ActivityId)
-            //            .MapToDomainEntity(dto);
+                fieldSettingsRep.GetAll()
+                    .GetByCustomer(context.CustomerId)
+                    .GetActivityTypeSettings(dto.ActivityId)
+                    .MapToDomainEntity(dto);
 
-            //    uow.Save();
-            //}
+                uow.Save();
+            }
         }
     }
 }

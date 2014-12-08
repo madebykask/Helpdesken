@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\Orders\CreateMissingOrderFieldSettingsAttribute.cs" />
+    <Compile Include="BusinessLogic\Accounts\OrderAccountDefaultSettingsCreator.cs" />
     <Compile Include="BusinessLogic\BusinessModelAuditors\Changes\InvitationToCabAudit.cs" />
     <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\ExcelFileComposer.cs" />
     <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\ICell.cs" />
@@ -283,6 +284,7 @@
     <Compile Include="Services\Concrete\ModulesService.cs" />
     <Compile Include="Services\Concrete\OrderAccountProxyService.cs" />
     <Compile Include="Services\Concrete\OrderAccountService.cs" />
+    <Compile Include="Services\Concrete\OrderAccountSettingsProxyService.cs" />
     <Compile Include="Services\Concrete\OrderAccountSettingsService.cs" />
     <Compile Include="Services\Concrete\Orders\OrderFieldSettingsService.cs" />
     <Compile Include="Services\Concrete\Orders\OrdersService.cs" />
