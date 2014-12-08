@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Orders.Order
+﻿namespace DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditFields
 {
     using System;
 

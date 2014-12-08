@@ -186,5 +186,13 @@
                 return new NewOrderEditData(settings, options);
             }
         }
+
+        public FindOrderResponse FindOrder(int orderId, int customerId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                return null;
+            }
+        }
     }
 }

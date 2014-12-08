@@ -6,7 +6,7 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Enums.Orders;
-    using DH.Helpdesk.BusinessData.Models.Orders.Order;
+    using DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditFields;
     using DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditSettings;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.Models.Shared.Output;

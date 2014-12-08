@@ -1,7 +1,10 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Orders.Controllers
 {
+    using System.Net;
+    using System.Web;
     using System.Web.Mvc;
 
+    using DH.Helpdesk.BusinessData.Enums.Orders;
     using DH.Helpdesk.BusinessData.Models.Orders.Index;
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Services.BusinessLogic.OtherTools.Concrete;
@@ -13,6 +16,7 @@
     using DH.Helpdesk.Web.Enums;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
+    using DH.Helpdesk.Web.Infrastructure.Tools;
 
     public class OrdersController : BaseController
     {
@@ -28,6 +32,10 @@
 
         private readonly IOrderModelFactory orderModelFactory;
 
+        private readonly ITemporaryFilesCache temporaryFilesCache;
+
+        private readonly IEditorStateCache editorStateCache;
+
         public OrdersController(
                 IMasterDataService masterDataService, 
                 IOrdersService ordersService, 
@@ -35,7 +43,9 @@
                 IOrdersModelFactory ordersModelFactory, 
                 TemporaryIdProvider temporaryIdProvider, 
                 INewOrderModelFactory newOrderModelFactory, 
-                IOrderModelFactory orderModelFactory)
+                IOrderModelFactory orderModelFactory, 
+                ITemporaryFilesCache temporaryFilesCache, 
+                IEditorStateCache editorStateCache)
             : base(masterDataService)
         {
             this.ordersService = ordersService;
@@ -44,6 +54,8 @@
             this.temporaryIdProvider = temporaryIdProvider;
             this.newOrderModelFactory = newOrderModelFactory;
             this.orderModelFactory = orderModelFactory;
+            this.temporaryFilesCache = temporaryFilesCache;
+            this.editorStateCache = editorStateCache;
         }
 
         [HttpGet]
@@ -114,6 +126,15 @@
         [HttpGet]
         public ViewResult Edit(int id)
         {
+            this.temporaryFilesCache.ResetCacheForObject(id);
+            this.editorStateCache.ClearObjectDeletedItems(id, OrderDeletedItem.Logs);
+
+            var response = this.ordersService.FindOrder(id, this.workContext.Customer.CustomerId);
+            if (response == null)
+            {
+                throw new HttpException((int)HttpStatusCode.NotFound, null);
+            }
+
             return this.View();
         }
 
