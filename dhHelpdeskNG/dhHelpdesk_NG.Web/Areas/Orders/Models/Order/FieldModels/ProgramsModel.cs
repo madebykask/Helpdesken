@@ -17,7 +17,6 @@
             this.Programs = programs;
         }
 
-        [IsId]
         public int OrderId { get; set; }
 
         [NotNull]

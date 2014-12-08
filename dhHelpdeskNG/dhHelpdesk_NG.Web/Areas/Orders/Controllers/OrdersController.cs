@@ -9,6 +9,7 @@
     using DH.Helpdesk.Services.Services.Orders;
     using DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories;
     using DH.Helpdesk.Web.Areas.Orders.Models.Index;
+    using DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit;
     using DH.Helpdesk.Web.Enums;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
@@ -108,6 +109,21 @@
                                                 orderTypeForCteateOrderId);
 
             return this.View("New", model);
+        }
+
+        [HttpGet]
+        public ViewResult Edit(int id)
+        {
+            return this.View();
+        }
+
+        [HttpPost]
+        [BadRequestOnNotValid]
+        public RedirectToRouteResult Edit(FullOrderEditModel model)
+        {
+            var id = int.Parse(model.Id);
+
+            return this.RedirectToAction("Edit", new { id });
         }
     }
 }

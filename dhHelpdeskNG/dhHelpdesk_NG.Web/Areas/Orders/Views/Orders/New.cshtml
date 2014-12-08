@@ -1,18 +1,35 @@
-﻿@model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.FullOrderEditModel
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.FullOrderEditModel
 @{
     Layout = "~/Areas/Orders/Views/Shared/_OrderLayout.cshtml";
 }
 
 @section Actions
 {
-    
+    <ul class="secnav">               
+        <li>
+            @Html.ActionLink(Translation.Get("Spara"), null, null, new { id = "btnSave", @class = "btn" })
+        </li>
+        <li>
+            @Html.ActionLink(Translation.Get("Avbryt"), "Index", "Orders", null, new { @class = "btn" })
+        </li>
+    </ul>        
 }
 
 @section Content
 {
-    @using (Html.BeginForm("New", "Orders", FormMethod.Post, new { id = "order_form" }))
+    @using (Html.BeginForm("New", "Orders", FormMethod.Post, new { id = "edit_form" }))
     {
         @Html.EditorFor(m => m)
     }
+    
+    <script type="text/javascript">
+        $(function() {
+            $("#btnSave").click(function() {
+                $("#edit_form").submit();
+                return false;
+            });
+        });
+    </script>      
 }
 

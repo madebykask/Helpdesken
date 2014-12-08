@@ -5,7 +5,7 @@
 <table class="tableform">
     <tbody>
         @Html.EditorFor(m => m.SupplierOrderNumber, "Fields/Text")              
-        @Html.EditorFor(m => m.SupplierOrderDate, "Fields/Date")              
+        @Html.EditorFor(m => m.SupplierOrderDate, "Fields/Date", new { id = "supplierorderdate_datepicker" })              
         @Html.EditorFor(m => m.SupplierOrderInfo, "Fields/Text")              
     </tbody>
 </table>

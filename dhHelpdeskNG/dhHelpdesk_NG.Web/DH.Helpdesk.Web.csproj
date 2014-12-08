@@ -1547,6 +1547,7 @@
     <Content Include="Areas\Orders\Views\Orders\EditorTemplates\NewLogEditModel.cshtml" />
     <Content Include="Areas\Orders\Views\Orders\Logs.cshtml" />
     <Content Include="Areas\Orders\Views\Orders\AttachedFiles.cshtml" />
+    <Content Include="Areas\Orders\Views\Orders\DisplayTemplates\Fields\IntLabel.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />

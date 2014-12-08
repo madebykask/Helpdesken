@@ -5,8 +5,8 @@
 <h4>@Translation.Get("Leveransinformation")</h4>
 <table class="tableform">
     <tbody>
-        @Html.EditorFor(m => m.DeliveryDate, "Fields/Date")        
-        @Html.EditorFor(m => m.InstallDate, "Fields/Date")     
+        @Html.EditorFor(m => m.DeliveryDate, "Fields/Date", new { id = "deliverydate_datepicker" })        
+        @Html.EditorFor(m => m.InstallDate, "Fields/Date", new { id = "installdate_datepicker" })     
         @if (Model.DeliveryDepartment.Show)
         {
             <tr>

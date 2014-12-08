@@ -119,7 +119,9 @@
                 var deliveryDepartments = departmentsRep.GetAll().GetByCustomer(customerId);
                 var deliveryOuIds = ousRep.GetAll();
                 var administratorsWithEmails = administratorsRep.GetAll().GetAdministratorsWithEmails(customerId);
-                var orderTypes = orderTypeRep.GetAll().GetById(orderTypeId);
+                var orderType = orderTypeRep.GetAll()
+                                    .GetById(orderTypeId)
+                                    .MapToName();
 
                 var workingGroupsWithEmails = new List<GroupWithEmails>();
                 var emailGroupsWithEmails = new List<GroupWithEmails>();
@@ -167,7 +169,7 @@
                 }
 
                 var options = OrderEditMapper.MapToOrderEditOptions(
-                                        orderTypes,
+                                        orderType,
                                         statuses,
                                         administrators,
                                         domains,
