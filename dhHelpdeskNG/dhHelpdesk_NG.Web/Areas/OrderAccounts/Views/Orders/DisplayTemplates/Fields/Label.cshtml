@@ -1,0 +1,17 @@
+﻿@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@model DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.FieldModels.ConfigurableFieldModel<string>
+
+@if (!Model.Show)
+{
+    return;
+}           
+
+<tr>
+    <td class="span3">
+        @Html.FieldCaption(Model)
+    </td>
+    <td class="span9">
+        @Html.HiddenFor(m => m.Value)
+        @Html.DisplayFor(m => m.Value)
+    </td>
+</tr>

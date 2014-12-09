@@ -37,6 +37,7 @@ namespace DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit
             SelectList employmentTypes,
             SelectList departments,
             SelectList units,
+            int? regionId,
             SelectList regions)
         {
             this.Ids = ids;
@@ -63,6 +64,7 @@ namespace DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit
             this.EmploymentTypes = employmentTypes;
             this.Departments = departments;
             this.Units = units;
+            this.RegionId = regionId;
             this.Regions = regions;
         }
 
@@ -116,6 +118,8 @@ namespace DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit
 
         [NotNull]
         public SelectList Units { get; set; }
+
+        public int? RegionId { get; set; }
 
         [NotNull]
         public SelectList Regions { get; set; }

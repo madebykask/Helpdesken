@@ -1,0 +1,19 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit.DeliveryInformation
+@if (Model.Name.Show
+        || Model.Phone.Show
+        || Model.Address.Show
+        || Model.PostalAddress.Show)
+{
+    <h4>@Translation.Get("Operativsystem")</h4>
+    <div class="row">
+        <div class="span12">
+            <table class="tableform">
+                @Html.EditorFor(m => m.Name, "Fields/Text")
+                @Html.EditorFor(m => m.Phone, "Fields/Text")
+                @Html.EditorFor(m => m.Address, "Fields/Text")
+                @Html.EditorFor(m => m.PostalAddress, "Fields/Text")
+            </table>
+        </div>
+    </div>
+}

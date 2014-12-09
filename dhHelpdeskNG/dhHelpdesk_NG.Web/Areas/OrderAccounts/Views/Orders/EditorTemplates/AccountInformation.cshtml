@@ -1,0 +1,34 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit.AccountInformation
+@if (Model.StartedDate.Show
+    || Model.FinishDate.Show
+    || Model.EMailTypeId.Show
+    || Model.HomeDirectory.Show
+    || Model.Profile.Show
+    || Model.InventoryNumber.Show
+    || Model.AccountTypeId.Show
+    || Model.AccountType2.Show
+    || Model.AccountType3.Show
+    || Model.AccountType4.Show
+    || Model.AccountType5.Show
+    || Model.Info.Show)
+{
+    <h4>@Translation.Get("Operativsystem")</h4>
+    <div class="row">
+        <div class="span12">
+            <table class="tableform">
+                @Html.EditorFor(m => m.StartedDate, "Fields/Date", new { Id = "acccount_information_started_date" })
+                @Html.EditorFor(m => m.FinishDate, "Fields/Date", new { Id = "acccount_information_finish_date" })
+                @Html.EditorFor(m => m.EMailTypeId, "Fields/List", new { Source = Model.EmailTypes })
+                @Html.EditorFor(m => m.HomeDirectory, "Fields/Flag")
+                @Html.EditorFor(m => m.Profile, "Fields/Flag")
+                @Html.EditorFor(m => m.AccountTypeId, "Fields/List", new { Source = Model.AccountTypes })
+                @Html.EditorFor(m => m.AccountType2, "Fields/MultiSelectList", new { Source = new MultiSelectList(Model.AccountTypes2, "Value", "Name", Model.AccountType2.Value) })
+                @Html.EditorFor(m => m.AccountType3, "Fields/List", new { Source = Model.AccountTypes3 })
+                @Html.EditorFor(m => m.AccountType4, "Fields/List", new { Source = Model.AccountTypes4 })
+                @Html.EditorFor(m => m.AccountType5, "Fields/List", new { Source = Model.AccountTypes4 })
+                @Html.EditorFor(m => m.Info, "Fields/WideText")
+            </table>
+        </div>
+    </div>
+}

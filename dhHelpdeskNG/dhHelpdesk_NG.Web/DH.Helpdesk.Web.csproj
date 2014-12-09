@@ -1596,6 +1596,23 @@
     <Content Include="Areas\OrderAccounts\Views\Orders\Edit.cshtml" />
     <Content Include="Areas\OrderAccounts\Views\Orders\New.cshtml" />
     <Content Include="Areas\OrderAccounts\Views\Shared\_EditLayout.cshtml" />
+    <Content Include="Areas\OrderAccounts\Views\Orders\EditorTemplates\Fields\Date.cshtml" />
+    <Content Include="Areas\OrderAccounts\Views\Orders\EditorTemplates\Fields\Flag.cshtml" />
+    <Content Include="Areas\OrderAccounts\Views\Orders\EditorTemplates\Fields\List.cshtml" />
+    <Content Include="Areas\OrderAccounts\Views\Orders\EditorTemplates\Fields\Number.cshtml" />
+    <Content Include="Areas\OrderAccounts\Views\Orders\EditorTemplates\Fields\Text.cshtml" />
+    <Content Include="Areas\OrderAccounts\Views\Orders\EditorTemplates\Fields\WideText.cshtml" />
+    <Content Include="Areas\OrderAccounts\Views\Orders\EditorTemplates\Orderer.cshtml" />
+    <Content Include="Areas\OrderAccounts\Views\Orders\DisplayTemplates\Fields\Label.cshtml" />
+    <Content Include="Areas\OrderAccounts\Views\Orders\EditorTemplates\User.cshtml" />
+    <Content Include="Areas\OrderAccounts\Views\Orders\EditorTemplates\AccountInformation.cshtml" />
+    <Content Include="Areas\OrderAccounts\Views\Orders\EditorTemplates\Fields\MultiSelectList.cshtml" />
+    <Content Include="Areas\OrderAccounts\Views\Orders\EditorTemplates\Contact.cshtml" />
+    <Content Include="Areas\OrderAccounts\Views\Orders\EditorTemplates\DeliveryInformation.cshtml" />
+    <Content Include="Areas\OrderAccounts\Views\Orders\EditorTemplates\Program.cshtml" />
+    <Content Include="Areas\OrderAccounts\Views\Orders\DisplayTemplates\Fields\IntLabel.cshtml" />
+    <Content Include="Areas\OrderAccounts\Views\Orders\EditorTemplates\Other.cshtml" />
+    <Content Include="Areas\OrderAccounts\Views\Orders\AttachedFiles.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />
@@ -2671,7 +2688,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\OrderAccounts\Controllers\" />
-    <Folder Include="Areas\OrderAccounts\Views\Orders\EditorTemplates\Fields\" />
     <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
   </ItemGroup>
   <ItemGroup>
