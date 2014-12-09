@@ -20,7 +20,7 @@
             this.OrderNumber = orderNumber;
         }
 
-        [MinValue(0)]
+        [NotNullAndEmpty]
         public string OrderNumber { get; private set; }
         
         public string Customer { get; private set; }

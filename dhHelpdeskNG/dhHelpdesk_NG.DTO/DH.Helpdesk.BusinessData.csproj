@@ -300,6 +300,7 @@
     <Compile Include="Models\Orders\Order\OrderEditSettings\SupplierEditSettings.cs" />
     <Compile Include="Models\Orders\Order\OrderEditSettings\TextFieldEditSettings.cs" />
     <Compile Include="Models\Orders\Order\OrderEditSettings\UserEditSettings.cs" />
+    <Compile Include="Models\Orders\Order\UpdateOrderRequest.cs" />
     <Compile Include="Models\Projects\Output\ProjectOverviewSorting.cs" />
     <Compile Include="Models\Questionnaire\Participant.cs" />
     <Compile Include="Models\Questionnaire\Read\CircularOverview.cs" />

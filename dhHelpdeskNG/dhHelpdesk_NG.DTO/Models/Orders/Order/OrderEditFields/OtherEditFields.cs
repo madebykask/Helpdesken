@@ -22,7 +22,7 @@
         
         public string Info { get; private set; }
         
-        [NotNull]
+        [IsId]
         public int? StatusId { get; private set; } 
     }
 }

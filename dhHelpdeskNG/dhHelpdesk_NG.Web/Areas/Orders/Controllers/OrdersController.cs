@@ -37,6 +37,8 @@
 
         private readonly IEditorStateCache editorStateCache;
 
+        private readonly IUpdateOrderModelFactory updateOrderModelFactory;
+
         public OrdersController(
                 IMasterDataService masterDataService, 
                 IOrdersService ordersService, 
@@ -46,7 +48,8 @@
                 INewOrderModelFactory newOrderModelFactory, 
                 IOrderModelFactory orderModelFactory, 
                 IEditorStateCacheFactory editorStateCacheFactory,
-                ITemporaryFilesCacheFactory temporaryFilesCacheFactory)
+                ITemporaryFilesCacheFactory temporaryFilesCacheFactory, 
+                IUpdateOrderModelFactory updateOrderModelFactory)
             : base(masterDataService)
         {
             this.ordersService = ordersService;
@@ -55,6 +58,7 @@
             this.temporaryIdProvider = temporaryIdProvider;
             this.newOrderModelFactory = newOrderModelFactory;
             this.orderModelFactory = orderModelFactory;
+            this.updateOrderModelFactory = updateOrderModelFactory;
 
             this.editorStateCache = editorStateCacheFactory.CreateForModule(ModuleName.Orders);
             this.temporaryFilesCache = temporaryFilesCacheFactory.CreateForModule(ModuleName.Orders);
@@ -103,12 +107,6 @@
             return this.PartialView(ordersModel);
         }
 
-        [HttpGet]
-        public ViewResult Order(int? orderId)
-        {
-            return this.View();
-        }
-
         [HttpPost]
         [BadRequestOnNotValid]
         public ViewResult CreateOrder(int orderTypeForCteateOrderId)
@@ -123,6 +121,18 @@
                                                 orderTypeForCteateOrderId);
 
             return this.View("New", model);
+        }
+
+        [HttpPost]
+        [BadRequestOnNotValid]
+        public RedirectToRouteResult New(FullOrderEditModel model)
+        {
+            this.temporaryFilesCache.ResetCacheForObject(model.Id);
+
+            var request = this.updateOrderModelFactory.Create(model, this.workContext.Customer.CustomerId);
+            var id = this.ordersService.AddOrUpdate(request);
+
+            return this.RedirectToAction("Edit", new { id });
         }
 
         [HttpGet]
@@ -146,6 +156,17 @@
         public RedirectToRouteResult Edit(FullOrderEditModel model)
         {
             var id = int.Parse(model.Id);
+
+            var newFileNameFiles = this.temporaryFilesCache.FindFiles(id, Subtopic.FileName.ToString());
+            var deletedFileNameFiles = this.editorStateCache.FindDeletedFileNames(id, Subtopic.FileName.ToString());
+
+            var deletedLogIds = this.editorStateCache.GetDeletedItemIds(id, OrderDeletedItem.Logs);
+
+            var request = this.updateOrderModelFactory.Create(model, this.workContext.Customer.CustomerId);
+            this.ordersService.AddOrUpdate(request);
+
+            this.temporaryFilesCache.ResetCacheForObject(id);
+            this.editorStateCache.ClearObjectDeletedItems(id, OrderDeletedItem.Logs);
 
             return this.RedirectToAction("Edit", new { id });
         }

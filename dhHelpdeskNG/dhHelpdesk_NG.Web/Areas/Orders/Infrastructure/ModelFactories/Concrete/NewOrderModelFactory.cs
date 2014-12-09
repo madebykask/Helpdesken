@@ -156,7 +156,7 @@
             var orderRow8 = this.configurableFieldModelFactory.CreateStringField(settings.OrderRow8, null);
             var configuration = this.configurableFieldModelFactory.CreateStringField(settings.Configuration, null);
             var orderInfo = this.configurableFieldModelFactory.CreateStringField(settings.OrderInfo, null);
-            var orderInfo2 = this.configurableFieldModelFactory.CreateStringField(settings.OrderInfo2, null);
+            var orderInfo2 = this.configurableFieldModelFactory.CreateIntegerField(settings.OrderInfo2, 0);
 
             return new OrderEditModel(
                             property,

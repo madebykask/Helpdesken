@@ -132,7 +132,7 @@
             FieldEditSettings setting,
             ItemOverview[] items,
             int? selectedValue,
-            bool needEmptyItem = false)
+            bool needEmptyItem = true)
         {
             if (!setting.Show)
             {

@@ -128,6 +128,14 @@
             }
         }
 
+        public int AddOrUpdate(UpdateOrderRequest request)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                throw new global::System.NotImplementedException();                
+            }
+        }
+
         private OrderEditOptions GetEditOptions(
                                 int customerId, 
                                 int? orderTypeId,

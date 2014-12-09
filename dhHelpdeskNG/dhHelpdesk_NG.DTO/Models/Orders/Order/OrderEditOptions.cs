@@ -36,7 +36,6 @@
             this.Statuses = statuses;
         }
 
-        [NotNullAndEmpty]
         public string OrderTypeName { get; private set; }
 
         [NotNull]

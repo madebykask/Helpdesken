@@ -53,7 +53,7 @@
             FieldEditSettings setting,
             ItemOverview[] items,
             int? selectedValue,
-            bool needEmptyItem = false);
+            bool needEmptyItem = true);
 
         ConfigurableFieldModel<string> CreateStringField(FieldEditSettings setting, string value);
 

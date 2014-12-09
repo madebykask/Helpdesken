@@ -8,9 +8,8 @@
 
     public sealed class GeneralEditModel
     {
-        public GeneralEditModel(string orderTypeName)
+        public GeneralEditModel()
         {
-            this.OrderTypeName = orderTypeName;
         }
 
         public GeneralEditModel(
@@ -29,7 +28,6 @@
             this.OrderDate = orderDate;
         }
 
-        [NotNullAndEmpty]
         public string OrderTypeName { get; private set; }
 
         [NotNull]

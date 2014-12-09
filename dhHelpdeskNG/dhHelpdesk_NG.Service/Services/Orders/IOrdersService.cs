@@ -12,5 +12,7 @@
         NewOrderEditData GetNewOrderEditData(int customerId, int orderTypeId);
 
         FindOrderResponse FindOrder(int orderId, int customerId);
+
+        int AddOrUpdate(UpdateOrderRequest request);
     }
 }

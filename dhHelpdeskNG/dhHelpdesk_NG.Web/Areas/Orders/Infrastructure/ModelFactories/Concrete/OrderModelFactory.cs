@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Globalization;
+    using System.Linq;
 
     using DH.Helpdesk.BusinessData.Enums.Orders;
     using DH.Helpdesk.BusinessData.Models.Orders.Order;
@@ -21,19 +22,20 @@
 
         public FullOrderEditModel Create(FindOrderResponse response, int customerId)
         {
-            var id = response.EditData.Order.Id.ToString(CultureInfo.InvariantCulture);
+            var orderId = response.EditData.Order.Id;
+            var textOrderId = orderId.ToString(CultureInfo.InvariantCulture);
             return new FullOrderEditModel(
                 this.CreateDeliveryEditModel(response.EditSettings.Delivery, response.EditData.Order.Delivery, response.EditOptions),
                 this.CreateGeneralEditModel(response.EditSettings.General, response.EditData.Order.General, response.EditOptions),
-                this.CreateLogEditModel(response.EditSettings.Log, response.EditData.Order.Log, response.EditOptions),
+                this.CreateLogEditModel(response.EditSettings.Log, response.EditData.Order.Log, response.EditOptions, orderId),
                 this.CreateOrdererEditModel(response.EditSettings.Orderer, response.EditData.Order.Orderer, response.EditOptions),
                 this.CreateOrderEditModel(response.EditSettings.Order, response.EditData.Order.Order, response.EditOptions),
-                this.CreateOtherEditModel(response.EditSettings.Other, response.EditData.Order.Other, response.EditOptions, id),
+                this.CreateOtherEditModel(response.EditSettings.Other, response.EditData.Order.Other, response.EditOptions, textOrderId),
                 this.CreateProgramEditModel(response.EditSettings.Program, response.EditData.Order.Program),
                 this.CreateReceiverEditModel(response.EditSettings.Receiver, response.EditData.Order.Receiver),
                 this.CreateSupplierEditModel(response.EditSettings.Supplier, response.EditData.Order.Supplier),
                 this.CreateUserEditModel(response.EditSettings.User, response.EditData.Order.User),
-                id,
+                textOrderId,
                 customerId,
                 response.EditData.Order.OrderTypeId,
                 false);
@@ -95,10 +97,14 @@
         private LogEditModel CreateLogEditModel(
                                 LogEditSettings settings,
                                 LogEditFields fields,
-                                OrderEditOptions options)
+                                OrderEditOptions options,
+                                int orderId)
         {
             var log = this.configurableFieldModelFactory.CreateLogs(
                                                     settings.Log,
+                                                    orderId,
+                                                    Subtopic.Log, 
+                                                    fields.Logs,
                                                     options.EmailGroups,
                                                     options.WorkingGroupsWithEmails,
                                                     options.AdministratorsWithEmails);
@@ -152,18 +158,18 @@
                                 OrderEditFields fields,
                                 OrderEditOptions options)
         {
-            var property = this.configurableFieldModelFactory.CreateSelectListField(settings.Property, options.Properties, null);
-            var orderRow1 = this.configurableFieldModelFactory.CreateStringField(settings.OrderRow1, null);
-            var orderRow2 = this.configurableFieldModelFactory.CreateStringField(settings.OrderRow2, null);
-            var orderRow3 = this.configurableFieldModelFactory.CreateStringField(settings.OrderRow3, null);
-            var orderRow4 = this.configurableFieldModelFactory.CreateStringField(settings.OrderRow4, null);
-            var orderRow5 = this.configurableFieldModelFactory.CreateStringField(settings.OrderRow5, null);
-            var orderRow6 = this.configurableFieldModelFactory.CreateStringField(settings.OrderRow6, null);
-            var orderRow7 = this.configurableFieldModelFactory.CreateStringField(settings.OrderRow7, null);
-            var orderRow8 = this.configurableFieldModelFactory.CreateStringField(settings.OrderRow8, null);
-            var configuration = this.configurableFieldModelFactory.CreateStringField(settings.Configuration, null);
-            var orderInfo = this.configurableFieldModelFactory.CreateStringField(settings.OrderInfo, null);
-            var orderInfo2 = this.configurableFieldModelFactory.CreateStringField(settings.OrderInfo2, null);
+            var property = this.configurableFieldModelFactory.CreateSelectListField(settings.Property, options.Properties, fields.PropertyId);
+            var orderRow1 = this.configurableFieldModelFactory.CreateStringField(settings.OrderRow1, fields.OrderRow1);
+            var orderRow2 = this.configurableFieldModelFactory.CreateStringField(settings.OrderRow2, fields.OrderRow2);
+            var orderRow3 = this.configurableFieldModelFactory.CreateStringField(settings.OrderRow3, fields.OrderRow3);
+            var orderRow4 = this.configurableFieldModelFactory.CreateStringField(settings.OrderRow4, fields.OrderRow4);
+            var orderRow5 = this.configurableFieldModelFactory.CreateStringField(settings.OrderRow5, fields.OrderRow5);
+            var orderRow6 = this.configurableFieldModelFactory.CreateStringField(settings.OrderRow6, fields.OrderRow6);
+            var orderRow7 = this.configurableFieldModelFactory.CreateStringField(settings.OrderRow7, fields.OrderRow7);
+            var orderRow8 = this.configurableFieldModelFactory.CreateStringField(settings.OrderRow8, fields.OrderRow8);
+            var configuration = this.configurableFieldModelFactory.CreateStringField(settings.Configuration, fields.Configuration);
+            var orderInfo = this.configurableFieldModelFactory.CreateStringField(settings.OrderInfo, fields.OrderInfo);
+            var orderInfo2 = this.configurableFieldModelFactory.CreateIntegerField(settings.OrderInfo2, fields.OrderInfo2);
 
             return new OrderEditModel(
                             property,
@@ -186,10 +192,12 @@
                                 OrderEditOptions options,
                                 string orderId)
         {
-            var fileName = this.configurableFieldModelFactory.CreateAttachedFiles(settings.FileName, orderId, Subtopic.FileName, new List<string>(0));
-            var caseNumber = this.configurableFieldModelFactory.CreateNullableDecimalField(settings.CaseNumber, null);
-            var info = this.configurableFieldModelFactory.CreateStringField(settings.Info, null);
-            var status = this.configurableFieldModelFactory.CreateSelectListField(settings.Status, options.Statuses, null);
+            var files = new List<string> { fields.FileName };
+
+            var fileName = this.configurableFieldModelFactory.CreateAttachedFiles(settings.FileName, orderId, Subtopic.FileName, files);
+            var caseNumber = this.configurableFieldModelFactory.CreateNullableDecimalField(settings.CaseNumber, fields.CaseNumber);
+            var info = this.configurableFieldModelFactory.CreateStringField(settings.Info, fields.Info);
+            var status = this.configurableFieldModelFactory.CreateSelectListField(settings.Status, options.Statuses, fields.StatusId);
 
             return new OtherEditModel(
                             fileName,
@@ -202,7 +210,7 @@
                                 ProgramEditSettings settings,
                                 ProgramEditFields fields)
         {
-            var program = this.configurableFieldModelFactory.CreatePrograms(settings.Program, new List<ProgramModel>(0));
+            var program = this.configurableFieldModelFactory.CreatePrograms(settings.Program, fields.Programs.Select(p => new ProgramModel(p.Id, p.Name)).ToList());
 
             return new ProgramEditModel(program);
         }
@@ -211,12 +219,12 @@
                                 ReceiverEditSettings settings,
                                 ReceiverEditFields fields)
         {
-            var receiverId = this.configurableFieldModelFactory.CreateStringField(settings.ReceiverId, null);
-            var receiverName = this.configurableFieldModelFactory.CreateStringField(settings.ReceiverName, null);
-            var receiverEmail = this.configurableFieldModelFactory.CreateStringField(settings.ReceiverEmail, null);
-            var receiverPhone = this.configurableFieldModelFactory.CreateStringField(settings.ReceiverPhone, null);
-            var receiverLocation = this.configurableFieldModelFactory.CreateStringField(settings.ReceiverLocation, null);
-            var markOfGoods = this.configurableFieldModelFactory.CreateStringField(settings.MarkOfGoods, null);
+            var receiverId = this.configurableFieldModelFactory.CreateStringField(settings.ReceiverId, fields.ReceiverId);
+            var receiverName = this.configurableFieldModelFactory.CreateStringField(settings.ReceiverName, fields.ReceiverName);
+            var receiverEmail = this.configurableFieldModelFactory.CreateStringField(settings.ReceiverEmail, fields.ReceiverEmail);
+            var receiverPhone = this.configurableFieldModelFactory.CreateStringField(settings.ReceiverPhone, fields.ReceiverPhone);
+            var receiverLocation = this.configurableFieldModelFactory.CreateStringField(settings.ReceiverLocation, fields.ReceiverLocation);
+            var markOfGoods = this.configurableFieldModelFactory.CreateStringField(settings.MarkOfGoods, fields.MarkOfGoods);
 
             return new ReceiverEditModel(
                             receiverId,
@@ -231,9 +239,9 @@
                                 SupplierEditSettings settings,
                                 SupplierEditFields fields)
         {
-            var supplierOrderNumber = this.configurableFieldModelFactory.CreateStringField(settings.SupplierOrderNumber, null);
-            var supplierOrderDate = this.configurableFieldModelFactory.CreateNullableDateTimeField(settings.SupplierOrderDate, null);
-            var supplierOrderInfo = this.configurableFieldModelFactory.CreateStringField(settings.SupplierOrderInfo, null);
+            var supplierOrderNumber = this.configurableFieldModelFactory.CreateStringField(settings.SupplierOrderNumber, fields.SupplierOrderNumber);
+            var supplierOrderDate = this.configurableFieldModelFactory.CreateNullableDateTimeField(settings.SupplierOrderDate, fields.SupplierOrderDate);
+            var supplierOrderInfo = this.configurableFieldModelFactory.CreateStringField(settings.SupplierOrderInfo, fields.SupplierOrderInfo);
 
             return new SupplierEditModel(
                             supplierOrderNumber,

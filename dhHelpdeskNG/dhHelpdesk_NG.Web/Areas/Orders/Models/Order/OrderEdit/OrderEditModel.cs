@@ -23,7 +23,7 @@
             ConfigurableFieldModel<string> orderRow8,
             ConfigurableFieldModel<string> configuration,
             ConfigurableFieldModel<string> orderInfo,
-            ConfigurableFieldModel<string> orderInfo2)
+            ConfigurableFieldModel<int> orderInfo2)
         {
             this.Property = property;
             this.OrderRow1 = orderRow1;
@@ -76,7 +76,7 @@
         public ConfigurableFieldModel<string> OrderInfo { get; set; } 
 
         [NotNull]
-        public ConfigurableFieldModel<string> OrderInfo2 { get; set; }
+        public ConfigurableFieldModel<int> OrderInfo2 { get; set; }
 
         public bool HasShowableFields()
         {

@@ -623,11 +623,13 @@
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\Concrete\OrderFieldSettingsModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\Concrete\OrderModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\Concrete\OrdersModelFactory.cs" />
+    <Compile Include="Areas\Orders\Infrastructure\ModelFactories\Concrete\UpdateOrderModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\IConfigurableFieldModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\INewOrderModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\IOrderFieldSettingsModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\IOrderModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\IOrdersModelFactory.cs" />
+    <Compile Include="Areas\Orders\Infrastructure\ModelFactories\IUpdateOrderModelFactory.cs" />
     <Compile Include="Areas\Orders\Models\Index\BaseIndexModel.cs" />
     <Compile Include="Areas\Orders\Models\Index\IndexModelType.cs" />
     <Compile Include="Areas\Orders\Models\Index\OrderOverviewModel.cs" />
