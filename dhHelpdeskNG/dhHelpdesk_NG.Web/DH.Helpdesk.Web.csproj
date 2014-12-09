@@ -1902,6 +1902,7 @@
     <Content Include="Views\DailyReport\_DailyReportInput.cshtml" />
     <Content Include="Views\DailyReport\_HistoryOverviewData.cshtml" />
     <Content Include="Areas\Inventory\Views\Shared\_IndexLayout.cshtml" />
+    <Content Include="Views\Faq\NewFAQPopup.cshtml" />
     <Content Include="Areas\Inventory\Views\Workstation\Index.cshtml" />
     <Content Include="Views\CheckList\Index.cshtml" />
     <Content Include="Views\CheckList\_Input.cshtml" />

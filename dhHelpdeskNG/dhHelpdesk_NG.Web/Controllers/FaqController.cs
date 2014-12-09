@@ -338,6 +338,21 @@
         }
 
         [HttpGet]
+        public ViewResult NewFAQPopup(string question, string answer, string internalanswer)
+        {
+            var currentCustomerId = SessionFacade.CurrentCustomer.Id;
+
+            var categoriesWithSubcategories =
+                this.faqCategoryRepository.FindCategoriesWithSubcategoriesByCustomerId(currentCustomerId);
+
+            var workingGroups = this.workingGroupRepository.FindActiveOverviews(currentCustomerId).OrderBy(w=> w.Name).ToList();
+            var model = this.newFaqModelFactory.Create(Guid.NewGuid().ToString(), categoriesWithSubcategories, 31, workingGroups);
+            ViewData["FN"] = GetFAQFileNames(model.TemporaryId);
+
+            return this.View(model);
+       }
+
+        [HttpGet]
         public JsonResult Search(string pharse)
         {
             var faqOverviews = this.faqService.SearchOverviewsByPharse(pharse, SessionFacade.CurrentCustomer.Id);

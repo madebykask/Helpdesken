@@ -21,6 +21,7 @@
 
 @{
     this.ViewBag.Title = Translation.Get("Ny FAQ", Enums.TranslationSource.TextTranslation);
+
 }
 
 @using (this.Html.BeginForm("NewFaq", "Faq", FormMethod.Post, new { id = "target" }))

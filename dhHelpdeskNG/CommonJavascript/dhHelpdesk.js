@@ -370,6 +370,15 @@ function CaseInitForm() {
         //$(win).on('beforeunload', function () { CaseNewNotifierEvent(win.returnValue); });
     });
 
+    $('#AddFAQ').click(function (e) {
+        e.preventDefault();
+        
+        var question = $('#case__Caption').val();
+        var answer = $('#CaseLog_TextExternal').val();
+        var internalanswer = $('#CaseLog_TextInternal').val();
+        var win = window.open('/Faq/NewFAQPopup?question=' + question + '&answer=' + answer + '&internalanswer=' + internalanswer, '_blank', 'left=100,top=100,width=700,height=700,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
+    });
+
     if (!Date.now) {
         Date.now = function () { return new Date().getTime(); };
     }

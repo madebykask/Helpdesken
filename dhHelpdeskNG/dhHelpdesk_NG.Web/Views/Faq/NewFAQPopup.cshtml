@@ -1,0 +1,47 @@
+﻿@using System.Web.Optimization
+@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Models.Faq.Output
+@model DH.Helpdesk.Web.Models.Faq.Output.NewFaqModel
+           
+<script type="text/javascript">
+    function afterSuccessSubmit(result, state, response) {
+        window.returnValue = result;
+        try {
+            window.opener.NewFAQEvent(result);
+        }
+        catch (err) { }
+        window.close();
+        return false;
+    }
+</script>
+
+@{
+    Layout = "../Shared/_PopupLayout.cshtml";
+    ViewBag.Title = Translation.Get("Ny FAQ", Enums.TranslationSource.TextTranslation);
+}
+
+@using (Ajax.BeginForm("NewFAQ", "Faq", new AjaxOptions { OnSuccess = "afterSuccessSubmit" }))
+{
+    <div class="navbar fixed">
+            <div class="navbar-container">
+                <a href="/">
+                    <div class="navbar-header pull-left navbar-brand">
+                    </div>
+                </a>
+            </div>
+    </div>
+    <div class="secnavs fixed">
+        <div class="pull-left">
+            <ul class="secnav">
+                <li>
+                    <input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn" />
+                </li>
+                <li>
+                    <input type="button" onclick=" window.close()" value="@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)" class="btn" />
+                </li>
+            </ul>
+        </div>
+    </div>
+   
+    @this.Html.Partial("FaqEditing", new EditingFaqModel(this.Model.TemporaryId, this.Model.Categories, string.Empty, string.Empty, string.Empty, new List<string>(0), string.Empty, string.Empty, this.Model.WorkingGroups, false, false))
+}
