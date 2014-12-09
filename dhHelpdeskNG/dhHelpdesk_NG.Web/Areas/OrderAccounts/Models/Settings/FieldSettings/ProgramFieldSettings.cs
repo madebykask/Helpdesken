@@ -4,6 +4,10 @@
 
     public class ProgramFieldSettings
     {
+        public ProgramFieldSettings()
+        {
+        }
+
         public ProgramFieldSettings(
             FieldSetting programs,
             FieldSetting infoProduct)
@@ -13,9 +17,9 @@
         }
 
         [LocalizedDisplay("Programvaror")]
-        public FieldSetting Programs { get; private set; }
+        public FieldSetting Programs { get;  set; }
 
         [LocalizedDisplay("Övrigt program")]
-        public FieldSetting InfoProduct { get; private set; }
+        public FieldSetting InfoProduct { get;  set; }
     }
 }

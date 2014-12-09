@@ -4,6 +4,10 @@
 
     public class AccountFieldsSettingsModel
     {
+        public AccountFieldsSettingsModel()
+        {
+        }
+
         public AccountFieldsSettingsModel(
             OrdererFieldSettings orderer,
             UserFieldSettings user,
@@ -23,24 +27,24 @@
         }
 
         [NotNull]
-        public OrdererFieldSettings Orderer { get; private set; }
+        public OrdererFieldSettings Orderer { get;  set; }
 
         [NotNull]
-        public UserFieldSettings User { get; private set; }
+        public UserFieldSettings User { get;  set; }
 
         [NotNull]
-        public AccountInformationFieldSettings AccountInformation { get; private set; }
+        public AccountInformationFieldSettings AccountInformation { get;  set; }
 
         [NotNull]
         public ContactFieldSettings Contact { get; set; }
 
         [NotNull]
-        public DeliveryInformationFieldSettings DeliveryInformation { get; private set; }
+        public DeliveryInformationFieldSettings DeliveryInformation { get;  set; }
 
         [NotNull]
-        public ProgramFieldSettings Program { get; private set; }
+        public ProgramFieldSettings Program { get;  set; }
 
         [NotNull]
-        public OtherFieldSettings Other { get; private set; }
+        public OtherFieldSettings Other { get;  set; }
     }
 }

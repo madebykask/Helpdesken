@@ -4,6 +4,10 @@
 
     public class OtherFieldSettings
     {
+        public OtherFieldSettings()
+        {
+        }
+
         public OtherFieldSettings(FieldSetting caseNumber, FieldSetting fileName, FieldSetting info)
         {
             this.CaseNumber = caseNumber;
@@ -12,12 +16,12 @@
         }
 
         [LocalizedDisplay("Ärendenummer")]
-        public FieldSetting CaseNumber { get; private set; }
+        public FieldSetting CaseNumber { get;  set; }
 
         [LocalizedDisplay("Filnamn")]
-        public FieldSetting FileName { get; private set; }
+        public FieldSetting FileName { get;  set; }
 
         [LocalizedDisplay("Övrigt")]
-        public FieldSetting Info { get; private set; }
+        public FieldSetting Info { get;  set; }
     }
 }

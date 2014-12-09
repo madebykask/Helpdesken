@@ -4,6 +4,10 @@
 
     public sealed class UserFieldSettings
     {
+        public UserFieldSettings()
+        {
+        }
+
         public UserFieldSettings(
             FieldSettingMultipleChoices ids,
             FieldSetting firstName,
@@ -51,66 +55,66 @@
         }
 
         [LocalizedDisplay("Användar ID")]
-        public FieldSettingMultipleChoices Ids { get; private set; }
+        public FieldSettingMultipleChoices Ids { get;  set; }
 
         [LocalizedDisplay("Personnummer")]
-        public FieldSetting FirstName { get; private set; }
+        public FieldSetting FirstName { get;  set; }
 
         [LocalizedDisplay("Förnamn")]
-        public FieldSetting Initials { get; private set; }
+        public FieldSetting Initials { get;  set; }
 
         [LocalizedDisplay("Initialer")]
-        public FieldSetting LastName { get; private set; }
+        public FieldSetting LastName { get;  set; }
 
         [LocalizedDisplay("Efternamn")]
-        public FieldSettingMultipleChoices PersonalIdentityNumber { get; private set; }
+        public FieldSettingMultipleChoices PersonalIdentityNumber { get;  set; }
 
         [LocalizedDisplay("Telefon")]
-        public FieldSetting Phone { get; private set; }
+        public FieldSetting Phone { get;  set; }
 
         [LocalizedDisplay("Anknytning")]
-        public FieldSetting Extension { get; private set; }
+        public FieldSetting Extension { get;  set; }
 
         [LocalizedDisplay("E-post")]
-        public FieldSetting EMail { get; private set; }
+        public FieldSetting EMail { get;  set; }
 
         [LocalizedDisplay("Titel")]
-        public FieldSetting Title { get; private set; }
+        public FieldSetting Title { get;  set; }
 
         [LocalizedDisplay("Placering")]
-        public FieldSetting Location { get; private set; }
+        public FieldSetting Location { get;  set; }
 
         [LocalizedDisplay("Rum")]
-        public FieldSetting RoomNumber { get; private set; }
+        public FieldSetting RoomNumber { get;  set; }
 
         [LocalizedDisplay("Besöksadress")]
-        public FieldSetting PostalAddress { get; private set; }
+        public FieldSetting PostalAddress { get;  set; }
 
         [LocalizedDisplay("Anställningstyp")]
-        public FieldSetting EmploymentType { get; private set; }
+        public FieldSetting EmploymentType { get;  set; }
 
         [LocalizedDisplay("Avdelning")]
-        public FieldSetting DepartmentId { get; private set; }
+        public FieldSetting DepartmentId { get;  set; }
 
         [LocalizedDisplay("Enhet")]
-        public FieldSetting UnitId { get; private set; }
+        public FieldSetting UnitId { get;  set; }
 
         [LocalizedDisplay("Avdelning 2")]
-        public FieldSetting DepartmentId2 { get; private set; }
+        public FieldSetting DepartmentId2 { get;  set; }
 
         [LocalizedDisplay("Övrigt")]
-        public FieldSetting Info { get; private set; }
+        public FieldSetting Info { get;  set; }
 
         [LocalizedDisplay("Ansvar")]
-        public FieldSetting Responsibility { get; private set; }
+        public FieldSetting Responsibility { get;  set; }
 
         [LocalizedDisplay("Verksamhet")]
-        public FieldSetting Activity { get; private set; }
+        public FieldSetting Activity { get;  set; }
 
         [LocalizedDisplay("Chef")]
-        public FieldSetting Manager { get; private set; }
+        public FieldSetting Manager { get;  set; }
 
         [LocalizedDisplay("Referensnummer")]
-        public FieldSetting ReferenceNumber { get; private set; }
+        public FieldSetting ReferenceNumber { get;  set; }
     }
 }

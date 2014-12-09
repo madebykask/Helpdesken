@@ -41,10 +41,8 @@
     </tr>
 </table>
 
-@using (Html.BeginForm("Edit", "Settings",
-            FormMethod.Post,
-            new { id = "settings_form" }))
+@using (Html.BeginForm("Edit", "Settings", FormMethod.Post, new { id = "settings_form" }))
 {
     @Html.HiddenFor(m => m.ActivityType)
-    @Html.EditorFor(x => Model)}
+    @Html.EditorFor(x => Model.AccountFieldsSettingsModel)
 }

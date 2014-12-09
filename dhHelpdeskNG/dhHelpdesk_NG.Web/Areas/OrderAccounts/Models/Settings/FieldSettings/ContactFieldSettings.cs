@@ -4,6 +4,10 @@
 
     public sealed class ContactFieldSettings
     {
+        public ContactFieldSettings()
+        {
+        }
+
         public ContactFieldSettings(
             FieldSettingMultipleChoices ids,
             FieldSetting name,
@@ -17,15 +21,15 @@
         }
 
         [LocalizedDisplay("Id")]
-        public FieldSettingMultipleChoices Ids { get; private set; }
+        public FieldSettingMultipleChoices Ids { get;  set; }
 
         [LocalizedDisplay("Namn")]
-        public FieldSetting Name { get; private set; }
+        public FieldSetting Name { get;  set; }
 
         [LocalizedDisplay("Telefon")]
-        public FieldSetting Phone { get; private set; }
+        public FieldSetting Phone { get;  set; }
 
         [LocalizedDisplay("E-post")]
-        public FieldSetting Email { get; private set; }
+        public FieldSetting Email { get;  set; }
     }
 }

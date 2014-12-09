@@ -1,24 +1,25 @@
 namespace DH.Helpdesk.Web.Areas.OrderAccounts.Models.Settings
 {
     using System.Collections.Generic;
-    using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Web.Areas.OrderAccounts.Models.Index;
+    using DH.Helpdesk.Web.Areas.OrderAccounts.Models.Settings.FieldSettings;
 
     using BaseIndexModel = DH.Helpdesk.Web.Areas.OrderAccounts.Models.Index.BaseIndexModel;
 
     public class SettingsIndexModel : BaseIndexModel
     {
-        protected SettingsIndexModel(int activityType, List<ItemOverview> activityTypes)
+        public SettingsIndexModel(
+            int activityType,
+            List<ItemOverview> activityTypes,
+            AccountFieldsSettingsModel settingsModel)
+            : base(activityType, activityTypes)
         {
-            this.ActivityType = activityType;
-            this.ActivityTypes = new SelectList(activityTypes, "Value", "Name");
+            this.AccountFieldsSettingsModel = settingsModel;
         }
 
-        public int ActivityType { get; set; }
-
-        public SelectList ActivityTypes { get; private set; }
+        public AccountFieldsSettingsModel AccountFieldsSettingsModel { get; set; }
 
         public override sealed IndexModelTypes IndexModelType
         {

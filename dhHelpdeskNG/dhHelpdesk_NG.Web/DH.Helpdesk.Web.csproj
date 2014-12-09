@@ -604,6 +604,18 @@
     <Compile Include="Areas\Licenses\Models\Vendors\VendorsIndexModel.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Index\BaseIndexModel.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Index\IndexModelTypes.cs" />
+    <Compile Include="Areas\OrderAccounts\Models\Order\Edit\AccountInformation.cs" />
+    <Compile Include="Areas\OrderAccounts\Models\Order\Edit\AccountModel.cs" />
+    <Compile Include="Areas\OrderAccounts\Models\Order\Edit\Contact.cs" />
+    <Compile Include="Areas\OrderAccounts\Models\Order\Edit\DeliveryInformation.cs" />
+    <Compile Include="Areas\OrderAccounts\Models\Order\Edit\Orderer.cs" />
+    <Compile Include="Areas\OrderAccounts\Models\Order\Edit\Other.cs" />
+    <Compile Include="Areas\OrderAccounts\Models\Order\Edit\Program.cs" />
+    <Compile Include="Areas\OrderAccounts\Models\Order\Edit\User.cs" />
+    <Compile Include="Areas\OrderAccounts\Models\Order\FieldModels\ConfigurableFieldModelMultipleChoices.cs" />
+    <Compile Include="Areas\OrderAccounts\Models\Order\Filter.cs" />
+    <Compile Include="Areas\OrderAccounts\Models\Order\GridModel.cs" />
+    <Compile Include="Areas\OrderAccounts\Models\Order\OrdersIndexModel.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Settings\FieldSettings\AccountFieldsSettingsModel.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Settings\FieldSettings\AccountInformationFieldSettings.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Settings\FieldSettings\ContactFieldSettings.cs" />
@@ -616,6 +628,7 @@
     <Compile Include="Areas\OrderAccounts\Models\Settings\FieldSettings\UserFieldSettings.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Settings\SettingsIndexModel.cs" />
     <Compile Include="Areas\OrderAccounts\OrderAccountsAreaRegistration.cs" />
+    <Compile Include="Areas\OrderAccounts\Models\Order\FieldModels\ConfigurableFieldModel.cs" />
     <Compile Include="Areas\Orders\Controllers\OrdersController.cs" />
     <Compile Include="Areas\Orders\Controllers\OrderFieldSettingsController.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\Concrete\ConfigurableFieldModelFactory.cs" />
@@ -1576,6 +1589,10 @@
     <Content Include="Areas\OrderAccounts\Views\Settings\EditorTemplates\FieldSettingMultipleChoices.cshtml" />
     <Content Include="Areas\OrderAccounts\Views\Settings\EditorTemplates\AccountFieldsSettingsModel.cshtml" />
     <Content Include="Areas\OrderAccounts\Views\Settings\Index.cshtml" />
+    <Content Include="Areas\OrderAccounts\Views\Orders\Index.cshtml" />
+    <Content Include="Areas\OrderAccounts\Views\Orders\Grid.cshtml" />
+    <Content Include="Areas\OrderAccounts\Views\Orders\Orders.cshtml" />
+    <Content Include="Areas\OrderAccounts\Views\Orders\Grids.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />
@@ -2651,7 +2668,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\OrderAccounts\Controllers\" />
-    <Folder Include="Areas\OrderAccounts\Views\Orders\" />
+    <Folder Include="Areas\OrderAccounts\Views\Orders\EditorTemplates\Fields\" />
     <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
   </ItemGroup>
   <ItemGroup>

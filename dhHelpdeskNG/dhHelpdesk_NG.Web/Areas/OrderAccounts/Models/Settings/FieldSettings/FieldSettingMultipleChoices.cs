@@ -2,6 +2,10 @@
 {
     public class FieldSettingMultipleChoices : FieldSetting
     {
+        public FieldSettingMultipleChoices()
+        {
+        }
+
         public FieldSettingMultipleChoices(
             bool isShowInDetails,
             bool isShowInList,
@@ -15,6 +19,6 @@
             this.IsMultiple = isMultiple;
         }
 
-        public bool IsMultiple { get; private set; }
+        public bool IsMultiple { get;  set; }
     }
 }

@@ -1,0 +1,40 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.OrdersIndexModel
+@{
+    Layout = "~/Areas/OrderAccounts/Views/Shared/_IndexLayout.cshtml";
+}
+
+@section Actions
+{
+    <ul class="secnav">
+        <li id="menu1">
+            <table class="tableform">
+                <tr>
+                    <td>
+                        @using (Html.BeginForm("Edit", "Order", FormMethod.Post, new { id = "type_form" }))
+                        {
+                            @Html.DropDownListFor(x => x.ActivityTypeForEdit, Model.ActivityTypes, new { id = "type_dropdown" })
+                        }
+                    </td>
+                    <td>
+                        <input type="submit" value="@Translation.Get("Skapa beställning")" class="btn" onclick=" $('#type_form').submit(); "/>
+                    </td>
+                </tr>
+            </table>
+        </li>
+    </ul>
+}
+
+<table class="tableform">
+    <tr>
+        <td class="span3">@Translation.Get("Typ")</td>
+        <td>
+            @using (Html.BeginForm("Index", "Order", FormMethod.Post, new { id = "type_form" }))
+            {
+                @Html.DropDownListFor(x => x.ActivityType, Model.ActivityTypes, new { id = "type_dropdown" })
+            }
+        </td>
+    </tr>
+</table>
+
+@Html.Partial("Orders", Model)

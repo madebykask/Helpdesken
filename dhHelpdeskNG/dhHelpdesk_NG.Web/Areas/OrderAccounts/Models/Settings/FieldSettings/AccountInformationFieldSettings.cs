@@ -4,6 +4,10 @@
 
     public sealed class AccountInformationFieldSettings
     {
+        public AccountInformationFieldSettings()
+        {
+        }
+
         public AccountInformationFieldSettings(
             FieldSetting startedDate,
             FieldSetting finishDate,
@@ -33,39 +37,39 @@
         }
 
         [LocalizedDisplay("Startdatum")]
-        public FieldSetting StartedDate { get; private set; }
+        public FieldSetting StartedDate { get;  set; }
 
         [LocalizedDisplay("Slutdatum")]
-        public FieldSetting FinishDate { get; private set; }
+        public FieldSetting FinishDate { get;  set; }
 
         [LocalizedDisplay("E-posttyp")]
-        public FieldSetting EMailTypeId { get; private set; }
+        public FieldSetting EMailTypeId { get;  set; }
 
         [LocalizedDisplay("Hemkatalog")]
-        public FieldSetting HomeDirectory { get; private set; }
+        public FieldSetting HomeDirectory { get;  set; }
 
         [LocalizedDisplay("Profil")]
-        public FieldSetting Profile { get; private set; }
+        public FieldSetting Profile { get;  set; }
 
         [LocalizedDisplay("Inventarienummer")]
-        public FieldSetting InventoryNumber { get; private set; }
+        public FieldSetting InventoryNumber { get;  set; }
 
         [LocalizedDisplay("Vallista 1")]
-        public FieldSetting AccountTypeId { get; private set; }
+        public FieldSetting AccountTypeId { get;  set; }
 
         [LocalizedDisplay("Vallista 2")]
-        public FieldSetting AccountType2 { get; private set; }
+        public FieldSetting AccountType2 { get;  set; }
 
         [LocalizedDisplay("Vallista 3")]
-        public FieldSetting AccountType3 { get; private set; }
+        public FieldSetting AccountType3 { get;  set; }
 
         [LocalizedDisplay("Vallista 4")]
-        public FieldSetting AccountType4 { get; private set; }
+        public FieldSetting AccountType4 { get;  set; }
 
         [LocalizedDisplay("Vallista 5")]
-        public FieldSetting AccountType5 { get; private set; }
+        public FieldSetting AccountType5 { get;  set; }
 
         [LocalizedDisplay("Övrigt")]
-        public FieldSetting Info { get; private set; }
+        public FieldSetting Info { get;  set; }
     }
 }

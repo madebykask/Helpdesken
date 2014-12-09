@@ -1,0 +1,11 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model List<DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.GridModel>
+<div id="grid_container">
+    @{
+        foreach (var model in Model)
+        {
+            @Translation.Get(model.CurrentModeName)
+            @Html.Partial("Grid", model)
+        }
+    }
+</div>

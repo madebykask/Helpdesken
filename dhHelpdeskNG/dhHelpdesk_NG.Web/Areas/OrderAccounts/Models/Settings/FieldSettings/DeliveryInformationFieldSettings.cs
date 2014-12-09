@@ -4,6 +4,10 @@
 
     public sealed class DeliveryInformationFieldSettings
     {
+        public DeliveryInformationFieldSettings()
+        {
+        }
+
         public DeliveryInformationFieldSettings(
             FieldSetting name,
             FieldSetting phone,
@@ -17,15 +21,15 @@
         }
 
         [LocalizedDisplay("Namn")]
-        public FieldSetting Name { get; private set; }
+        public FieldSetting Name { get;  set; }
 
         [LocalizedDisplay("Telefon")]
-        public FieldSetting Phone { get; private set; }
+        public FieldSetting Phone { get;  set; }
 
         [LocalizedDisplay("Adress")]
-        public FieldSetting Address { get; private set; }
+        public FieldSetting Address { get;  set; }
 
         [LocalizedDisplay("E-Postadress")]
-        public FieldSetting PostalAddress { get; private set; }
+        public FieldSetting PostalAddress { get;  set; }
     }
 }

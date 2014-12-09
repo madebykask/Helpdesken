@@ -1,0 +1,57 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.OrdersIndexModel
+@functions 
+{
+
+    private Dictionary<string, object> GetDictionary(Enums.Show show)
+    {
+        var dict = new Dictionary<string, object>();
+        if (Model.Filter.State == show)
+        {
+            dict.Add("checked", "checked");
+        }
+
+        return dict;
+    }
+
+}
+
+@using (Ajax.BeginForm("Grid", null, new AjaxOptions { UpdateTargetId = "grid_container" }, new { id = "search_form" }))
+{
+    @Html.HiddenFor(m => m.Filter.SortField.Name, new { id = "sortFieldName" })
+    @Html.HiddenFor(m => m.Filter.SortField.SortBy, new { id = "sortFieldBy" })
+    @Html.HiddenFor(m => m.ActivityType)
+    <table class="tableform">
+        <tr>
+            <td class="span3">@Translation.Get("Handläggare")</td>
+            <td>@Html.DropDownListFor(m => m.Filter.UserId, Model.Users, string.Empty, new { id = "region_dropdown" })</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("Visa")
+            </td>
+            <td>
+                <label class="radio inline">
+                    @Html.RadioButtonFor(x => x.Filter.State, 1, @GetDictionary(Enums.Show.Active)) @Translation.Get("Pågående projekt")
+                </label>
+                <label class="radio inline">
+                    @Html.RadioButtonFor(x => x.Filter.State, 0, @GetDictionary(Enums.Show.Inactive)) @Translation.Get("Avslutade projekt")
+
+                </label>
+                <label class="radio inline">
+                    @Html.RadioButtonFor(x => x.Filter.State, 2, @GetDictionary(Enums.Show.All)) @Translation.Get("Alla projekt")
+
+                </label>
+            </td>
+            <td class="span3">
+                @Html.LabelFor(m => m.Filter.SearchFor)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.Filter.SearchFor)
+            </td>
+        </tr>
+    </table>
+}
+
+<div id="grid_container">
+    @Html.Action("Grid", "Orders", new { filter = Model.Filter })
+</div>

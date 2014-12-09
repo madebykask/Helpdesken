@@ -4,6 +4,10 @@
 
     public sealed class OrdererFieldSettings
     {
+        public OrdererFieldSettings()
+        {
+        }
+
         public OrdererFieldSettings(
             FieldSetting id,
             FieldSetting firstName,
@@ -19,18 +23,18 @@
         }
 
         [LocalizedDisplay("Användar ID")]
-        public FieldSetting Id { get; private set; }
+        public FieldSetting Id { get;  set; }
 
         [LocalizedDisplay("Förnamn")]
-        public FieldSetting FirstName { get; private set; }
+        public FieldSetting FirstName { get;  set; }
 
         [LocalizedDisplay("Efternamn")]
-        public FieldSetting LastName { get; private set; }
+        public FieldSetting LastName { get;  set; }
 
         [LocalizedDisplay("Telefon")]
-        public FieldSetting Phone { get; private set; }
+        public FieldSetting Phone { get;  set; }
 
         [LocalizedDisplay("E-post")]
-        public FieldSetting Email { get; private set; }
+        public FieldSetting Email { get;  set; }
     }
 }

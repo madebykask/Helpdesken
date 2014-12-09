@@ -4,6 +4,10 @@
 
     public class FieldSetting
     {
+        public FieldSetting()
+        {
+        }
+
         public FieldSetting(
             bool isShowInDetails,
             bool isShowInList,
@@ -20,17 +24,17 @@
             this.IsRequired = isRequired;
         }
 
-        public bool IsShowInDetails { get; private set; }
+        public bool IsShowInDetails { get;  set; }
 
-        public bool IsShowInList { get; private set; }
+        public bool IsShowInList { get;  set; }
 
-        public bool IsShowExternal { get; private set; }
+        public bool IsShowExternal { get;  set; }
 
         [LocalizedRequired]
-        public string Caption { get; private set; }
+        public string Caption { get;  set; }
 
-        public string Help { get; private set; }
+        public string Help { get;  set; }
 
-        public bool IsRequired { get; private set; }
+        public bool IsRequired { get;  set; }
     }
 }
