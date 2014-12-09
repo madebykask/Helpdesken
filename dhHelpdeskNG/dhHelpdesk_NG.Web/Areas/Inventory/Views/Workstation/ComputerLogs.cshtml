@@ -8,6 +8,6 @@
 @using (Html.BeginForm("NewComputerLog", "Workstation", FormMethod.Post, new { id = "log_edit_form" }))
 {
     @Html.EditorFor(x => Model.ComputerLogModel)
-    <input type="submit" value="@Translation.Get("Nytt logg")" class="btn"/>
+    <input type="submit" value="@Translation.Get("Lägg till")" class="btn"/>
 }
 @Html.Partial("LogGrid", Model.ComputerLogs)

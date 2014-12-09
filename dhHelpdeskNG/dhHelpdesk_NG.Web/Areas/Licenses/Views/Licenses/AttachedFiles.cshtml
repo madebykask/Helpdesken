@@ -5,7 +5,6 @@
     @Html.HiddenFor(m => m.EntityId)
     @if (!Model.Files.Any())
     {
-        @Translation.Get("No Uploaded Files")
         return;
     }
     <table>

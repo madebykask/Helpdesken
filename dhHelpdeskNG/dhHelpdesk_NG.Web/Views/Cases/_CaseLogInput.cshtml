@@ -23,9 +23,12 @@
 <div class="secnavs secnavmarg">
     <div class="pull-left">
         <ul class="secnav">
-            @*<li><a data-toggle="modal" href="#divNewFAQ" title="@Translation.Get("Ny FAQ", Enums.TranslationSource.TextTranslation)" class="btn">@Translation.Get("Ny FAQ", Enums.TranslationSource.TextTranslation)</a></li>*@
-            <li><a href="#" id="AddFAQ" class="btn">@Translation.Get("Ny FAQ", Enums.TranslationSource.TextTranslation)</a></li>
-            <li class="secspace"></li>
+            @if (Model.CustomerSettings.ModuleFaq == true)
+            {
+                <li><a href="#" id="AddFAQ" class="btn">@Translation.Get("Ny FAQ", Enums.TranslationSource.TextTranslation)</a></li>
+                <li class="secspace"></li>
+            }
+            
             <li>
                 <div class="checkbox">
                     @if (Model.Disable_SendMailAboutCaseToNotifier)
