@@ -23,7 +23,7 @@
 <div class="secnavs secnavmarg">
     <div class="pull-left">
         <ul class="secnav">
-            @if (Model.CustomerSettings.ModuleFaq == true)
+            @if (Model.CustomerSettings.ModuleFaq == true && Model.customerUserSetting.User.FAQPermission == 1)
             {
                 <li><a href="#" id="AddFAQ" class="btn">@Translation.Get("Ny FAQ", Enums.TranslationSource.TextTranslation)</a></li>
                 <li class="secspace"></li>
