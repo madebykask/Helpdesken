@@ -1,0 +1,37 @@
+﻿@using DH.Helpdesk.Web.Areas.OrderAccounts.Models.Index
+@using DH.Helpdesk.Web.Infrastructure
+@model BaseIndexModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@RenderSection("Scripts", false)
+
+<div class="secnavs fixed">
+    <div class="pull-left">
+        @RenderSection("Actions", false)
+    </div>
+</div>
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs nav-tabs-actions">
+            <li class="@GetIsActive(IndexModelTypes.Orders)">
+                @Html.ActionLink(Translation.Get("Beställningar"), "Index", "Orders")
+            </li>
+            <li class="@GetIsActive(IndexModelTypes.OrderFieldSettings)">
+                @Html.ActionLink(Translation.Get("Inställningar"), "Index", "Settings")
+            </li>
+        </ul>
+        <div class="tab-content overflow-visible">
+            <div class="tab-pane tab-pane-border active">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+</div>
+@functions    {
+    private MvcHtmlString GetIsActive(IndexModelTypes type)
+    {
+        return MvcHtmlString.Create(Model.IndexModelType == type ? "active" : null);
+    }
+}

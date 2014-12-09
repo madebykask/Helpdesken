@@ -1,0 +1,192 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.OrderAccounts.Models.Settings.FieldSettings.AccountFieldsSettingsModel
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>@Translation.Get("Fält")</th>
+            <th>@Translation.Get("Visa")</th>
+            <th>@Translation.Get("Visa på självservice")</th>
+            <th>@Translation.Get("Rubrik")</th>
+            <th>@Translation.Get("Obligatorisk")</th>
+            <th>@Translation.Get("Lista")</th>
+            <th>@Translation.Get("Hjälp")</th>
+            <th>@Translation.Get("Flerval")</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td colspan="8" class="header">@Translation.Get("Beställare")</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Orderer.Id)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Orderer.FirstName)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Orderer.LastName)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Orderer.Phone)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Orderer.Email)
+        </tr>
+        <tr>
+            <td colspan="8" class="header">@Translation.Get("Användarinformation")</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.User.Ids)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.User.PersonalIdentityNumber)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.User.FirstName)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.User.Initials)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.User.LastName)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.User.Phone)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.User.Extension)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.User.EMail)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.User.Title)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.User.Location)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.User.RoomNumber)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.User.PostalAddress)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.User.EmploymentType)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.User.DepartmentId)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.User.UnitId)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.User.DepartmentId2)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.User.Info)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.User.Responsibility)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.User.Activity)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.User.Manager)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.User.ReferenceNumber)
+        </tr>
+        <tr>
+            <td colspan="8" class="header">@Translation.Get("Kontoinformation")</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.AccountInformation.StartedDate)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.AccountInformation.FinishDate)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.AccountInformation.EMailTypeId)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.AccountInformation.HomeDirectory)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.AccountInformation.Profile)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.AccountInformation.InventoryNumber)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.AccountInformation.AccountTypeId)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.AccountInformation.AccountType2)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.AccountInformation.AccountType3)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.AccountInformation.AccountType4)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.AccountInformation.AccountType5)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.AccountInformation.Info)
+        </tr>
+        <tr>
+            <td colspan="8" class="header">@Translation.Get("Kontakt")</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Contact.Ids)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Contact.Name)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Contact.Phone)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Contact.Email)
+        </tr>
+        <tr>
+            <td colspan="8" class="header">@Translation.Get("Leveransinformation")</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.DeliveryInformation.Name)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.DeliveryInformation.Phone)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.DeliveryInformation.Address)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.DeliveryInformation.PostalAddress)
+        </tr>
+        <tr>
+            <td colspan="8" class="header">@Translation.Get("Program")</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Program.Programs)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Program.InfoProduct)
+        </tr>
+        <tr>
+            <td colspan="8" class="header">@Translation.Get("Övrigt")</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Other.CaseNumber)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Other.FileName)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Other.Info)
+        </tr>
+    </tbody>
+</table>

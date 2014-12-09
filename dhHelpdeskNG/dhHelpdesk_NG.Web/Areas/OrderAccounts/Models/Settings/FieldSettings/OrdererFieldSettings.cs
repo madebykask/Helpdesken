@@ -1,5 +1,7 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Read.Processing
+﻿namespace DH.Helpdesk.Web.Areas.OrderAccounts.Models.Settings.FieldSettings
 {
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+
     public sealed class OrdererFieldSettings
     {
         public OrdererFieldSettings(
@@ -16,14 +18,19 @@
             this.Email = email;
         }
 
+        [LocalizedDisplay("Användar ID")]
         public FieldSetting Id { get; private set; }
 
+        [LocalizedDisplay("Förnamn")]
         public FieldSetting FirstName { get; private set; }
 
+        [LocalizedDisplay("Efternamn")]
         public FieldSetting LastName { get; private set; }
 
+        [LocalizedDisplay("Telefon")]
         public FieldSetting Phone { get; private set; }
 
+        [LocalizedDisplay("E-post")]
         public FieldSetting Email { get; private set; }
     }
 }

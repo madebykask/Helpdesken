@@ -56,6 +56,7 @@
     <Compile Include="Attributes\AllowReadAttribute.cs" />
     <Compile Include="Enums\Accounts\Fields\AccountInformationFields.cs" />
     <Compile Include="Enums\Accounts\Fields\AccountStates.cs" />
+    <Compile Include="Enums\Accounts\Fields\ContactFields.cs" />
     <Compile Include="Enums\Accounts\Fields\DeliveryInformationFields.cs" />
     <Compile Include="Enums\Accounts\Fields\EMailTypes.cs" />
     <Compile Include="Enums\Accounts\Fields\OrdererFields.cs" />

@@ -1,8 +1,10 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Read.Processing
+﻿namespace DH.Helpdesk.Web.Areas.OrderAccounts.Models.Settings.FieldSettings
 {
-    public class AccountFieldsSettingsForProcessing
+    using DH.Helpdesk.Common.ValidationAttributes;
+
+    public class AccountFieldsSettingsModel
     {
-        public AccountFieldsSettingsForProcessing(
+        public AccountFieldsSettingsModel(
             OrdererFieldSettings orderer,
             UserFieldSettings user,
             AccountInformationFieldSettings accountInformation,
@@ -20,18 +22,25 @@
             this.Other = other;
         }
 
+        [NotNull]
         public OrdererFieldSettings Orderer { get; private set; }
 
+        [NotNull]
         public UserFieldSettings User { get; private set; }
 
+        [NotNull]
         public AccountInformationFieldSettings AccountInformation { get; private set; }
 
+        [NotNull]
         public ContactFieldSettings Contact { get; set; }
 
+        [NotNull]
         public DeliveryInformationFieldSettings DeliveryInformation { get; private set; }
 
+        [NotNull]
         public ProgramFieldSettings Program { get; private set; }
 
+        [NotNull]
         public OtherFieldSettings Other { get; private set; }
     }
 }

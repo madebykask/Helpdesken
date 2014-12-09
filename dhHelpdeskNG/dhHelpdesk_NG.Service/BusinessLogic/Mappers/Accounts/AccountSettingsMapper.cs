@@ -27,6 +27,7 @@
             MapProgramFieldSettings(dto.Program, fieldSettings, date);
             MapOtherFieldSettings(dto.Other, fieldSettings, date);
             MapDeliveryInformationFieldSettings(dto.DeliveryInformation, fieldSettings, date);
+            MapContactFieldSettings(dto.Contact, fieldSettings, date);
         }
 
         private static void MapOrdererFieldSettings(
@@ -199,6 +200,29 @@
             MapFieldSettings(
                 updatedSettings.PostalAddress,
                 existingSettings.FindByName(DeliveryInformationFields.PostalAddress),
+                changedDate);
+        }
+
+        private static void MapContactFieldSettings(
+           ContactFieldSettings updatedSettings,
+           NamedObjectCollection<AccountFieldSettings> existingSettings,
+           DateTime changedDate)
+        {
+            MapFieldSettings(
+                updatedSettings.Ids,
+                existingSettings.FindByName(ContactFields.Id),
+                changedDate);
+            MapFieldSettings(
+                updatedSettings.Name,
+                existingSettings.FindByName(ContactFields.Name),
+                changedDate);
+            MapFieldSettings(
+                updatedSettings.Phone,
+                existingSettings.FindByName(ContactFields.Phone),
+                changedDate);
+            MapFieldSettings(
+                updatedSettings.Email,
+                existingSettings.FindByName(ContactFields.Email),
                 changedDate);
         }
 

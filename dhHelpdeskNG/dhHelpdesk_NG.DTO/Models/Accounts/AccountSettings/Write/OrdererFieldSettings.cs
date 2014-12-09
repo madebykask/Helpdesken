@@ -1,7 +1,5 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Write
 {
-    using DH.Helpdesk.Common.ValidationAttributes;
-
     public sealed class OrdererFieldSettings
     {
         public OrdererFieldSettings(
@@ -18,7 +16,6 @@
             this.Email = email;
         }
 
-        [IsId]
         public FieldSetting Id { get; private set; }
 
         public FieldSetting FirstName { get; private set; }

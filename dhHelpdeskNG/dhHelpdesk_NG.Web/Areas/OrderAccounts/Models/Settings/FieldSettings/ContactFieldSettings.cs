@@ -1,5 +1,7 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Read.Edit
+﻿namespace DH.Helpdesk.Web.Areas.OrderAccounts.Models.Settings.FieldSettings
 {
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+
     public sealed class ContactFieldSettings
     {
         public ContactFieldSettings(
@@ -14,12 +16,16 @@
             this.Email = email;
         }
 
+        [LocalizedDisplay("Id")]
         public FieldSettingMultipleChoices Ids { get; private set; }
 
+        [LocalizedDisplay("Namn")]
         public FieldSetting Name { get; private set; }
 
+        [LocalizedDisplay("Telefon")]
         public FieldSetting Phone { get; private set; }
 
+        [LocalizedDisplay("E-post")]
         public FieldSetting Email { get; private set; }
     }
 }

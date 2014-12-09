@@ -1,0 +1,50 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.OrderAccounts.Models.Settings.SettingsIndexModel
+@{
+    Layout = "~/Areas/OrderAccounts/Views/Shared/_IndexLayout.cshtml";
+}
+
+@section Scripts
+{
+    <script>
+        $(function () {
+            $('#type_dropdown').change(function () {
+                $('#type_form').submit();
+            });
+
+            $('.switchcheckbox').bootstrapSwitch('onText', trans_yes);
+            $('.switchcheckbox').bootstrapSwitch('offText', trans_no);
+            $('.switchcheckbox').bootstrapSwitch('size', 'small');
+            $('.switchcheckbox').bootstrapSwitch('onColor', 'success');
+        });
+    </script>
+}
+
+@section Actions
+{
+    <ul class="secnav">
+        <li id="menu1">
+            <input type="submit" value="@Translation.Get("Spara")" class="btn" onclick=" $('#settings_form').submit(); "/>
+        </li>
+    </ul>
+}
+
+<table class="tableform">
+    <tr>
+        <td class="span3">@Translation.Get("Typ")</td>
+        <td>
+            @using (Html.BeginForm("Index", "Settings", FormMethod.Post, new { id = "type_form" }))
+            {
+                @Html.DropDownListFor(x => x.ActivityType, Model.ActivityTypes, new { id = "type_dropdown" })
+            }
+        </td>
+    </tr>
+</table>
+
+@using (Html.BeginForm("Edit", "Settings",
+            FormMethod.Post,
+            new { id = "settings_form" }))
+{
+    @Html.HiddenFor(m => m.ActivityType)
+    @Html.EditorFor(x => Model)}
+}

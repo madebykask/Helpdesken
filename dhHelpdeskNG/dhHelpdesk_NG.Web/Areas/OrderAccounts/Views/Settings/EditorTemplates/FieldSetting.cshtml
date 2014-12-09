@@ -1,0 +1,11 @@
+﻿@model DH.Helpdesk.Web.Areas.OrderAccounts.Models.Settings.FieldSettings.FieldSetting
+<td>@Html.LabelFor(m => m)</td>
+<td>@Html.CheckBoxFor(m => m.IsShowInDetails, new { @class = "switchcheckbox" })</td>
+<td>@Html.CheckBoxFor(m => m.IsShowExternal, new { @class = "switchcheckbox" })</td>
+<td>@Html.TextBoxFor(m => m.Caption)</td>
+<td>@Html.CheckBoxFor(m => m.IsRequired, new { @class = "switchcheckbox" })</td>
+<td>@Html.CheckBoxFor(m => m.IsShowInList, new { @class = "switchcheckbox" })</td>
+<td>@Html.TextBoxFor(m => m.Help)</td>
+
+
+

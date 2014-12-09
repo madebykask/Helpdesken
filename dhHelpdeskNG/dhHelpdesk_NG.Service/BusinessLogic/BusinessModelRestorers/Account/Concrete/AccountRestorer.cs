@@ -17,6 +17,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Account.Conc
             this.RestoreDelivery(dto, existingDto, settings);
             this.RestoreProgram(dto, existingDto, settings);
             this.RestoreOther(dto, existingDto, settings);
+            this.RestoreContact(dto, existingDto, settings);
         }
 
         protected override bool CreateValidationRule(FieldSetting setting)
@@ -223,6 +224,36 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Account.Conc
                 () => updated.DeliveryInformation.PostalAddress,
                 existing.DeliveryInformation.PostalAddress,
                 settings.DeliveryInformation.PostalAddress);
+        }
+
+        private void RestoreContact(
+           AccountForUpdate updated,
+           AccountForEdit existing,
+           AccountFieldsSettingsForProcessing settings)
+        {
+            this.RestoreFieldIfNeeded(
+                updated,
+                () => updated.Contact.Ids,
+                existing.Contact.Ids,
+                settings.Contact.Ids);
+
+            this.RestoreFieldIfNeeded(
+                updated,
+                () => updated.Contact.Name,
+                existing.Contact.Name,
+                settings.Contact.Name);
+
+            this.RestoreFieldIfNeeded(
+                updated,
+                () => updated.Contact.Phone,
+                existing.Contact.Phone,
+                settings.Contact.Phone);
+
+            this.RestoreFieldIfNeeded(
+                updated,
+                () => updated.Contact.Email,
+                existing.Contact.Email,
+                settings.Contact.Email);
         }
 
         private void RestoreProgram(

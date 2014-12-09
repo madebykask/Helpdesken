@@ -31,6 +31,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Accounts.Co
             this.ValidateDelivery(newDto, settings);
             this.ValidateProgram(newDto, settings);
             this.ValidateOther(newDto, settings);
+            this.ValidateContact(newDto, settings);
         }
 
         private void ValidateOrder(AccountForInsert updated, AccountFieldsSettingsForProcessing settings)
@@ -253,6 +254,29 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Accounts.Co
                 updated.DeliveryInformation.PostalAddress,
                 DeliveryInformationFields.PostalAddress,
                 this.CreateValidationRule(settings.DeliveryInformation.PostalAddress));
+        }
+
+        private void ValidateContact(AccountForInsert updated, AccountFieldsSettingsForProcessing settings)
+        {
+            this.elementaryRulesValidator.ValidateForNew(
+                updated.Contact.Ids,
+                ContactFields.Id,
+                this.CreateValidationRule(settings.Contact.Ids));
+
+            this.elementaryRulesValidator.ValidateStringField(
+                updated.Contact.Name,
+                ContactFields.Name,
+                this.CreateValidationRule(settings.Contact.Name));
+
+            this.elementaryRulesValidator.ValidateStringField(
+                updated.Contact.Phone,
+                ContactFields.Phone,
+                this.CreateValidationRule(settings.Contact.Phone));
+
+            this.elementaryRulesValidator.ValidateStringField(
+                updated.Contact.Email,
+                ContactFields.EmaiL,
+                this.CreateValidationRule(settings.Contact.Email));
         }
 
         private void ValidateProgram(

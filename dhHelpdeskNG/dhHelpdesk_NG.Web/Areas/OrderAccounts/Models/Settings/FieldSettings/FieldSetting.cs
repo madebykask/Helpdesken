@@ -1,0 +1,36 @@
+﻿namespace DH.Helpdesk.Web.Areas.OrderAccounts.Models.Settings.FieldSettings
+{
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+
+    public class FieldSetting
+    {
+        public FieldSetting(
+            bool isShowInDetails,
+            bool isShowInList,
+            bool isShowExternal,
+            string caption,
+            string help,
+            bool isRequired)
+        {
+            this.IsShowInDetails = isShowInDetails;
+            this.IsShowInList = isShowInList;
+            this.IsShowExternal = isShowExternal;
+            this.Caption = caption;
+            this.Help = help;
+            this.IsRequired = isRequired;
+        }
+
+        public bool IsShowInDetails { get; private set; }
+
+        public bool IsShowInList { get; private set; }
+
+        public bool IsShowExternal { get; private set; }
+
+        [LocalizedRequired]
+        public string Caption { get; private set; }
+
+        public string Help { get; private set; }
+
+        public bool IsRequired { get; private set; }
+    }
+}

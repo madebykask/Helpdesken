@@ -293,7 +293,10 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
         {
             var query = this.DbSet.Where(x => x.Customer_Id == customerId);
 
-            query = isShowScrapped ? query.Where(x => x.ScrapDate != null) : query.Where(x => x.ScrapDate == null);
+            if (!isShowScrapped)
+            {
+                query = query.Where(x => x.ScrapDate == null);
+            }
 
             if (regionId.HasValue)
             {

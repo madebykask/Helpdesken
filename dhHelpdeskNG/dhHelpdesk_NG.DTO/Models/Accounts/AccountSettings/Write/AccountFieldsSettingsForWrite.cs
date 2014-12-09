@@ -8,6 +8,7 @@
             UserFieldSettings user,
             AccountInformationFieldSettings accountInformation,
             DeliveryInformationFieldSettings deliveryInformation,
+            ContactFieldSettings contact,
             ProgramFieldSettings program,
             OtherFieldSettings other)
         {
@@ -16,6 +17,7 @@
             this.User = user;
             this.AccountInformation = accountInformation;
             this.DeliveryInformation = deliveryInformation;
+            this.Contact = contact;
             this.Program = program;
             this.Other = other;
         }
@@ -29,6 +31,8 @@
         public AccountInformationFieldSettings AccountInformation { get; private set; }
 
         public DeliveryInformationFieldSettings DeliveryInformation { get; private set; }
+
+        public ContactFieldSettings Contact { get; set; }
 
         public ProgramFieldSettings Program { get; private set; }
 

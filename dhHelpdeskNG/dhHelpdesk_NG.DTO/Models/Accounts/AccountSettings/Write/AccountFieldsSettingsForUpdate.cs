@@ -10,10 +10,11 @@
             UserFieldSettings user,
             AccountInformationFieldSettings accountInformation,
             DeliveryInformationFieldSettings deliveryInformation,
+            ContactFieldSettings contact,
             ProgramFieldSettings program,
             OtherFieldSettings other,
             DateTime changedDate)
-            : base(activityId, orderer, user, accountInformation, deliveryInformation, program, other)
+            : base(activityId, orderer, user, accountInformation, deliveryInformation, contact, program, other)
         {
             this.ChangedDate = changedDate;
         }

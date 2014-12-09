@@ -40,11 +40,13 @@
             OtherFieldSettings otherSettings = CreateOtherFieldSettings(settingCollection);
             DeliveryInformationFieldSettings delveryInformationSettings =
                 CreateDeliveryInformationFieldSettings(settingCollection);
+            ContactFieldSettings contactSettings = CreateContactFieldSettings(settingCollection);
 
             return new AccountFieldsSettingsForProcessing(
                 ordererSettings,
                 userSettings,
                 accountInformationSettings,
+                contactSettings,
                 delveryInformationSettings,
                 programSettings,
                 otherSettings);
@@ -189,6 +191,19 @@
                 CreateFieldSetting(entity.FindByName(DeliveryInformationFields.PostalAddress));
 
             var settings = new DeliveryInformationFieldSettings(name, phone, address, postalAddress);
+
+            return settings;
+        }
+
+        private static ContactFieldSettings CreateContactFieldSettings(
+            NamedObjectCollection<AccountSettingsMapperForProcessing> entity)
+        {
+            var id = CreateFieldSetting(entity.FindByName(ContactFields.Id));
+            var name = CreateFieldSetting(entity.FindByName(ContactFields.Name));
+            var phone = CreateFieldSetting(entity.FindByName(ContactFields.Phone));
+            var email = CreateFieldSetting(entity.FindByName(ContactFields.Email));
+
+            var settings = new ContactFieldSettings(id, name, phone, email);
 
             return settings;
         }
