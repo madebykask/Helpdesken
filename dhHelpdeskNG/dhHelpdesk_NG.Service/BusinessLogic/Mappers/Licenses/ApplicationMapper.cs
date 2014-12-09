@@ -7,18 +7,23 @@
     using DH.Helpdesk.BusinessData.Models.Licenses.Applications;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Computers;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
 
     public static class ApplicationMapper
     {
-        public static ApplicationOverview[] MapToOverviews(this IQueryable<Application> query, IQueryable<Software> software)
+        public static ApplicationOverview[] MapToOverviews(
+                            this IQueryable<Application> query, 
+                            IQueryable<Software> software,
+                            IQueryable<Computer> computers)
         {            
             var entities = query.Select(a => new 
                                             {
                                                 ApplicationId = a.Id,
                                                 ApplicationName = a.Name,
                                                 a.Products,
-                                                NumberOfInstallations = software.Where(s => s.Name == a.Name).Count()
+                                                NumberOfInstallations = 
+                                                    computers.Count(c => software.Where(s => a.Name == s.Name).Select(s => s.Computer_Id).Contains(c.Id))
                                             })
                                             .OrderBy(a => a.ApplicationName)
                                             .ToArray();

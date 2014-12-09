@@ -6,11 +6,15 @@
     using DH.Helpdesk.BusinessData.Models.Licenses.Products;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Computers;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
 
     public static class ProductMapper
     {
-        public static ProductOverview[] MapToOverviews(this IQueryable<Product> query, IQueryable<Software> software)
+        public static ProductOverview[] MapToOverviews(
+                                this IQueryable<Product> query, 
+                                IQueryable<Software> software,
+                                IQueryable<Computer> computers)
         {
             var entities = query.Select(p => new 
                                                 {
@@ -19,7 +23,8 @@
                                                     Regions = p.Licenses.Select(l => l.Region.Name).Distinct(),
                                                     Departments = p.Licenses.Select(l => l.Department.DepartmentName).Distinct(),
                                                     LicencesNumber = p.Licenses.Select(l => l.NumberOfLicenses),
-                                                    UsedLicencesNumber = software.Where(s => p.Applications.Select(a => a.Name).Contains(s.Name)).Count()
+                                                    UsedLicencesNumber = 
+                                                        computers.Count(c => software.Where(s => p.Applications.Select(a => a.Name).Contains(s.Name)).Select(s => s.Computer_Id).Contains(c.Id))
                                                 })
                                                 .OrderBy(p => p.ProductName)
                                                 .ToArray();

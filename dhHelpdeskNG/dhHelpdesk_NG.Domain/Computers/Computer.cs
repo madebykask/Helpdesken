@@ -1,11 +1,12 @@
 ﻿
 namespace DH.Helpdesk.Domain.Computers
 {
+    using DH.Helpdesk.Domain.Interfaces;
     using DH.Helpdesk.Domain.WorkstationModules;
 
     using global::System;
 
-    public class Computer : Entity
+    public class Computer : Entity, INulableCustomerEntity
     {
         public Computer()
         {

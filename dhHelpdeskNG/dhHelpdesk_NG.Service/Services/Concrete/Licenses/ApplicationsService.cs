@@ -5,6 +5,7 @@
     using DH.Helpdesk.BusinessData.Models.Licenses.Applications;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Computers;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Licenses;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Shared;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
@@ -26,11 +27,15 @@
             {
                 var applicationRepository = uow.GetRepository<Application>();
                 var softwareRep = uow.GetRepository<Software>();
+                var computersRep = uow.GetRepository<Computer>();
+
+                var computers = computersRep.GetAll()
+                    .GetByCustomer((int?)customerId);
 
                 var overviews = applicationRepository.GetAll()
                                 .GetOnlyConnectedCustomerApplications(customerId, onlyConnected)
                                 .GetByName(name)
-                                .MapToOverviews(softwareRep.GetAll());
+                                .MapToOverviews(softwareRep.GetAll(), computers);
 
                 return overviews;
             }
