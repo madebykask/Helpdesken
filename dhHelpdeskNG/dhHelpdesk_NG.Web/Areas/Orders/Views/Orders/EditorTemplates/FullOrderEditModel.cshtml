@@ -14,10 +14,13 @@
         <li>
             <a href="#tab-2">@Translation.Get("Logg")</a>
         </li>                                
-    }                            
-    <li>
-        <a href="#tab-3">@Translation.Get("Historik")</a>
-    </li>                            
+    }      
+    @if (!Model.IsNew)
+    {
+        <li>
+            <a href="#tab-3">@Translation.Get("Historik")</a>
+        </li>                                    
+    }                      
 </ul>
 
 <div class="tab-content">
@@ -77,12 +80,15 @@
                 </div>
             </div>                            
         }
-        <div id="tab-3" class="tab-pane tab-pane-border">
-            <div class="container">
-                <div class="row">
-                    <div class="span12">
+        @if (!Model.IsNew)
+        {
+            <div id="tab-3" class="tab-pane tab-pane-border">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </div>            
+        }
 </div>

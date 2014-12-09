@@ -131,7 +131,7 @@
         public ConfigurableFieldModel<SelectList> CreateSelectListField(
             FieldEditSettings setting,
             ItemOverview[] items,
-            string selectedValue,
+            int? selectedValue,
             bool needEmptyItem = false)
         {
             if (!setting.Show)
@@ -145,7 +145,9 @@
                 itemsList.Insert(0, new ItemOverview(string.Empty, string.Empty));
             }
 
-            var list = new SelectList(itemsList, "Value", "Name", selectedValue);
+            var list = selectedValue.HasValue ? 
+                    new SelectList(itemsList, "Value", "Name", selectedValue) :
+                    new SelectList(itemsList, "Value", "Name");
             return new ConfigurableFieldModel<SelectList>(setting.Caption, list, setting.Required);
         }
 

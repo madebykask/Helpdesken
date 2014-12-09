@@ -6,6 +6,7 @@
     {
         public FullOrderEditFields(
                 int id, 
+                int? orderTypeId,
                 DeliveryEditFields delivery, 
                 GeneralEditFields general, 
                 LogEditFields log, 
@@ -17,6 +18,7 @@
                 SupplierEditFields supplier, 
                 UserEditFields user)
         {
+            this.OrderTypeId = orderTypeId;
             this.User = user;
             this.Supplier = supplier;
             this.Receiver = receiver;
@@ -32,6 +34,9 @@
 
         [IsId]
         public int Id { get; private set; }
+
+        [IsId]
+        public int? OrderTypeId { get; private set; }
 
         [NotNull]
         public DeliveryEditFields Delivery { get; private set; }

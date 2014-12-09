@@ -15,7 +15,7 @@
 
         public GeneralEditModel(
             ConfigurableFieldModel<int> orderNumber,
-            ConfigurableFieldModel<int> customer,
+            ConfigurableFieldModel<string> customer,
             ConfigurableFieldModel<SelectList> administrator,
             ConfigurableFieldModel<SelectList> domain,
             ConfigurableFieldModel<DateTime?> orderDate, 
@@ -36,7 +36,7 @@
         public ConfigurableFieldModel<int> OrderNumber { get; set; } 
 
         [NotNull]
-        public ConfigurableFieldModel<int> Customer { get; set; } 
+        public ConfigurableFieldModel<string> Customer { get; set; } 
 
         [NotNull]
         public ConfigurableFieldModel<SelectList> Administrator { get; set; } 

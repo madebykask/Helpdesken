@@ -74,7 +74,7 @@
                                 OrderEditOptions options)
         {
             var orderNumber = this.configurableFieldModelFactory.CreateIntegerField(settings.OrderNumber, 0);
-            var customer = this.configurableFieldModelFactory.CreateIntegerField(settings.Customer, 0);
+            var customer = this.configurableFieldModelFactory.CreateStringField(settings.Customer, null);
             var administrator = this.configurableFieldModelFactory.CreateSelectListField(settings.Administrator, options.Administrators, null);
             var domain = this.configurableFieldModelFactory.CreateSelectListField(settings.Domain, options.Domains, null);
             var orderDate = this.configurableFieldModelFactory.CreateNullableDateTimeField(settings.OrderDate, null);

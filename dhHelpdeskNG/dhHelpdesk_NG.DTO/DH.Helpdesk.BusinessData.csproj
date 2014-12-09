@@ -279,6 +279,7 @@
     <Compile Include="Models\Orders\Order\OrderEditFields\LogEditFields.cs" />
     <Compile Include="Models\Orders\Order\OrderEditFields\OrderEditFields.cs" />
     <Compile Include="Models\Orders\Order\OrderEditFields\OrdererEditFields.cs" />
+    <Compile Include="Models\Orders\Order\OrderEditFields\OrderProgramModel.cs" />
     <Compile Include="Models\Orders\Order\OrderEditFields\OtherEditFields.cs" />
     <Compile Include="Models\Orders\Order\OrderEditFields\ProgramEditFields.cs" />
     <Compile Include="Models\Orders\Order\OrderEditFields\ReceiverEditFields.cs" />

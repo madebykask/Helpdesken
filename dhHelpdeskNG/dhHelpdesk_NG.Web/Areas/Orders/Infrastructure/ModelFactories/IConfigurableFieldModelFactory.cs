@@ -52,7 +52,7 @@
         ConfigurableFieldModel<SelectList> CreateSelectListField(
             FieldEditSettings setting,
             ItemOverview[] items,
-            string selectedValue,
+            int? selectedValue,
             bool needEmptyItem = false);
 
         ConfigurableFieldModel<string> CreateStringField(FieldEditSettings setting, string value);
