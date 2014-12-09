@@ -1,5 +1,8 @@
 ﻿namespace DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit
 {
+    using System;
+
+    using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public class AccountModel
@@ -21,6 +24,19 @@
             this.Program = program;
             this.Other = other;
         }
+
+        [IsId]
+        public int Id { get; set; }
+
+        public int ActivityTypeId { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        public DateTime ChangedDate { get; set; }
+
+        public UserName ChangedByUserName { get; set; }
+
+        public bool IsCreateCase { get; set; }
 
         [NotNull]
         public Orderer Orderer { get; set; }

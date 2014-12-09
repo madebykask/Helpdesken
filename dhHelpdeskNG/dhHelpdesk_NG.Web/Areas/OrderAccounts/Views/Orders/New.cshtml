@@ -1,0 +1,39 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit.AccountModel
+@{
+    Layout = "~/Areas/Inventory/Views/Shared/_EditLayout.cshtml";
+}
+
+@section Actions
+{
+    <ul class="secnav">
+        <li id="menu1">
+            <input type="submit" value="@Translation.Get("Spara")" class="btn" onclick=" $('#edit_form').submit(); "/>
+        </li>
+        <li id="menu3">@Html.ActionLink(Translation.Get("Avbryt"), "Index", null, new { @class = "btn" })</li>
+        <li id="menu4">@Html.ActionLink(Translation.Get("Ta bort"), "Delete", new { id = Model.Id }, new { @class = "btn" })</li>
+    </ul>
+}
+
+@section Title
+{
+    @Translation.Get("Beställning")
+}
+
+@section Content
+{
+    @using (Html.BeginForm("Edit", "Orders", FormMethod.Post, new { id = "edit_form" }))
+    {
+        @Html.CheckBoxFor(m => m.IsCreateCase) @Translation.Get("Skapa ärende")
+
+        @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.ActivityTypeId)
+        @Html.EditorFor(m => m.Orderer)
+        @Html.EditorFor(m => m.User)
+        @Html.EditorFor(m => m.AccountInformation)
+        @Html.EditorFor(m => m.Contact)
+        @Html.EditorFor(m => m.DeliveryInformation)
+        @Html.EditorFor(m => m.Program)
+        @Html.EditorFor(m => m.Other)
+    }
+}

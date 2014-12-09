@@ -1593,6 +1593,9 @@
     <Content Include="Areas\OrderAccounts\Views\Orders\Grid.cshtml" />
     <Content Include="Areas\OrderAccounts\Views\Orders\Orders.cshtml" />
     <Content Include="Areas\OrderAccounts\Views\Orders\Grids.cshtml" />
+    <Content Include="Areas\OrderAccounts\Views\Orders\Edit.cshtml" />
+    <Content Include="Areas\OrderAccounts\Views\Orders\New.cshtml" />
+    <Content Include="Areas\OrderAccounts\Views\Shared\_EditLayout.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />
