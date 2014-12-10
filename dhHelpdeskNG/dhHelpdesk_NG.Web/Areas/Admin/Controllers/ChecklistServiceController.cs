@@ -35,7 +35,7 @@
         {
             if (this.ModelState.IsValid)
             {
-                this._checklistServiceService.NewChecklistService(checklistService);
+                //this._checklistServiceService.NewChecklistService(checklistService);
                 this._checklistServiceService.Commit();
 
                 return this.RedirectToAction("index", "checklistservice", new { area = "admin" });
