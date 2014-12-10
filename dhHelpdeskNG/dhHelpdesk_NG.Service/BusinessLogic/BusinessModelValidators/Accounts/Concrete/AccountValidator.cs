@@ -275,7 +275,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Accounts.Co
 
             this.elementaryRulesValidator.ValidateStringField(
                 updated.Contact.Email,
-                ContactFields.EmaiL,
+                ContactFields.Email,
                 this.CreateValidationRule(settings.Contact.Email));
         }
 

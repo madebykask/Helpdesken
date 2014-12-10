@@ -622,6 +622,7 @@
     <Compile Include="Areas\OrderAccounts\Models\Order\Filter.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Order\GridModel.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Order\OrdersIndexModel.cs" />
+    <Compile Include="Areas\OrderAccounts\Models\Order\RowModel.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Settings\FieldSettings\AccountFieldsSettingsModel.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Settings\FieldSettings\AccountInformationFieldSettings.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Settings\FieldSettings\ContactFieldSettings.cs" />

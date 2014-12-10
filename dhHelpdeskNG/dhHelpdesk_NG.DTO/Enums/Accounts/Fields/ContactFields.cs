@@ -8,6 +8,6 @@
 
         public static readonly string Phone = "Contact.Phone";
 
-        public static readonly string EmaiL = "Contact.EmaiL";
+        public static readonly string Email = "Contact.Email";
     }
 }
