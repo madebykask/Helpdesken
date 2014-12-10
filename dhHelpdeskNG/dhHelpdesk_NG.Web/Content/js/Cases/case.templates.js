@@ -1,11 +1,22 @@
 ﻿"use strict";
 
-function SetValueIfElVisible(el, val, doNotTriggerEvent) {
+function SetValueIfElVisible(el, val, opt) {
+    opt = opt || { doOverwrite: false, doNotTriggerEvent: false };
     if (el && $(el).is(':visible')) {
-        $(el).val(val);
-        if (!doNotTriggerEvent) {
-            $(el).trigger('change');
+        if (el.val() == "" || opt.doOverwrite) {
+            $(el).val(val);
+            if (!opt.doNotTriggerEvent) {
+                $(el).trigger('change');
+            }
         }
+    }
+}
+
+function SetValueToBtnGroup(domContainer, domText, domValue, value, doOverwrite) {
+    var el = $(domContainer).find('a[value="' + value + '"]');
+    if (el && (doOverwrite || $(domValue).val() == '')) {
+        $(domText).text(getBreadcrumbs(el));
+        $(domValue).val(value).trigger('change');
     }
 }
 
@@ -19,93 +30,249 @@ function SetCheckboxValueIfElVisible(el, val, doNotTriggerEvent) {
 }
 
 
+function IsWillBeOverwrittenByValue(domVisible, domValue, val) {
+    return $(domVisible).is(':visible') && $(domValue).val() != '' && $(domValue).val() != val;
+}
+
+
+function IsWillBeOverwritten(fieldId, val) {
+    switch (fieldId) {
+        case 'CaseType_Id':
+            return IsWillBeOverwrittenByValue('#divCaseType', '#case__CaseType_Id', val);
+            break;
+        case 'Category_Id':
+            return IsWillBeOverwrittenByValue('#case__Category_Id', '#case__Category_Id', val);
+            break;
+        case 'ReportedBy':
+            return IsWillBeOverwrittenByValue('#case__ReportedBy', '#case__ReportedBy', val);
+            break;
+        case 'Department_Id':
+            return IsWillBeOverwrittenByValue('#case__Department_Id', '#case__Department_Id', val);
+            break;
+        case 'NoMailToNotifier':
+            return false;
+            break;
+        case 'ProductArea_Id':
+            return IsWillBeOverwrittenByValue('#divProductArea', '#case__ProductArea_Id', val);
+            break;
+        case 'Caption':
+            return IsWillBeOverwrittenByValue('#case__Caption', '#case__Caption', val);
+            break;
+        case 'Description':
+            return IsWillBeOverwrittenByValue('#case__Description', '#case__Description', val);
+            break;
+        case 'Miscellaneous':
+            return IsWillBeOverwrittenByValue('#case__Miscellaneous', '#case__Miscellaneous', val);
+            break;
+        case 'CaseWorkingGroup_Id':
+            return IsWillBeOverwrittenByValue('#case__WorkingGroup_Id', '#case__WorkingGroup_Id', val);
+            break;
+        case 'PerformerUser_Id':
+            return IsWillBeOverwrittenByValue('#case__Performer_User_Id', '#case__Performer_User_Id', val);
+            break;
+        case 'Priority_Id':
+            return IsWillBeOverwrittenByValue('#case__Priority_Id', '#case__Priority_Id', val);
+            break;
+        case 'Project_Id':
+            return IsWillBeOverwrittenByValue('#case__Project_Id', '#case__Project_Id', val);
+            break;
+        case 'Text_External':
+            return IsWillBeOverwrittenByValue("#CaseLog_TextExternal", "#CaseLog_TextExternal", val);
+            break;
+        case 'Text_Internal':
+            return IsWillBeOverwrittenByValue("#CaseLog_TextInternal", "#CaseLog_TextInternal", val);
+            break;
+        case 'FinishingCause_Id':
+            return IsWillBeOverwrittenByValue('#divFinishingType', "#CaseLog_FinishingType", val);
+            break;
+    }
+    return false;
+}
+
+
+
+var overwriteWarning = {
+    dlg: null,
+    caseTemplateData: null,
+    show: function (data) {
+        var me = window.overwriteWarning;
+        me.caseTemplateData = data;
+        if (me.dlg == null) {
+            me.dlg = $('#overwriteDlg')
+            $(me.dlg).find('button.btn-ok').on('click', function() {
+                me.dlg.modal('hide');
+                window.ApplyTemplate(me.caseTemplateData, true);
+            });
+            $(me.dlg).find('button.btn-cancel').on('click', function () {
+                me.dlg.modal('hide');
+                window.ApplyTemplate(me.caseTemplateData);
+            });
+        }
+
+        me.dlg.modal({
+            "backdrop": "static",
+            "keyboard": true,
+            "show": true
+        });
+    }
+};
+
+
+
+function ApplyTemplate(data, doOverwrite) {
+    var cfg = { doOverwrite: doOverwrite };
+    for (var fieldId in data) {
+        var val = data[fieldId];
+        var el;
+        if (val != null && val !== '') {
+            switch (fieldId) {
+            case 'CaseType_Id':
+                SetValueToBtnGroup('#divCaseType', "#divBreadcrumbs_CaseType", "#case__CaseType_Id", val, doOverwrite);
+                break;
+            case 'Category_Id':
+                el = $('#case__Category_Id');
+                SetValueIfElVisible(el, val, cfg);
+                break;
+            case 'ReportedBy':
+                el = $('#case__ReportedBy');
+                SetValueIfElVisible(el, val, cfg);
+                break;
+            case 'Department_Id':
+                el = $('#case__Department_Id');
+                SetValueIfElVisible(el, val, cfg);
+                break;
+            case 'NoMailToNotifier':
+                el = $("#CaseMailSetting_DontSendMailToNotifier");
+                SetCheckboxValueIfElVisible(el, val);
+                break;
+            case 'ProductArea_Id':
+                SetValueToBtnGroup('#divProductArea', "#divBreadcrumbs_ProductArea", "#case__ProductArea_Id", val, doOverwrite);
+                break;
+            case 'Caption':
+                el = $("#case__Caption");
+                SetValueIfElVisible(el, val, cfg);
+                break;
+            case 'Description':
+                el = $("#case__Description");
+                SetValueIfElVisible(el, val, cfg);
+                break;
+            case 'Miscellaneous':
+                el = $("#case__Miscellaneous");
+                SetValueIfElVisible(el, val, cfg);
+                break;
+            case 'CaseWorkingGroup_Id':
+                el = $("#case__WorkingGroup_Id");
+                cfg['doNotTriggerEvent'] = true;
+                SetValueIfElVisible(el, val, cfg);
+                break;
+            case 'PerformerUser_Id':
+                el = $('#case__Performer_User_Id');
+                SetValueIfElVisible(el, val, cfg);
+                break;
+            case 'Priority_Id':
+                el = $("#case__Priority_Id");
+                cfg['doNotTriggerEvent'] = true;
+                SetValueIfElVisible(el, val, cfg);
+                break;
+            case 'Project_Id':
+                el = $("#case__Project_Id");
+                SetValueIfElVisible(el, val, cfg);
+                break;
+            case 'Text_External':
+                el = $("#CaseLog_TextExternal");
+                SetValueIfElVisible(el, val, cfg);
+                break;
+            case 'Text_Internal':
+                el = $("#CaseLog_TextInternal");
+                SetValueIfElVisible(el, val, cfg);
+                break;
+            case 'FinishingCause_Id':
+                SetValueToBtnGroup('#divFinishingType', "#divBreadcrumbs_FinishingType", "#CaseLog_FinishingType", val, doOverwrite);
+                break;
+            }
+        }
+    }
+}
+
+function IsValueApplicableFor(templateFieldId, val) {
+    if (val == null || val === "") {
+        return false;
+    }
+
+    switch (templateFieldId) {
+        case 'CaseType_Id':
+            return $('#divCaseType').is(":visible") && $('#divCaseType').find('a[value="' + val + '"]').length != 0;
+            break;
+        case 'Category_Id':
+            return $('#case__Category_Id').is(":visible");
+            break;
+        case 'ReportedBy':
+            return $('#case__ReportedBy').is(":visible");
+            break;
+        case 'Department_Id':
+            return $('#case__Department_Id');
+            break;
+        case 'NoMailToNotifier':
+            return true;
+            break;
+        case 'ProductArea_Id':
+            return $('#divProductArea').is(':visible') && $('#divProductArea').find('a[value="' + val + '"]').length != 0;
+            break;
+        case 'Caption':
+            return $("#case__Caption").is(':visible');
+            break;
+        case 'Description':
+            return $("#case__Description").is(':visible');
+            break;
+        case 'Miscellaneous':
+            return $("#case__Miscellaneous").is(':visible');
+            break;
+        case 'CaseWorkingGroup_Id':
+            return $("#case__WorkingGroup_Id").is(':visible');
+            break;
+        case 'PerformerUser_Id':
+            return $('#case__Performer_User_Id').is(':visible');
+            break;
+        case 'Priority_Id':
+            return $("#case__Priority_Id").is(':visible');
+            break;
+        case 'Project_Id':
+            return $("#case__Project_Id").is(':visible');
+            break;
+        case 'Text_External':
+            return $("#CaseLog_TextExternal").is(':visible');
+            break;
+        case 'Text_Internal':
+            return $("#CaseLog_TextInternal").is(':visible');
+            break;
+        case 'FinishingCause_Id':
+            return $("#divFinishingType").is(':visible') && $("#divFinishingType").find('a[value="' + val + '"]');
+            break;
+        }
+    return false;
+}
+
+
 function LoadTemplate(id) {
     $.post('/CaseSolution/GetTemplate?id=',
-        {'id': id},
-        function (resp) {
-            if (!resp) {
+        { 'id': id },
+        function (caseTemplate) {
+            var showOverwriteWarning = false;
+            if (!caseTemplate) {
                 return;
             }
-            for (var fieldId in resp) {
-                var val = resp[fieldId];
-                var el;
-                if (val != null && val !== '') {
-                    switch (fieldId) {
-                        case 'CaseType_Id':
-                            el = $('#divCaseType').find('a[value="' + val + '"]');
-                            if (el) {
-                                $("#divBreadcrumbs_CaseType").text(getBreadcrumbs(el));
-                                $("#case__CaseType_Id").val(val).trigger('change');
-                            }
-                            break;
-                        case 'Category_Id':
-                            el = $('#case__Category_Id');
-                            SetValueIfElVisible(el, val);
-                            break;
-                        case 'ReportedBy':
-                            el = $('#case__ReportedBy');
-                            SetValueIfElVisible(el, val);
-                            break;
-                        case 'Department_Id':
-                            el = $('#case__Department_Id');
-                            SetValueIfElVisible(el, val);
-                            break;
-                        case 'NoMailToNotifier':
-                            el = $("#CaseMailSetting_DontSendMailToNotifier");
-                            SetCheckboxValueIfElVisible(el, val);
-                            break;
-                        case 'ProductArea_Id':
-                            el = $('#divProductArea').find('a[value="' + val + '"]');
-                            if (el) {
-                                $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(el));
-                                $("#case__ProductArea_Id").val(val).trigger('change');
-                            }
-                            break;
-                        case 'Caption':
-                            el = $("#case__Caption");
-                            SetValueIfElVisible(el, val);
-                            break;
-                        case 'Description':
-                            el = $("#case__Description");
-                            SetValueIfElVisible(el, val);
-                            break;
-                        case 'Miscellaneous':
-                            el = $("#case__Miscellaneous");
-                            SetValueIfElVisible(el, val);
-                            break;
-                        case 'CaseWorkingGroup_Id':
-                            el = $("#case__WorkingGroup_Id");
-                            SetValueIfElVisible(el, val, true);
-                            break;
-                        case 'PerformerUser_Id':
-                            el = $('#case__Performer_User_Id');
-                            SetValueIfElVisible(el, val);
-                            break;
-                        case 'Priority_Id':
-                            el = $("#case__Priority_Id");
-                            SetValueIfElVisible(el, val, true);
-                            break;
-                        case 'Project_Id':
-                            el = $("#case__Project_Id");
-                            SetValueIfElVisible(el, val);
-                            break;
-                        case 'Text_External':
-                            el = $("#CaseLog_TextExternal");
-                            SetValueIfElVisible(el, val);
-                            break;
-                        case 'Text_Internal':
-                            el = $("#CaseLog_TextInternal");
-                            SetValueIfElVisible(el, val);
-                            break;
-                        case 'FinishingCause_Id':
-                            el = $("#divFinishingType").find('a[value="' + val + '"]');
-                            if (el) {
-                                $("#divBreadcrumbs_FinishingType").text(getBreadcrumbs(el));
-                                $("#CaseLog_FinishingType").val(val).trigger('change');
-                            }
-                            break;
-                    }
+
+            for (var field in caseTemplate) {
+                if (window.IsValueApplicableFor(field, caseTemplate[field]) && window.IsWillBeOverwritten(field, caseTemplate[field])) {
+                    showOverwriteWarning = true;
+                    break;
                 }
+            }
+
+            if (showOverwriteWarning) {
+                window.overwriteWarning.show(caseTemplate);
+            } else {
+                window.ApplyTemplate(caseTemplate);
             }
         }
     );
