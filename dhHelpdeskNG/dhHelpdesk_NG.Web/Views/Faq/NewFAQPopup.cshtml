@@ -2,8 +2,19 @@
 @using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Models.Faq.Output
 @model DH.Helpdesk.Web.Models.Faq.Output.NewFaqModel
-           
+  
+@Scripts.Render("~/bundles/dhhelpdesk")
+
+
+<link href="/Content/js/jquery.plupload.queue/css/jquery.plupload.queue.css" rel="stylesheet"/>
+<script src="/Content/js/plupload.full.min.js"></script>               
+<script src="/Content/js/jquery.plupload.queue/jquery.plupload.queue.min.js"></script>               
+
+
+
 <script type="text/javascript">
+    var _pluploadFAQ;
+
     function afterSuccessSubmit(result, state, response) {
         window.returnValue = result;
         try {
@@ -13,7 +24,120 @@
         window.close();
         return false;
     }
+
+    $(document).ready(function () {
+        FAQInitForm();        
+    });
+
+    function FAQInitForm() {
+        
+        var getFAQFiles = function () {
+            $.get('/FAQ/Files', { faqId: $('#FAQKey').val(), now: Date.now() }, function (data) {
+                $('#divFAQFiles').html(data);
+                bindDeleteFAQFileBehaviorToDeleteButtons();
+            });
+        };
+
+        $('#upload_FAQfiles_popup').on('hide', function () {
+
+            if (_pluploadFAQ != undefined) {
+                if (_pluploadFAQ.pluploadQueue().files.length > 0) {
+                    if (_pluploadFAQ.pluploadQueue().state == plupload.UPLOADING) {
+                        _pluploadFAQ.pluploadQueue().stop();
+                        for (var i = 0; i < _pluploadFAQ.pluploadQueue().files.length; i++) {
+                            _pluploadFAQ.pluploadQueue().removeFile(_pluploadFAQ.pluploadQueue().files[i]);
+                        }
+                        _pluploadFAQ.pluploadQueue().refresh();
+                    }
+                }
+            }
+        });
+
+        //PluploadTranslation($('#CurLanguageId').val());
+
+        $('#upload_FAQfiles_popup').on('show', function () {
+            
+            _pluploadFAQ = $('#FAQfile_uploader').pluploadQueue({
+                runtimes: 'html5,html4',
+                url: '/FAQ/UploadFile',
+
+                multipart_params: { faqId: $('#FAQKey').val() },
+                filters: {
+                    max_file_size: '10mb',
+                },
+                buttons: { browse: true, start: true, stop: true, cancel: true },
+                preinit: {
+                    Init: function (up, info) {
+                        //console.log('1:init', info);                    
+                    },
+
+
+                    UploadFile: function (up, file) {
+
+                        var strFiles = $('#FAQFileNames').val();
+                        if (strFiles != undefined) {
+                            var allFileNames = strFiles.split('|');
+
+                            var fn = file.name;
+
+                            for (var i = 0; i < allFileNames.length; i++) {
+                                if (fn == allFileNames[i]) {
+                                    var findName = false;
+                                    for (var j = 1; j < 100 && !findName; j++) {
+                                        findName = true;
+                                        for (var k = 0; k < allFileNames.length; k++) {
+                                            if (j.toString() + '-' + fn == allFileNames[k])
+                                                findName = false;
+                                        }
+
+                                        if (findName) {
+                                            var d = getNow().toString();
+                                            file.name = d + '-' + fn;
+                                        }
+                                    } // for j
+                                }
+                            } // for i
+                        }
+                        $('#FAQFileNames').val(strFiles + "|" + file.name);
+                    },
+
+                    UploadComplete: function (up, file) {
+
+                        //console.log('3:uploaded complete',file.name);
+                        //plupload_add
+                        $(".plupload_buttons").css("display", "inline");
+                        $(".plupload_upload_status").css("display", "inline");
+                        up.refresh();
+                    }
+                },
+                init: {
+                    FileUploaded: function () {
+                        getFAQFiles();
+                    },
+
+                    Error: function (uploader, e) {
+                        if (e.status != 409) {
+                            return;
+                        }
+                    },
+
+                    StateChanged: function (uploader) {
+                        if (uploader.state != plupload.STOPPED) {
+                            return;
+                        }
+                        uploader.refresh();
+                    }
+                }
+            });
+            
+        });
+        
+        bindDeleteFAQFileBehaviorToDeleteButtons();
+
+    }
 </script>
+
+@Html.Partial("_Plupload")
 
 @{
     Layout = "../Shared/_PopupLayout.cshtml";
