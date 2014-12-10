@@ -1,6 +1,5 @@
 ﻿namespace DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -41,12 +40,23 @@
             List<AccountOverview> accountOverviews,
             List<AccountFieldsSettingsOverviewWithActivity> settings)
         {
+            var grids = new List<GridModel>();
             List<IGrouping<int, AccountOverview>> groupedModels = accountOverviews.GroupBy(x => x.ActivityId).ToList();
 
-            throw new NotImplementedException();
+            foreach (IGrouping<int, AccountOverview> model in groupedModels)
+            {
+                AccountFieldsSettingsOverviewWithActivity setting = settings.Single(x => x.ActivityId == model.Key);
+
+                List<RowModel> overviews = model.Select(m => CreateOverview(m, setting.AccountFieldsSettingsOverview)).ToList();
+                List<GridColumnHeaderModel> headers = CreateHeaders(setting.AccountFieldsSettingsOverview);
+
+                grids.Add(new GridModel(headers, overviews, model.Key, new SortFieldModel()));
+            }
+
+            return grids;
         }
 
-        private static RowModel Orderer(AccountOverview overview, AccountFieldsSettingsOverview settings)
+        private static RowModel CreateOverview(AccountOverview overview, AccountFieldsSettingsOverview settings)
         {
             var values = new List<NewGridRowCellValueModel>();
 
@@ -332,6 +342,202 @@
                values);
 
             return new RowModel(overview.Id, values);
+        }
+
+        private static List<GridColumnHeaderModel> CreateHeaders(AccountFieldsSettingsOverview settings)
+        {
+            var headers = new List<GridColumnHeaderModel>();
+
+            CreateHeaderIfNeeded(settings.Orderer.Id, BusinessData.Enums.Accounts.Fields.OrdererFields.Id, headers);
+            CreateHeaderIfNeeded(
+                settings.Orderer.FirstName,
+                BusinessData.Enums.Accounts.Fields.OrdererFields.FirstName,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.Orderer.LastName,
+                BusinessData.Enums.Accounts.Fields.OrdererFields.LastName,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.Orderer.Phone,
+                BusinessData.Enums.Accounts.Fields.OrdererFields.Phone,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.Orderer.Email,
+                BusinessData.Enums.Accounts.Fields.OrdererFields.Email,
+                headers);
+
+            CreateHeaderIfNeeded(settings.User.Ids, BusinessData.Enums.Accounts.Fields.UserFields.Ids, headers);
+            CreateHeaderIfNeeded(
+                settings.User.PersonalIdentityNumber,
+                BusinessData.Enums.Accounts.Fields.UserFields.PersonalIdentityNumber,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.User.FirstName,
+                BusinessData.Enums.Accounts.Fields.UserFields.FirstName,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.User.Initials,
+                BusinessData.Enums.Accounts.Fields.UserFields.Initials,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.User.LastName,
+                BusinessData.Enums.Accounts.Fields.UserFields.LastName,
+                headers);
+            CreateHeaderIfNeeded(settings.User.Phone, BusinessData.Enums.Accounts.Fields.UserFields.Phone, headers);
+            CreateHeaderIfNeeded(
+                settings.User.Extension,
+                BusinessData.Enums.Accounts.Fields.UserFields.Extension,
+                headers);
+            CreateHeaderIfNeeded(settings.User.EMail, BusinessData.Enums.Accounts.Fields.UserFields.EMail, headers);
+            CreateHeaderIfNeeded(settings.User.Title, BusinessData.Enums.Accounts.Fields.UserFields.Title, headers);
+            CreateHeaderIfNeeded(
+                settings.User.Location,
+                BusinessData.Enums.Accounts.Fields.UserFields.Location,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.User.PostalAddress,
+                BusinessData.Enums.Accounts.Fields.UserFields.PostalAddress,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.User.RoomNumber,
+                BusinessData.Enums.Accounts.Fields.UserFields.RoomNumber,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.User.FirstName,
+                BusinessData.Enums.Accounts.Fields.UserFields.FirstName,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.User.FirstName,
+                BusinessData.Enums.Accounts.Fields.UserFields.FirstName,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.User.EmploymentType,
+                BusinessData.Enums.Accounts.Fields.UserFields.EmploymentType,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.User.DepartmentId,
+                BusinessData.Enums.Accounts.Fields.UserFields.DepartmentId,
+                headers);
+            CreateHeaderIfNeeded(settings.User.UnitId, BusinessData.Enums.Accounts.Fields.UserFields.UnitId, headers);
+            CreateHeaderIfNeeded(
+                settings.User.DepartmentId2,
+                BusinessData.Enums.Accounts.Fields.UserFields.DepartmentId2,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.User.DepartmentId2,
+                BusinessData.Enums.Accounts.Fields.UserFields.DepartmentId2,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.User.Responsibility,
+                BusinessData.Enums.Accounts.Fields.UserFields.Responsibility,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.User.Activity,
+                BusinessData.Enums.Accounts.Fields.UserFields.Activity,
+                headers);
+            CreateHeaderIfNeeded(settings.User.Manager, BusinessData.Enums.Accounts.Fields.UserFields.Manager, headers);
+            CreateHeaderIfNeeded(
+                settings.User.ReferenceNumber,
+                BusinessData.Enums.Accounts.Fields.UserFields.ReferenceNumber,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.AccountInformation.StartedDate,
+                BusinessData.Enums.Accounts.Fields.AccountInformationFields.StartedDate,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.AccountInformation.FinishDate,
+                BusinessData.Enums.Accounts.Fields.AccountInformationFields.FinishDate,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.AccountInformation.EMailTypeId,
+                BusinessData.Enums.Accounts.Fields.AccountInformationFields.EMailTypeId,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.AccountInformation.HomeDirectory,
+                BusinessData.Enums.Accounts.Fields.AccountInformationFields.HomeDirectory,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.AccountInformation.Profile,
+                BusinessData.Enums.Accounts.Fields.AccountInformationFields.Profile,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.AccountInformation.InventoryNumber,
+                BusinessData.Enums.Accounts.Fields.AccountInformationFields.InventoryNumber,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.AccountInformation.AccountTypeId,
+                BusinessData.Enums.Accounts.Fields.AccountInformationFields.AccountTypeId,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.AccountInformation.AccountType3,
+                BusinessData.Enums.Accounts.Fields.AccountInformationFields.AccountType3,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.AccountInformation.AccountType2,
+                BusinessData.Enums.Accounts.Fields.AccountInformationFields.AccountType2,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.AccountInformation.AccountType3,
+                BusinessData.Enums.Accounts.Fields.AccountInformationFields.AccountType3,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.AccountInformation.AccountType4,
+                BusinessData.Enums.Accounts.Fields.AccountInformationFields.AccountType4,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.AccountInformation.AccountType5,
+                BusinessData.Enums.Accounts.Fields.AccountInformationFields.AccountType5,
+                headers);
+
+            CreateHeaderIfNeeded(settings.Contact.Ids, BusinessData.Enums.Accounts.Fields.ContactFields.Id, headers);
+            CreateHeaderIfNeeded(settings.Contact.Name, BusinessData.Enums.Accounts.Fields.ContactFields.Name, headers);
+            CreateHeaderIfNeeded(
+                settings.Contact.Phone,
+                BusinessData.Enums.Accounts.Fields.ContactFields.Phone,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.Contact.Email,
+                BusinessData.Enums.Accounts.Fields.ContactFields.Email,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.DeliveryInformation.Name,
+                BusinessData.Enums.Accounts.Fields.DeliveryInformationFields.Name,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.DeliveryInformation.Phone,
+                BusinessData.Enums.Accounts.Fields.DeliveryInformationFields.Phone,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.DeliveryInformation.Address,
+                BusinessData.Enums.Accounts.Fields.DeliveryInformationFields.Address,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.DeliveryInformation.PostalAddress,
+                BusinessData.Enums.Accounts.Fields.DeliveryInformationFields.PostalAddress,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.Program.Programs,
+                BusinessData.Enums.Accounts.Fields.ProgramFields.Programs,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.Program.InfoProduct,
+                BusinessData.Enums.Accounts.Fields.ProgramFields.InfoProduct,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.Other.CaseNumber,
+                BusinessData.Enums.Accounts.Fields.OtherFields.CaseNumber,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.Other.FileName,
+                BusinessData.Enums.Accounts.Fields.OtherFields.FileName,
+                headers);
+            CreateHeaderIfNeeded(settings.Other.Info, BusinessData.Enums.Accounts.Fields.OtherFields.Info, headers);
+
+            return headers;
         }
 
         private static string GetStringFromList<T>(IEnumerable<T> values)

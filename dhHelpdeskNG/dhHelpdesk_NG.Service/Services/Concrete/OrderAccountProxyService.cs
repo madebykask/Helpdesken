@@ -35,14 +35,14 @@ namespace DH.Helpdesk.Services.Services.Concrete
             this.accountRestorer = accountRestorer;
         }
 
-        public AccountOverviewResponse GetOverviewResponse(AccountFilter filter, OperationContext context)
+        public List<AccountOverview> GetOverviews(AccountFilter filter, OperationContext context)
         {
-            List<AccountOverview> overviews = this.orderAccountService.GetOverviews(filter, context);
-            List<ItemOverview> activities = this.orderAccountService.GetAccountActivivties();
+            return this.orderAccountService.GetOverviews(filter, context);
+        }
 
-            var viewModel = new AccountOverviewResponse(overviews, activities);
-
-            return viewModel;
+        public List<ItemOverview> GetAccountActivities()
+        {
+            return this.orderAccountService.GetAccountActivivties();
         }
 
         public AccountForEdit Get(int id)

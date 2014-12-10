@@ -37,7 +37,7 @@ namespace DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order
         }
 
         public static OrdersIndexModel BuildViewModel(
-            int activityType,
+            int? activityType,
             List<ItemOverview> activityTypes,
             List<ItemOverview> users,
             Filter filter)
