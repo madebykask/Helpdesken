@@ -7,6 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 using System.Linq;
+using System.Collections.Generic;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -14,6 +15,7 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
+    
     
 
     #region CHECKLISTS
@@ -23,9 +25,13 @@ namespace DH.Helpdesk.Dal.Repositories
     /// </summary>
     public interface IChecklistsRepository : INewRepository
     {
+
         void SaveCheckList(CheckListBM checklist);
 
+        List<CheckListBM> GetChecklists(int customerId);
+        
         CheckListBM GetChecklist(int checkListId);
+
     }
 
     /// <summary>
@@ -53,6 +59,14 @@ namespace DH.Helpdesk.Dal.Repositories
                                    checkListEntity.WorkingGroup_Id, checkListEntity.ChecklistName,
                                    checkListEntity.ChangedDate,
                                    checkListEntity.CreatedDate);
+        }
+
+        public List<CheckListBM> GetChecklists(int customerId)
+        {           
+            var checkListEntitys =
+               this.DbContext.Checklists.Where(c => c.Customer_Id == customerId).ToList();
+            
+            return checkListEntitys.Select(c => new CheckListBM(c.Customer_Id,c.WorkingGroup_Id, c.ChecklistName ,c.ChangedDate, c.CreatedDate)).ToList();          
         }
 
         public void SaveCheckList(CheckListBM checklist)

@@ -15,7 +15,7 @@ namespace DH.Helpdesk.Services.Services
     {
         IDictionary<string, string> Validate(Checklists checklistToValidate);
 
-        IList<CheckListBM> GetChecklists(int customerId);
+        List<CheckListBM> GetChecklists(int customerId);
 
         CheckListBM GetChecklist(int checkListId);
 
@@ -53,11 +53,11 @@ namespace DH.Helpdesk.Services.Services
             return errors;
         }
 
-        public IList<CheckListBM> GetChecklists(int customerId)
+        public List<CheckListBM> GetChecklists(int customerId)
         {
             //var query = this._checklistsRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.ChecklistName).ToList();
             //return CheckListsMapper.MapToOverviews(query);
-            return null;
+            return this._checkListsRepository.GetChecklists(customerId);           
         }
        
         public CheckListBM GetChecklist(int checkListId)

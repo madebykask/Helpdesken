@@ -211,7 +211,7 @@ namespace DH.Helpdesk.Web.Controllers
         private CheckListIndexViewModel CreateCheckListInputModel()
         {
                         
-            //var clistsName = this._CheckListsService.GetChecklists(SessionFacade.CurrentCustomer.Id).ToList();
+            var clistsName = this._CheckListsService.GetChecklists(SessionFacade.CurrentCustomer.Id).ToList();
             //var checklistDates = this._CheckListService.GetChecklistDates(SessionFacade.CurrentCustomer.Id).ToList();
             var workingGroups = this._WorkingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id);
 
@@ -234,6 +234,13 @@ namespace DH.Helpdesk.Web.Controllers
                           new  CheckListserviceModel()                       
                       )).ToList();
             */
+            var checkListsNames = clistsName.Select(x => new SelectListItem
+                                    {
+                                        Text = x.ChecklistName,
+                                        Value = x.Id.ToString()
+                                    }).ToList();
+            checkListsNames.Insert(0, new SelectListItem { Text = "", Value = "0", Selected = true });
+
             var model = new CheckListIndexViewModel
             {
 
@@ -245,11 +252,8 @@ namespace DH.Helpdesk.Web.Controllers
 
                 //CheckListsList = null,
 
-                //ListOfExistances = clistsName.Select(x => new SelectListItem
-                //{
-                //    Text = x.ChecklistName,
-                //    Value = x.Id.ToString()
-                //}).ToList(),
+                ListOfExistances = checkListsNames,
+                 
 
                 From = DateTime.Now,
                 To = DateTime.Now,                
