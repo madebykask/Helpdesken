@@ -7,6 +7,7 @@
     using DH.Helpdesk.BusinessData.Models.Accounts.Read.Edit;
     using DH.Helpdesk.BusinessData.Models.Accounts.Read.Overview;
     using DH.Helpdesk.BusinessData.Models.Accounts.Write;
+    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Common.Extensions.Boolean;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.NewInfrastructure.Concrete;
@@ -119,6 +120,28 @@
                 accountRepository.DeleteById(id);
 
                 uof.Save();
+            }
+        }
+
+        public List<ItemOverview> GetAccountActivivties()
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var accountActivityRepository = uow.GetRepository<AccountActivity>();
+
+                List<ItemOverview> overviews = accountActivityRepository.GetAll().MapAccountActivitiesToItemOverview();
+                return overviews;
+            }
+        }
+
+        public List<int> GetAccountActivivtieIds()
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var accountActivityRepository = uow.GetRepository<AccountActivity>();
+
+                List<int> overviews = accountActivityRepository.GetAll().Select(x => x.Id).ToList();
+                return overviews;
             }
         }
 

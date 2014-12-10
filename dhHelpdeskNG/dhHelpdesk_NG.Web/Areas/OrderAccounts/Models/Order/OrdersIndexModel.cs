@@ -10,7 +10,7 @@ namespace DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order
     public class OrdersIndexModel : BaseIndexModel
     {
         private OrdersIndexModel(
-            int activityType,
+            int? activityType,
             List<ItemOverview> activityTypes,
             List<ItemOverview> users,
             Filter filter)

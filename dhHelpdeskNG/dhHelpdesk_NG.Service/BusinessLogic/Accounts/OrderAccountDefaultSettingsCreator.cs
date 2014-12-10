@@ -45,6 +45,7 @@
                 CreateMissingProgramFieldSettings(settingNames, missing);
                 CreateMissingOtherFieldSettings(settingNames, missing);
                 CreateMissingDeliveryInformationFieldSettings(settingNames, missing);
+                CreateMissingContactFieldSettings(settingNames, missing);
 
                 foreach (var fieldName in missing)
                 {
@@ -54,6 +55,16 @@
 
                 uow.Save();
             }
+        }
+
+        private static void CreateMissingContactFieldSettings(
+            List<string> settingNames,
+            List<string> missing)
+        {
+            CollectMissingField(ContactFields.Id, settingNames, missing);
+            CollectMissingField(ContactFields.Name, settingNames, missing);
+            CollectMissingField(ContactFields.Phone, settingNames, missing);
+            CollectMissingField(ContactFields.Email, settingNames, missing);
         }
 
         private static void CreateMissingDeliveryInformationFieldSettings(

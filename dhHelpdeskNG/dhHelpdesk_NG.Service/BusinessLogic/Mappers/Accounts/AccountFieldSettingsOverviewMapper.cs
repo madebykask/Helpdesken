@@ -31,6 +31,44 @@
             return Map(settingCollection);
         }
 
+        public static List<AccountFieldsSettingsOverviewWithActivity> ExtractOrdersFieldSettingsOverviews(
+            this IQueryable<AccountFieldSettings> query)
+        {
+            var overviews = new List<AccountFieldsSettingsOverviewWithActivity>();
+
+            var anonymus =
+                query.Select(
+                    s =>
+                    new
+                        {
+                            s.AccountActivity_Id,
+                            s.Label,
+                            s.AccountField,
+                            s.ShowInList,
+                        }).ToList().GroupBy(x => x.AccountActivity_Id);
+
+
+            foreach (var item in anonymus)
+            {
+                List<AccountSettingsMapperDataOverview> mapperData =
+                item.Select(
+                    s =>
+                    new AccountSettingsMapperDataOverview
+                    {
+                        Caption = s.Label,
+                        FieldName = s.AccountField,
+                        ShowInList = s.ShowInList,
+                    }).ToList();
+
+                var settingCollection = new NamedObjectCollection<AccountSettingsMapperDataOverview>(mapperData);
+                AccountFieldsSettingsOverview overview = Map(settingCollection);
+
+                overviews.Add(new AccountFieldsSettingsOverviewWithActivity(item.Key, overview));
+            }
+
+            return overviews;
+        }
+
         private static AccountFieldsSettingsOverview Map(
             NamedObjectCollection<AccountSettingsMapperDataOverview> settingCollection)
         {

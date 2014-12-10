@@ -602,6 +602,12 @@
     <Compile Include="Areas\Licenses\Models\Vendors\VendorsContentModel.cs" />
     <Compile Include="Areas\Licenses\Models\Vendors\VendorsFilterModel.cs" />
     <Compile Include="Areas\Licenses\Models\Vendors\VendorsIndexModel.cs" />
+    <Compile Include="Areas\OrderAccounts\Controllers\OrderController.cs" />
+    <Compile Include="Areas\OrderAccounts\Controllers\SettingsController.cs" />
+    <Compile Include="Areas\OrderAccounts\Infrastructure\BusinessModelMappers\Concrete\SettingsDtoMapper.cs" />
+    <Compile Include="Areas\OrderAccounts\Infrastructure\BusinessModelMappers\ISettingsDtoMapper.cs" />
+    <Compile Include="Areas\OrderAccounts\Infrastructure\ModelMappers\ISettingsViewModelMapper.cs" />
+    <Compile Include="Areas\OrderAccounts\Infrastructure\ModelMappers\Concrete\SettingsViewModelMapper.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Index\BaseIndexModel.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Index\IndexModelTypes.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Order\Edit\AccountInformation.cs" />
@@ -2687,7 +2693,7 @@
     <Content Include="Areas\Admin\Views\Users\_Appearance.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\OrderAccounts\Controllers\" />
+    <Folder Include="Areas\Inventory\Infrastucture\" />
     <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
   </ItemGroup>
   <ItemGroup>

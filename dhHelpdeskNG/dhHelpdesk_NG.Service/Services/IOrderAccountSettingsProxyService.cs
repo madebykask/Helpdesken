@@ -3,15 +3,15 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models;
-    using DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Read.Edit;
     using DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Read.ModelEdit;
     using DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Read.Overview;
     using DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Read.Processing;
     using DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Write;
+    using DH.Helpdesk.Services.Response.Account;
 
-    public interface IOrderAccountSettingsService
+    public interface IOrderAccountSettingsProxyService
     {
-        AccountFieldsSettingsForEdit GetFieldsSettingsForEdit(int accountActivityId, OperationContext context);
+        AccountFieldsSettingsForEditResponse GetFieldsSettingsForEditResponse(int accountActivityId, OperationContext context);
 
         AccountFieldsSettingsForModelEdit GetFieldsSettingsForModelEdit(int accountActivityId, OperationContext context);
 

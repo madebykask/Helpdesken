@@ -7,13 +7,13 @@ namespace DH.Helpdesk.Services.Services.Concrete
     using DH.Helpdesk.BusinessData.Models.Accounts.Read.Edit;
     using DH.Helpdesk.BusinessData.Models.Accounts.Read.Overview;
     using DH.Helpdesk.BusinessData.Models.Accounts.Write;
+    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Account;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Accounts;
     using DH.Helpdesk.Services.Requests.Account;
+    using DH.Helpdesk.Services.Response.Account;
 
-    using Ninject;
-
-    public class OrderAccountProxyService : IOrderAccountService
+    public class OrderAccountProxyService : IOrderAccountProxyService
     {
         private readonly IOrderAccountService orderAccountService;
 
@@ -24,7 +24,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
         private readonly IAccountRestorer accountRestorer;
 
         public OrderAccountProxyService(
-            [Named("OrderAccountService")] IOrderAccountService orderAccountService,
+            IOrderAccountService orderAccountService,
             IOrderAccountSettingsService orderAccountSettingsService,
             IAccountValidator accountValidator,
             IAccountRestorer accountRestorer)
@@ -35,9 +35,14 @@ namespace DH.Helpdesk.Services.Services.Concrete
             this.accountRestorer = accountRestorer;
         }
 
-        public List<AccountOverview> GetOverviews(AccountFilter filter, OperationContext context)
+        public AccountOverviewResponse GetOverviewResponse(AccountFilter filter, OperationContext context)
         {
-            return this.orderAccountService.GetOverviews(filter, context);
+            List<AccountOverview> overviews = this.orderAccountService.GetOverviews(filter, context);
+            List<ItemOverview> activities = this.orderAccountService.GetAccountActivivties();
+
+            var viewModel = new AccountOverviewResponse(overviews, activities);
+
+            return viewModel;
         }
 
         public AccountForEdit Get(int id)

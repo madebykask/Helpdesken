@@ -1,5 +1,7 @@
 namespace DH.Helpdesk.Services.Services.Concrete
 {
+    using System.Collections.Generic;
+
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Read.Edit;
     using DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Read.ModelEdit;
@@ -65,6 +67,19 @@ namespace DH.Helpdesk.Services.Services.Concrete
             }
         }
 
+        public List<AccountFieldsSettingsOverviewWithActivity> GetFieldsSettingsOverviews(OperationContext context)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var fieldSettingsRep = uow.GetRepository<AccountFieldSettings>();
+
+                return
+                    fieldSettingsRep.GetAll()
+                        .GetByCustomer(context.CustomerId)
+                        .ExtractOrdersFieldSettingsOverviews();
+            }
+        }
+
         public AccountFieldsSettingsForProcessing GetFieldsSettingsForProcessing(
             int accountActivityId,
             OperationContext context)
@@ -81,7 +96,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
             }
         }
 
-        public void Update(AccountFieldsSettingsForUpdate dto, OperationContext context)
+      public void Update(AccountFieldsSettingsForUpdate dto, OperationContext context)
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {

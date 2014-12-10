@@ -7,7 +7,7 @@
 
     public abstract class BaseIndexModel
     {
-        protected BaseIndexModel(int activityType, List<ItemOverview> activityTypes)
+        protected BaseIndexModel(int? activityType, List<ItemOverview> activityTypes)
         {
             this.ActivityType = activityType;
             this.ActivityTypes = new SelectList(activityTypes, "Value", "Name");
@@ -15,7 +15,7 @@
 
         public abstract IndexModelTypes IndexModelType { get; }
 
-        public int ActivityType { get; set; }
+        public int? ActivityType { get; set; }
 
         public SelectList ActivityTypes { get; private set; }
     }

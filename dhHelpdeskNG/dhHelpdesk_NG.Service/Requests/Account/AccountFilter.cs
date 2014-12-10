@@ -1,7 +1,6 @@
 ﻿namespace DH.Helpdesk.Services.Requests.Account
 {
     using DH.Helpdesk.BusinessData.Enums.Accounts;
-    using DH.Helpdesk.BusinessData.Enums.Accounts.Fields;
 
     public class AccountFilter
     {

@@ -2,20 +2,20 @@
 {
     using System.Collections.Generic;
 
-    using DH.Helpdesk.BusinessData.Models.Accounts.Read.Overview;
+    using DH.Helpdesk.BusinessData.Models.Accounts.Read.Edit;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class AccountOverviewResponse
+    public class AccountForEditResponse
     {
-        public AccountOverviewResponse(List<AccountOverview> accountOverviews, List<ItemOverview> accountTypes)
+        public AccountForEditResponse(AccountForEdit accountForEdit, List<ItemOverview> accountTypes)
         {
-            this.AccountOverviews = accountOverviews;
+            this.AccountForEdit = accountForEdit;
             this.AccountTypes = accountTypes;
         }
 
         [NotNull]
-        public List<AccountOverview> AccountOverviews { get; set; }
+        public AccountForEdit AccountForEdit { get; set; }
 
         [NotNull]
         public List<ItemOverview> AccountTypes { get; set; }

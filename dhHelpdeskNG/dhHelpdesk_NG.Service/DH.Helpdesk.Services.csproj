@@ -101,6 +101,7 @@
     <Compile Include="BusinessLogic\BusinessModelValidators\Inventory\Concrete\PrinterValidator.cs" />
     <Compile Include="BusinessLogic\MailTools\TemplateFormatters\MailTemplateFormatterNew.cs" />
     <Compile Include="BusinessLogic\MapperData\Participant.cs" />
+    <Compile Include="BusinessLogic\Mappers\Accounts\AccountActivityMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Accounts\AccountFieldSettingsForEditMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Accounts\AccountForReadMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Accounts\AccountOverviewMapper.cs" />
@@ -223,6 +224,8 @@
     <Compile Include="Requests\Cases\CaseSettingsSolutionAggregate.cs" />
     <Compile Include="Requests\Changes\NewChangeRequest.cs" />
     <Compile Include="Requests\Changes\UpdateChangeRequest.cs" />
+    <Compile Include="Response\Account\AccountFieldsSettingsForEditResponse.cs" />
+    <Compile Include="Response\Account\AccountForEditResponse.cs" />
     <Compile Include="Response\Account\AccountOverviewResponse.cs" />
     <Compile Include="Response\Changes\FindChangeResponse.cs" />
     <Compile Include="Response\Changes\GetNewChangeEditDataResponse.cs" />
@@ -304,7 +307,9 @@
     <Compile Include="Services\Concrete\PlaceService.cs" />
     <Compile Include="Services\ICaseInvoiceSettingsService.cs" />
     <Compile Include="Services\ICaseSolutionSettingService.cs" />
+    <Compile Include="Services\IOrderAccountProxyService.cs" />
     <Compile Include="Services\IOrderAccountService.cs" />
+    <Compile Include="Services\IOrderAccountSettingsProxyService.cs" />
     <Compile Include="Services\IOrderAccountSettingsService.cs" />
     <Compile Include="Services\ISSOService.cs" />
     <Compile Include="Services\IActionSettingService.cs" />
