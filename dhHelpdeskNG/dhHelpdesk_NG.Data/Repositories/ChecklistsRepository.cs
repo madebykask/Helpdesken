@@ -64,7 +64,7 @@ namespace DH.Helpdesk.Dal.Repositories
         public List<CheckListBM> GetChecklists(int customerId)
         {           
             var checkListEntitys =
-               this.DbContext.Checklists.Where(c => c.Customer_Id == customerId).ToList();
+               this.DbContext.CheckLists.Where(c => c.Customer_Id == customerId).ToList();
             
             return checkListEntitys.Select(c => new CheckListBM(c.Customer_Id,c.WorkingGroup_Id, c.ChecklistName ,c.ChangedDate, c.CreatedDate)).ToList();          
         }
