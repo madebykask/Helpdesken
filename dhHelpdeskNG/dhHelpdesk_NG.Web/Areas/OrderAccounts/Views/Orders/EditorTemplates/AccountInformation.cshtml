@@ -23,7 +23,7 @@
                 @Html.EditorFor(m => m.HomeDirectory, "Fields/Flag")
                 @Html.EditorFor(m => m.Profile, "Fields/Flag")
                 @Html.EditorFor(m => m.AccountTypeId, "Fields/List", new { Source = Model.AccountTypes })
-                @Html.EditorFor(m => m.AccountType2, "Fields/MultiSelectList", new { Source = new MultiSelectList(Model.AccountTypes2, "Value", "Name", Model.AccountType2.Value) })
+                @Html.EditorFor(m => m.AccountType2, "Fields/MultiSelectList", new { Source = Model.AccountTypes2 })
                 @Html.EditorFor(m => m.AccountType3, "Fields/List", new { Source = Model.AccountTypes3 })
                 @Html.EditorFor(m => m.AccountType4, "Fields/List", new { Source = Model.AccountTypes4 })
                 @Html.EditorFor(m => m.AccountType5, "Fields/List", new { Source = Model.AccountTypes4 })

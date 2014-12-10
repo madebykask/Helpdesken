@@ -8,6 +8,7 @@
     using DH.Helpdesk.BusinessData.Models.Accounts.Write;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Services.Requests.Account;
+    using DH.Helpdesk.Services.Response.Account;
 
     public interface IOrderAccountProxyService
     {
@@ -16,6 +17,8 @@
         List<ItemOverview> GetAccountActivities();
 
         AccountForEdit Get(int id);
+
+        AccountOptionsResponse GetOptions(int activityType, OperationContext context);
 
         void Update(AccountForUpdate dto, OperationContext context);
 

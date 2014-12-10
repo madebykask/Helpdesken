@@ -2,7 +2,7 @@ namespace DH.Helpdesk.BusinessData.Models.Accounts
 {
     using System.Collections.Generic;
 
-    public sealed class User
+    public class User
     {
         public User(
             List<string> ids,

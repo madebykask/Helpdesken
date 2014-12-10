@@ -264,7 +264,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Account.Conc
             this.RestoreFieldIfNeeded(
                 updated,
                 () => updated.Program.ProgramIds,
-                existing.Program.Programs,
+                existing.Program.ProgramIds,
                 settings.Program.Programs);
 
             this.RestoreFieldIfNeeded(

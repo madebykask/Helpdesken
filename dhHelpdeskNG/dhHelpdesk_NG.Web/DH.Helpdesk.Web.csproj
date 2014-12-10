@@ -608,6 +608,7 @@
     <Compile Include="Areas\OrderAccounts\Infrastructure\BusinessModelMappers\ISettingsDtoMapper.cs" />
     <Compile Include="Areas\OrderAccounts\Infrastructure\ModelMappers\ISettingsViewModelMapper.cs" />
     <Compile Include="Areas\OrderAccounts\Infrastructure\ModelMappers\Concrete\SettingsViewModelMapper.cs" />
+    <Compile Include="Areas\OrderAccounts\Infrastructure\ModelMappers\OrderModelMapper.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Index\BaseIndexModel.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Index\IndexModelTypes.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Order\Edit\AccountInformation.cs" />

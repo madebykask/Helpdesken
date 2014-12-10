@@ -1,12 +1,17 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Accounts
 {
-    public abstract class Program
+    using System.Collections.Generic;
+
+    public class Program
     {
-        protected Program(string infoProduct)
+        public Program(string infoProduct, List<int> programIds)
         {
             this.InfoProduct = infoProduct;
+            this.ProgramIds = programIds;
         }
 
         public string InfoProduct { get; private set; }
+
+        public List<int> ProgramIds { get; private set; }
     }
 }

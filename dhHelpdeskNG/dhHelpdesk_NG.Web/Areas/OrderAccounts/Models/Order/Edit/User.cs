@@ -25,7 +25,7 @@ namespace DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit
             ConfigurableFieldModel<string> location,
             ConfigurableFieldModel<string> roomNumber,
             ConfigurableFieldModel<string> postalAddress,
-            ConfigurableFieldModel<int> employmentType,
+            ConfigurableFieldModel<int?> employmentType,
             ConfigurableFieldModel<int?> departmentId,
             ConfigurableFieldModel<int?> unitId,
             ConfigurableFieldModel<int?> departmentId2,
@@ -37,6 +37,7 @@ namespace DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit
             SelectList employmentTypes,
             SelectList departments,
             SelectList units,
+            SelectList departments2,
             int? regionId,
             SelectList regions)
         {
@@ -64,6 +65,7 @@ namespace DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit
             this.EmploymentTypes = employmentTypes;
             this.Departments = departments;
             this.Units = units;
+            this.Departments2 = departments2;
             this.RegionId = regionId;
             this.Regions = regions;
         }
@@ -92,7 +94,7 @@ namespace DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit
 
         public ConfigurableFieldModel<string> PostalAddress { get; set; }
 
-        public ConfigurableFieldModel<int> EmploymentType { get; set; }
+        public ConfigurableFieldModel<int?> EmploymentType { get; set; }
 
         public ConfigurableFieldModel<int?> DepartmentId { get; set; }
 
@@ -115,6 +117,9 @@ namespace DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit
 
         [NotNull]
         public SelectList Departments { get; set; }
+
+        [NotNull]
+        public SelectList Departments2 { get; set; }
 
         [NotNull]
         public SelectList Units { get; set; }

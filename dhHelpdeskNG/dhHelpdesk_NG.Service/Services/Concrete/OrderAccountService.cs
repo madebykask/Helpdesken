@@ -145,6 +145,29 @@
             }
         }
 
+        public List<ItemOverview> GetEmploymentTypes()
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var employmentTypeRepository = uow.GetRepository<EmploymentType>();
+
+                List<ItemOverview> overviews = employmentTypeRepository.GetAll().MapEmploymentTypesToItemOverview();
+                return overviews;
+            }
+        }
+
+        public List<AccountTypeOverview> GetAccountTypes(int activityTypeId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var accountTypeRepository = uow.GetRepository<AccountType>();
+
+                List<AccountTypeOverview> overviews =
+                    accountTypeRepository.GetAll().MapAccountTypesToItemOverview(activityTypeId);
+                return overviews;
+            }
+        }
+
         public void Map(Account domainEntity, AccountForWrite dto)
         {
             domainEntity.OrdererId = dto.Orderer.Id;

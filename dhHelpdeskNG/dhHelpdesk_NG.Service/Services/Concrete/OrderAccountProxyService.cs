@@ -23,16 +23,20 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         private readonly IAccountRestorer accountRestorer;
 
+        private readonly IOrganizationService organizationService;
+
         public OrderAccountProxyService(
             IOrderAccountService orderAccountService,
             IOrderAccountSettingsService orderAccountSettingsService,
             IAccountValidator accountValidator,
-            IAccountRestorer accountRestorer)
+            IAccountRestorer accountRestorer,
+            IOrganizationService organizationService)
         {
             this.orderAccountService = orderAccountService;
             this.orderAccountSettingsService = orderAccountSettingsService;
             this.accountValidator = accountValidator;
             this.accountRestorer = accountRestorer;
+            this.organizationService = organizationService;
         }
 
         public List<AccountOverview> GetOverviews(AccountFilter filter, OperationContext context)
@@ -48,6 +52,17 @@ namespace DH.Helpdesk.Services.Services.Concrete
         public AccountForEdit Get(int id)
         {
             return this.orderAccountService.Get(id);
+        }
+
+        public AccountOptionsResponse GetOptions(int activityType, OperationContext context)
+        {
+            List<ItemOverview> regions = this.organizationService.GetRegions(context.CustomerId);
+            List<ItemOverview> departments = this.organizationService.GetDepartments(context.CustomerId);
+            List<ItemOverview> units = this.organizationService.GetOrganizationUnits();
+            List<ItemOverview> employmentTypes = this.orderAccountService.GetEmploymentTypes();
+            List<AccountTypeOverview> accountTypes = this.orderAccountService.GetAccountTypes(activityType);
+
+            return new AccountOptionsResponse(regions, departments, units, employmentTypes, accountTypes);
         }
 
         public void Update(AccountForUpdate dto, OperationContext context)

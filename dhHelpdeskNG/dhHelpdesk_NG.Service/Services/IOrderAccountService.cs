@@ -23,6 +23,10 @@
 
         List<int> GetAccountActivivtieIds();
 
+        List<ItemOverview> GetEmploymentTypes();
+
+        List<AccountTypeOverview> GetAccountTypes(int activityTypeId);
+
         void Delete(int id);
     }
 }

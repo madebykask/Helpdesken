@@ -3,10 +3,14 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
 
+    using DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Read.ModelEdit;
     using DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Read.Overview;
+    using DH.Helpdesk.BusinessData.Models.Accounts.Read.Edit;
     using DH.Helpdesk.BusinessData.Models.Accounts.Read.Overview;
     using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.Services.Response.Account;
     using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Services.Services.Concrete;
     using DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order;
     using DH.Helpdesk.Web.Controllers;
     using DH.Helpdesk.Web.Infrastructure;
@@ -21,16 +25,20 @@
 
         private readonly IUserService userService;
 
+        private readonly IOrganizationService organizationService;
+
         public OrderController(
             IMasterDataService masterDataService,
             IOrderAccountProxyService orderAccountProxyService,
             IOrderAccountSettingsProxyService orderAccountSettingsProxyService,
-            IUserService userService)
+            IUserService userService,
+            IOrganizationService organizationService)
             : base(masterDataService)
         {
             this.orderAccountProxyService = orderAccountProxyService;
             this.orderAccountSettingsProxyService = orderAccountSettingsProxyService;
             this.userService = userService;
+            this.organizationService = organizationService;
         }
 
         public ViewResult Index(int? activityType)
@@ -51,7 +59,6 @@
         {
             SessionFacade.SavePageFilters(FilterName, filter);
 
-
             List<AccountOverview> models = this.orderAccountProxyService.GetOverviews(
                 filter.CreateRequest(activityType),
                 OperationContext);
@@ -62,6 +69,18 @@
             List<GridModel> gridModels = GridModel.BuildGrid(models, settings);
 
             return this.PartialView("Grids", gridModels);
+        }
+
+        [HttpGet]
+        public ViewResult Edit(int id, int activityType)
+        {
+            AccountForEdit model = this.orderAccountProxyService.Get(id);
+            AccountFieldsSettingsForModelEdit settings =
+                this.orderAccountSettingsProxyService.GetFieldsSettingsForModelEdit(activityType, OperationContext);
+            AccountOptionsResponse options = this.orderAccountProxyService.GetOptions(activityType, OperationContext);
+
+
+            return this.View();
         }
     }
 }

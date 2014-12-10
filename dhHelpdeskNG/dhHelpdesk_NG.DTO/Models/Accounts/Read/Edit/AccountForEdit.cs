@@ -10,22 +10,21 @@
             int id,
             int activityId,
             Orderer orderer,
-            User user,
+            UserForEdit user,
             AccountInformation accountInformation,
             Contact contact,
             DeliveryInformation deliveryInformation,
-            ProgramForRead program,
-            OtherForRead other,
+            Program program,
+            Other other,
             DateTime? finishingDate,
             UserName changedByUser,
             DateTime changedDate,
             DateTime createdDate)
-            : base(orderer, user, accountInformation, contact, deliveryInformation)
+            : base(orderer, accountInformation, contact, deliveryInformation, program, other)
         {
             this.Id = id;
             this.ActivityId = activityId;
-            this.Program = program;
-            this.Other = other;
+            this.User = user;
             this.FinishingDate = finishingDate;
             this.ChangedByUser = changedByUser;
             this.ChangedDate = changedDate;
@@ -34,6 +33,8 @@
 
         public int ActivityId { get; private set; }
 
+        public UserForEdit User { get; set; }
+
         public DateTime? FinishingDate { get; private set; }
 
         public UserName ChangedByUser { get; private set; }
@@ -41,9 +42,5 @@
         public DateTime ChangedDate { get; private set; }
 
         public DateTime CreatedDate { get; private set; }
-
-        public ProgramForRead Program { get; set; }
-
-        public OtherForRead Other { get; set; }
     }
 }

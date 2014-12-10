@@ -2,8 +2,8 @@
 {
     public enum EMailTypes
     {
-        Standart = 0,
-        Expanded = 1,
-        NoEmail = 2
+        Standart = 1,
+        Expanded = 2,
+        NoEmail = 3
     }
 }

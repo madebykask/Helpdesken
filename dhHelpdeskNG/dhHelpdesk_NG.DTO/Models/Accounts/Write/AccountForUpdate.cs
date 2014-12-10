@@ -12,8 +12,8 @@
             AccountInformation accountInformation,
             Contact contact,
             DeliveryInformation deliveryInformation,
-            ProgramForWrite program,
-            OtherForWrite other,
+            Program program,
+            Other other,
             DateTime changedDate,
             int changedByUserId)
             : base(orderer, user, accountInformation, contact, deliveryInformation, program, other)

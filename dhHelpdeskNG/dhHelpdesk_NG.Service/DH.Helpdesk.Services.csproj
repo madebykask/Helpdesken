@@ -229,6 +229,7 @@
     <Compile Include="Requests\Changes\UpdateChangeRequest.cs" />
     <Compile Include="Response\Account\AccountFieldsSettingsForEditResponse.cs" />
     <Compile Include="Response\Account\AccountForEditResponse.cs" />
+    <Compile Include="Response\Account\AccountOptionsResponse.cs" />
     <Compile Include="Response\Account\AccountOverviewResponse.cs" />
     <Compile Include="Response\Changes\FindChangeResponse.cs" />
     <Compile Include="Response\Changes\GetNewChangeEditDataResponse.cs" />

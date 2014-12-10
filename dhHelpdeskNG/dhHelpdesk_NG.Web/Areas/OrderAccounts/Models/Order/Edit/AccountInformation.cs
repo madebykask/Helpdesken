@@ -4,8 +4,6 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
 
-    using DH.Helpdesk.BusinessData.Enums.Accounts.Fields;
-    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.FieldModels;
 
@@ -18,7 +16,7 @@
         public AccountInformation(
             ConfigurableFieldModel<DateTime?> startedDate,
             ConfigurableFieldModel<DateTime?> finishDate,
-            ConfigurableFieldModel<EMailTypes> eMailTypeId,
+            ConfigurableFieldModel<int?> eMailTypeId,
             ConfigurableFieldModel<bool> homeDirectory,
             ConfigurableFieldModel<bool> profile,
             ConfigurableFieldModel<string> inventoryNumber,
@@ -30,7 +28,7 @@
             ConfigurableFieldModel<string> info,
             SelectList emailTypes,
             SelectList accountTypes,
-            List<ItemOverview> accountTypes2,
+            MultiSelectList accountTypes2,
             SelectList accountTypes3,
             SelectList accountTypes4,
             SelectList accountTypes5)
@@ -59,7 +57,7 @@
 
         public ConfigurableFieldModel<DateTime?> FinishDate { get; set; }
 
-        public ConfigurableFieldModel<EMailTypes> EMailTypeId { get; set; }
+        public ConfigurableFieldModel<int?> EMailTypeId { get; set; }
 
         public ConfigurableFieldModel<bool> HomeDirectory { get; set; }
 
@@ -86,7 +84,7 @@
         public SelectList AccountTypes { get; set; }
 
         [NotNull]
-        public List<ItemOverview> AccountTypes2 { get; set; }
+        public MultiSelectList AccountTypes2 { get; set; }
 
         [NotNull]
         public SelectList AccountTypes3 { get; set; }

@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\AllowReadAttribute.cs" />
+    <Compile Include="Enums\Accounts\AccountTypes.cs" />
     <Compile Include="Enums\Accounts\Fields\AccountInformationFields.cs" />
     <Compile Include="Enums\Accounts\Fields\AccountStates.cs" />
     <Compile Include="Enums\Accounts\Fields\ContactFields.cs" />
@@ -126,12 +127,15 @@
     <Compile Include="Models\Accounts\AccountSettings\Read\Overview\AccountFieldsSettingsOverviewWithActivity.cs" />
     <Compile Include="Models\Accounts\Read\Overview\AccountInformation.cs" />
     <Compile Include="Models\Accounts\Read\Overview\AccountOverview.cs" />
+    <Compile Include="Models\Accounts\Read\Overview\AccountTypeOverview.cs" />
     <Compile Include="Models\Accounts\Read\Overview\Contact.cs" />
     <Compile Include="Models\Accounts\Read\Overview\DeliveryInformation.cs" />
     <Compile Include="Models\Accounts\Read\Overview\Orderer.cs" />
     <Compile Include="Models\Accounts\Read\Overview\Other.cs" />
     <Compile Include="Models\Accounts\Read\Overview\Program.cs" />
     <Compile Include="Models\Accounts\Read\Overview\User.cs" />
+    <Compile Include="Models\Accounts\Read\Edit\UserForEdit.cs" />
+    <Compile Include="Models\Accounts\Write\AccountForWrite.cs" />
     <Compile Include="Models\Checklists\Output\ActionsForServiceBM.cs" />
     <Compile Include="Models\Checklists\Output\CheckListBM.cs" />
     <Compile Include="Models\Checklists\Output\ChecklistServiceBM.cs" />
@@ -203,17 +207,12 @@
     <Compile Include="Models\Accounts\Read\Edit\AccountForEdit.cs" />
     <Compile Include="Models\Accounts\Write\AccountForInsert.cs" />
     <Compile Include="Models\Accounts\Write\AccountForUpdate.cs" />
-    <Compile Include="Models\Accounts\Write\AccountForWrite.cs" />
     <Compile Include="Models\Accounts\AccountInformation.cs" />
     <Compile Include="Models\Accounts\Contact.cs" />
     <Compile Include="Models\Accounts\DeliveryInformation.cs" />
     <Compile Include="Models\Accounts\Orderer.cs" />
     <Compile Include="Models\Accounts\Other.cs" />
-    <Compile Include="Models\Accounts\Read\OtherForRead.cs" />
-    <Compile Include="Models\Accounts\Write\OtherForWrite.cs" />
     <Compile Include="Models\Accounts\Program.cs" />
-    <Compile Include="Models\Accounts\Read\ProgramForRead.cs" />
-    <Compile Include="Models\Accounts\Write\ProgramForWrite.cs" />
     <Compile Include="Models\Accounts\User.cs" />
     <Compile Include="Models\Case\CaseFileModel.cs" />
     <Compile Include="Models\Case\CaseSolutionSetting.cs" />

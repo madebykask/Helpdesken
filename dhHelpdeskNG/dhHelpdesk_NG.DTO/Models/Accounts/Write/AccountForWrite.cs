@@ -8,16 +8,13 @@
             AccountInformation accountInformation,
             Contact contact,
             DeliveryInformation deliveryInformation,
-            ProgramForWrite program,
-            OtherForWrite other)
-            : base(orderer, user, accountInformation, contact, deliveryInformation)
+            Program program,
+            Other other)
+            : base(orderer, accountInformation, contact, deliveryInformation, program, other)
         {
-            this.Program = program;
-            this.Other = other;
+            this.User = user;
         }
 
-        public ProgramForWrite Program { get; set; }
-
-        public OtherForWrite Other { get; set; }
+        public User User { get; set; }
     }
 }

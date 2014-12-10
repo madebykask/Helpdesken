@@ -3,15 +3,12 @@
     using System;
     using System.Collections.Generic;
 
-    using DH.Helpdesk.BusinessData.Enums.Accounts;
-    using DH.Helpdesk.BusinessData.Enums.Accounts.Fields;
-
     public sealed class AccountInformation
     {
         public AccountInformation(
             DateTime? startedDate,
             DateTime? finishDate,
-            EMailTypes eMailTypeId,
+            int eMailTypeId,
             bool homeDirectory,
             bool profile,
             string inventoryNumber,
@@ -40,7 +37,7 @@
 
         public DateTime? FinishDate { get; private set; }
 
-        public EMailTypes EMailTypeId { get; private set; }
+        public int EMailTypeId { get; private set; }
 
         public bool HomeDirectory { get; private set; }
 

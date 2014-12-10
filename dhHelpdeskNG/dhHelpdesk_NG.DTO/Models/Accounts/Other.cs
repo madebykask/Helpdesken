@@ -1,12 +1,13 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Accounts
 {
-    public abstract class Other
+    public class Other
     {
-        protected Other(decimal caseNumber, string info, string fileName)
+        public Other(decimal caseNumber, string info, string fileName, byte[] content)
         {
             this.CaseNumber = caseNumber;
             this.Info = info;
             this.FileName = fileName;
+            this.Content = content;
         }
 
         public decimal CaseNumber { get; private set; }
@@ -14,5 +15,7 @@
         public string Info { get; private set; }
 
         public string FileName { get; private set; }
+
+        public byte[] Content { get; private set; }
     }
 }

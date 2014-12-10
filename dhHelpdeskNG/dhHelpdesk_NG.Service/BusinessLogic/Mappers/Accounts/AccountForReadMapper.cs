@@ -5,7 +5,6 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Accounts
 
     using DH.Helpdesk.BusinessData.Enums.Accounts.Fields;
     using DH.Helpdesk.BusinessData.Models.Accounts;
-    using DH.Helpdesk.BusinessData.Models.Accounts.Read;
     using DH.Helpdesk.BusinessData.Models.Accounts.Read.Edit;
     using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Common.Types;
@@ -22,7 +21,13 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Accounts
                     .SelectMany(
                         t => t.res.DefaultIfEmpty(),
                         (t, k) =>
-                        new { Entity = t.s, ChangedByUserFirstName = k.FirstName, ChangedByUserSurName = k.SurName })
+                        new
+                            {
+                                Entity = t.s,
+                                ChangedByUserFirstName = k.FirstName,
+                                ChangedByUserSurName = k.SurName,
+                                RegionId = t.s.Department.Region_Id
+                            })
                     .IncludePath(x => x.Entity.Programs);
 
             AccountForEdit dto =
@@ -37,7 +42,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Accounts
                         x.Entity.OrdererLastName,
                         x.Entity.OrdererPhone,
                         x.Entity.OrdererEmail),
-                        new User(
+                        new UserForEdit(
                         x.Entity.UserId != null ? x.Entity.UserId.Split(';').ToList() : new List<string>(),
                         x.Entity.UserFirstName,
                         x.Entity.UserInitials,
@@ -58,11 +63,12 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Accounts
                         x.Entity.Responsibility,
                         x.Entity.Activity,
                         x.Entity.Manager,
-                        x.Entity.ReferenceNumber),
+                        x.Entity.ReferenceNumber,
+                        x.RegionId),
                         new AccountInformation(
                         x.Entity.AccountStartDate,
                         x.Entity.AccountEndDate,
-                        (EMailTypes)x.Entity.EMailType,
+                        x.Entity.EMailType,
                         x.Entity.HomeDirectory.ToBool(),
                         x.Entity.Profile.ToBool(),
                         x.Entity.InventoryNumber,
@@ -84,8 +90,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Accounts
                         x.Entity.DeliveryPhone,
                         x.Entity.DeliveryAddress,
                         x.Entity.DeliveryPostalAddress),
-                        new ProgramForRead(x.Entity.InfoProduct, x.Entity.Programs.Select(y => y.Id).ToList()),
-                        new OtherForRead(x.Entity.CaseNumber, x.Entity.InfoOther, x.Entity.AccountFileName, x.Entity.AccountFile),
+                        new Program(x.Entity.InfoProduct, x.Entity.Programs.Select(y => y.Id).ToList()),
+                        new Other(x.Entity.CaseNumber, x.Entity.InfoOther, x.Entity.AccountFileName, x.Entity.AccountFile),
                         x.Entity.FinishingDate,
                         new UserName(x.ChangedByUserFirstName, x.ChangedByUserSurName),
                         x.Entity.ChangedDate,
