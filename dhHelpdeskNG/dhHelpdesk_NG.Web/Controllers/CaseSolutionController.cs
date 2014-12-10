@@ -152,6 +152,10 @@ namespace DH.Helpdesk.Web.Controllers
             IDictionary<string, string> errors = new Dictionary<string, string>();
             IList<CaseFieldSetting> CheckMandatory = null;//_caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id);
             this.TempData["RequiredFields"] = null;
+            if (caseSolutionSettingModels == null)
+            {
+                caseSolutionSettingModels = new CaseSolutionSettingModel[0];
+            }
 
             var caseSolutionSchedule = this.CreateCaseSolutionSchedule(caseSolutionInputViewModel);
 
@@ -275,7 +279,10 @@ namespace DH.Helpdesk.Web.Controllers
             IDictionary<string, string> errors = new Dictionary<string, string>();
             IList<CaseFieldSetting> CheckMandatory = null; //_caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id); 
             this.TempData["RequiredFields"] = null;
-
+            if (caseSolutionSettingModels == null)
+            {
+                caseSolutionSettingModels = new CaseSolutionSettingModel[0];
+            }
             var caseSolutionSchedule = this.CreateCaseSolutionSchedule(caseSolutionInputViewModel);
 
             // Positive: Send Mail to...
