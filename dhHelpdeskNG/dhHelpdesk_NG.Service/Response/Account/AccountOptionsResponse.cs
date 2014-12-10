@@ -12,13 +12,15 @@
             List<ItemOverview> departments,
             List<ItemOverview> units,
             List<ItemOverview> employmentTypes,
-            List<AccountTypeOverview> accountTypes)
+            List<AccountTypeOverview> accountTypes,
+            List<ItemOverview> programs)
         {
             this.Regions = regions;
             this.Departments = departments;
             this.Units = units;
             this.EmploymentTypes = employmentTypes;
             this.AccountTypes = accountTypes;
+            this.Programs = programs;
         }
 
         public List<ItemOverview> Regions { get; set; }
@@ -30,5 +32,7 @@
         public List<ItemOverview> EmploymentTypes { get; set; }
 
         public List<AccountTypeOverview> AccountTypes { get; set; }
+
+        public List<ItemOverview> Programs { get; set; }
     }
 }

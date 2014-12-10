@@ -198,6 +198,7 @@
     <Compile Include="App_Start\NinjectModules\Common\ConfigurationModule.cs" />
     <Compile Include="App_Start\NinjectModules\Common\UserModule.cs" />
     <Compile Include="App_Start\NinjectModules\Common\WorkContextModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Modules\AccountModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\CasesModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\ChangesModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\EmailModule.cs" />
@@ -604,11 +605,14 @@
     <Compile Include="Areas\Licenses\Models\Vendors\VendorsIndexModel.cs" />
     <Compile Include="Areas\OrderAccounts\Controllers\OrderController.cs" />
     <Compile Include="Areas\OrderAccounts\Controllers\SettingsController.cs" />
+    <Compile Include="Areas\OrderAccounts\Infrastructure\BusinessModelMappers\Concrete\AccountDtoMapper.cs" />
+    <Compile Include="Areas\OrderAccounts\Infrastructure\BusinessModelMappers\IAccountDtoMapper.cs" />
     <Compile Include="Areas\OrderAccounts\Infrastructure\BusinessModelMappers\Concrete\SettingsDtoMapper.cs" />
     <Compile Include="Areas\OrderAccounts\Infrastructure\BusinessModelMappers\ISettingsDtoMapper.cs" />
+    <Compile Include="Areas\OrderAccounts\Infrastructure\ModelMappers\IOrderModelMapper.cs" />
     <Compile Include="Areas\OrderAccounts\Infrastructure\ModelMappers\ISettingsViewModelMapper.cs" />
     <Compile Include="Areas\OrderAccounts\Infrastructure\ModelMappers\Concrete\SettingsViewModelMapper.cs" />
-    <Compile Include="Areas\OrderAccounts\Infrastructure\ModelMappers\OrderModelMapper.cs" />
+    <Compile Include="Areas\OrderAccounts\Infrastructure\ModelMappers\Concrete\OrderModelMapper.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Index\BaseIndexModel.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Index\IndexModelTypes.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Order\Edit\AccountInformation.cs" />

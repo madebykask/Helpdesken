@@ -13,5 +13,10 @@
         public string InfoProduct { get; private set; }
 
         public List<int> ProgramIds { get; private set; }
+
+        public static Program CreateDefault()
+        {
+            return new Program(null, null);
+        }
     }
 }

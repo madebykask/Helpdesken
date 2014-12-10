@@ -4,7 +4,6 @@
     using System.Globalization;
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Enums.Accounts;
     using DH.Helpdesk.BusinessData.Enums.Accounts.Fields;
     using DH.Helpdesk.BusinessData.Models.Accounts.Read.Overview;
     using DH.Helpdesk.BusinessData.Models.Shared.Output;
@@ -42,7 +41,8 @@
                                 t.s.AccountTypeName1,
                                 EmploymentTypeName = k.Name
                             })
-                    .IncludePath(x => x.Entity.Programs);
+                    .IncludePath(x => x.Entity.Programs)
+                    .ToList();
 
             List<IdAndNameOverview> accountOverviews =
                 accountTypes.Select(x => new IdAndNameOverview(x.Id, x.Name)).ToList();

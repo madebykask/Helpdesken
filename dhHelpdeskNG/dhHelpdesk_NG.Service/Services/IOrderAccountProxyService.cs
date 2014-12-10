@@ -7,6 +7,7 @@
     using DH.Helpdesk.BusinessData.Models.Accounts.Read.Overview;
     using DH.Helpdesk.BusinessData.Models.Accounts.Write;
     using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Services.Requests.Account;
     using DH.Helpdesk.Services.Response.Account;
 
@@ -20,9 +21,11 @@
 
         AccountOptionsResponse GetOptions(int activityType, OperationContext context);
 
+        IdAndNameOverview GetAccountActivityItemOverview(int id);
+
         void Update(AccountForUpdate dto, OperationContext context);
 
-        void Add(AccountForInsert dto, OperationContext context);
+        int Add(AccountForInsert dto, OperationContext context);
 
         void Delete(int id);
     }

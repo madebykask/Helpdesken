@@ -6,7 +6,7 @@
     <div class="row">
         <div class="span12">
             <table class="tableform">
-                @Html.EditorFor(m => m.Programs, "Fields/MultiSelectList", new { Source = new MultiSelectList(Model.AllPrograms, "Value", "Name", Model.Programs.Value) })
+                @Html.EditorFor(m => m.Programs, "Fields/MultiSelectList", new { Source = Model.AllPrograms })
                 @Html.EditorFor(m => m.InfoProduct, "Fields/WideText")
             </table>
         </div>

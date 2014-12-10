@@ -56,5 +56,10 @@
         public int? AccountType5 { get; private set; }
 
         public string Info { get; private set; }
+
+        public static AccountInformation CreateDefault()
+        {
+            return new AccountInformation(null, null, 0, false, false, null, null, null, null, null, null, null);
+        }
     }
 }

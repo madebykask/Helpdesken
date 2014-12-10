@@ -7,6 +7,7 @@
     using DH.Helpdesk.BusinessData.Enums.Accounts;
     using DH.Helpdesk.BusinessData.Models.Accounts.Read.Overview;
     using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Accounts;
 
@@ -23,7 +24,27 @@
             return overviews;
         }
 
+        public static IdAndNameOverview ExtractIdAndNameOverview(
+            this IQueryable<AccountActivity> query,
+            int id)
+        {
+            var overview = query.Where(x => x.Id == id).Select(x => new { x.Id, x.Name }).Single();
+
+            return new IdAndNameOverview(overview.Id, overview.Name);
+        }
+
         public static List<ItemOverview> MapEmploymentTypesToItemOverview(this IQueryable<EmploymentType> query)
+        {
+            List<ItemOverview> overviews =
+                query.Select(x => new { x.Id, x.Name })
+                    .ToList()
+                    .Select(x => new ItemOverview(x.Name, x.Id.ToString(CultureInfo.InvariantCulture)))
+                    .ToList();
+
+            return overviews;
+        }
+
+        public static List<ItemOverview> MapProgramsToItemOverview(this IQueryable<DH.Helpdesk.Domain.Program> query)
         {
             List<ItemOverview> overviews =
                 query.Select(x => new { x.Id, x.Name })

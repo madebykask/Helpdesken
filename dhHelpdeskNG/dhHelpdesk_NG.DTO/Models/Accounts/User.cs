@@ -91,5 +91,31 @@ namespace DH.Helpdesk.BusinessData.Models.Accounts
         public string Manager { get; private set; }
 
         public string ReferenceNumber { get; private set; }
+
+        public static User CreateDefault()
+        {
+            return new User(
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                0,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
+        }
     }
 }

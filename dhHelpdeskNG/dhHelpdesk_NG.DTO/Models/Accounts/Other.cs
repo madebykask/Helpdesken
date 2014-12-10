@@ -17,5 +17,10 @@
         public string FileName { get; private set; }
 
         public byte[] Content { get; private set; }
+
+        public static Other CreateDefault()
+        {
+            return new Other(0, null, null, null);
+        }
     }
 }

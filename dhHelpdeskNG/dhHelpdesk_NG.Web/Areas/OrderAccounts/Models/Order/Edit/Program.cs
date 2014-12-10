@@ -1,8 +1,8 @@
 ﻿namespace DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit
 {
     using System.Collections.Generic;
+    using System.Web.Mvc;
 
-    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.FieldModels;
 
     public class Program
@@ -14,7 +14,7 @@
         public Program(
             ConfigurableFieldModel<string> infoProduct,
             ConfigurableFieldModel<List<int>> programs,
-            List<ItemOverview> allPrograms)
+            MultiSelectList allPrograms)
         {
             this.InfoProduct = infoProduct;
             this.Programs = programs;
@@ -25,6 +25,6 @@
 
         public ConfigurableFieldModel<List<int>> Programs { get; set; }
 
-        public List<ItemOverview> AllPrograms { get; set; }
+        public MultiSelectList AllPrograms { get; set; }
     }
 }

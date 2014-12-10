@@ -20,5 +20,10 @@
         public string Phone { get; private set; }
 
         public string Email { get; private set; }
+
+        public static Orderer CreateDefault()
+        {
+            return new Orderer(null, null, null, null, null);
+        }
     }
 }

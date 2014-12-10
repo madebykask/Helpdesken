@@ -8,6 +8,7 @@
     using DH.Helpdesk.BusinessData.Models.Accounts.Read.Overview;
     using DH.Helpdesk.BusinessData.Models.Accounts.Write;
     using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Common.Extensions.Boolean;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.NewInfrastructure.Concrete;
@@ -84,7 +85,7 @@
             }
         }
 
-        public void Add(AccountForInsert dto, OperationContext context)
+        public int Add(AccountForInsert dto, OperationContext context)
         {
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
@@ -102,6 +103,8 @@
                 accountRepository.Add(domainEntity);
 
                 uof.Save();
+
+                return domainEntity.Id;
             }
         }
 
@@ -131,6 +134,17 @@
 
                 List<ItemOverview> overviews = accountActivityRepository.GetAll().MapAccountActivitiesToItemOverview();
                 return overviews;
+            }
+        }
+
+        public IdAndNameOverview GetAccountActivityItemOverview(int id)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var accountActivityRepository = uow.GetRepository<AccountActivity>();
+
+                IdAndNameOverview overview = accountActivityRepository.GetAll().ExtractIdAndNameOverview(id);
+                return overview;
             }
         }
 
@@ -168,6 +182,18 @@
             }
         }
 
+        public List<ItemOverview> GetAccountPrograms()
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var accountTypeRepository = uow.GetRepository<Helpdesk.Domain.Program>();
+
+                List<ItemOverview> overviews =
+                    accountTypeRepository.GetAll().MapProgramsToItemOverview();
+                return overviews;
+            }
+        }
+
         public void Map(Account domainEntity, AccountForWrite dto)
         {
             domainEntity.OrdererId = dto.Orderer.Id;
@@ -200,7 +226,7 @@
 
             domainEntity.AccountStartDate = dto.AccountInformation.StartedDate;
             domainEntity.AccountEndDate = dto.AccountInformation.FinishDate;
-            domainEntity.EMailType = (int)dto.AccountInformation.EMailTypeId;
+            domainEntity.EMailType = dto.AccountInformation.EMailTypeId;
             domainEntity.HomeDirectory = dto.AccountInformation.HomeDirectory.ToInt();
             domainEntity.Profile = dto.AccountInformation.Profile.ToInt();
             domainEntity.InventoryNumber = dto.AccountInformation.InventoryNumber;

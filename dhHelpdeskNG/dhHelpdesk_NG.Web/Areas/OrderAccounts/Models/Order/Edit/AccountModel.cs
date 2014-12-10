@@ -7,6 +7,10 @@
 
     public class AccountModel
     {
+        public AccountModel()
+        {
+        }
+
         public AccountModel(
             Orderer orderer,
             User user,
@@ -29,6 +33,8 @@
         public int Id { get; set; }
 
         public int ActivityTypeId { get; set; }
+
+        public string ActivityName { get; set; }
 
         public DateTime CreatedDate { get; set; }
 

@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.NinjectModules.Common
 {
+    using DH.Helpdesk.Services.BusinessLogic.Accounts;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Concrete;
     using DH.Helpdesk.Services.Services.Concrete.Licenses;
@@ -125,6 +126,13 @@
             this.Bind<IOrderFieldSettingsService>().To<OrderFieldSettingsService>();
             this.Bind<IModulesService>().To<ModulesService>();
 
+            this.Bind<IOrderAccountService>().To<OrderAccountService>();
+            this.Bind<IOrderAccountSettingsService>().To<OrderAccountSettingsService>();
+
+            this.Bind<IOrderAccountProxyService>().To<OrderAccountProxyService>();
+            this.Bind<IOrderAccountSettingsProxyService>().To<OrderAccountSettingsProxyService>();
+
+            this.Bind<IOrderAccountDefaultSettingsCreator>().To<OrderAccountDefaultSettingsCreator>();
         }
 
         #endregion

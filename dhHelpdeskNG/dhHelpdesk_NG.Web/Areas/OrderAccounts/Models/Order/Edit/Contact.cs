@@ -11,7 +11,7 @@
         }
 
         public Contact(
-            ConfigurableFieldModelMultipleChoices<List<string>> ids,
+            ConfigurableFieldModel<List<string>> ids,
             ConfigurableFieldModel<string> name,
             ConfigurableFieldModel<string> phone,
             ConfigurableFieldModel<string> email)
@@ -22,7 +22,7 @@
             this.Email = email;
         }
 
-        public ConfigurableFieldModelMultipleChoices<List<string>> Ids { get; set; }
+        public ConfigurableFieldModel<List<string>> Ids { get; set; }
 
         public ConfigurableFieldModel<string> Name { get; set; }
 

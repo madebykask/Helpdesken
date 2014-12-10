@@ -3,7 +3,6 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Accounts
     using System.Collections.Generic;
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Enums.Accounts.Fields;
     using DH.Helpdesk.BusinessData.Models.Accounts;
     using DH.Helpdesk.BusinessData.Models.Accounts.Read.Edit;
     using DH.Helpdesk.Common.Extensions.Integer;
@@ -26,76 +25,84 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Accounts
                                 Entity = t.s,
                                 ChangedByUserFirstName = k.FirstName,
                                 ChangedByUserSurName = k.SurName,
-                                RegionId = t.s.Department.Region_Id
+                                RegionId = t.s.Department.Region_Id,
+                                ActivityName = t.s.AccountActivity.Name
                             })
-                    .IncludePath(x => x.Entity.Programs);
+                    .IncludePath(x => x.Entity.Programs)
+                    .Single();
 
-            AccountForEdit dto =
-                anonymus.Select(
-                    x =>
-                    new AccountForEdit(
-                        x.Entity.Id,
-                        x.Entity.AccountActivity_Id,
-                        new Orderer(
-                        x.Entity.OrdererId,
-                        x.Entity.OrdererFirstName,
-                        x.Entity.OrdererLastName,
-                        x.Entity.OrdererPhone,
-                        x.Entity.OrdererEmail),
-                        new UserForEdit(
-                        x.Entity.UserId != null ? x.Entity.UserId.Split(';').ToList() : new List<string>(),
-                        x.Entity.UserFirstName,
-                        x.Entity.UserInitials,
-                        x.Entity.UserLastName,
-                        x.Entity.UserPersonalIdentityNumber != null ? x.Entity.UserPersonalIdentityNumber.Split(';').ToList() : new List<string>(),
-                        x.Entity.UserPhone,
-                        x.Entity.UserExtension,
-                        x.Entity.UserEMail,
-                        x.Entity.UserTitle,
-                        x.Entity.UserLocation,
-                        x.Entity.UserRoomNumber,
-                        x.Entity.UserPostalAddress,
-                        x.Entity.EmploymentType,
-                        x.Entity.Department_Id,
-                        x.Entity.OU_Id,
-                        x.Entity.Department_Id2,
-                        x.Entity.InfoUser,
-                        x.Entity.Responsibility,
-                        x.Entity.Activity,
-                        x.Entity.Manager,
-                        x.Entity.ReferenceNumber,
-                        x.RegionId),
-                        new AccountInformation(
-                        x.Entity.AccountStartDate,
-                        x.Entity.AccountEndDate,
-                        x.Entity.EMailType,
-                        x.Entity.HomeDirectory.ToBool(),
-                        x.Entity.Profile.ToBool(),
-                        x.Entity.InventoryNumber,
-                        x.Entity.AccountType_Id,
-                        x.Entity.AccountType2 != null
-                            ? x.Entity.AccountType2.Split(',').Select(int.Parse).ToList()
-                            : new List<int>(),
-                        x.Entity.AccountType3,
-                        x.Entity.AccountType4,
-                        x.Entity.AccountType5,
-                        x.Entity.Info),
-                        new Contact(
-                        x.Entity.ContactId != null ? x.Entity.ContactId.Split(';').ToList() : new List<string>(),
-                        x.Entity.ContactName,
-                        x.Entity.ContactPhone,
-                        x.Entity.ContactEMail),
-                        new DeliveryInformation(
-                        x.Entity.DeliveryName,
-                        x.Entity.DeliveryPhone,
-                        x.Entity.DeliveryAddress,
-                        x.Entity.DeliveryPostalAddress),
-                        new Program(x.Entity.InfoProduct, x.Entity.Programs.Select(y => y.Id).ToList()),
-                        new Other(x.Entity.CaseNumber, x.Entity.InfoOther, x.Entity.AccountFileName, x.Entity.AccountFile),
-                        x.Entity.FinishingDate,
-                        new UserName(x.ChangedByUserFirstName, x.ChangedByUserSurName),
-                        x.Entity.ChangedDate,
-                        x.Entity.CreatedDate)).Single();
+            var dto = new AccountForEdit(
+                anonymus.Entity.Id,
+                anonymus.Entity.AccountActivity_Id,
+                anonymus.ActivityName,
+                new Orderer(
+                    anonymus.Entity.OrdererId,
+                    anonymus.Entity.OrdererFirstName,
+                    anonymus.Entity.OrdererLastName,
+                    anonymus.Entity.OrdererPhone,
+                    anonymus.Entity.OrdererEmail),
+                new UserForEdit(
+                    anonymus.Entity.UserId != null ? anonymus.Entity.UserId.Split(';').ToList() : new List<string>(),
+                    anonymus.Entity.UserFirstName,
+                    anonymus.Entity.UserInitials,
+                    anonymus.Entity.UserLastName,
+                    anonymus.Entity.UserPersonalIdentityNumber != null
+                        ? anonymus.Entity.UserPersonalIdentityNumber.Split(';').ToList()
+                        : new List<string>(),
+                    anonymus.Entity.UserPhone,
+                    anonymus.Entity.UserExtension,
+                    anonymus.Entity.UserEMail,
+                    anonymus.Entity.UserTitle,
+                    anonymus.Entity.UserLocation,
+                    anonymus.Entity.UserRoomNumber,
+                    anonymus.Entity.UserPostalAddress,
+                    anonymus.Entity.EmploymentType,
+                    anonymus.Entity.Department_Id,
+                    anonymus.Entity.OU_Id,
+                    anonymus.Entity.Department_Id2,
+                    anonymus.Entity.InfoUser,
+                    anonymus.Entity.Responsibility,
+                    anonymus.Entity.Activity,
+                    anonymus.Entity.Manager,
+                    anonymus.Entity.ReferenceNumber,
+                    anonymus.RegionId),
+                new AccountInformation(
+                    anonymus.Entity.AccountStartDate,
+                    anonymus.Entity.AccountEndDate,
+                    anonymus.Entity.EMailType,
+                    anonymus.Entity.HomeDirectory.ToBool(),
+                    anonymus.Entity.Profile.ToBool(),
+                    anonymus.Entity.InventoryNumber,
+                    anonymus.Entity.AccountType_Id,
+                    anonymus.Entity.AccountType2 != null
+                        ? anonymus.Entity.AccountType2.Split(',').Select(int.Parse).ToList()
+                        : new List<int>(),
+                    anonymus.Entity.AccountType3,
+                    anonymus.Entity.AccountType4,
+                    anonymus.Entity.AccountType5,
+                    anonymus.Entity.Info),
+                new Contact(
+                    anonymus.Entity.ContactId != null
+                        ? anonymus.Entity.ContactId.Split(';').ToList()
+                        : new List<string>(),
+                    anonymus.Entity.ContactName,
+                    anonymus.Entity.ContactPhone,
+                    anonymus.Entity.ContactEMail),
+                new DeliveryInformation(
+                    anonymus.Entity.DeliveryName,
+                    anonymus.Entity.DeliveryPhone,
+                    anonymus.Entity.DeliveryAddress,
+                    anonymus.Entity.DeliveryPostalAddress),
+                new Program(anonymus.Entity.InfoProduct, anonymus.Entity.Programs.Select(y => y.Id).ToList()),
+                new Other(
+                    anonymus.Entity.CaseNumber,
+                    anonymus.Entity.InfoOther,
+                    anonymus.Entity.AccountFileName,
+                    anonymus.Entity.AccountFile),
+                anonymus.Entity.FinishingDate,
+                new UserName(anonymus.ChangedByUserFirstName, anonymus.ChangedByUserSurName),
+                anonymus.Entity.ChangedDate,
+                anonymus.Entity.CreatedDate);
 
             return dto;
         }

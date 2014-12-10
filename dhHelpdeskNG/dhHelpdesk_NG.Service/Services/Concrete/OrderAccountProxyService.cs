@@ -8,6 +8,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
     using DH.Helpdesk.BusinessData.Models.Accounts.Read.Overview;
     using DH.Helpdesk.BusinessData.Models.Accounts.Write;
     using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Account;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Accounts;
     using DH.Helpdesk.Services.Requests.Account;
@@ -61,8 +62,14 @@ namespace DH.Helpdesk.Services.Services.Concrete
             List<ItemOverview> units = this.organizationService.GetOrganizationUnits();
             List<ItemOverview> employmentTypes = this.orderAccountService.GetEmploymentTypes();
             List<AccountTypeOverview> accountTypes = this.orderAccountService.GetAccountTypes(activityType);
+            List<ItemOverview> programs = this.orderAccountService.GetAccountPrograms();
 
-            return new AccountOptionsResponse(regions, departments, units, employmentTypes, accountTypes);
+            return new AccountOptionsResponse(regions, departments, units, employmentTypes, accountTypes, programs);
+        }
+
+        public IdAndNameOverview GetAccountActivityItemOverview(int id)
+        {
+            return this.orderAccountService.GetAccountActivityItemOverview(id);
         }
 
         public void Update(AccountForUpdate dto, OperationContext context)
@@ -75,13 +82,13 @@ namespace DH.Helpdesk.Services.Services.Concrete
             this.orderAccountService.Update(dto, context);
         }
 
-        public void Add(AccountForInsert dto, OperationContext context)
+        public int Add(AccountForInsert dto, OperationContext context)
         {
             AccountFieldsSettingsForProcessing settings =
                 this.orderAccountSettingsService.GetFieldsSettingsForProcessing(dto.ActivityId, context);
 
             this.accountValidator.Validate(dto, settings);
-            this.orderAccountService.Add(dto, context);
+            return this.orderAccountService.Add(dto, context);
         }
 
         public void Delete(int id)

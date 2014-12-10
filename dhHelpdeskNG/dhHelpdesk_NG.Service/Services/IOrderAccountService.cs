@@ -7,6 +7,7 @@
     using DH.Helpdesk.BusinessData.Models.Accounts.Read.Overview;
     using DH.Helpdesk.BusinessData.Models.Accounts.Write;
     using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.Shared.Output;
     using DH.Helpdesk.Services.Requests.Account;
 
     public interface IOrderAccountService
@@ -17,7 +18,7 @@
 
         void Update(AccountForUpdate dto, OperationContext context);
 
-        void Add(AccountForInsert dto, OperationContext context);
+        int Add(AccountForInsert dto, OperationContext context);
 
         List<ItemOverview> GetAccountActivivties();
 
@@ -26,6 +27,10 @@
         List<ItemOverview> GetEmploymentTypes();
 
         List<AccountTypeOverview> GetAccountTypes(int activityTypeId);
+
+        List<ItemOverview> GetAccountPrograms();
+
+        IdAndNameOverview GetAccountActivityItemOverview(int id);
 
         void Delete(int id);
     }

@@ -17,5 +17,10 @@
         public string Address { get; private set; }
 
         public string PostalAddress { get; private set; }
+
+        public static DeliveryInformation CreateDefault()
+        {
+            return new DeliveryInformation(null, null, null, null);
+        }
     }
 }

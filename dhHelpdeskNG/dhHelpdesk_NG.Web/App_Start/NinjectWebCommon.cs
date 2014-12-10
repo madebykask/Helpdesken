@@ -69,7 +69,8 @@ namespace DH.Helpdesk.Web
                 new InvoiceModule(),
                 new LoggerModule(),
                 new LicensesModule(),
-                new OrdersModule());
+                new OrdersModule(),
+                new AccountModule());
 
             ManualDependencyResolver.SetKernel(kernel);
 

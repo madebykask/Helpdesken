@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Areas.OrderAccounts.Infrastructure.ModelMappers
+﻿namespace DH.Helpdesk.Web.Areas.OrderAccounts.Infrastructure.ModelMappers.Concrete
 {
     using System;
     using System.Collections.Generic;
@@ -18,18 +18,12 @@
     using DH.Helpdesk.Web.Infrastructure.Extensions;
 
     using AccountInformation = DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit.AccountInformation;
+    using Contact = DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit.Contact;
+    using DeliveryInformation = DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit.DeliveryInformation;
     using Orderer = DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit.Orderer;
+    using Other = DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit.Other;
+    using Program = DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit.Program;
     using User = DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit.User;
-
-    public interface IOrderModelMapper
-    {
-        AccountModel BuildViewModel(
-            AccountForEdit model,
-            AccountOptionsResponse options,
-            AccountFieldsSettingsForModelEdit settings);
-
-        AccountModel BuildViewModel(AccountOptionsResponse options, AccountFieldsSettingsForModelEdit settings);
-    }
 
     public class OrderModelMapper : IOrderModelMapper
     {
@@ -38,12 +32,45 @@
             AccountOptionsResponse options,
             AccountFieldsSettingsForModelEdit settings)
         {
-            throw new NotImplementedException();
+            var order = MapOrderer(model, options, settings);
+            var user = MapUser(model, options, settings);
+            var account = MapAccountInformation(model, options, settings);
+            var contact = MapContact(model, options, settings);
+            var delivery = MapDeliveryInformation(model, options, settings);
+            var program = MapProgram(model, options, settings);
+            var other = MapOther(model, options, settings);
+
+            return new AccountModel(order, user, account, contact, delivery, program, other)
+                       {
+                           Id = model.Id,
+                           ActivityTypeId =
+                               model.ActivityId,
+                           ActivityName =
+                               model.ActivityName,
+                           CreatedDate =
+                               model.CreatedDate,
+                           ChangedDate =
+                               model.ChangedDate,
+                           ChangedByUserName =
+                               model.ChangedByUser
+                       };
         }
 
-        public AccountModel BuildViewModel(AccountOptionsResponse options, AccountFieldsSettingsForModelEdit settings)
+        public AccountModel BuildViewModel(int activityId, AccountOptionsResponse options, AccountFieldsSettingsForModelEdit settings)
         {
-            throw new NotImplementedException();
+            var order = MapOrderer(options, settings);
+            var user = MapUser(options, settings);
+            var account = MapAccountInformation(options, settings);
+            var contact = MapContact(options, settings);
+            var delivery = MapDeliveryInformation(options, settings);
+            var program = MapProgram(options, settings);
+            var other = MapOther(options, settings);
+
+            return new AccountModel(order, user, account, contact, delivery, program, other)
+            {
+                ActivityTypeId =
+                    activityId,
+            };
         }
 
         private static Orderer MapOrderer(
@@ -231,6 +258,301 @@
                 accountType5SelectList);
         }
 
+        private static Contact MapContact(
+            AccountForEdit model,
+            AccountOptionsResponse options,
+            AccountFieldsSettingsForModelEdit settings)
+        {
+            var id = CreateListStringField(settings.Contact.Ids, model.Contact.Ids);
+            var name = CreateStringField(settings.Contact.Name, model.Contact.Name);
+            var phone = CreateStringField(settings.Contact.Phone, model.Contact.Phone);
+            var email = CreateStringField(settings.Contact.Email, model.Contact.Email);
+
+            return new Contact(id, name, phone, email);
+        }
+
+        private static DeliveryInformation MapDeliveryInformation(
+            AccountForEdit model,
+            AccountOptionsResponse options,
+            AccountFieldsSettingsForModelEdit settings)
+        {
+            var name = CreateStringField(settings.DeliveryInformation.Name, model.DeliveryInformation.Name);
+            var phone = CreateStringField(settings.DeliveryInformation.Phone, model.DeliveryInformation.Phone);
+            var addres = CreateStringField(settings.DeliveryInformation.Address, model.DeliveryInformation.Address);
+            var postalAddres = CreateStringField(
+                settings.DeliveryInformation.PostalAddress,
+                model.DeliveryInformation.PostalAddress);
+
+            return new DeliveryInformation(name, phone, addres, postalAddres);
+        }
+
+        private static Program MapProgram(
+            AccountForEdit model,
+            AccountOptionsResponse options,
+            AccountFieldsSettingsForModelEdit settings)
+        {
+            var programsSelectList = CreateMultiSelectListField(
+                settings.Program.Programs,
+                options.Programs,
+                model.Program.ProgramIds);
+
+            var programId = CreateListIntField(
+                settings.Program.Programs,
+                model.Program.ProgramIds);
+
+            var info = CreateStringField(settings.Program.InfoProduct, model.Program.InfoProduct);
+
+            return new Program(info, programId, programsSelectList);
+        }
+
+        private static Other MapOther(
+            AccountForEdit model,
+            AccountOptionsResponse options,
+            AccountFieldsSettingsForModelEdit settings)
+        {
+            var caseNumber = CreateNullableDecimalField(settings.Other.CaseNumber, model.Other.CaseNumber);
+            var info = CreateStringField(settings.Other.Info, model.Other.Info);
+            var fileName = CreateStringField(settings.Other.FileName, model.Other.FileName);
+
+            return new Other(caseNumber, info, fileName);
+        }
+
+        private static Orderer MapOrderer(
+            AccountOptionsResponse options,
+            AccountFieldsSettingsForModelEdit settings)
+        {
+            var id = CreateStringField(settings.Orderer.Id, null);
+            var firstName = CreateStringField(settings.Orderer.FirstName, null);
+            var lastName = CreateStringField(settings.Orderer.LastName, null);
+            var phone = CreateStringField(settings.Orderer.Phone, null);
+            var email = CreateStringField(settings.Orderer.Email, null);
+
+            return new Orderer(id, firstName, lastName, phone, email);
+        }
+
+        private static User MapUser(
+            AccountOptionsResponse options,
+            AccountFieldsSettingsForModelEdit settings)
+        {
+            var id = CreateListStringField(settings.User.Ids, null);
+            var personnelNumber = CreateListStringField(
+                settings.User.PersonalIdentityNumber,
+                null);
+
+            var firstName = CreateStringField(settings.User.FirstName, null);
+            var initials = CreateStringField(settings.User.Initials, null);
+            var lastName = CreateStringField(settings.User.LastName, null);
+            var phone = CreateStringField(settings.User.Phone, null);
+            var extension = CreateStringField(settings.User.Extension, null);
+            var eMail = CreateStringField(settings.User.EMail, null);
+            var title = CreateStringField(settings.User.Title, null);
+            var location = CreateStringField(settings.User.Location, null);
+            var roomNumber = CreateStringField(settings.User.RoomNumber, null);
+            var postalAddress = CreateStringField(settings.User.PostalAddress, null);
+
+            var emplTypes = CreateSelectListField(
+                settings.User.EmploymentType,
+                options.EmploymentTypes,
+                null);
+            var regions = CreateSelectListField(
+                settings.User.DepartmentId,
+                options.Regions,
+                null);
+            var departments1 = CreateSelectListField(
+                settings.User.DepartmentId,
+                options.Departments,
+                null);
+            var units = CreateSelectListField(settings.User.UnitId, options.Units, null);
+            var departments2 = CreateSelectListField(
+                settings.User.DepartmentId2,
+                options.Departments,
+                null);
+
+            var emplTypeId = CreateNullableIntegerField(settings.User.EmploymentType, null);
+            var department1Id = CreateNullableIntegerField(settings.User.DepartmentId, null);
+            var unitId = CreateNullableIntegerField(settings.User.UnitId, null);
+            var department2Id = CreateNullableIntegerField(settings.User.DepartmentId2, null);
+
+            var info = CreateStringField(settings.User.Info, null);
+            var responsibility = CreateStringField(settings.User.Responsibility, null);
+            var activity = CreateStringField(settings.User.Activity, null);
+            var manager = CreateStringField(settings.User.Manager, null);
+            var referenceNumber = CreateStringField(settings.User.ReferenceNumber, null);
+
+            return new User(
+                id,
+                firstName,
+                initials,
+                lastName,
+                personnelNumber,
+                phone,
+                extension,
+                eMail,
+                title,
+                location,
+                roomNumber,
+                postalAddress,
+                emplTypeId,
+                department1Id,
+                unitId,
+                department2Id,
+                info,
+                responsibility,
+                activity,
+                manager,
+                referenceNumber,
+                emplTypes,
+                departments1,
+                units,
+                departments2,
+                null,
+                regions);
+        }
+
+        private static AccountInformation MapAccountInformation(
+            AccountOptionsResponse options,
+            AccountFieldsSettingsForModelEdit settings)
+        {
+            var startedDate = CreateNullableDateTimeField(
+                settings.AccountInformation.StartedDate,
+                null);
+            var finishDate = CreateNullableDateTimeField(
+                settings.AccountInformation.FinishDate,
+                null);
+
+            var postTypes = CreateSelectListField(
+                settings.AccountInformation.EMailTypeId,
+                new EMailTypes(),
+                null);
+            var postTypeId = CreateNullableIntegerField(
+                settings.AccountInformation.EMailTypeId,
+                null);
+
+            var home = CreateBooleanField(
+                settings.AccountInformation.HomeDirectory,
+                false);
+            var profil = CreateBooleanField(settings.AccountInformation.Profile, false);
+
+            var number = CreateStringField(
+                settings.AccountInformation.InventoryNumber,
+                null);
+            var info = CreateStringField(settings.AccountInformation.Info, null);
+
+            var accountTypeSelectList = CreateSelectListField(
+                settings.AccountInformation.AccountTypeId,
+                ExtractOverviews(options.AccountTypes, AccountTypes.AccountType),
+                null);
+            var accountTypeId = CreateNullableIntegerField(
+                settings.AccountInformation.AccountTypeId,
+                null);
+
+            var accountType3SelectList = CreateSelectListField(
+                settings.AccountInformation.AccountType3,
+                ExtractOverviews(options.AccountTypes, AccountTypes.AccountType3),
+                null);
+            var accountType3Id = CreateNullableIntegerField(
+                settings.AccountInformation.AccountType3,
+                null);
+
+            var accountType4SelectList = CreateSelectListField(
+                settings.AccountInformation.AccountType4,
+                ExtractOverviews(options.AccountTypes, AccountTypes.AccountType4),
+                null);
+            var accountType4Id = CreateNullableIntegerField(
+                settings.AccountInformation.AccountType4,
+                null);
+
+            var accountType5SelectList = CreateSelectListField(
+                settings.AccountInformation.AccountType5,
+                ExtractOverviews(options.AccountTypes, AccountTypes.AccountType5),
+                null);
+            var accountType5Id = CreateNullableIntegerField(
+                settings.AccountInformation.AccountType5,
+                null);
+
+            var accountType2SelectList = CreateMultiSelectListField(
+                settings.AccountInformation.AccountType2,
+                ExtractOverviews(options.AccountTypes, AccountTypes.AccountType2),
+                null);
+
+            var accountType2Id = CreateListIntField(
+                settings.AccountInformation.AccountType2,
+                null);
+
+            return new AccountInformation(
+                startedDate,
+                finishDate,
+                postTypeId,
+                home,
+                profil,
+                number,
+                accountTypeId,
+                accountType2Id,
+                accountType3Id,
+                accountType4Id,
+                accountType5Id,
+                info,
+                postTypes,
+                accountTypeSelectList,
+                accountType2SelectList,
+                accountType3SelectList,
+                accountType4SelectList,
+                accountType5SelectList);
+        }
+
+        private static Contact MapContact(
+            AccountOptionsResponse options,
+            AccountFieldsSettingsForModelEdit settings)
+        {
+            var id = CreateListStringField(settings.Contact.Ids, null);
+            var name = CreateStringField(settings.Contact.Name, null);
+            var phone = CreateStringField(settings.Contact.Phone, null);
+            var email = CreateStringField(settings.Contact.Email, null);
+
+            return new Contact(id, name, phone, email);
+        }
+
+        private static DeliveryInformation MapDeliveryInformation(
+            AccountOptionsResponse options,
+            AccountFieldsSettingsForModelEdit settings)
+        {
+            var name = CreateStringField(settings.DeliveryInformation.Name, null);
+            var phone = CreateStringField(settings.DeliveryInformation.Phone, null);
+            var addres = CreateStringField(settings.DeliveryInformation.Address, null);
+            var postalAddres = CreateStringField(
+                settings.DeliveryInformation.PostalAddress,
+                null);
+
+            return new DeliveryInformation(name, phone, addres, postalAddres);
+        }
+
+        private static Program MapProgram(
+            AccountOptionsResponse options,
+            AccountFieldsSettingsForModelEdit settings)
+        {
+            var programsSelectList = CreateMultiSelectListField(
+                settings.Program.Programs,
+                options.Programs,
+                null);
+
+            var programId = CreateListIntField(
+                settings.Program.Programs,
+                null);
+
+            var info = CreateStringField(settings.Program.InfoProduct, null);
+
+            return new Program(info, programId, programsSelectList);
+        }
+
+        private static Other MapOther(AccountOptionsResponse options, AccountFieldsSettingsForModelEdit settings)
+        {
+            var caseNumber = CreateNullableDecimalField(settings.Other.CaseNumber, null);
+            var info = CreateStringField(settings.Other.Info, null);
+            var fileName = CreateStringField(settings.Other.FileName, null);
+
+            return new Other(caseNumber, info, fileName);
+        }
+
         #region
 
         private static ConfigurableFieldModel<DateTime?> CreateNullableDateTimeField(
@@ -308,6 +630,13 @@
             return !setting.IsShowInDetails
                        ? ConfigurableFieldModel<int>.CreateUnshowable()
                        : new ConfigurableFieldModel<int>(setting.Caption, value, setting.IsRequired);
+        }
+
+        private static ConfigurableFieldModel<decimal?> CreateNullableDecimalField(FieldSetting setting, decimal? value)
+        {
+            return !setting.IsShowInDetails
+                       ? ConfigurableFieldModel<decimal?>.CreateUnshowable()
+                       : new ConfigurableFieldModel<decimal?>(setting.Caption, value, setting.IsRequired);
         }
 
         private static ConfigurableFieldModel<int?> CreateNullableIntegerField(FieldSetting setting, int? value)

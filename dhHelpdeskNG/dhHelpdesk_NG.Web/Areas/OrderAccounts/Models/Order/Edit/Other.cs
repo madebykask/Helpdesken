@@ -9,7 +9,7 @@
         }
 
         public Other(
-            ConfigurableFieldModel<string> caseNumber,
+            ConfigurableFieldModel<decimal?> caseNumber,
             ConfigurableFieldModel<string> info,
             ConfigurableFieldModel<string> fileName)
         {
@@ -18,7 +18,7 @@
             this.FileName = fileName;
         }
 
-        public ConfigurableFieldModel<string> CaseNumber { get; set; }
+        public ConfigurableFieldModel<decimal?> CaseNumber { get; set; }
 
         public ConfigurableFieldModel<string> Info { get; set; }
 

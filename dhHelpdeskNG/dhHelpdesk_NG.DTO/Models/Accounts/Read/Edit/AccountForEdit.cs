@@ -9,6 +9,7 @@
         public AccountForEdit(
             int id,
             int activityId,
+            string activityName,
             Orderer orderer,
             UserForEdit user,
             AccountInformation accountInformation,
@@ -24,6 +25,7 @@
         {
             this.Id = id;
             this.ActivityId = activityId;
+            this.ActivityName = activityName;
             this.User = user;
             this.FinishingDate = finishingDate;
             this.ChangedByUser = changedByUser;
@@ -32,6 +34,8 @@
         }
 
         public int ActivityId { get; private set; }
+
+        public string ActivityName { get; private set; }
 
         public UserForEdit User { get; set; }
 
