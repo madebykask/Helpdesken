@@ -6,25 +6,32 @@
 //   Defines the IChecklistsRepository type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+using System.Linq;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
+    using DH.Helpdesk.BusinessData.Models.Checklists.Output;
+    using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
+    
 
     #region CHECKLISTS
 
     /// <summary>
     /// The ChecklistsRepository interface.
     /// </summary>
-    public interface IChecklistsRepository : IRepository<Checklists>
+    public interface IChecklistsRepository : INewRepository
     {
+        void SaveCheckList(CheckListBM checklist);
+
+        CheckListBM GetChecklist(int checkListId);
     }
 
     /// <summary>
     /// The checklists repository.
     /// </summary>
-    public class ChecklistsRepository : RepositoryBase<Checklists>, IChecklistsRepository
+    public class ChecklistsRepository : Repository, IChecklistsRepository
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ChecklistsRepository"/> class.
@@ -35,6 +42,40 @@ namespace DH.Helpdesk.Dal.Repositories
         public ChecklistsRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
+        }
+
+        public CheckListBM GetChecklist(int checkListId)
+        {
+            var checkListEntity =
+                this.DbContext.Checklists.Where(c => c.Id == checkListId).FirstOrDefault();
+
+            return new CheckListBM(checkListEntity.Customer_Id,
+                                   checkListEntity.WorkingGroup_Id, checkListEntity.ChecklistName,
+                                   checkListEntity.ChangedDate,
+                                   checkListEntity.CreatedDate);
+        }
+
+        public void SaveCheckList(CheckListBM checklist)
+        {          
+            var checklistsEntity = new Checklists()
+            {                
+                Customer_Id = checklist.CustomerId,                
+                WorkingGroup_Id = checklist.WorkingGroupId,
+                ChecklistName = checklist.ChecklistName,
+                CreatedDate = checklist.ChangedDate,
+                ChangedDate = checklist.ChangedDate
+            };
+
+            //if (checklistsEntity.IsNew())
+            //{
+               this.DbContext.Checklists.Add(checklistsEntity);               
+            //}
+            //else
+            //{
+            //    this.DbContext.Checklists.(checklistsEntity);
+            //}            
+
+            this.InitializeAfterCommit(checklist, checklistsEntity);            
         }
     }
 

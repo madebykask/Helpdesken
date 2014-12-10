@@ -1,8 +1,10 @@
-﻿namespace DH.Helpdesk.Dal.EntityConfigurations
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.ModelConfiguration;
+
+namespace DH.Helpdesk.Dal.EntityConfigurations
 {
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.ModelConfiguration;
+    
 
     using DH.Helpdesk.Domain;
 
@@ -12,7 +14,7 @@
         {
             this.HasKey(x => x.Id);
 
-            this.Property(x => x.CheckList_Id).IsRequired().HasColumnName("Checklists_Id");
+            this.Property(x => x.CheckList_Id).IsRequired();
             this.Property(x => x.IsActive).IsRequired().HasColumnName("Status");
             this.Property(x => x.Name).IsRequired().HasMaxLength(50).HasColumnName("ChecklistService");
             this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);

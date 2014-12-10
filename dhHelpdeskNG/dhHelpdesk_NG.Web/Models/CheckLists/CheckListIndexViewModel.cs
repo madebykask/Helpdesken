@@ -18,7 +18,7 @@ namespace DH.Helpdesk.Web.Models.CheckLists
         public List<SelectListItem> ListOfExistances;
         public DateTime From;
         public DateTime To;
-        public List<ChecklistInputModel> CheckListsList;
+        //public List<ChecklistInputModel> CheckListsList;
         public List<SelectListItem> Show;
 
 

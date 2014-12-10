@@ -17,28 +17,28 @@ namespace DH.Helpdesk.Services.Services
 
         IList<CheckListBM> GetChecklists(int customerId);
 
-        CheckListBM GetChecklist(int customerId);
+        CheckListBM GetChecklist(int checkListId);
 
         //IList<Checklist> GetChecklistDates(int customerId);
 
-        void NewChecklist(CheckListBM checklist);
+         void SaveCheckList(CheckListBM checklist);
 
-        void Commit();
+        //void Commit();
     }
 
     public class ChecklistsService : IChecklistsService
     {
-        private readonly IChecklistsRepository _checklistsRepository;
+        private readonly IChecklistsRepository _checkListsRepository;
         //private readonly IChecklistRepository _checklistRepository;
 
         private readonly IUnitOfWork _unitOfWork;
 
         public ChecklistsService(
-            IChecklistsRepository checklistsRepository,
+            IChecklistsRepository checkListsRepository,
             //IChecklistRepository checklistRepository,
             IUnitOfWork unitOfWork)
         {
-            this._checklistsRepository = checklistsRepository;
+            this._checkListsRepository = checkListsRepository;
             //this._checklistRepository = checklistRepository;
             this._unitOfWork = unitOfWork;
         }
@@ -55,14 +55,16 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<CheckListBM> GetChecklists(int customerId)
         {
-            var query = this._checklistsRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.ChecklistName).ToList();
-            return CheckListsMapper.MapToOverviews(query);
+            //var query = this._checklistsRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.ChecklistName).ToList();
+            //return CheckListsMapper.MapToOverviews(query);
+            return null;
         }
        
-        public CheckListBM GetChecklist(int customerId)
+        public CheckListBM GetChecklist(int checkListId)
         {
-            var entity = this._checklistsRepository.Get(x => x.Customer_Id == customerId);
-            return CheckListsMapper.MapToOverview(entity);
+            //var entity = this._checkListsRepository.GetChecklist(checkListId);
+            //return CheckListsMapper.MapToOverview(entity);
+            return null;
         }
 
         //public IList<Checklist> GetChecklistDates(int customerId)
@@ -70,27 +72,13 @@ namespace DH.Helpdesk.Services.Services
         //    //return this._checklistRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Id).ToList();
         //}
 
-        public void NewChecklist(CheckListBM checklist)
+        public void SaveCheckList(CheckListBM checklist)
         {
 
             if (checklist == null)
                 throw new ArgumentNullException("CheckList");
 
-            var checklistsEntity = new Checklists()
-            {
-                Customer_Id = checklist.CustomerId,
-                Id = checklist.Id,
-                WorkingGroup_Id = checklist.WorkingGroupId,
-                ChecklistName = checklist.ChecklistName,            
-                CreatedDate = checklist.ChangedDate,
-                ChangedDate = checklist.ChangedDate
-            };
-
-            if (checklist.Id == 0)
-
-                this._checklistsRepository.Add(checklistsEntity);
-
-            this.Commit();
+            this._checkListsRepository.SaveCheckList(checklist);             
         }
 
         public void Commit()

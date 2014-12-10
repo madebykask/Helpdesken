@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DH.Helpdesk.BusinessData.Models.Shared.Input;
+using DH.Helpdesk.Common.ValidationAttributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,22 +8,20 @@ using System.Text;
 namespace DH.Helpdesk.BusinessData.Models.Checklists.Output
 {
 
-    public sealed class CheckListBM
+    public sealed class CheckListBM : INewBusinessModel
     {
         public CheckListBM()
         { }
 
         public CheckListBM(
-                int customerId,
-                int id,
+                int customerId,                
                 int? wgId,
                 string checklistName,
                 DateTime changedDate,
                 DateTime createdDate
                )
         {
-            this.CustomerId = customerId;
-            this.Id = id;
+            this.CustomerId = customerId;            
             this.WorkingGroupId = wgId;
             this.ChecklistName = checklistName;
             this.ChangedDate = changedDate;
@@ -29,12 +29,18 @@ namespace DH.Helpdesk.BusinessData.Models.Checklists.Output
         }
 
 
-        public int CustomerId { get; set; }
-        public int Id { get; set; }     
-        public int? WorkingGroupId { get; set; }
-        public string ChecklistName { get; set; }
-        public DateTime ChangedDate { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public int CustomerId { get; private set; }
+
+        [IsId]
+        public int Id { get; set; }
+
+        public int? WorkingGroupId { get; private set; }
+
+        public string ChecklistName { get; private set; }
+
+        public DateTime ChangedDate { get; private set; }
+
+        public DateTime CreatedDate { get; private set; }
 
 
     }

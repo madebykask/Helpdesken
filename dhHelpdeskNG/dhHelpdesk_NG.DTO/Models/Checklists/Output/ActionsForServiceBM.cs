@@ -5,10 +5,10 @@ using System.Text;
 
 namespace DH.Helpdesk.BusinessData.Models.Checklists.Output
 {
-    public sealed class ActionsForService
+    public sealed class ActionsForServiceBM
     {
 
-        public ActionsForService(
+        public ActionsForServiceBM(
                 int checklistServiceId,   
                 int actionId,
                 int isActive,

@@ -1,12 +1,7 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions
-@*@model DH.Helpdesk.Domain.ChecklistService*@
 @model DH.Helpdesk.Web.Models.CheckLists.ChecklistInputModel
 
-@{
-    Model.WorkingGroups.Insert(0, new SelectListItem { });
-    SelectList WorkingGroups = new SelectList(Model.WorkingGroups, " ", " ");
-    }
 
 @if (TempData["Error"] != null)
 {
@@ -44,15 +39,19 @@
                                     @Html.HiddenFor( model => model.CheckListId)
                                 </tr>                             
                             </table>                           
-                           @* @Html.HiddenFor(model => model.Customer_Id)
-                            @Html.HiddenFor(model => model.Service_Id)*@
                         </div>
                     </div>
-                    <h4> 
-                        @Translation.Get("Område/Tjänst", Enums.TranslationSource.TextTranslation) 
-                        @Translation.Get("Åtgärder", Enums.TranslationSource.TextTranslation)
-                    </h4>
-                     @Html.Partial("_NewServices", Model.ListOfServices)
+
+                    @*<div class="container">
+                        <h4>
+                            @Translation.Get("Område/Tjänst", Enums.TranslationSource.TextTranslation)
+                            @Translation.Get("Åtgärder", Enums.TranslationSource.TextTranslation)
+                        </h4>
+                        <div id="newservicesAndactions">
+                            @Html.Partial("_NewServices", Model.ListOfServices)
+                            @Html.HiddenFor(model => model.ListOfServices)
+                        </div>
+                    </div>*@
                 </div>
             </div>
         </div>
@@ -63,12 +62,12 @@
     $(function () {
         var validator = $("#target").validate({
             rules: {
-                "Name": {
+                "CheckListName": {
                     required: true
                 }
             },
             messages: {
-                "Name": {
+                "CheckListName": {
                     required: "@Translation.Get("Du måste ange ett område/tjänst", Enums.TranslationSource.TextTranslation)"
                 }
             },

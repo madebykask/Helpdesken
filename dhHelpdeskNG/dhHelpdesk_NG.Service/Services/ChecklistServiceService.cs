@@ -4,11 +4,13 @@ using System.Linq;
 
 namespace DH.Helpdesk.Services.Services
 {
-    
 
+
+    using DH.Helpdesk.BusinessData.Models.Checklists.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers;
 
     public interface IChecklistServiceService
     {
@@ -21,7 +23,7 @@ namespace DH.Helpdesk.Services.Services
         IList<ChecklistService> GetChecklistServiceByCheckListID(int id, int customerId);
 
         void DeleteChecklistService(ChecklistService checklistService);
-        void NewChecklistService(ChecklistService checklistService);
+        void NewChecklistService(ChecklistServiceBM checklistService);
         void UpdateChecklistService(ChecklistService checklistService);
         void Commit();
     }
@@ -69,9 +71,10 @@ namespace DH.Helpdesk.Services.Services
             this._checklistServiceRepository.Delete(checklistService);
         }
 
-        public void NewChecklistService(ChecklistService checklistService)
+        public void NewChecklistService(ChecklistServiceBM checklistServiceBM)
         {
-            this._checklistServiceRepository.Add(checklistService);
+            //var readyToAdd = CheckListsMapper.MapServicesToEntity(checklistServiceBM);
+            //this._checklistServiceRepository.Add(readyToAdd);
         }
 
         public void UpdateChecklistService(ChecklistService checklistService)

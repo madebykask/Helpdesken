@@ -1,7 +1,10 @@
 ﻿@model DH.Helpdesk.Web.Models.CheckLists.CheckListserviceModel
 
+
+@using (Html.BeginForm("AddSericesAndActions", "checklist", FormMethod.Post, new { id = "tblNewService" }))
+{
 <div class="span8">
-<table class="tableform" id="tblNewService">        
+<table class="tableform">        
     <tbody>                                         
             <tr>
                 <td>                  
@@ -13,16 +16,10 @@
                     @Html.TextBoxFor(model => model.ServiceName)
                 </td>
              
-                @*<td>
-                    @Translation.Get("Aktivera", Enums.TranslationSource.TextTranslation)
-                </td>
-                <td class="field switch">
-                    @Html.SpecialLabel("IsActive", Model.IsActive, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                    @Html.SpecialLabelOff("IsActive", Model.IsActive, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                    @Html.SpecialCheckBox("IsActive", Model.IsActive, 1, new { @class = "checkbox" })
-                </td>*@
                 <td>
-                    @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation), "new", null, new { @class = "btn" })
+                  @* @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation),
+                                     "AddSericesAndActions", null, new { onclick = "$('#tblNewService').submit();return false;", @class = "btn" }) *@
+                    <input type="submit"  value="@Translation.Get("Lägg till")" class="btn btn-default" />
                 </td>
             </tr>                                                                                        
             <tr> 
@@ -32,19 +29,60 @@
              </tr>
              <tr>
                 <td> 
-                   @* @Html.DropDownList("Services List" , Model.ServiceName)*@
-                    <select id="services" name="Services">
-                        <option value="0">&nbsp;</option>                       
-                    </select>
+                     @if (Model.ServiceName != null)
+                     {
+                        @Html.DropDownListFor(model => Model.Service_Id , Model.ServicesList)
+                      
+                     }
+                    else
+                    {
+                       <select id="services" name="Services">
+                         <option value="0">&nbsp;</option>                       
+                       </select>
+                     }
                 </td>                         
                 <td> 
-                    @Html.TextAreaFor(model => model.ListOfActions.ActionName)
+                    @*@Html.TextAreaFor(model => model.ListOfActions.ActionName)*@
                 </td>
                 <td>
                     @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation), "new", null, new { @class = "btn" })
                 </td>
             </tr>
+             @if (Model.ServiceName != null)
+             {
+                 <tr>
+                    <td> 
+                     @Html.TextBoxFor(model => model.ServiceName)
+                    </td>                                  
+                    <td>
+                        @Translation.Get("Aktivera", Enums.TranslationSource.TextTranslation)
+                    </td>
+                    <td class="field switch">
+                        @Html.SpecialLabel("IsActive", Model.IsActive, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
+                        @Html.SpecialLabelOff("IsActive", Model.IsActive, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
+                        @Html.SpecialCheckBox("IsActive", Model.IsActive, 1, new { @class = "checkbox" })
+                    </td>
+                 </tr>
+             }
 
     </tbody>                                             
 </table>
 </div>
+}
+
+<script type="text/javascript">
+
+    $('#tblNewService').submit(function (e) {
+        e.preventDefault();
+        _this = $(this);
+        var data = _this.serialize();
+        var url = _this.attr('action');
+        var container = $('#tblNewService');
+
+        $.post(url, data, function (result) {
+            container.html(result);
+        });
+
+    });
+
+</script>

@@ -74,65 +74,133 @@ namespace DH.Helpdesk.Web.Controllers
 
         public ActionResult New()
         {
+            var model = new ChecklistInputModel();
 
+            model.CheckListId = 0;
+            model.WGId = null;
+            model.CheckListName = "";
+            
             var workingGroups = this._WorkingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id);
-
-            var Customer_User_WorkingGroups = workingGroups.Select(x => new SelectListItem
+            
+            
+            var wgs = workingGroups.Select(x => new SelectListItem
             {
                 Text = x.WorkingGroupName,
                 Value = x.Id.ToString()
             }).ToList();
 
-            var wgroups = workingGroups.Select(wg => new workingGroupMapper
-                     (wg.Id,
-                      wg.WorkingGroupName                         
-                     )).ToList();
+            wgs.Insert(0,new SelectListItem {Text = "", Value = "0", Selected=true});
+            
+            model.WorkingGroups = wgs;
 
-            var clistsName = this._CheckListsService.GetChecklists(SessionFacade.CurrentCustomer.Id).ToList();
-            var inputCheckLists = clistsName.Select(r => new ChecklistInputModel
-                      (r.Id,
-                        0,
-                          r.ChecklistName,
-                          wgroups,
-                          r.CreatedDate,
-                          r.ChangedDate,
-                          null
-                      )).ToList();
-
-            return this.View(new ChecklistInputModel()
-            { ChangedDate = DateTime.Now, CreatedDate = DateTime.Now,
-              WorkingGroups = Customer_User_WorkingGroups,
-              ListOfServices = new CheckListserviceModel()
-            });
+            return this.View(model);
+            
         }
+
+        /*public ActionResult Edit(int checkListId)
+        {
+            var model = new ChecklistInputModel();
+
+            var checkList = _CheckListsService.GetChecklist();
+            model.CheckListId = checkListId;
+            model.WGId = null;
+            model.CheckListName = "";
+
+            var workingGroups = this._WorkingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id);
+
+
+            var wgs = workingGroups.Select(x => new SelectListItem
+            {
+                Text = x.WorkingGroupName,
+                Value = x.Id.ToString()
+            }).ToList();
+
+            wgs.Insert(0, new SelectListItem { Text = "", Value = "0", Selected = true });
+
+            model.WorkingGroups = wgs;
+
+            return this.View(model);
+
+        }
+         * 
+        /*[HttpPost]
+        public PartialViewResult AddSericesAndActions(ChecklistInputModel service)
+        {
+            //if (service.CheckListId == 0)
+            //{
+            //    this.RedirectToAction("New", service);
+            //}
+
+            //var savedCheckList = this._CheckListsService.GetChecklist(SessionFacade.CurrentCustomer.Id ,service.CheckListName );
+
+            var newService = new ChecklistServiceBM(SessionFacade.CurrentCustomer.Id, 0, service.ListOfServices.Service_Id, 1,
+                                                     service.ListOfServices.ServiceName , DateTime.Now, DateTime.Now);
+        
+            this._CheckListServiceService.NewChecklistService(newService);
+
+            var addedServices = this._CheckListServiceService.GetChecklistServiceByCheckListID(0, SessionFacade.CurrentCustomer.Id);
+            //var servicesList = this._CheckListServiceService.GetChecklistServices(checklist.CheckListId, SessionFacade.CurrentCustomer.Id);
+
+            var returned = new CheckListserviceModel { Customer_Id = SessionFacade.CurrentCustomer.Id,
+                                                       ServiceName = service.ListOfServices.ServiceName,
+                                                       ServicesList = addedServices.Select( s =>  new SelectListItem
+                                                                        {
+                                                                            Text = s.Name,
+                                                                            Value = s.Id.ToString()
+                                                                        }).ToList(),
+                                                        IsActive = 1,
+                                                        ChangedDate = DateTime.Now, 
+                                                        CreatedDate = DateTime.Now
+                                                     };
+
+            return this.PartialView("_NewServices", returned);
+             
+        }
+            */
 
         [HttpPost]
         public ActionResult New(ChecklistInputModel checklist)
         {
-             
+            var model = this.SaveCheckList(checklist);
 
-            if (this.ModelState.IsValid)
+            return this.View(model);
+        }
+
+        
+        private ChecklistInputModel SaveCheckList(ChecklistInputModel checklist)
+        {
+           
+           if (checklist.CheckListName != null)
             {
                 var new_CheckList = new CheckListBM
                 (
-                    SessionFacade.CurrentCustomer.Id,
-                    checklist.CheckListId,
+                    SessionFacade.CurrentCustomer.Id,                    
                     checklist.WGId,
                     checklist.CheckListName,
-                    checklist.CreatedDate,
+                    DateTime.Now,
                     DateTime.Now
                );
 
-                this._CheckListsService.NewChecklist(new_CheckList);                
+              //new_CheckList.Id = checklist.CheckListId;
+              this._CheckListsService.SaveCheckList(new_CheckList);
 
-                return this.RedirectToAction("index", "checklist");
+              var returneNewModel = new ChecklistInputModel()
+              {
+                  CheckListId = new_CheckList.Id,
+                  CheckListName = new_CheckList.ChecklistName,
+                  WGId = new_CheckList.WorkingGroupId,
+                  WorkingGroups = checklist.WorkingGroups                  
+              };
 
-
+              return returneNewModel;
             }
 
-            return this.View(checklist);
-        }
 
+           return checklist;
+
+           
+        }
+        
         private CheckListIndexViewModel IndexViewModel()
         {
             var model = new CheckListIndexViewModel();
@@ -142,11 +210,8 @@ namespace DH.Helpdesk.Web.Controllers
 
         private CheckListIndexViewModel CreateCheckListInputModel()
         {
-
-            var allCheckLists = this._CheckListServiceService.GetChecklistServices(SessionFacade.CurrentCustomer.Id).ToList();
-            
-            
-            var clistsName = this._CheckListsService.GetChecklists(SessionFacade.CurrentCustomer.Id).ToList();
+                        
+            //var clistsName = this._CheckListsService.GetChecklists(SessionFacade.CurrentCustomer.Id).ToList();
             //var checklistDates = this._CheckListService.GetChecklistDates(SessionFacade.CurrentCustomer.Id).ToList();
             var workingGroups = this._WorkingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id);
 
@@ -161,16 +226,14 @@ namespace DH.Helpdesk.Web.Controllers
                      wg.WorkingGroupName
                     )).ToList();
 
-            var inputCheckLists = clistsName.Select(r => new ChecklistInputModel
+            /*var inputCheckLists = clistsName.Select(r => new ChecklistInputModel
                       (   r.Id,
                           0,
                           r.ChecklistName,
                           wgroups,
-                          r.CreatedDate,
-                          r.ChangedDate,
-                          null                        
+                          new  CheckListserviceModel()                       
                       )).ToList();
-
+            */
             var model = new CheckListIndexViewModel
             {
 
@@ -180,16 +243,16 @@ namespace DH.Helpdesk.Web.Controllers
                     Value = x.Id.ToString()
                 }).ToList(),
 
-                CheckListsList = inputCheckLists,
+                //CheckListsList = null,
 
-                ListOfExistances = clistsName.Select(x => new SelectListItem
-                {
-                    Text = x.ChecklistName,
-                    Value = x.Id.ToString()
-                }).ToList(),
+                //ListOfExistances = clistsName.Select(x => new SelectListItem
+                //{
+                //    Text = x.ChecklistName,
+                //    Value = x.Id.ToString()
+                //}).ToList(),
 
                 From = DateTime.Now,
-                To = DateTime.Now,
+                To = DateTime.Now,                
            
             };
 

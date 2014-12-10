@@ -1022,7 +1022,7 @@
     <Compile Include="Models\CheckLists\ChecklistInputModel.cs" />
     <Compile Include="Models\CheckLists\CheckListserviceModel.cs" />
     <Compile Include="Models\CheckLists\ServicesActionsModel.cs" />
-    <Compile Include="Models\CheckLists\WorkingGroupMapper.cs" />
+    <Compile Include="Models\CheckLists\WorkingGroupMapperModel.cs" />
     <Compile Include="Models\DailyReports\DailyReportHistoryModel.cs" />
     <Compile Include="Models\DailyReports\DailyReportInputModel.cs" />
     <Compile Include="Models\Documents\DocumentsFilterModel.cs" />

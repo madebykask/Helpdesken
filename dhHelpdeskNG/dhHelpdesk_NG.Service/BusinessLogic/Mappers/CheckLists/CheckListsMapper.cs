@@ -9,7 +9,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers
 {
     public static class CheckListsMapper
     {
-        public static List<CheckListBM> MapToOverviews(List<Checklists> query)
+        /*public static List<CheckListBM> MapToOverviews(List<Checklists> query)
         {
             var entities = query.Select(c => new
             {                
@@ -21,16 +21,16 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers
                 c.ChangedDate           
             }).ToList();
 
-            return entities.Select(c => new CheckListBM
-            {
-                CustomerId = c.Customer_Id,
-                Id = c.Id,
-                WorkingGroupId = c.WorkingGroup_Id,
-                ChecklistName = c.ChecklistName,
-                CreatedDate = c.CreatedDate,
-                ChangedDate = c.ChangedDate
+            //return entities.Select(c => new CheckListBM
+            //{
+            //    CustomerId = c.Customer_Id,
+            //    Id = c.Id,
+            //    WorkingGroupId = c.WorkingGroup_Id,
+            //    ChecklistName = c.ChecklistName,
+            //    CreatedDate = c.CreatedDate,
+            //    ChangedDate = c.ChangedDate
 
-            }).ToList();
+            //}).ToList();
         }
 
         public static CheckListBM MapToOverview(Checklists entity)
@@ -42,12 +42,12 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers
 
             return new CheckListBM
             {
-                CustomerId = entity.Customer_Id,
-                Id = entity.Id,
-                WorkingGroupId = entity.WorkingGroup_Id,
-                ChecklistName = entity.ChecklistName,                           
-                CreatedDate = entity.CreatedDate,
-                ChangedDate = entity.ChangedDate               
+                //CustomerId = entity.Customer_Id,
+                //Id = entity.Id,
+                //WorkingGroupId = entity.WorkingGroup_Id,
+                //ChecklistName = entity.ChecklistName,                           
+                //CreatedDate = entity.CreatedDate,
+                //ChangedDate = entity.ChangedDate               
             };
         }
 
@@ -60,6 +60,20 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers
             entity.CreatedDate = model.CreatedDate;
             entity.ChangedDate = model.ChangedDate;
         }
+
+        public static ChecklistService MapServicesToEntity(ChecklistServiceBM model)
+        {
+             return new ChecklistService
+            {
+              Customer_Id = model.CustomerId,
+              CheckList_Id = model.Id,
+              Name = model.Name,
+              IsActive = model.IsActive,
+              CreatedDate = model.CreatedDate,
+              ChangedDate = model.ChangedDate
+            };
+        }
+        */
     }
 
 }

@@ -2,10 +2,10 @@
 
 @{
     //Model.WorkingGroups.Insert(0, new SelectListItem { });
-    //SelectList WorkingGroups = new SelectList(Model.WorkingGroups, null,null);
+    //SelectList WorkingGroups = new SelectList(Model.WorkingGroups, null, null);
 
-    Model.ListOfExistances.Insert(0, new SelectListItem { });
-    SelectList CheckListInputs = new SelectList(Model.ListOfExistances, " ", " ");
+    //Model.ListOfExistances.Insert(0, new SelectListItem { });
+    //SelectList CheckListInputs = new SelectList(Model.ListOfExistances, " ", " ");
  }
 <table>               
     <tbody> 
@@ -15,7 +15,7 @@
                   @Html.Label(Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation) + ":")
                 </td>
                 <td>
-                  @Html.DropDownList("WorkingGroupList" , Model.WorkingGroups)
+                  @*@Html.DropDownList("WorkingGroupList" , Model.WorkingGroups)*@
                 </td>
             </tr>
               
@@ -24,7 +24,7 @@
                     @Html.Label(Translation.Get("Checklista", Enums.TranslationSource.TextTranslation) + ":")
                 </td>
                 <td>
-                    @Html.DropDownList("ChecklistsName" , Model.ListOfExistances) 
+                    @*@Html.DropDownList("ChecklistsName" , Model.ListOfExistances)*@ 
                 </td>                                                  
              </tr>        
              <tr>
