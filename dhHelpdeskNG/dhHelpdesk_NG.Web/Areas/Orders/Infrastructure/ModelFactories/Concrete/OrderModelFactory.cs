@@ -79,7 +79,7 @@
                                 GeneralEditFields fields,
                                 OrderEditOptions options)
         {
-            var orderNumber = this.configurableFieldModelFactory.CreateIntegerField(settings.OrderNumber, int.Parse(fields.OrderNumber));
+            var orderNumber = this.configurableFieldModelFactory.CreateIntegerField(settings.OrderNumber, fields.OrderNumber);
             var customer = this.configurableFieldModelFactory.CreateStringField(settings.Customer, fields.Customer);
             var administrator = this.configurableFieldModelFactory.CreateSelectListField(settings.Administrator, options.Administrators, fields.AdministratorId);
             var domain = this.configurableFieldModelFactory.CreateSelectListField(settings.Domain, options.Domains, fields.DomainId);

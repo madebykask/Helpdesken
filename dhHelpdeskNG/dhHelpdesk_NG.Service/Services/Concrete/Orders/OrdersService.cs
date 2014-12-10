@@ -132,7 +132,27 @@
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
-                throw new global::System.NotImplementedException();                
+                var ordersRep = uow.GetRepository<Order>();
+
+                Order entity;
+                if (request.Order.IsNew())
+                {
+                    entity = new Order();
+                    OrderUpdateMapper.MapToEntity(entity, request.Order, request.CustomerId);
+                    entity.CreatedDate = request.DateAndTime;
+                    entity.ChangedDate = request.DateAndTime;
+                    ordersRep.Add(entity);
+                }
+                else
+                {
+                    entity = ordersRep.GetById(request.Order.Id);
+                    OrderUpdateMapper.MapToEntity(entity, request.Order, request.CustomerId);
+                    entity.ChangedDate = request.DateAndTime;
+                    ordersRep.Update(entity);
+                }
+
+                uow.Save();
+                return entity.Id;
             }
         }
 

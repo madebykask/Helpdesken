@@ -142,6 +142,7 @@
     <Compile Include="BusinessLogic\Mappers\Orders\OrderOverviewMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\OrderPropertyMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\OrderTypeMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Orders\OrderUpdateMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Problems\ProblemMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Questionnaire\CircularPartMappers.cs" />
     <Compile Include="BusinessLogic\Mappers\Questionnaire\QuestionnaireQuestionResultMappers.cs" />

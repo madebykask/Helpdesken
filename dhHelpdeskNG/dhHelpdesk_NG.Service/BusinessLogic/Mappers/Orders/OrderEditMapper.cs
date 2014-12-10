@@ -156,7 +156,7 @@
         private static GeneralEditFields CreateGeneralEditFields(Order entity)
         {
             return new GeneralEditFields(
-                    entity.Id.ToString(CultureInfo.InvariantCulture),
+                    entity.Id,
                     entity.Customer.Name,
                     entity.User_Id,
                     entity.Domain_Id,

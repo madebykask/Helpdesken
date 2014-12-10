@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Orders.Controllers
 {
+    using System;
     using System.Net;
     using System.Web;
     using System.Web.Mvc;
@@ -129,7 +130,7 @@
         {
             this.temporaryFilesCache.ResetCacheForObject(model.Id);
 
-            var request = this.updateOrderModelFactory.Create(model, this.workContext.Customer.CustomerId);
+            var request = this.updateOrderModelFactory.Create(model, this.workContext.Customer.CustomerId, DateTime.Now);
             var id = this.ordersService.AddOrUpdate(request);
 
             return this.RedirectToAction("Edit", new { id });
@@ -162,7 +163,7 @@
 
             var deletedLogIds = this.editorStateCache.GetDeletedItemIds(id, OrderDeletedItem.Logs);
 
-            var request = this.updateOrderModelFactory.Create(model, this.workContext.Customer.CustomerId);
+            var request = this.updateOrderModelFactory.Create(model, this.workContext.Customer.CustomerId, DateTime.Now);
             this.ordersService.AddOrUpdate(request);
 
             this.temporaryFilesCache.ResetCacheForObject(id);

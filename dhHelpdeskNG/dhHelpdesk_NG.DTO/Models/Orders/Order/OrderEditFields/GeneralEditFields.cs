@@ -7,7 +7,7 @@
     public sealed class GeneralEditFields
     {
         public GeneralEditFields(
-                string orderNumber, 
+                int orderNumber, 
                 string customer, 
                 int? administratorId, 
                 int? domainId, 
@@ -20,8 +20,7 @@
             this.OrderNumber = orderNumber;
         }
 
-        [NotNullAndEmpty]
-        public string OrderNumber { get; private set; }
+        public int OrderNumber { get; private set; }
         
         public string Customer { get; private set; }
         

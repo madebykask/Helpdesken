@@ -2,7 +2,7 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class FullOrderEditFields
+    public sealed class FullOrderEditFields : Shared.Input.BusinessModel
     {
         public FullOrderEditFields(
                 int id, 
@@ -31,9 +31,6 @@
             this.Delivery = delivery;
             this.Id = id;
         }
-
-        [IsId]
-        public int Id { get; private set; }
 
         [IsId]
         public int? OrderTypeId { get; private set; }
