@@ -7,9 +7,19 @@
 <script type="text/javascript">
     var settingsViewParameters = { settingsUrl: '@Url.Action("Settings")' };
 
+    $(function () {
+
+        // YES and NO SWITCH FOR CHECKBOXES
+        $('.switchcheckbox').bootstrapSwitch('onText', trans_yes);
+        $('.switchcheckbox').bootstrapSwitch('offText', trans_no);
+        $('.switchcheckbox').bootstrapSwitch('size', 'small');
+        $('.switchcheckbox').bootstrapSwitch('onColor', 'success');
+    });
+
     $(function() {
         applySettingsViewBehavior(settingsViewParameters);
     });
+
 </script>
 
 <div id="settings_container">

@@ -8,6 +8,7 @@
                     bool showInDetails,
                     bool showInNotifiers,
                     string caption,
+                    string lableText,
                     bool required,
                     string ldapAttribute);        
         

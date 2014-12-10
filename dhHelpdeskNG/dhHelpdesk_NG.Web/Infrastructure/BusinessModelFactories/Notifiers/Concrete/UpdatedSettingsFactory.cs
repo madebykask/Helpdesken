@@ -78,6 +78,7 @@
                 model.ShowInDetails,
                 model.ShowInNotifiers,
                 model.Caption,
+                model.LableText,
                 model.Required,
                 model.LdapAttribute);
         }

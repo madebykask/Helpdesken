@@ -4,4 +4,9 @@
     {
         public static readonly string Ordered = "OrderPermission";
     }
+
+    public static class OrdererFieldLable
+    {
+        public static readonly string Ordered = "Beställare";
+    }
 }

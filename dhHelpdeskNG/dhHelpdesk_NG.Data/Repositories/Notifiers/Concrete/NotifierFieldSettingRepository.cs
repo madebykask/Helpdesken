@@ -188,34 +188,38 @@
                 return FieldSettings.CreateEmpty();
             }
 
-            var userId = this.CreateFieldSetting(settings, GeneralField.UserId, languageId);
-            var domain = this.CreateFieldSetting(settings, GeneralField.Domain, languageId);
-            var loginName = this.CreateFieldSetting(settings, GeneralField.LoginName, languageId);
-            var firstName = this.CreateFieldSetting(settings, GeneralField.FirstName, languageId);
-            var initials = this.CreateFieldSetting(settings, GeneralField.Initials, languageId);
-            var lastName = this.CreateFieldSetting(settings, GeneralField.LastName, languageId);
-            var displayName = this.CreateFieldSetting(settings, GeneralField.DisplayName, languageId);
-            var place = this.CreateFieldSetting(settings, GeneralField.Place, languageId);
-            var phone = this.CreateFieldSetting(settings, GeneralField.Phone, languageId);
-            var cellPhone = this.CreateFieldSetting(settings, GeneralField.CellPhone, languageId);
-            var email = this.CreateFieldSetting(settings, GeneralField.Email, languageId);
-            var code = this.CreateFieldSetting(settings, GeneralField.Code, languageId);
-            var postalAddress = this.CreateFieldSetting(settings, AddressField.PostalAddress, languageId);
-            var postalCode = this.CreateFieldSetting(settings, AddressField.PostalCode, languageId);
-            var city = this.CreateFieldSetting(settings, AddressField.City, languageId);
-            var title = this.CreateFieldSetting(settings, OrganizationField.Title, languageId);
-            var region = this.CreateFieldSetting(settings, OrganizationField.Region, languageId);
-            var department = this.CreateFieldSetting(settings, OrganizationField.Department, languageId);
-            var unit = this.CreateFieldSetting(settings, OrganizationField.Unit, languageId);
-            var organizationUnit = this.CreateFieldSetting(settings, OrganizationField.OrganizationUnit, languageId);
-            var division = this.CreateFieldSetting(settings, OrganizationField.Division, languageId);
-            var manager = this.CreateFieldSetting(settings, OrganizationField.Manager, languageId);
-            var group = this.CreateFieldSetting(settings, OrganizationField.Group, languageId);
-            var other = this.CreateFieldSetting(settings, OrganizationField.Other, languageId);
-            var ordered = this.CreateFieldSetting(settings, OrdererField.Ordered, languageId);
-            var createdDate = this.CreateFieldSetting(settings, StateField.CreatedDate, languageId);
-            var changedDate = this.CreateFieldSetting(settings, StateField.ChangedDate, languageId);
-            var synchronizationDate = this.CreateFieldSetting(settings, StateField.SynchronizationDate, languageId);
+            var userId = this.CreateFieldSetting(settings, GeneralField.UserId, languageId, GeneralFieldLable.UserId );
+            var domain = this.CreateFieldSetting(settings, GeneralField.Domain, languageId, GeneralFieldLable.Domain);
+            var loginName = this.CreateFieldSetting(settings, GeneralField.LoginName, languageId, GeneralFieldLable.LoginName);
+            var firstName = this.CreateFieldSetting(settings, GeneralField.FirstName, languageId, GeneralFieldLable.FirstName);
+            var initials = this.CreateFieldSetting(settings, GeneralField.Initials, languageId, GeneralFieldLable.Initials);
+            var lastName = this.CreateFieldSetting(settings, GeneralField.LastName, languageId, GeneralFieldLable.LastName);
+            var displayName = this.CreateFieldSetting(settings, GeneralField.DisplayName, languageId, GeneralFieldLable.DisplayName);
+            var place = this.CreateFieldSetting(settings, GeneralField.Place, languageId, GeneralFieldLable.Place);
+            var phone = this.CreateFieldSetting(settings, GeneralField.Phone, languageId, GeneralFieldLable.Phone);
+            var cellPhone = this.CreateFieldSetting(settings, GeneralField.CellPhone, languageId, GeneralFieldLable.CellPhone);
+            var email = this.CreateFieldSetting(settings, GeneralField.Email, languageId, GeneralFieldLable.Email);
+            var code = this.CreateFieldSetting(settings, GeneralField.Code, languageId, GeneralFieldLable.Code);
+
+            var postalAddress = this.CreateFieldSetting(settings, AddressField.PostalAddress, languageId, AddressFieldLable.PostalAddress);
+            var postalCode = this.CreateFieldSetting(settings, AddressField.PostalCode, languageId, AddressFieldLable.PostalCode);
+            var city = this.CreateFieldSetting(settings, AddressField.City, languageId, AddressFieldLable.City);
+
+            var title = this.CreateFieldSetting(settings, OrganizationField.Title, languageId, OrganizationFieldLable.Title);
+            var region = this.CreateFieldSetting(settings, OrganizationField.Region, languageId, OrganizationFieldLable.Region);
+            var department = this.CreateFieldSetting(settings, OrganizationField.Department, languageId, OrganizationFieldLable.Department);
+            var unit = this.CreateFieldSetting(settings, OrganizationField.Unit, languageId, OrganizationFieldLable.Unit);
+            var organizationUnit = this.CreateFieldSetting(settings, OrganizationField.OrganizationUnit, languageId, OrganizationFieldLable.OrganizationUnit);
+            var division = this.CreateFieldSetting(settings, OrganizationField.Division, languageId, OrganizationFieldLable.Division);
+            var manager = this.CreateFieldSetting(settings, OrganizationField.Manager, languageId, OrganizationFieldLable.Manager);
+            var group = this.CreateFieldSetting(settings, OrganizationField.Group, languageId, OrganizationFieldLable.Group);
+            var other = this.CreateFieldSetting(settings, OrganizationField.Other, languageId, OrganizationFieldLable.Other);
+
+            var ordered = this.CreateFieldSetting(settings, OrdererField.Ordered, languageId, OrdererFieldLable.Ordered);
+
+            var createdDate = this.CreateFieldSetting(settings, StateField.CreatedDate, languageId, StateFieldLable.CreatedDate);
+            var changedDate = this.CreateFieldSetting(settings, StateField.ChangedDate, languageId, StateFieldLable.ChangedDate);
+            var synchronizationDate = this.CreateFieldSetting(settings, StateField.SynchronizationDate, languageId, StateFieldLable.SynchronizationDate);
 
             return FieldSettings.CreateForEdit(
                 userId,
@@ -259,7 +263,7 @@
             return new FieldProcessingSetting(setting.Show != 0, setting.Required != 0);
         }
 
-        private FieldSetting CreateFieldSetting(List<ComputerUserFieldSettings> settings, string createSettingName, int languageId)
+        private FieldSetting CreateFieldSetting(List<ComputerUserFieldSettings> settings, string createSettingName, int languageId, string lableText)
         {
             var setting = FilterSettingByFieldName(settings, createSettingName);
             if (setting == null)
@@ -277,6 +281,7 @@
                                                     setting.Show != 0,
                                                     setting.ShowInList != 0,
                                                     translation.Label,
+                                                    lableText,
                                                     setting.Required != 0,
                                                     setting.LDAPAttribute);
         }

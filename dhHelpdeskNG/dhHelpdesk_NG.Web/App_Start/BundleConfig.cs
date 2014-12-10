@@ -137,12 +137,15 @@
                             "~/Content/js/Notifiers/notifier.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/notifiers/index").Include(
+                            "~/Content/js/bootstrap-switch.min.js",
                             "~/Content/js/Notifiers/index.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/notifiers/notifiers").Include(
+                            "~/Content/js/bootstrap-switch.min.js",
                             "~/Content/js/Notifiers/notifiers.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/notifiers/settings").Include(
+                            "~/Content/js/bootstrap-switch.min.js",
                             "~/Content/js/Notifiers/settings.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/reports").Include(

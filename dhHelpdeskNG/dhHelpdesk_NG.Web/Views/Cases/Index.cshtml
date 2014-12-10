@@ -4,6 +4,7 @@
 @section Scripts {
 
    <script type="text/javascript">
+       
 
         $('#divCaseType ul.dropdown-menu li a').click(function (e) {
             e.preventDefault();
@@ -93,8 +94,12 @@
         window.onload = function () {
             $('#btnNewCase').show();
             $('#btnCaseTemplate').show();
+            //     $('#btnSaveCaseSetting').focus();
+            //$("txtFreeTextSearch").blur();
+            //$("btnNewCase").focus();
+            
             //$('#btnSaveCaseSetting').hide();
-        };
+        };        
 
         $('#btnSaveCaseSetting').click(function (e) {
             e.preventDefault();

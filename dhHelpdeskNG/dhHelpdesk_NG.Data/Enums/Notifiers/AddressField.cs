@@ -8,4 +8,13 @@
 
         public static readonly string City = "City";
     }
+
+    public static class AddressFieldLable
+    {
+        public static readonly string PostalAddress = "Adress";
+
+        public static readonly string PostalCode = "Postnummer";
+
+        public static readonly string City = "Ort";
+    }
 }

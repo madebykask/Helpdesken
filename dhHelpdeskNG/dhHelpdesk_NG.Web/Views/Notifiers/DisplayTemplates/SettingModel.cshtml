@@ -1,7 +1,7 @@
 ﻿
 @model DH.Helpdesk.Web.Models.Notifiers.SettingModel
 
-<td>@Translation.Get(Model.Caption, Enums.TranslationSource.TextTranslation)</td> 
+<td>@Translation.Get(Model.LableText, Enums.TranslationSource.TextTranslation)</td> 
 <td>@Html.CheckBoxFor(m => m.ShowInDetails, new { @class = "switchcheckbox" })</td> 
 <td>@Html.CheckBoxFor(m => m.ShowInNotifiers, new { @class = "switchcheckbox" })</td> 
 <td>@Html.TextBoxFor(m => m.Caption)</td> 

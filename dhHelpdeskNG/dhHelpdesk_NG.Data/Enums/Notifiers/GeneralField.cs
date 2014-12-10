@@ -27,4 +27,32 @@
         public static readonly string Code = "UserCode";
 
     }
+
+    public static class GeneralFieldLable
+    {
+        public static readonly string UserId = "Användare";
+
+        public static readonly string Domain = "Domän";
+
+        public static readonly string LoginName = "Inloggningsnamn";
+
+        public static readonly string FirstName = "Förnamn";
+
+        public static readonly string Initials = "Initialer";
+
+        public static readonly string LastName = "Efternamn";
+
+        public static readonly string DisplayName = "Namn";
+
+        public static readonly string Place = "Placering";
+
+        public static readonly string Phone = "Telefon";
+
+        public static readonly string CellPhone = "Mobil";
+
+        public static readonly string Email = "E-post";
+
+        public static readonly string Code = "Kod";
+
+    }
 }

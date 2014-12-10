@@ -20,4 +20,25 @@
 
         public static readonly string Other = "Info";
     }
+
+    public static class OrganizationFieldLable
+    {
+        public static readonly string Title = "Titel";
+
+        public static readonly string Region = "Område";
+
+        public static readonly string Department = "Avdelning";
+
+        public static readonly string Unit = "Enhet";
+
+        public static readonly string OrganizationUnit = "Organisationsenhet";
+
+        public static readonly string Division = "Division";
+
+        public static readonly string Manager = "Chef";
+
+        public static readonly string Group = "Grupp";
+
+        public static readonly string Other = "Övrigt";
+    }
 }

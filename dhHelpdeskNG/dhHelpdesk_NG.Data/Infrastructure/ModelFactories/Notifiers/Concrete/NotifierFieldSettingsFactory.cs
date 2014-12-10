@@ -8,6 +8,7 @@
             bool showInDetails,
             bool showInNotifiers,
             string caption,
+            string lableText,
             bool required,
             string ldapAttribute)
         {
@@ -15,6 +16,7 @@
                                 showInDetails,
                                 showInNotifiers,
                                 caption,
+                                lableText,
                                 required,
                                 ldapAttribute);
             return instance;
@@ -25,6 +27,7 @@
             var empty = new FieldSetting(
                             false,
                             false,
+                            "Empty",
                             "Empty",
                             false,
                             string.Empty);

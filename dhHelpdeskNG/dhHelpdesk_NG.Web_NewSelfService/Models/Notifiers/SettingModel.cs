@@ -14,6 +14,7 @@
             bool showInDetails,
             bool showInNotifiers,
             string caption,
+            string lableText,
             bool required,
             string ldapAttribute)
             : this(showInDetails, showInNotifiers, caption, ldapAttribute)
@@ -26,6 +27,7 @@
             this.ShowInDetails = showInDetails;
             this.ShowInNotifiers = showInNotifiers;
             this.Caption = caption;
+            this.LableText = LableText;
             this.LdapAttribute = ldapAttribute;
         }
 
@@ -35,6 +37,9 @@
         [StringLength(50)]
         [NotNullAndEmpty]
         public string Caption { get; set; }
+
+        [NotNullAndEmpty]
+        public string LableText { get; set; }
 
         public bool Required { get; set; }
 

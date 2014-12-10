@@ -97,6 +97,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Notifiers.Concrete
                 setting.ShowInDetails,
                 setting.ShowInNotifiers,
                 setting.Caption,
+                setting.LableText,
                 setting.Required,
                 setting.LdapAttribute);
         }
