@@ -15,14 +15,14 @@ namespace DH.Helpdesk.Web.Controllers
         
         private readonly IUserService _userService;
         private readonly IWorkingGroupService _WorkingGroupService;
-        private readonly IChecklistsService _CheckListsService;
+        private readonly ICheckListsService _CheckListsService;
         private readonly IChecklistServiceService _CheckListServiceService;
         private readonly IChecklistActionService _CheckListActionService;
 
 
         public CheckListController(
             IUserService userService,
-            IChecklistsService checkListsService,
+            ICheckListsService checkListsService,
             IWorkingGroupService workingGroupService,
             IChecklistServiceService checkListServiceService,            
             IChecklistActionService checkActionService,
@@ -97,32 +97,8 @@ namespace DH.Helpdesk.Web.Controllers
             
         }
 
-        /*public ActionResult Edit(int checkListId)
-        {
-            var model = new ChecklistInputModel();
 
-            var checkList = _CheckListsService.GetChecklist();
-            model.CheckListId = checkListId;
-            model.WGId = null;
-            model.CheckListName = "";
-
-            var workingGroups = this._WorkingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id);
-
-
-            var wgs = workingGroups.Select(x => new SelectListItem
-            {
-                Text = x.WorkingGroupName,
-                Value = x.Id.ToString()
-            }).ToList();
-
-            wgs.Insert(0, new SelectListItem { Text = "", Value = "0", Selected = true });
-
-            model.WorkingGroups = wgs;
-
-            return this.View(model);
-
-        }
-         * 
+         
         /*[HttpPost]
         public PartialViewResult AddSericesAndActions(ChecklistInputModel service)
         {
@@ -171,9 +147,9 @@ namespace DH.Helpdesk.Web.Controllers
         {
            
            if (checklist.CheckListName != null)
-            {
+           {
                 var new_CheckList = new CheckListBM
-                (
+                (                        
                     SessionFacade.CurrentCustomer.Id,                    
                     checklist.WGId,
                     checklist.CheckListName,
@@ -181,10 +157,12 @@ namespace DH.Helpdesk.Web.Controllers
                     DateTime.Now
                );
 
-              //new_CheckList.Id = checklist.CheckListId;
+              if (checklist.CheckListId > 0)
+                   new_CheckList.Id = checklist.CheckListId;
+
               this._CheckListsService.SaveCheckList(new_CheckList);
 
-              var returneNewModel = new ChecklistInputModel()
+              var model = new ChecklistInputModel()
               {
                   CheckListId = new_CheckList.Id,
                   CheckListName = new_CheckList.ChecklistName,
@@ -192,8 +170,8 @@ namespace DH.Helpdesk.Web.Controllers
                   WorkingGroups = checklist.WorkingGroups                  
               };
 
-              return returneNewModel;
-            }
+              return model;
+           }
 
 
            return checklist;

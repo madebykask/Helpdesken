@@ -266,7 +266,7 @@
     <Compile Include="Services\CaseService.cs" />
     <Compile Include="Services\CaseSettingsService.cs" />
     <Compile Include="Services\CaseSolutionService.cs" />
-    <Compile Include="Services\ChecklistsService.cs" />
+    <Compile Include="Services\CheckListsService.cs" />
     <Compile Include="Services\Concrete\CaseInvoiceSettingsService.cs" />
     <Compile Include="Services\Concrete\CaseSolutionSettingService.cs" />
     <Compile Include="Services\CaseTypeService.cs" />

@@ -106,7 +106,7 @@
     <Compile Include="Checklist.cs" />
     <Compile Include="ChecklistAction.cs" />
     <Compile Include="ChecklistRow.cs" />
-    <Compile Include="Checklists.cs" />
+    <Compile Include="CheckLists.cs" />
     <Compile Include="ChecklistService.cs" />
     <Compile Include="Computers\Computer.cs" />
     <Compile Include="Computers\ComputerFieldSettings.cs" />

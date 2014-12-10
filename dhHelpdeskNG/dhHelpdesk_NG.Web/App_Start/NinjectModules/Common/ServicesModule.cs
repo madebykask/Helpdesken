@@ -109,7 +109,7 @@
             this.Bind<IInvoiceArticleService>().To<InvoiceArticleService>();
             this.Bind<ICaseSolutionSettingService>().To<CaseSolutionSettingService>();
             this.Bind<ICaseInvoiceSettingsService>().To<CaseInvoiceSettingsService>();
-            this.Bind<IChecklistsService>().To<ChecklistsService>();
+            this.Bind<ICheckListsService>().To<CheckListsService>();
 
             // Liceneses module services
             this.Bind<IProductsService>().To<ProductsService>();

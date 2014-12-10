@@ -1,13 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.ModelConfiguration;
-
-namespace DH.Helpdesk.Dal.EntityConfigurations.Checklists
-{
-    using System.ComponentModel.DataAnnotations.Schema;
-
-    public sealed class ChecklistsConfiguration : EntityTypeConfiguration<Domain.Checklists>
+using System.ComponentModel.DataAnnotations.Schema;
+using DH.Helpdesk.Domain;
+namespace DH.Helpdesk.Dal.EntityConfigurations.CheckLists
+{        
+    public sealed class CheckListsConfiguration : EntityTypeConfiguration<CheckListsEntity>
     {
-        internal ChecklistsConfiguration()
+        internal CheckListsConfiguration()
         {
             HasKey(x => x.Id);
             Property(x => x.Customer_Id).IsRequired();

@@ -15,7 +15,7 @@
             this.ShowInDetails = showInDetails;
             this.ShowInNotifiers = showInNotifiers;
             this.Caption = caption;
-            this.LableText = lableText;
+            this.LableText = lableText;  //==null? "" : lableText;
             this.Required = required;
             this.LdapAttribute = ldapAttribute;
         }

@@ -1,12 +1,12 @@
-﻿using DH.Helpdesk.BusinessData.Models.Shared.Input;
-using DH.Helpdesk.Common.ValidationAttributes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace DH.Helpdesk.BusinessData.Models.Checklists.Output
 {
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
+    using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class CheckListBM : INewBusinessModel
     {

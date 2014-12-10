@@ -2,7 +2,7 @@
 {
     using global::System;
 
-    public class Checklists : Entity
+    public class CheckListsEntity : Entity
     {
         public int Customer_Id { get; set; }
         public int? WorkingGroup_Id { get; set; }

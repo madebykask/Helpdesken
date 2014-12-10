@@ -11,9 +11,9 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.BusinessLogic.Mappers;
 
-    public interface IChecklistsService
+    public interface ICheckListsService
     {
-        IDictionary<string, string> Validate(Checklists checklistToValidate);
+        IDictionary<string, string> Validate(CheckListsEntity checklistToValidate);
 
         List<CheckListBM> GetChecklists(int customerId);
 
@@ -26,14 +26,14 @@ namespace DH.Helpdesk.Services.Services
         //void Commit();
     }
 
-    public class ChecklistsService : IChecklistsService
+    public class CheckListsService : ICheckListsService
     {
         private readonly IChecklistsRepository _checkListsRepository;
         //private readonly IChecklistRepository _checklistRepository;
 
         private readonly IUnitOfWork _unitOfWork;
 
-        public ChecklistsService(
+        public CheckListsService(
             IChecklistsRepository checkListsRepository,
             //IChecklistRepository checklistRepository,
             IUnitOfWork unitOfWork)
@@ -43,7 +43,7 @@ namespace DH.Helpdesk.Services.Services
             this._unitOfWork = unitOfWork;
         }
 
-        public IDictionary<string, string> Validate(Checklists checklistToValidate)
+        public IDictionary<string, string> Validate(CheckListsEntity checklistToValidate)
         {
             if (checklistToValidate == null)
                 throw new ArgumentNullException("checkliststovalidate");
@@ -78,7 +78,9 @@ namespace DH.Helpdesk.Services.Services
             if (checklist == null)
                 throw new ArgumentNullException("CheckList");
 
-            this._checkListsRepository.SaveCheckList(checklist);             
+            this._checkListsRepository.SaveCheckList(checklist);
+            this._checkListsRepository.Commit();
+
         }
 
         public void Commit()

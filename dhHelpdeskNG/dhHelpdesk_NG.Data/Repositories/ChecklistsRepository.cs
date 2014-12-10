@@ -53,7 +53,7 @@ namespace DH.Helpdesk.Dal.Repositories
         public CheckListBM GetChecklist(int checkListId)
         {
             var checkListEntity =
-                this.DbContext.Checklists.Where(c => c.Id == checkListId).FirstOrDefault();
+                this.DbContext.CheckLists.Where(c => c.Id == checkListId).FirstOrDefault();
 
             return new CheckListBM(checkListEntity.Customer_Id,
                                    checkListEntity.WorkingGroup_Id, checkListEntity.ChecklistName,
@@ -71,7 +71,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public void SaveCheckList(CheckListBM checklist)
         {          
-            var checklistsEntity = new Checklists()
+            var checklistsEntity = new CheckListsEntity()
             {                
                 Customer_Id = checklist.CustomerId,                
                 WorkingGroup_Id = checklist.WorkingGroupId,
@@ -82,7 +82,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
             //if (checklistsEntity.IsNew())
             //{
-               this.DbContext.Checklists.Add(checklistsEntity);               
+               this.DbContext.CheckLists.Add(checklistsEntity);               
             //}
             //else
             //{
