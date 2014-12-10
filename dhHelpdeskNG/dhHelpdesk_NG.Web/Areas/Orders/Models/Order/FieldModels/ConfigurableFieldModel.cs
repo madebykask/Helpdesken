@@ -48,6 +48,16 @@
             return field != null ? field.Value : default(TValue);
         }
 
+        public static string GetValueOrDefault(ConfigurableFieldModel<string> field)
+        {
+            if (field == null || field.Value == null)
+            {
+                return string.Empty;
+            }
+
+            return field.Value;
+        }
+
         #endregion         
     }
 }

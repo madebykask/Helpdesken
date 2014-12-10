@@ -3,6 +3,14 @@
 
 <h4>@Translation.Get("Program")</h4>
 <table class="tableform">
-    <tbody>        
+    <tbody>
+        @foreach (var program in Model.Program.Value.Programs)
+        {
+            <tr>
+                <td>
+                    @program.Name
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

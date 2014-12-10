@@ -80,5 +80,11 @@
 
         [IsId]
         public int? OrderTypeId { get; set; }
+
+        public bool InformOrderer { get; set; }
+
+        public bool InformReceiver { get; set; }
+
+        public bool CreateCase { get; set; }
     }
 }

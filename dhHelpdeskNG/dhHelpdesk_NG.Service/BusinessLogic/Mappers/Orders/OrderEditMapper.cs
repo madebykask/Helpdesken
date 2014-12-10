@@ -121,6 +121,11 @@
         {
             var entity = query.Single();
 
+            return MapToFullOrderEditFields(entity);
+        }
+
+        public static FullOrderEditFields MapToFullOrderEditFields(Order entity)
+        {
             return new FullOrderEditFields(
                     entity.Id,
                     entity.OrderType_Id,
@@ -133,7 +138,7 @@
                     CreateProgramEditFields(entity),
                     CreateReceiverEditFields(entity),
                     CreateSupplierEditFields(entity),
-                    CreateUserEditFields(entity));
+                    CreateUserEditFields(entity));            
         }
 
         private static DeliveryEditFields CreateDeliveryEditFields(Order entity)

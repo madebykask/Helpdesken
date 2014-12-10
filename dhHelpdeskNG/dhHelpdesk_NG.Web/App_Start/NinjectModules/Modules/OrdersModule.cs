@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.NinjectModules.Modules
 {
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Orders;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Orders.Concrete;
     using DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories;
     using DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete;
 
@@ -15,6 +17,7 @@
             this.Bind<INewOrderModelFactory>().To<NewOrderModelFactory>().InSingletonScope();
             this.Bind<IOrderModelFactory>().To<OrderModelFactory>().InSingletonScope();
             this.Bind<IUpdateOrderModelFactory>().To<UpdateOrderModelFactory>().InSingletonScope();
+            this.Bind<IOrderRestorer>().To<OrderRestorer>().InSingletonScope();
         }
     }
 }

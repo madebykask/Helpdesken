@@ -12,6 +12,7 @@
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Orders;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Orders;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Orders;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Common;
@@ -35,6 +36,8 @@
 
         private readonly IEmailGroupRepository emailGroupRepository;
 
+        private readonly IOrderRestorer orderRestorer;
+
         public OrdersService(
                 IUnitOfWorkFactory unitOfWorkFactory, 
                 IOrderFieldSettingsService orderFieldSettingsService, 
@@ -42,7 +45,8 @@
                 IUserRepository userRepository, 
                 IUserWorkingGroupRepository userWorkingGroupRepository, 
                 IEmailGroupEmailRepository emailGroupEmailRepository, 
-                IEmailGroupRepository emailGroupRepository)
+                IEmailGroupRepository emailGroupRepository, 
+                IOrderRestorer orderRestorer)
         {
             this.unitOfWorkFactory = unitOfWorkFactory;
             this.orderFieldSettingsService = orderFieldSettingsService;
@@ -51,6 +55,7 @@
             this.userWorkingGroupRepository = userWorkingGroupRepository;
             this.emailGroupEmailRepository = emailGroupEmailRepository;
             this.emailGroupRepository = emailGroupRepository;
+            this.orderRestorer = orderRestorer;
         }
 
         public OrdersFilterData GetOrdersFilterData(int customerId)
@@ -146,6 +151,11 @@
                 else
                 {
                     entity = ordersRep.GetById(request.Order.Id);
+
+                    var existingOrder = OrderEditMapper.MapToFullOrderEditFields(entity);
+                    var settings = this.orderFieldSettingsService.GetOrderEditSettings(request.CustomerId, entity.OrderType_Id, uow);
+                    this.orderRestorer.Restore(request.Order, existingOrder, settings);
+
                     OrderUpdateMapper.MapToEntity(entity, request.Order, request.CustomerId);
                     entity.ChangedDate = request.DateAndTime;
                     ordersRep.Update(entity);
@@ -153,6 +163,20 @@
 
                 uow.Save();
                 return entity.Id;
+            }
+        }
+
+        public void Delete(int id)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var ordersRep = uow.GetRepository<Order>();
+                var order = ordersRep.GetById(id);
+                order.Logs.Clear();
+                order.Programs.Clear();
+                ordersRep.DeleteById(id);
+
+                uow.Save();
             }
         }
 

@@ -14,5 +14,7 @@
         FindOrderResponse FindOrder(int orderId, int customerId);
 
         int AddOrUpdate(UpdateOrderRequest request);
+
+        void Delete(int id);
     }
 }

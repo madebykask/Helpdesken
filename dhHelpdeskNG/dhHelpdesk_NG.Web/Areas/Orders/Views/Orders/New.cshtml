@@ -13,6 +13,27 @@
         <li>
             @Html.ActionLink(Translation.Get("Avbryt"), "Index", "Orders", null, new { @class = "btn" })
         </li>
+        <li class="secspace"></li>      
+        <li>
+            @Html.CheckBoxFor(m => m.InformOrderer, new { id = "InformOrderer_action"})
+        </li>
+        <li>
+            @Html.LabelFor(m => m.InformOrderer, Translation.Get("Informera beställare"))
+        </li>
+        <li class="secspace"></li>      
+        <li>
+            @Html.CheckBoxFor(m => m.InformReceiver, new { id = "InformReceiver_action"})
+        </li>
+        <li>
+            @Html.LabelFor(m => m.InformReceiver, Translation.Get("Informera mottagare"))
+        </li>
+        <li class="secspace"></li>      
+        <li>
+            @Html.CheckBoxFor(m => m.CreateCase, new { id = "CreateCase_action"})
+        </li>
+        <li>
+            @Html.LabelFor(m => m.CreateCase, Translation.Get("Skapa ärende"))
+        </li>        
     </ul>        
 }
 
@@ -25,7 +46,12 @@
     
     <script type="text/javascript">
         $(function() {
-            $("#btnSave").click(function() {
+            $("#btnSave").click(function () {
+
+                $("#InformOrderer").val($("#InformOrderer_action").prop("checked"));
+                $("#InformReceiver").val($("#InformReceiver_action").prop("checked"));
+                $("#CreateCase").val($("#CreateCase_action").prop("checked"));
+
                 $("#edit_form").submit();
                 return false;
             });

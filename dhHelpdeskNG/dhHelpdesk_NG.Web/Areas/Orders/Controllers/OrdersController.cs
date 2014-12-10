@@ -171,5 +171,15 @@
 
             return this.RedirectToAction("Edit", new { id });
         }
+
+        [HttpPost]
+        public RedirectToRouteResult Delete(int id)
+        {
+            this.ordersService.Delete(id);
+            this.temporaryFilesCache.ResetCacheForObject(id);
+            this.editorStateCache.ClearObjectDeletedItems(id, OrderDeletedItem.Logs);
+
+            return this.RedirectToAction("Index");
+        }
     }
 }

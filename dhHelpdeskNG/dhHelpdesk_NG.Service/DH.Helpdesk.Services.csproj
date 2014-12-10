@@ -89,6 +89,8 @@
     <Compile Include="BusinessLogic\BusinessModelRestorers\Inventory\IServerRestorer.cs" />
     <Compile Include="BusinessLogic\BusinessModelRestorers\Inventory\Concrete\ServerRestorer.cs" />
     <Compile Include="BusinessLogic\BusinessModelRestorers\Inventory\Concrete\PrinterRestorer.cs" />
+    <Compile Include="BusinessLogic\BusinessModelRestorers\Orders\Concrete\OrderRestorer.cs" />
+    <Compile Include="BusinessLogic\BusinessModelRestorers\Orders\IOrderRestorer.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Accounts\Concrete\AccountValidator.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Accounts\IAccountValidator.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Inventory\Concrete\ComputerValidator.cs" />

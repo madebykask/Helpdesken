@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Orders.Order;
@@ -61,7 +62,8 @@
 
         private static LogEditFields CreateLogFields(LogEditModel model)
         {
-            var logs = model.Log.Value.Logs.Select(l => new Log(l.Id, l.DateAndTime, l.RegisteredBy, l.Text)).ToList();
+            var logs = model.Log != null ?
+                model.Log.Value.Logs.Select(l => new Log(l.Id, l.DateAndTime, l.RegisteredBy, l.Text)).ToList() : new List<Log>(0);
             return new LogEditFields(logs);
         }
 
@@ -106,7 +108,7 @@
         private static OtherEditFields CreateOtherFields(OtherEditModel model)
         {
             return new OtherEditFields(
-                    model.FileName.Value.Files.FirstOrDefault(),
+                    model.FileName != null ? model.FileName.Value.Files.FirstOrDefault() : string.Empty,
                     ConfigurableFieldModel<decimal?>.GetValueOrDefault(model.CaseNumber),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.Info),
                     model.StatusId);
@@ -114,7 +116,8 @@
 
         private static ProgramEditFields CreateProgramFields(ProgramEditModel model)
         {
-            var programs = model.Program.Value.Programs.Select(p => new OrderProgramModel(p.Id, p.Name)).ToList();
+            var programs = model != null && model.Program != null ? 
+                model.Program.Value.Programs.Select(p => new OrderProgramModel(p.Id, p.Name)).ToList() : new List<OrderProgramModel>(0);
             return new ProgramEditFields(programs);
         }
 
