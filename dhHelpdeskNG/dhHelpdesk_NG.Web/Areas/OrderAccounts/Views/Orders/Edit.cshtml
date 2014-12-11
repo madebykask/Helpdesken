@@ -1,17 +1,30 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
-@model DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit.AccountModel
+﻿@using DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit
+@using DH.Helpdesk.Web.Infrastructure
+@model AccountModel
 @{
     Layout = "~/Areas/Inventory/Views/Shared/_EditLayout.cshtml";
+}
+
+@section Scripts
+{
+    <script>
+        $(function () {
+            $("#saveButton, #saveAndCloseButton").click(function () {
+                $('#clickedButton').val($(this).val());
+                $('#edit_form').submit();
+            });
+        })
+    </script>
 }
 
 @section Actions
 {
     <ul class="secnav">
         <li id="menu1">
-            <input type="submit" value="@Translation.Get("Spara")" class="btn" onclick=" $('#edit_form').submit(); "/>
+            <button id="saveButton" type="submit" value="@ClickedButton.Save" class="btn">@Translation.Get("Spara")</button>
         </li>
         <li id="menu2">
-            <input type="submit" value="@Translation.Get("Spara och stäng")" class="btn" onclick=" $('#edit_form').submit(); "/>
+            <button id="saveAndCloseButton" type="submit" value="@ClickedButton.SaveAndClose" class="btn">@Translation.Get("Spara och stäng")</button>
         </li>
         <li id="menu3">@Html.ActionLink(Translation.Get("Avbryt"), "Index", null, new { @class = "btn" })</li>
         <li id="menu4">@Html.ActionLink(Translation.Get("Ta bort"), "Delete", new { id = Model.Id }, new { @class = "btn" })</li>
@@ -28,6 +41,8 @@
     @using (Html.BeginForm("Edit", "Orders", FormMethod.Post, new { id = "edit_form" }))
     {
         @Html.CheckBoxFor(m => m.IsCreateCase)
+        <input type="hidden" id="clickedButton" name="clickedButton" />
+
         @Translation.Get("Skapa ärende")
 
         <h4>@Translation.Get("Allmänt")</h4>

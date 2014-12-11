@@ -189,6 +189,16 @@
             throw new ElementaryValidationRulesException(fieldName, ReadOnlyMessage);
         }
 
+        private static void ValidateReadOnly(bool value, string fieldName)
+        {
+            if (value == false)
+            {
+                return;
+            }
+
+            throw new ElementaryValidationRulesException(fieldName, ReadOnlyMessage);
+        }
+
         private static void ValidateReadOnly(string value, string fieldName)
         {
             if (value == null)

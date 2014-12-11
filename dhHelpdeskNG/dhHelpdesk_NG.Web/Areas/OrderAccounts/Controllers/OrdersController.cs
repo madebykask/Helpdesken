@@ -116,22 +116,17 @@
 
         [HttpPost]
         [BadRequestOnNotValid]
-        public ViewResult Edit(AccountModel model)
+        public RedirectToRouteResult Edit(AccountModel model, string clickedButton)
         {
             AccountForUpdate dto = this.accountDtoMapper.BuidForUpdate(model, null, OperationContext); // todo
             this.orderAccountProxyService.Update(dto, this.OperationContext);
 
-            return this.View("Edit", new { id = dto.Id, activityType = dto.ActivityId });
-        }
+            if (clickedButton == ClickedButton.Save)
+            {
+                return this.RedirectToAction("Edit", new { dto.Id, activityType = dto.ActivityId });
+            }
 
-        [HttpPost]
-        [BadRequestOnNotValid]
-        public ViewResult EditAndClose(AccountModel model)
-        {
-            AccountForUpdate dto = this.accountDtoMapper.BuidForUpdate(model, null, OperationContext); // todo
-            this.orderAccountProxyService.Update(dto, this.OperationContext);
-
-            return this.View("Index", new { activityType = dto.ActivityId });
+            return this.RedirectToAction("Index", new { activityType = dto.ActivityId });
         }
 
         [HttpPost]
@@ -165,17 +160,17 @@
 
         [HttpPost]
         [BadRequestOnNotValid]
-        public ViewResult New(AccountModel model, string clickedButton)
+        public RedirectToRouteResult New(AccountModel model, string clickedButton)
         {
             AccountForInsert dto = this.accountDtoMapper.BuidForInsert(model, null, OperationContext); // todo
             int id = this.orderAccountProxyService.Add(dto, this.OperationContext);
 
             if (clickedButton == ClickedButton.Save)
             {
-                return this.View("Edit", new { id, activityType = dto.ActivityId });
+                return this.RedirectToAction("Edit", new { id, activityType = dto.ActivityId });
             }
 
-            return this.View("Index", new { activityType = dto.ActivityId });
+            return this.RedirectToAction("Index", new { activityType = dto.ActivityId });
         }
     }
 }

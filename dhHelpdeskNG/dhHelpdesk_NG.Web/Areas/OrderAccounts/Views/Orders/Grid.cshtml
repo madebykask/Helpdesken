@@ -30,7 +30,7 @@
     <tbody>
         @foreach (var order in Model.Orders)
         {
-            <tr onclick=" window.location.href = '@Url.Action("Edit", new { id = order.Id, inventoryTypeId = Model.CurrentActivity })' ">
+            <tr onclick=" window.location.href = '@Url.Action("Edit", new { id = order.Id, activityType = Model.CurrentActivity })' ">
                 @{
                     var fields = order.Fields.ToList();
                     for (var i = 0; i < fields.Count; i++)

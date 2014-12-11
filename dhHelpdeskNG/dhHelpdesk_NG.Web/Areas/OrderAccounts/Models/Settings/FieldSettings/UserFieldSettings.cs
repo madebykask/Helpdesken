@@ -57,16 +57,16 @@
         [LocalizedDisplay("Användar ID")]
         public FieldSettingMultipleChoices Ids { get;  set; }
 
-        [LocalizedDisplay("Personnummer")]
-        public FieldSetting FirstName { get;  set; }
-
         [LocalizedDisplay("Förnamn")]
-        public FieldSetting Initials { get;  set; }
+        public FieldSetting FirstName { get; set; }
 
         [LocalizedDisplay("Initialer")]
-        public FieldSetting LastName { get;  set; }
+        public FieldSetting Initials { get;  set; }
 
         [LocalizedDisplay("Efternamn")]
+        public FieldSetting LastName { get;  set; }
+
+        [LocalizedDisplay("Personnummer")]
         public FieldSettingMultipleChoices PersonalIdentityNumber { get;  set; }
 
         [LocalizedDisplay("Telefon")]

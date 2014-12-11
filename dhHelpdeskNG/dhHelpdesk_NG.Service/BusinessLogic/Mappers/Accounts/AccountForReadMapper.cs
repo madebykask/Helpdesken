@@ -24,6 +24,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Accounts
                                 Entity = t.s,
                                 ChangedByUserFirstName = k.FirstName,
                                 ChangedByUserSurName = k.SurName,
+                                ChangedByUserId = (int?)k.Id,
                                 RegionId = t.s.Department.Region_Id,
                                 ActivityName = t.s.AccountActivity.Name
                             })
@@ -40,13 +41,11 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Accounts
                     anonymus.Entity.OrdererPhone,
                     anonymus.Entity.OrdererEmail),
                 new UserForEdit(
-                    anonymus.Entity.UserId != null ? anonymus.Entity.UserId.Split(';').ToList() : new List<string>(),
+                    new List<string>(),
                     anonymus.Entity.UserFirstName,
                     anonymus.Entity.UserInitials,
                     anonymus.Entity.UserLastName,
-                    anonymus.Entity.UserPersonalIdentityNumber != null
-                        ? anonymus.Entity.UserPersonalIdentityNumber.Split(';').ToList()
-                        : new List<string>(),
+                    new List<string>(),
                     anonymus.Entity.UserPhone,
                     anonymus.Entity.UserExtension,
                     anonymus.Entity.UserEMail,
@@ -72,17 +71,13 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Accounts
                     anonymus.Entity.Profile.ToBool(),
                     anonymus.Entity.InventoryNumber,
                     anonymus.Entity.AccountType_Id,
-                    anonymus.Entity.AccountType2 != null
-                        ? anonymus.Entity.AccountType2.Split(',').Select(int.Parse).ToList()
-                        : new List<int>(),
+                     new List<int>(),
                     anonymus.Entity.AccountType3,
                     anonymus.Entity.AccountType4,
                     anonymus.Entity.AccountType5,
                     anonymus.Entity.Info),
                 new Contact(
-                    anonymus.Entity.ContactId != null
-                        ? anonymus.Entity.ContactId.Split(';').ToList()
-                        : new List<string>(),
+                     new List<string>(),
                     anonymus.Entity.ContactName,
                     anonymus.Entity.ContactPhone,
                     anonymus.Entity.ContactEMail),
@@ -98,7 +93,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Accounts
                     anonymus.Entity.AccountFileName,
                     anonymus.Entity.AccountFile),
                 anonymus.Entity.FinishingDate,
-                new UserName(anonymus.ChangedByUserFirstName, anonymus.ChangedByUserSurName),
+                anonymus.ChangedByUserId.HasValue ? new UserName(anonymus.ChangedByUserFirstName, anonymus.ChangedByUserSurName) : null,
                 anonymus.Entity.ChangedDate,
                 anonymus.Entity.CreatedDate);
 

@@ -95,6 +95,8 @@
                 var domainEntity = new Account();
                 this.Map(domainEntity, dto);
 
+                domainEntity.AccountActivity_Id = dto.ActivityId;
+                domainEntity.Customer_Id = context.CustomerId;
                 domainEntity.CreatedDate = context.DateAndTime;
                 domainEntity.ChangedDate = context.DateAndTime;
 
@@ -260,9 +262,12 @@
 
         private static void AddPrograms(AccountForWrite dto, Account domainEntity)
         {
-            foreach (var id in dto.Program.ProgramIds)
+            if (dto.Program.ProgramIds != null && dto.Program.ProgramIds.Any())
             {
-                domainEntity.Programs.Add(new Helpdesk.Domain.Program { Id = id });
+                foreach (var id in dto.Program.ProgramIds)
+                {
+                    domainEntity.Programs.Add(new Helpdesk.Domain.Program { Id = id });
+                }
             }
         }
     }
