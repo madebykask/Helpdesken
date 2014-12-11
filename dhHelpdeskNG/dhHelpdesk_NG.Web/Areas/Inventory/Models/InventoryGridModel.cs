@@ -1425,7 +1425,7 @@
             SortFieldModel sortFieldModel,
             List<InventoryOverviewModel> models)
         {
-            if (sortFieldModel.SortBy.HasValue)
+            if (sortFieldModel != null && sortFieldModel.SortBy.HasValue)
             {
                 var displayValueComparer = new RowCellModelComparer(sortFieldModel.Name);
                 var sortedModels = new List<InventoryOverviewModel>();

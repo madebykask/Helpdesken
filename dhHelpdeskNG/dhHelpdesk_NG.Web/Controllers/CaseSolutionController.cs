@@ -216,6 +216,7 @@ namespace DH.Helpdesk.Web.Controllers
                 return new HttpNotFoundResult("No case solution found...");
 
             // Positive: Send Mail to...
+            /// If you ever remove this - please remove it in GetTemplate() action also
             if (caseSolution.NoMailToNotifier == 0)
                 caseSolution.NoMailToNotifier = 1;
             else
@@ -241,16 +242,9 @@ namespace DH.Helpdesk.Web.Controllers
                 return new HttpNotFoundResult("No case solution found...");
             }
 
-            // Positive: Send Mail to...
-            if (caseSolution.NoMailToNotifier == 0)
-            {
-                caseSolution.NoMailToNotifier = 1;
-            }
-            else
-            {
-                caseSolution.NoMailToNotifier = 0;
-            }
-          
+            /// This strange logic I took from Edit() action
+            caseSolution.NoMailToNotifier = caseSolution.NoMailToNotifier == 0 ? 1 : 0;
+
             return this.Json(new
                                  {
                                      caseSolution.CaseType_Id,
@@ -258,7 +252,7 @@ namespace DH.Helpdesk.Web.Controllers
                                      caseSolution.Category_Id,
                                      caseSolution.ReportedBy,
                                      caseSolution.Department_Id,
-                                     NoMailToNotifier = !caseSolution.NoMailToNotifier.ToBool(),
+                                     NoMailToNotifier = caseSolution.NoMailToNotifier.ToBool(),
                                      caseSolution.ProductArea_Id,
                                      caseSolution.Caption,
                                      caseSolution.Description,
