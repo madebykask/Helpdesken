@@ -4,7 +4,7 @@
 
     public class AccountType : Entity
     {
-        public int AccountActivity_Id { get; set; }
+        public int? AccountActivity_Id { get; set; }
 
         public int AccountField { get; set; }
 

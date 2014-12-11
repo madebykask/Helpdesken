@@ -4,23 +4,28 @@
     Layout = "~/Areas/OrderAccounts/Views/Shared/_IndexLayout.cshtml";
 }
 
+@section Scripts
+{
+    <script>
+        $(function() {
+            $('#search_type_dropdown').change(function () {
+                $('#search_type_form').submit();
+            });
+        });
+    </script>
+}
+
 @section Actions
 {
     <ul class="secnav">
         <li id="menu1">
-            <table class="tableform">
-                <tr>
-                    <td>
-                        @using (Html.BeginForm("Edit", "Order", FormMethod.Post, new { id = "type_form" }))
-                        {
-                            @Html.DropDownListFor(x => x.ActivityTypeForEdit, Model.ActivityTypes, new { id = "type_dropdown" })
-                        }
-                    </td>
-                    <td>
-                        <input type="submit" value="@Translation.Get("Skapa beställning")" class="btn" onclick=" $('#type_form').submit(); "/>
-                    </td>
-                </tr>
-            </table>
+            @using (Html.BeginForm("RedirectToNew", "Orders", FormMethod.Post, new { id = "type_form" }))
+            {
+                @Html.DropDownListFor(x => x.ActivityTypeForEdit, Model.ActivityTypes, new { id = "type_dropdown" })
+            }
+        </li>
+        <li>
+            <input type="submit" value="@Translation.Get("Skapa beställning")" class="btn" onclick=" $('#type_form').submit(); "/>
         </li>
     </ul>
 }
@@ -29,9 +34,9 @@
     <tr>
         <td class="span3">@Translation.Get("Typ")</td>
         <td>
-            @using (Html.BeginForm("Index", "Order", FormMethod.Post, new { id = "type_form" }))
+            @using (Html.BeginForm("Index", "Orders", FormMethod.Post, new { id = "search_type_form" }))
             {
-                @Html.DropDownListFor(x => x.ActivityType, Model.ActivityTypes, new { id = "type_dropdown" })
+                @Html.DropDownListFor(x => x.ActivityType, Model.ActivityTypes, string.Empty, new { id = "search_type_dropdown" })
             }
         </td>
     </tr>

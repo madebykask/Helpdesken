@@ -2,6 +2,7 @@ namespace DH.Helpdesk.Web.Areas.OrderAccounts.Infrastructure.ModelMappers
 {
     using DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Read.ModelEdit;
     using DH.Helpdesk.BusinessData.Models.Accounts.Read.Edit;
+    using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.Services.Response.Account;
     using DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit;
 
@@ -12,6 +13,6 @@ namespace DH.Helpdesk.Web.Areas.OrderAccounts.Infrastructure.ModelMappers
             AccountOptionsResponse options,
             AccountFieldsSettingsForModelEdit settings);
 
-        AccountModel BuildViewModel(int activityId, AccountOptionsResponse options, AccountFieldsSettingsForModelEdit settings);
+        AccountModel BuildViewModel(int activityId, AccountOptionsResponse options, AccountFieldsSettingsForModelEdit settings, UserOverview userOverview);
     }
 }

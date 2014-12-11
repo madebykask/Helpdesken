@@ -41,16 +41,27 @@
             List<AccountFieldsSettingsOverviewWithActivity> settings)
         {
             var grids = new List<GridModel>();
-            List<IGrouping<int, AccountOverview>> groupedModels = accountOverviews.GroupBy(x => x.ActivityId).ToList();
+            var groupedModels = accountOverviews.GroupBy(x => new { x.ActivityId, x.ActivityName }).ToList();
 
-            foreach (IGrouping<int, AccountOverview> model in groupedModels)
+            foreach (var model in groupedModels)
             {
-                AccountFieldsSettingsOverviewWithActivity setting = settings.Single(x => x.ActivityId == model.Key);
+                AccountFieldsSettingsOverviewWithActivity setting =
+                    settings.Single(x => x.ActivityId == model.Key.ActivityId);
 
-                List<RowModel> overviews = model.Select(m => CreateOverview(m, setting.AccountFieldsSettingsOverview)).ToList();
+                List<RowModel> overviews =
+                    model.Select(m => CreateOverview(m, setting.AccountFieldsSettingsOverview)).ToList();
                 List<GridColumnHeaderModel> headers = CreateHeaders(setting.AccountFieldsSettingsOverview);
 
-                grids.Add(new GridModel(headers, overviews, model.Key, new SortFieldModel()));
+                var gridModel = new GridModel(headers, overviews, model.Key.ActivityId, new SortFieldModel())
+                                    {
+                                        CurrentModeName
+                                            =
+                                            model
+                                            .Key
+                                            .ActivityName
+                                    };
+
+                grids.Add(gridModel);
             }
 
             return grids;
@@ -150,16 +161,6 @@
                 (StringDisplayValue)overview.User.RoomNumber,
                 values);
             CreateValueIfNeeded(
-                settings.User.FirstName,
-                BusinessData.Enums.Accounts.Fields.UserFields.FirstName,
-                (StringDisplayValue)overview.User.FirstName,
-                values);
-            CreateValueIfNeeded(
-                settings.User.FirstName,
-                BusinessData.Enums.Accounts.Fields.UserFields.FirstName,
-                (StringDisplayValue)overview.User.FirstName,
-                values);
-            CreateValueIfNeeded(
                 settings.User.EmploymentType,
                 BusinessData.Enums.Accounts.Fields.UserFields.EmploymentType,
                 (StringDisplayValue)overview.User.EmploymentType,
@@ -180,8 +181,8 @@
                 (StringDisplayValue)overview.User.DepartmentId2,
                 values);
             CreateValueIfNeeded(
-                settings.User.DepartmentId2,
-                BusinessData.Enums.Accounts.Fields.UserFields.DepartmentId2,
+                settings.User.Info,
+                BusinessData.Enums.Accounts.Fields.UserFields.Info,
                 (StringDisplayValue)overview.User.Info,
                 values);
             CreateValueIfNeeded(
@@ -241,11 +242,6 @@
                 settings.AccountInformation.AccountTypeId,
                 BusinessData.Enums.Accounts.Fields.AccountInformationFields.AccountTypeId,
                 (StringDisplayValue)overview.AccountInformation.AccountTypeId,
-                values);
-            CreateValueIfNeeded(
-                settings.AccountInformation.AccountType3,
-                BusinessData.Enums.Accounts.Fields.AccountInformationFields.AccountType3,
-                (StringDisplayValue)overview.AccountInformation.AccountType3,
                 values);
             CreateValueIfNeeded(
                 settings.AccountInformation.AccountType2,
@@ -403,14 +399,6 @@
                 BusinessData.Enums.Accounts.Fields.UserFields.RoomNumber,
                 headers);
             CreateHeaderIfNeeded(
-                settings.User.FirstName,
-                BusinessData.Enums.Accounts.Fields.UserFields.FirstName,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.User.FirstName,
-                BusinessData.Enums.Accounts.Fields.UserFields.FirstName,
-                headers);
-            CreateHeaderIfNeeded(
                 settings.User.EmploymentType,
                 BusinessData.Enums.Accounts.Fields.UserFields.EmploymentType,
                 headers);
@@ -424,8 +412,8 @@
                 BusinessData.Enums.Accounts.Fields.UserFields.DepartmentId2,
                 headers);
             CreateHeaderIfNeeded(
-                settings.User.DepartmentId2,
-                BusinessData.Enums.Accounts.Fields.UserFields.DepartmentId2,
+                settings.User.Info,
+                BusinessData.Enums.Accounts.Fields.UserFields.Info,
                 headers);
             CreateHeaderIfNeeded(
                 settings.User.Responsibility,
@@ -468,10 +456,6 @@
             CreateHeaderIfNeeded(
                 settings.AccountInformation.AccountTypeId,
                 BusinessData.Enums.Accounts.Fields.AccountInformationFields.AccountTypeId,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.AccountInformation.AccountType3,
-                BusinessData.Enums.Accounts.Fields.AccountInformationFields.AccountType3,
                 headers);
             CreateHeaderIfNeeded(
                 settings.AccountInformation.AccountType2,

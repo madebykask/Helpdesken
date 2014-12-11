@@ -187,6 +187,12 @@
                                                 <img src="@Url.Content("~/Content/icons/order.png")" />
                                                 @Translation.Get("Beställningar")</a></li>
                                     }
+                                   @* @if (model.IsAccountVisible())
+                                    {    
+                                        *@<li><a href="@Url.Action("Index", "Orders", new { area = "OrderAccounts" })">
+                                                <img src="@Url.Content("~/Content/icons/orderaccount.png")" />
+                                                @Translation.Get("Beställning kontobehörighet")</a></li>
+                                    @*}*@
                                     @if (model.IsAccountVisible())
                                     {    
                                         <li><a href="@Url.Action("index", "accounts", new { area = "" })">

@@ -5,6 +5,7 @@
         public AccountOverview(
             int id,
             int activityId,
+            string activivtyName,
             Orderer orderer,
             User user,
             AccountInformation accountInformation,
@@ -15,6 +16,7 @@
         {
             this.Id = id;
             this.ActivityId = activityId;
+            this.ActivityName = activivtyName;
             this.Orderer = orderer;
             this.User = user;
             this.AccountInformation = accountInformation;
@@ -27,6 +29,8 @@
         public int Id { get; private set; }
 
         public int ActivityId { get; private set; }
+
+        public string ActivityName { get; private set; }
 
         public Orderer Orderer { get; private set; }
 

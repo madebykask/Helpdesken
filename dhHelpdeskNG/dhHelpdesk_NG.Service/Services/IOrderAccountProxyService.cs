@@ -23,6 +23,8 @@
 
         IdAndNameOverview GetAccountActivityItemOverview(int id);
 
+        List<int> GetAccountActivivtieIds();
+
         void Update(AccountForUpdate dto, OperationContext context);
 
         int Add(AccountForInsert dto, OperationContext context);

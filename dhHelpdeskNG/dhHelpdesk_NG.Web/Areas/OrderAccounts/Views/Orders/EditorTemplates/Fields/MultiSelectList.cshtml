@@ -29,7 +29,6 @@
         @Html.FieldCaption(Model)
     </td>
     <td class="span9">
-        @Html.DropDownListFor(m => m.Value, source, string.Empty, attributes)
         @Html.ListBoxFor(x => x.Value, source, new { id = "collaborators_dropdown", multiple = "multiple", @class = "chosen-select", data_placeholder = Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation) })
         @Html.HiddenFor(m => m.IsRequired)
         @Html.ValidationMessageFor(m => m.Value)

@@ -15,6 +15,7 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Accounts;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Accounts;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Accounts;
     using DH.Helpdesk.Services.Requests.Account;
 
@@ -58,7 +59,7 @@
                 var accountRepository = uof.GetRepository<Account>();
                 IQueryable<User> users = uof.GetRepository<User>().GetAll();
 
-                AccountForEdit dto = accountRepository.GetAll().ExtractAccountDto(users);
+                AccountForEdit dto = accountRepository.GetAll(x => x.Programs).GetById(id).ExtractAccountDto(users);
 
                 return dto;
             }
@@ -256,7 +257,7 @@
             domainEntity.AccountFile = dto.Other.Content;
             domainEntity.InfoOther = dto.Other.Info;
         }
-        
+
         private static void AddPrograms(AccountForWrite dto, Account domainEntity)
         {
             foreach (var id in dto.Program.ProgramIds)

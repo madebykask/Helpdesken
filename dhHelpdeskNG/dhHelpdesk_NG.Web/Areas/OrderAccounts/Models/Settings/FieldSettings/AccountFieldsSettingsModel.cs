@@ -27,7 +27,7 @@
         }
 
         [NotNull]
-        public OrdererFieldSettings Orderer { get;  set; }
+        public OrdererFieldSettings Orderer { get; set; }
 
         [NotNull]
         public UserFieldSettings User { get;  set; }

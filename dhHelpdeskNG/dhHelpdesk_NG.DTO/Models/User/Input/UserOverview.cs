@@ -35,6 +35,8 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             , int refreshContent
             , string firstName
             , string surName
+            , string phone
+            , string email
             , ICollection<UserWorkingGroup> wgs)
         {
             this.Id = id;
@@ -65,6 +67,8 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             this.RefreshContent = refreshContent;
             this.FirstName = firstName;
             this.SurName = surName;
+            this.Phone = phone;
+            this.Email = email;
             UserWorkingGroups = wgs;
         }
 
@@ -125,6 +129,10 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
         public string FirstName { get; set; }
 
         public string SurName { get; set; }
+
+        public string Phone { get; set; }
+
+        public string Email { get; set; }
 
         public ICollection<UserWorkingGroup> UserWorkingGroups { get; set; }
     }

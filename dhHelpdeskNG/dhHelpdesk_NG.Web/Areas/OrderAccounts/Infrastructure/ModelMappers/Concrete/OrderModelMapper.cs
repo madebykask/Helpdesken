@@ -12,6 +12,7 @@
     using DH.Helpdesk.BusinessData.Models.Accounts.Read.Edit;
     using DH.Helpdesk.BusinessData.Models.Accounts.Read.Overview;
     using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.Services.Response.Account;
     using DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit;
     using DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.FieldModels;
@@ -56,9 +57,9 @@
                        };
         }
 
-        public AccountModel BuildViewModel(int activityId, AccountOptionsResponse options, AccountFieldsSettingsForModelEdit settings)
+        public AccountModel BuildViewModel(int activityId, AccountOptionsResponse options, AccountFieldsSettingsForModelEdit settings, UserOverview userOverview)
         {
-            var order = MapOrderer(options, settings);
+            var order = MapOrderer(options, settings, userOverview);
             var user = MapUser(options, settings);
             var account = MapAccountInformation(options, settings);
             var contact = MapContact(options, settings);
@@ -319,13 +320,14 @@
 
         private static Orderer MapOrderer(
             AccountOptionsResponse options,
-            AccountFieldsSettingsForModelEdit settings)
+            AccountFieldsSettingsForModelEdit settings,
+            UserOverview user)
         {
-            var id = CreateStringField(settings.Orderer.Id, null);
-            var firstName = CreateStringField(settings.Orderer.FirstName, null);
-            var lastName = CreateStringField(settings.Orderer.LastName, null);
-            var phone = CreateStringField(settings.Orderer.Phone, null);
-            var email = CreateStringField(settings.Orderer.Email, null);
+            var id = CreateStringField(settings.Orderer.Id, user.UserId);
+            var firstName = CreateStringField(settings.Orderer.FirstName, user.FirstName);
+            var lastName = CreateStringField(settings.Orderer.LastName, user.SurName);
+            var phone = CreateStringField(settings.Orderer.Phone, user.Phone);
+            var email = CreateStringField(settings.Orderer.Email, user.Email);
 
             return new Orderer(id, firstName, lastName, phone, email);
         }

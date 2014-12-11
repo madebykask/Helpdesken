@@ -1,5 +1,11 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.OrderAccounts.Models.Settings.FieldSettings.AccountFieldsSettingsModel
+
+@if (Model == null)
+{
+    return;
+}          
+
 <table class="table table-striped table-bordered table-hover">
     <thead>
         <tr>

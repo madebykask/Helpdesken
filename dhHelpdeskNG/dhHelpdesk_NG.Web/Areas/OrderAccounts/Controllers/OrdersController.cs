@@ -21,7 +21,9 @@
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
 
-    public class OrderController : UserInteractionController
+    using Microsoft.Ajax.Utilities;
+
+    public class OrdersController : UserInteractionController
     {
         private const string FilterName = "OrderAccountFilter";
 
@@ -37,7 +39,7 @@
 
         private readonly IAccountDtoMapper accountDtoMapper;
 
-        public OrderController(
+        public OrdersController(
             IMasterDataService masterDataService,
             IOrderAccountProxyService orderAccountProxyService,
             IOrderAccountSettingsProxyService orderAccountSettingsProxyService,
@@ -77,8 +79,22 @@
                 filter.CreateRequest(activityType),
                 OperationContext);
 
-            List<AccountFieldsSettingsOverviewWithActivity> settings =
-                this.orderAccountSettingsProxyService.GetFieldsSettingsOverviews(OperationContext);
+            var settings = new List<AccountFieldsSettingsOverviewWithActivity>();
+
+            if (activityType.HasValue)
+            {
+                AccountFieldsSettingsOverview setting =
+                    this.orderAccountSettingsProxyService.GetFieldsSettingsOverview(
+                        activityType.Value,
+                        this.OperationContext);
+                var settingOverview = new AccountFieldsSettingsOverviewWithActivity(activityType.Value, setting);
+
+                settings.Add(settingOverview);
+            }
+            else
+            {
+                settings = this.orderAccountSettingsProxyService.GetFieldsSettingsOverviews(this.OperationContext);
+            }
 
             List<GridModel> gridModels = GridModel.BuildGrid(models, settings);
 
@@ -118,36 +134,46 @@
             return this.View("Index", new { activityType = dto.ActivityId });
         }
 
+        [HttpPost]
+        public RedirectToRouteResult RedirectToNew(int activityTypeForEdit)
+        {
+            return this.RedirectToAction("New", new { activityTypeForEdit });
+        }
+
         [HttpGet]
-        public ViewResult New(int activityType)
+        public ViewResult New(int activityTypeForEdit)
         {
             AccountFieldsSettingsForModelEdit settings =
-                this.orderAccountSettingsProxyService.GetFieldsSettingsForModelEdit(activityType, OperationContext);
-            AccountOptionsResponse options = this.orderAccountProxyService.GetOptions(activityType, OperationContext);
-            IdAndNameOverview activity = this.orderAccountProxyService.GetAccountActivityItemOverview(activityType);
+                this.orderAccountSettingsProxyService.GetFieldsSettingsForModelEdit(
+                    activityTypeForEdit,
+                    OperationContext);
+            AccountOptionsResponse options = this.orderAccountProxyService.GetOptions(
+                activityTypeForEdit,
+                OperationContext);
+            IdAndNameOverview activity =
+                this.orderAccountProxyService.GetAccountActivityItemOverview(activityTypeForEdit);
 
-            AccountModel viewModel = this.orderModelMapper.BuildViewModel(activityType, options, settings);
+            AccountModel viewModel = this.orderModelMapper.BuildViewModel(
+                activityTypeForEdit,
+                options,
+                settings,
+                SessionFacade.CurrentUser);
             viewModel.ActivityName = activity.Name;
 
-            return this.View(viewModel);
+            return this.View("New", viewModel);
         }
 
         [HttpPost]
         [BadRequestOnNotValid]
-        public ViewResult New(AccountModel model)
+        public ViewResult New(AccountModel model, string clickedButton)
         {
             AccountForInsert dto = this.accountDtoMapper.BuidForInsert(model, null, OperationContext); // todo
             int id = this.orderAccountProxyService.Add(dto, this.OperationContext);
 
-            return this.View("Edit", new { id, activityType = dto.ActivityId });
-        }
-
-        [HttpPost]
-        [BadRequestOnNotValid]
-        public ViewResult NewAndClose(AccountModel model)
-        {
-            AccountForInsert dto = this.accountDtoMapper.BuidForInsert(model, null, OperationContext); // todo
-            int id = this.orderAccountProxyService.Add(dto, this.OperationContext);
+            if (clickedButton == ClickedButton.Save)
+            {
+                return this.View("Edit", new { id, activityType = dto.ActivityId });
+            }
 
             return this.View("Index", new { activityType = dto.ActivityId });
         }

@@ -16,7 +16,7 @@
 
 }
 
-@using (Ajax.BeginForm("Grid", null, new AjaxOptions { UpdateTargetId = "grid_container" }, new { id = "search_form" }))
+@using (Ajax.BeginForm("Grid", "Orders", new AjaxOptions { UpdateTargetId = "grid_container" }, new { id = "search_form" }))
 {
     @Html.HiddenFor(m => m.Filter.SortField.Name, new { id = "sortFieldName" })
     @Html.HiddenFor(m => m.Filter.SortField.SortBy, new { id = "sortFieldBy" })
@@ -25,6 +25,14 @@
         <tr>
             <td class="span3">@Translation.Get("Handläggare")</td>
             <td>@Html.DropDownListFor(m => m.Filter.UserId, Model.Users, string.Empty, new { id = "region_dropdown" })</td>
+        </tr>
+        <tr>
+            <td class="span3">
+                @Html.LabelFor(m => m.Filter.SearchFor)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.Filter.SearchFor)
+            </td>
         </tr>
         <tr>
             <td>@Translation.Get("Visa")
@@ -42,12 +50,13 @@
 
                 </label>
             </td>
-            <td class="span3">
-                @Html.LabelFor(m => m.Filter.SearchFor)
-            </td>
-            <td>
-                @Html.TextBoxFor(m => m.Filter.SearchFor)
-            </td>
+            <tr>
+                <td class="span3">&nbsp;
+                </td>
+                <td>
+                    <input type="submit" value="@Translation.Get("Sök")" class="btn" />
+                </td>
+            </tr>
         </tr>
     </table>
 }

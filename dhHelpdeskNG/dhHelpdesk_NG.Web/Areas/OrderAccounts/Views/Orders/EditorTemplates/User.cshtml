@@ -23,12 +23,12 @@
         || Model.Manager.Show
         || Model.ReferenceNumber.Show)
 {
-    <h4>@Translation.Get("Operativsystem")</h4>
+    <h4>@Translation.Get("Användarinformation")</h4>
     <div class="row">
         <div class="span12">
             <table class="tableform">
-                @Html.EditorFor(m => m.Ids, "Fields/Text")
-                @Html.EditorFor(m => m.PersonalIdentityNumber, "Fields/Text")
+@*                @Html.EditorFor(m => m.Ids, "Fields/Text")*@
+@*                @Html.EditorFor(m => m.PersonalIdentityNumber, "Fields/Text")*@
                 @Html.EditorFor(m => m.FirstName, "Fields/Text")
                 @Html.EditorFor(m => m.Initials, "Fields/Text")
                 @Html.EditorFor(m => m.LastName, "Fields/Text")
@@ -54,9 +54,9 @@
                     </tr>
                 }
 
-                @Html.EditorFor(m => m.DepartmentId, "Fields/List", new { Source = Model.DepartmentId, id = "departments_dropdown" })
-                @Html.EditorFor(m => m.UnitId, "Fields/List", new { Source = Model.UnitId })
-                @Html.EditorFor(m => m.DepartmentId2, "Fields/List", new { Source = Model.DepartmentId2 })
+                @Html.EditorFor(m => m.DepartmentId, "Fields/List", new { Source = Model.Departments, id = "departments_dropdown" })
+                @Html.EditorFor(m => m.UnitId, "Fields/List", new { Source = Model.Units })
+                @Html.EditorFor(m => m.DepartmentId2, "Fields/List", new { Source = Model.Departments2 })
                 @Html.EditorFor(m => m.Info, "Fields/Text")
                 @Html.EditorFor(m => m.Responsibility, "Fields/Text")
                 @Html.EditorFor(m => m.Activity, "Fields/Text")

@@ -373,6 +373,8 @@ namespace DH.Helpdesk.Dal.Repositories
                         x.RefreshContent,
                         x.FirstName,
                         x.SurName,
+                        x.Phone,
+                        x.Email,
                         x.UserWorkingGroups)
                     ).SingleOrDefault();
             return u;

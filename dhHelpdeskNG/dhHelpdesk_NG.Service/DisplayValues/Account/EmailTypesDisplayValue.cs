@@ -30,7 +30,7 @@
                 case EMailTypes.Expanded:
                     return Translator.Translate(EMailTypes.Expanded.ToString());
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    return string.Empty;
             }
         }
     }

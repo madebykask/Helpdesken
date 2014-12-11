@@ -72,6 +72,11 @@ namespace DH.Helpdesk.Services.Services.Concrete
             return this.orderAccountService.GetAccountActivityItemOverview(id);
         }
 
+        public List<int> GetAccountActivivtieIds()
+        {
+            return this.orderAccountService.GetAccountActivivtieIds();
+        }
+
         public void Update(AccountForUpdate dto, OperationContext context)
         {
             AccountForEdit entity = this.orderAccountService.Get(dto.Id);

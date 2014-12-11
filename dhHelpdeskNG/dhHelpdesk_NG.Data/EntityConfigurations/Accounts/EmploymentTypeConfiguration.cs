@@ -14,6 +14,8 @@ namespace DH.Helpdesk.Dal.EntityConfigurations.Accounts
             this.Property(x => x.Status).IsRequired();
             this.Property(x => x.CreatedDate).IsRequired();
             this.Property(x => x.ChangedDate).IsRequired();
+
+            this.ToTable("tblEmploymentType");
         }
     }
 }

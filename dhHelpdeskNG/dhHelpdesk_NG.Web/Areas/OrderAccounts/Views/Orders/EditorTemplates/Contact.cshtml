@@ -5,11 +5,11 @@
         || Model.Phone.Show
         || Model.Email.Show)
 {
-    <h4>@Translation.Get("Operativsystem")</h4>
+    <h4>@Translation.Get("Kontakt")</h4>
     <div class="row">
         <div class="span12">
             <table class="tableform">
-                @Html.EditorFor(m => m.Ids, "Fields/Text")
+@*                @Html.EditorFor(m => m.Ids, "Fields/Text")*@
                 @Html.EditorFor(m => m.Name, "Fields/Text")
                 @Html.EditorFor(m => m.Phone, "Fields/Text")
                 @Html.EditorFor(m => m.Email, "Fields/Text")

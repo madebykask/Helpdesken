@@ -7,7 +7,6 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Accounts
     using DH.Helpdesk.BusinessData.Models.Accounts.Read.Edit;
     using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Common.Types;
-    using DH.Helpdesk.Dal.NewInfrastructure;
 
     public static class AccountForReadMapper
     {
@@ -28,7 +27,6 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Accounts
                                 RegionId = t.s.Department.Region_Id,
                                 ActivityName = t.s.AccountActivity.Name
                             })
-                    .IncludePath(x => x.Entity.Programs)
                     .Single();
 
             var dto = new AccountForEdit(

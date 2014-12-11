@@ -29,7 +29,6 @@
             this.Other = other;
         }
 
-        [IsId]
         public int Id { get; set; }
 
         public int ActivityTypeId { get; set; }
