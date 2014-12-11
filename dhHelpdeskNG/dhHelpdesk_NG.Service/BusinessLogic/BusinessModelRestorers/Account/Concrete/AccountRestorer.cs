@@ -1,5 +1,6 @@
 namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Account.Concrete
 {
+    using DH.Helpdesk.BusinessData.Models.Accounts;
     using DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Read.Processing;
     using DH.Helpdesk.BusinessData.Models.Accounts.Read.Edit;
     using DH.Helpdesk.BusinessData.Models.Accounts.Write;
@@ -11,13 +12,13 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Account.Conc
             AccountForEdit existingDto,
             AccountFieldsSettingsForProcessing settings)
         {
-            this.RestoreOrder(dto, existingDto, settings);
-            this.RestoreUser(dto, existingDto, settings);
-            this.RestoreAccountInformation(dto, existingDto, settings);
-            this.RestoreDelivery(dto, existingDto, settings);
-            this.RestoreProgram(dto, existingDto, settings);
-            this.RestoreOther(dto, existingDto, settings);
-            this.RestoreContact(dto, existingDto, settings);
+            this.RestoreOrder(dto.Orderer, existingDto, settings);
+            this.RestoreUser(dto.User, existingDto, settings);
+            this.RestoreAccountInformation(dto.AccountInformation, existingDto, settings);
+            this.RestoreDelivery(dto.DeliveryInformation, existingDto, settings);
+            this.RestoreProgram(dto.Program, existingDto, settings);
+            this.RestoreOther(dto.Other, existingDto, settings);
+            this.RestoreContact(dto.Contact, existingDto, settings);
         }
 
         protected override bool CreateValidationRule(FieldSetting setting)
@@ -26,276 +27,276 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Account.Conc
         }
 
         private void RestoreOrder(
-            AccountForUpdate updated,
+            Orderer updated,
             AccountForEdit existing,
             AccountFieldsSettingsForProcessing settings)
         {
-            this.RestoreFieldIfNeeded(updated, () => updated.Orderer.Id, existing.Orderer.Id, settings.Orderer.Id);
+            this.RestoreFieldIfNeeded(updated, () => updated.Id, existing.Orderer.Id, settings.Orderer.Id);
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.Orderer.FirstName,
+                () => updated.FirstName,
                 existing.Orderer.FirstName,
                 settings.Orderer.FirstName);
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.Orderer.LastName,
+                () => updated.LastName,
                 existing.Orderer.LastName,
                 settings.Orderer.LastName);
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.Orderer.Phone,
+                () => updated.Phone,
                 existing.Orderer.Phone,
                 settings.Orderer.Phone);
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.Orderer.Email,
+                () => updated.Email,
                 existing.Orderer.Email,
                 settings.Orderer.Email);
         }
 
         private void RestoreUser(
-            AccountForUpdate updated,
+            User updated,
             AccountForEdit existing,
             AccountFieldsSettingsForProcessing settings)
         {
-            this.RestoreFieldIfNeeded(updated, () => updated.User.Ids, existing.User.Ids, settings.User.Ids);
+            this.RestoreFieldIfNeeded(updated, () => updated.Ids, existing.User.Ids, settings.User.Ids);
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.User.PersonalIdentityNumber,
+                () => updated.PersonalIdentityNumber,
                 existing.User.PersonalIdentityNumber,
                 settings.User.PersonalIdentityNumber);
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.User.FirstName,
+                () => updated.FirstName,
                 existing.User.FirstName,
                 settings.User.FirstName);
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.User.Initials,
+                () => updated.Initials,
                 existing.User.Initials,
                 settings.User.Initials);
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.User.LastName,
+                () => updated.LastName,
                 existing.User.LastName,
                 settings.User.LastName);
-            this.RestoreFieldIfNeeded(updated, () => updated.User.Phone, existing.User.Phone, settings.User.Phone);
+            this.RestoreFieldIfNeeded(updated, () => updated.Phone, existing.User.Phone, settings.User.Phone);
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.User.Extension,
+                () => updated.Extension,
                 existing.User.Extension,
                 settings.User.Extension);
-            this.RestoreFieldIfNeeded(updated, () => updated.User.EMail, existing.User.EMail, settings.User.EMail);
-            this.RestoreFieldIfNeeded(updated, () => updated.User.Title, existing.User.Title, settings.User.Title);
+            this.RestoreFieldIfNeeded(updated, () => updated.EMail, existing.User.EMail, settings.User.EMail);
+            this.RestoreFieldIfNeeded(updated, () => updated.Title, existing.User.Title, settings.User.Title);
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.User.Location,
+                () => updated.Location,
                 existing.User.Location,
                 settings.User.Location);
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.User.RoomNumber,
+                () => updated.RoomNumber,
                 existing.User.RoomNumber,
                 settings.User.RoomNumber);
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.User.PostalAddress,
+                () => updated.PostalAddress,
                 existing.User.PostalAddress,
                 settings.User.PostalAddress);
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.User.DepartmentId,
+                () => updated.DepartmentId,
                 existing.User.DepartmentId,
                 settings.User.DepartmentId);
-            this.RestoreFieldIfNeeded(updated, () => updated.User.UnitId, existing.User.UnitId, settings.User.UnitId);
+            this.RestoreFieldIfNeeded(updated, () => updated.UnitId, existing.User.UnitId, settings.User.UnitId);
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.User.DepartmentId2,
+                () => updated.DepartmentId2,
                 existing.User.DepartmentId2,
                 settings.User.DepartmentId2);
-            this.RestoreFieldIfNeeded(updated, () => updated.User.Info, existing.User.Info, settings.User.Info);
+            this.RestoreFieldIfNeeded(updated, () => updated.Info, existing.User.Info, settings.User.Info);
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.User.Responsibility,
+                () => updated.Responsibility,
                 existing.User.Responsibility,
                 settings.User.Responsibility);
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.User.Activity,
+                () => updated.Activity,
                 existing.User.Activity,
                 settings.User.Activity);
-            this.RestoreFieldIfNeeded(updated, () => updated.User.Manager, existing.User.Manager, settings.User.Manager);
+            this.RestoreFieldIfNeeded(updated, () => updated.Manager, existing.User.Manager, settings.User.Manager);
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.User.ReferenceNumber,
+                () => updated.ReferenceNumber,
                 existing.User.ReferenceNumber,
                 settings.User.ReferenceNumber);
         }
 
         private void RestoreAccountInformation(
-            AccountForUpdate updated,
+            AccountInformation updated,
             AccountForEdit existing,
             AccountFieldsSettingsForProcessing settings)
         {
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.AccountInformation.StartedDate,
+                () => updated.StartedDate,
                 existing.AccountInformation.StartedDate,
                 settings.AccountInformation.StartedDate);
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.AccountInformation.FinishDate,
+                () => updated.FinishDate,
                 existing.AccountInformation.FinishDate,
                 settings.AccountInformation.FinishDate);
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.AccountInformation.EMailTypeId,
+                () => updated.EMailTypeId,
                 existing.AccountInformation.EMailTypeId,
                 settings.AccountInformation.EMailTypeId);
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.AccountInformation.HomeDirectory,
+                () => updated.HomeDirectory,
                 existing.AccountInformation.HomeDirectory,
                 settings.AccountInformation.HomeDirectory);
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.AccountInformation.Profile,
+                () => updated.Profile,
                 existing.AccountInformation.Profile,
                 settings.AccountInformation.Profile);
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.AccountInformation.InventoryNumber,
+                () => updated.InventoryNumber,
                 existing.AccountInformation.InventoryNumber,
                 settings.AccountInformation.InventoryNumber);
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.AccountInformation.AccountTypeId,
+                () => updated.AccountTypeId,
                 existing.AccountInformation.AccountTypeId,
                 settings.AccountInformation.AccountTypeId);
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.AccountInformation.AccountType2,
+                () => updated.AccountType2,
                 existing.AccountInformation.AccountType2,
                 settings.AccountInformation.AccountType2);
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.AccountInformation.AccountType3,
+                () => updated.AccountType3,
                 existing.AccountInformation.AccountType3,
                 settings.AccountInformation.AccountType3);
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.AccountInformation.AccountType4,
+                () => updated.AccountType4,
                 existing.AccountInformation.AccountType4,
                 settings.AccountInformation.AccountType4);
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.AccountInformation.AccountType5,
+                () => updated.AccountType5,
                 existing.AccountInformation.AccountType5,
                 settings.AccountInformation.AccountType5);
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.AccountInformation.Info,
+                () => updated.Info,
                 existing.AccountInformation.Info,
                 settings.AccountInformation.Info);
         }
 
         private void RestoreDelivery(
-            AccountForUpdate updated,
+            DeliveryInformation updated,
             AccountForEdit existing,
             AccountFieldsSettingsForProcessing settings)
         {
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.DeliveryInformation.Name,
+                () => updated.Name,
                 existing.DeliveryInformation.Name,
                 settings.DeliveryInformation.Name);
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.DeliveryInformation.Phone,
+                () => updated.Phone,
                 existing.DeliveryInformation.Phone,
                 settings.DeliveryInformation.Phone);
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.DeliveryInformation.Address,
+                () => updated.Address,
                 existing.DeliveryInformation.Address,
                 settings.DeliveryInformation.Address);
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.DeliveryInformation.PostalAddress,
+                () => updated.PostalAddress,
                 existing.DeliveryInformation.PostalAddress,
                 settings.DeliveryInformation.PostalAddress);
         }
 
         private void RestoreContact(
-           AccountForUpdate updated,
+           Contact updated,
            AccountForEdit existing,
            AccountFieldsSettingsForProcessing settings)
         {
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.Contact.Ids,
+                () => updated.Ids,
                 existing.Contact.Ids,
                 settings.Contact.Ids);
 
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.Contact.Name,
+                () => updated.Name,
                 existing.Contact.Name,
                 settings.Contact.Name);
 
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.Contact.Phone,
+                () => updated.Phone,
                 existing.Contact.Phone,
                 settings.Contact.Phone);
 
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.Contact.Email,
+                () => updated.Email,
                 existing.Contact.Email,
                 settings.Contact.Email);
         }
 
         private void RestoreProgram(
-            AccountForUpdate updated,
+            Program updated,
             AccountForEdit existing,
             AccountFieldsSettingsForProcessing settings)
         {
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.Program.ProgramIds,
+                () => updated.ProgramIds,
                 existing.Program.ProgramIds,
                 settings.Program.Programs);
 
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.Program.InfoProduct,
+                () => updated.InfoProduct,
                 existing.Program.InfoProduct,
                 settings.Program.InfoProduct);
         }
 
         private void RestoreOther(
-            AccountForUpdate updated,
+            Other updated,
             AccountForEdit existing,
             AccountFieldsSettingsForProcessing settings)
         {
-            this.RestoreFieldIfNeeded(updated, () => updated.Other.Info, existing.Other.Info, settings.Other.Info);
+            this.RestoreFieldIfNeeded(updated, () => updated.Info, existing.Other.Info, settings.Other.Info);
 
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.Other.CaseNumber,
+                () => updated.CaseNumber,
                 existing.Other.CaseNumber,
                 settings.Other.CaseNumber);
 
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.Other.FileName,
+                () => updated.FileName,
                 existing.Other.FileName,
                 settings.Other.FileName);
 
             this.RestoreFieldIfNeeded(
                 updated,
-                () => updated.Other.Content,
+                () => updated.Content,
                 existing.Other.Content,
                 settings.Other.FileName);
         }

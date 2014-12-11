@@ -19,6 +19,7 @@
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Accounts;
     using DH.Helpdesk.Services.Requests.Account;
 
+    using Program = DH.Helpdesk.Domain.Program;
     using User = DH.Helpdesk.Domain.User;
 
     public class OrderAccountService : IOrderAccountService
@@ -72,17 +73,32 @@
                 IRepository<Account> accountRepository = uof.GetRepository<Account>();
                 IRepository<Helpdesk.Domain.Program> programRepository = uof.GetRepository<Helpdesk.Domain.Program>();
 
-                var domainEntity = new Account();
+                var domainEntity = accountRepository.Find(x => x.Id == dto.Id, x => x.Programs).SingleOrDefault();
                 this.Map(domainEntity, dto);
 
                 domainEntity.ChangedDate = context.DateAndTime;
                 domainEntity.ChangedByUser_Id = context.UserId;
 
-                domainEntity.Programs.Clear();
-                AddPrograms(dto, domainEntity, programRepository);
+                foreach (var program in domainEntity.Programs.ToList())
+                {
+                    // Remove the roles which are not in the list of new roles
+                    if (!dto.Program.ProgramIds.Contains(program.Id))
+                        domainEntity.Programs.Remove(program);
+                    // Removes role 3 in the example
+                }
 
-                accountRepository.Update(domainEntity);
+                foreach (var newId in dto.Program.ProgramIds)
+                {
+                    // Add the roles which are not in the list of user's roles
+                    if (!domainEntity.Programs.Any(r => r.Id == newId))
+                    {
+                        var program = new Helpdesk.Domain.Program { Id = newId };
 
+                        programRepository.Attach(program);
+                        domainEntity.Programs.Add(program);
+                    }
+                    // Adds roles 1 and 2 in the example
+                }
                 uof.Save();
             }
         }
@@ -269,8 +285,8 @@
                 foreach (var id in dto.Program.ProgramIds)
                 {
                     var program = new Helpdesk.Domain.Program { Id = id };
-                    programRepository.Attach(program);
 
+                    programRepository.Attach(program);
                     domainEntity.Programs.Add(program);
                 }
             }

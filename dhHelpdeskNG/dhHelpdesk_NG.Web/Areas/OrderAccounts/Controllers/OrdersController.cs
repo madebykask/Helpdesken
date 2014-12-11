@@ -172,5 +172,13 @@
 
             return this.RedirectToAction("Index", new { activityType = dto.ActivityId });
         }
+
+        [HttpGet]
+        public RedirectToRouteResult Delete(int id)
+        {
+            this.orderAccountProxyService.Delete(id);
+
+            return this.RedirectToAction("Index");
+        }
     }
 }

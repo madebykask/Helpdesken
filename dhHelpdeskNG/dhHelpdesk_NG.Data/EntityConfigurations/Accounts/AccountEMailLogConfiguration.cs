@@ -20,6 +20,8 @@ namespace DH.Helpdesk.Dal.EntityConfigurations.Accounts
             this.Property(x => x.MailID).IsRequired();
             this.Property(x => x.MessageId).HasMaxLength(100).IsOptional();
             this.Property(x => x.CreatedDate).IsRequired();
+
+            this.ToTable("tblAccountEMailLog");
         }
     }
 }

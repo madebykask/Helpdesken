@@ -539,6 +539,7 @@
             modelBuilder.Configurations.Add(new AccountActivityGroupConfiguration());
             modelBuilder.Configurations.Add(new AccountFieldSettingsConfiguration());
             modelBuilder.Configurations.Add(new AccountTypeConfiguration());
+            modelBuilder.Configurations.Add(new AccountEMailLogConfiguration());
             modelBuilder.Configurations.Add(new EmploymentTypeConfiguration());
             modelBuilder.Configurations.Add(new ActionSettingConfiguration());
             modelBuilder.Configurations.Add(new BuildingConfiguration());
