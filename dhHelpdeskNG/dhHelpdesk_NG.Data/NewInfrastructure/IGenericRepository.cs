@@ -7,6 +7,8 @@
     public interface IRepository<TEntity>
         where TEntity : class
     {
+        void Attach(TEntity entity);
+
         void Add(TEntity entity);
 
         void Update(TEntity entity);

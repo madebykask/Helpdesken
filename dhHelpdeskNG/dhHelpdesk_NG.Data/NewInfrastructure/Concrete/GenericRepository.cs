@@ -19,6 +19,11 @@
             this.dbset = context.Set<TEntity>();
         }
 
+        public void Attach(TEntity entity)
+        {
+            this.dbset.Attach(entity);
+        }
+
         public void Add(TEntity entity)
         {
             this.dbset.Add(entity);

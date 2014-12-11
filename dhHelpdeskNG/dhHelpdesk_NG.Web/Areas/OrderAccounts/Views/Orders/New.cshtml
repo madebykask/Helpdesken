@@ -40,9 +40,9 @@
     @using (Html.BeginForm("New", "Orders", FormMethod.Post, new { id = "edit_form" }))
     {
         @Html.CheckBoxFor(m => m.IsCreateCase)
-        <input type="hidden" id="clickedButton" name="clickedButton" />
-        
         @Translation.Get("Skapa ärende")
+
+        <input type="hidden" id="clickedButton" name="clickedButton" />
 
         <h4>@Translation.Get("Allmänt")</h4>
         <div class="row">

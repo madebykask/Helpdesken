@@ -69,7 +69,8 @@
         {
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
-                var accountRepository = uof.GetRepository<Account>();
+                IRepository<Account> accountRepository = uof.GetRepository<Account>();
+                IRepository<Helpdesk.Domain.Program> programRepository = uof.GetRepository<Helpdesk.Domain.Program>();
 
                 var domainEntity = new Account();
                 this.Map(domainEntity, dto);
@@ -78,7 +79,7 @@
                 domainEntity.ChangedByUser_Id = context.UserId;
 
                 domainEntity.Programs.Clear();
-                AddPrograms(dto, domainEntity);
+                AddPrograms(dto, domainEntity, programRepository);
 
                 accountRepository.Update(domainEntity);
 
@@ -90,7 +91,8 @@
         {
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
-                var accountRepository = uof.GetRepository<Account>();
+                IRepository<Account> accountRepository = uof.GetRepository<Account>();
+                IRepository<Helpdesk.Domain.Program> programRepository = uof.GetRepository<Helpdesk.Domain.Program>();
 
                 var domainEntity = new Account();
                 this.Map(domainEntity, dto);
@@ -102,7 +104,7 @@
 
                 domainEntity.CreatedByUser_Id = context.UserId;
 
-                AddPrograms(dto, domainEntity);
+                AddPrograms(dto, domainEntity, programRepository);
                 accountRepository.Add(domainEntity);
 
                 uof.Save();
@@ -115,7 +117,7 @@
         {
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
-                var accountRepository = uof.GetRepository<Account>();
+                IRepository<Account> accountRepository = uof.GetRepository<Account>();
 
                 Account account = accountRepository.GetById(id);
                 account.Programs.Clear();
@@ -260,13 +262,16 @@
             domainEntity.InfoOther = dto.Other.Info;
         }
 
-        private static void AddPrograms(AccountForWrite dto, Account domainEntity)
+        private static void AddPrograms(AccountForWrite dto, Account domainEntity, IRepository<Helpdesk.Domain.Program> programRepository)
         {
             if (dto.Program.ProgramIds != null && dto.Program.ProgramIds.Any())
             {
                 foreach (var id in dto.Program.ProgramIds)
                 {
-                    domainEntity.Programs.Add(new Helpdesk.Domain.Program { Id = id });
+                    var program = new Helpdesk.Domain.Program { Id = id };
+                    programRepository.Attach(program);
+
+                    domainEntity.Programs.Add(program);
                 }
             }
         }
