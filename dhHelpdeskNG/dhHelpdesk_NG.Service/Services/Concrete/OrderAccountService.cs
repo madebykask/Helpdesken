@@ -71,9 +71,9 @@
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
                 IRepository<Account> accountRepository = uof.GetRepository<Account>();
-                IRepository<Helpdesk.Domain.Program> programRepository = uof.GetRepository<Helpdesk.Domain.Program>();
+                IRepository<Program> programRepository = uof.GetRepository<Program>();
 
-                var domainEntity = accountRepository.Find(x => x.Id == dto.Id, x => x.Programs).SingleOrDefault();
+                var domainEntity = accountRepository.Find(x => x.Id == dto.Id, x => x.Programs).Single();
                 this.Map(domainEntity, dto);
 
                 domainEntity.ChangedDate = context.DateAndTime;
@@ -81,24 +81,23 @@
 
                 foreach (var program in domainEntity.Programs.ToList())
                 {
-                    // Remove the roles which are not in the list of new roles
                     if (!dto.Program.ProgramIds.Contains(program.Id))
+                    {
                         domainEntity.Programs.Remove(program);
-                    // Removes role 3 in the example
+                    }
                 }
 
                 foreach (var newId in dto.Program.ProgramIds)
                 {
-                    // Add the roles which are not in the list of user's roles
                     if (!domainEntity.Programs.Any(r => r.Id == newId))
                     {
-                        var program = new Helpdesk.Domain.Program { Id = newId };
+                        var program = new Program { Id = newId };
 
                         programRepository.Attach(program);
                         domainEntity.Programs.Add(program);
                     }
-                    // Adds roles 1 and 2 in the example
                 }
+
                 uof.Save();
             }
         }
@@ -108,7 +107,7 @@
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
                 IRepository<Account> accountRepository = uof.GetRepository<Account>();
-                IRepository<Helpdesk.Domain.Program> programRepository = uof.GetRepository<Helpdesk.Domain.Program>();
+                IRepository<Program> programRepository = uof.GetRepository<Program>();
 
                 var domainEntity = new Account();
                 this.Map(domainEntity, dto);
@@ -120,7 +119,17 @@
 
                 domainEntity.CreatedByUser_Id = context.UserId;
 
-                AddPrograms(dto, domainEntity, programRepository);
+                if (dto.Program.ProgramIds != null && dto.Program.ProgramIds.Any())
+                {
+                    foreach (var id in dto.Program.ProgramIds)
+                    {
+                        var program = new Program { Id = id };
+
+                        programRepository.Attach(program);
+                        domainEntity.Programs.Add(program);
+                    }
+                }
+
                 accountRepository.Add(domainEntity);
 
                 uof.Save();
@@ -207,7 +216,7 @@
         {
             using (var uow = this.unitOfWorkFactory.Create())
             {
-                var accountTypeRepository = uow.GetRepository<Helpdesk.Domain.Program>();
+                var accountTypeRepository = uow.GetRepository<Program>();
 
                 List<ItemOverview> overviews =
                     accountTypeRepository.GetAll().MapProgramsToItemOverview();
@@ -276,20 +285,6 @@
             domainEntity.AccountFileContentType = ""; // todo
             domainEntity.AccountFile = dto.Other.Content;
             domainEntity.InfoOther = dto.Other.Info;
-        }
-
-        private static void AddPrograms(AccountForWrite dto, Account domainEntity, IRepository<Helpdesk.Domain.Program> programRepository)
-        {
-            if (dto.Program.ProgramIds != null && dto.Program.ProgramIds.Any())
-            {
-                foreach (var id in dto.Program.ProgramIds)
-                {
-                    var program = new Helpdesk.Domain.Program { Id = id };
-
-                    programRepository.Attach(program);
-                    domainEntity.Programs.Add(program);
-                }
-            }
         }
     }
 }
