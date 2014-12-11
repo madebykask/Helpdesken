@@ -262,11 +262,14 @@
                 }
                 else
                 {
-                    foreach (var c in allCustomers)
+                    if (UserWorkingGroups != null && UserWorkingGroups.Any())
                     {
-                        if (_userService.UserHasCase(c.Id, userToSave.Id, UserWorkingGroups.Where(w => w.UserRole != 0).Select(w => w.WorkingGroup_Id).ToList()))                        
-                            customersAlert.Add(c.Name);                        
-                    }                                               
+                        foreach (var c in allCustomers)
+                        {
+                            if (_userService.UserHasCase(c.Id, userToSave.Id, UserWorkingGroups.Where(w => w.UserRole != 0).Select(w => w.WorkingGroup_Id).ToList()))
+                                customersAlert.Add(c.Name);
+                        }
+                    }                       
                 }
 
                 if (customersAlert.Any())
