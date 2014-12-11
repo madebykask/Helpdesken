@@ -115,17 +115,8 @@
             if (string.IsNullOrEmpty(priority.Code))
                 errors.Add("Priority.Code", "Du måste ange prioritet");
 
-            if (string.IsNullOrEmpty(priority.Description))
-                errors.Add("Priority.Description", "Du måste ange en beskrivning");
-
             if (string.IsNullOrEmpty(priority.Name))
                 errors.Add("Priority.Name", "Du måste ange ett namn");
-
-            if (string.IsNullOrEmpty(priority.EMailList))
-                errors.Add("Priority.EMailList", "Du måste fylla i listan");
-
-            //if (string.IsNullOrEmpty(priority.FileName))
-            //    errors.Add("Priority.FileName", "Du måste bifoga en fil");
 
             if (priority.Id == 0)
                 this._priorityRepository.Add(priority);
