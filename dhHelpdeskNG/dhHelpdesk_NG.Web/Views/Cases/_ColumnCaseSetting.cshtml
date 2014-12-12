@@ -26,8 +26,10 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody>
-                        <tr class="rowAdding">                                   
+                        <tbody id="dataTable" class ="movable ui-sortable">
+                            @if (Model != null)
+                            {
+                                <tr class="rowAdding">                                   
                                     <td>
                                         <select style="width: 190px;" id="labellist">
                                             @*<option></option>*@
@@ -61,12 +63,7 @@
                                         <input type="hidden" id="caseSettingId" value="" />
                                     </td> 
                                               
-                                </tr>     
-                        </tbody>                                            
-                        <tbody id="dataTable" >
-                            @if (Model != null)
-                            {
-                                
+                                </tr>                                                 
                                 foreach (var uc in  Model.UserColumns)
                                 {                                    
                                     <tr>                                        
@@ -117,8 +114,8 @@
 
 <script type="text/javascript">       
     $(function () {
-        $("#customerCaseSum tbody [id=dataTable]").sortable();
-        $("#customerCaseSum tbody [id=dataTable]").disableSelection();
+        $("#movable").sortable();
+        $("#movable").disableSelection();
     });
 
     function addCaseSettingRow() {                       
