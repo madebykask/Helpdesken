@@ -74,6 +74,7 @@
             var search = text.Trim().ToLower();
 
             query = query.Where(o =>
+                                    o.Id.ToString().Trim().ToLower().Contains(search) ||                                          
 
                                     // Delivery
                                     o.DeliveryDepartment.DepartmentName.Trim().ToLower().Contains(search) ||                    

@@ -1,7 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Orders.Order;
@@ -35,6 +34,11 @@
 
         private static DeliveryEditFields CreateDeliveryFields(DeliveryEditModel model)
         {
+            if (model == null)
+            {
+                model = DeliveryEditModel.CreateEmpty();
+            }
+
             return new DeliveryEditFields(
                     ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.DeliveryDate),
                     ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.InstallDate),
@@ -52,6 +56,11 @@
 
         private static GeneralEditFields CreateGeneralFields(GeneralEditModel model)
         {
+            if (model == null)
+            {
+                model = GeneralEditModel.CreateEmpty();
+            }
+
             return new GeneralEditFields(
                     ConfigurableFieldModel<int>.GetValueOrDefault(model.OrderNumber),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.Customer),
@@ -62,13 +71,22 @@
 
         private static LogEditFields CreateLogFields(LogEditModel model)
         {
-            var logs = model.Log != null ?
-                model.Log.Value.Logs.Select(l => new Log(l.Id, l.DateAndTime, l.RegisteredBy, l.Text)).ToList() : new List<Log>(0);
+            if (model == null)
+            {
+                model = LogEditModel.CreateEmpty();
+            }
+
+            var logs = model.Log.Value.Logs.Select(l => new Log(l.Id, l.DateAndTime, l.RegisteredBy, l.Text)).ToList();
             return new LogEditFields(logs);
         }
 
         private static OrdererEditFields CreateOrdererFields(OrdererEditModel model)
         {
+            if (model == null)
+            {
+                model = OrdererEditModel.CreateEmpty();
+            }
+
             return new OrdererEditFields(
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.OrdererId),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.OrdererName),
@@ -90,6 +108,11 @@
 
         private static OrderEditFields CreateOrderFields(OrderEditModel model)
         {
+            if (model == null)
+            {
+                model = OrderEditModel.CreateEmpty();
+            }
+
             return new OrderEditFields(
                     model.PropertyId,
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.OrderRow1),
@@ -107,6 +130,11 @@
 
         private static OtherEditFields CreateOtherFields(OtherEditModel model)
         {
+            if (model == null)
+            {
+                model = OtherEditModel.CreateEmpty();
+            }
+
             return new OtherEditFields(
                     model.FileName != null ? model.FileName.Value.Files.FirstOrDefault() : string.Empty,
                     ConfigurableFieldModel<decimal?>.GetValueOrDefault(model.CaseNumber),
@@ -116,13 +144,22 @@
 
         private static ProgramEditFields CreateProgramFields(ProgramEditModel model)
         {
-            var programs = model != null && model.Program != null ? 
-                model.Program.Value.Programs.Select(p => new OrderProgramModel(p.Id, p.Name)).ToList() : new List<OrderProgramModel>(0);
+            if (model == null)
+            {
+                model = ProgramEditModel.CreateEmpty();
+            }
+
+            var programs = model.Program.Value.Programs.Select(p => new OrderProgramModel(p.Id, p.Name)).ToList();
             return new ProgramEditFields(programs);
         }
 
         private static ReceiverEditFields CreateReceiverFields(ReceiverEditModel model)
         {
+            if (model == null)
+            {
+                model = ReceiverEditModel.CreateEmpty();
+            }
+
             return new ReceiverEditFields(
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.ReceiverId),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.ReceiverName),
@@ -134,6 +171,11 @@
 
         private static SupplierEditFields CreateSupplierFields(SupplierEditModel model)
         {
+            if (model == null)
+            {
+                model = SupplierEditModel.CreateEmpty();
+            }
+
             return new SupplierEditFields(
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.SupplierOrderNumber),
                     ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.SupplierOrderDate),
@@ -142,6 +184,11 @@
 
         private static UserEditFields CreateUserFields(UserEditModel model)
         {
+            if (model == null)
+            {
+                model = UserEditModel.CreateEmpty();
+            }
+
             return new UserEditFields(
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.UserId),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.UserFirstName),

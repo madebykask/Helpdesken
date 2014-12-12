@@ -51,6 +51,17 @@
         [NotNull]
         public ConfigurableFieldModel<DateTime?> OrderDate { get; set; }
 
+        public static GeneralEditModel CreateEmpty()
+        {
+            return new GeneralEditModel(
+                ConfigurableFieldModel<int>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<SelectList>.CreateUnshowable(),
+                ConfigurableFieldModel<SelectList>.CreateUnshowable(),
+                ConfigurableFieldModel<DateTime?>.CreateUnshowable(),
+                string.Empty);
+        }
+
         public bool HasShowableFields()
         {
             return this.OrderNumber.Show ||

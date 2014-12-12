@@ -18,6 +18,14 @@
         [NotNull]
         public ConfigurableFieldModel<ProgramsModel> Program { get; set; }
 
+        public static ProgramEditModel CreateEmpty()
+        {
+            var program = ConfigurableFieldModel<ProgramsModel>.CreateUnshowable();
+            program.Value = new ProgramsModel();
+
+            return new ProgramEditModel(program);
+        }
+
         public bool HasShowableFields()
         {
             return this.Program.Show;

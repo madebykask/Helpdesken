@@ -30,6 +30,14 @@
         [NotNull]
         public ConfigurableFieldModel<string> SupplierOrderInfo { get; set; }
 
+        public static SupplierEditModel CreateEmpty()
+        {
+            return new SupplierEditModel(
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<DateTime?>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable());
+        }
+
         public bool HasShowableFields()
         {
             return this.SupplierOrderNumber.Show ||

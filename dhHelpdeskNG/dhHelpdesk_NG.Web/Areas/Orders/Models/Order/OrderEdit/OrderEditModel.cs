@@ -78,6 +78,23 @@
         [NotNull]
         public ConfigurableFieldModel<int> OrderInfo2 { get; set; }
 
+        public static OrderEditModel CreateEmpty()
+        {
+            return new OrderEditModel(
+                ConfigurableFieldModel<SelectList>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<int>.CreateUnshowable());
+        }
+
         public bool HasShowableFields()
         {
             return this.Property.Show ||

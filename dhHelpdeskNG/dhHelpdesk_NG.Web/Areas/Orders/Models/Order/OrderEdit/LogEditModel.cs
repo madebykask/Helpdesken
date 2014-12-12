@@ -18,6 +18,14 @@
         [NotNull]
         public ConfigurableFieldModel<LogsModel> Log { get; set; }
 
+        public static LogEditModel CreateEmpty()
+        {
+            var empty = new LogEditModel(ConfigurableFieldModel<LogsModel>.CreateUnshowable());
+            empty.Log.Value = new LogsModel();
+
+            return empty;
+        }
+
         public bool HasShowableFields()
         {
             return this.Log.Show;
