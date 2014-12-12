@@ -34,6 +34,7 @@
         void Commit();
 
         void SaveCustomerSettings(Customer customerToSave, Setting setting, List<ReportCustomer> ReportCustomers, int LanguageId, out IDictionary<string, string> errors);
+        void SaveCaseSettingsForNewCustomer(int customerId, int languageId, CaseSettings caseSettings, out IDictionary<string, string> errors);
 
         ItemOverview GetOverview(int customerId);
     }
@@ -48,6 +49,7 @@
         private readonly ISettingRepository _settingRepository;
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ICaseSettingRepository _caseSettingRepository;
 
         private readonly ICaseFieldSettingService _caseFieldSettingService;
         private readonly ISettingService _settingService;
@@ -61,6 +63,7 @@
             ISettingRepository settingRepository,
             IUserRepository userRepository,
             IUnitOfWork unitOfWork,
+            ICaseSettingRepository caseSettingRepository,
 
             ICaseFieldSettingService caseFieldSettingService,
             ISettingService settingService)
@@ -73,6 +76,7 @@
             this._settingRepository = settingRepository;
             this._userRepository = userRepository;
             this._unitOfWork = unitOfWork;
+            this._caseSettingRepository = caseSettingRepository;
 
             this._caseFieldSettingService = caseFieldSettingService;
             this._settingService = settingService;
@@ -339,6 +343,20 @@
 
         }
 
+
+        public void SaveCaseSettingsForNewCustomer(int customerId, int languageId, CaseSettings caseSettings, out IDictionary<string, string> errors)
+        {
+            errors = new Dictionary<string, string>();
+
+            if (caseSettings.Id == 0)
+                _caseSettingRepository.Add(caseSettings);
+            else
+                _caseSettingRepository.Update(caseSettings);
+
+
+            _caseSettingRepository.Commit();
+
+        }
 
         public void SaveCaseFieldSettingsLangForCustomerCopy(CaseFieldSettingLanguage caseFieldSettingLanguage, out IDictionary<string, string> errors)
         {

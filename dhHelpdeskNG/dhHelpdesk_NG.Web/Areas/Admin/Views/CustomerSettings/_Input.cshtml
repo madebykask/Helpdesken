@@ -136,11 +136,12 @@
                         <div class="span8">
                             <table class="tableform">
                                 <tr>
-                                    <td>
+                                    <td colspan="3">
                                         <strong>@Translation.Get("Markera de moduler som kunden använder sig av", Enums.TranslationSource.TextTranslation)</strong>
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td colspan="3"></td>
                                 </tr>
                                 <tr>
                                     <td><label class="checkbox">
@@ -260,7 +261,7 @@
                                     <td><label class="checkbox">
                                         <input type="checkbox" name="setting.ModuleCaseInvoice" @(Model.Setting.ModuleCaseInvoice == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.ModuleCaseInvoice" value="0" />
-                                        &nbsp;@Translation.Get("Case Invoice")
+                                        &nbsp;@Translation.Get("Fakturering")
                                         </label>
                                     </td>
                                 </tr>

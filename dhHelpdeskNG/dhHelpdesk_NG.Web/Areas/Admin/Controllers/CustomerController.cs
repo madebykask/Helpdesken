@@ -126,6 +126,29 @@
 
             this._customerService.SaveCustomerSettings(customer, newCustomerSetting, null, customer.Language_Id, out errors);
 
+
+            // Get CaseSettings from "default" customer
+            var caseSettingsToCopy = this._caseSettingsService.GetCaseSettingsForDefaultCust();
+
+            foreach (var cs in caseSettingsToCopy)
+            {
+                var newCustomerCaseSettings = new CaseSettings() { };
+
+                newCustomerCaseSettings.Customer_Id = customer.Id;
+                newCustomerCaseSettings.User_Id = cs.User_Id;
+                newCustomerCaseSettings.Name = cs.Name;
+                newCustomerCaseSettings.Line = cs.Line;
+                newCustomerCaseSettings.MinWidth = cs.MinWidth;
+                newCustomerCaseSettings.ColOrder = cs.ColOrder;
+                newCustomerCaseSettings.RegTime = DateTime.Now;
+                newCustomerCaseSettings.ChangeTime = DateTime.Now;
+                newCustomerCaseSettings.UserGroup = cs.UserGroup;
+
+                this._customerService.SaveCaseSettingsForNewCustomer(customer.Id, customer.Language_Id, newCustomerCaseSettings, out errors);
+
+            }
+
+
             //Get values from "default" customer
             var caseFieldSettingsToCopy = this._caseFieldSettingService.GetCaseFieldSettingsForDefaultCust();
 

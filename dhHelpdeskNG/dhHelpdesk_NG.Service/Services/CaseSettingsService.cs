@@ -14,6 +14,7 @@
         IList<CaseSettings> GenerateCSFromUGChoice(int customerId, int? UserGroupId);
         IList<CaseSettings> GetCaseSettingsWithUser(int customerId, int userId, int userGroupId);
         IList<CaseSettings> GetCaseSettingsByUserGroup(int customerId, int UserGroupId);
+        IList<CaseSettings> GetCaseSettingsForDefaultCust();
         //IList<CaseSettings> GetCaseSettingsByCopyUserId(int userId);
 
         CaseSettings GetCaseSetting(int id);
@@ -54,6 +55,14 @@
         public IList<CaseSettings> GetCaseSettingsByUserGroup(int customerId, int usergroupId)
         {
             return this._caseSettingRepository.GetMany(x => x.Customer_Id == customerId && x.User_Id == null && x.UserGroup == usergroupId).OrderBy(x => x.ColOrder).ToList();
+        }
+
+        public IList<CaseSettings> GetCaseSettingsForDefaultCust()
+        {
+            var list = this._caseSettingRepository.GetAll().Where(x => x.Customer_Id == null).ToList();
+
+            return list;
+
         }
 
         public IList<CaseSettings> GenerateCSFromUGChoice(int customerId, int? UserGroupId)

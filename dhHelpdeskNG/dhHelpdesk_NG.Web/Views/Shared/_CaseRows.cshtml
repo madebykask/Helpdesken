@@ -27,7 +27,7 @@
                         //}
                         //else
                         //{
-                            colName = Translation.Get(c.Name, Enums.TranslationSource.CaseTranslation, c.Customer_Id);
+                            colName = Translation.Get(c.Name, Enums.TranslationSource.CaseTranslation, c.Customer_Id.Value);
                         //}
                         
                         if (colName == null)
