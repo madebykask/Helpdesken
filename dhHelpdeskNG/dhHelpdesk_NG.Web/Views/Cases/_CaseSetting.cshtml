@@ -31,9 +31,9 @@
                                     <td class="span3">                                        
                                         @{
                                             var lbl = Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.Region_Id.ToString());
-                                            if (lbl == null)
+                                            if (string.IsNullOrEmpty(lbl))
                                             {
-                                                lbl = GlobalEnums.TranslationCaseFields.Region_Id.ToString();                                                                                           
+                                                lbl = Translation.Get(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
                                             }
                                          }
                                         @lbl:     
@@ -57,9 +57,10 @@
                                     <td class="span3">
                                         @{
                                             var lbl = Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.User_Id.ToString());
-                                            if (lbl == null)
+                                            if (string.IsNullOrEmpty(lbl))
                                             {
-                                                lbl = GlobalEnums.TranslationCaseFields.User_Id.ToString();                                                                                           
+                                                //lbl = GlobalEnums.TranslationCaseFields.User_Id.ToString();
+                                                lbl = Translation.Get(GlobalEnums.TranslationCaseFields.User_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
                                             }
                                          }
                                          @lbl:                                         
@@ -83,9 +84,10 @@
                                     <td class="span3">                                        
                                         @{
                                             var lbl = Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString());
-                                            if (lbl == null)
+                                            if (string.IsNullOrEmpty(lbl))
                                             {
-                                                lbl = GlobalEnums.TranslationCaseFields.CaseType_Id.ToString();                                                                                           
+                                                //lbl = GlobalEnums.TranslationCaseFields.CaseType_Id.ToString();
+                                                lbl = Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
                                             }
                                          }
                                         @lbl:                                             
@@ -104,9 +106,10 @@
                                     <td class="span3">                                        
                                         @{
                                              var lbl = Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString());
-                                            if (lbl == null)
+                                            if (string.IsNullOrEmpty(lbl))
                                             {
-                                                lbl = GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString();                                                                                           
+                                                //lbl = GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString();
+                                                lbl = Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);                                                                                          
                                             }
                                          }
                                         @lbl:                                             
@@ -135,9 +138,10 @@
                                     <td class="span3">                                        
                                         @{
                                             var lbl = Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString());
-                                            if (lbl == null)
+                                            if (string.IsNullOrEmpty(lbl))
                                             {
-                                                lbl = GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString();                                                                                           
+                                                //lbl = GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString();
+                                                lbl = Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
                                             }
                                          }
                                          @lbl:   
@@ -161,9 +165,10 @@
                                     <td class="span3">                                        
                                         @{
                                             var lbl = Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString());
-                                            if (lbl == null)
+                                            if (string.IsNullOrEmpty(lbl))
                                             {
-                                                lbl = GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString();                                                                                           
+                                                //lbl = GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString();
+                                                lbl = Translation.Get(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
                                             }
                                          }
                                          @lbl: 
@@ -182,9 +187,10 @@
                                     <td class="span3">                                        
                                         @{
                                             var lbl = Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString());
-                                            if (lbl == null)
+                                            if (string.IsNullOrEmpty(lbl))
                                             {
-                                                lbl = GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString();                                                                                           
+                                                //lbl = GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString();                                                                                           '
+                                                lbl = Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
                                             }
                                          }
                                          @lbl:
@@ -208,9 +214,10 @@
                                     <td class="span3">                                        
                                         @{
                                             var lbl = Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.Priority_Id.ToString());
-                                            if (lbl == null)
+                                            if (string.IsNullOrEmpty(lbl))
                                             {
-                                                lbl = GlobalEnums.TranslationCaseFields.Priority_Id.ToString();                                                                                           
+                                                //lbl = GlobalEnums.TranslationCaseFields.Priority_Id.ToString();                                                                                           
+                                                lbl = Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
                                             }
                                          }
                                          @lbl:
@@ -234,9 +241,10 @@
                                     <td class="span3">                                        
                                         @{
                                             var lbl = Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.Status_Id.ToString());
-                                            if (lbl == null)
+                                            if (string.IsNullOrEmpty(lbl))
                                             {
-                                                lbl = GlobalEnums.TranslationCaseFields.Status_Id.ToString();                                                                                           
+                                                //lbl = GlobalEnums.TranslationCaseFields.Status_Id.ToString();                                                                                           
+                                                lbl = Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
                                             }
                                          }
                                          @lbl:
@@ -255,9 +263,10 @@
                                 <td class="span3">                                    
                                      @{
                                         var lbl = Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString());
-                                        if (lbl == null)
+                                        if (string.IsNullOrEmpty(lbl))
                                         {
-                                            lbl = GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString();                                                                                           
+                                            //lbl = GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString();                                                                                           
+                                            lbl = Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
                                         }
                                       }
                                       @lbl:
@@ -281,9 +290,10 @@
                                     <td class="span3">                                      
                                       @{
                                          var lbl = Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.RegTime.ToString());
-                                         if (lbl == null)
+                                         if (string.IsNullOrEmpty(lbl))
                                          {
-                                            lbl = GlobalEnums.TranslationCaseFields.RegTime.ToString();                                                                                           
+                                             //lbl = GlobalEnums.TranslationCaseFields.RegTime.ToString();                                                                                           
+                                             lbl = Translation.Get(GlobalEnums.TranslationCaseFields.RegTime.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
                                          }
                                       }
                                       @lbl:
@@ -303,9 +313,10 @@
                                     <td class="span3">                                       
                                       @{
                                          var lbl = Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.WatchDate.ToString());
-                                         if (lbl == null)
+                                         if (string.IsNullOrEmpty(lbl))
                                          {
-                                             lbl = GlobalEnums.TranslationCaseFields.WatchDate.ToString();                                                                                           
+                                             //lbl = GlobalEnums.TranslationCaseFields.WatchDate.ToString();                                                                                           
+                                             lbl = Translation.Get(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
                                          }
                                       }
                                       @lbl:
@@ -325,9 +336,10 @@
                                     <td class="span3">                                        
                                       @{
                                          var lbl = Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.FinishingDate.ToString());
-                                         if (lbl == null)
+                                         if (string.IsNullOrEmpty(lbl))
                                          {
-                                             lbl = GlobalEnums.TranslationCaseFields.FinishingDate.ToString();                                                                                           
+                                             //lbl = GlobalEnums.TranslationCaseFields.FinishingDate.ToString();                                                                                           
+                                             lbl = Translation.Get(GlobalEnums.TranslationCaseFields.User_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
                                          }
                                       }
                                       @lbl:
@@ -347,9 +359,10 @@
                                     <td class="span3">                                        
                                       @{
                                          var lbl = Model.ColumnSettingModel.CaseFieldSettingLanguages.getLabel(GlobalEnums.TranslationCaseFields.ClosingReason.ToString());
-                                         if (lbl == null)
+                                         if (string.IsNullOrEmpty(lbl))
                                          {
-                                             lbl = GlobalEnums.TranslationCaseFields.ClosingReason.ToString();                                                                                           
+                                             //lbl = GlobalEnums.TranslationCaseFields.ClosingReason.ToString();                                                                                           
+                                             lbl = Translation.Get(GlobalEnums.TranslationCaseFields.ClosingReason.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id);
                                          }
                                       }
                                       @lbl:
