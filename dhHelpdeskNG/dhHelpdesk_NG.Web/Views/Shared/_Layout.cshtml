@@ -278,7 +278,7 @@
                                             @foreach (var lang in model.Languages.Where(l=> l.IsActive == 1).ToList())
                                             {
                                                 <li>
-                                                    @if (lang.Id == SessionFacade.CurrentUser.LanguageId)
+                                                    @if (lang.Id == SessionFacade.CurrentLanguageId)
                                                     {
                                                       <a href="@Url.Action("ChangeCurrentLanguage", "cases", new { languageId = lang.Id, area = "" })" > @Translation.Get(lang.Name)  <i class="icon-ok"></i> </a>
                                                     }

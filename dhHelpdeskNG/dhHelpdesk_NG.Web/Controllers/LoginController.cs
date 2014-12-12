@@ -36,29 +36,49 @@
             string returnUrl = Request.QueryString["returnUrl"];
             string decodedUrl = "/";
 
-            if(this.IsValidLoginArgument(userName, password))
+            if (this.IsValidLoginArgument(userName, password))
             {
                 var user = this.userService.Login(userName, password);
 
-                if(user != null)
+                if (user != null)
                 {
                     if (!string.IsNullOrEmpty(returnUrl))
+                    {
                         decodedUrl = Server.UrlDecode(returnUrl);
+                    }
+
                     if (!Url.IsLocalUrl(decodedUrl))
+                    {
                         decodedUrl = "/";
+                    }
+
                     if (decodedUrl.Contains("login"))
+                    {
                         decodedUrl = "/";
+                    }
 
+                    this.Session.Clear();
                     SessionFacade.CurrentUser = user;
-
+                    SessionFacade.CurrentLanguageId = user.LanguageId;
                     var customer = this.customerService.GetCustomer(user.CustomerId);
-                    ApplicationFacade.AddLoggedInUser(new LoggedInUsers { Customer_Id = user.CustomerId, User_Id = user.Id, UserFirstName = user.FirstName
-                        , UserLastName = user.SurName, CustomerName = customer.Name, LoggedOnLastTime = DateTime.UtcNow, SessionId = Session.SessionID });
-                    
+                    ApplicationFacade.AddLoggedInUser(
+                        new LoggedInUsers
+                            {
+                                Customer_Id = user.CustomerId,
+                                User_Id = user.Id,
+                                UserFirstName = user.FirstName,
+                                UserLastName = user.SurName,
+                                CustomerName = customer.Name,
+                                LoggedOnLastTime = DateTime.UtcNow,
+                                SessionId = Session.SessionID
+                            });
+
                     this.RedirectFromLoginPage(userName, decodedUrl);
                 }
                 else
+                {
                     this.TempData["LoginFailed"] = "Login failed! The user name or password entered is incorrect.";
+                }
             }
 
             return this.View("Login");

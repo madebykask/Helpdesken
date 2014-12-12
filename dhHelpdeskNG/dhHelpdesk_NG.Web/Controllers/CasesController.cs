@@ -1269,7 +1269,6 @@ namespace DH.Helpdesk.Web.Controllers
         public RedirectToRouteResult ChangeCurrentLanguage(int languageId)        
         {
             SessionFacade.CurrentLanguageId = languageId;
-            SessionFacade.CurrentUser.LanguageId = languageId;
             var prevInfo = this.ExtractPreviousRouteInfo();
             var res = new RedirectToRouteResult(prevInfo);
             return res;
@@ -2163,13 +2162,13 @@ namespace DH.Helpdesk.Web.Controllers
             colSettingModel.CustomerId = customerId;
             colSettingModel.UserId = userId;
 
-            var showColumns = _caseFieldSettingService.ListToShowOnCasePage(customerId, SessionFacade.CurrentUser.LanguageId)
+            var showColumns = _caseFieldSettingService.ListToShowOnCasePage(customerId, SessionFacade.CurrentLanguageId)
                                        .Where(c => c.ShowOnStartPage == 1)
                                        .Select(s => s.CFS_Id)
                                        .ToList();
 
             IList<CaseFieldSettingsWithLanguage> allColumns = new List<CaseFieldSettingsWithLanguage>();
-            allColumns = _caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, SessionFacade.CurrentUser.LanguageId)
+            allColumns = _caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, SessionFacade.CurrentLanguageId)
                                                  .Where(c => showColumns.Contains(c.Id))
                                                  .ToList();
 
@@ -2180,7 +2179,7 @@ namespace DH.Helpdesk.Web.Controllers
                 Id = 9998,
                 Label = Translation.Get("Tid kvar", Enums.TranslationSource.TextTranslation),
                 Name = "_temporary_.LeadTime",
-                Language_Id = SessionFacade.CurrentUser.LanguageId
+                Language_Id = SessionFacade.CurrentLanguageId
             };
             allColumns.Add(fixValue1);
 
@@ -2189,7 +2188,7 @@ namespace DH.Helpdesk.Web.Controllers
                 Id = 9999,
                 Label = Translation.Get("Problem", Enums.TranslationSource.TextTranslation),
                 Name = "tblProblem.ResponsibleUser_Id",
-                Language_Id = SessionFacade.CurrentUser.LanguageId
+                Language_Id = SessionFacade.CurrentLanguageId
             };
 
             allColumns.Add(fixValue2);

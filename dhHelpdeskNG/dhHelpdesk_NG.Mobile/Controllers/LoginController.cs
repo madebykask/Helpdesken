@@ -36,29 +36,49 @@
             string returnUrl = Request.QueryString["returnUrl"];
             string decodedUrl = "/";
 
-            if(this.IsValidLoginArgument(userName, password))
+            if (!this.IsValidLoginArgument(userName, password))
             {
-                var user = this.userService.Login(userName, password);
+                return this.View("Login");
+            }
 
-                if(user != null)
+            var user = this.userService.Login(userName, password);
+            if (user != null)
+            {
+                if (!string.IsNullOrEmpty(returnUrl))
                 {
-                    if (!string.IsNullOrEmpty(returnUrl))
-                        decodedUrl = Server.UrlDecode(returnUrl);
-                    if (!Url.IsLocalUrl(decodedUrl))
-                        decodedUrl = "/";
-                    if (decodedUrl.Contains("login"))
-                        decodedUrl = "/";
-
-                    SessionFacade.CurrentUser = user;
-
-                    var customer = this.customerService.GetCustomer(user.CustomerId);
-                    ApplicationFacade.AddLoggedInUser(new LoggedInUsers { Customer_Id = user.CustomerId, User_Id = user.Id, UserFirstName = user.FirstName
-                        , UserLastName = user.SurName, CustomerName = customer.Name, LoggedOnLastTime = DateTime.UtcNow, SessionId = Session.SessionID });
-                    
-                    this.RedirectFromLoginPage(userName, decodedUrl);
+                    decodedUrl = this.Server.UrlDecode(returnUrl);
                 }
-                else
-                    this.TempData["LoginFailed"] = "Login failed! The user name or password entered is incorrect.";
+
+                if (!this.Url.IsLocalUrl(decodedUrl))
+                {
+                    decodedUrl = "/";
+                }
+
+                if (decodedUrl != null && decodedUrl.Contains("login"))
+                {
+                    decodedUrl = "/";
+                }
+
+                SessionFacade.CurrentUser = user;
+                SessionFacade.CurrentLanguageId = user.LanguageId;
+                var customer = this.customerService.GetCustomer(user.CustomerId);
+                ApplicationFacade.AddLoggedInUser(
+                    new LoggedInUsers
+                        {
+                            Customer_Id = user.CustomerId,
+                            User_Id = user.Id,
+                            UserFirstName = user.FirstName,
+                            UserLastName = user.SurName,
+                            CustomerName = customer.Name,
+                            LoggedOnLastTime = DateTime.UtcNow,
+                            SessionId = this.Session.SessionID
+                        });
+
+                this.RedirectFromLoginPage(userName, decodedUrl);
+            }
+            else
+            {
+                this.TempData["LoginFailed"] = "Login failed! The user name or password entered is incorrect.";
             }
 
             return this.View("Login");

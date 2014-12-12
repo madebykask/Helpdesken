@@ -59,9 +59,9 @@
                 var user = this._masterDataService.GetUserForLogin(this.User.Identity.Name);
                 if (user != null)
                 {
+                    /// here we have user session expired before auth session expiration
                     SessionFacade.CurrentUser = user;
                     var customerName = this._masterDataService.GetCustomer(user.CustomerId).Name;
-
                     ApplicationFacade.AddLoggedInUser(
                         new LoggedInUsers
                         {
@@ -73,12 +73,13 @@
                             LoggedOnLastTime = DateTime.UtcNow,
                             SessionId = this.Session.SessionID
                         });
-                }
+                } 
                 else
                 {
                     this.Response.Redirect(redirectToUrl);
                 }
             }
+
             base.OnAuthorization(filterContext);
 
             if (filterContext.Result == null || (filterContext.Result.GetType() != typeof(HttpUnauthorizedResult)))
@@ -143,10 +144,6 @@
                 SessionFacade.CurrentCustomer = SessionFacade.CurrentCustomer
                                                 ?? this._masterDataService.GetCustomer(
                                                     SessionFacade.CurrentUser.CustomerId);
-                if (SessionFacade.CurrentLanguageId == 0)
-                {
-                    SessionFacade.CurrentLanguageId = SessionFacade.CurrentUser.LanguageId;
-                }
             }
         }
 
