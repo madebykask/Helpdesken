@@ -246,7 +246,8 @@
             this._mailTemplateService.SaveMailTemplateLanguage(mailtemplatelanguageToSave, update, out errors);
 
             if (errors.Count == 0)
-                return this.RedirectToAction("edit", "mailtemplate", new { customerId = customer.Id, id = id, languageId = mailTemplateLanguage.Language_Id });
+               // return this.RedirectToAction("edit", "mailtemplate", new { customerId = customer.Id, id = id, languageId = mailTemplateLanguage.Language_Id });
+                return this.RedirectToAction("index", "mailtemplate", new { customerId = customerId });
             
 
             var model = this.MailTemplateIndexViewModel(customer, customersettings);
