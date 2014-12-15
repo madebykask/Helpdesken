@@ -44,6 +44,10 @@
 
         private readonly IUpdateOrderModelFactory updateOrderModelFactory;
 
+        private readonly ILogsModelFactory logsModelFactory;
+
+        private readonly IEmailService emailService;
+
         public OrdersController(
                 IMasterDataService masterDataService, 
                 IOrdersService ordersService, 
@@ -54,7 +58,9 @@
                 IOrderModelFactory orderModelFactory, 
                 IEditorStateCacheFactory editorStateCacheFactory,
                 ITemporaryFilesCacheFactory temporaryFilesCacheFactory, 
-                IUpdateOrderModelFactory updateOrderModelFactory)
+                IUpdateOrderModelFactory updateOrderModelFactory, 
+                ILogsModelFactory logsModelFactory, 
+                IEmailService emailService)
             : base(masterDataService)
         {
             this.ordersService = ordersService;
@@ -64,6 +70,8 @@
             this.newOrderModelFactory = newOrderModelFactory;
             this.orderModelFactory = orderModelFactory;
             this.updateOrderModelFactory = updateOrderModelFactory;
+            this.logsModelFactory = logsModelFactory;
+            this.emailService = emailService;
 
             this.filesStateStore = editorStateCacheFactory.CreateForModule(ModuleName.Orders);
             this.filesStore = temporaryFilesCacheFactory.CreateForModule(ModuleName.Orders);
@@ -137,7 +145,11 @@
             model.NewFiles = this.filesStore.FindFiles(model.Id, Subtopic.FileName.ToString());
             model.DeletedFiles = this.filesStateStore.FindDeletedFileNames(intId, Subtopic.FileName.ToString());
 
-            var request = this.updateOrderModelFactory.Create(model, this.workContext.Customer.CustomerId, DateTime.Now);
+            var request = this.updateOrderModelFactory.Create(
+                                                model, 
+                                                this.workContext.Customer.CustomerId, 
+                                                DateTime.Now, 
+                                                this.emailService);
             var id = this.ordersService.AddOrUpdate(request);
 
             foreach (var newFile in model.NewFiles)
@@ -175,7 +187,6 @@
 
             this.filesStateStore.ClearObjectDeletedFiles(id);
 
-
             var model = this.orderModelFactory.Create(response, this.workContext.Customer.CustomerId);
             return this.View(model);
         }
@@ -189,9 +200,13 @@
             model.NewFiles = this.filesStore.FindFiles(model.Id, Subtopic.FileName.ToString()).Where(f => !filesInDb.Contains(f.Name)).ToList();
             model.DeletedFiles = this.filesStateStore.FindDeletedFileNames(id, Subtopic.FileName.ToString());
 
-            var deletedLogIds = this.filesStateStore.GetDeletedItemIds(id, OrderDeletedItem.Logs);
+            model.DeletedLogIds = this.filesStateStore.GetDeletedItemIds(id, OrderDeletedItem.Logs);
 
-            var request = this.updateOrderModelFactory.Create(model, this.workContext.Customer.CustomerId, DateTime.Now);
+            var request = this.updateOrderModelFactory.Create(
+                                                model, 
+                                                this.workContext.Customer.CustomerId, 
+                                                DateTime.Now,
+                                                this.emailService);
             this.ordersService.AddOrUpdate(request);
 
             foreach (var deletedFile in model.DeletedFiles)
@@ -288,6 +303,26 @@
             }
 
             return this.RedirectToAction("AttachedFiles", new { entityId, subtopic });
+        }
+
+        [HttpGet]
+        public PartialViewResult Logs(int orderId, Subtopic subtopic)
+        {
+            var deletedLogIds = this.filesStateStore.GetDeletedItemIds(orderId, OrderDeletedItem.Logs);
+            var logs = this.ordersService.FindLogsExcludeSpecified(orderId, deletedLogIds);
+
+            var response = this.ordersService.FindOrder(orderId, this.workContext.Customer.CustomerId);
+
+            var model = this.logsModelFactory.Create(orderId, subtopic, logs, response.EditOptions);
+
+            return this.PartialView(model);
+        }
+
+        [HttpPost]
+        public RedirectToRouteResult DeleteLog(int orderId, Subtopic subtopic, int logId)
+        {
+            this.filesStateStore.AddDeletedItem(logId, OrderDeletedItem.Logs, orderId);
+            return this.RedirectToAction("Logs", new { orderId, subtopic });
         }
     }
 }

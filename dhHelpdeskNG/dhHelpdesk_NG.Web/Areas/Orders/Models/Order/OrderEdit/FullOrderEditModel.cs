@@ -9,6 +9,9 @@
     {
         public FullOrderEditModel()
         {
+            this.NewFiles = new List<WebTemporaryFile>();
+            this.DeletedFiles = new List<string>();
+            this.DeletedLogIds = new List<int>();
         }
 
         public FullOrderEditModel(
@@ -41,6 +44,10 @@
             this.Id = id;
             this.CustomerId = customerId;
             this.OrderTypeId = orderTypeId;
+
+            this.NewFiles = new List<WebTemporaryFile>();
+            this.DeletedFiles = new List<string>();
+            this.DeletedLogIds = new List<int>();
         }
 
         public bool IsNew { get; private set; }
@@ -95,5 +102,8 @@
 
         [NotNull]
         public List<string> DeletedFiles { get; set; }
+
+        [NotNull]
+        public List<int> DeletedLogIds { get; set; }
     }
 }

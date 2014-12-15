@@ -3,10 +3,11 @@
     using System;
 
     using DH.Helpdesk.BusinessData.Models.Orders.Order;
+    using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit;
 
     public interface IUpdateOrderModelFactory
     {
-        UpdateOrderRequest Create(FullOrderEditModel model, int customerId, DateTime dateAndTime);
+        UpdateOrderRequest Create(FullOrderEditModel model, int customerId, DateTime dateAndTime, IEmailService emailService);
     }
 }

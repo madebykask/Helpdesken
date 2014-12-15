@@ -13,6 +13,7 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Orders;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Orders;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Orders;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Orders;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Common;
@@ -38,6 +39,8 @@
 
         private readonly IOrderRestorer orderRestorer;
 
+        private readonly IUpdateOrderRequestValidator updateOrderRequestValidator;
+
         public OrdersService(
                 IUnitOfWorkFactory unitOfWorkFactory, 
                 IOrderFieldSettingsService orderFieldSettingsService, 
@@ -46,7 +49,8 @@
                 IUserWorkingGroupRepository userWorkingGroupRepository, 
                 IEmailGroupEmailRepository emailGroupEmailRepository, 
                 IEmailGroupRepository emailGroupRepository, 
-                IOrderRestorer orderRestorer)
+                IOrderRestorer orderRestorer, 
+                IUpdateOrderRequestValidator updateOrderRequestValidator)
         {
             this.unitOfWorkFactory = unitOfWorkFactory;
             this.orderFieldSettingsService = orderFieldSettingsService;
@@ -56,6 +60,7 @@
             this.emailGroupEmailRepository = emailGroupEmailRepository;
             this.emailGroupRepository = emailGroupRepository;
             this.orderRestorer = orderRestorer;
+            this.updateOrderRequestValidator = updateOrderRequestValidator;
         }
 
         public OrdersFilterData GetOrdersFilterData(int customerId)
@@ -138,6 +143,7 @@
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var ordersRep = uow.GetRepository<Order>();
+                var orderLogsRep = uow.GetRepository<OrderLog>();
 
                 Order entity;
                 if (request.Order.IsNew())
@@ -155,10 +161,19 @@
                     var existingOrder = OrderEditMapper.MapToFullOrderEditFields(entity);
                     var settings = this.orderFieldSettingsService.GetOrderEditSettings(request.CustomerId, entity.OrderType_Id, uow);
                     this.orderRestorer.Restore(request.Order, existingOrder, settings);
+                    this.updateOrderRequestValidator.Validate(request.Order, existingOrder, settings);
 
                     OrderUpdateMapper.MapToEntity(entity, request.Order, request.CustomerId);
                     entity.ChangedDate = request.DateAndTime;
                     ordersRep.Update(entity);
+                }
+
+                orderLogsRep.DeleteWhere(l => request.DeletedLogIds.Contains(l.Id));
+
+                foreach (var newLog in request.NewLogs)
+                {
+                    var logEntity = OrderLogMapper.MapToEntity(newLog);
+                    entity.Logs.Add(logEntity);
                 }
 
                 uow.Save();
@@ -178,6 +193,19 @@
 
                 uow.Save();
             }
+        }
+
+        public List<BusinessData.Models.Orders.Order.OrderEditFields.Log> FindLogsExcludeSpecified(int orderId, List<int> excludeLogIds)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var logsRep = uow.GetRepository<OrderLog>();
+                var usersRep = uow.GetRepository<User>();
+
+                return logsRep.GetAll()
+                            .GetExcludeSpecified(orderId, excludeLogIds)
+                            .MapToLogs(usersRep.GetAll());                         
+            }            
         }
 
         private OrderEditOptions GetEditOptions(
@@ -264,6 +292,6 @@
                                     workingGroupsWithEmails,
                                     administratorsWithEmails,
                                     settings);            
-        }    
+        }        
     }
 }

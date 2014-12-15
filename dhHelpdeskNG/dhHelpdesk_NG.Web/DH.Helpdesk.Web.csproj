@@ -645,12 +645,14 @@
     <Compile Include="Areas\Orders\Controllers\OrdersController.cs" />
     <Compile Include="Areas\Orders\Controllers\OrderFieldSettingsController.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\Concrete\ConfigurableFieldModelFactory.cs" />
+    <Compile Include="Areas\Orders\Infrastructure\ModelFactories\Concrete\LogsModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\Concrete\NewOrderModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\Concrete\OrderFieldSettingsModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\Concrete\OrderModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\Concrete\OrdersModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\Concrete\UpdateOrderModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\IConfigurableFieldModelFactory.cs" />
+    <Compile Include="Areas\Orders\Infrastructure\ModelFactories\ILogsModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\INewOrderModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\IOrderFieldSettingsModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\IOrderModelFactory.cs" />

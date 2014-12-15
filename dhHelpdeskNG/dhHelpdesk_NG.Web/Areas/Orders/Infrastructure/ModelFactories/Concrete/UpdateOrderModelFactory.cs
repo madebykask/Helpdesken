@@ -3,16 +3,20 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net.Mail;
 
+    using DH.Helpdesk.BusinessData.Enums.Orders;
     using DH.Helpdesk.BusinessData.Models.Orders.Order;
     using DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditFields;
+    using DH.Helpdesk.Common.Extensions.String;
+    using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Orders.Models.Order.FieldModels;
     using DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit;
     using DH.Helpdesk.Web.Infrastructure.Tools;
 
     public class UpdateOrderModelFactory : IUpdateOrderModelFactory
     {
-        public UpdateOrderRequest Create(FullOrderEditModel model, int customerId, DateTime dateAndTime)
+        public UpdateOrderRequest Create(FullOrderEditModel model, int customerId, DateTime dateAndTime, IEmailService emailService)
         {
             int orderId;
             int.TryParse(model.Id, out orderId);
@@ -31,7 +35,9 @@
                 CreateSupplierFields(model.Supplier),
                 CreateUserFields(model.User));
 
-            return new UpdateOrderRequest(fields, customerId, dateAndTime);
+            var newLogs = CreateNewLogCollection(model, emailService);
+
+            return new UpdateOrderRequest(fields, customerId, dateAndTime, model.DeletedLogIds, newLogs);
         }
 
         private static DeliveryEditFields CreateDeliveryFields(DeliveryEditModel model)
@@ -195,6 +201,40 @@
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.UserId),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.UserFirstName),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.UserLastName));
+        }
+
+        private static List<ManualLog> CreateNewLogCollection(FullOrderEditModel model, IEmailService emailService)
+        {
+            var newLogs = new List<ManualLog>();
+
+            if (model.Log != null)
+            {
+                CreateNewLogIfNeeded(model.Log.Log, Subtopic.Log, newLogs, emailService);                
+            }
+
+            return newLogs;
+        }
+
+        private static void CreateNewLogIfNeeded(
+                    ConfigurableFieldModel<LogsModel> logField,
+                    Subtopic subtopic,
+                    List<ManualLog> logs,
+                    IEmailService emailService)
+        {
+            if (logField == null || string.IsNullOrEmpty(logField.Value.Text))
+            {
+                return;
+            }
+
+            var emails = string.IsNullOrEmpty(logField.Value.Emails)
+                ? new List<MailAddress>(0)
+                : logField.Value.Emails.Split(Environment.NewLine)
+                                .Where(emailService.IsValidEmail)
+                                .Select(e => new MailAddress(e))
+                                .ToList();
+
+            var newLog = ManualLog.CreateNew(logField.Value.Text, emails, subtopic);
+            logs.Add(newLog);
         }
     }
 }

@@ -95,6 +95,18 @@
             }
         }
 
+        public void ValidateDecimalField(decimal? newValue, decimal? oldValue, string fieldName, ElementaryValidationRule rule)
+        {
+            if (rule.ReadOnly)
+            {
+                ValidateReadOnly(newValue, oldValue, fieldName);
+            }
+            else if (rule.Required)
+            {
+                ValidateRequired(newValue, fieldName);
+            }
+        }
+
         public void ValidateIntegerField(int? newValue, int? oldValue, string fieldName, ElementaryValidationRule rule)
         {
             if (rule.ReadOnly)

@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Orders.Order
 {
     using System;
+    using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditFields;
     using DH.Helpdesk.Common.ValidationAttributes;
@@ -10,8 +11,12 @@
         public UpdateOrderRequest(
                 FullOrderEditFields order, 
                 int customerId, 
-                DateTime dateAndTime)
+                DateTime dateAndTime, 
+                List<int> deletedLogIds, 
+                List<ManualLog> newLogs)
         {
+            this.NewLogs = newLogs;
+            this.DeletedLogIds = deletedLogIds;
             this.DateAndTime = dateAndTime;
             this.CustomerId = customerId;
             this.Order = order;
@@ -24,5 +29,11 @@
         public int CustomerId { get; private set; }
 
         public DateTime DateAndTime { get; private set; }
+
+        [NotNull]
+        public List<int> DeletedLogIds { get; private set; }
+
+        [NotNull]
+        public List<ManualLog> NewLogs { get; private set; }
     }
 }

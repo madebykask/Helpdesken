@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.Services.Services.Orders
 {
+    using System.Collections.Generic;
+
     using DH.Helpdesk.BusinessData.Models.Orders.Index;
     using DH.Helpdesk.BusinessData.Models.Orders.Order;
 
@@ -16,5 +18,7 @@
         int AddOrUpdate(UpdateOrderRequest request);
 
         void Delete(int id);
+
+        List<BusinessData.Models.Orders.Order.OrderEditFields.Log> FindLogsExcludeSpecified(int orderId, List<int> excludeLogIds);
     }
 }
