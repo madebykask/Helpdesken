@@ -14,13 +14,15 @@
                                             p.CreatedDate,
                                             p.ProblemNumber,
                                             p.Name,
+                                            p.Customer
                                         }).ToArray();
 
             return entities.Select(p => new ProblemInfoOverview
                                         {
                                             CreatedDate = p.CreatedDate,
                                             Name = p.Name,
-                                            ProblemNumber = p.ProblemNumber
+                                            ProblemNumber = p.ProblemNumber,
+                                            CustomerName = p.Customer.Name
                                         }).ToArray();
         }
     }

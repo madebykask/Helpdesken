@@ -1253,6 +1253,20 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
+        public ActionResult SortCaseSettingColumn(int customerId, int userId, string sortIds)
+        {
+            var elementsId = sortIds.Split('|');
+
+            _caseSettingService.ReOrderCaseSetting(elementsId.ToList());
+
+            var model = new CaseColumnsSettingsModel();
+            model = GetCaseColumnSettingModel(customerId, userId);
+
+            return PartialView("_ColumnCaseSetting", model);
+
+        }
+
+        [HttpPost]
         public ActionResult DeleteRowFromCaseSettings(int id, int userId, int customerId)
         {
             if (this._caseSettingService.DeleteCaseSetting(id) != DeleteMessage.Success)

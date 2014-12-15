@@ -19,16 +19,19 @@
                                 <th>
                                     @Translation.Get("Min längd", Enums.TranslationSource.TextTranslation)
                                 </th>
-                                <th>
+                                @*<th>
                                     @Translation.Get("Ordning", Enums.TranslationSource.TextTranslation)
-                                </th>
+                                </th>*@
                                 <th>&nbsp;
                                 </th>
                             </tr>
                         </thead>
-                        <tbody>
-                        <tr class="rowAdding">                                   
+                                                             
+                        <tbody id="dataTable" >
+                            <tr class="rowAdding" id="0">                                   
                                     <td>
+                                        <input type="hidden" style="width: 80px;" name="colOrderValue" id="colOrderValue" value="99" />
+
                                         <select style="width: 190px;" id="labellist">
                                             @*<option></option>*@
                                              @foreach (var cfs in Model.CaseFieldSettingLanguages)
@@ -52,9 +55,9 @@
                                     <td id="_minWidth">
                                         <input type="text" style="width: 80px;" name="minWidthValue" id="minWidthValue" value="" />
                                     </td>
-                                    <td id="_colOrder">
-                                        <input type="text" style="width: 80px;" name="colOrderValue" id="colOrderValue" value="" />
-                                    </td>
+                                    @*<td id="_colOrder">
+                                        
+                                    </td>*@
                                     <td>
                                         <input class="btn btn-success" type="button" value="@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)" id="AddRow" 
                                                onclick="addCaseSettingRow()" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
@@ -62,17 +65,16 @@
                                     </td> 
                                               
                                 </tr>     
-                        </tbody>                                            
-                        <tbody id="dataTable" >
                             @if (Model != null)
                             {
                                 
                                 foreach (var uc in  Model.UserColumns)
                                 {                                    
-                                    <tr>                                        
+                                    <tr id="@uc.Id" class="SortableRow">                                        
                                         @if (Model.UserColumns != null)
                                         {
                                             <td>
+                                                @Html.HiddenFor(model => uc.ColOrder, new { style = "width: 80px;" })
                                                 <select style="width: 190px;" id="_dellabellist" disabled="disabled">                                                    
                                                     @foreach (var cfs in Model.CaseFieldSettingLanguages)
                                                     {                                                    
@@ -92,14 +94,15 @@
                                         <td>                                            
                                             @Html.TextBoxFor(model => uc.MinWidth, new { style = "width: 80px;" })                                            
                                         </td>
-                                        <td>
-                                            @Html.TextBoxFor(model => uc.ColOrder, new { style = "width: 80px;" })
-                                        </td>
+                                        @*<td>
+                                            
+                                        </td>*@
                                         <td>
                                             @Html.HiddenFor(model => uc.Id)
                                             @Html.HiddenFor(model => uc.Name)
                                             @Html.HiddenFor(model => uc.UserGroup)
-                                            <button class="btn btn-danger" type="button" style="color: teal" onclick="deleteCaseSettingRow(@uc.Id)" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"><i class="icon-remove"></i></button>
+                                            <input class="btn btn-danger" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" 
+                                                   onclick ="deleteCaseSettingRow(@uc.Id)" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
                                             <input type="hidden" id="deleteCaseSettingsId" value="@uc.Id" />
                                             <input type="hidden" id="userGroup" value="@uc.UserGroup" />                                                                                         
                                         </td>
@@ -115,11 +118,31 @@
     </div>
 </form>
 
-<script type="text/javascript">       
-    $(function () {
-        $("#customerCaseSum tbody [id=dataTable]").sortable();
-        $("#customerCaseSum tbody [id=dataTable]").disableSelection();
+<script type="text/javascript">    
+
+    $(function () {        
+        $("#customerCaseSum tbody").sortable(
+            {                
+                items: "> tr:not(:first)",                
+                update: function (event, ui) {
+                    var elements = document.getElementsByClassName('SortableRow');
+                    console.log('Count:' + elements.length.toString());
+                    var newOrder = "";
+                    for (var i = 0; i < elements.length; ++i) {
+                        var item = elements[i];              
+                        newOrder += item.id.toString() + "|" ;                        
+                    }
+                    console.log(newOrder);
+                    $.post('/cases/SortCaseSettingColumn/' + '?customerId=' + '@Model.CustomerId.ToString()' + '&userId=' + '@Model.UserId.ToString()' +
+                                                             '&sortIds=' + newOrder, function (result) {
+                        $("#colsetting_result").html(result);
+                    });
+                }                
+            });
+
+        $("#customerCaseSum tbody").disableSelection();
     });
+
 
     function addCaseSettingRow() {                       
         $.post('/cases/AddCaseSettingColumn/' + '?customerId=' + '@Model.CustomerId.ToString()' + '&userId=' + '@Model.UserId.ToString()' + 

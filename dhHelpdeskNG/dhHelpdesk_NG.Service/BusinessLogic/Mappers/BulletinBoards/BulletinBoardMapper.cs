@@ -12,13 +12,15 @@
             var entities = query.Select(b => new
                                         {
                                             b.CreatedDate,
-                                            b.Text
+                                            b.Text,
+                                            b.Customer
                                         }).ToArray();
 
             return entities.Select(b => new BulletinBoardOverview
                                         {
                                             CreatedDate = b.CreatedDate,
-                                            Text = b.Text
+                                            Text = b.Text,
+                                            CustomerName = b.Customer.Name
                                         }).ToArray();
         }
 

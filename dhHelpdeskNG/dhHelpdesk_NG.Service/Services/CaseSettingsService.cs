@@ -25,8 +25,9 @@
 
         void SaveCaseSetting(CaseSettings caseSetting, out IDictionary<string, string> errors);
 
-        void UpdateCaseSetting(CaseSettings updatedCaseSetting, out IDictionary<string, string> errors);        
+        void UpdateCaseSetting(CaseSettings updatedCaseSetting, out IDictionary<string, string> errors);
 
+        void ReOrderCaseSetting(List<string> caseSettingIds);
 
         void Commit();
     }
@@ -214,6 +215,12 @@
 
             if (errors.Count == 0)
                 this.Commit();
+        }
+
+        public void ReOrderCaseSetting(List<string> caseSettingIds)
+        {                       
+            this._caseSettingRepository.ReOrderCaseSetting(caseSettingIds);                        
+            this.Commit();
         }
 
         public void UpdateCaseSetting(CaseSettings updatedCaseSetting, out IDictionary<string, string> errors)

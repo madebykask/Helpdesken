@@ -35,6 +35,8 @@ namespace DH.Helpdesk.BusinessData.Models.Faq.Output
         /// </summary>
         public string Text { get; set; }
 
+        public string CustomerName { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating whether show on start page.
         /// </summary>

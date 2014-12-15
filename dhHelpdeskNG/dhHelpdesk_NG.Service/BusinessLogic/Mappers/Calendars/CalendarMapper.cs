@@ -20,7 +20,8 @@
                                             c.ShowOnStartPage,
                                             c.ShowFromDate,
                                             c.ShowUntilDate,
-                                            c.PublicInformation
+                                            c.PublicInformation,
+                                            c.Customer
                                         }).ToArray();
 
             return entities.Select(c => new CalendarOverview
@@ -32,7 +33,8 @@
                                             ShowOnStartPage = c.ShowOnStartPage.ToBool(),
                                             ShowFromDate = c.ShowFromDate,
                                             ShowUntilDate = c.ShowUntilDate,
-                                            PublicInformation = c.PublicInformation.ToBool()
+                                            PublicInformation = c.PublicInformation.ToBool(),
+                                            CustomerName = c.Customer.Name
                                         }).ToArray();
         }
 

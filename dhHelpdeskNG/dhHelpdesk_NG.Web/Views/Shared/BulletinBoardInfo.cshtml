@@ -11,8 +11,8 @@
             <div class="box-body portlet-content">
                 @foreach (var bulletinBoard in Model)
                 {
-                    <div class="box-post">
-                        <div class="label blue">@bulletinBoard.CreatedDate.ToFormattedDate()</div>
+                    <div class="box-post">                        
+                        <div class="label blue">@bulletinBoard.CustomerName | @bulletinBoard.CreatedDate.ToFormattedDate()</div>
                         <div class="textrow">@bulletinBoard.Text</div>
                     </div>
                 }

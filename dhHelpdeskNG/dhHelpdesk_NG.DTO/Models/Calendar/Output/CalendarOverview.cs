@@ -45,6 +45,8 @@ namespace DH.Helpdesk.BusinessData.Models.Calendar.Output
         [Required]
         public string Caption { get; set; }
 
+        public string CustomerName { get; set; }
+
         /// <summary>
         /// Gets or sets the text.
         /// </summary>

@@ -11,8 +11,8 @@
             <div class="box-body portlet-content">
                 @foreach (var calendar in Model)
                 {
-                    <div class="box-post">
-                        <div class="label green">@calendar.CalendarDate.ToFormattedDate()</div>
+                    <div class="box-post">                        
+                        <div class="label green">@calendar.CustomerName | @calendar.CalendarDate.ToFormattedDate()</div>
                         <div class="captionrow">@calendar.Caption</div>
                         <div class="textrow">@calendar.Text</div>
                     </div>

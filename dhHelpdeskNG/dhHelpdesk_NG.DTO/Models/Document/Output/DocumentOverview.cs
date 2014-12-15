@@ -36,6 +36,8 @@ namespace DH.Helpdesk.BusinessData.Models.Document.Output
         /// </summary>
         public string Name { get; set; }
 
+        public string CustomerName { get; set; }
+
         /// <summary>
         /// Gets or sets the description.
         /// </summary>

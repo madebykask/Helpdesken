@@ -648,6 +648,7 @@ namespace DH.Helpdesk.Dal.Repositories
     {
         string SetListCaseName(int labelId);
         void UpdateCaseSetting(CaseSettings updatedCaseSetting);
+        void ReOrderCaseSetting(List<string> caseSettingIds);
         //IList<CaseSettings> GetCaseSettingsByCopyUserId(int userId);
     }
 
@@ -672,6 +673,21 @@ namespace DH.Helpdesk.Dal.Repositories
             return query.First().Name;
         }
 
+        public void ReOrderCaseSetting(List<string> caseSettingIds)
+        {
+            int orderNum = 0; 
+            foreach (var strId in caseSettingIds)
+            {
+                if (!string.IsNullOrEmpty(strId))
+                {
+                    orderNum++;
+                    var id = int.Parse(strId);
+                    var caseSettingEntity = this.DataContext.CaseSettings.Find(id);
+                    caseSettingEntity.ColOrder = orderNum;
+                }
+            }                                    
+        }
+
         public void UpdateCaseSetting(CaseSettings updatedCaseSetting)
         {
             var caseSettingEntity = this.DataContext.CaseSettings.Find(updatedCaseSetting.Id);
@@ -681,7 +697,6 @@ namespace DH.Helpdesk.Dal.Repositories
             caseSettingEntity.MinWidth = updatedCaseSetting.MinWidth;
             caseSettingEntity.UserGroup = updatedCaseSetting.UserGroup;
             caseSettingEntity.ColOrder = updatedCaseSetting.ColOrder;
-
         }
 
         //public IList<CaseSettings> GetCaseSettingsByUserId(int userId)
