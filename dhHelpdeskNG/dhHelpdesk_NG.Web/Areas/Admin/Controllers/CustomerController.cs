@@ -899,73 +899,46 @@
                 this._computerService.SaveComputerUserFieldSettingForCustomerCopy(newCustomerComputerUserFS, out errors);
             }
 
-
-            //foreach (var l in language)
-            //{
-            //    var computerUserFieldSettingsLangToCopy = this._computerService.GetComputerUserFieldSettingsWithLanguages(customerToCopy.Id, l.Id);
-            //    var computerUserFieldSettingsForNewCustomer = this._computerService.GetComputerUserFieldSettings(newCustomerToSave.Id);
-
-            //    if (computerUserFieldSettingsLangToCopy != null)
-            //    {
-
-            //        foreach (var cfsl in computerUserFieldSettingsLangToCopy)
-            //        {
-
-            //            foreach (var cfs in computerUserFieldSettingsForNewCustomer)
-            //            {
-            //                if (cfsl.Name == cfs.ComputerUserField)
-            //                {
-            //                    var newComputerUserFSL = new ComputerUserFieldSettingsLanguage
-            //                    {
-            //                        ComputerUserFieldSettings_Id = cfs.Id,
-            //                        Language_Id = cfsl.Language_Id,
-            //                        Label = cfsl.Label,
-            //                        FieldHelp = cfsl.FieldHelp,
-            //                    };
-
-            //                    this._computerService.SaveComputerUserFieldSettingLangForCustomerCopy(newComputerUserFSL, out errors);
-
-            //                    break;
-            //                }
-
-            //            }
-
-            //        }
-
-            //    }
-
-            //}
-
             //ComputerUserFieldSettingsLanguage
 
-            //foreach (var l in language)
-            //{
-            //    var computerUserFieldSettingsLangToCopy = this._computerService.GetComputerUserFieldSettingsWithLanguages(customerToCopy.Id, l.Id);
-            //    var computerUserFieldSettingsForNewCustomer = this._computerService.GetComputerUserFieldSettings(newCustomerToSave.Id);
+            foreach (var l in language)
+            {
+                //var computerUserFieldSettingsLangToCopy = this._computerService.GetComputerUserFieldSettingsWithLanguages(customerToCopy.Id, l.Id);
+                var computerUserFieldSettingsLangToCopy = this._computerService.GetComputerUserFieldSettingsWithLanguagesForDefaultCust(l.Id);
+                var computerUserFieldSettingsForNewCustomer = this._computerService.GetComputerUserFieldSettings(newCustomerToSave.Id);
 
-            //    if (computerUserFieldSettingsLangToCopy != null)
-            //    {
-            //        foreach (var cfsltc in computerUserFieldSettingsLangToCopy)
-            //        {
+                if (computerUserFieldSettingsLangToCopy != null)
+                {
 
-            //            foreach (var cfsln in computerUserFieldSettingsForNewCustomer)
-            //            {
-                           
-            //                var newComputerUserFSL = new ComputerUserFieldSettingsLanguage
-            //                {
-            //                    ComputerUserFieldSettings_Id = cfsln.Id,
-            //                    Language_Id = cfsltc.Language_Id,
-            //                    Label = cfsltc.Label,
-            //                    FieldHelp = cfsltc.FieldHelp,
-            //                };
+                    foreach (var cfsl in computerUserFieldSettingsLangToCopy)
+                    {
 
-            //                this._computerService.SaveComputerUserFieldSettingLangForCustomerCopy(newComputerUserFSL, out errors);
-            //            }
-                          
-            //        }
-            //    }
+                        foreach (var cfs in computerUserFieldSettingsForNewCustomer)
+                        {
+                            if (cfsl.Name == cfs.ComputerUserField)
+                            {
+                                var newComputerUserFSL = new ComputerUserFieldSettingsLanguage
+                                {
+                                    ComputerUserFieldSettings_Id = cfs.Id,
+                                    Language_Id = cfsl.Language_Id,
+                                    Label = cfsl.Label,
+                                    FieldHelp = cfsl.FieldHelp,
+                                };
 
-            //}
+                                this._computerService.SaveComputerUserFieldSettingLangForCustomerCopy(newComputerUserFSL, out errors);
+
+                                break;
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+            
 
             //Get CustomerUser to copy
             var customerUserToCopy = this._customerUserService.GetCustomerUsersForCustomer(customerToCopy.Id);
