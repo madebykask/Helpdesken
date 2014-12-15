@@ -15,6 +15,7 @@
             Program program,
             Other other,
             DateTime changedDate,
+            DateTime? finishDate,
             int changedByUserId)
             : base(orderer, user, accountInformation, contact, deliveryInformation, program, other)
         {
@@ -22,6 +23,7 @@
             this.ActivityId = activityId;
             this.ChangedDate = changedDate;
             this.ChangedByUserId = changedByUserId;
+            this.FinishDate = finishDate;
         }
 
         public int ActivityId { get; private set; }
@@ -29,5 +31,7 @@
         public DateTime ChangedDate { get; private set; }
 
         public int ChangedByUserId { get; private set; }
+
+        public DateTime? FinishDate { get; private set; }
     }
 }

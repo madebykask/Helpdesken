@@ -635,6 +635,7 @@
     <Compile Include="Areas\OrderAccounts\Models\Settings\FieldSettings\DeliveryInformationFieldSettings.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Settings\FieldSettings\FieldSetting.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Settings\FieldSettings\FieldSettingMultipleChoices.cs" />
+    <Compile Include="Areas\OrderAccounts\Models\Settings\FieldSettings\HeadersFieldSettingsModel.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Settings\FieldSettings\OrdererFieldSettings.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Settings\FieldSettings\OtherFieldSettings.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Settings\FieldSettings\ProgramFieldSettings.cs" />

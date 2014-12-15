@@ -11,6 +11,10 @@
 
     public interface IOrderAccountSettingsService
     {
+        HeadersFieldSettings GetHeadersFieldSettings(int accountActivityId);
+
+        void UpdateHeadersFieldSettings(int accountActivityId, HeadersFieldSettings dto);
+
         AccountFieldsSettingsForEdit GetFieldsSettingsForEdit(int accountActivityId, OperationContext context);
 
         AccountFieldsSettingsForModelEdit GetFieldsSettingsForModelEdit(int accountActivityId, OperationContext context);

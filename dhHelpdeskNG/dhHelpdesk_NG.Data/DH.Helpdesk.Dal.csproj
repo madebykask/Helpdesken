@@ -107,6 +107,7 @@
     <Compile Include="EntityConfigurations\SSO\SSOLogConfiguration.cs" />
     <Compile Include="EntityConfigurations\Users\ModuleConfiguration.cs" />
     <Compile Include="EntityConfigurations\Users\UserModuleConfiguration.cs" />
+    <Compile Include="Enums\Accounts\Headers.cs" />
     <Compile Include="Enums\Accounts\Fields\AccountInformationFields.cs" />
     <Compile Include="Enums\Accounts\Fields\ContactFields.cs" />
     <Compile Include="Enums\Accounts\Fields\DeliveryInformationFields.cs" />

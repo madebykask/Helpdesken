@@ -4,6 +4,7 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Read.ModelEdit;
     using DH.Helpdesk.BusinessData.Models.Accounts.Read.Edit;
     using DH.Helpdesk.BusinessData.Models.Accounts.Read.Overview;
     using DH.Helpdesk.BusinessData.Models.Accounts.Write;
@@ -78,23 +79,27 @@
 
                 domainEntity.ChangedDate = context.DateAndTime;
                 domainEntity.ChangedByUser_Id = context.UserId;
+                domainEntity.FinishingDate = dto.FinishDate;
 
                 foreach (var program in domainEntity.Programs.ToList())
                 {
-                    if (!dto.Program.ProgramIds.Contains(program.Id))
+                    if (dto.Program.ProgramIds == null || !dto.Program.ProgramIds.Contains(program.Id))
                     {
                         domainEntity.Programs.Remove(program);
                     }
                 }
 
-                foreach (var newId in dto.Program.ProgramIds)
+                if (dto.Program.ProgramIds != null && dto.Program.ProgramIds.Any())
                 {
-                    if (!domainEntity.Programs.Any(r => r.Id == newId))
+                    foreach (var newId in dto.Program.ProgramIds)
                     {
-                        var program = new Program { Id = newId };
+                        if (!domainEntity.Programs.Any(r => r.Id == newId))
+                        {
+                            var program = new Program { Id = newId };
 
-                        programRepository.Attach(program);
-                        domainEntity.Programs.Add(program);
+                            programRepository.Attach(program);
+                            domainEntity.Programs.Add(program);
+                        }
                     }
                 }
 

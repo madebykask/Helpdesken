@@ -15,7 +15,8 @@
             ContactFieldSettings contact,
             DeliveryInformationFieldSettings deliveryInformation,
             ProgramFieldSettings program,
-            OtherFieldSettings other)
+            OtherFieldSettings other,
+            HeadersFieldSettingsModel headers)
         {
             this.Orderer = orderer;
             this.User = user;
@@ -24,27 +25,31 @@
             this.DeliveryInformation = deliveryInformation;
             this.Program = program;
             this.Other = other;
+            this.Headers = headers;
         }
 
         [NotNull]
         public OrdererFieldSettings Orderer { get; set; }
 
         [NotNull]
-        public UserFieldSettings User { get;  set; }
+        public UserFieldSettings User { get; set; }
 
         [NotNull]
-        public AccountInformationFieldSettings AccountInformation { get;  set; }
+        public AccountInformationFieldSettings AccountInformation { get; set; }
 
         [NotNull]
         public ContactFieldSettings Contact { get; set; }
 
         [NotNull]
-        public DeliveryInformationFieldSettings DeliveryInformation { get;  set; }
+        public DeliveryInformationFieldSettings DeliveryInformation { get; set; }
 
         [NotNull]
-        public ProgramFieldSettings Program { get;  set; }
+        public ProgramFieldSettings Program { get; set; }
 
         [NotNull]
-        public OtherFieldSettings Other { get;  set; }
+        public OtherFieldSettings Other { get; set; }
+
+        [NotNull]
+        public HeadersFieldSettingsModel Headers { get; set; }
     }
 }

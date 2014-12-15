@@ -31,6 +31,7 @@
                 program,
                 other,
                 operationContext.DateAndTime,
+                model.FinishDate,
                 operationContext.UserId);
         }
 

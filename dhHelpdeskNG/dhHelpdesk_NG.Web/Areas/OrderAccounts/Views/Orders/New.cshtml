@@ -62,12 +62,12 @@
 
         @Html.HiddenFor(m => m.Id)
         @Html.HiddenFor(m => m.ActivityTypeId)
-        @Html.EditorFor(m => m.Orderer)
-        @Html.EditorFor(m => m.User)
-        @Html.EditorFor(m => m.AccountInformation)
-        @Html.EditorFor(m => m.Contact)
-        @Html.EditorFor(m => m.DeliveryInformation)
-        @Html.EditorFor(m => m.Program)
+        @Html.EditorFor(m => m.Orderer, new { Header = Model.Headers.OrderLabel })
+        @Html.EditorFor(m => m.User, new { Header = Model.Headers.UserLabel })
+        @Html.EditorFor(m => m.AccountInformation, new { Header = Model.Headers.AccountLabel })
+        @Html.EditorFor(m => m.Contact, new { Header = Model.Headers.ContactLabel })
+        @Html.EditorFor(m => m.DeliveryInformation, new { Header = Model.Headers.DeliveryLabel })
+        @Html.EditorFor(m => m.Program, new { Header = Model.Headers.ProgramLabel })
         @Html.EditorFor(m => m.Other)
     }
 }

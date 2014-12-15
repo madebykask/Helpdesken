@@ -78,8 +78,8 @@
             }
 
             query = accountState == AccountStates.Active
-                        ? query.Where(x => x.FinishingDate != null)
-                        : query.Where(x => x.FinishingDate == null);
+                        ? query.Where(x => x.FinishingDate == null)
+                        : query.Where(x => x.FinishingDate != null);
 
             return query;
         }

@@ -21,8 +21,6 @@
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
 
-    using Microsoft.Ajax.Utilities;
-
     public class OrdersController : UserInteractionController
     {
         private const string FilterName = "OrderAccountFilter";
@@ -108,8 +106,9 @@
             AccountFieldsSettingsForModelEdit settings =
                 this.orderAccountSettingsProxyService.GetFieldsSettingsForModelEdit(activityType, OperationContext);
             AccountOptionsResponse options = this.orderAccountProxyService.GetOptions(activityType, OperationContext);
+            HeadersFieldSettings headers = this.orderAccountSettingsProxyService.GetHeadersFieldSettings(activityType);
 
-            AccountModel viewModel = this.orderModelMapper.BuildViewModel(model, options, settings);
+            AccountModel viewModel = this.orderModelMapper.BuildViewModel(model, options, settings, headers);
 
             return this.View(viewModel);
         }
@@ -148,11 +147,14 @@
             IdAndNameOverview activity =
                 this.orderAccountProxyService.GetAccountActivityItemOverview(activityTypeForEdit);
 
+            HeadersFieldSettings headers = this.orderAccountSettingsProxyService.GetHeadersFieldSettings(activityTypeForEdit);
+
             AccountModel viewModel = this.orderModelMapper.BuildViewModel(
                 activityTypeForEdit,
                 options,
                 settings,
-                SessionFacade.CurrentUser);
+                SessionFacade.CurrentUser,
+                headers);
             viewModel.ActivityName = activity.Name;
 
             return this.View("New", viewModel);
@@ -179,6 +181,15 @@
             this.orderAccountProxyService.Delete(id);
 
             return this.RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public JsonResult SearchDepartmentsByRegionId(int? selected)
+        {
+            List<ItemOverview> models = this.organizationService.GetDepartments(
+                SessionFacade.CurrentCustomer.Id,
+                selected);
+            return this.Json(models, JsonRequestBehavior.AllowGet);
         }
     }
 }

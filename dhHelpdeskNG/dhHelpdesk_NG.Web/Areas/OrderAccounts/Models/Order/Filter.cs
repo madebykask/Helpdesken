@@ -11,6 +11,7 @@
         public Filter()
         {
             this.SortField = new SortFieldModel();
+            this.State = Enums.Show.Active;
         }
 
         public Filter(int? userId, string searchFor, Enums.Show state, SortFieldModel sortFieldModel)

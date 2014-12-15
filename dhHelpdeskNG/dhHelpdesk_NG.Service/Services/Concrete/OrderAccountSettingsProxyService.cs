@@ -30,6 +30,16 @@ namespace DH.Helpdesk.Services.Services.Concrete
             this.orderAccountService = orderAccountService;
         }
 
+        public HeadersFieldSettings GetHeadersFieldSettings(int accountActivityId)
+        {
+            return this.orderAccountSettingsService.GetHeadersFieldSettings(accountActivityId);
+        }
+
+        public void UpdateHeadersFieldSettings(int accountActivityId, HeadersFieldSettings dto)
+        {
+            this.orderAccountSettingsService.UpdateHeadersFieldSettings(accountActivityId, dto);
+        }
+
         public AccountFieldsSettingsForEditResponse GetFieldsSettingsForEditResponse(
             int accountActivityId,
             OperationContext context)

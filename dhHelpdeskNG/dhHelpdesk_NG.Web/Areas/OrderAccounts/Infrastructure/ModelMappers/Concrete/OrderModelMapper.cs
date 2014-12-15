@@ -28,10 +28,7 @@
 
     public class OrderModelMapper : IOrderModelMapper
     {
-        public AccountModel BuildViewModel(
-            AccountForEdit model,
-            AccountOptionsResponse options,
-            AccountFieldsSettingsForModelEdit settings)
+        public AccountModel BuildViewModel(AccountForEdit model, AccountOptionsResponse options, AccountFieldsSettingsForModelEdit settings, HeadersFieldSettings headers)
         {
             var order = MapOrderer(model, options, settings);
             var user = MapUser(model, options, settings);
@@ -44,6 +41,7 @@
             return new AccountModel(order, user, account, contact, delivery, program, other)
                        {
                            Id = model.Id,
+                           FinishDate = model.FinishingDate,
                            ActivityTypeId =
                                model.ActivityId,
                            ActivityName =
@@ -53,11 +51,12 @@
                            ChangedDate =
                                model.ChangedDate,
                            ChangedByUserName =
-                               model.ChangedByUser
+                               model.ChangedByUser,
+                           Headers = headers
                        };
         }
 
-        public AccountModel BuildViewModel(int activityId, AccountOptionsResponse options, AccountFieldsSettingsForModelEdit settings, UserOverview userOverview)
+        public AccountModel BuildViewModel(int activityId, AccountOptionsResponse options, AccountFieldsSettingsForModelEdit settings, UserOverview userOverview, HeadersFieldSettings headers)
         {
             var order = MapOrderer(options, settings, userOverview);
             var user = MapUser(options, settings);
@@ -71,6 +70,7 @@
             {
                 ActivityTypeId =
                     activityId,
+                   Headers = headers
             };
         }
 

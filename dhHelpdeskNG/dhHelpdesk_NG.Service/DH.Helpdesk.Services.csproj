@@ -113,6 +113,7 @@
     <Compile Include="BusinessLogic\Mappers\Accounts\AccountFieldSettingsOverviewMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Accounts\AccountFieldSettingsForProcessing.cs" />
     <Compile Include="BusinessLogic\Mappers\Accounts\AccountSettingsMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Accounts\HeadersFieldSettingsMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Accounts\MapperData\AccountSettingsMapperDataForEdit.cs" />
     <Compile Include="BusinessLogic\Mappers\Accounts\MapperData\AccountSettingsMapperDataForModelEdit.cs" />
     <Compile Include="BusinessLogic\Mappers\Accounts\MapperData\AccountSettingsMapperDataOverview.cs" />
