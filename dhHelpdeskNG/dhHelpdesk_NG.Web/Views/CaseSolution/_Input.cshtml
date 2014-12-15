@@ -1,4 +1,5 @@
 ﻿@model DH.Helpdesk.Web.Models.CaseSolutionInputViewModel
+@using System.Web.Optimization
 @using System.Web.UI.WebControls
 @using DH.Helpdesk.BusinessData.Models.Case
 @using DH.Helpdesk.BusinessData.OldComponents
@@ -8,13 +9,7 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 
-@*@if (TempData["Error"] != null)
-{
-    <div class="alert alert-error">@Translation.Get("Ärendemall", Enums.TranslationSource.TextTranslation)
-        @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
-    </div>    
-}*@
-
+@Scripts.Render("~/bundles/casetemplates/edit")
 
 <div class="content">
     <div class="container">
@@ -414,8 +409,7 @@
                                         @Translation.Get("dagar", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <!-- ********************************* WEEK ************************************* -->
-                                    <td id="chosenWeek" class="chWeek span6" style="display: none;>
-                                        
+                                    <td id="chosenWeek" class="chWeek span6" style="display: none;">
                                         <!-- This is for cell width -->
                                         <label>
                                         @Translation.Get("Dagar i veckan", Enums.TranslationSource.TextTranslation):                                        
@@ -562,101 +556,6 @@
     </div>
 </div>
 <script type="text/javascript">
-    
-    $('#case__WorkingGroup_Id').change(function () {
-        // filter administrators
-        var DontConnectUserToWorkingGroup = $('#CaseMailSetting_DontConnectUserToWorkingGroup').val();
-        if (DontConnectUserToWorkingGroup == 0) {
-            CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeWorkingGroupFilterUser/', '#case__Performer_User_Id', $('#DepartmentFilterFormat').val());
-        }
-        //set state secondery
-        SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeWorkingGroupSetStateSecondary/', '#case__StateSecondary_Id')
-    });
-
-    $('#divFinishingCause ul.dropdown-menu li a').click(function (e) {
-        e.preventDefault();
-        var val = $(this).attr('value');
-        $("#divBreadcrumbs_FinishingCause").text(getBreadcrumbs(this));
-        $("#CaseSolution_FinishingCause_Id").val(val);
-    });
-
-    $('#divCaseType ul.dropdown-menu li a').click(function (e) {
-        e.preventDefault();
-        var val = $(this).attr('value');
-        $("#divBreadcrumbs_CaseType").text(getBreadcrumbs(this));
-        $("#CaseSolution_CaseType_Id").val(val);
-    });
-
-    $('#divProductArea ul.dropdown-menu li a').click(function (e) {
-        e.preventDefault();
-        var val = $(this).attr('value');
-        $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(this));
-        $("#CaseSolution_ProductArea_Id").val(val);
-    });
-
-    // enable/disable correct choices in schedule  
-    $(document).ready(function () {
-        if (document.getElementById("optday").getAttribute('checked') == "'checked'")
-            SetDayEnable();
-        else
-            SetWeekEnable();
-    });
-
-    $(function () {
-        $("#optday").click(function () {
-            SetDayEnable();
-        });
-    });
-
-    $(function () {
-        $("#optthe").click(function () {
-            SetWeekEnable();
-        });
-    });
-
-    function SetDayEnable() {
-        document.getElementById("cbo0").removeAttribute('disabled');
-        document.getElementById("cbo1").setAttribute('disabled', true);
-        document.getElementById("cbo2").setAttribute('disabled', true);
-    }
-
-    function SetWeekEnable() {
-        document.getElementById("cbo0").setAttribute('disabled', true);
-        document.getElementById("cbo1").removeAttribute('disabled');
-        document.getElementById("cbo2").removeAttribute('disabled');
-    }
-
-    // Setfocus for Required fields
-    function SetFocus(iObject) {
-        //alert(iObject);
-        document.getElementById(iObject).focus();
-    }
-
-    var checkScheduleChange = function () {
-        if ($('#optScheduleType1').is(':checked')) {
-            $(".chDay").toggle($("[name$=ScheduleType]").index($('#optScheduleType1')) == 0);
-            $('.chWeek, .chMonth').hide();
-        }
-        else if ($('#optScheduleType2').is(':checked')) {
-            $('.chDay, .chWeek').toggle($("[name$=ScheduleType]").index($('#optScheduleType2')) == 1);
-            $('.chMonth').hide();
-        }
-        else if ($('#optScheduleType3').is(':checked')) {
-            $('.chDay, .chMonth').toggle($("[name$=ScheduleType]").index($('#optScheduleType3')) == 2);
-            $('.chWeek').hide();
-        }
-    }
-
-    $(function () {
-        $("#chkSchedule").click(function () {
-            $("#scheduleOptions").toggle();
-        });
-
-        checkScheduleChange();
-        $("[name$=ScheduleType]").change(checkScheduleChange);
-    });
-
-
     var validator = $("#target").validate({
         ignore: "",
         rules: {
@@ -667,11 +566,10 @@
         messages: {
             "CaseSolution.Name": {
                 required: "@Translation.Get("Du måste ange ett namn på ärendemallen", Enums.TranslationSource.TextTranslation)"
-            }
-        },
-        submitHandler: function (form) {
-            form.submit();
         }
-    });
-
+    },
+       submitHandler: function (form) {
+           form.submit();
+       }
+   });
 </script>

@@ -736,9 +736,15 @@ namespace DH.Helpdesk.Web.Controllers
             return this.Json(new { list });
         }
 
-        public JsonResult ChangeWorkingGroupFilterUser(int? id, int customerId, int departmentFilterFormat)
+        public JsonResult ChangeWorkingGroupFilterUser(int? id, int customerId)
         {
-            var list = id.HasValue ? this._userService.GetUsersForWorkingGroup(customerId, id.GetValueOrDefault()).Select(x => new { id = x.Id, name = x.SurName + ' ' + x.FirstName }) : this._userService.GetUsers(customerId).Select(x => new { id = x.Id, name = x.SurName + ' ' + x.FirstName });
+            var list = id.HasValue
+                           ? this._userService.GetUsersForWorkingGroup(customerId, id.GetValueOrDefault())
+                                 .Where(x => x.IsActive == 1)
+                                 .Select(x => new { id = x.Id, name = x.SurName + ' ' + x.FirstName })
+                           : this._userService.GetUsers(customerId)
+                                 .Where(x => x.IsActive == 1)
+                                 .Select(x => new { id = x.Id, name = x.SurName + ' ' + x.FirstName });
             return this.Json(new { list });
         }
 

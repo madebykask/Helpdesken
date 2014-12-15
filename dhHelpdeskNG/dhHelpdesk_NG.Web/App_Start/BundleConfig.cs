@@ -109,6 +109,10 @@
                             "~/Content/js/Cases/edit.logic.js",
                             "~/Content/js/Cases/case.templates.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/casetemplates/edit").Include(
+                "~/Content/js/CaseTemplates/edit.logic.js"));
+
+
             bundles.Add(new ScriptBundle("~/bundles/changes/change").Include(
                             "~/Content/js/Changes/change.js"));
 
