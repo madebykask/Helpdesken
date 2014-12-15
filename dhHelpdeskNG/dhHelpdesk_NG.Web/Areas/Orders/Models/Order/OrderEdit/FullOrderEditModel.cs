@@ -1,6 +1,9 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
 {
+    using System.Collections.Generic;
+
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Infrastructure.Tools;
 
     public sealed class FullOrderEditModel
     {
@@ -86,5 +89,11 @@
         public bool InformReceiver { get; set; }
 
         public bool CreateCase { get; set; }
+
+        [NotNull]
+        public List<WebTemporaryFile> NewFiles { get; set; }
+
+        [NotNull]
+        public List<string> DeletedFiles { get; set; }
     }
 }

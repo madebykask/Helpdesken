@@ -20,7 +20,7 @@
             }
             <tr>
                 <td>
-                    @Html.ActionLink(file, "DownloadFile", new { orderId = Model.OrderId, subtopic = Model.Area, fileName = file })
+                    @Html.ActionLink(file, "DownloadFile", new { entityId = Model.OrderId, subtopic = Model.Area, fileName = file })
                 </td>
                 <td>
                     <a onclick="deleteFile('@Model.Area', '@file', '@filesContainerId')" class="btn">

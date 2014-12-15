@@ -1,12 +1,15 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Orders.Controllers
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Net;
     using System.Web;
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Enums.Orders;
     using DH.Helpdesk.BusinessData.Models.Orders.Index;
+    using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Services.BusinessLogic.OtherTools.Concrete;
@@ -14,6 +17,7 @@
     using DH.Helpdesk.Services.Services.Orders;
     using DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories;
     using DH.Helpdesk.Web.Areas.Orders.Models.Index;
+    using DH.Helpdesk.Web.Areas.Orders.Models.Order.FieldModels;
     using DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit;
     using DH.Helpdesk.Web.Enums;
     using DH.Helpdesk.Web.Infrastructure;
@@ -34,9 +38,9 @@
 
         private readonly IOrderModelFactory orderModelFactory;
 
-        private readonly ITemporaryFilesCache temporaryFilesCache;
+        private readonly ITemporaryFilesCache filesStore;
 
-        private readonly IEditorStateCache editorStateCache;
+        private readonly IEditorStateCache filesStateStore;
 
         private readonly IUpdateOrderModelFactory updateOrderModelFactory;
 
@@ -61,8 +65,8 @@
             this.orderModelFactory = orderModelFactory;
             this.updateOrderModelFactory = updateOrderModelFactory;
 
-            this.editorStateCache = editorStateCacheFactory.CreateForModule(ModuleName.Orders);
-            this.temporaryFilesCache = temporaryFilesCacheFactory.CreateForModule(ModuleName.Orders);
+            this.filesStateStore = editorStateCacheFactory.CreateForModule(ModuleName.Orders);
+            this.filesStore = temporaryFilesCacheFactory.CreateForModule(ModuleName.Orders);
         }
 
         [HttpGet]
@@ -128,25 +132,49 @@
         [BadRequestOnNotValid]
         public RedirectToRouteResult New(FullOrderEditModel model)
         {
-            this.temporaryFilesCache.ResetCacheForObject(model.Id);
+            int intId;
+            int.TryParse(model.Id, out intId);
+            model.NewFiles = this.filesStore.FindFiles(model.Id, Subtopic.FileName.ToString());
+            model.DeletedFiles = this.filesStateStore.FindDeletedFileNames(intId, Subtopic.FileName.ToString());
 
             var request = this.updateOrderModelFactory.Create(model, this.workContext.Customer.CustomerId, DateTime.Now);
             var id = this.ordersService.AddOrUpdate(request);
+
+            foreach (var newFile in model.NewFiles)
+            {
+                this.filesStore.AddFile(newFile.Content, newFile.Name, id, Subtopic.FileName.ToString());
+            }
+
+            this.filesStore.ResetCacheForObject(model.Id);
+
+            this.filesStateStore.ClearObjectDeletedItems(id, OrderDeletedItem.Logs);
 
             return this.RedirectToAction("Edit", new { id });
         }
 
         [HttpGet]
         public ViewResult Edit(int id)
-        {
-            this.temporaryFilesCache.ResetCacheForObject(id);
-            this.editorStateCache.ClearObjectDeletedItems(id, OrderDeletedItem.Logs);
+        {            
+            this.filesStateStore.ClearObjectDeletedItems(id, OrderDeletedItem.Logs);
 
             var response = this.ordersService.FindOrder(id, this.workContext.Customer.CustomerId);
             if (response == null)
             {
                 throw new HttpException((int)HttpStatusCode.NotFound, null);
             }
+
+            var filesInDb = response.EditData.Order.Other.FileName != null ? new List<string> { response.EditData.Order.Other.FileName } : new List<string>();
+            var filesOnDisc = this.filesStore.FindFiles(id, Subtopic.FileName.ToString()).Select(f => f.Name).ToArray();
+            foreach (var fileOnDisc in filesOnDisc)
+            {
+                if (!filesInDb.Contains(fileOnDisc))
+                {
+                    this.filesStore.DeleteFile(fileOnDisc, id, Subtopic.FileName.ToString());
+                }
+            }
+
+            this.filesStateStore.ClearObjectDeletedFiles(id);
+
 
             var model = this.orderModelFactory.Create(response, this.workContext.Customer.CustomerId);
             return this.View(model);
@@ -157,17 +185,23 @@
         public RedirectToRouteResult Edit(FullOrderEditModel model)
         {
             var id = int.Parse(model.Id);
+            var filesInDb = model.Other.FileName != null && model.Other.FileName.Value != null ? model.Other.FileName.Value.Files : new List<string>();
+            model.NewFiles = this.filesStore.FindFiles(model.Id, Subtopic.FileName.ToString()).Where(f => !filesInDb.Contains(f.Name)).ToList();
+            model.DeletedFiles = this.filesStateStore.FindDeletedFileNames(id, Subtopic.FileName.ToString());
 
-            var newFileNameFiles = this.temporaryFilesCache.FindFiles(id, Subtopic.FileName.ToString());
-            var deletedFileNameFiles = this.editorStateCache.FindDeletedFileNames(id, Subtopic.FileName.ToString());
-
-            var deletedLogIds = this.editorStateCache.GetDeletedItemIds(id, OrderDeletedItem.Logs);
+            var deletedLogIds = this.filesStateStore.GetDeletedItemIds(id, OrderDeletedItem.Logs);
 
             var request = this.updateOrderModelFactory.Create(model, this.workContext.Customer.CustomerId, DateTime.Now);
             this.ordersService.AddOrUpdate(request);
 
-            this.temporaryFilesCache.ResetCacheForObject(id);
-            this.editorStateCache.ClearObjectDeletedItems(id, OrderDeletedItem.Logs);
+            foreach (var deletedFile in model.DeletedFiles)
+            {
+                this.filesStore.DeleteFile(deletedFile, model.Id, Subtopic.FileName.ToString());
+            }
+
+            this.filesStateStore.ClearObjectDeletedFiles(id);  
+
+            this.filesStateStore.ClearObjectDeletedItems(id, OrderDeletedItem.Logs);
 
             return this.RedirectToAction("Edit", new { id });
         }
@@ -176,10 +210,84 @@
         public RedirectToRouteResult Delete(int id)
         {
             this.ordersService.Delete(id);
-            this.temporaryFilesCache.ResetCacheForObject(id);
-            this.editorStateCache.ClearObjectDeletedItems(id, OrderDeletedItem.Logs);
+            this.filesStore.ResetCacheForObject(id);
+            this.filesStateStore.ClearObjectDeletedItems(id, OrderDeletedItem.Logs);
 
             return this.RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public PartialViewResult AttachedFiles(string entityId, Subtopic subtopic)
+        {
+            List<string> fileNames;
+
+            if (GuidHelper.IsGuid(entityId))
+            {
+                fileNames = this.filesStore.FindFileNames(entityId, subtopic.ToString());
+            }
+            else
+            {
+                var id = int.Parse(entityId);
+                var savedFiles = this.filesStore.FindFileNames(id, subtopic.ToString());
+                var deletedFiles = this.filesStateStore.FindDeletedFileNames(id, subtopic.ToString());
+
+                fileNames = new List<string>();
+                fileNames.AddRange(savedFiles.Where(f => !deletedFiles.Contains(f)));
+            }
+
+            var model = new AttachedFilesModel(entityId, subtopic, fileNames);
+            return this.PartialView(model);
+        }
+
+        [HttpPost]
+        public RedirectToRouteResult UploadFile(string entityId, Subtopic subtopic, string name)
+        {
+            var uploadedFile = this.Request.Files[0];
+            if (uploadedFile == null)
+            {
+                throw new HttpException((int)HttpStatusCode.NotFound, null);
+            }
+
+            var fileContent = new byte[uploadedFile.InputStream.Length];
+            uploadedFile.InputStream.Read(fileContent, 0, fileContent.Length);
+
+            if (this.filesStore.FileExists(name, entityId, subtopic.ToString()))
+            {
+                throw new HttpException((int)HttpStatusCode.Conflict, null);
+            }
+
+            this.filesStore.AddFile(fileContent, name, entityId, subtopic.ToString());
+
+            return this.RedirectToAction("AttachedFiles", new { entityId, subtopic });
+        }
+
+        [HttpGet]
+        public FileContentResult DownloadFile(string entityId, Subtopic subtopic, string fileName)
+        {
+            if (!this.filesStore.FileExists(fileName, entityId, subtopic.ToString()))
+            {
+                throw new HttpException((int)HttpStatusCode.NotFound, null);
+            }
+
+            var fileContent = this.filesStore.GetFileContent(fileName, entityId, subtopic.ToString());
+
+            return this.File(fileContent, MimeType.BinaryFile, fileName);
+        }
+
+        [HttpPost]
+        public RedirectToRouteResult DeleteFile(string entityId, Subtopic subtopic, string fileName)
+        {
+            if (GuidHelper.IsGuid(entityId))
+            {
+                this.filesStore.DeleteFile(fileName, entityId, subtopic.ToString());
+            }
+            else
+            {
+                var id = int.Parse(entityId);
+                this.filesStateStore.AddDeletedFile(fileName, id, subtopic.ToString());
+            }
+
+            return this.RedirectToAction("AttachedFiles", new { entityId, subtopic });
         }
     }
 }

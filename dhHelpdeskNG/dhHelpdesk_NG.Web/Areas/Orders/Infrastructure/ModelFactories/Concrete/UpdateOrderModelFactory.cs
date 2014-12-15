@@ -1,12 +1,14 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Orders.Order;
     using DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditFields;
     using DH.Helpdesk.Web.Areas.Orders.Models.Order.FieldModels;
     using DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit;
+    using DH.Helpdesk.Web.Infrastructure.Tools;
 
     public class UpdateOrderModelFactory : IUpdateOrderModelFactory
     {
@@ -23,7 +25,7 @@
                 CreateLogFields(model.Log),
                 CreateOrdererFields(model.Orderer),
                 CreateOrderFields(model.Order),
-                CreateOtherFields(model.Other),
+                CreateOtherFields(model.Other, model.NewFiles, model.DeletedFiles),
                 CreateProgramFields(model.Program),
                 CreateReceiverFields(model.Receiver),
                 CreateSupplierFields(model.Supplier),
@@ -128,7 +130,7 @@
                     ConfigurableFieldModel<int>.GetValueOrDefault(model.OrderInfo2));
         }
 
-        private static OtherEditFields CreateOtherFields(OtherEditModel model)
+        private static OtherEditFields CreateOtherFields(OtherEditModel model, IEnumerable<WebTemporaryFile> newFiles, IEnumerable<string> deletedFiles)
         {
             if (model == null)
             {
@@ -136,7 +138,7 @@
             }
 
             return new OtherEditFields(
-                    model.FileName != null ? model.FileName.Value.Files.FirstOrDefault() : string.Empty,
+                    !deletedFiles.Any() ? newFiles.Select(f => f.Name).FirstOrDefault() : string.Empty,
                     ConfigurableFieldModel<decimal?>.GetValueOrDefault(model.CaseNumber),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.Info),
                     model.StatusId);

@@ -13,13 +13,20 @@
     </ul>
 }
 @using (Ajax.BeginForm("OrderFieldSettings", "OrderFieldSettings", null,
-    new AjaxOptions { UpdateTargetId = "OrderFieldSettingsTableContainer" },
+    new AjaxOptions
+        {
+            UpdateTargetId = "OrderFieldSettingsTableContainer", 
+            OnBegin = "OnBeginLoadSettings", 
+            OnComplete = "OnCompleteLoadSettings"
+        },
     new { id ="OrderFieldSettingsSearchForm" } ))
 {
     <table class="tableform">
         <tr>
             <td class="span3">@Translation.Get("Typ")</td>
-            <td>@Html.DropDownListFor(m => m.OrderTypeId, Model.OrderTypes, new { id = "ordertypes_dropdown", data_placeholder = Translation.Get("Välj en eller flera") })</td>
+            <td>
+                @Html.DropDownListFor(m => m.OrderTypeId, Model.OrderTypes, new { id = "ordertypes_dropdown", data_placeholder = Translation.Get("Välj en eller flera") })
+            </td>
         </tr>                
     </table>
 }
@@ -27,3 +34,15 @@
 <div id="OrderFieldSettingsTableContainer">
     @Html.Action("OrderFieldSettings", "OrderFieldSettings", new { model = (OrderFieldSettingsIndexModel)null })
 </div>
+
+<script type="text/javascript">
+    function OnBeginLoadSettings() {
+        $("#ordertypes_dropdown").prop("disabled", true);
+        $("#OrderFieldSettingsTableContainer").prop("disabled", true);
+    }
+
+    function OnCompleteLoadSettings() {
+        $("#ordertypes_dropdown").prop("disabled", false);
+        $("#OrderFieldSettingsTableContainer").prop("disabled", false);
+    }
+</script>
