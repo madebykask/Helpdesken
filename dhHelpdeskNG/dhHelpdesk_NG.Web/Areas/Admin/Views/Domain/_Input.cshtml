@@ -1,5 +1,12 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Admin.Models.DomainInputViewModel
+
+@{
+    var passChangeText = Translation.Get("Lösenordet har ändrats", Enums.TranslationSource.TextTranslation);    
+    
+    var passChangeError = Translation.Get("De lösenord du angav stämmer inte överens med varandra. Försök igen", Enums.TranslationSource.TextTranslation);
+}
+
 @if (TempData["Error"] != null)
 {
     <div class="alert alert-error">@Translation.Get("Domän", Enums.TranslationSource.TextTranslation)
@@ -143,10 +150,14 @@
 
         mod.find("#btnSavePassword").on("click", function (e) {
             if ($('#NewPassword').val() != $('#ConfirmPassword').val()) {
-                alert('@Translation.Get("Det nya lösenordet bekräftades inte korrekt. Kontrollera att nytt lösenord och bekräftat lösenord stämmer överens", Enums.TranslationSource.TextTranslation)');
+                var e = '@passChangeError';
+                ShowToastMessage(e, "Error");
+                
             } else {
                 $.post('/domain/EditPassword/', { id: $('#Domain_Id').val(), newPassword: $('#NewPassword').val(), confirmPassword: $('#ConfirmPassword').val() }, function (data) {
-                    alert('@Translation.Get("Lösenordet har ändrats", Enums.TranslationSource.TextTranslation)');
+                    var e = '@passChangeText';
+                    ShowToastMessage(e, "Alert");
+                   
 
                     $('#NewPassword').val('');
                     $('#ConfirmPassword').val('');
@@ -159,5 +170,21 @@
                 $("#divPasswordDialog #btnSavePassword").off("click");
                 $("#divPasswordDialog #btnClose").off("click");
             });
-        }
+    }
+
+    function ShowToastMessage(message, msgType) {
+        $().toastmessage('showToast', {
+            text: message,
+            sticky: true,
+            position: 'top-center',
+            type: msgType,
+            closeText: '',
+            stayTime: 10000,
+            inEffectDuration: 1000,
+            width: 500,
+            close: function () {
+                //console.log("toast is closed ...");
+            }
+        });
+    }
 </script>

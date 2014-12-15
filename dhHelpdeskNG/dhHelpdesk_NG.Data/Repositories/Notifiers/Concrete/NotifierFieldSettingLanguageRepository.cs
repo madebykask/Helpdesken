@@ -36,7 +36,7 @@
         {
             var query = from cfsl in this.DataContext.ComputerUserFieldSettingsLanguages
                         join cfs in this.DataContext.ComputerUserFieldSettings on cfsl.ComputerUserFieldSettings_Id equals cfs.Id
-                        where (cfsl.Language_Id == languageId) && (cfs.Show == 1)
+                        where (cfsl.Language_Id == languageId) //&& (cfs.Show == 1)
                         group cfsl by new { cfs.Customer_Id, cfsl.ComputerUserFieldSettings_Id, cfsl.Label, cfsl.Language_Id, cfsl.FieldHelp, cfs.ComputerUserField } into grouped
                         select new CustomComputerUserFieldSettingsLanguage
                         {
