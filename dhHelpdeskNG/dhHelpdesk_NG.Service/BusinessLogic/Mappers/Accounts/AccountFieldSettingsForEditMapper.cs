@@ -130,21 +130,14 @@
             var startedDate = CreateFieldSetting(entity.FindByName(AccountInformationFields.StartedDate));
             var finishDate = CreateFieldSetting(entity.FindByName(AccountInformationFields.FinishDate));
             var eMailTypeId = CreateFieldSetting(entity.FindByName(AccountInformationFields.EMailTypeId));
-            var homeDirectory =
-                CreateFieldSetting(entity.FindByName(AccountInformationFields.HomeDirectory));
+            var homeDirectory = CreateFieldSetting(entity.FindByName(AccountInformationFields.HomeDirectory));
             var profile = CreateFieldSetting(entity.FindByName(AccountInformationFields.Profile));
-            var inventoryNumber =
-                CreateFieldSetting(entity.FindByName(AccountInformationFields.InventoryNumber));
-            var accountTypeId =
-                CreateFieldSetting(entity.FindByName(AccountInformationFields.AccountTypeId));
-            var accountType2 =
-                CreateFieldSetting(entity.FindByName(AccountInformationFields.AccountType2));
-            var accountType3 =
-                CreateFieldSetting(entity.FindByName(AccountInformationFields.AccountType3));
-            var accountType4 =
-                CreateFieldSetting(entity.FindByName(AccountInformationFields.AccountType4));
-            var accountType5 =
-                CreateFieldSetting(entity.FindByName(AccountInformationFields.AccountType5));
+            var inventoryNumber = CreateFieldSetting(entity.FindByName(AccountInformationFields.InventoryNumber));
+            var accountTypeId = CreateFieldSetting(entity.FindByName(AccountInformationFields.AccountTypeId));
+            var accountType2 = CreateFieldSetting(entity.FindByName(AccountInformationFields.AccountType2));
+            var accountType3 = CreateFieldSetting(entity.FindByName(AccountInformationFields.AccountType3));
+            var accountType4 = CreateFieldSetting(entity.FindByName(AccountInformationFields.AccountType4));
+            var accountType5 = CreateFieldSetting(entity.FindByName(AccountInformationFields.AccountType5));
             var info = CreateFieldSetting(entity.FindByName(AccountInformationFields.Info));
 
             var settings = new AccountInformationFieldSettings(
@@ -193,8 +186,7 @@
             var name = CreateFieldSetting(entity.FindByName(DeliveryInformationFields.Name));
             var phone = CreateFieldSetting(entity.FindByName(DeliveryInformationFields.Phone));
             var address = CreateFieldSetting(entity.FindByName(DeliveryInformationFields.Address));
-            var postalAddress =
-                CreateFieldSetting(entity.FindByName(DeliveryInformationFields.PostalAddress));
+            var postalAddress = CreateFieldSetting(entity.FindByName(DeliveryInformationFields.PostalAddress));
 
             var settings = new DeliveryInformationFieldSettings(name, phone, address, postalAddress);
 
@@ -230,8 +222,8 @@
         {
             return new FieldSettingMultipleChoices(
                 fieldSetting.ShowInDetails.ToBool(),
-                fieldSetting.ShowExternal.ToBool(),
                 fieldSetting.ShowInList.ToBool(),
+                fieldSetting.ShowExternal.ToBool(),
                 fieldSetting.Caption,
                 fieldSetting.Help,
                 fieldSetting.Required.ToBool(),
