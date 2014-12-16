@@ -8,6 +8,6 @@
 
     public interface IUpdateOrderModelFactory
     {
-        UpdateOrderRequest Create(FullOrderEditModel model, int customerId, DateTime dateAndTime, IEmailService emailService);
+        UpdateOrderRequest Create(FullOrderEditModel model, int customerId, DateTime dateAndTime, IEmailService emailService, int userId);
     }
 }

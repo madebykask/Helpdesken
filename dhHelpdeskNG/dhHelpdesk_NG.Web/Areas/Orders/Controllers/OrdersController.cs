@@ -149,7 +149,8 @@
                                                 model, 
                                                 this.workContext.Customer.CustomerId, 
                                                 DateTime.Now, 
-                                                this.emailService);
+                                                this.emailService,
+                                                this.workContext.User.UserId);
             var id = this.ordersService.AddOrUpdate(request);
 
             foreach (var newFile in model.NewFiles)
@@ -206,7 +207,8 @@
                                                 model, 
                                                 this.workContext.Customer.CustomerId, 
                                                 DateTime.Now,
-                                                this.emailService);
+                                                this.emailService,
+                                                this.workContext.User.UserId);
             this.ordersService.AddOrUpdate(request);
 
             foreach (var deletedFile in model.DeletedFiles)

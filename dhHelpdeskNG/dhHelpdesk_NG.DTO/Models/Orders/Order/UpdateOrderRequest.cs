@@ -13,8 +13,16 @@
                 int customerId, 
                 DateTime dateAndTime, 
                 List<int> deletedLogIds, 
-                List<ManualLog> newLogs)
+                List<ManualLog> newLogs, 
+                int userId, 
+                bool informOrderer, 
+                bool informReceiver, 
+                bool createCase)
         {
+            this.CreateCase = createCase;
+            this.InformReceiver = informReceiver;
+            this.InformOrderer = informOrderer;
+            this.UserId = userId;
             this.NewLogs = newLogs;
             this.DeletedLogIds = deletedLogIds;
             this.DateAndTime = dateAndTime;
@@ -28,6 +36,9 @@
         [IsId]
         public int CustomerId { get; private set; }
 
+        [IsId]
+        public int UserId { get; private set; }
+
         public DateTime DateAndTime { get; private set; }
 
         [NotNull]
@@ -35,5 +46,11 @@
 
         [NotNull]
         public List<ManualLog> NewLogs { get; private set; }
+
+        public bool InformOrderer { get; private set; }
+
+        public bool InformReceiver { get; private set; }
+
+        public bool CreateCase { get; private set; }
     }
 }

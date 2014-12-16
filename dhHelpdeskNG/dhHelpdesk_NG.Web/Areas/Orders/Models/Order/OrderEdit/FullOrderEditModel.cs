@@ -3,6 +3,7 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Areas.Orders.Models.Order.FieldModels;
     using DH.Helpdesk.Web.Infrastructure.Tools;
 
     public sealed class FullOrderEditModel
@@ -28,7 +29,8 @@
                     string id,
                     int customerId,
                     int? orderTypeId, 
-                    bool isNew)
+                    bool isNew,
+                    HistoryModel history)
         {
             this.IsNew = isNew;
             this.Delivery = delivery;
@@ -44,6 +46,7 @@
             this.Id = id;
             this.CustomerId = customerId;
             this.OrderTypeId = orderTypeId;
+            this.History = history;
 
             this.NewFiles = new List<WebTemporaryFile>();
             this.DeletedFiles = new List<string>();
@@ -105,5 +108,7 @@
 
         [NotNull]
         public List<int> DeletedLogIds { get; set; }
+
+        public HistoryModel History { get; set; }
     }
 }

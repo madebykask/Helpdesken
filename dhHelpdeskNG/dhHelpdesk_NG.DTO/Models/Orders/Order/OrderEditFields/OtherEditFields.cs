@@ -16,6 +16,7 @@
             this.FileName = fileName;
         }
 
+        [NotNull]
         public string FileName { get; private set; }
         
         public decimal? CaseNumber { get; private set; }

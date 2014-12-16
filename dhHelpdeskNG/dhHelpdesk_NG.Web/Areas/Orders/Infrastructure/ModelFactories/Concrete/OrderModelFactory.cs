@@ -15,15 +15,22 @@
     {
         private readonly IConfigurableFieldModelFactory configurableFieldModelFactory;
 
-        public OrderModelFactory(IConfigurableFieldModelFactory configurableFieldModelFactory)
+        private readonly IHistoryModelFactory historyModelFactory;
+
+        public OrderModelFactory(
+                IConfigurableFieldModelFactory configurableFieldModelFactory, 
+                IHistoryModelFactory historyModelFactory)
         {
             this.configurableFieldModelFactory = configurableFieldModelFactory;
+            this.historyModelFactory = historyModelFactory;
         }
 
         public FullOrderEditModel Create(FindOrderResponse response, int customerId)
         {
             var orderId = response.EditData.Order.Id;
             var textOrderId = orderId.ToString(CultureInfo.InvariantCulture);
+            var history = this.historyModelFactory.Create(response);
+
             return new FullOrderEditModel(
                 this.CreateDeliveryEditModel(response.EditSettings.Delivery, response.EditData.Order.Delivery, response.EditOptions),
                 this.CreateGeneralEditModel(response.EditSettings.General, response.EditData.Order.General, response.EditOptions),
@@ -38,7 +45,8 @@
                 textOrderId,
                 customerId,
                 response.EditData.Order.OrderTypeId,
-                false);
+                false,
+                history);
         }
 
         private DeliveryEditModel CreateDeliveryEditModel(                                

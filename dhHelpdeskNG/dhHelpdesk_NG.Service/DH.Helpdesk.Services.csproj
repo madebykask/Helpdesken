@@ -69,6 +69,9 @@
     <Compile Include="Attributes\Orders\CreateMissingOrderFieldSettingsAttribute.cs" />
     <Compile Include="BusinessLogic\Accounts\OrderAccountDefaultSettingsCreator.cs" />
     <Compile Include="BusinessLogic\BusinessModelAuditors\Changes\InvitationToCabAudit.cs" />
+    <Compile Include="BusinessLogic\BusinessModelAuditors\Orders\CreateCaseAuditor.cs" />
+    <Compile Include="BusinessLogic\BusinessModelAuditors\Orders\InformOrdererAuditor.cs" />
+    <Compile Include="BusinessLogic\BusinessModelAuditors\Orders\InformReceiverAuditor.cs" />
     <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\ExcelFileComposer.cs" />
     <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\ICell.cs" />
     <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\IRow.cs" />
@@ -144,6 +147,7 @@
     <Compile Include="BusinessLogic\Mappers\Orders\OrderEditSettingsMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\OrderFieldSettingsMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\OrderFieldSettingsOverviewMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Orders\OrderHistoryMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\OrderLogMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\OrderMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\OrderOverviewMapper.cs" />

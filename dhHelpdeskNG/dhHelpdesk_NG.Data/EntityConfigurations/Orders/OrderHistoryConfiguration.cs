@@ -11,6 +11,9 @@
         {
             this.HasKey(o => o.Id);
             this.Property(o => o.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            this.Property(o => o.OrderHistoryGuid).IsRequired();
+            this.Property(o => o.OrderId).HasColumnName("Order_Id").IsRequired();
+            this.HasRequired(o => o.Order).WithMany().HasForeignKey(o => o.OrderId);
             this.HasRequired(o => o.Domain)
                 .WithMany()
                 .HasForeignKey(o => o.Domain_Id);

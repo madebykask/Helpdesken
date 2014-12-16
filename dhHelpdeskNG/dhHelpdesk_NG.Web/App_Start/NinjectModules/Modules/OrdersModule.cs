@@ -1,5 +1,8 @@
 ﻿namespace DH.Helpdesk.Web.NinjectModules.Modules
 {
+    using DH.Helpdesk.BusinessData.Models.Orders.Order;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Orders;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Orders;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Orders.Concrete;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Orders;
@@ -22,6 +25,11 @@
             this.Bind<IOrderRestorer>().To<OrderRestorer>().InSingletonScope();
             this.Bind<ILogsModelFactory>().To<LogsModelFactory>().InSingletonScope();
             this.Bind<IUpdateOrderRequestValidator>().To<UpdateOrderRequestValidator>().InSingletonScope();
+            this.Bind<IHistoryModelFactory>().To<HistoryModelFactory>().InSingletonScope();
+
+            this.Bind<IBusinessModelAuditor<UpdateOrderRequest, OrderAuditData>>().To<InformReceiverAuditor>().InSingletonScope();
+            this.Bind<IBusinessModelAuditor<UpdateOrderRequest, OrderAuditData>>().To<InformOrdererAuditor>().InSingletonScope();
+            this.Bind<IBusinessModelAuditor<UpdateOrderRequest, OrderAuditData>>().To<CreateCaseAuditor>().InSingletonScope();
         }
     }
 }

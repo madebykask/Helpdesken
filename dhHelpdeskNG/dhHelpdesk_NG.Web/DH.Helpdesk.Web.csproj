@@ -647,6 +647,7 @@
     <Compile Include="Areas\Orders\Controllers\OrdersController.cs" />
     <Compile Include="Areas\Orders\Controllers\OrderFieldSettingsController.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\Concrete\ConfigurableFieldModelFactory.cs" />
+    <Compile Include="Areas\Orders\Infrastructure\ModelFactories\Concrete\HistoryModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\Concrete\LogsModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\Concrete\NewOrderModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\Concrete\OrderFieldSettingsModelFactory.cs" />
@@ -654,6 +655,7 @@
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\Concrete\OrdersModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\Concrete\UpdateOrderModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\IConfigurableFieldModelFactory.cs" />
+    <Compile Include="Areas\Orders\Infrastructure\ModelFactories\IHistoryModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\ILogsModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\INewOrderModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\IOrderFieldSettingsModelFactory.cs" />
@@ -683,6 +685,9 @@
     <Compile Include="Areas\Orders\Models\OrderFieldSettings\OrderFieldSettingsIndexModel.cs" />
     <Compile Include="Areas\Orders\Models\Order\FieldModels\AttachedFilesModel.cs" />
     <Compile Include="Areas\Orders\Models\Order\FieldModels\ConfigurableFieldModel.cs" />
+    <Compile Include="Areas\Orders\Models\Order\FieldModels\FieldDifferencesModel.cs" />
+    <Compile Include="Areas\Orders\Models\Order\FieldModels\HistoryModel.cs" />
+    <Compile Include="Areas\Orders\Models\Order\FieldModels\HistoryRecordModel.cs" />
     <Compile Include="Areas\Orders\Models\Order\FieldModels\ProgramModel.cs" />
     <Compile Include="Areas\Orders\Models\Order\FieldModels\ProgramsModel.cs" />
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\DeliveryEditModel.cs" />
@@ -1631,6 +1636,8 @@
     <Content Include="Areas\OrderAccounts\Views\Orders\EditorTemplates\Other.cshtml" />
     <Content Include="Areas\OrderAccounts\Views\Orders\AttachedFiles.cshtml" />
     <Content Include="Areas\OrderAccounts\Views\Orders\DisplayTemplates\Fields\DecimalLabel.cshtml" />
+    <Content Include="Areas\Orders\Views\Orders\DisplayTemplates\HistoryModel.cshtml" />
+    <Content Include="Areas\Orders\Views\Orders\DisplayTemplates\HistoryRecordModel.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />

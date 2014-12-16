@@ -16,7 +16,7 @@
 
     public class UpdateOrderModelFactory : IUpdateOrderModelFactory
     {
-        public UpdateOrderRequest Create(FullOrderEditModel model, int customerId, DateTime dateAndTime, IEmailService emailService)
+        public UpdateOrderRequest Create(FullOrderEditModel model, int customerId, DateTime dateAndTime, IEmailService emailService, int userId)
         {
             int orderId;
             int.TryParse(model.Id, out orderId);
@@ -37,7 +37,16 @@
 
             var newLogs = CreateNewLogCollection(model, emailService);
 
-            return new UpdateOrderRequest(fields, customerId, dateAndTime, model.DeletedLogIds, newLogs);
+            return new UpdateOrderRequest(
+                                fields, 
+                                customerId, 
+                                dateAndTime, 
+                                model.DeletedLogIds, 
+                                newLogs, 
+                                userId,
+                                model.InformOrderer,
+                                model.InformReceiver,
+                                model.CreateCase);
         }
 
         private static DeliveryEditFields CreateDeliveryFields(DeliveryEditModel model)
@@ -143,8 +152,14 @@
                 model = OtherEditModel.CreateEmpty();
             }
 
+            var fileName = !deletedFiles.Any() ? newFiles.Select(f => f.Name).FirstOrDefault() : string.Empty;
+            if (fileName == null)
+            {
+                fileName = string.Empty;
+            }
+
             return new OtherEditFields(
-                    !deletedFiles.Any() ? newFiles.Select(f => f.Name).FirstOrDefault() : string.Empty,
+                    fileName,
                     ConfigurableFieldModel<decimal?>.GetValueOrDefault(model.CaseNumber),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.Info),
                     model.StatusId);
