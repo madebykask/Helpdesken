@@ -175,17 +175,23 @@
                     ordersRep.Update(entity);
                 }
 
+                var history = OrderHistoryMapper.MapToBusinessModel(request);
+                var historyEntity = OrderHistoryMapper.MapToEntity(history);
+                orderHistoryRep.Add(historyEntity);
+
+                uow.Save();
+
                 orderLogsRep.DeleteWhere(l => request.DeletedLogIds.Contains(l.Id));
 
                 foreach (var newLog in request.NewLogs)
                 {
+                    newLog.OrderId = entity.Id;
+                    newLog.OrderHistoryId = historyEntity.Id;
+                    newLog.CreatedByUserId = request.UserId;
+                    newLog.CreatedDateAndTime = request.DateAndTime;
                     var logEntity = OrderLogMapper.MapToEntity(newLog);
-                    entity.Logs.Add(logEntity);
+                    orderLogsRep.Add(logEntity);
                 }
-
-                var history = OrderHistoryMapper.MapToBusinessModel(request);
-                var historyEntity = OrderHistoryMapper.MapToEntity(history);
-                orderHistoryRep.Add(historyEntity);
 
                 uow.Save();
 
@@ -203,6 +209,7 @@
                 var order = ordersRep.GetById(id);
                 order.Logs.Clear();
                 order.Programs.Clear();
+                order.Histories.Clear();
                 ordersRep.DeleteById(id);
 
                 uow.Save();

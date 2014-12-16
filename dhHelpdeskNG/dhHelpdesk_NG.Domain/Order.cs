@@ -13,6 +13,7 @@
         {
             this.Programs = new List<Program>();    
             this.Logs = new List<OrderLog>();
+            this.Histories = new List<OrderHistoryEntity>();
         }
 
         public decimal? CaseNumber { get; set; }
@@ -170,5 +171,7 @@
         public virtual User User { get; set; }
 
         public virtual Department Department { get; set; }
+
+        public virtual ICollection<OrderHistoryEntity> Histories { get; set; } 
     }
 }

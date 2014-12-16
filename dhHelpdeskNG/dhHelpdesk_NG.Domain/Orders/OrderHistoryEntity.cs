@@ -86,10 +86,6 @@
         public DateTime? OrderDate { get; set; }
         public DateTime? SupplierOrderDate { get; set; }
 
-        public int? DeliveryOuId { get; set; }
-
-        public virtual Customer Customer { get; set; }
-
         public virtual Domain Domain { get; set; }
 
         public virtual OU Ou { get; set; }
@@ -101,8 +97,6 @@
         public virtual OrderType OrderType { get; set; }
 
         public virtual Department DeliveryDepartment { get; set; }
-
-        public virtual OU DeliveryOU { get; set; }    
      
         public virtual Order Order { get; set; }
     }

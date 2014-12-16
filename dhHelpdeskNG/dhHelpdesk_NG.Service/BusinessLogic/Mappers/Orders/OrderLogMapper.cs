@@ -46,6 +46,7 @@
                         Order_Id = model.OrderId,
                         User_Id = model.CreatedByUserId,
                         CreatedDate = model.CreatedDateAndTime,
+                        ChangedDate = model.CreatedDateAndTime,
                         LogNote = model.Text
                     };
         }

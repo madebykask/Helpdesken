@@ -18,7 +18,7 @@
         {
             var entity = new OrderHistoryEntity
                              {
-                                 OrderId = businessModel.Id,
+                                 OrderId = businessModel.Order.Id,
                                  OrderType_Id = businessModel.Order.OrderTypeId.HasValue ? businessModel.Order.OrderTypeId.Value : 0,
                                  CreatedByUser_Id = businessModel.CreatedByUserId,
                                  CreatedDate = businessModel.CreatedDateAndTime
@@ -51,7 +51,6 @@
             entity.DeliveryInfo = businessModel.DeliveryInfo1;
             entity.DeliveryInfo2 = businessModel.DeliveryInfo2;
             entity.DeliveryInfo3 = businessModel.DeliveryInfo3;
-            entity.DeliveryOuId = businessModel.DeliveryOuIdId;
         }
 
         private static void MapGeneralFields(OrderHistoryEntity entity, GeneralEditFields businessModel)

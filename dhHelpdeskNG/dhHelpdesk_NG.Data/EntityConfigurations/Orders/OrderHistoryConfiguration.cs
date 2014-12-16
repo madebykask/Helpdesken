@@ -90,10 +90,6 @@
             this.Property(o => o.Deleted).IsRequired();
             this.Property(o => o.CreatedDate).IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(o => o.CreatedByUser_Id).IsOptional();
-            this.Property(o => o.DeliveryOuId).HasColumnName("DeliveryOU_Id").IsOptional();
-            this.HasOptional(o => o.DeliveryOU)
-                .WithMany()
-                .HasForeignKey(o => o.DeliveryOuId);
 
             this.ToTable("tblOrderHistory");            
         }
