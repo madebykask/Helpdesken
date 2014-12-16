@@ -23,7 +23,8 @@
 
             bundles.Add(new StyleBundle("~/Content/css/popup").Include(
                             "~/Content/css/*.css",
-                            "~/Content/themes/base/minified/jquery-ui.min.css"));
+                            "~/Content/themes/base/minified/jquery-ui.min.css",
+                            "~/Content/js/jquery.plupload.queue/css/jquery.plupload.queue.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/common").Include(
                             "~/Content/js/jquery-1.8.3.min.js",
@@ -91,7 +92,11 @@
                             "~/Content/js/Shared/custom.validation.maxlengthfrom.notrequired.js",
                             "~/Content/js/Shared/custom.validation.requiredfrom.js",
                             "~/Content/js/Shared/custom.validation.maxlengthfrom.js",
-                            "~/Content/js/Shared/sortby.js"));
+                            "~/Content/js/Shared/sortby.js",
+                            "~/Content/js/bootstrap-switch.min.js",
+                            "~/Content/js/jquery.dataTables.min.js",
+                            "~/Content/js/plupload.full.min.js",
+                            "~/Content/js/jquery.plupload.queue/jquery.plupload.queue.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/licenses").Include(
                             "~/Content/js/Licenses/license.js"));
