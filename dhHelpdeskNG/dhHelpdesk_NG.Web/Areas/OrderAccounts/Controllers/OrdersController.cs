@@ -94,7 +94,7 @@
                 settings = this.orderAccountSettingsProxyService.GetFieldsSettingsOverviews(this.OperationContext);
             }
 
-            List<GridModel> gridModels = GridModel.BuildGrid(models, settings);
+            List<GridModel> gridModels = GridModel.BuildGrid(models, settings, filter.SortField);
 
             return this.PartialView("Grids", gridModels);
         }

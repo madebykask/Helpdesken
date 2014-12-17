@@ -47,6 +47,7 @@
                         .GetAdministratorAccounts(filter.AdministratorTypeId)
                         .GetAccountsBySearchString(filter.SearchString)
                         .GetStateAccounts(filter.AccountState)
+                        .Sort(epmloimentTypes, accountTypes, filter.SortField)
                         .MapToAccountOverview(epmloimentTypes, accountTypes);
 
                 return overviews;

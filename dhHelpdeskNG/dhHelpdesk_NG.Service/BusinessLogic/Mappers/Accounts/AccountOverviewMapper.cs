@@ -65,11 +65,15 @@
                                 account.OrdererPhone,
                                 account.OrdererEmail),
                             new User(
-                                !string.IsNullOrWhiteSpace(account.UserId) ? account.UserId.Split(';').ToList() : new List<string>(),
+                                !string.IsNullOrWhiteSpace(account.UserId)
+                                    ? account.UserId.Split(';').ToList()
+                                    : new List<string>(),
                                 account.UserFirstName,
                                 account.UserInitials,
                                 account.UserLastName,
-                                !string.IsNullOrWhiteSpace(account.UserPersonalIdentityNumber) ? account.UserPersonalIdentityNumber.Split(';').ToList() : new List<string>(),
+                                !string.IsNullOrWhiteSpace(account.UserPersonalIdentityNumber)
+                                    ? account.UserPersonalIdentityNumber.Split(';').ToList()
+                                    : new List<string>(),
                                 account.UserPhone,
                                 account.UserExtension,
                                 account.UserEMail,
@@ -100,7 +104,9 @@
                                 ExtractAccountName(accountOverviews, account.AccountType5),
                                 account.Info),
                             new Contact(
-                                !string.IsNullOrWhiteSpace(account.ContactId) ? account.ContactId.Split(';').ToList() : new List<string>(),
+                                !string.IsNullOrWhiteSpace(account.ContactId)
+                                    ? account.ContactId.Split(';').ToList()
+                                    : new List<string>(),
                                 account.ContactName,
                                 account.ContactPhone,
                                 account.ContactEMail),
@@ -112,7 +118,6 @@
                             new BusinessData.Models.Accounts.Read.Overview.Program(
                                 account.InfoProduct,
                                 account.Programs.Select(y => y.Name).ToList()),
-                            // todo that code makes new query per each iteration!!!
                             new Other(account.CaseNumber, account.InfoOther, account.AccountFileName));
                     }).ToList();
 
@@ -163,44 +168,6 @@
             }
 
             return overview.Name;
-        }
-
-        public static IQueryable<Account> Sort(this IQueryable<Account> query, SortField sort)
-        {
-            if (sort == null)
-            {
-                return query;
-            }
-
-            switch (sort.SortBy)
-            {
-                case SortBy.Ascending:
-                    // OrdererFields
-                    if (sort.Name == OrdererFields.Id)
-                    {
-                        query = query.OrderBy(o => o.OrdererId);
-                    }
-                    else if (sort.Name == OrdererFields.Id)
-                    {
-                        query = query.OrderBy(o => o.OrdererId);
-                    }
-                    else if (sort.Name == OrdererFields.Id)
-                    {
-                        query = query.OrderBy(o => o.OrdererId);
-                    }
-                    else if (sort.Name == OrdererFields.Id)
-                    {
-                        query = query.OrderBy(o => o.OrdererId);
-                    }
-                    else if (sort.Name == OrdererFields.Id)
-                    {
-                        query = query.OrderBy(o => o.OrdererId);
-                    }
-
-                    break;
-            }
-
-            return query;
         }
     }
 }

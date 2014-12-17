@@ -20,6 +20,21 @@
                 .HasForeignKey(x => x.AccountActivity_Id)
                 .WillCascadeOnDelete(false);
 
+            //this.HasRequired(x => x.AccountTypeEntity2)
+            //    .WithMany()
+            //    .HasForeignKey(x => x.AccountType2)
+            //    .WillCascadeOnDelete(false);
+
+            //this.HasRequired(x => x.AccountTypeEntity3)
+            //    .WithMany()
+            //    .HasForeignKey(x => x.AccountType3)
+            //    .WillCascadeOnDelete(false);
+
+            //this.HasRequired(x => x.AccountTypeEntity4)
+            //    .WithMany()
+            //    .HasForeignKey(x => x.AccountType4)
+            //    .WillCascadeOnDelete(false);
+
             this.HasOptional(x => x.AccountType)
                 .WithMany()
                 .HasForeignKey(x => x.AccountType_Id)
