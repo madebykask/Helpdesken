@@ -240,7 +240,8 @@
                 mailtemplatelanguageToSave.MailTemplate = mailTemplate;
                 mailtemplatelanguageToSave.Subject = mailTemplateLanguage.Subject;
                 mailtemplatelanguageToSave.Body = mailTemplateLanguage.Body;
-
+                if (mailTemplateLanguage.MailTemplateName != null)
+                   mailtemplatelanguageToSave.MailTemplateName = mailTemplateLanguage.MailTemplateName;
             }
 
             this._mailTemplateService.SaveMailTemplateLanguage(mailtemplatelanguageToSave, update, out errors);
