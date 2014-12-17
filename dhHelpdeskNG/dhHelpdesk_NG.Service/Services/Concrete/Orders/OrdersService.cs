@@ -179,9 +179,9 @@
                 var historyEntity = OrderHistoryMapper.MapToEntity(history);
                 orderHistoryRep.Add(historyEntity);
 
-                uow.Save();
-
                 orderLogsRep.DeleteWhere(l => request.DeletedLogIds.Contains(l.Id));
+
+                uow.Save();
 
                 foreach (var newLog in request.NewLogs)
                 {
@@ -206,10 +206,18 @@
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var ordersRep = uow.GetRepository<Order>();
+                var orderLogsRep = uow.GetRepository<OrderLog>();
+                var orderHistoryRep = uow.GetRepository<OrderHistoryEntity>();
+
                 var order = ordersRep.GetById(id);
-                order.Logs.Clear();
                 order.Programs.Clear();
-                order.Histories.Clear();
+
+                var orderLogIds = order.Logs.Select(l => l.Id);
+                orderLogsRep.DeleteWhere(l => orderLogIds.Contains(l.Id));
+
+                var orderHistoryIds = order.Histories.Select(h => h.Id);
+                orderHistoryRep.DeleteWhere(h => orderHistoryIds.Contains(h.Id));
+
                 ordersRep.DeleteById(id);
 
                 uow.Save();

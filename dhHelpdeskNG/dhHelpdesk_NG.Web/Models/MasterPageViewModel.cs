@@ -15,8 +15,13 @@
         public Setting CustomerSetting { get; set; }
 
         public IList<Customer> Customers { get; set; }
-
+        
         public IList<Language> Languages { get; set; }
+
+        public string GetHelpdeskVersion ()
+        {
+            return "";
+        }
 
         public bool IsAdministrator()
         {

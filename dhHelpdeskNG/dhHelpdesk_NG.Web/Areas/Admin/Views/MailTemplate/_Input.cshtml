@@ -35,7 +35,8 @@
                                         <td>
                                             @Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation)
                                         </td>
-                                        @if (Model.MailTemplateLanguage.MailTemplateName == "" || Model.MailTemplateLanguage.MailTemplateName == null)
+                                        @*if (Model.MailTemplateLanguage.MailTemplateName == "" || Model.MailTemplateLanguage.MailTemplateName == null)*@                                            
+                                        @if (Model.MailTemplateLanguage.MailTemplate != null && Model.MailTemplateLanguage.MailTemplate.IsStandard == 1)
                                         {
                                             <td>
                                                 @if (Model.MailTemplateLanguage.MailTemplate.MailID == 1)

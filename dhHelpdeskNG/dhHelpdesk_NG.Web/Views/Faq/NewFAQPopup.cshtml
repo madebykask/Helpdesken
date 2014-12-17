@@ -1,17 +1,6 @@
 ﻿@using System.Web.Optimization
-@using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Models.Faq.Output
-@model DH.Helpdesk.Web.Models.Faq.Output.NewFaqModel
   
-@Scripts.Render("~/bundles/dhhelpdesk")
-
-
-<link href="/Content/js/jquery.plupload.queue/css/jquery.plupload.queue.css" rel="stylesheet"/>
-<script src="/Content/js/plupload.full.min.js"></script>               
-<script src="/Content/js/jquery.plupload.queue/jquery.plupload.queue.min.js"></script>               
-
-
-
 <script type="text/javascript">
     var _pluploadFAQ;
 
@@ -144,28 +133,30 @@
     ViewBag.Title = Translation.Get("Ny FAQ", Enums.TranslationSource.TextTranslation);
 }
 
-@using (Ajax.BeginForm("NewFAQ", "Faq", new AjaxOptions { OnSuccess = "afterSuccessSubmit" }))
-{
-    <div class="navbar fixed">
+<div class="faq">
+    @using (Ajax.BeginForm("NewFAQ", "Faq", new AjaxOptions { OnSuccess = "afterSuccessSubmit" }))
+    {
+        <div class="navbar fixed">
             <div class="navbar-container">
                 <a href="/">
                     <div class="navbar-header pull-left navbar-brand">
                     </div>
                 </a>
             </div>
-    </div>
-    <div class="secnavs fixed">
-        <div class="pull-left">
-            <ul class="secnav">
-                <li>
-                    <input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn" />
-                </li>
-                <li>
-                    <input type="button" onclick=" window.close()" value="@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)" class="btn" />
-                </li>
-            </ul>
         </div>
-    </div>
+        <div class="secnavs fixed">
+            <div class="pull-left">
+                <ul class="secnav">
+                    <li>
+                        <input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn" />
+                    </li>
+                    <li>
+                        <input type="button" onclick=" window.close()" value="@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)" class="btn" />
+                    </li>
+                </ul>
+            </div>
+        </div>
    
-    @this.Html.Partial("FaqEditing", new EditingFaqModel(this.Model.TemporaryId, this.Model.Categories, string.Empty, string.Empty, string.Empty, new List<string>(0), string.Empty, string.Empty, this.Model.WorkingGroups, false, false))
-}
+        @this.Html.Partial("FaqEditing", new EditingFaqModel(this.Model.TemporaryId, this.Model.Categories, string.Empty, string.Empty, string.Empty, new List<string>(0), string.Empty, string.Empty, this.Model.WorkingGroups, false, false))
+    }
+</div>

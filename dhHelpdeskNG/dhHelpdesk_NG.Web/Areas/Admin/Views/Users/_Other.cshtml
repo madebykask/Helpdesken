@@ -54,12 +54,12 @@
         </tr>
         <tr>
             <td>
-                @Translation.Get("Startsidan", Enums.TranslationSource.TextTranslation)
+                @*Translation.Get("Startsidan", Enums.TranslationSource.TextTranslation)*@
             </td>
             <td>
-                <input type="checkbox" name="User.ShowQuickMenuOnStartPage" @(Model.User.ShowQuickMenuOnStartPage == 1 ? "checked='checked'" : "") value="1" />
+                <input type="hidden" name="User.ShowQuickMenuOnStartPage" @(Model.User.ShowQuickMenuOnStartPage == 1 ? "checked='checked'" : "") value="1" />
                 <input type="hidden" name="User.ShowQuickMenuOnStartPage" value="0" />
-                @Translation.Get("Visa snabbmeny på startsidan", Enums.TranslationSource.TextTranslation)
+                @*Translation.Get("Visa snabbmeny på startsidan", Enums.TranslationSource.TextTranslation)*@
             </td>
         </tr>
     </table>

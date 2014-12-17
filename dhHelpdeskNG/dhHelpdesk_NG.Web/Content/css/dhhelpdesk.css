@@ -2966,3 +2966,15 @@ div.DTFC_LeftFootWrapper table {
 	border-top: none;
 }
 
+/** FAQ begin */
+.popup .faq .secnav input.btn {
+    margin-bottom: 0px;
+}
+
+.popup .faq .tab-content {
+    overflow: hidden;
+}
+.popup .modal {
+    margin-left: -50%;
+}
+/** FAQ end */
