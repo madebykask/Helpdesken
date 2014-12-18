@@ -128,8 +128,7 @@
             {                
                 items: "> tr:not(:first)",                
                 update: function (event, ui) {
-                    //var elements = document.getElementsByClassName('SortableRow');
-                    var elements = document.querySelectorAll('.SortableRow');
+                    var elements = document.getElementsByClassName('SortableRow');
                     console.log('Count:' + elements.length.toString());
                     var newOrder = "";
                     for (var i = 0; i < elements.length; ++i) {

@@ -25,7 +25,6 @@
         public string RelatedField { get; set; }
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
-        public int? OrderNum { get; set; }
 
         public virtual Customer Customer { get; set; }
         public virtual ICollection<PriorityImpactUrgency> PriorityImpactUrgencies { get; set; }

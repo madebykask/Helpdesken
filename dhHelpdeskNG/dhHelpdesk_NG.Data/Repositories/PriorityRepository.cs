@@ -10,7 +10,6 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface IPriorityRepository : IRepository<Priority>
     {
-        void ReOrderPriorities(List<string> priorityIds);
         void ResetDefault(int exclude);
         void ResetEmailDefault(int exclude);
     }
@@ -20,22 +19,6 @@ namespace DH.Helpdesk.Dal.Repositories
         public PriorityRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
-        }
-
-
-        public void ReOrderPriorities(List<string> priorityIds)
-        {
-            int orderNum = 0;
-            foreach (var strId in priorityIds)
-            {
-                if (!string.IsNullOrEmpty(strId))
-                {
-                    orderNum++;
-                    var id = int.Parse(strId);
-                    var priorityEntity = this.DataContext.Priorities.Find(id);
-                    priorityEntity.OrderNum = orderNum;
-                }
-            }
         }
 
         public void ResetDefault(int exclude)

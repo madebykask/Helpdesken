@@ -16,7 +16,6 @@
         Helpdesk.Domain.PriorityLanguage GetPriorityLanguage(int id);
         Helpdesk.Domain.PriorityLanguage GetPriorityLanguageByLanguageId(int id, int languageId);
 
-        void ReOrderPriorities(List<string> priorityIds);
         bool FileExists(int priorityId, string fileName);
         int? GetDefaultId(int customerId);
         int GetPriorityIdByImpactAndUrgency(int impactId, int urgencyId);
@@ -45,21 +44,15 @@
             this._priorityImpactUrgencyRepository = priorityImpactUrgencyRepository;
             this._unitOfWork = unitOfWork;
         }
-        
+        //
         public IList<Priority> GetPriorities(int customerId)
         {
-            return this._priorityRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.OrderNum).ThenBy(x => x.Code).ToList();            
+            return this._priorityRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Code).ToList();
         }
 
         public Priority GetPriority(int id)
         {
             return this._priorityRepository.GetById(id);
-        }
-
-        public void ReOrderPriorities(List<string> priorityIds)
-        {
-            this._priorityRepository.ReOrderPriorities(priorityIds);
-            this.Commit();
         }
 
         public int? GetDefaultId(int customerId)
