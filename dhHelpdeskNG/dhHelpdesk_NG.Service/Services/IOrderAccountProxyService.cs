@@ -30,5 +30,9 @@
         int Add(AccountForInsert dto, OperationContext context);
 
         void Delete(int id);
+
+        string GetFileName(int orderId);
+
+        byte[] GetFileContent(int orderId);
     }
 }

@@ -161,6 +161,30 @@
             }
         }
 
+        public string GetFileName(int orderId)
+        {
+            using (IUnitOfWork uow = this.unitOfWorkFactory.Create())
+            {
+                IRepository<Account> accountRepository = uow.GetRepository<Account>();
+                string name =
+                    accountRepository.GetAll().GetById(orderId).Select(x => x.AccountFileName).SingleOrDefault();
+
+                return name;
+            }
+        }
+
+        public byte[] GetFileContent(int orderId)
+        {
+            using (IUnitOfWork uow = this.unitOfWorkFactory.Create())
+            {
+                IRepository<Account> accountRepository = uow.GetRepository<Account>();
+                byte[] content =
+                    accountRepository.GetAll().GetById(orderId).Select(x => x.AccountFile).SingleOrDefault();
+
+                return content;
+            }
+        }
+
         public List<ItemOverview> GetAccountActivivties()
         {
             using (var uow = this.unitOfWorkFactory.Create())

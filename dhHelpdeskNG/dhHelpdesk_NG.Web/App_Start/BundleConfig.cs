@@ -169,6 +169,9 @@
 
             bundles.Add(new ScriptBundle("~/bundles/orders/order").Include(
                             "~/Content/js/Orders/order.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/orderaccounts/order").Include(
+                "~/Content/js/Account/order.js"));
         }
     }
 }

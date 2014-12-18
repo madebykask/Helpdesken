@@ -11,6 +11,7 @@
     using DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Read.ModelEdit;
     using DH.Helpdesk.BusinessData.Models.Accounts.Read.Edit;
     using DH.Helpdesk.BusinessData.Models.Accounts.Read.Overview;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.Services.Response.Account;
@@ -70,7 +71,7 @@
             {
                 ActivityTypeId =
                     activityId,
-                   Headers = headers
+                Headers = headers
             };
         }
 
@@ -313,7 +314,20 @@
         {
             var caseNumber = CreateNullableDecimalField(settings.Other.CaseNumber, model.Other.CaseNumber);
             var info = CreateStringField(settings.Other.Info, model.Other.Info);
-            var fileName = CreateStringField(settings.Other.FileName, model.Other.FileName);
+
+            ConfigurableFieldModel<FilesModel> fileName;
+            if (settings.Other.FileName.IsShowInDetails)
+            {
+                var fileNameModel = new FilesModel(model.Id.ToString(), model.Other.FileName);
+                fileName = new ConfigurableFieldModel<FilesModel>(
+                    settings.Other.FileName.Caption,
+                    fileNameModel,
+                    settings.Other.FileName.IsRequired);
+            }
+            else
+            {
+                fileName = ConfigurableFieldModel<FilesModel>.CreateUnshowable();
+            }
 
             return new Other(caseNumber, info, fileName);
         }
@@ -550,7 +564,20 @@
         {
             var caseNumber = CreateNullableDecimalField(settings.Other.CaseNumber, null);
             var info = CreateStringField(settings.Other.Info, null);
-            var fileName = CreateStringField(settings.Other.FileName, null);
+
+            ConfigurableFieldModel<FilesModel> fileName;
+            if (settings.Other.FileName.IsShowInDetails)
+            {
+                var fileNameModel = new FilesModel(Guid.NewGuid().ToString(), null);
+                fileName = new ConfigurableFieldModel<FilesModel>(
+                    settings.Other.FileName.Caption,
+                    fileNameModel,
+                    settings.Other.FileName.IsRequired);
+            }
+            else
+            {
+                fileName = ConfigurableFieldModel<FilesModel>.CreateUnshowable();
+            }
 
             return new Other(caseNumber, info, fileName);
         }

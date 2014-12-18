@@ -371,6 +371,7 @@
     <Content Include="Content\img\ico-license.png" />
     <Content Include="Content\img\throbber.gif" />
     <Content Include="Content\img\transp50.png" />
+    <Content Include="Content\js\Account\order.js" />
     <Content Include="Content\js\bootstrap-switch.js" />
     <Content Include="Content\js\bootstrap-switch.min.js" />
     <Content Include="Content\js\Cases\case.templates.js" />
@@ -621,6 +622,7 @@
     <Compile Include="Areas\OrderAccounts\Models\Order\Edit\ClickedButton.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Order\Edit\Contact.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Order\Edit\DeliveryInformation.cs" />
+    <Compile Include="Areas\OrderAccounts\Models\Order\Edit\FilesModel.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Order\Edit\Orderer.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Order\Edit\Other.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Order\Edit\Program.cs" />
@@ -1634,7 +1636,7 @@
     <Content Include="Areas\OrderAccounts\Views\Orders\EditorTemplates\Program.cshtml" />
     <Content Include="Areas\OrderAccounts\Views\Orders\DisplayTemplates\Fields\IntLabel.cshtml" />
     <Content Include="Areas\OrderAccounts\Views\Orders\EditorTemplates\Other.cshtml" />
-    <Content Include="Areas\OrderAccounts\Views\Orders\AttachedFiles.cshtml" />
+    <Content Include="Areas\OrderAccounts\Views\Orders\AttachedFile.cshtml" />
     <Content Include="Areas\OrderAccounts\Views\Orders\DisplayTemplates\Fields\DecimalLabel.cshtml" />
     <Content Include="Areas\Orders\Views\Orders\DisplayTemplates\HistoryModel.cshtml" />
     <Content Include="Areas\Orders\Views\Orders\DisplayTemplates\HistoryRecordModel.cshtml" />
