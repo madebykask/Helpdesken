@@ -150,7 +150,8 @@
                                                 this.workContext.Customer.CustomerId, 
                                                 DateTime.Now, 
                                                 this.emailService,
-                                                this.workContext.User.UserId);
+                                                this.workContext.User.UserId,
+                                                SessionFacade.CurrentLanguageId);
             var id = this.ordersService.AddOrUpdate(request);
 
             foreach (var newFile in model.NewFiles)
@@ -208,7 +209,8 @@
                                                 this.workContext.Customer.CustomerId, 
                                                 DateTime.Now,
                                                 this.emailService,
-                                                this.workContext.User.UserId);
+                                                this.workContext.User.UserId,
+                                                SessionFacade.CurrentLanguageId);
             this.ordersService.AddOrUpdate(request);
 
             foreach (var deletedFile in model.DeletedFiles)

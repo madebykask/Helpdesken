@@ -7,6 +7,7 @@
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Orders.Concrete;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Orders;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Orders.Concrete;
+    using DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters;
     using DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories;
     using DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete;
 
@@ -26,10 +27,12 @@
             this.Bind<ILogsModelFactory>().To<LogsModelFactory>().InSingletonScope();
             this.Bind<IUpdateOrderRequestValidator>().To<UpdateOrderRequestValidator>().InSingletonScope();
             this.Bind<IHistoryModelFactory>().To<HistoryModelFactory>().InSingletonScope();
+            this.Bind<IMailTemplateFormatter<UpdateOrderRequest>>().To<OrderMailTemplateFormatter>();
 
             this.Bind<IBusinessModelAuditor<UpdateOrderRequest, OrderAuditData>>().To<InformReceiverAuditor>().InSingletonScope();
             this.Bind<IBusinessModelAuditor<UpdateOrderRequest, OrderAuditData>>().To<InformOrdererAuditor>().InSingletonScope();
             this.Bind<IBusinessModelAuditor<UpdateOrderRequest, OrderAuditData>>().To<CreateCaseAuditor>().InSingletonScope();
+            this.Bind<IBusinessModelAuditor<UpdateOrderRequest, OrderAuditData>>().To<LogsAuditor>().InSingletonScope();
         }
     }
 }

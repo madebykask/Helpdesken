@@ -17,8 +17,10 @@
                 int userId, 
                 bool informOrderer, 
                 bool informReceiver, 
-                bool createCase)
+                bool createCase, 
+                int languageId)
         {
+            this.LanguageId = languageId;
             this.CreateCase = createCase;
             this.InformReceiver = informReceiver;
             this.InformOrderer = informOrderer;
@@ -52,5 +54,8 @@
         public bool InformReceiver { get; private set; }
 
         public bool CreateCase { get; private set; }
+
+        [IsId]
+        public int LanguageId { get; private set; }
     }
 }

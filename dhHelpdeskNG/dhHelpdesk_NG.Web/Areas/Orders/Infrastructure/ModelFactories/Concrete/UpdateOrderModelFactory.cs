@@ -16,7 +16,13 @@
 
     public class UpdateOrderModelFactory : IUpdateOrderModelFactory
     {
-        public UpdateOrderRequest Create(FullOrderEditModel model, int customerId, DateTime dateAndTime, IEmailService emailService, int userId)
+        public UpdateOrderRequest Create(
+                        FullOrderEditModel model, 
+                        int customerId, 
+                        DateTime dateAndTime, 
+                        IEmailService emailService, 
+                        int userId,
+                        int languageId)
         {
             int orderId;
             int.TryParse(model.Id, out orderId);
@@ -46,7 +52,8 @@
                                 userId,
                                 model.InformOrderer,
                                 model.InformReceiver,
-                                model.CreateCase);
+                                model.CreateCase,
+                                languageId);
         }
 
         private static DeliveryEditFields CreateDeliveryFields(DeliveryEditModel model)

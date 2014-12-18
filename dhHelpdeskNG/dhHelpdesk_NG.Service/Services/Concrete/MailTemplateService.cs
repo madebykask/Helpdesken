@@ -33,5 +33,21 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 return mailTemplate;
             }
         }
+
+        public MailTemplate GetTemplate(int mailId, int customerId, int languageId, IUnitOfWork uow)
+        {
+            var templateLangaugeRepository = uow.GetRepository<MailTemplateLanguageEntity>();
+            var templateRepository = uow.GetRepository<MailTemplateEntity>();
+
+            MailTemplate mailTemplate = 
+                templateLangaugeRepository.GetAll()
+                    .ExtractMailTemplate(
+                        templateRepository.GetAll(),
+                        customerId,
+                        languageId,
+                        mailId);
+
+            return mailTemplate;            
+        }
     }
 }

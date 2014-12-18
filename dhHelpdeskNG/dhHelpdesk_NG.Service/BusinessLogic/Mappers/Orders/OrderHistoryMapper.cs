@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Orders
 {
+    using System;
+
     using DH.Helpdesk.BusinessData.Models.Orders.Order;
     using DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditFields;
     using DH.Helpdesk.Domain.Orders;
@@ -18,6 +20,7 @@
         {
             var entity = new OrderHistoryEntity
                              {
+                                 OrderHistoryGuid = Guid.NewGuid(),
                                  OrderId = businessModel.Order.Id,
                                  OrderType_Id = businessModel.Order.OrderTypeId.HasValue ? businessModel.Order.OrderTypeId.Value : 0,
                                  CreatedByUser_Id = businessModel.CreatedByUserId,
