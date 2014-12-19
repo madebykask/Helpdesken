@@ -56,6 +56,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Linq.Dynamic">
@@ -69,6 +70,10 @@
     <Compile Include="Attributes\Orders\CreateMissingOrderFieldSettingsAttribute.cs" />
     <Compile Include="BusinessLogic\Accounts\OrderAccountDefaultSettingsCreator.cs" />
     <Compile Include="BusinessLogic\BusinessModelAuditors\Changes\InvitationToCabAudit.cs" />
+    <Compile Include="BusinessLogic\BusinessModelAuditors\Orders\CreateCaseAuditor.cs" />
+    <Compile Include="BusinessLogic\BusinessModelAuditors\Orders\InformOrdererAuditor.cs" />
+    <Compile Include="BusinessLogic\BusinessModelAuditors\Orders\InformReceiverAuditor.cs" />
+    <Compile Include="BusinessLogic\BusinessModelAuditors\Orders\LogsAuditor.cs" />
     <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\ExcelFileComposer.cs" />
     <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\ICell.cs" />
     <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\IRow.cs" />
@@ -101,7 +106,16 @@
     <Compile Include="BusinessLogic\BusinessModelValidators\Inventory\IServerValidator.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Inventory\Concrete\ServerValidator.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Inventory\Concrete\PrinterValidator.cs" />
+    <Compile Include="BusinessLogic\BusinessModelValidators\Orders\Concrete\UpdateOrderRequestValidator.cs" />
+    <Compile Include="BusinessLogic\BusinessModelValidators\Orders\IUpdateOrderRequestValidator.cs" />
     <Compile Include="BusinessLogic\MailTools\TemplateFormatters\MailTemplateFormatterNew.cs" />
+    <Compile Include="BusinessLogic\MailTools\TemplateFormatters\OrderMailTemplateFormatter.cs" />
+    <Compile Include="BusinessLogic\MailTools\TemplateFormatters\SurveyTemplate1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SurveyTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BusinessLogic\MailTools\TemplateFormatters\SurveyTemplateVars.cs" />
     <Compile Include="BusinessLogic\MapperData\Participant.cs" />
     <Compile Include="BusinessLogic\Mappers\Accounts\AccountActivityMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Accounts\AccountFieldSettingsForEditMapper.cs" />
@@ -111,6 +125,7 @@
     <Compile Include="BusinessLogic\Mappers\Accounts\AccountFieldSettingsOverviewMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Accounts\AccountFieldSettingsForProcessing.cs" />
     <Compile Include="BusinessLogic\Mappers\Accounts\AccountSettingsMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Accounts\HeadersFieldSettingsMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Accounts\MapperData\AccountSettingsMapperDataForEdit.cs" />
     <Compile Include="BusinessLogic\Mappers\Accounts\MapperData\AccountSettingsMapperDataForModelEdit.cs" />
     <Compile Include="BusinessLogic\Mappers\Accounts\MapperData\AccountSettingsMapperDataOverview.cs" />
@@ -139,8 +154,11 @@
     <Compile Include="BusinessLogic\Mappers\Orders\Data\OrdersFieldSettingsOverviewMapData.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\OrderEditMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\OrderEditSettingsMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Orders\OrderEmailLogMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\OrderFieldSettingsMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\OrderFieldSettingsOverviewMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Orders\OrderHistoryMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Orders\OrderLogMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\OrderMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\OrderOverviewMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\OrderPropertyMapper.cs" />
@@ -175,11 +193,13 @@
     <Compile Include="BusinessLogic\Specifications\Licenses\ProductSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Links\LinkSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Orders\OrderFieldSettingsSpecifications.cs" />
+    <Compile Include="BusinessLogic\Specifications\Orders\OrderLogSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Orders\OrderPropertySpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Orders\OrderSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Questionnaire\CircularPartSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Questionnaire\CircularSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Questionnaire\QuestionnaireQuestionResultSpecifications.cs" />
+    <Compile Include="BusinessLogic\Specifications\SurveySepecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\User\UserSpecifications.cs" />
     <Compile Include="DisplayValues\Account\EmailTypesDisplayValue.cs" />
     <Compile Include="DisplayValues\Changes\ContactsListDisplayValue.cs" />
@@ -219,6 +239,7 @@
     <Compile Include="Infrastructure\Cases\ICasesCalculator.cs" />
     <Compile Include="Infrastructure\Email\Concrete\CaseMailer.cs" />
     <Compile Include="Infrastructure\Email\ICaseMailer.cs" />
+    <Compile Include="Services\ISurveyService.cs" />
     <Compile Include="Localization\CultureTranslations.cs" />
     <Compile Include="Infrastructure\ManualDependencyResolver.cs" />
     <Compile Include="Localization\Translator.cs" />
@@ -295,6 +316,7 @@
     <Compile Include="Services\Concrete\OrderAccountSettingsService.cs" />
     <Compile Include="Services\Concrete\Orders\OrderFieldSettingsService.cs" />
     <Compile Include="Services\Concrete\Orders\OrdersService.cs" />
+    <Compile Include="Services\Concrete\SurveyService.cs" />
     <Compile Include="Services\IModuleService.cs" />
     <Compile Include="Services\IMailTemplateService.cs" />
     <Compile Include="Services\Concrete\Licenses\ApplicationsService.cs" />
@@ -448,7 +470,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="BusinessLogic\MailTools\TemplateFormatters\SurveyTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>SurveyTemplate1.cs</LastGenOutput>
+    </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

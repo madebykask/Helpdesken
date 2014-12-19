@@ -1,11 +1,14 @@
 ﻿namespace DH.Helpdesk.Web.Areas.OrderAccounts.Infrastructure.ModelMappers.Concrete
 {
     using DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Read.Edit;
+    using DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Read.ModelEdit;
     using DH.Helpdesk.Web.Areas.OrderAccounts.Models.Settings.FieldSettings;
 
     using AccountInformationFieldSettings = DH.Helpdesk.Web.Areas.OrderAccounts.Models.Settings.FieldSettings.AccountInformationFieldSettings;
     using ContactFieldSettings = DH.Helpdesk.Web.Areas.OrderAccounts.Models.Settings.FieldSettings.ContactFieldSettings;
     using DeliveryInformationFieldSettings = DH.Helpdesk.Web.Areas.OrderAccounts.Models.Settings.FieldSettings.DeliveryInformationFieldSettings;
+    using FieldSetting = DH.Helpdesk.Web.Areas.OrderAccounts.Models.Settings.FieldSettings.FieldSetting;
+    using FieldSettingMultipleChoices = DH.Helpdesk.Web.Areas.OrderAccounts.Models.Settings.FieldSettings.FieldSettingMultipleChoices;
     using OrdererFieldSettings = DH.Helpdesk.Web.Areas.OrderAccounts.Models.Settings.FieldSettings.OrdererFieldSettings;
     using OtherFieldSettings = DH.Helpdesk.Web.Areas.OrderAccounts.Models.Settings.FieldSettings.OtherFieldSettings;
     using ProgramFieldSettings = DH.Helpdesk.Web.Areas.OrderAccounts.Models.Settings.FieldSettings.ProgramFieldSettings;
@@ -13,7 +16,7 @@
 
     public class SettingsViewModelMapper : ISettingsViewModelMapper
     {
-        public AccountFieldsSettingsModel BuildModel(AccountFieldsSettingsForEdit settings)
+        public AccountFieldsSettingsModel BuildModel(AccountFieldsSettingsForEdit settings, HeadersFieldSettings headers)
         {
             var orderer = MapOrdererFieldSettings(settings.Orderer);
             var user = MapUserFieldSettings(settings.User);
@@ -30,7 +33,14 @@
                 contact,
                 deliveryInformation,
                 program,
-                other);
+                other,
+                new HeadersFieldSettingsModel(
+                    headers.OrderLabel,
+                    headers.UserLabel,
+                    headers.AccountLabel,
+                    headers.ContactLabel,
+                    headers.DeliveryLabel,
+                    headers.ProgramLabel));
         }
 
         private static OrdererFieldSettings MapOrdererFieldSettings(

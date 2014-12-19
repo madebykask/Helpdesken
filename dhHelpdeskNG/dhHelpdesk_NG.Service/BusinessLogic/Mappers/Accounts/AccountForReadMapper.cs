@@ -41,11 +41,15 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Accounts
                     anonymus.Entity.OrdererPhone,
                     anonymus.Entity.OrdererEmail),
                 new UserForEdit(
-                    new List<string>(),
+                    string.IsNullOrWhiteSpace(anonymus.Entity.UserId)
+                        ? new List<string>()
+                        : anonymus.Entity.UserId.Split(';').ToList(),
                     anonymus.Entity.UserFirstName,
                     anonymus.Entity.UserInitials,
                     anonymus.Entity.UserLastName,
-                    new List<string>(),
+                    string.IsNullOrWhiteSpace(anonymus.Entity.UserPersonalIdentityNumber)
+                        ? new List<string>()
+                        : anonymus.Entity.UserPersonalIdentityNumber.Split(';').ToList(),
                     anonymus.Entity.UserPhone,
                     anonymus.Entity.UserExtension,
                     anonymus.Entity.UserEMail,
@@ -71,13 +75,17 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Accounts
                     anonymus.Entity.Profile.ToBool(),
                     anonymus.Entity.InventoryNumber,
                     anonymus.Entity.AccountType_Id,
-                     new List<int>(),
+                    string.IsNullOrWhiteSpace(anonymus.Entity.AccountType2)
+                        ? new List<int>()
+                        : anonymus.Entity.AccountType2.Split(',').ToList().Select(int.Parse).ToList(),
                     anonymus.Entity.AccountType3,
                     anonymus.Entity.AccountType4,
                     anonymus.Entity.AccountType5,
                     anonymus.Entity.Info),
                 new Contact(
-                     new List<string>(),
+                    string.IsNullOrWhiteSpace(anonymus.Entity.ContactId)
+                        ? new List<string>()
+                        : anonymus.Entity.ContactId.Split(';').ToList(),
                     anonymus.Entity.ContactName,
                     anonymus.Entity.ContactPhone,
                     anonymus.Entity.ContactEMail),
@@ -93,7 +101,9 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Accounts
                     anonymus.Entity.AccountFileName,
                     anonymus.Entity.AccountFile),
                 anonymus.Entity.FinishingDate,
-                anonymus.ChangedByUserId.HasValue ? new UserName(anonymus.ChangedByUserFirstName, anonymus.ChangedByUserSurName) : null,
+                anonymus.ChangedByUserId.HasValue
+                    ? new UserName(anonymus.ChangedByUserFirstName, anonymus.ChangedByUserSurName)
+                    : null,
                 anonymus.Entity.ChangedDate,
                 anonymus.Entity.CreatedDate);
 

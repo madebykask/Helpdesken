@@ -1,5 +1,11 @@
 ﻿@model DH.Helpdesk.Web.Areas.Admin.Models.CustomerInputViewModel
 @using DH.Helpdesk.Web.Infrastructure
+
+@{
+    var passChangeText = Translation.Get("Lösenordet har ändrats", Enums.TranslationSource.TextTranslation);    
+    
+    var passChangeError = Translation.Get("De lösenord du angav stämmer inte överens med varandra. Försök igen", Enums.TranslationSource.TextTranslation);
+}
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
@@ -136,11 +142,12 @@
                         <div class="span8">
                             <table class="tableform">
                                 <tr>
-                                    <td>
+                                    <td colspan="3">
                                         <strong>@Translation.Get("Markera de moduler som kunden använder sig av", Enums.TranslationSource.TextTranslation)</strong>
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td colspan="3"></td>
                                 </tr>
                                 <tr>
                                     <td><label class="checkbox">
@@ -260,7 +267,7 @@
                                     <td><label class="checkbox">
                                         <input type="checkbox" name="setting.ModuleCaseInvoice" @(Model.Setting.ModuleCaseInvoice == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.ModuleCaseInvoice" value="0" />
-                                        &nbsp;@Translation.Get("Case Invoice")
+                                        &nbsp;@Translation.Get("Fakturering")
                                         </label>
                                     </td>
                                 </tr>
@@ -377,10 +384,13 @@
 
         mod.find("#btnSavePassword").on("click", function (e) {
             if ($('#NewPassword').val() != $('#ConfirmPassword').val()) {
-                alert('@Translation.Get("Det nya lösenordet bekräftades inte korrekt. Kontrollera att nytt lösenord och bekräftat lösenord stämmer överens", Enums.TranslationSource.TextTranslation)');
+                var e = '@passChangeError';
+                ShowToastMessage(e, "Error");
+               
             } else {
                 $.post('/customersettings/SaveLDAPPassword/', { id: $('#id_customer').val(), newPassword: $('#NewPassword').val(), confirmPassword: $('#ConfirmPassword').val() }, function (data) {
-                    alert('@Translation.Get("Lösenordet har ändrats", Enums.TranslationSource.TextTranslation)');
+                    var e = '@passChangeText';
+                    ShowToastMessage(e, "Alert");
 
                     $('#NewPassword').val('');
                     $('#ConfirmPassword').val('');
@@ -395,4 +405,19 @@
             });
         }
 
+    function ShowToastMessage(message, msgType) {
+        $().toastmessage('showToast', {
+            text: message,
+            sticky: true,
+            position: 'top-center',
+            type: msgType,
+            closeText: '',
+            stayTime: 10000,
+            inEffectDuration: 1000,
+            width: 500,
+            close: function () {
+                //console.log("toast is closed ...");
+            }
+        });
+    }
 </script>

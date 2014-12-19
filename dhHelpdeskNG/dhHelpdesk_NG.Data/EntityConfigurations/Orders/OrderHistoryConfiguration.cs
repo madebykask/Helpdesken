@@ -11,6 +11,9 @@
         {
             this.HasKey(o => o.Id);
             this.Property(o => o.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            this.Property(o => o.OrderHistoryGuid).IsRequired();
+            this.Property(o => o.OrderId).HasColumnName("Order_Id").IsRequired();
+            this.HasRequired(o => o.Order).WithMany().HasForeignKey(o => o.OrderId);
             this.HasRequired(o => o.Domain)
                 .WithMany()
                 .HasForeignKey(o => o.Domain_Id);
@@ -87,10 +90,6 @@
             this.Property(o => o.Deleted).IsRequired();
             this.Property(o => o.CreatedDate).IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(o => o.CreatedByUser_Id).IsOptional();
-            this.Property(o => o.DeliveryOuId).HasColumnName("DeliveryOU_Id").IsOptional();
-            this.HasOptional(o => o.DeliveryOU)
-                .WithMany()
-                .HasForeignKey(o => o.DeliveryOuId);
 
             this.ToTable("tblOrderHistory");            
         }

@@ -30,5 +30,9 @@
         AverageSolutionTimeReport CreateAverageSolutionTimeReport(
                                 AverageSolutionTimeOptions options,
                                 OperationContext context);
+
+        CaseSatisfactionOptions CreateCaseSatisfactionOptions(OperationContext context);
+
+        CaseSatisfactionReport CreateCaseSatisfactionReport(CaseSatisfactionOptions options, OperationContext context);
     }
 }

@@ -172,6 +172,11 @@
                         "{0} - {1}", 
                         this.translator.Translate("Rapport"),
                         this.translator.Translate("Rapportgenerator"));
+                case ReportType.CaseSatisfaction:
+                    return string.Format(
+                        "{0} - {1}", 
+                        this.translator.Translate("Rapport"),
+                        this.translator.Translate("Case satisfaction"));
             }
 
             return null;

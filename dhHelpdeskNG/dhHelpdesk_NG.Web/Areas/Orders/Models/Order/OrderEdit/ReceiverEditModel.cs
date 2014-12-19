@@ -43,6 +43,17 @@
         [NotNull]
         public ConfigurableFieldModel<string> MarkOfGoods { get; set; }
 
+        public static ReceiverEditModel CreateEmpty()
+        {
+            return new ReceiverEditModel(
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable());
+        }
+
         public bool HasShowableFields()
         {
             return this.ReceiverId.Show ||

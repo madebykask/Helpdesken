@@ -12,7 +12,9 @@
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Orders;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Orders;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Orders;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Orders;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Common;
@@ -38,6 +40,10 @@
 
         private readonly IOrderRestorer orderRestorer;
 
+        private readonly IUpdateOrderRequestValidator updateOrderRequestValidator;
+
+        private readonly List<IBusinessModelAuditor<UpdateOrderRequest, OrderAuditData>> orderAuditors; 
+
         public OrdersService(
                 IUnitOfWorkFactory unitOfWorkFactory, 
                 IOrderFieldSettingsService orderFieldSettingsService, 
@@ -46,7 +52,9 @@
                 IUserWorkingGroupRepository userWorkingGroupRepository, 
                 IEmailGroupEmailRepository emailGroupEmailRepository, 
                 IEmailGroupRepository emailGroupRepository, 
-                IOrderRestorer orderRestorer)
+                IOrderRestorer orderRestorer, 
+                IUpdateOrderRequestValidator updateOrderRequestValidator, 
+                List<IBusinessModelAuditor<UpdateOrderRequest, OrderAuditData>> orderAuditors)
         {
             this.unitOfWorkFactory = unitOfWorkFactory;
             this.orderFieldSettingsService = orderFieldSettingsService;
@@ -56,6 +64,8 @@
             this.emailGroupEmailRepository = emailGroupEmailRepository;
             this.emailGroupRepository = emailGroupRepository;
             this.orderRestorer = orderRestorer;
+            this.updateOrderRequestValidator = updateOrderRequestValidator;
+            this.orderAuditors = orderAuditors;
         }
 
         public OrdersFilterData GetOrdersFilterData(int customerId)
@@ -138,8 +148,11 @@
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var ordersRep = uow.GetRepository<Order>();
+                var orderLogsRep = uow.GetRepository<OrderLog>();
+                var orderHistoryRep = uow.GetRepository<OrderHistoryEntity>();
 
                 Order entity;
+                FullOrderEditFields existingOrder = null;
                 if (request.Order.IsNew())
                 {
                     entity = new Order();
@@ -152,16 +165,38 @@
                 {
                     entity = ordersRep.GetById(request.Order.Id);
 
-                    var existingOrder = OrderEditMapper.MapToFullOrderEditFields(entity);
+                    existingOrder = OrderEditMapper.MapToFullOrderEditFields(entity);
                     var settings = this.orderFieldSettingsService.GetOrderEditSettings(request.CustomerId, entity.OrderType_Id, uow);
                     this.orderRestorer.Restore(request.Order, existingOrder, settings);
+                    this.updateOrderRequestValidator.Validate(request.Order, existingOrder, settings);
 
                     OrderUpdateMapper.MapToEntity(entity, request.Order, request.CustomerId);
                     entity.ChangedDate = request.DateAndTime;
                     ordersRep.Update(entity);
                 }
 
+                var history = OrderHistoryMapper.MapToBusinessModel(request);
+                var historyEntity = OrderHistoryMapper.MapToEntity(history);
+                orderHistoryRep.Add(historyEntity);
+
+                orderLogsRep.DeleteWhere(l => request.DeletedLogIds.Contains(l.Id));
+
                 uow.Save();
+
+                foreach (var newLog in request.NewLogs)
+                {
+                    newLog.OrderId = entity.Id;
+                    newLog.OrderHistoryId = historyEntity.Id;
+                    newLog.CreatedByUserId = request.UserId;
+                    newLog.CreatedDateAndTime = request.DateAndTime;
+                    var logEntity = OrderLogMapper.MapToEntity(newLog);
+                    orderLogsRep.Add(logEntity);
+                }
+
+                uow.Save();
+
+                this.orderAuditors.ForEach(a => a.Audit(request, new OrderAuditData(historyEntity.Id, existingOrder)));
+
                 return entity.Id;
             }
         }
@@ -171,13 +206,35 @@
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var ordersRep = uow.GetRepository<Order>();
+                var orderLogsRep = uow.GetRepository<OrderLog>();
+                var orderHistoryRep = uow.GetRepository<OrderHistoryEntity>();
+
                 var order = ordersRep.GetById(id);
-                order.Logs.Clear();
                 order.Programs.Clear();
+
+                var orderLogIds = order.Logs.Select(l => l.Id);
+                orderLogsRep.DeleteWhere(l => orderLogIds.Contains(l.Id));
+
+                var orderHistoryIds = order.Histories.Select(h => h.Id);
+                orderHistoryRep.DeleteWhere(h => orderHistoryIds.Contains(h.Id));
+
                 ordersRep.DeleteById(id);
 
                 uow.Save();
             }
+        }
+
+        public List<BusinessData.Models.Orders.Order.OrderEditFields.Log> FindLogsExcludeSpecified(int orderId, List<int> excludeLogIds)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var logsRep = uow.GetRepository<OrderLog>();
+                var usersRep = uow.GetRepository<User>();
+
+                return logsRep.GetAll()
+                            .GetExcludeSpecified(orderId, excludeLogIds)
+                            .MapToLogs(usersRep.GetAll());                         
+            }            
         }
 
         private OrderEditOptions GetEditOptions(
@@ -264,6 +321,6 @@
                                     workingGroupsWithEmails,
                                     administratorsWithEmails,
                                     settings);            
-        }    
+        }        
     }
 }

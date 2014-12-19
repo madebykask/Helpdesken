@@ -100,5 +100,15 @@ namespace DH.Helpdesk.Services.Services.Concrete
         {
             this.orderAccountService.Delete(id);
         }
+
+        public string GetFileName(int orderId)
+        {
+            return this.orderAccountService.GetFileName(orderId);
+        }
+
+        public byte[] GetFileContent(int orderId)
+        {
+            return this.orderAccountService.GetFileContent(orderId);
+        }
     }
 }

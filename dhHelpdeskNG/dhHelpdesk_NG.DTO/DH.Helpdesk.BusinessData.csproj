@@ -122,8 +122,10 @@
     <Compile Include="Enums\Orders\FieldNames\SupplierFieldNames.cs" />
     <Compile Include="Enums\Orders\FieldNames\UserFieldNames.cs" />
     <Compile Include="Enums\Orders\OrderDeletedItem.cs" />
+    <Compile Include="Enums\Orders\OrderEmailTemplate.cs" />
     <Compile Include="Enums\Orders\Subtopic.cs" />
     <Compile Include="Enums\Projects\ProjectFields.cs" />
+    <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\HeadersFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Overview\AccountFieldsSettingsOverviewWithActivity.cs" />
     <Compile Include="Models\Accounts\Read\Overview\AccountInformation.cs" />
     <Compile Include="Models\Accounts\Read\Overview\AccountOverview.cs" />
@@ -267,7 +269,9 @@
     <Compile Include="Models\Orders\OrderFieldSettings\FieldSettings\FieldSettings.cs" />
     <Compile Include="Models\Orders\Index\OrdersFilterData.cs" />
     <Compile Include="Models\Orders\OrderFieldSettings\GetSettingsResponse.cs" />
+    <Compile Include="Models\Orders\Order\OrderAuditData.cs" />
     <Compile Include="Models\Orders\Order\OrderEditFields\DeliveryEditFields.cs" />
+    <Compile Include="Models\Orders\Order\OrderEditFields\EmailLog.cs" />
     <Compile Include="Models\Orders\Order\OrderEditFields\FieldDifference.cs" />
     <Compile Include="Models\Orders\Order\OrderEditFields\File.cs" />
     <Compile Include="Models\Orders\Order\OrderEditFields\GeneralEditFields.cs" />
@@ -278,8 +282,10 @@
     <Compile Include="Models\Orders\Order\OrderEditData.cs" />
     <Compile Include="Models\Orders\Order\OrderEditFields\FullOrderEditFields.cs" />
     <Compile Include="Models\Orders\Order\OrderEditFields\LogEditFields.cs" />
+    <Compile Include="Models\Orders\Order\OrderEditFields\ManualLog.cs" />
     <Compile Include="Models\Orders\Order\OrderEditFields\OrderEditFields.cs" />
     <Compile Include="Models\Orders\Order\OrderEditFields\OrdererEditFields.cs" />
+    <Compile Include="Models\Orders\Order\OrderEditFields\OrderHistoryModel.cs" />
     <Compile Include="Models\Orders\Order\OrderEditFields\OrderProgramModel.cs" />
     <Compile Include="Models\Orders\Order\OrderEditFields\OtherEditFields.cs" />
     <Compile Include="Models\Orders\Order\OrderEditFields\ProgramEditFields.cs" />
@@ -310,6 +316,8 @@
     <Compile Include="Models\Questionnaire\Read\QuestionnaireQuestionOverview.cs" />
     <Compile Include="Models\Questionnaire\Write\Answer.cs" />
     <Compile Include="Models\Questionnaire\Write\ParticipantForInsert.cs" />
+    <Compile Include="Models\Reports\Output\CaseSatisfactionReportResponse.cs" />
+    <Compile Include="Models\Reports\Output\CaseSatisfactionOptionsResponse.cs" />
     <Compile Include="Models\TextList.cs" />
     <Compile Include="Models\Interfaces\IHierarchyItem.cs" />
     <Compile Include="Models\ActionSetting\ActionSetting.cs" />
@@ -841,7 +849,6 @@
       <Name>DH.Helpdesk.Domain</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

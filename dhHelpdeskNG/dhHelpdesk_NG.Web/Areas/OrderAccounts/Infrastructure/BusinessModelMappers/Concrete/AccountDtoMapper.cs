@@ -7,10 +7,14 @@
     using DH.Helpdesk.BusinessData.Models.Accounts.Write;
     using DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit;
     using DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.FieldModels;
+    using DH.Helpdesk.Web.Infrastructure.Tools;
 
     public class AccountDtoMapper : IAccountDtoMapper
     {
-        public AccountForUpdate BuidForUpdate(AccountModel model, byte[] content, OperationContext operationContext)
+        public AccountForUpdate BuidForUpdate(
+            AccountModel model,
+            WebTemporaryFile file,
+            OperationContext operationContext)
         {
             var order = MapOrderer(model.Orderer);
             var user = MapUser(model.User);
@@ -18,7 +22,7 @@
             var contact = MapContact(model.Contact);
             var delivery = MapDeliveryInformation(model.DeliveryInformation);
             var program = MapProgram(model.Program);
-            var other = MapOther(model.Other, content);
+            var other = MapOther(model.Other, file);
 
             return new AccountForUpdate(
                 model.Id,
@@ -31,10 +35,14 @@
                 program,
                 other,
                 operationContext.DateAndTime,
+                model.FinishDate,
                 operationContext.UserId);
         }
 
-        public AccountForInsert BuidForInsert(AccountModel model, byte[] content, OperationContext operationContext)
+        public AccountForInsert BuidForInsert(
+            AccountModel model,
+            WebTemporaryFile file,
+            OperationContext operationContext)
         {
             var order = MapOrderer(model.Orderer);
             var user = MapUser(model.User);
@@ -42,7 +50,7 @@
             var contact = MapContact(model.Contact);
             var delivery = MapDeliveryInformation(model.DeliveryInformation);
             var program = MapProgram(model.Program);
-            var other = MapOther(model.Other, content);
+            var other = MapOther(model.Other, file);
 
             return new AccountForInsert(
                 order,
@@ -186,7 +194,8 @@
             return new BusinessData.Models.Accounts.Contact(id, name, phone, email);
         }
 
-        private static BusinessData.Models.Accounts.DeliveryInformation MapDeliveryInformation(DeliveryInformation model)
+        private static BusinessData.Models.Accounts.DeliveryInformation MapDeliveryInformation(
+            DeliveryInformation model)
         {
             if (model == null)
             {
@@ -214,7 +223,7 @@
             return new BusinessData.Models.Accounts.Program(info, programs);
         }
 
-        private static BusinessData.Models.Accounts.Other MapOther(Other model, byte[] content)
+        private static BusinessData.Models.Accounts.Other MapOther(Other model, WebTemporaryFile tempFile)
         {
             if (model == null)
             {
@@ -226,9 +235,13 @@
 
             var info = ConfigurableFieldModel<string>.GetValueOrDefault(model.Info);
 
-            var file = ConfigurableFieldModel<string>.GetValueOrDefault(model.FileName);
+            FilesModel file = ConfigurableFieldModel<FilesModel>.GetValueOrDefault(model.FileName);
 
-            return new BusinessData.Models.Accounts.Other(caseNumberDecimal, info, file, content);
+            return new BusinessData.Models.Accounts.Other(
+                caseNumberDecimal,
+                info,
+                tempFile == null ? null : tempFile.Name,
+                tempFile == null ? null : tempFile.Content);
         }
     }
 }

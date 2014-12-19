@@ -14,7 +14,8 @@
                                         o.ChangedDate,
                                         o.CreatedDate,
                                         o.LogText,
-                                        o.Category
+                                        o.Category,
+                                        o.Customer
                                     })
                                     .ToArray();
 
@@ -26,7 +27,8 @@
                                         Category = new OperationLogCategoryOverview
                                         {
                                             OLCName = o.Category != null ? o.Category.OLCName : null
-                                        }
+                                        },
+                                        CustomerName = o.Customer.Name
                                     }).ToArray();
         }
 

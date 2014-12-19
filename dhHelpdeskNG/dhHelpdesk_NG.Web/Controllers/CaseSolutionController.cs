@@ -410,11 +410,13 @@ namespace DH.Helpdesk.Web.Controllers
                 }).ToList(),
                 FinishingCauses = this._finishingCauseService.GetFinishingCauses(SessionFacade.CurrentCustomer.Id),
 
-                PerformerUsers = this._userService.GetUsers().Select(x => new SelectListItem
-                {
-                    Text = x.SurName + " " + x.FirstName,
-                    Value = x.Id.ToString()
-                }).ToList(),
+                PerformerUsers = this._userService.GetUsers(SessionFacade.CurrentCustomer.Id)
+                                 .Where(x => x.IsActive == 1)
+                                 .Select(x => new SelectListItem() 
+                                 {
+                                     Text = x.SurName + " " + x.FirstName,
+                                        Value = x.Id.ToString()
+                                 }).ToList(),
 
                 Priorities = this._priorityService.GetPriorities(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {

@@ -34,12 +34,12 @@
 
         public List<AccountOverview> GetOverviews(AccountFilter filter, OperationContext context)
         {
-            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            using (IUnitOfWork uow = this.unitOfWorkFactory.Create())
             {
-                var accountRepository = uof.GetRepository<Account>();
+                var accountRepository = uow.GetRepository<Account>();
 
-                IQueryable<EmploymentType> epmloimentTypes = uof.GetRepository<EmploymentType>().GetAll();
-                IQueryable<AccountType> accountTypes = uof.GetRepository<AccountType>().GetAll();
+                IQueryable<EmploymentType> epmloimentTypes = uow.GetRepository<EmploymentType>().GetAll();
+                IQueryable<AccountType> accountTypes = uow.GetRepository<AccountType>().GetAll();
 
                 List<AccountOverview> overviews =
                     accountRepository.GetAll()
@@ -47,6 +47,7 @@
                         .GetAdministratorAccounts(filter.AdministratorTypeId)
                         .GetAccountsBySearchString(filter.SearchString)
                         .GetStateAccounts(filter.AccountState)
+                        .Sort(epmloimentTypes, accountTypes, filter.SortField)
                         .MapToAccountOverview(epmloimentTypes, accountTypes);
 
                 return overviews;
@@ -55,10 +56,10 @@
 
         public AccountForEdit Get(int id)
         {
-            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            using (IUnitOfWork uow = this.unitOfWorkFactory.Create())
             {
-                var accountRepository = uof.GetRepository<Account>();
-                IQueryable<User> users = uof.GetRepository<User>().GetAll();
+                var accountRepository = uow.GetRepository<Account>();
+                IQueryable<User> users = uow.GetRepository<User>().GetAll();
 
                 AccountForEdit dto = accountRepository.GetAll(x => x.Programs).GetById(id).ExtractAccountDto(users);
 
@@ -68,46 +69,50 @@
 
         public void Update(AccountForUpdate dto, OperationContext context)
         {
-            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            using (IUnitOfWork uow = this.unitOfWorkFactory.Create())
             {
-                IRepository<Account> accountRepository = uof.GetRepository<Account>();
-                IRepository<Program> programRepository = uof.GetRepository<Program>();
+                IRepository<Account> accountRepository = uow.GetRepository<Account>();
+                IRepository<Program> programRepository = uow.GetRepository<Program>();
 
                 var domainEntity = accountRepository.Find(x => x.Id == dto.Id, x => x.Programs).Single();
                 this.Map(domainEntity, dto);
 
                 domainEntity.ChangedDate = context.DateAndTime;
                 domainEntity.ChangedByUser_Id = context.UserId;
+                domainEntity.FinishingDate = dto.FinishDate;
 
                 foreach (var program in domainEntity.Programs.ToList())
                 {
-                    if (!dto.Program.ProgramIds.Contains(program.Id))
+                    if (dto.Program.ProgramIds == null || !dto.Program.ProgramIds.Contains(program.Id))
                     {
                         domainEntity.Programs.Remove(program);
                     }
                 }
 
-                foreach (var newId in dto.Program.ProgramIds)
+                if (dto.Program.ProgramIds != null && dto.Program.ProgramIds.Any())
                 {
-                    if (!domainEntity.Programs.Any(r => r.Id == newId))
+                    foreach (var newId in dto.Program.ProgramIds)
                     {
-                        var program = new Program { Id = newId };
+                        if (!domainEntity.Programs.Any(r => r.Id == newId))
+                        {
+                            var program = new Program { Id = newId };
 
-                        programRepository.Attach(program);
-                        domainEntity.Programs.Add(program);
+                            programRepository.Attach(program);
+                            domainEntity.Programs.Add(program);
+                        }
                     }
                 }
 
-                uof.Save();
+                uow.Save();
             }
         }
 
         public int Add(AccountForInsert dto, OperationContext context)
         {
-            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            using (IUnitOfWork uow = this.unitOfWorkFactory.Create())
             {
-                IRepository<Account> accountRepository = uof.GetRepository<Account>();
-                IRepository<Program> programRepository = uof.GetRepository<Program>();
+                IRepository<Account> accountRepository = uow.GetRepository<Account>();
+                IRepository<Program> programRepository = uow.GetRepository<Program>();
 
                 var domainEntity = new Account();
                 this.Map(domainEntity, dto);
@@ -132,7 +137,7 @@
 
                 accountRepository.Add(domainEntity);
 
-                uof.Save();
+                uow.Save();
 
                 return domainEntity.Id;
             }
@@ -140,19 +145,43 @@
 
         public void Delete(int id)
         {
-            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            using (IUnitOfWork uow = this.unitOfWorkFactory.Create())
             {
-                IRepository<Account> accountRepository = uof.GetRepository<Account>();
+                IRepository<Account> accountRepository = uow.GetRepository<Account>();
 
                 Account account = accountRepository.GetById(id);
                 account.Programs.Clear();
 
-                var accountEMailLogRepository = uof.GetRepository<AccountEMailLog>();
+                var accountEMailLogRepository = uow.GetRepository<AccountEMailLog>();
                 accountEMailLogRepository.DeleteWhere(x => x.Account_Id == id);
 
                 accountRepository.DeleteById(id);
 
-                uof.Save();
+                uow.Save();
+            }
+        }
+
+        public string GetFileName(int orderId)
+        {
+            using (IUnitOfWork uow = this.unitOfWorkFactory.Create())
+            {
+                IRepository<Account> accountRepository = uow.GetRepository<Account>();
+                string name =
+                    accountRepository.GetAll().GetById(orderId).Select(x => x.AccountFileName).SingleOrDefault();
+
+                return name;
+            }
+        }
+
+        public byte[] GetFileContent(int orderId)
+        {
+            using (IUnitOfWork uow = this.unitOfWorkFactory.Create())
+            {
+                IRepository<Account> accountRepository = uow.GetRepository<Account>();
+                byte[] content =
+                    accountRepository.GetAll().GetById(orderId).Select(x => x.AccountFile).SingleOrDefault();
+
+                return content;
             }
         }
 

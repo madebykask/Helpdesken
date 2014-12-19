@@ -74,6 +74,10 @@
         public DateTime? FinishingDate { get; set; }
 
         public virtual AccountActivity AccountActivity { get; set; }
+        //public virtual AccountType AccountTypeEntity2 { get; set; }
+        //public virtual AccountType AccountTypeEntity3 { get; set; }
+        //public virtual AccountType AccountTypeEntity4 { get; set; }
+
         public virtual AccountType AccountType { get; set; }
         public virtual Customer Customer { get; set; }
         public virtual Department Department { get; set; }

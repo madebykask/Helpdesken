@@ -28,10 +28,7 @@
 
     public class OrderModelMapper : IOrderModelMapper
     {
-        public AccountModel BuildViewModel(
-            AccountForEdit model,
-            AccountOptionsResponse options,
-            AccountFieldsSettingsForModelEdit settings)
+        public AccountModel BuildViewModel(AccountForEdit model, AccountOptionsResponse options, AccountFieldsSettingsForModelEdit settings, HeadersFieldSettings headers)
         {
             var order = MapOrderer(model, options, settings);
             var user = MapUser(model, options, settings);
@@ -44,6 +41,7 @@
             return new AccountModel(order, user, account, contact, delivery, program, other)
                        {
                            Id = model.Id,
+                           FinishDate = model.FinishingDate,
                            ActivityTypeId =
                                model.ActivityId,
                            ActivityName =
@@ -53,11 +51,13 @@
                            ChangedDate =
                                model.ChangedDate,
                            ChangedByUserName =
-                               model.ChangedByUser
+                               model.ChangedByUser,
+                           Headers = headers,
+                           Guid = model.Id.ToString(CultureInfo.InvariantCulture)
                        };
         }
 
-        public AccountModel BuildViewModel(int activityId, AccountOptionsResponse options, AccountFieldsSettingsForModelEdit settings, UserOverview userOverview)
+        public AccountModel BuildViewModel(int activityId, AccountOptionsResponse options, AccountFieldsSettingsForModelEdit settings, UserOverview userOverview, HeadersFieldSettings headers)
         {
             var order = MapOrderer(options, settings, userOverview);
             var user = MapUser(options, settings);
@@ -65,12 +65,16 @@
             var contact = MapContact(options, settings);
             var delivery = MapDeliveryInformation(options, settings);
             var program = MapProgram(options, settings);
-            var other = MapOther(options, settings);
+
+            string guid = Guid.NewGuid().ToString();
+            var other = MapOther(options, settings, guid);
 
             return new AccountModel(order, user, account, contact, delivery, program, other)
             {
                 ActivityTypeId =
                     activityId,
+                Headers = headers,
+                Guid = guid
             };
         }
 
@@ -313,7 +317,20 @@
         {
             var caseNumber = CreateNullableDecimalField(settings.Other.CaseNumber, model.Other.CaseNumber);
             var info = CreateStringField(settings.Other.Info, model.Other.Info);
-            var fileName = CreateStringField(settings.Other.FileName, model.Other.FileName);
+
+            ConfigurableFieldModel<FilesModel> fileName;
+            if (settings.Other.FileName.IsShowInDetails)
+            {
+                var fileNameModel = new FilesModel(model.Id.ToString(CultureInfo.InvariantCulture), model.Other.FileName);
+                fileName = new ConfigurableFieldModel<FilesModel>(
+                    settings.Other.FileName.Caption,
+                    fileNameModel,
+                    settings.Other.FileName.IsRequired);
+            }
+            else
+            {
+                fileName = ConfigurableFieldModel<FilesModel>.CreateUnshowable();
+            }
 
             return new Other(caseNumber, info, fileName);
         }
@@ -546,11 +563,24 @@
             return new Program(info, programId, programsSelectList);
         }
 
-        private static Other MapOther(AccountOptionsResponse options, AccountFieldsSettingsForModelEdit settings)
+        private static Other MapOther(AccountOptionsResponse options, AccountFieldsSettingsForModelEdit settings, string guid)
         {
             var caseNumber = CreateNullableDecimalField(settings.Other.CaseNumber, null);
             var info = CreateStringField(settings.Other.Info, null);
-            var fileName = CreateStringField(settings.Other.FileName, null);
+
+            ConfigurableFieldModel<FilesModel> fileName;
+            if (settings.Other.FileName.IsShowInDetails)
+            {
+                var fileNameModel = new FilesModel(guid, null);
+                fileName = new ConfigurableFieldModel<FilesModel>(
+                    settings.Other.FileName.Caption,
+                    fileNameModel,
+                    settings.Other.FileName.IsRequired);
+            }
+            else
+            {
+                fileName = ConfigurableFieldModel<FilesModel>.CreateUnshowable();
+            }
 
             return new Other(caseNumber, info, fileName);
         }

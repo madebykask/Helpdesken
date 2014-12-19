@@ -38,7 +38,7 @@
             var list = $("#languageList");
             list.html("");
             if (id != "") {
-                $.get('/MailTemplate/UpdateLanguageList/' + id + '?customerId=' + $("#customerId").val() + '&mailTemplateLanguageId=' + $("#mailTemplateLanguageId").val() + '&mailTemplateId=' + $("#mailTemplateId").val() + '&mailId=' + $("#mailId").val() + '&mailTemplateName=' + $("#mailTemplateName").val(), function (result) {
+                $.get('/MailTemplate/UpdateLanguageList/' + $("#mailId").val() + '?customerId=' + $("#customerId").val() + '&mailTemplateLanguageId=' + id + '&mailTemplateId=' + $("#mailTemplateId").val() + '&mailId=' + $("#mailId").val() + '&mailTemplateName=' + $("#mailTemplateName").val() , function (result) {
                     list.html(result);
                 });
             }

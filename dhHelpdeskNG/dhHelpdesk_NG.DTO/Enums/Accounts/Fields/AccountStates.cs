@@ -2,8 +2,10 @@
 {
     public enum AccountStates
     {
-        Active = 0,
-        Finished = 1,
+        Finished = 0,
+
+        Active = 1,
+
         All = 2
     }
 }

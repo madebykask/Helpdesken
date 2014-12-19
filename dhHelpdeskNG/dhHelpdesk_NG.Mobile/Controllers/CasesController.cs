@@ -1164,7 +1164,6 @@
         public RedirectToRouteResult ChangeCurrentLanguage(int languageId)
         {
             SessionFacade.CurrentLanguageId = languageId;
-            SessionFacade.CurrentUser.LanguageId = languageId;
             return this.RedirectToAction("index", "cases");
         }
 

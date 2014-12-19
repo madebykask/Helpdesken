@@ -16,7 +16,8 @@
                                             f.FAQCategory,
                                             f.Answer,
                                             f.FAQQuery,
-                                            f.FAQCategory.ParentFAQCategory
+                                            f.FAQCategory.ParentFAQCategory,
+                                            f.Customer
                                         }).ToArray();
 
             return entities.Select(f => new FaqInfoOverview
@@ -25,7 +26,8 @@
                                                 CreatedDate = f.CreatedDate,
                                                 Category = f.FAQCategory,
                                                 Answer = f.Answer,
-                                                Text = f.FAQQuery
+                                                Text = f.FAQQuery,
+                                                CustomerName = f.Customer.Name
                                             }).ToArray();
         }
     }

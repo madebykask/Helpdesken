@@ -1,13 +1,18 @@
 ﻿namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Accounts
 {
+    using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Linq.Expressions;
 
     using DH.Helpdesk.BusinessData.Enums.Accounts.Fields;
     using DH.Helpdesk.BusinessData.Models.Accounts.Read.Overview;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.BusinessData.Models.Shared.Output;
+    using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Common.Extensions.Integer;
+    using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Accounts;
 
@@ -21,98 +26,99 @@
             IQueryable<AccountType> accountTypes)
         {
             var anonymus =
-                query.Select(
-                    x =>
-                    new
+                query.SelectIncluding(
+                    new List<Expression<Func<Account, object>>>
                         {
-                            Entity = x,
-                            DepartmentName1 = x.Department.DepartmentName,
-                            DepartmentName2 = x.Department2.DepartmentName,
-                            UnitName = x.OU.Name,
-                            AccountTypeName1 = x.AccountType.Name,
-                            ActivityName = x.AccountActivity.Name
-                        })
-                    .GroupJoin(employmentTypes, s => s.Entity.EmploymentType, u => u.Id, (s, res) => new { s, res })
-                    .SelectMany(
-                        t => t.res.DefaultIfEmpty(),
-                        (t, k) =>
-                        new
-                            {
-                                t.s.Entity,
-                                t.s.DepartmentName1,
-                                t.s.DepartmentName2,
-                                t.s.UnitName,
-                                t.s.AccountTypeName1,
-                                t.s.ActivityName,
-                                EmploymentTypeName = k.Name
-                            })
-                    .ToList();
+                            o => o.Department.DepartmentName,
+                            o => o.Department2.DepartmentName,
+                            o => o.OU.Name,
+                            o => o.AccountType.Name,
+                            o => o.AccountActivity.Name,
+                            o => o.Programs.Select(p => p.Name),
+                        }).ToList();
 
             List<IdAndNameOverview> accountOverviews =
                 accountTypes.ToList().Select(x => new IdAndNameOverview(x.Id, x.Name)).ToList();
 
+            List<IdAndNameOverview> typeOverviews =
+                employmentTypes.ToList().Select(x => new IdAndNameOverview(x.Id, x.Name)).ToList();
+
             List<AccountOverview> overviews = anonymus.Select(
                 x =>
                     {
+                        var account = (Account)x.sourceObject;
+                        string departmentName1 = x.f0;
+                        string departmentName2 = x.f1;
+                        string unitName = x.f2;
+                        string accountTypeName1 = x.f3;
+                        string activityName = x.f4;
+
+
                         return new AccountOverview(
-                            x.Entity.Id,
-                            x.Entity.AccountActivity_Id,
-                            x.ActivityName,
+                            account.Id,
+                            account.AccountActivity_Id,
+                            activityName,
                             new Orderer(
-                                x.Entity.OrdererId,
-                                x.Entity.OrdererFirstName,
-                                x.Entity.OrdererLastName,
-                                x.Entity.OrdererPhone,
-                                x.Entity.OrdererEmail),
+                                account.OrdererId,
+                                account.OrdererFirstName,
+                                account.OrdererLastName,
+                                account.OrdererPhone,
+                                account.OrdererEmail),
                             new User(
-                                x.Entity.UserId != null ? x.Entity.UserId.Split(';').ToList() : new List<string>(),
-                                x.Entity.UserFirstName,
-                                x.Entity.UserInitials,
-                                x.Entity.UserLastName,
-                                x.Entity.UserPersonalIdentityNumber,
-                                x.Entity.UserPhone,
-                                x.Entity.UserExtension,
-                                x.Entity.UserEMail,
-                                x.Entity.UserTitle,
-                                x.Entity.UserLocation,
-                                x.Entity.UserRoomNumber,
-                                x.Entity.UserPostalAddress,
-                                x.EmploymentTypeName,
-                                x.DepartmentName1,
-                                x.UnitName,
-                                x.DepartmentName2,
-                                x.Entity.InfoUser,
-                                x.Entity.Responsibility,
-                                x.Entity.Activity,
-                                x.Entity.Manager,
-                                x.Entity.ReferenceNumber),
+                                !string.IsNullOrWhiteSpace(account.UserId)
+                                    ? account.UserId.Split(';').ToList()
+                                    : new List<string>(),
+                                account.UserFirstName,
+                                account.UserInitials,
+                                account.UserLastName,
+                                !string.IsNullOrWhiteSpace(account.UserPersonalIdentityNumber)
+                                    ? account.UserPersonalIdentityNumber.Split(';').ToList()
+                                    : new List<string>(),
+                                account.UserPhone,
+                                account.UserExtension,
+                                account.UserEMail,
+                                account.UserTitle,
+                                account.UserLocation,
+                                account.UserRoomNumber,
+                                account.UserPostalAddress,
+                                ExtractEmploymentType(typeOverviews, account.EmploymentType),
+                                departmentName1,
+                                unitName,
+                                departmentName2,
+                                account.InfoUser,
+                                account.Responsibility,
+                                account.Activity,
+                                account.Manager,
+                                account.ReferenceNumber),
                             new AccountInformation(
-                                x.Entity.AccountStartDate,
-                                x.Entity.AccountEndDate,
-                                (EMailTypes)x.Entity.EMailType,
-                                x.Entity.HomeDirectory.ToBool(),
-                                x.Entity.Profile.ToBool(),
-                                x.Entity.InventoryNumber,
-                                x.AccountTypeName1,
-                                ExtractAccountNames(accountOverviews, x.Entity.AccountType2),
-                                ExtractAccountName(accountOverviews, x.Entity.AccountType3),
-                                ExtractAccountName(accountOverviews, x.Entity.AccountType4),
-                                ExtractAccountName(accountOverviews, x.Entity.AccountType5),
-                                x.Entity.Info),
+                                account.AccountStartDate,
+                                account.AccountEndDate,
+                                (EMailTypes)account.EMailType,
+                                account.HomeDirectory.ToBool(),
+                                account.Profile.ToBool(),
+                                account.InventoryNumber,
+                                accountTypeName1,
+                                ExtractAccountNames(accountOverviews, account.AccountType2),
+                                ExtractAccountName(accountOverviews, account.AccountType3),
+                                ExtractAccountName(accountOverviews, account.AccountType4),
+                                ExtractAccountName(accountOverviews, account.AccountType5),
+                                account.Info),
                             new Contact(
-                                x.Entity.ContactId != null ? x.Entity.ContactId.Split(';').ToList() : new List<string>(),
-                                x.Entity.ContactName,
-                                x.Entity.ContactPhone,
-                                x.Entity.ContactEMail),
+                                !string.IsNullOrWhiteSpace(account.ContactId)
+                                    ? account.ContactId.Split(';').ToList()
+                                    : new List<string>(),
+                                account.ContactName,
+                                account.ContactPhone,
+                                account.ContactEMail),
                             new DeliveryInformation(
-                                x.Entity.DeliveryName,
-                                x.Entity.DeliveryPhone,
-                                x.Entity.DeliveryAddress,
-                                x.Entity.DeliveryPostalAddress),
+                                account.DeliveryName,
+                                account.DeliveryPhone,
+                                account.DeliveryAddress,
+                                account.DeliveryPostalAddress),
                             new BusinessData.Models.Accounts.Read.Overview.Program(
-                                x.Entity.InfoProduct,
-                                x.Entity.Programs.Select(y => y.Name).ToList()), // todo that code makes new query per each iteration!!!
-                            new Other(x.Entity.CaseNumber, x.Entity.InfoOther, x.Entity.AccountFileName));
+                                account.InfoProduct,
+                                account.Programs.Select(y => y.Name).ToList()),
+                            new Other(account.CaseNumber, account.InfoOther, account.AccountFileName));
                     }).ToList();
 
             return overviews;
@@ -145,6 +151,23 @@
                     .ToList();
 
             return overviews;
+        }
+
+        private static string ExtractEmploymentType(IEnumerable<IdAndNameOverview> list, int id)
+        {
+            if (id == 0)
+            {
+                return null;
+            }
+
+            IdAndNameOverview overview = list.SingleOrDefault(x => x.Id == id);
+
+            if (overview == null)
+            {
+                return null;
+            }
+
+            return overview.Name;
         }
     }
 }

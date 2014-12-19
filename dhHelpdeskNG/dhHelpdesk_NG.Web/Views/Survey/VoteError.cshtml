@@ -1,0 +1,16 @@
+﻿<div class="content">
+    <div class="container">
+        @if (ViewBag.CaseNumber != null)
+        {
+            <ul class="nav nav-tabs"><li class="active"><a href="#fragment=1">@Translation.Get("Ärende") @ViewBag.CaseNumber</a></li></ul>
+        }
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active">
+                <div class="container">
+                    <h2>Error</h2>
+                    <div>It is not possible to vote for this case due to <span>@ViewBag.ErrorReason</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -34,7 +34,8 @@
                 temporatyId,
                 workContext.Customer.CustomerId,
                 orderTypeId,
-                true);
+                true,
+                null);
         }
 
         private DeliveryEditModel CreateDeliveryEditModel(

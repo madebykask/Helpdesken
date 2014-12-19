@@ -28,6 +28,14 @@
         [NotNull]
         public ConfigurableFieldModel<string> UserLastName { get; set; }
 
+        public static UserEditModel CreateEmpty()
+        {
+            return new UserEditModel(
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable());
+        }
+
         public bool HasShowableFields()
         {
             return this.UserId.Show ||

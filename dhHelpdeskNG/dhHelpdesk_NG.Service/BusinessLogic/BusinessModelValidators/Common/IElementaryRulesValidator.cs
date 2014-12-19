@@ -22,6 +22,8 @@
 
         void ValidateRealField(double? newValue, double? oldValue, string fieldName, ElementaryValidationRule rule);
 
+        void ValidateDecimalField(decimal? newValue, decimal? oldValue, string fieldName, ElementaryValidationRule rule);
+
         void ValidateIntegerField(int? newValue, int? oldValue, string fieldName, ElementaryValidationRule rule);
 
         void ValidateStringField(string value, string fieldName, ElementaryValidationRule rule);

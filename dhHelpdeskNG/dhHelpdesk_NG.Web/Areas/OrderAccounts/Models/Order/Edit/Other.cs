@@ -11,7 +11,7 @@
         public Other(
             ConfigurableFieldModel<decimal?> caseNumber,
             ConfigurableFieldModel<string> info,
-            ConfigurableFieldModel<string> fileName)
+            ConfigurableFieldModel<FilesModel> fileName)
         {
             this.CaseNumber = caseNumber;
             this.Info = info;
@@ -22,6 +22,6 @@
 
         public ConfigurableFieldModel<string> Info { get; set; }
 
-        public ConfigurableFieldModel<string> FileName { get; set; }
+        public ConfigurableFieldModel<FilesModel> FileName { get; set; }
     }
 }

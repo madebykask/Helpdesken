@@ -1,4 +1,4 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
+﻿    @using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.BusinessData.OldComponents
 @model DH.Helpdesk.Web.Areas.Admin.Models.MailTemplateInputViewModel
@@ -35,7 +35,8 @@
                                         <td>
                                             @Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation)
                                         </td>
-                                        @if (Model.MailTemplateLanguage.MailTemplateName == "" || Model.MailTemplateLanguage.MailTemplateName == null)
+                                        @*if (Model.MailTemplateLanguage.MailTemplateName == "" || Model.MailTemplateLanguage.MailTemplateName == null)*@                                            
+                                        @if (Model.MailTemplateLanguage.MailTemplate != null && Model.MailTemplateLanguage.MailTemplate.IsStandard == 1)
                                         {
                                             <td>
                                                 @if (Model.MailTemplateLanguage.MailTemplate.MailID == 1)
@@ -1284,6 +1285,19 @@
                                     </td>
                                 </tr>
                             }
+                            <tr>
+                                    <th colspan="2">
+                                        @Translation.Get("Survey", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Plase short survey block", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        [#777]
+                                    </td>
+                             </tr>
                         </table>
                         @Html.HiddenFor(model => model.MailTemplateLanguage.Language_Id)
                         @Html.HiddenFor(model => model.MailTemplateLanguage.MailTemplate_Id)

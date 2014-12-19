@@ -16,7 +16,8 @@ namespace DH.Helpdesk.BusinessData.Models.DailyReport.Output
                 DailyReportSubject dailyReportSubject, 
                 string dailyReportText,
                 string firstName,
-                string lastName
+                string lastName,
+                string customerName
                )
         {
             this.Id = id;
@@ -27,6 +28,7 @@ namespace DH.Helpdesk.BusinessData.Models.DailyReport.Output
             this.CreatedDate = createdDate;
             this.FirstName = firstName;
             this.LastName = lastName;
+            this.CustomerName = customerName;
         }
 
         public int Id { get; private set; }
@@ -44,6 +46,8 @@ namespace DH.Helpdesk.BusinessData.Models.DailyReport.Output
         public string FirstName { get; private set; }
 
         public string LastName { get; private set; }
+
+        public string CustomerName { get; private set; }
 
     }
 }

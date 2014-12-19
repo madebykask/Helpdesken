@@ -1,4 +1,5 @@
-﻿@using DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit
+﻿@using System.Web.Optimization
+@using DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit
 @using DH.Helpdesk.Web.Infrastructure
 @model AccountModel
 @{
@@ -8,12 +9,26 @@
 @section Scripts
 {
     <script>
-        $(function () {
-            $("#saveButton, #saveAndCloseButton").click(function () {
+        $(function() {
+            $("#saveButton, #saveAndCloseButton").click(function() {
                 $('#clickedButton').val($(this).val());
                 $('#edit_form').submit();
             });
         })
+    </script>
+    
+    @Scripts.Render("~/bundles/orderaccounts/order")
+
+    <script type="text/javascript">
+        $(function() {
+            var parameters = {
+                id: '@Model.Guid',
+                uploadFileUrl: '@Url.Action("UploadFile")',
+                deleteFileUrl: '@Url.Action("DeleteFile")',
+            };
+
+            applyOrderAccountBehavior(parameters);
+        });
     </script>
 }
 
@@ -69,13 +84,14 @@
             </div>
         </div>
         @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.Guid)
         @Html.HiddenFor(m => m.ActivityTypeId)
-        @Html.EditorFor(m => m.Orderer)
-        @Html.EditorFor(m => m.User)
-        @Html.EditorFor(m => m.AccountInformation)
-        @Html.EditorFor(m => m.Contact)
-        @Html.EditorFor(m => m.DeliveryInformation)
-        @Html.EditorFor(m => m.Program)
+        @Html.EditorFor(m => m.Orderer, new { Header = Model.Headers.OrderLabel })
+        @Html.EditorFor(m => m.User, new { Header = Model.Headers.UserLabel })
+        @Html.EditorFor(m => m.AccountInformation, new { Header = Model.Headers.AccountLabel })
+        @Html.EditorFor(m => m.Contact, new { Header = Model.Headers.ContactLabel })
+        @Html.EditorFor(m => m.DeliveryInformation, new { Header = Model.Headers.DeliveryLabel })
+        @Html.EditorFor(m => m.Program, new { Header = Model.Headers.ProgramLabel })
         @Html.EditorFor(m => m.Other)
 
         <h4>@Translation.Get("Status")</h4>
@@ -96,6 +112,14 @@
                         </td>
                         <td class="span9">
                             @Html.DisplayFor(m => m.ChangedDate, "Date") @Translation.Get("av") @Html.DisplayFor(m => m.ChangedByUserName.FirstName) @Html.DisplayFor(m => m.ChangedByUserName.LastName)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">
+                            <label>@Translation.Get("Avslutsdatum")</label>
+                        </td>
+                        <td class="span9">
+                            @Html.EditorFor(m => m.FinishDate, "DatePicker", new { id = "account_order_finish_datepicker" })
                         </td>
                     </tr>
                 </table>

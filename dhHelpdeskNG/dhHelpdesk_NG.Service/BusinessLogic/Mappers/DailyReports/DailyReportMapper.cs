@@ -19,7 +19,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.DailyReports
                                             d.DailyReportSubject,
                                             d.DailyReportText,
                                             d.User.FirstName,
-                                            d.User.SurName
+                                            d.User.SurName,
+                                            d.Customer
                                         }).ToArray();
 
             return entities.Select(d => new DailyReportOverview(
@@ -30,7 +31,10 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.DailyReports
                                             d.DailyReportSubject,
                                             d.DailyReportText,
                                             d.FirstName,
-                                            d.SurName)).ToArray();
+                                            d.SurName,
+                                            d.Customer.Name
+                                            ))
+                                            .ToArray();
         }
     }
 }

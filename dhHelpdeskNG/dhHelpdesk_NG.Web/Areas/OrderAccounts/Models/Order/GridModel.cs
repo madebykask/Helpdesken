@@ -36,12 +36,13 @@
 
         public SortFieldModel SortField { get; set; }
 
-        public static List<GridModel> BuildGrid(
-            List<AccountOverview> accountOverviews,
-            List<AccountFieldsSettingsOverviewWithActivity> settings)
+        public static List<GridModel> BuildGrid(List<AccountOverview> accountOverviews, List<AccountFieldsSettingsOverviewWithActivity> settings, SortFieldModel sortField)
         {
             var grids = new List<GridModel>();
-            var groupedModels = accountOverviews.GroupBy(x => new { x.ActivityId, x.ActivityName }).ToList();
+            var groupedModels =
+                accountOverviews.GroupBy(x => new { x.ActivityId, x.ActivityName })
+                    .OrderBy(x => x.Key.ActivityId)
+                    .ToList();
 
             foreach (var model in groupedModels)
             {
@@ -52,7 +53,7 @@
                     model.Select(m => CreateOverview(m, setting.AccountFieldsSettingsOverview)).ToList();
                 List<GridColumnHeaderModel> headers = CreateHeaders(setting.AccountFieldsSettingsOverview);
 
-                var gridModel = new GridModel(headers, overviews, model.Key.ActivityId, new SortFieldModel())
+                var gridModel = new GridModel(headers, overviews, model.Key.ActivityId, sortField)
                                     {
                                         CurrentModeName
                                             =

@@ -11,10 +11,9 @@
             <div class="box-body portlet-content">
                 @foreach (var operationLog in Model)
                 {
-                    <div class="box-post">
-                        <div class="label green">
-                            <img src="@Url.Content("~/Content/icons/new.png")" 
-                                 title="@Translation.Get("Ny", Enums.TranslationSource.TextTranslation)" /> Skapad @operationLog.CreatedDate.ToFormattedDateTime() Uppdaterad @operationLog.ChangedDate.ToFormattedDateTime()
+                    <div class="box-post">                        
+                        <div class="label green">                            
+                            @operationLog.CustomerName | Skapad @operationLog.CreatedDate.ToFormattedDateTime() Uppdaterad @operationLog.ChangedDate.ToFormattedDateTime()
                         </div>
                         <div class="captionrow">@operationLog.Category.OLCName</div>
                         <div class="textrow">@operationLog.LogText</div>

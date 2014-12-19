@@ -51,6 +51,13 @@
             return this.View(model);
         }
 
+        [HttpPost]
+        public void SortCaseSettingColumn(int customerId, string sortIds)
+        {
+            var elementsId = sortIds.Split('|');
+            _priorityService.ReOrderPriorities(elementsId.ToList());                        
+        }
+
         public ActionResult New(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);

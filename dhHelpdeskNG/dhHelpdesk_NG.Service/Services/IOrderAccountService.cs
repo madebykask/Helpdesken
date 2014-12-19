@@ -33,5 +33,9 @@
         IdAndNameOverview GetAccountActivityItemOverview(int id);
 
         void Delete(int id);
+
+        string GetFileName(int orderId);
+
+        byte[] GetFileContent(int orderId);
     }
 }

@@ -101,10 +101,6 @@
             if (SessionFacade.CurrentUser != null)
             {
                 SessionFacade.CurrentCustomer = SessionFacade.CurrentCustomer ?? this._masterDataService.GetCustomer(SessionFacade.CurrentUser.CustomerId);
-                if (SessionFacade.CurrentLanguageId == 0)
-                {
-                    SessionFacade.CurrentLanguageId = SessionFacade.CurrentUser.LanguageId;
-                }
             }
         }
 

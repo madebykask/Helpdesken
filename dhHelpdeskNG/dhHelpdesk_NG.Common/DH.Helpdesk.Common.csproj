@@ -63,6 +63,7 @@
     <Compile Include="Enums\Settings\CaseSolutionFields.cs" />
     <Compile Include="Enums\Settings\CaseSolutionModes.cs" />
     <Compile Include="Enums\SortBy.cs" />
+    <Compile Include="Enums\SurveyVoteResult.cs" />
     <Compile Include="Exceptions\PropertyNotFoundException.cs" />
     <Compile Include="Extensions\Boolean\BoolExtensions.cs" />
     <Compile Include="Extensions\Boolean\ToIntExtension.cs" />

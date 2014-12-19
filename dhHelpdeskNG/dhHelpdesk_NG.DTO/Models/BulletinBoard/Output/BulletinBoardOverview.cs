@@ -25,5 +25,7 @@ namespace DH.Helpdesk.BusinessData.Models.BulletinBoard.Output
         /// Gets or sets the text.
         /// </summary>
         public string Text { get; set; }
+
+        public string CustomerName { get; set; }
     }
 }

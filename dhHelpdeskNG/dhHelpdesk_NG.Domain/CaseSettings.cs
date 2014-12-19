@@ -4,7 +4,7 @@
 
     public class CaseSettings : Entity
     {
-        public int Customer_Id { get; set; }
+        public int? Customer_Id { get; set; }
         public int ColOrder { get; set; }
         public int Line { get; set; }
         public int MinWidth { get; set; }

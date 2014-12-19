@@ -8,11 +8,8 @@ namespace DH.Helpdesk.Web.Areas.OrderAccounts.Infrastructure.ModelMappers
 
     public interface IOrderModelMapper
     {
-        AccountModel BuildViewModel(
-            AccountForEdit model,
-            AccountOptionsResponse options,
-            AccountFieldsSettingsForModelEdit settings);
+        AccountModel BuildViewModel(AccountForEdit model, AccountOptionsResponse options, AccountFieldsSettingsForModelEdit settings, HeadersFieldSettings headers);
 
-        AccountModel BuildViewModel(int activityId, AccountOptionsResponse options, AccountFieldsSettingsForModelEdit settings, UserOverview userOverview);
+        AccountModel BuildViewModel(int activityId, AccountOptionsResponse options, AccountFieldsSettingsForModelEdit settings, UserOverview userOverview, HeadersFieldSettings headers);
     }
 }

@@ -443,6 +443,8 @@
 
         public DbSet<Supplier> Suppliers { get; set; }
 
+        public DbSet<Survey> Surveys { get; set; }
+
         public DbSet<System> Systems { get; set; }
 
         public DbSet<TextTranslation> TextTranslations { get; set; }
@@ -663,6 +665,7 @@
             modelBuilder.Configurations.Add(new ServerFieldSettingsConfiguration());
             modelBuilder.Configurations.Add(new ServerLogicalDriveConfiguration());
             modelBuilder.Configurations.Add(new ServerSoftwareConfiguration());
+            modelBuilder.Configurations.Add(new SurveyConfiguration());
             modelBuilder.Configurations.Add(new SettingConfiguration());
             modelBuilder.Configurations.Add(new SSOLogConfiguration());
             modelBuilder.Configurations.Add(new StandardTextConfiguration());

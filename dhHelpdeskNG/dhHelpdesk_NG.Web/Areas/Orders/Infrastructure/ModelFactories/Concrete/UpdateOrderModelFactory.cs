@@ -3,15 +3,26 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net.Mail;
 
+    using DH.Helpdesk.BusinessData.Enums.Orders;
     using DH.Helpdesk.BusinessData.Models.Orders.Order;
     using DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditFields;
+    using DH.Helpdesk.Common.Extensions.String;
+    using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Orders.Models.Order.FieldModels;
     using DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit;
+    using DH.Helpdesk.Web.Infrastructure.Tools;
 
     public class UpdateOrderModelFactory : IUpdateOrderModelFactory
     {
-        public UpdateOrderRequest Create(FullOrderEditModel model, int customerId, DateTime dateAndTime)
+        public UpdateOrderRequest Create(
+                        FullOrderEditModel model, 
+                        int customerId, 
+                        DateTime dateAndTime, 
+                        IEmailService emailService, 
+                        int userId,
+                        int languageId)
         {
             int orderId;
             int.TryParse(model.Id, out orderId);
@@ -24,17 +35,34 @@
                 CreateLogFields(model.Log),
                 CreateOrdererFields(model.Orderer),
                 CreateOrderFields(model.Order),
-                CreateOtherFields(model.Other),
+                CreateOtherFields(model.Other, model.NewFiles, model.DeletedFiles),
                 CreateProgramFields(model.Program),
                 CreateReceiverFields(model.Receiver),
                 CreateSupplierFields(model.Supplier),
                 CreateUserFields(model.User));
 
-            return new UpdateOrderRequest(fields, customerId, dateAndTime);
+            var newLogs = CreateNewLogCollection(model, emailService);
+
+            return new UpdateOrderRequest(
+                                fields, 
+                                customerId, 
+                                dateAndTime, 
+                                model.DeletedLogIds, 
+                                newLogs, 
+                                userId,
+                                model.InformOrderer,
+                                model.InformReceiver,
+                                model.CreateCase,
+                                languageId);
         }
 
         private static DeliveryEditFields CreateDeliveryFields(DeliveryEditModel model)
         {
+            if (model == null)
+            {
+                model = DeliveryEditModel.CreateEmpty();
+            }
+
             return new DeliveryEditFields(
                     ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.DeliveryDate),
                     ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.InstallDate),
@@ -52,6 +80,11 @@
 
         private static GeneralEditFields CreateGeneralFields(GeneralEditModel model)
         {
+            if (model == null)
+            {
+                model = GeneralEditModel.CreateEmpty();
+            }
+
             return new GeneralEditFields(
                     ConfigurableFieldModel<int>.GetValueOrDefault(model.OrderNumber),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.Customer),
@@ -62,13 +95,22 @@
 
         private static LogEditFields CreateLogFields(LogEditModel model)
         {
-            var logs = model.Log != null ?
-                model.Log.Value.Logs.Select(l => new Log(l.Id, l.DateAndTime, l.RegisteredBy, l.Text)).ToList() : new List<Log>(0);
+            if (model == null)
+            {
+                model = LogEditModel.CreateEmpty();
+            }
+
+            var logs = model.Log.Value.Logs.Select(l => new Log(l.Id, l.DateAndTime, l.RegisteredBy, l.Text)).ToList();
             return new LogEditFields(logs);
         }
 
         private static OrdererEditFields CreateOrdererFields(OrdererEditModel model)
         {
+            if (model == null)
+            {
+                model = OrdererEditModel.CreateEmpty();
+            }
+
             return new OrdererEditFields(
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.OrdererId),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.OrdererName),
@@ -90,6 +132,11 @@
 
         private static OrderEditFields CreateOrderFields(OrderEditModel model)
         {
+            if (model == null)
+            {
+                model = OrderEditModel.CreateEmpty();
+            }
+
             return new OrderEditFields(
                     model.PropertyId,
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.OrderRow1),
@@ -105,10 +152,21 @@
                     ConfigurableFieldModel<int>.GetValueOrDefault(model.OrderInfo2));
         }
 
-        private static OtherEditFields CreateOtherFields(OtherEditModel model)
+        private static OtherEditFields CreateOtherFields(OtherEditModel model, IEnumerable<WebTemporaryFile> newFiles, IEnumerable<string> deletedFiles)
         {
+            if (model == null)
+            {
+                model = OtherEditModel.CreateEmpty();
+            }
+
+            var fileName = !deletedFiles.Any() ? newFiles.Select(f => f.Name).FirstOrDefault() : string.Empty;
+            if (fileName == null)
+            {
+                fileName = string.Empty;
+            }
+
             return new OtherEditFields(
-                    model.FileName != null ? model.FileName.Value.Files.FirstOrDefault() : string.Empty,
+                    fileName,
                     ConfigurableFieldModel<decimal?>.GetValueOrDefault(model.CaseNumber),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.Info),
                     model.StatusId);
@@ -116,13 +174,22 @@
 
         private static ProgramEditFields CreateProgramFields(ProgramEditModel model)
         {
-            var programs = model != null && model.Program != null ? 
-                model.Program.Value.Programs.Select(p => new OrderProgramModel(p.Id, p.Name)).ToList() : new List<OrderProgramModel>(0);
+            if (model == null)
+            {
+                model = ProgramEditModel.CreateEmpty();
+            }
+
+            var programs = model.Program.Value.Programs.Select(p => new OrderProgramModel(p.Id, p.Name)).ToList();
             return new ProgramEditFields(programs);
         }
 
         private static ReceiverEditFields CreateReceiverFields(ReceiverEditModel model)
         {
+            if (model == null)
+            {
+                model = ReceiverEditModel.CreateEmpty();
+            }
+
             return new ReceiverEditFields(
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.ReceiverId),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.ReceiverName),
@@ -134,6 +201,11 @@
 
         private static SupplierEditFields CreateSupplierFields(SupplierEditModel model)
         {
+            if (model == null)
+            {
+                model = SupplierEditModel.CreateEmpty();
+            }
+
             return new SupplierEditFields(
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.SupplierOrderNumber),
                     ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.SupplierOrderDate),
@@ -142,10 +214,49 @@
 
         private static UserEditFields CreateUserFields(UserEditModel model)
         {
+            if (model == null)
+            {
+                model = UserEditModel.CreateEmpty();
+            }
+
             return new UserEditFields(
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.UserId),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.UserFirstName),
                     ConfigurableFieldModel<string>.GetValueOrDefault(model.UserLastName));
+        }
+
+        private static List<ManualLog> CreateNewLogCollection(FullOrderEditModel model, IEmailService emailService)
+        {
+            var newLogs = new List<ManualLog>();
+
+            if (model.Log != null)
+            {
+                CreateNewLogIfNeeded(model.Log.Log, Subtopic.Log, newLogs, emailService);                
+            }
+
+            return newLogs;
+        }
+
+        private static void CreateNewLogIfNeeded(
+                    ConfigurableFieldModel<LogsModel> logField,
+                    Subtopic subtopic,
+                    List<ManualLog> logs,
+                    IEmailService emailService)
+        {
+            if (logField == null || string.IsNullOrEmpty(logField.Value.Text))
+            {
+                return;
+            }
+
+            var emails = string.IsNullOrEmpty(logField.Value.Emails)
+                ? new List<MailAddress>(0)
+                : logField.Value.Emails.Split(Environment.NewLine)
+                                .Where(emailService.IsValidEmail)
+                                .Select(e => new MailAddress(e))
+                                .ToList();
+
+            var newLog = ManualLog.CreateNew(logField.Value.Text, emails, subtopic);
+            logs.Add(newLog);
         }
     }
 }

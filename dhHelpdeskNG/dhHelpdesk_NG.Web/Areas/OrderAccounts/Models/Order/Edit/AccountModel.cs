@@ -2,6 +2,7 @@
 {
     using System;
 
+    using DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Read.ModelEdit;
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Common.ValidationAttributes;
 
@@ -31,6 +32,8 @@
 
         public int Id { get; set; }
 
+        public string Guid { get; set; }
+
         public int ActivityTypeId { get; set; }
 
         public string ActivityName { get; set; }
@@ -42,6 +45,10 @@
         public UserName ChangedByUserName { get; set; }
 
         public bool IsCreateCase { get; set; }
+
+        public DateTime? FinishDate { get; set; }
+
+        public HeadersFieldSettings Headers { get; set; }
 
         [NotNull]
         public Orderer Orderer { get; set; }

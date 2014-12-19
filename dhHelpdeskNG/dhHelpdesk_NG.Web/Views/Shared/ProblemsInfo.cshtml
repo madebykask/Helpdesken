@@ -11,8 +11,8 @@
             <div class="box-body portlet-content">
                 @foreach (var problem in Model)
                 {
-                    <div class="box-post" onclick="">
-                        <div class="label orange">@problem.CreatedDate.ToFormattedDateTime()</div>
+                    <div class="box-post" onclick="">                        
+                        <div class="label orange">@problem.CustomerName | @problem.CreatedDate.ToFormattedDateTime()</div>                        
                         <div class="textrow">@string.Format("#{0}, {1}", problem.ProblemNumber, problem.Name)</div>
                     </div>                
                 }

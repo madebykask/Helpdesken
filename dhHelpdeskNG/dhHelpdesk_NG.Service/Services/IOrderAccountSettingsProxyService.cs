@@ -11,6 +11,10 @@
 
     public interface IOrderAccountSettingsProxyService
     {
+        HeadersFieldSettings GetHeadersFieldSettings(int accountActivityId);
+
+        void UpdateHeadersFieldSettings(int accountActivityId, HeadersFieldSettings dto);
+
         AccountFieldsSettingsForEditResponse GetFieldsSettingsForEditResponse(int accountActivityId, OperationContext context);
 
         AccountFieldsSettingsForModelEdit GetFieldsSettingsForModelEdit(int accountActivityId, OperationContext context);

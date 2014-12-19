@@ -1,4 +1,5 @@
 ﻿@model DH.Helpdesk.Web.Models.CaseSolutionInputViewModel
+@using System.Web.Optimization
 @using System.Web.UI.WebControls
 @using DH.Helpdesk.BusinessData.Models.Case
 @using DH.Helpdesk.BusinessData.OldComponents
@@ -8,13 +9,7 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 
-@*@if (TempData["Error"] != null)
-{
-    <div class="alert alert-error">@Translation.Get("Ärendemall", Enums.TranslationSource.TextTranslation)
-        @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
-    </div>    
-}*@
-
+@Scripts.Render("~/bundles/casetemplates/edit")
 
 <div class="content">
     <div class="container">
@@ -368,27 +363,32 @@
 
                                 </tr>
                                 <tr id="scheduleOptions" style="@(Model.Schedule.ToBool() ? "display:block" : "display:none")">
-                                    <td>
-                                        <label style="width: 100px;"></label>
+                                    <td class="span3">
+                                        <p><label class="radio">
                                         <!-- This is for cell width -->
                                         <input type="radio" name="ScheduleType" @(Model.ScheduleType == 1 ? "checked='checked'" : "") id="optScheduleType1" value="1" />
                                         @Translation.Get("Varje dag", Enums.TranslationSource.TextTranslation)
-                                        <br />
-                                        <br />
+                                        </label>
+                                        </p>
+                                        <p>
+                                        <label class="radio">
                                         <input type="radio" name="ScheduleType" @(Model.ScheduleType == 2 ? "checked='checked'" : "") id="optScheduleType2" value="2" />
                                         @Translation.Get("Varje vecka", Enums.TranslationSource.TextTranslation)
-                                        <br />
-                                        <br />
+                                        </label>
+                                        </p>
+                                        <p>
+                                        <label class="radio">
                                         <input type="radio" name="ScheduleType" @(Model.ScheduleType == 3 ? "checked='checked'" : "") id="optScheduleType3" value="3" />
                                         @Translation.Get("Varje månad", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                        </p>
                                     </td>
                                     <!-- ******************************* DAY ************************************** -->
-                                    <td id="chosenDay" class="chDay" style="display: none; margin-left: 10px;">
-                                        <label style="width: 180px;"></label>
+                                    <td id="chosenDay" class="chDay span3" style="display: none;">
+                                        
                                         <!--This is for cell width -->
                                         @Translation.Get("Starttid", Enums.TranslationSource.TextTranslation):  
-                                        <br />
-                                        <select name="ScheduleTime" style="margin-left: 38px; width: 80px;">
+                                        <select name="ScheduleTime" style="width: 80px;">
                                             @for (int i = 0; i < 24; i++)
                                             {
                                                 <option  @(Model.ScheduleTime == i ? "selected='selected'" : "") value="@i">@i.ToString().PadLeft(2, '0'):00</option>
@@ -409,43 +409,64 @@
                                         @Translation.Get("dagar", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <!-- ********************************* WEEK ************************************* -->
-                                    <td id="chosenWeek" class="chWeek" style="display: none;">
-                                        <br />
-                                        <label style="width: 150px;"></label>
+                                    <td id="chosenWeek" class="chWeek span6" style="display: none;">
                                         <!-- This is for cell width -->
+                                        <label>
                                         @Translation.Get("Dagar i veckan", Enums.TranslationSource.TextTranslation):                                        
-                                        <br />
+                                        </label>
+                                        <p>
+                                        <label class="checkbox inline">
                                         <input type="checkbox" name="ScheduleDay" @(Model.ScheduleDays.IndexOf(",1,") >= 0 ? "checked='checked'" : "") value="1" />
-                                        @Translation.Get("Måndag", Enums.TranslationSource.TextTranslation)   &nbsp;                                     
+                                        @Translation.Get("Måndag", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                        <label class="checkbox inline">                                  
                                         <input type="checkbox" name="ScheduleDay" @(Model.ScheduleDays.IndexOf(",2,") >= 0 ? "checked='checked'" : "") value="2" />
-                                        @Translation.Get("Tisdag", Enums.TranslationSource.TextTranslation)   &nbsp;                                     
+                                        @Translation.Get("Tisdag", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                        <label class="checkbox inline">                                    
                                         <input type="checkbox" name="ScheduleDay" @(Model.ScheduleDays.IndexOf(",3,") >= 0 ? "checked='checked'" : "") value="3" />
-                                        @Translation.Get("Onsdag", Enums.TranslationSource.TextTranslation)    &nbsp;                                    
+                                        @Translation.Get("Onsdag", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                        <label class="checkbox inline">                                   
                                         <input type="checkbox" name="ScheduleDay" @(Model.ScheduleDays.IndexOf(",4,") >= 0 ? "checked='checked'" : "") value="4" />
-                                        @Translation.Get("Torsdag", Enums.TranslationSource.TextTranslation)&nbsp;
-                                        <br />
+                                        @Translation.Get("Torsdag", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                        </p>
+                                        <p>
+                                        <label class="checkbox inline">
                                         <input type="checkbox" name="ScheduleDay" @(Model.ScheduleDays.IndexOf(",5,") >= 0 ? "checked='checked'" : "") value="5" />
-                                        @Translation.Get("Fredag", Enums.TranslationSource.TextTranslation) &nbsp;&nbsp;&nbsp;&nbsp;                                   
+                                        @Translation.Get("Fredag", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                        <label class="checkbox inline">                                 
                                         <input type="checkbox" name="ScheduleDay" @(Model.ScheduleDays.IndexOf(",6,") >= 0 ? "checked='checked'" : "") value="6" />
-                                        @Translation.Get("Lördag", Enums.TranslationSource.TextTranslation)    &nbsp;                                    
+                                        @Translation.Get("Lördag", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                        <label class="checkbox inline">                                   
                                         <input type="checkbox" name="ScheduleDay" @(Model.ScheduleDays.IndexOf(",7,") >= 0 ? "checked='checked'" : "") value="7" />
-                                        @Translation.Get("Söndag", Enums.TranslationSource.TextTranslation)&nbsp;
+                                        @Translation.Get("Söndag", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                        </p>
                                     </td>
                                     <!-- ********************************* MONTH ************************************* -->
                                     <td id="chosenMonth" class="chMonth" style="display: none;">
-                                        <label style="width: 500px;"></label>
+                                        <p class="form-inline">
+                                        <label class="radio">
                                         <!-- This is for cell width -->
                                         <input type="radio" name="ScheduleMonthly" @(Model.ScheduleMonthlyOrder == 0 ? "checked='checked'" : "") id="optday" value="1" style="vertical-align:top"/>
                                         @Translation.Get("Dag", Enums.TranslationSource.TextTranslation):
+                                        </label>
                                         <select name="ScheduleMonthlyDay" style="width: 85px;" id="cbo0">
                                             @for (int i = 1; i <= 31; i++)
                                             {     
                                                 <option @(Model.ScheduleDays == i.ToString() ? "selected='selected'" : "") value="@i">@i</option>
                                             }
                                         </select>
-                                        <br />
+                                        </p>
+                                        <p class="form-inline">
+                                        <label class="radio">
                                         <input type="radio" name="ScheduleMonthly" onchange="click()" @(Model.ScheduleMonthlyOrder != 0 ? "checked='checked'" : "") id="optthe"  value="2" style="vertical-align:top"/>
                                         @Translation.Get("Den", Enums.TranslationSource.TextTranslation):
+                                        </label>
                                         <select name="ScheduleMonthlyOrder" style="width: 85px;" id="cbo1">
                                             <option value="1" @(Model.ScheduleMonthlyOrder == 1 ? "selected='selected'" : "")>@Translation.Get("första", Enums.TranslationSource.TextTranslation)</option>
                                             <option value="2" @(Model.ScheduleMonthlyOrder == 2 ? "selected='selected'" : "")>@Translation.Get("andra", Enums.TranslationSource.TextTranslation)</option>
@@ -462,34 +483,66 @@
                                             <option value="6" @(Model.ScheduleMonthlyWeekday == 6 ? "selected='selected'" : "")>@Translation.Get("Lördagen", Enums.TranslationSource.TextTranslation)</option>
                                             <option value="7" @(Model.ScheduleMonthlyWeekday == 7 ? "selected='selected'" : "")>@Translation.Get("Söndagen", Enums.TranslationSource.TextTranslation)</option>
                                         </select>
-                                        <br />
+                                        </p>
+                                        <p>
+                                        <label>
                                         @Translation.Get("Månader", Enums.TranslationSource.TextTranslation):
-                                        <br />
+                                        </label>
+                                        </p>
+                                        <p>
+                                        <label class="checkbox inline"> 
                                         <input type="checkbox" name="ScheduleMonth" @(Model.ScheduleMonths.IndexOf(",1,") >= 0 ? "checked='checked'" : "") value="1" />
-                                        @Translation.Get("Januari", Enums.TranslationSource.TextTranslation)&nbsp;
+                                        @Translation.Get("Januari", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                        <label class="checkbox inline"> 
                                         <input type="checkbox" name="ScheduleMonth" @(Model.ScheduleMonths.IndexOf(",2,") >= 0 ? "checked='checked'" : "") value="2" />
-                                        @Translation.Get("Februari", Enums.TranslationSource.TextTranslation)&nbsp;
+                                        @Translation.Get("Februari", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                        <label class="checkbox inline"> 
                                         <input type="checkbox" name="ScheduleMonth" @(Model.ScheduleMonths.IndexOf(",3,") >= 0 ? "checked='checked'" : "") value="3" />
-                                        @Translation.Get("Mars", Enums.TranslationSource.TextTranslation)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                                        @Translation.Get("Mars", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                        <label class="checkbox inline">  
                                         <input type="checkbox" name="ScheduleMonth" @(Model.ScheduleMonths.IndexOf(",4,") >= 0 ? "checked='checked'" : "") value="4" />
-                                        @Translation.Get("April", Enums.TranslationSource.TextTranslation)&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; 
+                                        @Translation.Get("April", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                        </p>
+                                        <p>
+                                        <label class="checkbox inline"> 
                                         <input type="checkbox" name="ScheduleMonth" @(Model.ScheduleMonths.IndexOf(",5,") >= 0 ? "checked='checked'" : "") value="5" />
-                                        @Translation.Get("Maj", Enums.TranslationSource.TextTranslation)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; 
+                                        @Translation.Get("Maj", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                        <label class="checkbox inline">  
                                         <input type="checkbox" name="ScheduleMonth" @(Model.ScheduleMonths.IndexOf(",6,") >= 0 ? "checked='checked'" : "") value="6" />
-                                        @Translation.Get("Juni", Enums.TranslationSource.TextTranslation)&nbsp;
-                                        <br />
+                                        @Translation.Get("Juni", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                        <label class="checkbox inline"> 
                                         <input type="checkbox" name="ScheduleMonth" @(Model.ScheduleMonths.IndexOf(",7,") >= 0 ? "checked='checked'" : "") value="7" />
-                                        @Translation.Get("Juli", Enums.TranslationSource.TextTranslation)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                                        @Translation.Get("Juli", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                        <label class="checkbox inline"> 
                                         <input type="checkbox" name="ScheduleMonth" @(Model.ScheduleMonths.IndexOf(",8,") >= 0 ? "checked='checked'" : "") value="8" />
-                                        @Translation.Get("Augusti", Enums.TranslationSource.TextTranslation)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        @Translation.Get("Augusti", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                        </p>
+                                        <p>
+                                        <label class="checkbox inline"> 
                                         <input type="checkbox" name="ScheduleMonth" @(Model.ScheduleMonths.IndexOf(",9,") >= 0 ? "checked='checked'" : "") value="9" />
-                                        @Translation.Get("September", Enums.TranslationSource.TextTranslation)&nbsp;
+                                        @Translation.Get("September", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                        <label class="checkbox inline"> 
                                         <input type="checkbox" name="ScheduleMonth" @(Model.ScheduleMonths.IndexOf(",10,") >= 0 ? "checked='checked'" : "") value="10" />
-                                        @Translation.Get("Oktober", Enums.TranslationSource.TextTranslation)&nbsp;
+                                        @Translation.Get("Oktober", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                        <label class="checkbox inline"> 
                                         <input type="checkbox" name="ScheduleMonth" @(Model.ScheduleMonths.IndexOf(",11,") >= 0 ? "checked='checked'" : "") value="11" />
-                                        @Translation.Get("November", Enums.TranslationSource.TextTranslation)&nbsp;
+                                        @Translation.Get("November", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                        <label class="checkbox inline"> 
                                         <input type="checkbox" name="ScheduleMonth" @(Model.ScheduleMonths.IndexOf(",12,") >= 0 ? "checked='checked'" : "") value="12" />
-                                        @Translation.Get("December", Enums.TranslationSource.TextTranslation)&nbsp; 
+                                        @Translation.Get("December", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                        </p>
                                     </td>
                                 </tr>
                             </table>
@@ -503,101 +556,6 @@
     </div>
 </div>
 <script type="text/javascript">
-    
-    $('#case__WorkingGroup_Id').change(function () {
-        // filter administrators
-        var DontConnectUserToWorkingGroup = $('#CaseMailSetting_DontConnectUserToWorkingGroup').val();
-        if (DontConnectUserToWorkingGroup == 0) {
-            CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeWorkingGroupFilterUser/', '#case__Performer_User_Id', $('#DepartmentFilterFormat').val());
-        }
-        //set state secondery
-        SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeWorkingGroupSetStateSecondary/', '#case__StateSecondary_Id')
-    });
-
-    $('#divFinishingCause ul.dropdown-menu li a').click(function (e) {
-        e.preventDefault();
-        var val = $(this).attr('value');
-        $("#divBreadcrumbs_FinishingCause").text(getBreadcrumbs(this));
-        $("#CaseSolution_FinishingCause_Id").val(val);
-    });
-
-    $('#divCaseType ul.dropdown-menu li a').click(function (e) {
-        e.preventDefault();
-        var val = $(this).attr('value');
-        $("#divBreadcrumbs_CaseType").text(getBreadcrumbs(this));
-        $("#CaseSolution_CaseType_Id").val(val);
-    });
-
-    $('#divProductArea ul.dropdown-menu li a').click(function (e) {
-        e.preventDefault();
-        var val = $(this).attr('value');
-        $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(this));
-        $("#CaseSolution_ProductArea_Id").val(val);
-    });
-
-    // enable/disable correct choices in schedule  
-    $(document).ready(function () {
-        if (document.getElementById("optday").getAttribute('checked') == "'checked'")
-            SetDayEnable();
-        else
-            SetWeekEnable();
-    });
-
-    $(function () {
-        $("#optday").click(function () {
-            SetDayEnable();
-        });
-    });
-
-    $(function () {
-        $("#optthe").click(function () {
-            SetWeekEnable();
-        });
-    });
-
-    function SetDayEnable() {
-        document.getElementById("cbo0").removeAttribute('disabled');
-        document.getElementById("cbo1").setAttribute('disabled', true);
-        document.getElementById("cbo2").setAttribute('disabled', true);
-    }
-
-    function SetWeekEnable() {
-        document.getElementById("cbo0").setAttribute('disabled', true);
-        document.getElementById("cbo1").removeAttribute('disabled');
-        document.getElementById("cbo2").removeAttribute('disabled');
-    }
-
-    // Setfocus for Required fields
-    function SetFocus(iObject) {
-        //alert(iObject);
-        document.getElementById(iObject).focus();
-    }
-
-    var checkScheduleChange = function () {
-        if ($('#optScheduleType1').is(':checked')) {
-            $(".chDay").toggle($("[name$=ScheduleType]").index($('#optScheduleType1')) == 0);
-            $('.chWeek, .chMonth').hide();
-        }
-        else if ($('#optScheduleType2').is(':checked')) {
-            $('.chDay, .chWeek').toggle($("[name$=ScheduleType]").index($('#optScheduleType2')) == 1);
-            $('.chMonth').hide();
-        }
-        else if ($('#optScheduleType3').is(':checked')) {
-            $('.chDay, .chMonth').toggle($("[name$=ScheduleType]").index($('#optScheduleType3')) == 2);
-            $('.chWeek').hide();
-        }
-    }
-
-    $(function () {
-        $("#chkSchedule").click(function () {
-            $("#scheduleOptions").toggle();
-        });
-
-        checkScheduleChange();
-        $("[name$=ScheduleType]").change(checkScheduleChange);
-    });
-
-
     var validator = $("#target").validate({
         ignore: "",
         rules: {
@@ -608,11 +566,10 @@
         messages: {
             "CaseSolution.Name": {
                 required: "@Translation.Get("Du måste ange ett namn på ärendemallen", Enums.TranslationSource.TextTranslation)"
-            }
-        },
-        submitHandler: function (form) {
-            form.submit();
         }
-    });
-
+    },
+       submitHandler: function (form) {
+           form.submit();
+       }
+   });
 </script>

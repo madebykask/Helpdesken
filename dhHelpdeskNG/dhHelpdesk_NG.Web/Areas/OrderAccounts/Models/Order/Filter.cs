@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order
 {
     using DH.Helpdesk.BusinessData.Enums.Accounts;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.Services.Requests.Account;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
@@ -11,6 +12,7 @@
         public Filter()
         {
             this.SortField = new SortFieldModel();
+            this.State = Enums.Show.Active;
         }
 
         public Filter(int? userId, string searchFor, Enums.Show state, SortFieldModel sortFieldModel)
@@ -37,7 +39,14 @@
 
         public AccountFilter CreateRequest(int? activityTypeId)
         {
-            return new AccountFilter(activityTypeId, this.UserId, this.SearchFor, (AccountStates)this.State);
+            SortField sortField = null;
+
+            if (!string.IsNullOrEmpty(this.SortField.Name))
+            {
+                sortField = new SortField(this.SortField.Name, this.SortField.SortBy.Value);
+            }
+
+            return new AccountFilter(activityTypeId, this.UserId, this.SearchFor, (AccountStates)this.State, sortField);
         }
     }
 }

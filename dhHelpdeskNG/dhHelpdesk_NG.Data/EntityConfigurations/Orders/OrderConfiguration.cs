@@ -112,6 +112,9 @@
                 .WithMany()
                 .HasForeignKey(o => o.Department_Id);
 
+            this.HasMany(o => o.Histories)
+                .WithRequired(h => h.Order);
+
             this.ToTable("tblorder");
         }
     }

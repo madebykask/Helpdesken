@@ -14,6 +14,7 @@
         IList<CaseSettings> GenerateCSFromUGChoice(int customerId, int? UserGroupId);
         IList<CaseSettings> GetCaseSettingsWithUser(int customerId, int userId, int userGroupId);
         IList<CaseSettings> GetCaseSettingsByUserGroup(int customerId, int UserGroupId);
+        IList<CaseSettings> GetCaseSettingsForDefaultCust();
         //IList<CaseSettings> GetCaseSettingsByCopyUserId(int userId);
 
         CaseSettings GetCaseSetting(int id);
@@ -24,8 +25,9 @@
 
         void SaveCaseSetting(CaseSettings caseSetting, out IDictionary<string, string> errors);
 
-        void UpdateCaseSetting(CaseSettings updatedCaseSetting, out IDictionary<string, string> errors);        
+        void UpdateCaseSetting(CaseSettings updatedCaseSetting, out IDictionary<string, string> errors);
 
+        void ReOrderCaseSetting(List<string> caseSettingIds);
 
         void Commit();
     }
@@ -54,6 +56,14 @@
         public IList<CaseSettings> GetCaseSettingsByUserGroup(int customerId, int usergroupId)
         {
             return this._caseSettingRepository.GetMany(x => x.Customer_Id == customerId && x.User_Id == null && x.UserGroup == usergroupId).OrderBy(x => x.ColOrder).ToList();
+        }
+
+        public IList<CaseSettings> GetCaseSettingsForDefaultCust()
+        {
+            var list = this._caseSettingRepository.GetAll().Where(x => x.Customer_Id == null).ToList();
+
+            return list;
+
         }
 
         public IList<CaseSettings> GenerateCSFromUGChoice(int customerId, int? UserGroupId)
@@ -205,6 +215,12 @@
 
             if (errors.Count == 0)
                 this.Commit();
+        }
+
+        public void ReOrderCaseSetting(List<string> caseSettingIds)
+        {                       
+            this._caseSettingRepository.ReOrderCaseSetting(caseSettingIds);                        
+            this.Commit();
         }
 
         public void UpdateCaseSetting(CaseSettings updatedCaseSetting, out IDictionary<string, string> errors)

@@ -82,6 +82,23 @@
         [IsId]
         public int? DeliveryOuIdId { get; set; }
 
+        public static DeliveryEditModel CreateEmpty()
+        {
+            return new DeliveryEditModel(
+                ConfigurableFieldModel<DateTime?>.CreateUnshowable(),
+                ConfigurableFieldModel<DateTime?>.CreateUnshowable(),
+                ConfigurableFieldModel<SelectList>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<SelectList>.CreateUnshowable());
+        }
+
         public bool HasShowableFields()
         {
             return this.DeliveryDate.Show ||

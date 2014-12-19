@@ -101,6 +101,27 @@
         [NotNull]
         public ConfigurableFieldModel<string> AccountingDimension5 { get; set; }
 
+        public static OrdererEditModel CreateEmpty()
+        {
+            return new OrdererEditModel(
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<SelectList>.CreateUnshowable(),
+                ConfigurableFieldModel<SelectList>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable());
+        }
+
         public bool HasShowableFields()
         {
             return this.OrdererId.Show ||

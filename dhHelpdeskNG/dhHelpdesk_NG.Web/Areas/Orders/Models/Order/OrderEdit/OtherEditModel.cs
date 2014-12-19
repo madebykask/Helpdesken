@@ -38,6 +38,18 @@
         [IsId]
         public int? StatusId { get; set; }
 
+        public static OtherEditModel CreateEmpty()
+        {
+            var files = ConfigurableFieldModel<AttachedFilesModel>.CreateUnshowable();
+            files.Value = new AttachedFilesModel();
+
+            return new OtherEditModel(
+                files,
+                ConfigurableFieldModel<decimal?>.CreateUnshowable(),
+                ConfigurableFieldModel<string>.CreateUnshowable(),
+                ConfigurableFieldModel<SelectList>.CreateUnshowable());
+        }
+
         public bool HasShowableFields()
         {
             return this.FileName.Show ||

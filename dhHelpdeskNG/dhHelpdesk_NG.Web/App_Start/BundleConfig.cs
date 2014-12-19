@@ -28,7 +28,8 @@
 
             bundles.Add(new StyleBundle("~/Content/css/popup").Include(
                             "~/Content/css/*.css",
-                            "~/Content/themes/base/minified/jquery-ui.min.css"));
+                            "~/Content/themes/base/minified/jquery-ui.min.css",
+                            "~/Content/js/jquery.plupload.queue/css/jquery.plupload.queue.css"));
 
             bundles.Add(new ScriptBundle(ScriptNames.Container).Include(
                   "~/Content/js/Container/init.js"));
@@ -73,7 +74,8 @@
                             "~/Content/js/bootstrap-datepicker.js",
                             "~/Content/js/jquery.validate.min.js",
                             "~/Content/js/plupload.full.min.js",
-                            "~/Content/js/jquery.plupload.queue/jquery.plupload.queue.js",                            
+                            "~/Content/js/jquery.plupload.queue/jquery.plupload.queue.js",
+                            "~/Content/js/jquery-ui-1.9.2.min.js",
                             "~/Content/js/dhHelpdesk-head.js",
                             "~/Content/js/jquery.form.min.js",
                             "~/Content/js/jquery.toastmessage.js",
@@ -99,7 +101,11 @@
                             "~/Content/js/Shared/custom.validation.maxlengthfrom.notrequired.js",
                             "~/Content/js/Shared/custom.validation.requiredfrom.js",
                             "~/Content/js/Shared/custom.validation.maxlengthfrom.js",
-                            "~/Content/js/Shared/sortby.js"));
+                            "~/Content/js/Shared/sortby.js",
+                            "~/Content/js/bootstrap-switch.min.js",
+                            "~/Content/js/jquery.dataTables.min.js",
+                            "~/Content/js/plupload.full.min.js",
+                            "~/Content/js/jquery.plupload.queue/jquery.plupload.queue.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/licenses").Include(
                             "~/Content/js/Licenses/license.js"));
@@ -116,6 +122,10 @@
             bundles.Add(new ScriptBundle("~/bundles/cases/edit").Include(
                             "~/Content/js/Cases/edit.logic.js",
                             "~/Content/js/Cases/case.templates.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/casetemplates/edit").Include(
+                "~/Content/js/CaseTemplates/edit.logic.js"));
+
 
             bundles.Add(new ScriptBundle("~/bundles/changes/change").Include(
                             "~/Content/js/Changes/change.js"));
@@ -168,10 +178,9 @@
             bundles.Add(new ScriptBundle("~/bundles/orders/order").Include(
                             "~/Content/js/Orders/order.js"));
 
-            BundleTable.EnableOptimizations = true;
-#if DEBUG
-            BundleTable.EnableOptimizations = false;
-#endif
+            bundles.Add(new ScriptBundle("~/bundles/orderaccounts/order").Include(
+                "~/Content/js/Account/order.js"));
+
         }
     }
 }

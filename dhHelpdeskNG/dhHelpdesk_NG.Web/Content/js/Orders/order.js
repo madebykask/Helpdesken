@@ -9,12 +9,12 @@
 
     $('#fileName_files_uploader').pluploadQueue({
         url: parameters.uploadFileUrl,
-        multipart_params: { orderId: parameters.id, subtopic: parameters.fileNameSubtopic },
+        multipart_params: { entityId: parameters.id, subtopic: parameters.fileNameSubtopic },
         max_file_size: '10mb',
 
         init: {
             FileUploaded: function (uploader, uploadedFile, responseContent) {
-                $('#fileName_files_container').html(responseContent.response);
+                $('#filename_files_container').html(responseContent.response);
             }
         }
     });
@@ -24,7 +24,7 @@
     });
 
     window.deleteFile = function (subtopic, fileName, filesContainerId) {
-        $.post(parameters.deleteFileUrl, { orderId: parameters.id, subtopic: subtopic, fileName: fileName }, function (markup) {
+        $.post(parameters.deleteFileUrl, { entityId: parameters.id, subtopic: subtopic, fileName: fileName }, function (markup) {
             $('#' + filesContainerId).html(markup);
         });
     };

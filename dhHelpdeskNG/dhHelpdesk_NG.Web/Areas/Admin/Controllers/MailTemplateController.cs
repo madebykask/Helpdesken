@@ -240,13 +240,15 @@
                 mailtemplatelanguageToSave.MailTemplate = mailTemplate;
                 mailtemplatelanguageToSave.Subject = mailTemplateLanguage.Subject;
                 mailtemplatelanguageToSave.Body = mailTemplateLanguage.Body;
-
+                if (mailTemplateLanguage.MailTemplateName != null)
+                   mailtemplatelanguageToSave.MailTemplateName = mailTemplateLanguage.MailTemplateName;
             }
 
             this._mailTemplateService.SaveMailTemplateLanguage(mailtemplatelanguageToSave, update, out errors);
 
             if (errors.Count == 0)
-                return this.RedirectToAction("edit", "mailtemplate", new { customerId = customer.Id, id = id, languageId = mailTemplateLanguage.Language_Id });
+               // return this.RedirectToAction("edit", "mailtemplate", new { customerId = customer.Id, id = id, languageId = mailTemplateLanguage.Language_Id });
+                return this.RedirectToAction("index", "mailtemplate", new { customerId = customerId });
             
 
             var model = this.MailTemplateIndexViewModel(customer, customersettings);
@@ -469,7 +471,9 @@
             var customer = this._customerService.GetCustomer(customerId);
             //var mailTemplateLanguageToUpdate = this._mailTemplateService.GetMailTemplateLanguage(mailTemplateLanguageId, id);
            
-            var mailTemplate = this._mailTemplateService.GetMailTemplate(mailTemplateId, customerId);
+            //var mailTemplate = this._mailTemplateService.GetMailTemplate(mailTemplateId, customerId);
+
+            var mailTemplate = this._mailTemplateService.GetMailTemplate(id, customerId);
 
             if (mailTemplate == null)
             {
@@ -480,13 +484,14 @@
                 };
             }
 
-            var mailTemplateLanguageToUpdate = this._mailTemplateService.GetMailTemplateLanguageForCustomer(mailTemplate.MailID, customer.Id, id);
+            //var mailTemplateLanguageToUpdate = this._mailTemplateService.GetMailTemplateLanguageForCustomer(mailTemplate.MailID, customer.Id, id);
+            var mailTemplateLanguageToUpdate = this._mailTemplateService.GetMailTemplateLanguageForCustomer(id, customer.Id, mailTemplateLanguageId);
             if (mailTemplateLanguageToUpdate == null)
                 mailTemplateLanguageToUpdate = new MailTemplateLanguageEntity
                 {
                     
                     MailTemplate_Id = mailTemplate.Id,
-                    Language_Id = id,
+                    Language_Id = mailTemplateLanguageId,
                     Subject = string.Empty,
                     Body = string.Empty,
                     MailTemplate = mailTemplate,
@@ -496,9 +501,9 @@
                 //mailTemplateLanguageToUpdate = new MailTemplateLanguage() { Language_Id = id, MailTemplate = mailTemplate };
 
 
-            var mailTemplateLanguage = new MailTemplateLanguageEntity() { Language_Id = id, MailTemplate = mailTemplate };
-            
-            var model = this.CreateInputViewModel(mailTemplateLanguage, customer, id, ordertypeId, accountactivityId);
+            var mailTemplateLanguage = new MailTemplateLanguageEntity() { Language_Id = mailTemplateLanguageId, MailTemplate = mailTemplate };
+
+            var model = this.CreateInputViewModel(mailTemplateLanguage, customer, mailTemplateLanguageId, ordertypeId, accountactivityId);
 
             model.MailTemplateLanguage = mailTemplateLanguageToUpdate;
             model.Customer = customer;

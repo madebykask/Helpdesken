@@ -18,6 +18,7 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.MailTemplates;
     using DH.Helpdesk.Domain.Problems;
+    using DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Customers;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Customers;
     using DH.Helpdesk.Services.Infrastructure.Email;
@@ -120,6 +121,7 @@
         private readonly IInvoiceArticleService invoiceArticleService;
 
         private readonly IUnitOfWorkFactory unitOfWorkFactory;
+        private ISurveyService surveyService;
 
         public CaseService(
             ICaseRepository caseRepository,
@@ -143,7 +145,8 @@
             UserRepository userRepository, 
             ICaseMailer caseMailer, 
             IInvoiceArticleService invoiceArticleService, 
-            IUnitOfWorkFactory unitOfWorkFactory)
+            IUnitOfWorkFactory unitOfWorkFactory,
+            ISurveyService surveyService)
         {
             this._unitOfWork = unitOfWork;
             this._caseRepository = caseRepository;
@@ -167,7 +170,8 @@
             this._filesStorage = filesStorage;
             this._logRepository = logRepository;
             this._logFileRepository = logFileRepository;
-            this._formFieldValueRepository = formFieldValueRepository; 
+            this._formFieldValueRepository = formFieldValueRepository;
+            this.surveyService = surveyService;
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -1054,6 +1058,41 @@
                 string site = cms.AbsoluterUrl + "Cases/edit/" + c.Id.ToString();
                 string url = "<br><a href='" + site +  "'>" + site + "</a>";
                 ret.Add(new Field { Key = "[#99]", StringValue = url });
+            }
+
+            // Survey template
+            if (cms != null)
+            {
+                /// if case is closed and was no vote in survey - add HTML inormation about survey
+                if (c.IsClosed() && (this.surveyService.GetByCaseId(c.Id) == null))
+                {
+                    var template = new SurveyTemplate()
+                    {
+                        VoteBadLink =
+                            string.Format(
+                                "{0}Survey/vote/{1}?voteId=bad",
+                                cms.AbsoluterUrl,
+                                c.Id),
+                        VoteBadText = "Bad",
+                        VoteNormalLink =
+                            string.Format(
+                                "{0}Survey/vote/{1}?voteId=normal",
+                                cms.AbsoluterUrl,
+                                c.Id),
+                        VoteNormalText = "Normal",
+                        VoteGoodLink =
+                            string.Format(
+                                "{0}Survey/vote/{1}?voteId=good",
+                                cms.AbsoluterUrl,
+                                c.Id),
+                        VoteGoodText = "Good",
+                    };
+                    ret.Add(new Field { Key = "[#777]", StringValue = template.TransformText() });
+                }
+                else
+                {
+                    ret.Add(new Field { Key = "[#777]", StringValue = string.Empty });
+                }
             }
 
             return ret;

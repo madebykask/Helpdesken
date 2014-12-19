@@ -1,0 +1,34 @@
+﻿
+@model DH.Helpdesk.Web.Areas.Orders.Models.Order.FieldModels.HistoryModel
+           
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.LabelFor(m => m.HistoryRecords.First().DateAndTime)
+            </th>
+            <th>
+                @Html.LabelFor(m => m.HistoryRecords.First().RegisteredBy)
+            </th>
+            <th>
+                @Html.LabelFor(m => m.HistoryRecords.First().Log)
+            </th>
+            <th>
+                @Html.LabelFor(m => m.HistoryRecords.First().FieldsDifferences)
+            </th>
+            <th>
+                @Html.LabelFor(m => m.HistoryRecords.First().Emails)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            var historyRecords = Model.HistoryRecords;
+            historyRecords.Reverse();
+        }
+        @foreach (var historyRecord in historyRecords)
+        {
+            @Html.DisplayFor(m => historyRecord)
+        }
+    </tbody>
+</table>

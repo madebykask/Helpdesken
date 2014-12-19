@@ -96,7 +96,6 @@
                                     <i class="icon-signal icon-white"></i>@Translation.Get("Rapportmeny") <i class="icon-chevron-down icon-white"></i>
                                 </a>
                                 <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
-                                                                        
                                     @if (model.IsReportVisible())
                                     {                                        
                                         <li><a href="@Url.Action("index", "reports", new { area = "" })">
@@ -116,8 +115,10 @@
                                                 <img src="@Url.Content("~/Content/icons/operationlog.png")" />
                                                 @Translation.Get("Driftlogg")</a></li>
                                     }                                 
-                                    <li>
-                                    </li>
+                                    <li><a href="@Url.Action("CaseSatisfactionReport", "reports", new { area = "" })">
+                                            <img src="@Url.Content("~/Content/icons/operationlog.png")" />
+                                            @Translation.Get("Case satisfaction")
+                                        </a></li>
                                 </ul>
                             </li>                            
                         }
@@ -278,7 +279,7 @@
                                             @foreach (var lang in model.Languages.Where(l=> l.IsActive == 1).ToList())
                                             {
                                                 <li>
-                                                    @if (lang.Id == SessionFacade.CurrentUser.LanguageId)
+                                                    @if (lang.Id == SessionFacade.CurrentLanguageId)
                                                     {
                                                       <a href="@Url.Action("ChangeCurrentLanguage", "cases", new { languageId = lang.Id, area = "" })" > @Translation.Get(lang.Name)  <i class="icon-ok"></i> </a>
                                                     }

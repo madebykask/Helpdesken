@@ -22,10 +22,10 @@
     @Html.HiddenFor(m => m.Filter.SortField.SortBy, new { id = "sortFieldBy" })
     @Html.HiddenFor(m => m.ActivityType)
     <table class="tableform">
-        <tr>
+       @* <tr>
             <td class="span3">@Translation.Get("Handläggare")</td>
             <td>@Html.DropDownListFor(m => m.Filter.UserId, Model.Users, string.Empty, new { id = "region_dropdown" })</td>
-        </tr>
+        </tr>*@
         <tr>
             <td class="span3">
                 @Html.LabelFor(m => m.Filter.SearchFor)
@@ -39,14 +39,14 @@
             </td>
             <td>
                 <label class="radio inline">
-                    @Html.RadioButtonFor(x => x.Filter.State, 1, @GetDictionary(Enums.Show.Active)) @Translation.Get("Pågående projekt")
+                    @Html.RadioButtonFor(x => x.Filter.State, 1, @GetDictionary(Enums.Show.Active)) @Translation.Get("Pågående")
                 </label>
                 <label class="radio inline">
-                    @Html.RadioButtonFor(x => x.Filter.State, 0, @GetDictionary(Enums.Show.Inactive)) @Translation.Get("Avslutade projekt")
+                    @Html.RadioButtonFor(x => x.Filter.State, 0, @GetDictionary(Enums.Show.Inactive)) @Translation.Get("Avslutade")
 
                 </label>
                 <label class="radio inline">
-                    @Html.RadioButtonFor(x => x.Filter.State, 2, @GetDictionary(Enums.Show.All)) @Translation.Get("Alla projekt")
+                    @Html.RadioButtonFor(x => x.Filter.State, 2, @GetDictionary(Enums.Show.All)) @Translation.Get("Alla")
 
                 </label>
             </td>

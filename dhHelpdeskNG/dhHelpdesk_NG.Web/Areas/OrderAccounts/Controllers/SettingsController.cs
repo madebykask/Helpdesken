@@ -4,6 +4,7 @@
     using System.Linq;
     using System.Web.Mvc;
 
+    using DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Read.ModelEdit;
     using DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Write;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Services.Response.Account;
@@ -64,8 +65,10 @@
             AccountFieldsSettingsForEditResponse data =
                 this.orderAccountSettingsProxyService.GetFieldsSettingsForEditResponse(id, OperationContext);
 
+            HeadersFieldSettings headers = this.orderAccountSettingsProxyService.GetHeadersFieldSettings(id);
             AccountFieldsSettingsModel model = this.settingsViewModelMapper.BuildModel(
-                data.AccountFieldsSettingsForEdit);
+                data.AccountFieldsSettingsForEdit,
+                headers);
 
             viewModel = new SettingsIndexModel(id, data.AccountTypes, model);
 
@@ -81,6 +84,16 @@
                 accountFieldsSettingsModel,
                 this.OperationContext);
             this.orderAccountSettingsProxyService.Update(dto, this.OperationContext);
+
+            this.orderAccountSettingsProxyService.UpdateHeadersFieldSettings(
+                activityType,
+                new HeadersFieldSettings(
+                    accountFieldsSettingsModel.Headers.OrderLabel,
+                    accountFieldsSettingsModel.Headers.UserLabel,
+                    accountFieldsSettingsModel.Headers.AccountLabel,
+                    accountFieldsSettingsModel.Headers.ContactLabel,
+                    accountFieldsSettingsModel.Headers.DeliveryLabel,
+                    accountFieldsSettingsModel.Headers.ProgramLabel));
 
             return this.RedirectToAction("Index", new { activityType });
         }

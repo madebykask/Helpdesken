@@ -102,7 +102,7 @@
                 CustomerCaseSummaryViewModel = new CustomerCaseSummaryViewModel(),
                 CaseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customer.Id),
                 Customer = customer,
-                ListCaseForLabel = this._caseFieldSettingService.ListToShowOnCasePage(customer.Id, customer.Language_Id),
+                ListCaseForLabel = this._caseFieldSettingService.ListToShowOnCasePage(customer.Id, SessionFacade.CurrentLanguageId), // customer.Language_Id
                 Customers = this._customerService.GetAllCustomers().Select(x => new SelectListItem
                 {
                     Text = x.Name,
@@ -145,8 +145,8 @@
             {
                 CaseSettings = this._caseSettingsService.GenerateCSFromUGChoice(customer.Id, usergroupId),
                 CSetting = caseSetting,
-                CaseFieldSettingLanguages = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customer.Id, customer.Language_Id),
-                ListSummaryForLabel = this._caseFieldSettingService.ListToShowOnCustomerSettingSummaryPage(customer.Id, customer.Language_Id, usergroupId),
+                CaseFieldSettingLanguages = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customer.Id, SessionFacade.CurrentLanguageId), //customer.Language_Id
+                ListSummaryForLabel = this._caseFieldSettingService.ListToShowOnCustomerSettingSummaryPage(customer.Id, SessionFacade.CurrentLanguageId, usergroupId), //customer.Language_Id
                 LineList = li,
                 UserGroupId = usergroupId,
                 CaseFieldSetting = this._caseFieldSettingService.GetCaseFieldSettings(customer.Id).Select(x => new SelectListItem
@@ -231,7 +231,7 @@
             if (ugListToUpdate == null)
                 ugListToUpdate = this._caseSettingsService.GetCaseSettings(customer.Id).ToList();
 
-            var labelForDDL = this._caseFieldSettingService.ListToShowOnCustomerSettingSummaryPage(customer.Id, customer.Language_Id, id);
+            var labelForDDL = this._caseFieldSettingService.ListToShowOnCustomerSettingSummaryPage(customer.Id, SessionFacade.CurrentLanguageId, id); //customer.Language_Id
             var caseSettings = new CaseSettings() { };
           
             var model = this.CustomerCaseSummaryViewModel(caseSettings, customer, id);

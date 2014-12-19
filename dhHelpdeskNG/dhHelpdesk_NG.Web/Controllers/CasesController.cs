@@ -736,9 +736,15 @@ namespace DH.Helpdesk.Web.Controllers
             return this.Json(new { list });
         }
 
-        public JsonResult ChangeWorkingGroupFilterUser(int? id, int customerId, int departmentFilterFormat)
+        public JsonResult ChangeWorkingGroupFilterUser(int? id, int customerId)
         {
-            var list = id.HasValue ? this._userService.GetUsersForWorkingGroup(customerId, id.GetValueOrDefault()).Select(x => new { id = x.Id, name = x.SurName + ' ' + x.FirstName }) : this._userService.GetUsers(customerId).Select(x => new { id = x.Id, name = x.SurName + ' ' + x.FirstName });
+            var list = id.HasValue
+                           ? this._userService.GetUsersForWorkingGroup(customerId, id.GetValueOrDefault())
+                                 .Where(x => x.IsActive == 1)
+                                 .Select(x => new { id = x.Id, name = x.SurName + ' ' + x.FirstName })
+                           : this._userService.GetUsers(customerId)
+                                 .Where(x => x.IsActive == 1)
+                                 .Select(x => new { id = x.Id, name = x.SurName + ' ' + x.FirstName });
             return this.Json(new { list });
         }
 
@@ -1253,6 +1259,20 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
+        public ActionResult SortCaseSettingColumn(int customerId, int userId, string sortIds)
+        {
+            var elementsId = sortIds.Split('|');
+
+            _caseSettingService.ReOrderCaseSetting(elementsId.ToList());
+
+            var model = new CaseColumnsSettingsModel();
+            model = GetCaseColumnSettingModel(customerId, userId);
+
+            return PartialView("_ColumnCaseSetting", model);
+
+        }
+
+        [HttpPost]
         public ActionResult DeleteRowFromCaseSettings(int id, int userId, int customerId)
         {
             if (this._caseSettingService.DeleteCaseSetting(id) != DeleteMessage.Success)
@@ -1269,7 +1289,6 @@ namespace DH.Helpdesk.Web.Controllers
         public RedirectToRouteResult ChangeCurrentLanguage(int languageId)        
         {
             SessionFacade.CurrentLanguageId = languageId;
-            SessionFacade.CurrentUser.LanguageId = languageId;
             var prevInfo = this.ExtractPreviousRouteInfo();
             var res = new RedirectToRouteResult(prevInfo);
             return res;
@@ -2163,13 +2182,13 @@ namespace DH.Helpdesk.Web.Controllers
             colSettingModel.CustomerId = customerId;
             colSettingModel.UserId = userId;
 
-            var showColumns = _caseFieldSettingService.ListToShowOnCasePage(customerId, SessionFacade.CurrentUser.LanguageId)
+            var showColumns = _caseFieldSettingService.ListToShowOnCasePage(customerId, SessionFacade.CurrentLanguageId)
                                        .Where(c => c.ShowOnStartPage == 1)
                                        .Select(s => s.CFS_Id)
                                        .ToList();
 
             IList<CaseFieldSettingsWithLanguage> allColumns = new List<CaseFieldSettingsWithLanguage>();
-            allColumns = _caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, SessionFacade.CurrentUser.LanguageId)
+            allColumns = _caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, SessionFacade.CurrentLanguageId)
                                                  .Where(c => showColumns.Contains(c.Id))
                                                  .ToList();
 
@@ -2180,7 +2199,7 @@ namespace DH.Helpdesk.Web.Controllers
                 Id = 9998,
                 Label = Translation.Get("Tid kvar", Enums.TranslationSource.TextTranslation),
                 Name = "_temporary_.LeadTime",
-                Language_Id = SessionFacade.CurrentUser.LanguageId
+                Language_Id = SessionFacade.CurrentLanguageId
             };
             allColumns.Add(fixValue1);
 
@@ -2189,7 +2208,7 @@ namespace DH.Helpdesk.Web.Controllers
                 Id = 9999,
                 Label = Translation.Get("Problem", Enums.TranslationSource.TextTranslation),
                 Name = "tblProblem.ResponsibleUser_Id",
-                Language_Id = SessionFacade.CurrentUser.LanguageId
+                Language_Id = SessionFacade.CurrentLanguageId
             };
 
             allColumns.Add(fixValue2);

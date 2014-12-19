@@ -14,7 +14,8 @@
                                             d.Id,
                                             d.Name,
                                             d.CreatedDate,
-                                            d.Size
+                                            d.Size,
+                                            d.Customer
                                         }).ToArray();
 
             return entities.Select(d => new DocumentOverview
@@ -22,7 +23,8 @@
                                             Id = d.Id,
                                             Name = d.Name,
                                             CreatedDate = d.CreatedDate,
-                                            Size = d.Size
+                                            Size = d.Size,
+                                            CustomerName = d.Customer.Name
                                         }).ToArray();
         }
 

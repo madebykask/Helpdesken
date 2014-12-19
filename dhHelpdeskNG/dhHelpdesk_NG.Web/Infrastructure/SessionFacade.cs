@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web;
@@ -288,21 +289,29 @@
         {
             get
             {
-                if (HttpContext.Current.Session[_CURRENT_LANGUAGE] == null)
+                HttpCookie cookie = HttpContext.Current.Request.Cookies.Get(_CURRENT_LANGUAGE);
+                if (cookie != null)
                 {
-                    return 0;
+                    return Convert.ToInt32(cookie.Value);
                 }
-                return (int)HttpContext.Current.Session[_CURRENT_LANGUAGE];
+
+                if (CurrentUser != null)
+                {
+                    return CurrentUser.LanguageId;
+                }
+
+                return 0;
             }
+
             set
             {
-                if (HttpContext.Current.Session[_CURRENT_LANGUAGE] == null)
+                if (HttpContext.Current.Request.Cookies[_CURRENT_LANGUAGE] == null)
                 {
-                    HttpContext.Current.Session.Add(_CURRENT_LANGUAGE, value);
+                    HttpContext.Current.Response.Cookies.Add(new HttpCookie(_CURRENT_LANGUAGE, value.ToString()));
                 }
                 else
                 {
-                    HttpContext.Current.Session[_CURRENT_LANGUAGE] = value;
+                    HttpContext.Current.Response.Cookies[_CURRENT_LANGUAGE].Value = value.ToString();
                 }
             }
         }

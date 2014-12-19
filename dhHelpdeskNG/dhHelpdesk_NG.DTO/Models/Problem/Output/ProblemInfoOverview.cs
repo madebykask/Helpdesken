@@ -30,5 +30,7 @@ namespace DH.Helpdesk.BusinessData.Models.Problem.Output
         /// Gets or sets the name.
         /// </summary>
         public string Name { get; set; }
+
+        public string CustomerName { get; set; }
     }
 }

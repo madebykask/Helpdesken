@@ -16,7 +16,7 @@
     <tbody>
         @foreach (var computer in Model.Computers)
         {
-            <tr>
+            <tr onclick=" window.open('@Url.Action("Edit", "Workstation", new { area="Inventory", id = computer.ComputerId })', '_blank'); ">
                 <td>@computer.ComputerName</td>
                 <td>@computer.User</td>
                 <td>@Html.DisplayFor(m => computer.ScanDate, "Date")</td>

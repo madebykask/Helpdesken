@@ -12,7 +12,7 @@
         {
             this.HasKey(x => x.Id);
 
-            this.Property(x => x.Customer_Id).IsRequired().HasColumnName("CustomerId");
+            this.Property(x => x.Customer_Id).HasColumnName("CustomerId");
             this.Property(x => x.ColOrder).IsRequired();
             this.Property(x => x.Line).IsRequired();
             this.Property(x => x.MinWidth).IsRequired();

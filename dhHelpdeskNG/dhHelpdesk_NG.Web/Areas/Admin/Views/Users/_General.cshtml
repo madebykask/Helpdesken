@@ -1,5 +1,11 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Admin.Models.UserInputViewModel
+
+@{
+    var passChangeText = Translation.Get("Lösenordet har ändrats", Enums.TranslationSource.TextTranslation);    
+    
+    var passChangeError = Translation.Get("De lösenord du angav stämmer inte överens med varandra. Försök igen", Enums.TranslationSource.TextTranslation);
+}
 <div class="formContainer">
     <table class="tableform">
         <tr>
@@ -123,10 +129,14 @@
 
         mod.find("#btnSavePassword").on("click", function (e) {
             if ($('#NewPassword').val() != $('#ConfirmPassword').val()) {
-                alert('@Translation.Get("De lösenord du angav stämmer inte överens med varandra. Försök igen", Enums.TranslationSource.TextTranslation)');
+                var e = '@passChangeError';
+                ShowToastMessage(e, "Error");
+                //alert('@Translation.Get("De lösenord du angav stämmer inte överens med varandra. Försök igen", Enums.TranslationSource.TextTranslation)');
             } else {
                 $.post('/users/EditUserPassword/', { id: $('#id_user').val(), newPassword: $('#NewPassword').val(), confirmPassword: $('#ConfirmPassword').val() }, function (data) {
-                    alert('@Translation.Get("Lösenordet har ändrats", Enums.TranslationSource.TextTranslation)');
+                    var e = '@passChangeText';
+                    ShowToastMessage(e, "Alert");
+                    //alert('@Translation.Get("Lösenordet har ändrats", Enums.TranslationSource.TextTranslation)');
 
                 $('#NewPassword').val('');
                 $('#ConfirmPassword').val('');
@@ -138,6 +148,22 @@
         mod.on("hide", function () {
             $("#divPasswordDialog #btnSavePassword").off("click");
             $("#divPasswordDialog #btnClose").off("click");
+        });
+    }
+
+    function ShowToastMessage(message, msgType) {
+        $().toastmessage('showToast', {
+            text: message,
+            sticky: true,
+            position: 'top-center',
+            type: msgType,
+            closeText: '',
+            stayTime: 10000,
+            inEffectDuration: 1000,
+            width: 500,
+            close: function () {
+                //console.log("toast is closed ...");
+            }
         });
     }
 

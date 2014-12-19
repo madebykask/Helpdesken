@@ -1,6 +1,9 @@
 ﻿namespace DH.Helpdesk.Web.Areas.OrderAccounts.Controllers
 {
     using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Web;
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Read.ModelEdit;
@@ -10,6 +13,8 @@
     using DH.Helpdesk.BusinessData.Models.Accounts.Write;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.Models.Shared.Output;
+    using DH.Helpdesk.Common.Tools;
+    using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Services.Response.Account;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Concrete;
@@ -18,10 +23,10 @@
     using DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order;
     using DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit;
     using DH.Helpdesk.Web.Controllers;
+    using DH.Helpdesk.Web.Enums;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.ActionFilters;
-
-    using Microsoft.Ajax.Utilities;
+    using DH.Helpdesk.Web.Infrastructure.Tools;
 
     public class OrdersController : UserInteractionController
     {
@@ -39,6 +44,10 @@
 
         private readonly IAccountDtoMapper accountDtoMapper;
 
+        private readonly ITemporaryFilesCache userTemporaryFilesStorage;
+
+        private readonly IEditorStateCache userEditorValuesStorage;
+
         public OrdersController(
             IMasterDataService masterDataService,
             IOrderAccountProxyService orderAccountProxyService,
@@ -46,7 +55,9 @@
             IUserService userService,
             IOrganizationService organizationService,
             IOrderModelMapper orderModelMapper,
-            IAccountDtoMapper accountDtoMapper)
+            IAccountDtoMapper accountDtoMapper,
+            IEditorStateCacheFactory userEditorValuesStorageFactory,
+            ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory)
             : base(masterDataService)
         {
             this.orderAccountProxyService = orderAccountProxyService;
@@ -55,6 +66,9 @@
             this.organizationService = organizationService;
             this.orderModelMapper = orderModelMapper;
             this.accountDtoMapper = accountDtoMapper;
+
+            this.userEditorValuesStorage = userEditorValuesStorageFactory.CreateForModule(ModuleName.OrderAccounts);
+            this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.OrderAccounts);
         }
 
         public ViewResult Index(int? activityType)
@@ -96,7 +110,7 @@
                 settings = this.orderAccountSettingsProxyService.GetFieldsSettingsOverviews(this.OperationContext);
             }
 
-            List<GridModel> gridModels = GridModel.BuildGrid(models, settings);
+            List<GridModel> gridModels = GridModel.BuildGrid(models, settings, filter.SortField);
 
             return this.PartialView("Grids", gridModels);
         }
@@ -104,12 +118,16 @@
         [HttpGet]
         public ViewResult Edit(int id, int activityType)
         {
+            this.userTemporaryFilesStorage.ResetCacheForObject(id);
+            this.userEditorValuesStorage.ClearObjectDeletedFiles(id);
+
             AccountForEdit model = this.orderAccountProxyService.Get(id);
             AccountFieldsSettingsForModelEdit settings =
                 this.orderAccountSettingsProxyService.GetFieldsSettingsForModelEdit(activityType, OperationContext);
             AccountOptionsResponse options = this.orderAccountProxyService.GetOptions(activityType, OperationContext);
+            HeadersFieldSettings headers = this.orderAccountSettingsProxyService.GetHeadersFieldSettings(activityType);
 
-            AccountModel viewModel = this.orderModelMapper.BuildViewModel(model, options, settings);
+            AccountModel viewModel = this.orderModelMapper.BuildViewModel(model, options, settings, headers);
 
             return this.View(viewModel);
         }
@@ -118,7 +136,22 @@
         [BadRequestOnNotValid]
         public RedirectToRouteResult Edit(AccountModel model, string clickedButton)
         {
-            AccountForUpdate dto = this.accountDtoMapper.BuidForUpdate(model, null, OperationContext); // todo
+            WebTemporaryFile file = null;
+            List<string> deletedRegistrationFiles = this.userEditorValuesStorage.FindDeletedFileNames(model.Id);
+            List<WebTemporaryFile> newRegistrationFiles = this.userTemporaryFilesStorage.FindFiles(model.Id);
+
+            if (!deletedRegistrationFiles.Any())
+            {
+                if (newRegistrationFiles.Any())
+                {
+                    file = newRegistrationFiles.SingleOrDefault();
+                }
+            }
+
+            this.userTemporaryFilesStorage.ResetCacheForObject(model.Id);
+            this.userEditorValuesStorage.ClearObjectDeletedFiles(model.Id);
+
+            AccountForUpdate dto = this.accountDtoMapper.BuidForUpdate(model, file, OperationContext);
             this.orderAccountProxyService.Update(dto, this.OperationContext);
 
             if (clickedButton == ClickedButton.Save)
@@ -148,11 +181,15 @@
             IdAndNameOverview activity =
                 this.orderAccountProxyService.GetAccountActivityItemOverview(activityTypeForEdit);
 
+            HeadersFieldSettings headers =
+                this.orderAccountSettingsProxyService.GetHeadersFieldSettings(activityTypeForEdit);
+
             AccountModel viewModel = this.orderModelMapper.BuildViewModel(
                 activityTypeForEdit,
                 options,
                 settings,
-                SessionFacade.CurrentUser);
+                SessionFacade.CurrentUser,
+                headers);
             viewModel.ActivityName = activity.Name;
 
             return this.View("New", viewModel);
@@ -162,13 +199,20 @@
         [BadRequestOnNotValid]
         public RedirectToRouteResult New(AccountModel model, string clickedButton)
         {
-            AccountForInsert dto = this.accountDtoMapper.BuidForInsert(model, null, OperationContext); // todo
+            string guid = model.Guid;
+
+            WebTemporaryFile registrationFile =
+                this.userTemporaryFilesStorage.FindFiles(guid).SingleOrDefault();
+
+            AccountForInsert dto = this.accountDtoMapper.BuidForInsert(model, registrationFile, OperationContext);
             int id = this.orderAccountProxyService.Add(dto, this.OperationContext);
 
             if (clickedButton == ClickedButton.Save)
             {
                 return this.RedirectToAction("Edit", new { id, activityType = dto.ActivityId });
             }
+
+            this.userTemporaryFilesStorage.ResetCacheForObject(guid);
 
             return this.RedirectToAction("Index", new { activityType = dto.ActivityId });
         }
@@ -179,6 +223,120 @@
             this.orderAccountProxyService.Delete(id);
 
             return this.RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public JsonResult SearchDepartmentsByRegionId(int? selected)
+        {
+            List<ItemOverview> models = this.organizationService.GetDepartments(
+                SessionFacade.CurrentCustomer.Id,
+                selected);
+            return this.Json(models, JsonRequestBehavior.AllowGet);
+        }
+
+        public PartialViewResult AttachedFile(string orderId)
+        {
+            string fileName;
+
+            if (GuidHelper.IsGuid(orderId))
+            {
+                fileName = this.userTemporaryFilesStorage.FindFileNames(orderId).SingleOrDefault();
+            }
+            else
+            {
+                string savedFile = this.userTemporaryFilesStorage.FindFileNames(orderId).SingleOrDefault();
+
+                if (!string.IsNullOrWhiteSpace(savedFile))
+                {
+                    fileName = savedFile;
+                }
+                else
+                {
+                    List<string> deletedFileNames = this.userEditorValuesStorage.FindDeletedFileNames(int.Parse(orderId));
+                    fileName = deletedFileNames.Any()
+                                   ? null
+                                   : this.orderAccountProxyService.GetFileName(int.Parse(orderId));
+                }
+            }
+
+            var model = new FilesModel(orderId, fileName);
+            return this.PartialView(model);
+        }
+
+        [HttpPost]
+        public RedirectToRouteResult UploadFile(string orderId, string name)
+        {
+            var uploadedFile = this.Request.Files[0];
+
+            if (uploadedFile == null)
+            {
+                throw new HttpException((int)HttpStatusCode.NoContent, null);
+            }
+
+            var uploadedData = new byte[uploadedFile.InputStream.Length];
+            uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
+
+            if (this.userTemporaryFilesStorage.FileExists(name, orderId))
+            {
+                throw new HttpException((int)HttpStatusCode.Conflict, null);
+            }
+
+            // if (GuidHelper.IsGuid(orderId))
+            // {
+
+            if (this.userTemporaryFilesStorage.FindFileNames(orderId).Any())
+            {
+                this.userTemporaryFilesStorage.DeleteFile(name, orderId);
+            }
+
+            this.userTemporaryFilesStorage.AddFile(uploadedData, name, orderId);
+            
+            // }
+
+            return this.RedirectToAction("AttachedFile", new { orderId });
+        }
+
+        [HttpGet]
+        public FileContentResult DownloadFile(string orderId, string fileName)
+        {
+            byte[] fileContent;
+
+            if (GuidHelper.IsGuid(orderId))
+            {
+                fileContent = this.userTemporaryFilesStorage.GetFileContent(fileName, orderId);
+            }
+            else
+            {
+                var fileInWebStorage = this.userTemporaryFilesStorage.FileExists(fileName, orderId);
+
+                fileContent = fileInWebStorage
+                                  ? this.userTemporaryFilesStorage.GetFileContent(fileName, orderId)
+                                  : this.orderAccountProxyService.GetFileContent(int.Parse(orderId));
+            }
+
+            return this.File(fileContent, MimeType.BinaryFile, fileName);
+        }
+
+        [HttpPost]
+        public RedirectToRouteResult DeleteFile(string orderId, string fileName)
+        {
+            if (GuidHelper.IsGuid(orderId))
+            {
+                this.userTemporaryFilesStorage.DeleteFile(fileName, orderId);
+            }
+            else
+            {
+                if (this.userTemporaryFilesStorage.FileExists(fileName, orderId))
+                {
+                    this.userTemporaryFilesStorage.DeleteFile(fileName, orderId);
+                }
+                else
+                {
+                    this.userEditorValuesStorage.AddDeletedFile(fileName, int.Parse(orderId));
+                }
+            }
+
+            return this.RedirectToAction("AttachedFile", new { orderId });
         }
     }
 }

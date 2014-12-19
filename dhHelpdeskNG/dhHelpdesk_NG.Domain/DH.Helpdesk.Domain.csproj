@@ -125,6 +125,7 @@
     <Compile Include="Invoice\CaseInvoiceSettingsEntity.cs" />
     <Compile Include="Orders\OrderHistoryEntity.cs" />
     <Compile Include="Orders\OrderPropertyEntity.cs" />
+    <Compile Include="Survey.cs" />
     <Compile Include="TextType.cs" />
     <Compile Include="DocumentSearch.cs" />
     <Compile Include="Faq\FaqCategoryEntity.cs" />
