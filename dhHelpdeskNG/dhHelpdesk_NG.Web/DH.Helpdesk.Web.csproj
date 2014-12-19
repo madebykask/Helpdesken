@@ -14,7 +14,6 @@
     <RootNamespace>DH.Helpdesk.Web</RootNamespace>
     <AssemblyName>DH.Helpdesk.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <SccProjectName>
@@ -70,19 +69,6 @@
     <Reference Include="DataAnnotationsExtensions.ClientValidation">
       <HintPath>..\packages\DataAnnotationsExtensions.MVC3.1.1.0.0\lib\NETFramework40\DataAnnotationsExtensions.ClientValidation.dll</HintPath>
     </Reference>
-    <Reference Include="ECT.Core">
-      <HintPath>FormLibContent\Assemblies\ECT.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="ECT.FormLib, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>FormLibContent\Assemblies\ECT.FormLib.dll</HintPath>
-    </Reference>
-    <Reference Include="ECT.Model">
-      <HintPath>FormLibContent\Assemblies\ECT.Model.dll</HintPath>
-    </Reference>
-    <Reference Include="ECT.Service">
-      <HintPath>FormLibContent\Assemblies\ECT.Service.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.6.1.0\lib\net40\EntityFramework.dll</HintPath>
     </Reference>
@@ -125,7 +111,6 @@
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.Linq" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.dll</HintPath>
     </Reference>
@@ -135,7 +120,7 @@
     <Reference Include="System.Net.Http.WebRequest, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.WebRequest.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.DataVisualization" />
+    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.Extensions" />
@@ -389,12 +374,10 @@
     <Content Include="Content\img\ico-license.png" />
     <Content Include="Content\img\throbber.gif" />
     <Content Include="Content\img\transp50.png" />
-    <Content Include="Content\js\Account\order.js" />
     <Content Include="Content\js\bootstrap-switch.js" />
     <Content Include="Content\js\bootstrap-switch.min.js" />
     <Content Include="Content\js\Cases\case.templates.js" />
     <Content Include="Content\js\Cases\edit.logic.js" />
-    <Content Include="Content\js\CaseTemplates\edit.logic.js" />
     <Content Include="Content\js\Changes\inventoryDialog.js" />
     <Compile Include="Areas\Inventory\Controllers\ComputerInventoryBaseController.cs" />
     <Compile Include="Areas\Inventory\Controllers\ComputerModelController.cs" />
@@ -640,7 +623,6 @@
     <Compile Include="Areas\OrderAccounts\Models\Order\Edit\ClickedButton.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Order\Edit\Contact.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Order\Edit\DeliveryInformation.cs" />
-    <Compile Include="Areas\OrderAccounts\Models\Order\Edit\FilesModel.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Order\Edit\Orderer.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Order\Edit\Other.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Order\Edit\Program.cs" />
@@ -656,7 +638,6 @@
     <Compile Include="Areas\OrderAccounts\Models\Settings\FieldSettings\DeliveryInformationFieldSettings.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Settings\FieldSettings\FieldSetting.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Settings\FieldSettings\FieldSettingMultipleChoices.cs" />
-    <Compile Include="Areas\OrderAccounts\Models\Settings\FieldSettings\HeadersFieldSettingsModel.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Settings\FieldSettings\OrdererFieldSettings.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Settings\FieldSettings\OtherFieldSettings.cs" />
     <Compile Include="Areas\OrderAccounts\Models\Settings\FieldSettings\ProgramFieldSettings.cs" />
@@ -667,16 +648,12 @@
     <Compile Include="Areas\Orders\Controllers\OrdersController.cs" />
     <Compile Include="Areas\Orders\Controllers\OrderFieldSettingsController.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\Concrete\ConfigurableFieldModelFactory.cs" />
-    <Compile Include="Areas\Orders\Infrastructure\ModelFactories\Concrete\HistoryModelFactory.cs" />
-    <Compile Include="Areas\Orders\Infrastructure\ModelFactories\Concrete\LogsModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\Concrete\NewOrderModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\Concrete\OrderFieldSettingsModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\Concrete\OrderModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\Concrete\OrdersModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\Concrete\UpdateOrderModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\IConfigurableFieldModelFactory.cs" />
-    <Compile Include="Areas\Orders\Infrastructure\ModelFactories\IHistoryModelFactory.cs" />
-    <Compile Include="Areas\Orders\Infrastructure\ModelFactories\ILogsModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\INewOrderModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\IOrderFieldSettingsModelFactory.cs" />
     <Compile Include="Areas\Orders\Infrastructure\ModelFactories\IOrderModelFactory.cs" />
@@ -705,9 +682,6 @@
     <Compile Include="Areas\Orders\Models\OrderFieldSettings\OrderFieldSettingsIndexModel.cs" />
     <Compile Include="Areas\Orders\Models\Order\FieldModels\AttachedFilesModel.cs" />
     <Compile Include="Areas\Orders\Models\Order\FieldModels\ConfigurableFieldModel.cs" />
-    <Compile Include="Areas\Orders\Models\Order\FieldModels\FieldDifferencesModel.cs" />
-    <Compile Include="Areas\Orders\Models\Order\FieldModels\HistoryModel.cs" />
-    <Compile Include="Areas\Orders\Models\Order\FieldModels\HistoryRecordModel.cs" />
     <Compile Include="Areas\Orders\Models\Order\FieldModels\ProgramModel.cs" />
     <Compile Include="Areas\Orders\Models\Order\FieldModels\ProgramsModel.cs" />
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\DeliveryEditModel.cs" />
@@ -755,7 +729,6 @@
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Areas\Admin\Controllers\UsersController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
-    <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\UserInteractionController.cs" />
     <Compile Include="Areas\Inventory\Controllers\WorkstationController.cs" />
@@ -1016,8 +989,6 @@
     <Compile Include="Infrastructure\LocalizedAttributes\Rules\ModelClientValidationRequiredFromRule.cs" />
     <Compile Include="Models\BulletinBoardInputViewModel.cs" />
     <Compile Include="Models\CalendarInputViewModel.cs" />
-    <Compile Include="Models\Reports\CaseSatisfactionOptions.cs" />
-    <Compile Include="Models\CaseSatisfactionReport.cs" />
     <Compile Include="Models\CaseSolutionSettingModel.cs" />
     <Compile Include="Models\Case\CaseFilesModel.cs" />
     <Compile Include="Models\Case\CaseFilterSeachBoxes.cs" />
@@ -1186,7 +1157,6 @@
     <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Areas\Admin\Models\UserViewModel.cs" />
     <Compile Include="Models\Shared\SendToDialogModel.cs" />
-    <Compile Include="Models\SurveyViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -1659,10 +1629,8 @@
     <Content Include="Areas\OrderAccounts\Views\Orders\EditorTemplates\Program.cshtml" />
     <Content Include="Areas\OrderAccounts\Views\Orders\DisplayTemplates\Fields\IntLabel.cshtml" />
     <Content Include="Areas\OrderAccounts\Views\Orders\EditorTemplates\Other.cshtml" />
-    <Content Include="Areas\OrderAccounts\Views\Orders\AttachedFile.cshtml" />
+    <Content Include="Areas\OrderAccounts\Views\Orders\AttachedFiles.cshtml" />
     <Content Include="Areas\OrderAccounts\Views\Orders\DisplayTemplates\Fields\DecimalLabel.cshtml" />
-    <Content Include="Areas\Orders\Views\Orders\DisplayTemplates\HistoryModel.cshtml" />
-    <Content Include="Areas\Orders\Views\Orders\DisplayTemplates\HistoryRecordModel.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />
@@ -2020,10 +1988,6 @@
     <Content Include="Views\CheckList\_ServiceInput.cshtml" />
     <Content Include="Views\CheckList\New.cshtml" />
     <Content Include="Views\CheckList\_NewServices.cshtml" />
-    <Content Include="Views\Reports\CaseSatisfactionReport.cshtml" />
-    <Content Include="Views\Survey\Vote.cshtml" />
-    <Content Include="Views\Survey\VoteError.cshtml" />
-    <Content Include="Views\Reports\SurveySatisfactionOptions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
@@ -2832,17 +2796,6 @@
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
           <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
-          <UseIIS>False</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>61976</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>
-          </IISUrl>
-          <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
-          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>
