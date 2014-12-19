@@ -2,9 +2,13 @@
 {
     public sealed class FilesModel
     {
-        public FilesModel(string id, string file)
+        public FilesModel()
         {
-            this.OrderId = id;
+        }
+
+        public FilesModel(string orderId, string file)
+        {
+            this.OrderId = orderId;
             this.File = file;
         }
 

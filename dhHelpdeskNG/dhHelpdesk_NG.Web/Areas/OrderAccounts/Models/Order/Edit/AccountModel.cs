@@ -32,6 +32,8 @@
 
         public int Id { get; set; }
 
+        public string Guid { get; set; }
+
         public int ActivityTypeId { get; set; }
 
         public string ActivityName { get; set; }

@@ -197,13 +197,14 @@
 
         [HttpPost]
         [BadRequestOnNotValid]
-        public RedirectToRouteResult New(AccountModel model, string clickedButton, string guid)
+        public RedirectToRouteResult New(AccountModel model, string clickedButton)
         {
-            // todo need to use mappers
-            WebTemporaryFile registrationFile = this.userTemporaryFilesStorage.FindFiles(guid).SingleOrDefault();
+            string guid = model.Guid;
+
+            WebTemporaryFile registrationFile =
+                this.userTemporaryFilesStorage.FindFiles(guid).SingleOrDefault();
 
             AccountForInsert dto = this.accountDtoMapper.BuidForInsert(model, registrationFile, OperationContext);
-            // todo
             int id = this.orderAccountProxyService.Add(dto, this.OperationContext);
 
             if (clickedButton == ClickedButton.Save)
@@ -243,10 +244,19 @@
             }
             else
             {
-                List<string> deletedFileNames = this.userEditorValuesStorage.FindDeletedFileNames(int.Parse(orderId));
-                List<string> savedFiles = this.userTemporaryFilesStorage.FindFileNames(orderId);
+                string savedFile = this.userTemporaryFilesStorage.FindFileNames(orderId).SingleOrDefault();
 
-                fileName = deletedFileNames.Any() ? null : this.orderAccountProxyService.GetFileName(int.Parse(orderId));
+                if (!string.IsNullOrWhiteSpace(savedFile))
+                {
+                    fileName = savedFile;
+                }
+                else
+                {
+                    List<string> deletedFileNames = this.userEditorValuesStorage.FindDeletedFileNames(int.Parse(orderId));
+                    fileName = deletedFileNames.Any()
+                                   ? null
+                                   : this.orderAccountProxyService.GetFileName(int.Parse(orderId));
+                }
             }
 
             var model = new FilesModel(orderId, fileName);
@@ -278,6 +288,7 @@
             {
                 this.userTemporaryFilesStorage.DeleteFile(name, orderId);
             }
+
             this.userTemporaryFilesStorage.AddFile(uploadedData, name, orderId);
             
             // }

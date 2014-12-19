@@ -240,7 +240,7 @@
             return new BusinessData.Models.Accounts.Other(
                 caseNumberDecimal,
                 info,
-                file.File,
+                tempFile == null ? null : tempFile.Name,
                 tempFile == null ? null : tempFile.Content);
         }
     }

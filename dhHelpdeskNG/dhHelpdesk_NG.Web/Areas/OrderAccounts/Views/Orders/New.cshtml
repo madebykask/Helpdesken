@@ -22,7 +22,7 @@
     <script type="text/javascript">
         $(function() {
             var parameters = {
-                id: '@Model.Other.FileName.Value.OrderId',
+                id: '@Model.Guid',
                 uploadFileUrl: '@Url.Action("UploadFile")',
                 deleteFileUrl: '@Url.Action("DeleteFile")',
             };
@@ -76,6 +76,7 @@
         </div>
 
         @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.Guid)
         @Html.HiddenFor(m => m.ActivityTypeId)
         @Html.EditorFor(m => m.Orderer, new { Header = Model.Headers.OrderLabel })
         @Html.EditorFor(m => m.User, new { Header = Model.Headers.UserLabel })

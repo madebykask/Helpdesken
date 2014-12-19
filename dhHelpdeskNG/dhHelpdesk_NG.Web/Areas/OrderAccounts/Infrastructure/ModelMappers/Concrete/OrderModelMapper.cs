@@ -11,7 +11,6 @@
     using DH.Helpdesk.BusinessData.Models.Accounts.AccountSettings.Read.ModelEdit;
     using DH.Helpdesk.BusinessData.Models.Accounts.Read.Edit;
     using DH.Helpdesk.BusinessData.Models.Accounts.Read.Overview;
-    using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.Services.Response.Account;
@@ -53,7 +52,8 @@
                                model.ChangedDate,
                            ChangedByUserName =
                                model.ChangedByUser,
-                           Headers = headers
+                           Headers = headers,
+                           Guid = model.Id.ToString(CultureInfo.InvariantCulture)
                        };
         }
 
@@ -65,13 +65,16 @@
             var contact = MapContact(options, settings);
             var delivery = MapDeliveryInformation(options, settings);
             var program = MapProgram(options, settings);
-            var other = MapOther(options, settings);
+
+            string guid = Guid.NewGuid().ToString();
+            var other = MapOther(options, settings, guid);
 
             return new AccountModel(order, user, account, contact, delivery, program, other)
             {
                 ActivityTypeId =
                     activityId,
-                Headers = headers
+                Headers = headers,
+                Guid = guid
             };
         }
 
@@ -318,7 +321,7 @@
             ConfigurableFieldModel<FilesModel> fileName;
             if (settings.Other.FileName.IsShowInDetails)
             {
-                var fileNameModel = new FilesModel(model.Id.ToString(), model.Other.FileName);
+                var fileNameModel = new FilesModel(model.Id.ToString(CultureInfo.InvariantCulture), model.Other.FileName);
                 fileName = new ConfigurableFieldModel<FilesModel>(
                     settings.Other.FileName.Caption,
                     fileNameModel,
@@ -560,7 +563,7 @@
             return new Program(info, programId, programsSelectList);
         }
 
-        private static Other MapOther(AccountOptionsResponse options, AccountFieldsSettingsForModelEdit settings)
+        private static Other MapOther(AccountOptionsResponse options, AccountFieldsSettingsForModelEdit settings, string guid)
         {
             var caseNumber = CreateNullableDecimalField(settings.Other.CaseNumber, null);
             var info = CreateStringField(settings.Other.Info, null);
@@ -568,7 +571,7 @@
             ConfigurableFieldModel<FilesModel> fileName;
             if (settings.Other.FileName.IsShowInDetails)
             {
-                var fileNameModel = new FilesModel(Guid.NewGuid().ToString(), null);
+                var fileNameModel = new FilesModel(guid, null);
                 fileName = new ConfigurableFieldModel<FilesModel>(
                     settings.Other.FileName.Caption,
                     fileNameModel,
