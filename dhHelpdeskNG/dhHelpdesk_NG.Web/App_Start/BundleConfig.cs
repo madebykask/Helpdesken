@@ -4,6 +4,11 @@
 
     public static class BundleConfig
     {
+        public struct ScriptNames
+        {
+            public const string Container = "~/bundles/container";
+        }
+
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new StyleBundle("~/img-profile/css").Include(
@@ -24,6 +29,9 @@
             bundles.Add(new StyleBundle("~/Content/css/popup").Include(
                             "~/Content/css/*.css",
                             "~/Content/themes/base/minified/jquery-ui.min.css"));
+
+            bundles.Add(new ScriptBundle(ScriptNames.Container).Include(
+                  "~/Content/js/Container/init.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/common").Include(
                             "~/Content/js/jquery-1.8.3.min.js",
@@ -159,6 +167,11 @@
 
             bundles.Add(new ScriptBundle("~/bundles/orders/order").Include(
                             "~/Content/js/Orders/order.js"));
+
+            BundleTable.EnableOptimizations = true;
+#if DEBUG
+            BundleTable.EnableOptimizations = false;
+#endif
         }
     }
 }

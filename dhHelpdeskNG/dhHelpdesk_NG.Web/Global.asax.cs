@@ -44,6 +44,8 @@
 
         protected void Application_Start()
         {
+            
+
             AreaRegistration.RegisterAllAreas();
 
             // No need to load all view engines
@@ -56,6 +58,8 @@
             RegisterBinders();
             ProcessStartupTasks();
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            ECT.FormLib.FormLibSetup.Setup();
         }
 
         protected void Application_BeginRequest(object sender, EventArgs e)
