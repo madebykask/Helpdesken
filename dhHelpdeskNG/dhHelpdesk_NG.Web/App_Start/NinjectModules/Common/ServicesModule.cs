@@ -133,6 +133,9 @@
             this.Bind<IOrderAccountSettingsProxyService>().To<OrderAccountSettingsProxyService>();
 
             this.Bind<IOrderAccountDefaultSettingsCreator>().To<OrderAccountDefaultSettingsCreator>();
+            
+            // Survey service
+            this.Bind<ISurveyService>().To<SurveyService>();
         }
 
         #endregion

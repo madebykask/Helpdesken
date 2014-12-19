@@ -107,6 +107,7 @@
       <HintPath>..\packages\RazorPDF.1.0.0\lib\net40\RazorPDF.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.dll</HintPath>
     </Reference>
@@ -116,6 +117,7 @@
     <Reference Include="System.Net.Http.WebRequest, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.WebRequest.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web.DataVisualization" />
     <Reference Include="System.Web.Helpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.1.0.20105.408\lib\net40\System.Web.Helpers.dll</HintPath>
@@ -737,6 +739,7 @@
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Areas\Admin\Controllers\UsersController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
+    <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\UserInteractionController.cs" />
     <Compile Include="Areas\Inventory\Controllers\WorkstationController.cs" />
@@ -997,6 +1000,8 @@
     <Compile Include="Infrastructure\LocalizedAttributes\Rules\ModelClientValidationRequiredFromRule.cs" />
     <Compile Include="Models\BulletinBoardInputViewModel.cs" />
     <Compile Include="Models\CalendarInputViewModel.cs" />
+    <Compile Include="Models\Reports\CaseSatisfactionOptions.cs" />
+    <Compile Include="Models\CaseSatisfactionReport.cs" />
     <Compile Include="Models\CaseSolutionSettingModel.cs" />
     <Compile Include="Models\Case\CaseFilesModel.cs" />
     <Compile Include="Models\Case\CaseFilterSeachBoxes.cs" />
@@ -1165,6 +1170,7 @@
     <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Areas\Admin\Models\UserViewModel.cs" />
     <Compile Include="Models\Shared\SendToDialogModel.cs" />
+    <Compile Include="Models\SurveyViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -1997,6 +2003,10 @@
     <Content Include="Views\CheckList\_ServiceInput.cshtml" />
     <Content Include="Views\CheckList\New.cshtml" />
     <Content Include="Views\CheckList\_NewServices.cshtml" />
+    <Content Include="Views\Reports\CaseSatisfactionReport.cshtml" />
+    <Content Include="Views\Survey\Vote.cshtml" />
+    <Content Include="Views\Survey\VoteError.cshtml" />
+    <Content Include="Views\Reports\SurveySatisfactionOptions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

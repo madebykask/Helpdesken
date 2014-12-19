@@ -27,6 +27,8 @@
 
         private readonly IUserService userService;
 
+        private readonly ISurveyService sureyService;
+
         public ReportsService(
             IReportCustomerRepository reportCustomerRepository, 
             IWorkingGroupService workingGroupService, 
@@ -35,7 +37,8 @@
             ICustomerRepository customerRepository, 
             ICaseService caseService, 
             IDepartmentService departmentService, 
-            IUserService userService)
+            IUserService userService,
+            ISurveyService surveyService)
         {
             this.reportCustomerRepository = reportCustomerRepository;
             this.workingGroupService = workingGroupService;
@@ -45,6 +48,7 @@
             this.caseService = caseService;
             this.departmentService = departmentService;
             this.userService = userService;
+            this.sureyService = surveyService;
         }
 
         public SearchData GetSearchData(OperationContext context)
@@ -181,6 +185,26 @@
                                             department,
                                             caseTypes,
                                             workingGroup);
+        }
+
+        public CaseSatisfactionOptionsResponse GetCaseSatisfactionOptionsResponse(OperationContext context)
+        {
+            var productAreas = this.productAreaService.GetProductAreas(context.CustomerId);
+            var caseTypes = this.caseTypeService.GetOverviews(context.CustomerId);
+            var workingGroups = this.workingGroupService.GetOverviews(context.CustomerId);
+            return new CaseSatisfactionOptionsResponse(workingGroups, caseTypes, productAreas);
+        }
+
+        public CaseSatisfactionReportResponse GetCaseSatisfactionResponse(
+            int customerId,
+            DateTime finishingDateFrom,
+            DateTime finishingDateTo,
+            int[] selectedCaseTypes,
+            int? selectedProductArea,
+            int[] selectedWorkingGroups)
+        {
+            var res = this.sureyService.GetSurveyStat(customerId, finishingDateFrom, finishingDateTo, selectedCaseTypes, selectedProductArea, selectedWorkingGroups);
+            return new CaseSatisfactionReportResponse(res.Item1, res.Item2, res.Item3, res.Item4);
         }
     }
 }

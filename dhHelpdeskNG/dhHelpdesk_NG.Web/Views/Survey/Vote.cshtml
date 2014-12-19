@@ -1,0 +1,15 @@
+﻿@model DH.Helpdesk.Web.Models.SurveyViewModel
+           
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs"><li class="active"><a href="#fragment=1">@Translation.Get("Ärende") @ViewBag.CaseNumber</a></li></ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active">
+                <div class="container">
+                    <h2>Thank you for your vote.</h2>
+                    <div>You voted for "@Model.SurveyTextResult"</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -163,6 +163,22 @@
             return this.temporaryFilesCache.FindFilePath(fileName, objectId);
         }
 
+        public void CreateCaseSatisfactionReport(int goodVotes, int normalVotes, int badVotes, int count, out ReportFile file)
+        {
+            var y = new List<string>() { goodVotes.ToString(), normalVotes.ToString(), badVotes.ToString(), count.ToString() };
+            var x = new List<string>() { Translation.Get("Good"), Translation.Get("Normal"), Translation.Get("Bad"), Translation.Get("Count") };
+
+            var chart = this.CreateChart()
+                .AddSeries(
+                        xValue: x,
+                        yValues: y,
+                        chartType: "Column");
+            string objectId;
+            string fileName;
+            this.SaveToCache(chart, out objectId, out fileName);
+            file = new ReportFile(objectId, fileName);
+        }
+
         private void SaveToCache(
                         Chart chart,
                         out string objectId,

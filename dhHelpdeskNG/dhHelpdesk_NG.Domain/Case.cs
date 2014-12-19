@@ -115,5 +115,10 @@
         /// Gets or sets the causing type.
         /// </summary>
         public virtual CausingPart CausingPart { get; set; }
+
+        public bool IsClosed()
+        {
+            return this.FinishingDate != null;
+        }
     }
 }

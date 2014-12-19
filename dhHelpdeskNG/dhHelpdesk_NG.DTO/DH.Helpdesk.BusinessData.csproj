@@ -316,6 +316,8 @@
     <Compile Include="Models\Questionnaire\Read\QuestionnaireQuestionOverview.cs" />
     <Compile Include="Models\Questionnaire\Write\Answer.cs" />
     <Compile Include="Models\Questionnaire\Write\ParticipantForInsert.cs" />
+    <Compile Include="Models\Reports\Output\CaseSatisfactionReportResponse.cs" />
+    <Compile Include="Models\Reports\Output\CaseSatisfactionOptionsResponse.cs" />
     <Compile Include="Models\TextList.cs" />
     <Compile Include="Models\Interfaces\IHierarchyItem.cs" />
     <Compile Include="Models\ActionSetting\ActionSetting.cs" />

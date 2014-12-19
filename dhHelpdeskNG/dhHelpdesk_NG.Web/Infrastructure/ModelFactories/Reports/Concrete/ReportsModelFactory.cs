@@ -204,6 +204,32 @@
             return instance;
         }
 
+        public CaseSatisfactionOptions CreateCaseSatisfactionOptions(OperationContext context)
+        {
+            var response = this.reportsService.GetRegistratedCasesCaseTypeOptionsResponse(context);
+            var workingGroups = CreateMultiSelectField(response.WorkingGroups);
+            var caseTypes = CreateMultiSelectField(response.CaseTypes);
+            var productAreas = response.ProductAreas;
+            var today = DateTime.Today;
+            var instance = new CaseSatisfactionOptions(caseTypes, workingGroups, productAreas, today.AddYears(-1), today, context.CustomerId);          
+            return instance;
+        }
+
+        public CaseSatisfactionReport CreateCaseSatisfactionReport(CaseSatisfactionOptions options, OperationContext context)
+        {
+            var response = this.reportsService.GetCaseSatisfactionResponse(
+                context.CustomerId,
+                options.PeriodFrom,
+                options.PeriodUntil,
+                options.CaseTypeIds.ToArray(),
+                options.ProductAreaId,
+                options.WorkingGroupIds.ToArray());
+            ReportFile file;
+            this.reportsHelper.CreateCaseSatisfactionReport(response.GoodVotes, response.NormalVotes, response.BadVotes, response.Count, out file);
+            var instance = new CaseSatisfactionReport(response.GoodVotes, response.NormalVotes, response.BadVotes, response.Count, file);
+            return instance;
+        }
+
         private static SelectList CreateListField(
             IEnumerable<ItemOverview> items,
             int selectedId)

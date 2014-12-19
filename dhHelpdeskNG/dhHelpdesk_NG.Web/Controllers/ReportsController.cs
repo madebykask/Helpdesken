@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Controllers
 {
+    using System;
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models.Reports;
@@ -87,6 +88,10 @@
                     return this.PartialView(
                                 "AverageSolutionTimeOptions",
                                 this.reportsModelFactory.CreateAverageSolutionTimeOptions(this.OperationContext));
+                case ReportType.CaseSatisfaction:
+                    return this.PartialView(
+                                "SurveySatisfactionOptions",
+                                this.reportsModelFactory.CreateCaseSatisfactionOptions(this.OperationContext));
             }
 
             return null;
@@ -140,6 +145,13 @@
             return new FileContentResult(
                                 this.reportsHelper.GetReportImageFromCache(objectId, fileName),
                                 MimeHelper.GetMimeType(fileName));
+        }
+
+        [HttpPost]
+        public ActionResult CaseSatisfactionReport(CaseSatisfactionOptions options)
+        {
+            var model = this.reportsModelFactory.CreateCaseSatisfactionReport(options, this.OperationContext);
+            return this.View("CaseSatisfactionReport", model);
         }
     }
 }

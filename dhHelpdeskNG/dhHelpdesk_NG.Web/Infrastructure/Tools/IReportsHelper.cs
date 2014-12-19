@@ -49,5 +49,7 @@
         byte[] GetReportImageFromCache(string objectId, string fileName);
 
         string GetReportPathFromCache(string objectId, string fileName);
+
+        void CreateCaseSatisfactionReport(int goodVotes, int normalVotes, int badVotes, int count, out ReportFile file);
     }
 }

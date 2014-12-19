@@ -16,6 +16,7 @@
         AverageSolutionTime = 13,
         RegistrationSource = 20,
         ResponseTime = 22,
-        ReportGenerator = 18
+        ReportGenerator = 18,
+        CaseSatisfaction = 23
     }
 }

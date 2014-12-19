@@ -5,6 +5,7 @@
     using System.Web.Configuration;
     using System.Web.Mvc;
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Reports;
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services;
@@ -210,6 +211,8 @@
                     o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Svarstid", Enums.TranslationSource.TextTranslation);
                 if (rep.Id == 18)
                     o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Rapportgenerator", Enums.TranslationSource.TextTranslation);
+                if (rep.Id == (int)ReportType.CaseSatisfaction)
+                    o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Case satisfaction", Enums.TranslationSource.TextTranslation);
 
                 reportList.Add(o);
             }
