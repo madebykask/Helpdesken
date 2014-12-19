@@ -59,7 +59,7 @@
             ProcessStartupTasks();
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            ECT.FormLib.FormLibSetup.Setup();
+            // ECT.FormLib.FormLibSetup.Setup(); todo
         }
 
         protected void Application_BeginRequest(object sender, EventArgs e)
