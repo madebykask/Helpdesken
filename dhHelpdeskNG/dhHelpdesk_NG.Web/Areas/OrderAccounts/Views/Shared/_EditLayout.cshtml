@@ -1,5 +1,38 @@
-﻿@{
+﻿@using System.Web.Optimization
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts
+{
+    <script>
+        $(function() {
+            $("#saveButton, #saveAndCloseButton").click(function() {
+                $('#clickedButton').val($(this).val());
+                $('#edit_form').submit();
+            });
+
+            $('.tagsinput').tagsinput('destroy'); // todo
+            $('.tagsinput').tagsinput({
+                maxTags: 10
+            });
+
+        })
+    </script>
+    
+    @Scripts.Render("~/bundles/orderaccounts/order")
+
+    <script type="text/javascript">
+        $(function() {
+            var parameters = {
+                id: '@Model.Guid',
+                uploadFileUrl: '@Url.Action("UploadFile")',
+                deleteFileUrl: '@Url.Action("DeleteFile")',
+            };
+
+            applyOrderAccountBehavior(parameters);
+        });
+    </script>
 }
 
 <div class="secnavs fixed">

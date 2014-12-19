@@ -47,8 +47,22 @@
     <div class="row">
         <div class="span12">
             <table class="tableform">
-                @*                @Html.EditorFor(m => m.Ids, "Fields/Text")*@
-                @*                @Html.EditorFor(m => m.PersonalIdentityNumber, "Fields/Text")*@
+                @if (Model.Ids.IsMultiple)
+                {
+                    @Html.EditorFor(m => m.Ids, "Fields/TagText")
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.Ids, "Fields/Text")
+                }
+                @if (Model.PersonalIdentityNumber.IsMultiple)
+                {
+                    @Html.EditorFor(m => m.PersonalIdentityNumber, "Fields/TagText")
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.PersonalIdentityNumber, "Fields/Text")
+                }
                 @Html.EditorFor(m => m.FirstName, "Fields/Text")
                 @Html.EditorFor(m => m.Initials, "Fields/Text")
                 @Html.EditorFor(m => m.LastName, "Fields/Text")

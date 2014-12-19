@@ -208,7 +208,7 @@
            NamedObjectCollection<AccountFieldSettings> existingSettings,
            DateTime changedDate)
         {
-            MapFieldSettings(
+            MapFieldSettingsMultipleChoices(
                 updatedSettings.Ids,
                 existingSettings.FindByName(ContactFields.Id),
                 changedDate);

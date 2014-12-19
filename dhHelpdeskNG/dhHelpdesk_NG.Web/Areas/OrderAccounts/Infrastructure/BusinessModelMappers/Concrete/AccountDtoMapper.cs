@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Accounts.Write;
@@ -90,8 +91,8 @@
                 return BusinessData.Models.Accounts.User.CreateDefault();
             }
 
-            var id = ConfigurableFieldModel<List<string>>.GetValueOrDefault(model.Ids);
-            var personnelNumber = ConfigurableFieldModel<List<string>>.GetValueOrDefault(model.PersonalIdentityNumber);
+            var id = ConfigurableFieldModel<string>.GetValueOrDefault(model.Ids);
+            var personnelNumber = ConfigurableFieldModel<string>.GetValueOrDefault(model.PersonalIdentityNumber);
             var firstName = ConfigurableFieldModel<string>.GetValueOrDefault(model.FirstName);
             var initials = ConfigurableFieldModel<string>.GetValueOrDefault(model.Initials);
             var lastName = ConfigurableFieldModel<string>.GetValueOrDefault(model.LastName);
@@ -116,11 +117,11 @@
             var referenceNumber = ConfigurableFieldModel<string>.GetValueOrDefault(model.ReferenceNumber);
 
             return new BusinessData.Models.Accounts.User(
-                id,
+                GetIds(id),
                 firstName,
                 initials,
                 lastName,
-                personnelNumber,
+                GetIds(personnelNumber),
                 phone,
                 extension,
                 eMail,
@@ -186,12 +187,12 @@
                 return BusinessData.Models.Accounts.Contact.CreateDefault();
             }
 
-            var id = ConfigurableFieldModel<List<string>>.GetValueOrDefault(model.Ids);
+            var id = ConfigurableFieldModel<string>.GetValueOrDefault(model.Ids);
             var name = ConfigurableFieldModel<string>.GetValueOrDefault(model.Name);
             var phone = ConfigurableFieldModel<string>.GetValueOrDefault(model.Phone);
             var email = ConfigurableFieldModel<string>.GetValueOrDefault(model.Email);
 
-            return new BusinessData.Models.Accounts.Contact(id, name, phone, email);
+            return new BusinessData.Models.Accounts.Contact(GetIds(id), name, phone, email);
         }
 
         private static BusinessData.Models.Accounts.DeliveryInformation MapDeliveryInformation(
@@ -242,6 +243,11 @@
                 info,
                 tempFile == null ? null : tempFile.Name,
                 tempFile == null ? null : tempFile.Content);
+        }
+
+        private static List<string> GetIds(string id)
+        {
+            return id == null ? new List<string>() : id.Split(',').ToList();
         }
     }
 }

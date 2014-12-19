@@ -13,11 +13,11 @@ namespace DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit
         }
 
         public User(
-            ConfigurableFieldModel<List<string>> ids,
+            ConfigurableFieldModelMultipleChoices<string> ids,
             ConfigurableFieldModel<string> firstName,
             ConfigurableFieldModel<string> initials,
             ConfigurableFieldModel<string> lastName,
-            ConfigurableFieldModel<List<string>> personalIdentityNumber,
+            ConfigurableFieldModelMultipleChoices<string> personalIdentityNumber,
             ConfigurableFieldModel<string> phone,
             ConfigurableFieldModel<string> extension,
             ConfigurableFieldModel<string> eMail,
@@ -70,7 +70,7 @@ namespace DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit
             this.Regions = regions;
         }
 
-        public ConfigurableFieldModel<List<string>> Ids { get; set; }
+        public ConfigurableFieldModelMultipleChoices<string> Ids { get; set; }
 
         public ConfigurableFieldModel<string> FirstName { get; set; }
 
@@ -78,7 +78,7 @@ namespace DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit
 
         public ConfigurableFieldModel<string> LastName { get; set; }
 
-        public ConfigurableFieldModel<List<string>> PersonalIdentityNumber { get; set; }
+        public ConfigurableFieldModelMultipleChoices<string> PersonalIdentityNumber { get; set; }
 
         public ConfigurableFieldModel<string> Phone { get; set; }
 

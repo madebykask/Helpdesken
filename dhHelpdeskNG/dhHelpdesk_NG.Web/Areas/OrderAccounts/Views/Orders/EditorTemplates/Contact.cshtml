@@ -3,16 +3,22 @@
 @{
     var header = ViewData["Header"] as string;
 }
-@if (Model.Ids.Show
-        || Model.Name.Show
-        || Model.Phone.Show
-        || Model.Email.Show)
+
+@if (Model.Ids.Show || Model.Name.Show || Model.Phone.Show || Model.Email.Show)
 {
     <h4>@Translation.Get(header)</h4>
     <div class="row">
         <div class="span12">
             <table class="tableform">
-                @*                @Html.EditorFor(m => m.Ids, "Fields/Text")*@
+                
+                @if (Model.Ids.IsMultiple)
+                {
+                    @Html.EditorFor(m => m.Ids, "Fields/TagText")
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.Ids, "Fields/Text")
+                }
                 @Html.EditorFor(m => m.Name, "Fields/Text")
                 @Html.EditorFor(m => m.Phone, "Fields/Text")
                 @Html.EditorFor(m => m.Email, "Fields/Text")

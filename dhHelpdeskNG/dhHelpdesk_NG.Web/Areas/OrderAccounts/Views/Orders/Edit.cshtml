@@ -1,35 +1,8 @@
-﻿@using System.Web.Optimization
-@using DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit
+﻿@using DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit
 @using DH.Helpdesk.Web.Infrastructure
 @model AccountModel
 @{
-    Layout = "~/Areas/Inventory/Views/Shared/_EditLayout.cshtml";
-}
-
-@section Scripts
-{
-    <script>
-        $(function() {
-            $("#saveButton, #saveAndCloseButton").click(function() {
-                $('#clickedButton').val($(this).val());
-                $('#edit_form').submit();
-            });
-        })
-    </script>
-    
-    @Scripts.Render("~/bundles/orderaccounts/order")
-
-    <script type="text/javascript">
-        $(function() {
-            var parameters = {
-                id: '@Model.Guid',
-                uploadFileUrl: '@Url.Action("UploadFile")',
-                deleteFileUrl: '@Url.Action("DeleteFile")',
-            };
-
-            applyOrderAccountBehavior(parameters);
-        });
-    </script>
+    Layout = "~/Areas/OrderAccounts/Views/Shared/_EditLayout.cshtml";
 }
 
 @section Actions

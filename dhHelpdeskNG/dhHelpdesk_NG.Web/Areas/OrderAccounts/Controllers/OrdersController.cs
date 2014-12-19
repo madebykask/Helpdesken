@@ -201,8 +201,7 @@
         {
             string guid = model.Guid;
 
-            WebTemporaryFile registrationFile =
-                this.userTemporaryFilesStorage.FindFiles(guid).SingleOrDefault();
+            WebTemporaryFile registrationFile = this.userTemporaryFilesStorage.FindFiles(guid).SingleOrDefault();
 
             AccountForInsert dto = this.accountDtoMapper.BuidForInsert(model, registrationFile, OperationContext);
             int id = this.orderAccountProxyService.Add(dto, this.OperationContext);
@@ -252,7 +251,8 @@
                 }
                 else
                 {
-                    List<string> deletedFileNames = this.userEditorValuesStorage.FindDeletedFileNames(int.Parse(orderId));
+                    List<string> deletedFileNames = this.userEditorValuesStorage.FindDeletedFileNames(
+                        int.Parse(orderId));
                     fileName = deletedFileNames.Any()
                                    ? null
                                    : this.orderAccountProxyService.GetFileName(int.Parse(orderId));
@@ -281,17 +281,12 @@
                 throw new HttpException((int)HttpStatusCode.Conflict, null);
             }
 
-            // if (GuidHelper.IsGuid(orderId))
-            // {
-
             if (this.userTemporaryFilesStorage.FindFileNames(orderId).Any())
             {
                 this.userTemporaryFilesStorage.DeleteFile(name, orderId);
             }
 
             this.userTemporaryFilesStorage.AddFile(uploadedData, name, orderId);
-            
-            // }
 
             return this.RedirectToAction("AttachedFile", new { orderId });
         }

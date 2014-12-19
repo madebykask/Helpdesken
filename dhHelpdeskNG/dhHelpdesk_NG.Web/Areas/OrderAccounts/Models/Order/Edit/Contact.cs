@@ -1,7 +1,5 @@
 ﻿namespace DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.Edit
 {
-    using System.Collections.Generic;
-
     using DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.FieldModels;
 
     public sealed class Contact
@@ -11,7 +9,7 @@
         }
 
         public Contact(
-            ConfigurableFieldModel<List<string>> ids,
+            ConfigurableFieldModelMultipleChoices<string> ids,
             ConfigurableFieldModel<string> name,
             ConfigurableFieldModel<string> phone,
             ConfigurableFieldModel<string> email)
@@ -22,7 +20,7 @@
             this.Email = email;
         }
 
-        public ConfigurableFieldModel<List<string>> Ids { get; set; }
+        public ConfigurableFieldModelMultipleChoices<string> Ids { get; set; }
 
         public ConfigurableFieldModel<string> Name { get; set; }
 

@@ -342,6 +342,9 @@
     <Compile Include="Areas\Admin\Models\SystemInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\UrgencyInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\WorkingGroupInputViewModel.cs" />
+    <Content Include="Content\bootstrap-tagsinput.css" />
+    <Content Include="Content\css\bootstrap-tagsinput.css" />
+    <Content Include="Content\js\bootstrap-tagsinput.js" />
     <Content Include="Content\bundles\chosen-sprite%402x.png" />
     <Content Include="Content\bundles\chosen-sprite.png" />
     <Content Include="Content\bundles\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -376,6 +379,7 @@
     <Content Include="Content\img\transp50.png" />
     <Content Include="Content\js\bootstrap-switch.js" />
     <Content Include="Content\js\bootstrap-switch.min.js" />
+    <Content Include="Content\js\bootstrap-tagsinput.min.js" />
     <Content Include="Content\js\Cases\case.templates.js" />
     <Content Include="Content\js\Cases\edit.logic.js" />
     <Content Include="Content\js\Changes\inventoryDialog.js" />
@@ -1631,6 +1635,7 @@
     <Content Include="Areas\OrderAccounts\Views\Orders\EditorTemplates\Other.cshtml" />
     <Content Include="Areas\OrderAccounts\Views\Orders\AttachedFiles.cshtml" />
     <Content Include="Areas\OrderAccounts\Views\Orders\DisplayTemplates\Fields\DecimalLabel.cshtml" />
+    <Content Include="Areas\OrderAccounts\Views\Orders\EditorTemplates\Fields\TagText.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />
