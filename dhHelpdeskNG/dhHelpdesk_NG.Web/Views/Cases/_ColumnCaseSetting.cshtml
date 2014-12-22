@@ -4,18 +4,21 @@
         <div class="tab-pane tab-pane-border active" id="fragment-1">                                   
             <h4>@Translation.Get("Filter", Enums.TranslationSource.TextTranslation)  @Translation.Get("Ärendeöversikt", Enums.TranslationSource.TextTranslation) </h4>    
             <div id="colsetting_result" class="row">                
-                <div class="span10">
+                <div class="span5">
                      @Html.HiddenFor(m=> Model.CustomerId)                
                      @Html.HiddenFor(m=> Model.UserId)
                     <table class="table table-striped table-bordered table-hover" id="customerCaseSum">
                         <thead>
                             <tr>
+                                <th style="width:20px">                                        
+                                   
+                               </th>
                                 <th>
                                     @Translation.Get("Kolumn", Enums.TranslationSource.TextTranslation)
                                 </th>
-                                <th>
+                                @*<th>
                                     @Translation.Get("Rad", Enums.TranslationSource.TextTranslation)
-                                </th>
+                                </th>*@
                                  @*<th>
                                     @Translation.Get("Min längd", Enums.TranslationSource.TextTranslation)
                                 </th>
@@ -29,6 +32,9 @@
                                                              
                         <tbody id="dataTable" >
                             <tr class="rowAdding" id="0">                                   
+                                    <td style="width:20px">                                        
+                                   
+                                    </td>
                                     <td>
                                         <input type="hidden" style="width: 80px;" name="colOrderValue" id="colOrderValue" value="99" />
                                         <input type="hidden" style="width: 80px;" name="minWidthValue" id="minWidthValue" value="100" />
@@ -44,14 +50,14 @@
                                                 }
                                         </select>
                                     </td>          
-                                    <td>
+                                   @* <td>
                                         <select  id="linelist">                                            
                                             @foreach (var line in Model.LineList)
                                             {
                                                 <option id="line" value="@line.Value">@line.Text</option>
                                             }
                                         </select>
-                                    </td> 
+                                    </td> *@
                    
                                    @* <td id="_minWidth">
                                         
@@ -74,19 +80,28 @@
                                     <tr id="@uc.Id" class="SortableRow">                                        
                                         @if (Model.UserColumns != null)
                                         {
+                                            <td>                                        
+                                   
+                                            </td>
                                             <td>
                                                 @Html.HiddenFor(model => uc.ColOrder)
-                                                @Html.HiddenFor(model => uc.MinWidth) 
+                                                @Html.HiddenFor(model => uc.MinWidth)                                                
 
-                                                <select id="_dellabellist" disabled="disabled">                                                    
-                                                    @foreach (var cfs in Model.CaseFieldSettingLanguages)
-                                                    {                                                    
-                                                        <option value="@cfs.Id" @(cfs.Name.ToUpper() == uc.Name.ToUpper() ? "selected=selected" : "")>@(string.IsNullOrEmpty(cfs.Label)? Translation.Get(cfs.Name, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id): cfs.Label)</option>
-                                                    }                                                    
-                                                </select>
+                                                @*<select id="_dellabellist" disabled="disabled">    *@                                                
+                                                @foreach (var cfs in Model.CaseFieldSettingLanguages)
+                                                {
+                                                    if (cfs.Name.ToUpper() == uc.Name.ToUpper())
+                                                    {  
+                                                        @Html.Label((string.IsNullOrEmpty(cfs.Label)? Translation.Get(cfs.Name, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id): cfs.Label))  
+                                                            //@Html.DisplayText("MMM") //cfs.Label                                                                                                               
+                                                    }
+                                                }
+                                                @*    <option value="@cfs.Id" @(cfs.Name.ToUpper() == uc.Name.ToUpper() ? "selected=selected" : "")>@(string.IsNullOrEmpty(cfs.Label)? Translation.Get(cfs.Name, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id): cfs.Label)</option>
+                                                *@                                                    
+                                                @*</select>*@
                                             </td> 
                                         }
-                                        <td>
+                                        @*<td>
                                             <select  id="dellinelist" name="rows">                                                
                                                 @foreach (var line in Model.LineList)
                                                 {                                            
@@ -94,7 +109,7 @@
                                                 }
                                             </select>
                                         </td>
-                                        @*<td>                                            
+                                        <td>                                            
                                                                                        
                                         </td>
                                         <td>
@@ -150,7 +165,7 @@
 
     function addCaseSettingRow() {                       
         $.post('/cases/AddCaseSettingColumn/' + '?customerId=' + '@Model.CustomerId.ToString()' + '&userId=' + '@Model.UserId.ToString()' + 
-            '&labellist=' + $("#labellist").val() + '&linelist=' + $("#linelist").val() +
+            '&labellist=' + $("#labellist").val() + '&linelist=1' + //+ $("#linelist").val() +
             '&minWidthValue=' + $("#minWidthValue").val() + '&colOrderValue=' + $("#colOrderValue").val() + '&userGroup= 4 ' , function (result) {
                 $("#colsetting_result").html(result);
            });

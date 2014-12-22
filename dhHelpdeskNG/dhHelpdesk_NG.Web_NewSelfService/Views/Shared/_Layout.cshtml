@@ -505,7 +505,7 @@
                         }
                     }
 
-                    @if (!hideMenu)
+                    @if (!hideMenu && System.Configuration.ConfigurationManager.AppSettings["LoginMode"].ToString() == "SSO")
                     {
                         var coWorker = pActionSettings.SingleOrDefault(a => a.ObjectId == ActionObject.CoWorker);
                         if (coWorker != null)

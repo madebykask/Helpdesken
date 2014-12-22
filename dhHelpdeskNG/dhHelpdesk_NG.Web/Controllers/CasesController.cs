@@ -1752,12 +1752,11 @@ namespace DH.Helpdesk.Web.Controllers
 
                 if (cs.DontConnectUserToWorkingGroup == 0 && m.case_.WorkingGroup_Id > 0)
                 {
-                    m.performers = this._userService.GetUsersForWorkingGroup(customerId, m.case_.WorkingGroup_Id.Value);
-                    
+                    m.performers = this._userService.GetUsersForWorkingGroup(customerId, m.case_.WorkingGroup_Id.Value);                    
                 }
                 else
                 {
-                    m.performers = m.users;
+                    m.performers = m.users;                    
                 }
 
                 if (caseId != 0)

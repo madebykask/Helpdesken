@@ -347,10 +347,19 @@
 
            
             var workingGroups = this.workingGroupRepository.FindActiveOverviews(currentCustomerId).OrderBy(w=> w.Name).ToList();
-            var model = this.newFaqModelFactory.Create(Guid.NewGuid().ToString(), categoriesWithSubcategories, categoriesWithSubcategories.First().Id, workingGroups);
-            ViewData["FN"] = GetFAQFileNames(model.TemporaryId);
+            if (categoriesWithSubcategories == null || categoriesWithSubcategories.Count < 1)
+            {
+                ViewData["Err"] = "FAQ Category is empty! First add a category.";
+                return this.View("NewFAQPopup");
+            }
+            else
+            {
+                var model = this.newFaqModelFactory.Create(Guid.NewGuid().ToString(), categoriesWithSubcategories, categoriesWithSubcategories.First().Id, workingGroups);
+                ViewData["FN"] = GetFAQFileNames(model.TemporaryId);
+                return this.View(model);
+            }
 
-            return this.View(model);
+            
        }
 
         [HttpGet]

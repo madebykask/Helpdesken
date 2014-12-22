@@ -682,38 +682,44 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             cs.FreeTextSearch = pharasSearch;
             cs.CaseProgress = progressId;
             cs.ReportedBy = "";
-            var caseListCondition = ConfigurationManager.AppSettings["CaseList"].ToString().ToLower().Split(',');
-
-
             var LMtype = "";
-            if(caseListCondition.Contains("manager"))
-            {
-                LMtype = "1";
-                cs.RegUserId = curUser;
-                cs.ReportedBy = "'" + SessionFacade.CurrentUserIdentity.EmployeeNumber + "'";
-            }
 
-            if(caseListCondition.Contains("coworkers"))
+            if (ConfigurationManager.AppSettings["LoginMode"].ToString() == "SSO")
             {
-                LMtype = LMtype + "2";
-                var employees = SessionFacade.CurrentCoWorkers;
-                foreach(var emp in employees)
+                var caseListCondition = ConfigurationManager.AppSettings["CaseList"].ToString().ToLower().Split(',');
+
+                if (caseListCondition.Contains("manager"))
                 {
-                    if(emp.EmployeeNumber != "")
-                    {
-                        if(cs.ReportedBy == "")
-                            cs.ReportedBy = "'" + emp.EmployeeNumber + "'";
-                        else
-                            cs.ReportedBy = cs.ReportedBy + "," + "'" + emp.EmployeeNumber + "'";
-                    }
+                    LMtype = "1";
+                    cs.RegUserId = curUser;
+                    cs.ReportedBy = "'" + SessionFacade.CurrentUserIdentity.EmployeeNumber + "'";
                 }
 
+                if (caseListCondition.Contains("coworkers"))
+                {
+                    LMtype = LMtype + "2";
+                    var employees = SessionFacade.CurrentCoWorkers;
+                    foreach (var emp in employees)
+                    {
+                        if (emp.EmployeeNumber != "")
+                        {
+                            if (cs.ReportedBy == "")
+                                cs.ReportedBy = "'" + emp.EmployeeNumber + "'";
+                            else
+                                cs.ReportedBy = cs.ReportedBy + "," + "'" + emp.EmployeeNumber + "'";
+                        }
+                    }
+
+                }
+
+                cs.LMCaseList = LMtype;
+            } // SSO only 
+            else
+            {
+                cs.RegUserId = curUser;
+                cs.LMCaseList = "0";
             }
 
-
-            //if (cs.ReportedBy == "")
-            //  cs.ReportedBy = "-1";
-            cs.LMCaseList = LMtype;
 
             cs.ReportedBy = cs.ReportedBy;
 
@@ -726,7 +732,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             // 1: User in Customer Setting
             srm.CaseSettings = this._caseSettingService.GetCaseSettingsByUserGroup(cusId, 1);
 
-            if(LMtype == "")
+            if(LMtype == "" && ConfigurationManager.AppSettings["LoginMode"].ToString() == "SSO" )
                 srm.Cases = null;
             else
             {
@@ -744,11 +750,14 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                     null,
                     "Line Manager").ToList(); // Take(maxRecords)
 
-                var dynamicCases = _caseService.GetAllDynamicCases();
-                model.DynamicCases = dynamicCases;
+                if (LMtype == "" && ConfigurationManager.AppSettings["LoginMode"].ToString() == "SSO")
+                {
+                    var dynamicCases = _caseService.GetAllDynamicCases();
+                    model.DynamicCases = dynamicCases;
+                }
 
             }
-
+            
             model.CaseSearchResult = srm;
             SessionFacade.CurrentCaseSearch = sm;
 

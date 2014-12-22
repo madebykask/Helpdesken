@@ -639,7 +639,11 @@
             //sb.Append(" and (tblCase.[RegUserId] = '" + userUserId + "')");
             switch (f.LMCaseList)
             {
-                   
+
+                case "0":
+                    sb.Append(" and (tblCase.[RegUserId] = '" + userUserId + "')");
+                    break;
+
                 //Manager Cases Only
                 case "1":
                     sb.Append(" and (tblCase.[RegUserId] = '" + userUserId + "' or tblCase.[ReportedBy] = " + f.ReportedBy + ")");

@@ -274,7 +274,13 @@
 
                 if (customersAlert.Any())
                 {
-                    err = Translation.Get("Denna användare står som ansvarig/handläggare på befintliga ärenden hos kund") + ": ";                      
+                    //Användare [Stina Svensmo] har aktiva ärenden hos kund [Datahalland].
+                    //Var vänlig se över dessa ärenden:
+                    //- Ärendeöversikt
+                    //- Pågående ärenden
+                    //- Välj handläggare
+
+                    err = userToSave.FirstName + " " + userToSave.SurName + " " + Translation.Get("står som ansvarig/handläggare på befintliga ärenden hos kund") + ": ";                      
                     err += "(" + string.Join(",", customersAlert.ToArray()) + ") ";
                     err += " " + Translation.Get("Var vänlig se över de ärenden som användaren står på.");
                 }

@@ -163,7 +163,7 @@ namespace DH.Helpdesk.Dal.Repositories
         {
             var query = from u in this.DataContext.Users
                         join uw in this.DataContext.UserWorkingGroups on u.Id equals uw.User_Id
-                        where u.Customer_Id == customerId && uw.WorkingGroup_Id == workingGroupId
+                        where u.CustomerUsers.Any(c => c.Customer_Id == customerId) && uw.WorkingGroup_Id == workingGroupId //u.Customer_Id == customerId
                         select u;
             return query;
         }
@@ -180,7 +180,7 @@ namespace DH.Helpdesk.Dal.Repositories
         public IEnumerable<User> GetUsers(int customerId)
         {
             var query = from u in this.DataContext.Users
-                        where u.Customer_Id == customerId && u.CustomerUsers.Any(c => c.Customer_Id == customerId)
+                        where u.CustomerUsers.Any(c => c.Customer_Id == customerId) // u.Customer_Id == customerId &&
                         select u;
 
             return query;

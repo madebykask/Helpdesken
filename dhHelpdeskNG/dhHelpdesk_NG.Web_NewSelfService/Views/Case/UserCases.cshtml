@@ -51,14 +51,14 @@
                                             {
                                                 foreach (var c in Model.CaseSearchResult.CaseSettings)
                                                 {
-                                                    if (c.Line == 1)
-                                                    {
-                                                <th onclick=" sortCases('@c.Name') " class="thpointer" >
-                                                    @Translation.Get(c.Name, Enums.TranslationSource.CaseTranslation, c.Customer_Id)  <i class="@c.Name.SetCaseSortIcon()"></i>
-                                                </th>
+                                                    //if (c.Line == 1)
+                                                    //{
+                                                        <th onclick=" sortCases('@c.Name') " class="thpointer" >
+                                                            @Translation.Get(c.Name, Enums.TranslationSource.CaseTranslation, c.Customer_Id.Value)  <i class="@c.Name.SetCaseSortIcon()"></i>
+                                                        </th>
+                                                    //}
                                                 }
                                             }
-                                        }
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -66,8 +66,11 @@
                                         {                                            
                                             foreach (var r in Model.CaseSearchResult.Cases)
                                             {
-
-                                                var dynamicUrl = Model.DynamicCases.Where(w => w.CaseId == r.Id).Select(d => "~/" + d.FormPath).FirstOrDefault();
+                                                var dynamicUrl = "";
+                                                if (Model.DynamicCases != null && Model.DynamicCases.Any())
+                                                {
+                                                    Model.DynamicCases.Where(w => w.CaseId == r.Id).Select(d => "~/" + d.FormPath).FirstOrDefault();
+                                                }
 
                                                 <tr>
                                                     <!--fasta kolumner -->
