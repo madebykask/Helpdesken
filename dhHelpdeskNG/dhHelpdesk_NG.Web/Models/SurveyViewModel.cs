@@ -15,13 +15,13 @@
             switch (survey.VoteResult)
             {
                 case SurveyVoteResult.BAD:
-                    res.SurveyTextResult = "Bad";
+                    res.SurveyTextResult = "Inte nöjd";
                     break;
                 case SurveyVoteResult.NORMAL:
-                    res.SurveyTextResult = "Normal";
+                    res.SurveyTextResult = "Nöjd";
                     break;
                 case SurveyVoteResult.GOOD:
-                    res.SurveyTextResult = "Good";
+                    res.SurveyTextResult = "Mycket nöjd";
                     break;
                 default:
                     throw new Exception("Survey result is not defined");

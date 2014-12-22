@@ -32,7 +32,7 @@
             var case_ = this.caseService.GetCaseById(id);
             if (case_ == null)
             {
-                ViewBag.ErrorReason = "case does not exists";
+                ViewBag.ErrorReason = "Ärendet kunde inte hittas";//Couldn’t find this case
                 return this.View("VoteError");
             }
 
@@ -40,13 +40,13 @@
             var survey = this.surveyService.GetByCaseId(id);
             if (survey != null)
             {
-                ViewBag.ErrorReason = "allready voted";
+                ViewBag.ErrorReason = "Du har redan fyllt i utvärderingen av detta ärende";//"you have already completed a survey for this case";
                 return this.View("VoteError");
             }
            
             if (!case_.IsClosed())
             {
-                ViewBag.ErrorReason = "case is not closed";
+                ViewBag.ErrorReason = "Ärendet är inte stängt";//"case is not closed";
                 return this.View("VoteError");
             }
 

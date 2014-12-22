@@ -22,6 +22,7 @@
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Customers;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Customers;
     using DH.Helpdesk.Services.Infrastructure.Email;
+    using DH.Helpdesk.Services.Localization;
     using DH.Helpdesk.Services.utils;
     using DH.Helpdesk.BusinessData.Models.User.Input;
 
@@ -1073,19 +1074,19 @@
                                 "{0}Survey/vote/{1}?voteId=bad",
                                 cms.AbsoluterUrl,
                                 c.Id),
-                        VoteBadText = "Bad",
+                        VoteBadText = Translator.Translate("Inte nöjd"),
                         VoteNormalLink =
                             string.Format(
                                 "{0}Survey/vote/{1}?voteId=normal",
                                 cms.AbsoluterUrl,
                                 c.Id),
-                        VoteNormalText = "Normal",
+                        VoteNormalText = Translator.Translate("Nöjd"),
                         VoteGoodLink =
                             string.Format(
                                 "{0}Survey/vote/{1}?voteId=good",
                                 cms.AbsoluterUrl,
                                 c.Id),
-                        VoteGoodText = "Good",
+                        VoteGoodText = Translator.Translate("Mycket nöjd"),
                     };
                     ret.Add(new Field { Key = "[#777]", StringValue = template.TransformText() });
                 }

@@ -742,6 +742,7 @@
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Areas\Admin\Controllers\UsersController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
+    <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\UserInteractionController.cs" />
     <Compile Include="Areas\Inventory\Controllers\WorkstationController.cs" />
@@ -1172,6 +1173,7 @@
     <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Areas\Admin\Models\UserViewModel.cs" />
     <Compile Include="Models\Shared\SendToDialogModel.cs" />
+    <Compile Include="Models\SurveyViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -2008,6 +2010,8 @@
     <Content Include="Views\CheckList\_NewServices.cshtml" />
     <Content Include="Views\Reports\CaseSatisfactionReport.cshtml" />
     <Content Include="Views\Reports\SurveySatisfactionOptions.cshtml" />
+    <Content Include="Views\Survey\Vote.cshtml" />
+    <Content Include="Views\Survey\VoteError.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
