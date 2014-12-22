@@ -7,7 +7,7 @@
     {{else}}
         <tr data-id='{{:Id}}' title='{{:Description}}'>
             <td colspan='7'>
-                <input onchange='dhHelpdesk.CaseArticles.UpdateArticle($(this).parent().parent())' type='text' class='width80 article-name' maxlength='100' value='{{:Name}}' />
+                <input onchange='dhHelpdesk.CaseArticles.UpdateArticle($(this).parent().parent())' type='text' class='width80 article-name' maxlength='50' value='{{:Name}}' />
             </td>
             <td>
                 <a href='javascript:void()' onclick='dhHelpdesk.CaseArticles.DeleteArticle($(this).parent().parent())'>x</a>
