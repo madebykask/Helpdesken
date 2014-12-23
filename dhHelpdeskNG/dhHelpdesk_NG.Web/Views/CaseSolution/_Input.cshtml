@@ -97,7 +97,15 @@
                                         </td>
 
                                     </tr>
-                                }                                
+                                }     
+                                <tr>
+                                    <td></td>
+                                    <td class="checkbox" style="padding-left: 20px">                                        
+                                        <input type="checkbox" name="CaseSolution.ShowInSelfService" @(Model.CaseSolution.ShowInSelfService? "checked=checked" : "") value ="True" />                                        
+                                        <input type="hidden" name="CaseSolution.ShowInSelfService" value="False" />                                                                      
+                                        &nbsp;@Translation.Get("Visa på självservice", Enums.TranslationSource.TextTranslation)
+                                    </td>                                    
+                                </tr>                           
                                 <tr>
                                     <th colspan="3" class="header">@Translation.Get("Ärendeinformation")</th>
                                 </tr>
