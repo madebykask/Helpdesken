@@ -175,7 +175,14 @@
                                     {
                                         <div class="form-group row">
                                             <label class="col-md-2">
-                                                @Model.FieldSettings.Where(f => f.Name == "Customer_Id").Select(f => f.LabelToChange).SingleOrDefault():                        
+                                                 @{ 
+                                                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Customer_Id").Select(f => f.LabelToChange).SingleOrDefault();
+                                                    if (string.IsNullOrEmpty(fieldCaption))
+                                                    {
+                                                        fieldCaption = Translation.Get("Customer_Id", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
+                                                    }                                                                    
+                                                  }
+                                                  @fieldCaption:                                                
                                             </label>
                                             <div class="col-md-10">
                                                 @Model.NewCase.Customer.Name
@@ -186,7 +193,15 @@
                                     {
                                         <div class="form-group row">
                                             <label class="col-md-2">
-                                                @Model.FieldSettings.Where(f => f.Name == "ReportedBy").Select(f => f.LabelToChange).SingleOrDefault():                                                                          
+                                                 @{ 
+                                                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "ReportedBy").Select(f => f.LabelToChange).SingleOrDefault();
+                                                    if (string.IsNullOrEmpty(fieldCaption))
+                                                    {
+                                                        fieldCaption = Translation.Get("ReportedBy", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
+                                                    }                                                                    
+                                                  }
+                                                  @fieldCaption:                                                
+                                                
                                             </label>
                                             <div class="col-md-10">
                                                 @if (Model.FieldSettings.Where(f => f.Name == "ReportedBy").Select(f => f.Required).SingleOrDefault() == 1)
@@ -205,7 +220,14 @@
                                     {
                                         <div class="form-group row">
                                             <label class="col-md-2">
-                                                @Model.FieldSettings.Where(f => f.Name == "Persons_Name").Select(f => f.LabelToChange).SingleOrDefault():                          
+                                                @{ 
+                                        var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Persons_Name").Select(f => f.LabelToChange).SingleOrDefault();
+                                                    if (string.IsNullOrEmpty(fieldCaption))
+                                                    {
+                                                        fieldCaption = Translation.Get("Persons_Name", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
+                                                    }                                                                    
+                                                  }
+                                                  @fieldCaption:                                              
                                             </label>
                                             <div class="col-md-10">
                                                 @if (Model.FieldSettings.Where(f => f.Name == "Persons_Name").Select(f => f.Required).SingleOrDefault() == 1)
@@ -224,7 +246,15 @@
                                     {
                                         <div class="form-group row">
                                             <label class="col-md-2">
-                                                @Model.FieldSettings.Where(f => f.Name == "Persons_EMail").Select(f => f.LabelToChange).SingleOrDefault():                          
+                                                @{ 
+                                                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Persons_EMail").Select(f => f.LabelToChange).SingleOrDefault();
+                                                    if (string.IsNullOrEmpty(fieldCaption))
+                                                    {  
+                                                        fieldCaption = Translation.Get("Persons_EMail", Enums.TranslationSource.CaseTranslation,SessionFacade.CurrentCustomerID);
+                                                    }                                                                    
+                                                }
+                                                @fieldCaption:                                               
+
                                             </label>
                                             <div class="col-md-10">
                                                 @if (Model.FieldSettings.Where(f => f.Name == "Persons_EMail").Select(f => f.Required).SingleOrDefault() == 1)
@@ -243,7 +273,14 @@
                                     {
                                         <div class="form-group row">
                                             <label class="col-md-2">
-                                                @Model.FieldSettings.Where(f => f.Name == "Persons_Phone").Select(f => f.LabelToChange).SingleOrDefault():                          
+                                                @{ 
+                                                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Persons_Phone").Select(f => f.LabelToChange).SingleOrDefault();
+                                                    if (string.IsNullOrEmpty(fieldCaption))
+                                                    {
+                                                        fieldCaption = Translation.Get("Persons_Phone", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
+                                                    }                                                                    
+                                                  }
+                                                  @fieldCaption:                                               
                                             </label>
                                             <div class="col-md-10">
                                                 @if (Model.FieldSettings.Where(f => f.Name == "Persons_Phone").Select(f => f.Required).SingleOrDefault() == 1)
@@ -262,7 +299,15 @@
                                     {
                                         <div class="form-group row">
                                             <label class="col-md-2">
-                                                @Model.FieldSettings.Where(f => f.Name == "Persons_CellPhone").Select(f => f.LabelToChange).SingleOrDefault():                          
+                                                @{ 
+                                                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Persons_CellPhone").Select(f => f.LabelToChange).SingleOrDefault();
+                                                    if (string.IsNullOrEmpty(fieldCaption))
+                                                    {
+                                                        fieldCaption = Translation.Get("Persons_CellPhone", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
+                                                    }                                                                    
+                                                  }
+                                                  @fieldCaption:
+                                              
                                             </label>
                                             <div class="col-md-10">
                                                 @if (Model.FieldSettings.Where(f => f.Name == "Persons_CellPhone").Select(f => f.Required).SingleOrDefault() == 1)
@@ -281,7 +326,14 @@
                                     {
                                         <div class="form-group row">
                                             <label class="col-md-2">
-                                                @Model.FieldSettings.Where(f => f.Name == "Region_Id").Select(f => f.LabelToChange).SingleOrDefault():
+                                                @{ 
+                                                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Region_Id").Select(f => f.LabelToChange).SingleOrDefault();
+                                                    if (string.IsNullOrEmpty(fieldCaption))
+                                                    {
+                                                        fieldCaption = Translation.Get("Region_Id", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
+                                                    }                                                                    
+                                                  }
+                                                  @fieldCaption:                                                
                                             </label>
                                             <div class="col-md-10">
                                                 @if (Model.FieldSettings.Where(f => f.Name == "Region_Id").Select(f => f.Required).SingleOrDefault() == 1)
@@ -309,7 +361,14 @@
                                     {
                                         <div class="form-group row">
                                             <label class="col-md-2">
-                                                @Model.FieldSettings.Where(f => f.Name == "Department_Id").Select(f => f.LabelToChange).SingleOrDefault():
+                                                @{ 
+                                                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Department_Id").Select(f => f.LabelToChange).SingleOrDefault();
+                                                    if (string.IsNullOrEmpty(fieldCaption))
+                                                    {
+                                                        fieldCaption = Translation.Get("Department_Id", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
+                                                    }                                                                    
+                                                  }
+                                                  @fieldCaption:                                                
                                             </label>
                                             <div class="col-md-10">
                                                 @if (Model.FieldSettings.Where(f => f.Name == "Department_Id").Select(f => f.Required).SingleOrDefault() == 1)
@@ -338,7 +397,14 @@
                                     {
                                         <div class="form-group row">
                                             <label class="col-md-2">
-                                                @Model.FieldSettings.Where(f => f.Name == "Place").Select(f => f.LabelToChange).SingleOrDefault():                          
+                                                @{ 
+                                                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Place").Select(f => f.LabelToChange).SingleOrDefault();
+                                                    if (string.IsNullOrEmpty(fieldCaption))
+                                                    {
+                                                        fieldCaption = Translation.Get("Place", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
+                                                    }                                                                    
+                                                  }
+                                                  @fieldCaption:                                                
                                             </label>
                                             <div class="col-md-10">
                                                 @if (Model.FieldSettings.Where(f => f.Name == "Place").Select(f => f.Required).SingleOrDefault() == 1)
@@ -357,7 +423,14 @@
                                     {
                                         <div class="form-group row">
                                             <label class="col-md-2">
-                                                @Model.FieldSettings.Where(f => f.Name == "UserCode").Select(f => f.LabelToChange).SingleOrDefault():                          
+                                                @{ 
+                                                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "UserCode").Select(f => f.LabelToChange).SingleOrDefault();
+                                                    if (string.IsNullOrEmpty(fieldCaption))
+                                                    {
+                                                        fieldCaption = Translation.Get("UserCode", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
+                                                    }                                                                    
+                                                  }
+                                                  @fieldCaption:                                                
                                             </label>
                                             <div class="col-md-10">
                                                 @if (Model.FieldSettings.Where(f => f.Name == "UserCode").Select(f => f.Required).SingleOrDefault() == 1)
@@ -388,7 +461,14 @@
                                     {
                                         <div class="form-group row">
                                             <label class="col-md-2">
-                                                @Model.FieldSettings.Where(f => f.Name == "InventoryNumber").Select(f => f.LabelToChange).SingleOrDefault():
+                                                @{ 
+                                                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "InventoryNumber").Select(f => f.LabelToChange).SingleOrDefault();
+                                                    if (string.IsNullOrEmpty(fieldCaption))
+                                                    {
+                                                        fieldCaption = Translation.Get("InventoryNumber", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
+                                                    }                                                                    
+                                                  }
+                                                  @fieldCaption:                                                
                                             </label>
                                             <div class="col-md-10">
                                                 @if (Model.FieldSettings.Where(f => f.Name == "InventoryNumber").Select(f => f.Required).SingleOrDefault() == 1)
@@ -407,7 +487,14 @@
                                     {
                                         <div class="form-group row">
                                             <label class="col-md-2">
-                                                @Model.FieldSettings.Where(f => f.Name == "ComputerType_Id").Select(f => f.LabelToChange).SingleOrDefault():
+                                                @{ 
+                                                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "ComputerType_Id").Select(f => f.LabelToChange).SingleOrDefault();
+                                                    if (string.IsNullOrEmpty(fieldCaption))
+                                                    {
+                                                        fieldCaption = Translation.Get("ComputerType_Id", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
+                                                    }                                                                    
+                                                  }
+                                                  @fieldCaption:                                                
                                             </label>
                                             <div class="col-md-10">
                                                 @if (Model.FieldSettings.Where(f => f.Name == "ComputerType_Id").Select(f => f.Required).SingleOrDefault() == 1)
@@ -426,7 +513,14 @@
                                     {
                                         <div class="form-group row">
                                             <label class="col-md-2">
-                                                @Model.FieldSettings.Where(f => f.Name == "InventoryLocation").Select(f => f.LabelToChange).SingleOrDefault():
+                                                @{ 
+                                                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "InventoryLocation").Select(f => f.LabelToChange).SingleOrDefault();
+                                                    if (string.IsNullOrEmpty(fieldCaption))
+                                                    {
+                                                        fieldCaption = Translation.Get("InventoryLocation", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
+                                                    }                                                                    
+                                                  }
+                                                  @fieldCaption:                                                
                                             </label>
                                             <div class="col-md-10">
                                                 @if (Model.FieldSettings.Where(f => f.Name == "InventoryLocation").Select(f => f.Required).SingleOrDefault() == 1)
@@ -457,7 +551,14 @@
                                     {
                                         <div class="form-group row">
                                             <label class="col-md-2">
-                                                @Model.FieldSettings.Where(f => f.Name == "CaseType_Id").Select(f => f.LabelToChange).SingleOrDefault():
+                                                @{ 
+                                                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "CaseType_Id").Select(f => f.LabelToChange).SingleOrDefault();
+                                                    if (string.IsNullOrEmpty(fieldCaption))
+                                                    {
+                                                        fieldCaption = Translation.Get("CaseType_Id", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
+                                                    }                                                                    
+                                                  }
+                                                  @fieldCaption:                                                
                                             </label>
                                             <div class="col-md-10">
                                                 @if (Model.FieldSettings.Where(f => f.Name == "CaseType_Id").Select(f => f.Required).SingleOrDefault() == 1)
@@ -488,7 +589,14 @@
                                     {
                                         <div class="form-group row">
                                             <label class="col-md-2">
-                                                @Model.FieldSettings.Where(f => f.Name == "ProductArea_Id").Select(f => f.LabelToChange).SingleOrDefault():
+                                                @{ 
+                                                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "ProductArea_Id").Select(f => f.LabelToChange).SingleOrDefault();
+                                                    if (string.IsNullOrEmpty(fieldCaption))
+                                                    {
+                                                        fieldCaption = Translation.Get("ProductArea_Id", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
+                                                    }                                                                    
+                                                  }
+                                                  @fieldCaption:                                                
                                             </label>
                                             <div class="col-md-10">
                                                 @if (Model.FieldSettings.Where(f => f.Name == "ProductArea_Id").Select(f => f.Required).SingleOrDefault() == 1)
@@ -518,7 +626,14 @@
                                     {
                                         <div class="form-group row">
                                             <label class="col-md-2">
-                                                @Model.FieldSettings.Where(f => f.Name == "System_Id").Select(f => f.LabelToChange).SingleOrDefault():
+                                                @{ 
+                                                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "System_Id").Select(f => f.LabelToChange).SingleOrDefault();
+                                                    if (string.IsNullOrEmpty(fieldCaption))
+                                                    {
+                                                        fieldCaption = Translation.Get("System_Id", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
+                                                    }                                                                    
+                                                  }
+                                                  @fieldCaption:                                                
                                             </label>
                                             <div class="col-md-10">
                                                 @if (Model.FieldSettings.Where(f => f.Name == "System_Id").Select(f => f.Required).SingleOrDefault() == 1)
@@ -547,7 +662,14 @@
                                     {
                                         <div class="form-group row">
                                             <label class="col-md-2">
-                                                @Model.FieldSettings.Where(f => f.Name == "Category_Id").Select(f => f.LabelToChange).SingleOrDefault():
+                                                @{ 
+                                                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Category_Id").Select(f => f.LabelToChange).SingleOrDefault();
+                                                    if (string.IsNullOrEmpty(fieldCaption))
+                                                    {
+                                                        fieldCaption = Translation.Get("Category_Id", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
+                                                    }                                                                    
+                                                  }
+                                                  @fieldCaption:                                                
                                             </label>
                                             <div class="col-md-10">
                                                 @if (Model.FieldSettings.Where(f => f.Name == "Category_Id").Select(f => f.Required).SingleOrDefault() == 1)
@@ -576,7 +698,14 @@
                                     {
                                         <div class="form-group row">
                                             <label class="col-md-2">
-                                                @Model.FieldSettings.Where(f => f.Name == "Supplier_Id").Select(f => f.LabelToChange).SingleOrDefault():
+                                                @{ 
+                                                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Supplier_Id").Select(f => f.LabelToChange).SingleOrDefault();
+                                                    if (string.IsNullOrEmpty(fieldCaption))
+                                                    {
+                                                        fieldCaption = Translation.Get("Supplier_Id", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
+                                                    }                                                                    
+                                                  }
+                                                  @fieldCaption:                                                
                                             </label>
                                         
                                             @if (Model.Suppliers != null)
@@ -606,7 +735,14 @@
                                     {
                                         <div class="form-group row">
                                             <label class="col-md-2">
-                                                @Model.FieldSettings.Where(f => f.Name == "InvoiceNumber").Select(f => f.LabelToChange).SingleOrDefault():
+                                                @{ 
+                                                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "InvoiceNumber").Select(f => f.LabelToChange).SingleOrDefault();
+                                                    if (string.IsNullOrEmpty(fieldCaption))
+                                                    {
+                                                        fieldCaption = Translation.Get("InvoiceNumber", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
+                                                    }                                                                    
+                                                  }
+                                                  @fieldCaption:                                                
                                             </label>
                                             <div class="col-md-10">
                                                 @if (Model.FieldSettings.Where(f => f.Name == "InvoiceNumber").Select(f => f.Required).SingleOrDefault() == 1)
@@ -626,7 +762,14 @@
                                     {
                                         <div class="form-group row">
                                             <label class="col-md-2">
-                                                @Model.FieldSettings.Where(f => f.Name == "ReferenceNumber").Select(f => f.LabelToChange).SingleOrDefault():
+                                                @{ 
+                                                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "ReferenceNumber").Select(f => f.LabelToChange).SingleOrDefault();
+                                                    if (string.IsNullOrEmpty(fieldCaption))
+                                                    {
+                                                        fieldCaption = Translation.Get("ReferenceNumber", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
+                                                    }                                                                    
+                                                  }
+                                                  @fieldCaption:                                                
                                             </label>
                                             <div class="col-md-10">
                                                 @if (Model.FieldSettings.Where(f => f.Name == "ReferenceNumber").Select(f => f.Required).SingleOrDefault() == 1)
@@ -646,7 +789,14 @@
                                     {
                                         <div class="form-group row">
                                             <label class="col-md-2">
-                                                @Model.FieldSettings.Where(f => f.Name == "Caption").Select(f => f.LabelToChange).SingleOrDefault():
+                                                @{ 
+                                                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Caption").Select(f => f.LabelToChange).SingleOrDefault();
+                                                    if (string.IsNullOrEmpty(fieldCaption))
+                                                    {
+                                                        fieldCaption = Translation.Get("Caption", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
+                                                    }                                                                    
+                                                  }
+                                                  @fieldCaption:                                                
                                             </label>
                                             <div class="col-md-10">
                                                 @if (Model.FieldSettings.Where(f => f.Name == "Caption").Select(f => f.Required).SingleOrDefault() == 1)
@@ -666,7 +816,14 @@
                                     {
                                         <div class="form-group row">
                                             <label class="col-md-2">
-                                                @Model.FieldSettings.Where(f => f.Name == "Description").Select(f => f.LabelToChange).SingleOrDefault():
+                                                @{ 
+                                                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Description").Select(f => f.LabelToChange).SingleOrDefault();
+                                                    if (string.IsNullOrEmpty(fieldCaption))
+                                                    {
+                                                        fieldCaption = Translation.Get("Description", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
+                                                    }                                                                    
+                                                  }
+                                                  @fieldCaption:                                                
                                             </label>
                                             <div class="col-md-10">
                                                 @if (Model.FieldSettings.Where(f => f.Name == "Description").Select(f => f.Required).SingleOrDefault() == 1)
@@ -686,7 +843,14 @@
                                     {
                                         <div class="form-group row">
                                             <label class="col-md-2">
-                                                @Model.FieldSettings.Where(f => f.Name == "Miscellaneous").Select(f => f.LabelToChange).SingleOrDefault():
+                                                @{ 
+                                                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Miscellaneous").Select(f => f.LabelToChange).SingleOrDefault();
+                                                    if (string.IsNullOrEmpty(fieldCaption))
+                                                    {
+                                                        fieldCaption = Translation.Get("Miscellaneous", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
+                                                    }                                                                    
+                                                  }
+                                                  @fieldCaption:                                                
                                             </label>
                                             <div class="col-md-10">
                                                 @if (Model.FieldSettings.Where(f => f.Name == "Miscellaneous").Select(f => f.Required).SingleOrDefault() == 1)
@@ -706,7 +870,14 @@
                                     {
                                         <div class="form-group row">
                                             <label class="col-md-2">
-                                                @Model.FieldSettings.Where(f => f.Name == "ContactBeforeAction").Select(f => f.LabelToChange).SingleOrDefault():
+                                                @{ 
+                                                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "ContactBeforeAction").Select(f => f.LabelToChange).SingleOrDefault();
+                                                    if (string.IsNullOrEmpty(fieldCaption))
+                                                    {
+                                                        fieldCaption = Translation.Get("ContactBeforeAction", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
+                                                    }                                                                    
+                                                  }
+                                                  @fieldCaption:                                                
                                             </label>
                                             <div class="col-md-10">
                                                 <input type="checkbox" name="NewCase.ContactBeforeAction" @(Model.NewCase.ContactBeforeAction == 1 ? "checked=checked" : "") value="1"/>
@@ -720,7 +891,14 @@
                                     {
                                         <div class="form-group row">
                                             <label class="col-md-2">
-                                                @Model.FieldSettings.Where(f => f.Name == "SMS").Select(f => f.LabelToChange).SingleOrDefault():
+                                                @{ 
+                                                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "SMS").Select(f => f.LabelToChange).SingleOrDefault();
+                                                    if (string.IsNullOrEmpty(fieldCaption))
+                                                    {
+                                                        fieldCaption = Translation.Get("SMS", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
+                                                    }                                                                    
+                                                  }
+                                                  @fieldCaption:                                                
                                             </label>
                                             <div class="col-md-10">
                                                 <input type="checkbox" name="NewCase.SMS" @(Model.NewCase.SMS == 1 ? "checked=checked" : "") value="1"/>
@@ -734,7 +912,14 @@
                                     {
                                         <div class="form-group row">
                                             <label class="col-md-2">
-                                                @Model.FieldSettings.Where(f => f.Name == "Available").Select(f => f.LabelToChange).SingleOrDefault():
+                                                @{ 
+                                                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Available").Select(f => f.LabelToChange).SingleOrDefault();
+                                                    if (string.IsNullOrEmpty(fieldCaption))
+                                                    {
+                                                        fieldCaption = Translation.Get("Available", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
+                                                    }                                                                    
+                                                  }
+                                                  @fieldCaption:                                                
                                             </label>
                                             <div class="col-md-10">
                                                 @if (Model.FieldSettings.Where(f => f.Name == "Available").Select(f => f.Required).SingleOrDefault() == 1)
@@ -756,7 +941,14 @@
                                     {
                                         <div class="form-group row">
                                             <label class="col-md-2">
-                                                @Model.FieldSettings.Where(f => f.Name == "Cost").Select(f => f.LabelToChange).SingleOrDefault():
+                                                @{ 
+                                                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Cost").Select(f => f.LabelToChange).SingleOrDefault();
+                                                    if (string.IsNullOrEmpty(fieldCaption))
+                                                    {
+                                                        fieldCaption = Translation.Get("Cost", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
+                                                    }                                                                    
+                                                  }
+                                                  @fieldCaption:                                                
                                             </label>
                                             <div class="col-md-10">
                                                 <table>
@@ -789,7 +981,14 @@
                                     {
                                         <div class="form-group row">
                                             <label class="col-md-2">
-                                                @Model.FieldSettings.Where(f => f.Name == "Filename").Select(f => f.LabelToChange).SingleOrDefault():
+                                                @{ 
+                                                    var fieldCaption = Model.FieldSettings.Where(f => f.Name == "Filename").Select(f => f.LabelToChange).SingleOrDefault();
+                                                    if (string.IsNullOrEmpty(fieldCaption))
+                                                    {
+                                                        fieldCaption = Translation.Get("Filename", Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID);
+                                                    }                                                                    
+                                                  }
+                                                  @fieldCaption:                                                
                                             </label>
                                             <div class="col-md-5">                                                
                                                 <a href="#NewCase_upload_files_popup" role="button" class="btn btn-default" data-toggle="modal">@Translation.Get("Add", Enums.TranslationSource.TextTranslation)</a>
