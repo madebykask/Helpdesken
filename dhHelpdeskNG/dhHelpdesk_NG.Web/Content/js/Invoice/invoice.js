@@ -37,6 +37,14 @@ $(function () {
 
         CustomerId: null,
 
+        RaiseEvent: function(eventType, extraParameters) {
+            $(document).trigger(eventType, extraParameters);
+        },
+
+        OnEvent: function(event, handler) {
+            $(document).on(event, handler);
+        },
+
         AddInvoiceArticle: function (article) {
             this._invoiceArticles.push(article);
         },
@@ -595,6 +603,17 @@ $(function () {
                 return null;
             },
 
+            this.HasArticles = function() {
+                var orders = this.GetOrders();
+                for (var i = 0; i < orders.length; i++) {
+                    var order = orders[i];
+                    if (order.HasArticles()) {
+                        return true;
+                    }
+                }
+                return false;
+            },
+
             this._refreshTabs = function() {
                 var tabs = this.Container.find("#case-invoice-orders-tabs");
                 tabs.tabs("refresh");
@@ -688,6 +707,16 @@ $(function () {
                 return model;
             },
 
+            this.ShowSummary = function() {
+                this.Container.find(".case-invoice-order-summary").show();
+                this.Container.find(".case-invoice-order-summary-btn").show();
+            },
+
+            this.HideSummary = function() {
+                this.Container.find(".case-invoice-order-summary").hide();
+                this.Container.find(".case-invoice-order-summary-btn").hide();
+            },
+
             this.Initialize = function () {
                 this.Container = $(dhHelpdesk.CaseArticles.CaseInvoiceTemplate.render(this.GetViewModel()));
 
@@ -707,6 +736,22 @@ $(function () {
                             th.Container.find(".articles-params").show();
                         }
                     }
+                });
+
+                dhHelpdesk.CaseArticles.OnEvent("OnAddArticle", function(order, article) {
+                    th.ShowSummary();
+                });
+
+                dhHelpdesk.CaseArticles.OnEvent("OnDeleteArticle", function(order, articleId) {
+                    if (th.HasArticles()) {
+                        th.ShowSummary();
+                    } else {
+                        th.HideSummary();
+                    }
+                });
+
+                this.Container.find(".case-invoice-order-summary-btn").click(function() {
+                    th.Container.find(".case-invoice-order-summary").find("a").click();
                 });
             },
 
@@ -740,6 +785,10 @@ $(function () {
 
             this.GetArticles = function() {
                 return this._articles;
+            },
+
+            this.HasArticles = function() {
+                return this._articles.length > 0;
             },
 
             this.GetArticle = function(id) {
@@ -784,6 +833,8 @@ $(function () {
                 rows.append(article.Container);
                 this.EnableAddBlank(this.HasNotBlankArticles());
                 this.UpdateTotal();
+
+                dhHelpdesk.CaseArticles.RaiseEvent("OnAddArticle", [this, article]);
             },
 
             this.DeleteArticle = function(id) {
@@ -813,6 +864,8 @@ $(function () {
                 }
 
                 this.UpdateTotal();
+
+                dhHelpdesk.CaseArticles.RaiseEvent("OnDeleteArticle", [this, id]);
             },
            
             this.GetSortedArticles = function() {

@@ -5,7 +5,7 @@
                 <i class="icon-plus-sign" style="cursor: pointer;" onclick="dhHelpdesk.CaseArticles.AddOrder('{{:Id}}'); return false;"></i>
                 <i style="display: none;" class="icon-minus-sign" style="cursor: pointer;" onclick="dhHelpdesk.CaseArticles.DeleteCurrentOrder('{{:Id}}'); return false;"></i>
             </li> 
-            <li class="case-invoice-order-summary"><a href="#case-invoice-order-summary{{:Id}}">{{:SummaryTitle}}</a></li>          
+            <li class="case-invoice-order-summary" style="display: none;"><a href="#case-invoice-order-summary{{:Id}}">{{:SummaryTitle}}</a></li>          
         </ul>
         <div class="ml15 mt20">
             <table class='articles-params'>
@@ -13,6 +13,7 @@
                     <tr>
                         <th>{{:SelectItemHeader}}</th>
                         <th>{{:UnitsHeader}}</th>
+                        <th></th>
                         <th></th>
                     </tr>
                 </thead>
@@ -27,6 +28,9 @@
                         </td>
                         <td>
                             <input type='button' class='articles-params-add btn' value='{{:AddButtonLabel}}' />
+                        </td>
+                        <td>
+                            <input type='button' class='case-invoice-order-summary-btn btn' value='{{:SummaryTitle}}' style="display: none;" />
                         </td>
                     </tr>
                 </tbody>
