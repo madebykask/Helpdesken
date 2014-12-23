@@ -234,6 +234,10 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                     currentCustomer.HelpdeskEmail,
                     ConfigurationManager.AppSettings["dh_helpdeskaddress"].ToString(),
                     cs.DontConnectUserToWorkingGroup);
+
+                model.NewCase.RegUserId = SessionFacade.CurrentUserIdentity.UserId;
+                model.NewCase.RegUserDomain = SessionFacade.CurrentUserIdentity.Domain;
+ 
             }
 
             model.CaseTypeParantPath = ParentPathDefaultValue;

@@ -211,11 +211,13 @@
                 SessionFacade.CurrentCoWorkers = null;                                
                 string fullName = identity.Name;
                 string userId = fullName.GetUserFromAdPath();
+                string userDomain = fullName.GetDomainFromAdPath();
 
                 SessionFacade.CurrentSystemUser = userId;
                 var ui = new UserIdentity()
                 {
                     UserId = userId,
+                    Domain = userDomain,
                     FirstName = userId
                 };
 
