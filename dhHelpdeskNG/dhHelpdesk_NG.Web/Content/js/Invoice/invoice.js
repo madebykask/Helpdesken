@@ -753,6 +753,26 @@ $(function () {
                 return null;
             },
 
+            this.HasNotBlankArticles = function() {
+                var articles = this.GetArticles();
+                for (var i = 0; i < articles.length; i++) {
+                    var article = articles[i];
+                    if (!article.IsBlank()) {
+                        return true;
+                    }
+                }
+                return false;
+            },
+
+            this.EnableAddBlank = function(enable) {
+                var addBlank = this.Container.find(".add-blank-article");
+                if (enable) {
+                    addBlank.show();
+                } else {
+                    addBlank.hide();
+                }
+            },
+
             this.AddArticle = function(article) {
                 this._articles.push(article);
                 article.Order = this;
@@ -762,6 +782,7 @@ $(function () {
                 article.Initialize();
                 var rows = this.Container.find(".articles-rows");
                 rows.append(article.Container);
+                this.EnableAddBlank(this.HasNotBlankArticles());
                 this.UpdateTotal();
             },
 
@@ -771,10 +792,27 @@ $(function () {
                     if (article.Id == id) {
                         this._articles.splice(i, 1);
                         this._deleteFromContainer(article.Id);
-                        this.UpdateTotal();
-                        return;
+                        this.EnableAddBlank(this.HasNotBlankArticles());
+                        break;
                     }
                 }
+
+                var articlesForDelete = [];
+                for (var j = 0; j < this._articles.length; j++) {
+                    var a = this._articles[j];
+                    if (!a.IsBlank()) {
+                        break;
+                    }
+                    articlesForDelete.push(a.Id);
+                }
+
+                for (var j = 0; j < articlesForDelete.length; j++) {
+                    var articleForDelete = articlesForDelete[j];
+                    this._articles.splice(articleForDelete, 1);
+                    this._deleteFromContainer(articleForDelete);
+                }
+
+                this.UpdateTotal();
             },
            
             this.GetSortedArticles = function() {
@@ -861,6 +899,11 @@ $(function () {
                 var th = this;
                 rows.sortable({
                     stop: function () {
+                        var newFirstArticle = th.GetArticle(rows.find("tr").first().attr("data-id"));
+                        if (newFirstArticle.IsBlank()) {
+                            rows.sortable("cancel");
+                            return;
+                        }
                         var i = 0;
                         rows.find("tr").each(function () {
                             var article = th.GetArticle($(this).attr("data-id"));
@@ -869,6 +912,7 @@ $(function () {
                             }
                             i++;
                         });
+                        th.GetArticles().sort(function (a, b) { return a.Position - b.Position; });
                     }
                 });
 
