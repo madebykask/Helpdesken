@@ -17,6 +17,7 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Accounts;
+    using DH.Helpdesk.Services.Localization;
 
     public interface IUserService
     {
@@ -387,7 +388,6 @@ namespace DH.Helpdesk.Services.Services
             else
                 user.Cs = new List<Customer>();
 
-
             if (user.Id != 0)
             {
                 if (cs != null)
@@ -400,6 +400,11 @@ namespace DH.Helpdesk.Services.Services
                             user.Cs.Add(c);
                     }
                 }
+            }
+
+            if (!user.Cs.Any(it => it.Id == user.Customer_Id))
+            {
+                errors.Add("User.Customer_Id", Translator.Translate("Du måste ange ett standartkund"));
             }
 
             if (user.Id == 0)
@@ -557,6 +562,11 @@ namespace DH.Helpdesk.Services.Services
                     if (c != null)
                         user.Cs.Add(c);
                 }
+            }
+
+            if (!user.Cs.Any(it => it.Id == user.Customer_Id))
+            {
+                errors.Add("User.Customer_Id", Translator.Translate("Du måste ange ett standartkund"));
             }
 
             if (user.UserWorkingGroups != null)

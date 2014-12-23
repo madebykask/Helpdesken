@@ -123,19 +123,14 @@
     }
 
     $("#addCs").click(function () {
- 
         if (document.getElementById("CsAvailable").length != 0 && document.getElementById("CsAvailable").selectedIndex != -1) {
             // Add to selected
-            document.getElementById("CsSelected").options[document.getElementById("CsSelected").length] = new Option(document.getElementById("CsAvailable")[document.getElementById("CsAvailable").selectedIndex].text, document.getElementById("CsAvailable")[document.getElementById("CsAvailable").selectedIndex].value, false, false)
-
+            document.getElementById("CsSelected").options[document.getElementById("CsSelected").length] = new Option(document.getElementById("CsAvailable")[document.getElementById("CsAvailable").selectedIndex].text, document.getElementById("CsAvailable")[document.getElementById("CsAvailable").selectedIndex].value, false, false);
             //Add to Default customer
-            document.getElementById("User_Customer_Id").options[document.getElementById("User_Customer_Id").length] = new Option(document.getElementById("CsAvailable")[document.getElementById("CsAvailable").selectedIndex].text, document.getElementById("CsAvailable")[document.getElementById("CsAvailable").selectedIndex].value, false, false)
-
+            document.getElementById("User_Customer_Id").options[document.getElementById("User_Customer_Id").length] = new Option(document.getElementById("CsAvailable")[document.getElementById("CsAvailable").selectedIndex].text, document.getElementById("CsAvailable")[document.getElementById("CsAvailable").selectedIndex].value, false, false);
             // Remove
-            document.getElementById("CsAvailable").options[document.getElementById("CsAvailable").selectedIndex] = null
-            
+            document.getElementById("CsAvailable").options[document.getElementById("CsAvailable").selectedIndex] = null;
         }
-
         return false;
     });
 

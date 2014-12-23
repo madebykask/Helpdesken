@@ -19,8 +19,7 @@
 <script type="text/javascript">
 
     $(function () {
-   
-        var validator = $("#target").validate({
+       $("#target").validate({
             rules: {
                 "User.UserID": {
                     required: true
@@ -33,6 +32,9 @@
                 },
                 "User.Email": {
                     required: true
+                },
+                "User.Customer_Id": {
+                    required: true
                 }
             },
             messages: {
@@ -40,20 +42,23 @@
                     required: "@Translation.Get("Du måste ange ett Användar ID", Enums.TranslationSource.TextTranslation)"
                 },
                 "User.FirstName": {
-                    required: "@Translation.Get("Du måste ange ett namn", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.Get("Du måste ange ett förnamn", Enums.TranslationSource.TextTranslation)"
                 },
                 "User.SurName": {
-                    required: "@Translation.Get("Du måste ange ett namn", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.Get("Du måste ange ett efternamn", Enums.TranslationSource.TextTranslation)"
                 },
                 "User.Email": {
                     required: "@Translation.Get("You must specify an e-mail address", Enums.TranslationSource.TextTranslation)"
-                }
                 },
-                submitHandler: function (form) {
-                    submitForm();
-                    form.submit();   
+                "User.Customer_Id": {
+                    required: "@Translation.Get("Du måste ange ett standartkund", Enums.TranslationSource.TextTranslation)"
                 }
-            });
+           },
+            submitHandler: function (form) {
+                submitForm();
+                form.submit();   
+            }
+        });
     });
 
     $("input:text:visible:first").focus();
