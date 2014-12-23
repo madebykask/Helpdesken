@@ -767,9 +767,9 @@ $(function () {
             this.EnableAddBlank = function(enable) {
                 var addBlank = this.Container.find(".add-blank-article");
                 if (enable) {
-                    addBlank.show();
+                    addBlank.css("display", "block");
                 } else {
-                    addBlank.hide();
+                    addBlank.css("display", "none");
                 }
             },
 
