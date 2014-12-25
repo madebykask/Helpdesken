@@ -10,6 +10,57 @@
     <script type="text/javascript">
         $(document).ready(function () {
             CaseInitForm();
+
+            var hasNotInvoicedArticles = function() {
+                return typeof dhHelpdesk.CaseArticles !== "undefined" &&
+                    dhHelpdesk.CaseArticles.HasNotInvoicedArticles();
+            }
+
+            var invoiceArticlesBeforeClose = function() {
+                return hasNotInvoicedArticles() &&
+                    !confirm('@Translation.Get("Are you sure you want to close the case without sending your selected articles to invoicing?")');
+            }
+
+            var openInvoiceWindow = function() {
+                dhHelpdesk.CaseArticles.OpenInvoiceWindow('@Translation.Get("Please send selected articles for invoicing or delete them in order to close the case.")');
+            }
+
+            $("#case-action-save-and-close").click(function() {
+                if (invoiceArticlesBeforeClose()) {
+                    openInvoiceWindow();
+                    return false;
+                }
+
+                EditCaseAndClose();
+                return false;
+            });
+
+            $("#case-action-save-and-new").click(function () {
+                if (invoiceArticlesBeforeClose()) {
+                    openInvoiceWindow();
+                    return false;
+                }
+
+                EditCaseAndAddCase();
+                return false;
+            });
+
+            $("#case-action-delete").click(function () {
+                if (hasNotInvoicedArticles()) {
+                    alert('@Translation.Get("You may not delete a case with selected articles in the order section. Please review your orders.")');
+                    return false;
+                }
+                return true;
+            });
+
+            $("#case-action-close").click(function () {
+                if (invoiceArticlesBeforeClose()) {
+                    openInvoiceWindow();
+                    return false;
+                }
+
+                return true;
+            });
         });
 
         function MakeAsUnread() {
@@ -41,20 +92,21 @@
                 @if(Model.EditMode == Enums.AccessMode.FullAccess)
                 {
                     <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
-                    <li>@Html.ActionLink(Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation), null, null, new { onclick = "EditCaseAndClose();return false;", @class = "btn" })</li>
-                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), null, null, new { onclick = "EditCaseAndAddCase();return false;", @class = "btn" })</li>
+                    <li>@Html.ActionLink(Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation), null, null, new { @class = "btn", id = "case-action-save-and-close" })</li>
+                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), null, null, new { @class = "btn", id = "case-action-save-and-new" })</li>
                     <li class="secspace"></li>                    
-                    if(SessionFacade.CurrentUser.DeleteCasePermission == 1)
+                    if (SessionFacade.CurrentUser.DeleteCasePermission == 1)
                     {                            
                     <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteCase",
                          new { caseId = @Model.case_.Id, customerId = @Model.case_.Customer_Id }, new
                          {
                              @class = "btn deleteDialog",
+                             id = "case-action-delete", 
                              deleteDialogText = Translation.Get("Är du säker på att du vill radera detta ärende", Enums.TranslationSource.TextTranslation) + '?'
                          })</li>
                     }
                 }
-                <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "Index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "Index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn", id = "case-action-close"  })</li>
 
                 <li>
                     <div id="divActionMenu" class="btn-group">

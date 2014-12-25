@@ -1,9 +1,12 @@
 ﻿namespace DH.Helpdesk.Services.Services.Concrete
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Invoice;
+    using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories.Invoice;
+    using DH.Helpdesk.Domain.Invoice;
 
     public sealed class InvoiceArticleService : IInvoiceArticleService
     {
@@ -13,14 +16,18 @@
 
         private readonly ICaseInvoiceArticleRepository caseInvoiceArticleRepository;
 
+        private readonly IUnitOfWorkFactory unitOfWorkFactory;
+
         public InvoiceArticleService(
                 IInvoiceArticleUnitRepository invoiceArticleUnitRepository, 
                 IInvoiceArticleRepository invoiceArticleRepository, 
-                ICaseInvoiceArticleRepository caseInvoiceArticleRepository)
+                ICaseInvoiceArticleRepository caseInvoiceArticleRepository, 
+                IUnitOfWorkFactory unitOfWorkFactory)
         {
             this.invoiceArticleUnitRepository = invoiceArticleUnitRepository;
             this.invoiceArticleRepository = invoiceArticleRepository;
             this.caseInvoiceArticleRepository = caseInvoiceArticleRepository;
+            this.unitOfWorkFactory = unitOfWorkFactory;
         }
 
         public InvoiceArticleUnit[] GetUnits(int customerId)
@@ -50,7 +57,26 @@
 
         public void DeleteCaseInvoices(int caseId)
         {
-            this.caseInvoiceArticleRepository.DeleteCaseInvoices(caseId);
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var caseInvoicesRep = uow.GetRepository<CaseInvoiceEntity>();
+                var caseInvoiceOrdersRep = uow.GetRepository<CaseInvoiceOrderEntity>();
+                var caseInvoiceArticlesRep = uow.GetRepository<CaseInvoiceArticleEntity>();
+
+                var invoices = caseInvoicesRep.GetAll()
+                                .Where(i => i.CaseId == caseId)
+                                .ToList();
+
+                foreach (var invoice in invoices)
+                {
+                    var orderIds = invoice.Orders.Select(o => o.Id);
+                    caseInvoiceArticlesRep.DeleteWhere(a => orderIds.Contains(a.OrderId));
+                    caseInvoiceOrdersRep.DeleteWhere(o => orderIds.Contains(o.Id));
+                    caseInvoicesRep.DeleteById(invoice.Id);
+                }
+
+                uow.Save();
+            }
         }
 
         public int SaveArticle(InvoiceArticle article)

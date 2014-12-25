@@ -105,18 +105,6 @@
                     this.Commit();
                 }
             }
-        }
-
-        public void DeleteCaseInvoices(int caseId)
-        {
-            var entities = this.DbContext.CaseInvoices
-                        .Where(i => i.CaseId == caseId)
-                        .ToList();
-
-            foreach (var entity in entities)
-            {
-                this.DbContext.CaseInvoices.Remove(entity);
-            }
-        }
+        }        
     }
 }

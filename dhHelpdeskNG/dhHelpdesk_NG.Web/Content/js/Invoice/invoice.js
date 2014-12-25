@@ -97,6 +97,18 @@ $(function () {
             return null;
         },
 
+        HasNotInvoicedArticles: function() {
+            var invoices = this.GetInvoices();
+            for (var i = 0; i < invoices.length; i++) {
+                var invoice = invoices[i];
+                if (invoice.HasNotInvoicedArticles()) {
+                    return true;
+                }
+            }
+
+            return false;
+        },
+
         GetOrder: function(id) {
             var invoices = this.GetInvoices();
             for (var i = 0; i < invoices.length; i++) {
@@ -331,10 +343,15 @@ $(function () {
             return options;
         },
 
-        CreateContainer: function () {
+        CreateContainer: function (message) {
             var th = this;
             var invoice = th.GetInvoice();
             th._container = invoice.Container;
+
+            if (message !== "undefined") {
+                th._container.find(".case-invoice-message").text(message);
+            }
+
             th._container.dialog({
                 title: "Articles to be invoiced",
                 width: 1000,
@@ -401,6 +418,33 @@ $(function () {
             });
         },
 
+        OpenInvoiceWindow: function (message) {
+            var th = dhHelpdesk.CaseArticles;
+            th.CreateContainer(message);
+            var addArticleEl = th._container.find(".articles-params");
+            var articlesSelectContainer = addArticleEl.find(".articles-select-container");
+            articlesSelectContainer.empty();
+            var articlesEl = $("<select class='multiselect articles-params-article'></select>");
+            articlesSelectContainer.append(articlesEl);
+
+            var articles = th.GetInvoiceArticles();
+            if (articles == null || articles.length == 0) {
+                addArticleEl.hide();
+                return;
+            } else {
+                addArticleEl.show();
+            }
+
+            for (var i = 0; i < articles.length; i++) {
+                var article = articles[i];
+                articlesEl.append("<option value='" + article.Id + "'>" + article.GetFullName() + "</option>");
+            }
+
+            articlesEl.multiselect();
+            articlesSelectContainer.find("button.multiselect").addClass("min-width-500 max-width-500");
+            th._container.dialog("open");
+        },
+
         Initialize: function (e) {
             var th = this;
             th.ProductAreaElement = $(document).find("." + e.attr("data-invoice-product-area"));
@@ -417,29 +461,7 @@ $(function () {
                 .attr("title", ButtonHint)
                 .addClass("btn");
             button.click(function () {
-                th.CreateContainer();
-                var addArticleEl = th._container.find(".articles-params");
-                var articlesSelectContainer = addArticleEl.find(".articles-select-container");
-                articlesSelectContainer.empty();
-                var articlesEl = $("<select class='multiselect articles-params-article'></select>");
-                articlesSelectContainer.append(articlesEl);
-
-                var articles = th.GetInvoiceArticles();
-                if (articles == null || articles.length == 0) {
-                    addArticleEl.hide();
-                    return;
-                } else {
-                    addArticleEl.show();
-                }
-
-                for (var i = 0; i < articles.length; i++) {
-                    var article = articles[i];
-                    articlesEl.append("<option value='" + article.Id + "'>" + article.GetFullName() + "</option>");
-                }
-
-                articlesEl.multiselect();
-                articlesSelectContainer.find("button.multiselect").addClass("min-width-500 max-width-500");
-                th._container.dialog("open");
+                th.OpenInvoiceWindow();
             });
             e.after(button);
 
@@ -608,6 +630,17 @@ $(function () {
                 for (var i = 0; i < orders.length; i++) {
                     var order = orders[i];
                     if (order.HasArticles()) {
+                        return true;
+                    }
+                }
+                return false;
+            },
+
+            this.HasNotInvoicedArticles = function () {
+                var orders = this.GetOrders();
+                for (var i = 0; i < orders.length; i++) {
+                    var order = orders[i];
+                    if (order.HasNotInvoicedArticles()) {
                         return true;
                     }
                 }
@@ -807,6 +840,17 @@ $(function () {
                 for (var i = 0; i < articles.length; i++) {
                     var article = articles[i];
                     if (!article.IsBlank()) {
+                        return true;
+                    }
+                }
+                return false;
+            },
+
+            this.HasNotInvoicedArticles = function() {
+                var articles = this.GetArticles();
+                for (var i = 0; i < articles.length; i++) {
+                    var article = articles[i];
+                    if (!article.IsInvoiced) {
                         return true;
                     }
                 }
