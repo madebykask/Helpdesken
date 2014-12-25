@@ -348,8 +348,10 @@ $(function () {
             var invoice = th.GetInvoice();
             th._container = invoice.Container;
 
-            if (message !== "undefined") {
+            var markInvoiceButton = false;
+            if (typeof message !== "undefined") {
                 th._container.find(".case-invoice-message").text(message);
+                markInvoiceButton = true;
             }
 
             th._container.dialog({
@@ -381,6 +383,9 @@ $(function () {
 
             if (!th.IsNewCase()) {
                 var invoiceBtn = $("<button>Invoice</button>");
+                if (markInvoiceButton) {
+                    invoiceBtn.css("color", "red");
+                }
                 invoiceBtn.click(function () {
                     th.InvoiceArticles();
                     th._container.dialog("close");
