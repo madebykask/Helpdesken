@@ -45,6 +45,18 @@ $(function () {
             $(document).on(event, handler);
         },
 
+        MakeInvalid: function(e) {
+            e.css("border-color", "red");
+        },
+
+        MakeValid: function(e) {
+            e.css("border-color", "");
+        },
+
+        IsNullOrEmpty: function(value) {
+            return !(typeof value === "string" && value.length > 0);
+        },
+
         AddInvoiceArticle: function (article) {
             this._invoiceArticles.push(article);
         },
@@ -1227,21 +1239,36 @@ $(function () {
                 this.Refresh();
             },
 
-            this.Validate = function() {
+            this.Validate = function () {
+                var isValid = true;
+
                 if (!this.IsArticlePpuExists()) {
                     var ePpu = this.Container.find(".article-ppu");
                     if (ePpu.length > 0) {
                         var ppu = ePpu.val();
                         if (!dhHelpdesk.CaseArticles.IsInteger(ppu) || ppu <= 0) {
-                            ePpu.css("border-color", "red");
-                            return false;
+                            dhHelpdesk.CaseArticles.MakeInvalid(ePpu);
+                            isValid = false;
+                        } else {
+                            dhHelpdesk.CaseArticles.MakeValid(ePpu);
                         }
-
-                        ePpu.css("border-color", "");
                     }
                 }
 
-                return true;
+                if (this.IsBlank()) {
+                    var eName = this.Container.find(".article-name");
+                    if (eName.length > 0) {
+                        var name = eName.val();
+                        if (dhHelpdesk.CaseArticles.IsNullOrEmpty(name)) {
+                            dhHelpdesk.CaseArticles.MakeInvalid(eName);
+                            isValid = false;
+                        } else {
+                            dhHelpdesk.CaseArticles.MakeValid(eName);
+                        }
+                    }
+                }
+
+                return isValid;
             }
         },
 
