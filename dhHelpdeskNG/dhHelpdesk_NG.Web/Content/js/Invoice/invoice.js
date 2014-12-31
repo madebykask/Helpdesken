@@ -777,12 +777,10 @@ $(function () {
 
             this.ShowSummary = function() {
                 this.Container.find(".case-invoice-order-summary").show();
-                this.Container.find(".case-invoice-order-summary-btn").show();
             },
 
             this.HideSummary = function() {
                 this.Container.find(".case-invoice-order-summary").hide();
-                this.Container.find(".case-invoice-order-summary-btn").hide();
             },
 
             this.Initialize = function () {
@@ -816,10 +814,6 @@ $(function () {
                     } else {
                         th.HideSummary();
                     }
-                });
-
-                this.Container.find(".case-invoice-order-summary-btn").click(function() {
-                    th.Container.find(".case-invoice-order-summary").find("a").click();
                 });
             },
 
