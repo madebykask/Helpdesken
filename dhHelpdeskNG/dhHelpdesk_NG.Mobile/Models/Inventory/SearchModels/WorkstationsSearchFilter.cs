@@ -3,6 +3,8 @@
     using DataAnnotationsExtensions;
 
     using DH.Helpdesk.BusinessData.Models.Inventory;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
+    using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Services.Requests.Inventory;
     using DH.Helpdesk.Mobile.Infrastructure.LocalizedAttributes;
@@ -67,6 +69,7 @@
 
         public ComputersFilter CreateRequest(int customerId)
         {
+            var sf = new SortField(this.SortField.Name, this.SortField.SortBy ?? SortBy.Ascending);
             return new ComputersFilter(
                 customerId,
                 this.RegionId,
@@ -83,7 +86,8 @@
                 this.ScrapDate.DateTo,
                 this.SearchFor,
                 this.IsShowScrapped,
-                this.RecordsOnPage);
+                this.RecordsOnPage,
+                sf);
         }
     }
 }

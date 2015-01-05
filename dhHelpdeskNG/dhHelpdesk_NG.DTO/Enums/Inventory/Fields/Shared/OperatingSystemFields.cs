@@ -4,7 +4,7 @@
     {
         public static readonly string OperatingSystem = "OperatingSystem.Name";
 
-        public static readonly string Version = "OperatingSystem.Name";
+        public static readonly string Version = "OperatingSystem.Version";
 
         public static readonly string ServicePack = "OperatingSystem.SP";
 

@@ -18,6 +18,9 @@
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Server;
     using DH.Helpdesk.BusinessData.Models.Operation;
     using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
+    using DH.Helpdesk.Common.Types;
+    using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Computers;
     using DH.Helpdesk.Dal.Repositories.Inventory;
@@ -27,12 +30,16 @@
     using DH.Helpdesk.Dal.Repositories.WorkstationModules;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Inventory;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Inventory;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Inventory;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications.Inventory;
     using DH.Helpdesk.Services.Exceptions;
     using DH.Helpdesk.Services.Requests.Inventory;
     using DH.Helpdesk.Services.Response.Inventory;
 
     public class InventoryService : IInventoryService
     {
+        private readonly IUnitOfWorkFactory unitOfWorkFactory;
+
         private readonly IInventoryTypeRepository inventoryTypeRepository;
 
         private readonly IComputerRepository computerRepository;
@@ -126,7 +133,8 @@
             IPrinterRestorer printerRestorer,
             IPrinterValidator printerValidator,
             IInventoryValidator inventoryValidator,
-            IInventoryRestorer inventoryRestorer)
+            IInventoryRestorer inventoryRestorer,
+            IUnitOfWorkFactory unitOfWorkFactory)
         {
             this.inventoryTypeRepository = inventoryTypeRepository;
             this.computerRepository = computerRepository;
@@ -159,6 +167,7 @@
             this.printerValidator = printerValidator;
             this.inventoryValidator = inventoryValidator;
             this.inventoryRestorer = inventoryRestorer;
+            this.unitOfWorkFactory = unitOfWorkFactory;
         }
 
         public List<ComputerUserOverview> GetComputerUsers(int customerId, string searchFor)
@@ -349,7 +358,8 @@
                 computersFilter.ScrapDateTo,
                 computersFilter.SearchFor,
                 computersFilter.IsShowScrapped,
-                computersFilter.RecordsOnPage);
+                computersFilter.RecordsOnPage,
+                computersFilter.SortField);
 
             return computerOverviews;
         }
@@ -479,12 +489,27 @@
             return this.operationLogRepository.GetOperationServerLogOverviews(customerId, id);
         }
 
-        public List<ServerOverview> GetServers(ServersFilter computersFilter)
+        public ServerOverview[] GetServers(ServersFilter computersFilter)
         {
-            var models = this.serverRepository.FindOverviews(computersFilter.CustomerId, computersFilter.SearchFor);
-
-            return models;
+//            var models = this.serverRepository.FindOverviews(computersFilter.CustomerId, computersFilter.SearchFor, sortOptions);
+//             public SearchResponse Search(SearchParameters parameters){
+//            var settings = this.orderFieldSettingsService.GetOrdersFieldSettingsOverview(parameters.CustomerId, parameters.OrderTypeId);
+            using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                var repository = uow.GetRepository<DH.Helpdesk.Domain.Servers.Server>();
+//
+                var overviews = repository.GetAll()
+                    .Search(computersFilter.CustomerId, computersFilter.SearchFor, computersFilter.SortField)
+                    .MapToFullOverviews();
+                return overviews;
+                //
+                //                var searchResult = new SearchResult(overviews.Count(), overviews);
+                //                return new SearchResponse(settings, searchResult);                
+            }
+//        }
         }
+
+        
 
         #endregion
 

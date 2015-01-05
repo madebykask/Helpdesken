@@ -176,7 +176,7 @@
                     return string.Format(
                         "{0} - {1}", 
                         this.translator.Translate("Rapport"),
-                        this.translator.Translate("Case satisfaction"));
+                        this.translator.Translate("Kundnöjdhet - ärende"));
             }
 
             return null;

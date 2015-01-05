@@ -14,6 +14,8 @@
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Printer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Server;
     using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
+    using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Services.Requests.Inventory;
     using DH.Helpdesk.Services.Response.Inventory;
 
@@ -75,7 +77,7 @@
 
         List<OperationServerLogOverview> GetOperationServerLogOverviews(int id, int customerId);
 
-        List<ServerOverview> GetServers(ServersFilter computersFilter);
+        ServerOverview[] GetServers(ServersFilter computersFilter);
 
         #endregion
 

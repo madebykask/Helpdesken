@@ -140,6 +140,7 @@
     <Compile Include="BusinessLogic\Mappers\Department\DepartmentMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Documents\DocumentMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Faqs\FaqMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Inventory\ServerOverviewMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Licenses\ApplicationMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Licenses\ComputerMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Licenses\LicenseFileMapper.cs" />
@@ -186,6 +187,7 @@
     <Compile Include="BusinessLogic\Specifications\EmailTemplate\MailTemplateSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\EmailTemplate\MailTemplateLanguageSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\GlobalSpecifications.cs" />
+    <Compile Include="BusinessLogic\Specifications\Inventory\ServerSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Licenses\ApplicationSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Licenses\ComputerSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Licenses\LicenseFileSpecifications.cs" />

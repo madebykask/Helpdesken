@@ -1651,6 +1651,7 @@
     <Content Include="Areas\OrderAccounts\Views\Orders\AttachedFile.cshtml" />
     <Content Include="Areas\Orders\Views\Orders\DisplayTemplates\HistoryModel.cshtml" />
     <Content Include="Areas\Orders\Views\Orders\DisplayTemplates\HistoryRecordModel.cshtml" />
+    <Content Include="log4net.config.template" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />

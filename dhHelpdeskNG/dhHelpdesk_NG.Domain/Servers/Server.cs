@@ -1,10 +1,11 @@
 ﻿namespace DH.Helpdesk.Domain.Servers
 {
-    using DH.Helpdesk.Domain.WorkstationModules;
-
     using global::System;
 
-    public class Server : Entity
+    using DH.Helpdesk.Domain.Interfaces;
+    using DH.Helpdesk.Domain.WorkstationModules;
+
+    public class Server : Entity, ICustomerEntity
     {
         public int? ChangedByUser_Id { get; set; }
         public int Customer_Id { get; set; }
@@ -39,11 +40,11 @@
         public DateTime? Scandate { get; set; }
         public DateTime? SyncChangedDate { get; set; }
 
-        public virtual Customer Customer { get; set; }
-        public virtual NIC NIC { get; set; }
-        public virtual global::DH.Helpdesk.Domain.WorkstationModules.OperatingSystem OperatingSystem { get; set; }
-        public virtual Processor Processor { get; set; }
-        public virtual RAM RAM { get; set; }
-        public virtual Room Room { get; set; }
+        public Customer Customer { get; set; }
+        public NIC NIC { get; set; }
+        public global::DH.Helpdesk.Domain.WorkstationModules.OperatingSystem OperatingSystem { get; set; }
+        public Processor Processor { get; set; }
+        public RAM RAM { get; set; }
+        public Room Room { get; set; }
     }
 }

@@ -12,15 +12,12 @@
     </layout>
   </appender>
   <appender name="SmtpAppender" type="log4net.Appender.SmtpAppender">
-    <to value="dhhelpdesk5@gmail.com" />
-    <from value="dhhelpdesk5@gmail.com" />
+    <to value="webmaster@dhhelpdesk.com" />
+    <from value="noreply@dhhelpdesk.com" />
     <subject value="DH Solutions Helpdesk" />
-    <smtpHost value="smtp.gmail.com" />
-    <port value="587" />
-    <authentication value="Basic" />
-    <username value="dhhelpdesk5@gmail.com"/>
-    <password value="dhsolutions"/>
-    <EnableSsl value="true" />
+    <smtpHost value="192.168.56.1" />
+    <port value="25" />
+    <authentication value="None" />
     <bufferSize value="1" />
     <lossy value="true" />
     <evaluator type="log4net.Core.LevelEvaluator">

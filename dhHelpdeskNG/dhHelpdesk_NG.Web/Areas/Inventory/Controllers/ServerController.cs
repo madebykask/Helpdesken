@@ -221,7 +221,7 @@
             ServerFieldsSettingsOverview settings = this.inventorySettingsService.GetServerFieldSettingsOverview(
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
-            List<ServerOverview> models = this.inventoryService.GetServers(filter.CreateRequest(SessionFacade.CurrentCustomer.Id));
+            var models = this.inventoryService.GetServers(filter.CreateRequest(SessionFacade.CurrentCustomer.Id));
 
             InventoryGridModel viewModel = InventoryGridModel.BuildModel(models, settings, filter.SortField);
             return viewModel;

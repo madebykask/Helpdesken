@@ -57,24 +57,18 @@
             SortFieldModel sortField)
         {
             List<InventoryOverviewModel> overviews = modelList.Select(c => CreateComputerOverview(c, settings)).ToList();
-            List<InventoryOverviewModel> sortedOverviews = SortGrid(sortField, overviews);
-
             var headers = GetComputerHeaders(settings);
-
-            return new InventoryGridModel(headers, sortedOverviews, (int)CurrentModes.Workstations, sortField);
+            return new InventoryGridModel(headers, overviews, (int)CurrentModes.Workstations, sortField);
         }
 
         public static InventoryGridModel BuildModel(
-            List<ServerOverview> modelList,
+            ServerOverview[] modelList,
             ServerFieldsSettingsOverview settings,
             SortFieldModel sortField)
         {
-            List<InventoryOverviewModel> overviews = modelList.Select(c => CreateServerOverview(c, settings)).ToList();
-            List<InventoryOverviewModel> sortedOverviews = SortGrid(sortField, overviews);
-
+            var overviews = modelList.Select(c => CreateServerOverview(c, settings)).ToList();
             var headers = GetServerHeaders(settings);
-
-            return new InventoryGridModel(headers, sortedOverviews, (int)CurrentModes.Servers, sortField);
+            return new InventoryGridModel(headers, overviews, (int)CurrentModes.Servers, sortField);
         }
 
         public static InventoryGridModel BuildModel(

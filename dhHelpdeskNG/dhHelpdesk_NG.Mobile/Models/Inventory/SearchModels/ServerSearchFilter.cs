@@ -1,8 +1,10 @@
 ﻿namespace DH.Helpdesk.Mobile.Models.Inventory.SearchModels
 {
-    using DH.Helpdesk.Services.Requests.Inventory;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
+    using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Mobile.Infrastructure.LocalizedAttributes;
     using DH.Helpdesk.Mobile.Models.Shared;
+    using DH.Helpdesk.Services.Requests.Inventory;
 
     public class ServerSearchFilter
     {
@@ -18,7 +20,8 @@
 
         public ServersFilter CreateRequest(int customerId)
         {
-            return new ServersFilter(customerId, this.SearchFor);
+            var sf = new SortField(this.SortField.Name, this.SortField.SortBy ?? SortBy.Ascending);
+            return new ServersFilter(customerId, this.SearchFor, sf);
         }
     }
 }

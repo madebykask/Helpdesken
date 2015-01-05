@@ -2,6 +2,7 @@
 {
     using System;
 
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public class ComputersFilter
@@ -22,8 +23,10 @@
             DateTime? scrapDateTo,
             string searchFor,
             bool isShowScrapped, 
-            int recordsOnPage)
+            int recordsOnPage,
+            SortField sortField)
         {
+            this.SortField = sortField;
             this.CustomerId = customerId;
             this.RegionId = regionId;
             this.DepartmentId = departmentId;
@@ -79,5 +82,7 @@
         public int RecordsOnPage { get; private set; }
 
         public bool IsShowScrapped { get; private set; }
+
+        public SortField SortField { get; private set; }
     }
 }

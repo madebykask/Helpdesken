@@ -7,6 +7,9 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
     using DH.Helpdesk.BusinessData.Models.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Computer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
+    using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Dal.Dal;
 
     public interface IComputerRepository : INewRepository
@@ -39,7 +42,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
             DateTime? scrapDateTo,
             string searchFor,
             bool isShowScrapped,
-            int recordsOnPage);
+            int recordsOnPage,
+            SortField sortOptions);
 
         ComputerShortOverview FindShortOverview(int id);
 

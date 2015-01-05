@@ -2,15 +2,13 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
 {
     using System.Collections.Generic;
     using System.Linq;
-
     using DH.Helpdesk.BusinessData.Models.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Server;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Server;
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
-
-    public class ServerRepository : Repository<Domain.Servers.Server>, IServerRepository
+   
+    public class ServerRepository : Repository<Helpdesk.Domain.Servers.Server>, IServerRepository
     {
         public ServerRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
@@ -19,7 +17,7 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
 
         public void Add(ServerForInsert businessModel)
         {
-            var entity = new Domain.Servers.Server();
+            var entity = new Helpdesk.Domain.Servers.Server();
             Map(entity, businessModel);
             entity.Customer_Id = businessModel.CustomerId;
             entity.CreatedDate = businessModel.CreatedDate;
@@ -149,80 +147,6 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
             return serverAggregate;
         }
 
-        public List<ServerOverview> FindOverviews(int customerId, string searchFor)
-        {
-            var query = this.DbSet.Where(x => x.Customer_Id == customerId);
-
-            if (!string.IsNullOrEmpty(searchFor))
-            {
-                var pharseInLowerCase = searchFor.ToLower();
-
-                query =
-                    query.Where(
-                        c =>
-                        c.ServerName.ToLower().Contains(pharseInLowerCase)
-                        || c.ServerModel.ToLower().Contains(pharseInLowerCase)
-                        || c.ServerDescription.ToLower().Contains(pharseInLowerCase)
-                        || c.Manufacturer.ToLower().Contains(pharseInLowerCase)
-                        || c.SerialNumber.ToLower().Contains(pharseInLowerCase));
-            }
-
-            var anonymus =
-                query.Select(
-                    x =>
-                    new
-                        {
-                            Entity = x,
-                            OperatingName = x.OperatingSystem.Name,
-                            ProcessorName = x.Processor.Name,
-                            RamName = x.RAM.Name,
-                            NetworkAdapterName = x.NIC.Name,
-                            RoomName = x.Room.Name
-                        }).ToList();
-
-            var overviewAggregates =
-                anonymus.Select(
-                    x =>
-                    new ServerOverview(
-                        x.Entity.Id,
-                        x.Entity.Customer_Id,
-                        x.Entity.CreatedDate,
-                        x.Entity.ChangedDate,
-                        new BusinessData.Models.Inventory.Output.Server.GeneralFields(
-                        x.Entity.ServerName,
-                        x.Entity.Manufacturer,
-                        x.Entity.ServerDescription,
-                        x.Entity.ServerModel,
-                        x.Entity.SerialNumber),
-                        new BusinessData.Models.Inventory.Output.Server.OtherFields(
-                        x.Entity.Info,
-                        x.Entity.Miscellaneous,
-                        x.Entity.URL,
-                        x.Entity.URL2,
-                        x.Entity.Owner),
-                        new BusinessData.Models.Inventory.Output.Server.StateFields(x.Entity.SyncChangedDate),
-                        new BusinessData.Models.Inventory.Output.Server.StorageFields(x.Entity.Harddrive),
-                        new BusinessData.Models.Inventory.Output.Shared.ChassisFields(x.Entity.ChassisType),
-                        new BusinessData.Models.Inventory.Output.Shared.InventoryFields(
-                        x.Entity.BarCode,
-                        x.Entity.PurchaseDate),
-                        new BusinessData.Models.Inventory.Output.Shared.MemoryFields(x.RamName),
-                        new BusinessData.Models.Inventory.Output.Shared.OperatingSystemFields(
-                        x.OperatingName,
-                        x.Entity.Version,
-                        x.Entity.SP,
-                        x.Entity.RegistrationCode,
-                        x.Entity.ProductKey),
-                        new BusinessData.Models.Inventory.Output.Shared.ProcessorFields(x.ProcessorName),
-                        new BusinessData.Models.Inventory.Output.Shared.PlaceFields(x.RoomName, x.Entity.Location),
-                        new BusinessData.Models.Inventory.Output.Server.CommunicationFields(
-                        x.NetworkAdapterName,
-                        x.Entity.IPAddress,
-                        x.Entity.MACAddress))).ToList();
-
-            return overviewAggregates;
-        }
-
         public void RemoveReferenceOnNic(int id)
         {
             var models =
@@ -294,7 +218,7 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
             return models;
         }
 
-        private static void Map(Domain.Servers.Server entity, Server businessModel)
+        private static void Map(Helpdesk.Domain.Servers.Server entity, Server businessModel)
         {
             entity.ServerName = businessModel.GeneralFields.Name ?? string.Empty;
             entity.Manufacturer = businessModel.GeneralFields.Manufacturer ?? string.Empty;

@@ -3,16 +3,21 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Linq.Expressions;
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Computer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer;
+    using DH.Helpdesk.BusinessData.Models.Shared.Input;
+    using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Common.Extensions.Boolean;
     using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
+
+    using ComputerFields = DH.Helpdesk.BusinessData.Enums.Inventory.Fields.Computer.WorkstationFields;
 
     public class ComputerRepository : Repository<Domain.Computers.Computer>, IComputerRepository
     {
@@ -273,6 +278,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             return workstation;
         }
 
+
         public List<ComputerOverview> FindOverviews(
             int customerId,
             int? regionId,
@@ -289,7 +295,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             DateTime? scrapDateTo,
             string searchFor,
             bool isShowScrapped,
-            int recordsOnPage)
+            int recordsOnPage,
+            SortField sortOptions)
         {
             var query = this.DbSet.Where(x => x.Customer_Id == customerId);
 
@@ -374,6 +381,96 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                         || c.CarePackNumber.ToLower().Contains(pharseInLowerCase)
                         || c.ComputerType.Name.ToLower().Contains(pharseInLowerCase)
                         || c.Location.ToLower().Contains(pharseInLowerCase));
+            }
+
+            if (sortOptions != null && sortOptions.Name != null)
+            {
+                if (sortOptions.SortBy == SortBy.Ascending)
+                {
+                    if (sortOptions.Name == ComputerFields.Name)
+                    {
+                        query = query.OrderBy(x => x.ComputerName);
+                    }
+                    else if (sortOptions.Name == ComputerFields.Manufacturer)
+                    {
+                        query = query.OrderBy(x => x.Manufacturer);
+                    }
+                    else if (sortOptions.Name == ComputerFields.Model)
+                    {
+                        query = query.OrderBy(x => x.ComputerModel.Name);
+                    }
+                    else if (sortOptions.Name == ComputerFields.SerialNumber)
+                    {
+                        query = query.OrderBy(x => x.SerialNumber);
+                    }
+                    else if (sortOptions.Name == ComputerFields.SerialNumber)
+                    {
+                        query = query.OrderBy(x => x.SerialNumber);
+                    }
+                    else if (sortOptions.Name == ComputerFields.BIOSVersion)
+                    {
+                        query = query.OrderBy(x => x.BIOSVersion);
+                    }
+                    else if (sortOptions.Name == ComputerFields.BIOSDate)
+                    {
+                        query = query.OrderBy(x => x.BIOSDate);
+                    }
+                    else if (sortOptions.Name == ComputerFields.Theftmark)
+                    {
+                        query = query.OrderBy(x => x.TheftMark);
+                    }
+                    else if (sortOptions.Name == ComputerFields.CarePackNumber)
+                    {
+                        query = query.OrderBy(x => x.CarePackNumber);
+                    }
+                    else if (sortOptions.Name == ComputerFields.ComputerType)
+                    {
+                        query = query.OrderBy(x => x.ComputerType.Name);
+                    }
+                }
+                else
+                {
+                    if (sortOptions.Name == ComputerFields.Name)
+                    {
+                        query = query.OrderByDescending(x => x.ComputerName);
+                    }
+                    else if (sortOptions.Name == ComputerFields.Manufacturer)
+                    {
+                        query = query.OrderByDescending(x => x.Manufacturer);
+                    }
+                    else if (sortOptions.Name == ComputerFields.Model)
+                    {
+                        query = query.OrderByDescending(x => x.ComputerModel.Name);
+                    }
+                    else if (sortOptions.Name == ComputerFields.SerialNumber)
+                    {
+                        query = query.OrderByDescending(x => x.SerialNumber);
+                    }
+                    else if (sortOptions.Name == ComputerFields.SerialNumber)
+                    {
+                        query = query.OrderByDescending(x => x.SerialNumber);
+                    }
+                    else if (sortOptions.Name == ComputerFields.BIOSVersion)
+                    {
+                        query = query.OrderByDescending(x => x.BIOSVersion);
+                    }
+                    else if (sortOptions.Name == ComputerFields.BIOSDate)
+                    {
+                        query = query.OrderByDescending(x => x.BIOSDate);
+                    }
+                    else if (sortOptions.Name == ComputerFields.Theftmark)
+                    {
+                        query = query.OrderByDescending(x => x.TheftMark);
+                    }
+                    else if (sortOptions.Name == ComputerFields.CarePackNumber)
+                    {
+                        query = query.OrderByDescending(x => x.CarePackNumber);
+                    }
+                    else if (sortOptions.Name == ComputerFields.ComputerType)
+                    {
+                        query = query.OrderByDescending(x => x.ComputerType.Name);
+                    }
+                }
             }
 
             var anonymus =
