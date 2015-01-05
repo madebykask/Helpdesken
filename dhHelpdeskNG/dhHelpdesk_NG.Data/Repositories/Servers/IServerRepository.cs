@@ -4,9 +4,6 @@ namespace DH.Helpdesk.Dal.Repositories.Servers
 
     using DH.Helpdesk.BusinessData.Models.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Server;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Server;
-    using DH.Helpdesk.Common.Enums;
-    using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Dal.Dal;
 
     public interface IServerRepository : INewRepository
@@ -20,11 +17,6 @@ namespace DH.Helpdesk.Dal.Repositories.Servers
         string FindOperationObjectName(int id);
 
         ServerForRead FindById(int id);
-
-//        List<ServerOverview> FindOverviews(
-//            int customerId,
-//            string searchFor,
-//            SortOptions sortOptions);
 
         void RemoveReferenceOnNic(int id);
 

@@ -491,25 +491,15 @@
 
         public ServerOverview[] GetServers(ServersFilter computersFilter)
         {
-//            var models = this.serverRepository.FindOverviews(computersFilter.CustomerId, computersFilter.SearchFor, sortOptions);
-//             public SearchResponse Search(SearchParameters parameters){
-//            var settings = this.orderFieldSettingsService.GetOrdersFieldSettingsOverview(parameters.CustomerId, parameters.OrderTypeId);
             using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
                 var repository = uow.GetRepository<DH.Helpdesk.Domain.Servers.Server>();
-//
                 var overviews = repository.GetAll()
                     .Search(computersFilter.CustomerId, computersFilter.SearchFor, computersFilter.SortField)
                     .MapToFullOverviews();
                 return overviews;
-                //
-                //                var searchResult = new SearchResult(overviews.Count(), overviews);
-                //                return new SearchResponse(settings, searchResult);                
             }
-//        }
-        }
-
-        
+        }        
 
         #endregion
 

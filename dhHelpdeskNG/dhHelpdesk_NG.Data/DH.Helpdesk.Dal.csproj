@@ -673,7 +673,6 @@
     <Compile Include="Repositories\VendorRepository.cs" />
     <Compile Include="Repositories\WatchDateCalendarRepository.cs" />
     <Compile Include="Repositories\WorkingGroupRepository.cs" />
-    <Compile Include="SearchRequestBuilders\Inventory\ServersSearchRequestBuilder.cs" />
     <Compile Include="SearchRequestBuilders\Notifiers\NotifiersSearchRequestBuilder.cs" />
     <Compile Include="Utils\CaseUtils.cs" />
   </ItemGroup>
@@ -698,6 +697,7 @@
   <ItemGroup>
     <Folder Include="Mappers\Inventory\BusinessModelToEntity\" />
     <Folder Include="Mappers\Inventory\EntityToBusinessModel\Inventory\" />
+    <Folder Include="SearchRequestBuilders\Inventory\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\PostSharp.4.0.36\tools\PostSharp.targets" Condition="Exists('..\packages\PostSharp.4.0.36\tools\PostSharp.targets')" />
