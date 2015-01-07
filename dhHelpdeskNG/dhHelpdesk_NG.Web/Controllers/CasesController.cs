@@ -1202,7 +1202,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 var updatedId = frm["uc.Id"].Split(',');
                 var updatedName = frm["uc.Name"].Split(',');
-                var updatedRow = frm.ReturnFormValue("rows").Split(',');
+                var updatedRow = frm["uc.Line"].Split(','); //frm.ReturnFormValue("rows").Split(',');
                 var updatedMinWith = frm["uc.MinWidth"].Split(',');
                 var updatedColOrder = frm["uc.ColOrder"].Split(',');
                 var updatedUserGroup = frm["uc.UserGroup"].Split(',');
