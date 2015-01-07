@@ -31,8 +31,8 @@
                         </thead>
                                                              
                         <tbody id="dataTable" >
-                            <tr class="rowAdding" id="0">                                   
-                                    <td style="width:20px">                                        
+                            <tr class="rowAdding" id="0" >                                   
+                                    <td style="width:20px" >                                        
                                    
                                     </td>
                                     <td>
@@ -67,7 +67,7 @@
                                     </td>*@
                                     <td>
                                         <input class="btn btn-success" type="button" value="@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)" id="AddRow" 
-                                               onclick="addCaseSettingRow()" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
+                                               onclick="addCaseSettingRow()" onmouseover="javascript:this.style.cursor='move'; javascript:this.style.cursor='pointer';"/>
                                         <input type="hidden" id="caseSettingId" value="" />
                                     </td> 
                                               
@@ -77,13 +77,13 @@
                                 
                                 foreach (var uc in  Model.UserColumns)
                                 {                                    
-                                    <tr id="@uc.Id" class="SortableRow">                                        
+                                    <tr id="@uc.Id" class="SortableRow" style="cursor:move">                                        
                                         @if (Model.UserColumns != null)
                                         {
-                                            <td>                                        
+                                            <td style="cursor:move">                                        
                                    
                                             </td>
-                                            <td>
+                                            <td style="cursor:move">
                                                 @Html.HiddenFor(model => uc.ColOrder)
                                                 @Html.HiddenFor(model => uc.MinWidth)                                                
 
@@ -92,7 +92,9 @@
                                                 {
                                                     if (cfs.Name.ToUpper() == uc.Name.ToUpper())
                                                     {  
-                                                        @Html.Label((string.IsNullOrEmpty(cfs.Label)? Translation.Get(cfs.Name, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id): cfs.Label))  
+                                                        //Html.Label((string.IsNullOrEmpty(cfs.Label) ? Translation.Get(cfs.Name, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id) : cfs.Label))  
+                                                        
+                                                        <label style="cursor:move" for="subCategoryName">@(string.IsNullOrEmpty(cfs.Label) ? Translation.Get(cfs.Name, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id) : cfs.Label)</label>
                                                             //@Html.DisplayText("MMM") //cfs.Label                                                                                                               
                                                     }
                                                 }
@@ -121,7 +123,7 @@
                                             @Html.HiddenFor(model => uc.UserGroup)
                                             @Html.HiddenFor(model => uc.Line)
                                             <input class="btn btn-danger" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" 
-                                                   onclick ="deleteCaseSettingRow(@uc.Id)" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
+                                                   onclick ="deleteCaseSettingRow(@uc.Id)" onmouseover="javascript:this.style.cursor='move'; javascript:this.style.cursor='pointer';"/>
                                             <input type="hidden" id="deleteCaseSettingsId" value="@uc.Id" />
                                             <input type="hidden" id="userGroup" value="@uc.UserGroup" />                                                                                         
                                         </td>
