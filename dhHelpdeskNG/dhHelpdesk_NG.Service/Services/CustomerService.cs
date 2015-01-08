@@ -575,6 +575,7 @@
             customer.Phone = customer.Phone ?? string.Empty;
             customer.RegistrationMessage = customer.RegistrationMessage ?? string.Empty;
             customer.ResponsibleReminderEmailList = customer.ResponsibleReminderEmailList ?? string.Empty;
+            //customer.CommunicateWithNotifier = customer.CommunicateWithNotifier ?? 1;
 
             if(string.IsNullOrEmpty(customer.Name))
                 errors.Add("Customer.Name", "Du måste ange ett kundnamn");
