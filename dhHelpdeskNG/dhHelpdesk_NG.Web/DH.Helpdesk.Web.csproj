@@ -1337,6 +1337,7 @@
     <Content Include="Content\PIE.htc" />
     <Content Include="Content\templates\case-invoice-article-overview.tmpl.html" />
     <Content Include="Content\templates\case-invoice-article.tmpl.html" />
+    <Content Include="Content\templates\case-invoice-order-actions.tmpl.html" />
     <Content Include="Content\templates\case-invoice-order.tmpl.html" />
     <Content Include="Content\templates\case-invoice-overview.tmpl.html" />
     <Content Include="Content\templates\case-invoice.tmpl.html" />
