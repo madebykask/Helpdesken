@@ -485,6 +485,8 @@ $(function () {
                         caseArticle.Amount = units;
                         currentOrder.AddArticle(caseArticle);
                     }
+                    // Reset number of units to default
+                    unitsEl.val(dhHelpdesk.CaseArticles.DefaultAmount);
                 }
             });
         },

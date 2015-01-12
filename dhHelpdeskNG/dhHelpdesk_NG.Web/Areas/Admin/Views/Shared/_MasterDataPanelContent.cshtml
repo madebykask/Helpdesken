@@ -34,7 +34,6 @@
     <ul class="dropdown-menu">
         <li class="@Html.ActiveTab(new string[] { "causingpart" })"><a href="@Url.Action("Index", "CausingPart", new { customerId = Model.Id })">@Translation.Get("Rotorsak")</a></li>
         <li class="@Html.ActiveTab(new string[] { "casetype" })"><a href="@Url.Action("index", "casetype", new { customerId = Model.Id })">@Translation.Get("Ärendetyper", Enums.TranslationSource.TextTranslation)</a></li>
-        <li class="@Html.ActiveTab(new [] { "CaseInvoice" })"><a href="@Url.Action("Index", "CaseInvoice", new { customerId = Model.Id })">@Translation.Get("Fakturering")</a></li>        
         <li class="@Html.ActiveTab(new string[] { "productarea" })"><a href="@Url.Action("index", "productarea", new { customerId = Model.Id })">@Translation.Get("Produktområde", Enums.TranslationSource.TextTranslation)</a></li>
         <li class="@Html.ActiveTab(new string[] { "urgency" })"><a href="@Url.Action("index", "urgency", new { customerId = Model.Id })">@Translation.Get("Brådskandegrad", Enums.TranslationSource.TextTranslation)</a></li>
         <li class="@Html.ActiveTab(new string[] { "impact" })"><a href="@Url.Action("index", "impact", new { customerId = Model.Id })">@Translation.Get("Påverkan", Enums.TranslationSource.TextTranslation)</a></li>
@@ -47,6 +46,8 @@
         <li class="@Html.ActiveTab(new string[] { "statesecondary" })"><a href="@Url.Action("index", "statesecondary", new { customerId = Model.Id })">@Translation.Get("Understatus", Enums.TranslationSource.TextTranslation)</a></li>
     </ul>
 </li>
+<li class="line"></li>
+<li><a href="@Url.Action("Index", "CaseInvoice", new { customerId = Model.Id })">@Translation.Get("Fakturering")</a></li>                
 <li class="line"></li>
 <li class="dropdown-submenu">
     <a href="#">
