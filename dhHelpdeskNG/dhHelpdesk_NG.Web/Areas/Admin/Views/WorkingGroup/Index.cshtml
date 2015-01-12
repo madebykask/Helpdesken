@@ -3,6 +3,7 @@
 @model DH.Helpdesk.Web.Areas.Admin.Models.WorkingGroupIndexViewModel
 @{
     ViewBag.Title = "Index";
+    var AMessage = TempData["InActiveAlert"];        
 }
 <div class="secnavs fixed">
     <div class="pull-left">
@@ -72,3 +73,38 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+   
+    $(document).ready(function () {
+        var newLine = "<br>";
+        var e = '@AMessage';        
+        if (e != "") {
+            e = replaceAll(e, "|", newLine);            
+            ShowToastMessage(e, "Warning");
+        }
+    });
+
+    replaceAll = function (string, omit, place, prevstring) {
+        if (prevstring && string === prevstring)
+            return string;
+        prevstring = string.replace(omit, place);
+        return replaceAll(prevstring, omit, place, string)
+    }
+
+    function ShowToastMessage(message, msgType) {
+        $().toastmessage('showToast', {
+            text: message,
+            sticky: true,
+            position: 'top-center',
+            type: msgType,
+            closeText: '',
+            stayTime: 10000,
+            inEffectDuration: 1000,
+            width : 600,
+            close: function () {
+                //console.log("toast is closed ...");
+            }
+        });
+    }
+</script>    

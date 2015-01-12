@@ -2,7 +2,7 @@
 @model DH.Helpdesk.Web.Areas.Admin.Models.UserIndexViewModel
 @{
     ViewBag.Title = "Users";
-    var AMessage = ViewData["AlertMessage"];        
+    var AMessage = TempData["AlertMessage"];        
 }
 
 <div class="secnavs fixed">
@@ -219,10 +219,20 @@
     var customerId = $("#currentCustomerId").val();
 
     $(document).ready(function () {
+        var newLine = "<br>";
         var e = '@AMessage';
-        if (e!= "")
+        if (e != "") {
+            e = replaceAll(e, "|", newLine);
             ShowToastMessage(e, "Warning");
+        }
     });
+
+    replaceAll = function (string, omit, place, prevstring) {
+        if (prevstring && string === prevstring)
+            return string;
+        prevstring = string.replace(omit, place);
+        return replaceAll(prevstring, omit, place, string)
+    }
 
     function ShowToastMessage(message, msgType) {
         $().toastmessage('showToast', {
