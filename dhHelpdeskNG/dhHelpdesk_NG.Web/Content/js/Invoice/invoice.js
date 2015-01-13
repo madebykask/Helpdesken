@@ -1495,48 +1495,159 @@ $(function () {
                 return creditOrderTitle;
             }
 
-            that.get_creditOrderEnabled = get_creditOrderEnabled();
-            that.get_creditOrderTitle = get_creditOrderTitle();
+            that.get_creditOrderEnabled = get_creditOrderEnabled;
+            that.get_creditOrderTitle = get_creditOrderTitle;
 
             return that;
-        }
+        },
+
+        caseFile: function(spec, my) {
+            var that = {};
+            my = my || {};
+
+            var fileName = spec.fileName || '';
+            var size = spec.size || 0;
+            var type = spec.type || '';
+            var createdDate = spec.createdDate || '';
+            var user = spec.user || '';
+
+            var getFileName = function() {
+                return fileName;
+            };
+
+            var getSize = function() {
+                return size;
+            };
+
+            var getType = function() {
+                return type;
+            };
+
+            var getCreatedDate = function() {
+                return createdDate;
+            };
+
+            var getUser = function() {
+                return user;
+            };
+
+            that.getFileName = getFileName;
+            that.getSize = getSize;
+            that.getType = getType;
+            that.getCreatedDate = getCreatedDate;
+            that.getUser = getUser;
+
+            return that;
+        },
+
+        caseFilesCollection: function(spec, my) {
+            var that = {};
+            my = my || {};
+
+            var maxFileSizeMb = spec.maxFileSizeMb || 10;
+            var allowedFileTypes = spec.allowedFileTypes || [];
+            var caseId = spec.caseId || '';
+            var files = spec.files || [];
+
+            var getMaxFileSizeMb = function() {
+                return maxFileSizeMb;
+            };
+
+            var getAllowedFileTypes = function() {
+                return allowedFileTypes;
+            };
+
+            var getCaseId = function() {
+                return caseId;
+            };
+
+            var getFiles = function() {
+                return files;
+            };
+
+            var addFile = function(file) {
+                files.push(file);
+            };
+
+            var deleteFile = function(fileName) {
+                var fs = getFiles();
+                for (var i = 0; i < fs.length; i++) {
+                    if (fs[i].getFileName() == fileName) {
+                        fs.splice(i, 1);
+                        break;
+                    }
+                }
+            };
+
+            that.maxFileSizeMb = getMaxFileSizeMb;
+            that.allowedFileTypes = getAllowedFileTypes;
+            that.getCaseId = getCaseId;
+            that.getFiles = getFiles;
+            that.addFile = addFile;
+            that.deleteFile = deleteFile;
+
+            return that;
+        },
+
+        caseFiles: null
     }
 
-    var loadCaseInvoiceTemplate = function () {
+    dhHelpdesk.CaseArticles.OnEvent("OnUploadCaseFile", function (e, uploader, files) {
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            var f = dhHelpdesk.CaseArticles.caseFile({
+                fileName: file.name,
+                size: file.size,
+                type: file.type
+            });
+
+            dhHelpdesk.CaseArticles.caseFiles.addFile(f);
+        }
+    });
+
+    dhHelpdesk.CaseArticles.OnEvent("OnDeleteCaseFile", function(e, caseId, fileName) {
+        dhHelpdesk.CaseArticles.caseFiles.deleteFile(fileName);
+    });
+
+    var loadCaseFiles = function () {
+        dhHelpdesk.CaseArticles.caseFiles = dhHelpdesk.CaseArticles.caseFilesCollection({});
+    };
+
+    var loadCaseInvoiceTemplate = function() {
         return $.get("/content/templates/case-invoice.tmpl.html", function(caseInvoiceTemplate) {
             dhHelpdesk.CaseArticles.CaseInvoiceTemplate = $.templates("caseInvoice", caseInvoiceTemplate);
         });
-    }
+    };
 
-    var loadCaseInvoiceOrderTemplate = function () {
+    var loadCaseInvoiceOrderTemplate = function() {
         return $.get("/content/templates/case-invoice-order.tmpl.html", function(caseInvoiceOrderTemplate) {
             dhHelpdesk.CaseArticles.CaseInvoiceOrderTemplate = $.templates("caseInvoiceOrder", caseInvoiceOrderTemplate);
         });
-    }
+    };
 
     var loadCaseInvoiceArticleTemplate = function() {
-        return $.get("/content/templates/case-invoice-article.tmpl.html", function (caseInvoiceArticleTemplate) {
+        return $.get("/content/templates/case-invoice-article.tmpl.html", function(caseInvoiceArticleTemplate) {
             dhHelpdesk.CaseArticles.CaseInvoiceArticleTemplate = $.templates("caseInvoiceArticle", caseInvoiceArticleTemplate);
         });
-    }
+    };
 
     var loadCaseInvoiceOverviewTemplate = function() {
         return $.get("/content/templates/case-invoice-overview.tmpl.html", function(caseInvoiceOverviewTemplate) {
             dhHelpdesk.CaseArticles.CaseInvoiceOverviewTemplate = $.templates("caseInvoiceOverview", caseInvoiceOverviewTemplate);
         });
-    }
+    };
 
     var loadCaseInvoiceArticleOverviewTemplate = function() {
-        return $.get("/content/templates/case-invoice-article-overview.tmpl.html", function (caseInvoiceArticleOverviewTemplate) {
+        return $.get("/content/templates/case-invoice-article-overview.tmpl.html", function(caseInvoiceArticleOverviewTemplate) {
             dhHelpdesk.CaseArticles.CaseInvoiceArticleOverviewTemplate = $.templates("caseInvoiceArticleOverview", caseInvoiceArticleOverviewTemplate);
         });
-    }
+    };
 
     var loadCaseInvoiceOrderActionsTemplate = function() {
-        return $.get("/content/templates/case-invoice-order-actions.tmpl.html", function (caseInvoiceOrderActionsTemplate) {
+        return $.get("/content/templates/case-invoice-order-actions.tmpl.html", function(caseInvoiceOrderActionsTemplate) {
             dhHelpdesk.CaseArticles.CaseInvoiceOrderActionsTemplate = $.templates("caseInvoiceOrderActions", caseInvoiceOrderActionsTemplate);
         });
-    }
+    };
 
     loadCaseInvoiceTemplate()
         .then(loadCaseInvoiceOrderTemplate)
@@ -1544,6 +1655,7 @@ $(function () {
         .then(loadCaseInvoiceOverviewTemplate)
         .then(loadCaseInvoiceArticleOverviewTemplate)
         .then(loadCaseInvoiceOrderActionsTemplate)
+        .then(loadCaseFiles)
         .then(function() {
             $("[data-invoice]").each(function () {
                 var $this = $(this);

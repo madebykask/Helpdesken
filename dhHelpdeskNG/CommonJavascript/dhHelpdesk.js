@@ -472,6 +472,9 @@ function CaseInitForm() {
                     $(".plupload_buttons").css("display", "inline");
                     $(".plupload_upload_status").css("display", "inline");                    
                     up.refresh();
+
+                    // Raise event about uploaded file
+                    $(document).trigger("OnUploadCaseFile", [up, file]);
                 }
             },
             init: {
@@ -878,6 +881,9 @@ function bindDeleteCaseFileBehaviorToDeleteButtons() {
             fileNames = fileNames.replace("|" + fileName.trim(), "");
             fileNames = fileNames.replace(fileName.trim() + "|", "");            
             $('#CaseFileNames').val(fileNames);
+
+            // Raise event about deleted file
+            $(document).trigger("OnDeleteCaseFile", [key, fileName]);
         });
     });
 }
