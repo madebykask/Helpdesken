@@ -47,11 +47,15 @@ var dhform = function (options) {
             _this.load({ url: _this._options.url });
         } else {
             $("#openContainer").on("click", function (event) {
-                if (_this._options.modal) {
-                    event.preventDefault();
-                    _this.loadModal({ url: _this._options.url });
-                }
+                event.preventDefault();
+                _this.loadModal({ url: _this._options.url });
             });
+
+            var modal = $('#' + _this._modalId);
+
+            $(document).on('hidden', '#' + _this._modalId, function () {
+                $('#myTab li a.case').click();
+            })
         }
     })();
 };
