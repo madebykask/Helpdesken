@@ -43,6 +43,7 @@
         EmailLog GetEMailLogByGUID(Guid GUID);             
         IList<CaseHistory> GetCaseHistoryByCaseId(int caseId);
         List<DynamicCase> GetAllDynamicCases();
+        DynamicCase GetDynamicCase(int id);
 
         int SaveCase(
             Case cases, 
@@ -203,6 +204,11 @@
         public List<DynamicCase> GetAllDynamicCases()
         {
             return _caseRepository.GetAllDynamicCases();
+        }
+
+        public DynamicCase GetDynamicCase(int id)
+        {
+            return _caseRepository.GetDynamicCase(id);
         }
 
         public Guid Delete(int id)

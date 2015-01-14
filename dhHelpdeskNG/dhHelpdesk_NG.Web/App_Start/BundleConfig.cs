@@ -6,7 +6,7 @@
     {
         public struct ScriptNames
         {
-            public const string Container = "~/bundles/container";
+            public const string DynamicCase = "~/bundles/dynamic-case";
         }
 
         public static void RegisterBundles(BundleCollection bundles)
@@ -31,8 +31,9 @@
                             "~/Content/themes/base/minified/jquery-ui.min.css",
                             "~/Content/js/jquery.plupload.queue/css/jquery.plupload.queue.css"));
 
-            bundles.Add(new ScriptBundle(ScriptNames.Container).Include(
-                  "~/Content/js/Container/init.js"));
+            bundles.Add(new ScriptBundle(ScriptNames.DynamicCase).Include(
+                            "~/Content/js/DynamicCase/iframeResizer.js",
+                            "~/Content/js/DynamicCase/container.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/common").Include(
                             "~/Content/js/jquery-1.8.3.min.js",

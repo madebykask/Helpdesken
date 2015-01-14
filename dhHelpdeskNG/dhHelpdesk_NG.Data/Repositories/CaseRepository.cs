@@ -28,6 +28,7 @@ namespace DH.Helpdesk.Dal.Repositories
         Case GetCaseByEmailGUID(Guid GUID);             
         Case GetDetachedCaseById(int id);
         List<DynamicCase> GetAllDynamicCases();
+        DynamicCase GetDynamicCase(int id);
         void SetNullProblemByProblemId(int problemId);
         void UpdateFinishedDate(int problemId, DateTime? time);
         void UpdateFollowUpDate(int caseId, DateTime? time);
@@ -102,6 +103,32 @@ namespace DH.Helpdesk.Dal.Repositories
 
             return query.Distinct().ToList();
         }
+
+        public DynamicCase GetDynamicCase(int id)
+        {
+            var externalSite = this.DataContext.GlobalSettings.FirstOrDefault().ExternalSite;
+
+            if(string.IsNullOrEmpty(externalSite))
+                externalSite = "";
+
+            if(!externalSite.EndsWith("/"))
+                externalSite = externalSite + "/";
+
+            var query = from f in this.DataContext.Forms
+                        join ff in this.DataContext.FormField on f.Id equals ff.Form_Id
+                        join ffv in this.DataContext.FormFieldValue on ff.Id equals ffv.FormField_Id
+                        where f.ExternalPage == 1 && ffv.Case_Id == id
+                        select new DynamicCase
+                        {
+                            CaseId = ffv.Case_Id,
+                            FormPath = externalSite + f.FormPath,
+                            FormName = f.FormName,
+                            Modal = f.Modal
+                        };
+
+            return query.FirstOrDefault();
+        }
+
 
         public Case GetCaseByGUID(Guid GUID)
         {

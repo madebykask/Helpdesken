@@ -1902,6 +1902,16 @@ namespace DH.Helpdesk.Web.Controllers
                 //}
 
                 m.CustomerSettings = this.workContext.Customer.Settings;
+                m.DynamicCase = _caseService.GetDynamicCase(m.case_.Id);
+
+                if(m.DynamicCase != null)
+                {
+                    var l = m.Languages.Where(x => x.Id == SessionFacade.CurrentLanguageId).FirstOrDefault();
+                    m.DynamicCase.FormPath = m.DynamicCase.FormPath.Replace("[CaseId]"
+                        , m.case_.Id.ToString()).Replace("[UserId]", SessionFacade.CurrentUser.UserId.ToString()).Replace("[Language]", l.LanguageId);
+                    //m.DynamicCase.FormPath += "&clearcache=1";
+                    //m.DynamicCase.FormPath += "&apa=" + (DateTime.Now.ToString("yyyyMMddHHmmssfff"));
+                }
             }
 
             m.CaseTemplateTreeButton = GetCaseTemplateTreeModel(customerId, userId);
