@@ -711,6 +711,7 @@
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\SupplierEditModel.cs" />
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\UserEditModel.cs" />
     <Compile Include="Areas\Orders\OrdersAreaRegistration.cs" />
+    <Content Include="Content\templates\case-invoice-case-files.tmpl.html" />
     <Compile Include="Controllers\AboutController.cs" />
     <Compile Include="Controllers\AjaxController.cs" />
     <Compile Include="Controllers\BulletinBoardController.cs" />
@@ -1062,6 +1063,7 @@
     <Compile Include="Models\IConfigurableFieldModel.cs" />
     <Compile Include="Areas\Inventory\Models\EditModel\Computer\AccesoriesEditViewModel.cs" />
     <Compile Include="Areas\Admin\Models\Invoice\ArticlesImportModel.cs" />
+    <Compile Include="Models\Invoice\CaseFileModel.cs" />
     <Compile Include="Models\Invoice\CaseInvoiceArticlesModel.cs" />
     <Compile Include="Models\Projects\ProjectOverviewSorting.cs" />
     <Compile Include="Models\Questionnaire\Input\CircularPartOverview.cs" />
@@ -1338,6 +1340,7 @@
     <Content Include="Content\templates\case-invoice-article-overview.tmpl.html" />
     <Content Include="Content\templates\case-invoice-article.tmpl.html" />
     <Content Include="Content\templates\case-invoice-order-actions.tmpl.html" />
+    <Content Include="Content\templates\case-invoice-order-files.tmpl.html" />
     <Content Include="Content\templates\case-invoice-order.tmpl.html" />
     <Content Include="Content\templates\case-invoice-overview.tmpl.html" />
     <Content Include="Content\templates\case-invoice.tmpl.html" />

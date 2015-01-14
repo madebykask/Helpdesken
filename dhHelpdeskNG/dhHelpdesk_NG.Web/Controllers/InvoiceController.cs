@@ -1,14 +1,18 @@
 ﻿namespace DH.Helpdesk.Web.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Net;
     using System.Web.Mvc;
 
+    using DH.Helpdesk.Common.Tools;
+    using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.Tools;
+    using DH.Helpdesk.Web.Models.Invoice;
 
     public class InvoiceController : BaseController
     {
@@ -22,13 +26,19 @@
 
         private readonly ICaseInvoiceSettingsService caseInvoiceSettingsService;
 
+        private readonly ITemporaryFilesCache userTemporaryFilesStorage;
+
+        private readonly ICaseFileService caseFileService;
+
         public InvoiceController(
             IMasterDataService masterDataService, 
             IInvoiceArticleService invoiceArticleService, 
             IWorkContext workContext, 
             IInvoiceHelper invoiceHelper, 
             ICaseService caseService, 
-            ICaseInvoiceSettingsService caseInvoiceSettingsService)
+            ICaseInvoiceSettingsService caseInvoiceSettingsService, 
+            ICaseFileService caseFileService,
+            ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory)
             : base(masterDataService)
         {
             this.invoiceArticleService = invoiceArticleService;
@@ -36,6 +46,8 @@
             this.invoiceHelper = invoiceHelper;
             this.caseService = caseService;
             this.caseInvoiceSettingsService = caseInvoiceSettingsService;
+            this.caseFileService = caseFileService;
+            this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Cases);
         }
 
         [HttpGet]
@@ -97,6 +109,34 @@
             {
                 return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError, ex.Message);                
             }
+        }
+
+        [HttpGet]
+        public JsonResult CaseFiles(string id)
+        {
+            var fileNames = GuidHelper.IsGuid(id)
+                                ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Cases)
+                                : this.caseFileService.FindFileNamesByCaseId(int.Parse(id));
+
+            var files = new List<CaseFileModel>();
+            foreach (var fileName in fileNames)
+            {
+                var file = new CaseFileModel
+                               {
+                                   FileName = fileName
+                               };
+
+                var fileContent = GuidHelper.IsGuid(id)
+                                  ? this.userTemporaryFilesStorage.GetFileContent(fileName, id, ModuleName.Cases)
+                                  : this.caseFileService.GetFileContentByIdAndFileName(int.Parse(id), fileName);
+
+                file.Size = fileContent.Length;
+                file.Type = MimeHelper.GetMimeType(fileName);
+
+                files.Add(file);
+            }
+
+            return this.Json(files.ToArray(), JsonRequestBehavior.AllowGet);
         }
     }
 }

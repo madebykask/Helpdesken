@@ -49,6 +49,29 @@
                     <input type="text" maxlength="40" autocomplete="Off" class="reference" style="margin-bottom: -2px;" value="{{:Reference}}" />
                 </td>
             </tr>
+            <tr>
+                <td colspan="2">
+                    <div style="margin-bottom: 1em;"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {{:attachedFilesTitle}}
+                </td>
+                <td>
+                    <button onclick="dhHelpdesk.CaseArticles.SelectCaseFiles('{{:Id}}'); return false;">{{:attachFilesTitle}}</button>        
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div style="margin-bottom: 1em;"></div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div id="files-container"></div>                    
+                </td>
+            </tr>
         </tbody>
-    </table>        
+    </table> 
 </div>   

@@ -35,11 +35,21 @@ $(function () {
 
         CaseInvoiceOrderActionsTemplate: null,
 
+        CaseInvoiceCaseFilesTemplate: null,
+
+        CaseInvoiceOrderFilesTemplate: null,
+
         CaseId: null,
+
+        CaseKey: null,
 
         CustomerId: null,
 
         OrderActionsInstance: null,
+
+        translate: function(text) {
+            return text;
+        },
 
         RaiseEvent: function(eventType, extraParameters) {
             $(document).trigger(eventType, extraParameters);
@@ -194,7 +204,7 @@ $(function () {
                     th._invoicesBackup.push(invoice.Clone());
                 }
                 th.SaveInvoices();
-                th.ShowMessage('Articles invoiced.');
+                th.ShowMessage(dhHelpdesk.CaseArticles.translate('Articles invoiced.'));
             })
             .fail(function(result) {
                 th.ShowErrorMessage(result.statusText);
@@ -263,6 +273,20 @@ $(function () {
                 var caseArticle = article.ToCaseArticle();
                 caseArticle.Article = article;
                 order.AddArticle(caseArticle);
+            }            
+        },
+
+        RemoveOrderFile: function (fileName) {
+            var order = this.GetCurrentOrder();
+            if (order != null) {                
+                order.RemoveOrderFile(fileName);
+            }            
+        },
+
+        SelectCaseFiles: function (orderId) {
+            var order = this.GetOrder(orderId);
+            if (order != null) {                
+                order.SelectCaseFiles();
             }            
         },
 
@@ -402,7 +426,7 @@ $(function () {
             }
 
             th._container.dialog({
-                title: "Articles to be invoiced",
+                title: dhHelpdesk.CaseArticles.translate("Articles to be invoiced"),
                 width: 1000,
                 height: 800,
                 close: function () {
@@ -410,7 +434,7 @@ $(function () {
                 },
                 buttons: [
                     {
-                        text: "Save",
+                        text: dhHelpdesk.CaseArticles.translate("Save"),
                         click: function () {
                             if (!th.Validate()) {
                                 return;
@@ -419,7 +443,7 @@ $(function () {
                         }
                     },
                     {
-                        text: "Close",
+                        text: dhHelpdesk.CaseArticles.translate("Close"),
                         click: function () {
                             th.CancelChanges();
                             th._container.dialog("close");
@@ -433,7 +457,7 @@ $(function () {
             dhHelpdesk.CaseArticles.OrderActionsInstance = dhHelpdesk.CaseArticles.orderActions({ actionsContainer: th._container.parent().find(".ui-dialog-buttonset") });
 
             if (!th.IsNewCase()) {
-                var invoiceBtn = $("<button>Invoice</button>");
+                var invoiceBtn = $("<button>" + dhHelpdesk.CaseArticles.translate("Invoice") + "</button>");
                 if (markInvoiceButton) {
                     invoiceBtn.css("color", "red");
                 }
@@ -452,7 +476,7 @@ $(function () {
             // set order actions 
             var orderActionsViewModel = dhHelpdesk.CaseArticles.orderActionsViewModel({
                 creditOrderEnabled: th.GetCurrentOrder().HasInvoicedArticles(),
-                creditOrderTitle: "Credit order"
+                creditOrderTitle: dhHelpdesk.CaseArticles.translate("Credit order")
             });
             dhHelpdesk.CaseArticles.OrderActionsInstance.get_actionsContainer().prepend($(dhHelpdesk.CaseArticles.CaseInvoiceOrderActionsTemplate.render(orderActionsViewModel)));
             dhHelpdesk.CaseArticles.OrderActionsInstance.get_creditOrderButton().click(function () {
@@ -756,7 +780,7 @@ $(function () {
                 container.append(order.Container);
 
                 var tabs = this.Container.find("#case-invoice-orders-tabs");
-                var orderTitle = order.CreditedFrom == null ? "Order" : "Credit Order";
+                var orderTitle = order.CreditedFrom == null ? dhHelpdesk.CaseArticles.translate("Order") : dhHelpdesk.CaseArticles.translate("Credit Order");
                 var newTab = $("<li class='case-invoice-order-tab active'><a href='#case-invoice-order" + order.Id + "'>" + orderTitle + " " + (order.Number + 1) + "</a><li>");
                 if (this._orders.length == 1) {
                     tabs.find("ul").prepend(newTab);
@@ -937,6 +961,7 @@ $(function () {
             this._articles = [];
             this.Container = null;
             this.CreditedFrom = null;
+            this.files = dhHelpdesk.CaseArticles.orderFilesCollection({});
 
             this.GetArticles = function() {
                 return this._articles;
@@ -1102,6 +1127,8 @@ $(function () {
                 for (var i = 0; i < articles.length; i++) {
                     clone.AddArticle(articles[i].Clone());
                 }
+                clone.files = this.files.clone();
+
                 return clone;
             },            
 
@@ -1136,16 +1163,18 @@ $(function () {
                 for (var i = 0; i < articles.length; i++) {
                     model.AddArticle(articles[i].GetViewModel());
                 }
-
+                model.files = this.files.getFiles();
                 return model;
             },
 
             this.Initialize = function () {
                 if (this.Container != null) {
+                    this.UpdateFiles();
                     return;
                 }
 
                 this.Container = $(dhHelpdesk.CaseArticles.CaseInvoiceOrderTemplate.render(this.GetViewModel()));
+                this.UpdateFiles();
 
                 var rows = this.Container.find(".articles-rows");
                 var th = this;
@@ -1201,6 +1230,48 @@ $(function () {
                     }
                 }
                 return isValid;
+            },
+
+            this.UpdateFiles = function () {
+                var model = this.files;
+                this.Container.find("#files-container").html(dhHelpdesk.CaseArticles.CaseInvoiceOrderFilesTemplate.render(model));
+            },
+
+            this.RemoveOrderFile = function(fileName) {
+                this.files.deleteFile(fileName);
+                this.UpdateFiles();
+            },
+
+            this.SelectCaseFiles = function () {
+                var model = dhHelpdesk.CaseArticles.caseFilesViewModel({
+                    caseId: dhHelpdesk.CaseArticles.caseFiles.getCaseId(),
+                    files: dhHelpdesk.CaseArticles.caseFiles.getFiles()
+                });
+
+                var that = this;
+                var d = $(dhHelpdesk.CaseArticles.CaseInvoiceCaseFilesTemplate.render(model))
+                    .dialog({
+                        buttons: [
+                        {
+                            text: dhHelpdesk.CaseArticles.translate("Attach"),
+                            click: function () {
+                                d.find("input:checked").each(function() {
+                                    var caseFile = dhHelpdesk.CaseArticles.caseFiles.getFile($(this).val());
+                                    that.files.addFile(caseFile.clone());
+                                });
+                                that.UpdateFiles();
+                                d.dialog("close");
+                            }
+                        },
+                        {
+                            text: dhHelpdesk.CaseArticles.translate("Close"),
+                            click: function () {
+                                d.dialog("close");
+                            }
+                        }]
+                    });
+
+                d.dialog("open");
             }
         },
 
@@ -1427,13 +1498,13 @@ $(function () {
 
         CaseInvoiceViewModel: function () {
             this.Id = null;
-            this.SelectItemHeader = "Select item";
-            this.UnitsHeader = "Units";
+            this.SelectItemHeader = dhHelpdesk.CaseArticles.translate("Select item");
+            this.UnitsHeader = dhHelpdesk.CaseArticles.translate("Units");
             this.DefaultAmount = dhHelpdesk.CaseArticles.DefaultAmount;
-            this.AddButtonLabel = "Add";
-            this.OrderTitle = "Order";
-            this.SummaryTitle = "Summary";
-            this.TotalLabel = "Total";
+            this.AddButtonLabel = dhHelpdesk.CaseArticles.translate("Add");
+            this.OrderTitle = dhHelpdesk.CaseArticles.translate("Order");
+            this.SummaryTitle = dhHelpdesk.CaseArticles.translate("Summary");
+            this.TotalLabel = dhHelpdesk.CaseArticles.translate("Total");
             this.Total = null;
             this.Orders = [];
 
@@ -1444,20 +1515,22 @@ $(function () {
 
         CaseInvoiceOrderViewModel: function () {
             this.Id = null;
-            this.ArtNoHeader = "Art no";
-            this.NameHeader = "Article name SWE";
-            this.NameEngHeader = "Article name ENG";
-            this.UnitsHeader = "Units";
-            this.TypeHeader = "Type";
-            this.PpuHeader = "PPU";
-            this.TotalHeader = "Total";
-            this.TotalLabel = "Total";
-            this.DeliveryPeriodTitle = "Delivery period";
-            this.ReferenceTitle = "Other reference";
+            this.ArtNoHeader = dhHelpdesk.CaseArticles.translate("Art no");
+            this.NameHeader = dhHelpdesk.CaseArticles.translate("Article name SWE");
+            this.NameEngHeader = dhHelpdesk.CaseArticles.translate("Article name ENG");
+            this.UnitsHeader = dhHelpdesk.CaseArticles.translate("Units");
+            this.TypeHeader = dhHelpdesk.CaseArticles.translate("Type");
+            this.PpuHeader = dhHelpdesk.CaseArticles.translate("PPU");
+            this.TotalHeader = dhHelpdesk.CaseArticles.translate("Total");
+            this.TotalLabel = dhHelpdesk.CaseArticles.translate("Total");
+            this.DeliveryPeriodTitle = dhHelpdesk.CaseArticles.translate("Delivery period");
+            this.ReferenceTitle = dhHelpdesk.CaseArticles.translate("Other reference");
             this.Total = null;
             this.Articles = [];
             this.DeliveryPeriod = "";
             this.Reference = "";
+            this.attachedFilesTitle = dhHelpdesk.CaseArticles.translate("Attached Files");
+            this.attachFilesTitle = dhHelpdesk.CaseArticles.translate("Add");
 
             this.AddArticle = function(article) {
                 this.Articles.push(article);
@@ -1485,7 +1558,7 @@ $(function () {
             var that = {};
 
             var creditOrderEnabled = spec.creditOrderEnabled || false;
-            var creditOrderTitle = spec.creditOrderTitle || "Credit order";
+            var creditOrderTitle = spec.creditOrderTitle || dhHelpdesk.CaseArticles.translate("Credit order");
 
             var get_creditOrderEnabled = function() {
                 return creditOrderEnabled;
@@ -1497,6 +1570,91 @@ $(function () {
 
             that.get_creditOrderEnabled = get_creditOrderEnabled;
             that.get_creditOrderTitle = get_creditOrderTitle;
+
+            return that;
+        },
+
+        caseFilesViewModel: function(spec, my) {
+            var that = {};
+            my = my || {};
+
+            var caseId = spec.caseId || '';
+            var files = spec.files || [];
+            var title = spec.title || dhHelpdesk.CaseArticles.translate("Case files");
+
+            var getCaseId = function() {
+                return caseId;
+            };
+
+            var getFiles = function() {
+                return files;
+            };
+
+            var getTitle = function() {
+                return title;
+            };
+
+            that.getCaseId = getCaseId;
+            that.getFiles = getFiles;
+            that.getTitle = getTitle;
+
+            return that;
+        },
+
+        orderFilesCollection: function(spec, my) {
+            var that = {};
+            my = my || {};
+
+            var files = spec.files || [];
+
+            var getFiles = function () {
+                return files;
+            };
+
+            var getFile = function (fileName) {
+                var fs = getFiles();
+                for (var i = 0; i < fs.length; i++) {
+                    var f = fs[i];
+                    if (f.getFileName() == fileName) {
+                        return f;
+                    }
+                }
+
+                return null;
+            };
+
+            var addFile = function (file) {
+                if (file == null) {
+                    return;
+                }
+                getFiles().push(file);
+            };
+
+            var deleteFile = function (fileName) {
+                var fs = getFiles();
+                for (var i = 0; i < fs.length; i++) {
+                    if (fs[i].getFileName() == fileName) {
+                        fs.splice(i, 1);
+                        break;
+                    }
+                }
+            };
+
+            var clone = function() {
+                var c = dhHelpdesk.CaseArticles.orderFilesCollection({});
+                var fs = getFiles();
+                for (var i = 0; i < fs.length; i++) {
+                    c.addFile(fs[i].clone());
+                }
+
+                return c;
+            };
+
+            that.getFiles = getFiles;
+            that.getFile = getFile;
+            that.addFile = addFile;
+            that.deleteFile = deleteFile;
+            that.clone = clone;
 
             return that;
         },
@@ -1531,11 +1689,28 @@ $(function () {
                 return user;
             };
 
+            var getEncodedFileName = function() {
+                return encodeURIComponent(getFileName());
+            };
+
+            var clone = function() {
+                var f = dhHelpdesk.CaseArticles.caseFile({
+                    fileName: getFileName(),
+                    size: getSize(),
+                    type: getType(),
+                    createdDate: getCreatedDate(),
+                    user: getUser()
+                });
+                return f;
+            };
+
             that.getFileName = getFileName;
             that.getSize = getSize;
             that.getType = getType;
             that.getCreatedDate = getCreatedDate;
             that.getUser = getUser;
+            that.getEncodedFileName = getEncodedFileName;
+            that.clone = clone;
 
             return that;
         },
@@ -1545,7 +1720,7 @@ $(function () {
             my = my || {};
 
             var maxFileSizeMb = spec.maxFileSizeMb || 10;
-            var allowedFileTypes = spec.allowedFileTypes || [];
+            var allowedFileTypes = spec.allowedFileTypes || ["application/pdf"];
             var caseId = spec.caseId || '';
             var files = spec.files || [];
 
@@ -1565,8 +1740,20 @@ $(function () {
                 return files;
             };
 
+            var getFile = function(fileName) {
+                var fs = getFiles();
+                for (var i = 0; i < fs.length; i++) {
+                    var f = fs[i];
+                    if (f.getFileName() == fileName) {
+                        return f;
+                    }
+                }
+
+                return null;
+            };
+
             var addFile = function(file) {
-                files.push(file);
+                getFiles().push(file);
             };
 
             var deleteFile = function(fileName) {
@@ -1579,12 +1766,35 @@ $(function () {
                 }
             };
 
-            that.maxFileSizeMb = getMaxFileSizeMb;
-            that.allowedFileTypes = getAllowedFileTypes;
+            var isFileValid = function(file) {
+
+                if (file.getSize() > getMaxFileSizeMb() * 1024 * 1024) {
+                    return false;
+                }
+
+                var isAllowedType = false;
+                var allowedTypes = getAllowedFileTypes();
+                for (var i = 0; i < allowedTypes.length; i++) {
+                    if (allowedTypes[i] == file.getType()) {
+                        isAllowedType = true;
+                        break;
+                    }
+                }
+                if (!isAllowedType) {
+                    return false;
+                }
+
+                return true;
+            };
+
+            that.getMaxFileSizeMb = getMaxFileSizeMb;
+            that.getAllowedFileTypes = getAllowedFileTypes;
             that.getCaseId = getCaseId;
             that.getFiles = getFiles;
+            that.getFile = getFile;
             that.addFile = addFile;
             that.deleteFile = deleteFile;
+            that.isFileValid = isFileValid;
 
             return that;
         },
@@ -1601,7 +1811,9 @@ $(function () {
                 type: file.type
             });
 
-            dhHelpdesk.CaseArticles.caseFiles.addFile(f);
+            if (dhHelpdesk.CaseArticles.caseFiles.isFileValid(f)) {
+                dhHelpdesk.CaseArticles.caseFiles.addFile(f);
+            }
         }
     });
 
@@ -1610,7 +1822,25 @@ $(function () {
     });
 
     var loadCaseFiles = function () {
-        dhHelpdesk.CaseArticles.caseFiles = dhHelpdesk.CaseArticles.caseFilesCollection({});
+        dhHelpdesk.CaseArticles.CaseKey = $(document).find("[data-invoice]").attr("data-invoice-case-key");
+        dhHelpdesk.CaseArticles.caseFiles = dhHelpdesk.CaseArticles.caseFilesCollection({
+            caseId: dhHelpdesk.CaseArticles.CaseKey
+        });
+
+        return $.getJSON("/invoice/casefiles?id=" + dhHelpdesk.CaseArticles.CaseKey, function (data) {
+            for (var i = 0; i < data.length; i++) {
+                var file = data[i];
+                var f = dhHelpdesk.CaseArticles.caseFile({
+                    fileName: file.FileName,
+                    size: file.Size,
+                    type: file.Type
+                });
+
+                if (dhHelpdesk.CaseArticles.caseFiles.isFileValid(f)) {
+                    dhHelpdesk.CaseArticles.caseFiles.addFile(f);
+                }
+            }
+        });
     };
 
     var loadCaseInvoiceTemplate = function() {
@@ -1649,12 +1879,26 @@ $(function () {
         });
     };
 
+    var loadCaseInvoiceCaseFilesTemplate = function () {
+        return $.get("/content/templates/case-invoice-case-files.tmpl.html", function (caseInvoiceCaseFilesTemplate) {
+            dhHelpdesk.CaseArticles.CaseInvoiceCaseFilesTemplate = $.templates("CaseInvoiceCaseFiles", caseInvoiceCaseFilesTemplate);
+        });
+    };
+
+    var loadCaseInvoiceOrderFilesTemplate = function () {
+        return $.get("/content/templates/case-invoice-order-files.tmpl.html", function (caseInvoiceOrderFilesTemplate) {
+            dhHelpdesk.CaseArticles.CaseInvoiceOrderFilesTemplate = $.templates("CaseInvoiceOrderFiles", caseInvoiceOrderFilesTemplate);
+        });
+    };
+
     loadCaseInvoiceTemplate()
         .then(loadCaseInvoiceOrderTemplate)
         .then(loadCaseInvoiceArticleTemplate)
         .then(loadCaseInvoiceOverviewTemplate)
         .then(loadCaseInvoiceArticleOverviewTemplate)
         .then(loadCaseInvoiceOrderActionsTemplate)
+        .then(loadCaseInvoiceCaseFilesTemplate)
+        .then(loadCaseInvoiceOrderFilesTemplate)
         .then(loadCaseFiles)
         .then(function() {
             $("[data-invoice]").each(function () {
