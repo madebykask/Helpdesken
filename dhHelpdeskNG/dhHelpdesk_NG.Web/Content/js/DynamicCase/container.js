@@ -51,8 +51,6 @@ var dhform = function (options) {
                 _this.loadModal({ url: _this._options.url });
             });
 
-            var modal = $('#' + _this._modalId);
-
             $(document).on('hidden', '#' + _this._modalId, function () {
                 $('#myTab li a.case').click();
             })
