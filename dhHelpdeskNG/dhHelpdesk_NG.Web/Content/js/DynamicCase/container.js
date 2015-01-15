@@ -32,7 +32,7 @@ var dhform = function (options) {
     _this._formArea;
     _this._formAreaId = 'dh-form-area';
     _this._modalFormAreaId = 'dh-modal-form-area';
-    _this.modalTemplate = '<div class="modal fade full-screen" id="containerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" aria-hidden="true">' +
+    _this.modalTemplate = '<div class="modal fade" id="containerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" aria-hidden="true">' +
                              '  <div class="modal-header">' +
                              '  </div>' +
                              '  <div class="modal-body" id="dh-modal-form-area">' +
@@ -109,6 +109,14 @@ dhform.prototype.loadModal = function (options) {
     $(_this.modalTemplate).appendTo(document.body);
 
     modal = $('#' + _this._modalId);
+    modal.css({
+        'width': function () {
+            return ($(document).width() * .9) + 'px';
+        },
+        'margin-left': function () {
+            return -($(this).width() / 2);
+        }
+    });
     modal.modal("show");
 
     _this._formArea = $('#' + _this._modalFormAreaId);
