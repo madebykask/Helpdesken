@@ -11,6 +11,7 @@
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.Mvc;
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Models.Invoice;
 
@@ -137,6 +138,16 @@
             }
 
             return this.Json(files.ToArray(), JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public UnicodeFileContentResult CaseFile(string id, string fileName)
+        {
+            var fileContent = GuidHelper.IsGuid(id)
+                                  ? this.userTemporaryFilesStorage.GetFileContent(fileName, id, ModuleName.Cases)
+                                  : this.caseFileService.GetFileContentByIdAndFileName(int.Parse(id), fileName);
+
+            return new UnicodeFileContentResult(fileContent, fileName);
         }
     }
 }

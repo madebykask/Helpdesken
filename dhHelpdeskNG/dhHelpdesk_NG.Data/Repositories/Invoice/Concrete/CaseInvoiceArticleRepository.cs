@@ -19,18 +19,22 @@
 
         private readonly IBusinessModelToEntityMapper<CaseInvoiceArticle, CaseInvoiceArticleEntity> articleMapper;
 
+        private readonly IBusinessModelToEntityMapper<CaseInvoiceOrderFile, CaseInvoiceOrderFileEntity> filesMapper;
+
         public CaseInvoiceArticleRepository(
                 IDatabaseFactory databaseFactory, 
                 IEntityToBusinessModelMapper<CaseInvoiceEntity, CaseInvoice> invoiceToBusinessModelMapper, 
                 IBusinessModelToEntityMapper<CaseInvoice, CaseInvoiceEntity> invoiceToEntityMapper, 
                 IBusinessModelToEntityMapper<CaseInvoiceOrder, CaseInvoiceOrderEntity> orderMapper, 
-                IBusinessModelToEntityMapper<CaseInvoiceArticle, CaseInvoiceArticleEntity> articleMapper)
+                IBusinessModelToEntityMapper<CaseInvoiceArticle, CaseInvoiceArticleEntity> articleMapper, 
+                IBusinessModelToEntityMapper<CaseInvoiceOrderFile, CaseInvoiceOrderFileEntity> filesMapper)
             : base(databaseFactory)
         {
             this.invoiceToBusinessModelMapper = invoiceToBusinessModelMapper;
             this.invoiceToEntityMapper = invoiceToEntityMapper;
             this.orderMapper = orderMapper;
             this.articleMapper = articleMapper;
+            this.filesMapper = filesMapper;
         }
 
         public CaseInvoice[] GetCaseInvoices(int caseId)
@@ -84,7 +88,25 @@
                         orderEntity.InvoiceId = entity.Id;
                         this.DbContext.CaseInvoiceOrders.Add(orderEntity);
                     }
+
                     this.Commit();
+
+                    var orderFiles = this.DbContext.CaseInvoiceOrderFiles.Where(f => f.OrderId == orderEntity.Id);
+                    foreach (var orderFile in orderFiles)
+                    {
+                        this.DbContext.CaseInvoiceOrderFiles.Remove(orderFile);
+                    }
+
+                    if (order.Files != null)
+                    {
+                        foreach (var file in order.Files)
+                        {
+                            var fileEntity = new CaseInvoiceOrderFileEntity();
+                            this.filesMapper.Map(file, fileEntity);
+                            fileEntity.OrderId = orderEntity.Id;
+                            this.DbContext.CaseInvoiceOrderFiles.Add(fileEntity);
+                        }
+                    }
 
                     foreach (var article in order.Articles)
                     {
@@ -102,6 +124,7 @@
                             this.DbContext.CaseInvoiceArticles.Add(articleEntity);
                         }
                     }
+
                     this.Commit();
                 }
             }

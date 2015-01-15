@@ -62,6 +62,7 @@
                 var caseInvoicesRep = uow.GetRepository<CaseInvoiceEntity>();
                 var caseInvoiceOrdersRep = uow.GetRepository<CaseInvoiceOrderEntity>();
                 var caseInvoiceArticlesRep = uow.GetRepository<CaseInvoiceArticleEntity>();
+                var caseInvoiceOrderFilesRep = uow.GetRepository<CaseInvoiceOrderFileEntity>();
 
                 var invoices = caseInvoicesRep.GetAll()
                                 .Where(i => i.CaseId == caseId)
@@ -71,6 +72,7 @@
                 {
                     var orderIds = invoice.Orders.Select(o => o.Id);
                     caseInvoiceArticlesRep.DeleteWhere(a => orderIds.Contains(a.OrderId));
+                    caseInvoiceOrderFilesRep.DeleteWhere(f => orderIds.Contains(f.OrderId));
                     caseInvoiceOrdersRep.DeleteWhere(o => orderIds.Contains(o.Id));
                     caseInvoicesRep.DeleteById(invoice.Id);
                 }

@@ -1084,13 +1084,23 @@ $(function () {
                     }
                 }
 
+                var filesResult = "";
+                var files = this.files.getFiles();
+                for (var j = 0; j < files.length; j++) {
+                    filesResult += files[j].toJson();
+                    if (j < files.length - 1) {
+                        filesResult += ", ";
+                    }
+                }
+
                 return '{' +
                         '"Id":"' + (this.Id >= 0 ? this.Id : 0) + '", ' +
                         '"InvoiceId":"' + (this.Invoice.Id > 0 ? this.Invoice.Id : 0) + '", ' +
                         '"Number":"' + this.Number + '", ' +
                         '"DeliveryPeriod":"' + (this.DeliveryPeriod != null ? this.DeliveryPeriod : '') + '", ' +
                         '"Reference":"' + (this.Reference != null ? this.Reference : '') + '", ' +
-                        '"Articles": [' + articlesResult + ']' +
+                        '"Articles": [' + articlesResult + '],' +
+                        '"Files": [' + filesResult + ']' +
                         '}';
             },
 
@@ -1233,13 +1243,23 @@ $(function () {
             },
 
             this.UpdateFiles = function () {
-                var model = this.files;
+                var model = dhHelpdesk.CaseArticles.caseFilesViewModel({
+                    caseId: dhHelpdesk.CaseArticles.caseFiles.getCaseId(),
+                    files: this.files.getFiles()
+                });
                 this.Container.find("#files-container").html(dhHelpdesk.CaseArticles.CaseInvoiceOrderFilesTemplate.render(model));
             },
 
             this.RemoveOrderFile = function(fileName) {
                 this.files.deleteFile(fileName);
                 this.UpdateFiles();
+            },
+
+            this.AddFileByName = function(fileName) {
+                var caseFile = dhHelpdesk.CaseArticles.caseFiles.getFile(fileName);
+                if (caseFile != null) {
+                    this.files.addFile(caseFile.clone());
+                }
             },
 
             this.SelectCaseFiles = function () {
@@ -1256,8 +1276,7 @@ $(function () {
                             text: dhHelpdesk.CaseArticles.translate("Attach"),
                             click: function () {
                                 d.find("input:checked").each(function() {
-                                    var caseFile = dhHelpdesk.CaseArticles.caseFiles.getFile($(this).val());
-                                    that.files.addFile(caseFile.clone());
+                                    that.AddFileByName($(this).val());
                                 });
                                 that.UpdateFiles();
                                 d.dialog("close");
@@ -1704,6 +1723,12 @@ $(function () {
                 return f;
             };
 
+            var toJson = function() {
+                return '{' +
+                            '"FileName":"' + getEncodedFileName() + '"' +
+                        '}';
+            };
+
             that.getFileName = getFileName;
             that.getSize = getSize;
             that.getType = getType;
@@ -1711,6 +1736,7 @@ $(function () {
             that.getUser = getUser;
             that.getEncodedFileName = getEncodedFileName;
             that.clone = clone;
+            that.toJson = toJson;
 
             return that;
         },
@@ -1934,6 +1960,13 @@ $(function () {
                         order.DeliveryPeriod = ord.DeliveryPeriod;
                         order.Reference = ord.Reference;
                         order.Date = ord.Date;
+
+                        if (ord.Files != null) {
+                            for (var m = 0; m < ord.Files.length; m++) {
+                                order.AddFileByName(ord.Files[m].FileName);
+                            }
+                        }
+
                         invoice.AddOrder(order);
                         if (ord.Articles != null) {
                             for (var k = 0; k < ord.Articles.length; k++) {
