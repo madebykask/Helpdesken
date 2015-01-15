@@ -16,5 +16,7 @@
 
         public IList<SelectListItem> UsAvailable { get; set; }
         public IList<SelectListItem> UsSelected { get; set; }
+
+        public IList<SelectListItem> CaseSolutions { get; set; }
     }
 }

@@ -28,11 +28,15 @@
                                                         @foreach (var link in categoryGroup.Links)
                                                         {
                                                             <li>
-                                                                @if(string.IsNullOrEmpty(link.UrlAddress)){
-                                                                    <span>@link.UrlName</span>                                                                    
+                                                                @if (string.IsNullOrEmpty(link.UrlAddress)){
+                                                                    <span>@link.UrlName</span>  
+                                                                                                                                    
                                                                 } else {
+                                                                       
                                                                     <a href="@link.UrlAddress" target="_blank"><i class="icon-play-circle"></i> @link.UrlName</a>
-                                                                }                                                                
+                                                                      
+                                                                } 
+                                                                                                                            
                                                             </li>
                                                         }
                                                     </ul>
