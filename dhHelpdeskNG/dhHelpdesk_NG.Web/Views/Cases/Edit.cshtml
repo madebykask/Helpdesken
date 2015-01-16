@@ -55,54 +55,88 @@
 
             CaseInitForm();
 
+            var dc = function(text) {
+                return $("<div>" + text + "<div>");
+            };
+
+            var confirmDialog = function(d, onOk, onCancel) {
+                return d.dialog({
+                    title: '@Translation.Get("Meddelande")',
+                    buttons: [
+                        {
+                            text: '@Translation.Get("OK")',
+                            click: function() {
+                                onOk();
+                                d.dialog("close");
+                            }
+                        },
+                        {
+                            text: '@Translation.Get("Avbryt")',
+                            click: function() {
+                                onCancel();
+                                d.dialog("close");
+                            }
+                        }
+                    ],
+                    modal: true
+                });
+            };
+
+            var messageDialog= function(d) {
+                return d.dialog({
+                    title: '@Translation.Get("Meddelande")',
+                    buttons: [
+                        {
+                            text: '@Translation.Get("Stäng")',
+                            click: function() {
+                                d.dialog("close");
+                            }
+                        }
+                    ],
+                    modal: true
+                });
+            };
+
             var hasNotInvoicedArticles = function () {
                 return typeof dhHelpdesk.CaseArticles !== "undefined" &&
                     dhHelpdesk.CaseArticles.HasNotInvoicedArticles();
             }
 
-            var invoiceArticlesBeforeClose = function () {
-                return hasNotInvoicedArticles() &&
-                    !confirm('@Translation.Get("Are you sure you want to close the case without sending your selected articles to invoicing?")');
+            var invoiceArticlesBeforeClose = function (onOk, onCancel) {
+                if (!hasNotInvoicedArticles()) {
+                    onOk();
+                    return;
+                }
+
+                confirmDialog(dc('@Translation.Get("Are you sure you want to close the case without sending your selected articles to invoicing?")'),
+                    onOk, onCancel);                
             }
 
             var openInvoiceWindow = function () {
                 dhHelpdesk.CaseArticles.OpenInvoiceWindow('@Translation.Get("Please send selected articles for invoicing or delete them in order to close the case.")');
             }
 
-            $("#case-action-save-and-close").click(function () {
-                if (invoiceArticlesBeforeClose()) {
-                    openInvoiceWindow();
-                    return false;
-                }
-
-                EditCaseAndClose();
-                return false;
+            $("#case-action-save-and-close").click(function (e) {
+                e.preventDefault();
+                invoiceArticlesBeforeClose(EditCaseAndClose, openInvoiceWindow);
             });
 
-            $("#case-action-save-and-new").click(function () {
-                if (invoiceArticlesBeforeClose()) {
-                    openInvoiceWindow();
-                    return false;
-                }
+            $("#case-action-save-and-new").click(function (e) {
+                e.preventDefault();
+                invoiceArticlesBeforeClose(EditCaseAndAddCase, openInvoiceWindow);
+            });
 
-                EditCaseAndAddCase();
-                return false;
+            $("#case-action-close").click(function (e) {
+                e.preventDefault();
+                var targetUrl = $(this).attr("href");
+                invoiceArticlesBeforeClose(function (){ window.location.href = targetUrl; }, openInvoiceWindow);
             });
 
             $("#case-action-delete").click(function () {
                 if (hasNotInvoicedArticles()) {
-                    alert('@Translation.Get("You may not delete a case with selected articles in the order section. Please review your orders.")');
+                    messageDialog(dc('@Translation.Get("You may not delete a case with selected articles in the order section. Please review your orders.")'));
                     return false;
                 }
-                return true;
-            });
-
-            $("#case-action-close").click(function () {
-                if (invoiceArticlesBeforeClose()) {
-                    openInvoiceWindow();
-                    return false;
-                }
-
                 return true;
             });
         });
