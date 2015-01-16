@@ -1269,26 +1269,40 @@ $(function () {
                 });
 
                 var that = this;
-                var d = $(dhHelpdesk.CaseArticles.CaseInvoiceCaseFilesTemplate.render(model))
-                    .dialog({
+                var d = $(dhHelpdesk.CaseArticles.CaseInvoiceCaseFilesTemplate.render(model));
+
+                if (model.getFiles().length > 0) {
+                    d.dialog({
                         buttons: [
-                        {
-                            text: dhHelpdesk.CaseArticles.translate("Attach"),
-                            click: function () {
-                                d.find("input:checked").each(function() {
-                                    that.AddFileByName($(this).val());
-                                });
-                                that.UpdateFiles();
-                                d.dialog("close");
+                            {
+                                text: dhHelpdesk.CaseArticles.translate("Attach"),
+                                click: function() {
+                                    d.find("input:checked").each(function() {
+                                        that.AddFileByName($(this).val());
+                                    });
+                                    that.UpdateFiles();
+                                    d.dialog("close");
+                                }
+                            },
+                            {
+                                text: dhHelpdesk.CaseArticles.translate("Close"),
+                                click: function() {
+                                    d.dialog("close");
+                                }
                             }
-                        },
-                        {
-                            text: dhHelpdesk.CaseArticles.translate("Close"),
-                            click: function () {
-                                d.dialog("close");
-                            }
-                        }]
+                        ]
                     });
+                } else {
+                    d.dialog({
+                        buttons: [{
+                                text: dhHelpdesk.CaseArticles.translate("Close"),
+                                click: function () {
+                                    d.dialog("close");
+                                }
+                            }
+                        ]
+                    });
+                }
 
                 d.dialog("open");
             }
@@ -1651,12 +1665,17 @@ $(function () {
 
             var deleteFile = function (fileName) {
                 var fs = getFiles();
-                for (var i = 0; i < fs.length; i++) {
-                    if (fs[i].getFileName() == fileName) {
-                        fs.splice(i, 1);
-                        break;
+                var found = false;
+                do {
+                    found = false;
+                    for (var i = 0; i < fs.length; i++) {
+                        if (fs[i].getFileName() == fileName) {
+                            fs.splice(i, 1);
+                            found = true;
+                            break;
+                        }
                     }
-                }
+                } while (found);
             };
 
             var clone = function() {
@@ -1843,8 +1862,15 @@ $(function () {
         }
     });
 
-    dhHelpdesk.CaseArticles.OnEvent("OnDeleteCaseFile", function(e, caseId, fileName) {
-        dhHelpdesk.CaseArticles.caseFiles.deleteFile(fileName);
+    dhHelpdesk.CaseArticles.OnEvent("OnDeleteCaseFile", function (e, caseId, fileName) {
+        var f = fileName.trim();
+        dhHelpdesk.CaseArticles.caseFiles.deleteFile(f);
+
+        var orders = dhHelpdesk.CaseArticles.GetInvoice().GetOrders();
+        for (var i = 0; i < orders.length; i++) {
+            orders[i].files.deleteFile(f);
+            orders[i].UpdateFiles();
+        }
     });
 
     var loadCaseFiles = function () {

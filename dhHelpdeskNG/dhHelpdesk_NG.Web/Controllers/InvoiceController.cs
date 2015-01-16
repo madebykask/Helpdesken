@@ -115,26 +115,42 @@
         [HttpGet]
         public JsonResult CaseFiles(string id)
         {
-            var fileNames = GuidHelper.IsGuid(id)
-                                ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Cases)
-                                : this.caseFileService.FindFileNamesByCaseId(int.Parse(id));
-
             var files = new List<CaseFileModel>();
-            foreach (var fileName in fileNames)
+
+            try
             {
-                var file = new CaseFileModel
-                               {
-                                   FileName = fileName
-                               };
+                var fileNames = GuidHelper.IsGuid(id)
+                                    ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Cases)
+                                    : this.caseFileService.FindFileNamesByCaseId(int.Parse(id));
 
-                var fileContent = GuidHelper.IsGuid(id)
-                                  ? this.userTemporaryFilesStorage.GetFileContent(fileName, id, ModuleName.Cases)
-                                  : this.caseFileService.GetFileContentByIdAndFileName(int.Parse(id), fileName);
+                foreach (var fileName in fileNames)
+                {
+                    var file = new CaseFileModel
+                    {
+                        FileName = fileName
+                    };
 
-                file.Size = fileContent.Length;
-                file.Type = MimeHelper.GetMimeType(fileName);
+                    byte[] fileContent = new byte[0];
 
-                files.Add(file);
+                    try
+                    {
+                        fileContent = GuidHelper.IsGuid(id)
+                                          ? this.userTemporaryFilesStorage.GetFileContent(fileName, id, ModuleName.Cases)
+                                          : this.caseFileService.GetFileContentByIdAndFileName(int.Parse(id), fileName);
+                    }
+                    catch (Exception)
+                    {
+                        continue;
+                    }
+
+                    file.Size = fileContent.Length;
+                    file.Type = MimeHelper.GetMimeType(fileName);
+
+                    files.Add(file);
+                }
+            }
+            catch (Exception)
+            {
             }
 
             return this.Json(files.ToArray(), JsonRequestBehavior.AllowGet);
