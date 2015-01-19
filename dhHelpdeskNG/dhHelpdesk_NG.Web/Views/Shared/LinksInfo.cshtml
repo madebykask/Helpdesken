@@ -22,21 +22,27 @@
                                         <ul>
                                             @foreach (var categoryGroup in customerGroup.Categories)
                                             {
+                                                
                                                 <li><strong>@categoryGroup.CategoryName</strong></li>
+                                               
                                                 <li>
                                                     <ul>
                                                         @foreach (var link in categoryGroup.Links)
                                                         {
                                                             <li>
-                                                                @if (string.IsNullOrEmpty(link.UrlAddress)){
-                                                                    <span>@link.UrlName</span>  
-                                                                                                                                    
+                                                                @if (string.IsNullOrEmpty(link.UrlAddress))
+                                                                {
+                                                                    if (link.DocumentId == null)
+                                                                    {
+                                                                        <a href="@Url.Action("new/", "cases", new { customerId = link.CustomerId, templateId = link.CaseSolutionId })">@link.UrlName</a>
+                                                                        @*<span>@link.CaseSolutionName</span>*@
+                                                                    } else {
+                                                                    
+                                                                        <a href="@Url.Action("DocumentFile", "Document", new {document = link.DocumentId})">@link.UrlName</a>
+                                                                    }
                                                                 } else {
-                                                                       
                                                                     <a href="@link.UrlAddress" target="_blank"><i class="icon-play-circle"></i> @link.UrlName</a>
-                                                                      
-                                                                } 
-                                                                                                                            
+                                                                }                                                 
                                                             </li>
                                                         }
                                                     </ul>
