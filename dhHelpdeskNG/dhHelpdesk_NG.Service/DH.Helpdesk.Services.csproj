@@ -159,6 +159,7 @@
     <Compile Include="BusinessLogic\Mappers\Orders\OrderFieldSettingsMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\OrderFieldSettingsOverviewMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\OrderHistoryMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Orders\OrderHistoryOverviewMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\OrderLogMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\OrderMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Orders\OrderOverviewMapper.cs" />
@@ -170,6 +171,10 @@
     <Compile Include="BusinessLogic\Mappers\Questionnaire\QuestionnaireQuestionResultMappers.cs" />
     <Compile Include="BusinessLogic\Mappers\Shared\Data\UnionItemOverview.cs" />
     <Compile Include="BusinessLogic\Mappers\Shared\GlobalMappers.cs" />
+    <Compile Include="BusinessLogic\Orders\Concrete\HistoriesComparator.cs" />
+    <Compile Include="BusinessLogic\Orders\Concrete\OrdersLogic.cs" />
+    <Compile Include="BusinessLogic\Orders\IHistoriesComparator.cs" />
+    <Compile Include="BusinessLogic\Orders\IOrdersLogic.cs" />
     <Compile Include="BusinessLogic\Specifications\Accounts\AccountFieldSettingsSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Accounts\AccountSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\BulletinBoards\BulletinBoardsSpecifications.cs" />
@@ -194,7 +199,9 @@
     <Compile Include="BusinessLogic\Specifications\Licenses\LicenseSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Licenses\ProductSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Links\LinkSpecifications.cs" />
+    <Compile Include="BusinessLogic\Specifications\Orders\OrderEmailLogSpecificatons.cs" />
     <Compile Include="BusinessLogic\Specifications\Orders\OrderFieldSettingsSpecifications.cs" />
+    <Compile Include="BusinessLogic\Specifications\Orders\OrderHistorySpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Orders\OrderLogSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Orders\OrderPropertySpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Orders\OrderSpecifications.cs" />

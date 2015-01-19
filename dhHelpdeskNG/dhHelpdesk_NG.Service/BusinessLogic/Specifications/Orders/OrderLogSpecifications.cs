@@ -16,5 +16,17 @@
 
             return query;
         }
+
+        public static IQueryable<OrderLog> GetByHistoryIds(this IQueryable<OrderLog> query, int[] historyIds)
+        {
+            if (historyIds == null || !historyIds.Any())
+            {
+                return query;
+            }
+
+            query = query.Where(l => l.OrderHistoryId.HasValue && historyIds.Contains(l.OrderHistoryId.Value));
+
+            return query;
+        }
     }
 }
