@@ -310,6 +310,17 @@
     <Compile Include="Models\Orders\Order\OrderEditSettings\SupplierEditSettings.cs" />
     <Compile Include="Models\Orders\Order\OrderEditSettings\TextFieldEditSettings.cs" />
     <Compile Include="Models\Orders\Order\OrderEditSettings\UserEditSettings.cs" />
+    <Compile Include="Models\Orders\Order\OrderHistoryFields\DeliveryHistoryFields.cs" />
+    <Compile Include="Models\Orders\Order\OrderHistoryFields\FullOrderHistoryFields.cs" />
+    <Compile Include="Models\Orders\Order\OrderHistoryFields\GeneralHistoryFields.cs" />
+    <Compile Include="Models\Orders\Order\OrderHistoryFields\LogHistoryFields.cs" />
+    <Compile Include="Models\Orders\Order\OrderHistoryFields\OrderHistoryFields.cs" />
+    <Compile Include="Models\Orders\Order\OrderHistoryFields\OrdererHistoryFields.cs" />
+    <Compile Include="Models\Orders\Order\OrderHistoryFields\OtherHistoryFields.cs" />
+    <Compile Include="Models\Orders\Order\OrderHistoryFields\ProgramHistoryFields.cs" />
+    <Compile Include="Models\Orders\Order\OrderHistoryFields\ReceiverHistoryFields.cs" />
+    <Compile Include="Models\Orders\Order\OrderHistoryFields\SupplierHistoryFields.cs" />
+    <Compile Include="Models\Orders\Order\OrderHistoryFields\UserHistoryFields.cs" />
     <Compile Include="Models\Orders\Order\UpdateOrderRequest.cs" />
     <Compile Include="Models\Projects\Output\ProjectOverviewSorting.cs" />
     <Compile Include="Models\Questionnaire\Participant.cs" />
