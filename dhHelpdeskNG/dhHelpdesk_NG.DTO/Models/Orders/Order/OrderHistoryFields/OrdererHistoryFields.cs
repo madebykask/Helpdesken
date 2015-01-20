@@ -9,7 +9,9 @@
                 string ordererEmail, 
                 string ordererPhone, 
                 string ordererCode, 
+                int? departmentId,
                 string department, 
+                int? unitId,
                 string unit, 
                 string ordererAddress, 
                 string ordererInvoiceAddress, 
@@ -20,6 +22,8 @@
                 string accountingDimension4, 
                 string accountingDimension5)
         {
+            this.UnitId = unitId;
+            this.DepartmentId = departmentId;
             this.AccountingDimension5 = accountingDimension5;
             this.AccountingDimension4 = accountingDimension4;
             this.AccountingDimension3 = accountingDimension3;
@@ -50,7 +54,11 @@
 
         public string OrdererCode { get; private set; }
         
+        public int? DepartmentId { get; private set; }
+        
         public string Department { get; private set; }
+        
+        public int? UnitId { get; private set; }
         
         public string Unit { get; private set; }
         

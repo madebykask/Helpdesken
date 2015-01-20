@@ -4,6 +4,7 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditFields;
+    using DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditSettings;
 
     public sealed class OrdersLogic : IOrdersLogic
     {
@@ -14,7 +15,11 @@
             this.historiesComparator = historiesComparator;
         }
 
-        public List<HistoriesDifference> AnalyzeHistoriesDifferences(List<HistoryOverview> histories, List<LogOverview> logs, List<EmailLogOverview> emailLogs)
+        public List<HistoriesDifference> AnalyzeHistoriesDifferences(
+                    List<HistoryOverview> histories, 
+                    List<LogOverview> logs, 
+                    List<EmailLogOverview> emailLogs,
+                    FullOrderEditSettings settings)
         {
             var historyDifferences = new List<HistoriesDifference>();
 
@@ -29,7 +34,8 @@
                     previousHistory,
                     history,
                     historyLogs,
-                    historyEmailLogs);
+                    historyEmailLogs,
+                    settings);
 
                 if (difference != null)
                 {

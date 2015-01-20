@@ -142,6 +142,9 @@
                                 .GetById(orderId)
                                 .MapToFullOrderEditFields();
 
+                var settings = this.orderFieldSettingsService.GetOrderEditSettings(customerId, order.OrderTypeId, uow);
+                var options = this.GetEditOptions(customerId, order.OrderTypeId, settings, uow);
+
                 var histories = orderHistoryRep.GetAll()
                                 .GetByOrder(orderId)
                                 .MapToOverviews();
@@ -152,12 +155,9 @@
                 var emailLogs = orderEmailLogRep.GetAll()
                                 .GetByHistoryIds(historyIds)
                                 .MapToOverviews();
-                var historyDifferences = this.ordersLogic.AnalyzeHistoriesDifferences(histories, logOverviews, emailLogs);
+                var historyDifferences = this.ordersLogic.AnalyzeHistoriesDifferences(histories, logOverviews, emailLogs, settings);
 
                 var data = new OrderEditData(order, historyDifferences);
-
-                var settings = this.orderFieldSettingsService.GetOrderEditSettings(customerId, order.OrderTypeId, uow);
-                var options = this.GetEditOptions(customerId, order.OrderTypeId, settings, uow);
 
                 return new FindOrderResponse(data, settings, options);
             }

@@ -99,5 +99,11 @@
         public virtual Department DeliveryDepartment { get; set; }
      
         public virtual Order Order { get; set; }
+
+        public virtual User Administrator { get; set; }
+
+        public virtual Department Department { get; set; }
+
+        public virtual User CreatedByUser { get; set; }
     }
 }

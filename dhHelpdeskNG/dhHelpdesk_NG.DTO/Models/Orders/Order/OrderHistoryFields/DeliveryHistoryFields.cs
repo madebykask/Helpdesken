@@ -7,6 +7,7 @@
         public DeliveryHistoryFields(
                 DateTime? deliveryDate, 
                 DateTime? installDate, 
+                int? deliveryDepartmentId,
                 string deliveryDepartment, 
                 string deliveryOu, 
                 string deliveryAddress, 
@@ -15,10 +16,9 @@
                 string deliveryLocation, 
                 string deliveryInfo1, 
                 string deliveryInfo2, 
-                string deliveryInfo3,
-                string deliveryOuId)
+                string deliveryInfo3)
         {
-            this.DeliveryOuId = deliveryOuId;
+            this.DeliveryDepartmentId = deliveryDepartmentId;
             this.DeliveryInfo3 = deliveryInfo3;
             this.DeliveryInfo2 = deliveryInfo2;
             this.DeliveryInfo1 = deliveryInfo1;
@@ -36,6 +36,8 @@
         
         public DateTime? InstallDate { get; private set; }
         
+        public int? DeliveryDepartmentId { get; private set; }
+
         public string DeliveryDepartment { get; private set; }
         
         public string DeliveryOu { get; private set; }
@@ -53,7 +55,5 @@
         public string DeliveryInfo2 { get; private set; }
         
         public string DeliveryInfo3 { get; private set; }
-
-        public string DeliveryOuId { get; private set; }
     }
 }

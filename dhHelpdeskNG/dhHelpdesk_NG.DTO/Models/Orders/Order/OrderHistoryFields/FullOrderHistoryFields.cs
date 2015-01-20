@@ -2,11 +2,9 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class FullOrderHistoryFields : Shared.Input.BusinessModel
+    public sealed class FullOrderHistoryFields
     {
         public FullOrderHistoryFields(
-                int id, 
-                int? orderTypeId,
                 DeliveryHistoryFields delivery, 
                 GeneralHistoryFields general, 
                 LogHistoryFields log, 
@@ -18,7 +16,6 @@
                 SupplierHistoryFields supplier, 
                 UserHistoryFields user)
         {
-            this.OrderTypeId = orderTypeId;
             this.User = user;
             this.Supplier = supplier;
             this.Receiver = receiver;
@@ -29,11 +26,7 @@
             this.Log = log;
             this.General = general;
             this.Delivery = delivery;
-            this.Id = id;
         }
-
-        [IsId]
-        public int? OrderTypeId { get; private set; }
 
         [NotNull]
         public DeliveryHistoryFields Delivery { get; private set; }

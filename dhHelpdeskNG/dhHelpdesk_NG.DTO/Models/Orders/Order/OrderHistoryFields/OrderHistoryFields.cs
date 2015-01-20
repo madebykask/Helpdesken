@@ -3,6 +3,7 @@
     public sealed class OrderHistoryFields
     {
         public OrderHistoryFields(
+                int? propertyId,
                 string property, 
                 string orderRow1, 
                 string orderRow2, 
@@ -16,6 +17,7 @@
                 string orderInfo, 
                 int orderInfo2)
         {
+            this.PropertyId = propertyId;
             this.OrderInfo2 = orderInfo2;
             this.OrderInfo = orderInfo;
             this.Configuration = configuration;
@@ -29,6 +31,8 @@
             this.OrderRow1 = orderRow1;
             this.Property = property;
         }
+
+        public int? PropertyId { get; private set; }
 
         public string Property { get; private set; }
         

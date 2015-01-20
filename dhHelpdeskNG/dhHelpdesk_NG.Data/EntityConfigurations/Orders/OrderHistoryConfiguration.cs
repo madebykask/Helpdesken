@@ -36,6 +36,9 @@
             this.Property(o => o.AccountingDimension4).IsOptional().HasMaxLength(20);
             this.Property(o => o.AccountingDimension5).IsOptional().HasMaxLength(20);
             this.Property(o => o.Department_Id).IsOptional();
+            this.HasOptional(o => o.Department)
+                .WithMany()
+                .HasForeignKey(o => o.Department_Id);
             this.HasRequired(o => o.Ou)
                 .WithMany()
                 .HasForeignKey(o => o.OU_Id);
@@ -64,6 +67,9 @@
             this.Property(o => o.SupplierOrderDate).IsOptional();
             this.Property(o => o.SupplierOrderInfo).IsRequired().HasMaxLength(200);
             this.Property(o => o.User_Id).IsOptional();
+            this.HasOptional(o => o.Administrator)
+                .WithMany()
+                .HasForeignKey(o => o.User_Id);
             this.Property(o => o.Deliverydate).IsOptional();
             this.Property(o => o.InstallDate).IsOptional();
             this.HasRequired(o => o.OrderState)
@@ -89,7 +95,10 @@
             this.Property(o => o.Info).HasMaxLength(200).IsOptional();
             this.Property(o => o.Deleted).IsRequired();
             this.Property(o => o.CreatedDate).IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-            this.Property(o => o.CreatedByUser_Id).IsOptional();
+            this.Property(o => o.CreatedByUser_Id).IsRequired();
+            this.HasRequired(o => o.CreatedByUser)
+                .WithMany()
+                .HasForeignKey(o => o.CreatedByUser_Id);
 
             this.ToTable("tblOrderHistory");            
         }

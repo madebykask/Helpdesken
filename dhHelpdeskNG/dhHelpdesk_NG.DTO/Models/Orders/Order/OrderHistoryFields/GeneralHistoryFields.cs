@@ -2,28 +2,30 @@
 {
     using System;
 
+    using DH.Helpdesk.Common.Types;
+
     public sealed class GeneralHistoryFields
     {
         public GeneralHistoryFields(
-                int orderNumber, 
-                string customer, 
-                string administrator, 
+                int? administratorId,
+                UserName administrator, 
+                int? domainId,
                 string domain, 
                 DateTime? orderDate)
         {
+            this.AdministratorId = administratorId;
+            this.DomainId = domainId;
             this.OrderDate = orderDate;
             this.Domain = domain;
             this.Administrator = administrator;
-            this.Customer = customer;
-            this.OrderNumber = orderNumber;
         }
+        
+        public int? AdministratorId { get; private set; }
+        
+        public UserName Administrator { get; private set; }
+        
+        public int? DomainId { get; private set; }
 
-        public int OrderNumber { get; private set; }
-        
-        public string Customer { get; private set; }
-        
-        public string Administrator { get; private set; }
-        
         public string Domain { get; private set; }
         
         public DateTime? OrderDate { get; private set; }    
