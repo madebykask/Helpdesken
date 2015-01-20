@@ -344,6 +344,7 @@
     <Compile Include="Areas\Admin\Models\WorkingGroupInputViewModel.cs" />
     <Content Include="Content\bootstrap-tagsinput.css" />
     <Content Include="Content\css\bootstrap-tagsinput.css" />
+    <Content Include="Content\js\Account\order.js" />
     <Content Include="Content\js\bootstrap-tagsinput.js" />
     <Content Include="Content\bundles\chosen-sprite%402x.png" />
     <Content Include="Content\bundles\chosen-sprite.png" />

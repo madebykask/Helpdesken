@@ -688,7 +688,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             cs.ReportedBy = "";
             var LMtype = "";
 
-            if (ConfigurationManager.AppSettings["LoginMode"].ToString() == "SSO")
+            if (ConfigurationManager.AppSettings["CurrentApplication"].ToString() == "LineManager")
             {
                 var caseListCondition = ConfigurationManager.AppSettings["CaseList"].ToString().ToLower().Split(',');
 
@@ -717,7 +717,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                 }
 
                 cs.LMCaseList = LMtype;
-            } // SSO only 
+            } // LineManager only 
             else
             {
                 cs.RegUserId = curUser;
@@ -736,7 +736,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
             // 1: User in Customer Setting
             srm.CaseSettings = this._caseSettingService.GetCaseSettingsByUserGroup(cusId, 1);
 
-            if(LMtype == "" && ConfigurationManager.AppSettings["LoginMode"].ToString() == "SSO" )
+            if (LMtype == "" && ConfigurationManager.AppSettings["CurrentApplication"].ToString() == "LineManager")
                 srm.Cases = null;
             else
             {
@@ -754,7 +754,7 @@ namespace DH.Helpdesk.NewSelfService.Controllers
                     null,
                     "Line Manager").ToList(); // Take(maxRecords)
 
-                if (LMtype == "" && ConfigurationManager.AppSettings["LoginMode"].ToString() == "SSO")
+                if (LMtype == "" && ConfigurationManager.AppSettings["CurrentApplication"].ToString() == "LineManager")
                 {
                     var dynamicCases = _caseService.GetAllDynamicCases();
                     model.DynamicCases = dynamicCases;

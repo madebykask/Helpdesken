@@ -20,6 +20,7 @@
     using DH.Helpdesk.Web.Infrastructure.Filters.Notifiers;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Notifiers;
     using DH.Helpdesk.Web.Models.Notifiers;
+    using DH.Helpdesk.Web.Models.Notifiers.ConfigurableFields;
 
     public sealed class NotifiersController : BaseController
     {
@@ -261,9 +262,12 @@
         }
 
         [HttpGet]
-        public ViewResult NewNotifierPopup()
+        public ViewResult NewNotifierPopup(string userId, string fName, 
+                                           string email, string phone, string placement, 
+                                           int? regionId, int? departmentId, int? unit)
         {
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
+            var inputParams = new Dictionary<string,string>();
 
             var settings =
                 this.notifierFieldSettingRepository.FindDisplayFieldSettingsByCustomerIdAndLanguageId(
@@ -286,7 +290,12 @@
             if (settings.Department.Show)
             {
                 regions = this.regionRepository.FindByCustomerId(currentCustomerId);
+                //if (regionId != null && regionId > 0)
+                  //  inputParams.Add("RegionId", regionId);
+
                 departments = this.departmentRepository.FindActiveOverviews(currentCustomerId);
+                //if (departmentId != null && departmentId > 0)
+                  //  inputParams.Add("DepartmentId", departmentId);
             }
 
             if (settings.OrganizationUnit.Show)
@@ -309,6 +318,21 @@
                 groups = this.notifierGroupRepository.FindOverviewsByCustomerId(currentCustomerId);
             }
 
+            if (!string.IsNullOrEmpty(userId))
+                inputParams.Add("UserId", userId);
+
+            if (!string.IsNullOrEmpty(fName))
+               inputParams.Add("FName", fName);
+
+            if (!string.IsNullOrEmpty(email))
+                inputParams.Add("Email", email);
+
+            if (!string.IsNullOrEmpty(phone))
+                inputParams.Add("Phone", phone);
+
+            if (!string.IsNullOrEmpty(placement))
+                inputParams.Add("Placement", placement);
+
             var model = this.newNotifierModelFactory.Create(
                 settings,
                 domains,
@@ -317,8 +341,9 @@
                 organizationUnits,
                 divisions,
                 managers,
-                groups);
-
+                groups,
+                inputParams);
+            
             return this.View(model);
         }
 
@@ -371,6 +396,7 @@
                 groups = this.notifierGroupRepository.FindOverviewsByCustomerId(currentCustomerId);
             }
 
+
             var model = this.newNotifierModelFactory.Create(
                 settings,
                 domains,
@@ -379,7 +405,8 @@
                 organizationUnits,
                 divisions,
                 managers,
-                groups);
+                groups,
+                null);
 
             return this.View(model);
         }

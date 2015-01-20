@@ -365,7 +365,22 @@ function CaseInitForm() {
 
     $('#AddNotifier').click(function (e) {
         e.preventDefault();
-        var win = window.open('/Notifiers/NewNotifierPopup', '_blank', 'left=100,top=100,width=990,height=480,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
+
+
+        var params = "?def=1"; // this is Not applied in form 
+        
+        if ($("#case__ReportedBy").val() != '') 
+            params += "&userId=" + $("#case__ReportedBy").val();
+        if ($("#case__PersonsName").val() != '')
+            params += "&fName=" + $("#case__PersonsName").val();
+        if ($("#case__PersonsEmail").val() != '')
+            params += "&email=" + $("#case__PersonsEmail").val();
+        if ($("#case__PersonsPhone").val() != '')
+            params += "&phone=" + $("#case__PersonsPhone").val();
+        if ($("#case__Place").val() != '')
+            params += "&placement=" + $("#case__Place").val();
+        
+        var win = window.open('/Notifiers/NewNotifierPopup' + params, '_blank', 'left=100,top=100,width=990,height=480,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
         //win.onbeforeunload = function () { CaseNewNotifierEvent(win.returnValue); }
         //$(win).on('beforeunload', function () { CaseNewNotifierEvent(win.returnValue); });
     });

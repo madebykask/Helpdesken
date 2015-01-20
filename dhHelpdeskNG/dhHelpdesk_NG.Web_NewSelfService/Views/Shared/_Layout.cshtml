@@ -167,12 +167,12 @@
 
         var pCaseTemplates = helper.GetCaseTemplates(pCustomerId);
         var pActionSettings = helper.GetActionSettings(pCustomerId);
-        
+
         var hideMenu = false;
-        
-        if (SessionFacade.UserHasAccess == false) 
-        {           
-            hideMenu = true;           
+
+        if (SessionFacade.UserHasAccess == false)
+        {
+            hideMenu = true;
         }
 
         var showLanguageSelect = false;
@@ -180,14 +180,15 @@
         {
             showLanguageSelect = true;
         }
-               
+
         CaseLogModel pCaseLogs = null;
         var currentCaseId = ViewBag.CurrentCaseId;
         if (currentCaseId != null)
         {
             pCaseLogs = helper.GetCaseLogs(currentCaseId);
         }
-         
+
+        var appType = System.Configuration.ConfigurationManager.AppSettings["CurrentApplication"].ToString();
         
     }
     @*<div style="position: fixed; top: 30%; right: -2px; background: #fff; padding: 20px 20px 5px 20px; border: 1px solid #ccc;">
@@ -204,11 +205,11 @@
     <!-- COMMUNICATE DIV--->
     @*<input type="button" value ="@employeeList" />*@
 
-    @if (currentCaseId != null) 
+    @if (currentCaseId != null)
     {
         <div class="siteCom">
             <div class="mapButton">
-                 @if ((pCaseLogs != null) && (pCaseLogs.CaseLogs != null) && (pCaseLogs.CaseLogs.Count > 0) && (string.IsNullOrEmpty(pCaseLogs.CaseLogs[0].RegUser))) 
+                 @if ((pCaseLogs != null) && (pCaseLogs.CaseLogs != null) && (pCaseLogs.CaseLogs.Count > 0) && (string.IsNullOrEmpty(pCaseLogs.CaseLogs[0].RegUser)))
                  {
                     <div class="mapText" title="@Translation.Get("Communicate", Enums.TranslationSource.TextTranslation)"><span class="glyphicon glyphicon-comment"></span><span class="glyphicon glyphicon-certificate newcom"></span></div>
                  }
@@ -242,15 +243,15 @@
                 </div>
                 <div class="com-list">
                     @if (pCaseLogs != null)
-                    {                                                
+                    {
                         foreach (var logItem in pCaseLogs.CaseLogs)
                         {                            
-                            <div class="@(!string.IsNullOrEmpty(logItem.RegUser)?"com-list-hd":"com-list-com")" >
+                            <div class="@(!string.IsNullOrEmpty(logItem.RegUser) ? "com-list-hd" : "com-list-com")" >
                                 <div class="list-arrow"></div>
                                 <p> 
-                                    @(logItem.User_Id==null? (logItem.RegUser==SessionFacade.CurrentSystemUser? Translation.Get("Me", Enums.TranslationSource.TextTranslation):logItem.RegUser):logItem.User.FirstName + " " + logItem.User.SurName) 
+                                    @(logItem.User_Id == null ? (logItem.RegUser == SessionFacade.CurrentSystemUser ? Translation.Get("Me", Enums.TranslationSource.TextTranslation) : logItem.RegUser) : logItem.User.FirstName + " " + logItem.User.SurName) 
                                     | 
-                                    @Html.DisplayFor(l => logItem.RegTime , "DateAndTime") 
+                                    @Html.DisplayFor(l => logItem.RegTime, "DateAndTime") 
                                 </p>
                                 <p>                                    
                                     @Html.Raw(logItem.Text_Internal.Replace("\n", "<br />"))                                                                       
@@ -276,14 +277,14 @@
                       <a href="#" type="button" class="dropdown-toggle" data-toggle="dropdown">
                         @Translation.Get("Select language", Enums.TranslationSource.TextTranslation)<span class="caret"></span>
                       </a>
-                      @if  (SessionFacade.AllLanguages != null)
+                      @if (SessionFacade.AllLanguages != null)
                       {
                           <ul class="dropdown-menu" role="menu">
                               @foreach (var lang in SessionFacade.AllLanguages)
                               {
                                 <li>
-                                    <a href="@Url.Action("ChangeLanguage", "start" , new { area= "", language = lang.LanguageId , currentUrl = this.Request.Url.LocalPath, lastParams = HttpContext.Current.Request.QueryString })"> 
-                                       @Translation.Get(lang.Name , Enums.TranslationSource.TextTranslation) @(lang.Id==SessionFacade.CurrentLanguageId? "●" : "")
+                                    <a href="@Url.Action("ChangeLanguage", "start", new { area = "", language = lang.LanguageId, currentUrl = this.Request.Url.LocalPath, lastParams = HttpContext.Current.Request.QueryString })"> 
+                                       @Translation.Get(lang.Name, Enums.TranslationSource.TextTranslation) @(lang.Id == SessionFacade.CurrentLanguageId ? "●" : "")
                                     </a>
 
                                 </li>
@@ -318,7 +319,7 @@
                 <ul class="nav navbar-nav">
                     @if (!hideMenu)
                     {
-                        var start = pActionSettings.SingleOrDefault(a => a.ObjectId == ActionObject .Start);
+                        var start = pActionSettings.SingleOrDefault(a => a.ObjectId == ActionObject.Start);
                         if (start != null)
                         {
                             if (start.Visibled)
@@ -326,7 +327,7 @@
                             <li class="blue">
                                 <a href="@Url.Action("Index", "Start", new { customerId = pCustomerId, area = "" })">
                                     <div class="@(string.IsNullOrEmpty(start.ObjectClass) ? "ico-home" : start.ObjectClass)"></div>
-                                    @start.ObjectValue
+                                    @Translation.Get(start.ObjectValue, Enums.TranslationSource.TextTranslation) 
                                 </a>
                             </li>
                             }
@@ -352,7 +353,7 @@
                             <li class="dropdown blue">
                                 <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
                                     <div class="@(string.IsNullOrEmpty(serviceRequest.ObjectClass) ? "ico-new" : serviceRequest.ObjectClass)"></div>
-                                    @serviceRequest.ObjectValue
+                                    @Translation.Get(serviceRequest.ObjectValue, Enums.TranslationSource.TextTranslation)
                                 </a>
 
                                 <ul class="dropdown-menu">
@@ -392,7 +393,14 @@
                             <li class="dropdown blue">
                                 <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
                                     <div class="ico-new"></div>
-                                    @Translation.Get("Order New Service Request", Enums.TranslationSource.TextTranslation)
+                                    @if (appType == "LineManager")
+                                    {
+                                       @Translation.Get("Order New Service Request", Enums.TranslationSource.TextTranslation)
+                                    }
+                                    else
+                                    {
+                                       @Translation.Get("Initiate a case", Enums.TranslationSource.TextTranslation)
+                                    }
                                 </a>
 
                                 <ul class="dropdown-menu">
@@ -437,7 +445,7 @@
                             <li class="blue">
                                 <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = "2", area = "" })">
                                     <div class="@(string.IsNullOrEmpty(ongoingService.ObjectClass) ? "ico-ongoing" : ongoingService.ObjectClass)"></div>
-                                    @ongoingService.ObjectValue
+                                    @Translation.Get(ongoingService.ObjectValue, Enums.TranslationSource.TextTranslation)
                                 </a>
                             </li>
                             }
@@ -447,7 +455,14 @@
                             <li class="blue">
                                 <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = "2", area = "" })">
                                     <div class="ico-ongoing"></div>
-                                    @Translation.Get("Ongoing Service Requests", Enums.TranslationSource.TextTranslation)
+                                    @if (appType == "LineManager")
+                                    {
+                                      @Translation.Get("Ongoing Service Requests", Enums.TranslationSource.TextTranslation)
+                                    }
+                                    else
+                                    {
+                                      @Translation.Get("Ongoing cases", Enums.TranslationSource.TextTranslation)
+                                    }
                                 </a>
                             </li>
                         }
@@ -463,7 +478,7 @@
                             <li class="blue">
                                 <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = "1", area = "" })">
                                     <div class="@(string.IsNullOrEmpty(finishedService.ObjectClass) ? "ico-finished" : finishedService.ObjectClass)"></div>
-                                    @finishedService.ObjectValue
+                                    @Translation.Get(finishedService.ObjectValue, Enums.TranslationSource.TextTranslation)
                                 </a>
                             </li>
                             }
@@ -473,7 +488,15 @@
                             <li class="blue">
                                 <a href="@Url.Action("UserCases", "case", new { customerId = pCustomerId, progressId = "1", area = "" })">
                                     <div class="ico-finished"></div>
-                                    @Translation.Get("Finished Service Requests", Enums.TranslationSource.TextTranslation)
+                                    @if (appType == "LineManager")
+                                    {
+                                      @Translation.Get("Finished Service Requests", Enums.TranslationSource.TextTranslation)
+                                    }
+                                    else
+                                    {
+                                      @Translation.Get("Closed cases", Enums.TranslationSource.TextTranslation)
+                                    }
+                                    
                                 </a>
                             </li>
                         }
@@ -489,7 +512,7 @@
                             <li class="blue">
                                 <a href="@Url.Action("Index", "Documents", new { customerId = pCustomerId, area = "" })">
                                     <div class="@(string.IsNullOrEmpty(document.ObjectClass) ? "ico-documents" : document.ObjectClass)"></div>
-                                    @document.ObjectValue
+                                    @Translation.Get(document.ObjectValue, Enums.TranslationSource.TextTranslation)
                                 </a>
                             </li>
                             }
@@ -499,13 +522,20 @@
                             <li class="blue">
                                 <a href="@Url.Action("Index", "Documents", new { customerId = pCustomerId, area = "" })">
                                     <div class="ico-documents"></div>
-                                    @Translation.Get("HR Documents", Enums.TranslationSource.TextTranslation)
+                                    @if (appType == "LineManager")
+                                    {
+                                      @Translation.Get("HR Documents", Enums.TranslationSource.TextTranslation)
+                                    }
+                                    else
+                                    {
+                                      @Translation.Get("Documents", Enums.TranslationSource.TextTranslation)
+                                    }                                    
                                 </a>
                             </li>
                         }
                     }
 
-                    @if (!hideMenu && System.Configuration.ConfigurationManager.AppSettings["LoginMode"].ToString() == "SSO")
+                    @if (!hideMenu && appType == "LineManager")
                     {
                         var coWorker = pActionSettings.SingleOrDefault(a => a.ObjectId == ActionObject.CoWorker);
                         if (coWorker != null)
@@ -515,7 +545,7 @@
                             <li class="blue">
                                 <a href="@Url.Action("Index", "CoWorkers", new { customerId = pCustomerId, area = "" })">
                                     <div class="@(string.IsNullOrEmpty(coWorker.ObjectClass) ? "ico-coworkers" : coWorker.ObjectClass)"></div>
-                                    @coWorker.ObjectValue
+                                    @Translation.Get(coWorker.ObjectValue, Enums.TranslationSource.TextTranslation)
                                 </a>
                             </li>
                             }
@@ -541,7 +571,7 @@
                             <li class="dropdown blue">
                                 <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
                                     <div class="@(string.IsNullOrEmpty(help.ObjectClass) ? "ico-help" : help.ObjectClass)"></div>
-                                    @help.ObjectValue
+                                    @Translation.Get(help.ObjectValue, Enums.TranslationSource.TextTranslation)
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li><a href="@Url.Action("FindYourWay", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("Find Your Way", Enums.TranslationSource.TextTranslation)</a></li>
@@ -554,14 +584,17 @@
                         else
                         {<li class="dropdown blue">
                             <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
-                                <div class="ico-help"></div>
-                                @Translation.Get("Need Help", Enums.TranslationSource.TextTranslation)?
+                                <div class="ico-help"></div>                                
+                                @Translation.Get("Need Help", Enums.TranslationSource.TextTranslation)?                                                                                                
                             </a>
+                            @if (appType == "LineManager")
+                            {
                             <ul class="dropdown-menu">
                                 <li><a href="@Url.Action("FindYourWay", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("Find Your Way", Enums.TranslationSource.TextTranslation)</a></li>
                                 <li><a href="@Url.Action("Index", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("Help", Enums.TranslationSource.TextTranslation)</a></li>
                                 <li><a href="@Url.Action("About", "Help", new { customerId = pCustomerId, area = "" })">@Translation.Get("About", Enums.TranslationSource.TextTranslation)</a></li>
                             </ul>
+                            }
                         </li>
                         }
                     }
@@ -712,7 +745,7 @@
                         
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("SaveExternalMessage", "Case", new { area= ""})', 
+                url: '@Url.Action("SaveExternalMessage", "Case", new { area = "" })', 
                 contentType: "application/json; charset=utf-8",
                 data: "{ caseId: '@currentCaseId', extraNote:'" + note + "', backUrlAddresss:'" + currentPath + "'}",
                 dataType: "html",
