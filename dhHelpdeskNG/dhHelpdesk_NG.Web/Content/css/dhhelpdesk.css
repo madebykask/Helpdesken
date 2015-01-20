@@ -126,7 +126,6 @@ input[type="text"] {
 		top: 0;
         height:45px;
 		z-index: 1058;
-        min-width:1350px !important;
 	}
 
 .navbar-admin /*ADMIN*/
@@ -182,8 +181,10 @@ input[type="text"] {
 		text-shadow: none;
 		padding-top: 10px;
 		padding-bottom: 10px;
-		width:116px !important;
+		width:116px;
 		height:25px;
+        max-width:20%;
+        
 	}
 
 		.navbar .navbar-brand:hover, .navbar .navbar-brand:focus
