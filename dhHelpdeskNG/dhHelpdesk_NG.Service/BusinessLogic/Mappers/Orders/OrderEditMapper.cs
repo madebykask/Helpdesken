@@ -77,7 +77,7 @@
 
             if (settings.Delivery.DeliveryOuId.Show)
             {
-                var union = deliveryDepartments.Select(u => new UnionItemOverview { Id = u.Id, Name = u.DepartmentName, Type = "deliveryOuIds" });
+                var union = deliveryOuIds.Select(u => new UnionItemOverview { Id = u.Id, Name = u.Name, Type = "deliveryOuIds" });
                 query = query == null ? union : query.Union(union);
             }
 

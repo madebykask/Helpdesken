@@ -14,7 +14,7 @@
             this.Property(o => o.OrderHistoryGuid).IsRequired();
             this.Property(o => o.OrderId).HasColumnName("Order_Id").IsRequired();
             this.HasRequired(o => o.Order).WithMany().HasForeignKey(o => o.OrderId);
-            this.HasRequired(o => o.Domain)
+            this.HasOptional(o => o.Domain)
                 .WithMany()
                 .HasForeignKey(o => o.Domain_Id);
             this.Property(o => o.OrderDate).IsOptional();
@@ -39,7 +39,7 @@
             this.HasOptional(o => o.Department)
                 .WithMany()
                 .HasForeignKey(o => o.Department_Id);
-            this.HasRequired(o => o.Ou)
+            this.HasOptional(o => o.Ou)
                 .WithMany()
                 .HasForeignKey(o => o.OU_Id);
             this.Property(o => o.OrderPropertyId).HasColumnName("OrderProperty_Id");
@@ -72,7 +72,7 @@
                 .HasForeignKey(o => o.User_Id);
             this.Property(o => o.Deliverydate).IsOptional();
             this.Property(o => o.InstallDate).IsOptional();
-            this.HasRequired(o => o.OrderState)
+            this.HasOptional(o => o.OrderState)
                 .WithMany()
                 .HasForeignKey(o => o.OrderState_Id);
             this.HasRequired(o => o.OrderType)
