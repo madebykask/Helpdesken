@@ -17,6 +17,7 @@
             List<ItemOverview> organizationUnits,
             List<ItemOverview> divisions,
             List<ItemOverview> managers,
-            List<ItemOverview> groups);
+            List<ItemOverview> groups,
+            Dictionary<string,string> inputParams);
     }
 }

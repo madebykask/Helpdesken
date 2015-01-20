@@ -566,7 +566,7 @@ namespace DH.Helpdesk.Services.Services
 
             if (!user.Cs.Any(it => it.Id == user.Customer_Id))
             {
-                errors.Add("User.Customer_Id", Translator.Translate("Du måste ange ett standartkund"));
+                errors.Add("User.Customer_Id", Translator.Translate("Du måste ange en standardkund"));
             }
 
             if (user.UserWorkingGroups != null)

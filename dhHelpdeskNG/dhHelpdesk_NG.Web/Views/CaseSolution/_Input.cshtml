@@ -564,6 +564,27 @@
     </div>
 </div>
 <script type="text/javascript">
+    $('#divCaseType ul.dropdown-menu li a').click(function (e) {
+        e.preventDefault();
+        var val = $(this).attr('value');
+        $("#divBreadcrumbs_CaseType").text(getBreadcrumbs(this));
+        $("#case__CaseType_Id").val(val).trigger('change');
+    });
+
+    $('#divProductArea ul.dropdown-menu li a').click(function (e) {
+        e.preventDefault();
+        var val = $(this).attr('value');
+        $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(this));
+        $("#case__ProductArea_Id").val(val).trigger('change');;
+    });
+
+    $('#divFinishingCause ul.dropdown-menu li a').click(function (e) {
+        e.preventDefault();
+        var val = $(this).attr('value');
+        $("#divBreadcrumbs_FinishingCause").text(getBreadcrumbs(this));
+        $("#case__FinishingCause_Id").val(val).trigger('change');;
+    });
+
     var validator = $("#target").validate({
         ignore: "",
         rules: {
