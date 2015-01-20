@@ -126,6 +126,7 @@ input[type="text"] {
 		top: 0;
         height:45px;
 		z-index: 1058;
+        min-width:1350px !important;
 	}
 
 .navbar-admin /*ADMIN*/
@@ -1428,7 +1429,8 @@ table th.thpointer {
 }
 .box-post div.label.purple
 {
-	background:#53378a;
+	/*background:#53378a;*/
+    background:#7858b8;
     color:#fff;
 }
 .box-post div.captionrow
@@ -1789,7 +1791,8 @@ td.td-bottom-multiselect .btn-group {
     }
 
     .start-tile-img.purple {
-        background: #53378a;
+        /*background: #53378a;*/
+        background:#7858b8;
     }
 
 .column {
