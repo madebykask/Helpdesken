@@ -382,6 +382,7 @@
     <Content Include="Content\js\bootstrap-tagsinput.min.js" />
     <Content Include="Content\js\Cases\case.templates.js" />
     <Content Include="Content\js\Cases\edit.logic.js" />
+    <Content Include="Content\js\CaseTemplates\edit.logic.js" />
     <Content Include="Content\js\Changes\inventoryDialog.js" />
     <Compile Include="Areas\Inventory\Controllers\ComputerInventoryBaseController.cs" />
     <Compile Include="Areas\Inventory\Controllers\ComputerModelController.cs" />

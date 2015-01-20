@@ -157,7 +157,7 @@
         public ActionResult New(UserInputViewModel userInputViewModel, int[] AAsSelected, int[] CsSelected, int[] OTsSelected, string NewPassword, string ConfirmPassword, FormCollection coll)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-
+           
             var user = this.returnCaseInfoMailForNewSave(userInputViewModel);
 
             //returnUserRoleForNewSave(userInputViewModel); TODO: Save userrole correct! geht nichts momental
@@ -184,9 +184,11 @@
 
             this._userService.SaveNewUser(user, AAsSelected, CsSelected, OTsSelected, null, out errors);
 
+
             if (errors.Count == 0)
             {
-                return this.RedirectToAction("index", "users");
+                //return this.RedirectToAction("index", "users");
+                return this.RedirectToAction("edit", "users", new { id = user.Id });
             }
 
             var model = this.CreateInputViewModel(userInputViewModel.User);
@@ -305,7 +307,8 @@
                 if (errors.Count == 0)
                 {
                     ViewBag.AlertMessage = err;
-                    return this.RedirectToAction("index", "users", new { alertMessage = err});
+                    return this.RedirectToAction("edit", "users", new { id = id });
+                    //return this.RedirectToAction("index", "users", new { alertMessage = err});
                 }
 
                 
@@ -435,6 +438,7 @@
 
             if (errors.Count == 0)
             {
+                //return this.RedirectToAction("edit", "users", new { id = id });
                 return this.RedirectToAction("index", "users");
             }
 
