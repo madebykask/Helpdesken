@@ -75,7 +75,7 @@
                                             <a href="@Url.Action("edit", "bulletinboard", new { id = item.Id })">@Html.DisplayFor(modelItem => item.ShowUntilDate, "Date")</a>
                                         </td>
                                         <td >
-                                            <a href="@Url.Action("edit", "bulletinboard", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Text)</a>
+                                            <a href="@Url.Action("edit", "bulletinboard", new { id = item.Id })">@item.Text.ForHtmlView()</a>
                                         </td>
                                         <td >
                                             <a href="@Url.Action("edit", "bulletinboard", new { id = item.Id })">@Translation.Get(item.ShowOnStartPage.TranslateBit(), Enums.TranslationSource.TextTranslation)</a>
