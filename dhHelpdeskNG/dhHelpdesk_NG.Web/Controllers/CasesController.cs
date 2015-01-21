@@ -1750,7 +1750,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m.standardTexts = this._standardTextService.GetStandardTexts(customerId);
                 m.Languages = this._languageService.GetActiveLanguages();
 
-                if (cs.DontConnectUserToWorkingGroup == 0 && m.case_.WorkingGroup_Id > 0)
+                if (cs.DontConnectUserToWorkingGroup == 0 && m.case_.WorkingGroup_Id > 0 && m.case_.Id != 0)
                 {
                     m.performers = this._userService.GetUsersForWorkingGroup(customerId, m.case_.WorkingGroup_Id.Value);                    
                 }
