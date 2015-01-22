@@ -289,13 +289,16 @@
 
             if (settings.Department.Show)
             {
-                regions = this.regionRepository.FindByCustomerId(currentCustomerId);
-                //if (regionId != null && regionId > 0)
-                  //  inputParams.Add("RegionId", regionId);
-
                 departments = this.departmentRepository.FindActiveOverviews(currentCustomerId);
                 //if (departmentId != null && departmentId > 0)
                   //  inputParams.Add("DepartmentId", departmentId);
+            }
+
+            if (settings.Region.Show)
+            {
+                regions = this.regionRepository.FindByCustomerId(currentCustomerId);
+                //if (regionId != null && regionId > 0)
+                //  inputParams.Add("RegionId", regionId);
             }
 
             if (settings.OrganizationUnit.Show)
