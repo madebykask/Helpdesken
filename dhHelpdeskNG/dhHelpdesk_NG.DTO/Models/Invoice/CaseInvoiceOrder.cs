@@ -18,7 +18,8 @@
                 string deliveryPeriod, 
                 string reference,
                 DateTime date,
-                CaseInvoiceArticle[] articles)
+                CaseInvoiceArticle[] articles,
+                CaseInvoiceOrderFile[] files)
         {
             this.Reference = reference;
             this.Articles = articles;
@@ -28,6 +29,7 @@
             this.Invoice = invoice;
             this.Id = id;
             this.Date = date;
+            this.Files = files;
         }
 
         public CaseInvoiceOrder(
@@ -37,8 +39,9 @@
                 string deliveryPeriod, 
                 string reference,
                 DateTime date,
-                CaseInvoiceArticle[] articles) :
-                this(id, invoiceId, null, number, deliveryPeriod, reference, date, articles)
+                CaseInvoiceArticle[] articles,
+                CaseInvoiceOrderFile[] files) :
+                this(id, invoiceId, null, number, deliveryPeriod, reference, date, articles, files)
         {
         }
 
@@ -61,6 +64,8 @@
         public DateTime Date { get; private set; }
 
         public CaseInvoiceArticle[] Articles { get; private set; }
+
+        public CaseInvoiceOrderFile[] Files { get; private set; }
 
         public decimal? CaseNumber { get; set; }
 
@@ -97,6 +102,15 @@
                 foreach (var article in this.Articles)
                 {
                     serializer.Serialize(writer, article);                    
+                }
+            }
+
+            if (this.Files != null)
+            {
+                var serializer = new XmlSerializer(typeof(CaseInvoiceOrderFile));
+                foreach (var file in this.Files)
+                {
+                    serializer.Serialize(writer, file);
                 }
             }
         }

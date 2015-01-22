@@ -713,6 +713,7 @@
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\SupplierEditModel.cs" />
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\UserEditModel.cs" />
     <Compile Include="Areas\Orders\OrdersAreaRegistration.cs" />
+    <Content Include="Content\templates\case-invoice-case-files.tmpl.html" />
     <Compile Include="Controllers\AboutController.cs" />
     <Compile Include="Controllers\AjaxController.cs" />
     <Compile Include="Controllers\BulletinBoardController.cs" />
@@ -1064,6 +1065,7 @@
     <Compile Include="Models\IConfigurableFieldModel.cs" />
     <Compile Include="Areas\Inventory\Models\EditModel\Computer\AccesoriesEditViewModel.cs" />
     <Compile Include="Areas\Admin\Models\Invoice\ArticlesImportModel.cs" />
+    <Compile Include="Models\Invoice\CaseFileModel.cs" />
     <Compile Include="Models\Invoice\CaseInvoiceArticlesModel.cs" />
     <Compile Include="Models\Projects\ProjectOverviewSorting.cs" />
     <Compile Include="Models\Questionnaire\Input\CircularPartOverview.cs" />
@@ -1296,7 +1298,10 @@
     <Content Include="Content\js\Changes\settings.js" />
     <Content Include="Content\js\chosen.jquery.js" />
     <Content Include="Content\js\chosen.jquery.min.js" />
-    <Content Include="Content\js\Container\init.js" />
+    <Content Include="Content\js\DynamicCase\iframeResizer.js" />
+    <Content Include="Content\js\DynamicCase\iframeResizer.min.js" />
+    <Content Include="Content\js\DynamicCase\iframeSizer.contentWindow.min.js" />
+    <Content Include="Content\js\DynamicCase\container.js" />
     <Content Include="Content\js\dhHelpdesk-head.js" />
     <Content Include="Content\js\Inventory\place-cascading.js" />
     <Content Include="Content\js\Inventory\reports.js" />
@@ -1339,6 +1344,8 @@
     <Content Include="Content\PIE.htc" />
     <Content Include="Content\templates\case-invoice-article-overview.tmpl.html" />
     <Content Include="Content\templates\case-invoice-article.tmpl.html" />
+    <Content Include="Content\templates\case-invoice-order-actions.tmpl.html" />
+    <Content Include="Content\templates\case-invoice-order-files.tmpl.html" />
     <Content Include="Content\templates\case-invoice-order.tmpl.html" />
     <Content Include="Content\templates\case-invoice-overview.tmpl.html" />
     <Content Include="Content\templates\case-invoice.tmpl.html" />
@@ -1432,7 +1439,6 @@
     <Content Include="img-profile\ikea-quality-text.png" />
     <Content Include="img-profile\print-logo.png" />
     <Content Include="img-profile\profile.css" />
-    <Content Include="log4net.config" />
     <Content Include="Content\js\jsrender.min.js.map" />
     <Content Include="Areas\Admin\Views\GlobalSetting\_TranslationsList.cshtml" />
     <Content Include="Areas\Admin\Views\GlobalSetting\_Holidays.cshtml" />

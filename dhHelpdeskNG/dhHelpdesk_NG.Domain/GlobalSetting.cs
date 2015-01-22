@@ -21,6 +21,7 @@ namespace DH.Helpdesk.Domain
         public string PDFPrintUserName { get; set; }
         public string ServerName { get; set; }
         public string SMTPServer { get; set; }
+        public string ExternalSite { get; set; }
 
         public virtual Language DefaultLanguage { get; set; }
     }

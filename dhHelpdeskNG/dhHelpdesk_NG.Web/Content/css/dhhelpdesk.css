@@ -181,8 +181,10 @@ input[type="text"] {
 		text-shadow: none;
 		padding-top: 10px;
 		padding-bottom: 10px;
-		width:116px !important;
+		width:116px;
 		height:25px;
+        max-width:20%;
+        
 	}
 
 		.navbar .navbar-brand:hover, .navbar .navbar-brand:focus
@@ -1428,7 +1430,8 @@ table th.thpointer {
 }
 .box-post div.label.purple
 {
-	background:#53378a;
+	/*background:#53378a;*/
+    background:#7858b8;
     color:#fff;
 }
 .box-post div.captionrow
@@ -1789,7 +1792,8 @@ td.td-bottom-multiselect .btn-group {
     }
 
     .start-tile-img.purple {
-        background: #53378a;
+        /*background: #53378a;*/
+        background:#7858b8;
     }
 
 .column {

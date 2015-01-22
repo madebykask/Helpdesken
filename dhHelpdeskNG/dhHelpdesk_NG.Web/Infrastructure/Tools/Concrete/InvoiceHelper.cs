@@ -3,6 +3,7 @@
     using System;
     using System.IO;
     using System.Linq;
+    using System.Web;
     using System.Web.Script.Serialization;
     using System.Xml;
     using System.Xml.Serialization;
@@ -48,7 +49,8 @@
                                             a.Amount,
                                             a.Ppu,
                                             a.Position,
-                                            a.IsInvoiced)).ToArray())).ToArray());
+                                            a.IsInvoiced)).ToArray(),
+                                            o.Files.Select(f => new CaseInvoiceOrderFile(HttpUtility.UrlDecode(f.FileName))).ToArray())).ToArray());
             if (caseOverview != null)
             {
                 foreach (var order in invoice.Orders)
@@ -115,6 +117,17 @@
             public DateTime Date { get; set; }
 
             public CaseInvoiceArticleData[] Articles { get; set; }
+
+            public CaseInvoiceOrderFileData[] Files { get; set; }
+        }
+
+        private class CaseInvoiceOrderFileData
+        {
+            public CaseInvoiceOrderFileData()
+            {                
+            }
+
+            public string FileName { get; set; }
         }
 
         private class CaseInvoiceArticleData

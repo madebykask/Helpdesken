@@ -114,6 +114,8 @@
         ////public List<CategoryWithSubcategories> CategoryWithSubcategories { get; set; }
         //public EditingFaqModel EditFaqModel { get; set; }
         public CaseTemplateTreeModel CaseTemplateTreeButton { get; set; }
+
+        public DynamicCase DynamicCase { get; set; }
     }
 
     public class CaseIndexViewModel

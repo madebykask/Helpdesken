@@ -81,7 +81,29 @@
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
-
+            var allCustomers = _customerService.GetAllCustomers();
+            string err = "";
+            List<string> customersAlert = new List<string>();
+            if (workingGroup.IsActive == 0)
+            {                
+                foreach (var c in allCustomers)
+                {
+                    if (_workingGroupService.CaseHasWorkingGroup(c.Id, workingGroup.Id))
+                        customersAlert.Add(c.Name);
+                }
+            }
+            
+            if (customersAlert.Any())
+            {                
+                err = Translation.Get("Driftgruppen") + " [" + workingGroup.WorkingGroupName + "] " + Translation.Get("har aktiva ärenden hos kund") + ": ";
+                err += "(" + string.Join(",", customersAlert.ToArray()) + ") |";
+                err += " " + Translation.Get("Var vänlig se över dessa ärenden") + ":|";
+                err += " -" + Translation.Get("Ärendeöversikt") + "|";
+                err += " -" + Translation.Get("Pågående ärenden") + "|";
+                err += " -" + Translation.Get("Välj driftgrupp");
+                this.TempData.Add("InActiveAlert", err);                
+            }
+            
             this._workingGroupService.SaveWorkingGroup(workingGroup, out errors);
 
             if (errors.Count == 0)

@@ -1,0 +1,14 @@
+﻿<table class='width100 table table-striped table-hover'>
+    <tbody>
+        {{for getFiles()}}
+        <tr>
+            <td>
+                <a href="/invoice/casefile/?id={{>#parent.parent.data.getCaseId()}}&fileName={{:getEncodedFileName()}}">{{:getFileName()}}</a>
+            </td>
+            <td>
+                <a href='javascript:void()' onclick='dhHelpdesk.CaseArticles.RemoveOrderFile("{{:getFileName()}}")'>x</a>
+            </td>
+        </tr>
+        {{/for}}            
+    </tbody>
+</table>    

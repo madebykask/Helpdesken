@@ -122,6 +122,7 @@
     <Compile Include="Interfaces\INulableCustomerEntity.cs" />
     <Compile Include="Interfaces\IOptionalCustomerEntity.cs" />
     <Compile Include="Interfaces\IStartPageEntity.cs" />
+    <Compile Include="Invoice\CaseInvoiceOrderFileEntity.cs" />
     <Compile Include="Invoice\CaseInvoiceSettingsEntity.cs" />
     <Compile Include="Orders\OrderHistoryEntity.cs" />
     <Compile Include="Orders\OrderPropertyEntity.cs" />

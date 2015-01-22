@@ -167,8 +167,8 @@
             return this.View(model);
         }
 
-        [HttpPost]
-        [BadRequestOnNotValid]
+        [HttpPost, ValidateInput(false)]
+        //[BadRequestOnNotValid]
         public RedirectToRouteResult EditFaq(EditFaqInputModel model)
         {
             var updatedFaq = new ExistingFaq(
@@ -312,8 +312,8 @@
             return this.View(model);
         }
 
-        [HttpPost]
-        [BadRequestOnNotValid]
+        [HttpPost, ValidateInput(false)]
+        //[BadRequestOnNotValid]
         public RedirectToRouteResult NewFaq(NewFaqInputModel model)
         {
             var currentDateTime = DateTime.Now;

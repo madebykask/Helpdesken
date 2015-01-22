@@ -18,7 +18,8 @@
                         string caseInvoiceArticlesSelector,
                         int customerId,
                         string btnCaption,
-                        string btnHint)
+                        string btnHint,
+                        string caseKey)
         {
             var result = new StringBuilder();
             var tag = new TagBuilder("input");
@@ -36,6 +37,7 @@
             tag.MergeAttribute("data-invoice-customerId", customerId.ToString(CultureInfo.InvariantCulture));
             tag.MergeAttribute("data-invoice-Caption", btnCaption);
             tag.MergeAttribute("data-invoice-Hint", btnHint);
+            tag.MergeAttribute("data-invoice-case-key", caseKey);
 
             result.Append(tag);
             return MvcHtmlString.Create(result.ToString());            

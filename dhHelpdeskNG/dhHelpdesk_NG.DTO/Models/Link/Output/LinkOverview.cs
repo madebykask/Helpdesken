@@ -50,5 +50,25 @@ namespace DH.Helpdesk.BusinessData.Models.Link.Output
         public bool ShowOnStartPage { get; set; }
 
         public string SortOrder { get; set; }
+
+        /// <summary>
+        /// Gets or sets the casesolution id.
+        /// </summary>
+        public int? CaseSolutionId { get; set; }
+
+        /// <summary>
+        /// Gets or sets Casesolution name.
+        /// </summary>
+        public string CaseSolutionName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the document id.
+        /// </summary>
+        public int? DocumentId { get; set; }
+
+        /// <summary>
+        /// Gets or sets document name.
+        /// </summary>
+        public string DocumentName { get; set; }
     }
 }

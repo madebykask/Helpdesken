@@ -66,7 +66,7 @@
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [CustomAuthorize(Roles = "3,4")]
-        public ActionResult Index(string alertMessage = "")
+        public ActionResult Index() //string alertMessage = ""
         {
             var model = this.IndexInputViewModel();
             if (this.Session["UserSearch"] == null)
@@ -81,8 +81,12 @@
                 model.StatusUsers.FirstOrDefault(x => x.Value == filter.StatusId.ToString()).Selected = true;
             }
 
-            if (!string.IsNullOrEmpty(alertMessage))
-                ViewData["AlertMessage"] = alertMessage;
+            /*if (!string.IsNullOrEmpty(alertMessage))
+            {
+                TempData["AlertMessage"] = alertMessage;
+                alertMessage = "";
+            }
+             */ 
 
             return this.View(model);
         }
@@ -276,15 +280,13 @@
 
                 if (customersAlert.Any())
                 {
-                    //Användare [Stina Svensmo] har aktiva ärenden hos kund [Datahalland].
-                    //Var vänlig se över dessa ärenden:
-                    //- Ärendeöversikt
-                    //- Pågående ärenden
-                    //- Välj handläggare
-
-                    err = userToSave.FirstName + " " + userToSave.SurName + " " + Translation.Get("står som ansvarig/handläggare på befintliga ärenden hos kund") + ": ";                      
-                    err += "(" + string.Join(",", customersAlert.ToArray()) + ") ";
-                    err += " " + Translation.Get("Var vänlig se över de ärenden som användaren står på.");
+                    err = Translation.Get("Användare") + " [" + userToSave.FirstName + " " + userToSave.SurName + "] " +
+                          Translation.Get("har aktiva ärenden hos kund") + ":";
+                    err += "(" + string.Join(",", customersAlert.ToArray()) + ")|";
+                    err += " " + Translation.Get("Var vänlig se över dessa ärenden") + ":|";
+                    err += " -" + Translation.Get("Ärendeöversikt") + "|";
+                    err += " -" + Translation.Get("Pågående ärenden") + "|";
+                    err += " -" + Translation.Get("Välj handläggare");
                 }
 
                 if (userToSave.UserRoles != null)
@@ -306,9 +308,10 @@
 
                 if (errors.Count == 0)
                 {
-                    ViewBag.AlertMessage = err;
-                    return this.RedirectToAction("edit", "users", new { id = id });
-                    //return this.RedirectToAction("index", "users", new { alertMessage = err});
+                    if (!string.IsNullOrEmpty(err))
+                       this.TempData.Add("AlertMessage", err);   
+
+                    return this.RedirectToAction("index", "users");
                 }
 
                 

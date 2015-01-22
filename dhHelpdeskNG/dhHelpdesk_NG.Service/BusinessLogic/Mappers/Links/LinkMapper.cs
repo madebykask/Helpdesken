@@ -17,7 +17,11 @@
                                             l.LinkGroup,
                                             l.URLAddress,
                                             l.URLName,
-                                            l.SortOrder
+                                            l.SortOrder,
+                                            l.Document,
+                                            l.Document_Id,
+                                            l.CaseSolution_Id,
+                                            l.CaseSolution
                                         }).ToArray();
 
             return entities.Select(l => new LinkOverview
@@ -28,7 +32,11 @@
                                             LinkGroupName = l.LinkGroup != null ? l.LinkGroup.LinkGroupName : null,
                                             UrlAddress = l.URLAddress,
                                             UrlName = l.URLName,
-                                            SortOrder = l.SortOrder
+                                            SortOrder = l.SortOrder,
+                                            DocumentId = l.Document_Id,
+                                            DocumentName = l.Document != null ? l.Document.Name : null,
+                                            CaseSolutionId = l.CaseSolution_Id,
+                                            CaseSolutionName = l.CaseSolution != null ? l.CaseSolution.Name : null
                                         }).ToArray();
         }
     }

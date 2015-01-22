@@ -41,6 +41,10 @@
                 .To<CaseInvoiceOrderToBusinessModelMapper>()
                 .InSingletonScope();
 
+            this.Bind<IEntityToBusinessModelMapper<CaseInvoiceOrderFileEntity, CaseInvoiceOrderFile>>()
+                .To<CaseInvoiceOrderFileToBusinessModelMapper>()
+                .InSingletonScope();
+
             this.Bind<IEntityToBusinessModelMapper<CaseInvoiceEntity, CaseInvoice>>()
                 .To<CaseInvoiceToBusinessModelMapper>()
                 .InSingletonScope();
@@ -55,6 +59,10 @@
 
             this.Bind<IBusinessModelToEntityMapper<CaseInvoiceOrder, CaseInvoiceOrderEntity>>()
                 .To<CaseInvoiceOrderToEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<CaseInvoiceOrderFile, CaseInvoiceOrderFileEntity>>()
+                .To<CaseInvoiceOrderFileToEntityMapper>()
                 .InSingletonScope();
 
             this.Bind<IInvoiceArticlesModelFactory>()
