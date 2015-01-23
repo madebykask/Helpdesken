@@ -288,7 +288,7 @@
             }
 
             if (settings.Department.Show)
-            {
+            {                
                 departments = this.departmentRepository.FindActiveOverviews(currentCustomerId);
                 //if (departmentId != null && departmentId > 0)
                   //  inputParams.Add("DepartmentId", departmentId);

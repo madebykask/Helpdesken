@@ -1,5 +1,6 @@
 ﻿@using DH.Helpdesk.Common.Enums
 @using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions
 @model DH.Helpdesk.Web.Areas.Orders.Models.Index.OrdersGridModel
 
 @Translation.Get("Poster i sökresultat"):
@@ -35,7 +36,7 @@
             <tr onclick=" window.location.href = '@Url.Action("Edit", new RouteValueDictionary { { "id", order.Id } })' ">
                 @foreach(var value in order.FieldValues)
                 {
-                    <td class="tdpointer">@MvcHtmlString.Create(value.Value.GetDisplayValue())</td>
+                    <td class="tdpointer">@value.Value.GetDisplayValue().ForHtmlView()</td>
                 }
             </tr>
         }

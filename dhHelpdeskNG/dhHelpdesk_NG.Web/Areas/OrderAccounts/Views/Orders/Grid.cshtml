@@ -1,5 +1,6 @@
 ﻿@using DH.Helpdesk.Common.Enums
 @using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions
 @model DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order.GridModel
 @Translation.Get("poster per sida"): @Model.Orders.Count
 
@@ -38,7 +39,7 @@
                         var orderField = Model.Headers[i];
                         var orderFieldValue = fields.Single(v => v.FieldName == orderField.FieldName);
 
-                        <td class="tdpointer">@orderFieldValue.Value.GetDisplayValue()</td>
+                        <td class="tdpointer">@orderFieldValue.Value.GetDisplayValue().ForHtmlView()</td>
                     }
                 }
             </tr>

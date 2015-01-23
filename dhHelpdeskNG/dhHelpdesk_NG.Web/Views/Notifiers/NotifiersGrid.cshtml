@@ -40,7 +40,7 @@
                     var field = Model.Headers[i];
                     var value = notifier.FieldValues.Single(v => v.FieldName == field.FieldName);
 
-                    <td class="tdpointer">@value.Value</td>
+                    <td class="tdpointer">@value.Value.ForHtmlView()</td>
                 }
             </tr>
         }

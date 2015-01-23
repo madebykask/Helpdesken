@@ -62,7 +62,7 @@
                                         </td>
                                         <td>
                                             <a href="@Url.Action("EditQuestionnaire", "Questionnaire", new { questionnaireId = item.Id, languageId = LanguageId.Swedish})">
-                                                @Html.DisplayFor(modelItem => item.Description)
+                                                @item.Description.ForHtmlView()
                                             </a>
                                         </td>
                                         <td>

@@ -74,7 +74,7 @@
                             }
                             else    
                             {
-                                <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@c.StringValue</a>
+                                <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@c.StringValue.ForHtmlView()</a>
                             }
                         }
                     </td>

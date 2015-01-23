@@ -279,7 +279,7 @@
                 }
 
                 if (customersAlert.Any())
-                {                   
+                {
                     err = Translation.Get("Användare") + " [" + userToSave.FirstName + " " + userToSave.SurName + "] " +
                           Translation.Get("har aktiva ärenden hos kund") + ":";
                     err += "(" + string.Join(",", customersAlert.ToArray()) + ")|";
@@ -307,7 +307,7 @@
                 this._userService.SaveEditUser(userToSave, AAsSelected, CsSelected, OTsSelected, Departments, UserWorkingGroups, out errors);
 
                 if (errors.Count == 0)
-                {               
+                {
                     if (!string.IsNullOrEmpty(err))
                        this.TempData.Add("AlertMessage", err);   
 
