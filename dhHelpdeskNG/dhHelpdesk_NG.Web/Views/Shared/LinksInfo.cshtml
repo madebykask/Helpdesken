@@ -1,17 +1,18 @@
 ﻿@model DH.Helpdesk.Web.Models.Link.LinksInfoViewModel
-
-@if (Model != null && Model.CustomerGroups.Any())
+@if(Model != null && Model.CustomerGroups.Any())
 {
     <div class="row-fluid">
         <div class="box-box span12">
             <div class="box-header portlet-header">
-                <div class="start-tile-img label orange"><img src="@Url.Content("~/Content/icons/quicklinks.png")" alt="@Translation.Get("Snabblänkar", Enums.TranslationSource.TextTranslation)" /></div><h4>@Translation.Get("Snabblänkar", Enums.TranslationSource.TextTranslation)</h4>
+                <div class="start-tile-img label orange">
+                    <img src="@Url.Content("~/Content/icons/quicklinks.png")" alt="@Translation.Get("Snabblänkar", Enums.TranslationSource.TextTranslation)" /></div>
+                <h4>@Translation.Get("Snabblänkar", Enums.TranslationSource.TextTranslation)</h4>
             </div>
             <div class="box-body portlet-content">
                 <div class="box-main">
                     <div class="accordion" id="quicklinksstart">
                         <div class="accordion-group accordion-caret">
-                            @foreach (var customerGroup in Model.CustomerGroups)
+                            @foreach(var customerGroup in Model.CustomerGroups)
                             {
                                 <div class="accordion-heading">
                                     <a class="accordion-toggle accordion-caret collapsed" data-toggle="collapse" data-parent="#quicklinksstart" href="#collapseLinkInfo@(customerGroup.CustomerId)"><strong>@customerGroup.CustomerName</strong>
@@ -20,40 +21,46 @@
                                 <div id="collapseLinkInfo@(customerGroup.CustomerId)" class="accordion-body collapse">
                                     <div class="accordion-inner">
                                         <ul>
-                                            @foreach (var categoryGroup in customerGroup.Categories)
+                                            @foreach(var categoryGroup in customerGroup.Categories)
                                             {
                                                 
                                                 <li><strong>@categoryGroup.CategoryName</strong></li>
                                                
                                                 <li>
                                                     <ul>
-                                                        @foreach (var link in categoryGroup.Links)
+                                                        @foreach(var link in categoryGroup.Links)
                                                         {
                                                             <li>
-                                                                @if (string.IsNullOrEmpty(link.UrlAddress))
+                                                                @if(string.IsNullOrEmpty(link.UrlAddress))
                                                                 {
-                                                                    if (link.DocumentId == null)
+                                                                    if(link.DocumentId == null)
                                                                     {
-                                                                        <a href="@Url.Action("new/", "cases", new { customerId = link.CustomerId, templateId = link.CaseSolutionId })">@link.UrlName</a>
-                                                                        @*<span>@link.CaseSolutionName</span>*@
-                                                                    } else {
-                                                                    
-                                                                        <a href="@Url.Action("DocumentFile", "Document", new {document = link.DocumentId})">@link.UrlName</a>
+                                                                    <a href="@Url.Action("new/", "cases", new { customerId = link.CustomerId, templateId = link.CaseSolutionId })">@link.UrlName</a>
+@*<span>@link.CaseSolutionName</span>*@
                                                                     }
-                                                                } else {
-                                                                    <a href="@link.UrlAddress" target="_blank"><i class="icon-play-circle"></i> @link.UrlName</a>
-                                                                }                                                 
+                                                                    else
+                                                                    {
+                                                                    
+                                                                    <a href="@Url.Action("DocumentFile", "Document", new { document = link.DocumentId })">@link.UrlName</a>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    var linkUrlAddress = link.UrlAddress;
+                                                                    linkUrlAddress = linkUrlAddress.Replace("[UserId]", SessionFacade.CurrentUser.UserId);
+                                                                    <a href="@linkUrlAddress" target="_blank"><i class="icon-play-circle"></i>@link.UrlName</a>
+                                                                }
                                                             </li>
                                                         }
                                                     </ul>
                                                 </li>
                                             }
-                                        </ul>                                                            
+                                        </ul>
                                     </div>
                                 </div>
-                            }                       
+                            }
                         </div>
-                    </div> 
+                    </div>
                 </div>
             </div>
         </div>
